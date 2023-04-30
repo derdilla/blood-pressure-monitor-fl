@@ -8,19 +8,26 @@ class AppHome extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double _padding;
+    if (MediaQuery.of(context).size.width < 1000) {
+      _padding = 10;
+    } else {
+      _padding = 80;
+    }
+
     return Scaffold(
       body: Center(
         child: Container(
-          padding: const EdgeInsets.all(80),
+          padding: EdgeInsets.all(_padding),
           child: Column(
-            children: const [
-              Expanded(
+            children: [
+              const Expanded(
                   flex: 40,
                   child: MeasurementGraph()
               ),
               Expanded(
                 flex: 60,
-                  child: MeasurementList()
+                  child: MeasurementList(context)
               ),
             ]
           ),

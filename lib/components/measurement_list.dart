@@ -2,9 +2,21 @@ import 'package:blood_pressure_app/model/blood_pressure.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
+import 'dart:io' show Platform;
 
 class MeasurementList extends StatelessWidget {
-  const MeasurementList({super.key});
+  late final _tableElementsSizes;
+  late final _sideFlex;
+
+  MeasurementList(BuildContext context, {super.key}) {
+    if (MediaQuery.of(context).size.width < 1000) {
+      _tableElementsSizes = [30,10,10,10,30];
+      _sideFlex = 1;
+    } else {
+      _tableElementsSizes = [9,7,7,7,60];
+      _sideFlex = 5;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -38,37 +50,37 @@ class MeasurementList extends StatelessWidget {
   }
 
   Widget buildListItem(BloodPressureRecord record) {
-    final DateFormat formater = DateFormat('yyyy-MM-dd H:mm:s');
+    final DateFormat formater = DateFormat('yy-MM-dd H:mm:s');
     return Container(
       margin: EdgeInsets.only(bottom: 5),
       child: Row(
           children: [
-            const Expanded(
-              flex: 5,
+            Expanded(
+              flex: _sideFlex,
               child: SizedBox(),
             ),
             Expanded(
-                flex: 9,
+                flex: _tableElementsSizes[0],
                 child: Text(formater.format(record.creationTime))
             ),
             Expanded(
-                flex: 7,
+                flex: _tableElementsSizes[1],
                 child: Text(record.systolic.toString())
             ),
             Expanded(
-                flex: 7,
+                flex: _tableElementsSizes[2],
                 child: Text(record.diastolic.toString())
             ),
             Expanded(
-                flex: 7,
+                flex: _tableElementsSizes[3],
                 child: Text(record.pulse.toString())
             ),
             Expanded(
-                flex: 60,
+                flex: _tableElementsSizes[4],
                 child: Text(record.notes)
             ),
-            const Expanded(
-              flex: 5,
+            Expanded(
+              flex: _sideFlex,
               child: SizedBox(),
             ),
           ]
@@ -82,33 +94,33 @@ class MeasurementList extends StatelessWidget {
       child: Column (
         children: [
           Row(
-          children: const [
+          children: [
             Expanded(
-              flex: 5,
+              flex: _sideFlex,
               child: SizedBox(),
             ),
             Expanded(
-                flex: 9,
-                child: Text("timestamp", style: TextStyle(fontWeight: FontWeight.bold))
+                flex: _tableElementsSizes[0],
+                child: Text("time", style: TextStyle(fontWeight: FontWeight.bold))
             ),
             Expanded(
-                flex: 7,
-                child: Text("systolic", style: TextStyle(fontWeight: FontWeight.bold))
+                flex: _tableElementsSizes[1],
+                child: Text("sys", style: TextStyle(fontWeight: FontWeight.bold))
             ),
             Expanded(
-                flex: 7,
-                child: Text("diastolic", style: TextStyle(fontWeight: FontWeight.bold))
+                flex: _tableElementsSizes[2],
+                child: Text("dia", style: TextStyle(fontWeight: FontWeight.bold))
             ),
             Expanded(
-                flex: 7,
-                child: Text("pulse", style: TextStyle(fontWeight: FontWeight.bold))
+                flex: _tableElementsSizes[3],
+                child: Text("pul", style: TextStyle(fontWeight: FontWeight.bold))
             ),
             Expanded(
-                flex: 60,
+                flex: _tableElementsSizes[4],
                 child: Text("notes", style: TextStyle(fontWeight: FontWeight.bold))
             ),
             Expanded(
-              flex: 5,
+              flex: _sideFlex,
               child: SizedBox(),
             ),
           ],
