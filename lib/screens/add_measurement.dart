@@ -41,16 +41,12 @@ class _AddMeasurementPageState extends State<AddMeasurementPage> {
                   ],
                   validator: (String? value) {
                     if (value == null || value.isEmpty
-                        || (double.tryParse(value) == null)) {
+                        || (int.tryParse(value) == null)) {
                       return 'Please enter a Number';
+                    } else {
+                      _systolic = int.tryParse(value) ?? -1;
                     }
                     return null;
-                  },
-                  onSaved: (String? value) {
-                    if (value != null && value.isNotEmpty
-                        || (double.tryParse(value ?? "-1") != null)) {
-                      _systolic = double.tryParse(value ?? "-1") as int;
-                    }
                   },
                 ),
                 TextFormField(
@@ -63,16 +59,12 @@ class _AddMeasurementPageState extends State<AddMeasurementPage> {
                   ],
                   validator: (String? value) {
                     if (value == null || value.isEmpty
-                        || (double.tryParse(value) == null)) {
+                        || (int.tryParse(value) == null)) {
                       return 'Please enter a Number';
+                    } else {
+                      _diastolic = int.tryParse(value) ?? -1;
                     }
                     return null;
-                  },
-                  onSaved: (String? value) {
-                    if (value != null && value.isNotEmpty
-                        || (double.tryParse(value ?? "-1") != null)) {
-                      _diastolic = double.tryParse(value ?? "-1") as int;
-                    }
                   },
                 ),
                 TextFormField(
@@ -85,23 +77,19 @@ class _AddMeasurementPageState extends State<AddMeasurementPage> {
                   ],
                   validator: (String? value) {
                     if (value == null || value.isEmpty
-                        || (double.tryParse(value) == null)) {
+                        || (int.tryParse(value) == null)) {
                       return 'Please enter a Number';
+                    } else {
+                      _pulse = int.tryParse(value) ?? -1;
                     }
                     return null;
-                  },
-                  onSaved: (String? value) {
-                    if (value != null && value.isNotEmpty
-                        || (double.tryParse(value ?? "-1") != null)) {
-                      _pulse = double.tryParse(value ?? "-1") as int;
-                    }
                   },
                 ),
                 TextFormField(
                   decoration: const InputDecoration(
                       hintText: 'note (optional)'
                   ),
-                  onSaved: (String? value) {
+                  validator: (String? value) {
                     _note = value ?? "";
                   },
                 ),
