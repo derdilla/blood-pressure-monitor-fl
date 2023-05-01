@@ -52,12 +52,12 @@ class MeasurementList extends StatelessWidget {
   Widget buildListItem(BloodPressureRecord record) {
     final DateFormat formater = DateFormat('yy-MM-dd H:mm:s');
     return Container(
-      margin: EdgeInsets.only(bottom: 5),
+      margin: const EdgeInsets.only(bottom: 5),
       child: Row(
           children: [
             Expanded(
               flex: _sideFlex,
-              child: SizedBox(),
+              child: const SizedBox(),
             ),
             Expanded(
                 flex: _tableElementsSizes[0],

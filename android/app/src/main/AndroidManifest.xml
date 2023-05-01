@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.derdilla.blood_pressure_app">
    <application
-        android:label="blood_pressure_app"
+        android:label="blood pressure app"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
