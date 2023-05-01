@@ -1,16 +1,11 @@
-# blood_pressure_app
+# blood pressure monitor
 
-Track your blood pressure wherever you go
+Track your blood pressure wherever you go. offline, ad-free and open.
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
+To use this app, download the version for your platform from the release page. 
+#### todo:
+- [ ] add to f-droid
+- [ ] add to play store (not coming soon)
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
