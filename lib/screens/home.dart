@@ -2,6 +2,8 @@ import 'package:blood_pressure_app/screens/add_measurement.dart';
 import 'package:flutter/material.dart';
 import 'package:blood_pressure_app/components/measurement_graph.dart';
 import 'package:blood_pressure_app/components/measurement_list.dart';
+import 'package:provider/provider.dart';
+import 'package:blood_pressure_app/model/blood_pressure.dart';
 
 class AppHome extends StatelessWidget {
   const AppHome({super.key});
@@ -33,22 +35,42 @@ class AppHome extends StatelessWidget {
           ),
         ),
       ),
-      floatingActionButton: Ink(
-        decoration: ShapeDecoration(
-            shape: const CircleBorder(),
-            color: Theme.of(context).primaryColor
-        ),
-        child: IconButton(
-          icon: const Icon(Icons.add),
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => const AddMeasurementPage()),
-            );
-          },
-        ),
-      ),
-
+      floatingActionButton:
+        Container(
+          height: 100,
+          child: Column(
+            children: [
+              Ink(
+                decoration: ShapeDecoration(
+                    shape: const CircleBorder(),
+                    color: Theme.of(context).unselectedWidgetColor
+                ),
+                child: IconButton(
+                  icon: const Icon(Icons.save),
+                  onPressed: () {
+                    Provider.of<BloodPressureModel>(context, listen: false).save(context);
+                  },
+                ),
+              ),
+              const SizedBox(height: 10,),
+              Ink(
+                decoration: ShapeDecoration(
+                    shape: const CircleBorder(),
+                    color: Theme.of(context).primaryColor
+                ),
+                child: IconButton(
+                  icon: const Icon(Icons.add),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const AddMeasurementPage()),
+                    );
+                  },
+                ),
+              ),
+            ],
+          ),
+        )
     );
   }
 }

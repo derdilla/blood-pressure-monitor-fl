@@ -1,13 +1,19 @@
 import 'dart:collection';
+import 'dart:io';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:path/path.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:file_saver/file_saver.dart';
+import 'package:share_plus/share_plus.dart';
+import 'dart:convert' show utf8;
+import 'dart:typed_data';
 
 class BloodPressureModel extends ChangeNotifier {
   static const maxEntries = 2E64; // https://www.sqlite.org/limits.html Nr.13
   late final Database _database;
-  List<BloodPressureRecord> _allMeasurements = [];
+  List<BloodPressureRecord> _allMeasurements = []; // TODO: remove cache
   var _cacheCount = 100; // how many db entries are cached on default
 
   BloodPressureModel._create();
@@ -98,6 +104,37 @@ class BloodPressureModel extends ChangeNotifier {
           e['notes'] as String));
     }
     return UnmodifiableListView(recordsInRange);
+  }
+
+  Future<void> save(BuildContext context) async { // TODO: passing context is not clean keep UI code out of model
+    // create csv
+    String csvData = 'timestampUnixMs, systolic, diastolic, pulse, notes\n';
+    List<Map<String, Object?>> allEntries = await _database.query('bloodPressureModel',
+      orderBy: 'timestamp DESC');
+    for (var e in allEntries) {
+      csvData += '${e['timestamp']}, ${e['systolic']}, ${e['diastolic']}, ${e['pulse']}, "${e['notes']}"\n';
+    }
+
+    // save data
+    print(csvData);
+    String path = await FileSaver.instance.saveFile(
+      name: 'blood_press_${DateTime.now().toIso8601String()}',
+      bytes: Uint8List.fromList(utf8.encode(csvData)),
+      ext: 'csv',
+      mimeType: MimeType.csv
+    );
+
+    // notify user about location
+    if (Platform.isLinux || Platform.isWindows || Platform.isMacOS) {
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Exported to: $path')));
+    } else if (Platform.isAndroid || Platform.isIOS) {
+      Share.shareFiles([path], mimeTypes: [MimeType.csv.type]);
+    } else {
+
+    }
+
+
   }
   
 
