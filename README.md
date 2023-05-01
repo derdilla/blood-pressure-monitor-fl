@@ -1,16 +1,19 @@
-# blood_pressure_app
+# blood pressure monitor
 
-Track your blood pressure wherever you go
+Track your blood pressure wherever you go. offline, ad-free and open.
+This application allows you to easily store your records and export all your records to a csv file. 
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
+To use this app, download the version for your platform from the release page.
 
-A few resources to get you started if this is your first Flutter project:
+While building an ios app would be no problem code wise, but apples restrictive behavior makes this more complicated (and expensive). 
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+## todo:
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+- [ ] add to f-droid
+- [ ] add to play store (not coming soon)
+- [ ] import from csv
+- [ ] edit/delete entries in app
+- [ ] ensure that no data loss can occur during version changes
+
