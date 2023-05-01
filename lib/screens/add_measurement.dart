@@ -29,7 +29,8 @@ class _AddMeasurementPageState extends State<AddMeasurementPage> {
           child: Container(
             padding: const EdgeInsets.all(80.0),
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 TextFormField(
                   decoration: const InputDecoration(
@@ -96,22 +97,39 @@ class _AddMeasurementPageState extends State<AddMeasurementPage> {
                 const SizedBox(
                   height: 24,
                 ),
-                ElevatedButton(
-                    onPressed: () {
-                      if (_formKey.currentState!.validate()) {
-                        Provider.of<BloodPressureModel>(context, listen: false).add(
-                          BloodPressureRecord(DateTime.now(), _systolic, _diastolic, _pulse, _note)
-                        );
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => const AppHome()),
-                        );
-                      }
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Theme.of(context).primaryColor
-                    ),
-                    child: const Text('SAVE'))
+                Row(
+                  children: [
+                    ElevatedButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => const AppHome()),
+                          );
+                        },
+                        style: ElevatedButton.styleFrom(
+                            backgroundColor: Theme.of(context).unselectedWidgetColor
+                        ),
+                        child: const Text('CANCEL')),
+                    Spacer(),
+                    ElevatedButton(
+                        onPressed: () {
+                          if (_formKey.currentState!.validate()) {
+                            Provider.of<BloodPressureModel>(context, listen: false).add(
+                                BloodPressureRecord(DateTime.now(), _systolic, _diastolic, _pulse, _note)
+                            );
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => const AppHome()),
+                            );
+                          }
+                        },
+                        style: ElevatedButton.styleFrom(
+                            backgroundColor: Theme.of(context).primaryColor
+                        ),
+                        child: const Text('SAVE'))
+                  ],
+                )
+
               ],
             ),
           ),
