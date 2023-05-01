@@ -93,6 +93,7 @@ class MeasurementList extends StatelessWidget {
     return Container(
       child: Column (
         children: [
+          const SizedBox(height: 15 ),
           Row(
           children: [
             Expanded(
@@ -105,15 +106,18 @@ class MeasurementList extends StatelessWidget {
             ),
             Expanded(
                 flex: _tableElementsSizes[1],
-                child: Text("sys", style: TextStyle(fontWeight: FontWeight.bold))
+                child: const Text("sys",
+                    style: TextStyle(fontWeight: FontWeight.bold, color: Colors.teal))
             ),
             Expanded(
                 flex: _tableElementsSizes[2],
-                child: Text("dia", style: TextStyle(fontWeight: FontWeight.bold))
+                child: const Text("dia",
+                    style: TextStyle(fontWeight: FontWeight.bold, color: Colors.green))
             ),
             Expanded(
                 flex: _tableElementsSizes[3],
-                child: Text("pul", style: TextStyle(fontWeight: FontWeight.bold))
+                child: const Text("pul",
+                    style: TextStyle(fontWeight: FontWeight.bold, color: Colors.red))
             ),
             Expanded(
                 flex: _tableElementsSizes[4],

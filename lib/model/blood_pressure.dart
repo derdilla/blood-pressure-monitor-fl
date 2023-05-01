@@ -29,9 +29,6 @@ class BloodPressureModel extends ChangeNotifier {
     return component;
   }
 
-  // All measurements (might get slow after some time)
-  UnmodifiableListView<BloodPressureRecord> get allMeasurements => UnmodifiableListView(_allMeasurements);
-
   Future<void> _cacheLast() async {
     var dbEntries = await _database.query('bloodPressureModel',
         orderBy: 'timestamp DESC', limit: _cacheCount); // descending
@@ -63,8 +60,8 @@ class BloodPressureModel extends ChangeNotifier {
     _cacheLast();
   }
 
-  /// Returns the last x BloodPressureRecords from new to old
-  /// caches new ones if necessary
+  /// Returns the last x BloodPressureRecords from new to old.
+  /// Caches new ones if necessary
   UnmodifiableListView<BloodPressureRecord> getLastX(int count) {
     List<BloodPressureRecord> lastMeasurements = [];
     
@@ -81,6 +78,26 @@ class BloodPressureModel extends ChangeNotifier {
     }
     
     return UnmodifiableListView(lastMeasurements);
+  }
+
+  /// Returns all recordings in saved in a range in ascending order
+  Future<UnmodifiableListView<BloodPressureRecord>> getInTimeRange(DateTime from, DateTime to) async {
+    var dbEntries = await _database.query('bloodPressureModel',
+      orderBy: 'timestamp DESC',
+      where: 'timestamp BETWEEN ? AND ?',
+      whereArgs: [from.millisecondsSinceEpoch, to.millisecondsSinceEpoch]
+    ); // descending
+    // syncronous part
+    List<BloodPressureRecord> recordsInRange = [];
+    for (var e in dbEntries) {
+      recordsInRange.add(BloodPressureRecord(
+          DateTime.fromMillisecondsSinceEpoch(e['timestamp']as int),
+          e['systolic'] as int,
+          e['diastolic'] as int,
+          e['pulse'] as int,
+          e['notes'] as String));
+    }
+    return UnmodifiableListView(recordsInRange);
   }
   
 
