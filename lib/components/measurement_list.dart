@@ -10,10 +10,10 @@ class MeasurementList extends StatelessWidget {
 
   MeasurementList(BuildContext context, {super.key}) {
     if (MediaQuery.of(context).size.width < 1000) {
-      _tableElementsSizes = [30,10,10,10,30];
+      _tableElementsSizes = [33,9,9,9,30];
       _sideFlex = 1;
     } else {
-      _tableElementsSizes = [9,7,7,7,60];
+      _tableElementsSizes = [20,5,5,5,60];
       _sideFlex = 5;
     }
   }
