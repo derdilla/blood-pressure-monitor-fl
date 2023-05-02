@@ -101,10 +101,7 @@ class _AddMeasurementPageState extends State<AddMeasurementPage> {
                   children: [
                     ElevatedButton(
                         onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => const AppHome()),
-                          );
+                          Navigator.of(context).pop();
                         },
                         style: ElevatedButton.styleFrom(
                             backgroundColor: Theme.of(context).unselectedWidgetColor
@@ -117,10 +114,14 @@ class _AddMeasurementPageState extends State<AddMeasurementPage> {
                             Provider.of<BloodPressureModel>(context, listen: false).add(
                                 BloodPressureRecord(DateTime.now(), _systolic, _diastolic, _pulse, _note)
                             );
+                            Navigator.of(context).pop();
+                            /*
                             Navigator.push(
                               context,
                               MaterialPageRoute(builder: (context) => const AppHome()),
                             );
+                            *
+                             */
                           }
                         },
                         style: ElevatedButton.styleFrom(
