@@ -235,7 +235,6 @@ class MeasurementGraph extends StatelessWidget {
                                 }
                               }
                             },
-                            dropdownColor: Colors.white,
                             items: TimeStep.options.map<DropdownMenuItem<int>>((v) {
                               return DropdownMenuItem(
                                   value: v,
