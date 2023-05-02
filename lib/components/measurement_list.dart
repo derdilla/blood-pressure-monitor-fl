@@ -39,7 +39,7 @@ class MeasurementList extends StatelessWidget {
                         }
                     );
                   } else {
-                    return const Text('Es existieren noch keine Werte');
+                    return const Text('no data');
                   }
                 }
               ),

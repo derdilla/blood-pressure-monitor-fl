@@ -43,6 +43,8 @@ class _LineChart extends StatelessWidget {
                               default:
                                 if (snapshot.hasError) {
                                   res = Text('ERROR: ${snapshot.error}');
+                                } else if (snapshot.hasData && snapshot.data!.length < 2) {
+                                  res = const Text('not enough data to draw graph');
                                 } else {
                                   assert(snapshot.hasData);
                                   final data = snapshot.data ?? [];
