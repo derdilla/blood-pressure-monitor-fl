@@ -81,7 +81,7 @@ class MeasurementList extends StatelessWidget {
             ),
             Expanded(
               flex: _sideFlex,
-              child: SizedBox(),
+              child: const SizedBox(),
             ),
           ]
       ),
@@ -106,8 +106,8 @@ class MeasurementList extends StatelessWidget {
             ),
             Expanded(
                 flex: _tableElementsSizes[1],
-                child: const Text("sys",
-                    style: TextStyle(fontWeight: FontWeight.bold, color: Colors.teal))
+                child: Text("sys",
+                    style: TextStyle(fontWeight: FontWeight.bold, color: Theme.of(context).primaryColor))
             ),
             Expanded(
                 flex: _tableElementsSizes[2],
@@ -131,7 +131,7 @@ class MeasurementList extends StatelessWidget {
           ),
           Divider(
             height: 20,
-            thickness: 1,
+            thickness: 2,
             color: Theme.of(context).primaryColor,
           )
         ]
