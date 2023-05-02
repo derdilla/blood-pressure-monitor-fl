@@ -63,7 +63,7 @@ class BloodPressureModel extends ChangeNotifier {
       measurement.pulse,
       measurement.notes]);
 
-    _cacheLast();
+    _cacheLast(); // hast notifyListeners()
   }
 
   /// Returns the last x BloodPressureRecords from new to old.

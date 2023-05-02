@@ -1,3 +1,4 @@
+import 'package:blood_pressure_app/model/settings.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:blood_pressure_app/model/blood_pressure.dart';
@@ -16,13 +17,18 @@ void main() async {
     databaseFactory = databaseFactoryFfi;
   }
 
+  // 2 different db files
   final dataModel = await BloodPressureModel.create();
+  final settingsModel = await Settings.create();
 
   runApp(
-      ChangeNotifierProvider(
-        create: (context) => dataModel,
-        child: const AppRoot(),
-      ),
+      MultiProvider(
+        providers: [
+          ChangeNotifierProvider(create: (context) => dataModel),
+          ChangeNotifierProvider(create: (context) => settingsModel),
+        ],
+        child: const AppRoot()
+      )
   );
 }
 
