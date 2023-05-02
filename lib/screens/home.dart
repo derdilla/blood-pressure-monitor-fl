@@ -23,12 +23,9 @@ class AppHome extends StatelessWidget {
           padding: _padding,
           child: Column(
             children: [
-              const Expanded(
-                  flex: 40,
-                  child: MeasurementGraph()
-              ),
+              MeasurementGraph(),
               Expanded(
-                flex: 60,
+                flex: 50,
                   child: MeasurementList(context)
               ),
             ]
@@ -37,7 +34,7 @@ class AppHome extends StatelessWidget {
       ),
       floatingActionButton:
         Container(
-          height: 100,
+          height: 110,
           child: Column(
             children: [
               Ink(

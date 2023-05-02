@@ -25,22 +25,9 @@ class _LineChart extends StatelessWidget {
                 builder: (context, settings, child) {
                   return Consumer<BloodPressureModel>(
                     builder: (context, model, child) {
-                      late final Future<UnmodifiableListView<BloodPressureRecord>> dataFuture;
-                      DateTime now = DateTime.now();
-                      switch (settings.graphStepSize) {
-                        case TimeStep.day:
-                          dataFuture = model.getInTimeRange(DateTime(now.year, now.month, now.day), now);
-                          break;
-                        case TimeStep.month:
-                          dataFuture = model.getInTimeRange(DateTime(now.year, now.month), now);
-                          break;
-                        case TimeStep.year:
-                          dataFuture = model.getInTimeRange(DateTime(now.year), now);
-                          break;
-                        case TimeStep.lifetime:
-                          dataFuture = model.getInTimeRange(DateTime.fromMillisecondsSinceEpoch(0), now);
-                          break;
-                      }
+                      var end = settings.graphEnd;
+                      if (settings.graphStepSize == TimeStep.lifetime) end = DateTime.now();
+                      final dataFuture = model.getInTimeRange(settings.graphStart, end);
 
                       return FutureBuilder<UnmodifiableListView<BloodPressureRecord>>(
                           future: dataFuture,
@@ -166,37 +153,112 @@ class _LineChart extends StatelessWidget {
 class MeasurementGraph extends StatelessWidget {
   const MeasurementGraph({super.key});
 
+  void moveGraphWithStep(int directionalStep, Settings settings) {
+    final oldStart = settings.graphStart;
+    final oldEnd = settings.graphEnd;
+    switch (settings.graphStepSize) {
+      case TimeStep.day:
+        settings.graphStart = oldStart.copyWith(day: oldStart.day + directionalStep);
+        settings.graphEnd = oldEnd.copyWith(day: oldEnd.day + directionalStep);
+        break;
+      case TimeStep.month:
+        settings.graphStart = oldStart.copyWith(month: oldStart.month + directionalStep);
+        settings.graphEnd = oldEnd.copyWith(month: oldEnd.month + directionalStep);
+        break;
+      case TimeStep.year:
+        settings.graphStart = oldStart.copyWith(year: oldStart.year + directionalStep);
+        settings.graphEnd = oldEnd.copyWith(year: oldEnd.year + directionalStep);
+        break;
+      case TimeStep.lifetime:
+        settings.graphStart = DateTime.fromMillisecondsSinceEpoch(0);
+        settings.graphEnd = oldStart;
+        break;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return SizedBox(
-      height: 1000,
+      height: 290,
       child: Padding(
         padding: const EdgeInsets.only(right: 16, left: 6, top: 2),
         child: Column(
           children: [
+            const SizedBox(height: 20,),
             _LineChart(),
+            const SizedBox(height: 7,),
             Consumer<Settings>(
                 builder: (context, settings, child) {
-                  return Container(
-                    color: Colors.white,
-                    child: DropdownButton<int>(
-                      value: settings.graphStepSize,
-                      onChanged: (int? value) {
-                        if (value != null) {
-                          settings.graphStepSize = value;
-                        }
-                      },
-                      dropdownColor: Colors.white,
-                      items: TimeStep.options.map<DropdownMenuItem<int>>((v) {
-                        return DropdownMenuItem(
-                            value: v,
-                            child: Text(
-                                TimeStep.getName(v)
-                            )
-                        );
-                      }).toList(),
-                    ),
+                  return Row(
+                    children: [
+                      Expanded(
+                        flex: 30,
+                        child: MaterialButton(
+                          onPressed: () {
+                            moveGraphWithStep(-1, settings);
+                          },
+                          child: const Icon(
+                            Icons.chevron_left,
+                            size: 48,
+                          ),
+                        ),
+                      ),
+
+                      Expanded(
+                        flex: 40,
+                          child: DropdownButton<int>(
+                            value: settings.graphStepSize,
+                            isExpanded: true,
+                            onChanged: (int? value) {
+                              if (value != null) {
+                                settings.graphStepSize = value;
+                                final now = DateTime.now();
+                                switch (settings.graphStepSize) {
+                                  case TimeStep.day:
+                                    settings.graphStart = DateTime(now.year, now.month, now.day);
+                                    settings.graphEnd = settings.graphStart.copyWith(day: now.day + 1);
+                                    break;
+                                  case TimeStep.month:
+                                    settings.graphStart = DateTime(now.year, now.month);
+                                    settings.graphEnd = settings.graphStart.copyWith(month: now.month + 1);
+                                    break;
+                                  case TimeStep.year:
+                                    settings.graphStart = DateTime(now.year);
+                                    settings.graphEnd = settings.graphStart.copyWith(year: now.year + 1);
+                                    break;
+                                  case TimeStep.lifetime:
+                                    settings.graphStart = DateTime.fromMillisecondsSinceEpoch(0);
+                                    settings.graphEnd = now;
+                                    break;
+                                }
+                              }
+                            },
+                            dropdownColor: Colors.white,
+                            items: TimeStep.options.map<DropdownMenuItem<int>>((v) {
+                              return DropdownMenuItem(
+                                  value: v,
+                                  child: Text(
+                                      TimeStep.getName(v)
+                                  )
+                              );
+                            }).toList(),
+                          ),
+                      ),
+
+
+                      Expanded(
+                        flex: 30,
+                        child: MaterialButton(
+                          onPressed: () {
+                            moveGraphWithStep(1, settings);
+                          },
+                          child: const Icon(
+                            Icons.chevron_right,
+                            size: 48,
+                          ),
+                        ),
+                      ),
+                    ]
                   );
                 }
             )

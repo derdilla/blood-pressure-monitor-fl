@@ -16,6 +16,8 @@ class Settings extends ChangeNotifier {
   late final Database _database;
 
   late int _graphStepSize;
+  late DateTime _graphStart;
+  late DateTime _graphEnd;
 
   Settings._create();
   Future<void> _asyncInit() async {
@@ -53,9 +55,13 @@ class Settings extends ChangeNotifier {
 
   Future<void> _loadSettings() async {
     var pGraphStepSize = _getSetting('_graphStepSize');
+    var pGraphStart = _getSetting('_graphStart');
+    var pGraphEnd = _getSetting('_graphEnd');
     // var ...
 
     _graphStepSize = (await pGraphStepSize as int?) ?? TimeStep.day;
+    _graphStart = DateTime.fromMillisecondsSinceEpoch((await pGraphStart as int?) ?? -1);
+    _graphEnd = DateTime.fromMillisecondsSinceEpoch((await pGraphEnd as int?) ?? -1);
     // ...
   }
 
@@ -65,6 +71,24 @@ class Settings extends ChangeNotifier {
   set graphStepSize(int newStepSize) {
     _graphStepSize = newStepSize;
     _saveSetting('_graphStepSize', newStepSize);
+    notifyListeners();
+  }
+
+  DateTime get graphStart {
+    return _graphStart;
+  }
+  set graphStart(DateTime newGraphStart) {
+    _graphStart = newGraphStart;
+    _saveSetting('_graphStart', newGraphStart.millisecondsSinceEpoch);
+    notifyListeners();
+  }
+
+  DateTime get graphEnd {
+    return _graphEnd;
+  }
+  set graphEnd(DateTime newGraphEnd) {
+    _graphEnd = newGraphEnd;
+    _saveSetting('_graphEnd', newGraphEnd.millisecondsSinceEpoch);
     notifyListeners();
   }
 
