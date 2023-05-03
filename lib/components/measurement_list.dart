@@ -1,4 +1,5 @@
 import 'package:blood_pressure_app/model/blood_pressure.dart';
+import 'package:blood_pressure_app/model/settings.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
@@ -20,7 +21,6 @@ class MeasurementList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return Container(
         child: Column(
           children: [
@@ -90,53 +90,56 @@ class MeasurementList extends StatelessWidget {
 
 
   Widget buildTableHeader(BuildContext context) {
-    return Container(
-      child: Column (
-        children: [
-          const SizedBox(height: 15 ),
-          Row(
-          children: [
-            Expanded(
-              flex: _sideFlex,
-              child: SizedBox(),
+    return Consumer<Settings>(
+        builder: (context, settings, child) {
+          return Container(
+            child: Column (
+                children: [
+                  const SizedBox(height: 15 ),
+                  Row(
+                    children: [
+                      Expanded(
+                        flex: _sideFlex,
+                        child: SizedBox(),
+                      ),
+                      Expanded(
+                          flex: _tableElementsSizes[0],
+                          child: const Text("time", style: TextStyle(fontWeight: FontWeight.bold))
+                      ),
+                      Expanded(
+                          flex: _tableElementsSizes[1],
+                          child: Text("sys",
+                              style: TextStyle(fontWeight: FontWeight.bold, color: settings.sysColor))
+                      ),
+                      Expanded(
+                          flex: _tableElementsSizes[2],
+                          child: Text("dia",
+                              style: TextStyle(fontWeight: FontWeight.bold, color: settings.diaColor))
+                      ),
+                      Expanded(
+                          flex: _tableElementsSizes[3],
+                          child: Text("pul",
+                              style: TextStyle(fontWeight: FontWeight.bold, color: settings.pulColor))
+                      ),
+                      Expanded(
+                          flex: _tableElementsSizes[4],
+                          child: const Text("notes", style: TextStyle(fontWeight: FontWeight.bold))
+                      ),
+                      Expanded(
+                        flex: _sideFlex,
+                        child: SizedBox(),
+                      ),
+                    ],
+                  ),
+                  Divider(
+                    height: 20,
+                    thickness: 2,
+                    color: Theme.of(context).primaryColor,
+                  )
+                ]
             ),
-            Expanded(
-                flex: _tableElementsSizes[0],
-                child: Text("time", style: TextStyle(fontWeight: FontWeight.bold))
-            ),
-            Expanded(
-                flex: _tableElementsSizes[1],
-                child: Text("sys",
-                    style: TextStyle(fontWeight: FontWeight.bold, color: Theme.of(context).primaryColor))
-            ),
-            Expanded(
-                flex: _tableElementsSizes[2],
-                child: const Text("dia",
-                    style: TextStyle(fontWeight: FontWeight.bold, color: Colors.green))
-            ),
-            Expanded(
-                flex: _tableElementsSizes[3],
-                child: const Text("pul",
-                    style: TextStyle(fontWeight: FontWeight.bold, color: Colors.red))
-            ),
-            Expanded(
-                flex: _tableElementsSizes[4],
-                child: Text("notes", style: TextStyle(fontWeight: FontWeight.bold))
-            ),
-            Expanded(
-              flex: _sideFlex,
-              child: SizedBox(),
-            ),
-          ],
-          ),
-          Divider(
-            height: 20,
-            thickness: 2,
-            color: Theme.of(context).primaryColor,
-          )
-        ]
-      ),
-    );
+          );
+        });
   }
 }
 

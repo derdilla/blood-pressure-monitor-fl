@@ -1,7 +1,9 @@
+import 'package:blood_pressure_app/components/complex_settings.dart';
 import 'package:blood_pressure_app/model/settings.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:settings_ui/settings_ui.dart';
+import 'package:flutter_material_color_picker/flutter_material_color_picker.dart';
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});
@@ -17,7 +19,7 @@ class SettingsScreen extends StatelessWidget {
           builder: (context, settings, child) {
             return SettingsList(sections: [
               SettingsSection(
-                  title: const Text('common'),
+                  title: const Text('theme'),
                   tiles: <SettingsTile>[
                     SettingsTile.switchTile(
                         initialValue: settings.followSystemDarkMode,
@@ -28,7 +30,7 @@ class SettingsScreen extends StatelessWidget {
                         title: const Text('follow system dark mode')
                     ),
                     SettingsTile.switchTile(
-                        initialValue: (() {
+                      initialValue: (() {
                           if (settings.followSystemDarkMode) {
                             return MediaQuery.of(context).platformBrightness == Brightness.dark;
                           }
@@ -38,9 +40,30 @@ class SettingsScreen extends StatelessWidget {
                           settings.darkMode = value;
                         },
                       leading: const Icon(Icons.dark_mode),
-                        title: const Text('enable dark mode'),
+                      title: const Text('enable dark mode'),
                       enabled: !settings.followSystemDarkMode,
                     ),
+                    //settings.accentColor = settings.createMaterialColor((color ?? Colors.teal).value);
+                    ColorSelectionTile(
+                        onMainColorChanged: (color) => settings.accentColor = settings.createMaterialColor((color ?? Colors.teal).value),
+                        initialColor: settings.accentColor,
+                        title: const Text('theme color')
+                    ).build(context),
+                    ColorSelectionTile(
+                        onMainColorChanged: (color) => settings.sysColor = settings.createMaterialColor((color ?? Colors.green).value),
+                        initialColor: settings.sysColor,
+                        title: const Text('systolic color')
+                    ).build(context),
+                    ColorSelectionTile(
+                        onMainColorChanged: (color) => settings.diaColor = settings.createMaterialColor((color ?? Colors.teal).value),
+                        initialColor: settings.diaColor,
+                        title: const Text('diastolic color')
+                    ).build(context),
+                    ColorSelectionTile(
+                        onMainColorChanged: (color) => settings.pulColor = settings.createMaterialColor((color ?? Colors.red).value),
+                        initialColor: settings.pulColor,
+                        title: const Text('pulse color')
+                    ).build(context),
                   ]
               )
             ]);

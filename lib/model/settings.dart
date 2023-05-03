@@ -20,6 +20,10 @@ class Settings extends ChangeNotifier {
   late DateTime _graphEnd;
   late bool _followSystemDarkMode;
   late bool _darkMode;
+  late MaterialColor _accentColor;
+  late MaterialColor _sysColor;
+  late MaterialColor _diaColor;
+  late MaterialColor _pulColor;
 
   Settings._create();
   Future<void> _asyncInit() async {
@@ -61,14 +65,44 @@ class Settings extends ChangeNotifier {
     var pGraphEnd = _getSetting('_graphEnd');
     var pFollowSystemDarkMode = _getSetting('_followSystemDarkMode');
     var pDarkMode = _getSetting('_darkMode');
+    var pAccentColor = _getSetting('_accentColor');
+    var pSysColor = _getSetting('_sysColor');
+    var pDiaColor = _getSetting('_diaColor');
+    var pPulColor = _getSetting('_pulColor');
     // var ...
 
     _graphStepSize = (await pGraphStepSize as int?) ?? TimeStep.day;
     _graphStart = DateTime.fromMillisecondsSinceEpoch((await pGraphStart as int?) ?? -1);
     _graphEnd = DateTime.fromMillisecondsSinceEpoch((await pGraphEnd as int?) ?? -1);
     _followSystemDarkMode = ((await pFollowSystemDarkMode as int?) ?? "1") == "1" ? true : false;
-    _darkMode = ((await pDarkMode as int?) ?? "1") == "1" ? true : false;
+    _darkMode = ((await pDarkMode as int?) ?? 1) == 1 ? true : false;
+    _accentColor = createMaterialColor(await pAccentColor as int? ?? 0xFF009688);
+    _sysColor = createMaterialColor(await pSysColor as int? ?? 0xFF009688);
+    _diaColor = createMaterialColor(await pDiaColor as int? ?? 0xFF4CAF50);
+    _pulColor = createMaterialColor(await pPulColor as int? ?? 0xFFF44336);
     // ...
+    return;
+  }
+
+  MaterialColor createMaterialColor(int value) {
+    final color = Color(value);
+    List strengths = <double>[.05];
+    Map<int, Color> swatch = {};
+    final int r = color.red, g = color.green, b = color.blue;
+
+    for (int i = 1; i < 10; i++) {
+      strengths.add(0.1 * i);
+    }
+    for (var strength in strengths) {
+      final double ds = 0.5 - strength;
+      swatch[(strength * 1000).round()] = Color.fromRGBO(
+        r + ((ds < 0 ? r : (255 - r)) * ds).round(),
+        g + ((ds < 0 ? g : (255 - g)) * ds).round(),
+        b + ((ds < 0 ? b : (255 - b)) * ds).round(),
+        1,
+      );
+    }
+    return MaterialColor(value, swatch);
   }
 
   int get graphStepSize {
@@ -102,7 +136,7 @@ class Settings extends ChangeNotifier {
   }
   set followSystemDarkMode(bool newSetting) {
     _followSystemDarkMode = newSetting;
-    _saveSetting('_followSystemDarkMode', newSetting ? 1 : 0);
+    _saveSetting('_followSystemDarkMode', newSetting ? "1" : "0");
     notifyListeners();
   }
   bool get darkMode {
@@ -111,6 +145,38 @@ class Settings extends ChangeNotifier {
   set darkMode(bool newSetting) {
     _darkMode = newSetting;
     _saveSetting('_darkMode', newSetting ? 1 : 0);
+    notifyListeners();
+  }
+  MaterialColor get accentColor {
+    return _accentColor;
+  }
+  set accentColor(MaterialColor newColor) {
+    _accentColor = newColor;
+    _saveSetting('_accentColor', newColor.value);
+    notifyListeners();
+  }
+  MaterialColor get diaColor {
+    return _diaColor;
+  }
+  set diaColor(MaterialColor newColor) {
+    _diaColor = newColor;
+    _saveSetting('_diaColor', newColor.value);
+    notifyListeners();
+  }
+  MaterialColor get sysColor {
+    return _sysColor;
+  }
+  set sysColor(MaterialColor newColor) {
+    _sysColor = newColor;
+    _saveSetting('_sysColor', newColor.value);
+    notifyListeners();
+  }
+  MaterialColor get pulColor {
+    return _pulColor;
+  }
+  set pulColor(MaterialColor newColor) {
+    _pulColor = newColor;
+    _saveSetting('_pulColor', newColor.value);
     notifyListeners();
   }
 

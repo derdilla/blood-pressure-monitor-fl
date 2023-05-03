@@ -43,6 +43,7 @@ dependencies:
   file_saver: ^0.2.1
   share_plus: ^4.5.3
   settings_ui: ^2.0.2
+  flutter_material_color_picker: ^1.1.0+2
 
 dev_dependencies:
   flutter_test:

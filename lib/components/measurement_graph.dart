@@ -11,10 +11,6 @@ import 'package:blood_pressure_app/model/settings.dart';
 class _LineChart extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    const pulseColor = Colors.red;
-    const diaColor = Colors.green;
-    const sysColor = Colors.teal;
-
     return Stack(
       children: [
         Align(
@@ -102,14 +98,14 @@ class _LineChart extends StatelessWidget {
                                             // high blood pressure marking acordning to https://www.texasheart.org/heart-health/heart-information-center/topics/high-blood-pressure-hypertension/
                                             LineChartBarData(
                                                 spots: pulseSpots,
-                                                color: pulseColor,
+                                                color: settings.pulColor,
                                                 barWidth: 4,
                                                 isCurved: true,
                                                 preventCurveOverShooting: true
                                             ),
                                             LineChartBarData(
                                                 spots: diastolicSpots,
-                                                color: diaColor,
+                                                color: settings.diaColor,
                                                 barWidth: 4,
                                                 isCurved: true,
                                                 preventCurveOverShooting: true,
@@ -122,7 +118,7 @@ class _LineChart extends StatelessWidget {
                                             ),
                                             LineChartBarData(
                                                 spots: systolicSpots,
-                                                color: sysColor,
+                                                color: settings.sysColor,
                                                 barWidth: 4,
                                                 isCurved: true,
                                                 preventCurveOverShooting: true,

@@ -51,12 +51,12 @@ class AppRoot extends StatelessWidget {
           return MaterialApp(
             title: 'Blood Pressure App',
             theme: ThemeData(
-                primaryColor: Colors.teal
+                primaryColor: settings.accentColor
             ),
             darkTheme: ThemeData(
                 brightness: Brightness.dark,
                 canvasColor: Colors.black,
-                primaryColor: Colors.teal.shade400,
+                primaryColor: settings.accentColor.shade400,
                 iconTheme: const IconThemeData(color: Colors.black)
             ),
             themeMode:  mode,
