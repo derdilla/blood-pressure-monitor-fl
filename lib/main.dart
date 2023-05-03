@@ -37,20 +37,32 @@ class AppRoot extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Blood Pressure Logger',
-      theme: ThemeData(
-          primaryColor: Colors.teal
-      ),
-      darkTheme: ThemeData(
-          brightness: Brightness.dark,
-          canvasColor: Colors.black,
-          primaryColor: Colors.teal.shade400,
-          iconTheme: const IconThemeData(color: Colors.black)
-      ),
-      themeMode: ThemeMode.system,
-      home: const AppHome(),
-    );
+    return Consumer<Settings>(
+        builder: (context, settings, child) {
+          late var mode;
+          if (settings.followSystemDarkMode) {
+            mode = ThemeMode.system;
+          } else if (settings.darkMode) {
+            mode = ThemeMode.dark;
+          } else {
+            mode = ThemeMode.light;
+          }
+
+          return MaterialApp(
+            title: 'Blood Pressure App',
+            theme: ThemeData(
+                primaryColor: Colors.teal
+            ),
+            darkTheme: ThemeData(
+                brightness: Brightness.dark,
+                canvasColor: Colors.black,
+                primaryColor: Colors.teal.shade400,
+                iconTheme: const IconThemeData(color: Colors.black)
+            ),
+            themeMode:  mode,
+            home: const AppHome(),
+          );
+        });
   }
 }
 

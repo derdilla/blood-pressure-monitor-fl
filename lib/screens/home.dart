@@ -1,4 +1,5 @@
 import 'package:blood_pressure_app/screens/add_measurement.dart';
+import 'package:blood_pressure_app/screens/settings.dart';
 import 'package:flutter/material.dart';
 import 'package:blood_pressure_app/components/measurement_graph.dart';
 import 'package:blood_pressure_app/components/measurement_list.dart';
@@ -33,10 +34,26 @@ class AppHome extends StatelessWidget {
         ),
       ),
       floatingActionButton:
-        Container(
-          height: 110,
+        SizedBox(
+          height: 150,
           child: Column(
             children: [
+              Ink(
+                decoration: ShapeDecoration(
+                    shape: const CircleBorder(),
+                    color: Theme.of(context).unselectedWidgetColor
+                ),
+                child: IconButton(
+                  icon: const Icon(Icons.settings),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const SettingsScreen()),
+                    );
+                  },
+                ),
+              ),
+              const SizedBox(height: 10,),
               Ink(
                 decoration: ShapeDecoration(
                     shape: const CircleBorder(),

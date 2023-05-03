@@ -18,6 +18,8 @@ class Settings extends ChangeNotifier {
   late int _graphStepSize;
   late DateTime _graphStart;
   late DateTime _graphEnd;
+  late bool _followSystemDarkMode;
+  late bool _darkMode;
 
   Settings._create();
   Future<void> _asyncInit() async {
@@ -57,11 +59,15 @@ class Settings extends ChangeNotifier {
     var pGraphStepSize = _getSetting('_graphStepSize');
     var pGraphStart = _getSetting('_graphStart');
     var pGraphEnd = _getSetting('_graphEnd');
+    var pFollowSystemDarkMode = _getSetting('_followSystemDarkMode');
+    var pDarkMode = _getSetting('_darkMode');
     // var ...
 
     _graphStepSize = (await pGraphStepSize as int?) ?? TimeStep.day;
     _graphStart = DateTime.fromMillisecondsSinceEpoch((await pGraphStart as int?) ?? -1);
     _graphEnd = DateTime.fromMillisecondsSinceEpoch((await pGraphEnd as int?) ?? -1);
+    _followSystemDarkMode = ((await pFollowSystemDarkMode as int?) ?? "1") == "1" ? true : false;
+    _darkMode = ((await pDarkMode as int?) ?? "1") == "1" ? true : false;
     // ...
   }
 
@@ -89,6 +95,22 @@ class Settings extends ChangeNotifier {
   set graphEnd(DateTime newGraphEnd) {
     _graphEnd = newGraphEnd;
     _saveSetting('_graphEnd', newGraphEnd.millisecondsSinceEpoch);
+    notifyListeners();
+  }
+  bool get followSystemDarkMode {
+    return _followSystemDarkMode;
+  }
+  set followSystemDarkMode(bool newSetting) {
+    _followSystemDarkMode = newSetting;
+    _saveSetting('_followSystemDarkMode', newSetting ? 1 : 0);
+    notifyListeners();
+  }
+  bool get darkMode {
+    return _darkMode;
+  }
+  set darkMode(bool newSetting) {
+    _darkMode = newSetting;
+    _saveSetting('_darkMode', newSetting ? 1 : 0);
     notifyListeners();
   }
 
