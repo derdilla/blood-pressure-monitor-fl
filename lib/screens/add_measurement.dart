@@ -22,14 +22,17 @@ class _AddMeasurementPageState extends State<AddMeasurementPage> {
   int _pulse = -1;
   String _note = "";
 
+  final _sysFocusNode = FocusNode();
+
   @override
   Widget build(BuildContext context) {
+    _sysFocusNode.requestFocus();
     return Scaffold(
       body: Center(
         child: Form(
           key: _formKey,
           child: Container(
-            padding: const EdgeInsets.all(80.0),
+            padding: const EdgeInsets.all(90.0),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -60,6 +63,14 @@ class _AddMeasurementPageState extends State<AddMeasurementPage> {
                   inputFormatters: <TextInputFormatter>[
                     FilteringTextInputFormatter.digitsOnly
                   ],
+                  focusNode: _sysFocusNode,
+                  onChanged: (String? value) {
+                    // to next field
+                    if ( value != null && value.isNotEmpty &&
+                    (int.tryParse(value) ?? -1) > 40) {
+                      FocusScope.of(context).nextFocus();
+                    }
+                  },
                   validator: (String? value) {
                     if (value == null || value.isEmpty
                         || (int.tryParse(value) == null)) {
@@ -78,6 +89,13 @@ class _AddMeasurementPageState extends State<AddMeasurementPage> {
                   inputFormatters: <TextInputFormatter>[
                     FilteringTextInputFormatter.digitsOnly
                   ],
+                  onChanged: (String? value) {
+                    // to next field
+                    if ( value != null && value.isNotEmpty &&
+                        (int.tryParse(value) ?? -1) > 40) {
+                      FocusScope.of(context).nextFocus();
+                    }
+                  },
                   validator: (String? value) {
                     if (value == null || value.isEmpty
                         || (int.tryParse(value) == null)) {
@@ -96,6 +114,13 @@ class _AddMeasurementPageState extends State<AddMeasurementPage> {
                   inputFormatters: <TextInputFormatter>[
                     FilteringTextInputFormatter.digitsOnly
                   ],
+                  onChanged: (String? value) {
+                    // to next field
+                    if ( value != null && value.isNotEmpty &&
+                        (int.tryParse(value) ?? -1) > 35) {
+                      FocusScope.of(context).nextFocus();
+                    }
+                  },
                   validator: (String? value) {
                     if (value == null || value.isEmpty
                         || (int.tryParse(value) == null)) {
@@ -143,7 +168,6 @@ class _AddMeasurementPageState extends State<AddMeasurementPage> {
                         child: const Text('SAVE'))
                   ],
                 )
-
               ],
             ),
           ),
