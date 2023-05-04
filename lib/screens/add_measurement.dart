@@ -2,6 +2,7 @@ import 'package:blood_pressure_app/model/blood_pressure.dart';
 import 'package:blood_pressure_app/screens/home.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 
@@ -13,12 +14,13 @@ class AddMeasurementPage extends StatefulWidget {
 }
 
 class _AddMeasurementPageState extends State<AddMeasurementPage> {
+  final _formatter = DateFormat('yy-MM-dd H:mm:s');
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  DateTime _time = DateTime.now();
   int _systolic = -1;
   int _diastolic = -1;
   int _pulse = -1;
   String _note = "";
-
 
   @override
   Widget build(BuildContext context) {
@@ -32,6 +34,24 @@ class _AddMeasurementPageState extends State<AddMeasurementPage> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
+                TextFormField(
+                  initialValue: _formatter.format(_time),
+                  decoration: const InputDecoration(
+                      hintText: 'time'
+                  ),
+                  validator: (String? value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter a value';
+                    } else {
+                      try {
+                        _time = _formatter.parse(value);
+                      } on FormatException {
+                        return 'date format: ${_formatter.pattern}';
+                      }
+                    }
+                    return null;
+                  },
+                ),
                 TextFormField(
                   decoration: const InputDecoration(
                     hintText: 'systolic'
@@ -112,16 +132,9 @@ class _AddMeasurementPageState extends State<AddMeasurementPage> {
                         onPressed: () {
                           if (_formKey.currentState!.validate()) {
                             Provider.of<BloodPressureModel>(context, listen: false).add(
-                                BloodPressureRecord(DateTime.now(), _systolic, _diastolic, _pulse, _note)
+                                BloodPressureRecord(_time, _systolic, _diastolic, _pulse, _note)
                             );
                             Navigator.of(context).pop();
-                            /*
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context) => const AppHome()),
-                            );
-                            *
-                             */
                           }
                         },
                         style: ElevatedButton.styleFrom(
@@ -138,5 +151,6 @@ class _AddMeasurementPageState extends State<AddMeasurementPage> {
       ),
     );
   }
+  
 
 }
