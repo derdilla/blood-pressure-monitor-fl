@@ -75,6 +75,18 @@ class SettingsScreen extends StatelessWidget {
                     leading: const Icon(Icons.save),
                     onPressed: (context) =>  Provider.of<BloodPressureModel>(context, listen: false).save(context),
                   ),
+                  SettingsTile(
+                    title: const Text('import'),
+                    leading: const Icon(Icons.file_upload),
+                    onPressed: (context) =>  Provider.of<BloodPressureModel>(context, listen: false).import((res, String? err) {
+                      if (res) {
+
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text('Error: ${err ?? 'unknown error'}')));
+                      }
+                    }),
+                  ),
                 ],
               )
             ]);

@@ -44,6 +44,8 @@ dependencies:
   share_plus: ^4.5.3
   settings_ui: ^2.0.2
   flutter_material_color_picker: ^1.1.0+2
+  file_picker: ^5.2.11
+  csv: ^5.0.2
 
 dev_dependencies:
   flutter_test:

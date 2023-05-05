@@ -1,5 +1,7 @@
 import 'dart:collection';
 import 'dart:io';
+import 'package:csv/csv.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:path/path.dart';
@@ -8,7 +10,6 @@ import 'package:sqflite/sqflite.dart';
 import 'package:file_saver/file_saver.dart';
 import 'package:share_plus/share_plus.dart';
 import 'dart:convert' show utf8;
-import 'dart:typed_data';
 
 class BloodPressureModel extends ChangeNotifier {
   static const maxEntries = 2E64; // https://www.sqlite.org/limits.html Nr.13
@@ -56,14 +57,27 @@ class BloodPressureModel extends ChangeNotifier {
   Future<void> add(BloodPressureRecord measurement) async {
     assert(_database.isOpen);
 
-    _database.rawInsert('INSERT INTO bloodPressureModel(timestamp, systolic, diastolic, pulse, notes) VALUES (?, ?, ?, ?, ?)', [
-      measurement.creationTime.millisecondsSinceEpoch,
-      measurement.systolic,
-      measurement.diastolic,
-      measurement.pulse,
-      measurement.notes]);
+    var existing = _database.query('bloodPressureModel', where: 'timestamp = ?',
+        whereArgs: [measurement.creationTime.millisecondsSinceEpoch]);
+    if ((await existing).isNotEmpty) {
+        await _database.update('bloodPressureModel', {
+          'systolic': measurement.systolic,
+          'diastolic': measurement.diastolic,
+          'pulse': measurement.pulse,
+          'notes': measurement.notes
+        }, where: 'timestamp = ?',
+            whereArgs: [measurement.creationTime.millisecondsSinceEpoch]);
+    } else {
+      await _database.insert('bloodPressureModel', {
+        'timestamp': measurement.creationTime.millisecondsSinceEpoch,
+        'systolic': measurement.systolic,
+        'diastolic': measurement.diastolic,
+        'pulse': measurement.pulse,
+        'notes': measurement.notes
+      });
+    }
 
-    _cacheLast(); // hast notifyListeners()
+    _cacheLast(); // contains notifyListeners()
   }
 
   /// Returns the last x BloodPressureRecords from new to old.
@@ -106,7 +120,8 @@ class BloodPressureModel extends ChangeNotifier {
     return UnmodifiableListView(recordsInRange);
   }
 
-  Future<void> save(BuildContext context) async { // TODO: passing context is not clean keep UI code out of model
+  Future<void> save(BuildContext context) async {
+    // TODO: passing context is not clean keep UI code out of model
     // create csv
     String csvData = 'timestampUnixMs, systolic, diastolic, pulse, notes\n';
     List<Map<String, Object?>> allEntries = await _database.query('bloodPressureModel',
@@ -132,10 +147,43 @@ class BloodPressureModel extends ChangeNotifier {
     } else {
 
     }
-
-
   }
-  
+
+  Future<void> import(void Function(bool, String?) callback) async {
+    var result = await FilePicker.platform.pickFiles(
+        allowMultiple: false,
+        withData: true,
+    );
+
+    if (result != null) {
+      var binaryContent = result.files.single.bytes;
+      print(binaryContent);
+      if (binaryContent != null) {
+        final csvContents = const CsvToListConverter().convert(
+            String.fromCharCodes(binaryContent),
+            fieldDelimiter: ',',
+            textDelimiter: '"',
+            eol: '\n'
+        );
+        for (var i = 1; i < csvContents.length; i++) {
+          var line = csvContents[i];
+          BloodPressureRecord record = BloodPressureRecord(
+              DateTime.fromMillisecondsSinceEpoch(line[0] as int),
+              (line[1] as int),
+              (line[2] as int),
+              (line[3] as int),
+              line[4]);
+          add(record);
+        }
+        return callback(true, null);
+
+      } else {
+        return callback(false, 'empty file');
+      }
+    } else {
+      return callback(false, 'no file opened');
+    }
+  }
 
 /* TODO:
   - bool deleteFromTime (timestamp)
