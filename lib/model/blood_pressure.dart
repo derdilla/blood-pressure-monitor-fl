@@ -9,13 +9,12 @@ import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:file_saver/file_saver.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:cross_file/cross_file.dart' show XFile;
 import 'dart:convert' show utf8;
 
 class BloodPressureModel extends ChangeNotifier {
   static const maxEntries = 2E64; // https://www.sqlite.org/limits.html Nr.13
   late final Database _database;
-  List<BloodPressureRecord> _allMeasurements = []; // TODO: remove cache
-  var _cacheCount = 100; // how many db entries are cached on default
 
   BloodPressureModel._create();
   Future<void> _asyncInit() async {
@@ -27,30 +26,12 @@ class BloodPressureModel extends ChangeNotifier {
       },
       version: 1,
     );
-    await _cacheLast();
   }
   // factory method, to allow for async contructor
   static Future<BloodPressureModel> create() async {
     final component = BloodPressureModel._create();
     await component._asyncInit();
     return component;
-  }
-
-  Future<void> _cacheLast() async {
-    var dbEntries = await _database.query('bloodPressureModel',
-        orderBy: 'timestamp DESC', limit: _cacheCount); // descending
-    // syncronous part
-    _allMeasurements = [];
-    for (var e in dbEntries) {
-      _allMeasurements.add(BloodPressureRecord(
-        DateTime.fromMillisecondsSinceEpoch(e['timestamp']as int), 
-        e['systolic'] as int, 
-        e['diastolic'] as int, 
-        e['pulse'] as int, 
-        e['notes'] as String));
-    }
-    
-    notifyListeners();
   }
 
   /// Adds a new measurement at the correct chronological position in the List.
@@ -77,26 +58,25 @@ class BloodPressureModel extends ChangeNotifier {
       });
     }
 
-    _cacheLast(); // contains notifyListeners()
+    notifyListeners();
   }
 
   /// Returns the last x BloodPressureRecords from new to old.
   /// Caches new ones if necessary
-  UnmodifiableListView<BloodPressureRecord> getLastX(int count) {
+  Future<UnmodifiableListView<BloodPressureRecord>> getLastX(int count) async {
     List<BloodPressureRecord> lastMeasurements = [];
-    
-    // fetch more if needed
-    if (count > _cacheCount) {
-      _cacheCount = count;
-      _cacheLast();
-    } else if (count == _cacheCount) { // small optimization
-      lastMeasurements = _allMeasurements;
-    } else {
-      for (int i = 0; (i<count && i<_allMeasurements.length); i++) {
-        lastMeasurements.add(_allMeasurements[i]);
-      }
+
+    var dbEntries = await _database.query('bloodPressureModel',
+        orderBy: 'timestamp DESC', limit: count); // de
+    for (var e in dbEntries) {
+      lastMeasurements.add(BloodPressureRecord(
+          DateTime.fromMillisecondsSinceEpoch(e['timestamp']as int),
+          e['systolic'] as int,
+          e['diastolic'] as int,
+          e['pulse'] as int,
+          e['notes'].toString()));
+
     }
-    
     return UnmodifiableListView(lastMeasurements);
   }
 
@@ -120,8 +100,7 @@ class BloodPressureModel extends ChangeNotifier {
     return UnmodifiableListView(recordsInRange);
   }
 
-  Future<void> save(BuildContext context) async {
-    // TODO: passing context is not clean keep UI code out of model
+  Future<void> save(void Function(bool success, String? msg) callback) async {
     // create csv
     String csvData = 'timestampUnixMs, systolic, diastolic, pulse, notes\n';
     List<Map<String, Object?>> allEntries = await _database.query('bloodPressureModel',
@@ -131,8 +110,9 @@ class BloodPressureModel extends ChangeNotifier {
     }
 
     // save data
+    String filename = 'blood_press_${DateTime.now().toIso8601String()}';
     String path = await FileSaver.instance.saveFile(
-      name: 'blood_press_${DateTime.now().toIso8601String()}',
+      name: filename,
       bytes: Uint8List.fromList(utf8.encode(csvData)),
       ext: 'csv',
       mimeType: MimeType.csv
@@ -140,10 +120,11 @@ class BloodPressureModel extends ChangeNotifier {
 
     // notify user about location
     if (Platform.isLinux || Platform.isWindows || Platform.isMacOS) {
-      ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Exported to: $path')));
+      callback(true, 'Exported to: $path');
     } else if (Platform.isAndroid || Platform.isIOS) {
-      Share.shareFiles([path], mimeTypes: [MimeType.csv.type]);
+      // TODO: compatability option
+      Share.shareXFiles([XFile(path, mimeType: MimeType.csv.type,)]);
+      callback(true, null);
     } else {
 
     }
@@ -184,13 +165,6 @@ class BloodPressureModel extends ChangeNotifier {
       return callback(false, 'no file opened');
     }
   }
-
-/* TODO:
-  - bool deleteFromTime (timestamp)
-  - bool changeAtTime (newRecord)
-   */
-
-
 }
 
 @immutable

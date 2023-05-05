@@ -20,7 +20,7 @@ class SettingsScreen extends StatelessWidget {
           builder: (context, settings, child) {
             return SettingsList(sections: [
               SettingsSection(
-                  title: const Text('theme'),
+                  title: const Text('layout'),
                   tiles: <SettingsTile>[
                     SettingsTile.switchTile(
                         initialValue: settings.followSystemDarkMode,
@@ -73,7 +73,15 @@ class SettingsScreen extends StatelessWidget {
                   SettingsTile(
                     title: const Text('export'),
                     leading: const Icon(Icons.save),
-                    onPressed: (context) =>  Provider.of<BloodPressureModel>(context, listen: false).save(context),
+                    onPressed: (context) =>  Provider.of<BloodPressureModel>(context, listen: false).save((success, msg) {
+                      if (success && msg != null) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text(msg)));
+                      } else if (!success && msg != null) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text('Error: $msg')));
+                      }
+                    }),
                   ),
                   SettingsTile(
                     title: const Text('import'),

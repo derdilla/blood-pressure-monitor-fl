@@ -1,3 +1,5 @@
+import 'dart:collection';
+
 import 'package:blood_pressure_app/model/blood_pressure.dart';
 import 'package:blood_pressure_app/model/settings.dart';
 import 'package:flutter/material.dart';
@@ -21,6 +23,7 @@ class MeasurementList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     return Container(
         child: Column(
           children: [
@@ -29,18 +32,34 @@ class MeasurementList extends StatelessWidget {
               flex: 100,
               child: Consumer<BloodPressureModel>(
                 builder: (context, model, child) {
-                  List<BloodPressureRecord> items = model.getLastX(30);
-                  if (items.isNotEmpty && items.first.diastolic > 0) {
-                    return ListView.builder(
-                        itemCount: items.length,
-                        shrinkWrap: true,
-                        itemBuilder: (context, index) {
-                          return buildListItem(items[index]);
+                  final items = model.getLastX(30);
+                  return FutureBuilder<UnmodifiableListView<BloodPressureRecord>>(
+                    future: items,
+                    builder: (BuildContext context, AsyncSnapshot<UnmodifiableListView<BloodPressureRecord>> recordsSnapsot) {
+                      assert(recordsSnapsot.connectionState != ConnectionState.none);
+
+                      if (recordsSnapsot.connectionState == ConnectionState.waiting) {
+                        return const Text('loading...');
+                      } else {
+                        if (recordsSnapsot.hasError) {
+                          return Text('Error loading data:\n${recordsSnapsot.error}');
+                        } else {
+                          final data = recordsSnapsot.data ?? [];
+                          if (data.isNotEmpty && data.first.diastolic > 0) {
+                            return ListView.builder(
+                                itemCount: data.length,
+                                shrinkWrap: true,
+                                itemBuilder: (context, index) {
+                                  return buildListItem(data[index]);
+                                }
+                            );
+                          } else {
+                            return const Text('no data');
+                          }
                         }
-                    );
-                  } else {
-                    return const Text('no data');
-                  }
+                      }
+                    }
+                  );
                 }
               ),
             )
