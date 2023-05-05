@@ -37,36 +37,8 @@ class AppHome extends StatelessWidget {
         SizedBox(
           height: 150,
           child: Column(
+            verticalDirection: VerticalDirection.up,
             children: [
-              Ink(
-                decoration: ShapeDecoration(
-                    shape: const CircleBorder(),
-                    color: Theme.of(context).unselectedWidgetColor
-                ),
-                child: IconButton(
-                  icon: const Icon(Icons.settings),
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => const SettingsScreen()),
-                    );
-                  },
-                ),
-              ),
-              const SizedBox(height: 10,),
-              Ink(
-                decoration: ShapeDecoration(
-                    shape: const CircleBorder(),
-                    color: Theme.of(context).unselectedWidgetColor
-                ),
-                child: IconButton(
-                  icon: const Icon(Icons.save),
-                  onPressed: () {
-                    Provider.of<BloodPressureModel>(context, listen: false).save(context);
-                  },
-                ),
-              ),
-              const SizedBox(height: 10,),
               Ink(
                 decoration: ShapeDecoration(
                     shape: const CircleBorder(),
@@ -82,6 +54,23 @@ class AppHome extends StatelessWidget {
                   },
                 ),
               ),
+              const SizedBox(height: 10,),
+              Ink(
+                decoration: ShapeDecoration(
+                    shape: const CircleBorder(),
+                    color: Theme.of(context).unselectedWidgetColor
+                ),
+                child: IconButton(
+                  icon: const Icon(Icons.settings),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const SettingsScreen()),
+                    );
+                  },
+                ),
+              ),
+
             ],
           ),
         )

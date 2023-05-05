@@ -1,4 +1,5 @@
 import 'package:blood_pressure_app/components/complex_settings.dart';
+import 'package:blood_pressure_app/model/blood_pressure.dart';
 import 'package:blood_pressure_app/model/settings.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -65,6 +66,16 @@ class SettingsScreen extends StatelessWidget {
                         title: const Text('pulse color')
                     ).build(context),
                   ]
+              ),
+              SettingsSection(
+                title: const Text('data'),
+                tiles: <SettingsTile>[
+                  SettingsTile(
+                    title: const Text('export'),
+                    leading: const Icon(Icons.save),
+                    onPressed: (context) =>  Provider.of<BloodPressureModel>(context, listen: false).save(context),
+                  ),
+                ],
               )
             ]);
           }

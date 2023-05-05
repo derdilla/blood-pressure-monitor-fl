@@ -116,7 +116,6 @@ class BloodPressureModel extends ChangeNotifier {
     }
 
     // save data
-    print(csvData);
     String path = await FileSaver.instance.saveFile(
       name: 'blood_press_${DateTime.now().toIso8601String()}',
       bytes: Uint8List.fromList(utf8.encode(csvData)),
