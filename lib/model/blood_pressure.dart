@@ -95,7 +95,8 @@ class BloodPressureModel extends ChangeNotifier {
           e['systolic'] as int,
           e['diastolic'] as int,
           e['pulse'] as int,
-          e['notes'] as String));
+          e['notes'].toString())
+      );
     }
     return UnmodifiableListView(recordsInRange);
   }
