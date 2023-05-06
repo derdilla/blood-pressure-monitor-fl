@@ -30,22 +30,18 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  provider: ^6.0.0
-  sqflite:
-  path:
+  provider: ^6.0.0  # MIT
+  sqflite:  # BSD-2-Clause
+  path:  # BSD-3-Clause
 
-
-  # The following adds the Cupertino Icons font to your application.
-  # Use with the CupertinoIcons class for iOS style icons.
-  cupertino_icons: ^1.0.2
-  intl: ^0.18.1
-  fl_chart: ^0.62.0
-  file_saver: ^0.2.1
-  share_plus: ^4.5.3
-  settings_ui: ^2.0.2
-  flutter_material_color_picker: ^1.1.0+2
-  file_picker: ^5.2.11
-  csv: ^5.0.2
+  intl: ^0.18.1  # BSD-3-Clause
+  fl_chart: ^0.62.0  # MIT
+  file_saver: ^0.2.1  # BSD-3-Clause
+  share_plus: ^4.5.3  # BSD-3-Clause
+  settings_ui: ^2.0.2  # Apache-2.0
+  flutter_material_color_picker: ^1.1.0+2  # MIT
+  file_picker: ^5.2.11  # MIT
+  csv: ^5.0.2  # MIT
 
 dev_dependencies:
   flutter_test:

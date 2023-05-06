@@ -26,7 +26,7 @@ class SettingsScreen extends StatelessWidget {
                         onToggle: (value) {
                           settings.allowManualTimeInput = value;
                         },
-                        leading: const Icon(Icons.auto_mode),
+                        leading: const Icon(Icons.details),
                         title: const Text('allow manual time input')
                     ),
                     SettingsTile.switchTile(
