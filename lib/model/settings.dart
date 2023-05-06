@@ -1,15 +1,9 @@
 
-import 'dart:collection';
-import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:path/path.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:sqflite/sqflite.dart';
-import 'package:file_saver/file_saver.dart';
-import 'package:share_plus/share_plus.dart';
-import 'dart:convert' show utf8;
-import 'dart:typed_data';
 
 class Settings extends ChangeNotifier {
   static const maxEntries = 2E64; // https://www.sqlite.org/limits.html Nr.13
