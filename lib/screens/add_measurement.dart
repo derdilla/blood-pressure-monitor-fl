@@ -14,7 +14,6 @@ class AddMeasurementPage extends StatefulWidget {
 }
 
 class _AddMeasurementPageState extends State<AddMeasurementPage> {
-  final _formatter = DateFormat('yy-MM-dd H:mm:s');
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   DateTime _time = DateTime.now();
   int _systolic = -1;
@@ -39,9 +38,10 @@ class _AddMeasurementPageState extends State<AddMeasurementPage> {
               children: [
                 Consumer<Settings>(
                     builder: (context, settings, child) {
+                      final formatter = DateFormat(settings.dateFormatString);
                       if(settings.allowManualTimeInput) {
                         return TextFormField(
-                          initialValue: _formatter.format(_time),
+                          initialValue: formatter.format(_time),
                           decoration: const InputDecoration(
                               hintText: 'time'
                           ),
@@ -50,9 +50,9 @@ class _AddMeasurementPageState extends State<AddMeasurementPage> {
                               return 'Please enter a value';
                             } else {
                               try {
-                                _time = _formatter.parse(value);
+                                _time = formatter.parse(value);
                               } on FormatException {
-                                return 'date format: ${_formatter.pattern}';
+                                return 'date format: ${formatter.pattern}';
                               }
                             }
                             return null;

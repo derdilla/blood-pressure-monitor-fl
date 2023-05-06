@@ -69,42 +69,47 @@ class MeasurementList extends StatelessWidget {
   }
 
   Widget buildListItem(BloodPressureRecord record) {
-    final DateFormat formater = DateFormat('yy-MM-dd H:mm:s');
-    return Container(
-      margin: const EdgeInsets.only(bottom: 5),
-      child: Row(
-          children: [
-            Expanded(
-              flex: _sideFlex,
-              child: const SizedBox(),
+    return Consumer<Settings>(
+        builder: (context, settings, child) {
+          final formatter = DateFormat(settings.dateFormatString);
+          return Container(
+            margin: const EdgeInsets.only(bottom: 5),
+            child: Row(
+                children: [
+                  Expanded(
+                    flex: _sideFlex,
+                    child: const SizedBox(),
+                  ),
+                  Expanded(
+                      flex: _tableElementsSizes[0],
+                      child: Text(formatter.format(record.creationTime))
+                  ),
+                  Expanded(
+                      flex: _tableElementsSizes[1],
+                      child: Text(record.systolic.toString())
+                  ),
+                  Expanded(
+                      flex: _tableElementsSizes[2],
+                      child: Text(record.diastolic.toString())
+                  ),
+                  Expanded(
+                      flex: _tableElementsSizes[3],
+                      child: Text(record.pulse.toString())
+                  ),
+                  Expanded(
+                      flex: _tableElementsSizes[4],
+                      child: Text(record.notes)
+                  ),
+                  Expanded(
+                    flex: _sideFlex,
+                    child: const SizedBox(),
+                  ),
+                ]
             ),
-            Expanded(
-                flex: _tableElementsSizes[0],
-                child: Text(formater.format(record.creationTime))
-            ),
-            Expanded(
-                flex: _tableElementsSizes[1],
-                child: Text(record.systolic.toString())
-            ),
-            Expanded(
-                flex: _tableElementsSizes[2],
-                child: Text(record.diastolic.toString())
-            ),
-            Expanded(
-                flex: _tableElementsSizes[3],
-                child: Text(record.pulse.toString())
-            ),
-            Expanded(
-                flex: _tableElementsSizes[4],
-                child: Text(record.notes)
-            ),
-            Expanded(
-              flex: _sideFlex,
-              child: const SizedBox(),
-            ),
-          ]
-      ),
+          );
+        }
     );
+
   }
 
 
@@ -160,9 +165,4 @@ class MeasurementList extends StatelessWidget {
           );
         });
   }
-}
-
-class _MeasuredValueListItem {
-
-
 }

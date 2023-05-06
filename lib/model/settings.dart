@@ -19,6 +19,7 @@ class Settings extends ChangeNotifier {
   late MaterialColor _diaColor;
   late MaterialColor _pulColor;
   late bool _allowManualTimeInput;
+  late String _dateFormatString;
 
   Settings._create();
   Future<void> _asyncInit() async {
@@ -65,6 +66,7 @@ class Settings extends ChangeNotifier {
     var pDiaColor = _getSetting('_diaColor');
     var pPulColor = _getSetting('_pulColor');
     var pAllowManualTimeInput = _getSetting('_allowManualTimeInput');
+    var pDateFormatString = _getSetting('_dateFormatString');
     // var ...
 
     _graphStepSize = (await pGraphStepSize as int?) ?? TimeStep.day;
@@ -77,6 +79,7 @@ class Settings extends ChangeNotifier {
     _diaColor = createMaterialColor(await pDiaColor as int? ?? 0xFF4CAF50);
     _pulColor = createMaterialColor(await pPulColor as int? ?? 0xFFF44336);
     _allowManualTimeInput = ((await pAllowManualTimeInput as int?) ?? 1) == 1 ? true : false;
+    _dateFormatString = (await pDateFormatString as String?) ?? 'yy-MM-dd H:mm';
     // ...
     return;
   }
@@ -182,6 +185,14 @@ class Settings extends ChangeNotifier {
   set allowManualTimeInput(bool newSetting) {
     _allowManualTimeInput = newSetting;
     _saveSetting('_allowManualTimeInput', newSetting ? 1 : 0);
+    notifyListeners();
+  }
+  String get dateFormatString {
+    return _dateFormatString;
+  }
+  set dateFormatString(String newFormatString) {
+    _dateFormatString = newFormatString;
+    _saveSetting('_dateFormatString', newFormatString);
     notifyListeners();
   }
 
