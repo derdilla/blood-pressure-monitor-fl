@@ -84,6 +84,8 @@ class _AddMeasurementPageState extends State<AddMeasurementPage> {
                     if (value == null || value.isEmpty
                         || (int.tryParse(value) == null)) {
                       return 'Please enter a Number';
+                    } else if ((int.tryParse(value) ?? -1) <= 30) {
+                      return 'The number must be > 30';
                     } else {
                       _systolic = int.tryParse(value) ?? -1;
                     }
@@ -109,6 +111,8 @@ class _AddMeasurementPageState extends State<AddMeasurementPage> {
                     if (value == null || value.isEmpty
                         || (int.tryParse(value) == null)) {
                       return 'Please enter a Number';
+                    } else if ((int.tryParse(value) ?? -1) <= 30) {
+                      return 'The number must be > 30';
                     } else {
                       _diastolic = int.tryParse(value) ?? -1;
                     }
@@ -134,6 +138,8 @@ class _AddMeasurementPageState extends State<AddMeasurementPage> {
                     if (value == null || value.isEmpty
                         || (int.tryParse(value) == null)) {
                       return 'Please enter a Number';
+                    } else if ((int.tryParse(value) ?? -1) <= 30) {
+                      return 'The number must be > 30';
                     } else {
                       _pulse = int.tryParse(value) ?? -1;
                     }
