@@ -1,4 +1,5 @@
 import 'package:blood_pressure_app/model/blood_pressure.dart';
+import 'package:blood_pressure_app/model/settings.dart';
 import 'package:blood_pressure_app/screens/home.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -37,23 +38,31 @@ class _AddMeasurementPageState extends State<AddMeasurementPage> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                TextFormField(
-                  initialValue: _formatter.format(_time),
-                  decoration: const InputDecoration(
-                      hintText: 'time'
-                  ),
-                  validator: (String? value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter a value';
-                    } else {
-                      try {
-                        _time = _formatter.parse(value);
-                      } on FormatException {
-                        return 'date format: ${_formatter.pattern}';
+                Consumer<Settings>(
+                    builder: (context, settings, child) {
+                      if(settings.allowManualTimeInput) {
+                        return TextFormField(
+                          initialValue: _formatter.format(_time),
+                          decoration: const InputDecoration(
+                              hintText: 'time'
+                          ),
+                          validator: (String? value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Please enter a value';
+                            } else {
+                              try {
+                                _time = _formatter.parse(value);
+                              } on FormatException {
+                                return 'date format: ${_formatter.pattern}';
+                              }
+                            }
+                            return null;
+                          },
+                        );
+                      } else {
+                        return const SizedBox.shrink();
                       }
                     }
-                    return null;
-                  },
                 ),
                 TextFormField(
                   decoration: const InputDecoration(

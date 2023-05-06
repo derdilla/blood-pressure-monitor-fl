@@ -24,6 +24,7 @@ class Settings extends ChangeNotifier {
   late MaterialColor _sysColor;
   late MaterialColor _diaColor;
   late MaterialColor _pulColor;
+  late bool _allowManualTimeInput;
 
   Settings._create();
   Future<void> _asyncInit() async {
@@ -69,6 +70,7 @@ class Settings extends ChangeNotifier {
     var pSysColor = _getSetting('_sysColor');
     var pDiaColor = _getSetting('_diaColor');
     var pPulColor = _getSetting('_pulColor');
+    var pAllowManualTimeInput = _getSetting('_allowManualTimeInput');
     // var ...
 
     _graphStepSize = (await pGraphStepSize as int?) ?? TimeStep.day;
@@ -80,6 +82,7 @@ class Settings extends ChangeNotifier {
     _sysColor = createMaterialColor(await pSysColor as int? ?? 0xFF009688);
     _diaColor = createMaterialColor(await pDiaColor as int? ?? 0xFF4CAF50);
     _pulColor = createMaterialColor(await pPulColor as int? ?? 0xFFF44336);
+    _allowManualTimeInput = ((await pAllowManualTimeInput as int?) ?? 1) == 1 ? true : false;
     // ...
     return;
   }
@@ -177,6 +180,14 @@ class Settings extends ChangeNotifier {
   set pulColor(MaterialColor newColor) {
     _pulColor = newColor;
     _saveSetting('_pulColor', newColor.value);
+    notifyListeners();
+  }
+  bool get allowManualTimeInput {
+    return _allowManualTimeInput;
+  }
+  set allowManualTimeInput(bool newSetting) {
+    _allowManualTimeInput = newSetting;
+    _saveSetting('_allowManualTimeInput', newSetting ? 1 : 0);
     notifyListeners();
   }
 

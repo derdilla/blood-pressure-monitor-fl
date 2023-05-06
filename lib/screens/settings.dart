@@ -23,6 +23,14 @@ class SettingsScreen extends StatelessWidget {
                   title: const Text('layout'),
                   tiles: <SettingsTile>[
                     SettingsTile.switchTile(
+                        initialValue: settings.allowManualTimeInput,
+                        onToggle: (value) {
+                          settings.allowManualTimeInput = value;
+                        },
+                        leading: const Icon(Icons.auto_mode),
+                        title: const Text('allow manual time input')
+                    ),
+                    SettingsTile.switchTile(
                         initialValue: settings.followSystemDarkMode,
                         onToggle: (value) {
                           settings.followSystemDarkMode = value;
