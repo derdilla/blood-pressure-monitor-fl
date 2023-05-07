@@ -123,7 +123,7 @@ class BloodPressureModel extends ChangeNotifier {
     if (Platform.isLinux || Platform.isWindows || Platform.isMacOS) {
       callback(true, 'Exported to: $path');
     } else if (Platform.isAndroid || Platform.isIOS) {
-      // TODO: compatability option
+      // TODO: compatability option (MIME Types)
       Share.shareXFiles([XFile(path, mimeType: MimeType.csv.type,)]);
       callback(true, null);
     } else {

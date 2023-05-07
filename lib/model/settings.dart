@@ -1,4 +1,6 @@
 
+import 'dart:io';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:path/path.dart';
@@ -35,6 +37,13 @@ class Settings extends ChangeNotifier {
   }
   // factory method, to allow for async contructor
   static Future<Settings> create() async {
+    if (Platform.isWindows || Platform.isLinux) {
+      // Initialize FFI
+      sqfliteFfiInit();
+      // Change the default factory
+      databaseFactory = databaseFactoryFfi;
+    }
+
     final component = Settings._create();
     await component._asyncInit();
     return component;
@@ -72,7 +81,7 @@ class Settings extends ChangeNotifier {
     _graphStepSize = (await pGraphStepSize as int?) ?? TimeStep.day;
     _graphStart = DateTime.fromMillisecondsSinceEpoch((await pGraphStart as int?) ?? -1);
     _graphEnd = DateTime.fromMillisecondsSinceEpoch((await pGraphEnd as int?) ?? -1);
-    _followSystemDarkMode = ((await pFollowSystemDarkMode as int?) ?? "1") == "1" ? true : false;
+    _followSystemDarkMode = ((await pFollowSystemDarkMode as int?) ?? 1) == 1 ? true : false;
     _darkMode = ((await pDarkMode as int?) ?? 1) == 1 ? true : false;
     _accentColor = createMaterialColor(await pAccentColor as int? ?? 0xFF009688);
     _sysColor = createMaterialColor(await pSysColor as int? ?? 0xFF009688);
@@ -205,6 +214,8 @@ class TimeStep {
   static const month = 1;
   static const year = 2;
   static const lifetime = 3;
+
+  TimeStep._create();
 
   static String getName(int opt) {
     switch (opt) {
