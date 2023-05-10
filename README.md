@@ -13,7 +13,7 @@ While building an ios app would be no problem code wise, but apples restrictive 
 
 - [ ] add to f-droid
 - [ ] add to play store (not coming soon)
-- [ ] import from csv
+- [X] import from csv
 - [ ] edit/delete entries in app
-- [ ] ensure that no data loss can occur during version changes
+- [X] ensure that no data loss can occur during version changes
 
