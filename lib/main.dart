@@ -49,7 +49,6 @@ class AppRoot extends StatelessWidget {
                 brightness: Brightness.dark,
                 canvasColor: Colors.black,
                 primaryColor: settings.accentColor.shade400,
-                iconTheme: const IconThemeData(color: Colors.black)
             ),
             themeMode:  mode,
             home: const AppHome(),
