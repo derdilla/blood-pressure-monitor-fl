@@ -1,4 +1,4 @@
-name: 'linux builds'
+name: CI
 
 on:
   push:
