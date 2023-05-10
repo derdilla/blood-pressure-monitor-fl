@@ -45,7 +45,10 @@ class AppHome extends StatelessWidget {
                     color: Theme.of(context).primaryColor
                 ),
                 child: IconButton(
-                  icon: const Icon(Icons.add),
+                  icon: const Icon(
+                    Icons.add,
+                    color: Colors.black,
+                  ),
                   onPressed: () {
                     Navigator.push(
                       context,
@@ -61,7 +64,10 @@ class AppHome extends StatelessWidget {
                     color: Theme.of(context).unselectedWidgetColor
                 ),
                 child: IconButton(
-                  icon: const Icon(Icons.settings),
+                  icon: const Icon(
+                      Icons.settings,
+                      color: Colors.black
+                  ),
                   onPressed: () {
                     Navigator.push(
                       context,

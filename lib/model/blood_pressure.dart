@@ -29,6 +29,13 @@ class BloodPressureModel extends ChangeNotifier {
   }
   // factory method, to allow for async contructor
   static Future<BloodPressureModel> create() async {
+    if (Platform.isWindows || Platform.isLinux) {
+      // Initialize FFI
+      sqfliteFfiInit();
+      // Change the default factory
+      databaseFactory = databaseFactoryFfi;
+    }
+
     final component = BloodPressureModel._create();
     await component._asyncInit();
     return component;

@@ -38,7 +38,6 @@ dependencies:
   fl_chart: ^0.62.0  # MIT
   file_saver: ^0.2.1  # BSD-3-Clause
   share_plus: ^4.5.3  # BSD-3-Clause
-  settings_ui: ^2.0.2  # Apache-2.0
   flutter_material_color_picker: ^1.1.0+2  # MIT
   file_picker: ^5.2.11  # MIT
   csv: ^5.0.2  # MIT
