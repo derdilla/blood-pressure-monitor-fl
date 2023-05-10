@@ -5,6 +5,17 @@ on:
     branches: [ "main" ]
 
 jobs:
+  test:
+    runs-on: ubuntu-latest
+ 
+    steps:
+    - uses: actions/checkout@v3
+    - uses: subosito/flutter-action@v2
+      with:
+        flutter-version: '3.7.12'
+    - run: flutter pub get
+    - run: flutter test
+
   build-android:
     runs-on: ubuntu-latest
  
@@ -18,7 +29,6 @@ jobs:
       with:
         flutter-version: '3.7.12'
     - run: flutter pub get
-    - run: flutter test
     
     - run: flutter build apk
 
@@ -37,7 +47,6 @@ jobs:
       with:
         flutter-version: '3.7.12'
     - run: flutter pub get
-    - run: flutter test
 
     - run: |
             sudo apt-get update -y
@@ -54,7 +63,6 @@ jobs:
       with:
         flutter-version: '3.7.12'
     - run: flutter pub get
-    - run: flutter test
     
     - run: flutter config --enable-windows-desktop
     - run: flutter build windows
