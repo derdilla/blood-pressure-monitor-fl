@@ -24,9 +24,11 @@ class Settings extends ChangeNotifier {
   late String _dateFormatString;
 
   Settings._create();
-  Future<void> _asyncInit() async {
+  Future<void> _asyncInit(String? dbPath) async {
+    dbPath ??= await getDatabasesPath();
+
     _database = await openDatabase(
-      join(await getDatabasesPath(), 'settings.db'),
+      join(dbPath, 'settings.db'),
       // runs when the database is first created
       onCreate: (db, version) {
         return db.execute('CREATE TABLE settings(key STRING PRIMARY KEY, value STRING)');
@@ -36,7 +38,7 @@ class Settings extends ChangeNotifier {
     await _loadSettings();
   }
   // factory method, to allow for async contructor
-  static Future<Settings> create() async {
+  static Future<Settings> create({String? dbPath}) async {
     if (Platform.isWindows || Platform.isLinux) {
       // Initialize FFI
       sqfliteFfiInit();
@@ -45,7 +47,7 @@ class Settings extends ChangeNotifier {
     }
 
     final component = Settings._create();
-    await component._asyncInit();
+    await component._asyncInit(dbPath);
     return component;
   }
 

@@ -1,9 +1,6 @@
-import 'package:blood_pressure_app/model/blood_pressure.dart';
 import 'package:blood_pressure_app/model/settings.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart' show launch;
 
@@ -69,7 +66,7 @@ class _EnterTimeFormatScreenState extends State<EnterTimeFormatScreen> {
                       );
                     }
                 ),
-                SizedBox(height: 25,),
+                const SizedBox(height: 25,),
                 Row(
                   children: [
                     ElevatedButton(
