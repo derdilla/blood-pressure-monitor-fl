@@ -110,7 +110,7 @@ class BloodPressureModel extends ChangeNotifier {
     return UnmodifiableListView(recordsInRange);
   }
 
-  Future<void> save(void Function(bool success, String? msg) callback) async {
+  Future<void> save(void Function(bool success, String? msg) callback, {bool exportAsText = false}) async {
     // create csv
     String csvData = 'timestampUnixMs, systolic, diastolic, pulse, notes\n';
     List<Map<String, Object?>> allEntries = await _database.query('bloodPressureModel',
@@ -132,8 +132,11 @@ class BloodPressureModel extends ChangeNotifier {
     if (Platform.isLinux || Platform.isWindows || Platform.isMacOS) {
       callback(true, 'Exported to: $path');
     } else if (Platform.isAndroid || Platform.isIOS) {
-      // TODO: compatability option (MIME Types)
-      Share.shareXFiles([XFile(path, mimeType: MimeType.csv.type,)]);
+      var mimeType = MimeType.csv;
+      if (exportAsText) {
+        mimeType = MimeType.text;
+      }
+      Share.shareXFiles([XFile(path, mimeType: mimeType.type,)]);
       callback(true, null);
     } else {
 
