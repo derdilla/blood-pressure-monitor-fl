@@ -17,9 +17,11 @@ class BloodPressureModel extends ChangeNotifier {
   late final Database _database;
 
   BloodPressureModel._create();
-  Future<void> _asyncInit() async {
+  Future<void> _asyncInit(String? dbPath) async {
+    dbPath ??= await getDatabasesPath();
+
     _database = await openDatabase(
-      join(await getDatabasesPath(), 'blood_pressure.db'),
+      join(dbPath, 'blood_pressure.db'),
       // runs when the database is first created
       onCreate: (db, version) {
         return db.execute('CREATE TABLE bloodPressureModel(timestamp INTEGER(14) PRIMARY KEY, systolic INTEGER, diastolic INTEGER, pulse INTEGER, notes STRING)');
@@ -28,7 +30,7 @@ class BloodPressureModel extends ChangeNotifier {
     );
   }
   // factory method, to allow for async contructor
-  static Future<BloodPressureModel> create() async {
+  static Future<BloodPressureModel> create({String? dbPath}) async {
     if (Platform.isWindows || Platform.isLinux) {
       // Initialize FFI
       sqfliteFfiInit();
@@ -37,7 +39,7 @@ class BloodPressureModel extends ChangeNotifier {
     }
 
     final component = BloodPressureModel._create();
-    await component._asyncInit();
+    await component._asyncInit(dbPath);
     return component;
   }
 
@@ -175,6 +177,10 @@ class BloodPressureModel extends ChangeNotifier {
     } else {
       return callback(false, 'no file opened');
     }
+  }
+
+  void close() {
+    _database.close();
   }
 }
 

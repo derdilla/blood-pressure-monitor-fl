@@ -1,6 +1,3 @@
-import 'dart:io';
-import 'dart:math';
-
 import 'package:blood_pressure_app/model/settings.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
@@ -20,13 +17,10 @@ void main() {
     databaseFactory = databaseFactoryFfi;
 
     test('should initialize', () async {
-      await clearDbDir();
-      expect(() async { await Settings.create(); }, returnsNormally);
+      expect(() async { await Settings.create(dbPath: '/tmp/setting_test/should_init'); }, returnsNormally);
     });
     test('fields defaults should be set after initialization', () async {
-      await clearDbDir();
-
-      var s = await Settings.create();
+      var s = await Settings.create(dbPath: '/tmp/setting_test/should_default');
       expect(s.graphStepSize, TimeStep.day);
       expect(s.graphStart, DateTime.fromMillisecondsSinceEpoch(-1));
       expect(s.graphEnd, DateTime.fromMillisecondsSinceEpoch(-1));
@@ -41,9 +35,8 @@ void main() {
       expect(s.useExportCompatability, false);
     });
 
-    test('setting fields should notify listeners and change values', () async {
-      await clearDbDir();
-      var s = await Settings.create();
+    test('setting fields should save changes', () async {
+      var s = await Settings.create(dbPath: '/tmp/setting_test/should_save');
 
       int i = 0;
       s.addListener(() {
@@ -80,11 +73,10 @@ void main() {
       expect(s.pulColor.value, 0xFF942DA7);
       expect(s.allowManualTimeInput, false);
       expect(s.useExportCompatability, true);
-
     });
+
     test('setting fields should notify listeners and change values', () async {
-      await clearDbDir();
-      var s = await Settings.create();
+      var s = await Settings.create(dbPath: '/tmp/setting_test/should_notify');
 
       int i = 0;
       s.addListener(() {
@@ -103,19 +95,9 @@ void main() {
       s.allowManualTimeInput = false;
       s.dateFormatString = 'yy:dd @ H:mm.ss';
       s.useExportCompatability = true;
-
+      
       expect(i, 12);
     });
 
   });
-}
-
-Future<void> clearDbDir() async {
-  databaseFactory.setDatabasesPath((await getDatabasesPath()).replaceAll('databases', 'test_databases'));
-  try {
-    Directory(await getDatabasesPath()).deleteSync(recursive: true);
-  } catch (e) {
-    print('no directory to delete!');
-  }
-  Directory(await getDatabasesPath()).create(recursive: true);
 }
