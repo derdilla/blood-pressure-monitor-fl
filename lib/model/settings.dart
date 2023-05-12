@@ -22,11 +22,14 @@ class Settings extends ChangeNotifier {
   late MaterialColor _pulColor;
   late bool _allowManualTimeInput;
   late String _dateFormatString;
+  late bool _useExportCompatability;
 
   Settings._create();
-  Future<void> _asyncInit() async {
+  Future<void> _asyncInit(String? dbPath) async {
+    dbPath ??= await getDatabasesPath();
+
     _database = await openDatabase(
-      join(await getDatabasesPath(), 'settings.db'),
+      join(dbPath, 'settings.db'),
       // runs when the database is first created
       onCreate: (db, version) {
         return db.execute('CREATE TABLE settings(key STRING PRIMARY KEY, value STRING)');
@@ -36,7 +39,7 @@ class Settings extends ChangeNotifier {
     await _loadSettings();
   }
   // factory method, to allow for async contructor
-  static Future<Settings> create() async {
+  static Future<Settings> create({String? dbPath}) async {
     if (Platform.isWindows || Platform.isLinux) {
       // Initialize FFI
       sqfliteFfiInit();
@@ -45,7 +48,7 @@ class Settings extends ChangeNotifier {
     }
 
     final component = Settings._create();
-    await component._asyncInit();
+    await component._asyncInit(dbPath);
     return component;
   }
 
@@ -76,19 +79,21 @@ class Settings extends ChangeNotifier {
     var pPulColor = _getSetting('_pulColor');
     var pAllowManualTimeInput = _getSetting('_allowManualTimeInput');
     var pDateFormatString = _getSetting('_dateFormatString');
+    var pUseExportCompatability = _getSetting('_useExportCompatability');
     // var ...
 
     _graphStepSize = (await pGraphStepSize as int?) ?? TimeStep.day;
     _graphStart = DateTime.fromMillisecondsSinceEpoch((await pGraphStart as int?) ?? -1);
     _graphEnd = DateTime.fromMillisecondsSinceEpoch((await pGraphEnd as int?) ?? -1);
-    _followSystemDarkMode = ((await pFollowSystemDarkMode as int?) ?? 1) == 1 ? true : false;
+    _followSystemDarkMode = ((await pFollowSystemDarkMode as int?) ?? 1) == 1;
     _darkMode = ((await pDarkMode as int?) ?? 1) == 1 ? true : false;
     _accentColor = createMaterialColor(await pAccentColor as int? ?? 0xFF009688);
     _sysColor = createMaterialColor(await pSysColor as int? ?? 0xFF009688);
     _diaColor = createMaterialColor(await pDiaColor as int? ?? 0xFF4CAF50);
     _pulColor = createMaterialColor(await pPulColor as int? ?? 0xFFF44336);
-    _allowManualTimeInput = ((await pAllowManualTimeInput as int?) ?? 1) == 1 ? true : false;
+    _allowManualTimeInput = ((await pAllowManualTimeInput as int?) ?? 1) == 1;
     _dateFormatString = (await pDateFormatString as String?) ?? 'yy-MM-dd H:mm';
+    _useExportCompatability = ((await pUseExportCompatability as int?) ?? 0) == 1;
     // ...
     return;
   }
@@ -202,6 +207,14 @@ class Settings extends ChangeNotifier {
   set dateFormatString(String newFormatString) {
     _dateFormatString = newFormatString;
     _saveSetting('_dateFormatString', newFormatString);
+    notifyListeners();
+  }
+  bool get useExportCompatability {
+    return _useExportCompatability;
+  }
+  set useExportCompatability(bool useExportCompatability) {
+    _useExportCompatability = useExportCompatability;
+    _saveSetting('_useExportCompatability', useExportCompatability);
     notifyListeners();
   }
 

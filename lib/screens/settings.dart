@@ -91,6 +91,14 @@ class SettingsScreen extends StatelessWidget {
                   SettingsSection(
                     title: const Text('data'),
                     children: [
+                      SwitchSettingsTile(
+                          initialValue: settings.useExportCompatability,
+                          title: const Text('compatability export'),
+                          description: const Text('sets export mime type to text instead of csv'),
+                          onToggle: (value) {
+                            settings.useExportCompatability = value;
+                          }
+                      ),
                       SettingsTile(
                         title: const Text('export'),
                         leading: const Icon(Icons.save),
@@ -102,7 +110,8 @@ class SettingsScreen extends StatelessWidget {
                             ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(content: Text('Error: $msg')));
                           }
-                        }),
+                        }
+                            , exportAsText: settings.useExportCompatability),
                       ),
                       SettingsTile(
                         title: const Text('import'),
