@@ -1,101 +1,16 @@
-
-import 'dart:io';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:path/path.dart';
-import 'package:sqflite_common_ffi/sqflite_ffi.dart';
-import 'package:sqflite/sqflite.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Settings extends ChangeNotifier {
-  static const maxEntries = 2E64; // https://www.sqlite.org/limits.html Nr.13
-  late final Database _database;
-
-  late int _graphStepSize;
-  late DateTime _graphStart;
-  late DateTime _graphEnd;
-  late bool _followSystemDarkMode;
-  late bool _darkMode;
-  late MaterialColor _accentColor;
-  late MaterialColor _sysColor;
-  late MaterialColor _diaColor;
-  late MaterialColor _pulColor;
-  late bool _allowManualTimeInput;
-  late String _dateFormatString;
-  late bool _useExportCompatability;
+  late final SharedPreferences _prefs;
 
   Settings._create();
-  Future<void> _asyncInit(String? dbPath) async {
-    dbPath ??= await getDatabasesPath();
-
-    _database = await openDatabase(
-      join(dbPath, 'settings.db'),
-      // runs when the database is first created
-      onCreate: (db, version) {
-        return db.execute('CREATE TABLE settings(key STRING PRIMARY KEY, value STRING)');
-      },
-      version: 1,
-    );
-    await _loadSettings();
-  }
   // factory method, to allow for async contructor
-  static Future<Settings> create({String? dbPath}) async {
-    if (Platform.isWindows || Platform.isLinux) {
-      // Initialize FFI
-      sqfliteFfiInit();
-      // Change the default factory
-      databaseFactory = databaseFactoryFfi;
-    }
-
+  static Future<Settings> create() async {
     final component = Settings._create();
-    await component._asyncInit(dbPath);
+    component._prefs = await SharedPreferences.getInstance();
     return component;
-  }
-
-  Future<Object?> _getSetting(String key) async {
-    final r = await _database.query('settings', where: 'key = ?', whereArgs: [key]);
-    if (r.isNotEmpty) {
-      return r[0]['value'];
-    }
-  }
-
-  Future<void> _saveSetting(String key, Object value) async {
-    if ((await _database.query('settings', where: 'key = ?', whereArgs: [key])).isEmpty) {
-      _database.insert('settings', {'key': key, 'value': value});
-    } else {
-      _database.update('settings', {'value': value}, where: 'key = ?', whereArgs: [key]);
-    }
-  }
-
-  Future<void> _loadSettings() async {
-    var pGraphStepSize = _getSetting('_graphStepSize');
-    var pGraphStart = _getSetting('_graphStart');
-    var pGraphEnd = _getSetting('_graphEnd');
-    var pFollowSystemDarkMode = _getSetting('_followSystemDarkMode');
-    var pDarkMode = _getSetting('_darkMode');
-    var pAccentColor = _getSetting('_accentColor');
-    var pSysColor = _getSetting('_sysColor');
-    var pDiaColor = _getSetting('_diaColor');
-    var pPulColor = _getSetting('_pulColor');
-    var pAllowManualTimeInput = _getSetting('_allowManualTimeInput');
-    var pDateFormatString = _getSetting('_dateFormatString');
-    var pUseExportCompatability = _getSetting('_useExportCompatability');
-    // var ...
-
-    _graphStepSize = (await pGraphStepSize as int?) ?? TimeStep.day;
-    _graphStart = DateTime.fromMillisecondsSinceEpoch((await pGraphStart as int?) ?? -1);
-    _graphEnd = DateTime.fromMillisecondsSinceEpoch((await pGraphEnd as int?) ?? -1);
-    _followSystemDarkMode = ((await pFollowSystemDarkMode as int?) ?? 1) == 1;
-    _darkMode = ((await pDarkMode as int?) ?? 1) == 1 ? true : false;
-    _accentColor = createMaterialColor(await pAccentColor as int? ?? 0xFF009688);
-    _sysColor = createMaterialColor(await pSysColor as int? ?? 0xFF009688);
-    _diaColor = createMaterialColor(await pDiaColor as int? ?? 0xFF4CAF50);
-    _pulColor = createMaterialColor(await pPulColor as int? ?? 0xFFF44336);
-    _allowManualTimeInput = ((await pAllowManualTimeInput as int?) ?? 1) == 1;
-    _dateFormatString = (await pDateFormatString as String?) ?? 'yy-MM-dd H:mm';
-    _useExportCompatability = ((await pUseExportCompatability as int?) ?? 0) == 1;
-    // ...
-    return;
   }
 
   MaterialColor createMaterialColor(int value) {
@@ -120,101 +35,89 @@ class Settings extends ChangeNotifier {
   }
 
   int get graphStepSize {
-    return _graphStepSize;
+    return _prefs.getInt('graphStepSize') ?? TimeStep.day;
   }
   set graphStepSize(int newStepSize) {
-    _graphStepSize = newStepSize;
-    _saveSetting('_graphStepSize', newStepSize);
+    _prefs.setInt('graphStepSize', newStepSize);
     notifyListeners();
   }
 
   DateTime get graphStart {
-    return _graphStart;
+    return DateTime.fromMillisecondsSinceEpoch(_prefs.getInt('graphStart') ?? -1);
   }
   set graphStart(DateTime newGraphStart) {
-    _graphStart = newGraphStart;
-    _saveSetting('_graphStart', newGraphStart.millisecondsSinceEpoch);
+    _prefs.setInt('graphStart', newGraphStart.millisecondsSinceEpoch);
     notifyListeners();
   }
 
   DateTime get graphEnd {
-    return _graphEnd;
+    return DateTime.fromMillisecondsSinceEpoch(_prefs.getInt('graphEnd') ?? -1);
   }
   set graphEnd(DateTime newGraphEnd) {
-    _graphEnd = newGraphEnd;
-    _saveSetting('_graphEnd', newGraphEnd.millisecondsSinceEpoch);
+    _prefs.setInt('graphEnd', newGraphEnd.millisecondsSinceEpoch);
     notifyListeners();
   }
   bool get followSystemDarkMode {
-    return _followSystemDarkMode;
+    return _prefs.getBool('followSystemDarkMode') ?? true;
   }
   set followSystemDarkMode(bool newSetting) {
-    _followSystemDarkMode = newSetting;
-    _saveSetting('_followSystemDarkMode', newSetting ? "1" : "0");
+    _prefs.setBool('followSystemDarkMode', newSetting);
     notifyListeners();
   }
   bool get darkMode {
-    return _darkMode;
+    return _prefs.getBool('darkMode') ?? true;
   }
   set darkMode(bool newSetting) {
-    _darkMode = newSetting;
-    _saveSetting('_darkMode', newSetting ? 1 : 0);
+    _prefs.setBool('darkMode', newSetting);
     notifyListeners();
   }
   MaterialColor get accentColor {
-    return _accentColor;
+    return createMaterialColor(_prefs.getInt('accentColor') ?? 0xFF009688);
   }
   set accentColor(MaterialColor newColor) {
-    _accentColor = newColor;
-    _saveSetting('_accentColor', newColor.value);
+    _prefs.setInt('accentColor', newColor.value);
     notifyListeners();
   }
   MaterialColor get diaColor {
-    return _diaColor;
+    return createMaterialColor(_prefs.getInt('diaColor') ?? 0xFF4CAF50);
   }
   set diaColor(MaterialColor newColor) {
-    _diaColor = newColor;
-    _saveSetting('_diaColor', newColor.value);
+    _prefs.setInt('diaColor', newColor.value);
     notifyListeners();
   }
   MaterialColor get sysColor {
-    return _sysColor;
+    return createMaterialColor(_prefs.getInt('sysColor') ?? 0xFF009688);
   }
   set sysColor(MaterialColor newColor) {
-    _sysColor = newColor;
-    _saveSetting('_sysColor', newColor.value);
+    _prefs.setInt('sysColor', newColor.value);
     notifyListeners();
   }
   MaterialColor get pulColor {
-    return _pulColor;
+    return createMaterialColor(_prefs.getInt('pulColor') ?? 0xFFF44336);
   }
   set pulColor(MaterialColor newColor) {
-    _pulColor = newColor;
-    _saveSetting('_pulColor', newColor.value);
+    _prefs.setInt('pulColor', newColor.value);
     notifyListeners();
   }
   bool get allowManualTimeInput {
-    return _allowManualTimeInput;
+    return _prefs.getBool('allowManualTimeInput') ?? true;
   }
   set allowManualTimeInput(bool newSetting) {
-    _allowManualTimeInput = newSetting;
-    _saveSetting('_allowManualTimeInput', newSetting ? 1 : 0);
+    _prefs.setBool('allowManualTimeInput', newSetting);
     notifyListeners();
   }
   String get dateFormatString {
-    return _dateFormatString;
+    return _prefs.getString('dateFormatString') ?? 'yy-MM-dd H:mm';
   }
   set dateFormatString(String newFormatString) {
-    _dateFormatString = newFormatString;
-    _saveSetting('_dateFormatString', newFormatString);
+    _prefs.setString('dateFormatString', newFormatString);
     notifyListeners();
   }
   bool get useExportCompatability {
-    return _useExportCompatability;
+    return _prefs.getBool('useExportCompatability') ?? false;
   }
   set useExportCompatability(bool useExportCompatability) {
-    _useExportCompatability = useExportCompatability;
-    _saveSetting('_useExportCompatability', useExportCompatability);
+    _prefs.setBool('useExportCompatability', useExportCompatability);
     notifyListeners();
   }
 

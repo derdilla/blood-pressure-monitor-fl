@@ -3,28 +3,26 @@ import 'package:blood_pressure_app/screens/settings.dart';
 import 'package:flutter/material.dart';
 import 'package:blood_pressure_app/components/measurement_graph.dart';
 import 'package:blood_pressure_app/components/measurement_list.dart';
-import 'package:provider/provider.dart';
-import 'package:blood_pressure_app/model/blood_pressure.dart';
 
 class AppHome extends StatelessWidget {
   const AppHome({super.key});
 
   @override
   Widget build(BuildContext context) {
-    var _padding;
+    EdgeInsets padding;
     if (MediaQuery.of(context).size.width < 1000) {
-      _padding = const EdgeInsets.only(left: 10, right: 10, bottom: 15, top: 30);
+      padding = const EdgeInsets.only(left: 10, right: 10, bottom: 15, top: 30);
     } else {
-      _padding = const EdgeInsets.all(80);
+      padding = const EdgeInsets.all(80);
     }
 
     return Scaffold(
       body: Center(
         child: Container(
-          padding: _padding,
+          padding: padding,
           child: Column(
             children: [
-              MeasurementGraph(),
+              const MeasurementGraph(),
               Expanded(
                 flex: 50,
                   child: MeasurementList(context)
@@ -71,7 +69,7 @@ class AppHome extends StatelessWidget {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => const SettingsScreen()),
+                      MaterialPageRoute(builder: (context) => const SettingsPage()),
                     );
                   },
                 ),

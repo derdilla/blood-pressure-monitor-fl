@@ -1,8 +1,12 @@
 import 'package:blood_pressure_app/model/settings.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
 void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
+  SharedPreferences.setMockInitialValues({});
+
   group('TimeStep', () {
     test('names should match to fields', () {
       expect(TimeStep.getName(TimeStep.day), 'day');

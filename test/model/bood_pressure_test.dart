@@ -58,8 +58,7 @@ void main() {
       await m.add(BloodPressureRecord(DateTime.fromMillisecondsSinceEpoch(1), 0, 0, 0, ''));
       await m.add(BloodPressureRecord(DateTime.fromMillisecondsSinceEpoch(2), 0, 0, 0, ''));
 
-      print(listenerCalls);
-      expect(listenerCalls, 3); // TODO: FAILS
+      expect(listenerCalls, 3);
     });
 
     test('should return entries as added', () async {
