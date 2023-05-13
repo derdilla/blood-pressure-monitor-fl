@@ -39,7 +39,7 @@ class SettingsPage extends StatelessWidget {
                           onPressed: (context) {
                             Navigator.push(
                               context,
-                              MaterialPageRoute(builder: (context) => EnterTimeFormatScreen()),
+                              MaterialPageRoute(builder: (context) => const EnterTimeFormatScreen()),
                             );
                           },
                         ),
@@ -65,7 +65,15 @@ class SettingsPage extends StatelessWidget {
                           title: const Text('enable dark mode'),
                           disabled: settings.followSystemDarkMode,
                         ),
-                        //settings.accentColor = settings.createMaterialColor((color ?? Colors.teal).value);
+                        SliderSettingsTile(title: const Text('icon size'),
+                            onChanged: (double value) {
+                              settings.iconSize = value;
+                            },
+                            initialValue: settings.iconSize,
+                            start: 15,
+                            end: 70,
+                            stepSize: 5,
+                        ),
                         ColorSelectionSettingsTile(
                             onMainColorChanged: (color) => settings.accentColor = settings.createMaterialColor((color ?? Colors.teal).value),
                             initialColor: settings.accentColor,

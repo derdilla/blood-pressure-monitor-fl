@@ -1,9 +1,12 @@
+import 'package:blood_pressure_app/model/settings.dart';
 import 'package:blood_pressure_app/screens/add_measurement.dart';
 import 'package:blood_pressure_app/screens/settings.dart';
 import 'package:flutter/material.dart';
 import 'package:blood_pressure_app/components/measurement_graph.dart';
 import 'package:blood_pressure_app/components/measurement_list.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
+
 
 class AppHome extends StatelessWidget {
   const AppHome({super.key});
@@ -41,56 +44,60 @@ class AppHome extends StatelessWidget {
       ),
       floatingActionButton: OrientationBuilder(
         builder: (context, orientation) {
-          if (orientation == Orientation.landscape) {
+          if (orientation == Orientation.landscape && MediaQuery.of(context).size.height < 500) {
             SystemChrome.setEnabledSystemUIMode(SystemUiMode.leanBack);
             return const SizedBox.shrink();
           }
           SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: SystemUiOverlay.values);
-          return SizedBox(
-            height: 150,
-            child: Column(
-              verticalDirection: VerticalDirection.up,
-              children: [
-                Ink(
-                  decoration: ShapeDecoration(
-                      shape: const CircleBorder(),
-                      color: Theme.of(context).primaryColor
-                  ),
-                  child: IconButton(
-                    icon: const Icon(
-                      Icons.add,
-                      color: Colors.black,
+          return Consumer<Settings>(
+            builder: (context, settings, child) {
+              return SizedBox(
+                child: Column(
+                  verticalDirection: VerticalDirection.up,
+                  children: [
+                    Ink(
+                      decoration: ShapeDecoration(
+                          shape: const CircleBorder(),
+                          color: Theme.of(context).primaryColor
+                      ),
+                      child: IconButton(
+                        iconSize: settings.iconSize,
+                        icon: const Icon(
+                          Icons.add,
+                          color: Colors.black,
+                        ),
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => const AddMeasurementPage()),
+                          );
+                        },
+                      ),
                     ),
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => const AddMeasurementPage()),
-                      );
-                    },
-                  ),
-                ),
-                const SizedBox(height: 10,),
-                Ink(
-                  decoration: ShapeDecoration(
-                      shape: const CircleBorder(),
-                      color: Theme.of(context).unselectedWidgetColor
-                  ),
-                  child: IconButton(
-                    icon: const Icon(
-                        Icons.settings,
-                        color: Colors.black
+                    const SizedBox(height: 10,),
+                    Ink(
+                      decoration: ShapeDecoration(
+                          shape: const CircleBorder(),
+                          color: Theme.of(context).unselectedWidgetColor
+                      ),
+                      child: IconButton(
+                        iconSize: settings.iconSize,
+                        icon: const Icon(
+                            Icons.settings,
+                            color: Colors.black
+                        ),
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => const SettingsPage()),
+                          );
+                        },
+                      ),
                     ),
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => const SettingsPage()),
-                      );
-                    },
-                  ),
+                  ],
                 ),
-
-              ],
-            ),
+              );
+            }
           );
         })
     );

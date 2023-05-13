@@ -37,6 +37,7 @@ void main() {
       expect(s.allowManualTimeInput, true);
       expect(s.dateFormatString, 'yy-MM-dd H:mm');
       expect(s.useExportCompatability, false);
+      expect(s.iconSize, 30);
     });
 
     test('setting fields should save changes', () async {
@@ -65,6 +66,7 @@ void main() {
       s.allowManualTimeInput = false;
       s.dateFormatString = 'yy:dd @ H:mm.ss';
       s.useExportCompatability = true;
+      s.iconSize = 50;
 
 
       expect(s.graphStart, DateTime.fromMillisecondsSinceEpoch(10000));
@@ -77,6 +79,7 @@ void main() {
       expect(s.pulColor.value, 0xFF942DA7);
       expect(s.allowManualTimeInput, false);
       expect(s.useExportCompatability, true);
+      expect(s.iconSize, 50);
     });
 
     test('setting fields should notify listeners and change values', () async {
@@ -99,8 +102,9 @@ void main() {
       s.allowManualTimeInput = false;
       s.dateFormatString = 'yy:dd @ H:mm.ss';
       s.useExportCompatability = true;
+      s.iconSize = 10;
       
-      expect(i, 12);
+      expect(i, 13);
     });
 
   });

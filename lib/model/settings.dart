@@ -120,6 +120,13 @@ class Settings extends ChangeNotifier {
     _prefs.setBool('useExportCompatability', useExportCompatability);
     notifyListeners();
   }
+  double get iconSize {
+    return _prefs.getInt('iconSize')?.toDouble() ?? 30;
+  }
+  set iconSize(double newSize) {
+    _prefs.setInt('iconSize', newSize.toInt());
+    notifyListeners();
+  }
 
 }
 

@@ -13,7 +13,7 @@ class SettingsTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (disabled) return SizedBox.shrink();
+    if (disabled) return const SizedBox.shrink();
 
     var lead = SizedBox(
       width: 40,
@@ -139,6 +139,94 @@ class SwitchSettingsTile extends StatelessWidget {
       description: description,
       disabled: disabled,
       trailing: s,
+    );
+  }
+}
+
+class SliderSettingsTile extends StatefulWidget {
+  final Widget title;
+  final void Function(double newValue) onChanged;
+  final Widget? leading;
+  final Widget? description;
+  final Widget? trailing;
+  final bool disabled;
+  final double start;
+  final double end;
+  final double stepSize;
+  final double initialValue;
+
+  const SliderSettingsTile({
+    super.key,
+    required this.title,
+    required this.onChanged,
+    required this.initialValue,
+    required this.start,
+    required this.end,
+    this.stepSize = 1,
+    this.description,
+    this.leading,
+    this.trailing,
+    this.disabled = false});
+
+  @override
+  State<StatefulWidget> createState() => _SliderSettingsTileState(initialValue);
+}
+
+class _SliderSettingsTileState extends State<SliderSettingsTile> {
+  double _value;
+
+  _SliderSettingsTileState(this._value);
+
+  @override
+  Widget build(BuildContext context) {
+    if (widget.disabled) return const SizedBox.shrink();
+
+    var lead = SizedBox(
+      width: 40,
+      child: widget.leading ?? const SizedBox.shrink(),
+    );
+    var trail = widget.trailing ?? const SizedBox.shrink();
+
+    return SizedBox(
+      height: 70,
+      child: Row(
+        children: [
+          lead,
+          SizedBox(
+            width: MediaQuery.of(context).size.width - 150,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                widget.title,
+                Flexible(
+                    child: DefaultTextStyle(
+                        style: const TextStyle(color: Colors.grey),
+                        overflow: TextOverflow.visible,
+                        child: widget.description ?? const SizedBox.shrink()
+                    )
+                ),
+                Expanded(
+                    child: Slider(
+                      value: _value,
+                      onChanged: (newValue) {
+                        setState(() {
+                          _value = newValue;
+                        });
+                        widget.onChanged(newValue);
+                      },
+                      min: widget.start,
+                      max: widget.end,
+                      divisions: (widget.end-widget.start)~/widget.stepSize,
+                    )
+                )
+              ],
+            ),
+          ),
+          const Expanded(child: SizedBox.shrink()),
+          trail
+        ],
+      ),
     );
   }
 }
