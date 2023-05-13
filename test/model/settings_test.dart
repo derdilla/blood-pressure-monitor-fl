@@ -21,10 +21,10 @@ void main() {
     databaseFactory = databaseFactoryFfi;
 
     test('should initialize', () async {
-      expect(() async { await Settings.create(dbPath: '/tmp/setting_test/should_init'); }, returnsNormally);
+      expect(() async { await Settings.create(); }, returnsNormally);
     });
     test('fields defaults should be set after initialization', () async {
-      var s = await Settings.create(dbPath: '/tmp/setting_test/should_default');
+      var s = await Settings.create();
       expect(s.graphStepSize, TimeStep.day);
       expect(s.graphStart, DateTime.fromMillisecondsSinceEpoch(-1));
       expect(s.graphEnd, DateTime.fromMillisecondsSinceEpoch(-1));
@@ -40,7 +40,7 @@ void main() {
     });
 
     test('setting fields should save changes', () async {
-      var s = await Settings.create(dbPath: '/tmp/setting_test/should_save');
+      var s = await Settings.create();
 
       int i = 0;
       s.addListener(() {
@@ -80,7 +80,7 @@ void main() {
     });
 
     test('setting fields should notify listeners and change values', () async {
-      var s = await Settings.create(dbPath: '/tmp/setting_test/should_notify');
+      var s = await Settings.create();
 
       int i = 0;
       s.addListener(() {

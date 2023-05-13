@@ -29,22 +29,27 @@ class SettingsTile extends StatelessWidget {
         child: Row(
           children: [
             lead,
-            (() {
+            SizedBox(
+              width: MediaQuery.of(context).size.width - 150,
+              child: (() {
               if (description != null) {
                 return Column(
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     title,
-                    DefaultTextStyle(
-                        style: const TextStyle(color: Colors.grey),
-                        child: description ?? const SizedBox.shrink()
+                    Flexible(
+                        child: DefaultTextStyle(
+                            style: const TextStyle(color: Colors.grey),
+                            overflow: TextOverflow.visible,
+                            child: description ?? const SizedBox.shrink()
+                        )
                     )
                   ],
                 );
               }
               return title;
-            })(),
+            })(),),
             const Expanded(child: SizedBox.shrink()),
             trail
           ],

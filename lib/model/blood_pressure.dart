@@ -20,8 +20,12 @@ class BloodPressureModel extends ChangeNotifier {
   Future<void> _asyncInit(String? dbPath) async {
     dbPath ??= await getDatabasesPath();
 
+    if (dbPath != inMemoryDatabasePath) {
+      dbPath = join(dbPath, 'blood_pressure.db');
+    }
+
     _database = await openDatabase(
-      join(dbPath, 'blood_pressure.db'),
+      dbPath,
       // runs when the database is first created
       onCreate: (db, version) {
         return db.execute('CREATE TABLE bloodPressureModel(timestamp INTEGER(14) PRIMARY KEY, systolic INTEGER, diastolic INTEGER, pulse INTEGER, notes STRING)');
@@ -151,7 +155,6 @@ class BloodPressureModel extends ChangeNotifier {
 
     if (result != null) {
       var binaryContent = result.files.single.bytes;
-      print(binaryContent);
       if (binaryContent != null) {
         final csvContents = const CsvToListConverter().convert(
             String.fromCharCodes(binaryContent),

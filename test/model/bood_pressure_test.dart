@@ -101,7 +101,6 @@ void main() {
 
       m.save((success, msg) {
         expect(success, true);
-        // TODO: rewrite blood_pressure to remove UI code entirely
       });
     });
   });
