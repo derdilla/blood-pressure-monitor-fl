@@ -9,6 +9,9 @@ import 'package:intl/intl.dart';
 import 'package:blood_pressure_app/model/settings.dart';
 
 class _LineChart extends StatelessWidget {
+  final double height;
+  const _LineChart({super.key, this.height = 200});
+  
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -16,7 +19,7 @@ class _LineChart extends StatelessWidget {
         Align(
           alignment: Alignment.topCenter,
           child: Container(
-              height: 200,
+            height: height,
               child: Consumer<Settings>(
                 builder: (context, settings, child) {
                   return Consumer<BloodPressureModel>(
@@ -60,7 +63,6 @@ class _LineChart extends StatelessWidget {
                                     diaMax = max(diaMax, element.diastolic);
                                     sysMax = max(sysMax, element.systolic);
                                   }
-
 
                                   final noTitels = AxisTitles(sideTitles: SideTitles(reservedSize: 40, showTitles: false));
                                   res = LineChart(
@@ -149,7 +151,8 @@ class _LineChart extends StatelessWidget {
 }
 
 class MeasurementGraph extends StatelessWidget {
-  const MeasurementGraph({super.key});
+  final double height;
+  const MeasurementGraph({super.key, this.height = 290});
 
   void moveGraphWithStep(int directionalStep, Settings settings) {
     final oldStart = settings.graphStart;
@@ -177,13 +180,13 @@ class MeasurementGraph extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 290,
+      height: height,
       child: Padding(
         padding: const EdgeInsets.only(right: 16, left: 6, top: 2),
         child: Column(
           children: [
             const SizedBox(height: 20,),
-            _LineChart(),
+            _LineChart(height: height-100),
             const SizedBox(height: 7,),
             Consumer<Settings>(
                 builder: (context, settings, child) {

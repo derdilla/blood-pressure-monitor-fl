@@ -1,4 +1,3 @@
-import 'package:blood_pressure_app/model/settings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_material_color_picker/flutter_material_color_picker.dart';
 
