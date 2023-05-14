@@ -1,6 +1,7 @@
 import 'package:blood_pressure_app/model/settings.dart';
 import 'package:blood_pressure_app/screens/add_measurement.dart';
 import 'package:blood_pressure_app/screens/settings.dart';
+import 'package:blood_pressure_app/screens/statistics.dart';
 import 'package:flutter/material.dart';
 import 'package:blood_pressure_app/components/measurement_graph.dart';
 import 'package:blood_pressure_app/components/measurement_list.dart';
@@ -51,51 +52,69 @@ class AppHome extends StatelessWidget {
           SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: SystemUiOverlay.values);
           return Consumer<Settings>(
             builder: (context, settings, child) {
-              return SizedBox(
-                child: Column(
-                  verticalDirection: VerticalDirection.up,
-                  children: [
-                    Ink(
-                      decoration: ShapeDecoration(
-                          shape: const CircleBorder(),
-                          color: Theme.of(context).primaryColor
-                      ),
-                      child: IconButton(
-                        iconSize: settings.iconSize,
-                        icon: const Icon(
-                          Icons.add,
-                          color: Colors.black,
-                        ),
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => const AddMeasurementPage()),
-                          );
-                        },
-                      ),
+              return Column(
+                verticalDirection: VerticalDirection.up,
+                children: [
+                  Ink(
+                    decoration: ShapeDecoration(
+                      shape: const CircleBorder(),
+                      color: Theme.of(context).primaryColor
                     ),
-                    const SizedBox(height: 10,),
-                    Ink(
-                      decoration: ShapeDecoration(
-                          shape: const CircleBorder(),
-                          color: Theme.of(context).unselectedWidgetColor
+                    child: IconButton(
+                      iconSize: settings.iconSize,
+                      icon: const Icon(
+                        Icons.add,
+                        color: Colors.black,
                       ),
-                      child: IconButton(
-                        iconSize: settings.iconSize,
-                        icon: const Icon(
-                            Icons.settings,
-                            color: Colors.black
-                        ),
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => const SettingsPage()),
-                          );
-                        },
-                      ),
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => const AddMeasurementPage()),
+                        );
+                      },
                     ),
-                  ],
-                ),
+                  ),
+                  const SizedBox(height: 10,),
+                  Ink(
+                    decoration: ShapeDecoration(
+                        shape: const CircleBorder(),
+                        color: Theme.of(context).unselectedWidgetColor
+                    ),
+                    child: IconButton(
+                      iconSize: settings.iconSize,
+                      icon: const Icon(
+                          Icons.insights,
+                          color: Colors.black
+                      ),
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => const StatisticsPage()),
+                        );
+                      },
+                    ),
+                  ),
+                  const SizedBox(height: 10,),
+                  Ink(
+                    decoration: ShapeDecoration(
+                        shape: const CircleBorder(),
+                        color: Theme.of(context).unselectedWidgetColor
+                    ),
+                    child: IconButton(
+                      iconSize: settings.iconSize,
+                      icon: const Icon(
+                          Icons.settings,
+                          color: Colors.black
+                      ),
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => const SettingsPage()),
+                        );
+                      },
+                    ),
+                  ),
+                ],
               );
             }
           );

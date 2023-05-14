@@ -113,6 +113,40 @@ class BloodPressureModel extends ChangeNotifier {
     }
     return UnmodifiableListView(recordsInRange);
   }
+  
+  Future<int> get count async {
+    return (await _database.rawQuery('SELECT COUNT(*) FROM bloodPressureModel'))[0]['COUNT(*)'] as int? ?? -1;
+  }
+  Future<int> get avgDia async {
+    var res = (await _database.rawQuery('SELECT AVG(diastolic) as dia FROM bloodPressureModel'))[0]['dia'];
+    int? val;
+    try {
+      val = (res as int?);
+    } catch (e) {
+      val = (res as double?)?.toInt();
+    }
+    return val ?? -1;
+  }
+  Future<int> get avgSys async {
+    var res = (await _database.rawQuery('SELECT AVG(systolic) as sys FROM bloodPressureModel'))[0]['sys'];
+    int? val;
+    try {
+      val = (res as int?);
+    } catch (e) {
+      val = (res as double?)?.toInt();
+    }
+    return val ?? -1;
+  }
+  Future<int> get avgPul async {
+    var res = (await _database.rawQuery('SELECT AVG(pulse) as pul FROM bloodPressureModel'))[0]['pul'];
+    int? val;
+    try {
+      val = (res as int?);
+    } catch (e) {
+      val = (res as double?)?.toInt();
+    }
+    return val ?? -1;
+  }
 
   Future<void> save(void Function(bool success, String? msg) callback, {bool exportAsText = false}) async {
     // create csv
