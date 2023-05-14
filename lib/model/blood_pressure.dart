@@ -1,4 +1,4 @@
-import 'dart:collection';
+import 'package:collection/collection.dart';
 import 'dart:io';
 import 'package:csv/csv.dart';
 import 'package:file_picker/file_picker.dart';
@@ -146,6 +146,63 @@ class BloodPressureModel extends ChangeNotifier {
       val = (res as double?)?.toInt();
     }
     return val ?? -1;
+  }
+
+  /// outer list is type (0 -> diastolic, 1 -> systolic, 2 -> pulse)
+  /// inner list index is hour of day ([0] -> 00:00-00:59; [1] -> ...)
+  Future<List<List<int>>> getAllAvgsRelativeToDaytime({bool interpolate = false}) async {
+    // setup vars
+    List<List<int>> allDiaValuesRelativeToTime = [[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]];
+    List<List<int>> allSysValuesRelativeToTime = [[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]];
+    List<List<int>> allPulValuesRelativeToTime = [[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]];
+
+    // sort all data
+    final dbRes = await _database.query('bloodPressureModel', columns: ['*']);
+    for (var entry in dbRes) {
+      DateTime ts = DateTime.fromMillisecondsSinceEpoch(entry['timestamp'] as int);
+      allDiaValuesRelativeToTime[ts.hour].add(entry['diastolic'] as int);
+      allSysValuesRelativeToTime[ts.hour].add(entry['systolic'] as int);
+      allPulValuesRelativeToTime[ts.hour].add(entry['pulse'] as int);
+    }
+    for(int i = 0; i < 24; i++) { // TODO: interpolate for every day instead without using allow of resources
+      if (allDiaValuesRelativeToTime[i].isEmpty) { // fixme next might be empty
+        allDiaValuesRelativeToTime[i].add(0);
+      }
+      if (allSysValuesRelativeToTime[i].isEmpty) {
+        allSysValuesRelativeToTime[i].add(0);
+      }
+      if (allPulValuesRelativeToTime[i].isEmpty) {
+        allPulValuesRelativeToTime[i].add(0);
+      }
+    }
+
+    if (interpolate) {
+      for(int i = 0; i < 24; i++) {
+        var prev = (i - 1 >= 0) ? (i - 1) : 23;
+        var next = (i + 1 <= 23) ? (i + 1) : 0;
+        allDiaValuesRelativeToTime[i].add([
+          allDiaValuesRelativeToTime[prev].average,
+          allDiaValuesRelativeToTime[next].average
+        ].average.toInt());
+        allSysValuesRelativeToTime[i].add([
+          allSysValuesRelativeToTime[prev].average,
+          allSysValuesRelativeToTime[next].average
+        ].average.toInt());
+        allPulValuesRelativeToTime[i].add([
+          allPulValuesRelativeToTime[prev].average,
+          allPulValuesRelativeToTime[next].average
+        ].average.toInt());
+      }
+    }
+
+    // make avgs
+    List<List<int>> res = [[],[],[]];
+    for(int i = 0; i < 24; i++) {
+      res[0].add(allDiaValuesRelativeToTime[i].average.toInt());
+      res[1].add(allSysValuesRelativeToTime[i].average.toInt());
+      res[2].add(allPulValuesRelativeToTime[i].average.toInt());
+    }
+    return res;
   }
 
   Future<void> save(void Function(bool success, String? msg) callback, {bool exportAsText = false}) async {

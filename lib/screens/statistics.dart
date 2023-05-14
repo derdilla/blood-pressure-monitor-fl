@@ -1,4 +1,5 @@
 import 'package:blood_pressure_app/model/blood_pressure.dart';
+import 'package:blood_pressure_app/model/settings.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -16,25 +17,123 @@ class StatisticsPage extends StatelessWidget {
       body: SingleChildScrollView(
         child: Consumer<BloodPressureModel>(
           builder: (context, model, child) {
-            return Wrap(
-              children: [
-                Statistic(
-                    caption: const Text('Measurement count'),
-                    child: futureInt(model.count)
-                ),
-                Statistic(
-                    caption: const Text('Diastolic avg.'),
-                    child: futureInt(model.avgDia)
-                ),
-                Statistic(
-                    caption: const Text('Systolic avg.'),
-                    child: futureInt(model.avgSys)
-                ),
-                Statistic(
-                    caption: const Text('Pulse avg.'),
-                    child: futureInt(model.avgPul)
-                ),
-              ],
+            return Consumer<Settings>(
+              builder: (context, settings, child) {
+                return Column(
+                  children: [
+                    Statistic(
+                        caption: const Text('Measurement count'),
+                        child: futureInt(model.count)
+                    ),
+                    // Averages
+                    Row(
+                      children: [
+                        const Spacer(),
+                        Statistic(
+                          caption: Text('Diastolic avg.',
+                            style: TextStyle(color: settings.diaColor, fontWeight: FontWeight.w700),
+                          ),
+                          smallEdges: true,
+                          child: futureInt(model.avgDia),
+                        ),
+                        const Spacer(),
+                        Statistic(
+                          caption: Text('Systolic avg.',
+                            style: TextStyle(color: settings.sysColor, fontWeight: FontWeight.w700),),
+                          smallEdges: true,
+                          child: futureInt(model.avgSys),
+                        ),
+                        const Spacer(),
+                        Statistic(
+                          caption: Text('Pulse avg.',
+                            style: TextStyle(color: settings.pulColor, fontWeight: FontWeight.w700),),
+                          smallEdges: true,
+                          child: futureInt(model.avgPul),
+                        ),
+                        const Spacer(),
+                      ],
+                    ),
+                    Statistic(
+                      caption: const Text('Time-Resolved Metrics'),
+                      child: FutureBuilder<List<List<int>>>(
+                          future: model.getAllAvgsRelativeToDaytime(
+                              interpolate: true),
+                          builder: (BuildContext context, AsyncSnapshot<List<
+                              List<int>>> snapshot) {
+                            switch (snapshot.connectionState) {
+                              case ConnectionState.none:
+                                return const Text('not started');
+                              case ConnectionState.waiting:
+                                return const Text('loading...');
+                              default:
+                                if (snapshot.hasError) {
+                                  return Text('ERROR: ${snapshot.error}');
+                                }
+                                assert(snapshot.hasData);
+                                assert(snapshot.data != null);
+                                final daytimeAvgs = snapshot.data ?? [];
+                                const opacity = 0.5;
+                                return SizedBox(
+                                  width: 500,
+                                  height: 270,
+                                  child: RadarChart(
+                                    RadarChartData(
+                                      radarShape: RadarShape.circle,
+                                      radarBorderData: const BorderSide(color: Colors.transparent),
+                                      gridBorderData: BorderSide(
+                                          color: Theme.of(context).dividerColor,
+                                          width: 2
+                                      ),
+                                      tickBorderData: BorderSide(
+                                          color: Theme.of(context).dividerColor,
+                                          width: 2),
+                                      ticksTextStyle: const TextStyle(color: Colors.transparent),
+                                      tickCount: 5,
+                                      titleTextStyle: const TextStyle(
+                                        fontSize: 25
+                                      ),
+                                      getTitle: (pos, value) {
+                                        if (pos % 2 == 0) {
+                                          return RadarChartTitle(
+                                              text: '$pos',
+                                              positionPercentageOffset: 0.05
+                                          );
+                                        }
+                                        return const RadarChartTitle(text: '');
+                                      },
+                                      dataSets: [
+                                        RadarDataSet(
+                                            dataEntries: intListToRadarEntry(daytimeAvgs[0]),
+                                            borderColor: settings.diaColor,
+                                            fillColor: settings.diaColor.withOpacity(opacity),
+                                            entryRadius: 0,
+                                            borderWidth: 3
+                                        ),
+                                        RadarDataSet(
+                                            dataEntries: intListToRadarEntry(daytimeAvgs[1]),
+                                            borderColor: settings.sysColor,
+                                            fillColor: settings.sysColor.withOpacity(opacity),
+                                            entryRadius: 0,
+                                            borderWidth: 3
+                                        ),
+                                        RadarDataSet(
+                                            dataEntries: intListToRadarEntry(daytimeAvgs[2]),
+                                            borderColor: settings.pulColor,
+                                            fillColor: settings.pulColor.withOpacity(opacity),
+                                            entryRadius: 0,
+                                            borderWidth: 3
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                );
+                            }
+                          }
+                      ),
+                    ),
+                  ],
+                );
+              }
             );
           },
         )
@@ -64,21 +163,37 @@ class StatisticsPage extends StatelessWidget {
         }
     );
   }
+
+  List<RadarEntry> intListToRadarEntry(List<int> data) {
+    var res = <RadarEntry>[];
+    for (var v in data) {
+      res.add(RadarEntry(value: v.toDouble()));
+    }
+    return res;
+  }
 }
 
 class Statistic extends StatelessWidget {
   final Widget caption;
   final Widget child;
+  final bool smallEdges;
 
-  const Statistic({super.key, required this.caption, required this.child, });
+  const Statistic({super.key, required this.caption, required this.child, this.smallEdges=false});
 
   @override
-  Widget build(BuildContext context) { // TODO
+  Widget build(BuildContext context) {
+    double sides = 20;
+    double top = 20;
+    double padding = 30;
+    if (smallEdges) {
+      sides = 0;
+      padding = 10;
+    }
     return Container(
-      margin: const EdgeInsets.only(left:20, right: 20, top: 20),
+      margin: EdgeInsets.only(left: sides, right: sides, top: top),
       constraints: const BoxConstraints(
           minHeight: 50,
-          minWidth: 150
+          minWidth: 110
       ),
       decoration: BoxDecoration(
         border: Border.all(
@@ -98,7 +213,7 @@ class Statistic extends StatelessWidget {
             ),
           ),
           Container(
-            padding: const EdgeInsets.all(30),
+            padding: EdgeInsets.only(left: padding, right: padding, bottom: padding, top: padding+5),
             child: Align(
               alignment: Alignment.center,
               child: DefaultTextStyle(
