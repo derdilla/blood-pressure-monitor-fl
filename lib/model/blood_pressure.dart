@@ -117,6 +117,19 @@ class BloodPressureModel extends ChangeNotifier {
   Future<int> get count async {
     return (await _database.rawQuery('SELECT COUNT(*) FROM bloodPressureModel'))[0]['COUNT(*)'] as int? ?? -1;
   }
+  Future<int> get measurementsPerDay async {
+    final c = await count;
+    if (c <= 1) {
+      return -1;
+    }
+    var firstDay = DateTime.fromMillisecondsSinceEpoch((await _database.rawQuery('SELECT timestamp FROM bloodPressureModel ORDER BY timestamp ASC LIMIT 1'))[0]['timestamp'] as int? ?? -1);
+    var lastDay = DateTime.fromMillisecondsSinceEpoch((await _database.rawQuery('SELECT timestamp FROM bloodPressureModel ORDER BY timestamp DESC LIMIT 1'))[0]['timestamp'] as int? ?? -1);
+
+    return c ~/ lastDay.difference(firstDay).inDays;
+
+  }
+
+
   Future<int> get avgDia async {
     var res = (await _database.rawQuery('SELECT AVG(diastolic) as dia FROM bloodPressureModel'))[0]['dia'];
     int? val;
@@ -148,9 +161,35 @@ class BloodPressureModel extends ChangeNotifier {
     return val ?? -1;
   }
 
+  Future<int> get maxDia async {
+    var res = (await _database.rawQuery('SELECT MAX(diastolic) as dia FROM bloodPressureModel'))[0]['dia'];
+    return (res as int?) ?? -1;
+  }
+  Future<int> get maxSys async {
+    var res = (await _database.rawQuery('SELECT MAX(systolic) as sys FROM bloodPressureModel'))[0]['sys'];
+    return (res as int?) ?? -1;
+  }
+  Future<int> get maxPul async {
+    var res = (await _database.rawQuery('SELECT MAX(pulse) as pul FROM bloodPressureModel'))[0]['pul'];
+    return (res as int?) ?? -1;
+  }
+
+  Future<int> get minDia async {
+    var res = (await _database.rawQuery('SELECT MIN(diastolic) as dia FROM bloodPressureModel'))[0]['dia'];
+    return (res as int?) ?? -1;
+  }
+  Future<int> get minSys async {
+    var res = (await _database.rawQuery('SELECT MIN(systolic) as sys FROM bloodPressureModel'))[0]['sys'];
+    return (res as int?) ?? -1;
+  }
+  Future<int> get minPul async {
+    var res = (await _database.rawQuery('SELECT MIN(pulse) as pul FROM bloodPressureModel'))[0]['pul'];
+    return (res as int?) ?? -1;
+  }
+
   /// outer list is type (0 -> diastolic, 1 -> systolic, 2 -> pulse)
   /// inner list index is hour of day ([0] -> 00:00-00:59; [1] -> ...)
-  Future<List<List<int>>> getAllAvgsRelativeToDaytime({bool interpolate = false}) async {
+  Future<List<List<int>>> get allAvgsRelativeToDaytime async {
     // setup vars
     List<List<int>> allDiaValuesRelativeToTime = [[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]];
     List<List<int>> allSysValuesRelativeToTime = [[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]];
@@ -164,34 +203,15 @@ class BloodPressureModel extends ChangeNotifier {
       allSysValuesRelativeToTime[ts.hour].add(entry['systolic'] as int);
       allPulValuesRelativeToTime[ts.hour].add(entry['pulse'] as int);
     }
-    for(int i = 0; i < 24; i++) { // TODO: interpolate for every day instead without using allow of resources
-      if (allDiaValuesRelativeToTime[i].isEmpty) { // fixme next might be empty
-        allDiaValuesRelativeToTime[i].add(0);
+    for(int i = 0; i < 24; i++) {
+      if (allDiaValuesRelativeToTime[i].isEmpty) {
+        allDiaValuesRelativeToTime[i].add(await avgDia);
       }
       if (allSysValuesRelativeToTime[i].isEmpty) {
-        allSysValuesRelativeToTime[i].add(0);
+        allSysValuesRelativeToTime[i].add(await avgSys);
       }
       if (allPulValuesRelativeToTime[i].isEmpty) {
-        allPulValuesRelativeToTime[i].add(0);
-      }
-    }
-
-    if (interpolate) {
-      for(int i = 0; i < 24; i++) {
-        var prev = (i - 1 >= 0) ? (i - 1) : 23;
-        var next = (i + 1 <= 23) ? (i + 1) : 0;
-        allDiaValuesRelativeToTime[i].add([
-          allDiaValuesRelativeToTime[prev].average,
-          allDiaValuesRelativeToTime[next].average
-        ].average.toInt());
-        allSysValuesRelativeToTime[i].add([
-          allSysValuesRelativeToTime[prev].average,
-          allSysValuesRelativeToTime[next].average
-        ].average.toInt());
-        allPulValuesRelativeToTime[i].add([
-          allPulValuesRelativeToTime[prev].average,
-          allPulValuesRelativeToTime[next].average
-        ].average.toInt());
+        allPulValuesRelativeToTime[i].add(await avgPul);
       }
     }
 

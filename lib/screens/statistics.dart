@@ -25,39 +25,48 @@ class StatisticsPage extends StatelessWidget {
                         caption: const Text('Measurement count'),
                         child: futureInt(model.count)
                     ),
-                    // Averages
-                    Row(
-                      children: [
-                        const Spacer(),
-                        Statistic(
-                          caption: Text('Diastolic avg.',
-                            style: TextStyle(color: settings.diaColor, fontWeight: FontWeight.w700),
-                          ),
-                          smallEdges: true,
-                          child: futureInt(model.avgDia),
-                        ),
-                        const Spacer(),
-                        Statistic(
-                          caption: Text('Systolic avg.',
-                            style: TextStyle(color: settings.sysColor, fontWeight: FontWeight.w700),),
-                          smallEdges: true,
-                          child: futureInt(model.avgSys),
-                        ),
-                        const Spacer(),
-                        Statistic(
-                          caption: Text('Pulse avg.',
-                            style: TextStyle(color: settings.pulColor, fontWeight: FontWeight.w700),),
-                          smallEdges: true,
-                          child: futureInt(model.avgPul),
-                        ),
-                        const Spacer(),
-                      ],
+                    // special measurements
+                    StatisticsRow(
+                      caption1: Text('Systolic avg.',
+                        style: TextStyle(color: settings.sysColor, fontWeight: FontWeight.w700),),
+                      child1: futureInt(model.avgSys),
+                      caption2: Text('Diastolic avg.', style: TextStyle(color: settings.diaColor, fontWeight: FontWeight.w700),),
+                      child2: futureInt(model.avgDia),
+                      caption3: Text('Pulse avg.',
+                        style: TextStyle(color: settings.pulColor, fontWeight: FontWeight.w700),),
+                      child3: futureInt(model.avgPul),
                     ),
+                    Statistic(
+                        caption: const Text('Measurements per Day'),
+                        child: futureInt(model.measurementsPerDay)
+                    ),
+                    StatisticsRow(
+                      caption2: Text('Diastolic min.',
+                        style: TextStyle(color: settings.diaColor, fontWeight: FontWeight.w700),),
+                      child2: futureInt(model.minDia),
+                      caption1: Text('Systolic min.',
+                        style: TextStyle(color: settings.sysColor, fontWeight: FontWeight.w700),),
+                      child1: futureInt(model.minSys),
+                      caption3: Text('Pulse min.',
+                        style: TextStyle(color: settings.pulColor, fontWeight: FontWeight.w700),),
+                      child3: futureInt(model.minPul),
+                    ),
+                    StatisticsRow(
+                      caption2: Text('Diastolic max.',
+                        style: TextStyle(color: settings.diaColor, fontWeight: FontWeight.w700),),
+                      child2: futureInt(model.maxDia),
+                      caption1: Text('Systolic max.',
+                        style: TextStyle(color: settings.sysColor, fontWeight: FontWeight.w700),),
+                      child1: futureInt(model.maxSys),
+                      caption3: Text('Pulse max.',
+                        style: TextStyle(color: settings.pulColor, fontWeight: FontWeight.w700),),
+                      child3: futureInt(model.maxPul),
+                    ),
+                    // Time-Resolved Metrics
                     Statistic(
                       caption: const Text('Time-Resolved Metrics'),
                       child: FutureBuilder<List<List<int>>>(
-                          future: model.getAllAvgsRelativeToDaytime(
-                              interpolate: true),
+                          future: model.allAvgsRelativeToDaytime,
                           builder: (BuildContext context, AsyncSnapshot<List<
                               List<int>>> snapshot) {
                             switch (snapshot.connectionState) {
@@ -131,6 +140,7 @@ class StatisticsPage extends StatelessWidget {
                           }
                       ),
                     ),
+                    // TODO: Weekdays / Weekends
                   ],
                 );
               }
@@ -138,29 +148,6 @@ class StatisticsPage extends StatelessWidget {
           },
         )
       ),
-    );
-  }
-  
-  Widget futureInt(Future<int> value) {
-    return FutureBuilder<int>(
-        future: value,
-        builder: (BuildContext context, AsyncSnapshot<int> snapshot) {
-          switch (snapshot.connectionState) {
-            case ConnectionState.none:
-              return const Text('not started');
-            case ConnectionState.waiting:
-              return const Text('loading...');
-            default:
-              if (snapshot.hasError) {
-                return Text('ERROR: ${snapshot.error}');
-              }
-              assert(snapshot.hasData);
-              if ((snapshot.data??-1) < 0) {
-                return const Text('invalid data');
-              }
-              return Text(snapshot.data?.toString() ?? 'error');
-          }
-        }
     );
   }
 
@@ -184,7 +171,7 @@ class Statistic extends StatelessWidget {
   Widget build(BuildContext context) {
     double sides = 20;
     double top = 20;
-    double padding = 30;
+    double padding = 20;
     if (smallEdges) {
       sides = 0;
       padding = 10;
@@ -197,7 +184,7 @@ class Statistic extends StatelessWidget {
       ),
       decoration: BoxDecoration(
         border: Border.all(
-          width: 4,
+          width: 3,
           color: Theme.of(context).textTheme.bodyMedium?.color ?? Colors.white38
         ),
         borderRadius: const BorderRadius.all(Radius.circular(25)),
@@ -231,3 +218,65 @@ class Statistic extends StatelessWidget {
     );
   }
 }
+
+class StatisticsRow extends StatelessWidget {
+  final Widget caption1;
+  final Widget caption2;
+  final Widget caption3;
+  final Widget child1;
+  final Widget child2;
+  final Widget child3;
+
+  const StatisticsRow({super.key, required this.caption1, required this.caption2, required this.caption3, required this.child1, required this.child2, required this.child3});
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        const Spacer(),
+        Statistic(
+          smallEdges: true,
+          caption: caption1,
+          child: child1,
+        ),
+        const Spacer(),
+        Statistic(
+          smallEdges: true,
+          caption: caption2,
+          child: child2,
+        ),
+        const Spacer(),
+        Statistic(
+          smallEdges: true,
+          caption: caption3,
+          child: child3,
+        ),
+        const Spacer(),
+      ],
+    );
+  }
+}
+
+Widget futureInt(Future<int> value) {
+  return FutureBuilder<int>(
+      future: value,
+      builder: (BuildContext context, AsyncSnapshot<int> snapshot) {
+        switch (snapshot.connectionState) {
+          case ConnectionState.none:
+            return const Text('not started');
+          case ConnectionState.waiting:
+            return const Text('loading...');
+          default:
+            if (snapshot.hasError) {
+              return Text('ERROR: ${snapshot.error}');
+            }
+            assert(snapshot.hasData);
+            if ((snapshot.data ?? -1) < 0) {
+              return const Text('invalid data');
+            }
+            return Text(snapshot.data?.toString() ?? 'error');
+        }
+      }
+  );
+}
+
