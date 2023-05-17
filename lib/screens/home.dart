@@ -1,4 +1,4 @@
-import 'package:blood_pressure_app/model/settings.dart';
+import 'package:blood_pressure_app/model/settings_store.dart';
 import 'package:blood_pressure_app/screens/add_measurement.dart';
 import 'package:blood_pressure_app/screens/settings.dart';
 import 'package:blood_pressure_app/screens/statistics.dart';

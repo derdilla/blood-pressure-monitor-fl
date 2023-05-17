@@ -6,7 +6,7 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:provider/provider.dart';
 import 'dart:math';
 import 'package:intl/intl.dart';
-import 'package:blood_pressure_app/model/settings.dart';
+import 'package:blood_pressure_app/model/settings_store.dart';
 
 class _LineChart extends StatelessWidget {
   final double height;

@@ -1,8 +1,8 @@
-import 'package:blood_pressure_app/model/settings.dart';
+import 'package:blood_pressure_app/model/settings_store.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:url_launcher/url_launcher.dart' show launch;
+import 'package:url_launcher/url_launcher.dart' show launchUrl;
 
 
 class EnterTimeFormatScreen extends StatefulWidget {
@@ -37,7 +37,7 @@ class _EnterTimeFormatScreenState extends State<EnterTimeFormatScreen> {
                     text: 'For a full list of valid formats please look here.',
                     style: const TextStyle(color: Colors.blue),
                     recognizer: TapGestureRecognizer()
-                      ..onTap = () { launch('https://pub.dev/documentation/intl/latest/intl/DateFormat-class.html');
+                      ..onTap = () { launchUrl(Uri.parse('https://pub.dev/documentation/intl/latest/intl/DateFormat-class.html'));
                       },
                   ),
                 ),

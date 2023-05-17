@@ -1,11 +1,10 @@
 import 'dart:collection';
 
 import 'package:blood_pressure_app/model/blood_pressure.dart';
-import 'package:blood_pressure_app/model/settings.dart';
+import 'package:blood_pressure_app/model/settings_store.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
-import 'dart:io' show Platform;
 
 class MeasurementList extends StatelessWidget {
   late final _tableElementsSizes;

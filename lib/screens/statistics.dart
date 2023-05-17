@@ -1,5 +1,5 @@
 import 'package:blood_pressure_app/model/blood_pressure.dart';
-import 'package:blood_pressure_app/model/settings.dart';
+import 'package:blood_pressure_app/model/settings_store.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -272,7 +272,7 @@ Widget futureInt(Future<int> value) {
             }
             assert(snapshot.hasData);
             if ((snapshot.data ?? -1) < 0) {
-              return const Text('invalid data');
+              return const Text('-');
             }
             return Text(snapshot.data?.toString() ?? 'error');
         }

@@ -28,6 +28,7 @@ class SettingsTile extends StatelessWidget {
         child: Row(
           children: [
             lead,
+            const SizedBox(width: 15,),
             SizedBox(
               width: MediaQuery.of(context).size.width - 150,
               child: (() {
@@ -192,6 +193,7 @@ class _SliderSettingsTileState extends State<SliderSettingsTile> {
       child: Row(
         children: [
           lead,
+          const SizedBox(width: 15,),
           SizedBox(
             width: MediaQuery.of(context).size.width - 150,
             child: Column(
@@ -253,7 +255,7 @@ class SettingsSection extends StatelessWidget {
           ),
         ),
         Container(
-          padding: const EdgeInsets.only(left: 20, right: 20),
+          padding: const EdgeInsets.only(left: 10, right: 20),
           child: Column(
             children: children,
           ),

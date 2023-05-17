@@ -1,9 +1,10 @@
-import 'package:blood_pressure_app/components/complex_settings.dart';
+import 'package:blood_pressure_app/components/settings_widgets.dart';
 import 'package:blood_pressure_app/model/blood_pressure.dart';
-import 'package:blood_pressure_app/model/settings.dart';
+import 'package:blood_pressure_app/model/settings_store.dart';
 import 'package:blood_pressure_app/screens/enter_timeformat.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});
@@ -64,7 +65,9 @@ class SettingsPage extends StatelessWidget {
                     title: const Text('enable dark mode'),
                     disabled: settings.followSystemDarkMode,
                   ),
-                  SliderSettingsTile(title: const Text('icon size'),
+                  SliderSettingsTile(
+                    title: const Text('icon size'),
+                    leading: const Icon(Icons.zoom_in),
                     onChanged: (double value) {
                       settings.iconSize = value;
                     },
@@ -102,6 +105,7 @@ class SettingsPage extends StatelessWidget {
                       initialValue: settings.useExportCompatability,
                       title: const Text('compatability export'),
                       description: const Text('sets export mime type to text instead of csv'),
+                      leading: const Icon(Icons.support),
                       onToggle: (value) {
                         settings.useExportCompatability = value;
                       }
@@ -133,6 +137,36 @@ class SettingsPage extends StatelessWidget {
                     }),
                   ),
                 ],
+              ),
+              SettingsSection(
+                  title: const Text('about'),
+                  children: [
+                    SettingsTile(
+                      title: const Text('source code'),
+                      leading: SizedBox(
+                        width: 30,
+                          height: 30,
+                        child: Image.asset('assets/github-mark.png'),
+                      ),
+                      onPressed: (context) async {
+                        var url = Uri.parse('https://github.com/NobodyForNothing/blood-pressure-monitor-fl');
+                        if (await canLaunchUrl(url)) {
+                          await launchUrl(url, mode: LaunchMode.externalApplication);
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(content: Text('Can\'t open URL:\nhttps://github.com/NobodyForNothing/blood-pressure-monitor-fl')));
+                        }
+                        },
+                    ),
+                    SettingsTile(
+                      title: const Text('3rd party licenses'),
+                      leading: const Icon(Icons.policy_outlined),
+                      trailing: Icon(Icons.arrow_forward_ios, color: Theme.of(context).highlightColor,),
+                      onPressed: (context) {
+                        showLicensePage(context: context);
+                      },
+                    ),
+                  ]
               )
             ],
             );
