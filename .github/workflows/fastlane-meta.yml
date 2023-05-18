@@ -4,12 +4,13 @@ on:
     branches: '**'
     paths:
       - "fastlane/**"
-      - ".github/workflows/fastlane-metadata.yml"
+      - ".github/workflows/fastlane-meta.yml"
   pull_request:
     branches: '**'
     paths:
       - "fastlane/**"
-      - ".github/workflows/fastlane-metadata.yml"
+      - ".github/workflows/fastlane-meta.yml"
+  workflow_dispatch:
     
 jobs:
   validate:
