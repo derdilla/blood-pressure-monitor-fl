@@ -4,7 +4,7 @@ on:
     branches: '**'
     paths:
       - "fastlane/**"
-      - ".github/workflows/fastlane-metadata.yaml"
+      - ".github/workflows/fastlane-metadata.yml"
   pull_request:
     branches: '**'
     paths:
