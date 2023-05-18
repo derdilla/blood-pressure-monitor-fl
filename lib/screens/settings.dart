@@ -143,11 +143,7 @@ class SettingsPage extends StatelessWidget {
                   children: [
                     SettingsTile(
                       title: const Text('source code'),
-                      leading: SizedBox(
-                        width: 30,
-                          height: 30,
-                        child: Image.asset('assets/github-mark.png'),
-                      ),
+                      leading: const Icon(Icons.merge),
                       onPressed: (context) async {
                         var url = Uri.parse('https://github.com/NobodyForNothing/blood-pressure-monitor-fl');
                         if (await canLaunchUrl(url)) {
