@@ -3,6 +3,13 @@ name: CI
 on:
   push:
     branches: '**'
+    paths:
+      - "lib/**"
+      - "android/**"
+      - "assets/**"
+      - "linux/**"
+      - "windows/**"
+      - ".github/workflows/CI.yml"
 
 jobs:
   test:
