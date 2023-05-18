@@ -1,0 +1,3 @@
+* add library licenses screen
+* add missing simbols
+* link repository in app
