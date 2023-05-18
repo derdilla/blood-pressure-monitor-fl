@@ -18,7 +18,7 @@ class _LineChart extends StatelessWidget {
       children: [
         Align(
           alignment: Alignment.topCenter,
-          child: Container(
+          child: SizedBox(
             height: height,
               child: Consumer<Settings>(
                 builder: (context, settings, child) {
@@ -94,23 +94,31 @@ class _LineChart extends StatelessWidget {
                                                       );
                                                     }
                                                 ),
-                                              )
+                                              ),
+                                          ),
+                                          lineTouchData: LineTouchData(
+                                            touchTooltipData: LineTouchTooltipData(
+                                              tooltipMargin: -200,
+                                              tooltipRoundedRadius: 20
+                                            )
                                           ),
                                           lineBarsData: [
                                             // high blood pressure marking acordning to https://www.texasheart.org/heart-health/heart-information-center/topics/high-blood-pressure-hypertension/
                                             LineChartBarData(
-                                                spots: pulseSpots,
-                                                color: settings.pulColor,
-                                                barWidth: 4,
-                                                isCurved: true,
-                                                preventCurveOverShooting: true
+                                              spots: pulseSpots,
+                                              dotData: FlDotData(
+                                                show: false,
+                                              ),
+                                              color: settings.pulColor,
+                                              barWidth: 4,
                                             ),
                                             LineChartBarData(
                                                 spots: diastolicSpots,
                                                 color: settings.diaColor,
                                                 barWidth: 4,
-                                                isCurved: true,
-                                                preventCurveOverShooting: true,
+                                                dotData: FlDotData(
+                                                  show: false,
+                                                ),
                                                 belowBarData: BarAreaData(
                                                     show: true,
                                                     color: Colors.red.shade400.withAlpha(100),
@@ -122,8 +130,9 @@ class _LineChart extends StatelessWidget {
                                                 spots: systolicSpots,
                                                 color: settings.sysColor,
                                                 barWidth: 4,
-                                                isCurved: true,
-                                                preventCurveOverShooting: true,
+                                                dotData: FlDotData(
+                                                  show: false,
+                                                ),
                                                 belowBarData: BarAreaData(
                                                     show: true,
                                                     color: Colors.red.shade400.withAlpha(100),
