@@ -42,18 +42,18 @@ class Settings extends ChangeNotifier {
     notifyListeners();
   }
 
-  DateTime get graphStart {
+  DateTime get displayDataStart {
     return DateTime.fromMillisecondsSinceEpoch(_prefs.getInt('graphStart') ?? -1);
   }
-  set graphStart(DateTime newGraphStart) {
+  set displayDataStart(DateTime newGraphStart) {
     _prefs.setInt('graphStart', newGraphStart.millisecondsSinceEpoch);
     notifyListeners();
   }
 
-  DateTime get graphEnd {
+  DateTime get displayDataEnd {
     return DateTime.fromMillisecondsSinceEpoch(_prefs.getInt('graphEnd') ?? -1);
   }
-  set graphEnd(DateTime newGraphEnd) {
+  set displayDataEnd(DateTime newGraphEnd) {
     _prefs.setInt('graphEnd', newGraphEnd.millisecondsSinceEpoch);
     notifyListeners();
   }

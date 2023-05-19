@@ -24,9 +24,9 @@ class _LineChart extends StatelessWidget {
                 builder: (context, settings, child) {
                   return Consumer<BloodPressureModel>(
                     builder: (context, model, child) {
-                      var end = settings.graphEnd;
+                      var end = settings.displayDataEnd;
                       if (settings.graphStepSize == TimeStep.lifetime) end = DateTime.now();
-                      final dataFuture = model.getInTimeRange(settings.graphStart, end);
+                      final dataFuture = model.getInTimeRange(settings.displayDataStart, end);
 
                       return FutureBuilder<UnmodifiableListView<BloodPressureRecord>>(
                           future: dataFuture,
@@ -164,24 +164,24 @@ class MeasurementGraph extends StatelessWidget {
   const MeasurementGraph({super.key, this.height = 290});
 
   void moveGraphWithStep(int directionalStep, Settings settings) {
-    final oldStart = settings.graphStart;
-    final oldEnd = settings.graphEnd;
+    final oldStart = settings.displayDataStart;
+    final oldEnd = settings.displayDataEnd;
     switch (settings.graphStepSize) {
       case TimeStep.day:
-        settings.graphStart = oldStart.copyWith(day: oldStart.day + directionalStep);
-        settings.graphEnd = oldEnd.copyWith(day: oldEnd.day + directionalStep);
+        settings.displayDataStart = oldStart.copyWith(day: oldStart.day + directionalStep);
+        settings.displayDataEnd = oldEnd.copyWith(day: oldEnd.day + directionalStep);
         break;
       case TimeStep.month:
-        settings.graphStart = oldStart.copyWith(month: oldStart.month + directionalStep);
-        settings.graphEnd = oldEnd.copyWith(month: oldEnd.month + directionalStep);
+        settings.displayDataStart = oldStart.copyWith(month: oldStart.month + directionalStep);
+        settings.displayDataEnd = oldEnd.copyWith(month: oldEnd.month + directionalStep);
         break;
       case TimeStep.year:
-        settings.graphStart = oldStart.copyWith(year: oldStart.year + directionalStep);
-        settings.graphEnd = oldEnd.copyWith(year: oldEnd.year + directionalStep);
+        settings.displayDataStart = oldStart.copyWith(year: oldStart.year + directionalStep);
+        settings.displayDataEnd = oldEnd.copyWith(year: oldEnd.year + directionalStep);
         break;
       case TimeStep.lifetime:
-        settings.graphStart = DateTime.fromMillisecondsSinceEpoch(0);
-        settings.graphEnd = oldStart;
+        settings.displayDataStart = DateTime.fromMillisecondsSinceEpoch(0);
+        settings.displayDataEnd = oldStart;
         break;
     }
   }
@@ -225,20 +225,20 @@ class MeasurementGraph extends StatelessWidget {
                                 final now = DateTime.now();
                                 switch (settings.graphStepSize) {
                                   case TimeStep.day:
-                                    settings.graphStart = DateTime(now.year, now.month, now.day);
-                                    settings.graphEnd = settings.graphStart.copyWith(day: now.day + 1);
+                                    settings.displayDataStart = DateTime(now.year, now.month, now.day);
+                                    settings.displayDataEnd = settings.displayDataStart.copyWith(day: now.day + 1);
                                     break;
                                   case TimeStep.month:
-                                    settings.graphStart = DateTime(now.year, now.month);
-                                    settings.graphEnd = settings.graphStart.copyWith(month: now.month + 1);
+                                    settings.displayDataStart = DateTime(now.year, now.month);
+                                    settings.displayDataEnd = settings.displayDataStart.copyWith(month: now.month + 1);
                                     break;
                                   case TimeStep.year:
-                                    settings.graphStart = DateTime(now.year);
-                                    settings.graphEnd = settings.graphStart.copyWith(year: now.year + 1);
+                                    settings.displayDataStart = DateTime(now.year);
+                                    settings.displayDataEnd = settings.displayDataStart.copyWith(year: now.year + 1);
                                     break;
                                   case TimeStep.lifetime:
-                                    settings.graphStart = DateTime.fromMillisecondsSinceEpoch(0);
-                                    settings.graphEnd = now;
+                                    settings.displayDataStart = DateTime.fromMillisecondsSinceEpoch(0);
+                                    settings.displayDataEnd = now;
                                     break;
                                 }
                               }
