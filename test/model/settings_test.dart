@@ -10,6 +10,7 @@ void main() {
   group('TimeStep', () {
     test('names should match to fields', () {
       expect(TimeStep.getName(TimeStep.day), 'day');
+      expect(TimeStep.getName(TimeStep.week), 'week');
       expect(TimeStep.getName(TimeStep.month), 'month');
       expect(TimeStep.getName(TimeStep.year), 'year');
       expect(TimeStep.getName(TimeStep.lifetime), 'lifetime');
