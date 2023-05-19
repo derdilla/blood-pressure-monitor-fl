@@ -83,6 +83,9 @@ class _LineChart extends StatelessWidget {
                                                         case TimeStep.month:
                                                           formater = DateFormat('d');
                                                           break;
+                                                        case TimeStep.week:
+                                                          formater = DateFormat('E');
+                                                          break;
                                                         case TimeStep.year:
                                                           formater = DateFormat('MMM');
                                                           break;
@@ -171,6 +174,10 @@ class MeasurementGraph extends StatelessWidget {
         settings.displayDataStart = oldStart.copyWith(day: oldStart.day + directionalStep);
         settings.displayDataEnd = oldEnd.copyWith(day: oldEnd.day + directionalStep);
         break;
+      case TimeStep.week:
+        settings.displayDataStart = oldStart.copyWith(day: oldStart.day + directionalStep * 7);
+        settings.displayDataEnd = oldEnd.copyWith(day: oldEnd.day + directionalStep * 7);
+        break;
       case TimeStep.month:
         settings.displayDataStart = oldStart.copyWith(month: oldStart.month + directionalStep);
         settings.displayDataEnd = oldEnd.copyWith(month: oldEnd.month + directionalStep);
@@ -227,6 +234,10 @@ class MeasurementGraph extends StatelessWidget {
                                   case TimeStep.day:
                                     settings.displayDataStart = DateTime(now.year, now.month, now.day);
                                     settings.displayDataEnd = settings.displayDataStart.copyWith(day: now.day + 1);
+                                    break;
+                                  case TimeStep.week:
+                                    settings.displayDataStart = DateTime(now.year, now.month, DateTime.monday);
+                                    settings.displayDataEnd = settings.displayDataStart.copyWith(day: DateTime.sunday);
                                     break;
                                   case TimeStep.month:
                                     settings.displayDataStart = DateTime(now.year, now.month);
