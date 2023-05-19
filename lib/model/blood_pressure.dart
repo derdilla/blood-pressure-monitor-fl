@@ -33,7 +33,7 @@ class BloodPressureModel extends ChangeNotifier {
       version: 1,
     );
   }
-  // factory method, to allow for async contructor
+  // factory method, to allow for async constructor
   static Future<BloodPressureModel> create({String? dbPath}) async {
     if (Platform.isWindows || Platform.isLinux) {
       // Initialize FFI
@@ -100,7 +100,7 @@ class BloodPressureModel extends ChangeNotifier {
       where: 'timestamp BETWEEN ? AND ?',
       whereArgs: [from.millisecondsSinceEpoch, to.millisecondsSinceEpoch]
     ); // descending
-    // syncronous part
+    // synchronous part
     List<BloodPressureRecord> recordsInRange = [];
     for (var e in dbEntries) {
       recordsInRange.add(BloodPressureRecord(
@@ -313,15 +313,4 @@ class BloodPressureRecord {
 
   const BloodPressureRecord(
       this.creationTime, this.systolic, this.diastolic, this.pulse, this.notes);
-
-  @override
-  int compareTo(BloodPressureRecord other) {
-    if (creationTime.isBefore(other.creationTime)) {
-      return -1;
-    } else if (creationTime.isAfter(other.creationTime)) {
-      return 1;
-    } else {
-      return 0;
-    }
-  }
 }

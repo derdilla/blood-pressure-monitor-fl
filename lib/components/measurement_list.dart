@@ -9,8 +9,8 @@ import 'package:intl/intl.dart';
 import '../screens/add_measurement.dart';
 
 class MeasurementList extends StatelessWidget {
-  late final List<int> _tableElementsSizes;
-  late final int _sideFlex;
+  late final _tableElementsSizes;
+  late final _sideFlex;
 
   MeasurementList(BuildContext context, {super.key}) {
     if (MediaQuery.of(context).size.width < 1000) {
@@ -32,32 +32,36 @@ class MeasurementList extends StatelessWidget {
           flex: 100,
           child: Consumer<BloodPressureModel>(
             builder: (context, model, child) {
-              final items = model.getLastX(30);
-              return FutureBuilder<UnmodifiableListView<BloodPressureRecord>>(
-                future: items,
-                builder: (BuildContext context, AsyncSnapshot<UnmodifiableListView<BloodPressureRecord>> recordsSnapshot) {
-                  assert(recordsSnapshot.connectionState != ConnectionState.none);
+              return Consumer<Settings>(
+                builder: (context, settings, child) {
+                  final items = model.getInTimeRange(settings.displayDataStart, settings.displayDataEnd);
+                  return FutureBuilder<UnmodifiableListView<BloodPressureRecord>>(
+                      future: items,
+                      builder: (BuildContext context, AsyncSnapshot<UnmodifiableListView<BloodPressureRecord>> recordsSnapshot) {
+                        assert(recordsSnapshot.connectionState != ConnectionState.none);
 
-                  if (recordsSnapshot.connectionState == ConnectionState.waiting) {
-                    return const Text('loading...');
-                  } else {
-                    if (recordsSnapshot.hasError) {
-                      return Text('Error loading data:\n${recordsSnapshot.error}');
-                    } else {
-                      final data = recordsSnapshot.data ?? [];
-                      if (data.isNotEmpty && data.first.diastolic > 0) {
-                        return ListView.builder(
-                            itemCount: data.length,
-                            shrinkWrap: true,
-                            itemBuilder: (context, index) {
-                              return buildListItem(data[index]);
+                        if (recordsSnapshot.connectionState == ConnectionState.waiting) {
+                          return const Text('loading...');
+                        } else {
+                          if (recordsSnapshot.hasError) {
+                            return Text('Error loading data:\n${recordsSnapshot.error}');
+                          } else {
+                            final data = recordsSnapshot.data ?? [];
+                            if (data.isNotEmpty && data.first.diastolic > 0) {
+                              return ListView.builder(
+                                  itemCount: data.length,
+                                  shrinkWrap: true,
+                                  itemBuilder: (context, index) {
+                                    return buildListItem(data[index]);
+                                  }
+                              );
+                            } else {
+                              return const Text('no data');
                             }
-                        );
-                      } else {
-                        return const Text('no data');
+                          }
+                        }
                       }
-                    }
-                  }
+                  );
                 }
               );
             }

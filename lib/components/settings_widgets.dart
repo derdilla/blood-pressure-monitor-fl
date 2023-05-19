@@ -170,13 +170,19 @@ class SliderSettingsTile extends StatefulWidget {
     this.disabled = false});
 
   @override
-  State<StatefulWidget> createState() => _SliderSettingsTileState(initialValue);
+  State<StatefulWidget> createState() => _SliderSettingsTileState();
 }
 
 class _SliderSettingsTileState extends State<SliderSettingsTile> {
-  double _value;
+  late double _value = -1;
 
-  _SliderSettingsTileState(this._value);
+  _SliderSettingsTileState();
+
+  @override
+  void initState() {
+    super.initState();
+    _value = widget.initialValue;
+  }
 
   @override
   Widget build(BuildContext context) {

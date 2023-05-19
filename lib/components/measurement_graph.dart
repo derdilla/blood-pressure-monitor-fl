@@ -10,7 +10,7 @@ import 'package:blood_pressure_app/model/settings_store.dart';
 
 class _LineChart extends StatelessWidget {
   final double height;
-  const _LineChart({super.key, this.height = 200});
+  const _LineChart({this.height = 200});
   
   @override
   Widget build(BuildContext context) {
@@ -24,9 +24,9 @@ class _LineChart extends StatelessWidget {
                 builder: (context, settings, child) {
                   return Consumer<BloodPressureModel>(
                     builder: (context, model, child) {
-                      var end = settings.graphEnd;
+                      var end = settings.displayDataEnd;
                       if (settings.graphStepSize == TimeStep.lifetime) end = DateTime.now();
-                      final dataFuture = model.getInTimeRange(settings.graphStart, end);
+                      final dataFuture = model.getInTimeRange(settings.displayDataStart, end);
 
                       return FutureBuilder<UnmodifiableListView<BloodPressureRecord>>(
                           future: dataFuture,
@@ -75,22 +75,25 @@ class _LineChart extends StatelessWidget {
                                                 sideTitles: SideTitles(
                                                     showTitles: true,
                                                     getTitlesWidget: (double pos, TitleMeta meta) {
-                                                      late final DateFormat formater;
+                                                      late final DateFormat formatter;
                                                       switch (settings.graphStepSize) {
                                                         case TimeStep.day:
-                                                          formater = DateFormat('H:mm');
+                                                          formatter = DateFormat('H:mm');
                                                           break;
                                                         case TimeStep.month:
-                                                          formater = DateFormat('d');
+                                                          formatter = DateFormat('d');
+                                                          break;
+                                                        case TimeStep.week:
+                                                          formatter = DateFormat('E');
                                                           break;
                                                         case TimeStep.year:
-                                                          formater = DateFormat('MMM');
+                                                          formatter = DateFormat('MMM');
                                                           break;
                                                         case TimeStep.lifetime:
-                                                          formater = DateFormat('yyyy');
+                                                          formatter = DateFormat('yyyy');
                                                       }
                                                       return Text(
-                                                          formater.format(DateTime.fromMillisecondsSinceEpoch(pos.toInt()))
+                                                          formatter.format(DateTime.fromMillisecondsSinceEpoch(pos.toInt()))
                                                       );
                                                     }
                                                 ),
@@ -103,7 +106,7 @@ class _LineChart extends StatelessWidget {
                                             )
                                           ),
                                           lineBarsData: [
-                                            // high blood pressure marking acordning to https://www.texasheart.org/heart-health/heart-information-center/topics/high-blood-pressure-hypertension/
+                                            // high blood pressure marking according to https://www.texasheart.org/heart-health/heart-information-center/topics/high-blood-pressure-hypertension/
                                             LineChartBarData(
                                               spots: pulseSpots,
                                               dotData: FlDotData(
@@ -164,24 +167,28 @@ class MeasurementGraph extends StatelessWidget {
   const MeasurementGraph({super.key, this.height = 290});
 
   void moveGraphWithStep(int directionalStep, Settings settings) {
-    final oldStart = settings.graphStart;
-    final oldEnd = settings.graphEnd;
+    final oldStart = settings.displayDataStart;
+    final oldEnd = settings.displayDataEnd;
     switch (settings.graphStepSize) {
       case TimeStep.day:
-        settings.graphStart = oldStart.copyWith(day: oldStart.day + directionalStep);
-        settings.graphEnd = oldEnd.copyWith(day: oldEnd.day + directionalStep);
+        settings.displayDataStart = oldStart.copyWith(day: oldStart.day + directionalStep);
+        settings.displayDataEnd = oldEnd.copyWith(day: oldEnd.day + directionalStep);
+        break;
+      case TimeStep.week:
+        settings.displayDataStart = oldStart.copyWith(day: oldStart.day + directionalStep * 7);
+        settings.displayDataEnd = oldEnd.copyWith(day: oldEnd.day + directionalStep * 7);
         break;
       case TimeStep.month:
-        settings.graphStart = oldStart.copyWith(month: oldStart.month + directionalStep);
-        settings.graphEnd = oldEnd.copyWith(month: oldEnd.month + directionalStep);
+        settings.displayDataStart = oldStart.copyWith(month: oldStart.month + directionalStep);
+        settings.displayDataEnd = oldEnd.copyWith(month: oldEnd.month + directionalStep);
         break;
       case TimeStep.year:
-        settings.graphStart = oldStart.copyWith(year: oldStart.year + directionalStep);
-        settings.graphEnd = oldEnd.copyWith(year: oldEnd.year + directionalStep);
+        settings.displayDataStart = oldStart.copyWith(year: oldStart.year + directionalStep);
+        settings.displayDataEnd = oldEnd.copyWith(year: oldEnd.year + directionalStep);
         break;
       case TimeStep.lifetime:
-        settings.graphStart = DateTime.fromMillisecondsSinceEpoch(0);
-        settings.graphEnd = oldStart;
+        settings.displayDataStart = DateTime.fromMillisecondsSinceEpoch(0);
+        settings.displayDataEnd = oldStart;
         break;
     }
   }
@@ -225,20 +232,24 @@ class MeasurementGraph extends StatelessWidget {
                                 final now = DateTime.now();
                                 switch (settings.graphStepSize) {
                                   case TimeStep.day:
-                                    settings.graphStart = DateTime(now.year, now.month, now.day);
-                                    settings.graphEnd = settings.graphStart.copyWith(day: now.day + 1);
+                                    settings.displayDataStart = DateTime(now.year, now.month, now.day);
+                                    settings.displayDataEnd = settings.displayDataStart.copyWith(day: now.day + 1);
+                                    break;
+                                  case TimeStep.week:
+                                    settings.displayDataStart = DateTime(now.year, now.month, DateTime.monday);
+                                    settings.displayDataEnd = settings.displayDataStart.copyWith(day: DateTime.sunday);
                                     break;
                                   case TimeStep.month:
-                                    settings.graphStart = DateTime(now.year, now.month);
-                                    settings.graphEnd = settings.graphStart.copyWith(month: now.month + 1);
+                                    settings.displayDataStart = DateTime(now.year, now.month);
+                                    settings.displayDataEnd = settings.displayDataStart.copyWith(month: now.month + 1);
                                     break;
                                   case TimeStep.year:
-                                    settings.graphStart = DateTime(now.year);
-                                    settings.graphEnd = settings.graphStart.copyWith(year: now.year + 1);
+                                    settings.displayDataStart = DateTime(now.year);
+                                    settings.displayDataEnd = settings.displayDataStart.copyWith(year: now.year + 1);
                                     break;
                                   case TimeStep.lifetime:
-                                    settings.graphStart = DateTime.fromMillisecondsSinceEpoch(0);
-                                    settings.graphEnd = now;
+                                    settings.displayDataStart = DateTime.fromMillisecondsSinceEpoch(0);
+                                    settings.displayDataEnd = now;
                                     break;
                                 }
                               }

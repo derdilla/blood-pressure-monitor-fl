@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -6,7 +5,7 @@ class Settings extends ChangeNotifier {
   late final SharedPreferences _prefs;
 
   Settings._create();
-  // factory method, to allow for async contructor
+  // factory method, to allow for async constructor
   static Future<Settings> create() async {
     final component = Settings._create();
     component._prefs = await SharedPreferences.getInstance();
@@ -42,18 +41,18 @@ class Settings extends ChangeNotifier {
     notifyListeners();
   }
 
-  DateTime get graphStart {
+  DateTime get displayDataStart {
     return DateTime.fromMillisecondsSinceEpoch(_prefs.getInt('graphStart') ?? -1);
   }
-  set graphStart(DateTime newGraphStart) {
+  set displayDataStart(DateTime newGraphStart) {
     _prefs.setInt('graphStart', newGraphStart.millisecondsSinceEpoch);
     notifyListeners();
   }
 
-  DateTime get graphEnd {
+  DateTime get displayDataEnd {
     return DateTime.fromMillisecondsSinceEpoch(_prefs.getInt('graphEnd') ?? -1);
   }
-  set graphEnd(DateTime newGraphEnd) {
+  set displayDataEnd(DateTime newGraphEnd) {
     _prefs.setInt('graphEnd', newGraphEnd.millisecondsSinceEpoch);
     notifyListeners();
   }
@@ -131,12 +130,13 @@ class Settings extends ChangeNotifier {
 }
 
 class TimeStep {
-  static const options = [0, 1, 2, 3];
+  static const options = [0, 4, 1, 2, 3];
 
   static const day = 0;
   static const month = 1;
   static const year = 2;
   static const lifetime = 3;
+  static const week = 4;
 
   TimeStep._create();
 
@@ -150,6 +150,8 @@ class TimeStep {
         return 'year';
       case lifetime:
         return 'lifetime';
+      case week:
+        return 'week';
     }
     return 'invalid';
   }

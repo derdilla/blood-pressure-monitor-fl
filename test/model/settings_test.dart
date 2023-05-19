@@ -10,6 +10,7 @@ void main() {
   group('TimeStep', () {
     test('names should match to fields', () {
       expect(TimeStep.getName(TimeStep.day), 'day');
+      expect(TimeStep.getName(TimeStep.week), 'week');
       expect(TimeStep.getName(TimeStep.month), 'month');
       expect(TimeStep.getName(TimeStep.year), 'year');
       expect(TimeStep.getName(TimeStep.lifetime), 'lifetime');
@@ -26,8 +27,8 @@ void main() {
     test('fields defaults should be set after initialization', () async {
       var s = await Settings.create();
       expect(s.graphStepSize, TimeStep.day);
-      expect(s.graphStart, DateTime.fromMillisecondsSinceEpoch(-1));
-      expect(s.graphEnd, DateTime.fromMillisecondsSinceEpoch(-1));
+      expect(s.displayDataStart, DateTime.fromMillisecondsSinceEpoch(-1));
+      expect(s.displayDataEnd, DateTime.fromMillisecondsSinceEpoch(-1));
       expect(s.followSystemDarkMode, true);
       expect(s.darkMode, true);
       expect(s.accentColor.value, 0xFF009688);
@@ -55,8 +56,8 @@ void main() {
       });
 
       s.graphStepSize = TimeStep.lifetime;
-      s.graphStart = DateTime.fromMillisecondsSinceEpoch(10000);
-      s.graphEnd = DateTime.fromMillisecondsSinceEpoch(200000);
+      s.displayDataStart = DateTime.fromMillisecondsSinceEpoch(10000);
+      s.displayDataEnd = DateTime.fromMillisecondsSinceEpoch(200000);
       s.followSystemDarkMode = false;
       s.darkMode = false;
       s.accentColor = s.createMaterialColor(0xFF942DA4);
@@ -69,8 +70,8 @@ void main() {
       s.iconSize = 50;
 
 
-      expect(s.graphStart, DateTime.fromMillisecondsSinceEpoch(10000));
-      expect(s.graphEnd, DateTime.fromMillisecondsSinceEpoch(200000));
+      expect(s.displayDataStart, DateTime.fromMillisecondsSinceEpoch(10000));
+      expect(s.displayDataEnd, DateTime.fromMillisecondsSinceEpoch(200000));
       expect(s.followSystemDarkMode, false);
       expect(s.darkMode, false);
       expect(s.accentColor.value, 0xFF942DA4);
@@ -91,8 +92,8 @@ void main() {
       });
 
       s.graphStepSize = TimeStep.lifetime;
-      s.graphStart = DateTime.fromMillisecondsSinceEpoch(10000);
-      s.graphEnd = DateTime.fromMillisecondsSinceEpoch(200000);
+      s.displayDataStart = DateTime.fromMillisecondsSinceEpoch(10000);
+      s.displayDataEnd = DateTime.fromMillisecondsSinceEpoch(200000);
       s.followSystemDarkMode = false;
       s.darkMode = false;
       s.accentColor = s.createMaterialColor(0xFF942DA4);
