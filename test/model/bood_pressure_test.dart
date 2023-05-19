@@ -18,16 +18,6 @@ void main() {
       expect(record.pulse, 1000);
       expect(record.notes, "((V⍳V)=⍳⍴V)/V←,V    ⌷←⍳→⍴∆∇⊃‾⍎⍕⌈๏ แผ่นดินฮั่นเABCDEFGHIJKLMNOPQRSTUVWXYZ /0123456789abcdefghijklmnopqrstuvwxyz £©µÀÆÖÞßéöÿ–—‘“”„†•…‰™œŠŸž€ ΑΒΓΔΩαβγδω АБВГДабвг, \n \t д∀∂∈ℝ∧∪≡∞ ↑↗↨↻⇣ ┐┼╔╘░►☺♀ ﬁ�⑀₂ἠḂӥẄɐː⍎אԱა");
     });
-    test('should compare depending on creation time', () {
-      var first = BloodPressureRecord(DateTime.fromMicrosecondsSinceEpoch(0), 0, 0, 0, '');
-      var middle = BloodPressureRecord(DateTime.fromMicrosecondsSinceEpoch(10000), 0, 0, 0, '');
-      var last = BloodPressureRecord(DateTime.now(), 0, 0, 0, '');
-
-      expect(first.compareTo(middle), -1);
-      expect(middle.compareTo(first), 1);
-      expect(last.compareTo(first), 1);
-      expect(last.compareTo(last), 0);
-    });
   });
 
   group('BloodPressureModel',() {

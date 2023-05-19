@@ -308,15 +308,4 @@ class BloodPressureRecord {
 
   const BloodPressureRecord(
       this.creationTime, this.systolic, this.diastolic, this.pulse, this.notes);
-
-  @override
-  int compareTo(BloodPressureRecord other) {
-    if (creationTime.isBefore(other.creationTime)) {
-      return -1;
-    } else if (creationTime.isAfter(other.creationTime)) {
-      return 1;
-    } else {
-      return 0;
-    }
-  }
 }
