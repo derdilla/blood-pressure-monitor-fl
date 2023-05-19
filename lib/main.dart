@@ -28,7 +28,7 @@ class AppRoot extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<Settings>(
         builder: (context, settings, child) {
-          late var mode;
+          late final ThemeMode mode;
           if (settings.followSystemDarkMode) {
             mode = ThemeMode.system;
           } else if (settings.darkMode) {

@@ -103,5 +103,19 @@ void main() {
         expect(success, true);
       });
     });
+
+    test('should delete', () async {
+      var m = await BloodPressureModel.create(dbPath: '/tmp/bp_test/should_delete');
+
+      await m.add(BloodPressureRecord(DateTime.fromMillisecondsSinceEpoch(758934), 123, 87, 65, ';)'));
+      expect((await m.getLastX(100)).length, 1);
+      expect((await m.getInTimeRange(DateTime.fromMillisecondsSinceEpoch(0), DateTime.now())).length, 1);
+
+      await m.delete(DateTime.fromMillisecondsSinceEpoch(758934));
+
+      expect((await m.getLastX(100)).length, 0);
+      expect((await m.getInTimeRange(DateTime.fromMillisecondsSinceEpoch(0), DateTime.now())).length, 0);
+
+    });
   });
 }
