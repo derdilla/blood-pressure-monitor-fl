@@ -12,6 +12,8 @@
     <img alt="GitHub release (latest by date)" src="https://img.shields.io/github/v/release/NobodyForNothing/blood-pressure-monitor-fl">
   </a>
   <img alt="GitHub last commit" src="https://img.shields.io/github/last-commit/NobodyForNothing/blood-pressure-monitor-fl">
+  <img alt="GitHub Repo stars" src="https://img.shields.io/github/stars/NobodyForNothing/blood-pressure-monitor-fl">
+  <img alt="GitHub watchers" src="https://img.shields.io/github/watchers/NobodyForNothing/blood-pressure-monitor-fl">
 </div>
 <p align="center">
   A cross-platform app to save and analyze blood pressure values and allows easy data export
