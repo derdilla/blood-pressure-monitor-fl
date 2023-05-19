@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 
+import '../screens/add_measurement.dart';
+
 class MeasurementList extends StatelessWidget {
   late final _tableElementsSizes;
   late final _sideFlex;
@@ -23,47 +25,45 @@ class MeasurementList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    return Container(
-        child: Column(
-          children: [
-            buildTableHeader(context),
-            Expanded(
-              flex: 100,
-              child: Consumer<BloodPressureModel>(
-                builder: (context, model, child) {
-                  final items = model.getLastX(30);
-                  return FutureBuilder<UnmodifiableListView<BloodPressureRecord>>(
-                    future: items,
-                    builder: (BuildContext context, AsyncSnapshot<UnmodifiableListView<BloodPressureRecord>> recordsSnapsot) {
-                      assert(recordsSnapsot.connectionState != ConnectionState.none);
+    return Column(
+      children: [
+        buildTableHeader(context),
+        Expanded(
+          flex: 100,
+          child: Consumer<BloodPressureModel>(
+            builder: (context, model, child) {
+              final items = model.getLastX(30);
+              return FutureBuilder<UnmodifiableListView<BloodPressureRecord>>(
+                future: items,
+                builder: (BuildContext context, AsyncSnapshot<UnmodifiableListView<BloodPressureRecord>> recordsSnapsot) {
+                  assert(recordsSnapsot.connectionState != ConnectionState.none);
 
-                      if (recordsSnapsot.connectionState == ConnectionState.waiting) {
-                        return const Text('loading...');
+                  if (recordsSnapsot.connectionState == ConnectionState.waiting) {
+                    return const Text('loading...');
+                  } else {
+                    if (recordsSnapsot.hasError) {
+                      return Text('Error loading data:\n${recordsSnapsot.error}');
+                    } else {
+                      final data = recordsSnapsot.data ?? [];
+                      if (data.isNotEmpty && data.first.diastolic > 0) {
+                        return ListView.builder(
+                            itemCount: data.length,
+                            shrinkWrap: true,
+                            itemBuilder: (context, index) {
+                              return buildListItem(data[index]);
+                            }
+                        );
                       } else {
-                        if (recordsSnapsot.hasError) {
-                          return Text('Error loading data:\n${recordsSnapsot.error}');
-                        } else {
-                          final data = recordsSnapsot.data ?? [];
-                          if (data.isNotEmpty && data.first.diastolic > 0) {
-                            return ListView.builder(
-                                itemCount: data.length,
-                                shrinkWrap: true,
-                                itemBuilder: (context, index) {
-                                  return buildListItem(data[index]);
-                                }
-                            );
-                          } else {
-                            return const Text('no data');
-                          }
-                        }
+                        return const Text('no data');
                       }
                     }
-                  );
+                  }
                 }
-              ),
-            )
-          ],
+              );
+            }
+          ),
         )
+      ],
     );
   }
 
@@ -71,39 +71,54 @@ class MeasurementList extends StatelessWidget {
     return Consumer<Settings>(
         builder: (context, settings, child) {
           final formatter = DateFormat(settings.dateFormatString);
-          return Container(
-            margin: const EdgeInsets.only(bottom: 5),
-            child: Row(
-                children: [
-                  Expanded(
-                    flex: _sideFlex,
-                    child: const SizedBox(),
-                  ),
-                  Expanded(
-                      flex: _tableElementsSizes[0],
-                      child: Text(formatter.format(record.creationTime))
-                  ),
-                  Expanded(
-                      flex: _tableElementsSizes[1],
-                      child: Text(record.systolic.toString())
-                  ),
-                  Expanded(
-                      flex: _tableElementsSizes[2],
-                      child: Text(record.diastolic.toString())
-                  ),
-                  Expanded(
-                      flex: _tableElementsSizes[3],
-                      child: Text(record.pulse.toString())
-                  ),
-                  Expanded(
-                      flex: _tableElementsSizes[4],
-                      child: Text(record.notes)
-                  ),
-                  Expanded(
-                    flex: _sideFlex,
-                    child: const SizedBox(),
-                  ),
-                ]
+          return GestureDetector(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => AddMeasurementPage(
+                  initTime: record.creationTime,
+                  initSys: record.systolic,
+                  initDia: record.diastolic,
+                  initPul: record.pulse,
+                  initNote: record.notes,
+                  isEdit: true,
+                )),
+              );
+            },
+            child: Container(
+              margin: const EdgeInsets.only(bottom: 5),
+              child: Row(
+                  children: [
+                    Expanded(
+                      flex: _sideFlex,
+                      child: const SizedBox(),
+                    ),
+                    Expanded(
+                        flex: _tableElementsSizes[0],
+                        child: Text(formatter.format(record.creationTime))
+                    ),
+                    Expanded(
+                        flex: _tableElementsSizes[1],
+                        child: Text(record.systolic.toString())
+                    ),
+                    Expanded(
+                        flex: _tableElementsSizes[2],
+                        child: Text(record.diastolic.toString())
+                    ),
+                    Expanded(
+                        flex: _tableElementsSizes[3],
+                        child: Text(record.pulse.toString())
+                    ),
+                    Expanded(
+                        flex: _tableElementsSizes[4],
+                        child: Text(record.notes)
+                    ),
+                    Expanded(
+                      flex: _sideFlex,
+                      child: const SizedBox(),
+                    ),
+                  ]
+              ),
             ),
           );
         }
