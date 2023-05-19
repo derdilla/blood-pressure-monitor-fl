@@ -73,6 +73,7 @@ class MeasurementList extends StatelessWidget {
           final formatter = DateFormat(settings.dateFormatString);
           return GestureDetector(
             onTap: () {
+              Provider.of<BloodPressureModel>(context, listen: false).delete(record.creationTime);
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => AddMeasurementPage(
