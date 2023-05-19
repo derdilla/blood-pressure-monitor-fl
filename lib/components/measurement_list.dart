@@ -7,8 +7,8 @@ import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 
 class MeasurementList extends StatelessWidget {
-  late final _tableElementsSizes;
-  late final _sideFlex;
+  late final List<int> _tableElementsSizes;
+  late final int _sideFlex;
 
   MeasurementList(BuildContext context, {super.key}) {
     if (MediaQuery.of(context).size.width < 1000) {
@@ -23,51 +23,49 @@ class MeasurementList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    return Container(
-        child: Column(
-          children: [
-            buildTableHeader(context),
-            Expanded(
-              flex: 100,
-              child: Consumer<BloodPressureModel>(
-                builder: (context, model, child) {
-                  return Consumer<Settings>(
-                    builder: (context, settings, child) {
-                      final items = model.getInTimeRange(settings.displayDataStart, settings.displayDataEnd);
-                      return FutureBuilder<UnmodifiableListView<BloodPressureRecord>>(
-                          future: items,
-                          builder: (BuildContext context, AsyncSnapshot<UnmodifiableListView<BloodPressureRecord>> recordsSnapsot) {
-                            assert(recordsSnapsot.connectionState != ConnectionState.none);
+    return Column(
+      children: [
+        buildTableHeader(context),
+        Expanded(
+          flex: 100,
+          child: Consumer<BloodPressureModel>(
+            builder: (context, model, child) {
+              return Consumer<Settings>(
+                builder: (context, settings, child) {
+                  final items = model.getInTimeRange(settings.displayDataStart, settings.displayDataEnd);
+                  return FutureBuilder<UnmodifiableListView<BloodPressureRecord>>(
+                      future: items,
+                      builder: (BuildContext context, AsyncSnapshot<UnmodifiableListView<BloodPressureRecord>> recordsSnapshot) {
+                        assert(recordsSnapshot.connectionState != ConnectionState.none);
 
-                            if (recordsSnapsot.connectionState == ConnectionState.waiting) {
-                              return const Text('loading...');
+                        if (recordsSnapshot.connectionState == ConnectionState.waiting) {
+                          return const Text('loading...');
+                        } else {
+                          if (recordsSnapshot.hasError) {
+                            return Text('Error loading data:\n${recordsSnapshot.error}');
+                          } else {
+                            final data = recordsSnapshot.data ?? [];
+                            if (data.isNotEmpty && data.first.diastolic > 0) {
+                              return ListView.builder(
+                                  itemCount: data.length,
+                                  shrinkWrap: true,
+                                  itemBuilder: (context, index) {
+                                    return buildListItem(data[index]);
+                                  }
+                              );
                             } else {
-                              if (recordsSnapsot.hasError) {
-                                return Text('Error loading data:\n${recordsSnapsot.error}');
-                              } else {
-                                final data = recordsSnapsot.data ?? [];
-                                if (data.isNotEmpty && data.first.diastolic > 0) {
-                                  return ListView.builder(
-                                      itemCount: data.length,
-                                      shrinkWrap: true,
-                                      itemBuilder: (context, index) {
-                                        return buildListItem(data[index]);
-                                      }
-                                  );
-                                } else {
-                                  return const Text('no data');
-                                }
-                              }
+                              return const Text('no data');
                             }
                           }
-                      );
-                    }
+                        }
+                      }
                   );
                 }
-              ),
-            )
-          ],
+              );
+            }
+          ),
         )
+      ],
     );
   }
 
@@ -119,52 +117,50 @@ class MeasurementList extends StatelessWidget {
   Widget buildTableHeader(BuildContext context) {
     return Consumer<Settings>(
         builder: (context, settings, child) {
-          return Container(
-            child: Column (
-                children: [
-                  const SizedBox(height: 15 ),
-                  Row(
-                    children: [
-                      Expanded(
-                        flex: _sideFlex,
-                        child: SizedBox(),
-                      ),
-                      Expanded(
-                          flex: _tableElementsSizes[0],
-                          child: const Text("time", style: TextStyle(fontWeight: FontWeight.bold))
-                      ),
-                      Expanded(
-                          flex: _tableElementsSizes[1],
-                          child: Text("sys",
-                              style: TextStyle(fontWeight: FontWeight.bold, color: settings.sysColor))
-                      ),
-                      Expanded(
-                          flex: _tableElementsSizes[2],
-                          child: Text("dia",
-                              style: TextStyle(fontWeight: FontWeight.bold, color: settings.diaColor))
-                      ),
-                      Expanded(
-                          flex: _tableElementsSizes[3],
-                          child: Text("pul",
-                              style: TextStyle(fontWeight: FontWeight.bold, color: settings.pulColor))
-                      ),
-                      Expanded(
-                          flex: _tableElementsSizes[4],
-                          child: const Text("notes", style: TextStyle(fontWeight: FontWeight.bold))
-                      ),
-                      Expanded(
-                        flex: _sideFlex,
-                        child: SizedBox(),
-                      ),
-                    ],
-                  ),
-                  Divider(
-                    height: 20,
-                    thickness: 2,
-                    color: Theme.of(context).primaryColor,
-                  )
-                ]
-            ),
+          return Column (
+              children: [
+                const SizedBox(height: 15 ),
+                Row(
+                  children: [
+                    Expanded(
+                      flex: _sideFlex,
+                      child: const SizedBox(),
+                    ),
+                    Expanded(
+                        flex: _tableElementsSizes[0],
+                        child: const Text("time", style: TextStyle(fontWeight: FontWeight.bold))
+                    ),
+                    Expanded(
+                        flex: _tableElementsSizes[1],
+                        child: Text("sys",
+                            style: TextStyle(fontWeight: FontWeight.bold, color: settings.sysColor))
+                    ),
+                    Expanded(
+                        flex: _tableElementsSizes[2],
+                        child: Text("dia",
+                            style: TextStyle(fontWeight: FontWeight.bold, color: settings.diaColor))
+                    ),
+                    Expanded(
+                        flex: _tableElementsSizes[3],
+                        child: Text("pul",
+                            style: TextStyle(fontWeight: FontWeight.bold, color: settings.pulColor))
+                    ),
+                    Expanded(
+                        flex: _tableElementsSizes[4],
+                        child: const Text("notes", style: TextStyle(fontWeight: FontWeight.bold))
+                    ),
+                    Expanded(
+                      flex: _sideFlex,
+                      child: const SizedBox(),
+                    ),
+                  ],
+                ),
+                Divider(
+                  height: 20,
+                  thickness: 2,
+                  color: Theme.of(context).primaryColor,
+                )
+              ]
           );
         });
   }
