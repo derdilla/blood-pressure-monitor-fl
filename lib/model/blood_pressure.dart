@@ -113,6 +113,11 @@ class BloodPressureModel extends ChangeNotifier {
     }
     return UnmodifiableListView(recordsInRange);
   }
+
+  Future<void> delete(DateTime timestamp) async {
+    _database.delete('bloodPressureModel', where: 'timestamp = ?', whereArgs: [timestamp.millisecondsSinceEpoch]);
+    notifyListeners();
+  }
   
   Future<int> get count async {
     return (await _database.rawQuery('SELECT COUNT(*) FROM bloodPressureModel'))[0]['COUNT(*)'] as int? ?? -1;

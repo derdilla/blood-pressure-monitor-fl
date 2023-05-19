@@ -6,9 +6,11 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 
+import '../screens/add_measurement.dart';
+
 class MeasurementList extends StatelessWidget {
-  late final List<int> _tableElementsSizes;
-  late final int _sideFlex;
+  late final _tableElementsSizes;
+  late final _sideFlex;
 
   MeasurementList(BuildContext context, {super.key}) {
     if (MediaQuery.of(context).size.width < 1000) {
@@ -73,39 +75,55 @@ class MeasurementList extends StatelessWidget {
     return Consumer<Settings>(
         builder: (context, settings, child) {
           final formatter = DateFormat(settings.dateFormatString);
-          return Container(
-            margin: const EdgeInsets.only(bottom: 5),
-            child: Row(
-                children: [
-                  Expanded(
-                    flex: _sideFlex,
-                    child: const SizedBox(),
-                  ),
-                  Expanded(
-                      flex: _tableElementsSizes[0],
-                      child: Text(formatter.format(record.creationTime))
-                  ),
-                  Expanded(
-                      flex: _tableElementsSizes[1],
-                      child: Text(record.systolic.toString())
-                  ),
-                  Expanded(
-                      flex: _tableElementsSizes[2],
-                      child: Text(record.diastolic.toString())
-                  ),
-                  Expanded(
-                      flex: _tableElementsSizes[3],
-                      child: Text(record.pulse.toString())
-                  ),
-                  Expanded(
-                      flex: _tableElementsSizes[4],
-                      child: Text(record.notes)
-                  ),
-                  Expanded(
-                    flex: _sideFlex,
-                    child: const SizedBox(),
-                  ),
-                ]
+          return GestureDetector(
+            onTap: () {
+              Provider.of<BloodPressureModel>(context, listen: false).delete(record.creationTime);
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => AddMeasurementPage(
+                  initTime: record.creationTime,
+                  initSys: record.systolic,
+                  initDia: record.diastolic,
+                  initPul: record.pulse,
+                  initNote: record.notes,
+                  isEdit: true,
+                )),
+              );
+            },
+            child: Container(
+              margin: const EdgeInsets.only(bottom: 5),
+              child: Row(
+                  children: [
+                    Expanded(
+                      flex: _sideFlex,
+                      child: const SizedBox(),
+                    ),
+                    Expanded(
+                        flex: _tableElementsSizes[0],
+                        child: Text(formatter.format(record.creationTime))
+                    ),
+                    Expanded(
+                        flex: _tableElementsSizes[1],
+                        child: Text(record.systolic.toString())
+                    ),
+                    Expanded(
+                        flex: _tableElementsSizes[2],
+                        child: Text(record.diastolic.toString())
+                    ),
+                    Expanded(
+                        flex: _tableElementsSizes[3],
+                        child: Text(record.pulse.toString())
+                    ),
+                    Expanded(
+                        flex: _tableElementsSizes[4],
+                        child: Text(record.notes)
+                    ),
+                    Expanded(
+                      flex: _sideFlex,
+                      child: const SizedBox(),
+                    ),
+                  ]
+              ),
             ),
           );
         }
