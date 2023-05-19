@@ -7,7 +7,18 @@ import 'package:provider/provider.dart';
 
 
 class AddMeasurementPage extends StatefulWidget {
-  const AddMeasurementPage({super.key});
+  final DateTime? initTime;
+  final int initSys;
+  final int initDia;
+  final int initPul;
+  final String initNote;
+
+  const AddMeasurementPage({super.key,
+    this.initTime,
+    this.initSys = -1,
+    this.initDia = -1,
+    this.initPul = -1,
+    this.initNote = ''});
 
   @override
   State<AddMeasurementPage> createState() => _AddMeasurementPageState();
@@ -15,13 +26,23 @@ class AddMeasurementPage extends StatefulWidget {
 
 class _AddMeasurementPageState extends State<AddMeasurementPage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  DateTime _time = DateTime.now();
-  int _systolic = -1;
-  int _diastolic = -1;
-  int _pulse = -1;
-  String _note = "";
+  late DateTime _time;
+  late int _systolic;
+  late int _diastolic;
+  late int _pulse;
+  late String _note;
 
   final _sysFocusNode = FocusNode();
+
+  @override
+  void initState() {
+    super.initState();
+    _time = widget.initTime ?? DateTime.now();
+    _systolic = widget.initSys;
+    _diastolic = widget.initDia;
+    _pulse = widget.initPul;
+    _note = widget.initNote;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -190,6 +211,4 @@ class _AddMeasurementPageState extends State<AddMeasurementPage> {
       ),
     );
   }
-  
-
 }
