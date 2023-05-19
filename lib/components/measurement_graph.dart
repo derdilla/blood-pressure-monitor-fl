@@ -10,7 +10,7 @@ import 'package:blood_pressure_app/model/settings_store.dart';
 
 class _LineChart extends StatelessWidget {
   final double height;
-  const _LineChart({super.key, this.height = 200});
+  const _LineChart({this.height = 200});
   
   @override
   Widget build(BuildContext context) {
@@ -75,25 +75,25 @@ class _LineChart extends StatelessWidget {
                                                 sideTitles: SideTitles(
                                                     showTitles: true,
                                                     getTitlesWidget: (double pos, TitleMeta meta) {
-                                                      late final DateFormat formater;
+                                                      late final DateFormat formatter;
                                                       switch (settings.graphStepSize) {
                                                         case TimeStep.day:
-                                                          formater = DateFormat('H:mm');
+                                                          formatter = DateFormat('H:mm');
                                                           break;
                                                         case TimeStep.month:
-                                                          formater = DateFormat('d');
+                                                          formatter = DateFormat('d');
                                                           break;
                                                         case TimeStep.week:
-                                                          formater = DateFormat('E');
+                                                          formatter = DateFormat('E');
                                                           break;
                                                         case TimeStep.year:
-                                                          formater = DateFormat('MMM');
+                                                          formatter = DateFormat('MMM');
                                                           break;
                                                         case TimeStep.lifetime:
-                                                          formater = DateFormat('yyyy');
+                                                          formatter = DateFormat('yyyy');
                                                       }
                                                       return Text(
-                                                          formater.format(DateTime.fromMillisecondsSinceEpoch(pos.toInt()))
+                                                          formatter.format(DateTime.fromMillisecondsSinceEpoch(pos.toInt()))
                                                       );
                                                     }
                                                 ),
@@ -106,7 +106,7 @@ class _LineChart extends StatelessWidget {
                                             )
                                           ),
                                           lineBarsData: [
-                                            // high blood pressure marking acordning to https://www.texasheart.org/heart-health/heart-information-center/topics/high-blood-pressure-hypertension/
+                                            // high blood pressure marking according to https://www.texasheart.org/heart-health/heart-information-center/topics/high-blood-pressure-hypertension/
                                             LineChartBarData(
                                               spots: pulseSpots,
                                               dotData: FlDotData(

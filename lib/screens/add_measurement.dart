@@ -167,7 +167,7 @@ class _AddMeasurementPageState extends State<AddMeasurementPage> {
                             backgroundColor: Theme.of(context).unselectedWidgetColor
                         ),
                         child: const Text('CANCEL')),
-                    Spacer(),
+                    const Spacer(),
                     ElevatedButton(
                         onPressed: () {
                           if (_formKey.currentState!.validate()) {
