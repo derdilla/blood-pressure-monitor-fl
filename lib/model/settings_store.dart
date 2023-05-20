@@ -1,3 +1,4 @@
+import 'package:blood_pressure_app/model/blood_pressure.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -129,6 +130,9 @@ class Settings extends ChangeNotifier {
 
   // high blood pressure marking according to https://www.texasheart.org/heart-health/heart-information-center/topics/high-blood-pressure-hypertension/
   double get sysWarn {
+    if (!overrideWarnValues) {
+      return BloodPressureWarnValues.getUpperSysWarnValue(age).toDouble();
+    }
     return _prefs.getInt('sysWarn')?.toDouble() ?? 130;
   }
   set sysWarn(double newWarn) {
@@ -137,6 +141,9 @@ class Settings extends ChangeNotifier {
   }
 
   double get diaWarn {
+    if (!overrideWarnValues) {
+      return BloodPressureWarnValues.getUpperDiaWarnValue(age).toDouble();
+    }
     return _prefs.getInt('diaWarn')?.toDouble() ?? 80;
   }
   set diaWarn(double newWarn) {
