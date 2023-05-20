@@ -127,6 +127,23 @@ class Settings extends ChangeNotifier {
     notifyListeners();
   }
 
+  // high blood pressure marking according to https://www.texasheart.org/heart-health/heart-information-center/topics/high-blood-pressure-hypertension/
+  double get sysWarn {
+    return _prefs.getInt('sysWarn')?.toDouble() ?? 130;
+  }
+  set sysWarn(double newWarn) {
+    _prefs.setInt('sysWarn', newWarn.toInt());
+    notifyListeners();
+  }
+
+  double get diaWarn {
+    return _prefs.getInt('diaWarn')?.toDouble() ?? 80;
+  }
+  set diaWarn(double newWarn) {
+    _prefs.setInt('diaWarn', newWarn.toInt());
+    notifyListeners();
+  }
+
 }
 
 class TimeStep {

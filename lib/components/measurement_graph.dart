@@ -106,7 +106,6 @@ class _LineChart extends StatelessWidget {
                                             )
                                           ),
                                           lineBarsData: [
-                                            // high blood pressure marking according to https://www.texasheart.org/heart-health/heart-information-center/topics/high-blood-pressure-hypertension/
                                             LineChartBarData(
                                               spots: pulseSpots,
                                               dotData: FlDotData(
@@ -125,7 +124,7 @@ class _LineChart extends StatelessWidget {
                                                 belowBarData: BarAreaData(
                                                     show: true,
                                                     color: Colors.red.shade400.withAlpha(100),
-                                                    cutOffY: 80,
+                                                    cutOffY: settings.diaWarn,
                                                     applyCutOffY: true
                                                 )
                                             ),
