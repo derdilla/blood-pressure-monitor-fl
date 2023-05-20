@@ -138,7 +138,7 @@ class _LineChart extends StatelessWidget {
                                                 belowBarData: BarAreaData(
                                                     show: true,
                                                     color: Colors.red.shade400.withAlpha(100),
-                                                    cutOffY: 130,
+                                                    cutOffY: settings.sysWarn,
                                                     applyCutOffY: true
                                                 )
                                             )

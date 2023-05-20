@@ -1,7 +1,8 @@
 import 'package:blood_pressure_app/components/settings_widgets.dart';
 import 'package:blood_pressure_app/model/blood_pressure.dart';
 import 'package:blood_pressure_app/model/settings_store.dart';
-import 'package:blood_pressure_app/screens/enter_timeformat.dart';
+import 'package:blood_pressure_app/screens/subsettings/enter_timeformat.dart';
+import 'package:blood_pressure_app/screens/subsettings/warn_about.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -127,6 +128,17 @@ class SettingsPage extends StatelessWidget {
                       // this field intentionally doesn't get disabled, as this
                       // would cause unexpected jumps in layout
                     ),
+                    SettingsTile(
+                        title: const Text('about'),
+                        description: const Text('more information on warn values'),
+                        leading: const Icon(Icons.info_outline),
+                        onPressed: (context) {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => const AboutWarnValuesScreen()),
+                          );
+                        }
+                    ),
                     SwitchSettingsTile(
                       initialValue: settings.overrideWarnValues,
                       onToggle: (value) {
@@ -142,7 +154,7 @@ class SettingsPage extends StatelessWidget {
                       inputFormatters: [
                         FilteringTextInputFormatter.digitsOnly
                       ],
-                      initialValue: settings.sysWarn.toString(),
+                      initialValue: settings.sysWarn.toInt().toString(),
                       onEditingComplete: (String? value) {
                         if (value == null || value.isEmpty
                             || (double.tryParse(value) == null)) {
@@ -164,7 +176,7 @@ class SettingsPage extends StatelessWidget {
                       inputFormatters: [
                         FilteringTextInputFormatter.digitsOnly
                       ],
-                      initialValue: settings.diaWarn.toString(),
+                      initialValue: settings.diaWarn.toInt().toString(),
                       onEditingComplete: (String? value) {
                         if (value == null || value.isEmpty
                             || (double.tryParse(value) == null)) {

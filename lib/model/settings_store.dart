@@ -128,12 +128,11 @@ class Settings extends ChangeNotifier {
     notifyListeners();
   }
 
-  // high blood pressure marking according to https://www.texasheart.org/heart-health/heart-information-center/topics/high-blood-pressure-hypertension/
   double get sysWarn {
     if (!overrideWarnValues) {
       return BloodPressureWarnValues.getUpperSysWarnValue(age).toDouble();
     }
-    return _prefs.getInt('sysWarn')?.toDouble() ?? 130;
+    return _prefs.getInt('sysWarn')?.toDouble() ?? 120;
   }
   set sysWarn(double newWarn) {
     _prefs.setInt('sysWarn', newWarn.toInt());
