@@ -239,7 +239,7 @@ class _SliderSettingsTileState extends State<SliderSettingsTile> {
   }
 }
 
-class InputSettingsTile extends StatelessWidget {
+class InputSettingsTile extends StatefulWidget {
   final Widget title;
   final Widget? leading;
   final Widget? description;
@@ -248,40 +248,57 @@ class InputSettingsTile extends StatelessWidget {
   final double inputWidth;
   final String? initialValue;
   final InputDecoration? decoration;
-  final String? Function(String?)? validator;
+  final void Function(String?)? onEditingComplete;
   final TextInputType? keyboardType;
   final List<TextInputFormatter>? inputFormatters;
 
-  const InputSettingsTile({super.key, required this.title, required this.inputWidth, this.leading, this.description, this.disabled = false, this.initialValue, this.decoration, this.validator, this.keyboardType, this.inputFormatters});
+  const InputSettingsTile({super.key, required this.title, required this.inputWidth, this.leading, this.description, this.disabled = false, this.initialValue, this.decoration, this.onEditingComplete, this.keyboardType, this.inputFormatters});
+
+  @override
+  State<StatefulWidget> createState() => _InputSettingsTileState();
+}
+
+class _InputSettingsTileState extends State<InputSettingsTile> {
+  late String _value;
+  
+  @override
+  void initState() {
+    super.initState();
+    _value = widget.initialValue ?? "";
+  }
 
   @override
   Widget build(BuildContext context) {
     final focusNode = FocusNode();
 
     return SettingsTile(
-      title: title,
-      description: description,
+      title: widget.title,
+      description: widget.description,
+      leading: widget.leading,
+      disabled: widget.disabled,
       onPressed: (context) {
         focusNode.requestFocus();
       },
       trailing: Row(
         children: [
           SizedBox(
-            width: inputWidth,
+            width: widget.inputWidth,
             child: TextFormField(
-              initialValue: initialValue,
-              decoration: decoration,
-              validator: validator,
-              keyboardType: keyboardType,
-              inputFormatters: inputFormatters,
+              initialValue: widget.initialValue,
+              decoration: widget.decoration,
+              onChanged: (value) {
+                _value = value;
+              },
+              onEditingComplete: () => widget.onEditingComplete!(_value),
+              onTapOutside: (e) => widget.onEditingComplete!(_value),
+              keyboardType: widget.keyboardType,
+              inputFormatters: widget.inputFormatters,
               focusNode: focusNode,
             ),
           ),
           const SizedBox(width: 20,),
         ],
       ),
-      leading: leading,
-      disabled: disabled,
     );
   }
 }
