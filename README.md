@@ -24,9 +24,27 @@ This application allows you to easily store your records and export all your rec
 
 ## Getting Started
 
-To use this app, download the version for your platform from the release page.
+### Android
 
-While building an ios app would be no problem code wise, but apple's restrictive behavior makes this more complicated (and expensive). 
+#### GitHub
+You can download and install the APK directly through the Releases page. Keep in mind that you have to regulary check for new versions manually.
+
+#### Finding and Downloading the "Blood Pressure Monitor" App through Fdroid
+Please note that the app is currently only available from the IzzyOnDroid repository due to the review phase of the main repository not being finished.
+To find and download the "Blood Pressure Monitor" app from the IzzyOnDroid repository, follow these steps:
+
+1. Download and install the [F-Droid app](https://f-droid.org/en/) App.
+2. Once in F-Droid Go to the settings in right bottom drawer and  add the `https://apt.izzysoft.de/fdroid/repo` repository.
+3. You can now search and install the "blood pressure monitor" App in F-Droid (You might need to add extra permissions)
+
+### I-OS
+While building an ios app would be no problem code wise, apple's restrictive behavior makes this more complicated (and expensive). So I wont take this step unless there is significant demand. 
+
+### Linux
+Download the bundle from the releases Page
+
+### Windows and MacOS
+Sorry, you need to compile from source. If there is enough demand I can add a windows build.
 
 ## Screenshots
 <table style="width: 100%; border-collapse: collapse;">
@@ -40,9 +58,9 @@ While building an ios app would be no problem code wise, but apple's restrictive
 
 ## TODO:
 
-- [ ] add to f-droid
+- [X] add to f-droid (currently in extra repo)
 - [ ] add to play store (not coming soon)
 - [X] import from CSV
-- [ ] edit/delete entries in app
+- [X] edit/delete entries in app
 - [X] ensure that no data loss can occur during version changes
 
