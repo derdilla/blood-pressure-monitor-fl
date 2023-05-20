@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_material_color_picker/flutter_material_color_picker.dart';
 
 class SettingsTile extends StatelessWidget {
@@ -30,7 +31,6 @@ class SettingsTile extends StatelessWidget {
             lead,
             const SizedBox(width: 15,),
             SizedBox(
-              width: MediaQuery.of(context).size.width - 150,
               child: (() {
               if (description != null) {
                 return Column(
@@ -233,6 +233,70 @@ class _SliderSettingsTileState extends State<SliderSettingsTile> {
           ),
           const Expanded(child: SizedBox.shrink()),
           trail
+        ],
+      ),
+    );
+  }
+}
+
+class InputSettingsTile extends StatefulWidget {
+  final Widget title;
+  final Widget? leading;
+  final Widget? description;
+  final bool disabled;
+
+  final double inputWidth;
+  final String? initialValue;
+  final InputDecoration? decoration;
+  final void Function(String?)? onEditingComplete;
+  final TextInputType? keyboardType;
+  final List<TextInputFormatter>? inputFormatters;
+
+  const InputSettingsTile({super.key, required this.title, required this.inputWidth, this.leading, this.description, this.disabled = false, this.initialValue, this.decoration, this.onEditingComplete, this.keyboardType, this.inputFormatters});
+
+  @override
+  State<StatefulWidget> createState() => _InputSettingsTileState();
+}
+
+class _InputSettingsTileState extends State<InputSettingsTile> {
+  late String _value;
+  
+  @override
+  void initState() {
+    super.initState();
+    _value = widget.initialValue ?? "";
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final focusNode = FocusNode();
+
+    return SettingsTile(
+      title: widget.title,
+      description: widget.description,
+      leading: widget.leading,
+      disabled: widget.disabled,
+      onPressed: (context) {
+        focusNode.requestFocus();
+      },
+      trailing: Row(
+        children: [
+          SizedBox(
+            width: widget.inputWidth,
+            child: TextFormField(
+              initialValue: widget.initialValue,
+              decoration: widget.decoration,
+              onChanged: (value) {
+                _value = value;
+              },
+              onEditingComplete: () => widget.onEditingComplete!(_value),
+              onTapOutside: (e) => widget.onEditingComplete!(_value),
+              keyboardType: widget.keyboardType,
+              inputFormatters: widget.inputFormatters,
+              focusNode: focusNode,
+            ),
+          ),
+          const SizedBox(width: 20,),
         ],
       ),
     );

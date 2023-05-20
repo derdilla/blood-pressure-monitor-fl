@@ -1,3 +1,4 @@
+import 'package:blood_pressure_app/model/blood_pressure.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -124,6 +125,44 @@ class Settings extends ChangeNotifier {
   }
   set iconSize(double newSize) {
     _prefs.setInt('iconSize', newSize.toInt());
+    notifyListeners();
+  }
+
+  double get sysWarn {
+    if (!overrideWarnValues) {
+      return BloodPressureWarnValues.getUpperSysWarnValue(age).toDouble();
+    }
+    return _prefs.getInt('sysWarn')?.toDouble() ?? 120;
+  }
+  set sysWarn(double newWarn) {
+    _prefs.setInt('sysWarn', newWarn.toInt());
+    notifyListeners();
+  }
+
+  double get diaWarn {
+    if (!overrideWarnValues) {
+      return BloodPressureWarnValues.getUpperDiaWarnValue(age).toDouble();
+    }
+    return _prefs.getInt('diaWarn')?.toDouble() ?? 80;
+  }
+  set diaWarn(double newWarn) {
+    _prefs.setInt('diaWarn', newWarn.toInt());
+    notifyListeners();
+  }
+
+  int get age {
+    return _prefs.getInt('age') ?? 30;
+  }
+  set age(int newAge) {
+    _prefs.setInt('age', newAge.toInt());
+    notifyListeners();
+  }
+
+  bool get overrideWarnValues {
+    return _prefs.getBool('overrideWarnValues') ?? false;
+  }
+  set overrideWarnValues(bool overrideWarnValues) {
+    _prefs.setBool('overrideWarnValues', overrideWarnValues);
     notifyListeners();
   }
 

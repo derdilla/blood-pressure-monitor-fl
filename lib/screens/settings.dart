@@ -1,8 +1,10 @@
 import 'package:blood_pressure_app/components/settings_widgets.dart';
 import 'package:blood_pressure_app/model/blood_pressure.dart';
 import 'package:blood_pressure_app/model/settings_store.dart';
-import 'package:blood_pressure_app/screens/enter_timeformat.dart';
+import 'package:blood_pressure_app/screens/subsettings/enter_timeformat.dart';
+import 'package:blood_pressure_app/screens/subsettings/warn_about.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -99,12 +101,105 @@ class SettingsPage extends StatelessWidget {
                 ]
               ),
               SettingsSection(
+                  title: const Text('behavior'),
+                  children: [
+                    InputSettingsTile(
+                      title: const Text('age'),
+                      description: const Text('determines warn values'),
+                      leading: const Icon(Icons.manage_accounts_outlined),
+                      keyboardType: TextInputType.number,
+                      inputFormatters: [
+                        FilteringTextInputFormatter.digitsOnly
+                      ],
+                      initialValue: settings.age.toString(),
+                      onEditingComplete: (String? value) {
+                        if (value == null || value.isEmpty
+                            || (int.tryParse(value) == null)) {
+                          return;
+                        }
+                        settings.age = int.tryParse(value) as int; // no error possible as per above's condition
+                      },
+                      decoration: const InputDecoration(
+                          hintText: 'age'
+                      ),
+                      inputWidth: 80,
+                      disabled: false,
+                      // although no function provided, when overriding warn values,
+                      // this field intentionally doesn't get disabled, as this
+                      // would cause unexpected jumps in layout
+                    ),
+                    SettingsTile(
+                        title: const Text('about'),
+                        description: const Text('more information on warn values'),
+                        leading: const Icon(Icons.info_outline),
+                        onPressed: (context) {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => const AboutWarnValuesScreen()),
+                          );
+                        }
+                    ),
+                    SwitchSettingsTile(
+                      initialValue: settings.overrideWarnValues,
+                      onToggle: (value) {
+                        settings.overrideWarnValues = value;
+                      },
+                      leading: const Icon(Icons.tune),
+                      title: const Text('override warn values'),
+                    ),
+                    InputSettingsTile(
+                      title: const Text('systolic warn'),
+                      leading: const Icon(Icons.settings_applications_outlined),
+                      keyboardType: TextInputType.number,
+                      inputFormatters: [
+                        FilteringTextInputFormatter.digitsOnly
+                      ],
+                      initialValue: settings.sysWarn.toInt().toString(),
+                      onEditingComplete: (String? value) {
+                        if (value == null || value.isEmpty
+                            || (double.tryParse(value) == null)) {
+                          return;
+                        }
+                        // no error possible as per above's condition
+                        settings.sysWarn = double.tryParse(value) as double;
+                      },
+                      decoration: const InputDecoration(
+                          hintText: 'systolic warn'
+                      ),
+                      inputWidth: 120,
+                      disabled: !settings.overrideWarnValues,
+                    ),
+                    InputSettingsTile(
+                      title: const Text('diastolic warn'),
+                      leading: const Icon(Icons.settings_applications_outlined),
+                      keyboardType: TextInputType.number,
+                      inputFormatters: [
+                        FilteringTextInputFormatter.digitsOnly
+                      ],
+                      initialValue: settings.diaWarn.toInt().toString(),
+                      onEditingComplete: (String? value) {
+                        if (value == null || value.isEmpty
+                            || (double.tryParse(value) == null)) {
+                          return;
+                        }
+                        // no error possible as per above's condition
+                        settings.diaWarn = double.tryParse(value) as double;
+                      },
+                      decoration: const InputDecoration(
+                          hintText: 'diastolic warn'
+                      ),
+                      inputWidth: 120,
+                      disabled: !settings.overrideWarnValues,
+                    ),
+                  ]
+              ),
+              SettingsSection(
                 title: const Text('data'),
                 children: [
                   SwitchSettingsTile(
                       initialValue: settings.useExportCompatability,
                       title: const Text('compatability export'),
-                      description: const Text('sets export mime type to text instead of csv'),
+                      description: const Text('sets export mime type to text'),
                       leading: const Icon(Icons.support),
                       onToggle: (value) {
                         settings.useExportCompatability = value;
