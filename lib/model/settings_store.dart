@@ -144,6 +144,22 @@ class Settings extends ChangeNotifier {
     notifyListeners();
   }
 
+  int get age {
+    return _prefs.getInt('age') ?? 30;
+  }
+  set age(int newAge) {
+    _prefs.setInt('age', newAge.toInt());
+    notifyListeners();
+  }
+
+  bool get overrideWarnValues {
+    return _prefs.getBool('overrideWarnValues') ?? false;
+  }
+  set overrideWarnValues(bool overrideWarnValues) {
+    _prefs.setBool('overrideWarnValues', overrideWarnValues);
+    notifyListeners();
+  }
+
 }
 
 class TimeStep {
