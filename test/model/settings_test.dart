@@ -39,6 +39,13 @@ void main() {
       expect(s.dateFormatString, 'yy-MM-dd H:mm');
       expect(s.useExportCompatability, false);
       expect(s.iconSize, 30);
+      expect(s.sysWarn, 125); // depends on overrideWarnValues
+      expect(s.diaWarn, 80); // depends on overrideWarnValues
+      expect(s.age, 30);
+      expect(s.overrideWarnValues, false);
+
+      s.overrideWarnValues = true;
+      expect(s.sysWarn, 120);
     });
 
     test('setting fields should save changes', () async {
@@ -68,7 +75,10 @@ void main() {
       s.dateFormatString = 'yy:dd @ H:mm.ss';
       s.useExportCompatability = true;
       s.iconSize = 50;
-
+      s.sysWarn = 314; // depends on overrideWarnValues
+      s.diaWarn = 159; // depends on overrideWarnValues
+      s.age = 26;
+      s.overrideWarnValues = true;
 
       expect(s.displayDataStart, DateTime.fromMillisecondsSinceEpoch(10000));
       expect(s.displayDataEnd, DateTime.fromMillisecondsSinceEpoch(200000));
@@ -81,6 +91,10 @@ void main() {
       expect(s.allowManualTimeInput, false);
       expect(s.useExportCompatability, true);
       expect(s.iconSize, 50);
+      expect(s.sysWarn, 314);
+      expect(s.diaWarn, 159);
+      expect(s.age, 26);
+      expect(s.overrideWarnValues, true);
     });
 
     test('setting fields should notify listeners and change values', () async {
@@ -104,8 +118,12 @@ void main() {
       s.dateFormatString = 'yy:dd @ H:mm.ss';
       s.useExportCompatability = true;
       s.iconSize = 10;
+      s.sysWarn = 314; // depends on overrideWarnValues
+      s.diaWarn = 159; // depends on overrideWarnValues
+      s.age = 26;
+      s.overrideWarnValues = true;
       
-      expect(i, 13);
+      expect(i, 17);
     });
 
   });
