@@ -2,7 +2,7 @@ import 'package:blood_pressure_app/model/settings_store.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:url_launcher/url_launcher.dart' show launchUrl;
+import 'package:url_launcher/url_launcher.dart' show LaunchMode, canLaunchUrl, launchUrl;
 
 
 class EnterTimeFormatScreen extends StatefulWidget {
@@ -31,17 +31,25 @@ class _EnterTimeFormatScreenState extends State<EnterTimeFormatScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const Text('A formatter String consists of a mixture of predefined ICU/Skeleton Strings and any other text you want to include.'),
-                const SizedBox(height: 5,),
-                RichText(
-                  text: TextSpan(
-                    text: 'For a full list of valid formats please look here.',
-                    style: const TextStyle(color: Colors.blue),
-                    recognizer: TapGestureRecognizer()
-                      ..onTap = () { launchUrl(Uri.parse('https://pub.dev/documentation/intl/latest/intl/DateFormat-class.html'));
-                      },
+                InkWell(
+                  onTap: () async {
+                    final url = Uri.parse('https://pub.dev/documentation/intl/latest/intl/DateFormat-class.html');
+                    if (await canLaunchUrl(url)) {
+                      await launchUrl(url, mode: LaunchMode.externalApplication);
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Can\'t open URL:\nhttps://pub.dev/documentation/intl/latest/intl/DateFormat-class.html')));
+                    }
+                  },
+                  child: const SizedBox(
+                    height: 48,
+                    child: Center(
+                      child: Text(
+                        'For a full list of valid formats please look here.',
+                        style: TextStyle(color: Colors.blue),
+                      ),
+                    ),
                   ),
                 ),
-                const SizedBox(height: 7,),
                 const Text('Please note that having longer/shorter format Strings wont magically change the width of the table columns, so it might come to awkward line breaks.'),
                 const SizedBox(height: 7,),
                 const Text('default: "yy-MM-dd H:mm"'),
