@@ -138,7 +138,7 @@ class MeasurementList extends StatelessWidget {
                                         width: 10,
                                         color: Colors.blue,
                                         child: const Align(
-                                            alignment: Alignment.centerLeft,
+                                            alignment: Alignment(-0.95,0),
                                             child: Icon(Icons.edit)
                                         ),
                                       ),
@@ -146,7 +146,7 @@ class MeasurementList extends StatelessWidget {
                                         width: 10,
                                         color: Colors.red,
                                         child: const Align(
-                                            alignment: Alignment.centerRight,
+                                            alignment: Alignment(0.95, 0),
                                             child: Icon(Icons.delete)
                                         ),
                                       ),
@@ -158,7 +158,7 @@ class MeasurementList extends StatelessWidget {
 
                                       },
                                       child: Container(
-                                        margin: const EdgeInsets.only(bottom: 7, top: 7),
+                                        height: 40,
                                         /*
             decoration: BoxDecoration(
               color: settings.darkMode ? const Color(0xff0c0c0c) : Colors.grey.shade200,
