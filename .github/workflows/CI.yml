@@ -37,7 +37,7 @@ jobs:
         flutter-version: '3.7.12'
     - run: flutter pub get
     
-    - run: flutter build apk --debug
+    - run: flutter build apk --flavor github --debug
 
     - run: |
             sudo apt-get update -y
