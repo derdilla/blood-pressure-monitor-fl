@@ -100,104 +100,80 @@ class MeasurementList extends StatelessWidget {
                               final formatter = DateFormat(settings.dateFormatString);
                               return Column(
                                 children: [
-                                  GestureDetector(
-                                    onTap: () {
-                                      Provider.of<BloodPressureModel>(context, listen: false).delete(data[index].creationTime);
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(builder: (context) => AddMeasurementPage(
-                                          initTime: data[index].creationTime,
-                                          initSys: data[index].systolic,
-                                          initDia: data[index].diastolic,
-                                          initPul: data[index].pulse,
-                                          initNote: data[index].notes,
-                                          isEdit: true,
-                                        )),
-                                      );
+                                  Dismissible(
+                                    key: Key(data[index].creationTime.toIso8601String()),
+                                    confirmDismiss: (direction) async {
+                                      if (direction == DismissDirection.startToEnd) {
+                                        Provider.of<BloodPressureModel>(context, listen: false).delete(data[index].creationTime);
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(builder: (context) => AddMeasurementPage(
+                                            initTime: data[index].creationTime,
+                                            initSys: data[index].systolic,
+                                            initDia: data[index].diastolic,
+                                            initPul: data[index].pulse,
+                                            initNote: data[index].notes,
+                                            isEdit: true,
+                                          )),
+                                        );
+                                      }
+                                      return (direction != DismissDirection.startToEnd);
                                     },
-                                    child: Dismissible(
-                                      key: Key(data[index].creationTime.toIso8601String()),
-                                      confirmDismiss: (direction) async {
-                                        if (direction == DismissDirection.startToEnd) {
-                                          Provider.of<BloodPressureModel>(context, listen: false).delete(data[index].creationTime);
-                                          Navigator.push(
-                                            context,
-                                            MaterialPageRoute(builder: (context) => AddMeasurementPage(
-                                              initTime: data[index].creationTime,
-                                              initSys: data[index].systolic,
-                                              initDia: data[index].diastolic,
-                                              initPul: data[index].pulse,
-                                              initNote: data[index].notes,
-                                              isEdit: true,
-                                            )),
-                                          );
-                                        }
-                                        return (direction != DismissDirection.startToEnd);
-                                      },
-                                      background: Container(
-                                        width: 10,
-                                        color: Colors.blue,
-                                        child: const Align(
-                                            alignment: Alignment(-0.95,0),
-                                            child: Icon(Icons.edit)
-                                        ),
-                                      ),
-                                      secondaryBackground: Container(
-                                        width: 10,
-                                        color: Colors.red,
-                                        child: const Align(
-                                            alignment: Alignment(0.95, 0),
-                                            child: Icon(Icons.delete)
-                                        ),
-                                      ),
+                                    onDismissed: (direction) {
+                                      if (direction == DismissDirection.endToStart) {
+                                        Provider.of<BloodPressureModel>(context, listen: false).delete(data[index].creationTime);
+                                      }
 
-                                      onDismissed: (direction) {
-                                        if (direction == DismissDirection.endToStart) {
-                                          Provider.of<BloodPressureModel>(context, listen: false).delete(data[index].creationTime);
-                                        }
-
-                                      },
-                                      child: Container(
-                                        height: 40,
-                                        /*
-            decoration: BoxDecoration(
-              color: settings.darkMode ? const Color(0xff0c0c0c) : Colors.grey.shade200,
-              borderRadius: const BorderRadius.all(Radius.circular(7)),
-              backgroundBlendMode: settings.darkMode ? BlendMode.screen : BlendMode.darken
-            ),
-          */
-                                        child: Row(
-                                            children: [
-                                              Expanded(
-                                                flex: _sideFlex,
-                                                child: const SizedBox(),
-                                              ),
-                                              Expanded(
-                                                  flex: _tableElementsSizes[0],
-                                                  child: Text(formatter.format(data[index].creationTime))
-                                              ),
-                                              Expanded(
-                                                  flex: _tableElementsSizes[1],
-                                                  child: Text(data[index].systolic.toString())
-                                              ),
-                                              Expanded(
-                                                  flex: _tableElementsSizes[2],
-                                                  child: Text(data[index].diastolic.toString())
-                                              ),
-                                              Expanded(
-                                                  flex: _tableElementsSizes[3],
-                                                  child: Text(data[index].pulse.toString())
-                                              ),
-                                              Expanded(
-                                                  flex: _tableElementsSizes[4],
-                                                  child: Text(data[index].notes)
-                                              ),
-                                              Expanded(
-                                                flex: _sideFlex,
-                                                child: const SizedBox(),
-                                              ),
-                                            ]
-                                        ),
+                                    },
+                                    background: Container(
+                                      width: 10,
+                                      color: Colors.blue,
+                                      child: const Align(
+                                          alignment: Alignment(-0.95,0),
+                                          child: Icon(Icons.edit)
+                                      ),
+                                    ),
+                                    secondaryBackground: Container(
+                                      width: 10,
+                                      color: Colors.red,
+                                      child: const Align(
+                                          alignment: Alignment(0.95, 0),
+                                          child: Icon(Icons.delete)
+                                      ),
+                                    ),
+                                    child: SizedBox(
+                                      height: 40,
+                                      child: Row(
+                                          children: [
+                                            Expanded(
+                                              flex: _sideFlex,
+                                              child: const SizedBox(),
+                                            ),
+                                            Expanded(
+                                                flex: _tableElementsSizes[0],
+                                                child: Text(formatter.format(data[index].creationTime))
+                                            ),
+                                            Expanded(
+                                                flex: _tableElementsSizes[1],
+                                                child: Text(data[index].systolic.toString())
+                                            ),
+                                            Expanded(
+                                                flex: _tableElementsSizes[2],
+                                                child: Text(data[index].diastolic.toString())
+                                            ),
+                                            Expanded(
+                                                flex: _tableElementsSizes[3],
+                                                child: Text(data[index].pulse.toString())
+                                            ),
+                                            Expanded(
+                                                flex: _tableElementsSizes[4],
+                                                child: Text(data[index].notes)
+                                            ),
+                                            Expanded(
+                                              flex: _sideFlex,
+                                              child: const SizedBox(),
+                                            ),
+                                          ]
                                       ),
                                     ),
                                   ),
