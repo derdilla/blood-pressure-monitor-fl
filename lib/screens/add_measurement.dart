@@ -186,6 +186,19 @@ class _AddMeasurementPageState extends State<AddMeasurementPage> {
                 ),
                 Row(
                   children: [
+                    widget.isEdit ? ElevatedButton(
+                      onPressed: () {
+                        Provider.of<BloodPressureModel>(context, listen: false).add(
+                            BloodPressureRecord(widget.initTime ?? DateTime.now(), widget.initSys, widget.initDia, widget.initPul, widget.initNote)
+                        );
+                        Navigator.of(context).pop();
+                      },
+                      style: ElevatedButton.styleFrom(
+                          backgroundColor: Theme.of(context).unselectedWidgetColor
+                      ),
+                      child: const Text('CANCEL')
+                    ) : const Spacer(),
+                    widget.isEdit ? const Spacer() : const SizedBox.shrink(),
                     ElevatedButton(
                         onPressed: () {
                           Navigator.of(context).pop();
@@ -208,7 +221,8 @@ class _AddMeasurementPageState extends State<AddMeasurementPage> {
                         style: ElevatedButton.styleFrom(
                             backgroundColor: Theme.of(context).primaryColor
                         ),
-                        child: const Text('SAVE'))
+                        child: const Text('SAVE')
+                    )
                   ],
                 )
               ],
