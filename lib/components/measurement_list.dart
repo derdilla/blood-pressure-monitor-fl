@@ -28,53 +28,54 @@ class MeasurementList extends StatelessWidget {
     return Column(
       children: [
         Consumer<Settings>(
-            builder: (context, settings, child) {
-              return Column (
+          builder: (context, settings, child) {
+            return Column (
+              children: [
+                Row(
                   children: [
-                    Row(
-                      children: [
-                        Expanded(
-                          flex: _sideFlex,
-                          child: const SizedBox(),
-                        ),
-                        Expanded(
-                            flex: _tableElementsSizes[0],
-                            child: const Text("time", style: TextStyle(fontWeight: FontWeight.bold))
-                        ),
-                        Expanded(
-                            flex: _tableElementsSizes[1],
-                            child: Text("sys",
-                                style: TextStyle(fontWeight: FontWeight.bold, color: settings.sysColor))
-                        ),
-                        Expanded(
-                            flex: _tableElementsSizes[2],
-                            child: Text("dia",
-                                style: TextStyle(fontWeight: FontWeight.bold, color: settings.diaColor))
-                        ),
-                        Expanded(
-                            flex: _tableElementsSizes[3],
-                            child: Text("pul",
-                                style: TextStyle(fontWeight: FontWeight.bold, color: settings.pulColor))
-                        ),
-                        Expanded(
-                            flex: _tableElementsSizes[4],
-                            child: const Text("notes", style: TextStyle(fontWeight: FontWeight.bold))
-                        ),
-                        Expanded(
-                          flex: _sideFlex,
-                          child: const SizedBox(),
-                        ),
-                      ],
+                    Expanded(
+                      flex: _sideFlex,
+                      child: const SizedBox(),
                     ),
-                    Divider(
-                      height: 5,
-                      thickness: 2,
-                      color: Theme.of(context).primaryColor,
-                    )
-                  ]
-              );
-            }
-            ),
+                    Expanded(
+                        flex: _tableElementsSizes[0],
+                        child: const Text("time", style: TextStyle(fontWeight: FontWeight.bold))
+                    ),
+                    Expanded(
+                        flex: _tableElementsSizes[1],
+                        child: Text("sys",
+                            style: TextStyle(fontWeight: FontWeight.bold, color: settings.sysColor))
+                    ),
+                    Expanded(
+                        flex: _tableElementsSizes[2],
+                        child: Text("dia",
+                            style: TextStyle(fontWeight: FontWeight.bold, color: settings.diaColor))
+                    ),
+                    Expanded(
+                        flex: _tableElementsSizes[3],
+                        child: Text("pul",
+                            style: TextStyle(fontWeight: FontWeight.bold, color: settings.pulColor))
+                    ),
+                    Expanded(
+                        flex: _tableElementsSizes[4],
+                        child: const Text("notes", style: TextStyle(fontWeight: FontWeight.bold))
+                    ),
+                    Expanded(
+                      flex: _sideFlex,
+                      child: const SizedBox(),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 10,),
+                Divider(
+                  height: 0,
+                  thickness: 2,
+                  color: Theme.of(context).primaryColor,
+                )
+              ]
+            );
+          }
+        ),
         Expanded(
           child: Consumer<BloodPressureModel>(
             builder: (context, model, child) {
@@ -96,6 +97,7 @@ class MeasurementList extends StatelessWidget {
                           return ListView.builder(
                             itemCount: data.length,
                             shrinkWrap: true,
+                            padding: const EdgeInsets.all(2),
                             itemBuilder: (context, index) {
                               final formatter = DateFormat(settings.dateFormatString);
                               return Column(

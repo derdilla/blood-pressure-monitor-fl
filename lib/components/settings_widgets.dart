@@ -25,7 +25,7 @@ class SettingsTile extends StatelessWidget {
     return InkWell(
       onTap: () => onPressed(context),
       child: SizedBox(
-        height: 45,
+        height: 48,
         child: Row(
           children: [
             lead,
@@ -94,6 +94,7 @@ class ColorSelectionSettingsTile extends StatelessWidget {
               contentPadding: const EdgeInsets.all(6.0),
               title: const Text('select color'),
               content: MaterialColorPicker(
+                circleSize: 53,
                 selectedColor: initialColor,
                 onMainColorChange: (color) {
                   onMainColorChanged?.call(color);
@@ -195,7 +196,7 @@ class _SliderSettingsTileState extends State<SliderSettingsTile> {
     var trail = widget.trailing ?? const SizedBox.shrink();
 
     return SizedBox(
-      height: 70,
+      height: 80,
       child: Row(
         children: [
           lead,
