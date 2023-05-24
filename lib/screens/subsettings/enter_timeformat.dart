@@ -1,8 +1,7 @@
 import 'package:blood_pressure_app/model/settings_store.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:url_launcher/url_launcher.dart' show LaunchMode, canLaunchUrl, launchUrl;
+import 'package:blood_pressure_app/screens/subsettings/time_formats_explainer.dart';
 
 
 class EnterTimeFormatScreen extends StatefulWidget {
@@ -33,12 +32,10 @@ class _EnterTimeFormatScreenState extends State<EnterTimeFormatScreen> {
                 const Text('A formatter String consists of a mixture of predefined ICU/Skeleton Strings and any other text you want to include.'),
                 InkWell(
                   onTap: () async {
-                    final url = Uri.parse('https://pub.dev/documentation/intl/latest/intl/DateFormat-class.html');
-                    if (await canLaunchUrl(url)) {
-                      await launchUrl(url, mode: LaunchMode.externalApplication);
-                    } else {
-                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Can\'t open URL:\nhttps://pub.dev/documentation/intl/latest/intl/DateFormat-class.html')));
-                    }
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => const TimeFormattingHelp())
+                    );
                   },
                   child: const SizedBox(
                     height: 48,
