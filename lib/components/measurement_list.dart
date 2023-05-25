@@ -27,117 +27,10 @@ class MeasurementList extends StatelessWidget {
 
     return Column(
       children: [
-        buildTableHeader(context),
-        Expanded(
-          flex: 100,
-          child: Consumer<BloodPressureModel>(
-            builder: (context, model, child) {
-              return Consumer<Settings>(
-                builder: (context, settings, child) {
-                  final items = model.getInTimeRange(settings.displayDataStart, settings.displayDataEnd);
-                  return FutureBuilder<UnmodifiableListView<BloodPressureRecord>>(
-                      future: items,
-                      builder: (BuildContext context, AsyncSnapshot<UnmodifiableListView<BloodPressureRecord>> recordsSnapshot) {
-                        assert(recordsSnapshot.connectionState != ConnectionState.none);
-
-                        if (recordsSnapshot.connectionState == ConnectionState.waiting) {
-                          return const Text('loading...');
-                        } else {
-                          if (recordsSnapshot.hasError) {
-                            return Text('Error loading data:\n${recordsSnapshot.error}');
-                          } else {
-                            final data = recordsSnapshot.data ?? [];
-                            if (data.isNotEmpty && data.first.diastolic > 0) {
-                              return ListView.builder(
-                                  itemCount: data.length,
-                                  shrinkWrap: true,
-                                  itemBuilder: (context, index) {
-                                    return buildListItem(data[index]);
-                                  }
-                              );
-                            } else {
-                              return const Text('no data');
-                            }
-                          }
-                        }
-                      }
-                  );
-                }
-              );
-            }
-          ),
-        )
-      ],
-    );
-  }
-
-  Widget buildListItem(BloodPressureRecord record) {
-    return Consumer<Settings>(
-        builder: (context, settings, child) {
-          final formatter = DateFormat(settings.dateFormatString);
-          return GestureDetector(
-            onTap: () {
-              Provider.of<BloodPressureModel>(context, listen: false).delete(record.creationTime);
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => AddMeasurementPage(
-                  initTime: record.creationTime,
-                  initSys: record.systolic,
-                  initDia: record.diastolic,
-                  initPul: record.pulse,
-                  initNote: record.notes,
-                  isEdit: true,
-                )),
-              );
-            },
-            child: Container(
-              margin: const EdgeInsets.only(bottom: 5),
-              child: Row(
-                  children: [
-                    Expanded(
-                      flex: _sideFlex,
-                      child: const SizedBox(),
-                    ),
-                    Expanded(
-                        flex: _tableElementsSizes[0],
-                        child: Text(formatter.format(record.creationTime))
-                    ),
-                    Expanded(
-                        flex: _tableElementsSizes[1],
-                        child: Text(record.systolic.toString())
-                    ),
-                    Expanded(
-                        flex: _tableElementsSizes[2],
-                        child: Text(record.diastolic.toString())
-                    ),
-                    Expanded(
-                        flex: _tableElementsSizes[3],
-                        child: Text(record.pulse.toString())
-                    ),
-                    Expanded(
-                        flex: _tableElementsSizes[4],
-                        child: Text(record.notes)
-                    ),
-                    Expanded(
-                      flex: _sideFlex,
-                      child: const SizedBox(),
-                    ),
-                  ]
-              ),
-            ),
-          );
-        }
-    );
-
-  }
-
-
-  Widget buildTableHeader(BuildContext context) {
-    return Consumer<Settings>(
-        builder: (context, settings, child) {
-          return Column (
+        Consumer<Settings>(
+          builder: (context, settings, child) {
+            return Column (
               children: [
-                const SizedBox(height: 15 ),
                 Row(
                   children: [
                     Expanded(
@@ -173,13 +66,136 @@ class MeasurementList extends StatelessWidget {
                     ),
                   ],
                 ),
+                const SizedBox(height: 10,),
                 Divider(
-                  height: 20,
+                  height: 0,
                   thickness: 2,
                   color: Theme.of(context).primaryColor,
                 )
               ]
-          );
-        });
+            );
+          }
+        ),
+        Expanded(
+          child: Consumer<BloodPressureModel>(
+            builder: (context, model, child) {
+              return Consumer<Settings>(
+                builder: (context, settings, child) {
+                  final items = model.getInTimeRange(settings.displayDataStart, settings.displayDataEnd);
+                  return FutureBuilder<UnmodifiableListView<BloodPressureRecord>>(
+                    future: items,
+                    builder: (BuildContext context, AsyncSnapshot<UnmodifiableListView<BloodPressureRecord>> recordsSnapshot) {
+                      assert(recordsSnapshot.connectionState != ConnectionState.none);
+
+                      if (recordsSnapshot.connectionState == ConnectionState.waiting) {
+                        return const Text('loading...');
+                      } else if (recordsSnapshot.hasError) {
+                          return Text('Error loading data:\n${recordsSnapshot.error}');
+                      } else {
+                        final data = recordsSnapshot.data ?? [];
+                        if (data.isNotEmpty && data.first.diastolic > 0) {
+                          return ListView.builder(
+                            itemCount: data.length,
+                            shrinkWrap: true,
+                            padding: const EdgeInsets.all(2),
+                            itemBuilder: (context, index) {
+                              final formatter = DateFormat(settings.dateFormatString);
+                              return Column(
+                                children: [
+                                  Dismissible(
+                                    key: Key(data[index].creationTime.toIso8601String()),
+                                    confirmDismiss: (direction) async {
+                                      if (direction == DismissDirection.startToEnd) {
+                                        Provider.of<BloodPressureModel>(context, listen: false).delete(data[index].creationTime);
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(builder: (context) => AddMeasurementPage(
+                                            initTime: data[index].creationTime,
+                                            initSys: data[index].systolic,
+                                            initDia: data[index].diastolic,
+                                            initPul: data[index].pulse,
+                                            initNote: data[index].notes,
+                                            isEdit: true,
+                                          )),
+                                        );
+                                      }
+                                      return (direction != DismissDirection.startToEnd);
+                                    },
+                                    onDismissed: (direction) {
+                                      if (direction == DismissDirection.endToStart) {
+                                        Provider.of<BloodPressureModel>(context, listen: false).delete(data[index].creationTime);
+                                      }
+
+                                    },
+                                    background: Container(
+                                      width: 10,
+                                      color: Colors.blue,
+                                      child: const Align(
+                                          alignment: Alignment(-0.95,0),
+                                          child: Icon(Icons.edit)
+                                      ),
+                                    ),
+                                    secondaryBackground: Container(
+                                      width: 10,
+                                      color: Colors.red,
+                                      child: const Align(
+                                          alignment: Alignment(0.95, 0),
+                                          child: Icon(Icons.delete)
+                                      ),
+                                    ),
+                                    child: SizedBox(
+                                      height: 40,
+                                      child: Row(
+                                          children: [
+                                            Expanded(
+                                              flex: _sideFlex,
+                                              child: const SizedBox(),
+                                            ),
+                                            Expanded(
+                                                flex: _tableElementsSizes[0],
+                                                child: Text(formatter.format(data[index].creationTime))
+                                            ),
+                                            Expanded(
+                                                flex: _tableElementsSizes[1],
+                                                child: Text(data[index].systolic.toString())
+                                            ),
+                                            Expanded(
+                                                flex: _tableElementsSizes[2],
+                                                child: Text(data[index].diastolic.toString())
+                                            ),
+                                            Expanded(
+                                                flex: _tableElementsSizes[3],
+                                                child: Text(data[index].pulse.toString())
+                                            ),
+                                            Expanded(
+                                                flex: _tableElementsSizes[4],
+                                                child: Text(data[index].notes)
+                                            ),
+                                            Expanded(
+                                              flex: _sideFlex,
+                                              child: const SizedBox(),
+                                            ),
+                                          ]
+                                      ),
+                                    ),
+                                  ),
+                                  const Divider(thickness: 1, height: 1,)
+                                ],
+                              );
+                            }
+                          );
+                        } else {
+                          return const Text('no data');
+                        }
+                      }
+                    }
+                  );
+                }
+              );
+            }
+          ),
+        )
+      ],
+    );
   }
 }

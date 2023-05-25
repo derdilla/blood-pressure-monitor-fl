@@ -23,19 +23,23 @@ class AboutWarnValuesScreen extends StatelessWidget {
             children: [
               const Text('The warn values are a pure suggestions and no medical advice.'),
               const SizedBox(height: 5,),
-              RichText(
-                text: TextSpan(
-                  text: 'The default age dependent values come from this source.',
-                  style: const TextStyle(color: Colors.blue),
-                  recognizer: TapGestureRecognizer()
-                    ..onTap = () async {
-                      final url = Uri.parse(BloodPressureWarnValues.source);
-                      if (await canLaunchUrl(url)) {
-                        await launchUrl(url, mode: LaunchMode.externalApplication);
-                      } else {
-                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Can\'t open URL:\n${BloodPressureWarnValues.source}')));
-                      }
-                    },
+              InkWell(
+                onTap: () async {
+                  final url = Uri.parse(BloodPressureWarnValues.source);
+                  if (await canLaunchUrl(url)) {
+                    await launchUrl(url, mode: LaunchMode.externalApplication);
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Can\'t open URL:\n${BloodPressureWarnValues.source}')));
+                  }
+                },
+                child: const SizedBox(
+                  height: 48,
+                  child: Center(
+                    child: Text(
+                      "The default age dependent values come from this source.",
+                      style: TextStyle(color: Colors.blue),
+                    ),
+                  ),
                 ),
               ),
               const SizedBox(height: 5,),
