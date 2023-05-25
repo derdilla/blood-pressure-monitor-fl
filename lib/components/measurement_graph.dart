@@ -26,24 +26,20 @@ class _LineChart extends StatelessWidget {
                     builder: (context, model, child) {
                       var end = settings.displayDataEnd;
                       if (settings.graphStepSize == TimeStep.lifetime) end = DateTime.now();
-                      final dataFuture = model.getInTimeRange(settings.displayDataStart, end);
 
                       return FutureBuilder<UnmodifiableListView<BloodPressureRecord>>(
-                          future: dataFuture,
+                          future: model.getInTimeRange(settings.displayDataStart, end),
                           builder: (BuildContext context, AsyncSnapshot<UnmodifiableListView<BloodPressureRecord>> snapshot) {
-                            Widget res;
                             switch (snapshot.connectionState) {
                               case ConnectionState.none:
-                                res = const Text('not started');
-                                break;
+                                return const Text('not started');
                               case ConnectionState.waiting:
-                                res = const Text('loading...');
-                                break;
+                                return const Text('loading...');
                               default:
                                 if (snapshot.hasError) {
-                                  res = Text('ERROR: ${snapshot.error}');
+                                  return Text('ERROR: ${snapshot.error}');
                                 } else if (snapshot.hasData && snapshot.data!.length < 2) {
-                                  res = const Text('not enough data to draw graph');
+                                  return const Text('not enough data to draw graph');
                                 } else {
                                   assert(snapshot.hasData);
                                   final data = snapshot.data ?? [];
@@ -65,45 +61,51 @@ class _LineChart extends StatelessWidget {
                                   }
 
                                   final noTitels = AxisTitles(sideTitles: SideTitles(reservedSize: 40, showTitles: false));
-                                  res = LineChart(
+                                  return LineChart(
                                       swapAnimationDuration: const Duration(milliseconds: 250),
                                       LineChartData(
                                           minY: 30,
                                           maxY: max(pulMax.toDouble(), max(diaMax.toDouble(), sysMax.toDouble())) + 5,
                                           titlesData: FlTitlesData(topTitles: noTitels, rightTitles:  noTitels,
-                                              bottomTitles: AxisTitles(
-                                                sideTitles: SideTitles(
-                                                    showTitles: true,
-                                                    getTitlesWidget: (double pos, TitleMeta meta) {
-                                                      late final DateFormat formatter;
-                                                      switch (settings.graphStepSize) {
-                                                        case TimeStep.day:
-                                                          formatter = DateFormat('H:mm');
-                                                          break;
-                                                        case TimeStep.month:
-                                                          formatter = DateFormat('d');
-                                                          break;
-                                                        case TimeStep.week:
-                                                          formatter = DateFormat('E');
-                                                          break;
-                                                        case TimeStep.year:
-                                                          formatter = DateFormat('MMM');
-                                                          break;
-                                                        case TimeStep.lifetime:
-                                                          formatter = DateFormat('yyyy');
-                                                      }
-                                                      return Text(
-                                                          formatter.format(DateTime.fromMillisecondsSinceEpoch(pos.toInt()))
-                                                      );
+                                            bottomTitles: AxisTitles(
+                                              sideTitles: SideTitles(
+                                                  showTitles: true,
+                                                  getTitlesWidget: (double pos, TitleMeta meta) {
+                                                    if (meta.axisPosition <= 1 ||
+                                                        pos >= meta.max) {
+                                                      return const SizedBox.shrink();
                                                     }
-                                                ),
+
+
+                                                    late final DateFormat formatter;
+                                                    switch (settings.graphStepSize) {
+                                                      case TimeStep.day:
+                                                        formatter = DateFormat('H:mm');
+                                                        break;
+                                                      case TimeStep.month:
+                                                        formatter = DateFormat('d');
+                                                        break;
+                                                      case TimeStep.week:
+                                                        formatter = DateFormat('E');
+                                                        break;
+                                                      case TimeStep.year:
+                                                        formatter = DateFormat('MMM');
+                                                        break;
+                                                      case TimeStep.lifetime:
+                                                        formatter = DateFormat('yyyy');
+                                                    }
+                                                    return Text(
+                                                        formatter.format(DateTime.fromMillisecondsSinceEpoch(pos.toInt()))
+                                                    );
+                                                  }
                                               ),
+                                            ),
                                           ),
                                           lineTouchData: LineTouchData(
-                                            touchTooltipData: LineTouchTooltipData(
-                                              tooltipMargin: -200,
-                                              tooltipRoundedRadius: 20
-                                            )
+                                              touchTooltipData: LineTouchTooltipData(
+                                                  tooltipMargin: -200,
+                                                  tooltipRoundedRadius: 20
+                                              )
                                           ),
                                           lineBarsData: [
                                             LineChartBarData(
@@ -147,7 +149,6 @@ class _LineChart extends StatelessWidget {
                                   );
                                 }
                             }
-                            return res;
                           }
                       );
                     }
@@ -202,7 +203,20 @@ class MeasurementGraph extends StatelessWidget {
           children: [
             const SizedBox(height: 20,),
             _LineChart(height: height-100),
-            const SizedBox(height: 7,),
+            const SizedBox(height: 2,),
+            Consumer<Settings>(
+                builder: (context, settings, child) {
+                  final formatter = DateFormat(settings.dateFormatString);
+                  return Row(
+                    children: [
+                      Text(formatter.format(settings.displayDataStart)),
+                      const Spacer(),
+                      Text(formatter.format(settings.displayDataEnd)),
+                    ],
+                  );
+                }
+            ),
+            const SizedBox(height: 2,),
             Consumer<Settings>(
                 builder: (context, settings, child) {
                   return Row(
@@ -280,8 +294,8 @@ class MeasurementGraph extends StatelessWidget {
                     ]
                   );
                 }
-            )
-          ],
+            ),
+                      ],
         ),
       ),
     );
