@@ -249,8 +249,8 @@ class MeasurementGraph extends StatelessWidget {
                                     settings.displayDataEnd = settings.displayDataStart.copyWith(day: now.day + 1);
                                     break;
                                   case TimeStep.week:
-                                    settings.displayDataStart = DateTime(now.year, now.month, DateTime.monday);
-                                    settings.displayDataEnd = settings.displayDataStart.copyWith(day: DateTime.sunday);
+                                    settings.displayDataStart = DateTime(now.year, now.month, now.day - (now.weekday - 1)); // monday
+                                    settings.displayDataEnd = settings.displayDataStart.copyWith(day: settings.displayDataStart.day + DateTime.sunday); // end of sunday
                                     break;
                                   case TimeStep.month:
                                     settings.displayDataStart = DateTime(now.year, now.month);
