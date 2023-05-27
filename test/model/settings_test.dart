@@ -36,7 +36,7 @@ void main() {
       expect(s.diaColor.value, 0xFF4CAF50);
       expect(s.pulColor.value, 0xFFF44336);
       expect(s.allowManualTimeInput, true);
-      expect(s.dateFormatString, 'yy-MM-dd H:mm');
+      expect(s.dateFormatString, 'yyyy-MM-dd  HH:mm');
       expect(s.useExportCompatability, false);
       expect(s.iconSize, 30);
       expect(s.sysWarn, 125); // depends on overrideWarnValues
