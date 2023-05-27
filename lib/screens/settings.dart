@@ -103,6 +103,14 @@ class SettingsPage extends StatelessWidget {
               SettingsSection(
                   title: const Text('behavior'),
                   children: [
+                    SwitchSettingsTile(
+                        initialValue: settings.validateInputs,
+                        title: const Text('validate inputs'),
+                        leading: const Icon(Icons.edit),
+                        onToggle: (value) {
+                          settings.validateInputs = value;
+                        }
+                    ),
                     InputSettingsTile(
                       title: const Text('age'),
                       description: const Text('determines warn values'),
