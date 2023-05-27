@@ -69,7 +69,7 @@ class AppHome extends StatelessWidget {
                       onPressed: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => const AddMeasurementPage()),
+                          _buildTransition(const AddMeasurementPage()),
                         );
                       },
                     ),
@@ -89,7 +89,7 @@ class AppHome extends StatelessWidget {
                       onPressed: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => const StatisticsPage()),
+                          _buildTransition(const StatisticsPage())
                         );
                       },
                     ),
@@ -109,7 +109,7 @@ class AppHome extends StatelessWidget {
                       onPressed: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => const SettingsPage()),
+                          _buildTransition(const SettingsPage())
                         );
                       },
                     ),
@@ -121,4 +121,21 @@ class AppHome extends StatelessWidget {
         })
     );
   }
+}
+
+PageRouteBuilder _buildTransition(Widget page) {
+  return PageRouteBuilder(
+    transitionDuration: const Duration(milliseconds: 150),
+    pageBuilder: (context, animation, secondaryAnimation) => page,
+    transitionsBuilder: (context, animation, secondaryAnimation, child) {
+      const begin = Offset(0.9, 0.6);
+      const end = Offset.zero;
+      final tween = Tween(begin: begin, end: end);
+      final offsetAnimation = animation.drive(tween);
+      return SlideTransition(
+        position: offsetAnimation,
+        child: child,
+      );
+    }
+  );
 }
