@@ -1,3 +1,4 @@
+import 'package:blood_pressure_app/components/date_time_picker.dart';
 import 'package:blood_pressure_app/model/blood_pressure.dart';
 import 'package:blood_pressure_app/model/settings_store.dart';
 import 'package:flutter/material.dart';
@@ -63,23 +64,35 @@ class _AddMeasurementPageState extends State<AddMeasurementPage> {
                     builder: (context, settings, child) {
                       final formatter = DateFormat(settings.dateFormatString);
                       if(settings.allowManualTimeInput) {
-                        return TextFormField(
-                          initialValue: formatter.format(_time),
-                          decoration: const InputDecoration(
-                              hintText: 'time'
-                          ),
-                          validator: (String? value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Please enter a value';
-                            } else {
-                              try {
-                                _time = formatter.parse(value);
-                              } on FormatException {
-                                return 'date format: ${formatter.pattern}';
-                              }
+                        return GestureDetector(
+                          onTap: () async {
+                            var selectedTime = await showDateTimePicker(
+                              context: context,
+                              firstDate: DateTime.fromMillisecondsSinceEpoch(0),
+                              lastDate: DateTime.now().copyWith(second: DateTime.now().second+1)
+                            );
+                            if (selectedTime != null) {
+                              setState(() {
+                              _time = selectedTime;
+                            });
                             }
-                            return null;
                           },
+                          child: Column(
+                            children: [
+                              Row(
+                                children: [
+                                  Text(formatter.format(_time)),
+                                  const Spacer(),
+                                  const Icon(Icons.edit)
+                                ],
+                              ),
+                              const SizedBox(height: 3,),
+                              Divider(
+                                color: Theme.of(context).disabledColor,
+                                thickness: 1,
+                              )
+                            ],
+                          ),
                         );
                       } else {
                         return const SizedBox.shrink();
