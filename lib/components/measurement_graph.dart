@@ -64,7 +64,7 @@ class _LineChart extends StatelessWidget {
                                   return LineChart(
                                       swapAnimationDuration: const Duration(milliseconds: 250),
                                       LineChartData(
-                                          minY: 30,
+                                          minY: settings.validateInputs ? 30 : 0,
                                           maxY: max(pulMax.toDouble(), max(diaMax.toDouble(), sysMax.toDouble())) + 5,
                                           titlesData: FlTitlesData(topTitles: noTitels, rightTitles:  noTitels,
                                             bottomTitles: AxisTitles(
@@ -80,7 +80,7 @@ class _LineChart extends StatelessWidget {
                                                     late final DateFormat formatter;
                                                     switch (settings.graphStepSize) {
                                                       case TimeStep.day:
-                                                        formatter = DateFormat('H:mm');
+                                                        formatter = DateFormat('H:m');
                                                         break;
                                                       case TimeStep.month:
                                                         formatter = DateFormat('d');

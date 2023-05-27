@@ -166,6 +166,14 @@ class Settings extends ChangeNotifier {
     notifyListeners();
   }
 
+  bool get validateInputs {
+    return _prefs.getBool('validateInputs') ?? true;
+  }
+  set validateInputs(bool validateInputs) {
+    _prefs.setBool('validateInputs', validateInputs);
+    notifyListeners();
+  }
+
 }
 
 class TimeStep {
