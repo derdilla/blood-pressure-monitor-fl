@@ -107,7 +107,7 @@ class Settings extends ChangeNotifier {
     notifyListeners();
   }
   String get dateFormatString {
-    return _prefs.getString('dateFormatString') ?? 'yy-MM-dd H:mm';
+    return _prefs.getString('dateFormatString') ?? 'yyyy-MM-dd  HH:mm';
   }
   set dateFormatString(String newFormatString) {
     _prefs.setString('dateFormatString', newFormatString);
