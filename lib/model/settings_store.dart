@@ -5,6 +5,10 @@ import 'package:shared_preferences/shared_preferences.dart';
 class Settings extends ChangeNotifier {
   late final SharedPreferences _prefs;
 
+  // TODO add setting
+  bool validateInputs = true;
+
+
   Settings._create();
   // factory method, to allow for async constructor
   static Future<Settings> create() async {

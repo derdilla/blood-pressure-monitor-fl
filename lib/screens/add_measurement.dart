@@ -86,90 +86,108 @@ class _AddMeasurementPageState extends State<AddMeasurementPage> {
                       }
                     }
                 ),
-                TextFormField(
-                  initialValue: widget.isEdit ? _systolic.toString() : '',
-                  decoration: const InputDecoration(
-                    hintText: 'systolic'
-                  ),
-                  keyboardType: TextInputType.number,
-                  inputFormatters: <TextInputFormatter>[
-                    FilteringTextInputFormatter.digitsOnly
-                  ],
-                  focusNode: _sysFocusNode,
-                  onChanged: (String? value) {
-                    // to next field
-                    if ( value != null && value.isNotEmpty &&
-                    (int.tryParse(value) ?? -1) > 40) {
-                      FocusScope.of(context).nextFocus();
-                    }
-                  },
-                  validator: (String? value) {
-                    if (value == null || value.isEmpty
-                        || (int.tryParse(value) == null)) {
-                      return 'Please enter a Number';
-                    } else if ((int.tryParse(value) ?? -1) <= 30) {
-                      return 'The number must be > 30';
-                    } else {
-                      _systolic = int.tryParse(value) ?? -1;
-                    }
-                    return null;
-                  },
+                Consumer<Settings>(
+                  builder: (context, settings, child) {
+                    return TextFormField(
+                      initialValue: widget.isEdit ? _systolic.toString() : '',
+                      decoration: const InputDecoration(
+                          hintText: 'systolic'
+                      ),
+                      keyboardType: TextInputType.number,
+                      inputFormatters: <TextInputFormatter>[
+                        FilteringTextInputFormatter.digitsOnly
+                      ],
+                      focusNode: _sysFocusNode,
+                      onChanged: (String? value) {
+                        // to next field
+                        if ( value != null && value.isNotEmpty &&
+                            (int.tryParse(value) ?? -1) > 40) {
+                          FocusScope.of(context).nextFocus();
+                        }
+                      },
+                      validator: (String? value) {
+                        if (value == null || value.isEmpty
+                            || (int.tryParse(value) == null)) {
+                          return 'Please enter a Number';
+                        } else if (settings.validateInputs && (int.tryParse(value) ?? -1) <= 30) {
+                          return 'Number < 30? Turn off validation in settings!';
+                        } else if (settings.validateInputs && (int.tryParse(value) ?? 1000) >= 400) { // exceeding this value is unlikely: https://pubmed.ncbi.nlm.nih.gov/7741618/
+                          return 'Unrealistic value? Turn off validation in settings!';
+                        } else {
+                          _systolic = int.tryParse(value) ?? -1;
+                        }
+                        return null;
+                      },
+                    );
+                  }
                 ),
-                TextFormField(
-                  initialValue: widget.isEdit ? _diastolic.toString() : '',
-                  decoration: const InputDecoration(
-                      hintText: 'diastolic'
-                  ),
-                  keyboardType: TextInputType.number,
-                  inputFormatters: <TextInputFormatter>[
-                    FilteringTextInputFormatter.digitsOnly
-                  ],
-                  onChanged: (String? value) {
-                    // to next field
-                    if ( value != null && value.isNotEmpty &&
-                        (int.tryParse(value) ?? -1) > 40) {
-                      FocusScope.of(context).nextFocus();
-                    }
-                  },
-                  validator: (String? value) {
-                    if (value == null || value.isEmpty
-                        || (int.tryParse(value) == null)) {
-                      return 'Please enter a Number';
-                    } else if ((int.tryParse(value) ?? -1) <= 30) {
-                      return 'The number must be > 30';
-                    } else {
-                      _diastolic = int.tryParse(value) ?? -1;
-                    }
-                    return null;
-                  },
+                Consumer<Settings>(
+                  builder: (context, settings, child) {
+                    return TextFormField(
+                      initialValue: widget.isEdit ? _diastolic.toString() : '',
+                      decoration: const InputDecoration(
+                          hintText: 'diastolic'
+                      ),
+                      keyboardType: TextInputType.number,
+                      inputFormatters: <TextInputFormatter>[
+                        FilteringTextInputFormatter.digitsOnly
+                      ],
+                      onChanged: (String? value) {
+                        // to next field
+                        if ( value != null && value.isNotEmpty &&
+                            (int.tryParse(value) ?? -1) > 40) {
+                          FocusScope.of(context).nextFocus();
+                        }
+                      },
+                      validator: (String? value) {
+                        if (value == null || value.isEmpty
+                            || (int.tryParse(value) == null)) {
+                          return 'Please enter a Number';
+                        } else if (settings.validateInputs && (int.tryParse(value) ?? -1) <= 30) {
+                          return 'Number < 30? Turn off validation in settings!';
+                        } else if (settings.validateInputs && (int.tryParse(value) ?? 1000) >= 400) { // exceeding this value is unlikely: https://pubmed.ncbi.nlm.nih.gov/7741618/
+                          return 'Unrealistic value? Turn off validation in settings!';
+                        } else {
+                          _diastolic = int.tryParse(value) ?? -1;
+                        }
+                        return null;
+                      },
+                    );
+                  }
                 ),
-                TextFormField(
-                  initialValue: widget.isEdit ? _pulse.toString() : '',
-                  decoration: const InputDecoration(
-                      hintText: 'pulse'
-                  ),
-                  keyboardType: TextInputType.number,
-                  inputFormatters: <TextInputFormatter>[
-                    FilteringTextInputFormatter.digitsOnly
-                  ],
-                  onChanged: (String? value) {
-                    // to next field
-                    if ( value != null && value.isNotEmpty &&
-                        (int.tryParse(value) ?? -1) > 35) {
-                      FocusScope.of(context).nextFocus();
-                    }
-                  },
-                  validator: (String? value) {
-                    if (value == null || value.isEmpty
-                        || (int.tryParse(value) == null)) {
-                      return 'Please enter a Number';
-                    } else if ((int.tryParse(value) ?? -1) <= 30) {
-                      return 'The number must be > 30';
-                    } else {
-                      _pulse = int.tryParse(value) ?? -1;
-                    }
-                    return null;
-                  },
+                Consumer<Settings>(
+                  builder: (context, settings, child) {
+                    return TextFormField(
+                      initialValue: widget.isEdit ? _pulse.toString() : '',
+                      decoration: const InputDecoration(
+                          hintText: 'pulse'
+                      ),
+                      keyboardType: TextInputType.number,
+                      inputFormatters: <TextInputFormatter>[
+                        FilteringTextInputFormatter.digitsOnly
+                      ],
+                      onChanged: (String? value) {
+                        // to next field
+                        if ( value != null && value.isNotEmpty &&
+                            (int.tryParse(value) ?? -1) > 35) {
+                          FocusScope.of(context).nextFocus();
+                        }
+                      },
+                      validator: (String? value) {
+                        if (value == null || value.isEmpty
+                            || (int.tryParse(value) == null)) {
+                          return 'Please enter a Number';
+                        } else if (settings.validateInputs && (int.tryParse(value) ?? -1) <= 30) {
+                          return 'Number < 30? Turn off validation in settings!';
+                        } else if (settings.validateInputs && (int.tryParse(value) ?? 1000) >= 600) { // exceeding this value is unlikely: https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3273956/
+                          return 'Unrealistic value? Turn off validation in settings!';
+                        } else {
+                          _pulse = int.tryParse(value) ?? -1;
+                        }
+                        return null;
+                      },
+                    );
+                  }
                 ),
                 TextFormField(
                   initialValue: widget.isEdit ? _note.toString() : '',
