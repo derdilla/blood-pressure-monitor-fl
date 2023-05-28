@@ -273,7 +273,7 @@ class BloodPressureModel extends ChangeNotifier {
       var binaryContent = result.files.single.bytes;
       if (binaryContent != null) {
         final csvContents = const CsvToListConverter().convert(
-            String.fromCharCodes(binaryContent),
+            utf8.decode(binaryContent),
             fieldDelimiter: ',',
             textDelimiter: '"',
             eol: '\n'
