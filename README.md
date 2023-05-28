@@ -26,6 +26,11 @@ This application allows you to easily store your records and export all your rec
 
 ### Android
 
+#### Play Store
+This app is available in the Google [Play Store](https://play.google.com/store/apps/details?id=com.derdilla.bloodPressureApp&hl=en-US&ah=OCOjPuu-d1n3CfovAYWnjcrk1d4). 
+
+Please note that when switching from another installation source, you first need to uninstall the old app before you can get updates. **Making a manual backup is required to avoid data loss.**
+
 #### GitHub
 You can download and install the APK directly through the Releases page. Keep in mind that you have to regulary check for new versions manually.
 
@@ -59,7 +64,7 @@ Sorry, you need to compile from source. If there is enough demand I can add a wi
 ## TODO:
 
 - [X] add to f-droid (currently in extra repo)
-- [ ] add to play store (not coming soon)
+- [X] add to play store (open test)
 - [X] import from CSV
 - [X] edit/delete entries in app
 - [X] ensure that no data loss can occur during version changes
