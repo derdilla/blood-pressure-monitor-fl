@@ -24,11 +24,10 @@ void main() {
     test('should initialize', () async {
       expect(() async { await Settings.create(); }, returnsNormally);
     });
+
     test('fields defaults should be set after initialization', () async {
       var s = await Settings.create();
       expect(s.graphStepSize, TimeStep.day);
-      expect(s.displayDataStart, DateTime.fromMillisecondsSinceEpoch(-1));
-      expect(s.displayDataEnd, DateTime.fromMillisecondsSinceEpoch(-1));
       expect(s.followSystemDarkMode, true);
       expect(s.darkMode, true);
       expect(s.accentColor.value, 0xFF009688);

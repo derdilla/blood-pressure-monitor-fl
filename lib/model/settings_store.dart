@@ -5,6 +5,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 class Settings extends ChangeNotifier {
   late final SharedPreferences _prefs;
 
+  DateTime? _displayDataStart;
+  DateTime? _displayDataEnd;
+
   Settings._create();
   // factory method, to allow for async constructor
   static Future<Settings> create() async {
@@ -102,26 +105,18 @@ class Settings extends ChangeNotifier {
   }
 
   DateTime get displayDataStart {
-    var setting = _prefs.getInt('graphStart');
-    if (setting != null) {
-      return DateTime.fromMillisecondsSinceEpoch(setting);
-    }
-    return getMostRecentDisplayIntervall()[0];
+    return _displayDataStart ?? getMostRecentDisplayIntervall()[0];
   }
   set displayDataStart(DateTime newGraphStart) {
-    _prefs.setInt('graphStart', newGraphStart.millisecondsSinceEpoch);
+    _displayDataStart = newGraphStart;
     notifyListeners();
   }
 
   DateTime get displayDataEnd {
-    var setting = _prefs.getInt('graphEnd');
-    if (setting != null) {
-      return DateTime.fromMillisecondsSinceEpoch(setting);
-    }
-    return getMostRecentDisplayIntervall()[1];
+    return _displayDataEnd ?? getMostRecentDisplayIntervall()[1];
   }
   set displayDataEnd(DateTime newGraphEnd) {
-    _prefs.setInt('graphEnd', newGraphEnd.millisecondsSinceEpoch);
+    _displayDataEnd = newGraphEnd;
     notifyListeners();
   }
   bool get followSystemDarkMode {
