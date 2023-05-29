@@ -183,7 +183,9 @@ class MeasurementGraph extends StatelessWidget {
                   final formatter = DateFormat(settings.dateFormatString);
                   return Row(
                     children: [
-                      Text(formatter.format(settings.displayDataStart)),
+                      (settings.graphStepSize == TimeStep.lifetime) ?
+                          const Text('-') :
+                          Text(formatter.format(settings.displayDataStart)),
                       const Spacer(),
                       Text(formatter.format(settings.displayDataEnd)),
                     ],
