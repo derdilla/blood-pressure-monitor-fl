@@ -182,6 +182,13 @@ class Settings extends ChangeNotifier {
     notifyListeners();
   }
 
+  int get animationSpeed {
+    return _prefs.getInt('animationSpeed') ?? 150;
+  }
+  set animationSpeed(int newSpeed) {
+    _prefs.setInt('animationSpeed', newSpeed);
+    notifyListeners();
+  }
 }
 
 class TimeStep {

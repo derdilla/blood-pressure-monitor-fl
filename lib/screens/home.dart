@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:blood_pressure_app/components/measurement_graph.dart';
 import 'package:blood_pressure_app/components/measurement_list.dart';
 import 'package:flutter/services.dart';
+import 'package:path/path.dart';
 import 'package:provider/provider.dart';
 
 
@@ -69,7 +70,7 @@ class AppHome extends StatelessWidget {
                       onPressed: () {
                         Navigator.push(
                           context,
-                          _buildTransition(const AddMeasurementPage()),
+                          _buildTransition(const AddMeasurementPage(), settings.animationSpeed),
                         );
                       },
                     ),
@@ -89,7 +90,7 @@ class AppHome extends StatelessWidget {
                       onPressed: () {
                         Navigator.push(
                           context,
-                          _buildTransition(const StatisticsPage())
+                          _buildTransition(const StatisticsPage(), settings.animationSpeed)
                         );
                       },
                     ),
@@ -109,7 +110,7 @@ class AppHome extends StatelessWidget {
                       onPressed: () {
                         Navigator.push(
                           context,
-                          _buildTransition(const SettingsPage())
+                          _buildTransition(const SettingsPage(), settings.animationSpeed)
                         );
                       },
                     ),
@@ -123,19 +124,17 @@ class AppHome extends StatelessWidget {
   }
 }
 
-PageRouteBuilder _buildTransition(Widget page) {
-  return PageRouteBuilder(
-    transitionDuration: const Duration(milliseconds: 150),
-    pageBuilder: (context, animation, secondaryAnimation) => page,
-    transitionsBuilder: (context, animation, secondaryAnimation, child) {
-      const begin = Offset(0.9, 0.6);
-      const end = Offset.zero;
-      final tween = Tween(begin: begin, end: end);
-      final offsetAnimation = animation.drive(tween);
-      return SlideTransition(
-        position: offsetAnimation,
-        child: child,
-      );
-    }
-  );
+PageRoute _buildTransition(Widget page, int duration) {
+  return TimedMaterialPageRouter(duration: Duration(milliseconds: duration), builder: (context) => page);
+}
+
+class TimedMaterialPageRouter extends MaterialPageRoute {
+  Duration _duration = Duration.zero;
+  
+  TimedMaterialPageRouter({required WidgetBuilder builder, required Duration duration}) : super(builder: builder) {
+    _duration = duration;
+  }
+
+  @override
+  Duration get transitionDuration => _duration;
 }

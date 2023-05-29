@@ -89,6 +89,17 @@ class SettingsPage extends StatelessWidget {
                     end: 5,
                     stepSize: 1,
                   ),
+                  SliderSettingsTile(
+                    title: const Text('animation duration'),
+                    leading: const Icon(Icons.speed),
+                    onChanged: (double value) {
+                      settings.animationSpeed = value.toInt();
+                    },
+                    initialValue: settings.animationSpeed.toDouble(),
+                    start: 0,
+                    end: 1000,
+                    stepSize: 50,
+                  ),
                   ColorSelectionSettingsTile(
                       onMainColorChanged: (color) => settings.accentColor = settings.createMaterialColor((color ?? Colors.teal).value),
                       initialColor: settings.accentColor,
