@@ -121,7 +121,8 @@ class MeasurementList extends StatelessWidget {
                                         return false;
                                       } else { // delete
                                         bool dialogeDeletionConfirmed = false;
-                                        await showDialog(context: context,
+                                        if (settings.confirmDeletion) {
+                                          await showDialog(context: context,
                                             builder: (context) {
                                               return AlertDialog(
                                                 title: const Text("Confirm deletion"),
@@ -142,7 +143,11 @@ class MeasurementList extends StatelessWidget {
                                                 ],
                                               );
                                             }
-                                        );
+                                          );
+                                        } else {
+                                          Provider.of<BloodPressureModel>(context, listen: false).delete(data[index].creationTime);
+                                          dialogeDeletionConfirmed = true;
+                                        }
 
                                         if (dialogeDeletionConfirmed) {
                                           if (!context.mounted) return true;

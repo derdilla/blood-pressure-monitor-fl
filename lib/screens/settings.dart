@@ -133,6 +133,14 @@ class SettingsPage extends StatelessWidget {
                           settings.validateInputs = value;
                         }
                     ),
+                    SwitchSettingsTile(
+                        initialValue: settings.confirmDeletion,
+                        title: const Text('confirm deletion'),
+                        leading: const Icon(Icons.check),
+                        onToggle: (value) {
+                          settings.confirmDeletion = value;
+                        }
+                    ),
                     InputSettingsTile(
                       title: const Text('age'),
                       description: const Text('determines warn values'),
