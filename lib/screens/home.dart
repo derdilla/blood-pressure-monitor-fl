@@ -69,7 +69,7 @@ class AppHome extends StatelessWidget {
                       onPressed: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => const AddMeasurementPage()),
+                          _buildTransition(const AddMeasurementPage(), settings.animationSpeed),
                         );
                       },
                     ),
@@ -89,7 +89,7 @@ class AppHome extends StatelessWidget {
                       onPressed: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => const StatisticsPage()),
+                          _buildTransition(const StatisticsPage(), settings.animationSpeed)
                         );
                       },
                     ),
@@ -109,7 +109,7 @@ class AppHome extends StatelessWidget {
                       onPressed: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => const SettingsPage()),
+                          _buildTransition(const SettingsPage(), settings.animationSpeed)
                         );
                       },
                     ),
@@ -121,4 +121,19 @@ class AppHome extends StatelessWidget {
         })
     );
   }
+}
+
+PageRoute _buildTransition(Widget page, int duration) {
+  return TimedMaterialPageRouter(duration: Duration(milliseconds: duration), builder: (context) => page);
+}
+
+class TimedMaterialPageRouter extends MaterialPageRoute {
+  Duration _duration = Duration.zero;
+  
+  TimedMaterialPageRouter({required WidgetBuilder builder, required Duration duration}) : super(builder: builder) {
+    _duration = duration;
+  }
+
+  @override
+  Duration get transitionDuration => _duration;
 }

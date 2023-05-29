@@ -129,7 +129,10 @@ class MeasurementList extends StatelessWidget {
                                     },
                                     background: Container(
                                       width: 10,
-                                      color: Colors.blue,
+                                      decoration: BoxDecoration(
+                                        color: Colors.blue,
+                                        borderRadius: BorderRadius.circular(5)
+                                      ),
                                       child: const Align(
                                           alignment: Alignment(-0.95,0),
                                           child: Icon(Icons.edit)
@@ -137,7 +140,10 @@ class MeasurementList extends StatelessWidget {
                                     ),
                                     secondaryBackground: Container(
                                       width: 10,
-                                      color: Colors.red,
+                                      decoration: BoxDecoration(
+                                        color: Colors.red,
+                                        borderRadius: BorderRadius.circular(5)
+                                      ),
                                       child: const Align(
                                           alignment: Alignment(0.95, 0),
                                           child: Icon(Icons.delete)

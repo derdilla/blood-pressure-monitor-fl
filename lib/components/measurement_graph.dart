@@ -114,12 +114,12 @@ class _LineChart extends StatelessWidget {
                                                 show: false,
                                               ),
                                               color: settings.pulColor,
-                                              barWidth: 4,
+                                              barWidth: settings.graphLineThickness,
                                             ),
                                             LineChartBarData(
                                                 spots: diastolicSpots,
                                                 color: settings.diaColor,
-                                                barWidth: 4,
+                                                barWidth: settings.graphLineThickness,
                                                 dotData: FlDotData(
                                                   show: false,
                                                 ),
@@ -133,7 +133,7 @@ class _LineChart extends StatelessWidget {
                                             LineChartBarData(
                                                 spots: systolicSpots,
                                                 color: settings.sysColor,
-                                                barWidth: 4,
+                                                barWidth: settings.graphLineThickness,
                                                 dotData: FlDotData(
                                                   show: false,
                                                 ),
