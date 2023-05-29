@@ -34,13 +34,11 @@ Please note that when switching from another installation source, you first need
 #### GitHub
 You can download and install the APK directly through the Releases page. Keep in mind that you have to regulary check for new versions manually.
 
-#### Finding and Downloading the "Blood Pressure Monitor" App through Fdroid
-Please note that the app is currently only available from the IzzyOnDroid repository due to the review phase of the main repository not being finished.
-To find and download the "Blood Pressure Monitor" app from the IzzyOnDroid repository, follow these steps:
+#### Fdroid
+Attention: The old version of the app on the IzzyOnDroid repository is marked for removal and it is necessary to export the data through the in-app settings menu and reimport it in the version from the main repo.
 
-1. Download and install the [F-Droid app](https://f-droid.org/en/) App.
-2. Once in F-Droid Go to the settings in right bottom drawer and  add the `https://apt.izzysoft.de/fdroid/repo` repository.
-3. You can now search and install the "blood pressure monitor" App in F-Droid (You might need to add extra permissions)
+It may take a few days until it is available.
+
 
 ### I-OS
 While building an ios app would be no problem code wise, apple's restrictive behavior makes this more complicated (and expensive). So I wont take this step unless there is significant demand. 
@@ -63,7 +61,7 @@ Sorry, you need to compile from source. If there is enough demand I can add a wi
 
 ## TODO:
 
-- [X] add to f-droid (currently in extra repo)
+- [X] add to f-droid
 - [X] add to play store (open test)
 - [X] import from CSV
 - [X] edit/delete entries in app
