@@ -251,6 +251,14 @@ class Settings extends ChangeNotifier {
     _prefs.setInt('animationSpeed', newSpeed);
     notifyListeners();
   }
+
+  bool get confirmDeletion {
+    return _prefs.getBool('confirmDeletion') ?? true;
+  }
+  set confirmDeletion(bool confirmDeletion) {
+    _prefs.setBool('confirmDeletion', confirmDeletion);
+    notifyListeners();
+  }
 }
 
 class TimeStep {

@@ -105,7 +105,7 @@ class MeasurementList extends StatelessWidget {
                                   Dismissible(
                                     key: Key(data[index].creationTime.toIso8601String()),
                                     confirmDismiss: (direction) async {
-                                      if (direction == DismissDirection.startToEnd) {
+                                      if (direction == DismissDirection.startToEnd) { // edit
                                         Provider.of<BloodPressureModel>(context, listen: false).delete(data[index].creationTime);
                                         Navigator.push(
                                           context,
@@ -118,14 +118,60 @@ class MeasurementList extends StatelessWidget {
                                             isEdit: true,
                                           )),
                                         );
+                                        return false;
+                                      } else { // delete
+                                        bool dialogeDeletionConfirmed = false;
+                                        if (settings.confirmDeletion) {
+                                          await showDialog(context: context,
+                                            builder: (context) {
+                                              return AlertDialog(
+                                                title: const Text("Confirm deletion"),
+                                                content: const Text("Do you really want to delete this entry? You can turn of this question in the settings."),
+                                                actions: [
+                                                  ElevatedButton(
+                                                      onPressed: () => Navigator.of(context).pop(),
+                                                      child: const Text('CANCEL')
+                                                  ),
+                                                  ElevatedButton(
+                                                      onPressed: () {
+                                                        Provider.of<BloodPressureModel>(context, listen: false).delete(data[index].creationTime);
+                                                        dialogeDeletionConfirmed = true;
+                                                        Navigator.of(context).pop();
+                                                      },
+                                                      child: const Text('CONFIRM')
+                                                  ),
+                                                ],
+                                              );
+                                            }
+                                          );
+                                        } else {
+                                          Provider.of<BloodPressureModel>(context, listen: false).delete(data[index].creationTime);
+                                          dialogeDeletionConfirmed = true;
+                                        }
+
+                                        if (dialogeDeletionConfirmed) {
+                                          if (!context.mounted) return true;
+                                          ScaffoldMessenger.of(context).removeCurrentSnackBar();
+                                          ScaffoldMessenger.of(context).showSnackBar(
+                                              SnackBar(
+                                                duration: const Duration(seconds: 5),
+                                                content: const Text('entry has been deleted'),
+                                                action: SnackBarAction(
+                                                  label: "UNDO",
+                                                  onPressed: () => model.add(BloodPressureRecord(
+                                                      data[index].creationTime,
+                                                      data[index].systolic,
+                                                      data[index].diastolic,
+                                                      data[index].pulse,
+                                                      data[index].notes)),
+                                                ),
+                                              )
+                                          );
+                                        }
+                                        return dialogeDeletionConfirmed;
                                       }
-                                      return (direction != DismissDirection.startToEnd);
                                     },
                                     onDismissed: (direction) {
-                                      if (direction == DismissDirection.endToStart) {
-                                        Provider.of<BloodPressureModel>(context, listen: false).delete(data[index].creationTime);
-                                      }
-
                                     },
                                     background: Container(
                                       width: 10,
