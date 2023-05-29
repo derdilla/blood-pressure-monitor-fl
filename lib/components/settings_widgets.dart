@@ -59,7 +59,6 @@ class SettingsTile extends StatelessWidget {
   }
 }
 
-
 class ColorSelectionSettingsTile extends StatelessWidget {
   final Widget title;
   final ValueChanged<ColorSwatch?>? onMainColorChanged;
@@ -196,7 +195,7 @@ class _SliderSettingsTileState extends State<SliderSettingsTile> {
     var trail = widget.trailing ?? const SizedBox.shrink();
 
     return SizedBox(
-      height: 80,
+      height: 50,
       child: Row(
         children: [
           lead,
@@ -215,6 +214,7 @@ class _SliderSettingsTileState extends State<SliderSettingsTile> {
                         child: widget.description ?? const SizedBox.shrink()
                     )
                 ),
+                const SizedBox(height: 7,),
                 Expanded(
                     child: Slider(
                       value: _value,
