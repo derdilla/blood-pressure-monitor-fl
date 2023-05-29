@@ -42,8 +42,71 @@ class Settings extends ChangeNotifier {
     notifyListeners();
   }
 
+  void changeStepSize(int value) {
+    graphStepSize = value;
+    final newInterval = getMostRecentDisplayIntervall();
+    displayDataStart = newInterval[0];
+    displayDataEnd = newInterval[1];
+  }
+
+  void moveDisplayDataByStep(int directionalStep) {
+    final oldStart = displayDataStart;
+    final oldEnd =displayDataEnd;
+    switch (graphStepSize) {
+      case TimeStep.day:
+        displayDataStart = oldStart.copyWith(day: oldStart.day + directionalStep);
+        displayDataEnd = oldEnd.copyWith(day: oldEnd.day + directionalStep);
+        break;
+      case TimeStep.week:
+        displayDataStart = oldStart.copyWith(day: oldStart.day + directionalStep * 7);
+        displayDataEnd = oldEnd.copyWith(day: oldEnd.day + directionalStep * 7);
+        break;
+      case TimeStep.month:
+        displayDataStart = oldStart.copyWith(month: oldStart.month + directionalStep);
+        displayDataEnd = oldEnd.copyWith(month: oldEnd.month + directionalStep);
+        break;
+      case TimeStep.year:
+        displayDataStart = oldStart.copyWith(year: oldStart.year + directionalStep);
+        displayDataEnd = oldEnd.copyWith(year: oldEnd.year + directionalStep);
+        break;
+      case TimeStep.lifetime:
+        displayDataStart = DateTime.fromMillisecondsSinceEpoch(0);
+        displayDataEnd = oldStart;
+        break;
+    }
+  }
+
+  List<DateTime> getMostRecentDisplayIntervall() {
+    final now = DateTime.now();
+    switch (graphStepSize) {
+      case TimeStep.day:
+        final start = DateTime(now.year, now.month, now.day);
+        return [start, start.copyWith(day: now.day + 1)];
+      case TimeStep.week:
+        final start = DateTime(now.year, now.month, now.day - (now.weekday - 1)); // monday
+        return [start, start.copyWith(day: start.day + DateTime.sunday)]; // end of sunday
+      case TimeStep.month:
+        final start = DateTime(now.year, now.month);
+        return [start,  start.copyWith(month: now.month + 1)];
+      case TimeStep.year:
+        final start = DateTime(now.year);
+        return [start,  start.copyWith(year: now.year + 1)];
+      case TimeStep.lifetime:
+        final start = DateTime.fromMillisecondsSinceEpoch(0);
+        return [start,  now];
+      default:
+        assert(false);
+        final start = DateTime.fromMillisecondsSinceEpoch(0);
+        return [start,  now];
+    }
+  }
+
   DateTime get displayDataStart {
-    return DateTime.fromMillisecondsSinceEpoch(_prefs.getInt('graphStart') ?? -1);
+    var setting = _prefs.getInt('graphStart');
+    if (setting != null) {
+      return DateTime.fromMillisecondsSinceEpoch(setting);
+    }
+    return getMostRecentDisplayIntervall()[0];
   }
   set displayDataStart(DateTime newGraphStart) {
     _prefs.setInt('graphStart', newGraphStart.millisecondsSinceEpoch);
@@ -51,7 +114,11 @@ class Settings extends ChangeNotifier {
   }
 
   DateTime get displayDataEnd {
-    return DateTime.fromMillisecondsSinceEpoch(_prefs.getInt('graphEnd') ?? -1);
+    var setting = _prefs.getInt('graphEnd');
+    if (setting != null) {
+      return DateTime.fromMillisecondsSinceEpoch(setting);
+    }
+    return getMostRecentDisplayIntervall()[1];
   }
   set displayDataEnd(DateTime newGraphEnd) {
     _prefs.setInt('graphEnd', newGraphEnd.millisecondsSinceEpoch);
