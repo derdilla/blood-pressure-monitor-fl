@@ -143,6 +143,26 @@ class MeasurementList extends StatelessWidget {
                                               );
                                             }
                                         );
+
+                                        if (dialogeDeletionConfirmed) {
+                                          if (!context.mounted) return true;
+                                          ScaffoldMessenger.of(context).removeCurrentSnackBar();
+                                          ScaffoldMessenger.of(context).showSnackBar(
+                                              SnackBar(
+                                                duration: const Duration(seconds: 5),
+                                                content: const Text('entry has been deleted'),
+                                                action: SnackBarAction(
+                                                  label: "UNDO",
+                                                  onPressed: () => model.add(BloodPressureRecord(
+                                                      data[index].creationTime,
+                                                      data[index].systolic,
+                                                      data[index].diastolic,
+                                                      data[index].pulse,
+                                                      data[index].notes)),
+                                                ),
+                                              )
+                                          );
+                                        }
                                         return dialogeDeletionConfirmed;
                                       }
                                     },
