@@ -71,7 +71,7 @@ class Settings extends ChangeNotifier {
         break;
       case TimeStep.lifetime:
         displayDataStart = DateTime.fromMillisecondsSinceEpoch(0);
-        displayDataEnd = oldStart;
+        displayDataEnd = DateTime.now();
         break;
     }
   }
