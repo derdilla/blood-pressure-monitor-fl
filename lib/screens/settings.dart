@@ -78,6 +78,17 @@ class SettingsPage extends StatelessWidget {
                     end: 70,
                     stepSize: 5,
                   ),
+                  SliderSettingsTile(
+                    title: const Text('line thickness'),
+                    leading: const Icon(Icons.line_weight),
+                    onChanged: (double value) {
+                      settings.graphLineThickness = value;
+                    },
+                    initialValue: settings.graphLineThickness,
+                    start: 1,
+                    end: 5,
+                    stepSize: 1,
+                  ),
                   ColorSelectionSettingsTile(
                       onMainColorChanged: (color) => settings.accentColor = settings.createMaterialColor((color ?? Colors.teal).value),
                       initialColor: settings.accentColor,
