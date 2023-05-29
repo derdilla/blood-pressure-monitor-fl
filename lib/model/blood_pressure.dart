@@ -285,7 +285,7 @@ class BloodPressureModel extends ChangeNotifier {
               (line[1] as int),
               (line[2] as int),
               (line[3] as int),
-              line[4]);
+              line[4].toString());
           add(record);
         }
         return callback(true, null);

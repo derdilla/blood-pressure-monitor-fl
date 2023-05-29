@@ -252,14 +252,25 @@ class SettingsPage extends StatelessWidget {
                   SettingsTile(
                     title: const Text('import'),
                     leading: const Icon(Icons.file_upload),
-                    onPressed: (context) =>  Provider.of<BloodPressureModel>(context, listen: false).import((res, String? err) {
-                      if (res) {
-
-                      } else {
+                    onPressed: (context) {
+                      try {
+                        Provider.of<BloodPressureModel>(context, listen: false)
+                            .import((res, String? err) {
+                          if (res) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                    content: Text('import successful')));
+                          } else {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(content: Text(
+                                    'Error: ${err ?? 'unknown error'}')));
+                          }
+                        });
+                      } on Exception catch (e) {
                         ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text('Error: ${err ?? 'unknown error'}')));
+                            const SnackBar(content: Text('unknown error')));
                       }
-                    }),
+                    },
                   ),
                 ],
               ),
@@ -274,6 +285,7 @@ class SettingsPage extends StatelessWidget {
                         if (await canLaunchUrl(url)) {
                           await launchUrl(url, mode: LaunchMode.externalApplication);
                         } else {
+                          if (!context.mounted) return;
                           ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(content: Text('Can\'t open URL:\nhttps://github.com/NobodyForNothing/blood-pressure-monitor-fl')));
                         }
