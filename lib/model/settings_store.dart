@@ -174,6 +174,14 @@ class Settings extends ChangeNotifier {
     notifyListeners();
   }
 
+  double get graphLineThickness {
+    return _prefs.getDouble('graphLineThickness') ?? 3;
+  }
+  set graphLineThickness(double newThickness) {
+    _prefs.setDouble('graphLineThickness', newThickness);
+    notifyListeners();
+  }
+
 }
 
 class TimeStep {

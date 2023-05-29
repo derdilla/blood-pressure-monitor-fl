@@ -116,21 +116,21 @@ class StatisticsPage extends StatelessWidget {
                                             borderColor: settings.diaColor,
                                             fillColor: settings.diaColor.withOpacity(opacity),
                                             entryRadius: 0,
-                                            borderWidth: 3
+                                            borderWidth: settings.graphLineThickness
                                         ),
                                         RadarDataSet(
                                             dataEntries: intListToRadarEntry(daytimeAvgs[1]),
                                             borderColor: settings.sysColor,
                                             fillColor: settings.sysColor.withOpacity(opacity),
                                             entryRadius: 0,
-                                            borderWidth: 3
+                                            borderWidth: settings.graphLineThickness
                                         ),
                                         RadarDataSet(
                                             dataEntries: intListToRadarEntry(daytimeAvgs[2]),
                                             borderColor: settings.pulColor,
                                             fillColor: settings.pulColor.withOpacity(opacity),
                                             entryRadius: 0,
-                                            borderWidth: 3
+                                            borderWidth: settings.graphLineThickness
                                         ),
                                       ],
                                     ),
