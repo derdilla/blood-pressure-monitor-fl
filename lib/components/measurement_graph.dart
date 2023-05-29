@@ -1,5 +1,6 @@
 import 'dart:collection';
 
+import 'package:blood_pressure_app/components/display_interval_picker.dart';
 import 'package:blood_pressure_app/model/blood_pressure.dart';
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
@@ -166,33 +167,6 @@ class MeasurementGraph extends StatelessWidget {
   final double height;
   const MeasurementGraph({super.key, this.height = 290});
 
-  void moveGraphWithStep(int directionalStep, Settings settings) {
-    final oldStart = settings.displayDataStart;
-    final oldEnd = settings.displayDataEnd;
-    switch (settings.graphStepSize) {
-      case TimeStep.day:
-        settings.displayDataStart = oldStart.copyWith(day: oldStart.day + directionalStep);
-        settings.displayDataEnd = oldEnd.copyWith(day: oldEnd.day + directionalStep);
-        break;
-      case TimeStep.week:
-        settings.displayDataStart = oldStart.copyWith(day: oldStart.day + directionalStep * 7);
-        settings.displayDataEnd = oldEnd.copyWith(day: oldEnd.day + directionalStep * 7);
-        break;
-      case TimeStep.month:
-        settings.displayDataStart = oldStart.copyWith(month: oldStart.month + directionalStep);
-        settings.displayDataEnd = oldEnd.copyWith(month: oldEnd.month + directionalStep);
-        break;
-      case TimeStep.year:
-        settings.displayDataStart = oldStart.copyWith(year: oldStart.year + directionalStep);
-        settings.displayDataEnd = oldEnd.copyWith(year: oldEnd.year + directionalStep);
-        break;
-      case TimeStep.lifetime:
-        settings.displayDataStart = DateTime.fromMillisecondsSinceEpoch(0);
-        settings.displayDataEnd = oldStart;
-        break;
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -209,7 +183,9 @@ class MeasurementGraph extends StatelessWidget {
                   final formatter = DateFormat(settings.dateFormatString);
                   return Row(
                     children: [
-                      Text(formatter.format(settings.displayDataStart)),
+                      (settings.graphStepSize == TimeStep.lifetime) ?
+                          const Text('-') :
+                          Text(formatter.format(settings.displayDataStart)),
                       const Spacer(),
                       Text(formatter.format(settings.displayDataEnd)),
                     ],
@@ -217,85 +193,8 @@ class MeasurementGraph extends StatelessWidget {
                 }
             ),
             const SizedBox(height: 2,),
-            Consumer<Settings>(
-                builder: (context, settings, child) {
-                  return Row(
-                    children: [
-                      Expanded(
-                        flex: 30,
-                        child: MaterialButton(
-                          onPressed: () {
-                            moveGraphWithStep(-1, settings);
-                          },
-                          child: const Icon(
-                            Icons.chevron_left,
-                            size: 48,
-                          ),
-                        ),
-                      ),
-
-                      Expanded(
-                        flex: 40,
-                          child: DropdownButton<int>(
-                            value: settings.graphStepSize,
-                            isExpanded: true,
-                            onChanged: (int? value) {
-                              if (value != null) {
-                                settings.graphStepSize = value;
-                                final now = DateTime.now();
-                                switch (settings.graphStepSize) {
-                                  case TimeStep.day:
-                                    settings.displayDataStart = DateTime(now.year, now.month, now.day);
-                                    settings.displayDataEnd = settings.displayDataStart.copyWith(day: now.day + 1);
-                                    break;
-                                  case TimeStep.week:
-                                    settings.displayDataStart = DateTime(now.year, now.month, now.day - (now.weekday - 1)); // monday
-                                    settings.displayDataEnd = settings.displayDataStart.copyWith(day: settings.displayDataStart.day + DateTime.sunday); // end of sunday
-                                    break;
-                                  case TimeStep.month:
-                                    settings.displayDataStart = DateTime(now.year, now.month);
-                                    settings.displayDataEnd = settings.displayDataStart.copyWith(month: now.month + 1);
-                                    break;
-                                  case TimeStep.year:
-                                    settings.displayDataStart = DateTime(now.year);
-                                    settings.displayDataEnd = settings.displayDataStart.copyWith(year: now.year + 1);
-                                    break;
-                                  case TimeStep.lifetime:
-                                    settings.displayDataStart = DateTime.fromMillisecondsSinceEpoch(0);
-                                    settings.displayDataEnd = now;
-                                    break;
-                                }
-                              }
-                            },
-                            items: TimeStep.options.map<DropdownMenuItem<int>>((v) {
-                              return DropdownMenuItem(
-                                  value: v,
-                                  child: Text(
-                                      TimeStep.getName(v)
-                                  )
-                              );
-                            }).toList(),
-                          ),
-                      ),
-
-
-                      Expanded(
-                        flex: 30,
-                        child: MaterialButton(
-                          onPressed: () {
-                            moveGraphWithStep(1, settings);
-                          },
-                          child: const Icon(
-                            Icons.chevron_right,
-                            size: 48,
-                          ),
-                        ),
-                      ),
-                    ]
-                  );
-                }
-            ),
-                      ],
+            const IntervalPicker()
+          ],
         ),
       ),
     );
