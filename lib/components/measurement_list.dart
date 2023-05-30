@@ -195,8 +195,10 @@ class MeasurementList extends StatelessWidget {
                                           child: Icon(Icons.delete)
                                       ),
                                     ),
-                                    child: SizedBox(
-                                      height: 40,
+                                    child: Container(
+                                      constraints: const BoxConstraints(
+                                        minHeight: 40
+                                      ),
                                       child: Row(
                                           children: [
                                             Expanded(
