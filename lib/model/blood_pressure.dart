@@ -130,6 +130,10 @@ class BloodPressureModel extends ChangeNotifier {
     var firstDay = DateTime.fromMillisecondsSinceEpoch((await _database.rawQuery('SELECT timestamp FROM bloodPressureModel ORDER BY timestamp ASC LIMIT 1'))[0]['timestamp'] as int? ?? -1);
     var lastDay = DateTime.fromMillisecondsSinceEpoch((await _database.rawQuery('SELECT timestamp FROM bloodPressureModel ORDER BY timestamp DESC LIMIT 1'))[0]['timestamp'] as int? ?? -1);
 
+    if (lastDay.difference(firstDay).inDays <= 0) {
+      return c;
+    }
+
     return c ~/ lastDay.difference(firstDay).inDays;
 
   }
