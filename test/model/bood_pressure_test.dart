@@ -31,7 +31,6 @@ void main() {
     test('should start empty', () async {
       var m = await BloodPressureModel.create(dbPath: '/tmp/bp_test/should_start_empty');
 
-      expect((await m.getLastX(100)).length, 0);
       expect((await m.getInTimeRange(DateTime.fromMillisecondsSinceEpoch(0), DateTime.now())).length, 0);
 
     });
@@ -56,7 +55,7 @@ void main() {
 
       var r = BloodPressureRecord(DateTime.fromMillisecondsSinceEpoch(31415926), -172, 10000, 0, "((V⍳V)=⍳⍴V)/V←,V    ⌷←⍳→⍴∆∇⊃‾⍎⍕⌈๏ แผ่นดินฮั่นเABCDEFGHIJKLMNOPQRSTUVWXYZ /0123456789abcdefghijklmnopqrstuvwxyz £©µÀÆÖÞßéöÿ–—‘“”„†•…‰™œŠŸž€ ΑΒΓΔΩαβγδω АБВГДабвг, \n \t д∀∂∈ℝ∧∪≡∞ ↑↗↨↻⇣ ┐┼╔╘░►☺♀ ﬁ�⑀₂ἠḂӥẄɐː⍎אԱა");
       m.addListener(() async {
-        var res = (await m.getLastX(1)).first;
+        var res = (await m.getInTimeRange(DateTime.fromMillisecondsSinceEpoch(0), DateTime.now())).first;
         expect(res, isNotNull);
         expect(res.creationTime, r.creationTime);
         expect(res.systolic, r.systolic);
@@ -75,7 +74,7 @@ void main() {
       await m.add(r);
 
       var m2 = await BloodPressureModel.create(dbPath: '/tmp/bp_test/should_store_between_sessions');
-      var res = (await m2.getLastX(1)).first;
+      var res = (await m.getInTimeRange(DateTime.fromMillisecondsSinceEpoch(0), DateTime.now())).first;
 
       expect(res.creationTime, r.creationTime);
       expect(res.systolic, r.systolic);
@@ -98,12 +97,12 @@ void main() {
       var m = await BloodPressureModel.create(dbPath: '/tmp/bp_test/should_delete');
 
       await m.add(BloodPressureRecord(DateTime.fromMillisecondsSinceEpoch(758934), 123, 87, 65, ';)'));
-      expect((await m.getLastX(100)).length, 1);
+      expect((await m.getInTimeRange(DateTime.fromMillisecondsSinceEpoch(0), DateTime.now())).length, 1);
       expect((await m.getInTimeRange(DateTime.fromMillisecondsSinceEpoch(0), DateTime.now())).length, 1);
 
       await m.delete(DateTime.fromMillisecondsSinceEpoch(758934));
 
-      expect((await m.getLastX(100)).length, 0);
+      expect((await m.getInTimeRange(DateTime.fromMillisecondsSinceEpoch(0), DateTime.now())).length, 0);
       expect((await m.getInTimeRange(DateTime.fromMillisecondsSinceEpoch(0), DateTime.now())).length, 0);
 
     });
