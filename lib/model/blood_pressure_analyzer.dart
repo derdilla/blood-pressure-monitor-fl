@@ -32,12 +32,12 @@ class BloodPressureAnalyser {
     List<List<int>> allPulValuesRelativeToTime = [[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]];
 
     // sort all data
-    final dbRes = await _model.bloodPressureModel;
+    final dbRes = await _model.all;
     for (var entry in dbRes) {
-      DateTime ts = DateTime.fromMillisecondsSinceEpoch(entry['timestamp'] as int);
-      allDiaValuesRelativeToTime[ts.hour].add(entry['diastolic'] as int);
-      allSysValuesRelativeToTime[ts.hour].add(entry['systolic'] as int);
-      allPulValuesRelativeToTime[ts.hour].add(entry['pulse'] as int);
+      DateTime ts = DateTime.fromMillisecondsSinceEpoch(entry.creationTime.millisecondsSinceEpoch);
+      allDiaValuesRelativeToTime[ts.hour].add(entry.diastolic);
+      allSysValuesRelativeToTime[ts.hour].add(entry.systolic);
+      allPulValuesRelativeToTime[ts.hour].add(entry.pulse);
     }
     for(int i = 0; i < 24; i++) {
       if (allDiaValuesRelativeToTime[i].isEmpty) {
