@@ -1,4 +1,5 @@
 import 'package:blood_pressure_app/model/blood_pressure.dart';
+import 'package:collection/collection.dart';
 
 class BloodPressureAnalyser {
   final BloodPressureModel _model;
@@ -31,7 +32,7 @@ class BloodPressureAnalyser {
     List<List<int>> allPulValuesRelativeToTime = [[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]];
 
     // sort all data
-    final dbRes = await _database.query('bloodPressureModel', columns: ['*']);
+    final dbRes = await _model.bloodPressureModel;
     for (var entry in dbRes) {
       DateTime ts = DateTime.fromMillisecondsSinceEpoch(entry['timestamp'] as int);
       allDiaValuesRelativeToTime[ts.hour].add(entry['diastolic'] as int);
@@ -40,13 +41,13 @@ class BloodPressureAnalyser {
     }
     for(int i = 0; i < 24; i++) {
       if (allDiaValuesRelativeToTime[i].isEmpty) {
-        allDiaValuesRelativeToTime[i].add(await avgDia);
+        allDiaValuesRelativeToTime[i].add(await _model.avgDia);
       }
       if (allSysValuesRelativeToTime[i].isEmpty) {
-        allSysValuesRelativeToTime[i].add(await avgSys);
+        allSysValuesRelativeToTime[i].add(await _model.avgSys);
       }
       if (allPulValuesRelativeToTime[i].isEmpty) {
-        allPulValuesRelativeToTime[i].add(await avgPul);
+        allPulValuesRelativeToTime[i].add(await _model.avgPul);
       }
     }
 

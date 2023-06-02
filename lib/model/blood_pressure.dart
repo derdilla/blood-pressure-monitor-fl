@@ -49,11 +49,9 @@ class BloodPressureModel extends ChangeNotifier {
 
   /// Adds a new measurement at the correct chronological position in the List.
   Future<void> add(BloodPressureRecord measurement) async {
-    assert(_database.isOpen);
-
-    var existing = _database.query('bloodPressureModel', where: 'timestamp = ?',
+    final existing = await _database.query('bloodPressureModel', where: 'timestamp = ?',
         whereArgs: [measurement.creationTime.millisecondsSinceEpoch]);
-    if ((await existing).isNotEmpty) {
+    if (existing.isNotEmpty) {
         await _database.update('bloodPressureModel', {
           'systolic': measurement.systolic,
           'diastolic': measurement.diastolic,
@@ -70,34 +68,27 @@ class BloodPressureModel extends ChangeNotifier {
         'notes': measurement.notes
       });
     }
-
     notifyListeners();
-  }
-
-  /// Returns all recordings in saved in a range in ascending order
-  Future<UnmodifiableListView<BloodPressureRecord>> getInTimeRange(DateTime from, DateTime to) async {
-    var dbEntries = await _database.query('bloodPressureModel',
-      orderBy: 'timestamp DESC',
-      where: 'timestamp BETWEEN ? AND ?',
-      whereArgs: [from.millisecondsSinceEpoch, to.millisecondsSinceEpoch]
-    ); // descending
-    // synchronous part
-    List<BloodPressureRecord> recordsInRange = [];
-    for (var e in dbEntries) {
-      recordsInRange.add(BloodPressureRecord(
-          DateTime.fromMillisecondsSinceEpoch(e['timestamp']as int),
-          e['systolic'] as int,
-          e['diastolic'] as int,
-          e['pulse'] as int,
-          e['notes'].toString())
-      );
-    }
-    return UnmodifiableListView(recordsInRange);
   }
 
   Future<void> delete(DateTime timestamp) async {
     _database.delete('bloodPressureModel', where: 'timestamp = ?', whereArgs: [timestamp.millisecondsSinceEpoch]);
     notifyListeners();
+  }
+
+  /// Returns all recordings in saved in a range in ascending order
+  Future<UnmodifiableListView<BloodPressureRecord>> getInTimeRange(DateTime from, DateTime to) async {
+    final dbEntries = await _database.query('bloodPressureModel',
+      orderBy: 'timestamp DESC',
+      where: 'timestamp BETWEEN ? AND ?',
+      whereArgs: [from.millisecondsSinceEpoch, to.millisecondsSinceEpoch]
+    ); // descending
+    List<BloodPressureRecord> recordsInRange = _convert(dbEntries);
+    return UnmodifiableListView(recordsInRange);
+  }
+
+  Future<List<Map<String, Object?>>> get bloodPressureModel {
+    return _database.query('bloodPressureModel', columns: ['*']);
   }
   
   Future<int> get count async {
@@ -228,6 +219,20 @@ class BloodPressureModel extends ChangeNotifier {
     } catch (e) {
       return (v as double?)?.toInt();
     }
+  }
+
+  List<BloodPressureRecord> _convert(List<Map<String, Object?>> dbResult) {
+    List<BloodPressureRecord> records = [];
+    for (var e in dbResult) {
+      records.add(BloodPressureRecord(
+          DateTime.fromMillisecondsSinceEpoch(e['timestamp']as int),
+          e['systolic'] as int,
+          e['diastolic'] as int,
+          e['pulse'] as int,
+          e['notes'].toString())
+      );
+    }
+    return records;
   }
 }
 
