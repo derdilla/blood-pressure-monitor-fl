@@ -109,9 +109,9 @@ class RamSettings extends ChangeNotifier implements Settings {
   bool _overrideWarnValues = false;
   MaterialColor _pulColor = Colors.pink;
   MaterialColor _sysColor = Colors.pink;
-  double _sysWarn = 80;
+  double _sysWarn = 120;
   bool _useExportCompatability = false;
-  bool _validateInputs = false;
+  bool _validateInputs = true;
 
   RamSettings() {
     _accentColor = createMaterialColor(0xFF009688);
@@ -156,7 +156,7 @@ class RamSettings extends ChangeNotifier implements Settings {
   @override
   double get sysWarn {
     if (!overrideWarnValues) {
-      return BloodPressureWarnValues.getUpperDiaWarnValue(age).toDouble();
+      return BloodPressureWarnValues.getUpperSysWarnValue(age).toDouble();
     }
     return _sysWarn;
   }
@@ -172,6 +172,7 @@ class RamSettings extends ChangeNotifier implements Settings {
   @override
   set accentColor(MaterialColor value) {
     _accentColor = value;
+    notifyListeners();
   }
 
   @override
