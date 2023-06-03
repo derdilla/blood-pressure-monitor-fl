@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 class RamBloodPressureModel extends ChangeNotifier implements BloodPressureModel {
   final List<BloodPressureRecord> _records = [];
 
-
   @override
   Future<void> add(BloodPressureRecord measurement) async {
     _records.add(measurement);
@@ -14,38 +13,8 @@ class RamBloodPressureModel extends ChangeNotifier implements BloodPressureModel
   }
 
   @override
-  Future<int> get avgDia async => _records.map((e) => e.diastolic).reduce((a, b) => a+b) ~/ _records.length;
-
-  @override
-  Future<int> get avgPul async => _records.map((e) => e.pulse).reduce((a, b) => a+b) ~/ _records.length;
-
-  @override
-  Future<int> get avgSys async => _records.map((e) => e.systolic).reduce((a, b) => a+b) ~/ _records.length;
-
-  @override
-  Future<List<BloodPressureRecord>> get all async => _records;
-
-  @override
-  void close() {}
-
-  @override
-  Future<int> get count async => _records.length;
-
-  @override
   Future<void> delete(DateTime timestamp) async {
     _records.removeWhere((element) => element.creationTime.isAtSameMomentAs(timestamp));
-  }
-
-  @override
-  Future<DateTime> get firstDay async {
-    _records.sort((a, b) => a.creationTime.compareTo(b.creationTime));
-    return _records.first.creationTime;
-  }
-
-  @override
-  Future<DateTime> get lastDay async {
-    _records.sort((a, b) => a.creationTime.compareTo(b.creationTime));
-    return _records.last.creationTime;
   }
 
   @override
@@ -58,6 +27,21 @@ class RamBloodPressureModel extends ChangeNotifier implements BloodPressureModel
     }
     return UnmodifiableListView(recordsInTime);
   }
+
+  @override
+  Future<List<BloodPressureRecord>> get all async => _records;
+
+  @override
+  Future<int> get count async => _records.length;
+
+  @override
+  Future<int> get avgDia async => _records.map((e) => e.diastolic).reduce((a, b) => a+b) ~/ _records.length;
+
+  @override
+  Future<int> get avgPul async => _records.map((e) => e.pulse).reduce((a, b) => a+b) ~/ _records.length;
+
+  @override
+  Future<int> get avgSys async => _records.map((e) => e.systolic).reduce((a, b) => a+b) ~/ _records.length;
 
   @override
   Future<int> get maxDia async => _records.reduce((a,b) => (a.diastolic>=b.diastolic) ? a : b).diastolic;
@@ -78,6 +62,21 @@ class RamBloodPressureModel extends ChangeNotifier implements BloodPressureModel
   Future<int> get minSys async => _records.reduce((a,b) => (a.systolic<=b.systolic) ? a : b).systolic;
 
   @override
+  Future<DateTime> get firstDay async {
+    _records.sort((a, b) => a.creationTime.compareTo(b.creationTime));
+    return _records.first.creationTime;
+  }
+
+  @override
+  Future<DateTime> get lastDay async {
+    _records.sort((a, b) => a.creationTime.compareTo(b.creationTime));
+    return _records.last.creationTime;
+  }
+
+  @override
+  void close() {}
+
+  @override
   Future<void> import(void Function(bool p1, String? p2) callback) {
     // TODO: implement import
     throw UnimplementedError();
@@ -88,5 +87,4 @@ class RamBloodPressureModel extends ChangeNotifier implements BloodPressureModel
     // TODO: implement save
     throw UnimplementedError();
   }
-
 }
