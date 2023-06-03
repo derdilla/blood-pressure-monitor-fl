@@ -26,10 +26,9 @@ class _LineChart extends StatelessWidget {
                   return Consumer<BloodPressureModel>(
                     builder: (context, model, child) {
                       var end = settings.displayDataEnd;
-                      if (settings.graphStepSize == TimeStep.lifetime) end = DateTime.now();
 
                       return FutureBuilder<UnmodifiableListView<BloodPressureRecord>>(
-                          future: model.getInTimeRange(settings.displayDataStart, end),
+                          future: (settings.graphStepSize == TimeStep.lifetime) ? model.all : model.getInTimeRange(settings.displayDataStart, end),
                           builder: (BuildContext context, AsyncSnapshot<UnmodifiableListView<BloodPressureRecord>> snapshot) {
                             switch (snapshot.connectionState) {
                               case ConnectionState.none:
@@ -187,7 +186,9 @@ class MeasurementGraph extends StatelessWidget {
                           const Text('-') :
                           Text(formatter.format(settings.displayDataStart)),
                       const Spacer(),
-                      Text(formatter.format(settings.displayDataEnd)),
+                      (settings.graphStepSize == TimeStep.lifetime) ?
+                        const Text('now') :
+                        Text(formatter.format(settings.displayDataEnd)),
                     ],
                   );
                 }

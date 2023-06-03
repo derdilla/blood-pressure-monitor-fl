@@ -87,8 +87,8 @@ class BloodPressureModel extends ChangeNotifier {
     return UnmodifiableListView(recordsInRange);
   }
 
-  Future<List<BloodPressureRecord>> get all async {
-    return _convert(await _database.query('bloodPressureModel', columns: ['*']));
+  Future<UnmodifiableListView<BloodPressureRecord>> get all async {
+    return UnmodifiableListView(_convert(await _database.query('bloodPressureModel', columns: ['*'])));
   }
   
   Future<int> get count async {
