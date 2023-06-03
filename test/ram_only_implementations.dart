@@ -29,7 +29,7 @@ class RamBloodPressureModel extends ChangeNotifier implements BloodPressureModel
   }
 
   @override
-  Future<List<BloodPressureRecord>> get all async => _records;
+  Future<UnmodifiableListView<BloodPressureRecord>> get all async => UnmodifiableListView(_records);
 
   @override
   Future<int> get count async => _records.length;
