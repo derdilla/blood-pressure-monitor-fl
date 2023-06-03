@@ -49,11 +49,9 @@ class BloodPressureModel extends ChangeNotifier {
 
   /// Adds a new measurement at the correct chronological position in the List.
   Future<void> add(BloodPressureRecord measurement) async {
-    assert(_database.isOpen);
-
-    var existing = _database.query('bloodPressureModel', where: 'timestamp = ?',
+    final existing = await _database.query('bloodPressureModel', where: 'timestamp = ?',
         whereArgs: [measurement.creationTime.millisecondsSinceEpoch]);
-    if ((await existing).isNotEmpty) {
+    if (existing.isNotEmpty) {
         await _database.update('bloodPressureModel', {
           'systolic': measurement.systolic,
           'diastolic': measurement.diastolic,
@@ -70,100 +68,51 @@ class BloodPressureModel extends ChangeNotifier {
         'notes': measurement.notes
       });
     }
-
     notifyListeners();
-  }
-
-  /// Returns the last x BloodPressureRecords from new to old.
-  /// Caches new ones if necessary
-  Future<UnmodifiableListView<BloodPressureRecord>> getLastX(int count) async {
-    List<BloodPressureRecord> lastMeasurements = [];
-
-    var dbEntries = await _database.query('bloodPressureModel',
-        orderBy: 'timestamp DESC', limit: count); // de
-    for (var e in dbEntries) {
-      lastMeasurements.add(BloodPressureRecord(
-          DateTime.fromMillisecondsSinceEpoch(e['timestamp']as int),
-          e['systolic'] as int,
-          e['diastolic'] as int,
-          e['pulse'] as int,
-          e['notes'].toString()));
-
-    }
-    return UnmodifiableListView(lastMeasurements);
-  }
-
-  /// Returns all recordings in saved in a range in ascending order
-  Future<UnmodifiableListView<BloodPressureRecord>> getInTimeRange(DateTime from, DateTime to) async {
-    var dbEntries = await _database.query('bloodPressureModel',
-      orderBy: 'timestamp DESC',
-      where: 'timestamp BETWEEN ? AND ?',
-      whereArgs: [from.millisecondsSinceEpoch, to.millisecondsSinceEpoch]
-    ); // descending
-    // synchronous part
-    List<BloodPressureRecord> recordsInRange = [];
-    for (var e in dbEntries) {
-      recordsInRange.add(BloodPressureRecord(
-          DateTime.fromMillisecondsSinceEpoch(e['timestamp']as int),
-          e['systolic'] as int,
-          e['diastolic'] as int,
-          e['pulse'] as int,
-          e['notes'].toString())
-      );
-    }
-    return UnmodifiableListView(recordsInRange);
   }
 
   Future<void> delete(DateTime timestamp) async {
     _database.delete('bloodPressureModel', where: 'timestamp = ?', whereArgs: [timestamp.millisecondsSinceEpoch]);
     notifyListeners();
   }
+
+  /// Returns all recordings in saved in a range in ascending order
+  Future<UnmodifiableListView<BloodPressureRecord>> getInTimeRange(DateTime from, DateTime to) async {
+    final dbEntries = await _database.query('bloodPressureModel',
+      orderBy: 'timestamp DESC',
+      where: 'timestamp BETWEEN ? AND ?',
+      whereArgs: [from.millisecondsSinceEpoch, to.millisecondsSinceEpoch]
+    ); // descending
+    List<BloodPressureRecord> recordsInRange = _convert(dbEntries);
+    return UnmodifiableListView(recordsInRange);
+  }
+
+  Future<List<BloodPressureRecord>> get all async {
+    return _convert(await _database.query('bloodPressureModel', columns: ['*']));
+  }
   
   Future<int> get count async {
     return (await _database.rawQuery('SELECT COUNT(*) FROM bloodPressureModel'))[0]['COUNT(*)'] as int? ?? -1;
   }
-  Future<int> get measurementsPerDay async {
-    final c = await count;
-    if (c <= 1) {
-      return -1;
-    }
-    var firstDay = DateTime.fromMillisecondsSinceEpoch((await _database.rawQuery('SELECT timestamp FROM bloodPressureModel ORDER BY timestamp ASC LIMIT 1'))[0]['timestamp'] as int? ?? -1);
-    var lastDay = DateTime.fromMillisecondsSinceEpoch((await _database.rawQuery('SELECT timestamp FROM bloodPressureModel ORDER BY timestamp DESC LIMIT 1'))[0]['timestamp'] as int? ?? -1);
 
-    return c ~/ lastDay.difference(firstDay).inDays;
-
+  Future<DateTime> get firstDay async {
+    return DateTime.fromMillisecondsSinceEpoch((await _database.rawQuery('SELECT timestamp FROM bloodPressureModel ORDER BY timestamp ASC LIMIT 1'))[0]['timestamp'] as int? ?? -1);
   }
-
+  Future<DateTime> get lastDay async {
+    return DateTime.fromMillisecondsSinceEpoch((await _database.rawQuery('SELECT timestamp FROM bloodPressureModel ORDER BY timestamp DESC LIMIT 1'))[0]['timestamp'] as int? ?? -1);
+  }
 
   Future<int> get avgDia async {
-    var res = (await _database.rawQuery('SELECT AVG(diastolic) as dia FROM bloodPressureModel'))[0]['dia'];
-    int? val;
-    try {
-      val = (res as int?);
-    } catch (e) {
-      val = (res as double?)?.toInt();
-    }
-    return val ?? -1;
+    var res = _toInt((await _database.rawQuery('SELECT AVG(diastolic) as dia FROM bloodPressureModel'))[0]['dia']);
+    return res ?? -1;
   }
   Future<int> get avgSys async {
-    var res = (await _database.rawQuery('SELECT AVG(systolic) as sys FROM bloodPressureModel'))[0]['sys'];
-    int? val;
-    try {
-      val = (res as int?);
-    } catch (e) {
-      val = (res as double?)?.toInt();
-    }
-    return val ?? -1;
+    var res = _toInt((await _database.rawQuery('SELECT AVG(systolic) as sys FROM bloodPressureModel'))[0]['sys']);
+    return res ?? -1;
   }
   Future<int> get avgPul async {
-    var res = (await _database.rawQuery('SELECT AVG(pulse) as pul FROM bloodPressureModel'))[0]['pul'];
-    int? val;
-    try {
-      val = (res as int?);
-    } catch (e) {
-      val = (res as double?)?.toInt();
-    }
-    return val ?? -1;
+    var res = _toInt((await _database.rawQuery('SELECT AVG(pulse) as pul FROM bloodPressureModel'))[0]['pul']);
+    return res ?? -1;
   }
 
   Future<int> get maxDia async {
@@ -190,44 +139,6 @@ class BloodPressureModel extends ChangeNotifier {
   Future<int> get minPul async {
     var res = (await _database.rawQuery('SELECT MIN(pulse) as pul FROM bloodPressureModel'))[0]['pul'];
     return (res as int?) ?? -1;
-  }
-
-  /// outer list is type (0 -> diastolic, 1 -> systolic, 2 -> pulse)
-  /// inner list index is hour of day ([0] -> 00:00-00:59; [1] -> ...)
-  Future<List<List<int>>> get allAvgsRelativeToDaytime async {
-    // setup vars
-    List<List<int>> allDiaValuesRelativeToTime = [[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]];
-    List<List<int>> allSysValuesRelativeToTime = [[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]];
-    List<List<int>> allPulValuesRelativeToTime = [[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]];
-
-    // sort all data
-    final dbRes = await _database.query('bloodPressureModel', columns: ['*']);
-    for (var entry in dbRes) {
-      DateTime ts = DateTime.fromMillisecondsSinceEpoch(entry['timestamp'] as int);
-      allDiaValuesRelativeToTime[ts.hour].add(entry['diastolic'] as int);
-      allSysValuesRelativeToTime[ts.hour].add(entry['systolic'] as int);
-      allPulValuesRelativeToTime[ts.hour].add(entry['pulse'] as int);
-    }
-    for(int i = 0; i < 24; i++) {
-      if (allDiaValuesRelativeToTime[i].isEmpty) {
-        allDiaValuesRelativeToTime[i].add(await avgDia);
-      }
-      if (allSysValuesRelativeToTime[i].isEmpty) {
-        allSysValuesRelativeToTime[i].add(await avgSys);
-      }
-      if (allPulValuesRelativeToTime[i].isEmpty) {
-        allPulValuesRelativeToTime[i].add(await avgPul);
-      }
-    }
-
-    // make avgs
-    List<List<int>> res = [[],[],[]];
-    for(int i = 0; i < 24; i++) {
-      res[0].add(allDiaValuesRelativeToTime[i].average.toInt());
-      res[1].add(allSysValuesRelativeToTime[i].average.toInt());
-      res[2].add(allPulValuesRelativeToTime[i].average.toInt());
-    }
-    return res;
   }
 
   Future<void> save(void Function(bool success, String? msg) callback, {bool exportAsText = false}) async {
@@ -300,6 +211,28 @@ class BloodPressureModel extends ChangeNotifier {
 
   void close() {
     _database.close();
+  }
+
+  int? _toInt(Object? v) {
+    try {
+      return (v as int?);
+    } catch (e) {
+      return (v as double?)?.toInt();
+    }
+  }
+
+  List<BloodPressureRecord> _convert(List<Map<String, Object?>> dbResult) {
+    List<BloodPressureRecord> records = [];
+    for (var e in dbResult) {
+      records.add(BloodPressureRecord(
+          DateTime.fromMillisecondsSinceEpoch(e['timestamp']as int),
+          e['systolic'] as int,
+          e['diastolic'] as int,
+          e['pulse'] as int,
+          e['notes'].toString())
+      );
+    }
+    return records;
   }
 }
 

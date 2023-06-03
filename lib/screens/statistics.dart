@@ -1,4 +1,5 @@
 import 'package:blood_pressure_app/model/blood_pressure.dart';
+import 'package:blood_pressure_app/model/blood_pressure_analyzer.dart';
 import 'package:blood_pressure_app/model/settings_store.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
@@ -38,7 +39,7 @@ class StatisticsPage extends StatelessWidget {
                     ),
                     Statistic(
                         caption: const Text('Measurements per Day'),
-                        child: futureInt(model.measurementsPerDay)
+                        child: futureInt(BloodPressureAnalyser(model).measurementsPerDay)
                     ),
                     StatisticsRow(
                       caption2: Text('Diastolic min.',
@@ -66,7 +67,7 @@ class StatisticsPage extends StatelessWidget {
                     Statistic(
                       caption: const Text('Time-Resolved Metrics'),
                       child: FutureBuilder<List<List<int>>>(
-                          future: model.allAvgsRelativeToDaytime,
+                          future: BloodPressureAnalyser(model).allAvgsRelativeToDaytime,
                           builder: (BuildContext context, AsyncSnapshot<List<
                               List<int>>> snapshot) {
                             switch (snapshot.connectionState) {
