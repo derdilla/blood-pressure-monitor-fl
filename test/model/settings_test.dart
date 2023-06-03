@@ -42,6 +42,10 @@ void main() {
       expect(s.diaWarn, 80); // depends on overrideWarnValues
       expect(s.age, 30);
       expect(s.overrideWarnValues, false);
+      expect(s.validateInputs, true);
+      expect(s.graphLineThickness, 3);
+      expect(s.animationSpeed, 150);
+      expect(s.confirmDeletion, true);
 
       s.overrideWarnValues = true;
       expect(s.sysWarn, 120);
@@ -66,10 +70,10 @@ void main() {
       s.displayDataEnd = DateTime.fromMillisecondsSinceEpoch(200000);
       s.followSystemDarkMode = false;
       s.darkMode = false;
-      s.accentColor = s.createMaterialColor(0xFF942DA4);
-      s.sysColor = s.createMaterialColor(0xFF942DA5);
-      s.diaColor = s.createMaterialColor(0xFF942DA6);
-      s.pulColor = s.createMaterialColor(0xFF942DA7);
+      s.accentColor = createMaterialColor(0xFF942DA4);
+      s.sysColor = createMaterialColor(0xFF942DA5);
+      s.diaColor = createMaterialColor(0xFF942DA6);
+      s.pulColor = createMaterialColor(0xFF942DA7);
       s.allowManualTimeInput = false;
       s.dateFormatString = 'yy:dd @ H:mm.ss';
       s.useExportCompatability = true;
@@ -78,6 +82,10 @@ void main() {
       s.diaWarn = 159; // depends on overrideWarnValues
       s.age = 26;
       s.overrideWarnValues = true;
+      s.validateInputs = false;
+      s.graphLineThickness = 5;
+      s.animationSpeed = 100;
+      s.confirmDeletion = false;
 
       expect(s.displayDataStart, DateTime.fromMillisecondsSinceEpoch(10000));
       expect(s.displayDataEnd, DateTime.fromMillisecondsSinceEpoch(200000));
@@ -94,6 +102,10 @@ void main() {
       expect(s.diaWarn, 159);
       expect(s.age, 26);
       expect(s.overrideWarnValues, true);
+      expect(s.validateInputs, false);
+      expect(s.graphLineThickness, 5);
+      expect(s.animationSpeed, 100);
+      expect(s.confirmDeletion, false);
     });
 
     test('setting fields should notify listeners and change values', () async {
@@ -109,10 +121,10 @@ void main() {
       s.displayDataEnd = DateTime.fromMillisecondsSinceEpoch(200000);
       s.followSystemDarkMode = false;
       s.darkMode = false;
-      s.accentColor = s.createMaterialColor(0xFF942DA4);
-      s.sysColor = s.createMaterialColor(0xFF942DA5);
-      s.diaColor = s.createMaterialColor(0xFF942DA6);
-      s.pulColor = s.createMaterialColor(0xFF942DA7);
+      s.accentColor = createMaterialColor(0xFF942DA4);
+      s.sysColor = createMaterialColor(0xFF942DA5);
+      s.diaColor = createMaterialColor(0xFF942DA6);
+      s.pulColor = createMaterialColor(0xFF942DA7);
       s.allowManualTimeInput = false;
       s.dateFormatString = 'yy:dd @ H:mm.ss';
       s.useExportCompatability = true;
@@ -121,9 +133,12 @@ void main() {
       s.diaWarn = 159; // depends on overrideWarnValues
       s.age = 26;
       s.overrideWarnValues = true;
+      s.validateInputs = false;
+      s.graphLineThickness = 5;
+      s.animationSpeed = 100;
+      s.confirmDeletion = true;
       
-      expect(i, 17);
+      expect(i, 21);
     });
-
   });
 }

@@ -101,22 +101,22 @@ class SettingsPage extends StatelessWidget {
                     stepSize: 50,
                   ),
                   ColorSelectionSettingsTile(
-                      onMainColorChanged: (color) => settings.accentColor = settings.createMaterialColor((color ?? Colors.teal).value),
+                      onMainColorChanged: (color) => settings.accentColor = createMaterialColor((color ?? Colors.teal).value),
                       initialColor: settings.accentColor,
                       title: const Text('theme color')
                   ),
                   ColorSelectionSettingsTile(
-                      onMainColorChanged: (color) => settings.sysColor = settings.createMaterialColor((color ?? Colors.green).value),
+                      onMainColorChanged: (color) => settings.sysColor = createMaterialColor((color ?? Colors.green).value),
                       initialColor: settings.sysColor,
                       title: const Text('systolic color')
                   ),
                   ColorSelectionSettingsTile(
-                      onMainColorChanged: (color) => settings.diaColor = settings.createMaterialColor((color ?? Colors.teal).value),
+                      onMainColorChanged: (color) => settings.diaColor = createMaterialColor((color ?? Colors.teal).value),
                       initialColor: settings.diaColor,
                       title: const Text('diastolic color')
                   ),
                   ColorSelectionSettingsTile(
-                      onMainColorChanged: (color) => settings.pulColor = settings.createMaterialColor((color ?? Colors.red).value),
+                      onMainColorChanged: (color) => settings.pulColor = createMaterialColor((color ?? Colors.red).value),
                       initialColor: settings.pulColor,
                       title: const Text('pulse color')
                   ),
