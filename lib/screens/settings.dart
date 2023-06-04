@@ -297,7 +297,7 @@ class SettingsPage extends StatelessWidget {
                         });
                       } on Exception catch (e) {
                         ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text('unknown error')));
+                            SnackBar(content: Text('error: ${e.toString()}')));
                       }
                     },
                   ),

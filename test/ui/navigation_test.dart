@@ -6,7 +6,6 @@ import 'package:blood_pressure_app/screens/add_measurement.dart';
 import 'package:blood_pressure_app/screens/settings.dart';
 import 'package:blood_pressure_app/screens/statistics.dart';
 import 'package:blood_pressure_app/screens/subsettings/enter_timeformat.dart';
-import 'package:blood_pressure_app/screens/subsettings/warn_about.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:provider/provider.dart';
