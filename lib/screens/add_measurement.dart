@@ -102,6 +102,7 @@ class _AddMeasurementPageState extends State<AddMeasurementPage> {
                 Consumer<Settings>(
                   builder: (context, settings, child) {
                     return TextFormField(
+                      key: const Key('txtSys'),
                       initialValue: widget.isEdit ? _systolic.toString() : '',
                       decoration: const InputDecoration(
                           hintText: 'systolic'
@@ -137,6 +138,7 @@ class _AddMeasurementPageState extends State<AddMeasurementPage> {
                 Consumer<Settings>(
                   builder: (context, settings, child) {
                     return TextFormField(
+                      key: const Key('txtDia'),
                       initialValue: widget.isEdit ? _diastolic.toString() : '',
                       decoration: const InputDecoration(
                           hintText: 'diastolic'
@@ -171,6 +173,7 @@ class _AddMeasurementPageState extends State<AddMeasurementPage> {
                 Consumer<Settings>(
                   builder: (context, settings, child) {
                     return TextFormField(
+                      key: const Key('txtPul'),
                       initialValue: widget.isEdit ? _pulse.toString() : '',
                       decoration: const InputDecoration(
                           hintText: 'pulse'
@@ -218,33 +221,35 @@ class _AddMeasurementPageState extends State<AddMeasurementPage> {
                 Row(
                   children: [
                     ElevatedButton(
-                        onPressed: () {
-                          if (widget.isEdit) {
-                            Provider.of<BloodPressureModel>(context, listen: false).add(
-                                BloodPressureRecord(widget.initTime ?? DateTime.now(), widget.initSys, widget.initDia, widget.initPul, widget.initNote)
-                            );
-                          }
-                          Navigator.of(context).pop();
-                        },
-                        style: ElevatedButton.styleFrom(
-                            backgroundColor: Theme.of(context).unselectedWidgetColor
-                        ),
-                        child: const Text('CANCEL')
+                      key: const Key('btnCancel'),
+                      onPressed: () {
+                        if (widget.isEdit) {
+                          Provider.of<BloodPressureModel>(context, listen: false).add(
+                              BloodPressureRecord(widget.initTime ?? DateTime.now(), widget.initSys, widget.initDia, widget.initPul, widget.initNote)
+                          );
+                        }
+                        Navigator.of(context).pop();
+                      },
+                      style: ElevatedButton.styleFrom(
+                          backgroundColor: Theme.of(context).unselectedWidgetColor
+                      ),
+                      child: const Text('CANCEL')
                     ),
                     const Spacer(),
                     ElevatedButton(
-                        onPressed: () {
-                          if (_formKey.currentState!.validate()) {
-                            Provider.of<BloodPressureModel>(context, listen: false).add(
-                                BloodPressureRecord(_time, _systolic, _diastolic, _pulse, _note)
-                            );
-                            Navigator.of(context).pop();
-                          }
-                        },
-                        style: ElevatedButton.styleFrom(
-                            backgroundColor: Theme.of(context).primaryColor
-                        ),
-                        child: const Text('SAVE')
+                      key: const Key('btnSave'),
+                      onPressed: () {
+                        if (_formKey.currentState!.validate()) {
+                          Provider.of<BloodPressureModel>(context, listen: false).add(
+                              BloodPressureRecord(_time, _systolic, _diastolic, _pulse, _note)
+                          );
+                          Navigator.of(context).pop();
+                        }
+                      },
+                      style: ElevatedButton.styleFrom(
+                          backgroundColor: Theme.of(context).primaryColor
+                      ),
+                      child: const Text('SAVE')
                     )
                   ],
                 )

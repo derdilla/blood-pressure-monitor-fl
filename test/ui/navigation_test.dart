@@ -14,8 +14,8 @@ import 'package:mockito/mockito.dart';
 class MockNavigatorObserver extends Mock implements NavigatorObserver {}
 
 void main() {
-  group('navigation', () {
-    testWidgets('should navigate to measurements page', (widgetTester) async {
+  group('start page', () {
+    testWidgets('should navigate to add measurements page', (widgetTester) async {
       await _pumpAppRoot(widgetTester);
       expect(find.byIcon(Icons.add), findsOneWidget);
       await widgetTester.tap(find.byIcon(Icons.add));
@@ -40,6 +40,27 @@ void main() {
       expect(find.byType(StatisticsPage), findsOneWidget);
     });
   });
+  group('add measurement page', () {
+    testWidgets('should cancel', (widgetTester) async {
+      await _pumpAppRoot(widgetTester);
+      expect(find.byIcon(Icons.add), findsOneWidget);
+      await widgetTester.tap(find.byIcon(Icons.add));
+      await widgetTester.pumpAndSettle();
+
+      expect(find.byType(AddMeasurementPage), findsOneWidget);
+      expect(find.byKey(const Key('btnCancel')), findsOneWidget);
+
+      await widgetTester.tap(find.byKey(const Key('btnCancel')));
+      await widgetTester.pumpAndSettle();
+      expect(find.byType(AddMeasurementPage), findsNothing);
+    });
+    testWidgets('should submit', (widgetTester) async {
+      await _pumpAppRoot(widgetTester);
+      await _addMeasurementThroughPage(widgetTester, 100, 70, 60);
+
+      expect(find.byType(AddMeasurementPage), findsNothing);
+    });
+  });
 }
 
 Future<void> _pumpAppRoot(WidgetTester widgetTester) async {
@@ -55,4 +76,26 @@ Future<void> _pumpAppRoot(WidgetTester widgetTester) async {
           child: const AppRoot()
       )
   );
+}
+
+// starts at AppRoot, ends at AppRoot
+Future<void> _addMeasurementThroughPage(WidgetTester widgetTester, int sys, int dia, int pul) async {
+  expect(find.byType(AppRoot), findsOneWidget);
+  expect(find.byIcon(Icons.add), findsOneWidget);
+  await widgetTester.tap(find.byIcon(Icons.add));
+  await widgetTester.pumpAndSettle();
+  
+  expect(find.byType(AddMeasurementPage), findsOneWidget);
+
+  expect(find.byKey(const Key('txtSys')), findsOneWidget);
+  expect(find.byKey(const Key('txtDia')), findsOneWidget);
+  expect(find.byKey(const Key('txtPul')), findsOneWidget);
+  expect(find.byKey(const Key('btnSave')), findsOneWidget);
+
+  await widgetTester.enterText(find.byKey(const Key('txtSys')), sys.toString());
+  await widgetTester.enterText(find.byKey(const Key('txtDia')), dia.toString());
+  await widgetTester.enterText(find.byKey(const Key('txtPul')), pul.toString());
+
+  await widgetTester.tap(find.byKey(const Key('btnSave')));
+  await widgetTester.pumpAndSettle();
 }
