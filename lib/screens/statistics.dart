@@ -234,25 +234,31 @@ class StatisticsRow extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        const Spacer(),
-        Statistic(
-          smallEdges: true,
-          caption: caption1,
-          child: child1,
+        const SizedBox(width: 20,),
+        Expanded(
+          child: Statistic(
+            smallEdges: true,
+            caption: caption1,
+            child: child1,
+          ),
         ),
-        const Spacer(),
-        Statistic(
-          smallEdges: true,
-          caption: caption2,
-          child: child2,
+        const SizedBox(width: 10,),
+        Expanded(
+          child: Statistic(
+            smallEdges: true,
+            caption: caption2,
+            child: child2,
+          ),
         ),
-        const Spacer(),
-        Statistic(
-          smallEdges: true,
-          caption: caption3,
-          child: child3,
+        const SizedBox(width: 10,),
+        Expanded(
+          child: Statistic(
+            smallEdges: true,
+            caption: caption3,
+            child: child3,
+          ),
         ),
-        const Spacer(),
+        const SizedBox(width: 20,),
       ],
     );
   }

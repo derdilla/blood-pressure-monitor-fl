@@ -26,6 +26,7 @@ class SettingsPage extends StatelessWidget {
                 title: const Text('layout'),
                 children: [
                   SwitchSettingsTile(
+                    key: const Key('allowManualTimeInput'),
                     initialValue: settings.allowManualTimeInput,
                     onToggle: (value) {
                       settings.allowManualTimeInput = value;
@@ -34,6 +35,7 @@ class SettingsPage extends StatelessWidget {
                     title: const Text('allow manual time input')
                   ),
                   SettingsTile(
+                    key: const Key('EnterTimeFormatScreen'),
                     title: const Text('time format'),
                     leading: const Icon(Icons.schedule),
                     trailing: Icon(Icons.arrow_forward_ios, color: Theme.of(context).highlightColor,),
@@ -46,6 +48,7 @@ class SettingsPage extends StatelessWidget {
                     },
                   ),
                   SwitchSettingsTile(
+                      key: const Key('followSystemDarkMode'),
                       initialValue: settings.followSystemDarkMode,
                       onToggle: (value) {
                         settings.followSystemDarkMode = value;
@@ -54,6 +57,7 @@ class SettingsPage extends StatelessWidget {
                       title: const Text('follow system dark mode')
                   ),
                   SwitchSettingsTile(
+                    key: const Key('darkMode'),
                     initialValue: (() {
                       if (settings.followSystemDarkMode) {
                         return MediaQuery.of(context).platformBrightness == Brightness.dark;
@@ -68,6 +72,7 @@ class SettingsPage extends StatelessWidget {
                     disabled: settings.followSystemDarkMode,
                   ),
                   SliderSettingsTile(
+                    key: const Key('iconSize'),
                     title: const Text('icon size'),
                     leading: const Icon(Icons.zoom_in),
                     onChanged: (double value) {
@@ -79,6 +84,7 @@ class SettingsPage extends StatelessWidget {
                     stepSize: 5,
                   ),
                   SliderSettingsTile(
+                    key: const Key('graphLineThickness'),
                     title: const Text('line thickness'),
                     leading: const Icon(Icons.line_weight),
                     onChanged: (double value) {
@@ -90,6 +96,7 @@ class SettingsPage extends StatelessWidget {
                     stepSize: 1,
                   ),
                   SliderSettingsTile(
+                    key: const Key('animationSpeed'),
                     title: const Text('animation duration'),
                     leading: const Icon(Icons.speed),
                     onChanged: (double value) {
@@ -101,22 +108,26 @@ class SettingsPage extends StatelessWidget {
                     stepSize: 50,
                   ),
                   ColorSelectionSettingsTile(
-                      onMainColorChanged: (color) => settings.accentColor = settings.createMaterialColor((color ?? Colors.teal).value),
+                      key: const Key('accentColor'),
+                      onMainColorChanged: (color) => settings.accentColor = createMaterialColor((color ?? Colors.teal).value),
                       initialColor: settings.accentColor,
                       title: const Text('theme color')
                   ),
                   ColorSelectionSettingsTile(
-                      onMainColorChanged: (color) => settings.sysColor = settings.createMaterialColor((color ?? Colors.green).value),
+                      key: const Key('sysColor'),
+                      onMainColorChanged: (color) => settings.sysColor = createMaterialColor((color ?? Colors.green).value),
                       initialColor: settings.sysColor,
                       title: const Text('systolic color')
                   ),
                   ColorSelectionSettingsTile(
-                      onMainColorChanged: (color) => settings.diaColor = settings.createMaterialColor((color ?? Colors.teal).value),
+                      key: const Key('diaColor'),
+                      onMainColorChanged: (color) => settings.diaColor = createMaterialColor((color ?? Colors.teal).value),
                       initialColor: settings.diaColor,
                       title: const Text('diastolic color')
                   ),
                   ColorSelectionSettingsTile(
-                      onMainColorChanged: (color) => settings.pulColor = settings.createMaterialColor((color ?? Colors.red).value),
+                      key: const Key('pulColor'),
+                      onMainColorChanged: (color) => settings.pulColor = createMaterialColor((color ?? Colors.red).value),
                       initialColor: settings.pulColor,
                       title: const Text('pulse color')
                   ),
@@ -126,6 +137,7 @@ class SettingsPage extends StatelessWidget {
                   title: const Text('behavior'),
                   children: [
                     SwitchSettingsTile(
+                        key: const Key('validateInputs'),
                         initialValue: settings.validateInputs,
                         title: const Text('validate inputs'),
                         leading: const Icon(Icons.edit),
@@ -134,6 +146,7 @@ class SettingsPage extends StatelessWidget {
                         }
                     ),
                     SwitchSettingsTile(
+                        key: const Key('confirmDeletion'),
                         initialValue: settings.confirmDeletion,
                         title: const Text('confirm deletion'),
                         leading: const Icon(Icons.check),
@@ -142,6 +155,7 @@ class SettingsPage extends StatelessWidget {
                         }
                     ),
                     InputSettingsTile(
+                      key: const Key('age'),
                       title: const Text('age'),
                       description: const Text('determines warn values'),
                       leading: const Icon(Icons.manage_accounts_outlined),
@@ -167,6 +181,7 @@ class SettingsPage extends StatelessWidget {
                       // would cause unexpected jumps in layout
                     ),
                     SettingsTile(
+                        key: const Key('AboutWarnValuesScreen'),
                         title: const Text('about'),
                         description: const Text('more information on warn values'),
                         leading: const Icon(Icons.info_outline),
@@ -178,6 +193,7 @@ class SettingsPage extends StatelessWidget {
                         }
                     ),
                     SwitchSettingsTile(
+                      key: const Key('overrideWarnValues'),
                       initialValue: settings.overrideWarnValues,
                       onToggle: (value) {
                         settings.overrideWarnValues = value;
@@ -186,6 +202,7 @@ class SettingsPage extends StatelessWidget {
                       title: const Text('override warn values'),
                     ),
                     InputSettingsTile(
+                      key: const Key('sysWarn'),
                       title: const Text('systolic warn'),
                       leading: const Icon(Icons.settings_applications_outlined),
                       keyboardType: TextInputType.number,
@@ -208,6 +225,7 @@ class SettingsPage extends StatelessWidget {
                       disabled: !settings.overrideWarnValues,
                     ),
                     InputSettingsTile(
+                      key: const Key('diaWarn'),
                       title: const Text('diastolic warn'),
                       leading: const Icon(Icons.settings_applications_outlined),
                       keyboardType: TextInputType.number,
@@ -235,6 +253,7 @@ class SettingsPage extends StatelessWidget {
                 title: const Text('data'),
                 children: [
                   SwitchSettingsTile(
+                      key: const Key('useExportCompatability'),
                       initialValue: settings.useExportCompatability,
                       title: const Text('compatability export'),
                       description: const Text('sets export mime type to text'),
@@ -244,6 +263,7 @@ class SettingsPage extends StatelessWidget {
                       }
                   ),
                   SettingsTile(
+                    key: const Key('export'),
                     title: const Text('export'),
                     leading: const Icon(Icons.save),
                     onPressed: (context) =>  Provider.of<BloodPressureModel>(context, listen: false).save((success, msg) {
@@ -258,6 +278,7 @@ class SettingsPage extends StatelessWidget {
                         , exportAsText: settings.useExportCompatability),
                   ),
                   SettingsTile(
+                    key: const Key('import'),
                     title: const Text('import'),
                     leading: const Icon(Icons.file_upload),
                     onPressed: (context) {
@@ -276,7 +297,7 @@ class SettingsPage extends StatelessWidget {
                         });
                       } on Exception catch (e) {
                         ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text('unknown error')));
+                            SnackBar(content: Text('error: ${e.toString()}')));
                       }
                     },
                   ),
@@ -286,6 +307,7 @@ class SettingsPage extends StatelessWidget {
                   title: const Text('about'),
                   children: [
                     SettingsTile(
+                      key: const Key('sourceCode'),
                       title: const Text('source code'),
                       leading: const Icon(Icons.merge),
                       onPressed: (context) async {
@@ -300,6 +322,7 @@ class SettingsPage extends StatelessWidget {
                         },
                     ),
                     SettingsTile(
+                      key: const Key('licenses'),
                       title: const Text('3rd party licenses'),
                       leading: const Icon(Icons.policy_outlined),
                       trailing: Icon(Icons.arrow_forward_ios, color: Theme.of(context).highlightColor,),

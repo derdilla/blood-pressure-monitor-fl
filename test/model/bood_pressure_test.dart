@@ -2,7 +2,7 @@ import 'package:blood_pressure_app/model/blood_pressure.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
-import '../ram_only_implementations.dart';
+import 'package:blood_pressure_app/model/ram_only_implementations.dart';
 
 void main() {
   group('BloodPressureRecord', () {
