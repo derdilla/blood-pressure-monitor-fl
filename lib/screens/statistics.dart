@@ -1,4 +1,5 @@
 import 'package:blood_pressure_app/model/blood_pressure.dart';
+import 'package:blood_pressure_app/model/blood_pressure_analyzer.dart';
 import 'package:blood_pressure_app/model/settings_store.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
@@ -38,7 +39,7 @@ class StatisticsPage extends StatelessWidget {
                     ),
                     Statistic(
                         caption: const Text('Measurements per Day'),
-                        child: futureInt(model.measurementsPerDay)
+                        child: futureInt(BloodPressureAnalyser(model).measurementsPerDay)
                     ),
                     StatisticsRow(
                       caption2: Text('Diastolic min.',
@@ -66,7 +67,7 @@ class StatisticsPage extends StatelessWidget {
                     Statistic(
                       caption: const Text('Time-Resolved Metrics'),
                       child: FutureBuilder<List<List<int>>>(
-                          future: model.allAvgsRelativeToDaytime,
+                          future: BloodPressureAnalyser(model).allAvgsRelativeToDaytime,
                           builder: (BuildContext context, AsyncSnapshot<List<
                               List<int>>> snapshot) {
                             switch (snapshot.connectionState) {
@@ -233,25 +234,31 @@ class StatisticsRow extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        const Spacer(),
-        Statistic(
-          smallEdges: true,
-          caption: caption1,
-          child: child1,
+        const SizedBox(width: 20,),
+        Expanded(
+          child: Statistic(
+            smallEdges: true,
+            caption: caption1,
+            child: child1,
+          ),
         ),
-        const Spacer(),
-        Statistic(
-          smallEdges: true,
-          caption: caption2,
-          child: child2,
+        const SizedBox(width: 10,),
+        Expanded(
+          child: Statistic(
+            smallEdges: true,
+            caption: caption2,
+            child: child2,
+          ),
         ),
-        const Spacer(),
-        Statistic(
-          smallEdges: true,
-          caption: caption3,
-          child: child3,
+        const SizedBox(width: 10,),
+        Expanded(
+          child: Statistic(
+            smallEdges: true,
+            caption: caption3,
+            child: child3,
+          ),
         ),
-        const Spacer(),
+        const SizedBox(width: 20,),
       ],
     );
   }

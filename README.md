@@ -4,7 +4,7 @@
 
 
 <h1 align="center"> blood pressure monitor </h1>
-<p align="center">
+<div align="center">
   <a href="[https://github.com/NobodyForNothing/blood-pressure-monitor-fl/actions/workflows/CI.yml">
     <img src="https://github.com/NobodyForNothing/blood-pressure-monitor-fl/actions/workflows/CI.yml/badge.svg" alt="CI status" />
   </a>
@@ -14,6 +14,10 @@
   <img alt="GitHub last commit" src="https://img.shields.io/github/last-commit/NobodyForNothing/blood-pressure-monitor-fl">
   <img alt="GitHub Repo stars" src="https://img.shields.io/github/stars/NobodyForNothing/blood-pressure-monitor-fl">
   <img alt="GitHub watchers" src="https://img.shields.io/github/watchers/NobodyForNothing/blood-pressure-monitor-fl">
+</div>
+<div align="center">
+  <a><img alt="F-Droid" height=40 src="https://gitlab.com/fdroid/artwork/-/raw/master/fdroid-logo-2015/available-on-fdroid.svg"></a>
+  <a href='https://play.google.com/store/apps/details?id=com.derdilla.bloodPressureApp&pcampaignid=pcampaignidMKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img height=45 alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png'/></a>
 </div>
 <p align="center">
   A cross-platform app to save and analyze blood pressure values and allows easy data export
@@ -27,18 +31,15 @@ This application allows you to easily store your records and export all your rec
 ### Android
 
 #### Play Store
-This app is available in the Google [Play Store](https://play.google.com/store/apps/details?id=com.derdilla.bloodPressureApp&hl=en-US&ah=OCOjPuu-d1n3CfovAYWnjcrk1d4). 
+This app is available in the Google [Play Store](https://play.google.com/store/apps/details?id=com.derdilla.bloodPressureApp). 
 
 Please note that when switching from another installation source, you first need to uninstall the old app before you can get updates. **Making a manual backup is required to avoid data loss.**
 
+#### Fdroid
+This app is available on [F-Droid](https://f-droid.org/en/packages/com.derdilla.bloodPressureApp/). 
+
 #### GitHub
 You can download and install the APK directly through the Releases page. Keep in mind that you have to regulary check for new versions manually.
-
-#### Fdroid
-Attention: The old version of the app on the IzzyOnDroid repository is marked for removal and it is necessary to export the data through the in-app settings menu and reimport it in the version from the main repo.
-
-It may take a few days until it is available.
-
 
 ### I-OS
 While building an ios app would be no problem code wise, apple's restrictive behavior makes this more complicated (and expensive). So I wont take this step unless there is significant demand. 

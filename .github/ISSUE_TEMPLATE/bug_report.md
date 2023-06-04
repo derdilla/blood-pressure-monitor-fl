@@ -6,10 +6,6 @@ labels: bug
 assignees: ''
 
 ---
-
-**What you expected**
-
 **What happened**
 
-**Additional context**
-Add any other context about the problem here.
+**ideas**
