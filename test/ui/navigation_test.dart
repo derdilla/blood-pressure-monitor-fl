@@ -5,6 +5,8 @@ import 'package:blood_pressure_app/model/settings_store.dart';
 import 'package:blood_pressure_app/screens/add_measurement.dart';
 import 'package:blood_pressure_app/screens/settings.dart';
 import 'package:blood_pressure_app/screens/statistics.dart';
+import 'package:blood_pressure_app/screens/subsettings/enter_timeformat.dart';
+import 'package:blood_pressure_app/screens/subsettings/warn_about.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:provider/provider.dart';
@@ -60,6 +62,23 @@ void main() {
 
       expect(find.byType(AddMeasurementPage), findsNothing);
     });
+  });
+  group('settings page', () {
+    testWidgets('open EnterTimeFormatScreen', (widgetTester) async {
+      await _pumpAppRoot(widgetTester);
+      expect(find.byIcon(Icons.settings), findsOneWidget);
+      await widgetTester.tap(find.byIcon(Icons.settings));
+      await widgetTester.pumpAndSettle();
+
+      expect(find.byType(SettingsPage), findsOneWidget);
+      expect(find.byType(EnterTimeFormatScreen), findsNothing);
+      expect(find.byKey(const Key('EnterTimeFormatScreen')), findsOneWidget);
+      await widgetTester.tap(find.byKey(const Key('EnterTimeFormatScreen')));
+      await widgetTester.pumpAndSettle();
+
+      expect(find.byType(EnterTimeFormatScreen), findsOneWidget);
+    });
+    // ...
   });
 }
 
