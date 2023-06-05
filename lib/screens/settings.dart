@@ -97,27 +97,39 @@ class SettingsPage extends StatelessWidget {
                   ),
                   SliderSettingsTile(
                     key: const Key('animationSpeed'),
-                    title: const Text('animation duration'),
-                    leading: const Icon(Icons.speed),
-                    onChanged: (double value) {
-                      settings.animationSpeed = value.toInt();
-                    },
-                    initialValue: settings.animationSpeed.toDouble(),
-                    start: 0,
-                    end: 1000,
-                    stepSize: 50,
-                  ),
-                  ColorSelectionSettingsTile(
-                      key: const Key('accentColor'),
-                      onMainColorChanged: (color) => settings.accentColor = createMaterialColor((color ?? Colors.teal).value),
-                      initialColor: settings.accentColor,
-                      title: const Text('theme color')
-                  ),
-                  ColorSelectionSettingsTile(
-                      key: const Key('sysColor'),
-                      onMainColorChanged: (color) => settings.sysColor = createMaterialColor((color ?? Colors.green).value),
-                      initialColor: settings.sysColor,
-                      title: const Text('systolic color')
+                title: const Text('animation duration'),
+                leading: const Icon(Icons.speed),
+                onChanged: (double value) {
+                  settings.animationSpeed = value.toInt();
+                },
+                initialValue: settings.animationSpeed.toDouble(),
+                start: 0,
+                end: 1000,
+                stepSize: 50,
+              ),
+              SliderSettingsTile(
+                key: const Key('graphTitlesCount'),
+                title: const Text('graph label count'),
+                leading: const Icon(Icons.functions),
+                onChanged: (double value) {
+                  settings.graphTitlesCount = value.toInt();
+                },
+                initialValue: settings.graphTitlesCount.toDouble(),
+                start: 2,
+                end: 10,
+                stepSize: 1,
+              ),
+              ColorSelectionSettingsTile(
+                  key: const Key('accentColor'),
+                  onMainColorChanged: (color) =>
+                      settings.accentColor = createMaterialColor((color ?? Colors.teal).value),
+                  initialColor: settings.accentColor,
+                  title: const Text('theme color')),
+              ColorSelectionSettingsTile(
+                  key: const Key('sysColor'),
+                  onMainColorChanged: (color) => settings.sysColor = createMaterialColor((color ?? Colors.green).value),
+                  initialColor: settings.sysColor,
+                  title: const Text('systolic color')
                   ),
                   ColorSelectionSettingsTile(
                       key: const Key('diaColor'),

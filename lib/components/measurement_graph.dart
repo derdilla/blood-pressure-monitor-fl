@@ -88,19 +88,22 @@ class _LineChartState extends State<_LineChart> {
                                                   // calculate new intervall
                                                   double graphWidth = meta.max - meta.min;
                                                   assert(graphWidth > 0);
-
-                                                  if ((graphWidth - 2) / 5 != _lineChartTitleIntervall) {
+                                                  if (((graphWidth - 2) / settings.graphTitlesCount) !=
+                                                      _lineChartTitleIntervall) {
+                                                    // simple hack needed to change the state during build
+                                                    // https://stackoverflow.com/a/63607696/21489239
                                                     Future.delayed(Duration.zero, () async {
                                                       setState(() {
-                                                        _lineChartTitleIntervall = (graphWidth - 2) / 5;
+                                                        _lineChartTitleIntervall =
+                                                            (graphWidth - 2) / settings.graphTitlesCount;
                                                       });
                                                     });
                                                   }
 
+                                                  // don't show fixed titles, as they are replaced by long dates below
                                                   if (meta.axisPosition <= 1 || pos >= meta.max) {
                                                     return const SizedBox.shrink();
                                                   }
-                                                  print(_lineChartTitleIntervall);
 
                                                   late final DateFormat formatter;
                                                   switch (settings.graphStepSize) {

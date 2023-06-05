@@ -234,8 +234,18 @@ class Settings extends ChangeNotifier {
   bool get confirmDeletion {
     return _prefs.getBool('confirmDeletion') ?? true;
   }
+
   set confirmDeletion(bool confirmDeletion) {
     _prefs.setBool('confirmDeletion', confirmDeletion);
+    notifyListeners();
+  }
+
+  int get graphTitlesCount {
+    return _prefs.getInt('titlesCount') ?? 5;
+  }
+
+  set graphTitlesCount(int newCount) {
+    _prefs.setInt('titlesCount', newCount);
     notifyListeners();
   }
 }

@@ -112,6 +112,7 @@ class RamSettings extends ChangeNotifier implements Settings {
   double _sysWarn = 120;
   bool _useExportCompatability = false;
   bool _validateInputs = true;
+  int _graphTitlesCount = 5;
 
   RamSettings() {
     _accentColor = createMaterialColor(0xFF009688);
@@ -316,6 +317,15 @@ class RamSettings extends ChangeNotifier implements Settings {
   @override
   set validateInputs(bool value) {
     _validateInputs = value;
+    notifyListeners();
+  }
+
+  @override
+  int get graphTitlesCount => _graphTitlesCount;
+
+  @override
+  set graphTitlesCount(int value) {
+    _graphTitlesCount = value;
     notifyListeners();
   }
 
