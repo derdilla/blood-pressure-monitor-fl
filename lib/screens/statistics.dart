@@ -139,7 +139,6 @@ class StatisticsPage extends StatelessWidget {
                         }
                       }),
                 ),
-                // TODO: Weekdays / Weekends
               ],
             );
           });

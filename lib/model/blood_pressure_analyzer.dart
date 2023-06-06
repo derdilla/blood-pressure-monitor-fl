@@ -25,84 +25,14 @@ class BloodPressureAnalyser {
   /// inner list index is hour of day ([0] -> 00:00-00:59; [1] -> ...)
   Future<List<List<int>>> get allAvgsRelativeToDaytime async {
     // setup vars
-    List<List<int>> allDiaValuesRelativeToTime = [
-      [],
-      [],
-      [],
-      [],
-      [],
-      [],
-      [],
-      [],
-      [],
-      [],
-      [],
-      [],
-      [],
-      [],
-      [],
-      [],
-      [],
-      [],
-      [],
-      [],
-      [],
-      [],
-      [],
-      []
-    ];
-    List<List<int>> allSysValuesRelativeToTime = [
-      [],
-      [],
-      [],
-      [],
-      [],
-      [],
-      [],
-      [],
-      [],
-      [],
-      [],
-      [],
-      [],
-      [],
-      [],
-      [],
-      [],
-      [],
-      [],
-      [],
-      [],
-      [],
-      [],
-      []
-    ];
-    List<List<int>> allPulValuesRelativeToTime = [
-      [],
-      [],
-      [],
-      [],
-      [],
-      [],
-      [],
-      [],
-      [],
-      [],
-      [],
-      [],
-      [],
-      [],
-      [],
-      [],
-      [],
-      [],
-      [],
-      [],
-      [],
-      [],
-      [],
-      []
-    ];
+    List<List<int>> allDiaValuesRelativeToTime = [];
+    List<List<int>> allSysValuesRelativeToTime = [];
+    List<List<int>> allPulValuesRelativeToTime = [];
+    for (int i = 0; i < 24; i++) {
+      allDiaValuesRelativeToTime.add([]);
+      allSysValuesRelativeToTime.add([]);
+      allPulValuesRelativeToTime.add([]);
+    }
 
     // sort all data
     final dbRes = await _model.all;
