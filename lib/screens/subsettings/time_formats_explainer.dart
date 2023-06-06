@@ -44,23 +44,19 @@ class TimeFormattingHelp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Date formatting'),
-        backgroundColor: Theme.of(context).primaryColor,
-      ),
-      body: Container(
-        padding: const EdgeInsets.all(20),
-        child: SingleChildScrollView(
-          child: Table(
-            columnWidths: const {
-              0: FlexColumnWidth(0.71),
-              1: FlexColumnWidth(0.29)
-            },
-            children: getRows(),
-          ),
+        appBar: AppBar(
+          title: const Text('Date formatting'),
+          backgroundColor: Theme.of(context).primaryColor,
         ),
-      )
-    );
+        body: Container(
+          padding: const EdgeInsets.all(20),
+          child: SingleChildScrollView(
+            child: Table(
+              columnWidths: const {0: FlexColumnWidth(0.71), 1: FlexColumnWidth(0.29)},
+              children: getRows(),
+            ),
+          ),
+        ));
   }
 
   List<TableRow> getRows() {
@@ -69,14 +65,8 @@ class TimeFormattingHelp extends StatelessWidget {
     for (int i = 1; i < lines.length; i++) {
       List<String> values = lines[i].trim().split(RegExp(r'\s{2,}'));
 
-      rowsOut.add(TableRow(
-          children: [
-            Text(values[0]),
-            Text(values[1])
-          ]
-      ));
+      rowsOut.add(TableRow(children: [Text(values[0]), Text(values[1])]));
     }
     return rowsOut;
   }
-
 }

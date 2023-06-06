@@ -18,12 +18,14 @@ void main() {
     });
   });
 
-  group('Settings model',() {
+  group('Settings model', () {
     // setup db path
     databaseFactory = databaseFactoryFfi;
 
     test('should initialize', () async {
-      expect(() async { await Settings.create(); }, returnsNormally);
+      expect(() async {
+        await Settings.create();
+      }, returnsNormally);
     });
 
     test('fields defaults should be set after initialization', () async {
@@ -147,12 +149,14 @@ void main() {
     });
   });
 
-  group('RamSettings model',() {
+  group('RamSettings model', () {
     // setup db path
     databaseFactory = databaseFactoryFfi;
 
     test('should initialize', () async {
-      expect(() async { RamSettings(); }, returnsNormally);
+      expect(() async {
+        RamSettings();
+      }, returnsNormally);
     });
 
     test('fields defaults should be set after initialization', () async {

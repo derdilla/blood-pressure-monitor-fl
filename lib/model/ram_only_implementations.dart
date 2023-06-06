@@ -21,7 +21,7 @@ class RamBloodPressureModel extends ChangeNotifier implements BloodPressureModel
   @override
   Future<UnmodifiableListView<BloodPressureRecord>> getInTimeRange(DateTime from, DateTime to) async {
     List<BloodPressureRecord> recordsInTime = [];
-    for(final e in _records) {
+    for (final e in _records) {
       if (e.creationTime.isAfter(from) && e.creationTime.isBefore(to)) {
         recordsInTime.add(e);
       }
@@ -36,31 +36,31 @@ class RamBloodPressureModel extends ChangeNotifier implements BloodPressureModel
   Future<int> get count async => _records.length;
 
   @override
-  Future<int> get avgDia async => _records.map((e) => e.diastolic).reduce((a, b) => a+b) ~/ _records.length;
+  Future<int> get avgDia async => _records.map((e) => e.diastolic).reduce((a, b) => a + b) ~/ _records.length;
 
   @override
-  Future<int> get avgPul async => _records.map((e) => e.pulse).reduce((a, b) => a+b) ~/ _records.length;
+  Future<int> get avgPul async => _records.map((e) => e.pulse).reduce((a, b) => a + b) ~/ _records.length;
 
   @override
-  Future<int> get avgSys async => _records.map((e) => e.systolic).reduce((a, b) => a+b) ~/ _records.length;
+  Future<int> get avgSys async => _records.map((e) => e.systolic).reduce((a, b) => a + b) ~/ _records.length;
 
   @override
-  Future<int> get maxDia async => _records.reduce((a,b) => (a.diastolic>=b.diastolic) ? a : b).diastolic;
+  Future<int> get maxDia async => _records.reduce((a, b) => (a.diastolic >= b.diastolic) ? a : b).diastolic;
 
   @override
-  Future<int> get maxPul async => _records.reduce((a,b) => (a.pulse>=b.pulse) ? a : b).pulse;
+  Future<int> get maxPul async => _records.reduce((a, b) => (a.pulse >= b.pulse) ? a : b).pulse;
 
   @override
-  Future<int> get maxSys async => _records.reduce((a,b) => (a.systolic>=b.systolic) ? a : b).systolic;
+  Future<int> get maxSys async => _records.reduce((a, b) => (a.systolic >= b.systolic) ? a : b).systolic;
 
   @override
-  Future<int> get minDia async => _records.reduce((a,b) => (a.diastolic<=b.diastolic) ? a : b).diastolic;
+  Future<int> get minDia async => _records.reduce((a, b) => (a.diastolic <= b.diastolic) ? a : b).diastolic;
 
   @override
-  Future<int> get minPul async => _records.reduce((a,b) => (a.pulse<=b.pulse) ? a : b).pulse;
+  Future<int> get minPul async => _records.reduce((a, b) => (a.pulse <= b.pulse) ? a : b).pulse;
 
   @override
-  Future<int> get minSys async => _records.reduce((a,b) => (a.systolic<=b.systolic) ? a : b).systolic;
+  Future<int> get minSys async => _records.reduce((a, b) => (a.systolic <= b.systolic) ? a : b).systolic;
 
   @override
   Future<DateTime> get firstDay async {
@@ -128,6 +128,7 @@ class RamSettings extends ChangeNotifier implements Settings {
     }
     return _diaWarn;
   }
+
   @override
   set diaWarn(double newWarn) {
     _diaWarn = newWarn;
@@ -138,6 +139,7 @@ class RamSettings extends ChangeNotifier implements Settings {
   DateTime get displayDataStart {
     return _displayDataStart ?? getMostRecentDisplayIntervall()[0];
   }
+
   @override
   set displayDataStart(DateTime newGraphStart) {
     _displayDataStart = newGraphStart;
@@ -148,6 +150,7 @@ class RamSettings extends ChangeNotifier implements Settings {
   DateTime get displayDataEnd {
     return _displayDataEnd ?? getMostRecentDisplayIntervall()[1];
   }
+
   @override
   set displayDataEnd(DateTime newGraphEnd) {
     _displayDataEnd = newGraphEnd;
@@ -161,6 +164,7 @@ class RamSettings extends ChangeNotifier implements Settings {
     }
     return _sysWarn;
   }
+
   @override
   set sysWarn(double newWarn) {
     _sysWarn = newWarn;
@@ -340,7 +344,7 @@ class RamSettings extends ChangeNotifier implements Settings {
   @override
   void moveDisplayDataByStep(int directionalStep) {
     final oldStart = displayDataStart;
-    final oldEnd =displayDataEnd;
+    final oldEnd = displayDataEnd;
     switch (graphStepSize) {
       case TimeStep.day:
         displayDataStart = oldStart.copyWith(day: oldStart.day + directionalStep);
@@ -377,17 +381,17 @@ class RamSettings extends ChangeNotifier implements Settings {
         return [start, start.copyWith(day: start.day + DateTime.sunday)]; // end of sunday
       case TimeStep.month:
         final start = DateTime(now.year, now.month);
-        return [start,  start.copyWith(month: now.month + 1)];
+        return [start, start.copyWith(month: now.month + 1)];
       case TimeStep.year:
         final start = DateTime(now.year);
-        return [start,  start.copyWith(year: now.year + 1)];
+        return [start, start.copyWith(year: now.year + 1)];
       case TimeStep.lifetime:
         final start = DateTime.fromMillisecondsSinceEpoch(0);
-        return [start,  now];
+        return [start, now];
       default:
         assert(false);
         final start = DateTime.fromMillisecondsSinceEpoch(0);
-        return [start,  now];
+        return [start, now];
     }
   }
 }

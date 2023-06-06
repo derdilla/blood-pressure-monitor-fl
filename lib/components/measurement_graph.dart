@@ -189,26 +189,30 @@ class MeasurementGraph extends StatelessWidget {
         padding: const EdgeInsets.only(right: 16, left: 6, top: 2),
         child: Column(
           children: [
-            const SizedBox(height: 20,),
-            _LineChart(height: height-100),
-            const SizedBox(height: 2,),
-            Consumer<Settings>(
-                builder: (context, settings, child) {
-                  final formatter = DateFormat(settings.dateFormatString);
-                  return Row(
-                    children: [
-                      (settings.graphStepSize == TimeStep.lifetime) ?
-                          const Text('-') :
-                          Text(formatter.format(settings.displayDataStart)),
-                      const Spacer(),
-                      (settings.graphStepSize == TimeStep.lifetime) ?
-                        const Text('now') :
-                        Text(formatter.format(settings.displayDataEnd)),
-                    ],
-                  );
-                }
+            const SizedBox(
+              height: 20,
             ),
-            const SizedBox(height: 2,),
+            _LineChart(height: height - 100),
+            const SizedBox(
+              height: 2,
+            ),
+            Consumer<Settings>(builder: (context, settings, child) {
+              final formatter = DateFormat(settings.dateFormatString);
+              return Row(
+                children: [
+                  (settings.graphStepSize == TimeStep.lifetime)
+                      ? const Text('-')
+                      : Text(formatter.format(settings.displayDataStart)),
+                  const Spacer(),
+                  (settings.graphStepSize == TimeStep.lifetime)
+                      ? const Text('now')
+                      : Text(formatter.format(settings.displayDataEnd)),
+                ],
+              );
+            }),
+            const SizedBox(
+              height: 2,
+            ),
             const IntervalPicker()
           ],
         ),
