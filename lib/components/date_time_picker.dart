@@ -11,12 +11,7 @@ Future<DateTime?> showDateTimePicker({
   lastDate ??= firstDate.add(const Duration(days: 365 * 200));
 
   final DateTime? selectedDate = await showDatePicker(
-      context: context,
-      initialDate: initialDate,
-      firstDate: firstDate,
-      lastDate: lastDate,
-      confirmText: 'NEXT'
-  );
+      context: context, initialDate: initialDate, firstDate: firstDate, lastDate: lastDate, confirmText: 'NEXT');
 
   if (selectedDate == null) return null;
   if (!context.mounted) return null;
@@ -29,10 +24,10 @@ Future<DateTime?> showDateTimePicker({
   return selectedTime == null
       ? selectedDate
       : DateTime(
-    selectedDate.year,
-    selectedDate.month,
-    selectedDate.day,
-    selectedTime.hour,
-    selectedTime.minute,
-  );
+          selectedDate.year,
+          selectedDate.month,
+          selectedDate.day,
+          selectedTime.hour,
+          selectedTime.minute,
+        );
 }

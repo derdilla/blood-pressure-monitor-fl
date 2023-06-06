@@ -10,7 +10,14 @@ class SettingsTile extends StatelessWidget {
   final Widget? trailing;
   final bool disabled;
 
-  const SettingsTile({super.key, required this.title, this.leading, this.trailing, required this.onPressed, this.description, this.disabled = false});
+  const SettingsTile(
+      {super.key,
+      required this.title,
+      this.leading,
+      this.trailing,
+      required this.onPressed,
+      this.description,
+      this.disabled = false});
 
   @override
   Widget build(BuildContext context) {
@@ -29,27 +36,28 @@ class SettingsTile extends StatelessWidget {
         child: Row(
           children: [
             lead,
-            const SizedBox(width: 15,),
+            const SizedBox(
+              width: 15,
+            ),
             SizedBox(
               child: (() {
-              if (description != null) {
-                return Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    title,
-                    Flexible(
-                        child: DefaultTextStyle(
-                            style: const TextStyle(color: Colors.grey),
-                            overflow: TextOverflow.visible,
-                            child: description ?? const SizedBox.shrink()
-                        )
-                    )
-                  ],
-                );
-              }
-              return title;
-            })(),),
+                if (description != null) {
+                  return Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      title,
+                      Flexible(
+                          child: DefaultTextStyle(
+                              style: const TextStyle(color: Colors.grey),
+                              overflow: TextOverflow.visible,
+                              child: description ?? const SizedBox.shrink()))
+                    ],
+                  );
+                }
+                return title;
+              })(),
+            ),
             const Expanded(child: SizedBox.shrink()),
             trail
           ],
@@ -68,7 +76,15 @@ class ColorSelectionSettingsTile extends StatelessWidget {
   final Widget? description;
   final bool disabled;
 
-  const ColorSelectionSettingsTile({super.key, required this.title, required this.onMainColorChanged, required this.initialColor, this.leading, this.trailing, this.description, this.disabled = false});
+  const ColorSelectionSettingsTile(
+      {super.key,
+      required this.title,
+      required this.onMainColorChanged,
+      required this.initialColor,
+      this.leading,
+      this.trailing,
+      this.description,
+      this.disabled = false});
 
   @override
   Widget build(BuildContext context) {
@@ -122,14 +138,20 @@ class SwitchSettingsTile extends StatelessWidget {
   final bool? initialValue;
   final bool disabled;
 
-  const SwitchSettingsTile({super.key, required this.title, required this.onToggle,
-    this.leading, this.description, this.initialValue, this.disabled = false});
+  const SwitchSettingsTile(
+      {super.key,
+      required this.title,
+      required this.onToggle,
+      this.leading,
+      this.description,
+      this.initialValue,
+      this.disabled = false});
 
   @override
   Widget build(BuildContext context) {
     var s = Switch(
       value: initialValue ?? false,
-      onChanged:  onToggle,
+      onChanged: onToggle,
     );
     return SettingsTile(
       title: title,
@@ -156,18 +178,18 @@ class SliderSettingsTile extends StatefulWidget {
   final double stepSize;
   final double initialValue;
 
-  const SliderSettingsTile({
-    super.key,
-    required this.title,
-    required this.onChanged,
-    required this.initialValue,
-    required this.start,
-    required this.end,
-    this.stepSize = 1,
-    this.description,
-    this.leading,
-    this.trailing,
-    this.disabled = false});
+  const SliderSettingsTile(
+      {super.key,
+      required this.title,
+      required this.onChanged,
+      required this.initialValue,
+      required this.start,
+      required this.end,
+      this.stepSize = 1,
+      this.description,
+      this.leading,
+      this.trailing,
+      this.disabled = false});
 
   @override
   State<StatefulWidget> createState() => _SliderSettingsTileState();
@@ -199,7 +221,9 @@ class _SliderSettingsTileState extends State<SliderSettingsTile> {
       child: Row(
         children: [
           lead,
-          const SizedBox(width: 15,),
+          const SizedBox(
+            width: 15,
+          ),
           SizedBox(
             width: MediaQuery.of(context).size.width - 150,
             child: Column(
@@ -211,24 +235,23 @@ class _SliderSettingsTileState extends State<SliderSettingsTile> {
                     child: DefaultTextStyle(
                         style: const TextStyle(color: Colors.grey),
                         overflow: TextOverflow.visible,
-                        child: widget.description ?? const SizedBox.shrink()
-                    )
+                        child: widget.description ?? const SizedBox.shrink())),
+                const SizedBox(
+                  height: 7,
                 ),
-                const SizedBox(height: 7,),
                 Expanded(
                     child: Slider(
-                      value: _value,
-                      onChanged: (newValue) {
-                        setState(() {
-                          _value = newValue;
-                        });
-                        widget.onChanged(newValue);
-                      },
-                      min: widget.start,
-                      max: widget.end,
-                      divisions: (widget.end-widget.start)~/widget.stepSize,
-                    )
-                )
+                  value: _value,
+                  onChanged: (newValue) {
+                    setState(() {
+                      _value = newValue;
+                    });
+                    widget.onChanged(newValue);
+                  },
+                  min: widget.start,
+                  max: widget.end,
+                  divisions: (widget.end - widget.start) ~/ widget.stepSize,
+                ))
               ],
             ),
           ),
@@ -253,7 +276,18 @@ class InputSettingsTile extends StatefulWidget {
   final TextInputType? keyboardType;
   final List<TextInputFormatter>? inputFormatters;
 
-  const InputSettingsTile({super.key, required this.title, required this.inputWidth, this.leading, this.description, this.disabled = false, this.initialValue, this.decoration, this.onEditingComplete, this.keyboardType, this.inputFormatters});
+  const InputSettingsTile(
+      {super.key,
+      required this.title,
+      required this.inputWidth,
+      this.leading,
+      this.description,
+      this.disabled = false,
+      this.initialValue,
+      this.decoration,
+      this.onEditingComplete,
+      this.keyboardType,
+      this.inputFormatters});
 
   @override
   State<StatefulWidget> createState() => _InputSettingsTileState();
@@ -261,7 +295,7 @@ class InputSettingsTile extends StatefulWidget {
 
 class _InputSettingsTileState extends State<InputSettingsTile> {
   late String _value;
-  
+
   @override
   void initState() {
     super.initState();
@@ -297,7 +331,9 @@ class _InputSettingsTileState extends State<InputSettingsTile> {
               focusNode: focusNode,
             ),
           ),
-          const SizedBox(width: 20,),
+          const SizedBox(
+            width: 20,
+          ),
         ],
       ),
     );
@@ -321,8 +357,7 @@ class SettingsSection extends StatelessWidget {
             child: DefaultTextStyle(
                 style: (Theme.of(context).textTheme.bodyMedium ?? const TextStyle())
                     .copyWith(color: Theme.of(context).primaryColor, fontWeight: FontWeight.bold),
-                child: title
-            ),
+                child: title),
           ),
         ),
         Container(

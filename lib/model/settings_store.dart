@@ -19,6 +19,7 @@ class Settings extends ChangeNotifier {
   int get graphStepSize {
     return _prefs.getInt('graphStepSize') ?? TimeStep.day;
   }
+
   set graphStepSize(int newStepSize) {
     _prefs.setInt('graphStepSize', newStepSize);
     notifyListeners();
@@ -33,7 +34,7 @@ class Settings extends ChangeNotifier {
 
   void moveDisplayDataByStep(int directionalStep) {
     final oldStart = displayDataStart;
-    final oldEnd =displayDataEnd;
+    final oldEnd = displayDataEnd;
     switch (graphStepSize) {
       case TimeStep.day:
         displayDataStart = oldStart.copyWith(day: oldStart.day + directionalStep);
@@ -69,23 +70,24 @@ class Settings extends ChangeNotifier {
         return [start, start.copyWith(day: start.day + DateTime.sunday)]; // end of sunday
       case TimeStep.month:
         final start = DateTime(now.year, now.month);
-        return [start,  start.copyWith(month: now.month + 1)];
+        return [start, start.copyWith(month: now.month + 1)];
       case TimeStep.year:
         final start = DateTime(now.year);
-        return [start,  start.copyWith(year: now.year + 1)];
+        return [start, start.copyWith(year: now.year + 1)];
       case TimeStep.lifetime:
         final start = DateTime.fromMillisecondsSinceEpoch(0);
-        return [start,  now];
+        return [start, now];
       default:
         assert(false);
         final start = DateTime.fromMillisecondsSinceEpoch(0);
-        return [start,  now];
+        return [start, now];
     }
   }
 
   DateTime get displayDataStart {
     return _displayDataStart ?? getMostRecentDisplayIntervall()[0];
   }
+
   set displayDataStart(DateTime newGraphStart) {
     _displayDataStart = newGraphStart;
     notifyListeners();
@@ -94,76 +96,97 @@ class Settings extends ChangeNotifier {
   DateTime get displayDataEnd {
     return _displayDataEnd ?? getMostRecentDisplayIntervall()[1];
   }
+
   set displayDataEnd(DateTime newGraphEnd) {
     _displayDataEnd = newGraphEnd;
     notifyListeners();
   }
+
   bool get followSystemDarkMode {
     return _prefs.getBool('followSystemDarkMode') ?? true;
   }
+
   set followSystemDarkMode(bool newSetting) {
     _prefs.setBool('followSystemDarkMode', newSetting);
     notifyListeners();
   }
+
   bool get darkMode {
     return _prefs.getBool('darkMode') ?? true;
   }
+
   set darkMode(bool newSetting) {
     _prefs.setBool('darkMode', newSetting);
     notifyListeners();
   }
+
   MaterialColor get accentColor {
     return createMaterialColor(_prefs.getInt('accentColor') ?? 0xFF009688);
   }
+
   set accentColor(MaterialColor newColor) {
     _prefs.setInt('accentColor', newColor.value);
     notifyListeners();
   }
+
   MaterialColor get diaColor {
     return createMaterialColor(_prefs.getInt('diaColor') ?? 0xFF4CAF50);
   }
+
   set diaColor(MaterialColor newColor) {
     _prefs.setInt('diaColor', newColor.value);
     notifyListeners();
   }
+
   MaterialColor get sysColor {
     return createMaterialColor(_prefs.getInt('sysColor') ?? 0xFF009688);
   }
+
   set sysColor(MaterialColor newColor) {
     _prefs.setInt('sysColor', newColor.value);
     notifyListeners();
   }
+
   MaterialColor get pulColor {
     return createMaterialColor(_prefs.getInt('pulColor') ?? 0xFFF44336);
   }
+
   set pulColor(MaterialColor newColor) {
     _prefs.setInt('pulColor', newColor.value);
     notifyListeners();
   }
+
   bool get allowManualTimeInput {
     return _prefs.getBool('allowManualTimeInput') ?? true;
   }
+
   set allowManualTimeInput(bool newSetting) {
     _prefs.setBool('allowManualTimeInput', newSetting);
     notifyListeners();
   }
+
   String get dateFormatString {
     return _prefs.getString('dateFormatString') ?? 'yyyy-MM-dd  HH:mm';
   }
+
   set dateFormatString(String newFormatString) {
     _prefs.setString('dateFormatString', newFormatString);
     notifyListeners();
   }
+
   bool get useExportCompatability {
     return _prefs.getBool('useExportCompatability') ?? false;
   }
+
   set useExportCompatability(bool useExportCompatability) {
     _prefs.setBool('useExportCompatability', useExportCompatability);
     notifyListeners();
   }
+
   double get iconSize {
     return _prefs.getInt('iconSize')?.toDouble() ?? 30;
   }
+
   set iconSize(double newSize) {
     _prefs.setInt('iconSize', newSize.toInt());
     notifyListeners();
@@ -175,6 +198,7 @@ class Settings extends ChangeNotifier {
     }
     return _prefs.getInt('sysWarn')?.toDouble() ?? 120;
   }
+
   set sysWarn(double newWarn) {
     _prefs.setInt('sysWarn', newWarn.toInt());
     notifyListeners();
@@ -186,6 +210,7 @@ class Settings extends ChangeNotifier {
     }
     return _prefs.getInt('diaWarn')?.toDouble() ?? 80;
   }
+
   set diaWarn(double newWarn) {
     _prefs.setInt('diaWarn', newWarn.toInt());
     notifyListeners();
@@ -194,6 +219,7 @@ class Settings extends ChangeNotifier {
   int get age {
     return _prefs.getInt('age') ?? 30;
   }
+
   set age(int newAge) {
     _prefs.setInt('age', newAge.toInt());
     notifyListeners();
@@ -202,6 +228,7 @@ class Settings extends ChangeNotifier {
   bool get overrideWarnValues {
     return _prefs.getBool('overrideWarnValues') ?? false;
   }
+
   set overrideWarnValues(bool overrideWarnValues) {
     _prefs.setBool('overrideWarnValues', overrideWarnValues);
     notifyListeners();
@@ -210,6 +237,7 @@ class Settings extends ChangeNotifier {
   bool get validateInputs {
     return _prefs.getBool('validateInputs') ?? true;
   }
+
   set validateInputs(bool validateInputs) {
     _prefs.setBool('validateInputs', validateInputs);
     notifyListeners();
@@ -218,6 +246,7 @@ class Settings extends ChangeNotifier {
   double get graphLineThickness {
     return _prefs.getDouble('graphLineThickness') ?? 3;
   }
+
   set graphLineThickness(double newThickness) {
     _prefs.setDouble('graphLineThickness', newThickness);
     notifyListeners();
@@ -226,6 +255,7 @@ class Settings extends ChangeNotifier {
   int get animationSpeed {
     return _prefs.getInt('animationSpeed') ?? 150;
   }
+
   set animationSpeed(int newSpeed) {
     _prefs.setInt('animationSpeed', newSpeed);
     notifyListeners();
@@ -234,8 +264,18 @@ class Settings extends ChangeNotifier {
   bool get confirmDeletion {
     return _prefs.getBool('confirmDeletion') ?? true;
   }
+
   set confirmDeletion(bool confirmDeletion) {
     _prefs.setBool('confirmDeletion', confirmDeletion);
+    notifyListeners();
+  }
+
+  int get graphTitlesCount {
+    return _prefs.getInt('titlesCount') ?? 5;
+  }
+
+  set graphTitlesCount(int newCount) {
+    _prefs.setInt('titlesCount', newCount);
     notifyListeners();
   }
 }

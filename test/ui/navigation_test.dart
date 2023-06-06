@@ -8,9 +8,8 @@ import 'package:blood_pressure_app/screens/statistics.dart';
 import 'package:blood_pressure_app/screens/subsettings/enter_timeformat.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:provider/provider.dart';
-
 import 'package:mockito/mockito.dart';
+import 'package:provider/provider.dart';
 
 class MockNavigatorObserver extends Mock implements NavigatorObserver {}
 
@@ -85,15 +84,10 @@ Future<void> _pumpAppRoot(WidgetTester widgetTester) async {
   final model = RamBloodPressureModel();
   final settings = RamSettings();
 
-  await widgetTester.pumpWidget(
-      MultiProvider(
-          providers: [
-            ChangeNotifierProvider<Settings>(create: (_) => settings),
-            ChangeNotifierProvider<BloodPressureModel>(create: (_) => model),
-          ],
-          child: const AppRoot()
-      )
-  );
+  await widgetTester.pumpWidget(MultiProvider(providers: [
+    ChangeNotifierProvider<Settings>(create: (_) => settings),
+    ChangeNotifierProvider<BloodPressureModel>(create: (_) => model),
+  ], child: const AppRoot()));
 }
 
 // starts at AppRoot, ends at AppRoot
@@ -102,7 +96,7 @@ Future<void> _addMeasurementThroughPage(WidgetTester widgetTester, int sys, int 
   expect(find.byIcon(Icons.add), findsOneWidget);
   await widgetTester.tap(find.byIcon(Icons.add));
   await widgetTester.pumpAndSettle();
-  
+
   expect(find.byType(AddMeasurementPage), findsOneWidget);
 
   expect(find.byKey(const Key('txtSys')), findsOneWidget);

@@ -1,9 +1,8 @@
+import 'package:blood_pressure_app/model/ram_only_implementations.dart';
 import 'package:blood_pressure_app/model/settings_store.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
-
-import 'package:blood_pressure_app/model/ram_only_implementations.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -19,12 +18,14 @@ void main() {
     });
   });
 
-  group('Settings model',() {
+  group('Settings model', () {
     // setup db path
     databaseFactory = databaseFactoryFfi;
 
     test('should initialize', () async {
-      expect(() async { await Settings.create(); }, returnsNormally);
+      expect(() async {
+        await Settings.create();
+      }, returnsNormally);
     });
 
     test('fields defaults should be set after initialization', () async {
@@ -48,6 +49,7 @@ void main() {
       expect(s.graphLineThickness, 3);
       expect(s.animationSpeed, 150);
       expect(s.confirmDeletion, true);
+      expect(s.graphTitlesCount, 5);
 
       s.overrideWarnValues = true;
       expect(s.sysWarn, 120);
@@ -88,6 +90,7 @@ void main() {
       s.graphLineThickness = 5;
       s.animationSpeed = 100;
       s.confirmDeletion = false;
+      s.graphTitlesCount = 7;
 
       expect(s.displayDataStart, DateTime.fromMillisecondsSinceEpoch(10000));
       expect(s.displayDataEnd, DateTime.fromMillisecondsSinceEpoch(200000));
@@ -108,6 +111,7 @@ void main() {
       expect(s.graphLineThickness, 5);
       expect(s.animationSpeed, 100);
       expect(s.confirmDeletion, false);
+      expect(s.graphTitlesCount, 7);
     });
 
     test('setting fields should notify listeners and change values', () async {
@@ -139,17 +143,20 @@ void main() {
       s.graphLineThickness = 5;
       s.animationSpeed = 100;
       s.confirmDeletion = true;
-      
-      expect(i, 21);
+      s.graphTitlesCount = 2;
+
+      expect(i, 22);
     });
   });
 
-  group('RamSettings model',() {
+  group('RamSettings model', () {
     // setup db path
     databaseFactory = databaseFactoryFfi;
 
     test('should initialize', () async {
-      expect(() async { RamSettings(); }, returnsNormally);
+      expect(() async {
+        RamSettings();
+      }, returnsNormally);
     });
 
     test('fields defaults should be set after initialization', () async {
@@ -173,6 +180,7 @@ void main() {
       expect(s.graphLineThickness, 3);
       expect(s.animationSpeed, 150);
       expect(s.confirmDeletion, true);
+      expect(s.graphTitlesCount, 5);
 
       s.overrideWarnValues = true;
       expect(s.sysWarn, 120);
@@ -213,6 +221,7 @@ void main() {
       s.graphLineThickness = 5;
       s.animationSpeed = 100;
       s.confirmDeletion = false;
+      s.graphTitlesCount = 7;
 
       expect(s.displayDataStart, DateTime.fromMillisecondsSinceEpoch(10000));
       expect(s.displayDataEnd, DateTime.fromMillisecondsSinceEpoch(200000));
@@ -233,6 +242,7 @@ void main() {
       expect(s.graphLineThickness, 5);
       expect(s.animationSpeed, 100);
       expect(s.confirmDeletion, false);
+      expect(s.graphTitlesCount, 7);
     });
 
     test('setting fields should notify listeners and change values', () async {
@@ -264,8 +274,9 @@ void main() {
       s.graphLineThickness = 5;
       s.animationSpeed = 100;
       s.confirmDeletion = true;
+      s.graphTitlesCount = 2;
 
-      expect(i, 21);
+      expect(i, 22);
     });
   });
 }
