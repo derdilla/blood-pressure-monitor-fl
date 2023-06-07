@@ -21,13 +21,12 @@ Future<DateTime?> showDateTimePicker({
     initialTime: TimeOfDay.fromDateTime(initialDate),
   );
 
-  return selectedTime == null
-      ? selectedDate
-      : DateTime(
-          selectedDate.year,
-          selectedDate.month,
-          selectedDate.day,
-          selectedTime.hour,
-          selectedTime.minute,
-        );
+  if (selectedTime == null) return null;
+  return DateTime(
+    selectedDate.year,
+    selectedDate.month,
+    selectedDate.day,
+    selectedTime.hour,
+    selectedTime.minute,
+  );
 }
