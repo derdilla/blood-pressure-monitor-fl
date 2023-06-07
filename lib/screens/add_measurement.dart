@@ -69,7 +69,8 @@ class _AddMeasurementPageState extends State<AddMeasurementPage> {
                           var selectedTime = await showDateTimePicker(
                               context: context,
                               firstDate: DateTime.fromMillisecondsSinceEpoch(0),
-                              lastDate: DateTime.now().copyWith(second: DateTime.now().second + 1));
+                              lastDate: DateTime.now().copyWith(second: DateTime.now().second + 1),
+                              initialDate: _time);
                           if (selectedTime != null) {
                             setState(() {
                               _time = selectedTime;
