@@ -2,6 +2,8 @@ import 'package:blood_pressure_app/model/blood_pressure.dart';
 import 'package:blood_pressure_app/model/settings_store.dart';
 import 'package:blood_pressure_app/screens/home.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
 
 void main() async {
@@ -33,6 +35,7 @@ class AppRoot extends StatelessWidget {
 
       return MaterialApp(
         title: 'Blood Pressure App',
+        onGenerateTitle: (context) => AppLocalizations.of(context)?.title ?? 'BLOOD PRESSURE APP',
         theme: ThemeData(primaryColor: settings.accentColor),
         darkTheme: ThemeData(
           brightness: Brightness.dark,
@@ -40,6 +43,16 @@ class AppRoot extends StatelessWidget {
           primaryColor: settings.accentColor.shade400,
         ),
         themeMode: mode,
+        localizationsDelegates: const [
+          AppLocalizations.delegate,
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ],
+        supportedLocales: const [
+          Locale('en'), // English
+          Locale('de'), // German
+        ],
         home: const AppHome(),
       );
     });
