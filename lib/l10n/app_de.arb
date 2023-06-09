@@ -1,3 +1,15 @@
 {
-  "title": "Blutdruck app"
+  "title": "Blutdruck app",
+  "sysLong": "Systolisch",
+  "sysShort": "sys",
+  "diaLong": "Diastolisch",
+  "diaShort": "dia",
+  "pulLong": "Puls",
+  "pulShort": "pul",
+  "addNote": "Notiz (optional)",
+  "errNaN": "Bitte Zahl eingeben",
+  "errLt30": "Wert < 30? Deaktiviere Prüfung in Einstellungen!",
+  "errUnrealistic": "Fehleingabe? Deaktiviere validierung in den Einstellungen!",
+  "btnCancel": "ABBRECHEN",
+  "btnSave": "OK"
 }

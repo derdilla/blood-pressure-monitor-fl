@@ -1,3 +1,15 @@
 {
-  "title": "Blood Pressure App"
+  "title": "Blood Pressure App",
+  "sysLong": "systolic",
+  "sysShort": "sys",
+  "diaLong": "diastolic",
+  "diaShort": "dia",
+  "pulLong": "pulse",
+  "pulShort": "pul",
+  "addNote": "note (optional)",
+  "errNaN": "Please enter a Number",
+  "errLt30": "Number < 30? Turn off validation in settings!",
+  "errUnrealistic": "Unrealistic value? Turn off validation in settings!",
+  "btnCancel": "CANCEL",
+  "btnSave": "SAVE"
 }
