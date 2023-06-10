@@ -78,7 +78,7 @@ class RamBloodPressureModel extends ChangeNotifier implements BloodPressureModel
   void close() {}
 
   @override
-  Future<void> import(void Function(bool p1, String? p2) callback) {
+  Future<void> import(void Function(bool p1) callback) {
     // TODO: implement import
     throw UnimplementedError();
   }

@@ -1,16 +1,17 @@
 {
   "title": "Blood Pressure App",
 
-  "error": "Error: {msg}",
-  "@error": {
+  "success": "Success: {msg}",
+  "@success": {
     "placeholders": {
       "msg": {
         "type": "String"
       }
     }
   },
-  "success": "Success: {msg}",
-  "@success": {
+  "loading": "loading...",
+  "error": "Error: {msg}",
+  "@error": {
     "placeholders": {
       "msg": {
         "type": "String"
@@ -30,6 +31,7 @@
     }
   },
   "errNoFileOpened": "no file opened",
+  "errNotStarted": "not started'",
 
   "btnCancel": "CANCEL",
   "btnSave": "SAVE",
@@ -80,5 +82,34 @@
   "shared": "shared",
   "import": "import",
   "sourceCode": "source code",
-  "licenses": "3rd party licenses"
+  "licenses": "3rd party licenses",
+
+  "statistics": "Statistics",
+  "measurementCount": "Measurement count",
+  "measurementsPerDay": "Measurements per Day",
+  "timeResolvedMetrics": "Time-Resolved Metrics",
+  "avgOf": "{txt} avg.",
+  "@avgOf": {
+    "placeholders": {
+      "txt": {
+        "type": "String"
+      }
+    }
+  },
+  "minOf": "{txt} min.",
+  "@minOf": {
+    "placeholders": {
+      "txt": {
+        "type": "String"
+      }
+    }
+  },
+  "maxOf": "{txt} may.",
+  "@maxOf": {
+    "placeholders": {
+      "txt": {
+        "type": "String"
+      }
+    }
+  }
 }
