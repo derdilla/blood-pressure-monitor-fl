@@ -2,11 +2,11 @@ import 'dart:collection';
 
 import 'package:blood_pressure_app/model/blood_pressure.dart';
 import 'package:blood_pressure_app/model/settings_store.dart';
+import 'package:blood_pressure_app/screens/add_measurement.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-
-import '../screens/add_measurement.dart';
 
 class MeasurementList extends StatelessWidget {
   late final _tableElementsSizes;
@@ -36,19 +36,19 @@ class MeasurementList extends StatelessWidget {
                 ),
                 Expanded(
                     flex: _tableElementsSizes[0],
-                    child: const Text("time", style: TextStyle(fontWeight: FontWeight.bold))),
+                    child: Text(AppLocalizations.of(context)!.time, style: TextStyle(fontWeight: FontWeight.bold))),
                 Expanded(
                     flex: _tableElementsSizes[1],
-                    child: Text("sys", style: TextStyle(fontWeight: FontWeight.bold, color: settings.sysColor))),
+                    child: Text(AppLocalizations.of(context)!.sysShort, style: TextStyle(fontWeight: FontWeight.bold, color: settings.sysColor))),
                 Expanded(
                     flex: _tableElementsSizes[2],
-                    child: Text("dia", style: TextStyle(fontWeight: FontWeight.bold, color: settings.diaColor))),
+                    child: Text(AppLocalizations.of(context)!.diaShort, style: TextStyle(fontWeight: FontWeight.bold, color: settings.diaColor))),
                 Expanded(
                     flex: _tableElementsSizes[3],
-                    child: Text("pul", style: TextStyle(fontWeight: FontWeight.bold, color: settings.pulColor))),
+                    child: Text(AppLocalizations.of(context)!.pulShort, style: TextStyle(fontWeight: FontWeight.bold, color: settings.pulColor))),
                 Expanded(
                     flex: _tableElementsSizes[4],
-                    child: const Text("notes", style: TextStyle(fontWeight: FontWeight.bold))),
+                    child: Text(AppLocalizations.of(context)!.notes, style: TextStyle(fontWeight: FontWeight.bold))),
                 Expanded(
                   flex: _sideFlex,
                   child: const SizedBox(),
@@ -76,9 +76,9 @@ class MeasurementList extends StatelessWidget {
                     assert(recordsSnapshot.connectionState != ConnectionState.none);
 
                     if (recordsSnapshot.connectionState == ConnectionState.waiting) {
-                      return const Text('loading...');
+                      return Text(AppLocalizations.of(context)!.loading);
                     } else if (recordsSnapshot.hasError) {
-                      return Text('Error loading data:\n${recordsSnapshot.error}');
+                      return Text(AppLocalizations.of(context)!.error(recordsSnapshot.error.toString()));
                     } else {
                       final data = recordsSnapshot.data ?? [];
                       if (data.isNotEmpty && data.first.diastolic > 0) {
@@ -118,13 +118,12 @@ class MeasurementList extends StatelessWidget {
                                               context: context,
                                               builder: (context) {
                                                 return AlertDialog(
-                                                  title: const Text("Confirm deletion"),
-                                                  content: const Text(
-                                                      "Do you really want to delete this entry? You can turn of this question in the settings."),
+                                                  title: Text(AppLocalizations.of(context)!.confirmDelete),
+                                                  content: Text(AppLocalizations.of(context)!.confirmDeleteDesc),
                                                   actions: [
                                                     ElevatedButton(
                                                         onPressed: () => Navigator.of(context).pop(),
-                                                        child: const Text('CANCEL')),
+                                                        child: Text(AppLocalizations.of(context)!.btnCancel)),
                                                     ElevatedButton(
                                                         onPressed: () {
                                                           Provider.of<BloodPressureModel>(context, listen: false)
@@ -132,7 +131,7 @@ class MeasurementList extends StatelessWidget {
                                                           dialogeDeletionConfirmed = true;
                                                           Navigator.of(context).pop();
                                                         },
-                                                        child: const Text('CONFIRM')),
+                                                        child: Text(AppLocalizations.of(context)!.btnConfirm)),
                                                   ],
                                                 );
                                               });
@@ -147,9 +146,9 @@ class MeasurementList extends StatelessWidget {
                                           ScaffoldMessenger.of(context).removeCurrentSnackBar();
                                           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                                             duration: const Duration(seconds: 5),
-                                            content: const Text('entry has been deleted'),
+                                            content: Text(AppLocalizations.of(context)!.deletionConfirmed),
                                             action: SnackBarAction(
-                                              label: "UNDO",
+                                              label: AppLocalizations.of(context)!.btnUndo,
                                               onPressed: () => model.add(BloodPressureRecord(
                                                   data[index].creationTime,
                                                   data[index].systolic,
@@ -208,7 +207,7 @@ class MeasurementList extends StatelessWidget {
                               );
                             });
                       } else {
-                        return const Text('no data');
+                        return Text(AppLocalizations.of(context)!.errNoData);
                       }
                     }
                   });

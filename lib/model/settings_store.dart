@@ -291,7 +291,7 @@ class TimeStep {
 
   TimeStep._create();
 
-  static String getName(int opt) {
+  static String getName(int opt) { // TODO: translations
     switch (opt) {
       case day:
         return 'day';
