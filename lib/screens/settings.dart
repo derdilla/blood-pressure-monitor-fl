@@ -267,7 +267,7 @@ class SettingsPage extends StatelessWidget {
                   leading: const Icon(Icons.file_upload),
                   onPressed: (context) {
                     try {
-                      Provider.of<BloodPressureModel>(context, listen: false).import((res, String? err) {
+                      Provider.of<BloodPressureModel>(context, listen: false).import((res) {
                         if (res) {
                           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                               content:
@@ -275,7 +275,7 @@ class SettingsPage extends StatelessWidget {
                         } else {
                           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                               content: Text(AppLocalizations.of(context)!
-                                  .error(err ?? AppLocalizations.of(context)!.errUnknown))));
+                                  .error(AppLocalizations.of(context)!.errNoFileOpened))));
                         }
                       });
                     } on Exception catch (e) {

@@ -1,5 +1,6 @@
 {
   "title": "Blood Pressure App",
+
   "error": "Error: {msg}",
   "@error": {
     "placeholders": {
@@ -28,8 +29,11 @@
       }
     }
   },
+  "errNoFileOpened": "no file opened",
+
   "btnCancel": "CANCEL",
   "btnSave": "SAVE",
+
   "sysLong": "systolic",
   "sysShort": "sys",
   "diaLong": "diastolic",
@@ -37,6 +41,7 @@
   "pulLong": "pulse",
   "pulShort": "pul",
   "addNote": "note (optional)",
+
   "layout": "layout",
   "allowManualTimeInput": "allow manual time input",
   "enterTimeFormatScreen": "time format",
@@ -64,6 +69,15 @@
   "useExportCompatability": "compatability export",
   "useExportCompatabilityDesc": "sets export mime type to text",
   "export": "export",
+  "exportSuccess": "Exported to: {path}",
+  "@exportSuccess": {
+    "placeholders": {
+      "path": {
+        "type": "String"
+      }
+    }
+  },
+  "shared": "shared",
   "import": "import",
   "sourceCode": "source code",
   "licenses": "3rd party licenses"

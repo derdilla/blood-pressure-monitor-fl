@@ -171,7 +171,7 @@ class BloodPressureModel extends ChangeNotifier {
 
     // notify user about location
     if (Platform.isLinux || Platform.isWindows || Platform.isMacOS) {
-      callback(true, 'Exported to: $path');
+      callback(true, path);
     } else if (Platform.isAndroid || Platform.isIOS) {
       var mimeType = MimeType.csv;
       if (exportAsText) {
@@ -187,7 +187,7 @@ class BloodPressureModel extends ChangeNotifier {
     } else {}
   }
 
-  Future<void> import(void Function(bool, String?) callback) async {
+  Future<void> import(void Function(bool) callback) async {
     var result = await FilePicker.platform.pickFiles(
       allowMultiple: false,
       withData: true,
@@ -204,13 +204,10 @@ class BloodPressureModel extends ChangeNotifier {
               (line[1] as int), (line[2] as int), (line[3] as int), line[4].toString());
           add(record);
         }
-        return callback(true, null);
-      } else {
-        return callback(false, 'empty file');
+        return callback(true);
       }
-    } else {
-      return callback(false, 'no file opened');
     }
+    return callback(false);
   }
 
   void close() {
