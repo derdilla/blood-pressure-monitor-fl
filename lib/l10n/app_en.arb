@@ -32,6 +32,7 @@
   },
   "errNoFileOpened": "no file opened",
   "errNotStarted": "not started'",
+  "errNoValue": "Please enter a value",
 
   "btnCancel": "CANCEL",
   "btnSave": "SAVE",
@@ -111,5 +112,19 @@
         "type": "String"
       }
     }
-  }
+  },
+
+  "warnValues": "warn values",
+  "warnAboutTxt1": "The warn values are a pure suggestions and no medical advice.",
+  "warnAboutTxt2": "The default age dependent values come from this source.",
+  "warnAboutTxt3": "Feel free to change the values to suit your needs and follow the recommendations of your doctor.",
+
+  "enterTimeFormatTxt1": "A formatter String consists of a mixture of predefined ICU/Skeleton Strings and any other text you want to include.",
+  "enterTimeFormatTxt2": "For a full list of valid formats please look here.",
+  "enterTimeFormatTxt3": "Please note that having longer/shorter format Strings wont magically change the width of the table columns, so it might come to awkward line breaks.",
+  "enterTimeFormatTxt4": "default: \"yy-MM-dd H:mm\"",
+  "enterTimeFormatString": "time-format string",
+
+  "dateFormatting": "Date formatting"
+
 }

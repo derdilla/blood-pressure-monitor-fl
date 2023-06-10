@@ -1,5 +1,6 @@
 import 'package:blood_pressure_app/model/blood_pressure.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class AboutWarnValuesScreen extends StatelessWidget {
@@ -9,7 +10,7 @@ class AboutWarnValuesScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Warn values'),
+        title: Text(AppLocalizations.of(context)!.warnValues),
         backgroundColor: Theme.of(context).primaryColor,
       ),
       body: Center(
@@ -19,7 +20,7 @@ class AboutWarnValuesScreen extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text('The warn values are a pure suggestions and no medical advice.'),
+              Text(AppLocalizations.of(context)!.warnAboutTxt1),
               const SizedBox(
                 height: 5,
               ),
@@ -28,17 +29,18 @@ class AboutWarnValuesScreen extends StatelessWidget {
                   final url = Uri.parse(BloodPressureWarnValues.source);
                   if (await canLaunchUrl(url)) {
                     await launchUrl(url, mode: LaunchMode.externalApplication);
-                  } else {
-                    ScaffoldMessenger.of(context)
-                        .showSnackBar(SnackBar(content: Text('Can\'t open URL:\n${BloodPressureWarnValues.source}')));
+                  } else if (context.mounted) {
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                        content: Text(AppLocalizations.of(context)!
+                            .errCantOpenURL(BloodPressureWarnValues.source))));
                   }
                 },
-                child: const SizedBox(
+                child: SizedBox(
                   height: 48,
                   child: Center(
                     child: Text(
-                      "The default age dependent values come from this source.",
-                      style: TextStyle(color: Colors.blue),
+                      AppLocalizations.of(context)!.warnAboutTxt2,
+                      style: const TextStyle(color: Colors.blue),
                     ),
                   ),
                 ),
@@ -46,8 +48,7 @@ class AboutWarnValuesScreen extends StatelessWidget {
               const SizedBox(
                 height: 5,
               ),
-              const Text(
-                  'Feel free to change the values to suit your needs and follow the recommendations of your doctor.'),
+              Text(AppLocalizations.of(context)!.warnAboutTxt3),
             ],
           ),
         ),

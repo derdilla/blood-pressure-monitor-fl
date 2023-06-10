@@ -1,6 +1,7 @@
 import 'package:blood_pressure_app/model/settings_store.dart';
 import 'package:blood_pressure_app/screens/subsettings/time_formats_explainer.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 
 class EnterTimeFormatScreen extends StatefulWidget {
@@ -29,28 +30,30 @@ class _EnterTimeFormatScreenState extends State<EnterTimeFormatScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
-                      'A formatter String consists of a mixture of predefined ICU/Skeleton Strings and any other text you want to include.'),
+                  Text(AppLocalizations.of(context)!.enterTimeFormatTxt1),
                   InkWell(
                     onTap: () async {
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => const TimeFormattingHelp()));
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  const TimeFormattingHelp()));
                     },
-                    child: const SizedBox(
+                    child: SizedBox(
                       height: 48,
                       child: Center(
                         child: Text(
-                          'For a full list of valid formats please look here.',
-                          style: TextStyle(color: Colors.blue),
+                          AppLocalizations.of(context)!.enterTimeFormatTxt2,
+                          style: const TextStyle(color: Colors.blue),
                         ),
                       ),
                     ),
                   ),
-                  const Text(
-                      'Please note that having longer/shorter format Strings wont magically change the width of the table columns, so it might come to awkward line breaks.'),
+                  Text(AppLocalizations.of(context)!.enterTimeFormatTxt3),
                   const SizedBox(
                     height: 7,
                   ),
-                  const Text('default: "yy-MM-dd H:mm"'),
+                  Text(AppLocalizations.of(context)!.enterTimeFormatTxt4),
                   const SizedBox(
                     height: 10,
                   ),
@@ -58,10 +61,12 @@ class _EnterTimeFormatScreenState extends State<EnterTimeFormatScreen> {
                     _newVal = settings.dateFormatString;
                     return TextFormField(
                       initialValue: _newVal,
-                      decoration: const InputDecoration(hintText: 'format string'),
+                      decoration: InputDecoration(
+                          hintText: AppLocalizations.of(context)!
+                              .enterTimeFormatString),
                       validator: (String? value) {
                         if (value == null || value.isEmpty) {
-                          return 'Please enter a value';
+                          return AppLocalizations.of(context)!.errNoValue;
                         } else {
                           _newVal = value;
                         }
@@ -78,18 +83,22 @@ class _EnterTimeFormatScreenState extends State<EnterTimeFormatScreen> {
                           onPressed: () {
                             Navigator.of(context).pop();
                           },
-                          style: ElevatedButton.styleFrom(backgroundColor: Theme.of(context).unselectedWidgetColor),
-                          child: const Text('CANCEL')),
+                          style: ElevatedButton.styleFrom(
+                              backgroundColor:
+                                  Theme.of(context).unselectedWidgetColor),
+                          child: Text(AppLocalizations.of(context)!.btnCancel)),
                       const Spacer(),
                       ElevatedButton(
                           onPressed: () {
                             if (_formKey.currentState!.validate()) {
-                              Provider.of<Settings>(context, listen: false).dateFormatString = _newVal;
+                              Provider.of<Settings>(context, listen: false)
+                                  .dateFormatString = _newVal;
                               Navigator.of(context).pop();
                             }
                           },
-                          style: ElevatedButton.styleFrom(backgroundColor: Theme.of(context).primaryColor),
-                          child: const Text('SAVE'))
+                          style: ElevatedButton.styleFrom(
+                              backgroundColor: Theme.of(context).primaryColor),
+                          child: Text(AppLocalizations.of(context)!.btnSave))
                     ],
                   )
                 ],
