@@ -1,7 +1,7 @@
 {
-  "title": "Blutdruck app",
+  "title": "Blood Pressure App",
 
-  "success": "Success: {msg}",
+  "success": "Erfolg: {msg}",
   "@success": {
     "placeholders": {
       "msg": {
@@ -9,8 +9,8 @@
       }
     }
   },
-  "loading": "loading...",
-  "error": "Error: {msg}",
+  "loading": "Lade...",
+  "error": "Fehler: {msg}",
   "@error": {
     "placeholders": {
       "msg": {
@@ -20,9 +20,9 @@
   },
   "errNaN": "Bitte Zahl eingeben",
   "errLt30": "Wert < 30? Deaktiviere Prüfung in Einstellungen!",
-  "errUnrealistic": "Fehleingabe? Deaktiviere validierung in den Einstellungen!",
-  "errUnknown": "unknown error",
-  "errCantOpenURL": "Can't open URL: {url}",
+  "errUnrealistic": "Fehleingabe? Deaktiviere Validierung in den Einstellungen!",
+  "errUnknown": "Unbekannter Fehler",
+  "errCantOpenURL": "Kann URL nicht öffnen: {url}",
   "@errCantOpenURL": {
     "placeholders": {
       "url": {
@@ -30,16 +30,16 @@
       }
     }
   },
-  "errNoFileOpened": "no file opened",
-  "errNotStarted": "not started'",
-  "errNoValue": "Please enter a value",
-  "errNotEnoughDataToGraph": "not enough data to draw graph",
-  "errNoData": "no data",
+  "errNoFileOpened": "Keine Datei geöffnet",
+  "errNotStarted": "Nicht begonnen'",
+  "errNoValue": "Bitte Wert eingeben",
+  "errNotEnoughDataToGraph": "Zuwenig Daten für Graphen",
+  "errNoData": "Keine Daten",
 
-  "btnCancel": "ABBRECHEN",
+  "btnCancel": "ABBRUCH",
   "btnSave": "OK",
-  "btnConfirm": "CONFIRM",
-  "btnUndo": "UNDO",
+  "btnConfirm": "OK",
+  "btnUndo": "ZURÜCK",
 
   "sysLong": "Systolisch",
   "sysShort": "sys",
@@ -49,34 +49,39 @@
   "pulShort": "pul",
   "addNote": "Notiz (optional)",
 
-  "layout": "layout",
-  "allowManualTimeInput": "allow manual time input",
-  "enterTimeFormatScreen": "time format",
-  "followSystemDarkMode": "follow system dark mode",
-  "darkMode": "enable dark mode",
-  "iconSize": "icon size",
-  "graphLineThickness": "line thickness",
-  "animationSpeed": "animation duration",
+  "layout": "Layout",
+  "allowManualTimeInput": "Editierbare Zeitangaben",
+  "enterTimeFormatScreen": "Datums-/Zeitformat",
+  "followSystemDarkMode": "Thema wie System",
+  "darkMode": "Dunkles Thema",
+  "iconSize": "Größe der Buttons",
+  "graphLineThickness": "Linienstärke d. Graphen",
+  "animationSpeed": "Animationsdauer",
+
+
+  #################################################################
+  Neuer String, bitte selbst übersetzen
+  #################################################################
   "graphTitlesCount": "graph label count",
-  "accentColor": "theme color",
-  "sysColor": "systolic color",
-  "diaColor": "diastolic color",
-  "pulColor": "pulse color",
-  "behavior": "behavior",
-  "validateInputs": "validate inputs",
-  "confirmDeletion": "confirm deletion",
-  "age": "age",
-  "ageDesc": "determines warn values",
-  "aboutWarnValuesScreen": "about",
-  "aboutWarnValuesScreenDesc": "more information on warn values",
-  "overrideWarnValues": "override warn values",
-  "sysWarn": "systolic warn",
-  "diaWarn": "diastolic warn",
-  "data": "data",
-  "useExportCompatability": "compatability export",
-  "useExportCompatabilityDesc": "sets export mime type to text",
-  "export": "export",
-  "exportSuccess": "Exported to: {path}",
+  "accentColor": "Hauptfarbe der App",
+  "sysColor": "Farbe für Systole",
+  "diaColor": "Farbe für Diastole",
+  "pulColor": "Farbe für Puls",
+  "behavior": "Verhalten",
+  "validateInputs": "Eingaben prüfen",
+  "confirmDeletion": "Löschen bestätigen",
+  "age": "Alter",
+  "ageDesc": "Bestimmt die Warnwerte",
+  "aboutWarnValuesScreen": "Hilfe",
+  "aboutWarnValuesScreenDesc": "Mehr Infos zu den Warnwerten",
+  "overrideWarnValues": "Warnwerte außer Kraft setzen",
+  "sysWarn": "Warnwert Sys",
+  "diaWarn": "Warnwert Dia",
+  "data": "Daten",
+  "useExportCompatability": "Kompatibler Export",
+  "useExportCompatabilityDesc": "Exportiert MIME-type als Text",
+  "export": "Exportieren",
+  "exportSuccess": "Exportiert in: {path}",
   "@exportSuccess": {
     "placeholders": {
       "path": {
@@ -84,16 +89,22 @@
       }
     }
   },
-  "shared": "shared",
-  "import": "import",
-  "sourceCode": "source code",
-  "licenses": "3rd party licenses",
+  "shared": "Geteilt",
+  "import": "Import",
+  "sourceCode": "Quellcode",
+  "licenses": "Drittpartei-Lizenzen",
 
-  "statistics": "Statistics",
-  "measurementCount": "Measurement count",
-  "measurementsPerDay": "Measurements per Day",
-  "timeResolvedMetrics": "Time-Resolved Metrics",
-  "avgOf": "{txt} avg.",
+  "statistics": "Statistik",
+  "measurementCount": "Zahl der Messungen",
+  "measurementsPerDay": "Messungen pro Tag",
+  "timeResolvedMetrics": "Werte nach Uhrzeit",
+
+
+  ######################################################
+  Textfelder sind sehr eng, daher das kürzere math. Symbol.
+  UNICODE U+2300, DEZIMAL &#8960;
+  ######################################################
+  "avgOf": "{txt} ⌀",
   "@avgOf": {
     "placeholders": {
       "txt": {
@@ -109,7 +120,12 @@
       }
     }
   },
-  "maxOf": "{txt} may.",
+
+
+  ###########################################
+  Hier stand ursprüngl. "may."
+  ###########################################
+  "maxOf": "{txt} max.",
   "@maxOf": {
     "placeholders": {
       "txt": {
@@ -118,22 +134,27 @@
     }
   },
 
-  "warnValues": "warn values",
-  "warnAboutTxt1": "The warn values are a pure suggestions and no medical advice.",
-  "warnAboutTxt2": "The default age dependent values come from this source.",
-  "warnAboutTxt3": "Feel free to change the values to suit your needs and follow the recommendations of your doctor.",
+  "warnValues": "Warnwerte",
+  "warnAboutTxt1": "Die Warnwerte sind ledigl. Vorschläge, kein medizinischer Rat.",
+  "warnAboutTxt2": "Die voreingestellten Basiswerte für Altersstufen stammen aus dieser Quelle.",
+  "warnAboutTxt3": "Ändere die Werte nach Bedarf, aber befolge die Empfehlungen deines Arztes.",
 
-  "enterTimeFormatTxt1": "A formatter String consists of a mixture of predefined ICU/Skeleton Strings and any other text you want to include.",
-  "enterTimeFormatTxt2": "For a full list of valid formats please look here.",
-  "enterTimeFormatTxt3": "Please note that having longer/shorter format Strings wont magically change the width of the table columns, so it might come to awkward line breaks.",
-  "enterTimeFormatTxt4": "default: \"yy-MM-dd H:mm\"",
-  "enterTimeFormatString": "time-format string",
+  "enterTimeFormatTxt1": "Ein Formatier-String besteht aus einer Mischung vordefinierter ICU-Strings sowie anderer Zeichen deiner Wahl.",
+  "enterTimeFormatTxt2": "Die vollständige Liste gültiger Formate findest du hier.",
+  "enterTimeFormatTxt3": "Bitte beachte, dass kürzere/längere Formatier-Strings nicht die Spaltenbreiten ändern. Sie führen eher zu unerwünschten Umbrüchen.",
 
-  "dateFormatting": "Date formatting",
-  "now": "now",
-  "notes": "notes",
-  "time": "time",
-  "confirmDelete": "Confirm deletion",
-  "confirmDeleteDesc": "Do you really want to delete this entry? You can turn of this question in the settings.",
-  "deletionConfirmed": "entry has been deleted"
+
+  ################################################
+  M. E. ist das Zeitformat jetzt HH:mm (zwei H, betr. auch EN)
+  ################################################
+  "enterTimeFormatTxt4": "Voreingestellt: \"yy-MM-dd H:mm\"",
+  "enterTimeFormatString": "Zeitformat-String",
+
+  "dateFormatting": "Datumsformat",
+  "now": "jetzt",
+  "notes": "Notizen",
+  "time": "Zeit",
+  "confirmDelete": "Löschen bestätigen",
+  "confirmDeleteDesc": "Soll der Eintrag wirklich gelöscht werden? (Diese Rückfrage kann in den Einstellungen abgestellt werden.)",
+  "deletionConfirmed": "Eintrag wurde gelöscht"
 }
