@@ -135,5 +135,11 @@
   "time": "time",
   "confirmDelete": "Confirm deletion",
   "confirmDeleteDesc": "Do you really want to delete this entry? You can turn of this question in the settings.",
-  "deletionConfirmed": "entry has been deleted"
+  "deletionConfirmed": "entry has been deleted",
+
+  "day": "day",
+  "week": "week",
+  "month": "month",
+  "year": "year",
+  "lifetime": "lifetime"
 }

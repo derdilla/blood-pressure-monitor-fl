@@ -42,11 +42,11 @@
   "btnUndo": "ZURÜCK",
 
   "sysLong": "Systole",
-  "sysShort": "sys",
+  "sysShort": "Sys",
   "diaLong": "Diastole",
-  "diaShort": "dia",
+  "diaShort": "Dia",
   "pulLong": "Puls",
-  "pulShort": "pul",
+  "pulShort": "Pul",
   "addNote": "Notiz (optional)",
 
   "layout": "Layout",
@@ -136,5 +136,11 @@
   "time": "Zeitpunkt",
   "confirmDelete": "Löschen bestätigen",
   "confirmDeleteDesc": "Soll der Eintrag wirklich gelöscht werden? (Diese Rückfrage kann in den Einstellungen abgestellt werden.)",
-  "deletionConfirmed": "Eintrag wurde gelöscht"
+  "deletionConfirmed": "Eintrag wurde gelöscht",
+
+  "day": "Tag",
+  "week": "Woche",
+  "month": "Monat",
+  "year": "Jahr",
+  "lifetime": "Lebenszeit"
 }

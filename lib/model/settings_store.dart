@@ -1,5 +1,6 @@
 import 'package:blood_pressure_app/model/blood_pressure.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Settings extends ChangeNotifier {
@@ -291,20 +292,21 @@ class TimeStep {
 
   TimeStep._create();
 
-  static String getName(int opt) { // TODO: translations
+  static String getName(int opt, BuildContext context) {
     switch (opt) {
       case day:
-        return 'day';
+        return AppLocalizations.of(context)!.day;
       case month:
-        return 'month';
+        return AppLocalizations.of(context)!.month;
       case year:
-        return 'year';
+        return AppLocalizations.of(context)!.year;
       case lifetime:
-        return 'lifetime';
+        return AppLocalizations.of(context)!.lifetime;
       case week:
-        return 'week';
+        return AppLocalizations.of(context)!.week;
     }
-    return 'invalid';
+    assert(false);
+    return '-';
   }
 }
 
