@@ -93,7 +93,7 @@
   "measurementCount": "Measurement count",
   "measurementsPerDay": "Measurements per Day",
   "timeResolvedMetrics": "Time-Resolved Metrics",
-  "avgOf": "{txt} avg.",
+  "avgOf": "{txt} Ø",
   "@avgOf": {
     "placeholders": {
       "txt": {
@@ -109,7 +109,7 @@
       }
     }
   },
-  "maxOf": "{txt} may.",
+  "maxOf": "{txt} max.",
   "@maxOf": {
     "placeholders": {
       "txt": {
@@ -126,7 +126,7 @@
   "enterTimeFormatTxt1": "A formatter String consists of a mixture of predefined ICU/Skeleton Strings and any other text you want to include.",
   "enterTimeFormatTxt2": "For a full list of valid formats please look here.",
   "enterTimeFormatTxt3": "Please note that having longer/shorter format Strings wont magically change the width of the table columns, so it might come to awkward line breaks.",
-  "enterTimeFormatTxt4": "default: \"yy-MM-dd H:mm\"",
+  "enterTimeFormatTxt4": "default: \"yy-MM-dd HH:mm\"",
   "enterTimeFormatString": "time-format string",
 
   "dateFormatting": "Date formatting",

@@ -20,7 +20,7 @@
   },
   "errNaN": "Bitte Zahl eingeben",
   "errLt30": "Wert < 30? Deaktiviere Prüfung in Einstellungen!",
-  "errUnrealistic": "Fehleingabe? Deaktiviere Validierung in den Einstellungen!",
+  "errUnrealistic": "Fehleingabe? Deaktiviere Prüfung in den Einstellungen!",
   "errUnknown": "Unbekannter Fehler",
   "errCantOpenURL": "Kann URL nicht öffnen: {url}",
   "@errCantOpenURL": {
@@ -41,9 +41,9 @@
   "btnConfirm": "OK",
   "btnUndo": "ZURÜCK",
 
-  "sysLong": "Systolisch",
+  "sysLong": "Systole",
   "sysShort": "sys",
-  "diaLong": "Diastolisch",
+  "diaLong": "Diastole",
   "diaShort": "dia",
   "pulLong": "Puls",
   "pulShort": "pul",
@@ -54,16 +54,11 @@
   "enterTimeFormatScreen": "Datums-/Zeitformat",
   "followSystemDarkMode": "Thema wie System",
   "darkMode": "Dunkles Thema",
-  "iconSize": "Größe der Buttons",
+  "iconSize": "Größe der Knöpfe",
   "graphLineThickness": "Linienstärke d. Graphen",
   "animationSpeed": "Animationsdauer",
-
-
-  #################################################################
-  Neuer String, bitte selbst übersetzen
-  #################################################################
-  "graphTitlesCount": "graph label count",
-  "accentColor": "Hauptfarbe der App",
+  "graphTitlesCount": "anzahl graph Beschriftungen",
+  "accentColor": "Thema der App",
   "sysColor": "Farbe für Systole",
   "diaColor": "Farbe für Diastole",
   "pulColor": "Farbe für Puls",
@@ -72,14 +67,14 @@
   "confirmDeletion": "Löschen bestätigen",
   "age": "Alter",
   "ageDesc": "Bestimmt die Warnwerte",
-  "aboutWarnValuesScreen": "Hilfe",
+  "aboutWarnValuesScreen": "Mehr Infos",
   "aboutWarnValuesScreenDesc": "Mehr Infos zu den Warnwerten",
-  "overrideWarnValues": "Warnwerte außer Kraft setzen",
+  "overrideWarnValues": "Warnwerte überschreiben",
   "sysWarn": "Warnwert Sys",
   "diaWarn": "Warnwert Dia",
   "data": "Daten",
   "useExportCompatability": "Kompatibler Export",
-  "useExportCompatabilityDesc": "Exportiert MIME-type als Text",
+  "useExportCompatabilityDesc": "Signalisiert Export als Text",
   "export": "Exportieren",
   "exportSuccess": "Exportiert in: {path}",
   "@exportSuccess": {
@@ -92,19 +87,13 @@
   "shared": "Geteilt",
   "import": "Import",
   "sourceCode": "Quellcode",
-  "licenses": "Drittpartei-Lizenzen",
+  "licenses": "Lizenzen dritter",
 
   "statistics": "Statistik",
-  "measurementCount": "Zahl der Messungen",
+  "measurementCount": "Anzahl Messungen",
   "measurementsPerDay": "Messungen pro Tag",
   "timeResolvedMetrics": "Werte nach Uhrzeit",
-
-
-  ######################################################
-  Textfelder sind sehr eng, daher das kürzere math. Symbol.
-  UNICODE U+2300, DEZIMAL &#8960;
-  ######################################################
-  "avgOf": "{txt} ⌀",
+  "avgOf": "{txt} Ø",
   "@avgOf": {
     "placeholders": {
       "txt": {
@@ -121,10 +110,6 @@
     }
   },
 
-
-  ###########################################
-  Hier stand ursprüngl. "may."
-  ###########################################
   "maxOf": "{txt} max.",
   "@maxOf": {
     "placeholders": {
@@ -135,25 +120,20 @@
   },
 
   "warnValues": "Warnwerte",
-  "warnAboutTxt1": "Die Warnwerte sind ledigl. Vorschläge, kein medizinischer Rat.",
+  "warnAboutTxt1": "Die Warnwerte sind lediglich Vorschläge, kein medizinischer Rat.",
   "warnAboutTxt2": "Die voreingestellten Basiswerte für Altersstufen stammen aus dieser Quelle.",
-  "warnAboutTxt3": "Ändere die Werte nach Bedarf, aber befolge die Empfehlungen deines Arztes.",
+  "warnAboutTxt3": "Ändere die Werte nach Bedarf und stimme dich mit deinem Arzt ab.",
 
-  "enterTimeFormatTxt1": "Ein Formatier-String besteht aus einer Mischung vordefinierter ICU-Strings sowie anderer Zeichen deiner Wahl.",
+  "enterTimeFormatTxt1": "Das Datumsformat besteht aus einer Mischung vordefinierter ICU-Strings sowie anderer Zeichen deiner Wahl.",
   "enterTimeFormatTxt2": "Die vollständige Liste gültiger Formate findest du hier.",
-  "enterTimeFormatTxt3": "Bitte beachte, dass kürzere/längere Formatier-Strings nicht die Spaltenbreiten ändern. Sie führen eher zu unerwünschten Umbrüchen.",
-
-
-  ################################################
-  M. E. ist das Zeitformat jetzt HH:mm (zwei H, betr. auch EN)
-  ################################################
-  "enterTimeFormatTxt4": "Voreingestellt: \"yy-MM-dd H:mm\"",
+  "enterTimeFormatTxt3": "Bitte beachte, dass kürzere/längere Zeitformat-Strings nicht die Spaltenbreiten ändern. Sie führen eher zu unerwünschten Umbrüchen.",
+  "enterTimeFormatTxt4": "Voreingestellt: \"yy-MM-dd HH:mm\"",
   "enterTimeFormatString": "Zeitformat-String",
 
   "dateFormatting": "Datumsformat",
   "now": "jetzt",
   "notes": "Notizen",
-  "time": "Zeit",
+  "time": "Zeitpunkt",
   "confirmDelete": "Löschen bestätigen",
   "confirmDeleteDesc": "Soll der Eintrag wirklich gelöscht werden? (Diese Rückfrage kann in den Einstellungen abgestellt werden.)",
   "deletionConfirmed": "Eintrag wurde gelöscht"
