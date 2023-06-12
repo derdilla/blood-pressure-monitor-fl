@@ -8,7 +8,7 @@
   <a href="[https://github.com/NobodyForNothing/blood-pressure-monitor-fl/actions/workflows/CI.yml">
     <img src="https://github.com/NobodyForNothing/blood-pressure-monitor-fl/actions/workflows/CI.yml/badge.svg" alt="CI status" />
   </a>
-  <a href"https://github.com/NobodyForNothing/blood-pressure-monitor-fl/releases/latest">
+  <a href="https://github.com/NobodyForNothing/blood-pressure-monitor-fl/releases/latest">
     <img alt="GitHub release (latest by date)" src="https://img.shields.io/github/v/release/NobodyForNothing/blood-pressure-monitor-fl">
   </a>
   <img alt="GitHub last commit" src="https://img.shields.io/github/last-commit/NobodyForNothing/blood-pressure-monitor-fl">
@@ -60,11 +60,14 @@ Sorry, you need to compile from source. If there is enough demand I can add a wi
   </tr>
 </table>
 
-## TODO:
+## Contributing
+Contributions to this project are greatly appreciated and can come in many forms. Please note that when contributing you agree that your work is under the same license as the project.  
+### Opening bugs and proposing features
+This is probably the simplest to do: Just use the app and find out what's wrong and what can be improved. There is no such thing as a wrong issue. Just make sure there is no existing one about the exact same topic If you are unsure about something just create a new issue, worst thing to happen is that it gets closed.
 
-- [X] add to f-droid
-- [X] add to play store (open test)
-- [X] import from CSV
-- [X] edit/delete entries in app
-- [X] ensure that no data loss can occur during version changes
+### improving texts and translate
+Another easy way to help is to go through the texts (this one or the ones in the app) and fixing grammar/other mistakes or finding better (more precise / friendly) ways to put things.
+If you want the app to support your language, you can duplicate the localization file in file lib/l10n/app_en.arb and change the country code to one of 78 [languages supported by flutter](https://api.flutter.dev/flutter/flutter_localizations/GlobalMaterialLocalizations-class.html). After you are done translating you can simply open a PR or if you don't know how to do this just add an issue.  
 
+### pull requests
+If you can code, you can fix issues or implement features from the issues page. While not a strict requirement, it's still probably best, if you talk about it in an issue first.
