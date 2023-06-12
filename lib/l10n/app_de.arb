@@ -57,7 +57,7 @@
   "iconSize": "Größe der Knöpfe",
   "graphLineThickness": "Linienstärke d. Graphen",
   "animationSpeed": "Animationsdauer",
-  "graphTitlesCount": "anzahl graph Beschriftungen",
+  "graphTitlesCount": "Anzahl der Label am Graphen",
   "accentColor": "Thema der App",
   "sysColor": "Farbe für Systole",
   "diaColor": "Farbe für Diastole",
