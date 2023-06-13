@@ -209,7 +209,7 @@ class _AddMeasurementPageState extends State<AddMeasurementPage> {
                             Navigator.of(context).pop();
                           },
                           style: ElevatedButton.styleFrom(backgroundColor: Theme.of(context).unselectedWidgetColor),
-                          child: Text(AppLocalizations.of(context)?.btnCancel ?? "CANCEL")),
+                          child: Text(AppLocalizations.of(context)!.btnCancel)),
                       const Spacer(),
                       ElevatedButton(
                           key: const Key('btnSave'),
@@ -221,7 +221,7 @@ class _AddMeasurementPageState extends State<AddMeasurementPage> {
                             }
                           },
                           style: ElevatedButton.styleFrom(backgroundColor: Theme.of(context).primaryColor),
-                          child: Text(AppLocalizations.of(context)?.btnSave ?? "SAVE"))
+                          child: Text(AppLocalizations.of(context)!.btnSave))
                     ],
                   )
                 ],

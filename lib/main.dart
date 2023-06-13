@@ -35,7 +35,7 @@ class AppRoot extends StatelessWidget {
 
       return MaterialApp(
         title: 'Blood Pressure App',
-        onGenerateTitle: (context) => AppLocalizations.of(context)?.title ?? 'BLOOD PRESSURE APP',
+        onGenerateTitle: (context) => AppLocalizations.of(context)!.title,
         theme: ThemeData(primaryColor: settings.accentColor),
         darkTheme: ThemeData(
           brightness: Brightness.dark,

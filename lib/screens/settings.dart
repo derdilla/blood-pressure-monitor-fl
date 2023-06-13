@@ -22,7 +22,7 @@ class SettingsPage extends StatelessWidget {
       body: Consumer<Settings>(builder: (context, settings, child) {
         return ListView(
           children: [
-            SettingsSection(title: Text(AppLocalizations.of(context)?.layout ?? 'LAYOUT'), children: [
+            SettingsSection(title: Text(AppLocalizations.of(context)!.layout), children: [
               SwitchSettingsTile(
                   key: const Key('allowManualTimeInput'),
                   initialValue: settings.allowManualTimeInput,
