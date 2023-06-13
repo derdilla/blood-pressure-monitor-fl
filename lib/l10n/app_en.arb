@@ -1,0 +1,145 @@
+{
+  "title": "Blood Pressure App",
+
+  "success": "Success: {msg}",
+  "@success": {
+    "placeholders": {
+      "msg": {
+        "type": "String"
+      }
+    }
+  },
+  "loading": "loading...",
+  "error": "Error: {msg}",
+  "@error": {
+    "placeholders": {
+      "msg": {
+        "type": "String"
+      }
+    }
+  },
+  "errNaN": "Please enter a Number",
+  "errLt30": "Number < 30? Turn off validation in settings!",
+  "errUnrealistic": "Unrealistic value? Turn off validation in settings!",
+  "errUnknown": "unknown error",
+  "errCantOpenURL": "Can't open URL: {url}",
+  "@errCantOpenURL": {
+    "placeholders": {
+      "url": {
+        "type": "String"
+      }
+    }
+  },
+  "errNoFileOpened": "no file opened",
+  "errNotStarted": "not started'",
+  "errNoValue": "Please enter a value",
+  "errNotEnoughDataToGraph": "not enough data to draw graph",
+  "errNoData": "no data",
+
+  "btnCancel": "CANCEL",
+  "btnSave": "SAVE",
+  "btnConfirm": "CONFIRM",
+  "btnUndo": "UNDO",
+
+  "sysLong": "systolic",
+  "sysShort": "sys",
+  "diaLong": "diastolic",
+  "diaShort": "dia",
+  "pulLong": "pulse",
+  "pulShort": "pul",
+  "addNote": "note (optional)",
+
+  "layout": "layout",
+  "allowManualTimeInput": "allow manual time input",
+  "enterTimeFormatScreen": "time format",
+  "followSystemDarkMode": "follow system dark mode",
+  "darkMode": "enable dark mode",
+  "iconSize": "icon size",
+  "graphLineThickness": "line thickness",
+  "animationSpeed": "animation duration",
+  "graphTitlesCount": "graph label count",
+  "accentColor": "theme color",
+  "sysColor": "systolic color",
+  "diaColor": "diastolic color",
+  "pulColor": "pulse color",
+  "behavior": "behavior",
+  "validateInputs": "validate inputs",
+  "confirmDeletion": "confirm deletion",
+  "age": "age",
+  "ageDesc": "determines warn values",
+  "aboutWarnValuesScreen": "about",
+  "aboutWarnValuesScreenDesc": "more information on warn values",
+  "overrideWarnValues": "override warn values",
+  "sysWarn": "systolic warn",
+  "diaWarn": "diastolic warn",
+  "data": "data",
+  "useExportCompatability": "compatability export",
+  "useExportCompatabilityDesc": "sets export mime type to text",
+  "export": "export",
+  "exportSuccess": "Exported to: {path}",
+  "@exportSuccess": {
+    "placeholders": {
+      "path": {
+        "type": "String"
+      }
+    }
+  },
+  "shared": "shared",
+  "import": "import",
+  "sourceCode": "source code",
+  "licenses": "3rd party licenses",
+
+  "statistics": "Statistics",
+  "measurementCount": "Measurement count",
+  "measurementsPerDay": "Measurements per Day",
+  "timeResolvedMetrics": "Time-Resolved Metrics",
+  "avgOf": "{txt} Ø",
+  "@avgOf": {
+    "placeholders": {
+      "txt": {
+        "type": "String"
+      }
+    }
+  },
+  "minOf": "{txt} min.",
+  "@minOf": {
+    "placeholders": {
+      "txt": {
+        "type": "String"
+      }
+    }
+  },
+  "maxOf": "{txt} max.",
+  "@maxOf": {
+    "placeholders": {
+      "txt": {
+        "type": "String"
+      }
+    }
+  },
+
+  "warnValues": "warn values",
+  "warnAboutTxt1": "The warn values are a pure suggestions and no medical advice.",
+  "warnAboutTxt2": "The default age dependent values come from this source.",
+  "warnAboutTxt3": "Feel free to change the values to suit your needs and follow the recommendations of your doctor.",
+
+  "enterTimeFormatTxt1": "A formatter String consists of a mixture of predefined ICU/Skeleton Strings and any other text you want to include.",
+  "enterTimeFormatTxt2": "For a full list of valid formats please look here.",
+  "enterTimeFormatTxt3": "Please note that having longer/shorter format Strings wont magically change the width of the table columns, so it might come to awkward line breaks.",
+  "enterTimeFormatTxt4": "default: \"yy-MM-dd HH:mm\"",
+  "enterTimeFormatString": "time-format string",
+
+  "dateFormatting": "Date formatting",
+  "now": "now",
+  "notes": "notes",
+  "time": "time",
+  "confirmDelete": "Confirm deletion",
+  "confirmDeleteDesc": "Do you really want to delete this entry? You can turn of this question in the settings.",
+  "deletionConfirmed": "entry has been deleted",
+
+  "day": "day",
+  "week": "week",
+  "month": "month",
+  "year": "year",
+  "lifetime": "lifetime"
+}

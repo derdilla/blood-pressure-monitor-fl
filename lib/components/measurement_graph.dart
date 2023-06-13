@@ -6,6 +6,7 @@ import 'package:blood_pressure_app/model/blood_pressure.dart';
 import 'package:blood_pressure_app/model/settings_store.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
@@ -42,14 +43,14 @@ class _LineChartState extends State<_LineChart> {
                             (BuildContext context, AsyncSnapshot<UnmodifiableListView<BloodPressureRecord>> snapshot) {
                           switch (snapshot.connectionState) {
                             case ConnectionState.none:
-                              return const Text('not started');
+                              return Text(AppLocalizations.of(context)!.errNotStarted);
                             case ConnectionState.waiting:
-                              return const Text('loading...');
+                              return Text(AppLocalizations.of(context)!.loading);
                             default:
                               if (snapshot.hasError) {
-                                return Text('ERROR: ${snapshot.error}');
+                                return Text(AppLocalizations.of(context)!.error(snapshot.error.toString()));
                               } else if (snapshot.hasData && snapshot.data!.length < 2) {
-                                return const Text('not enough data to draw graph');
+                                return Text(AppLocalizations.of(context)!.errNotEnoughDataToGraph);
                               } else {
                                 assert(snapshot.hasData);
                                 final data = snapshot.data ?? [];
@@ -205,7 +206,7 @@ class MeasurementGraph extends StatelessWidget {
                       : Text(formatter.format(settings.displayDataStart)),
                   const Spacer(),
                   (settings.graphStepSize == TimeStep.lifetime)
-                      ? const Text('now')
+                      ? Text(AppLocalizations.of(context)!.now)
                       : Text(formatter.format(settings.displayDataEnd)),
                 ],
               );

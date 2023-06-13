@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class TimeFormattingHelp extends StatelessWidget {
   const TimeFormattingHelp({super.key});
@@ -45,14 +46,17 @@ class TimeFormattingHelp extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: const Text('Date formatting'),
+          title: Text(AppLocalizations.of(context)!.dateFormatting),
           backgroundColor: Theme.of(context).primaryColor,
         ),
         body: Container(
           padding: const EdgeInsets.all(20),
           child: SingleChildScrollView(
             child: Table(
-              columnWidths: const {0: FlexColumnWidth(0.71), 1: FlexColumnWidth(0.29)},
+              columnWidths: const {
+                0: FlexColumnWidth(0.71),
+                1: FlexColumnWidth(0.29)
+              },
               children: getRows(),
             ),
           ),
