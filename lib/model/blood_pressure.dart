@@ -160,14 +160,17 @@ class BloodPressureModel extends ChangeNotifier {
     // create csv
     String csvData = 'timestampUnixMs, systolic, diastolic, pulse, notes\n';
     List<Map<String, Object?>> allEntries = await _database.query('bloodPressureModel', orderBy: 'timestamp DESC');
+    List<List<dynamic>> data = [];
     for (var e in allEntries) {
-      csvData += '${e['timestamp']}, ${e['systolic']}, ${e['diastolic']}, ${e['pulse']}, "${e['notes']}"\n';
+      data.add([e['timestamp'],e['systolic'], e['diastolic'], e['pulse'], e['notes']]);
     }
+    csvData += const ListToCsvConverter().convert(data, delimitAllFields: true);
 
     // save data
     String filename = 'blood_press_${DateTime.now().toIso8601String()}';
     String path = await FileSaver.instance
         .saveFile(name: filename, bytes: Uint8List.fromList(utf8.encode(csvData)), ext: 'csv', mimeType: MimeType.csv);
+
 
     // notify user about location
     if (Platform.isLinux || Platform.isWindows || Platform.isMacOS) {
@@ -242,6 +245,11 @@ class BloodPressureRecord {
 
   const BloodPressureRecord(
       this.creationTime, this.systolic, this.diastolic, this.pulse, this.notes);
+
+  @override
+  String toString() {
+    return 'BloodPressureRecord($creationTime, $systolic, $diastolic, $pulse, $notes)';
+  }
 }
 
 // source: https://pressbooks.library.torontomu.ca/vitalsign/chapter/blood-pressure-ranges/ (last access: 20.05.2023)
