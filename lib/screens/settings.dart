@@ -47,28 +47,33 @@ class SettingsPage extends StatelessWidget {
                   );
                 },
               ),
-              SwitchSettingsTile(
-                  key: const Key('followSystemDarkMode'),
-                  initialValue: settings.followSystemDarkMode,
-                  onToggle: (value) {
-                    settings.followSystemDarkMode = value;
-                  },
-                  leading: const Icon(Icons.auto_mode),
-                  title: Text(AppLocalizations.of(context)!.followSystemDarkMode)),
-              SwitchSettingsTile(
-                key: const Key('darkMode'),
-                initialValue: (() {
-                  if (settings.followSystemDarkMode) {
-                    return MediaQuery.of(context).platformBrightness == Brightness.dark;
+              DropDownSettingsTile<int>(
+                key: const Key('thema'),
+                leading: const Icon(Icons.brightness_4),
+                title: Text(AppLocalizations.of(context)!.theme),
+                value: settings.followSystemDarkMode ? 0 : (settings.darkMode ? 1 : 2),
+                items: [
+                  DropdownMenuItem(value: 0, child: Text(AppLocalizations.of(context)!.system)),
+                  DropdownMenuItem(value: 1, child: Text(AppLocalizations.of(context)!.dark)),
+                  DropdownMenuItem(value: 2, child: Text(AppLocalizations.of(context)!.light))
+                ],
+                onChanged: (int? value) {
+                  switch (value) {
+                    case 0:
+                      settings.followSystemDarkMode = true;
+                      break;
+                    case 1:
+                      settings.followSystemDarkMode = false;
+                      settings.darkMode = true;
+                      break;
+                    case 2:
+                      settings.followSystemDarkMode = false;
+                      settings.darkMode = false;
+                      break;
+                    default:
+                      assert(false);
                   }
-                  return settings.darkMode;
-                })(),
-                onToggle: (value) {
-                  settings.darkMode = value;
                 },
-                leading: const Icon(Icons.dark_mode),
-                title: Text(AppLocalizations.of(context)!.darkMode),
-                disabled: settings.followSystemDarkMode,
               ),
               SliderSettingsTile(
                 key: const Key('iconSize'),
