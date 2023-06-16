@@ -1,0 +1,146 @@
+{
+  "title": "Blood Pressure App",
+
+  "success": "Erfolg: {msg}",
+  "@success": {
+    "placeholders": {
+      "msg": {
+        "type": "String"
+      }
+    }
+  },
+  "loading": "Lade...",
+  "error": "Fehler: {msg}",
+  "@error": {
+    "placeholders": {
+      "msg": {
+        "type": "String"
+      }
+    }
+  },
+  "errNaN": "Bitte Zahl eingeben",
+  "errLt30": "Wert < 30? Deaktiviere Prüfung in Einstellungen!",
+  "errUnrealistic": "Fehleingabe? Deaktiviere Prüfung in den Einstellungen!",
+  "errUnknown": "Unbekannter Fehler",
+  "errCantOpenURL": "Kann URL nicht öffnen: {url}",
+  "@errCantOpenURL": {
+    "placeholders": {
+      "url": {
+        "type": "String"
+      }
+    }
+  },
+  "errNoFileOpened": "Keine Datei geöffnet",
+  "errNotStarted": "Nicht begonnen'",
+  "errNoValue": "Bitte Wert eingeben",
+  "errNotEnoughDataToGraph": "Zuwenig Daten für Graphen",
+  "errNoData": "Keine Daten",
+
+  "btnCancel": "ABBRUCH",
+  "btnSave": "OK",
+  "btnConfirm": "OK",
+  "btnUndo": "ZURÜCK",
+
+  "sysLong": "Systole",
+  "sysShort": "Sys",
+  "diaLong": "Diastole",
+  "diaShort": "Dia",
+  "pulLong": "Puls",
+  "pulShort": "Pul",
+  "addNote": "Notiz (optional)",
+
+  "layout": "Layout",
+  "allowManualTimeInput": "Editierbare Zeitangaben",
+  "enterTimeFormatScreen": "Datums-/Zeitformat",
+  "followSystemDarkMode": "Thema wie System",
+  "darkMode": "Dunkles Thema",
+  "iconSize": "Größe der Knöpfe",
+  "graphLineThickness": "Linienstärke d. Graphen",
+  "animationSpeed": "Animationsdauer",
+  "graphTitlesCount": "Anzahl der Label am Graphen",
+  "accentColor": "Thema der App",
+  "sysColor": "Farbe für Systole",
+  "diaColor": "Farbe für Diastole",
+  "pulColor": "Farbe für Puls",
+  "behavior": "Verhalten",
+  "validateInputs": "Eingaben prüfen",
+  "confirmDeletion": "Löschen bestätigen",
+  "age": "Alter",
+  "ageDesc": "Bestimmt die Warnwerte",
+  "aboutWarnValuesScreen": "Mehr Infos",
+  "aboutWarnValuesScreenDesc": "Mehr Infos zu den Warnwerten",
+  "overrideWarnValues": "Warnwerte überschreiben",
+  "sysWarn": "Warnwert Sys",
+  "diaWarn": "Warnwert Dia",
+  "data": "Daten",
+  "useExportCompatability": "Kompatibler Export",
+  "useExportCompatabilityDesc": "Signalisiert Export als Text",
+  "export": "Exportieren",
+  "exportSuccess": "Exportiert in: {path}",
+  "@exportSuccess": {
+    "placeholders": {
+      "path": {
+        "type": "String"
+      }
+    }
+  },
+  "shared": "Geteilt",
+  "import": "Import",
+  "sourceCode": "Quellcode",
+  "licenses": "Lizenzen dritter",
+
+  "statistics": "Statistik",
+  "measurementCount": "Anzahl Messungen",
+  "measurementsPerDay": "Messungen pro Tag",
+  "timeResolvedMetrics": "Werte nach Uhrzeit",
+  "avgOf": "{txt} Ø",
+  "@avgOf": {
+    "placeholders": {
+      "txt": {
+        "type": "String"
+      }
+    }
+  },
+  "minOf": "{txt} min.",
+  "@minOf": {
+    "placeholders": {
+      "txt": {
+        "type": "String"
+      }
+    }
+  },
+
+  "maxOf": "{txt} max.",
+  "@maxOf": {
+    "placeholders": {
+      "txt": {
+        "type": "String"
+      }
+    }
+  },
+
+  "warnValues": "Warnwerte",
+  "warnAboutTxt1": "Die Warnwerte sind lediglich Vorschläge, kein medizinischer Rat.",
+  "warnAboutTxt2": "Die voreingestellten Basiswerte für Altersstufen stammen aus dieser Quelle.",
+  "warnAboutTxt3": "Ändere die Werte nach Bedarf und stimme dich mit deinem Arzt ab.",
+
+  "enterTimeFormatTxt1": "Das Datumsformat besteht aus einer Mischung vordefinierter ICU-Strings sowie anderer Zeichen deiner Wahl.",
+  "enterTimeFormatTxt2": "Die vollständige Liste gültiger Formate findest du hier.",
+  "enterTimeFormatTxt3": "Bitte beachte, dass kürzere/längere Zeitformat-Strings nicht die Spaltenbreiten ändern. Sie führen eher zu unerwünschten Umbrüchen.",
+  "enterTimeFormatTxt4": "Voreingestellt: \"yy-MM-dd HH:mm\"",
+  "enterTimeFormatString": "Zeitformat-String",
+
+  "dateFormatting": "Datumsformat",
+  "now": "jetzt",
+  "notes": "Notizen",
+  "time": "Zeitpunkt",
+  "confirmDelete": "Löschen bestätigen",
+  "confirmDeleteDesc": "Soll der Eintrag wirklich gelöscht werden? (Diese Rückfrage kann in den Einstellungen abgestellt werden.)",
+  "deletionConfirmed": "Eintrag wurde gelöscht",
+
+  "day": "Tag",
+  "week": "Woche",
+  "month": "Monat",
+  "year": "Jahr",
+  "lifetime": "Lebenszeit"
+}

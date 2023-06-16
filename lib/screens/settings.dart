@@ -5,6 +5,7 @@ import 'package:blood_pressure_app/screens/subsettings/enter_timeformat.dart';
 import 'package:blood_pressure_app/screens/subsettings/warn_about.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -21,7 +22,7 @@ class SettingsPage extends StatelessWidget {
       body: Consumer<Settings>(builder: (context, settings, child) {
         return ListView(
           children: [
-            SettingsSection(title: const Text('layout'), children: [
+            SettingsSection(title: Text(AppLocalizations.of(context)!.layout), children: [
               SwitchSettingsTile(
                   key: const Key('allowManualTimeInput'),
                   initialValue: settings.allowManualTimeInput,
@@ -29,10 +30,10 @@ class SettingsPage extends StatelessWidget {
                     settings.allowManualTimeInput = value;
                   },
                   leading: const Icon(Icons.details),
-                  title: const Text('allow manual time input')),
+                  title: Text(AppLocalizations.of(context)!.allowManualTimeInput)),
               SettingsTile(
                 key: const Key('EnterTimeFormatScreen'),
-                title: const Text('time format'),
+                title: Text(AppLocalizations.of(context)!.enterTimeFormatScreen),
                 leading: const Icon(Icons.schedule),
                 trailing: Icon(
                   Icons.arrow_forward_ios,
@@ -53,7 +54,7 @@ class SettingsPage extends StatelessWidget {
                     settings.followSystemDarkMode = value;
                   },
                   leading: const Icon(Icons.auto_mode),
-                  title: const Text('follow system dark mode')),
+                  title: Text(AppLocalizations.of(context)!.followSystemDarkMode)),
               SwitchSettingsTile(
                 key: const Key('darkMode'),
                 initialValue: (() {
@@ -66,12 +67,12 @@ class SettingsPage extends StatelessWidget {
                   settings.darkMode = value;
                 },
                 leading: const Icon(Icons.dark_mode),
-                title: const Text('enable dark mode'),
+                title: Text(AppLocalizations.of(context)!.darkMode),
                 disabled: settings.followSystemDarkMode,
               ),
               SliderSettingsTile(
                 key: const Key('iconSize'),
-                title: const Text('icon size'),
+                title: Text(AppLocalizations.of(context)!.iconSize),
                 leading: const Icon(Icons.zoom_in),
                 onChanged: (double value) {
                   settings.iconSize = value;
@@ -83,7 +84,7 @@ class SettingsPage extends StatelessWidget {
               ),
               SliderSettingsTile(
                 key: const Key('graphLineThickness'),
-                title: const Text('line thickness'),
+                title: Text(AppLocalizations.of(context)!.graphLineThickness),
                 leading: const Icon(Icons.line_weight),
                 onChanged: (double value) {
                   settings.graphLineThickness = value;
@@ -95,7 +96,7 @@ class SettingsPage extends StatelessWidget {
               ),
               SliderSettingsTile(
                 key: const Key('animationSpeed'),
-                title: const Text('animation duration'),
+                title: Text(AppLocalizations.of(context)!.animationSpeed),
                 leading: const Icon(Icons.speed),
                 onChanged: (double value) {
                   settings.animationSpeed = value.toInt();
@@ -107,7 +108,7 @@ class SettingsPage extends StatelessWidget {
               ),
               SliderSettingsTile(
                 key: const Key('graphTitlesCount'),
-                title: const Text('graph label count'),
+                title: Text(AppLocalizations.of(context)!.graphTitlesCount),
                 leading: const Icon(Icons.functions),
                 onChanged: (double value) {
                   settings.graphTitlesCount = value.toInt();
@@ -122,28 +123,28 @@ class SettingsPage extends StatelessWidget {
                   onMainColorChanged: (color) =>
                       settings.accentColor = createMaterialColor((color ?? Colors.teal).value),
                   initialColor: settings.accentColor,
-                  title: const Text('theme color')),
+                  title: Text(AppLocalizations.of(context)!.accentColor)),
               ColorSelectionSettingsTile(
                   key: const Key('sysColor'),
                   onMainColorChanged: (color) => settings.sysColor = createMaterialColor((color ?? Colors.green).value),
                   initialColor: settings.sysColor,
-                  title: const Text('systolic color')),
+                  title: Text(AppLocalizations.of(context)!.sysColor)),
               ColorSelectionSettingsTile(
                   key: const Key('diaColor'),
                   onMainColorChanged: (color) => settings.diaColor = createMaterialColor((color ?? Colors.teal).value),
                   initialColor: settings.diaColor,
-                  title: const Text('diastolic color')),
+                  title: Text(AppLocalizations.of(context)!.diaColor)),
               ColorSelectionSettingsTile(
                   key: const Key('pulColor'),
                   onMainColorChanged: (color) => settings.pulColor = createMaterialColor((color ?? Colors.red).value),
                   initialColor: settings.pulColor,
-                  title: const Text('pulse color')),
+                  title: Text(AppLocalizations.of(context)!.pulColor)),
             ]),
-            SettingsSection(title: const Text('behavior'), children: [
+            SettingsSection(title: Text(AppLocalizations.of(context)!.behavior), children: [
               SwitchSettingsTile(
                   key: const Key('validateInputs'),
                   initialValue: settings.validateInputs,
-                  title: const Text('validate inputs'),
+                  title: Text(AppLocalizations.of(context)!.validateInputs),
                   leading: const Icon(Icons.edit),
                   onToggle: (value) {
                     settings.validateInputs = value;
@@ -151,15 +152,15 @@ class SettingsPage extends StatelessWidget {
               SwitchSettingsTile(
                   key: const Key('confirmDeletion'),
                   initialValue: settings.confirmDeletion,
-                  title: const Text('confirm deletion'),
+                  title: Text(AppLocalizations.of(context)!.confirmDeletion),
                   leading: const Icon(Icons.check),
                   onToggle: (value) {
                     settings.confirmDeletion = value;
                   }),
               InputSettingsTile(
                 key: const Key('age'),
-                title: const Text('age'),
-                description: const Text('determines warn values'),
+                title: Text(AppLocalizations.of(context)!.age),
+                description: Text(AppLocalizations.of(context)!.ageDesc),
                 leading: const Icon(Icons.manage_accounts_outlined),
                 keyboardType: TextInputType.number,
                 inputFormatters: [FilteringTextInputFormatter.digitsOnly],
@@ -170,7 +171,7 @@ class SettingsPage extends StatelessWidget {
                   }
                   settings.age = int.tryParse(value) as int; // no error possible as per above's condition
                 },
-                decoration: const InputDecoration(hintText: 'age'),
+                decoration: InputDecoration(hintText: AppLocalizations.of(context)!.age),
                 inputWidth: 80,
                 disabled: false,
                 // although no function provided, when overriding warn values,
@@ -179,8 +180,8 @@ class SettingsPage extends StatelessWidget {
               ),
               SettingsTile(
                   key: const Key('AboutWarnValuesScreen'),
-                  title: const Text('about'),
-                  description: const Text('more information on warn values'),
+                  title: Text(AppLocalizations.of(context)!.aboutWarnValuesScreen),
+                  description: Text(AppLocalizations.of(context)!.aboutWarnValuesScreenDesc),
                   leading: const Icon(Icons.info_outline),
                   onPressed: (context) {
                     Navigator.push(
@@ -195,11 +196,11 @@ class SettingsPage extends StatelessWidget {
                   settings.overrideWarnValues = value;
                 },
                 leading: const Icon(Icons.tune),
-                title: const Text('override warn values'),
+                title: Text(AppLocalizations.of(context)!.overrideWarnValues),
               ),
               InputSettingsTile(
                 key: const Key('sysWarn'),
-                title: const Text('systolic warn'),
+                title: Text(AppLocalizations.of(context)!.sysWarn),
                 leading: const Icon(Icons.settings_applications_outlined),
                 keyboardType: TextInputType.number,
                 inputFormatters: [FilteringTextInputFormatter.digitsOnly],
@@ -211,13 +212,13 @@ class SettingsPage extends StatelessWidget {
                   // no error possible as per above's condition
                   settings.sysWarn = double.tryParse(value) as double;
                 },
-                decoration: const InputDecoration(hintText: 'systolic warn'),
+                decoration: InputDecoration(hintText: AppLocalizations.of(context)!.sysWarn),
                 inputWidth: 120,
                 disabled: !settings.overrideWarnValues,
               ),
               InputSettingsTile(
                 key: const Key('diaWarn'),
-                title: const Text('diastolic warn'),
+                title: Text(AppLocalizations.of(context)!.diaWarn),
                 leading: const Icon(Icons.settings_applications_outlined),
                 keyboardType: TextInputType.number,
                 inputFormatters: [FilteringTextInputFormatter.digitsOnly],
@@ -229,52 +230,57 @@ class SettingsPage extends StatelessWidget {
                   // no error possible as per above's condition
                   settings.diaWarn = double.tryParse(value) as double;
                 },
-                decoration: const InputDecoration(hintText: 'diastolic warn'),
+                decoration: InputDecoration(hintText: AppLocalizations.of(context)!.diaWarn),
                 inputWidth: 120,
                 disabled: !settings.overrideWarnValues,
               ),
             ]),
             SettingsSection(
-              title: const Text('data'),
+              title: Text(AppLocalizations.of(context)!.data),
               children: [
                 SwitchSettingsTile(
                     key: const Key('useExportCompatability'),
                     initialValue: settings.useExportCompatability,
-                    title: const Text('compatability export'),
-                    description: const Text('sets export mime type to text'),
+                    title: Text(AppLocalizations.of(context)!.useExportCompatability),
+                    description: Text(AppLocalizations.of(context)!.useExportCompatabilityDesc),
                     leading: const Icon(Icons.support),
                     onToggle: (value) {
                       settings.useExportCompatability = value;
                     }),
                 SettingsTile(
                   key: const Key('export'),
-                  title: const Text('export'),
+                  title: Text(AppLocalizations.of(context)!.export),
                   leading: const Icon(Icons.save),
                   onPressed: (context) => Provider.of<BloodPressureModel>(context, listen: false).save((success, msg) {
                     if (success && msg != null) {
-                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(msg)));
+                      ScaffoldMessenger.of(context)
+                          .showSnackBar(SnackBar(content: Text(AppLocalizations.of(context)!.success(msg))));
                     } else if (!success && msg != null) {
-                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error: $msg')));
+                      ScaffoldMessenger.of(context)
+                          .showSnackBar(SnackBar(content: Text(AppLocalizations.of(context)!.error(msg))));
                     }
                   }, exportAsText: settings.useExportCompatability),
                 ),
                 SettingsTile(
                   key: const Key('import'),
-                  title: const Text('import'),
+                  title: Text(AppLocalizations.of(context)!.import),
                   leading: const Icon(Icons.file_upload),
                   onPressed: (context) {
                     try {
-                      Provider.of<BloodPressureModel>(context, listen: false).import((res, String? err) {
+                      Provider.of<BloodPressureModel>(context, listen: false).import((res) {
                         if (res) {
-                          ScaffoldMessenger.of(context)
-                              .showSnackBar(const SnackBar(content: Text('import successful')));
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                              content:
+                                  Text(AppLocalizations.of(context)!.success(AppLocalizations.of(context)!.import))));
                         } else {
-                          ScaffoldMessenger.of(context)
-                              .showSnackBar(SnackBar(content: Text('Error: ${err ?? 'unknown error'}')));
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                              content: Text(AppLocalizations.of(context)!
+                                  .error(AppLocalizations.of(context)!.errNoFileOpened))));
                         }
                       });
                     } on Exception catch (e) {
-                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('error: ${e.toString()}')));
+                      ScaffoldMessenger.of(context)
+                          .showSnackBar(SnackBar(content: Text(AppLocalizations.of(context)!.error(e.toString()))));
                     }
                   },
                 ),
@@ -283,7 +289,7 @@ class SettingsPage extends StatelessWidget {
             SettingsSection(title: const Text('about'), children: [
               SettingsTile(
                 key: const Key('sourceCode'),
-                title: const Text('source code'),
+                title: Text(AppLocalizations.of(context)!.sourceCode),
                 leading: const Icon(Icons.merge),
                 onPressed: (context) async {
                   var url = Uri.parse('https://github.com/NobodyForNothing/blood-pressure-monitor-fl');
@@ -291,15 +297,15 @@ class SettingsPage extends StatelessWidget {
                     await launchUrl(url, mode: LaunchMode.externalApplication);
                   } else {
                     if (!context.mounted) return;
-                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                        content:
-                            Text('Can\'t open URL:\nhttps://github.com/NobodyForNothing/blood-pressure-monitor-fl')));
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                        content: Text(AppLocalizations.of(context)!
+                            .errCantOpenURL('https://github.com/NobodyForNothing/blood-pressure-monitor-fl'))));
                   }
                 },
               ),
               SettingsTile(
                 key: const Key('licenses'),
-                title: const Text('3rd party licenses'),
+                title: Text(AppLocalizations.of(context)!.licenses),
                 leading: const Icon(Icons.policy_outlined),
                 trailing: Icon(
                   Icons.arrow_forward_ios,

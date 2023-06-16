@@ -8,10 +8,12 @@ class BloodPressureAnalyser {
 
   Future<int> get measurementsPerDay async {
     final c = await _model.count;
+    if (c <= 1) return -1;
+
     final firstDay = await _model.firstDay;
     final lastDay = await _model.lastDay;
 
-    if (c <= 1 || firstDay.millisecondsSinceEpoch == -1 || lastDay.millisecondsSinceEpoch == -1) {
+    if (firstDay.millisecondsSinceEpoch == -1 || lastDay.millisecondsSinceEpoch == -1) {
       return -1;
     }
     if (lastDay.difference(firstDay).inDays <= 0) {

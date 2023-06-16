@@ -3,6 +3,7 @@ import 'package:blood_pressure_app/model/blood_pressure.dart';
 import 'package:blood_pressure_app/model/settings_store.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
@@ -69,7 +70,8 @@ class _AddMeasurementPageState extends State<AddMeasurementPage> {
                           var selectedTime = await showDateTimePicker(
                               context: context,
                               firstDate: DateTime.fromMillisecondsSinceEpoch(0),
-                              lastDate: DateTime.now().copyWith(second: DateTime.now().second + 1));
+                              lastDate: DateTime.now().copyWith(second: DateTime.now().second + 1),
+                              initialDate: _time);
                           if (selectedTime != null) {
                             setState(() {
                               _time = selectedTime;
@@ -99,7 +101,7 @@ class _AddMeasurementPageState extends State<AddMeasurementPage> {
                     return TextFormField(
                       key: const Key('txtSys'),
                       initialValue: widget.isEdit ? _systolic.toString() : '',
-                      decoration: const InputDecoration(hintText: 'systolic'),
+                      decoration: InputDecoration(hintText: AppLocalizations.of(context)?.sysLong),
                       keyboardType: TextInputType.number,
                       inputFormatters: <TextInputFormatter>[FilteringTextInputFormatter.digitsOnly],
                       focusNode: _sysFocusNode,
@@ -111,12 +113,12 @@ class _AddMeasurementPageState extends State<AddMeasurementPage> {
                       },
                       validator: (String? value) {
                         if (value == null || value.isEmpty || (int.tryParse(value) == null)) {
-                          return 'Please enter a Number';
+                          return AppLocalizations.of(context)?.errNaN;
                         } else if (settings.validateInputs && (int.tryParse(value) ?? -1) <= 30) {
-                          return 'Number < 30? Turn off validation in settings!';
+                          return AppLocalizations.of(context)?.errLt30;
                         } else if (settings.validateInputs && (int.tryParse(value) ?? 1000) >= 400) {
                           // exceeding this value is unlikely: https://pubmed.ncbi.nlm.nih.gov/7741618/
-                          return 'Unrealistic value? Turn off validation in settings!';
+                          return AppLocalizations.of(context)?.errUnrealistic;
                         } else {
                           _systolic = int.tryParse(value) ?? -1;
                         }
@@ -128,7 +130,7 @@ class _AddMeasurementPageState extends State<AddMeasurementPage> {
                     return TextFormField(
                       key: const Key('txtDia'),
                       initialValue: widget.isEdit ? _diastolic.toString() : '',
-                      decoration: const InputDecoration(hintText: 'diastolic'),
+                      decoration: InputDecoration(hintText: AppLocalizations.of(context)?.diaLong),
                       keyboardType: TextInputType.number,
                       inputFormatters: <TextInputFormatter>[FilteringTextInputFormatter.digitsOnly],
                       onChanged: (String? value) {
@@ -139,12 +141,12 @@ class _AddMeasurementPageState extends State<AddMeasurementPage> {
                       },
                       validator: (String? value) {
                         if (value == null || value.isEmpty || (int.tryParse(value) == null)) {
-                          return 'Please enter a Number';
+                          return AppLocalizations.of(context)?.errNaN;
                         } else if (settings.validateInputs && (int.tryParse(value) ?? -1) <= 30) {
-                          return 'Number < 30? Turn off validation in settings!';
+                          return AppLocalizations.of(context)?.errLt30;
                         } else if (settings.validateInputs && (int.tryParse(value) ?? 1000) >= 400) {
                           // exceeding this value is unlikely: https://pubmed.ncbi.nlm.nih.gov/7741618/
-                          return 'Unrealistic value? Turn off validation in settings!';
+                          return AppLocalizations.of(context)?.errUnrealistic;
                         } else {
                           _diastolic = int.tryParse(value) ?? -1;
                         }
@@ -156,7 +158,7 @@ class _AddMeasurementPageState extends State<AddMeasurementPage> {
                     return TextFormField(
                       key: const Key('txtPul'),
                       initialValue: widget.isEdit ? _pulse.toString() : '',
-                      decoration: const InputDecoration(hintText: 'pulse'),
+                      decoration: InputDecoration(hintText: AppLocalizations.of(context)?.pulLong),
                       keyboardType: TextInputType.number,
                       inputFormatters: <TextInputFormatter>[FilteringTextInputFormatter.digitsOnly],
                       onChanged: (String? value) {
@@ -167,12 +169,12 @@ class _AddMeasurementPageState extends State<AddMeasurementPage> {
                       },
                       validator: (String? value) {
                         if (value == null || value.isEmpty || (int.tryParse(value) == null)) {
-                          return 'Please enter a Number';
+                          return AppLocalizations.of(context)?.errNaN;
                         } else if (settings.validateInputs && (int.tryParse(value) ?? -1) <= 30) {
-                          return 'Number < 30? Turn off validation in settings!';
+                          return AppLocalizations.of(context)?.errLt30;
                         } else if (settings.validateInputs && (int.tryParse(value) ?? 1000) >= 600) {
                           // exceeding this value is unlikely: https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3273956/
-                          return 'Unrealistic value? Turn off validation in settings!';
+                          return AppLocalizations.of(context)?.errUnrealistic;
                         } else {
                           _pulse = int.tryParse(value) ?? -1;
                         }
@@ -182,7 +184,7 @@ class _AddMeasurementPageState extends State<AddMeasurementPage> {
                   }),
                   TextFormField(
                     initialValue: widget.isEdit ? _note.toString() : '',
-                    decoration: const InputDecoration(hintText: 'note (optional)'),
+                    decoration: InputDecoration(hintText: AppLocalizations.of(context)?.addNote),
                     validator: (String? value) {
                       _note = value ?? "";
                       return null;
@@ -207,7 +209,7 @@ class _AddMeasurementPageState extends State<AddMeasurementPage> {
                             Navigator.of(context).pop();
                           },
                           style: ElevatedButton.styleFrom(backgroundColor: Theme.of(context).unselectedWidgetColor),
-                          child: const Text('CANCEL')),
+                          child: Text(AppLocalizations.of(context)!.btnCancel)),
                       const Spacer(),
                       ElevatedButton(
                           key: const Key('btnSave'),
@@ -219,7 +221,7 @@ class _AddMeasurementPageState extends State<AddMeasurementPage> {
                             }
                           },
                           style: ElevatedButton.styleFrom(backgroundColor: Theme.of(context).primaryColor),
-                          child: const Text('SAVE'))
+                          child: Text(AppLocalizations.of(context)!.btnSave))
                     ],
                   )
                 ],

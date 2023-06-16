@@ -3,6 +3,7 @@ import 'package:blood_pressure_app/model/blood_pressure_analyzer.dart';
 import 'package:blood_pressure_app/model/settings_store.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 
 class StatisticsPage extends StatelessWidget {
@@ -12,7 +13,7 @@ class StatisticsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Statistics'),
+        title: Text(AppLocalizations.of(context)!.statistics),
         backgroundColor: Theme.of(context).primaryColor,
       ),
       body: SingleChildScrollView(child: Consumer<BloodPressureModel>(
@@ -20,76 +21,76 @@ class StatisticsPage extends StatelessWidget {
           return Consumer<Settings>(builder: (context, settings, child) {
             return Column(
               children: [
-                Statistic(caption: const Text('Measurement count'), child: futureInt(model.count)),
+                Statistic(caption: Text(AppLocalizations.of(context)!.statistics), child: futureInt(model.count)),
                 // special measurements
                 StatisticsRow(
                   caption1: Text(
-                    'Systolic avg.',
+                    AppLocalizations.of(context)!.avgOf(AppLocalizations.of(context)!.sysLong),
                     style: TextStyle(color: settings.sysColor, fontWeight: FontWeight.w700),
                   ),
                   child1: futureInt(model.avgSys),
                   caption2: Text(
-                    'Diastolic avg.',
+                    AppLocalizations.of(context)!.avgOf(AppLocalizations.of(context)!.diaLong),
                     style: TextStyle(color: settings.diaColor, fontWeight: FontWeight.w700),
                   ),
                   child2: futureInt(model.avgDia),
                   caption3: Text(
-                    'Pulse avg.',
+                    AppLocalizations.of(context)!.avgOf(AppLocalizations.of(context)!.pulLong),
                     style: TextStyle(color: settings.pulColor, fontWeight: FontWeight.w700),
                   ),
                   child3: futureInt(model.avgPul),
                 ),
                 Statistic(
-                    caption: const Text('Measurements per Day'),
+                    caption: Text(AppLocalizations.of(context)!.measurementsPerDay),
                     child: futureInt(BloodPressureAnalyser(model).measurementsPerDay)),
                 StatisticsRow(
-                  caption2: Text(
-                    'Diastolic min.',
-                    style: TextStyle(color: settings.diaColor, fontWeight: FontWeight.w700),
-                  ),
-                  child2: futureInt(model.minDia),
                   caption1: Text(
-                    'Systolic min.',
+                    AppLocalizations.of(context)!.minOf(AppLocalizations.of(context)!.sysLong),
                     style: TextStyle(color: settings.sysColor, fontWeight: FontWeight.w700),
                   ),
                   child1: futureInt(model.minSys),
+                  caption2: Text(
+                    AppLocalizations.of(context)!.minOf(AppLocalizations.of(context)!.diaLong),
+                    style: TextStyle(color: settings.diaColor, fontWeight: FontWeight.w700),
+                  ),
+                  child2: futureInt(model.minDia),
                   caption3: Text(
-                    'Pulse min.',
+                    AppLocalizations.of(context)!.minOf(AppLocalizations.of(context)!.pulLong),
                     style: TextStyle(color: settings.pulColor, fontWeight: FontWeight.w700),
                   ),
                   child3: futureInt(model.minPul),
                 ),
                 StatisticsRow(
                   caption2: Text(
-                    'Diastolic max.',
+                    AppLocalizations.of(context)!.maxOf(AppLocalizations.of(context)!.diaLong),
                     style: TextStyle(color: settings.diaColor, fontWeight: FontWeight.w700),
                   ),
                   child2: futureInt(model.maxDia),
                   caption1: Text(
-                    'Systolic max.',
+                    AppLocalizations.of(context)!.maxOf(AppLocalizations.of(context)!.sysLong),
                     style: TextStyle(color: settings.sysColor, fontWeight: FontWeight.w700),
                   ),
                   child1: futureInt(model.maxSys),
                   caption3: Text(
-                    'Pulse max.',
+                    AppLocalizations.of(context)!.maxOf(AppLocalizations.of(context)!.pulLong),
                     style: TextStyle(color: settings.pulColor, fontWeight: FontWeight.w700),
                   ),
                   child3: futureInt(model.maxPul),
                 ),
                 // Time-Resolved Metrics
                 Statistic(
-                  caption: const Text('Time-Resolved Metrics'),
+                  caption: Text(AppLocalizations.of(context)!.timeResolvedMetrics),
                   child: FutureBuilder<List<List<int>>>(
                       future: BloodPressureAnalyser(model).allAvgsRelativeToDaytime,
                       builder: (BuildContext context, AsyncSnapshot<List<List<int>>> snapshot) {
                         switch (snapshot.connectionState) {
                           case ConnectionState.none:
-                            return const Text('not started');
+                            return Text(AppLocalizations.of(context)!.errNotStarted);
                           case ConnectionState.waiting:
-                            return const Text('loading...');
+                            return Text(AppLocalizations.of(context)!.loading);
                           default:
                             if (snapshot.hasError) {
-                              return Text('ERROR: ${snapshot.error}');
+                              return Text(AppLocalizations.of(context)!.error(snapshot.error.toString()));
                             }
                             assert(snapshot.hasData);
                             assert(snapshot.data != null);
@@ -269,18 +270,18 @@ Widget futureInt(Future<int> value) {
       builder: (BuildContext context, AsyncSnapshot<int> snapshot) {
         switch (snapshot.connectionState) {
           case ConnectionState.none:
-            return const Text('not started');
+            return Text(AppLocalizations.of(context)!.errNotStarted);
           case ConnectionState.waiting:
-            return const Text('loading...');
+            return Text(AppLocalizations.of(context)!.loading);
           default:
             if (snapshot.hasError) {
-              return Text('ERROR: ${snapshot.error}');
+              return Text(AppLocalizations.of(context)!.error(snapshot.error.toString()));
             }
             assert(snapshot.hasData);
             if ((snapshot.data ?? -1) < 0) {
               return const Text('-');
             }
-            return Text(snapshot.data?.toString() ?? 'error');
+            return const Text('-');
         }
       });
 }
