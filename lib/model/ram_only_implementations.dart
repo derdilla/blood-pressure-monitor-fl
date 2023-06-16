@@ -1,6 +1,7 @@
 import 'dart:collection';
 
 import 'package:blood_pressure_app/model/blood_pressure.dart';
+import 'package:blood_pressure_app/model/export_import.dart';
 import 'package:blood_pressure_app/model/settings_store.dart';
 import 'package:flutter/material.dart';
 
@@ -113,6 +114,7 @@ class RamSettings extends ChangeNotifier implements Settings {
   bool _useExportCompatability = false;
   bool _validateInputs = true;
   int _graphTitlesCount = 5;
+  ExportFormat _exportFormat = ExportFormat.csv;
 
   RamSettings() {
     _accentColor = createMaterialColor(0xFF009688);
@@ -330,6 +332,15 @@ class RamSettings extends ChangeNotifier implements Settings {
   @override
   set graphTitlesCount(int value) {
     _graphTitlesCount = value;
+    notifyListeners();
+  }
+
+  @override
+  ExportFormat get exportFormat => _exportFormat;
+
+  @override
+  set exportFormat(ExportFormat value) {
+    _exportFormat = value;
     notifyListeners();
   }
 

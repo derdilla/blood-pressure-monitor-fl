@@ -1,5 +1,6 @@
 import 'package:blood_pressure_app/model/blood_pressure.dart';
 import 'package:blood_pressure_app/model/export_import.dart';
+import 'package:file_saver/file_saver.dart' show MimeType;
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -176,15 +177,6 @@ class Settings extends ChangeNotifier {
     notifyListeners();
   }
 
-  bool get useExportCompatability {
-    return _prefs.getBool('useExportCompatability') ?? false;
-  }
-
-  set useExportCompatability(bool useExportCompatability) {
-    _prefs.setBool('useExportCompatability', useExportCompatability);
-    notifyListeners();
-  }
-
   double get iconSize {
     return _prefs.getInt('iconSize')?.toDouble() ?? 30;
   }
@@ -284,10 +276,66 @@ class Settings extends ChangeNotifier {
   ExportFormat get exportFormat {
     return ExportFormat(_prefs.getInt('exportFormat') ?? 0);
   }
+  
   set exportFormat(ExportFormat format) {
     _prefs.setInt('exportFormat', format.code);
     notifyListeners();
   }
+  
+  String get csvFieldDelimiter {
+    return _prefs.getString('csvFieldDelimiter') ?? ',';
+  }
+  
+  set csvFieldDelimiter(String value) {
+    _prefs.setString('csvFieldDelimiter', value);
+    notifyListeners();
+  }
+
+  String get csvTextDelimiter {
+    return _prefs.getString('csvTextDelimiter') ?? '"';
+  }
+
+  set csvTextDelimiter(String value) {
+    _prefs.setString('csvTextDelimiter', value);
+    notifyListeners();
+  }
+
+  MimeType get exportMimeType {
+    switch (_prefs.getInt('exportMimeType') ?? 0) {
+      case 0:
+        return MimeType.csv;
+      case 1:
+        return MimeType.text;
+      case 2:
+        return MimeType.pdf;
+      case 3:
+        return MimeType.other;
+      default:
+        throw UnimplementedError();
+    }
+  }
+  set exportMimeType(MimeType value) {
+    switch (value) {
+      case MimeType.csv:
+        _prefs.setInt('exportMimeType', 0);
+        break;
+      case MimeType.text:
+        _prefs.setInt('exportMimeType', 1);
+        break;
+      case MimeType.pdf:
+        _prefs.setInt('exportMimeType', 2);
+        break;
+      case MimeType.other:
+        _prefs.setInt('exportMimeType', 3);
+        break;
+      default:
+        throw UnimplementedError();
+    }
+    notifyListeners();
+  }
+
+
+
 }
 
 class TimeStep {

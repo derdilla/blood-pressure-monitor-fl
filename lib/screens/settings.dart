@@ -2,6 +2,7 @@ import 'package:blood_pressure_app/components/settings_widgets.dart';
 import 'package:blood_pressure_app/model/blood_pressure.dart';
 import 'package:blood_pressure_app/model/settings_store.dart';
 import 'package:blood_pressure_app/screens/subsettings/enter_timeformat.dart';
+import 'package:blood_pressure_app/screens/subsettings/export_import_screen.dart';
 import 'package:blood_pressure_app/screens/subsettings/warn_about.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -243,15 +244,16 @@ class SettingsPage extends StatelessWidget {
             SettingsSection(
               title: Text(AppLocalizations.of(context)!.data),
               children: [
-                SwitchSettingsTile(
-                    key: const Key('useExportCompatability'),
-                    initialValue: settings.useExportCompatability,
-                    title: Text(AppLocalizations.of(context)!.useExportCompatability),
-                    description: Text(AppLocalizations.of(context)!.useExportCompatabilityDesc),
-                    leading: const Icon(Icons.support),
-                    onToggle: (value) {
-                      settings.useExportCompatability = value;
-                    }),
+                SettingsTile(
+                    title: const Text('EXPORT'),
+                    trailing: const Icon(Icons.arrow_forward_ios),
+                    onPressed: (context) {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => const ExportImportScreen()),
+                      );
+                    }
+                ),
                 SettingsTile(
                   key: const Key('export'),
                   title: Text(AppLocalizations.of(context)!.export),
@@ -264,7 +266,7 @@ class SettingsPage extends StatelessWidget {
                       ScaffoldMessenger.of(context)
                           .showSnackBar(SnackBar(content: Text(AppLocalizations.of(context)!.error(msg))));
                     }
-                  }, exportAsText: settings.useExportCompatability),
+                  }, exportAsText: false),
                 ),
                 SettingsTile(
                   key: const Key('import'),

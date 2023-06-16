@@ -1,17 +1,12 @@
 
-import 'dart:typed_data';
-
 import 'package:intl/intl.dart';
-
-import 'blood_pressure.dart';
 
 class CSVExportSettings {
   final DateFormat dateFormatter;
   final String? fieldDelimiter;
   final String? textDelimiter;
-  final String? textEndDelimiter;
 
-  CSVExportSettings(this.dateFormatter, this.fieldDelimiter, this.textDelimiter, this.textEndDelimiter);
+  CSVExportSettings(this.dateFormatter, this.fieldDelimiter, this.textDelimiter);
 }
 
 class ExportFormat {
