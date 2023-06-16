@@ -1,4 +1,5 @@
 import 'package:blood_pressure_app/model/blood_pressure.dart';
+import 'package:blood_pressure_app/model/export_import.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -277,6 +278,14 @@ class Settings extends ChangeNotifier {
 
   set graphTitlesCount(int newCount) {
     _prefs.setInt('titlesCount', newCount);
+    notifyListeners();
+  }
+
+  ExportFormat get exportFormat {
+    return ExportFormat(_prefs.getInt('exportFormat') ?? 0);
+  }
+  set exportFormat(ExportFormat format) {
+    _prefs.setInt('exportFormat', format.code);
     notifyListeners();
   }
 }
