@@ -82,11 +82,9 @@
   "pdf": "PDF",
   "text": "Text",
   "other": "Anderes",
-  "fieldDelimiter": "Feld separator",
+  "fieldDelimiter": "Feldseparator",
   "textDelimiter": "Textbegrenzung",
-  "useExportCompatability": "Kompatibler Export",
-  "useExportCompatabilityDesc": "Signalisiert Export als Text",
-  "export": "Exportieren",
+  "export": "EXPORT",
   "exportSuccess": "Exportiert in: {path}",
   "@exportSuccess": {
     "placeholders": {
@@ -96,7 +94,7 @@
     }
   },
   "shared": "Geteilt",
-  "import": "Import",
+  "import": "IMPORT",
   "sourceCode": "Quellcode",
   "licenses": "Lizenzen dritter",
 

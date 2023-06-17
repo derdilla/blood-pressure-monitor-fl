@@ -1,8 +1,8 @@
 
 import 'package:blood_pressure_app/components/settings_widgets.dart';
+import 'package:blood_pressure_app/model/blood_pressure.dart';
 import 'package:blood_pressure_app/model/export_import.dart';
 import 'package:blood_pressure_app/model/settings_store.dart';
-import 'package:file_saver/file_saver.dart' show MimeType;
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
@@ -45,22 +45,6 @@ class ExportImportScreen extends StatelessWidget {
         }
 
         List<Widget> options = [
-          DropDownSettingsTile<MimeType>(
-            key: const Key('exportMimeType'),
-            title: Text(AppLocalizations.of(context)!.exportMimeType),
-            value: settings.exportMimeType,
-            items: [
-              DropdownMenuItem(value: MimeType.csv, child: Text(AppLocalizations.of(context)!.csv)),
-              DropdownMenuItem(value: MimeType.text, child: Text(AppLocalizations.of(context)!.text)),
-              DropdownMenuItem(value: MimeType.pdf, child: Text(AppLocalizations.of(context)!.pdf)),
-              DropdownMenuItem(value: MimeType.other, child: Text(AppLocalizations.of(context)!.other)),
-            ],
-            onChanged: (MimeType? value) {
-              if (value != null) {
-                settings.exportMimeType = value;
-              }
-            },
-          ),
           DropDownSettingsTile<ExportFormat>(
             key: const Key('exportFormat'),
             title: Text(AppLocalizations.of(context)!.exportFormat),
@@ -74,14 +58,85 @@ class ExportImportScreen extends StatelessWidget {
                 settings.exportFormat = value;
               }
             },
-          )
+          ),
+          /*
+          DropDownSettingsTile<MimeType>(
+            key: const Key('exportMimeType'),
+            title: Text(AppLocalizations.of(context)!.exportMimeType),
+            description: Text(AppLocalizations.of(context)!.exportMimeTypeDesc),
+            value: settings.exportMimeType,
+            items: [
+              DropdownMenuItem(value: MimeType.csv, child: Text(AppLocalizations.of(context)!.csv)),
+              DropdownMenuItem(value: MimeType.text, child: Text(AppLocalizations.of(context)!.text)),
+              DropdownMenuItem(value: MimeType.pdf, child: Text(AppLocalizations.of(context)!.pdf)),
+              DropdownMenuItem(value: MimeType.other, child: Text(AppLocalizations.of(context)!.other)),
+            ],
+            onChanged: (MimeType? value) {
+              if (value != null) {
+                settings.exportMimeType = value;
+              }
+            },
+          ),
+           */
         ];
         options.addAll(modeSpecificSettings);
-
         return ListView(
           children: options,
         );
       }),
+      floatingActionButton: SizedBox(
+        height: 60,
+        child: Center(
+          child: Row(
+            children: [
+              Expanded(
+                  flex: 50,
+                  child: MaterialButton(
+                    height: 60,
+                    child:  Text(AppLocalizations.of(context)!.export),
+                    onPressed: () {
+                      Provider.of<BloodPressureModel>(context, listen: false).save((success, msg) {
+                        if (success && msg != null) {
+                          ScaffoldMessenger.of(context)
+                              .showSnackBar(SnackBar(content: Text(AppLocalizations.of(context)!.success(msg))));
+                        } else if (!success && msg != null) {
+                          ScaffoldMessenger.of(context)
+                              .showSnackBar(SnackBar(content: Text(AppLocalizations.of(context)!.error(msg))));
+                        }
+                      }, exportAsText: false);
+                    },
+                  )
+              ),
+              const VerticalDivider(),
+              Expanded(
+                flex: 50,
+                child: MaterialButton(
+                  height: 60,
+                  child: Text(AppLocalizations.of(context)!.import),
+                  onPressed: () {
+                    try {
+                      Provider.of<BloodPressureModel>(context, listen: false).import((res) {
+                        if (res) {
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                              content:
+                              Text(AppLocalizations.of(context)!.success(AppLocalizations.of(context)!.import))));
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                              content: Text(AppLocalizations.of(context)!
+                                  .error(AppLocalizations.of(context)!.errNoFileOpened))));
+                        }
+                      });
+                    } on Exception catch (e) {
+                      ScaffoldMessenger.of(context)
+                          .showSnackBar(SnackBar(content: Text(AppLocalizations.of(context)!.error(e.toString()))));
+                    }
+                  },
+                )
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }

@@ -1,5 +1,4 @@
 import 'package:blood_pressure_app/components/settings_widgets.dart';
-import 'package:blood_pressure_app/model/blood_pressure.dart';
 import 'package:blood_pressure_app/model/settings_store.dart';
 import 'package:blood_pressure_app/screens/subsettings/enter_timeformat.dart';
 import 'package:blood_pressure_app/screens/subsettings/export_import_screen.dart';
@@ -245,7 +244,8 @@ class SettingsPage extends StatelessWidget {
               title: Text(AppLocalizations.of(context)!.data),
               children: [
                 SettingsTile(
-                    title: const Text('EXPORT'),
+                    title: Text(AppLocalizations.of(context)!.exportImport),
+                    leading: const Icon(Icons.download),
                     trailing: const Icon(Icons.arrow_forward_ios),
                     onPressed: (context) {
                       Navigator.push(
@@ -253,43 +253,6 @@ class SettingsPage extends StatelessWidget {
                         MaterialPageRoute(builder: (context) => const ExportImportScreen()),
                       );
                     }
-                ),
-                SettingsTile(
-                  key: const Key('export'),
-                  title: Text(AppLocalizations.of(context)!.export),
-                  leading: const Icon(Icons.save),
-                  onPressed: (context) => Provider.of<BloodPressureModel>(context, listen: false).save((success, msg) {
-                    if (success && msg != null) {
-                      ScaffoldMessenger.of(context)
-                          .showSnackBar(SnackBar(content: Text(AppLocalizations.of(context)!.success(msg))));
-                    } else if (!success && msg != null) {
-                      ScaffoldMessenger.of(context)
-                          .showSnackBar(SnackBar(content: Text(AppLocalizations.of(context)!.error(msg))));
-                    }
-                  }, exportAsText: false),
-                ),
-                SettingsTile(
-                  key: const Key('import'),
-                  title: Text(AppLocalizations.of(context)!.import),
-                  leading: const Icon(Icons.file_upload),
-                  onPressed: (context) {
-                    try {
-                      Provider.of<BloodPressureModel>(context, listen: false).import((res) {
-                        if (res) {
-                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                              content:
-                                  Text(AppLocalizations.of(context)!.success(AppLocalizations.of(context)!.import))));
-                        } else {
-                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                              content: Text(AppLocalizations.of(context)!
-                                  .error(AppLocalizations.of(context)!.errNoFileOpened))));
-                        }
-                      });
-                    } on Exception catch (e) {
-                      ScaffoldMessenger.of(context)
-                          .showSnackBar(SnackBar(content: Text(AppLocalizations.of(context)!.error(e.toString()))));
-                    }
-                  },
                 ),
               ],
             ),
