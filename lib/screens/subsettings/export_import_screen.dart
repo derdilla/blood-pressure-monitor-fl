@@ -5,6 +5,7 @@ import 'package:blood_pressure_app/model/export_import.dart';
 import 'package:blood_pressure_app/model/settings_store.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class ExportImportScreen extends StatelessWidget {
@@ -18,6 +19,13 @@ class ExportImportScreen extends StatelessWidget {
         backgroundColor: Theme.of(context).primaryColor,
       ),
       body: Consumer<Settings>(builder: (context, settings, child) {
+        var exportRange = settings.exportDataRange;
+        String? exportRangeText;
+        if (exportRange != null) {
+          var formatter = DateFormat.yMMMd(AppLocalizations.of(context)!.localeName);
+          exportRangeText = '${formatter.format(exportRange.start)} - ${formatter.format(exportRange.end)}';
+        }
+
         List<Widget> modeSpecificSettings = [];
         if (settings.exportFormat == ExportFormat.csv) {
           modeSpecificSettings = [
@@ -45,6 +53,21 @@ class ExportImportScreen extends StatelessWidget {
         }
 
         List<Widget> options = [
+          SettingsTile(
+            title: Text(AppLocalizations.of(context)!.exportInterval),
+            description: (exportRangeText != null) ? Text(exportRangeText) : null,
+            onPressed: (context) async {
+              var model = Provider.of<BloodPressureModel>(context, listen: false);
+              var newRange = await showDateRangePicker(context: context, firstDate: await model.firstDay, lastDate: await model.lastDay);
+              if (newRange == null && context.mounted) {
+                ScaffoldMessenger.of(context)
+                    .showSnackBar(SnackBar(content: Text(AppLocalizations.of(context)!.errNoRangeForExport)));
+                return;
+              }
+              settings.exportDataRange = newRange;
+
+            }
+          ),
           DropDownSettingsTile<ExportFormat>(
             key: const Key('exportFormat'),
             title: Text(AppLocalizations.of(context)!.exportFormat),

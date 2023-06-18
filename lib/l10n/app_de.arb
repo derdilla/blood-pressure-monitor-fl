@@ -35,6 +35,7 @@
   "errNoValue": "Bitte Wert eingeben",
   "errNotEnoughDataToGraph": "Zuwenig Daten für Graphen",
   "errNoData": "Keine Daten",
+  "errNoRangeForExport": "Sie müssen angeben, welche daten sie exportieren wollen.",
 
   "btnCancel": "ABBRUCH",
   "btnSave": "OK",
@@ -75,7 +76,9 @@
   "sysWarn": "Warnwert Sys",
   "diaWarn": "Warnwert Dia",
   "data": "Daten",
+
   "exportImport": "Exportieren / Importieren",
+  "exportInterval": "Datenbereich",
   "exportFormat": "Exportformat",
   "exportMimeType": "Export MIME typ",
   "csv": "CSV",

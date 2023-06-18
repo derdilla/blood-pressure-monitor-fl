@@ -35,6 +35,7 @@
   "errNoValue": "Please enter a value",
   "errNotEnoughDataToGraph": "not enough data to draw graph",
   "errNoData": "no data",
+  "errNoRangeForExport": "You need to specify a range in which data is exported.",
 
   "btnCancel": "CANCEL",
   "btnSave": "SAVE",
@@ -75,7 +76,9 @@
   "sysWarn": "systolic warn",
   "diaWarn": "diastolic warn",
   "data": "data",
+
   "exportImport": "export / import",
+  "exportInterval": "data range",
   "exportFormat": "export format",
   "exportMimeType": "export MIME type",
   "exportMimeTypeDesc": "signalizes type to other apps",

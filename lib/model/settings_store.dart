@@ -11,6 +11,8 @@ class Settings extends ChangeNotifier {
   DateTime? _displayDataStart;
   DateTime? _displayDataEnd;
 
+  DateTimeRange? _exportDataRange;
+
   Settings._create();
   // factory method, to allow for async constructor
   static Future<Settings> create() async {
@@ -334,7 +336,15 @@ class Settings extends ChangeNotifier {
     notifyListeners();
   }
 
+  DateTimeRange? get exportDataRange {
+    return _exportDataRange;
+  }
 
+  set exportDataRange(DateTimeRange? value) {
+    _exportDataRange = value;
+    notifyListeners();
+  }
+  
 
 }
 
