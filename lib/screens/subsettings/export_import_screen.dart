@@ -178,104 +178,93 @@ class ExportImportScreen extends StatelessWidget {
   }
 }
 
-class CsvItemsOrderCreator extends StatefulWidget {
-  @override
-  State<StatefulWidget> createState() => _CsvItemsOrderCreatorState();
-}
-
-class _CsvItemsOrderCreatorState extends State<CsvItemsOrderCreator> {
-  List<String> _items = ['timestampUnixMs', 'systolic', 'diastolic', 'pulse', 'notes'];
-  List<String> _addable = [];
+class CsvItemsOrderCreator extends StatelessWidget {
+  const CsvItemsOrderCreator({super.key});
 
   @override
   Widget build(BuildContext context) {
-    print(_addable);
-    return Container(
-      margin: const EdgeInsets.fromLTRB(45, 20, 10, 0),
-      padding: const EdgeInsets.all(20),
-      height: 320,
-      decoration: BoxDecoration(
-        border: Border.all(color: Theme.of(context).textTheme.labelLarge?.color ?? Colors.teal),
-        borderRadius: const BorderRadius.all(Radius.circular(10)),
-      ),
-      clipBehavior: Clip.hardEdge,
-      child: ReorderableListView(
-        physics: const NeverScrollableScrollPhysics(),
-        shrinkWrap: true,
-        onReorder: (oldIndex, newIndex) {
-          setState(() {
+    return Consumer<Settings>(builder: (context, settings, child) {
+      return Container(
+        margin: const EdgeInsets.fromLTRB(45, 20, 10, 0),
+        padding: const EdgeInsets.all(20),
+        height: 320,
+        decoration: BoxDecoration(
+          border: Border.all(color: Theme.of(context).textTheme.labelLarge?.color ?? Colors.teal),
+          borderRadius: const BorderRadius.all(Radius.circular(10)),
+        ),
+        clipBehavior: Clip.hardEdge,
+        child: ReorderableListView(
+          physics: const NeverScrollableScrollPhysics(),
+          shrinkWrap: true,
+          onReorder: (oldIndex, newIndex) {
             if (oldIndex < newIndex) {
               newIndex -= 1;
             }
-            final String item = _items.removeAt(oldIndex);
-            _items.insert(newIndex, item);
-          });
-        },
-        footer: (_addable.isNotEmpty) ? InkWell(
-          onTap: () {
-            showDialog(context: context,
-                builder: (context) {
-                  return Dialog(
-                    shape: const RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(50))
-                    ),
-                    child: Container(
-                      height: 330,
-                      padding: const EdgeInsets.all(30),
-                      child: ListView(
-                        children: [
-                          for (int i = 0; i < _addable.length; i += 1)
-                            ListTile(
-                              title: Text(_addable[i]),
-                              onTap: () {
-                                setState(() {
-                                  var addedItem = _addable.removeAt(i);
-                                  _items.add(addedItem);
-                                });
-                                Navigator.of(context).pop();
-
-                              },
-                            )
-                        ],
-                      ),
-                    ),
-                  );
-                }
-            );
+            final String item = settings.exportItems.removeAt(oldIndex);
+            settings.exportItems.insert(newIndex, item);
           },
-          child:  const Center(
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Icon(Icons.add),
-                SizedBox(width: 10,),
-                Text('ADD ENTRY')
-              ],
-            ),
-          ),
-        ) : null,
-        children: <Widget>[
-          for (int i = 0; i < _items.length; i += 1)
-            SizedBox(
-              key: Key(_items[i]),
-              child: Dismissible(
-                key: Key('dism$_items[i]'),
-                background: Container(color: Colors.red),
-                onDismissed: (direction) {
-                  setState(() {
-                    var removedItem = _items.removeAt(i);
-                    _addable.add(removedItem);
-                  });
-                },
-                child: ListTile(
-                  title: Text(_items[i]),
-                  trailing: const Icon(Icons.drag_handle),
-                ),
+          footer: (settings.exportAddableItems.isNotEmpty) ? InkWell(
+            onTap: () {
+              showDialog(context: context,
+                  builder: (context) {
+                    return Dialog(
+                      shape: const RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(50))
+                      ),
+                      child: Container(
+                        height: 330,
+                        padding: const EdgeInsets.all(30),
+                        child: ListView(
+                          children: [
+                            for (int i = 0; i < settings.exportAddableItems.length; i += 1)
+                              ListTile(
+                                title: Text(settings.exportAddableItems[i]),
+                                onTap: () {
+                                  var addedItem = settings.exportAddableItems.removeAt(i);
+                                  settings.exportItems.add(addedItem);
+                                  Navigator.of(context).pop();
+
+                                },
+                              )
+                          ],
+                        ),
+                      ),
+                    );
+                  }
+              );
+            },
+            child:  const Center(
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(Icons.add),
+                  SizedBox(width: 10,),
+                  Text('ADD ENTRY')
+                ],
               ),
             ),
-        ],
-      ),
-    );
+          ) : null,
+          children: <Widget>[
+            for (int i = 0; i < settings.exportItems.length; i += 1)
+              SizedBox(
+                key: Key(settings.exportItems[i]),
+                child: Dismissible(
+                  key: Key('dism${settings.exportItems[i]}'),
+                  background: Container(color: Colors.red),
+                  onDismissed: (direction) {
+                    var removedItem = settings.exportItems.removeAt(i);
+                    settings.exportAddableItems.add(removedItem);
+                  },
+                  child: ListTile(
+                    title: Text(settings.exportItems[i]),
+                    trailing: const Icon(Icons.drag_handle),
+                  ),
+                ),
+              ),
+          ],
+        ),
+      );
+    });
   }
 
 }

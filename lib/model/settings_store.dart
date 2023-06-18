@@ -12,7 +12,9 @@ class Settings extends ChangeNotifier {
   DateTime? _displayDataEnd;
 
   DateTimeRange? _exportDataRange;
-
+  List<String> _exportItems = ['timestampUnixMs', 'systolic', 'diastolic', 'pulse', 'notes'];
+  List<String> _exportAddableItems = [];
+  
   Settings._create();
   // factory method, to allow for async constructor
   static Future<Settings> create() async {
@@ -342,6 +344,23 @@ class Settings extends ChangeNotifier {
 
   set exportDataRange(DateTimeRange? value) {
     _exportDataRange = value;
+    notifyListeners();
+  }
+  
+  List<String> get exportAddableItems {
+    return _exportAddableItems;
+  }
+
+  set exportAddableItems(List<String> value) {
+    _exportAddableItems = value;
+    notifyListeners();
+  }
+  List<String> get exportItems {
+    return _exportItems;
+  }
+
+  set exportItems(List<String> value) {
+    _exportItems = value;
     notifyListeners();
   }
   
