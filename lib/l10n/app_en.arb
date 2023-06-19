@@ -36,6 +36,7 @@
   "errNotEnoughDataToGraph": "not enough data to draw graph",
   "errNoData": "no data",
   "errNoRangeForExport": "You need to specify a range in which data is exported.",
+  "errPleaseSelect": "please select",
 
   "btnCancel": "CANCEL",
   "btnSave": "SAVE",

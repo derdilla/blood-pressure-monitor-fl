@@ -24,10 +24,12 @@ class ExportImportScreen extends StatelessWidget {
       ),
       body: Consumer<Settings>(builder: (context, settings, child) {
         var exportRange = settings.exportDataRange;
-        String? exportRangeText;
-        if (exportRange != null) {
+        String exportRangeText;
+        if (exportRange.start.millisecondsSinceEpoch != 0 && exportRange.end.millisecondsSinceEpoch != 0) {
           var formatter = DateFormat.yMMMd(AppLocalizations.of(context)!.localeName);
           exportRangeText = '${formatter.format(exportRange.start)} - ${formatter.format(exportRange.end)}';
+        } else {
+          exportRangeText = AppLocalizations.of(context)!.errPleaseSelect;
         }
 
         List<Widget> modeSpecificSettings = [];
@@ -53,7 +55,7 @@ class ExportImportScreen extends StatelessWidget {
                 }
               },
             ),
-            CsvItemsOrderCreator()
+            const CsvItemsOrderCreator()
           ];
         }
 
@@ -67,7 +69,7 @@ class ExportImportScreen extends StatelessWidget {
           ),
           (settings.exportLimitDataRange) ? SettingsTile(
               title: Text(AppLocalizations.of(context)!.exportInterval),
-              description: (exportRangeText != null) ? Text(exportRangeText) : null,
+              description: Text(exportRangeText),
               onPressed: (context) async {
                 var model = Provider.of<BloodPressureModel>(context, listen: false);
                 var newRange = await showDateRangePicker(context: context, firstDate: await model.firstDay, lastDate: await model.lastDay);
@@ -76,7 +78,7 @@ class ExportImportScreen extends StatelessWidget {
                       .showSnackBar(SnackBar(content: Text(AppLocalizations.of(context)!.errNoRangeForExport)));
                   return;
                 }
-                settings.exportDataRange = newRange;
+                settings.exportDataRange = newRange ?? DateTimeRange(start: DateTime.fromMillisecondsSinceEpoch(0), end: DateTime.fromMillisecondsSinceEpoch(0));
 
               }
           ) : const SizedBox.shrink(),
@@ -132,13 +134,13 @@ class ExportImportScreen extends StatelessWidget {
                     onPressed: () async {
                       var settings = Provider.of<Settings>(context, listen: false);
                       var range = settings.exportDataRange;
-                      if (range == null) {
+                      if (range.start.millisecondsSinceEpoch == 0 || range.end.millisecondsSinceEpoch == 0) {
                         ScaffoldMessenger.of(context)
                             .showSnackBar(SnackBar(content: Text(AppLocalizations.of(context)!.errNoRangeForExport)));
                         return;
                       }
 
-                      var entries = await Provider.of<BloodPressureModel>(context, listen: false).getInTimeRange(settings.exportDataRange!.start, settings.exportDataRange!.end);
+                      var entries = await Provider.of<BloodPressureModel>(context, listen: false).getInTimeRange(settings.exportDataRange.start, settings.exportDataRange.end);
                       var fileContents = DataExporter(settings).createFile(entries);
 
                       String filename = 'blood_press_${DateTime.now().toIso8601String()}';

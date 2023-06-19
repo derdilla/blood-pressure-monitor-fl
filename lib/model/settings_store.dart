@@ -10,10 +10,6 @@ class Settings extends ChangeNotifier {
 
   DateTime? _displayDataStart;
   DateTime? _displayDataEnd;
-
-  DateTimeRange? _exportDataRange;
-  List<String> _exportItems = ['timestampUnixMs', 'systolic', 'diastolic', 'pulse', 'notes'];
-  List<String> _exportAddableItems = [];
   
   Settings._create();
   // factory method, to allow for async constructor
@@ -351,29 +347,32 @@ class Settings extends ChangeNotifier {
     notifyListeners();
   }
 
-  DateTimeRange? get exportDataRange {
-    return _exportDataRange;
+  DateTimeRange get exportDataRange {
+    final start = DateTime.fromMillisecondsSinceEpoch(_prefs.getInt('exportDataRangeStartEpochMs') ?? 0);
+    final end = DateTime.fromMillisecondsSinceEpoch(_prefs.getInt('exportDataRangeEndEpochMs') ?? 0);
+    return DateTimeRange(start: start, end: end);
   }
 
-  set exportDataRange(DateTimeRange? value) {
-    _exportDataRange = value;
+  set exportDataRange(DateTimeRange value) {
+    _prefs.setInt('exportDataRangeStartEpochMs', value.start.millisecondsSinceEpoch);
+    _prefs.setInt('exportDataRangeEndEpochMs', value.end.millisecondsSinceEpoch);
     notifyListeners();
   }
   
   List<String> get exportAddableItems {
-    return _exportAddableItems;
+    return _prefs.getStringList('exportAddableItems') ?? [];
   }
 
   set exportAddableItems(List<String> value) {
-    _exportAddableItems = value;
+    _prefs.setStringList('exportAddableItems', value);
     notifyListeners();
   }
   List<String> get exportItems {
-    return _exportItems;
+    return _prefs.getStringList('exportItems') ?? ['timestampUnixMs', 'systolic', 'diastolic', 'pulse', 'notes'];
   }
 
   set exportItems(List<String> value) {
-    _exportItems = value;
+    _prefs.setStringList('exportItems', value);
     notifyListeners();
   }
   

@@ -36,6 +36,7 @@
   "errNotEnoughDataToGraph": "Zuwenig Daten für Graphen",
   "errNoData": "Keine Daten",
   "errNoRangeForExport": "Sie müssen angeben, welche daten sie exportieren wollen.",
+  "errPleaseSelect": "Bitte auswählen",
 
   "btnCancel": "ABBRUCH",
   "btnSave": "OK",
