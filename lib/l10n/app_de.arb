@@ -78,6 +78,7 @@
   "data": "Daten",
 
   "exportImport": "Exportieren / Importieren",
+  "exportLimitDataRange": "Datenbereich einschränken",
   "exportInterval": "Datenbereich",
   "exportFormat": "Exportformat",
   "exportMimeType": "Export MIME typ",

@@ -1,12 +1,16 @@
 
+import 'dart:io';
+
 import 'package:blood_pressure_app/components/settings_widgets.dart';
 import 'package:blood_pressure_app/model/blood_pressure.dart';
 import 'package:blood_pressure_app/model/export_import.dart';
 import 'package:blood_pressure_app/model/settings_store.dart';
+import 'package:file_saver/file_saver.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:share_plus/share_plus.dart';
 
 class ExportImportScreen extends StatelessWidget {
   const ExportImportScreen({super.key});
@@ -54,21 +58,28 @@ class ExportImportScreen extends StatelessWidget {
         }
 
         List<Widget> options = [
-          SettingsTile(
-            title: Text(AppLocalizations.of(context)!.exportInterval),
-            description: (exportRangeText != null) ? Text(exportRangeText) : null,
-            onPressed: (context) async {
-              var model = Provider.of<BloodPressureModel>(context, listen: false);
-              var newRange = await showDateRangePicker(context: context, firstDate: await model.firstDay, lastDate: await model.lastDay);
-              if (newRange == null && context.mounted) {
-                ScaffoldMessenger.of(context)
-                    .showSnackBar(SnackBar(content: Text(AppLocalizations.of(context)!.errNoRangeForExport)));
-                return;
+          SwitchSettingsTile(
+              title: Text(AppLocalizations.of(context)!.exportLimitDataRange),
+              initialValue: settings.exportLimitDataRange,
+              onToggle: (value) {
+                settings.exportLimitDataRange = value;
               }
-              settings.exportDataRange = newRange;
-
-            }
           ),
+          (settings.exportLimitDataRange) ? SettingsTile(
+              title: Text(AppLocalizations.of(context)!.exportInterval),
+              description: (exportRangeText != null) ? Text(exportRangeText) : null,
+              onPressed: (context) async {
+                var model = Provider.of<BloodPressureModel>(context, listen: false);
+                var newRange = await showDateRangePicker(context: context, firstDate: await model.firstDay, lastDate: await model.lastDay);
+                if (newRange == null && context.mounted) {
+                  ScaffoldMessenger.of(context)
+                      .showSnackBar(SnackBar(content: Text(AppLocalizations.of(context)!.errNoRangeForExport)));
+                  return;
+                }
+                settings.exportDataRange = newRange;
+
+              }
+          ) : const SizedBox.shrink(),
           DropDownSettingsTile<ExportFormat>(
             key: const Key('exportFormat'),
             title: Text(AppLocalizations.of(context)!.exportFormat),
@@ -119,7 +130,7 @@ class ExportImportScreen extends StatelessWidget {
                     height: 60,
                     child:  Text(AppLocalizations.of(context)!.export),
                     onPressed: () async {
-                      var settings = Provider.of<Settings>(context);
+                      var settings = Provider.of<Settings>(context, listen: false);
                       var range = settings.exportDataRange;
                       if (range == null) {
                         ScaffoldMessenger.of(context)
@@ -130,17 +141,23 @@ class ExportImportScreen extends StatelessWidget {
                       var entries = await Provider.of<BloodPressureModel>(context, listen: false).getInTimeRange(settings.exportDataRange!.start, settings.exportDataRange!.end);
                       var fileContents = DataExporter(settings).createFile(entries);
 
-                      /*
-                      .save((success, msg) {
-                        if (success && msg != null) {
-                          ScaffoldMessenger.of(context)
-                              .showSnackBar(SnackBar(content: Text(AppLocalizations.of(context)!.success(msg))));
-                        } else if (!success && msg != null) {
-                          ScaffoldMessenger.of(context)
-                              .showSnackBar(SnackBar(content: Text(AppLocalizations.of(context)!.error(msg))));
-                        }
-                      }, exportAsText: false);
-                       */
+                      String filename = 'blood_press_${DateTime.now().toIso8601String()}';
+                      String path = await FileSaver.instance.saveFile(name: filename, bytes: fileContents);
+
+                      if ((Platform.isLinux || Platform.isWindows || Platform.isMacOS) && context.mounted) {
+                        ScaffoldMessenger.of(context)
+                            .showSnackBar(SnackBar(content: Text(AppLocalizations.of(context)!.success(path))));
+                      } else if (Platform.isAndroid || Platform.isIOS) {
+                        Share.shareXFiles([
+                          XFile(
+                            path,
+                            mimeType: MimeType.csv.type
+                          )
+                        ]);
+                      } else {
+                        ScaffoldMessenger.of(context)
+                            .showSnackBar(const SnackBar(content: Text('UNSUPPORTED PLATFORM')));
+                      }
                     },
                   )
               ),
@@ -202,38 +219,40 @@ class CsvItemsOrderCreator extends StatelessWidget {
             }
             final String item = settings.exportItems.removeAt(oldIndex);
             settings.exportItems.insert(newIndex, item);
+            settings.forceNotifyListeners();
           },
           footer: (settings.exportAddableItems.isNotEmpty) ? InkWell(
-            onTap: () {
-              showDialog(context: context,
-                  builder: (context) {
-                    return Dialog(
-                      shape: const RoundedRectangleBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(50))
-                      ),
-                      child: Container(
-                        height: 330,
-                        padding: const EdgeInsets.all(30),
-                        child: ListView(
-                          children: [
-                            for (int i = 0; i < settings.exportAddableItems.length; i += 1)
-                              ListTile(
-                                title: Text(settings.exportAddableItems[i]),
-                                onTap: () {
-                                  var addedItem = settings.exportAddableItems.removeAt(i);
-                                  settings.exportItems.add(addedItem);
-                                  Navigator.of(context).pop();
+            onTap: () async {
+              await showDialog(context: context,
+                builder: (context) {
+                  return Dialog(
+                    shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(50))
+                    ),
+                    child: Container(
+                      height: 330,
+                      padding: const EdgeInsets.all(30),
+                      child: ListView(
+                        children: [
+                          for (int i = 0; i < settings.exportAddableItems.length; i += 1)
+                            ListTile(
+                              title: Text(settings.exportAddableItems[i]),
+                              onTap: () {
+                                var addedItem = settings.exportAddableItems.removeAt(i);
+                                settings.exportItems.add(addedItem);
+                                Navigator.of(context).pop();
 
-                                },
-                              )
-                          ],
-                        ),
+                              },
+                            )
+                        ],
                       ),
-                    );
-                  }
+                    ),
+                  );
+                }
               );
+              settings.forceNotifyListeners();
             },
-            child:  const Center(
+            child: const Center(
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -254,6 +273,7 @@ class CsvItemsOrderCreator extends StatelessWidget {
                   onDismissed: (direction) {
                     var removedItem = settings.exportItems.removeAt(i);
                     settings.exportAddableItems.add(removedItem);
+                    settings.forceNotifyListeners();
                   },
                   child: ListTile(
                     title: Text(settings.exportItems[i]),

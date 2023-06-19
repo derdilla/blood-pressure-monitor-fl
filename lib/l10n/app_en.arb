@@ -78,6 +78,7 @@
   "data": "data",
 
   "exportImport": "export / import",
+  "exportLimitDataRange": "limit data range",
   "exportInterval": "data range",
   "exportFormat": "export format",
   "exportMimeType": "export MIME type",

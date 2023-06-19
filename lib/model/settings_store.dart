@@ -23,6 +23,10 @@ class Settings extends ChangeNotifier {
     return component;
   }
 
+  void forceNotifyListeners() {
+    notifyListeners();
+  }
+
   int get graphStepSize {
     return _prefs.getInt('graphStepSize') ?? TimeStep.day;
   }
@@ -335,6 +339,15 @@ class Settings extends ChangeNotifier {
       default:
         throw UnimplementedError();
     }
+    notifyListeners();
+  }
+
+  bool get exportLimitDataRange {
+    return _prefs.getBool('exportLimitDataRange') ?? false;
+  }
+
+  set exportLimitDataRange(bool value) {
+    _prefs.setBool('exportLimitDataRange', value);
     notifyListeners();
   }
 
