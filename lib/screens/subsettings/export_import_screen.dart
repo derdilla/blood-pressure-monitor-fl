@@ -22,105 +22,109 @@ class ExportImportScreen extends StatelessWidget {
         title: Text(AppLocalizations.of(context)!.exportImport),
         backgroundColor: Theme.of(context).primaryColor,
       ),
-      body: Consumer<Settings>(builder: (context, settings, child) {
-        var exportRange = settings.exportDataRange;
-        String exportRangeText;
-        if (exportRange.start.millisecondsSinceEpoch != 0 && exportRange.end.millisecondsSinceEpoch != 0) {
-          var formatter = DateFormat.yMMMd(AppLocalizations.of(context)!.localeName);
-          exportRangeText = '${formatter.format(exportRange.start)} - ${formatter.format(exportRange.end)}';
-        } else {
-          exportRangeText = AppLocalizations.of(context)!.errPleaseSelect;
-        }
+      body: Container(
+        margin: const EdgeInsets.only(bottom: 80),
+        child: Consumer<Settings>(builder: (context, settings, child) {
+          var exportRange = settings.exportDataRange;
+          String exportRangeText;
+          if (exportRange.start.millisecondsSinceEpoch != 0 && exportRange.end.millisecondsSinceEpoch != 0) {
+            var formatter = DateFormat.yMMMd(AppLocalizations.of(context)!.localeName);
+            exportRangeText = '${formatter.format(exportRange.start)} - ${formatter.format(exportRange.end)}';
+          } else {
+            exportRangeText = AppLocalizations.of(context)!.errPleaseSelect;
+          }
 
-        List<Widget> modeSpecificSettings = [];
-        if (settings.exportFormat == ExportFormat.csv) {
-          modeSpecificSettings = [
-            InputSettingsTile(
-              title: Text(AppLocalizations.of(context)!.fieldDelimiter),
-              inputWidth: 40,
-              initialValue: settings.csvFieldDelimiter,
-              onEditingComplete: (value) {
+          List<Widget> modeSpecificSettings = [];
+          if (settings.exportFormat == ExportFormat.csv) {
+            modeSpecificSettings = [
+              InputSettingsTile(
+                title: Text(AppLocalizations.of(context)!.fieldDelimiter),
+                inputWidth: 40,
+                initialValue: settings.csvFieldDelimiter,
+                onEditingComplete: (value) {
+                  if (value != null) {
+                    settings.csvFieldDelimiter = value;
+                  }
+                },
+              ),
+              InputSettingsTile(
+                title: Text(AppLocalizations.of(context)!.textDelimiter),
+                inputWidth: 40,
+                initialValue: settings.csvTextDelimiter,
+                onEditingComplete: (value) {
+                  if (value != null) {
+                    settings.csvTextDelimiter = value;
+                  }
+                },
+              ),
+              const CsvItemsOrderCreator()
+            ];
+          }
+
+          List<Widget> options = [
+            SwitchSettingsTile(
+                title: Text(AppLocalizations.of(context)!.exportLimitDataRange),
+                initialValue: settings.exportLimitDataRange,
+                onToggle: (value) {
+                  settings.exportLimitDataRange = value;
+                }
+            ),
+            (settings.exportLimitDataRange) ? SettingsTile(
+                title: Text(AppLocalizations.of(context)!.exportInterval),
+                description: Text(exportRangeText),
+                onPressed: (context) async {
+                  var model = Provider.of<BloodPressureModel>(context, listen: false);
+                  var newRange = await showDateRangePicker(context: context, firstDate: await model.firstDay, lastDate: await model.lastDay);
+                  if (newRange == null && context.mounted) {
+                    ScaffoldMessenger.of(context)
+                        .showSnackBar(SnackBar(content: Text(AppLocalizations.of(context)!.errNoRangeForExport)));
+                    return;
+                  }
+                  settings.exportDataRange = newRange ?? DateTimeRange(start: DateTime.fromMillisecondsSinceEpoch(0), end: DateTime.fromMillisecondsSinceEpoch(0));
+
+                }
+            ) : const SizedBox.shrink(),
+            DropDownSettingsTile<ExportFormat>(
+              key: const Key('exportFormat'),
+              title: Text(AppLocalizations.of(context)!.exportFormat),
+              value: settings.exportFormat,
+              items: [
+                DropdownMenuItem(value: ExportFormat.csv, child: Text(AppLocalizations.of(context)!.csv)),
+                DropdownMenuItem(value: ExportFormat.pdf, child: Text(AppLocalizations.of(context)!.pdf)),
+              ],
+              onChanged: (ExportFormat? value) {
                 if (value != null) {
-                  settings.csvFieldDelimiter = value;
+                  settings.exportFormat = value;
                 }
               },
             ),
-            InputSettingsTile(
-              title: Text(AppLocalizations.of(context)!.textDelimiter),
-              inputWidth: 40,
-              initialValue: settings.csvTextDelimiter,
-              onEditingComplete: (value) {
+            /*
+            DropDownSettingsTile<MimeType>(
+              key: const Key('exportMimeType'),
+              title: Text(AppLocalizations.of(context)!.exportMimeType),
+              description: Text(AppLocalizations.of(context)!.exportMimeTypeDesc),
+              value: settings.exportMimeType,
+              items: [
+                DropdownMenuItem(value: MimeType.csv, child: Text(AppLocalizations.of(context)!.csv)),
+                DropdownMenuItem(value: MimeType.text, child: Text(AppLocalizations.of(context)!.text)),
+                DropdownMenuItem(value: MimeType.pdf, child: Text(AppLocalizations.of(context)!.pdf)),
+                DropdownMenuItem(value: MimeType.other, child: Text(AppLocalizations.of(context)!.other)),
+              ],
+              onChanged: (MimeType? value) {
                 if (value != null) {
-                  settings.csvTextDelimiter = value;
+                  settings.exportMimeType = value;
                 }
               },
             ),
-            const CsvItemsOrderCreator()
+             */
           ];
-        }
-
-        List<Widget> options = [
-          SwitchSettingsTile(
-              title: Text(AppLocalizations.of(context)!.exportLimitDataRange),
-              initialValue: settings.exportLimitDataRange,
-              onToggle: (value) {
-                settings.exportLimitDataRange = value;
-              }
-          ),
-          (settings.exportLimitDataRange) ? SettingsTile(
-              title: Text(AppLocalizations.of(context)!.exportInterval),
-              description: Text(exportRangeText),
-              onPressed: (context) async {
-                var model = Provider.of<BloodPressureModel>(context, listen: false);
-                var newRange = await showDateRangePicker(context: context, firstDate: await model.firstDay, lastDate: await model.lastDay);
-                if (newRange == null && context.mounted) {
-                  ScaffoldMessenger.of(context)
-                      .showSnackBar(SnackBar(content: Text(AppLocalizations.of(context)!.errNoRangeForExport)));
-                  return;
-                }
-                settings.exportDataRange = newRange ?? DateTimeRange(start: DateTime.fromMillisecondsSinceEpoch(0), end: DateTime.fromMillisecondsSinceEpoch(0));
-
-              }
-          ) : const SizedBox.shrink(),
-          DropDownSettingsTile<ExportFormat>(
-            key: const Key('exportFormat'),
-            title: Text(AppLocalizations.of(context)!.exportFormat),
-            value: settings.exportFormat,
-            items: [
-              DropdownMenuItem(value: ExportFormat.csv, child: Text(AppLocalizations.of(context)!.csv)),
-              DropdownMenuItem(value: ExportFormat.pdf, child: Text(AppLocalizations.of(context)!.pdf)),
-            ],
-            onChanged: (ExportFormat? value) {
-              if (value != null) {
-                settings.exportFormat = value;
-              }
-            },
-          ),
-          /*
-          DropDownSettingsTile<MimeType>(
-            key: const Key('exportMimeType'),
-            title: Text(AppLocalizations.of(context)!.exportMimeType),
-            description: Text(AppLocalizations.of(context)!.exportMimeTypeDesc),
-            value: settings.exportMimeType,
-            items: [
-              DropdownMenuItem(value: MimeType.csv, child: Text(AppLocalizations.of(context)!.csv)),
-              DropdownMenuItem(value: MimeType.text, child: Text(AppLocalizations.of(context)!.text)),
-              DropdownMenuItem(value: MimeType.pdf, child: Text(AppLocalizations.of(context)!.pdf)),
-              DropdownMenuItem(value: MimeType.other, child: Text(AppLocalizations.of(context)!.other)),
-            ],
-            onChanged: (MimeType? value) {
-              if (value != null) {
-                settings.exportMimeType = value;
-              }
-            },
-          ),
-           */
-        ];
-        options.addAll(modeSpecificSettings);
-        return ListView(
-          children: options,
-        );
-      }),
+          options.addAll(modeSpecificSettings);
+          options.add(const SizedBox(height: 20,));
+          return ListView(
+            children: options,
+          );
+        }),
+      ),
       floatingActionButton: SizedBox(
         height: 60,
         child: Center(
