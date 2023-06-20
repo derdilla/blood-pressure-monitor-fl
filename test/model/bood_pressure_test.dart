@@ -83,17 +83,6 @@ void main() {
       expect(res.notes, r.notes);
     });
 
-    test('should import exported values', () async {
-      var m = await BloodPressureModel.create(dbPath: '/tmp/bp_test/should_import_exported');
-      var r = BloodPressureRecord(DateTime.fromMillisecondsSinceEpoch(31415926), -172, 10000, 0,
-          "((V⍳V)=⍳⍴V)/V←,V    ⌷←⍳→⍴∆∇⊃‾⍎⍕⌈๏ แผ่นดินฮั่นเABCDEFGHIJKLMNOPQRSTUVWXYZ /0123456789abcdefghijklmnopqrstuvwxyz £©µÀÆÖÞßéöÿ–—‘“”„†•…‰™œŠŸž€ ΑΒΓΔΩαβγδω АБВГДабвг, \n \t д∀∂∈ℝ∧∪≡∞ ↑↗↨↻⇣ ┐┼╔╘░►☺♀ ﬁ�⑀₂ἠḂӥẄɐː⍎אԱა");
-      await m.add(r);
-
-      m.save((success, msg) {
-        expect(success, true);
-      });
-    });
-
     test('should delete', () async {
       var m = await BloodPressureModel.create(dbPath: '/tmp/bp_test/should_delete');
 

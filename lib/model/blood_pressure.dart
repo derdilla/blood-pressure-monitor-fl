@@ -1,13 +1,8 @@
-import 'dart:convert' show utf8;
 import 'dart:io';
 
 import 'package:collection/collection.dart';
-import 'package:csv/csv.dart';
-import 'package:file_picker/file_picker.dart';
-import 'package:file_saver/file_saver.dart';
 import 'package:flutter/foundation.dart';
 import 'package:path/path.dart';
-import 'package:share_plus/share_plus.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
 class BloodPressureModel extends ChangeNotifier {
@@ -154,63 +149,6 @@ class BloodPressureModel extends ChangeNotifier {
   Future<int> get minPul async {
     var res = (await _database.rawQuery('SELECT MIN(pulse) as pul FROM bloodPressureModel'))[0]['pul'];
     return (res as int?) ?? -1;
-  }
-
-  Future<void> save(void Function(bool success, String? msg) callback, {bool exportAsText = false}) async {
-    // create csv
-    String csvData = 'timestampUnixMs, systolic, diastolic, pulse, notes\n';
-    List<Map<String, Object?>> allEntries = await _database.query('bloodPressureModel', orderBy: 'timestamp DESC');
-    List<List<dynamic>> data = [];
-    for (var e in allEntries) {
-      data.add([e['timestamp'],e['systolic'], e['diastolic'], e['pulse'], e['notes']]);
-    }
-    csvData += const ListToCsvConverter().convert(data, delimitAllFields: true);
-
-    // save data
-    String filename = 'blood_press_${DateTime.now().toIso8601String()}';
-    String path = await FileSaver.instance
-        .saveFile(name: filename, bytes: Uint8List.fromList(utf8.encode(csvData)), ext: 'csv', mimeType: MimeType.csv);
-
-
-    // notify user about location
-    if (Platform.isLinux || Platform.isWindows || Platform.isMacOS) {
-      callback(true, path);
-    } else if (Platform.isAndroid || Platform.isIOS) {
-      var mimeType = MimeType.csv;
-      if (exportAsText) {
-        mimeType = MimeType.text;
-      }
-      Share.shareXFiles([
-        XFile(
-          path,
-          mimeType: mimeType.type,
-        )
-      ]);
-      callback(true, null);
-    } else {}
-  }
-
-  Future<void> import(void Function(bool) callback) async {
-    var result = await FilePicker.platform.pickFiles(
-      allowMultiple: false,
-      withData: true,
-    );
-
-    if (result != null) {
-      var binaryContent = result.files.single.bytes;
-      if (binaryContent != null) {
-        final csvContents = const CsvToListConverter()
-            .convert(utf8.decode(binaryContent), fieldDelimiter: ',', textDelimiter: '"', eol: '\n');
-        for (var i = 1; i < csvContents.length; i++) {
-          var line = csvContents[i];
-          BloodPressureRecord record = BloodPressureRecord(DateTime.fromMillisecondsSinceEpoch(line[0] as int),
-              (line[1] as int), (line[2] as int), (line[3] as int), line[4].toString());
-          add(record);
-        }
-        return callback(true);
-      }
-    }
-    return callback(false);
   }
 
   void close() {
