@@ -14,17 +14,26 @@ class DataExporter {
 
   Uint8List createFile(List<BloodPressureRecord> records) {
     if (settings.exportFormat == ExportFormat.csv) {
+      List<String> exportItems;
+      if (settings.exportCustomEntries) {
+        exportItems = settings.exportItems;
+      } else {
+        exportItems = ['timestampUnixMs', 'systolic', 'diastolic', 'pulse', 'notes'];
+      }
+
       var csvHead = '';
-      for (var attribute in settings.exportItems) {
-        csvHead += attribute;
-        csvHead += settings.csvFieldDelimiter;
+      for (var i = 0; i<exportItems.length; i++) {
+        csvHead += exportItems[i];
+        if (i<(exportItems.length - 1)) {
+          csvHead += settings.csvFieldDelimiter;
+        }
       }
       csvHead += '\n';
 
       List<List<dynamic>> items = [];
       for (var record in records) {
         List<dynamic> row = [];
-        for (var attribute in settings.exportItems) {
+        for (var attribute in exportItems) {
           switch (attribute) {
             case 'timestampUnixMs':
               row.add(record.creationTime.millisecondsSinceEpoch);

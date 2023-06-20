@@ -58,7 +58,14 @@ class ExportImportScreen extends StatelessWidget {
                   }
                 },
               ),
-              const CsvItemsOrderCreator()
+              SwitchSettingsTile(
+                title: Text(AppLocalizations.of(context)!.exportCustomEntries),
+                initialValue: settings.exportCustomEntries,
+                onToggle: (value) {
+                  settings.exportCustomEntries = value;
+                }
+              ),
+              (settings.exportCustomEntries) ? const CsvItemsOrderCreator(): const SizedBox.shrink()
             ];
           }
 
@@ -268,14 +275,17 @@ class CsvItemsOrderCreator extends StatelessWidget {
                 }
               );
             },
-            child: const Center(
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Icon(Icons.add),
-                  SizedBox(width: 10,),
-                  Text('ADD ENTRY')
-                ],
+            child: Container(
+              margin: const EdgeInsets.only(top: 15),
+              child: Center(
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Icon(Icons.add),
+                    const SizedBox(width: 10,),
+                    Text(AppLocalizations.of(context)!.addEntry)
+                  ],
+                ),
               ),
             ),
           ) : null,

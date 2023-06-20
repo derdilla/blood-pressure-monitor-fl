@@ -82,6 +82,8 @@
   "exportLimitDataRange": "Datenbereich einschränken",
   "exportInterval": "Datenbereich",
   "exportFormat": "Exportformat",
+  "exportCustomEntries": "Eigene Felder",
+  "addEntry": "Feld hinzufügen",
   "exportMimeType": "Export MIME typ",
   "csv": "CSV",
   "pdf": "PDF",

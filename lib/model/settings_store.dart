@@ -358,6 +358,15 @@ class Settings extends ChangeNotifier {
     _prefs.setInt('exportDataRangeEndEpochMs', value.end.millisecondsSinceEpoch);
     notifyListeners();
   }
+
+  bool get exportCustomEntries {
+    return _prefs.getBool('exportCustomEntries') ?? false;
+  }
+
+  set exportCustomEntries(bool value) {
+    _prefs.setBool('exportCustomEntries', value);
+    notifyListeners();
+  }
   
   List<String> get exportAddableItems {
     return _prefs.getStringList('exportAddableItems') ?? [];
