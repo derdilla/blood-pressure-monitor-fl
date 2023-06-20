@@ -48,6 +48,8 @@ class DataExporter {
       var converter = ListToCsvConverter(fieldDelimiter: settings.csvFieldDelimiter, textDelimiter: settings.csvTextDelimiter);
       var csvData = converter.convert(items);
       return Uint8List.fromList(utf8.encode(csvHead + csvData));
+    } else if (settings.exportFormat == ExportFormat.pdf) {
+      throw UnimplementedError('TODO');
     }
     return Uint8List(0);
   }

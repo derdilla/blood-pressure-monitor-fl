@@ -229,14 +229,18 @@ class CsvItemsOrderCreator extends StatelessWidget {
             if (oldIndex < newIndex) {
               newIndex -= 1;
             }
-            final String item = settings.exportItems.removeAt(oldIndex);
-            settings.exportItems.insert(newIndex, item);
-            settings.forceNotifyListeners();
+            var exportItems = settings.exportItems;
+            final String item = exportItems.removeAt(oldIndex);
+            exportItems.insert(newIndex, item);
+
+            settings.exportItems = exportItems;
           },
           footer: (settings.exportAddableItems.isNotEmpty) ? InkWell(
             onTap: () async {
               await showDialog(context: context,
                 builder: (context) {
+                  var exportItems = settings.exportItems;
+                  var exportAddableItems = settings.exportAddableItems;
                   return Dialog(
                     shape: const RoundedRectangleBorder(
                         borderRadius: BorderRadius.all(Radius.circular(50))
@@ -246,14 +250,15 @@ class CsvItemsOrderCreator extends StatelessWidget {
                       padding: const EdgeInsets.all(30),
                       child: ListView(
                         children: [
-                          for (int i = 0; i < settings.exportAddableItems.length; i += 1)
+                          for (int i = 0; i < exportAddableItems.length; i += 1)
                             ListTile(
-                              title: Text(settings.exportAddableItems[i]),
+                              title: Text(exportAddableItems[i]),
                               onTap: () {
-                                var addedItem = settings.exportAddableItems.removeAt(i);
-                                settings.exportItems.add(addedItem);
+                                var addedItem = exportAddableItems.removeAt(i);
+                                exportItems.add(addedItem);
                                 Navigator.of(context).pop();
-
+                                settings.exportItems = exportItems;
+                                settings.exportAddableItems = exportAddableItems;
                               },
                             )
                         ],
@@ -262,7 +267,6 @@ class CsvItemsOrderCreator extends StatelessWidget {
                   );
                 }
               );
-              settings.forceNotifyListeners();
             },
             child: const Center(
               child: Row(
@@ -283,9 +287,12 @@ class CsvItemsOrderCreator extends StatelessWidget {
                   key: Key('dism${settings.exportItems[i]}'),
                   background: Container(color: Colors.red),
                   onDismissed: (direction) {
-                    var removedItem = settings.exportItems.removeAt(i);
-                    settings.exportAddableItems.add(removedItem);
-                    settings.forceNotifyListeners();
+                    var exportItems = settings.exportItems;
+                    var exportAddableItems = settings.exportAddableItems;
+                    var removedItem = exportItems.removeAt(i);
+                    exportAddableItems.add(removedItem);
+                    settings.exportItems = exportItems;
+                    settings.exportAddableItems = exportAddableItems;
                   },
                   child: ListTile(
                     title: Text(settings.exportItems[i]),
