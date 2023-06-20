@@ -1,4 +1,5 @@
 
+import 'dart:collection';
 import 'dart:io';
 
 import 'package:blood_pressure_app/components/settings_widgets.dart';
@@ -137,14 +138,19 @@ class ExportImportScreen extends StatelessWidget {
                     child:  Text(AppLocalizations.of(context)!.export),
                     onPressed: () async {
                       var settings = Provider.of<Settings>(context, listen: false);
-                      var range = settings.exportDataRange;
-                      if (range.start.millisecondsSinceEpoch == 0 || range.end.millisecondsSinceEpoch == 0) {
-                        ScaffoldMessenger.of(context)
-                            .showSnackBar(SnackBar(content: Text(AppLocalizations.of(context)!.errNoRangeForExport)));
-                        return;
-                      }
 
-                      var entries = await Provider.of<BloodPressureModel>(context, listen: false).getInTimeRange(settings.exportDataRange.start, settings.exportDataRange.end);
+                      final UnmodifiableListView<BloodPressureRecord> entries;
+                      if (settings.exportLimitDataRange) {
+                        var range = settings.exportDataRange;
+                        if (range.start.millisecondsSinceEpoch == 0 || range.end.millisecondsSinceEpoch == 0) {
+                          ScaffoldMessenger.of(context)
+                              .showSnackBar(SnackBar(content: Text(AppLocalizations.of(context)!.errNoRangeForExport)));
+                          return;
+                        }
+                        entries = await Provider.of<BloodPressureModel>(context, listen: false).getInTimeRange(settings.exportDataRange.start, settings.exportDataRange.end);
+                      } else {
+                        entries = await Provider.of<BloodPressureModel>(context, listen: false).all;
+                      }
                       var fileContents = DataExporter(settings).createFile(entries);
 
                       String filename = 'blood_press_${DateTime.now().toIso8601String()}';
