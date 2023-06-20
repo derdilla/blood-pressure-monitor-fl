@@ -59,6 +59,14 @@ class ExportImportScreen extends StatelessWidget {
                 },
               ),
               SwitchSettingsTile(
+                  title: Text(AppLocalizations.of(context)!.exportCsvHeadline),
+                  description: Text(AppLocalizations.of(context)!.exportCsvHeadlineDesc),
+                  initialValue: settings.exportCsvHeadline,
+                  onToggle: (value) {
+                    settings.exportCsvHeadline = value;
+                  }
+              ),
+              SwitchSettingsTile(
                 title: Text(AppLocalizations.of(context)!.exportCustomEntries),
                 initialValue: settings.exportCustomEntries,
                 onToggle: (value) {

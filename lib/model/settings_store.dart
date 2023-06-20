@@ -384,8 +384,15 @@ class Settings extends ChangeNotifier {
     _prefs.setStringList('exportItems', value);
     notifyListeners();
   }
-  
 
+  bool get exportCsvHeadline {
+    return _prefs.getBool('exportCsvHeadline') ?? true;
+  }
+
+  set exportCsvHeadline(bool value) {
+    _prefs.setBool('exportCsvHeadline', value);
+    notifyListeners();
+  }
 }
 
 class TimeStep {

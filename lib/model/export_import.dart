@@ -22,13 +22,15 @@ class DataExporter {
       }
 
       var csvHead = '';
-      for (var i = 0; i<exportItems.length; i++) {
-        csvHead += exportItems[i];
-        if (i<(exportItems.length - 1)) {
-          csvHead += settings.csvFieldDelimiter;
+      if (settings.exportCsvHeadline) {
+        for (var i = 0; i<exportItems.length; i++) {
+          csvHead += exportItems[i];
+          if (i<(exportItems.length - 1)) {
+            csvHead += settings.csvFieldDelimiter;
+          }
         }
+        csvHead += '\n';
       }
-      csvHead += '\n';
 
       List<List<dynamic>> items = [];
       for (var record in records) {

@@ -86,6 +86,8 @@
   "addEntry": "Feld hinzufügen",
   "exportMimeType": "export MIME type",
   "exportMimeTypeDesc": "signalizes type to other apps",
+  "exportCsvHeadline": "headline",
+  "exportCsvHeadlineDesc": "Helps to discriminate types",
   "csv": "CSV",
   "pdf": "PDF",
   "text": "text",
