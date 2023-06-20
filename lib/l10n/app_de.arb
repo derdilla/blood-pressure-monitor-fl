@@ -37,6 +37,9 @@
   "errNoData": "Keine Daten",
   "errNoRangeForExport": "Sie müssen angeben, welche daten sie exportieren wollen.",
   "errPleaseSelect": "Bitte auswählen",
+  "errNotCsvFormat": "Es können nur Dateien im csv Format importiert werden.",
+  "errNeedHeadline": "Es können nur Dateien mit einer Überschrift importiert werden.",
+
 
   "btnCancel": "ABBRUCH",
   "btnSave": "OK",

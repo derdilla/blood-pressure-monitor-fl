@@ -29,7 +29,7 @@ class DataExporter {
             csvHead += settings.csvFieldDelimiter;
           }
         }
-        csvHead += '\n';
+        csvHead += '\r\n';
       }
 
       List<List<dynamic>> items = [];
@@ -63,6 +63,66 @@ class DataExporter {
       throw UnimplementedError('TODO');
     }
     return Uint8List(0);
+  }
+
+  List<BloodPressureRecord> parseCSVFile(Uint8List data) {
+    assert(settings.exportFormat == ExportFormat.csv);
+    assert(settings.exportCsvHeadline);
+
+    List<BloodPressureRecord> records = [];
+
+    String fileContents = utf8.decode(data.toList());
+    final converter = CsvToListConverter(fieldDelimiter: settings.csvFieldDelimiter, textDelimiter: settings.csvTextDelimiter);
+    final csvLines = converter.convert(fileContents);
+    if (csvLines.length <= 1) {
+      throw const FormatException('empty file');
+    }
+    final attributes = csvLines.removeAt(0);
+    var creationTimePos = -1;
+    var sysPos = -1;
+    var diaPos = -1;
+    var pulPos = -1;
+    var notePos = -1;
+    for (var i = 0; i<attributes.length; i++) {
+      switch (attributes[i]) {
+        case 'timestampUnixMs':
+          creationTimePos = i;
+          break;
+        case 'systolic':
+          sysPos = i;
+          break;
+        case 'diastolic':
+          diaPos = i;
+          break;
+        case 'pulse':
+          pulPos = i;
+          break;
+        case 'notes':
+          notePos = i;
+          break;
+      }
+    }
+    assert(creationTimePos >= 0);
+    assert(sysPos >= 0);
+    assert(diaPos >= 0);
+    assert(pulPos >= 0);
+    assert(notePos >= 0);
+
+    for (final line in csvLines) {
+      records.add(
+          BloodPressureRecord(
+              DateTime.fromMillisecondsSinceEpoch(line[creationTimePos]),
+              line[sysPos],
+              line[diaPos],
+              line[pulPos],
+              line[notePos]
+          )
+      );
+    }
+    // TODO: maybe use customized fields if no header is present?
+    // requires changes in screen class
+
+    return records;
   }
 }
 

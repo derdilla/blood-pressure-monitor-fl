@@ -6,6 +6,7 @@ import 'package:blood_pressure_app/components/settings_widgets.dart';
 import 'package:blood_pressure_app/model/blood_pressure.dart';
 import 'package:blood_pressure_app/model/export_import.dart';
 import 'package:blood_pressure_app/model/settings_store.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:file_saver/file_saver.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -194,23 +195,36 @@ class ExportImportScreen extends StatelessWidget {
                 child: MaterialButton(
                   height: 60,
                   child: Text(AppLocalizations.of(context)!.import),
-                  onPressed: () {
-                    try {
-                      Provider.of<BloodPressureModel>(context, listen: false).import((res) {
-                        if (res) {
-                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                              content:
-                              Text(AppLocalizations.of(context)!.success(AppLocalizations.of(context)!.import))));
-                        } else {
-                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                              content: Text(AppLocalizations.of(context)!
-                                  .error(AppLocalizations.of(context)!.errNoFileOpened))));
-                        }
-                      });
-                    } on Exception catch (e) {
-                      ScaffoldMessenger.of(context)
-                          .showSnackBar(SnackBar(content: Text(AppLocalizations.of(context)!.error(e.toString()))));
+                  onPressed: () async {
+                    final settings = Provider.of<Settings>(context, listen: false);
+                    if (!(settings.exportFormat == ExportFormat.csv)) {
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                          content: Text(AppLocalizations.of(context)!.errNotCsvFormat)));
                     }
+                    if (!settings.exportCsvHeadline) {
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                          content: Text(AppLocalizations.of(context)!.errNeedHeadline)));
+                    }
+
+                    // TODO: import from here
+
+
+                    var result = await FilePicker.platform.pickFiles(
+                      allowMultiple: false,
+                      withData: true,
+                    );
+                    if (result == null) {
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                          content: Text(AppLocalizations.of(context)!.errNoFileOpened)));
+                      return;
+                    }
+                    var binaryContent = result.files.single.bytes;
+                    if (binaryContent == null) {
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                          content: Text(AppLocalizations.of(context)!.errCantReadFile)));
+                      return;
+                    }
+                    DataExporter(settings).parseCSVFile(binaryContent);
                   },
                 )
               ),
