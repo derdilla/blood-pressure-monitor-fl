@@ -206,13 +206,11 @@ class ExportImportScreen extends StatelessWidget {
                           content: Text(AppLocalizations.of(context)!.errNeedHeadline)));
                     }
 
-                    // TODO: import from here
-
-
                     var result = await FilePicker.platform.pickFiles(
                       allowMultiple: false,
                       withData: true,
                     );
+                    if (!context.mounted) return;
                     if (result == null) {
                       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                           content: Text(AppLocalizations.of(context)!.errNoFileOpened)));
@@ -224,7 +222,15 @@ class ExportImportScreen extends StatelessWidget {
                           content: Text(AppLocalizations.of(context)!.errCantReadFile)));
                       return;
                     }
-                    DataExporter(settings).parseCSVFile(binaryContent);
+                    
+                    var fileContents = DataExporter(settings).parseCSVFile(binaryContent);
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                        content: Text(AppLocalizations.of(context)!.importSuccess(fileContents.length))));
+                    var model = Provider.of<BloodPressureModel>(context, listen: false);
+                    for (final e in fileContents) {
+                      model.add(e);
+                    }
+
                   },
                 )
               ),

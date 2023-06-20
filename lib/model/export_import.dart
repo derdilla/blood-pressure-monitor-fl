@@ -74,9 +74,6 @@ class DataExporter {
     String fileContents = utf8.decode(data.toList());
     final converter = CsvToListConverter(fieldDelimiter: settings.csvFieldDelimiter, textDelimiter: settings.csvTextDelimiter);
     final csvLines = converter.convert(fileContents);
-    if (csvLines.length <= 1) {
-      throw const FormatException('empty file');
-    }
     final attributes = csvLines.removeAt(0);
     var creationTimePos = -1;
     var sysPos = -1;
@@ -119,9 +116,6 @@ class DataExporter {
           )
       );
     }
-    // TODO: maybe use customized fields if no header is present?
-    // requires changes in screen class
-
     return records;
   }
 }

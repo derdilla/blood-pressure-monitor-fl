@@ -110,6 +110,14 @@
   "import": "IMPORT",
   "sourceCode": "source code",
   "licenses": "3rd party licenses",
+  "importSuccess": "Successfully imported {count} entries",
+  "@importSuccess": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
 
   "statistics": "Statistics",
   "measurementCount": "Measurement count",
