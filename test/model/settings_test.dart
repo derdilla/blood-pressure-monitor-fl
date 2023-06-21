@@ -1,5 +1,7 @@
 import 'package:blood_pressure_app/model/ram_only_implementations.dart';
 import 'package:blood_pressure_app/model/settings_store.dart';
+import 'package:file_saver/file_saver.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
@@ -29,7 +31,6 @@ void main() {
       expect(s.pulColor.value, 0xFFF44336);
       expect(s.allowManualTimeInput, true);
       expect(s.dateFormatString, 'yyyy-MM-dd  HH:mm');
-      expect(s.useExportCompatability, false);
       expect(s.iconSize, 30);
       expect(s.sysWarn, 125); // depends on overrideWarnValues
       expect(s.diaWarn, 80); // depends on overrideWarnValues
@@ -40,6 +41,14 @@ void main() {
       expect(s.animationSpeed, 150);
       expect(s.confirmDeletion, true);
       expect(s.graphTitlesCount, 5);
+      expect(s.csvFieldDelimiter, ',');
+      expect(s.csvTextDelimiter, '"');
+      expect(s.exportItems, ['timestampUnixMs', 'systolic', 'diastolic', 'pulse', 'notes']);
+      expect(s.exportAddableItems, []);
+      expect(s.exportCsvHeadline, true);
+      expect(s.exportDataRange.start.millisecondsSinceEpoch, 0);
+      expect(s.exportLimitDataRange, false);
+      expect(s.exportMimeType, MimeType.csv);
 
       s.overrideWarnValues = true;
       expect(s.sysWarn, 120);
@@ -70,7 +79,6 @@ void main() {
       s.pulColor = createMaterialColor(0xFF942DA7);
       s.allowManualTimeInput = false;
       s.dateFormatString = 'yy:dd @ H:mm.ss';
-      s.useExportCompatability = true;
       s.iconSize = 50;
       s.sysWarn = 314; // depends on overrideWarnValues
       s.diaWarn = 159; // depends on overrideWarnValues
@@ -81,6 +89,13 @@ void main() {
       s.animationSpeed = 100;
       s.confirmDeletion = false;
       s.graphTitlesCount = 7;
+      s.csvFieldDelimiter = '|';
+      s.csvTextDelimiter = '\'';
+      s.exportAddableItems = ['timestampUnixMs'];
+      s.exportItems = ['systolic', 'diastolic', 'pulse', 'notes'];
+      s.exportCsvHeadline = false;
+      s.exportLimitDataRange = true;
+      s.exportMimeType = MimeType.pdf;
 
       expect(s.displayDataStart, DateTime.fromMillisecondsSinceEpoch(10000));
       expect(s.displayDataEnd, DateTime.fromMillisecondsSinceEpoch(200000));
@@ -91,7 +106,6 @@ void main() {
       expect(s.diaColor.value, 0xFF942DA6);
       expect(s.pulColor.value, 0xFF942DA7);
       expect(s.allowManualTimeInput, false);
-      expect(s.useExportCompatability, true);
       expect(s.iconSize, 50);
       expect(s.sysWarn, 314);
       expect(s.diaWarn, 159);
@@ -102,6 +116,13 @@ void main() {
       expect(s.animationSpeed, 100);
       expect(s.confirmDeletion, false);
       expect(s.graphTitlesCount, 7);
+      expect(s.csvFieldDelimiter, '|');
+      expect(s.csvTextDelimiter, '\'');
+      expect(s.exportItems, ['systolic', 'diastolic', 'pulse', 'notes']);
+      expect(s.exportAddableItems, ['timestampUnixMs']);
+      expect(s.exportCsvHeadline, false);
+      expect(s.exportLimitDataRange, true);
+      expect(s.exportMimeType, MimeType.pdf);
     });
 
     test('setting fields should notify listeners and change values', () async {
@@ -123,7 +144,6 @@ void main() {
       s.pulColor = createMaterialColor(0xFF942DA7);
       s.allowManualTimeInput = false;
       s.dateFormatString = 'yy:dd @ H:mm.ss';
-      s.useExportCompatability = true;
       s.iconSize = 10;
       s.sysWarn = 314; // depends on overrideWarnValues
       s.diaWarn = 159; // depends on overrideWarnValues
@@ -134,8 +154,16 @@ void main() {
       s.animationSpeed = 100;
       s.confirmDeletion = true;
       s.graphTitlesCount = 2;
+      s.csvFieldDelimiter = '|';
+      s.csvTextDelimiter = '\'';
+      s.exportAddableItems = ['timestampUnixMs'];
+      s.exportItems = ['systolic', 'diastolic', 'pulse', 'notes'];
+      s.exportCsvHeadline = false;
+      s.exportDataRange = DateTimeRange(start: DateTime.fromMillisecondsSinceEpoch(20), end: DateTime.now());
+      s.exportLimitDataRange = true;
+      s.exportMimeType = MimeType.pdf;
 
-      expect(i, 22);
+      expect(i, 29);
     });
   });
 
@@ -160,7 +188,6 @@ void main() {
       expect(s.pulColor.value, 0xFFF44336);
       expect(s.allowManualTimeInput, true);
       expect(s.dateFormatString, 'yyyy-MM-dd  HH:mm');
-      expect(s.useExportCompatability, false);
       expect(s.iconSize, 30);
       expect(s.sysWarn, 125); // depends on overrideWarnValues
       expect(s.diaWarn, 80); // depends on overrideWarnValues
@@ -171,6 +198,14 @@ void main() {
       expect(s.animationSpeed, 150);
       expect(s.confirmDeletion, true);
       expect(s.graphTitlesCount, 5);
+      expect(s.csvFieldDelimiter, ',');
+      expect(s.csvTextDelimiter, '"');
+      expect(s.exportItems, ['timestampUnixMs', 'systolic', 'diastolic', 'pulse', 'notes']);
+      expect(s.exportAddableItems, []);
+      expect(s.exportCsvHeadline, true);
+      expect(s.exportDataRange.start.millisecondsSinceEpoch, 0);
+      expect(s.exportLimitDataRange, false);
+      expect(s.exportMimeType, MimeType.csv);
 
       s.overrideWarnValues = true;
       expect(s.sysWarn, 120);
@@ -201,7 +236,6 @@ void main() {
       s.pulColor = createMaterialColor(0xFF942DA7);
       s.allowManualTimeInput = false;
       s.dateFormatString = 'yy:dd @ H:mm.ss';
-      s.useExportCompatability = true;
       s.iconSize = 50;
       s.sysWarn = 314; // depends on overrideWarnValues
       s.diaWarn = 159; // depends on overrideWarnValues
@@ -212,6 +246,13 @@ void main() {
       s.animationSpeed = 100;
       s.confirmDeletion = false;
       s.graphTitlesCount = 7;
+      s.csvFieldDelimiter = '|';
+      s.csvTextDelimiter = '\'';
+      s.exportAddableItems = ['timestampUnixMs'];
+      s.exportItems = ['systolic', 'diastolic', 'pulse', 'notes'];
+      s.exportCsvHeadline = false;
+      s.exportLimitDataRange = true;
+      s.exportMimeType = MimeType.pdf;
 
       expect(s.displayDataStart, DateTime.fromMillisecondsSinceEpoch(10000));
       expect(s.displayDataEnd, DateTime.fromMillisecondsSinceEpoch(200000));
@@ -222,7 +263,6 @@ void main() {
       expect(s.diaColor.value, 0xFF942DA6);
       expect(s.pulColor.value, 0xFF942DA7);
       expect(s.allowManualTimeInput, false);
-      expect(s.useExportCompatability, true);
       expect(s.iconSize, 50);
       expect(s.sysWarn, 314);
       expect(s.diaWarn, 159);
@@ -233,6 +273,13 @@ void main() {
       expect(s.animationSpeed, 100);
       expect(s.confirmDeletion, false);
       expect(s.graphTitlesCount, 7);
+      expect(s.csvFieldDelimiter, '|');
+      expect(s.csvTextDelimiter, '\'');
+      expect(s.exportItems, ['systolic', 'diastolic', 'pulse', 'notes']);
+      expect(s.exportAddableItems, ['timestampUnixMs']);
+      expect(s.exportCsvHeadline, false);
+      expect(s.exportLimitDataRange, true);
+      expect(s.exportMimeType, MimeType.pdf);
     });
 
     test('setting fields should notify listeners and change values', () async {
@@ -254,7 +301,6 @@ void main() {
       s.pulColor = createMaterialColor(0xFF942DA7);
       s.allowManualTimeInput = false;
       s.dateFormatString = 'yy:dd @ H:mm.ss';
-      s.useExportCompatability = true;
       s.iconSize = 10;
       s.sysWarn = 314; // depends on overrideWarnValues
       s.diaWarn = 159; // depends on overrideWarnValues
@@ -265,8 +311,16 @@ void main() {
       s.animationSpeed = 100;
       s.confirmDeletion = true;
       s.graphTitlesCount = 2;
+      s.csvFieldDelimiter = '|';
+      s.csvTextDelimiter = '\'';
+      s.exportAddableItems = ['timestampUnixMs'];
+      s.exportItems = ['systolic', 'diastolic', 'pulse', 'notes'];
+      s.exportCsvHeadline = false;
+      s.exportDataRange = DateTimeRange(start: DateTime.fromMillisecondsSinceEpoch(20), end: DateTime.now());
+      s.exportLimitDataRange = true;
+      s.exportMimeType = MimeType.pdf;
 
-      expect(i, 22);
+      expect(i, 29);
     });
   });
 }

@@ -19,10 +19,6 @@ class Settings extends ChangeNotifier {
     return component;
   }
 
-  void forceNotifyListeners() {
-    notifyListeners();
-  }
-
   int get graphStepSize {
     return _prefs.getInt('graphStepSize') ?? TimeStep.day;
   }
