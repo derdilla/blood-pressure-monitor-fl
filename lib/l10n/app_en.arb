@@ -40,6 +40,7 @@
   "errNotCsvFormat": "You can only import files in csv format.",
   "errNeedHeadline": "You can only import files with a headline.",
   "errCantReadFile": "The file contents can not be read",
+  "errNotImportable": "This file can't be imported",
 
   "btnCancel": "CANCEL",
   "btnSave": "SAVE",

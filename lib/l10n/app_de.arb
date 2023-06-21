@@ -39,6 +39,7 @@
   "errPleaseSelect": "Bitte auswählen",
   "errNotCsvFormat": "Es können nur Dateien im csv Format importiert werden.",
   "errNeedHeadline": "Es können nur Dateien mit einer Überschrift importiert werden.",
+  "errNotImportable": "Diese Datei kann nicht importiert werden.",
 
 
   "btnCancel": "ABBRUCH",

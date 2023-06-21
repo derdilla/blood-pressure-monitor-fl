@@ -14,6 +14,7 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
 
+// FIXME: Export/import buttons overlap with content on snack bar
 class ExportImportScreen extends StatelessWidget {
   const ExportImportScreen({super.key});
 
@@ -222,15 +223,19 @@ class ExportImportScreen extends StatelessWidget {
                           content: Text(AppLocalizations.of(context)!.errCantReadFile)));
                       return;
                     }
-                    
-                    var fileContents = DataExporter(settings).parseCSVFile(binaryContent);
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                        content: Text(AppLocalizations.of(context)!.importSuccess(fileContents.length))));
-                    var model = Provider.of<BloodPressureModel>(context, listen: false);
-                    for (final e in fileContents) {
-                      model.add(e);
-                    }
 
+                    try {
+                      var fileContents = DataExporter(settings).parseCSVFile(binaryContent);
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                          content: Text(AppLocalizations.of(context)!.importSuccess(fileContents.length))));
+                      var model = Provider.of<BloodPressureModel>(context, listen: false);
+                      for (final e in fileContents) {
+                        model.add(e);
+                      }
+                    } catch (e) {
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                          content: Text(AppLocalizations.of(context)!.errNotImportable)));
+                    }
                   },
                 )
               ),
@@ -270,7 +275,7 @@ class CsvItemsOrderCreator extends StatelessWidget {
 
             settings.exportItems = exportItems;
           },
-          footer: (settings.exportAddableItems.isNotEmpty) ? InkWell(
+          footer: (settings.exportItems.length < 5) ? InkWell(
             onTap: () async {
               await showDialog(context: context,
                 builder: (context) {

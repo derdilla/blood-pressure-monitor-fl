@@ -44,7 +44,7 @@ void main() {
       expect(s.csvFieldDelimiter, ',');
       expect(s.csvTextDelimiter, '"');
       expect(s.exportItems, ['timestampUnixMs', 'systolic', 'diastolic', 'pulse', 'notes']);
-      expect(s.exportAddableItems, []);
+      expect(s.exportAddableItems, ['isoUTCTime']);
       expect(s.exportCsvHeadline, true);
       expect(s.exportDataRange.start.millisecondsSinceEpoch, 0);
       expect(s.exportLimitDataRange, false);
@@ -92,7 +92,7 @@ void main() {
       s.csvFieldDelimiter = '|';
       s.csvTextDelimiter = '\'';
       s.exportAddableItems = ['timestampUnixMs'];
-      s.exportItems = ['systolic', 'diastolic', 'pulse', 'notes'];
+      s.exportItems = ['systolic', 'diastolic', 'pulse', 'notes', 'isoUTCTime'];
       s.exportCsvHeadline = false;
       s.exportLimitDataRange = true;
       s.exportMimeType = MimeType.pdf;
@@ -118,7 +118,7 @@ void main() {
       expect(s.graphTitlesCount, 7);
       expect(s.csvFieldDelimiter, '|');
       expect(s.csvTextDelimiter, '\'');
-      expect(s.exportItems, ['systolic', 'diastolic', 'pulse', 'notes']);
+      expect(s.exportItems, ['systolic', 'diastolic', 'pulse', 'notes', 'isoUTCTime']);
       expect(s.exportAddableItems, ['timestampUnixMs']);
       expect(s.exportCsvHeadline, false);
       expect(s.exportLimitDataRange, true);
@@ -157,7 +157,7 @@ void main() {
       s.csvFieldDelimiter = '|';
       s.csvTextDelimiter = '\'';
       s.exportAddableItems = ['timestampUnixMs'];
-      s.exportItems = ['systolic', 'diastolic', 'pulse', 'notes'];
+      s.exportItems = ['systolic', 'diastolic', 'pulse', 'notes', 'isoUTCTime'];
       s.exportCsvHeadline = false;
       s.exportDataRange = DateTimeRange(start: DateTime.fromMillisecondsSinceEpoch(20), end: DateTime.now());
       s.exportLimitDataRange = true;
@@ -201,7 +201,7 @@ void main() {
       expect(s.csvFieldDelimiter, ',');
       expect(s.csvTextDelimiter, '"');
       expect(s.exportItems, ['timestampUnixMs', 'systolic', 'diastolic', 'pulse', 'notes']);
-      expect(s.exportAddableItems, []);
+      expect(s.exportAddableItems, ['isoUTCTime']);
       expect(s.exportCsvHeadline, true);
       expect(s.exportDataRange.start.millisecondsSinceEpoch, 0);
       expect(s.exportLimitDataRange, false);
@@ -249,7 +249,7 @@ void main() {
       s.csvFieldDelimiter = '|';
       s.csvTextDelimiter = '\'';
       s.exportAddableItems = ['timestampUnixMs'];
-      s.exportItems = ['systolic', 'diastolic', 'pulse', 'notes'];
+      s.exportItems = ['systolic', 'diastolic', 'pulse', 'notes', 'isoUTCTime'];
       s.exportCsvHeadline = false;
       s.exportLimitDataRange = true;
       s.exportMimeType = MimeType.pdf;
@@ -275,7 +275,7 @@ void main() {
       expect(s.graphTitlesCount, 7);
       expect(s.csvFieldDelimiter, '|');
       expect(s.csvTextDelimiter, '\'');
-      expect(s.exportItems, ['systolic', 'diastolic', 'pulse', 'notes']);
+      expect(s.exportItems, ['systolic', 'diastolic', 'pulse', 'notes', 'isoUTCTime']);
       expect(s.exportAddableItems, ['timestampUnixMs']);
       expect(s.exportCsvHeadline, false);
       expect(s.exportLimitDataRange, true);
@@ -314,7 +314,7 @@ void main() {
       s.csvFieldDelimiter = '|';
       s.csvTextDelimiter = '\'';
       s.exportAddableItems = ['timestampUnixMs'];
-      s.exportItems = ['systolic', 'diastolic', 'pulse', 'notes'];
+      s.exportItems = ['systolic', 'diastolic', 'pulse', 'notes', 'isoUTCTime'];
       s.exportCsvHeadline = false;
       s.exportDataRange = DateTimeRange(start: DateTime.fromMillisecondsSinceEpoch(20), end: DateTime.now());
       s.exportLimitDataRange = true;

@@ -40,6 +40,9 @@ class DataExporter {
             case 'timestampUnixMs':
               row.add(record.creationTime.millisecondsSinceEpoch);
               break;
+            case 'isoUTCTime':
+              row.add(record.creationTime.toIso8601String());
+              break;
             case 'systolic':
               row.add(record.systolic);
               break;
@@ -76,6 +79,7 @@ class DataExporter {
     final csvLines = converter.convert(fileContents);
     final attributes = csvLines.removeAt(0);
     var creationTimePos = -1;
+    var isoTimePos = -1;
     var sysPos = -1;
     var diaPos = -1;
     var pulPos = -1;
@@ -84,6 +88,9 @@ class DataExporter {
       switch (attributes[i]) {
         case 'timestampUnixMs':
           creationTimePos = i;
+          break;
+        case 'isoUTCTime':
+          isoTimePos = i;
           break;
         case 'systolic':
           sysPos = i;
@@ -99,7 +106,7 @@ class DataExporter {
           break;
       }
     }
-    assert(creationTimePos >= 0);
+    assert(creationTimePos >= 0 || isoTimePos >= 0);
     assert(sysPos >= 0);
     assert(diaPos >= 0);
     assert(pulPos >= 0);
@@ -108,7 +115,7 @@ class DataExporter {
     for (final line in csvLines) {
       records.add(
           BloodPressureRecord(
-              DateTime.fromMillisecondsSinceEpoch(line[creationTimePos]),
+              (creationTimePos >= 0 ) ? DateTime.fromMillisecondsSinceEpoch(line[creationTimePos]) : DateTime.parse(line[isoTimePos]),
               line[sysPos],
               line[diaPos],
               line[pulPos],

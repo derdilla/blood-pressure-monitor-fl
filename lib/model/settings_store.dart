@@ -365,7 +365,7 @@ class Settings extends ChangeNotifier {
   }
   
   List<String> get exportAddableItems {
-    return _prefs.getStringList('exportAddableItems') ?? [];
+    return _prefs.getStringList('exportAddableItems') ?? ['isoUTCTime'];
   }
 
   set exportAddableItems(List<String> value) {

@@ -106,7 +106,7 @@ class RamSettings extends ChangeNotifier implements Settings {
   ExportFormat _exportFormat = ExportFormat.csv;
   String _csvFieldDelimiter = ',';
   String _csvTextDelimiter = '"';
-  List<String> _exportAddableItems = [];
+  List<String> _exportAddableItems = ['isoUTCTime'];
   bool _exportCsvHeadline = true;
   bool _exportCustomEntries = false;
   DateTimeRange _exportDataRange = DateTimeRange(start: DateTime.fromMillisecondsSinceEpoch(0), end: DateTime.fromMillisecondsSinceEpoch(0));
