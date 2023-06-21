@@ -14,7 +14,6 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
 
-// FIXME: Export/import buttons overlap with content on snack bar
 class ExportImportScreen extends StatelessWidget {
   const ExportImportScreen({super.key});
 
@@ -143,8 +142,9 @@ class ExportImportScreen extends StatelessWidget {
           );
         }),
       ),
-      floatingActionButton: SizedBox(
+      floatingActionButton: Container(
         height: 60,
+        color: Theme.of(context).colorScheme.onBackground,
         child: Center(
           child: Row(
             children: [
