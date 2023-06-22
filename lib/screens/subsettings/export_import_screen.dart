@@ -75,6 +75,7 @@ class _ExportImportScreenState extends State<ExportImportScreen> {
               items: [
                 DropdownMenuItem(value: ExportFormat.csv, child: Text(AppLocalizations.of(context)!.csv)),
                 DropdownMenuItem(value: ExportFormat.pdf, child: Text(AppLocalizations.of(context)!.pdf)),
+                DropdownMenuItem(value: ExportFormat.db, child: Text(AppLocalizations.of(context)!.db)),
               ],
               onChanged: (ExportFormat? value) {
                 if (value != null) {
@@ -146,8 +147,8 @@ class _ExportImportScreenState extends State<ExportImportScreen> {
             ];
           }
 
-          // warn banner when
-          if (_showWarnBanner && (settings.exportFormat != ExportFormat.csv ||
+          // warn banner when the exported data can't be imported
+          if (_showWarnBanner && ![ExportFormat.csv, ExportFormat.db].contains(settings.exportFormat) ||
               settings.exportCsvHeadline == false ||
               !(
                   (settings.exportItems.contains('timestampUnixMs') || settings.exportItems.contains('isoUTCTime')) &&
@@ -156,7 +157,7 @@ class _ExportImportScreenState extends State<ExportImportScreen> {
                   settings.exportItems.contains('pulse') &&
                   settings.exportItems.contains('notes')
               )
-          )) {
+          ) {
             options.insert(0, MaterialBanner(
               padding: const EdgeInsets.all(20),
               content: Text(AppLocalizations.of(context)!.exportWarnConfigNotImportable),
@@ -208,13 +209,17 @@ class _ExportImportScreenState extends State<ExportImportScreen> {
                       }
                       var fileContents = await DataExporter(settings).createFile(entries);
 
-                      String filename = 'blood_press_${DateTime.now().toIso8601String()}'
+                      String filename = 'blood_press_${DateTime.now().toIso8601String()}';
                       switch(settings.exportFormat) {
                         case ExportFormat.csv:
                           filename += '.csv';
                           break;
                         case ExportFormat.pdf:
                           filename += '.pdf';
+                          break;
+                        case ExportFormat.db:
+                          filename += '.db';
+                          break;
                       }
                       String path = await FileSaver.instance.saveFile(name: filename, bytes: fileContents);
 

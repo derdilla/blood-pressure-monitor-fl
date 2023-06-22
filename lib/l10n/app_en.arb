@@ -94,6 +94,7 @@
   "exportCsvHeadlineDesc": "Helps to discriminate types",
   "csv": "CSV",
   "pdf": "PDF",
+  "db": "SQLITE DB",
   "text": "text",
   "other": "other",
   "fieldDelimiter": "field delimiter",

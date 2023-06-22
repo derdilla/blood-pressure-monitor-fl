@@ -279,6 +279,8 @@ class Settings extends ChangeNotifier {
         return ExportFormat.csv;
       case 1:
         return ExportFormat.pdf;
+      case 2:
+        return ExportFormat.db;
       default:
         assert(false);
         return ExportFormat.csv;
@@ -292,6 +294,9 @@ class Settings extends ChangeNotifier {
         break;
       case ExportFormat.pdf:
         _prefs.setInt('exportFormat', 1);
+        break;
+      case ExportFormat.db:
+        _prefs.setInt('exportFormat', 2);
         break;
       default:
         assert(false);
