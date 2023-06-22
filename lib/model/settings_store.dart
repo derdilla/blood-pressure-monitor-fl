@@ -274,11 +274,28 @@ class Settings extends ChangeNotifier {
   }
 
   ExportFormat get exportFormat {
-    return ExportFormat(_prefs.getInt('exportFormat') ?? 0);
+    switch (_prefs.getInt('exportFormat') ?? 0) {
+      case 0:
+        return ExportFormat.csv;
+      case 1:
+        return ExportFormat.pdf;
+      default:
+        assert(false);
+        return ExportFormat.csv;
+    }
   }
   
   set exportFormat(ExportFormat format) {
-    _prefs.setInt('exportFormat', format.code);
+    switch (format) {
+      case ExportFormat.csv:
+        _prefs.setInt('exportFormat', 0);
+        break;
+      case ExportFormat.pdf:
+        _prefs.setInt('exportFormat', 1);
+        break;
+      default:
+        assert(false);
+    }
     notifyListeners();
   }
   
