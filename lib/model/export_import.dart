@@ -3,10 +3,11 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 
-import 'package:blood_pressure_app/model/pdf_creator.dart';
 import 'package:blood_pressure_app/model/settings_store.dart';
 import 'package:csv/csv.dart';
 import 'package:path/path.dart';
+import 'package:pdf/pdf.dart';
+import 'package:pdf/widgets.dart' as pw;
 import 'package:sqflite/sqflite.dart';
 
 import 'blood_pressure.dart';
@@ -21,7 +22,7 @@ class DataExporter {
       case ExportFormat.csv:
         return createCSVCFile(records);
       case ExportFormat.pdf:
-        return await PdfCreator().createPdf(records);
+        return createPdfFile(records);
       case ExportFormat.db:
         return copyDBFile();
     }
@@ -134,6 +135,41 @@ class DataExporter {
       );
     }
     return records;
+  }
+
+  Future<Uint8List> createPdfFile(List<BloodPressureRecord> data) async {
+    pw.Document pdf = pw.Document();
+
+    pdf.addPage(pw.Page(
+        pageFormat: PdfPageFormat.a4,
+        build: (pw.Context context) {
+          return pw.Center(
+            child: pw.Table(
+                children: [
+                  pw.TableRow(
+                      children: [
+                        pw.Text('timestamp'),
+                        pw.Text('systolic'),
+                        pw.Text('diastolic'),
+                        pw.Text('pulse'),
+                        pw.Text('note')
+                      ]
+                  ),
+                  for (var entry in data)
+                    pw.TableRow(
+                        children: [
+                          pw.Text(entry.creationTime.toIso8601String()),
+                          pw.Text(entry.systolic.toString()),
+                          pw.Text(entry.diastolic.toString()),
+                          pw.Text(entry.pulse.toString()),
+                          pw.Text(entry.notes)
+                        ]
+                    )
+                ]
+            ),
+          );
+        }));
+    return await pdf.save();
   }
 
   Future<Uint8List> copyDBFile() async {
