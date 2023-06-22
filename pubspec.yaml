@@ -46,6 +46,7 @@ dependencies:
   url_launcher: ^6.1.11  # BSD-3-Clause
   shared_preferences: ^2.1.1  # BSD-3-Clause
   mockito: ^5.4.1
+  pdf: ^3.10.4
 
 dev_dependencies:
   flutter_test:

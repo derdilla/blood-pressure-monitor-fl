@@ -206,7 +206,7 @@ class _ExportImportScreenState extends State<ExportImportScreen> {
                       } else {
                         entries = await Provider.of<BloodPressureModel>(context, listen: false).all;
                       }
-                      var fileContents = DataExporter(settings).createFile(entries);
+                      var fileContents = await DataExporter(settings).createFile(entries);
 
                       String filename = 'blood_press_${DateTime.now().toIso8601String()}';
                       String path = await FileSaver.instance.saveFile(name: filename, bytes: fileContents);

@@ -2,6 +2,7 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
+import 'package:blood_pressure_app/model/pdf_creator.dart';
 import 'package:blood_pressure_app/model/settings_store.dart';
 import 'package:csv/csv.dart';
 
@@ -12,7 +13,7 @@ class DataExporter {
 
   DataExporter(this.settings);
 
-  Uint8List createFile(List<BloodPressureRecord> records) {
+  Future<Uint8List> createFile(List<BloodPressureRecord> records) async {
     if (settings.exportFormat == ExportFormat.csv) {
       List<String> exportItems;
       if (settings.exportCustomEntries) {
@@ -63,7 +64,7 @@ class DataExporter {
       var csvData = converter.convert(items);
       return Uint8List.fromList(utf8.encode(csvHead + csvData));
     } else if (settings.exportFormat == ExportFormat.pdf) {
-      throw UnimplementedError('TODO');
+      return await PdfCreator().createPdf(records);
     }
     return Uint8List(0);
   }
