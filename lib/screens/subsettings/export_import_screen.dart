@@ -208,7 +208,14 @@ class _ExportImportScreenState extends State<ExportImportScreen> {
                       }
                       var fileContents = await DataExporter(settings).createFile(entries);
 
-                      String filename = 'blood_press_${DateTime.now().toIso8601String()}';
+                      String filename = 'blood_press_${DateTime.now().toIso8601String()}'
+                      switch(settings.exportFormat) {
+                        case ExportFormat.csv:
+                          filename += '.csv';
+                          break;
+                        case ExportFormat.pdf:
+                          filename += '.pdf';
+                      }
                       String path = await FileSaver.instance.saveFile(name: filename, bytes: fileContents);
 
                       if ((Platform.isLinux || Platform.isWindows || Platform.isMacOS) && context.mounted) {
