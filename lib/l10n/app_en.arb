@@ -119,6 +119,7 @@
       }
     }
   },
+  "exportWarnConfigNotImportable": "Hey! Just a friendly heads up: the current export configuration won't be importable. To fix it, make sure you set the export type as CSV, enable the headline, and include the fields 'diastolic', 'systolic', 'pulse', 'notes', along with one of the time formats available.",
 
   "statistics": "Statistics",
   "measurementCount": "Measurement count",

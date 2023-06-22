@@ -14,8 +14,15 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
 
-class ExportImportScreen extends StatelessWidget {
+class ExportImportScreen extends StatefulWidget {
   const ExportImportScreen({super.key});
+
+  @override
+  State<ExportImportScreen> createState() => _ExportImportScreenState();
+}
+
+class _ExportImportScreenState extends State<ExportImportScreen> {
+  bool _showWarnBanner = true;
 
   @override
   Widget build(BuildContext context) {
@@ -27,6 +34,7 @@ class ExportImportScreen extends StatelessWidget {
       body: Container(
         margin: const EdgeInsets.only(bottom: 80),
         child: Consumer<Settings>(builder: (context, settings, child) {
+           // export range
           var exportRange = settings.exportDataRange;
           String exportRangeText;
           if (exportRange.start.millisecondsSinceEpoch != 0 && exportRange.end.millisecondsSinceEpoch != 0) {
@@ -36,48 +44,7 @@ class ExportImportScreen extends StatelessWidget {
             exportRangeText = AppLocalizations.of(context)!.errPleaseSelect;
           }
 
-          List<Widget> modeSpecificSettings = [];
-          if (settings.exportFormat == ExportFormat.csv) {
-            modeSpecificSettings = [
-              InputSettingsTile(
-                title: Text(AppLocalizations.of(context)!.fieldDelimiter),
-                inputWidth: 40,
-                initialValue: settings.csvFieldDelimiter,
-                onEditingComplete: (value) {
-                  if (value != null) {
-                    settings.csvFieldDelimiter = value;
-                  }
-                },
-              ),
-              InputSettingsTile(
-                title: Text(AppLocalizations.of(context)!.textDelimiter),
-                inputWidth: 40,
-                initialValue: settings.csvTextDelimiter,
-                onEditingComplete: (value) {
-                  if (value != null) {
-                    settings.csvTextDelimiter = value;
-                  }
-                },
-              ),
-              SwitchSettingsTile(
-                  title: Text(AppLocalizations.of(context)!.exportCsvHeadline),
-                  description: Text(AppLocalizations.of(context)!.exportCsvHeadlineDesc),
-                  initialValue: settings.exportCsvHeadline,
-                  onToggle: (value) {
-                    settings.exportCsvHeadline = value;
-                  }
-              ),
-              SwitchSettingsTile(
-                title: Text(AppLocalizations.of(context)!.exportCustomEntries),
-                initialValue: settings.exportCustomEntries,
-                onToggle: (value) {
-                  settings.exportCustomEntries = value;
-                }
-              ),
-              (settings.exportCustomEntries) ? const CsvItemsOrderCreator(): const SizedBox.shrink()
-            ];
-          }
-
+          // default options
           List<Widget> options = [
             SwitchSettingsTile(
                 title: Text(AppLocalizations.of(context)!.exportLimitDataRange),
@@ -135,6 +102,77 @@ class ExportImportScreen extends StatelessWidget {
             ),
              */
           ];
+
+          // mode specifics
+          List<Widget> modeSpecificSettings = [];
+          if (settings.exportFormat == ExportFormat.csv) {
+            modeSpecificSettings = [
+              InputSettingsTile(
+                title: Text(AppLocalizations.of(context)!.fieldDelimiter),
+                inputWidth: 40,
+                initialValue: settings.csvFieldDelimiter,
+                onEditingComplete: (value) {
+                  if (value != null) {
+                    settings.csvFieldDelimiter = value;
+                  }
+                },
+              ),
+              InputSettingsTile(
+                title: Text(AppLocalizations.of(context)!.textDelimiter),
+                inputWidth: 40,
+                initialValue: settings.csvTextDelimiter,
+                onEditingComplete: (value) {
+                  if (value != null) {
+                    settings.csvTextDelimiter = value;
+                  }
+                },
+              ),
+              SwitchSettingsTile(
+                  title: Text(AppLocalizations.of(context)!.exportCsvHeadline),
+                  description: Text(AppLocalizations.of(context)!.exportCsvHeadlineDesc),
+                  initialValue: settings.exportCsvHeadline,
+                  onToggle: (value) {
+                    settings.exportCsvHeadline = value;
+                  }
+              ),
+              SwitchSettingsTile(
+                title: Text(AppLocalizations.of(context)!.exportCustomEntries),
+                initialValue: settings.exportCustomEntries,
+                onToggle: (value) {
+                  settings.exportCustomEntries = value;
+                }
+              ),
+              (settings.exportCustomEntries) ? const CsvItemsOrderCreator(): const SizedBox.shrink()
+            ];
+          }
+
+          // warn banner when
+          if (_showWarnBanner && (settings.exportFormat != ExportFormat.csv ||
+              settings.exportCsvHeadline == false ||
+              !(
+                  (settings.exportItems.contains('timestampUnixMs') || settings.exportItems.contains('isoUTCTime')) &&
+                  settings.exportItems.contains('systolic') &&
+                  settings.exportItems.contains('diastolic') &&
+                  settings.exportItems.contains('pulse') &&
+                  settings.exportItems.contains('notes')
+              )
+          )) {
+            options.insert(0, MaterialBanner(
+              padding: const EdgeInsets.all(20),
+              content: Text(AppLocalizations.of(context)!.exportWarnConfigNotImportable),
+              actions: [
+                TextButton(
+                    onPressed: () {
+                      setState(() {
+                        _showWarnBanner = false;
+                      });
+                    },
+                    child: Text(AppLocalizations.of(context)!.btnConfirm))
+              ]
+            ));
+          }
+
+          // create view
           options.addAll(modeSpecificSettings);
           options.add(const SizedBox(height: 20,));
           return ListView(
