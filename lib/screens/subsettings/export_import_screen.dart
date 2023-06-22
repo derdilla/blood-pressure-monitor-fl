@@ -333,13 +333,15 @@ class ExportImportButtons extends StatelessWidget {
                   child: Text(AppLocalizations.of(context)!.import),
                   onPressed: () async {
                     final settings = Provider.of<Settings>(context, listen: false);
-                    if (!(settings.exportFormat == ExportFormat.csv)) {
+                    if (!([ExportFormat.csv, ExportFormat.db].contains(settings.exportFormat))) {
                       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                          content: Text(AppLocalizations.of(context)!.errNotCsvFormat)));
+                          content: Text(AppLocalizations.of(context)!.errWrongImportFormat)));
+                      return;
                     }
-                    if (!settings.exportCsvHeadline) {
+                    if (settings.exportFormat == ExportFormat.csv && !settings.exportCsvHeadline) {
                       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                           content: Text(AppLocalizations.of(context)!.errNeedHeadline)));
+                      return;
                     }
 
                     var result = await FilePicker.platform.pickFiles(

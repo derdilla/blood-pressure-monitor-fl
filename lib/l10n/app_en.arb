@@ -37,7 +37,7 @@
   "errNoData": "no data",
   "errNoRangeForExport": "You need to specify a range in which data is exported.",
   "errPleaseSelect": "please select",
-  "errNotCsvFormat": "You can only import files in csv format.",
+  "errWrongImportFormat": "You can only import files in csv and SQLite db format.",
   "errNeedHeadline": "You can only import files with a headline.",
   "errCantReadFile": "The file contents can not be read",
   "errNotImportable": "This file can't be imported",

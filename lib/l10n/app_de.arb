@@ -37,7 +37,7 @@
   "errNoData": "Keine Daten",
   "errNoRangeForExport": "Sie müssen angeben, welche daten sie exportieren wollen.",
   "errPleaseSelect": "Bitte auswählen",
-  "errNotCsvFormat": "Es können nur Dateien im csv Format importiert werden.",
+  "errWrongImportFormat": "Es können nur Dateien im csv und SQLite db Format importiert werden.",
   "errNeedHeadline": "Es können nur Dateien mit einer Überschrift importiert werden.",
   "errNotImportable": "Diese Datei kann nicht importiert werden.",
 
