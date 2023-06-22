@@ -274,17 +274,17 @@ class _ExportImportScreenState extends State<ExportImportScreen> {
                       return;
                     }
 
-                    try {
-                      var fileContents = DataExporter(settings).parseCSVFile(binaryContent);
-                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                          content: Text(AppLocalizations.of(context)!.importSuccess(fileContents.length))));
-                      var model = Provider.of<BloodPressureModel>(context, listen: false);
-                      for (final e in fileContents) {
-                        model.add(e);
-                      }
-                    } catch (e) {
+                    var fileContents = DataExporter(settings).parseFile(binaryContent);
+                    if (fileContents == null) {
                       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                           content: Text(AppLocalizations.of(context)!.errNotImportable)));
+                      return;
+                    }
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                        content: Text(AppLocalizations.of(context)!.importSuccess(fileContents.length))));
+                    var model = Provider.of<BloodPressureModel>(context, listen: false);
+                    for (final e in fileContents) {
+                      model.add(e);
                     }
                   },
                 )

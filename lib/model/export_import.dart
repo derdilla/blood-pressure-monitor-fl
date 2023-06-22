@@ -28,6 +28,21 @@ class DataExporter {
     }
   }
 
+  List<BloodPressureRecord>? parseFile(Uint8List data) {
+    switch(settings.exportFormat) {
+      case ExportFormat.csv:
+        try {
+          return parseCSVFile(data);
+        } catch (e) {
+          return null;
+        }
+      case ExportFormat.pdf:
+        return null;
+      case ExportFormat.db:
+        throw UnimplementedError('TODO');
+    }
+  }
+
   Uint8List createCSVCFile(List<BloodPressureRecord> records) {
     List<String> exportItems;
     if (settings.exportCustomEntries) {
