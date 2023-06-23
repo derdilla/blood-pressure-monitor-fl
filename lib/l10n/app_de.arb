@@ -177,5 +177,16 @@
   "week": "Woche",
   "month": "Monat",
   "year": "Jahr",
-  "lifetime": "Lebenszeit"
+  "lifetime": "Lebenszeit",
+  "weekOfYear": "Woche {weekNum}, {year}",
+  "@weekOfYear": {
+    "placeholders": {
+      "weekNum": {
+        "type": "int"
+      },
+      "year": {
+        "type": "int"
+      }
+    }
+  }
 }
