@@ -1,7 +1,9 @@
 import 'dart:collection';
 
 import 'package:blood_pressure_app/model/blood_pressure.dart';
+import 'package:blood_pressure_app/model/export_import.dart';
 import 'package:blood_pressure_app/model/settings_store.dart';
+import 'package:file_saver/src/utils/mime_types.dart';
 import 'package:flutter/material.dart';
 
 class RamBloodPressureModel extends ChangeNotifier implements BloodPressureModel {
@@ -76,18 +78,6 @@ class RamBloodPressureModel extends ChangeNotifier implements BloodPressureModel
 
   @override
   void close() {}
-
-  @override
-  Future<void> import(void Function(bool p1) callback) {
-    // TODO: implement import
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<void> save(void Function(bool success, String? msg) callback, {bool exportAsText = false}) {
-    // TODO: implement save
-    throw UnimplementedError();
-  }
 }
 
 class RamSettings extends ChangeNotifier implements Settings {
@@ -113,6 +103,16 @@ class RamSettings extends ChangeNotifier implements Settings {
   bool _useExportCompatability = false;
   bool _validateInputs = true;
   int _graphTitlesCount = 5;
+  ExportFormat _exportFormat = ExportFormat.csv;
+  String _csvFieldDelimiter = ',';
+  String _csvTextDelimiter = '"';
+  List<String> _exportAddableItems = ['isoUTCTime'];
+  bool _exportCsvHeadline = true;
+  bool _exportCustomEntries = false;
+  DateTimeRange _exportDataRange = DateTimeRange(start: DateTime.fromMillisecondsSinceEpoch(0), end: DateTime.fromMillisecondsSinceEpoch(0));
+  List<String> _exportItems = ['timestampUnixMs', 'systolic', 'diastolic', 'pulse', 'notes'];
+  bool _exportLimitDataRange = false;
+  MimeType _exportMimeType = MimeType.csv;
 
   RamSettings() {
     _accentColor = createMaterialColor(0xFF009688);
@@ -307,15 +307,6 @@ class RamSettings extends ChangeNotifier implements Settings {
   }
 
   @override
-  bool get useExportCompatability => _useExportCompatability;
-
-  @override
-  set useExportCompatability(bool value) {
-    _useExportCompatability = value;
-    notifyListeners();
-  }
-
-  @override
   bool get validateInputs => _validateInputs;
 
   @override
@@ -330,6 +321,103 @@ class RamSettings extends ChangeNotifier implements Settings {
   @override
   set graphTitlesCount(int value) {
     _graphTitlesCount = value;
+    notifyListeners();
+  }
+
+  @override
+  ExportFormat get exportFormat => _exportFormat;
+
+  @override
+  set exportFormat(ExportFormat value) {
+    _exportFormat = value;
+    notifyListeners();
+  }
+
+  bool get useExportCompatability => _useExportCompatability;
+
+  set useExportCompatability(bool value) {
+    _useExportCompatability = value;
+    notifyListeners();
+  }
+
+  @override
+  String get csvFieldDelimiter => _csvFieldDelimiter;
+
+  @override
+  set csvFieldDelimiter(String value) {
+    _csvFieldDelimiter = value;
+    notifyListeners();
+  }
+
+  @override
+  String get csvTextDelimiter => _csvTextDelimiter;
+
+  @override
+  set csvTextDelimiter(String value) {
+    _csvTextDelimiter = value;
+    notifyListeners();
+  }
+
+  @override
+  List<String> get exportAddableItems => _exportAddableItems;
+
+  @override
+  set exportAddableItems(List<String> value) {
+    _exportAddableItems = value;
+    notifyListeners();
+  }
+
+  @override
+  bool get exportCsvHeadline => _exportCsvHeadline;
+
+  @override
+  set exportCsvHeadline(bool value) {
+    _exportCsvHeadline = value;
+    notifyListeners();
+  }
+
+  @override
+  bool get exportCustomEntries => _exportCustomEntries;
+
+  @override
+  set exportCustomEntries(bool value) {
+    _exportCustomEntries = value;
+    notifyListeners();
+  }
+
+  @override
+  DateTimeRange get exportDataRange => _exportDataRange;
+
+  @override
+  set exportDataRange(DateTimeRange value) {
+    _exportDataRange = value;
+    notifyListeners();
+  }
+
+  @override
+  List<String> get exportItems => _exportItems;
+
+  @override
+  set exportItems(List<String> value) {
+    _exportItems = value;
+    notifyListeners();
+  }
+
+  @override
+  bool get exportLimitDataRange => _exportLimitDataRange;
+
+  @override
+  set exportLimitDataRange(bool value) {
+    _exportLimitDataRange = value;
+    notifyListeners();
+  }
+
+  @override
+  MimeType get exportMimeType => _exportMimeType;
+
+  @override
+  set exportMimeType(MimeType value) {
+    _exportMimeType = value;
     notifyListeners();
   }
 

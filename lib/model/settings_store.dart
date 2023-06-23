@@ -1,4 +1,6 @@
 import 'package:blood_pressure_app/model/blood_pressure.dart';
+import 'package:blood_pressure_app/model/export_import.dart';
+import 'package:file_saver/file_saver.dart' show MimeType;
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -8,7 +10,7 @@ class Settings extends ChangeNotifier {
 
   DateTime? _displayDataStart;
   DateTime? _displayDataEnd;
-
+  
   Settings._create();
   // factory method, to allow for async constructor
   static Future<Settings> create() async {
@@ -175,15 +177,6 @@ class Settings extends ChangeNotifier {
     notifyListeners();
   }
 
-  bool get useExportCompatability {
-    return _prefs.getBool('useExportCompatability') ?? false;
-  }
-
-  set useExportCompatability(bool useExportCompatability) {
-    _prefs.setBool('useExportCompatability', useExportCompatability);
-    notifyListeners();
-  }
-
   double get iconSize {
     return _prefs.getInt('iconSize')?.toDouble() ?? 30;
   }
@@ -277,6 +270,145 @@ class Settings extends ChangeNotifier {
 
   set graphTitlesCount(int newCount) {
     _prefs.setInt('titlesCount', newCount);
+    notifyListeners();
+  }
+
+  ExportFormat get exportFormat {
+    switch (_prefs.getInt('exportFormat') ?? 0) {
+      case 0:
+        return ExportFormat.csv;
+      case 1:
+        return ExportFormat.pdf;
+      case 2:
+        return ExportFormat.db;
+      default:
+        assert(false);
+        return ExportFormat.csv;
+    }
+  }
+  
+  set exportFormat(ExportFormat format) {
+    switch (format) {
+      case ExportFormat.csv:
+        _prefs.setInt('exportFormat', 0);
+        break;
+      case ExportFormat.pdf:
+        _prefs.setInt('exportFormat', 1);
+        break;
+      case ExportFormat.db:
+        _prefs.setInt('exportFormat', 2);
+        break;
+      default:
+        assert(false);
+    }
+    notifyListeners();
+  }
+  
+  String get csvFieldDelimiter {
+    return _prefs.getString('csvFieldDelimiter') ?? ',';
+  }
+  
+  set csvFieldDelimiter(String value) {
+    _prefs.setString('csvFieldDelimiter', value);
+    notifyListeners();
+  }
+
+  String get csvTextDelimiter {
+    return _prefs.getString('csvTextDelimiter') ?? '"';
+  }
+
+  set csvTextDelimiter(String value) {
+    _prefs.setString('csvTextDelimiter', value);
+    notifyListeners();
+  }
+
+  MimeType get exportMimeType {
+    switch (_prefs.getInt('exportMimeType') ?? 0) {
+      case 0:
+        return MimeType.csv;
+      case 1:
+        return MimeType.text;
+      case 2:
+        return MimeType.pdf;
+      case 3:
+        return MimeType.other;
+      default:
+        throw UnimplementedError();
+    }
+  }
+  set exportMimeType(MimeType value) {
+    switch (value) {
+      case MimeType.csv:
+        _prefs.setInt('exportMimeType', 0);
+        break;
+      case MimeType.text:
+        _prefs.setInt('exportMimeType', 1);
+        break;
+      case MimeType.pdf:
+        _prefs.setInt('exportMimeType', 2);
+        break;
+      case MimeType.other:
+        _prefs.setInt('exportMimeType', 3);
+        break;
+      default:
+        throw UnimplementedError();
+    }
+    notifyListeners();
+  }
+
+  bool get exportLimitDataRange {
+    return _prefs.getBool('exportLimitDataRange') ?? false;
+  }
+
+  set exportLimitDataRange(bool value) {
+    _prefs.setBool('exportLimitDataRange', value);
+    notifyListeners();
+  }
+
+  DateTimeRange get exportDataRange {
+    final start = DateTime.fromMillisecondsSinceEpoch(_prefs.getInt('exportDataRangeStartEpochMs') ?? 0);
+    final end = DateTime.fromMillisecondsSinceEpoch(_prefs.getInt('exportDataRangeEndEpochMs') ?? 0);
+    return DateTimeRange(start: start, end: end);
+  }
+
+  set exportDataRange(DateTimeRange value) {
+    _prefs.setInt('exportDataRangeStartEpochMs', value.start.millisecondsSinceEpoch);
+    _prefs.setInt('exportDataRangeEndEpochMs', value.end.millisecondsSinceEpoch);
+    notifyListeners();
+  }
+
+  bool get exportCustomEntries {
+    return _prefs.getBool('exportCustomEntries') ?? false;
+  }
+
+  set exportCustomEntries(bool value) {
+    _prefs.setBool('exportCustomEntries', value);
+    notifyListeners();
+  }
+  
+  List<String> get exportAddableItems {
+    return _prefs.getStringList('exportAddableItems') ?? ['isoUTCTime'];
+  }
+
+  set exportAddableItems(List<String> value) {
+    _prefs.setStringList('exportAddableItems', value);
+    notifyListeners();
+  }
+  List<String> get exportItems {
+    return _prefs.getStringList('exportItems') ?? ['timestampUnixMs', 'systolic', 'diastolic', 'pulse', 'notes'];
+  }
+
+  set exportItems(List<String> value) {
+    _prefs.setStringList('exportItems', value);
+    notifyListeners();
+  }
+
+  bool get exportCsvHeadline {
+    return _prefs.getBool('exportCsvHeadline') ?? true;
+  }
+
+  set exportCsvHeadline(bool value) {
+    _prefs.setBool('exportCsvHeadline', value);
     notifyListeners();
   }
 }

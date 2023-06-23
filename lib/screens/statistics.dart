@@ -21,7 +21,9 @@ class StatisticsPage extends StatelessWidget {
           return Consumer<Settings>(builder: (context, settings, child) {
             return Column(
               children: [
-                Statistic(caption: Text(AppLocalizations.of(context)!.statistics), child: futureInt(model.count)),
+                Statistic(
+                    key: const Key('measurementCount'),
+                    caption: Text(AppLocalizations.of(context)!.measurementCount), child: futureInt(model.count)),
                 // special measurements
                 StatisticsRow(
                   caption1: Text(
@@ -281,7 +283,7 @@ Widget futureInt(Future<int> value) {
             if ((snapshot.data ?? -1) < 0) {
               return const Text('-');
             }
-            return const Text('-');
+            return Text(snapshot.data.toString());
         }
       });
 }
