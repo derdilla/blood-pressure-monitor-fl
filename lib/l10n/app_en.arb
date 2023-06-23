@@ -87,7 +87,7 @@
   "exportInterval": "data range",
   "exportFormat": "export format",
   "exportCustomEntries": "customize fields",
-  "addEntry": "Feld hinzufügen",
+  "addEntry": "Add field",
   "exportMimeType": "export MIME type",
   "exportMimeTypeDesc": "signalizes type to other apps",
   "exportCsvHeadline": "headline",
