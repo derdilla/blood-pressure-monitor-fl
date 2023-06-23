@@ -1,6 +1,3 @@
-Wir stellen Ihnen ein aufregendes Update vor! Sind Sie bereit, die Kontrolle über Ihre Datenauswertung zu übernehmen? Die neuste Version präsentiert eine robuste Auswahl an Exportfunktionen. Ab sofort können Sie Ihre Datenanalyse selbstbewusst verwalten, ohne sich Gedanken über den Import komplizierter Formate machen zu müssen. Machen Sie sich bereit, ihren Blutdruck wie nie zuvor zu erkunden, zu exportieren und freizuschalten!
-
-Neuigkeiten in dieser Version:
 - Eine Vielzahl von Optionen für den CSV-Export wurde hinzugefügt.
 - Export als SQLite-Datenbank möglich.
 - Probleme mit der Statistikseite behoben.

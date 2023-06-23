@@ -1,6 +1,3 @@
-Introducing an exciting update! Are you ready to take control of your analysis? Look no further, as this latest release introduces a robust set of export features that have got you covered. Now, you can confidently manage your data analysis without any concerns about importing complicated formats. Get prepared to explore, export, and unlock valuable insights like never before!
-
-What's new in this release:
 - Added a plethora of options for CSV export.
 - Enabled export as an SQLite database.
 - Addressed issues with the statistics page.
