@@ -35,6 +35,13 @@
   "errNoValue": "Bitte Wert eingeben",
   "errNotEnoughDataToGraph": "Zuwenig Daten für Graphen",
   "errNoData": "Keine Daten",
+  "errNoRangeForExport": "Sie müssen angeben, welche daten sie exportieren wollen.",
+  "errPleaseSelect": "Bitte auswählen",
+  "errWrongImportFormat": "Es können nur Dateien im csv und SQLite db Format importiert werden.",
+  "errNeedHeadline": "Es können nur Dateien mit einer Überschrift importiert werden.",
+  "errCantReadFile": "Der Inhalt der Datei kann nicht gelesen werden",
+  "errNotImportable": "Diese Datei kann nicht importiert werden.",
+
 
   "btnCancel": "ABBRUCH",
   "btnSave": "OK",
@@ -52,8 +59,10 @@
   "layout": "Layout",
   "allowManualTimeInput": "Editierbare Zeitangaben",
   "enterTimeFormatScreen": "Datums-/Zeitformat",
-  "followSystemDarkMode": "Thema wie System",
-  "darkMode": "Dunkles Thema",
+  "theme": "Thema",
+  "system": "System",
+  "dark": "Dunkel",
+  "light": "Hell",
   "iconSize": "Größe der Knöpfe",
   "graphLineThickness": "Linienstärke d. Graphen",
   "animationSpeed": "Animationsdauer",
@@ -73,9 +82,25 @@
   "sysWarn": "Warnwert Sys",
   "diaWarn": "Warnwert Dia",
   "data": "Daten",
-  "useExportCompatability": "Kompatibler Export",
-  "useExportCompatabilityDesc": "Signalisiert Export als Text",
-  "export": "Exportieren",
+
+  "exportImport": "Exportieren / Importieren",
+  "exportLimitDataRange": "Datenbereich einschränken",
+  "exportInterval": "Datenbereich",
+  "exportFormat": "Exportformat",
+  "exportCustomEntries": "Eigene Felder",
+  "addEntry": "Feld hinzufügen",
+  "exportMimeType": "Export MIME typ",
+  "exportMimeTypeDesc": "gibt anderen dateityp weiter",
+  "exportCsvHeadline": "Überschrift",
+  "exportCsvHeadlineDesc": "Feldbezeichnungen zum Differenzieren",
+  "csv": "CSV",
+  "pdf": "PDF",
+  "db": "SQLITE DB",
+  "text": "Text",
+  "other": "Anderes",
+  "fieldDelimiter": "Feldseparator",
+  "textDelimiter": "Textbegrenzung",
+  "export": "EXPORT",
   "exportSuccess": "Exportiert in: {path}",
   "@exportSuccess": {
     "placeholders": {
@@ -84,10 +109,20 @@
       }
     }
   },
+  "exportWarnConfigNotImportable": "Hey! Nur eine freundliche Info: Die aktuelle Exportkonfiguration ist nicht importierbar. Um das zu beheben, stelle sicher, dass der Exporttyp als CSV festgelegt ist, die Überschrift aktiviert ist und die Felder 'diastolic', 'systolic', 'pulse', 'notes' sowie eines der verfügbaren Zeitformate enthalten sind.",
+
   "shared": "Geteilt",
-  "import": "Import",
+  "import": "IMPORT",
   "sourceCode": "Quellcode",
   "licenses": "Lizenzen dritter",
+  "importSuccess": "Es wurden {count} Einträge erfolgreich importiert",
+  "@importSuccess": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
 
   "statistics": "Statistik",
   "measurementCount": "Anzahl Messungen",

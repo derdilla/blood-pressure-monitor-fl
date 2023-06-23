@@ -1,7 +1,7 @@
 import 'package:blood_pressure_app/components/settings_widgets.dart';
-import 'package:blood_pressure_app/model/blood_pressure.dart';
 import 'package:blood_pressure_app/model/settings_store.dart';
 import 'package:blood_pressure_app/screens/subsettings/enter_timeformat.dart';
+import 'package:blood_pressure_app/screens/subsettings/export_import_screen.dart';
 import 'package:blood_pressure_app/screens/subsettings/warn_about.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -47,28 +47,33 @@ class SettingsPage extends StatelessWidget {
                   );
                 },
               ),
-              SwitchSettingsTile(
-                  key: const Key('followSystemDarkMode'),
-                  initialValue: settings.followSystemDarkMode,
-                  onToggle: (value) {
-                    settings.followSystemDarkMode = value;
-                  },
-                  leading: const Icon(Icons.auto_mode),
-                  title: Text(AppLocalizations.of(context)!.followSystemDarkMode)),
-              SwitchSettingsTile(
-                key: const Key('darkMode'),
-                initialValue: (() {
-                  if (settings.followSystemDarkMode) {
-                    return MediaQuery.of(context).platformBrightness == Brightness.dark;
+              DropDownSettingsTile<int>(
+                key: const Key('thema'),
+                leading: const Icon(Icons.brightness_4),
+                title: Text(AppLocalizations.of(context)!.theme),
+                value: settings.followSystemDarkMode ? 0 : (settings.darkMode ? 1 : 2),
+                items: [
+                  DropdownMenuItem(value: 0, child: Text(AppLocalizations.of(context)!.system)),
+                  DropdownMenuItem(value: 1, child: Text(AppLocalizations.of(context)!.dark)),
+                  DropdownMenuItem(value: 2, child: Text(AppLocalizations.of(context)!.light))
+                ],
+                onChanged: (int? value) {
+                  switch (value) {
+                    case 0:
+                      settings.followSystemDarkMode = true;
+                      break;
+                    case 1:
+                      settings.followSystemDarkMode = false;
+                      settings.darkMode = true;
+                      break;
+                    case 2:
+                      settings.followSystemDarkMode = false;
+                      settings.darkMode = false;
+                      break;
+                    default:
+                      assert(false);
                   }
-                  return settings.darkMode;
-                })(),
-                onToggle: (value) {
-                  settings.darkMode = value;
                 },
-                leading: const Icon(Icons.dark_mode),
-                title: Text(AppLocalizations.of(context)!.darkMode),
-                disabled: settings.followSystemDarkMode,
               ),
               SliderSettingsTile(
                 key: const Key('iconSize'),
@@ -238,51 +243,16 @@ class SettingsPage extends StatelessWidget {
             SettingsSection(
               title: Text(AppLocalizations.of(context)!.data),
               children: [
-                SwitchSettingsTile(
-                    key: const Key('useExportCompatability'),
-                    initialValue: settings.useExportCompatability,
-                    title: Text(AppLocalizations.of(context)!.useExportCompatability),
-                    description: Text(AppLocalizations.of(context)!.useExportCompatabilityDesc),
-                    leading: const Icon(Icons.support),
-                    onToggle: (value) {
-                      settings.useExportCompatability = value;
-                    }),
                 SettingsTile(
-                  key: const Key('export'),
-                  title: Text(AppLocalizations.of(context)!.export),
-                  leading: const Icon(Icons.save),
-                  onPressed: (context) => Provider.of<BloodPressureModel>(context, listen: false).save((success, msg) {
-                    if (success && msg != null) {
-                      ScaffoldMessenger.of(context)
-                          .showSnackBar(SnackBar(content: Text(AppLocalizations.of(context)!.success(msg))));
-                    } else if (!success && msg != null) {
-                      ScaffoldMessenger.of(context)
-                          .showSnackBar(SnackBar(content: Text(AppLocalizations.of(context)!.error(msg))));
+                    title: Text(AppLocalizations.of(context)!.exportImport),
+                    leading: const Icon(Icons.download),
+                    trailing: const Icon(Icons.arrow_forward_ios),
+                    onPressed: (context) {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => const ExportImportScreen()),
+                      );
                     }
-                  }, exportAsText: settings.useExportCompatability),
-                ),
-                SettingsTile(
-                  key: const Key('import'),
-                  title: Text(AppLocalizations.of(context)!.import),
-                  leading: const Icon(Icons.file_upload),
-                  onPressed: (context) {
-                    try {
-                      Provider.of<BloodPressureModel>(context, listen: false).import((res) {
-                        if (res) {
-                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                              content:
-                                  Text(AppLocalizations.of(context)!.success(AppLocalizations.of(context)!.import))));
-                        } else {
-                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                              content: Text(AppLocalizations.of(context)!
-                                  .error(AppLocalizations.of(context)!.errNoFileOpened))));
-                        }
-                      });
-                    } on Exception catch (e) {
-                      ScaffoldMessenger.of(context)
-                          .showSnackBar(SnackBar(content: Text(AppLocalizations.of(context)!.error(e.toString()))));
-                    }
-                  },
                 ),
               ],
             ),

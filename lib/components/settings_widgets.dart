@@ -340,6 +340,43 @@ class _InputSettingsTileState extends State<InputSettingsTile> {
   }
 }
 
+class DropDownSettingsTile<T> extends StatelessWidget {
+  final Widget title;
+  final Widget? leading;
+  final Widget? description;
+  final bool disabled;
+
+  final T value;
+  final List<DropdownMenuItem<T>> items;
+  final void Function(T? value) onChanged;
+
+
+  const DropDownSettingsTile({required this.title, required this.value,
+    required this.onChanged, required this.items, this.disabled = false, this.leading, this.description, super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return SettingsTile(
+      title: title,
+      description: description,
+      leading: leading,
+      disabled: disabled,
+      onPressed: (BuildContext context) {  },
+      trailing: Row(
+        children: [
+          DropdownButton<T>(
+            value: value,
+            items: items,
+            onChanged: onChanged,
+          ),
+          const SizedBox(width: 15,)
+        ],
+      ),
+    );
+  }
+
+}
+
 class SettingsSection extends StatelessWidget {
   final Widget title;
   final List<Widget> children;

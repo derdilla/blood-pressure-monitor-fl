@@ -35,6 +35,12 @@
   "errNoValue": "Please enter a value",
   "errNotEnoughDataToGraph": "not enough data to draw graph",
   "errNoData": "no data",
+  "errNoRangeForExport": "You need to specify a range in which data is exported.",
+  "errPleaseSelect": "please select",
+  "errWrongImportFormat": "You can only import files in csv and SQLite db format.",
+  "errNeedHeadline": "You can only import files with a headline.",
+  "errCantReadFile": "The file contents can not be read",
+  "errNotImportable": "This file can't be imported",
 
   "btnCancel": "CANCEL",
   "btnSave": "SAVE",
@@ -52,8 +58,10 @@
   "layout": "layout",
   "allowManualTimeInput": "allow manual time input",
   "enterTimeFormatScreen": "time format",
-  "followSystemDarkMode": "follow system dark mode",
-  "darkMode": "enable dark mode",
+  "theme": "theme",
+  "system": "System",
+  "dark": "dark",
+  "light": "light",
   "iconSize": "icon size",
   "graphLineThickness": "line thickness",
   "animationSpeed": "animation duration",
@@ -73,9 +81,25 @@
   "sysWarn": "systolic warn",
   "diaWarn": "diastolic warn",
   "data": "data",
-  "useExportCompatability": "compatability export",
-  "useExportCompatabilityDesc": "sets export mime type to text",
-  "export": "export",
+
+  "exportImport": "export / import",
+  "exportLimitDataRange": "limit data range",
+  "exportInterval": "data range",
+  "exportFormat": "export format",
+  "exportCustomEntries": "customize fields",
+  "addEntry": "Add field",
+  "exportMimeType": "export MIME type",
+  "exportMimeTypeDesc": "signalizes type to other apps",
+  "exportCsvHeadline": "headline",
+  "exportCsvHeadlineDesc": "Helps to discriminate types",
+  "csv": "CSV",
+  "pdf": "PDF",
+  "db": "SQLITE DB",
+  "text": "text",
+  "other": "other",
+  "fieldDelimiter": "field delimiter",
+  "textDelimiter": "text delimiter",
+  "export": "EXPORT",
   "exportSuccess": "Exported to: {path}",
   "@exportSuccess": {
     "placeholders": {
@@ -85,9 +109,18 @@
     }
   },
   "shared": "shared",
-  "import": "import",
+  "import": "IMPORT",
   "sourceCode": "source code",
   "licenses": "3rd party licenses",
+  "importSuccess": "Successfully imported {count} entries",
+  "@importSuccess": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "exportWarnConfigNotImportable": "Hey! Just a friendly heads up: the current export configuration won't be importable. To fix it, make sure you set the export type as CSV, enable the headline, and include the fields 'diastolic', 'systolic', 'pulse', 'notes', along with one of the time formats available.",
 
   "statistics": "Statistics",
   "measurementCount": "Measurement count",
