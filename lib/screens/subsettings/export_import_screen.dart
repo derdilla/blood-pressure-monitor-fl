@@ -401,13 +401,15 @@ class _ExportWarnBannerState extends State<ExportWarnBanner> {
     return Consumer<Settings>(builder: (context, settings, child) {
       if (_showWarnBanner && ![ExportFormat.csv, ExportFormat.db].contains(settings.exportFormat) ||
           settings.exportCsvHeadline == false ||
-          !(
+          settings.exportCustomEntries && !(
               (settings.exportItems.contains('timestampUnixMs') || settings.exportItems.contains('isoUTCTime')) &&
                   settings.exportItems.contains('systolic') &&
                   settings.exportItems.contains('diastolic') &&
                   settings.exportItems.contains('pulse') &&
                   settings.exportItems.contains('notes')
-          )
+          ) ||
+          ![',', '|'].contains(settings.csvFieldDelimiter) ||
+          !['"', '\''].contains(settings.csvTextDelimiter)
       ) {
         return MaterialBanner(
             padding: const EdgeInsets.all(20),
