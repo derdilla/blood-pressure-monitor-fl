@@ -147,6 +147,8 @@ class _AddMeasurementPageState extends State<AddMeasurementPage> {
                         } else if (settings.validateInputs && (int.tryParse(value) ?? 1000) >= 400) {
                           // exceeding this value is unlikely: https://pubmed.ncbi.nlm.nih.gov/7741618/
                           return AppLocalizations.of(context)?.errUnrealistic;
+                        } else if (settings.validateInputs && (int.tryParse(value) ?? -1) >= _systolic) {
+                          return AppLocalizations.of(context)?.errDiaGtSys;
                         } else {
                           _diastolic = int.tryParse(value) ?? -1;
                         }
