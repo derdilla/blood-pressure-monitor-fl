@@ -281,7 +281,7 @@ Widget futureInt(Future<int> value) {
             if ((snapshot.data ?? -1) < 0) {
               return const Text('-');
             }
-            return const Text('-');
+            return Text(snapshot.data.toString());
         }
       });
 }
