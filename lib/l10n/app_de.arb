@@ -19,8 +19,9 @@
     }
   },
   "errNaN": "Bitte Zahl eingeben",
-  "errLt30": "Wert < 30? Deaktiviere Prüfung in Einstellungen!",
+  "errLt30": "Wert <= 30? Deaktiviere Prüfung in Einstellungen!",
   "errUnrealistic": "Fehleingabe? Deaktiviere Prüfung in den Einstellungen!",
+  "errDiaGtSys": "dia >= sys? Deaktiviere Prüfung in den Einstellungen!",
   "errUnknown": "Unbekannter Fehler",
   "errCantOpenURL": "Kann URL nicht öffnen: {url}",
   "@errCantOpenURL": {
