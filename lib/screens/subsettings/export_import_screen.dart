@@ -116,7 +116,7 @@ class ExportDataRangeSettings extends StatelessWidget {
           SettingsTile(
             title: Text(AppLocalizations.of(context)!.exportInterval),
             description: Text(exportRangeText),
-            disabled: !settings.exportLimitDataRange,
+            disabled: !settings.exportLimitDataRange || settings.exportFormat == ExportFormat.db,
             onPressed: (context) async {
               var model = Provider.of<BloodPressureModel>(context, listen: false);
               var newRange = await showDateRangePicker(context: context, firstDate: await model.firstDay, lastDate: await model.lastDay);
