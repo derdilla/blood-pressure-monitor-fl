@@ -197,23 +197,6 @@ class MeasurementGraph extends StatelessWidget {
             const SizedBox(
               height: 2,
             ),
-            Consumer<Settings>(builder: (context, settings, child) {
-              final formatter = DateFormat(settings.dateFormatString);
-              return Row(
-                children: [
-                  (settings.graphStepSize == TimeStep.lifetime)
-                      ? const Text('-')
-                      : Text(formatter.format(settings.displayDataStart)),
-                  const Spacer(),
-                  (settings.graphStepSize == TimeStep.lifetime)
-                      ? Text(AppLocalizations.of(context)!.now)
-                      : Text(formatter.format(settings.displayDataEnd)),
-                ],
-              );
-            }),
-            const SizedBox(
-              height: 2,
-            ),
             const IntervalPicker()
           ],
         ),
