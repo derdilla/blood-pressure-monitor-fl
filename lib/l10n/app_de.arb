@@ -39,6 +39,7 @@
   "errPleaseSelect": "Bitte auswählen",
   "errWrongImportFormat": "Es können nur Dateien im csv und SQLite db Format importiert werden.",
   "errNeedHeadline": "Es können nur Dateien mit einer Überschrift importiert werden.",
+  "errCantReadFile": "Der Inhalt der Datei kann nicht gelesen werden",
   "errNotImportable": "Diese Datei kann nicht importiert werden.",
 
 
@@ -94,6 +95,7 @@
   "exportCsvHeadlineDesc": "Feldbezeichnungen zum Differenzieren",
   "csv": "CSV",
   "pdf": "PDF",
+  "db": "SQLITE DB",
   "text": "Text",
   "other": "Anderes",
   "fieldDelimiter": "Feldseparator",
@@ -113,6 +115,14 @@
   "import": "IMPORT",
   "sourceCode": "Quellcode",
   "licenses": "Lizenzen dritter",
+  "importSuccess": "Es wurden {count} Einträge erfolgreich importiert",
+  "@importSuccess": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
 
   "statistics": "Statistik",
   "measurementCount": "Anzahl Messungen",
