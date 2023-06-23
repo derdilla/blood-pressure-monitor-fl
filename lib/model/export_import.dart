@@ -28,7 +28,7 @@ class DataExporter {
     }
   }
 
-  List<BloodPressureRecord>? parseFile(Uint8List data) {
+  Future<List<BloodPressureRecord>?> parseFile(String filePath, Uint8List data) async {
     switch(settings.exportFormat) {
       case ExportFormat.csv:
         try {
@@ -39,7 +39,7 @@ class DataExporter {
       case ExportFormat.pdf:
         return null;
       case ExportFormat.db:
-        throw UnimplementedError('TODO');
+        return loadDBFile(filePath);
     }
   }
 
@@ -194,7 +194,11 @@ class DataExporter {
       dbPath = join(dbPath, 'blood_pressure.db');
     }
     return File(dbPath).readAsBytes();
+  }
 
+  Future<List<BloodPressureRecord>> loadDBFile(String filePath) async {
+    final loadedModel = await BloodPressureModel.create(dbPath: filePath, isFullPath: true);
+    return await loadedModel.all;
   }
 }
 

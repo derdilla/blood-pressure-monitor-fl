@@ -360,8 +360,11 @@ class ExportImportButtons extends StatelessWidget {
                           content: Text(AppLocalizations.of(context)!.errCantReadFile)));
                       return;
                     }
+                    var path = result.files.single.path;
+                    assert(path != null); // null state directly linked to binary content
 
-                    var fileContents = DataExporter(settings).parseFile(binaryContent);
+                    var fileContents = await DataExporter(settings).parseFile(path! ,binaryContent);
+                    if (!context.mounted) return;
                     if (fileContents == null) {
                       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                           content: Text(AppLocalizations.of(context)!.errNotImportable)));

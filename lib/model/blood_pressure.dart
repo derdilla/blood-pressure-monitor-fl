@@ -10,10 +10,10 @@ class BloodPressureModel extends ChangeNotifier {
   late final Database _database;
 
   BloodPressureModel._create();
-  Future<void> _asyncInit(String? dbPath) async {
+  Future<void> _asyncInit(String? dbPath, bool isFullPath) async {
     dbPath ??= await getDatabasesPath();
 
-    if (dbPath != inMemoryDatabasePath) {
+    if (dbPath != inMemoryDatabasePath && !isFullPath) {
       dbPath = join(dbPath, 'blood_pressure.db');
     }
 
@@ -29,7 +29,7 @@ class BloodPressureModel extends ChangeNotifier {
   }
 
   // factory method, to allow for async constructor
-  static Future<BloodPressureModel> create({String? dbPath}) async {
+  static Future<BloodPressureModel> create({String? dbPath, bool isFullPath = false}) async {
     if (Platform.isWindows || Platform.isLinux) {
       // Initialize FFI
       sqfliteFfiInit();
@@ -38,7 +38,7 @@ class BloodPressureModel extends ChangeNotifier {
     }
 
     final component = BloodPressureModel._create();
-    await component._asyncInit(dbPath);
+    await component._asyncInit(dbPath, isFullPath);
     return component;
   }
 
