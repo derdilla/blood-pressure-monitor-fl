@@ -1,1 +1,1 @@
-Save and analyze blood pressure values
+Save, analyze and export your blood pressure!
