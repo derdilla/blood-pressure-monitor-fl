@@ -8,7 +8,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:provider/provider.dart';
 
 void main() {
-  group("page should display data", () {
+  group("StatisticsPage", () {
     testWidgets('should load page', (widgetTester) async {
       await _initStatsPage(widgetTester, []);
       expect(find.text('Statistics'), findsOneWidget);
