@@ -10,27 +10,32 @@ class IntervalPicker extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Consumer<Settings>(builder: (context, settings, child) {
+      final Widget intervallDisplay;
+      switch (settings.graphStepSize) {
+        case TimeStep.day:
+          intervallDisplay = Text(DateFormat.yMMMd(AppLocalizations.of(context)!.localeName).format(settings.displayDataStart));
+          break;
+        case TimeStep.week:
+          final dayOfYear = int.parse(DateFormat("D").format(settings.displayDataStart));
+          final weekOfYear = ((dayOfYear - settings.displayDataStart.weekday + 10) / 7).floor();
+          intervallDisplay = Text(AppLocalizations.of(context)!.weekOfYear(weekOfYear, settings.displayDataStart.year));
+          break;
+        case TimeStep.month:
+          intervallDisplay =  Text(DateFormat.yMMM(AppLocalizations.of(context)!.localeName).format(settings.displayDataStart));
+          break;
+        case TimeStep.year:
+          intervallDisplay =  Text(DateFormat.y(AppLocalizations.of(context)!.localeName).format(settings.displayDataStart));
+          break;
+        case TimeStep.lifetime:
+          intervallDisplay =  const Text('-');
+          break;
+        default:
+          assert(false);
+          intervallDisplay =  const Text('-');
+      }
       return Column(
         children: [
-          Consumer<Settings>(builder: (context, settings, child) {
-            switch (settings.graphStepSize) {
-              case TimeStep.day:
-                return Text(DateFormat.yMMMd(AppLocalizations.of(context)!.localeName).format(settings.displayDataStart));
-              case TimeStep.week:
-                final dayOfYear = int.parse(DateFormat("D").format(settings.displayDataStart));
-                final weekOfYear = ((dayOfYear - settings.displayDataStart.weekday + 10) / 7).floor();
-                return Text(AppLocalizations.of(context)!.weekOfYear(weekOfYear, settings.displayDataStart.year));
-              case TimeStep.month:
-                return Text(DateFormat.yMMM(AppLocalizations.of(context)!.localeName).format(settings.displayDataStart));
-              case TimeStep.year:
-                return Text(DateFormat.y(AppLocalizations.of(context)!.localeName).format(settings.displayDataStart));
-              case TimeStep.lifetime:
-                return const Text('-');
-              default:
-                assert(false);
-                return const Text('-');
-            }
-          }),
+          intervallDisplay,
           const SizedBox(
             height: 2,
           ),
