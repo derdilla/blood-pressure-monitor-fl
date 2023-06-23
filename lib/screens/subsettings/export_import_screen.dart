@@ -37,7 +37,7 @@ class ExportImportScreen extends StatelessWidget {
                   value: settings.exportFormat,
                   items: [
                     DropdownMenuItem(value: ExportFormat.csv, child: Text(AppLocalizations.of(context)!.csv)),
-                    DropdownMenuItem(value: ExportFormat.pdf, child: Text(AppLocalizations.of(context)!.pdf)),
+                    //DropdownMenuItem(value: ExportFormat.pdf, child: Text(AppLocalizations.of(context)!.pdf)),
                     DropdownMenuItem(value: ExportFormat.db, child: Text(AppLocalizations.of(context)!.db)),
                   ],
                   onChanged: (ExportFormat? value) {
@@ -295,18 +295,19 @@ class ExportImportButtons extends StatelessWidget {
                     var fileContents = await DataExporter(settings).createFile(entries);
 
                     String filename = 'blood_press_${DateTime.now().toIso8601String()}';
+                    String ext;
                     switch(settings.exportFormat) {
                       case ExportFormat.csv:
-                        filename += '.csv';
+                        ext = '.csv';
                         break;
                       case ExportFormat.pdf:
-                        filename += '.pdf';
+                        ext = '.pdf';
                         break;
                       case ExportFormat.db:
-                        filename += '.db';
+                        ext = '.db';
                         break;
                     }
-                    String path = await FileSaver.instance.saveFile(name: filename, bytes: fileContents);
+                    String path = await FileSaver.instance.saveFile(name: filename, ext: ext, bytes: fileContents);
 
                     if ((Platform.isLinux || Platform.isWindows || Platform.isMacOS) && context.mounted) {
                       ScaffoldMessenger.of(context)
