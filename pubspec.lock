@@ -357,6 +357,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.6.7"
+  jsaver:
+    dependency: "direct main"
+    description:
+      name: jsaver
+      sha256: "7f18f134d3271e5b9da0ccbf0bd6766cb4e6a0221cc26f4d917b1da023331600"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.2.0"
   json_object_mapper:
     dependency: transitive
     description:

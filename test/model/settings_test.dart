@@ -49,6 +49,7 @@ void main() {
       expect(s.exportDataRange.start.millisecondsSinceEpoch, 0);
       expect(s.exportLimitDataRange, false);
       expect(s.exportMimeType, MimeType.csv);
+      expect(s.defaultExportDir.isEmpty, true);
 
       s.overrideWarnValues = true;
       expect(s.sysWarn, 120);
@@ -96,6 +97,7 @@ void main() {
       s.exportCsvHeadline = false;
       s.exportLimitDataRange = true;
       s.exportMimeType = MimeType.pdf;
+      s.defaultExportDir = '/storage/emulated/0/Android/data/com.derdilla.bloodPressureApp/files/file.csv';
 
       expect(s.displayDataStart, DateTime.fromMillisecondsSinceEpoch(10000));
       expect(s.displayDataEnd, DateTime.fromMillisecondsSinceEpoch(200000));
@@ -123,6 +125,7 @@ void main() {
       expect(s.exportCsvHeadline, false);
       expect(s.exportLimitDataRange, true);
       expect(s.exportMimeType, MimeType.pdf);
+      expect(s.defaultExportDir, '/storage/emulated/0/Android/data/com.derdilla.bloodPressureApp/files/file.csv');
     });
 
     test('setting fields should notify listeners and change values', () async {
@@ -162,8 +165,9 @@ void main() {
       s.exportDataRange = DateTimeRange(start: DateTime.fromMillisecondsSinceEpoch(20), end: DateTime.now());
       s.exportLimitDataRange = true;
       s.exportMimeType = MimeType.pdf;
+      s.defaultExportDir = '/storage/emulated/0/Android/data/com.derdilla.bloodPressureApp/files/file.csv';
 
-      expect(i, 29);
+      expect(i, 30);
     });
   });
 
@@ -206,6 +210,7 @@ void main() {
       expect(s.exportDataRange.start.millisecondsSinceEpoch, 0);
       expect(s.exportLimitDataRange, false);
       expect(s.exportMimeType, MimeType.csv);
+      expect(s.defaultExportDir.isEmpty, true);
 
       s.overrideWarnValues = true;
       expect(s.sysWarn, 120);
@@ -253,6 +258,8 @@ void main() {
       s.exportCsvHeadline = false;
       s.exportLimitDataRange = true;
       s.exportMimeType = MimeType.pdf;
+      s.defaultExportDir = '/storage/emulated/0/Android/data/com.derdilla.bloodPressureApp/files/file.csv';
+
 
       expect(s.displayDataStart, DateTime.fromMillisecondsSinceEpoch(10000));
       expect(s.displayDataEnd, DateTime.fromMillisecondsSinceEpoch(200000));
@@ -280,6 +287,7 @@ void main() {
       expect(s.exportCsvHeadline, false);
       expect(s.exportLimitDataRange, true);
       expect(s.exportMimeType, MimeType.pdf);
+      expect(s.defaultExportDir, '/storage/emulated/0/Android/data/com.derdilla.bloodPressureApp/files/file.csv');
     });
 
     test('setting fields should notify listeners and change values', () async {
@@ -319,8 +327,9 @@ void main() {
       s.exportDataRange = DateTimeRange(start: DateTime.fromMillisecondsSinceEpoch(20), end: DateTime.now());
       s.exportLimitDataRange = true;
       s.exportMimeType = MimeType.pdf;
+      s.defaultExportDir = '/storage/emulated/0/Android/data/com.derdilla.bloodPressureApp/files/file.csv';
 
-      expect(i, 29);
+      expect(i, 30);
     });
   });
 }

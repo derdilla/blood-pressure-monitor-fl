@@ -47,6 +47,7 @@ dependencies:
   shared_preferences: ^2.1.1  # BSD-3-Clause
   mockito: ^5.4.1
   pdf: ^3.10.4
+  jsaver: ^1.2.0
 
 dev_dependencies:
   flutter_test:

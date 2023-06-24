@@ -84,6 +84,7 @@
   "data": "Data",
 
   "exportImport": "Export / Import",
+  "exportDir": "Export directory",
   "exportLimitDataRange": "Limit data range",
   "exportInterval": "Data range",
   "exportFormat": "Export format",

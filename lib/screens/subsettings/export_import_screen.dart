@@ -11,6 +11,7 @@ import 'package:file_saver/file_saver.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
+import 'package:jsaver/jSaver.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
 
@@ -31,6 +32,14 @@ class ExportImportScreen extends StatelessWidget {
             child: Column(
               children: [
                 const ExportWarnBanner(),
+                SettingsTile(
+                  title: Text(AppLocalizations.of(context)!.exportDir),
+                  description: Text(settings.defaultExportDir),
+                  onPressed: (context) async {
+                    final appDir = await JSaver.instance.setDefaultSavingDirectory();
+                    settings.defaultExportDir = appDir.value;
+                  }
+                ),
                 DropDownSettingsTile<ExportFormat>(
                   key: const Key('exportFormat'),
                   title: Text(AppLocalizations.of(context)!.exportFormat),
@@ -298,13 +307,13 @@ class ExportImportButtons extends StatelessWidget {
                     String ext;
                     switch(settings.exportFormat) {
                       case ExportFormat.csv:
-                        ext = '.csv';
+                        ext = 'CSV'; // lower case 'csv' gets automatically converted to 'csv.xls' for some reason
                         break;
                       case ExportFormat.pdf:
-                        ext = '.pdf';
+                        ext = 'pdf';
                         break;
                       case ExportFormat.db:
-                        ext = '.db';
+                        ext = 'db';
                         break;
                     }
                     String path = await FileSaver.instance.saveFile(name: filename, ext: ext, bytes: fileContents);
@@ -313,12 +322,19 @@ class ExportImportButtons extends StatelessWidget {
                       ScaffoldMessenger.of(context)
                           .showSnackBar(SnackBar(content: Text(AppLocalizations.of(context)!.success(path))));
                     } else if (Platform.isAndroid || Platform.isIOS) {
-                      Share.shareXFiles([
-                        XFile(
-                            path,
-                            mimeType: MimeType.csv.type
-                        )
-                      ]);
+                      if (settings.defaultExportDir.isNotEmpty) {
+                        JSaver.instance.save(
+                            fromPath: path,
+                            androidPathOptions: AndroidPathOptions(toDefaultDirectory: true)
+                        );
+                      } else {
+                        Share.shareXFiles([
+                          XFile(
+                              path,
+                              mimeType: MimeType.csv.type
+                          )
+                        ]);
+                      }
                     } else {
                       ScaffoldMessenger.of(context)
                           .showSnackBar(const SnackBar(content: Text('UNSUPPORTED PLATFORM')));

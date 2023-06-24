@@ -411,6 +411,14 @@ class Settings extends ChangeNotifier {
     _prefs.setBool('exportCsvHeadline', value);
     notifyListeners();
   }
+
+  String get defaultExportDir {
+    return _prefs.getString('defaultExportDir') ?? '';
+  }
+  set defaultExportDir (String value) {
+    _prefs.setString('defaultExportDir', value);
+    notifyListeners();
+  }
 }
 
 class TimeStep {
