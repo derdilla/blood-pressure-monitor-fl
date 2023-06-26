@@ -82,6 +82,7 @@
   "sysWarn": "Systolic warn",
   "diaWarn": "Diastolic warn",
   "data": "Data",
+  "version": "Version",
 
   "exportImport": "Export / Import",
   "exportDir": "Export directory",

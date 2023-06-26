@@ -83,6 +83,7 @@
   "sysWarn": "Warnwert Sys",
   "diaWarn": "Warnwert Dia",
   "data": "Daten",
+  "version": "Version",
 
   "exportImport": "Exportieren / Importieren",
   "exportDir": "Export Ordner",
