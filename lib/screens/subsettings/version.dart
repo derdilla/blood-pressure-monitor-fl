@@ -34,7 +34,7 @@ class VersionScreen extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(localizations!.packageNameOf(packageInfo.packageName)),
-                          Text(localizations.versionOf(packageInfo!.version)),
+                          Text(localizations.versionOf(packageInfo.version)),
                           Text(localizations.buildNumberOf(packageInfo.buildNumber)),
                           Text(localizations.buildSignatureOf(packageInfo.buildSignature)),
                           const SizedBox(height: 30,),
