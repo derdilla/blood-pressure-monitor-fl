@@ -2,6 +2,7 @@ import 'package:blood_pressure_app/components/settings_widgets.dart';
 import 'package:blood_pressure_app/model/settings_store.dart';
 import 'package:blood_pressure_app/screens/subsettings/enter_timeformat.dart';
 import 'package:blood_pressure_app/screens/subsettings/export_import_screen.dart';
+import 'package:blood_pressure_app/screens/subsettings/version.dart';
 import 'package:blood_pressure_app/screens/subsettings/warn_about.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -278,7 +279,12 @@ class SettingsPage extends StatelessWidget {
                       title: Text(AppLocalizations.of(context)!.version),
                       leading: const Icon(Icons.info_outline),
                       description: Text(description),
-                      onPressed: (context) {}
+                      onPressed: (context) {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => const VersionScreen()),
+                        );
+                      }
                   );
                 },
               ),
