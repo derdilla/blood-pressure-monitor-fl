@@ -37,7 +37,7 @@ dependencies:
   path:  # BSD-3-Clause
 
   intl: any  # BSD-3-Clause
-  fl_chart: ^0.62.0  # MIT
+  fl_chart: ^0.63.0  # MIT
   file_saver: ^0.2.1  # BSD-3-Clause
   share_plus: ^7.0.1  # BSD-3-Clause
   flutter_material_color_picker: ^1.1.0+2  # MIT
