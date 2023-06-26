@@ -247,7 +247,7 @@ class Exporter {
     }
     String path = await FileSaver.instance.saveFile(name: filename, ext: ext, bytes: fileContents);
 
-    if ((Platform.isLinux || Platform.isWindows || Platform.isMacOS) && context.mounted) {
+    if (Platform.isLinux || Platform.isWindows || Platform.isMacOS) {
       messenger.showSnackBar(SnackBar(content: Text(localizations!.success(path))));
     } else if (Platform.isAndroid || Platform.isIOS) {
       if (settings.defaultExportDir.isNotEmpty) {
@@ -255,6 +255,7 @@ class Exporter {
             fromPath: path,
             androidPathOptions: AndroidPathOptions(toDefaultDirectory: true)
         );
+        messenger.showSnackBar(SnackBar(content: Text(localizations!.success(settings.defaultExportDir))));
       } else {
         Share.shareXFiles([
           XFile(
