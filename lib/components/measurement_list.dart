@@ -93,10 +93,9 @@ class MeasurementList extends StatelessWidget {
                                   Dismissible(
                                     key: Key(data[index].creationTime.toIso8601String()),
                                     confirmDismiss: (direction) async {
-                                      if (direction == DismissDirection.startToEnd) {
-                                        // edit
-                                        Provider.of<BloodPressureModel>(context, listen: false)
-                                            .delete(data[index].creationTime);
+                                      final model = Provider.of<BloodPressureModel>(context, listen: false);
+                                      if (direction == DismissDirection.startToEnd) { // edit
+                                        model.delete(data[index].creationTime);
                                         Navigator.push(
                                           context,
                                           MaterialPageRoute(
@@ -110,8 +109,7 @@ class MeasurementList extends StatelessWidget {
                                                   )),
                                         );
                                         return false;
-                                      } else {
-                                        // delete
+                                      } else { // delete
                                         bool dialogeDeletionConfirmed = false;
                                         if (settings.confirmDeletion) {
                                           await showDialog(
@@ -126,8 +124,8 @@ class MeasurementList extends StatelessWidget {
                                                         child: Text(AppLocalizations.of(context)!.btnCancel)),
                                                     ElevatedButton(
                                                         onPressed: () {
-                                                          Provider.of<BloodPressureModel>(context, listen: false)
-                                                              .delete(data[index].creationTime);
+                                                          model.delete(data[index].creationTime);
+
                                                           dialogeDeletionConfirmed = true;
                                                           Navigator.of(context).pop();
                                                         },
@@ -136,8 +134,7 @@ class MeasurementList extends StatelessWidget {
                                                 );
                                               });
                                         } else {
-                                          Provider.of<BloodPressureModel>(context, listen: false)
-                                              .delete(data[index].creationTime);
+                                          model.delete(data[index].creationTime);
                                           dialogeDeletionConfirmed = true;
                                         }
 
@@ -149,12 +146,14 @@ class MeasurementList extends StatelessWidget {
                                             content: Text(AppLocalizations.of(context)!.deletionConfirmed),
                                             action: SnackBarAction(
                                               label: AppLocalizations.of(context)!.btnUndo,
-                                              onPressed: () => model.add(BloodPressureRecord(
-                                                  data[index].creationTime,
-                                                  data[index].systolic,
-                                                  data[index].diastolic,
-                                                  data[index].pulse,
-                                                  data[index].notes)),
+                                              onPressed: () async {
+                                                model.add(BloodPressureRecord(
+                                                    data[index].creationTime,
+                                                    data[index].systolic,
+                                                    data[index].diastolic,
+                                                    data[index].pulse,
+                                                    data[index].notes));
+                                              },
                                             ),
                                           ));
                                         }

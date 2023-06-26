@@ -71,10 +71,8 @@ class _LineChartState extends State<_LineChart> {
                                   sysMax = max(sysMax, element.systolic);
                                 }
 
-                                final noTitels =
-                                    AxisTitles(sideTitles: SideTitles(reservedSize: 40, showTitles: false));
+                                const noTitels = AxisTitles(sideTitles: SideTitles(reservedSize: 40, showTitles: false));
                                 return LineChart(
-                                    swapAnimationDuration: const Duration(milliseconds: 250),
                                     LineChartData(
                                         minY: settings.validateInputs ? 30 : 0,
                                         maxY: max(pulMax.toDouble(), max(diaMax.toDouble(), sysMax.toDouble())) + 5,

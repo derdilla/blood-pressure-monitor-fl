@@ -1,21 +1,29 @@
 
+import 'dart:collection';
 import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:blood_pressure_app/model/settings_store.dart';
 import 'package:csv/csv.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:file_saver/file_saver.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:jsaver/jSaver.dart';
 import 'package:path/path.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
+import 'package:provider/provider.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:sqflite/sqflite.dart';
 
 import 'blood_pressure.dart';
 
-class DataExporter {
+class ExportFileCreator {
   Settings settings;
 
-  DataExporter(this.settings);
+  ExportFileCreator(this.settings);
 
   Future<Uint8List> createFile(List<BloodPressureRecord> records) async {
     switch (settings.exportFormat) {
@@ -199,6 +207,110 @@ class DataExporter {
   Future<List<BloodPressureRecord>> loadDBFile(String filePath) async {
     final loadedModel = await BloodPressureModel.create(dbPath: filePath, isFullPath: true);
     return await loadedModel.all;
+  }
+}
+
+class Exporter {
+  BuildContext context;
+  Exporter(this.context);
+
+  Future<void> export() async {
+    var settings = Provider.of<Settings>(context, listen: false);
+    final messenger = ScaffoldMessenger.of(context);
+    final localizations = AppLocalizations.of(context);
+
+    final UnmodifiableListView<BloodPressureRecord> entries;
+    if (settings.exportLimitDataRange) {
+      var range = settings.exportDataRange;
+      if (range.start.millisecondsSinceEpoch == 0 || range.end.millisecondsSinceEpoch == 0) {
+        messenger.showSnackBar(SnackBar(content: Text(localizations!.errNoRangeForExport)));
+        return;
+      }
+      entries = await Provider.of<BloodPressureModel>(context, listen: false).getInTimeRange(settings.exportDataRange.start, settings.exportDataRange.end);
+    } else {
+      entries = await Provider.of<BloodPressureModel>(context, listen: false).all;
+    }
+    var fileContents = await ExportFileCreator(settings).createFile(entries);
+
+    String filename = 'blood_press_${DateTime.now().toIso8601String()}';
+    String ext;
+    switch(settings.exportFormat) {
+      case ExportFormat.csv:
+        ext = 'CSV'; // lower case 'csv' gets automatically converted to 'csv.xls' for some reason
+        break;
+      case ExportFormat.pdf:
+        ext = 'pdf';
+        break;
+      case ExportFormat.db:
+        ext = 'db';
+        break;
+    }
+    String path = await FileSaver.instance.saveFile(name: filename, ext: ext, bytes: fileContents);
+
+    if (Platform.isLinux || Platform.isWindows || Platform.isMacOS) {
+      messenger.showSnackBar(SnackBar(content: Text(localizations!.success(path))));
+    } else if (Platform.isAndroid || Platform.isIOS) {
+      if (settings.defaultExportDir.isNotEmpty) {
+        JSaver.instance.save(
+            fromPath: path,
+            androidPathOptions: AndroidPathOptions(toDefaultDirectory: true)
+        );
+        messenger.showSnackBar(SnackBar(content: Text(localizations!.success(settings.defaultExportDir))));
+      } else {
+        Share.shareXFiles([
+          XFile(
+              path,
+              mimeType: MimeType.csv.type
+          )
+        ]);
+      }
+    } else {
+      messenger.showSnackBar(const SnackBar(content: Text('UNSUPPORTED PLATFORM')));
+    }
+  }
+
+
+  Future<void> import() async {
+    final messenger = ScaffoldMessenger.of(context);
+    final localizations = AppLocalizations.of(context);
+
+    final settings = Provider.of<Settings>(context, listen: false);
+    final model = Provider.of<BloodPressureModel>(context, listen: false);
+
+    if (!([ExportFormat.csv, ExportFormat.db].contains(settings.exportFormat))) {
+      messenger.showSnackBar(SnackBar(content: Text(localizations!.errWrongImportFormat)));
+      return;
+    }
+    if (settings.exportFormat == ExportFormat.csv && !settings.exportCsvHeadline) {
+      messenger.showSnackBar(SnackBar(content: Text(localizations!.errNeedHeadline)));
+      return;
+    }
+
+    var result = await FilePicker.platform.pickFiles(
+      allowMultiple: false,
+      withData: true,
+    );
+    if (result == null) {
+      messenger.showSnackBar(SnackBar(content: Text(localizations!.errNoFileOpened)));
+      return;
+    }
+    var binaryContent = result.files.single.bytes;
+    if (binaryContent == null) {
+      messenger.showSnackBar(SnackBar(content: Text(localizations!.errCantReadFile)));
+      return;
+    }
+    var path = result.files.single.path;
+    assert(path != null); // null state directly linked to binary content
+
+    var fileContents = await ExportFileCreator(settings).parseFile(path! ,binaryContent);
+    if (fileContents == null) {
+      messenger.showSnackBar(SnackBar(content: Text(localizations!.errNotImportable)));
+      return;
+    }
+    messenger.showSnackBar(SnackBar(content: Text(localizations!.importSuccess(fileContents.length))));
+    for (final e in fileContents) {
+      model.add(e);
+    }
   }
 }
 
