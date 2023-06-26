@@ -278,7 +278,7 @@ class ExportImportButtons extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: 60,
-      color: Theme.of(context).colorScheme.onBackground,
+      color: Theme.of(context).colorScheme.onInverseSurface,
       child: Center(
         child: Row(
           children: [
