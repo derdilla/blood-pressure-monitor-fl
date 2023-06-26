@@ -419,6 +419,15 @@ class Settings extends ChangeNotifier {
     _prefs.setString('defaultExportDir', value);
     notifyListeners();
   }
+
+  bool get exportAfterEveryEntry {
+    return _prefs.getBool('exportAfterEveryEntry') ?? false;
+  }
+
+  set exportAfterEveryEntry(bool value) {
+    _prefs.setBool('exportAfterEveryEntry', value);
+    notifyListeners();
+  }
 }
 
 class TimeStep {

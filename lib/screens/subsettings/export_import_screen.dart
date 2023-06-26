@@ -1,19 +1,12 @@
-
-import 'dart:collection';
-import 'dart:io';
-
 import 'package:blood_pressure_app/components/settings_widgets.dart';
 import 'package:blood_pressure_app/model/blood_pressure.dart';
 import 'package:blood_pressure_app/model/export_import.dart';
 import 'package:blood_pressure_app/model/settings_store.dart';
-import 'package:file_picker/file_picker.dart';
-import 'package:file_saver/file_saver.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
 import 'package:jsaver/jSaver.dart';
 import 'package:provider/provider.dart';
-import 'package:share_plus/share_plus.dart';
 
 class ExportImportScreen extends StatelessWidget {
   const ExportImportScreen({super.key});
@@ -39,6 +32,14 @@ class ExportImportScreen extends StatelessWidget {
                     final appDir = await JSaver.instance.setDefaultSavingDirectory();
                     settings.defaultExportDir = appDir.value;
                   }
+                ),
+                SwitchSettingsTile(
+                    title: Text(AppLocalizations.of(context)!.exportAfterEveryInput),
+                    description: Text(AppLocalizations.of(context)!.exportAfterEveryInputDesc),
+                    initialValue: settings.exportAfterEveryEntry,
+                    onToggle: (value) {
+                      settings.exportAfterEveryEntry = value;
+                    }
                 ),
                 DropDownSettingsTile<ExportFormat>(
                   key: const Key('exportFormat'),
@@ -286,60 +287,7 @@ class ExportImportButtons extends StatelessWidget {
                 child: MaterialButton(
                   height: 60,
                   child:  Text(AppLocalizations.of(context)!.export),
-                  onPressed: () async {
-                    var settings = Provider.of<Settings>(context, listen: false);
-
-                    final UnmodifiableListView<BloodPressureRecord> entries;
-                    if (settings.exportLimitDataRange) {
-                      var range = settings.exportDataRange;
-                      if (range.start.millisecondsSinceEpoch == 0 || range.end.millisecondsSinceEpoch == 0) {
-                        ScaffoldMessenger.of(context)
-                            .showSnackBar(SnackBar(content: Text(AppLocalizations.of(context)!.errNoRangeForExport)));
-                        return;
-                      }
-                      entries = await Provider.of<BloodPressureModel>(context, listen: false).getInTimeRange(settings.exportDataRange.start, settings.exportDataRange.end);
-                    } else {
-                      entries = await Provider.of<BloodPressureModel>(context, listen: false).all;
-                    }
-                    var fileContents = await DataExporter(settings).createFile(entries);
-
-                    String filename = 'blood_press_${DateTime.now().toIso8601String()}';
-                    String ext;
-                    switch(settings.exportFormat) {
-                      case ExportFormat.csv:
-                        ext = 'CSV'; // lower case 'csv' gets automatically converted to 'csv.xls' for some reason
-                        break;
-                      case ExportFormat.pdf:
-                        ext = 'pdf';
-                        break;
-                      case ExportFormat.db:
-                        ext = 'db';
-                        break;
-                    }
-                    String path = await FileSaver.instance.saveFile(name: filename, ext: ext, bytes: fileContents);
-
-                    if ((Platform.isLinux || Platform.isWindows || Platform.isMacOS) && context.mounted) {
-                      ScaffoldMessenger.of(context)
-                          .showSnackBar(SnackBar(content: Text(AppLocalizations.of(context)!.success(path))));
-                    } else if (Platform.isAndroid || Platform.isIOS) {
-                      if (settings.defaultExportDir.isNotEmpty) {
-                        JSaver.instance.save(
-                            fromPath: path,
-                            androidPathOptions: AndroidPathOptions(toDefaultDirectory: true)
-                        );
-                      } else {
-                        Share.shareXFiles([
-                          XFile(
-                              path,
-                              mimeType: MimeType.csv.type
-                          )
-                        ]);
-                      }
-                    } else {
-                      ScaffoldMessenger.of(context)
-                          .showSnackBar(const SnackBar(content: Text('UNSUPPORTED PLATFORM')));
-                    }
-                  },
+                  onPressed: () => Exporter(context).export(),
                 )
             ),
             const VerticalDivider(),
@@ -348,52 +296,7 @@ class ExportImportButtons extends StatelessWidget {
                 child: MaterialButton(
                   height: 60,
                   child: Text(AppLocalizations.of(context)!.import),
-                  onPressed: () async {
-                    final settings = Provider.of<Settings>(context, listen: false);
-                    if (!([ExportFormat.csv, ExportFormat.db].contains(settings.exportFormat))) {
-                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                          content: Text(AppLocalizations.of(context)!.errWrongImportFormat)));
-                      return;
-                    }
-                    if (settings.exportFormat == ExportFormat.csv && !settings.exportCsvHeadline) {
-                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                          content: Text(AppLocalizations.of(context)!.errNeedHeadline)));
-                      return;
-                    }
-
-                    var result = await FilePicker.platform.pickFiles(
-                      allowMultiple: false,
-                      withData: true,
-                    );
-                    if (!context.mounted) return;
-                    if (result == null) {
-                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                          content: Text(AppLocalizations.of(context)!.errNoFileOpened)));
-                      return;
-                    }
-                    var binaryContent = result.files.single.bytes;
-                    if (binaryContent == null) {
-                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                          content: Text(AppLocalizations.of(context)!.errCantReadFile)));
-                      return;
-                    }
-                    var path = result.files.single.path;
-                    assert(path != null); // null state directly linked to binary content
-
-                    var fileContents = await DataExporter(settings).parseFile(path! ,binaryContent);
-                    if (!context.mounted) return;
-                    if (fileContents == null) {
-                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                          content: Text(AppLocalizations.of(context)!.errNotImportable)));
-                      return;
-                    }
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                        content: Text(AppLocalizations.of(context)!.importSuccess(fileContents.length))));
-                    var model = Provider.of<BloodPressureModel>(context, listen: false);
-                    for (final e in fileContents) {
-                      model.add(e);
-                    }
-                  },
+                  onPressed: () => Exporter(context).import(),
                 )
             ),
           ],

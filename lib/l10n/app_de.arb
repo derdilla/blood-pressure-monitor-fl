@@ -85,7 +85,9 @@
   "data": "Daten",
 
   "exportImport": "Exportieren / Importieren",
-  "exportDir": "Export ordbner",
+  "exportDir": "Export ordner",
+  "exportAfterEveryInput": "Export nach jedem Eintrag",
+  "exportAfterEveryInputDesc": "Nicht empfohlen (datenexplosion)",
   "exportLimitDataRange": "Datenbereich einschränken",
   "exportInterval": "Datenbereich",
   "exportFormat": "Exportformat",

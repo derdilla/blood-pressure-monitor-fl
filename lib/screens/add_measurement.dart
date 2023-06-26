@@ -1,5 +1,6 @@
 import 'package:blood_pressure_app/components/date_time_picker.dart';
 import 'package:blood_pressure_app/model/blood_pressure.dart';
+import 'package:blood_pressure_app/model/export_import.dart';
 import 'package:blood_pressure_app/model/settings_store.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -215,11 +216,18 @@ class _AddMeasurementPageState extends State<AddMeasurementPage> {
                       const Spacer(),
                       ElevatedButton(
                           key: const Key('btnSave'),
-                          onPressed: () {
+                          onPressed: () async {
                             if (_formKey.currentState!.validate()) {
-                              Provider.of<BloodPressureModel>(context, listen: false)
-                                  .add(BloodPressureRecord(_time, _systolic, _diastolic, _pulse, _note));
-                              Navigator.of(context).pop();
+                              final settings = Provider.of<Settings>(context, listen: false);
+                              final model = Provider.of<BloodPressureModel>(context, listen: false);
+                              final exporter = Exporter(context);
+                              final navigator = Navigator.of(context);
+
+                              await model.add(BloodPressureRecord(_time, _systolic, _diastolic, _pulse, _note));
+                              if (settings.exportAfterEveryEntry) {
+                                exporter.export();
+                              }
+                              navigator.pop();
                             }
                           },
                           style: ElevatedButton.styleFrom(backgroundColor: Theme.of(context).primaryColor),

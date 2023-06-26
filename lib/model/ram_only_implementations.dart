@@ -114,6 +114,7 @@ class RamSettings extends ChangeNotifier implements Settings {
   bool _exportLimitDataRange = false;
   MimeType _exportMimeType = MimeType.csv;
   String _defaultExportDir = '';
+  bool _exportAfterEveryEntry = false;
 
   RamSettings() {
     _accentColor = createMaterialColor(0xFF009688);
@@ -428,6 +429,15 @@ class RamSettings extends ChangeNotifier implements Settings {
   @override
   set defaultExportDir(String value) {
     _defaultExportDir = value;
+    notifyListeners();
+  }
+
+  @override
+  bool get exportAfterEveryEntry => _exportAfterEveryEntry;
+
+  @override
+  set exportAfterEveryEntry(bool value) {
+    _exportAfterEveryEntry = value;
     notifyListeners();
   }
 
