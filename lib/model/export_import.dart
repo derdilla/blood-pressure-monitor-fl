@@ -109,8 +109,12 @@ class ExportFileCreator {
     List<BloodPressureRecord> records = [];
 
     String fileContents = utf8.decode(data.toList());
-    final converter = CsvToListConverter(fieldDelimiter: settings.csvFieldDelimiter, textDelimiter: settings.csvTextDelimiter);
-    final csvLines = converter.convert(fileContents);
+    var converter = CsvToListConverter(fieldDelimiter: settings.csvFieldDelimiter, textDelimiter: settings.csvTextDelimiter);
+    var csvLines = converter.convert(fileContents);
+    if (csvLines.length <= 1) { // legacy files
+      converter = CsvToListConverter(fieldDelimiter: settings.csvFieldDelimiter, textDelimiter: settings.csvTextDelimiter, eol: '\n');
+      csvLines = converter.convert(fileContents);
+    }
     final attributes = csvLines.removeAt(0);
     var creationTimePos = -1;
     var isoTimePos = -1;
@@ -119,7 +123,7 @@ class ExportFileCreator {
     var pulPos = -1;
     var notePos = -1;
     for (var i = 0; i<attributes.length; i++) {
-      switch (attributes[i]) {
+      switch (attributes[i].toString().trim()) {
         case 'timestampUnixMs':
           creationTimePos = i;
           break;
