@@ -82,6 +82,40 @@
   "sysWarn": "Systolic warn",
   "diaWarn": "Diastolic warn",
   "data": "Data",
+  "version": "Version",
+  "versionOf": "Version: {version}",
+  "@versionOf": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "buildNumberOf": "Version number: {buildNumber}",
+  "@buildNumberOf": {
+    "placeholders": {
+      "buildNumber": {
+        "type": "String"
+      }
+    }
+  },
+  "buildSignatureOf": "Build signature: {signature}",
+  "@buildSignatureOf": {
+    "placeholders": {
+      "signature": {
+        "type": "String"
+      }
+    }
+  },
+  "packageNameOf": "Package name: {name}",
+  "@packageNameOf": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "sharedPrefsDump": "Shared preferences dump:",
 
   "exportImport": "Export / Import",
   "exportDir": "Export directory",

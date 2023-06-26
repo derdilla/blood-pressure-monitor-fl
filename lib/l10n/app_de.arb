@@ -83,6 +83,40 @@
   "sysWarn": "Warnwert Sys",
   "diaWarn": "Warnwert Dia",
   "data": "Daten",
+  "version": "Version",
+  "versionOf": "Version: {version}",
+  "@versionOf": {
+    "version": {
+      "url": {
+        "type": "String"
+      }
+    }
+  },
+  "buildNumberOf": "Versions Nummer: {buildNumber}",
+  "@buildNumberOf": {
+    "placeholders": {
+      "buildNumber": {
+        "type": "String"
+      }
+    }
+  },
+  "buildSignatureOf": "Build Signatur: {signature}",
+  "@buildSignatureOf": {
+    "placeholders": {
+      "signature": {
+        "type": "String"
+      }
+    }
+  },
+  "packageNameOf": "Paketname: {name}",
+  "@packageNameOf": {
+    "name": {
+      "url": {
+        "type": "String"
+      }
+    }
+  },
+  "sharedPrefsDump": "Shared preferences dump:",
 
   "exportImport": "Exportieren / Importieren",
   "exportDir": "Export Ordner",

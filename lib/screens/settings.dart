@@ -2,10 +2,12 @@ import 'package:blood_pressure_app/components/settings_widgets.dart';
 import 'package:blood_pressure_app/model/settings_store.dart';
 import 'package:blood_pressure_app/screens/subsettings/enter_timeformat.dart';
 import 'package:blood_pressure_app/screens/subsettings/export_import_screen.dart';
+import 'package:blood_pressure_app/screens/subsettings/version.dart';
 import 'package:blood_pressure_app/screens/subsettings/warn_about.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -257,6 +259,35 @@ class SettingsPage extends StatelessWidget {
               ],
             ),
             SettingsSection(title: const Text('about'), children: [
+              FutureBuilder<PackageInfo>(
+                future: PackageInfo.fromPlatform(),
+                builder: (context, snapshot) {
+                  String description = AppLocalizations.of(context)!.errNotStarted;
+                  switch (snapshot.connectionState) {
+                    case ConnectionState.waiting:
+                      description = AppLocalizations.of(context)!.loading;
+                      break;
+                    default:
+                      if (snapshot.hasError) {
+                        description = (AppLocalizations.of(context)!.error(snapshot.error.toString()));
+                      } else if (snapshot.hasData && snapshot.data != null) {
+                        description = snapshot.data!.version;
+                      }
+                  }
+                  return SettingsTile(
+                      key: const Key('version'),
+                      title: Text(AppLocalizations.of(context)!.version),
+                      leading: const Icon(Icons.info_outline),
+                      description: Text(description),
+                      onPressed: (context) {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => const VersionScreen()),
+                        );
+                      }
+                  );
+                },
+              ),
               SettingsTile(
                 key: const Key('sourceCode'),
                 title: Text(AppLocalizations.of(context)!.sourceCode),
