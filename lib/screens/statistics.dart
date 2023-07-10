@@ -1,3 +1,4 @@
+import 'package:blood_pressure_app/components/consistent_future_builder.dart';
 import 'package:blood_pressure_app/model/blood_pressure.dart';
 import 'package:blood_pressure_app/model/blood_pressure_analyzer.dart';
 import 'package:blood_pressure_app/model/settings_store.dart';
@@ -82,64 +83,51 @@ class StatisticsPage extends StatelessWidget {
                 // Time-Resolved Metrics
                 Statistic(
                   caption: Text(AppLocalizations.of(context)!.timeResolvedMetrics),
-                  child: FutureBuilder<List<List<int>>>(
+                  child: ConsistentFutureBuilder<List<List<int>>>(
                       future: BloodPressureAnalyser(model).allAvgsRelativeToDaytime,
-                      builder: (BuildContext context, AsyncSnapshot<List<List<int>>> snapshot) {
-                        switch (snapshot.connectionState) {
-                          case ConnectionState.none:
-                            return Text(AppLocalizations.of(context)!.errNotStarted);
-                          case ConnectionState.waiting:
-                            return Text(AppLocalizations.of(context)!.loading);
-                          default:
-                            if (snapshot.hasError) {
-                              return Text(AppLocalizations.of(context)!.error(snapshot.error.toString()));
-                            }
-                            assert(snapshot.hasData);
-                            assert(snapshot.data != null);
-                            final daytimeAvgs = snapshot.data ?? [];
-                            const opacity = 0.5;
-                            return SizedBox(
-                              width: 500,
-                              height: 270,
-                              child: RadarChart(
-                                RadarChartData(
-                                  radarShape: RadarShape.circle,
-                                  radarBorderData: const BorderSide(color: Colors.transparent),
-                                  gridBorderData: BorderSide(color: Theme.of(context).dividerColor, width: 2),
-                                  tickBorderData: BorderSide(color: Theme.of(context).dividerColor, width: 2),
-                                  ticksTextStyle: const TextStyle(color: Colors.transparent),
-                                  tickCount: 5,
-                                  titleTextStyle: const TextStyle(fontSize: 25),
-                                  getTitle: (pos, value) {
-                                    if (pos % 2 == 0) {
-                                      return RadarChartTitle(text: '$pos', positionPercentageOffset: 0.05);
-                                    }
-                                    return const RadarChartTitle(text: '');
-                                  },
-                                  dataSets: [
-                                    RadarDataSet(
-                                        dataEntries: intListToRadarEntry(daytimeAvgs[0]),
-                                        borderColor: settings.diaColor,
-                                        fillColor: settings.diaColor.withOpacity(opacity),
-                                        entryRadius: 0,
-                                        borderWidth: settings.graphLineThickness),
-                                    RadarDataSet(
-                                        dataEntries: intListToRadarEntry(daytimeAvgs[1]),
-                                        borderColor: settings.sysColor,
-                                        fillColor: settings.sysColor.withOpacity(opacity),
-                                        entryRadius: 0,
-                                        borderWidth: settings.graphLineThickness),
-                                    RadarDataSet(
-                                        dataEntries: intListToRadarEntry(daytimeAvgs[2]),
-                                        borderColor: settings.pulColor,
-                                        fillColor: settings.pulColor.withOpacity(opacity),
-                                        entryRadius: 0,
-                                        borderWidth: settings.graphLineThickness),
-                                  ],
-                                ),
-                              ),
-                            );
-                        }
+                      onData: (context, data) {
+                        const opacity = 0.5;
+                        return SizedBox(
+                          width: 500,
+                          height: 270,
+                          child: RadarChart(
+                            RadarChartData(
+                              radarShape: RadarShape.circle,
+                              radarBorderData: const BorderSide(color: Colors.transparent),
+                              gridBorderData: BorderSide(color: Theme.of(context).dividerColor, width: 2),
+                              tickBorderData: BorderSide(color: Theme.of(context).dividerColor, width: 2),
+                              ticksTextStyle: const TextStyle(color: Colors.transparent),
+                              tickCount: 5,
+                              titleTextStyle: const TextStyle(fontSize: 25),
+                              getTitle: (pos, value) {
+                                if (pos % 2 == 0) {
+                                  return RadarChartTitle(text: '$pos', positionPercentageOffset: 0.05);
+                                }
+                                return const RadarChartTitle(text: '');
+                              },
+                              dataSets: [
+                                RadarDataSet(
+                                    dataEntries: intListToRadarEntry(data[0]),
+                                    borderColor: settings.diaColor,
+                                    fillColor: settings.diaColor.withOpacity(opacity),
+                                    entryRadius: 0,
+                                    borderWidth: settings.graphLineThickness),
+                                RadarDataSet(
+                                    dataEntries: intListToRadarEntry(data[1]),
+                                    borderColor: settings.sysColor,
+                                    fillColor: settings.sysColor.withOpacity(opacity),
+                                    entryRadius: 0,
+                                    borderWidth: settings.graphLineThickness),
+                                RadarDataSet(
+                                    dataEntries: intListToRadarEntry(data[2]),
+                                    borderColor: settings.pulColor,
+                                    fillColor: settings.pulColor.withOpacity(opacity),
+                                    entryRadius: 0,
+                                    borderWidth: settings.graphLineThickness),
+                              ],
+                            ),
+                          ),
+                        );
                       }),
                 ),
               ],
@@ -267,23 +255,13 @@ class StatisticsRow extends StatelessWidget {
 }
 
 Widget futureInt(Future<int> value) {
-  return FutureBuilder<int>(
+  return ConsistentFutureBuilder<int>(
       future: value,
-      builder: (BuildContext context, AsyncSnapshot<int> snapshot) {
-        switch (snapshot.connectionState) {
-          case ConnectionState.none:
-            return Text(AppLocalizations.of(context)!.errNotStarted);
-          case ConnectionState.waiting:
-            return Text(AppLocalizations.of(context)!.loading);
-          default:
-            if (snapshot.hasError) {
-              return Text(AppLocalizations.of(context)!.error(snapshot.error.toString()));
-            }
-            assert(snapshot.hasData);
-            if ((snapshot.data ?? -1) < 0) {
-              return const Text('-');
-            }
-            return Text(snapshot.data.toString());
+      onData: (context, data) {
+        if (data < 0) {
+          return const Text('-');
         }
-      });
+        return Text(data.toString());
+      }
+  );
 }
