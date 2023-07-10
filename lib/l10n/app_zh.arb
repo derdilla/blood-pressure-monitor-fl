@@ -47,6 +47,7 @@
   "btnSave": "保存",
   "btnConfirm": "确定",
   "btnUndo": "撤销",
+  "btnNext": "NEXT",
 
   "sysLong": "高压",
   "sysShort": "高",
@@ -56,6 +57,7 @@
   "pulShort": "脉",
   "addNote": "备注（选填）",
 
+  "settings": "Settings",
   "layout": "布局",
   "allowManualTimeInput": "允许手动输入时间",
   "enterTimeFormatScreen": "时间格式",
