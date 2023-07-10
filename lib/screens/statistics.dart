@@ -89,7 +89,7 @@ class StatisticsPage extends StatelessWidget {
                         const opacity = 0.5;
                         return SizedBox(
                           width: 500,
-                          height: 270,
+                          height: 500,
                           child: RadarChart(
                             RadarChartData(
                               radarShape: RadarShape.circle,
@@ -185,7 +185,10 @@ class Statistic extends StatelessWidget {
               alignment: Alignment.center,
               child: DefaultTextStyle(
                 style: TextStyle(color: Theme.of(context).primaryColor, fontWeight: FontWeight.bold, fontSize: 40),
-                child: child,
+                child: FittedBox(
+                  fit: BoxFit.fitHeight,
+                  child: child
+                ),
               ),
             ),
           ),
