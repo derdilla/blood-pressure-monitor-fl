@@ -44,11 +44,8 @@ You can download and install the APK directly through the Releases page. Keep in
 ### I-OS
 While building an ios app would be no problem code wise, apple's restrictive behavior makes this more complicated (and expensive). So I wont take this step unless there is significant demand. 
 
-### Linux
-Download the bundle from the releases Page
-
-### Windows and MacOS
-Sorry, you need to compile from source. If there is enough demand I can add a windows build.
+### Windows, Linux and MacOS
+This would all be technically possible, but I don't really see a demand. Open an issue if you need them.
 
 ## Screenshots
 <table style="width: 100%; border-collapse: collapse;">
