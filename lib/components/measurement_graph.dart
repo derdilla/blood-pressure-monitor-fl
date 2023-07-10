@@ -53,7 +53,8 @@ class _LineChartState extends State<_LineChart> {
                                 return Text(AppLocalizations.of(context)!.errNotEnoughDataToGraph);
                               } else {
                                 assert(snapshot.hasData);
-                                final data = snapshot.data ?? [];
+                                List<BloodPressureRecord> data = snapshot.data?.toList() ?? [];
+                                data.sort((a, b) => a.creationTime.compareTo(b.creationTime));
 
                                 List<FlSpot> pulseSpots = [];
                                 List<FlSpot> diastolicSpots = [];
