@@ -1,0 +1,229 @@
+{
+  "title": "血压记录",
+
+  "success": "成功：{msg}",
+  "@success": {
+    "placeholders": {
+      "msg": {
+        "type": "String"
+      }
+    }
+  },
+  "loading": "正在载入...",
+  "error": "错误：{msg}",
+  "@error": {
+    "placeholders": {
+      "msg": {
+        "type": "String"
+      }
+    }
+  },
+  "errNaN": "请输入数字",
+  "errLt30": "数字<=30？请在设置中关闭验证！",
+  "errUnrealistic": "不符实际的数值？请在设置中关闭验证！",
+  "errDiaGtSys": "低压>=高压？请在设置中关闭验证！",
+  "errUnknown": "未知错误",
+  "errCantOpenURL": "无法打开网址：{url}",
+  "@errCantOpenURL": {
+    "placeholders": {
+      "url": {
+        "type": "String"
+      }
+    }
+  },
+  "errNoFileOpened": "没有打开的文件",
+  "errNotStarted": "没有启动",
+  "errNoValue": "请输入数值",
+  "errNotEnoughDataToGraph": "数据太少，无法绘制图表。",
+  "errNoData": "没有数据",
+  "errNoRangeForExport": "需要指定导出数据的范围。",
+  "errPleaseSelect": "请选择",
+  "errWrongImportFormat": "只能导入csv和SQLite数据库格式的文件。",
+  "errNeedHeadline": "只能导入有标题行的文件。",
+  "errCantReadFile": "文件内容无法读取",
+  "errNotImportable": "此文件无法导入",
+
+  "btnCancel": "取消",
+  "btnSave": "保存",
+  "btnConfirm": "确定",
+  "btnUndo": "撤销",
+  "btnNext": "NEXT",
+
+  "sysLong": "高压",
+  "sysShort": "高",
+  "diaLong": "低压",
+  "diaShort": "低",
+  "pulLong": "脉搏",
+  "pulShort": "脉",
+  "addNote": "备注（选填）",
+
+  "settings": "Settings",
+  "layout": "布局",
+  "allowManualTimeInput": "允许手动输入时间",
+  "enterTimeFormatScreen": "时间格式",
+  "theme": "主题",
+  "system": "系统",
+  "dark": "暗色",
+  "light": "亮色",
+  "iconSize": "图标大小",
+  "graphLineThickness": "线条粗细",
+  "animationSpeed": "动画时长",
+  "graphTitlesCount": "图表标签数量",
+  "accentColor": "主题颜色",
+  "sysColor": "高压颜色",
+  "diaColor": "低压颜色",
+  "pulColor": "脉搏颜色",
+  "behavior": "行为",
+  "validateInputs": "验证输入",
+  "confirmDeletion": "确认删除",
+  "age": "年龄",
+  "ageDesc": "据此确定警告值",
+  "aboutWarnValuesScreen": "关于",
+  "aboutWarnValuesScreenDesc": "关于警告值的更多信息",
+  "overrideWarnValues": "自定义警告值",
+  "sysWarn": "高压警告",
+  "diaWarn": "低压警告",
+  "data": "数据",
+  "version": "版本",
+  "versionOf": "版本：{version}",
+  "@versionOf": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "buildNumberOf": "版本号：{buildNumber}",
+  "@buildNumberOf": {
+    "placeholders": {
+      "buildNumber": {
+        "type": "String"
+      }
+    }
+  },
+  "buildSignatureOf": "生成签名：{signature}",
+  "@buildSignatureOf": {
+    "placeholders": {
+      "signature": {
+        "type": "String"
+      }
+    }
+  },
+  "packageNameOf": "软件包名称：{name}",
+  "@packageNameOf": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "sharedPrefsDump": "共享首选项转储：",
+
+  "exportImport": "导出/导入",
+  "exportDir": "导出目录",
+  "exportAfterEveryInput": "每次记录后导出",
+  "exportAfterEveryInputDesc": "不推荐（会导致文件数量激增）",
+  "exportLimitDataRange": "限制数据范围",
+  "exportInterval": "数据范围",
+  "exportFormat": "导出格式",
+  "exportCustomEntries": "自定义字段",
+  "addEntry": "添加字段",
+  "exportMimeType": "导出MIME类型",
+  "exportMimeTypeDesc": "将类型型号发送给其他应用",
+  "exportCsvHeadline": "标题行",
+  "exportCsvHeadlineDesc": "有助于区分类型",
+  "csv": "CSV",
+  "pdf": "PDF",
+  "db": "SQLITE数据",
+  "text": "文本",
+  "other": "其他",
+  "fieldDelimiter": "字段分隔符",
+  "textDelimiter": "文本分隔符",
+  "export": "导出",
+  "exportSuccess": "已导出到：{path}",
+  "@exportSuccess": {
+    "placeholders": {
+      "path": {
+        "type": "String"
+      }
+    }
+  },
+  "shared": "已分享",
+  "import": "导入",
+  "sourceCode": "源代码",
+  "licenses": "第3方许可协议",
+  "importSuccess": "已成功导入{count}条记录",
+  "@importSuccess": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "exportWarnConfigNotImportable": "友情提示：当前的导出配置将导致无法导入。要修复此问题，请确定将导出类型设置为CSV——带有标题行，标题行中包含“diastolic”、“systolic”、“pulse”、“notes”，以及有效的时间格式。",
+
+  "statistics": "统计",
+  "measurementCount": "测量次数",
+  "measurementsPerDay": "每日测量次数",
+  "timeResolvedMetrics": "时间解析图表",
+  "avgOf": "{txt} Ø",
+  "@avgOf": {
+    "placeholders": {
+      "txt": {
+        "type": "String"
+      }
+    }
+  },
+  "minOf": "{txt}最低",
+  "@minOf": {
+    "placeholders": {
+      "txt": {
+        "type": "String"
+      }
+    }
+  },
+  "maxOf": "{txt}最高",
+  "@maxOf": {
+    "placeholders": {
+      "txt": {
+        "type": "String"
+      }
+    }
+  },
+
+  "warnValues": "警告值",
+  "warnAboutTxt1": "警告值纯粹是个参考意见，不是医学建议。",
+  "warnAboutTxt2": "不同年龄的默认参考值来源于此。",
+  "warnAboutTxt3": "您可以按需随意修改此值，请遵从医生的建议。",
+
+  "enterTimeFormatTxt1": "格式化字符串是一个预定义的ICU/骨骼字符串和您想要包含的附加文字的混合体。",
+  "enterTimeFormatTxt2": " 如对有效格式的完整列表感到好奇，可在此处查看。",
+  "enterTimeFormatTxt3": " 友情提示：使用更长或更短的格式字符串不会神奇地改变表列宽度，这可能会导致意外的换行和文字显示不全。",
+  "enterTimeFormatTxt4": "默认：\"yy-MM-dd HH:mm\"",
+  "enterTimeFormatString": "时间格式",
+
+  "dateFormatting": "日期格式",
+  "now": "现在",
+  "notes": "备注",
+  "time": "时间",
+  "confirmDelete": "确认删除",
+  "confirmDeleteDesc": "确定要删除此记录吗？您可以在设置中修改此选项。",
+  "deletionConfirmed": "记录已删除。",
+
+  "day": "日",
+  "week": "周",
+  "month": "月",
+  "year": "年",
+  "lifetime": "终身",
+  "weekOfYear": "{year}第{weekNum}周",
+  "@weekOfYear": {
+    "placeholders": {
+      "weekNum": {
+        "type": "int"
+      },
+      "year": {
+        "type": "int"
+      }
+    }
+  }
+}

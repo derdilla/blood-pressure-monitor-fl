@@ -47,6 +47,7 @@
   "btnSave": "SAVE",
   "btnConfirm": "OK",
   "btnUndo": "UNDO",
+  "btnNext": "NEXT",
 
   "sysLong": "Systolic",
   "sysShort": "sys",
@@ -56,6 +57,7 @@
   "pulShort": "pul",
   "addNote": "Note (optional)",
 
+  "settings": "Settings",
   "layout": "Layout",
   "allowManualTimeInput": "Allow manual time input",
   "enterTimeFormatScreen": "Time format",

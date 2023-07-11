@@ -19,7 +19,7 @@ class SettingsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Settings'),
+        title: Text(AppLocalizations.of(context)!.settings),
         backgroundColor: Theme.of(context).primaryColor,
       ),
       body: Consumer<Settings>(builder: (context, settings, child) {
@@ -259,7 +259,7 @@ class SettingsPage extends StatelessWidget {
                 ),
               ],
             ),
-            SettingsSection(title: const Text('about'), children: [
+            SettingsSection(title: Text(AppLocalizations.of(context)!.aboutWarnValuesScreen), children: [
               SettingsTile(
                   key: const Key('version'),
                   title: Text(AppLocalizations.of(context)!.version),

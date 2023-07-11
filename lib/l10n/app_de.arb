@@ -48,6 +48,7 @@
   "btnSave": "OK",
   "btnConfirm": "OK",
   "btnUndo": "ZURÜCK",
+  "btnNext": "WEITER",
 
   "sysLong": "Systole",
   "sysShort": "Sys",
@@ -57,6 +58,7 @@
   "pulShort": "Pul",
   "addNote": "Notiz (optional)",
 
+  "settings": "Einstellungen",
   "layout": "Layout",
   "allowManualTimeInput": "Editierbare Zeitangaben",
   "enterTimeFormatScreen": "Datums-/Zeitformat",

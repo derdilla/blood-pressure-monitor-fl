@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 Future<DateTime?> showDateTimePicker({
   required BuildContext context,
@@ -11,7 +12,7 @@ Future<DateTime?> showDateTimePicker({
   lastDate ??= firstDate.add(const Duration(days: 365 * 200));
 
   final DateTime? selectedDate = await showDatePicker(
-      context: context, initialDate: initialDate, firstDate: firstDate, lastDate: lastDate, confirmText: 'NEXT');
+      context: context, initialDate: initialDate, firstDate: firstDate, lastDate: lastDate, confirmText: AppLocalizations.of(context)!.btnNext);
 
   if (selectedDate == null) return null;
   if (!context.mounted) return null;
