@@ -1,5 +1,6 @@
 import 'package:blood_pressure_app/components/consistent_future_builder.dart';
 import 'package:blood_pressure_app/components/settings_widgets.dart';
+import 'package:blood_pressure_app/model/blood_pressure.dart';
 import 'package:blood_pressure_app/model/settings_store.dart';
 import 'package:blood_pressure_app/screens/subsettings/enter_timeformat.dart';
 import 'package:blood_pressure_app/screens/subsettings/export_import_screen.dart';
@@ -23,6 +24,7 @@ class SettingsPage extends StatelessWidget {
         backgroundColor: Theme.of(context).primaryColor,
       ),
       body: Consumer<Settings>(builder: (context, settings, child) {
+        print(settings.sysWarn);
         return ListView(
           children: [
             SettingsSection(title: Text(AppLocalizations.of(context)!.layout), children: [
@@ -166,81 +168,59 @@ class SettingsPage extends StatelessWidget {
                     settings.confirmDeletion = value;
                   }),
               InputSettingsTile(
-                key: const Key('age'),
-                title: Text(AppLocalizations.of(context)!.age),
-                description: Text(AppLocalizations.of(context)!.ageDesc),
-                leading: const Icon(Icons.manage_accounts_outlined),
-                keyboardType: TextInputType.number,
-                inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                initialValue: settings.age.toString(),
-                onEditingComplete: (String? value) {
-                  if (value == null || value.isEmpty || (int.tryParse(value) == null)) {
-                    return;
-                  }
-                  settings.age = int.tryParse(value) as int; // no error possible as per above's condition
-                },
-                decoration: InputDecoration(hintText: AppLocalizations.of(context)!.age),
-                inputWidth: 80,
-                disabled: false,
-                // although no function provided, when overriding warn values,
-                // this field intentionally doesn't get disabled, as this
-                // would cause unexpected jumps in layout
-              ),
-              SettingsTile(
-                  key: const Key('AboutWarnValuesScreen'),
-                  title: Text(AppLocalizations.of(context)!.aboutWarnValuesScreen),
-                  description: Text(AppLocalizations.of(context)!.aboutWarnValuesScreenDesc),
-                  leading: const Icon(Icons.info_outline),
-                  onPressed: (context) {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => const AboutWarnValuesScreen()),
-                    );
-                  }),
-              SwitchSettingsTile(
-                key: const Key('overrideWarnValues'),
-                initialValue: settings.overrideWarnValues,
-                onToggle: (value) {
-                  settings.overrideWarnValues = value;
-                },
-                leading: const Icon(Icons.tune),
-                title: Text(AppLocalizations.of(context)!.overrideWarnValues),
-              ),
-              InputSettingsTile(
                 key: const Key('sysWarn'),
                 title: Text(AppLocalizations.of(context)!.sysWarn),
-                leading: const Icon(Icons.settings_applications_outlined),
+                leading: const Icon(Icons.warning_amber_outlined),
                 keyboardType: TextInputType.number,
                 inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                 initialValue: settings.sysWarn.toInt().toString(),
                 onEditingComplete: (String? value) {
-                  if (value == null || value.isEmpty || (double.tryParse(value) == null)) {
+                  if (value == null || value.isEmpty || (int.tryParse(value) == null)) {
                     return;
                   }
-                  // no error possible as per above's condition
-                  settings.sysWarn = double.tryParse(value) as double;
+                  settings.sysWarn = int.parse(value);
                 },
                 decoration: InputDecoration(hintText: AppLocalizations.of(context)!.sysWarn),
                 inputWidth: 120,
-                disabled: !settings.overrideWarnValues,
               ),
               InputSettingsTile(
                 key: const Key('diaWarn'),
                 title: Text(AppLocalizations.of(context)!.diaWarn),
-                leading: const Icon(Icons.settings_applications_outlined),
+                leading: const Icon(Icons.warning_amber_outlined),
                 keyboardType: TextInputType.number,
                 inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                 initialValue: settings.diaWarn.toInt().toString(),
                 onEditingComplete: (String? value) {
-                  if (value == null || value.isEmpty || (double.tryParse(value) == null)) {
+                  if (value == null || value.isEmpty || (int.tryParse(value) == null)) {
                     return;
                   }
-                  // no error possible as per above's condition
-                  settings.diaWarn = double.tryParse(value) as double;
+                  settings.diaWarn = int.parse(value);
                 },
                 decoration: InputDecoration(hintText: AppLocalizations.of(context)!.diaWarn),
                 inputWidth: 120,
-                disabled: !settings.overrideWarnValues,
+              ),
+              SettingsTile(
+                key: const Key('determineWarnValues'),
+                leading: const Icon(Icons.settings_applications_outlined),
+                title: Text(AppLocalizations.of(context)!.determineWarnValues),
+                onPressed: (context) {
+                  showDialog(
+                      context: context,
+                      builder: (context) => const DetermineAgeValues(),
+                  );
+                },
+              ),
+              SettingsTile(
+                key: const Key('AboutWarnValuesScreen'),
+                title: Text(AppLocalizations.of(context)!.aboutWarnValuesScreen),
+                description: Text(AppLocalizations.of(context)!.aboutWarnValuesScreenDesc),
+                leading: const Icon(Icons.info_outline),
+                onPressed: (context) {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const AboutWarnValuesScreen()),
+                  );
+                }
               ),
             ]),
             SettingsSection(
@@ -307,6 +287,60 @@ class SettingsPage extends StatelessWidget {
           ],
         );
       }),
+    );
+  }
+}
+
+class DetermineAgeValues extends StatefulWidget {
+  const DetermineAgeValues({super.key});
+
+  @override
+  State<DetermineAgeValues> createState() => _DetermineAgeValuesState();
+}
+
+class _DetermineAgeValuesState extends State<DetermineAgeValues> {
+  final formKey = GlobalKey<FormState>();
+  final controller = TextEditingController();
+
+  @override
+  void dispose() {
+    // Clean up the controller when the widget is disposed.
+    controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      content: TextFormField(
+        key: formKey,
+        controller: controller,
+        inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+        decoration: InputDecoration(hintText: AppLocalizations.of(context)!.age),
+      ),
+      actions: [
+        Consumer<Settings>(builder: (context, settings, child) {
+          return ElevatedButton(
+              onPressed: () {
+                if (controller.text.isEmpty || (int.tryParse(controller.text) == null)) {
+                  return;
+                }
+                int age = int.parse(controller.text);
+                settings.sysWarn = BloodPressureWarnValues.getUpperSysWarnValue(age);
+                settings.diaWarn = BloodPressureWarnValues.getUpperDiaWarnValue(age);
+                Navigator.of(context).pop();
+                Navigator.of(context).pop();
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const SettingsPage()),
+                );
+
+              },
+              child: Text(AppLocalizations.of(context)!.btnConfirm)
+          );
+        }),
+
+      ],
     );
   }
 }

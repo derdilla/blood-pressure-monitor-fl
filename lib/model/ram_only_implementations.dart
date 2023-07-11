@@ -3,7 +3,7 @@ import 'dart:collection';
 import 'package:blood_pressure_app/model/blood_pressure.dart';
 import 'package:blood_pressure_app/model/export_import.dart';
 import 'package:blood_pressure_app/model/settings_store.dart';
-import 'package:file_saver/src/utils/mime_types.dart';
+import 'package:file_saver/file_saver.dart' show MimeType;
 import 'package:flutter/material.dart';
 
 class RamBloodPressureModel extends ChangeNotifier implements BloodPressureModel {
@@ -82,24 +82,22 @@ class RamBloodPressureModel extends ChangeNotifier implements BloodPressureModel
 
 class RamSettings extends ChangeNotifier implements Settings {
   MaterialColor _accentColor = Colors.pink;
-  int _age = 30;
   bool _allowManualTimeInput = true;
   int _animationSpeed = 150;
   bool _confirmDeletion = true;
   bool _darkMode = true;
   String _dateFormatString = 'yyyy-MM-dd  HH:mm';
   MaterialColor _diaColor = Colors.pink;
-  double _diaWarn = 80;
+  int _diaWarn = 80;
   DateTime? _displayDataEnd;
   DateTime? _displayDataStart;
   bool _followSystemDarkMode = true;
   double _graphLineThickness = 3;
   int _graphStepSize = TimeStep.day;
   double _iconSize = 30;
-  bool _overrideWarnValues = false;
   MaterialColor _pulColor = Colors.pink;
   MaterialColor _sysColor = Colors.pink;
-  double _sysWarn = 120;
+  int _sysWarn = 120;
   bool _useExportCompatability = false;
   bool _validateInputs = true;
   int _graphTitlesCount = 5;
@@ -124,15 +122,12 @@ class RamSettings extends ChangeNotifier implements Settings {
   }
 
   @override
-  double get diaWarn {
-    if (!overrideWarnValues) {
-      return BloodPressureWarnValues.getUpperDiaWarnValue(age).toDouble();
-    }
+  int get diaWarn {
     return _diaWarn;
   }
 
   @override
-  set diaWarn(double newWarn) {
+  set diaWarn(int newWarn) {
     _diaWarn = newWarn;
     notifyListeners();
   }
@@ -160,15 +155,12 @@ class RamSettings extends ChangeNotifier implements Settings {
   }
 
   @override
-  double get sysWarn {
-    if (!overrideWarnValues) {
-      return BloodPressureWarnValues.getUpperSysWarnValue(age).toDouble();
-    }
+  int get sysWarn {
     return _sysWarn;
   }
 
   @override
-  set sysWarn(double newWarn) {
+  set sysWarn(int newWarn) {
     _sysWarn = newWarn;
     notifyListeners();
   }
@@ -179,15 +171,6 @@ class RamSettings extends ChangeNotifier implements Settings {
   @override
   set accentColor(MaterialColor value) {
     _accentColor = value;
-    notifyListeners();
-  }
-
-  @override
-  int get age => _age;
-
-  @override
-  set age(int value) {
-    _age = value;
     notifyListeners();
   }
 
@@ -278,15 +261,6 @@ class RamSettings extends ChangeNotifier implements Settings {
   @override
   set iconSize(double value) {
     _iconSize = value;
-    notifyListeners();
-  }
-
-  @override
-  bool get overrideWarnValues => _overrideWarnValues;
-
-  @override
-  set overrideWarnValues(bool value) {
-    _overrideWarnValues = value;
     notifyListeners();
   }
 
