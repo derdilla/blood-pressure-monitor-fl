@@ -52,6 +52,7 @@ class AppRoot extends StatelessWidget {
         supportedLocales: const [
           Locale('en'), // English
           Locale('de'), // German
+          Locale('zh'), // generic Chinese; The file present is actually zh_Hans
         ],
         home: const AppHome(),
       );

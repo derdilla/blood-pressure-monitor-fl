@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_material_color_picker/flutter_material_color_picker.dart';
 
 class SettingsTile extends StatelessWidget {
@@ -107,7 +108,6 @@ class ColorSelectionSettingsTile extends StatelessWidget {
           builder: (_) {
             return AlertDialog(
               contentPadding: const EdgeInsets.all(6.0),
-              title: const Text('select color'),
               content: MaterialColorPicker(
                 circleSize: 53,
                 selectedColor: initialColor,
@@ -119,7 +119,7 @@ class ColorSelectionSettingsTile extends StatelessWidget {
               actions: [
                 TextButton(
                   onPressed: Navigator.of(context).pop,
-                  child: const Text('CLOSE'),
+                  child: Text(AppLocalizations.of(context)!.btnCancel),
                 ),
               ],
             );

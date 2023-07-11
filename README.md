@@ -14,6 +14,9 @@
   <img alt="GitHub last commit" src="https://img.shields.io/github/last-commit/NobodyForNothing/blood-pressure-monitor-fl">
   <img alt="GitHub Repo stars" src="https://img.shields.io/github/stars/NobodyForNothing/blood-pressure-monitor-fl">
   <img alt="GitHub watchers" src="https://img.shields.io/github/watchers/NobodyForNothing/blood-pressure-monitor-fl">
+  <a href="https://hosted.weblate.org/engage/blood-pressure-monitor-fl/">
+    <img src="https://hosted.weblate.org/widgets/blood-pressure-monitor-fl/-/svg-badge.svg" alt="Translation status" />
+  </a>
 </div>
 <div align="center">
   <a href='https://f-droid.org/en/packages/com.derdilla.bloodPressureApp'><img alt="F-Droid" height=40 src="https://gitlab.com/fdroid/artwork/-/raw/master/fdroid-logo-2015/available-on-fdroid.svg"></a>
@@ -64,7 +67,10 @@ This is probably the simplest to do: Just use the app and find out what's wrong 
 
 ### improving texts and translate
 Another easy way to help is to go through the texts (this one or the ones in the app) and fixing grammar/other mistakes or finding better (more precise / friendly) ways to put things.
-If you want the app to support your language, you can duplicate the localization file in file lib/l10n/app_en.arb and change the country code to one of 78 [languages supported by flutter](https://api.flutter.dev/flutter/flutter_localizations/GlobalMaterialLocalizations-class.html). After you are done translating you can simply open a PR or if you don't know how to do this just add an issue.  
+The easiest way to do this is [weblate](https://hosted.weblate.org/engage/blood-pressure-monitor-fl/).
+
+[![Translation status](https://hosted.weblate.org/widgets/blood-pressure-monitor-fl/-/multi-auto.svg)](https://hosted.weblate.org/engage/blood-pressure-monitor-fl/)
+
 
 ### pull requests
 If you can code, you can fix issues or implement features from the issues page. While not a strict requirement, it's still probably best, if you talk about it in an issue first.
