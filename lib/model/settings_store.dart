@@ -26,8 +26,8 @@ class Settings extends ChangeNotifier {
 
     if (keys.contains('age')) {
       final lastAge = _prefs.getInt('age') ?? 30;
-      sysWarn = BloodPressureWarnValues.getUpperSysWarnValue(lastAge).toDouble();
-      diaWarn = BloodPressureWarnValues.getUpperDiaWarnValue(lastAge).toDouble();
+      sysWarn = BloodPressureWarnValues.getUpperSysWarnValue(lastAge);
+      diaWarn = BloodPressureWarnValues.getUpperDiaWarnValue(lastAge);
       toAwait.add(_prefs.remove('age'));
     }
     if (keys.contains('overrideWarnValues')) {
@@ -207,21 +207,21 @@ class Settings extends ChangeNotifier {
     notifyListeners();
   }
 
-  double get sysWarn {
-    return _prefs.getInt('sysWarn')?.toDouble() ?? 120;
+  int get sysWarn {
+    return _prefs.getInt('sysWarn') ?? 120;
   }
 
-  set sysWarn(double newWarn) {
-    _prefs.setInt('sysWarn', newWarn.toInt());
+  set sysWarn(int newWarn) {
+    _prefs.setInt('sysWarn', newWarn);
     notifyListeners();
   }
 
-  double get diaWarn {
-    return _prefs.getInt('diaWarn')?.toDouble() ?? 80;
+  int get diaWarn {
+    return _prefs.getInt('diaWarn') ?? 80;
   }
 
-  set diaWarn(double newWarn) {
-    _prefs.setInt('diaWarn', newWarn.toInt());
+  set diaWarn(int newWarn) {
+    _prefs.setInt('diaWarn', newWarn);
     notifyListeners();
   }
 

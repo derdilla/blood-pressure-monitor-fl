@@ -139,7 +139,7 @@ class _LineChartState extends State<_LineChart> {
                                     belowBarData: BarAreaData(
                                         show: true,
                                         color: Colors.red.shade400.withAlpha(100),
-                                        cutOffY: settings.diaWarn,
+                                        cutOffY: settings.diaWarn.toDouble(),
                                         applyCutOffY: true)),
                                 LineChartBarData(
                                     spots: systolicSpots,
@@ -151,7 +151,7 @@ class _LineChartState extends State<_LineChart> {
                                     belowBarData: BarAreaData(
                                         show: true,
                                         color: Colors.red.shade400.withAlpha(100),
-                                        cutOffY: settings.sysWarn,
+                                        cutOffY: settings.sysWarn.toDouble(),
                                         applyCutOffY: true))
                               ]));
                       }
