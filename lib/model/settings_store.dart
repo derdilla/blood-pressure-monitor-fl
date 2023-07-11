@@ -428,13 +428,15 @@ class Settings extends ChangeNotifier {
 }
 
 class TimeStep {
-  static const options = [0, 4, 1, 2, 3];
+  static const options = [0, 4, 1, 2, 3, 5, 6];
 
   static const day = 0;
   static const month = 1;
   static const year = 2;
   static const lifetime = 3;
   static const week = 4;
+  static const last7Days = 5;
+  static const last30Days = 6;
 
   TimeStep._create();
 
@@ -450,6 +452,11 @@ class TimeStep {
         return AppLocalizations.of(context)!.lifetime;
       case week:
         return AppLocalizations.of(context)!.week;
+      case last7Days:
+        return AppLocalizations.of(context)!.last7Days;
+      case last30Days:
+        return AppLocalizations.of(context)!.last30Days;
+        //  TODO: implement
     }
     assert(false);
     return '-';
