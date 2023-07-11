@@ -32,10 +32,8 @@ void main() {
       expect(s.allowManualTimeInput, true);
       expect(s.dateFormatString, 'yyyy-MM-dd  HH:mm');
       expect(s.iconSize, 30);
-      expect(s.sysWarn, 125); // depends on overrideWarnValues
-      expect(s.diaWarn, 80); // depends on overrideWarnValues
-      expect(s.age, 30);
-      expect(s.overrideWarnValues, false);
+      expect(s.sysWarn, 120);
+      expect(s.diaWarn, 80);
       expect(s.validateInputs, true);
       expect(s.graphLineThickness, 3);
       expect(s.animationSpeed, 150);
@@ -51,9 +49,6 @@ void main() {
       expect(s.exportMimeType, MimeType.csv);
       expect(s.defaultExportDir.isEmpty, true);
       expect(s.exportAfterEveryEntry, false);
-
-      s.overrideWarnValues = true;
-      expect(s.sysWarn, 120);
     });
 
     test('setting fields should save changes', () async {
@@ -82,10 +77,8 @@ void main() {
       s.allowManualTimeInput = false;
       s.dateFormatString = 'yy:dd @ H:mm.ss';
       s.iconSize = 50;
-      s.sysWarn = 314; // depends on overrideWarnValues
-      s.diaWarn = 159; // depends on overrideWarnValues
-      s.age = 26;
-      s.overrideWarnValues = true;
+      s.sysWarn = 314;
+      s.diaWarn = 159;
       s.validateInputs = false;
       s.graphLineThickness = 5;
       s.animationSpeed = 100;
@@ -113,8 +106,6 @@ void main() {
       expect(s.iconSize, 50);
       expect(s.sysWarn, 314);
       expect(s.diaWarn, 159);
-      expect(s.age, 26);
-      expect(s.overrideWarnValues, true);
       expect(s.validateInputs, false);
       expect(s.graphLineThickness, 5);
       expect(s.animationSpeed, 100);
@@ -151,10 +142,8 @@ void main() {
       s.allowManualTimeInput = false;
       s.dateFormatString = 'yy:dd @ H:mm.ss';
       s.iconSize = 10;
-      s.sysWarn = 314; // depends on overrideWarnValues
-      s.diaWarn = 159; // depends on overrideWarnValues
-      s.age = 26;
-      s.overrideWarnValues = true;
+      s.sysWarn = 314;
+      s.diaWarn = 159;
       s.validateInputs = false;
       s.graphLineThickness = 5;
       s.animationSpeed = 100;
@@ -171,7 +160,7 @@ void main() {
       s.defaultExportDir = '/storage/emulated/0/Android/data/com.derdilla.bloodPressureApp/files/file.csv';
       s.exportAfterEveryEntry = true;
 
-      expect(i, 31);
+      expect(i, 29);
     });
   });
 
@@ -197,10 +186,8 @@ void main() {
       expect(s.allowManualTimeInput, true);
       expect(s.dateFormatString, 'yyyy-MM-dd  HH:mm');
       expect(s.iconSize, 30);
-      expect(s.sysWarn, 125); // depends on overrideWarnValues
-      expect(s.diaWarn, 80); // depends on overrideWarnValues
-      expect(s.age, 30);
-      expect(s.overrideWarnValues, false);
+      expect(s.sysWarn, 120);
+      expect(s.diaWarn, 80);
       expect(s.validateInputs, true);
       expect(s.graphLineThickness, 3);
       expect(s.animationSpeed, 150);
@@ -216,9 +203,6 @@ void main() {
       expect(s.exportMimeType, MimeType.csv);
       expect(s.defaultExportDir.isEmpty, true);
       expect(s.exportAfterEveryEntry, false);
-
-      s.overrideWarnValues = true;
-      expect(s.sysWarn, 120);
     });
 
     test('setting fields should save changes', () async {
@@ -247,10 +231,8 @@ void main() {
       s.allowManualTimeInput = false;
       s.dateFormatString = 'yy:dd @ H:mm.ss';
       s.iconSize = 50;
-      s.sysWarn = 314; // depends on overrideWarnValues
-      s.diaWarn = 159; // depends on overrideWarnValues
-      s.age = 26;
-      s.overrideWarnValues = true;
+      s.sysWarn = 314;
+      s.diaWarn = 159;
       s.validateInputs = false;
       s.graphLineThickness = 5;
       s.animationSpeed = 100;
@@ -279,8 +261,6 @@ void main() {
       expect(s.iconSize, 50);
       expect(s.sysWarn, 314);
       expect(s.diaWarn, 159);
-      expect(s.age, 26);
-      expect(s.overrideWarnValues, true);
       expect(s.validateInputs, false);
       expect(s.graphLineThickness, 5);
       expect(s.animationSpeed, 100);
@@ -317,10 +297,8 @@ void main() {
       s.allowManualTimeInput = false;
       s.dateFormatString = 'yy:dd @ H:mm.ss';
       s.iconSize = 10;
-      s.sysWarn = 314; // depends on overrideWarnValues
-      s.diaWarn = 159; // depends on overrideWarnValues
-      s.age = 26;
-      s.overrideWarnValues = true;
+      s.sysWarn = 314;
+      s.diaWarn = 159;
       s.validateInputs = false;
       s.graphLineThickness = 5;
       s.animationSpeed = 100;
@@ -337,7 +315,7 @@ void main() {
       s.defaultExportDir = '/storage/emulated/0/Android/data/com.derdilla.bloodPressureApp/files/file.csv';
       s.exportAfterEveryEntry = true;
 
-      expect(i, 31);
+      expect(i, 29);
     });
   });
 }
