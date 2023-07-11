@@ -165,7 +165,7 @@ class SettingsPage extends StatelessWidget {
                   onToggle: (value) {
                     settings.confirmDeletion = value;
                   }),
-              InputSettingsTile(
+              /*InputSettingsTile(
                 key: const Key('age'),
                 title: Text(AppLocalizations.of(context)!.age),
                 description: Text(AppLocalizations.of(context)!.ageDesc),
@@ -186,6 +186,7 @@ class SettingsPage extends StatelessWidget {
                 // this field intentionally doesn't get disabled, as this
                 // would cause unexpected jumps in layout
               ),
+               */
               SettingsTile(
                   key: const Key('AboutWarnValuesScreen'),
                   title: Text(AppLocalizations.of(context)!.aboutWarnValuesScreen),
@@ -197,15 +198,6 @@ class SettingsPage extends StatelessWidget {
                       MaterialPageRoute(builder: (context) => const AboutWarnValuesScreen()),
                     );
                   }),
-              SwitchSettingsTile(
-                key: const Key('overrideWarnValues'),
-                initialValue: settings.overrideWarnValues,
-                onToggle: (value) {
-                  settings.overrideWarnValues = value;
-                },
-                leading: const Icon(Icons.tune),
-                title: Text(AppLocalizations.of(context)!.overrideWarnValues),
-              ),
               InputSettingsTile(
                 key: const Key('sysWarn'),
                 title: Text(AppLocalizations.of(context)!.sysWarn),
@@ -222,7 +214,6 @@ class SettingsPage extends StatelessWidget {
                 },
                 decoration: InputDecoration(hintText: AppLocalizations.of(context)!.sysWarn),
                 inputWidth: 120,
-                disabled: !settings.overrideWarnValues,
               ),
               InputSettingsTile(
                 key: const Key('diaWarn'),
@@ -240,7 +231,6 @@ class SettingsPage extends StatelessWidget {
                 },
                 decoration: InputDecoration(hintText: AppLocalizations.of(context)!.diaWarn),
                 inputWidth: 120,
-                disabled: !settings.overrideWarnValues,
               ),
             ]),
             SettingsSection(

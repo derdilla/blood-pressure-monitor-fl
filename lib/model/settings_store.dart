@@ -16,7 +16,28 @@ class Settings extends ChangeNotifier {
   static Future<Settings> create() async {
     final component = Settings._create();
     component._prefs = await SharedPreferences.getInstance();
+    await component._update();
     return component;
+  }
+
+  Future<void> _update() async {
+    final keys = _prefs.getKeys();
+    List<Future> toAwait = [];
+
+    if (keys.contains('age')) {
+      final lastAge = _prefs.getInt('age') ?? 30;
+      sysWarn = BloodPressureWarnValues.getUpperSysWarnValue(lastAge).toDouble();
+      diaWarn = BloodPressureWarnValues.getUpperDiaWarnValue(lastAge).toDouble();
+      toAwait.add(_prefs.remove('age'));
+    }
+    if (keys.contains('overrideWarnValues')) {
+      toAwait.add(_prefs.remove('overrideWarnValues'));
+    }
+
+    for (var e in toAwait) {
+      await e;
+    }
+    return;
   }
 
   int get graphStepSize {
@@ -187,9 +208,6 @@ class Settings extends ChangeNotifier {
   }
 
   double get sysWarn {
-    if (!overrideWarnValues) {
-      return BloodPressureWarnValues.getUpperSysWarnValue(age).toDouble();
-    }
     return _prefs.getInt('sysWarn')?.toDouble() ?? 120;
   }
 
@@ -199,32 +217,11 @@ class Settings extends ChangeNotifier {
   }
 
   double get diaWarn {
-    if (!overrideWarnValues) {
-      return BloodPressureWarnValues.getUpperDiaWarnValue(age).toDouble();
-    }
     return _prefs.getInt('diaWarn')?.toDouble() ?? 80;
   }
 
   set diaWarn(double newWarn) {
     _prefs.setInt('diaWarn', newWarn.toInt());
-    notifyListeners();
-  }
-
-  int get age {
-    return _prefs.getInt('age') ?? 30;
-  }
-
-  set age(int newAge) {
-    _prefs.setInt('age', newAge.toInt());
-    notifyListeners();
-  }
-
-  bool get overrideWarnValues {
-    return _prefs.getBool('overrideWarnValues') ?? false;
-  }
-
-  set overrideWarnValues(bool overrideWarnValues) {
-    _prefs.setBool('overrideWarnValues', overrideWarnValues);
     notifyListeners();
   }
 
