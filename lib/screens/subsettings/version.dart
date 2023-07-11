@@ -1,3 +1,4 @@
+import 'package:blood_pressure_app/components/consistent_future_builder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -17,42 +18,31 @@ class VersionScreen extends StatelessWidget {
       body: Center(
         child: Container(
           padding: const EdgeInsets.all(40.0),
-          child: FutureBuilder(
+          child: ConsistentFutureBuilder<List<Object>>(
             future: Future.wait([PackageInfo.fromPlatform(), SharedPreferences.getInstance()]),
-            builder: (context, snapshot) {
+            onData: (context, data) {
               final localizations = AppLocalizations.of(context);
-              switch (snapshot.connectionState) {
-                case ConnectionState.waiting:
-                  return Text(AppLocalizations.of(context)!.loading);
-                default:
-                  if (snapshot.hasError) {
-                    return Text(AppLocalizations.of(context)!.error(snapshot.error.toString()));
-                  } else if (snapshot.hasData && snapshot.data != null) {
-                    PackageInfo packageInfo = snapshot.data![0] as PackageInfo;
-                    SharedPreferences sharedPrefs = snapshot.data![1] as SharedPreferences;
-                    return Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+              PackageInfo packageInfo = data[0] as PackageInfo;
+              SharedPreferences sharedPrefs = data[1] as SharedPreferences;
+              return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(localizations!.packageNameOf(packageInfo.packageName)),
+                    Text(localizations.versionOf(packageInfo.version)),
+                    Text(localizations.buildNumberOf(packageInfo.buildNumber)),
+                    Text(localizations.buildSignatureOf(packageInfo.buildSignature)),
+                    const SizedBox(height: 30,),
+                    Text(localizations.sharedPrefsDump),
+                    for (final key in sharedPrefs.getKeys())
+                      Row(
                         children: [
-                          Text(localizations!.packageNameOf(packageInfo.packageName)),
-                          Text(localizations.versionOf(packageInfo.version)),
-                          Text(localizations.buildNumberOf(packageInfo.buildNumber)),
-                          Text(localizations.buildSignatureOf(packageInfo.buildSignature)),
-                          const SizedBox(height: 30,),
-                          Text(localizations.sharedPrefsDump),
-                          for (final key in sharedPrefs.getKeys())
-                            Row(
-                              children: [
-                                Text('$key:'),
-                                const Spacer(),
-                                Text(sharedPrefs.get(key).toString()),
-                              ],
-                            )
-                        ]
-                    );
-                  }
-              }
-              return Text(localizations!.errNotStarted);
-
+                          Text('$key:'),
+                          const Spacer(),
+                          Text(sharedPrefs.get(key).toString()),
+                        ],
+                      )
+                  ]
+              );
             },
           ),
         ),
