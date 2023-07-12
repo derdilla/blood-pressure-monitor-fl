@@ -9,7 +9,7 @@
       }
     }
   },
-  "loading": "正在载入...",
+  "loading": "正在载入…",
   "@loading": {},
   "error": "错误：{msg}",
   "@error": {
