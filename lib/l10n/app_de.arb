@@ -321,5 +321,11 @@
         "type": "int"
       }
     }
-  }
+  },
+  "determineWarnValues": "Warnwerte bestimmen",
+  "@determineWarnValues": {},
+  "last7Days": "7 Tage",
+  "@last7Days": {},
+  "last30Days": "30 Tage",
+  "@last30Days": {}
 }
