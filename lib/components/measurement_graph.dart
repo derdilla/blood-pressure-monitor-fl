@@ -52,14 +52,20 @@ class _LineChartState extends State<_LineChart> {
                         int pulMax = 0;
                         int diaMax = 0;
                         int sysMax = 0;
-                        for (var element in data) {
-                          final x = element.creationTime.millisecondsSinceEpoch.toDouble();
-                          diastolicSpots.add(FlSpot(x, element.diastolic.toDouble()));
-                          systolicSpots.add(FlSpot(x, element.systolic.toDouble()));
-                          pulseSpots.add(FlSpot(x, element.pulse.toDouble()));
-                          pulMax = max(pulMax, element.pulse);
-                          diaMax = max(diaMax, element.diastolic);
-                          sysMax = max(sysMax, element.systolic);
+                        for (var e in data) {
+                          final x = e.creationTime.millisecondsSinceEpoch.toDouble();
+                          if (e.diastolic != null) {
+                            diastolicSpots.add(FlSpot(x, e.diastolic!.toDouble()));
+                            diaMax = max(diaMax, e.diastolic!);
+                          }
+                          if (e.systolic != null) {
+                            systolicSpots.add(FlSpot(x, e.systolic!.toDouble()));
+                            sysMax = max(sysMax, e.systolic!);
+                          }
+                          if (e.pulse != null) {
+                            pulseSpots.add(FlSpot(x, e.pulse!.toDouble()));
+                            pulMax = max(pulMax, e.pulse!);
+                          }
                         }
 
                         const noTitels = AxisTitles(sideTitles: SideTitles(reservedSize: 40, showTitles: false));

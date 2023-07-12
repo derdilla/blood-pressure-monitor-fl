@@ -73,7 +73,7 @@ class MeasurementList extends StatelessWidget {
               return ConsistentFutureBuilder<UnmodifiableListView<BloodPressureRecord>>(
                 future: items,
                 onData: (context, data) {
-                  if (data.isNotEmpty && data.first.diastolic > 0) {
+                  if (data.isNotEmpty) {
                     return ListView.builder(
                         itemCount: data.length,
                         shrinkWrap: true,
@@ -93,10 +93,10 @@ class MeasurementList extends StatelessWidget {
                                       MaterialPageRoute(
                                           builder: (context) => AddMeasurementPage(
                                             initTime: data[index].creationTime,
-                                            initSys: data[index].systolic,
-                                            initDia: data[index].diastolic,
-                                            initPul: data[index].pulse,
-                                            initNote: data[index].notes,
+                                            initSys: data[index].systolic ?? -1,
+                                            initDia: data[index].diastolic ?? -1,
+                                            initPul: data[index].pulse ?? -1,
+                                            initNote: data[index].notes ?? '',
                                             isEdit: true,
                                           )),
                                     );
@@ -176,13 +176,17 @@ class MeasurementList extends StatelessWidget {
                                         flex: _tableElementsSizes[0],
                                         child: Text(formatter.format(data[index].creationTime))),
                                     Expanded(
-                                        flex: _tableElementsSizes[1], child: Text(data[index].systolic.toString())),
+                                        flex: _tableElementsSizes[1],
+                                        child: Text((data[index].systolic ?? '').toString())),
                                     Expanded(
                                         flex: _tableElementsSizes[2],
-                                        child: Text(data[index].diastolic.toString())),
+                                        child: Text((data[index].diastolic ?? '').toString())),
                                     Expanded(
-                                        flex: _tableElementsSizes[3], child: Text(data[index].pulse.toString())),
-                                    Expanded(flex: _tableElementsSizes[4], child: Text(data[index].notes)),
+                                        flex: _tableElementsSizes[3],
+                                        child: Text((data[index].pulse ?? '').toString())),
+                                    Expanded(
+                                        flex: _tableElementsSizes[4],
+                                        child: Text(data[index].notes ?? '')),
                                     Expanded(
                                       flex: _sideFlex,
                                       child: const SizedBox(),

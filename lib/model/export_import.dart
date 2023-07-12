@@ -20,7 +20,7 @@ import 'package:sqflite/sqflite.dart';
 
 import 'blood_pressure.dart';
 
-class ExportFileCreator {
+class ExportFileCreator { // TODO: check result
   Settings settings;
 
   ExportFileCreator(this.settings);
@@ -186,10 +186,10 @@ class ExportFileCreator {
                     pw.TableRow(
                         children: [
                           pw.Text(entry.creationTime.toIso8601String()),
-                          pw.Text(entry.systolic.toString()),
-                          pw.Text(entry.diastolic.toString()),
-                          pw.Text(entry.pulse.toString()),
-                          pw.Text(entry.notes)
+                          pw.Text((entry.systolic ?? '').toString()),
+                          pw.Text((entry.diastolic ?? '').toString()),
+                          pw.Text((entry.pulse ?? '').toString()),
+                          pw.Text(entry.notes ?? '')
                         ]
                     )
                 ]

@@ -8,6 +8,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
+// TODO: rewrite; this can be far more compact and is way to monolithic
 class AddMeasurementPage extends StatefulWidget {
   final DateTime? initTime;
   final int initSys;
@@ -113,6 +114,11 @@ class _AddMeasurementPageState extends State<AddMeasurementPage> {
                         }
                       },
                       validator: (String? value) {
+                        // TMP TODO REMOVE
+                        _systolic = int.tryParse(value??'') ?? -1;
+                        return null;
+                        // TMP END
+
                         if (value == null || value.isEmpty || (int.tryParse(value) == null)) {
                           return AppLocalizations.of(context)?.errNaN;
                         } else if (settings.validateInputs && (int.tryParse(value) ?? -1) <= 30) {
@@ -141,6 +147,10 @@ class _AddMeasurementPageState extends State<AddMeasurementPage> {
                         }
                       },
                       validator: (String? value) {
+                        // TMP TODO REMOVE
+                        _diastolic = int.tryParse(value??'') ?? -1;
+                        return null;
+                        // TMP END
                         if (value == null || value.isEmpty || (int.tryParse(value) == null)) {
                           return AppLocalizations.of(context)?.errNaN;
                         } else if (settings.validateInputs && (int.tryParse(value) ?? -1) <= 30) {
@@ -171,6 +181,11 @@ class _AddMeasurementPageState extends State<AddMeasurementPage> {
                         }
                       },
                       validator: (String? value) {
+                        // TMP TODO REMOVE
+                        _pulse = int.tryParse(value??'') ?? -1;
+                        return null;
+                        // TMP END
+
                         if (value == null || value.isEmpty || (int.tryParse(value) == null)) {
                           return AppLocalizations.of(context)?.errNaN;
                         } else if (settings.validateInputs && (int.tryParse(value) ?? -1) <= 30) {
@@ -204,9 +219,9 @@ class _AddMeasurementPageState extends State<AddMeasurementPage> {
                             if (widget.isEdit) {
                               Provider.of<BloodPressureModel>(context, listen: false).add(BloodPressureRecord(
                                   widget.initTime ?? DateTime.now(),
-                                  widget.initSys,
-                                  widget.initDia,
-                                  widget.initPul,
+                                  _nullInvalidInt(widget.initSys),
+                                  _nullInvalidInt(widget.initDia),
+                                  _nullInvalidInt(widget.initPul),
                                   widget.initNote));
                             }
                             Navigator.of(context).pop();
@@ -223,7 +238,7 @@ class _AddMeasurementPageState extends State<AddMeasurementPage> {
                               final exporter = Exporter(context);
                               final navigator = Navigator.of(context);
 
-                              await model.add(BloodPressureRecord(_time, _systolic, _diastolic, _pulse, _note));
+                              await model.add(BloodPressureRecord(_time, _nullInvalidInt(_systolic), _nullInvalidInt(_diastolic), _nullInvalidInt(_pulse), _note));
                               if (settings.exportAfterEveryEntry) {
                                 exporter.export();
                               }
@@ -241,5 +256,9 @@ class _AddMeasurementPageState extends State<AddMeasurementPage> {
         ),
       ),
     );
+  }
+
+  int? _nullInvalidInt(int i) {
+    return (i >= 0) ? i : null;
   }
 }

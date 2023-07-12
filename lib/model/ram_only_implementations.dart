@@ -1,4 +1,5 @@
 import 'dart:collection';
+import 'dart:math';
 
 import 'package:blood_pressure_app/model/blood_pressure.dart';
 import 'package:blood_pressure_app/model/export_import.dart';
@@ -38,31 +39,31 @@ class RamBloodPressureModel extends ChangeNotifier implements BloodPressureModel
   Future<int> get count async => _records.length;
 
   @override
-  Future<int> get avgDia async => _records.map((e) => e.diastolic).reduce((a, b) => a + b) ~/ _records.length;
+  Future<int> get avgDia async => _records.where((e) => e.diastolic!=null).map((e) => e.diastolic).reduce((a, b) => a! + b!)??0 ~/ _records.length;
 
   @override
-  Future<int> get avgPul async => _records.map((e) => e.pulse).reduce((a, b) => a + b) ~/ _records.length;
+  Future<int> get avgPul async => _records.where((e) => e.pulse!=null).map((e) => e.pulse).reduce((a, b) => a! + b!)??0 ~/ _records.length;
 
   @override
-  Future<int> get avgSys async => _records.map((e) => e.systolic).reduce((a, b) => a + b) ~/ _records.length;
+  Future<int> get avgSys async => _records.where((e) => e.systolic!=null).map((e) => e.systolic).reduce((a, b) => a! + b!)??0 ~/ _records.length;
 
   @override
-  Future<int> get maxDia async => _records.reduce((a, b) => (a.diastolic >= b.diastolic) ? a : b).diastolic;
+  Future<int> get maxDia async => _records.where((e) => e.diastolic!=null).map<int>((e) => e.diastolic!).reduce(max);
 
   @override
-  Future<int> get maxPul async => _records.reduce((a, b) => (a.pulse >= b.pulse) ? a : b).pulse;
+  Future<int> get maxPul async => _records.where((e) => e.pulse!=null).map<int>((e) => e.pulse!).reduce(max);
 
   @override
-  Future<int> get maxSys async => _records.reduce((a, b) => (a.systolic >= b.systolic) ? a : b).systolic;
+  Future<int> get maxSys async => _records.where((e) => e.systolic!=null).map<int>((e) => e.systolic!).reduce(max);
 
   @override
-  Future<int> get minDia async => _records.reduce((a, b) => (a.diastolic <= b.diastolic) ? a : b).diastolic;
+  Future<int> get minDia async => _records.where((e) => e.diastolic!=null).map<int>((e) => e.diastolic!).reduce(min);
 
   @override
-  Future<int> get minPul async => _records.reduce((a, b) => (a.pulse <= b.pulse) ? a : b).pulse;
+  Future<int> get minPul async => _records.where((e) => e.pulse!=null).map<int>((e) => e.pulse!).reduce(min);
 
   @override
-  Future<int> get minSys async => _records.reduce((a, b) => (a.systolic <= b.systolic) ? a : b).systolic;
+  Future<int> get minSys async => _records.where((e) => e.systolic!=null).map<int>((e) => e.systolic!).reduce(min);
 
   @override
   Future<DateTime> get firstDay async {
