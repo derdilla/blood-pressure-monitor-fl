@@ -1,1 +1,94 @@
-{}
+{
+  "errNoData": "ingen data",
+  "@errNoData": {},
+  "btnCancel": "Avbryt",
+  "@btnCancel": {},
+  "btnUndo": "Angre",
+  "@btnUndo": {},
+  "btnNext": "Neste",
+  "@btnNext": {},
+  "settings": "Innstillinger",
+  "@settings": {},
+  "theme": "Drakt",
+  "@theme": {},
+  "system": "System",
+  "@system": {},
+  "dark": "Mørk",
+  "@dark": {},
+  "light": "Lys",
+  "@light": {},
+  "graphLineThickness": "Linjetykkelse",
+  "@graphLineThickness": {},
+  "animationSpeed": "Animasjonsvarighet",
+  "@animationSpeed": {},
+  "accentColor": "Draktfarge",
+  "@accentColor": {},
+  "data": "Data",
+  "@data": {},
+  "buildNumberOf": "Versjonsnummer: {buildNumber}",
+  "@buildNumberOf": {
+    "placeholders": {
+      "buildNumber": {
+        "type": "String"
+      }
+    }
+  },
+  "csv": "CSV",
+  "@csv": {},
+  "pdf": "PDF",
+  "@pdf": {},
+  "text": "tekst",
+  "@text": {},
+  "sourceCode": "Kildekode",
+  "@sourceCode": {},
+  "statistics": "Statistikk",
+  "@statistics": {},
+  "measurementCount": "Målingsantall",
+  "@measurementCount": {},
+  "iconSize": "Ikonstørrelse",
+  "@iconSize": {},
+  "versionOf": "Versjon: {version}",
+  "@versionOf": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "time": "Tid",
+  "@time": {},
+  "confirmDelete": "Bekreft sletting",
+  "@confirmDelete": {},
+  "day": "dag",
+  "@day": {},
+  "week": "uke",
+  "@week": {},
+  "month": "måned",
+  "@month": {},
+  "year": "år",
+  "@year": {},
+  "btnSave": "Lagre",
+  "@btnSave": {},
+  "packageNameOf": "Pakkenavn: {name}",
+  "@packageNameOf": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "btnConfirm": "OK",
+  "@btnConfirm": {},
+  "version": "Versjon",
+  "@version": {},
+  "buildSignatureOf": "Byggsignatur: {signature}",
+  "@buildSignatureOf": {
+    "placeholders": {
+      "signature": {
+        "type": "String"
+      }
+    }
+  },
+  "licenses": "Tredjepartslisenser",
+  "@licenses": {}
+}
