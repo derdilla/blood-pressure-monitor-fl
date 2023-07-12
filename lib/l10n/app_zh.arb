@@ -199,7 +199,7 @@
   "@csv": {},
   "pdf": "PDF",
   "@pdf": {},
-  "db": "SQLITE数据",
+  "db": "SQLite数据",
   "@db": {},
   "text": "文本",
   "@text": {},
