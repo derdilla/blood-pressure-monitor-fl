@@ -65,6 +65,7 @@ class Settings extends ChangeNotifier {
         displayDataEnd = oldEnd.copyWith(day: oldEnd.day + directionalStep);
         break;
       case TimeStep.week:
+      case TimeStep.last7Days:
         displayDataStart = oldStart.copyWith(day: oldStart.day + directionalStep * 7);
         displayDataEnd = oldEnd.copyWith(day: oldEnd.day + directionalStep * 7);
         break;
@@ -80,6 +81,9 @@ class Settings extends ChangeNotifier {
         displayDataStart = DateTime.fromMillisecondsSinceEpoch(0);
         displayDataEnd = DateTime.now();
         break;
+      case TimeStep.last30Days:
+        displayDataStart = oldStart.copyWith(day: oldStart.day + directionalStep * 30);
+        displayDataEnd = oldEnd.copyWith(day: oldEnd.day + directionalStep * 30);
     }
   }
 
@@ -100,6 +104,12 @@ class Settings extends ChangeNotifier {
         return [start, start.copyWith(year: now.year + 1)];
       case TimeStep.lifetime:
         final start = DateTime.fromMillisecondsSinceEpoch(0);
+        return [start, now];
+      case TimeStep.last7Days:
+        final start = now.copyWith(day: now.day-7);
+        return [start, now];
+      case TimeStep.last30Days:
+        final start = now.copyWith(day: now.day-30);
         return [start, now];
       default:
         assert(false);
@@ -456,7 +466,6 @@ class TimeStep {
         return AppLocalizations.of(context)!.last7Days;
       case last30Days:
         return AppLocalizations.of(context)!.last30Days;
-        //  TODO: implement
     }
     assert(false);
     return '-';
