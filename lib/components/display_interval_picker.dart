@@ -29,6 +29,11 @@ class IntervalPicker extends StatelessWidget {
         case TimeStep.lifetime:
           intervallDisplay =  const Text('-');
           break;
+        case TimeStep.last7Days:
+        case TimeStep.last30Days:
+          final f = DateFormat.MMMd(AppLocalizations.of(context)!.localeName);
+          intervallDisplay = Text('${f.format(settings.displayDataStart)} - ${f.format(settings.displayDataEnd)}');
+          break;
         default:
           assert(false);
           intervallDisplay =  const Text('-');

@@ -300,17 +300,17 @@
   "@confirmDeleteDesc": {},
   "deletionConfirmed": "Entry has been deleted.",
   "@deletionConfirmed": {},
-  "day": "day",
+  "day": "Day",
   "@day": {},
-  "week": "week",
+  "week": "Week",
   "@week": {},
-  "month": "month",
+  "month": "Month",
   "@month": {},
-  "year": "year",
+  "year": "Year",
   "@year": {},
-  "lifetime": "lifetime",
+  "lifetime": "Lifetime",
   "@lifetime": {},
-  "weekOfYear": "eek {weekNum}, {year}",
+  "weekOfYear": "Week {weekNum}, {year}",
   "@weekOfYear": {
     "placeholders": {
       "weekNum": {
@@ -320,5 +320,7 @@
         "type": "int"
       }
     }
-  }
+  },
+  "last7Days": "7 days",
+  "last30Days": "30 days"
 }

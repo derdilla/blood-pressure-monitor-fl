@@ -101,6 +101,7 @@ class _LineChartState extends State<_LineChart> {
                                         formatter = DateFormat('H:m');
                                         break;
                                       case TimeStep.month:
+                                      case TimeStep.last7Days:
                                         formatter = DateFormat('d');
                                         break;
                                       case TimeStep.week:
@@ -111,6 +112,9 @@ class _LineChartState extends State<_LineChart> {
                                         break;
                                       case TimeStep.lifetime:
                                         formatter = DateFormat('yyyy');
+                                        break;
+                                      case TimeStep.last30Days:
+                                        formatter = DateFormat.MMMd();
                                     }
                                     return Text(formatter
                                         .format(DateTime.fromMillisecondsSinceEpoch(pos.toInt())));
