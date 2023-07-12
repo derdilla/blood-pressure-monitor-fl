@@ -20,7 +20,7 @@ import 'package:sqflite/sqflite.dart';
 
 import 'blood_pressure.dart';
 
-class ExportFileCreator { // TODO: check result
+class ExportFileCreator {
   Settings settings;
 
   ExportFileCreator(this.settings);
@@ -42,6 +42,7 @@ class ExportFileCreator { // TODO: check result
         try {
           return parseCSVFile(data);
         } catch (e) {
+          print(e);
           return null;
         }
       case ExportFormat.pdf:
@@ -82,16 +83,16 @@ class ExportFileCreator { // TODO: check result
             row.add(record.creationTime.toIso8601String());
             break;
           case 'systolic':
-            row.add(record.systolic);
+            row.add(record.systolic ?? '');
             break;
           case 'diastolic':
-            row.add(record.diastolic);
+            row.add(record.diastolic ?? '');
             break;
           case 'pulse':
-            row.add(record.pulse);
+            row.add(record.pulse ?? '');
             break;
           case 'notes':
-            row.add(record.notes);
+            row.add(record.notes ?? '');
             break;
         }
       }
@@ -144,19 +145,27 @@ class ExportFileCreator { // TODO: check result
           break;
       }
     }
+    // TODO: make checks not neccessary; we can allow more, as fields are now nullable
     assert(creationTimePos >= 0 || isoTimePos >= 0);
     assert(sysPos >= 0);
     assert(diaPos >= 0);
     assert(pulPos >= 0);
     assert(notePos >= 0);
 
-    for (final line in csvLines) {
+    int? convert(dynamic e) {
+      if (e is int?) {
+        return e;
+      }
+      return null;
+    }
+    for (final line in csvLines) { // TODO: empty strings -> null
+      print(line[2]);
       records.add(
           BloodPressureRecord(
               (creationTimePos >= 0 ) ? DateTime.fromMillisecondsSinceEpoch(line[creationTimePos]) : DateTime.parse(line[isoTimePos]),
-              line[sysPos],
-              line[diaPos],
-              line[pulPos],
+              convert(line[sysPos]),
+              convert(line[diaPos]),
+              convert(line[pulPos]),
               line[notePos]
           )
       );
