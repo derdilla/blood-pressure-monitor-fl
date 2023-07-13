@@ -93,10 +93,10 @@ class MeasurementList extends StatelessWidget {
                                       MaterialPageRoute(
                                           builder: (context) => AddMeasurementPage(
                                             initTime: data[index].creationTime,
-                                            initSys: data[index].systolic ?? -1,
-                                            initDia: data[index].diastolic ?? -1,
-                                            initPul: data[index].pulse ?? -1,
-                                            initNote: data[index].notes ?? '',
+                                            initSys: data[index].systolic,
+                                            initDia: data[index].diastolic,
+                                            initPul: data[index].pulse,
+                                            initNote: data[index].notes,
                                             addInitialValuesOnCancel: true,
                                           )),
                                     );
