@@ -191,7 +191,6 @@ class _AddMeasurementPageState extends State<AddMeasurementPage> {
                                   }
                                   navigator.pop();
                                 }
-                                print(_systolic);
                               },
                               style: ElevatedButton.styleFrom(backgroundColor: Theme.of(context).primaryColor),
                               child: Text(AppLocalizations.of(context)!.btnSave))
@@ -240,7 +239,7 @@ class ValueInput extends StatelessWidget {
               return AppLocalizations.of(context)?.errNaN;
             } else if (settings.validateInputs && (int.tryParse(value) ?? -1) <= 30) {
               return AppLocalizations.of(context)?.errLt30;
-            } else if (settings.validateInputs && (int.tryParse(value??'')??0) >= 400) {
+            } else if (settings.validateInputs && (int.tryParse(value)??0) >= 400) {
               // https://pubmed.ncbi.nlm.nih.gov/7741618/
               return AppLocalizations.of(context)?.errUnrealistic;
             }

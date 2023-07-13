@@ -83,16 +83,14 @@ class _LineChartState extends State<_LineChart> {
                                   interval: _lineChartTitleIntervall,
                                   getTitlesWidget: (double pos, TitleMeta meta) {
                                     // calculate new intervall
+                                    // as graphWidth can technically be as low as one max is needed here to avoid freezes
                                     double graphWidth = meta.max - meta.min;
-                                    assert(graphWidth > 0);
-                                    if (((graphWidth - 2) / settings.graphTitlesCount) !=
-                                        _lineChartTitleIntervall) {
+                                    if ((max(graphWidth - 2,1) / settings.graphTitlesCount) != _lineChartTitleIntervall) {
                                       // simple hack needed to change the state during build
                                       // https://stackoverflow.com/a/63607696/21489239
                                       Future.delayed(Duration.zero, () async {
                                         setState(() {
-                                          _lineChartTitleIntervall =
-                                              (graphWidth - 2) / settings.graphTitlesCount;
+                                          _lineChartTitleIntervall = max(graphWidth - 2,1) / settings.graphTitlesCount;
                                         });
                                       });
                                     }
