@@ -160,6 +160,14 @@ class SettingsPage extends StatelessWidget {
                     settings.validateInputs = value;
                   }),
               SwitchSettingsTile(
+                  key: const Key('allowMissingValues'),
+                  initialValue: settings.allowMissingValues,
+                  title: Text(AppLocalizations.of(context)!.allowMissingValues),
+                  leading: const Icon(Icons.report_off_outlined),
+                  onToggle: (value) {
+                    settings.allowMissingValues = value;
+                  }),
+              SwitchSettingsTile(
                   key: const Key('confirmDeletion'),
                   initialValue: settings.confirmDeletion,
                   title: Text(AppLocalizations.of(context)!.confirmDeletion),

@@ -114,6 +114,7 @@ class RamSettings extends ChangeNotifier implements Settings {
   MimeType _exportMimeType = MimeType.csv;
   String _defaultExportDir = '';
   bool _exportAfterEveryEntry = false;
+  bool _allowMissingValues = false;
 
   RamSettings() {
     _accentColor = createMaterialColor(0xFF009688);
@@ -413,6 +414,15 @@ class RamSettings extends ChangeNotifier implements Settings {
   @override
   set exportAfterEveryEntry(bool value) {
     _exportAfterEveryEntry = value;
+    notifyListeners();
+  }
+
+  @override
+  bool get allowMissingValues => _allowMissingValues;
+
+  @override
+  set allowMissingValues(bool value) {
+    _allowMissingValues = value;
     notifyListeners();
   }
 

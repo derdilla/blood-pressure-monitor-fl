@@ -244,6 +244,15 @@ class Settings extends ChangeNotifier {
     notifyListeners();
   }
 
+  bool get allowMissingValues {
+    return _prefs.getBool('allowMissingValues') ?? false;
+  }
+
+  set allowMissingValues(bool allowMissingValues) {
+    _prefs.setBool('allowMissingValues', allowMissingValues);
+    notifyListeners();
+  }
+
   double get graphLineThickness {
     return _prefs.getDouble('graphLineThickness') ?? 3;
   }

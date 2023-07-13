@@ -322,5 +322,6 @@
     }
   },
   "last7Days": "7 days",
-  "last30Days": "30 days"
+  "last30Days": "30 days",
+  "allowMissingValues": "Allow missing values"
 }
