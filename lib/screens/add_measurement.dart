@@ -82,12 +82,8 @@ class _AddMeasurementPageState extends State<AddMeasurementPage> {
                             },
                             child: Column(
                               children: [
-                                Row(
-                                  children: [Text(formatter.format(_time)), const Spacer(), const Icon(Icons.edit)],
-                                ),
-                                const SizedBox(
-                                  height: 3,
-                                ),
+                                Row(children: [Text(formatter.format(_time)), const Spacer(), const Icon(Icons.edit)]),
+                                const SizedBox(height: 3,),
                                 Divider(
                                   color: Theme.of(context).disabledColor,
                                   thickness: 1,
@@ -237,5 +233,4 @@ class ValueInput extends StatelessWidget {
       );
     });
   }
-
 }

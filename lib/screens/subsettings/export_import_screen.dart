@@ -7,7 +7,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
 import 'package:jsaver/jSaver.dart';
 import 'package:provider/provider.dart';
-
+// TODO: make checks not neccessary; we can allow more, as fields are now nullable
 class ExportImportScreen extends StatelessWidget {
   const ExportImportScreen({super.key});
 
@@ -320,13 +320,8 @@ class _ExportWarnBannerState extends State<ExportWarnBanner> {
     return Consumer<Settings>(builder: (context, settings, child) {
       if (_showWarnBanner && ![ExportFormat.csv, ExportFormat.db].contains(settings.exportFormat) ||
           settings.exportCsvHeadline == false ||
-          settings.exportCustomEntries && !(
-              (settings.exportItems.contains('timestampUnixMs') || settings.exportItems.contains('isoUTCTime')) &&
-                  settings.exportItems.contains('systolic') &&
-                  settings.exportItems.contains('diastolic') &&
-                  settings.exportItems.contains('pulse') &&
-                  settings.exportItems.contains('notes')
-          ) ||
+          settings.exportCustomEntries &&
+              !((settings.exportItems.contains('timestampUnixMs') || settings.exportItems.contains('isoUTCTime'))) ||
           ![',', '|'].contains(settings.csvFieldDelimiter) ||
           !['"', '\''].contains(settings.csvTextDelimiter)
       ) {

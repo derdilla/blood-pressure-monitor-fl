@@ -145,12 +145,9 @@ class ExportFileCreator {
           break;
       }
     }
-    // TODO: make checks not neccessary; we can allow more, as fields are now nullable
-    assert(creationTimePos >= 0 || isoTimePos >= 0);
-    assert(sysPos >= 0);
-    assert(diaPos >= 0);
-    assert(pulPos >= 0);
-    assert(notePos >= 0);
+    if(creationTimePos < 0 && isoTimePos < 0) {
+      throw ArgumentError('File didn\'t save timestamps');
+    }
 
     int? convert(dynamic e) {
       if (e is int?) {
@@ -158,15 +155,14 @@ class ExportFileCreator {
       }
       return null;
     }
-    for (final line in csvLines) { // TODO: empty strings -> null
-      print(line[2]);
+    for (final line in csvLines) {
       records.add(
           BloodPressureRecord(
               (creationTimePos >= 0 ) ? DateTime.fromMillisecondsSinceEpoch(line[creationTimePos]) : DateTime.parse(line[isoTimePos]),
-              convert(line[sysPos]),
-              convert(line[diaPos]),
-              convert(line[pulPos]),
-              line[notePos]
+              (sysPos >= 0) ? convert(line[sysPos]) : null,
+              (diaPos >= 0) ? convert(line[diaPos]) : null,
+              (pulPos >= 0) ? convert(line[pulPos]) : null,
+              (notePos >= 0) ? line[notePos] : null
           )
       );
     }
@@ -292,10 +288,6 @@ class Exporter {
 
     if (!([ExportFormat.csv, ExportFormat.db].contains(settings.exportFormat))) {
       messenger.showSnackBar(SnackBar(content: Text(localizations!.errWrongImportFormat)));
-      return;
-    }
-    if (settings.exportFormat == ExportFormat.csv && !settings.exportCsvHeadline) {
-      messenger.showSnackBar(SnackBar(content: Text(localizations!.errNeedHeadline)));
       return;
     }
 
