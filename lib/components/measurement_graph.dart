@@ -40,32 +40,33 @@ class _LineChartState extends State<_LineChart> {
                           ? model.all
                           : model.getInTimeRange(settings.displayDataStart, end),
                       onData: (context, fetchedData) {
-                        if (fetchedData.length < 2) {
-                          return Text(AppLocalizations.of(context)!.errNotEnoughDataToGraph);
-                        }
                         List<BloodPressureRecord> data = fetchedData.toList();
                         data.sort((a, b) => a.creationTime.compareTo(b.creationTime));
 
-                        List<FlSpot> pulseSpots = [];
-                        List<FlSpot> diastolicSpots = [];
-                        List<FlSpot> systolicSpots = [];
+                        List<FlSpot> pulSpots = [];
+                        List<FlSpot> diaSpots = [];
+                        List<FlSpot> sysSpots = [];
                         int pulMax = 0;
                         int diaMax = 0;
                         int sysMax = 0;
                         for (var e in data) {
                           final x = e.creationTime.millisecondsSinceEpoch.toDouble();
                           if (e.diastolic != null) {
-                            diastolicSpots.add(FlSpot(x, e.diastolic!.toDouble()));
+                            diaSpots.add(FlSpot(x, e.diastolic!.toDouble()));
                             diaMax = max(diaMax, e.diastolic!);
                           }
                           if (e.systolic != null) {
-                            systolicSpots.add(FlSpot(x, e.systolic!.toDouble()));
+                            sysSpots.add(FlSpot(x, e.systolic!.toDouble()));
                             sysMax = max(sysMax, e.systolic!);
                           }
                           if (e.pulse != null) {
-                            pulseSpots.add(FlSpot(x, e.pulse!.toDouble()));
+                            pulSpots.add(FlSpot(x, e.pulse!.toDouble()));
                             pulMax = max(pulMax, e.pulse!);
                           }
+                        }
+
+                        if (fetchedData.length < 2 || (diaSpots.length < 2 && sysSpots.length < 2 && pulSpots.length < 2)) {
+                          return Text(AppLocalizations.of(context)!.errNotEnoughDataToGraph);
                         }
 
                         const noTitels = AxisTitles(sideTitles: SideTitles(reservedSize: 40, showTitles: false));
@@ -132,7 +133,7 @@ class _LineChartState extends State<_LineChart> {
                                   LineTouchTooltipData(tooltipMargin: -200, tooltipRoundedRadius: 20)),
                               lineBarsData: [
                                 LineChartBarData(
-                                  spots: pulseSpots,
+                                  spots: pulSpots,
                                   dotData: const FlDotData(
                                     show: false,
                                   ),
@@ -140,7 +141,7 @@ class _LineChartState extends State<_LineChart> {
                                   barWidth: settings.graphLineThickness,
                                 ),
                                 LineChartBarData(
-                                    spots: diastolicSpots,
+                                    spots: diaSpots,
                                     color: settings.diaColor,
                                     barWidth: settings.graphLineThickness,
                                     dotData: const FlDotData(
@@ -152,7 +153,7 @@ class _LineChartState extends State<_LineChart> {
                                         cutOffY: settings.diaWarn.toDouble(),
                                         applyCutOffY: true)),
                                 LineChartBarData(
-                                    spots: systolicSpots,
+                                    spots: sysSpots,
                                     color: settings.sysColor,
                                     barWidth: settings.graphLineThickness,
                                     dotData: const FlDotData(

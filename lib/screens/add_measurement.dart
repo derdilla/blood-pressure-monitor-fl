@@ -100,6 +100,7 @@ class _AddMeasurementPageState extends State<AddMeasurementPage> {
                           initialValue: (_systolic ?? '').toString(),
                           hintText: AppLocalizations.of(context)!.sysLong,
                           basicValidation: !settings.allowMissingValues,
+                          preValidion: (v) => _systolic = int.tryParse(v ?? ''),
                           focusNode: _sysFocusNode,
                           additionalValidator: (String? value) {
                             _systolic = int.tryParse(value ?? '');
@@ -111,6 +112,7 @@ class _AddMeasurementPageState extends State<AddMeasurementPage> {
                           initialValue: (_diastolic ?? '').toString(),
                           hintText: AppLocalizations.of(context)!.diaLong,
                           basicValidation: !settings.allowMissingValues,
+                          preValidion: (v) => _diastolic = int.tryParse(v ?? ''),
                           additionalValidator: (String? value) {
                             if (settings.validateInputs && (int.tryParse(value ?? '') ?? 0) >= (_systolic ?? 1)) {
                               return AppLocalizations.of(context)?.errDiaGtSys;
@@ -124,6 +126,7 @@ class _AddMeasurementPageState extends State<AddMeasurementPage> {
                           initialValue: (_pulse ?? '').toString(),
                           hintText: AppLocalizations.of(context)!.pulLong,
                           basicValidation: !settings.allowMissingValues,
+                          preValidion: (v) => _pulse = int.tryParse(v ?? ''),
                           additionalValidator: (String? value) {
                             if (settings.validateInputs && (int.tryParse(value ?? '') ?? 0) >= 600) { // https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3273956/
                               return AppLocalizations.of(context)?.errUnrealistic;
@@ -168,15 +171,27 @@ class _AddMeasurementPageState extends State<AddMeasurementPage> {
                                 if (_formKey.currentState!.validate()) {
                                   final settings = Provider.of<Settings>(context, listen: false);
                                   final model = Provider.of<BloodPressureModel>(context, listen: false);
-                                  final exporter = Exporter(context);
                                   final navigator = Navigator.of(context);
 
                                   await model.add(BloodPressureRecord(_time, _systolic, _diastolic, _pulse, _note));
-                                  if (settings.exportAfterEveryEntry) {
+                                  if (settings.exportAfterEveryEntry && context.mounted) {
+                                    final exporter = Exporter(context);
+                                    exporter.export();
+                                  }
+                                  navigator.pop();
+                                } else if (_systolic == null && _diastolic == null && _pulse == null && _note != null) {
+                                  final settings = Provider.of<Settings>(context, listen: false);
+                                  final model = Provider.of<BloodPressureModel>(context, listen: false);
+                                  final navigator = Navigator.of(context);
+
+                                  await model.add(BloodPressureRecord(_time, _systolic, _diastolic, _pulse, _note));
+                                  if (settings.exportAfterEveryEntry && context.mounted) {
+                                    final exporter = Exporter(context);
                                     exporter.export();
                                   }
                                   navigator.pop();
                                 }
+                                print(_systolic);
                               },
                               style: ElevatedButton.styleFrom(backgroundColor: Theme.of(context).primaryColor),
                               child: Text(AppLocalizations.of(context)!.btnSave))
@@ -198,10 +213,11 @@ class ValueInput extends StatelessWidget {
   final String hintText;
   final FocusNode? focusNode;
   final bool basicValidation;
+  final void Function(String?)? preValidion;
   final FormFieldValidator<String> additionalValidator;
 
   const ValueInput({super.key, required this.initialValue, required this.hintText, this.focusNode, this.basicValidation = true,
-    required this.additionalValidator});
+    this.preValidion, required this.additionalValidator});
 
   @override
   Widget build(BuildContext context) {
@@ -218,6 +234,7 @@ class ValueInput extends StatelessWidget {
           }
         },
         validator: (String? value) {
+          if (preValidion != null) preValidion!(value);
           if (basicValidation) {
             if (value == null || value.isEmpty || (int.tryParse(value) == null)) {
               return AppLocalizations.of(context)?.errNaN;
