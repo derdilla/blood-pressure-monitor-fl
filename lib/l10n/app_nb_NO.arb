@@ -105,7 +105,7 @@
   },
   "loading": "laster inn …",
   "@loading": {},
-  "errLt30": "Nummer <=30? Skru av bekreftelse i innstillingene.",
+  "errLt30": "Nummer <=30? Skru av bekreftelse i innstillingene!",
   "@errLt30": {},
   "errUnknown": "Ukjent feil",
   "@errUnknown": {},
@@ -153,7 +153,7 @@
   "@diaColor": {},
   "validateInputs": "Bekreft inndata",
   "@validateInputs": {},
-  "errDiaGtSys": "dia >=sys? Skru av bekreftelse i innstillingene.",
+  "errDiaGtSys": "dia >=sys? Skru av bekreftelse i innstillingene!",
   "@errDiaGtSys": {},
   "errNoRangeForExport": "Du må angi et dataområde å eksportere data i.",
   "@errNoRangeForExport": {},
@@ -296,7 +296,7 @@
       }
     }
   },
-  "errUnrealistic": "Urealistisk verdi? Skru av bekreftelse i innstillingene.",
+  "errUnrealistic": "Urealistisk verdi? Skru av bekreftelse i innstillingene!",
   "@errUnrealistic": {},
   "other": "annet",
   "@other": {},
