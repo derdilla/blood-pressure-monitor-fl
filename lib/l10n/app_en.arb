@@ -236,6 +236,17 @@
   },
   "exportWarnConfigNotImportable": "Hey! Just a friendly heads up: the current export configuration won't be importable. To fix it, make sure you set the export type as CSV, enable the headline, and include one of the time formats available.",
   "@exportWarnConfigNotImportable": {},
+  "exportWarnNotEveryFieldExported": "Beware that you are not exporting all fields: {fields} {count, plural, one{is} other{are}} missing.",
+  "@exportWarnNotEveryFieldExported": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "fields": {
+        "type": "String"
+      }
+    }
+  },
   "statistics": "Statistics",
   "@statistics": {},
   "measurementCount": "Measurement count",

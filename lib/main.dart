@@ -49,11 +49,7 @@ class AppRoot extends StatelessWidget {
           GlobalWidgetsLocalizations.delegate,
           GlobalCupertinoLocalizations.delegate,
         ],
-        supportedLocales: const [
-          Locale('en'), // English
-          Locale('de'), // German
-          Locale('zh'), // generic Chinese; The file present is actually zh_Hans
-        ],
+        supportedLocales: AppLocalizations.supportedLocales,
         home: const AppHome(),
       );
     });

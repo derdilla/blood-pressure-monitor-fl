@@ -7,7 +7,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
 import 'package:jsaver/jSaver.dart';
 import 'package:provider/provider.dart';
-// TODO: make checks not neccessary; we can allow more, as fields are now nullable
+
 class ExportImportScreen extends StatelessWidget {
   const ExportImportScreen({super.key});
 
@@ -317,17 +317,27 @@ class _ExportWarnBannerState extends State<ExportWarnBanner> {
   bool _showWarnBanner = true;
   @override
   Widget build(BuildContext context) {
+    String? message;
     return Consumer<Settings>(builder: (context, settings, child) {
       if (_showWarnBanner && ![ExportFormat.csv, ExportFormat.db].contains(settings.exportFormat) ||
           settings.exportCsvHeadline == false ||
-          settings.exportCustomEntries &&
-              !((settings.exportItems.contains('timestampUnixMs') || settings.exportItems.contains('isoUTCTime'))) ||
+          settings.exportCustomEntries && !(['timestampUnixMs','isoUTCTime'].any((i) => settings.exportItems.contains(i))) ||
           ![',', '|'].contains(settings.csvFieldDelimiter) ||
           !['"', '\''].contains(settings.csvTextDelimiter)
       ) {
+        message = AppLocalizations.of(context)!.exportWarnConfigNotImportable;
+      } else if (_showWarnBanner && settings.exportCustomEntries &&
+          !(['systolic','diastolic', 'pulse', 'notes'].every((i) => settings.exportItems.contains(i)))) {
+        var missingAttributes = {'systolic','diastolic', 'pulse', 'notes'};
+        missingAttributes.removeWhere((e) => settings.exportItems.contains(e));
+
+        message = AppLocalizations.of(context)!.exportWarnNotEveryFieldExported(missingAttributes.length, missingAttributes.toString());
+      }
+
+      if (message != null) {
         return MaterialBanner(
             padding: const EdgeInsets.all(20),
-            content: Text(AppLocalizations.of(context)!.exportWarnConfigNotImportable),
+            content: Text(message!),
             actions: [
               TextButton(
                   onPressed: () {
