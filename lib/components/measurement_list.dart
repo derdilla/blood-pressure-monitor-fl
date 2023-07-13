@@ -97,7 +97,7 @@ class MeasurementList extends StatelessWidget {
                                             initDia: data[index].diastolic ?? -1,
                                             initPul: data[index].pulse ?? -1,
                                             initNote: data[index].notes ?? '',
-                                            isEdit: true,
+                                            addInitialValuesOnCancel: true,
                                           )),
                                     );
                                     return false;
