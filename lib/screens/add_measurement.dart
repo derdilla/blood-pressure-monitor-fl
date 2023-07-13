@@ -168,18 +168,8 @@ class _AddMeasurementPageState extends State<AddMeasurementPage> {
                           ElevatedButton(
                               key: const Key('btnSave'),
                               onPressed: () async {
-                                if (_formKey.currentState!.validate()) {
-                                  final settings = Provider.of<Settings>(context, listen: false);
-                                  final model = Provider.of<BloodPressureModel>(context, listen: false);
-                                  final navigator = Navigator.of(context);
-
-                                  await model.add(BloodPressureRecord(_time, _systolic, _diastolic, _pulse, _note));
-                                  if (settings.exportAfterEveryEntry && context.mounted) {
-                                    final exporter = Exporter(context);
-                                    exporter.export();
-                                  }
-                                  navigator.pop();
-                                } else if (_systolic == null && _diastolic == null && _pulse == null && _note != null) {
+                                if ((_formKey.currentState?.validate() ?? false) ||
+                                    (_systolic == null && _diastolic == null && _pulse == null && _note != null)){
                                   final settings = Provider.of<Settings>(context, listen: false);
                                   final model = Provider.of<BloodPressureModel>(context, listen: false);
                                   final navigator = Navigator.of(context);
