@@ -24,7 +24,6 @@ class SettingsPage extends StatelessWidget {
         backgroundColor: Theme.of(context).primaryColor,
       ),
       body: Consumer<Settings>(builder: (context, settings, child) {
-        print(settings.sysWarn);
         return ListView(
           children: [
             SettingsSection(title: Text(AppLocalizations.of(context)!.layout), children: [

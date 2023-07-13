@@ -42,7 +42,6 @@ class ExportFileCreator {
         try {
           return parseCSVFile(data);
         } catch (e) {
-          print(e);
           return null;
         }
       case ExportFormat.pdf:
@@ -104,9 +103,6 @@ class ExportFileCreator {
   }
 
   List<BloodPressureRecord> parseCSVFile(Uint8List data) {
-    assert(settings.exportFormat == ExportFormat.csv);
-    assert(settings.exportCsvHeadline);
-
     List<BloodPressureRecord> records = [];
 
     String fileContents = utf8.decode(data.toList());
