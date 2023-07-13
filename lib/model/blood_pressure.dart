@@ -166,8 +166,8 @@ class BloodPressureModel extends ChangeNotifier {
   List<BloodPressureRecord> _convert(List<Map<String, Object?>> dbResult) {
     List<BloodPressureRecord> records = [];
     for (var e in dbResult) {
-      records.add(BloodPressureRecord(DateTime.fromMillisecondsSinceEpoch(e['timestamp'] as int), e['systolic'] as int,
-          e['diastolic'] as int, e['pulse'] as int, e['notes'].toString()));
+      records.add(BloodPressureRecord(DateTime.fromMillisecondsSinceEpoch(e['timestamp'] as int), e['systolic'] as int?,
+          e['diastolic'] as int?, e['pulse'] as int?, e['notes'].toString()));
     }
     return records;
   }
@@ -176,10 +176,10 @@ class BloodPressureModel extends ChangeNotifier {
 @immutable
 class BloodPressureRecord {
   final DateTime creationTime;
-  final int systolic;
-  final int diastolic;
-  final int pulse;
-  final String notes;
+  final int? systolic;
+  final int? diastolic;
+  final int? pulse;
+  final String? notes;
 
   const BloodPressureRecord(
       this.creationTime, this.systolic, this.diastolic, this.pulse, this.notes);

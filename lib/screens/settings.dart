@@ -24,7 +24,6 @@ class SettingsPage extends StatelessWidget {
         backgroundColor: Theme.of(context).primaryColor,
       ),
       body: Consumer<Settings>(builder: (context, settings, child) {
-        print(settings.sysWarn);
         return ListView(
           children: [
             SettingsSection(title: Text(AppLocalizations.of(context)!.layout), children: [
@@ -158,6 +157,14 @@ class SettingsPage extends StatelessWidget {
                   leading: const Icon(Icons.edit),
                   onToggle: (value) {
                     settings.validateInputs = value;
+                  }),
+              SwitchSettingsTile(
+                  key: const Key('allowMissingValues'),
+                  initialValue: settings.allowMissingValues,
+                  title: Text(AppLocalizations.of(context)!.allowMissingValues),
+                  leading: const Icon(Icons.report_off_outlined),
+                  onToggle: (value) {
+                    settings.allowMissingValues = value;
                   }),
               SwitchSettingsTile(
                   key: const Key('confirmDeletion'),

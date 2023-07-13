@@ -82,16 +82,16 @@ class ExportFileCreator {
             row.add(record.creationTime.toIso8601String());
             break;
           case 'systolic':
-            row.add(record.systolic);
+            row.add(record.systolic ?? '');
             break;
           case 'diastolic':
-            row.add(record.diastolic);
+            row.add(record.diastolic ?? '');
             break;
           case 'pulse':
-            row.add(record.pulse);
+            row.add(record.pulse ?? '');
             break;
           case 'notes':
-            row.add(record.notes);
+            row.add(record.notes ?? '');
             break;
         }
       }
@@ -103,9 +103,6 @@ class ExportFileCreator {
   }
 
   List<BloodPressureRecord> parseCSVFile(Uint8List data) {
-    assert(settings.exportFormat == ExportFormat.csv);
-    assert(settings.exportCsvHeadline);
-
     List<BloodPressureRecord> records = [];
 
     String fileContents = utf8.decode(data.toList());
@@ -144,20 +141,24 @@ class ExportFileCreator {
           break;
       }
     }
-    assert(creationTimePos >= 0 || isoTimePos >= 0);
-    assert(sysPos >= 0);
-    assert(diaPos >= 0);
-    assert(pulPos >= 0);
-    assert(notePos >= 0);
+    if(creationTimePos < 0 && isoTimePos < 0) {
+      throw ArgumentError('File didn\'t save timestamps');
+    }
 
+    int? convert(dynamic e) {
+      if (e is int?) {
+        return e;
+      }
+      return null;
+    }
     for (final line in csvLines) {
       records.add(
           BloodPressureRecord(
               (creationTimePos >= 0 ) ? DateTime.fromMillisecondsSinceEpoch(line[creationTimePos]) : DateTime.parse(line[isoTimePos]),
-              line[sysPos],
-              line[diaPos],
-              line[pulPos],
-              line[notePos]
+              (sysPos >= 0) ? convert(line[sysPos]) : null,
+              (diaPos >= 0) ? convert(line[diaPos]) : null,
+              (pulPos >= 0) ? convert(line[pulPos]) : null,
+              (notePos >= 0) ? line[notePos] : null
           )
       );
     }
@@ -186,10 +187,10 @@ class ExportFileCreator {
                     pw.TableRow(
                         children: [
                           pw.Text(entry.creationTime.toIso8601String()),
-                          pw.Text(entry.systolic.toString()),
-                          pw.Text(entry.diastolic.toString()),
-                          pw.Text(entry.pulse.toString()),
-                          pw.Text(entry.notes)
+                          pw.Text((entry.systolic ?? '').toString()),
+                          pw.Text((entry.diastolic ?? '').toString()),
+                          pw.Text((entry.pulse ?? '').toString()),
+                          pw.Text(entry.notes ?? '')
                         ]
                     )
                 ]
@@ -283,10 +284,6 @@ class Exporter {
 
     if (!([ExportFormat.csv, ExportFormat.db].contains(settings.exportFormat))) {
       messenger.showSnackBar(SnackBar(content: Text(localizations!.errWrongImportFormat)));
-      return;
-    }
-    if (settings.exportFormat == ExportFormat.csv && !settings.exportCsvHeadline) {
-      messenger.showSnackBar(SnackBar(content: Text(localizations!.errNeedHeadline)));
       return;
     }
 

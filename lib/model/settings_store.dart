@@ -244,6 +244,15 @@ class Settings extends ChangeNotifier {
     notifyListeners();
   }
 
+  bool get allowMissingValues {
+    return _prefs.getBool('allowMissingValues') ?? false;
+  }
+
+  set allowMissingValues(bool allowMissingValues) {
+    _prefs.setBool('allowMissingValues', allowMissingValues);
+    notifyListeners();
+  }
+
   double get graphLineThickness {
     return _prefs.getDouble('graphLineThickness') ?? 3;
   }
@@ -437,7 +446,7 @@ class Settings extends ChangeNotifier {
   }
 }
 
-class TimeStep {
+class TimeStep { // TODO: replace with enum
   static const options = [0, 4, 1, 2, 3, 5, 6];
 
   static const day = 0;

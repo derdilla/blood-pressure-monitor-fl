@@ -317,22 +317,27 @@ class _ExportWarnBannerState extends State<ExportWarnBanner> {
   bool _showWarnBanner = true;
   @override
   Widget build(BuildContext context) {
+    String? message;
     return Consumer<Settings>(builder: (context, settings, child) {
       if (_showWarnBanner && ![ExportFormat.csv, ExportFormat.db].contains(settings.exportFormat) ||
           settings.exportCsvHeadline == false ||
-          settings.exportCustomEntries && !(
-              (settings.exportItems.contains('timestampUnixMs') || settings.exportItems.contains('isoUTCTime')) &&
-                  settings.exportItems.contains('systolic') &&
-                  settings.exportItems.contains('diastolic') &&
-                  settings.exportItems.contains('pulse') &&
-                  settings.exportItems.contains('notes')
-          ) ||
+          settings.exportCustomEntries && !(['timestampUnixMs','isoUTCTime'].any((i) => settings.exportItems.contains(i))) ||
           ![',', '|'].contains(settings.csvFieldDelimiter) ||
           !['"', '\''].contains(settings.csvTextDelimiter)
       ) {
+        message = AppLocalizations.of(context)!.exportWarnConfigNotImportable;
+      } else if (_showWarnBanner && settings.exportCustomEntries &&
+          !(['systolic','diastolic', 'pulse', 'notes'].every((i) => settings.exportItems.contains(i)))) {
+        var missingAttributes = {'systolic','diastolic', 'pulse', 'notes'};
+        missingAttributes.removeWhere((e) => settings.exportItems.contains(e));
+
+        message = AppLocalizations.of(context)!.exportWarnNotEveryFieldExported(missingAttributes.length, missingAttributes.toString());
+      }
+
+      if (message != null) {
         return MaterialBanner(
             padding: const EdgeInsets.all(20),
-            content: Text(AppLocalizations.of(context)!.exportWarnConfigNotImportable),
+            content: Text(message!),
             actions: [
               TextButton(
                   onPressed: () {

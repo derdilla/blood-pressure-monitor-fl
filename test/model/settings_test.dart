@@ -49,6 +49,7 @@ void main() {
       expect(s.exportMimeType, MimeType.csv);
       expect(s.defaultExportDir.isEmpty, true);
       expect(s.exportAfterEveryEntry, false);
+      expect(s.allowMissingValues, false);
     });
 
     test('setting fields should save changes', () async {
@@ -93,6 +94,7 @@ void main() {
       s.exportMimeType = MimeType.pdf;
       s.defaultExportDir = '/storage/emulated/0/Android/data/com.derdilla.bloodPressureApp/files/file.csv';
       s.exportAfterEveryEntry = true;
+      s.allowMissingValues = true;
 
       expect(s.displayDataStart, DateTime.fromMillisecondsSinceEpoch(10000));
       expect(s.displayDataEnd, DateTime.fromMillisecondsSinceEpoch(200000));
@@ -120,6 +122,7 @@ void main() {
       expect(s.exportMimeType, MimeType.pdf);
       expect(s.defaultExportDir, '/storage/emulated/0/Android/data/com.derdilla.bloodPressureApp/files/file.csv');
       expect(s.exportAfterEveryEntry, true);
+      expect(s.allowMissingValues, true);
     });
 
     test('setting fields should notify listeners and change values', () async {
@@ -159,8 +162,9 @@ void main() {
       s.exportMimeType = MimeType.pdf;
       s.defaultExportDir = '/storage/emulated/0/Android/data/com.derdilla.bloodPressureApp/files/file.csv';
       s.exportAfterEveryEntry = true;
+      s.allowMissingValues = true;
 
-      expect(i, 29);
+      expect(i, 30);
     });
   });
 
@@ -203,6 +207,7 @@ void main() {
       expect(s.exportMimeType, MimeType.csv);
       expect(s.defaultExportDir.isEmpty, true);
       expect(s.exportAfterEveryEntry, false);
+      expect(s.allowMissingValues, false);
     });
 
     test('setting fields should save changes', () async {
@@ -247,7 +252,7 @@ void main() {
       s.exportMimeType = MimeType.pdf;
       s.defaultExportDir = '/storage/emulated/0/Android/data/com.derdilla.bloodPressureApp/files/file.csv';
       s.exportAfterEveryEntry = true;
-
+      s.allowMissingValues = true;
 
       expect(s.displayDataStart, DateTime.fromMillisecondsSinceEpoch(10000));
       expect(s.displayDataEnd, DateTime.fromMillisecondsSinceEpoch(200000));
@@ -275,6 +280,8 @@ void main() {
       expect(s.exportMimeType, MimeType.pdf);
       expect(s.defaultExportDir, '/storage/emulated/0/Android/data/com.derdilla.bloodPressureApp/files/file.csv');
       expect(s.exportAfterEveryEntry, true);
+      expect(s.allowMissingValues, true);
+
     });
 
     test('setting fields should notify listeners and change values', () async {
@@ -314,8 +321,9 @@ void main() {
       s.exportMimeType = MimeType.pdf;
       s.defaultExportDir = '/storage/emulated/0/Android/data/com.derdilla.bloodPressureApp/files/file.csv';
       s.exportAfterEveryEntry = true;
+      s.allowMissingValues = true;
 
-      expect(i, 29);
+      expect(i, 30);
     });
   });
 }

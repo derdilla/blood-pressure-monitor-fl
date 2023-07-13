@@ -219,7 +219,7 @@
       }
     }
   },
-  "exportWarnConfigNotImportable": "Hey! Nur eine freundliche Info: Die aktuelle Exportkonfiguration ist nicht importierbar. Um das zu beheben, stelle sicher, dass der Exporttyp als CSV festgelegt ist, die Überschrift aktiviert ist und die Felder 'diastolic', 'systolic', 'pulse', 'notes' sowie eines der verfügbaren Zeitformate enthalten sind.",
+  "exportWarnConfigNotImportable": "Hey! Nur eine freundliche Info: Die aktuelle Exportkonfiguration ist nicht importierbar. Um das zu beheben, stelle sicher, dass der Exporttyp als CSV festgelegt ist, die Überschrift aktiviert ist und eines der verfügbaren Zeitformate enthalten ist.",
   "@exportWarnConfigNotImportable": {},
   "shared": "Geteilt",
   "@shared": {},
