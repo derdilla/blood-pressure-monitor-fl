@@ -1,0 +1,4 @@
+* improve design
+* Improve graph usability
+* validate inputs
+* changed default time format
