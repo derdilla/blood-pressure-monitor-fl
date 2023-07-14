@@ -1,0 +1,5 @@
+- Added a plethora of options for CSV export.
+- Enabled export as an SQLite database.
+- Addressed issues with the statistics page.
+- Incorporated display interval-specific time formats to avoid confusion.
+- Enhanced input validation to catch even more mistakes.

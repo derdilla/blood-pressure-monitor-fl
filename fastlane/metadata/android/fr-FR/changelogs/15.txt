@@ -1,0 +1,5 @@
+* Allow exporting to a specific directory
+* Fix legacy import
+* Fix glitches in graph
+* Add version and debug info in app
+* improve english texts
