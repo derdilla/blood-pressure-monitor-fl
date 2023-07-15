@@ -1,3 +1,5 @@
+import 'dart:collection';
+
 import 'package:blood_pressure_app/components/consistent_future_builder.dart';
 import 'package:blood_pressure_app/model/blood_pressure.dart';
 import 'package:blood_pressure_app/model/blood_pressure_analyzer.dart';
@@ -7,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 
+// TODO: rewrite to be smaller is possible
 class StatisticsPage extends StatelessWidget {
   const StatisticsPage({super.key});
 
@@ -19,120 +22,125 @@ class StatisticsPage extends StatelessWidget {
       ),
       body: SingleChildScrollView(child: Consumer<BloodPressureModel>(
         builder: (context, model, child) {
-          return Consumer<Settings>(builder: (context, settings, child) {
-            return Column(
-              children: [
-                Statistic(
-                    key: const Key('measurementCount'),
-                    caption: Text(AppLocalizations.of(context)!.measurementCount), child: futureInt(model.count)),
-                // special measurements
-                StatisticsRow(
-                  caption1: Text(
-                    AppLocalizations.of(context)!.avgOf(AppLocalizations.of(context)!.sysLong),
-                    style: TextStyle(color: settings.sysColor, fontWeight: FontWeight.w700),
-                  ),
-                  child1: futureInt(model.avgSys),
-                  caption2: Text(
-                    AppLocalizations.of(context)!.avgOf(AppLocalizations.of(context)!.diaLong),
-                    style: TextStyle(color: settings.diaColor, fontWeight: FontWeight.w700),
-                  ),
-                  child2: futureInt(model.avgDia),
-                  caption3: Text(
-                    AppLocalizations.of(context)!.avgOf(AppLocalizations.of(context)!.pulLong),
-                    style: TextStyle(color: settings.pulColor, fontWeight: FontWeight.w700),
-                  ),
-                  child3: futureInt(model.avgPul),
-                ),
-                Statistic(
-                    caption: Text(AppLocalizations.of(context)!.measurementsPerDay),
-                    child: futureInt(BloodPressureAnalyser(model).measurementsPerDay)),
-                StatisticsRow(
-                  caption1: Text(
-                    AppLocalizations.of(context)!.minOf(AppLocalizations.of(context)!.sysLong),
-                    style: TextStyle(color: settings.sysColor, fontWeight: FontWeight.w700),
-                  ),
-                  child1: futureInt(model.minSys),
-                  caption2: Text(
-                    AppLocalizations.of(context)!.minOf(AppLocalizations.of(context)!.diaLong),
-                    style: TextStyle(color: settings.diaColor, fontWeight: FontWeight.w700),
-                  ),
-                  child2: futureInt(model.minDia),
-                  caption3: Text(
-                    AppLocalizations.of(context)!.minOf(AppLocalizations.of(context)!.pulLong),
-                    style: TextStyle(color: settings.pulColor, fontWeight: FontWeight.w700),
-                  ),
-                  child3: futureInt(model.minPul),
-                ),
-                StatisticsRow(
-                  caption2: Text(
-                    AppLocalizations.of(context)!.maxOf(AppLocalizations.of(context)!.diaLong),
-                    style: TextStyle(color: settings.diaColor, fontWeight: FontWeight.w700),
-                  ),
-                  child2: futureInt(model.maxDia),
-                  caption1: Text(
-                    AppLocalizations.of(context)!.maxOf(AppLocalizations.of(context)!.sysLong),
-                    style: TextStyle(color: settings.sysColor, fontWeight: FontWeight.w700),
-                  ),
-                  child1: futureInt(model.maxSys),
-                  caption3: Text(
-                    AppLocalizations.of(context)!.maxOf(AppLocalizations.of(context)!.pulLong),
-                    style: TextStyle(color: settings.pulColor, fontWeight: FontWeight.w700),
-                  ),
-                  child3: futureInt(model.maxPul),
-                ),
-                // Time-Resolved Metrics
-                Statistic(
-                  caption: Text(AppLocalizations.of(context)!.timeResolvedMetrics),
-                  child: ConsistentFutureBuilder<List<List<int>>>(
-                      future: BloodPressureAnalyser(model).allAvgsRelativeToDaytime,
-                      onData: (context, data) {
-                        const opacity = 0.5;
-                        return SizedBox(
-                          width: 500,
-                          height: 500,
-                          child: RadarChart(
-                            RadarChartData(
-                              radarShape: RadarShape.circle,
-                              radarBorderData: const BorderSide(color: Colors.transparent),
-                              gridBorderData: BorderSide(color: Theme.of(context).dividerColor, width: 2),
-                              tickBorderData: BorderSide(color: Theme.of(context).dividerColor, width: 2),
-                              ticksTextStyle: const TextStyle(color: Colors.transparent),
-                              tickCount: 5,
-                              titleTextStyle: const TextStyle(fontSize: 25),
-                              getTitle: (pos, value) {
-                                if (pos % 2 == 0) {
-                                  return RadarChartTitle(text: '$pos', positionPercentageOffset: 0.05);
-                                }
-                                return const RadarChartTitle(text: '');
-                              },
-                              dataSets: [
-                                RadarDataSet(
-                                    dataEntries: intListToRadarEntry(data[0]),
-                                    borderColor: settings.diaColor,
-                                    fillColor: settings.diaColor.withOpacity(opacity),
-                                    entryRadius: 0,
-                                    borderWidth: settings.graphLineThickness),
-                                RadarDataSet(
-                                    dataEntries: intListToRadarEntry(data[1]),
-                                    borderColor: settings.sysColor,
-                                    fillColor: settings.sysColor.withOpacity(opacity),
-                                    entryRadius: 0,
-                                    borderWidth: settings.graphLineThickness),
-                                RadarDataSet(
-                                    dataEntries: intListToRadarEntry(data[2]),
-                                    borderColor: settings.pulColor,
-                                    fillColor: settings.pulColor.withOpacity(opacity),
-                                    entryRadius: 0,
-                                    borderWidth: settings.graphLineThickness),
-                              ],
+          return ConsistentFutureBuilder<UnmodifiableListView<BloodPressureRecord>>(
+              future: model.all, 
+              onData: (context, data) {
+                return Consumer<Settings>(builder: (context, settings, child) {
+                  final analyzer = BloodPressureAnalyser(data);
+                  return Column(
+                    children: [
+                      Statistic(
+                          key: const Key('measurementCount'),
+                          caption: Text(AppLocalizations.of(context)!.measurementCount), child: displayInt(analyzer.count)),
+                      // special measurements
+                      StatisticsRow(
+                        caption1: Text(
+                          AppLocalizations.of(context)!.avgOf(AppLocalizations.of(context)!.sysLong),
+                          style: TextStyle(color: settings.sysColor, fontWeight: FontWeight.w700),
+                        ),
+                        child1: displayInt(analyzer.avgSys),
+                        caption2: Text(
+                          AppLocalizations.of(context)!.avgOf(AppLocalizations.of(context)!.diaLong),
+                          style: TextStyle(color: settings.diaColor, fontWeight: FontWeight.w700),
+                        ),
+                        child2: displayInt(analyzer.avgDia),
+                        caption3: Text(
+                          AppLocalizations.of(context)!.avgOf(AppLocalizations.of(context)!.pulLong),
+                          style: TextStyle(color: settings.pulColor, fontWeight: FontWeight.w700),
+                        ),
+                        child3: displayInt(analyzer.avgPul),
+                      ),
+                      Statistic(
+                          caption: Text(AppLocalizations.of(context)!.measurementsPerDay),
+                          child: displayInt(analyzer.measurementsPerDay)),
+                      StatisticsRow(
+                        caption1: Text(
+                          AppLocalizations.of(context)!.minOf(AppLocalizations.of(context)!.sysLong),
+                          style: TextStyle(color: settings.sysColor, fontWeight: FontWeight.w700),
+                        ),
+                        child1: displayInt(analyzer.minSys),
+                        caption2: Text(
+                          AppLocalizations.of(context)!.minOf(AppLocalizations.of(context)!.diaLong),
+                          style: TextStyle(color: settings.diaColor, fontWeight: FontWeight.w700),
+                        ),
+                        child2: displayInt(analyzer.minDia),
+                        caption3: Text(
+                          AppLocalizations.of(context)!.minOf(AppLocalizations.of(context)!.pulLong),
+                          style: TextStyle(color: settings.pulColor, fontWeight: FontWeight.w700),
+                        ),
+                        child3: displayInt(analyzer.minPul),
+                      ),
+                      StatisticsRow(
+                        caption2: Text(
+                          AppLocalizations.of(context)!.maxOf(AppLocalizations.of(context)!.diaLong),
+                          style: TextStyle(color: settings.diaColor, fontWeight: FontWeight.w700),
+                        ),
+                        child2: displayInt(analyzer.maxDia),
+                        caption1: Text(
+                          AppLocalizations.of(context)!.maxOf(AppLocalizations.of(context)!.sysLong),
+                          style: TextStyle(color: settings.sysColor, fontWeight: FontWeight.w700),
+                        ),
+                        child1: displayInt(analyzer.maxSys),
+                        caption3: Text(
+                          AppLocalizations.of(context)!.maxOf(AppLocalizations.of(context)!.pulLong),
+                          style: TextStyle(color: settings.pulColor, fontWeight: FontWeight.w700),
+                        ),
+                        child3: displayInt(analyzer.maxPul),
+                      ),
+                      // Time-Resolved Metrics
+                      Statistic(
+                        caption: Text(AppLocalizations.of(context)!.timeResolvedMetrics),
+                        child: (() {
+                          final data = analyzer.allAvgsRelativeToDaytime;
+                          const opacity = 0.5;
+                          return SizedBox(
+                            width: 500,
+                            height: 500,
+                            child: RadarChart(
+                              RadarChartData(
+                                radarShape: RadarShape.circle,
+                                radarBorderData: const BorderSide(color: Colors.transparent),
+                                gridBorderData: BorderSide(color: Theme.of(context).dividerColor, width: 2),
+                                tickBorderData: BorderSide(color: Theme.of(context).dividerColor, width: 2),
+                                ticksTextStyle: const TextStyle(color: Colors.transparent),
+                                tickCount: 5,
+                                titleTextStyle: const TextStyle(fontSize: 25),
+                                getTitle: (pos, value) {
+                                  if (pos % 2 == 0) {
+                                    return RadarChartTitle(text: '$pos', positionPercentageOffset: 0.05);
+                                  }
+                                  return const RadarChartTitle(text: '');
+                                },
+                                dataSets: [
+                                  RadarDataSet(
+                                      dataEntries: intListToRadarEntry(data[0]),
+                                      borderColor: settings.diaColor,
+                                      fillColor: settings.diaColor.withOpacity(opacity),
+                                      entryRadius: 0,
+                                      borderWidth: settings.graphLineThickness),
+                                  RadarDataSet(
+                                      dataEntries: intListToRadarEntry(data[1]),
+                                      borderColor: settings.sysColor,
+                                      fillColor: settings.sysColor.withOpacity(opacity),
+                                      entryRadius: 0,
+                                      borderWidth: settings.graphLineThickness),
+                                  RadarDataSet(
+                                      dataEntries: intListToRadarEntry(data[2]),
+                                      borderColor: settings.pulColor,
+                                      fillColor: settings.pulColor.withOpacity(opacity),
+                                      entryRadius: 0,
+                                      borderWidth: settings.graphLineThickness),
+                                ],
+                              ),
                             ),
-                          ),
-                        );
-                      }),
-                ),
-              ],
-            );
-          });
+                          );
+                        })(),
+                      ),
+                    ],
+                  );
+                });
+              }
+          );
         },
       )),
     );
@@ -257,14 +265,9 @@ class StatisticsRow extends StatelessWidget {
   }
 }
 
-Widget futureInt(Future<int> value) {
-  return ConsistentFutureBuilder<int>(
-      future: value,
-      onData: (context, data) {
-        if (data < 0) {
-          return const Text('-');
-        }
-        return Text(data.toString());
-      }
-  );
+Widget displayInt(int value) {
+  if (value < 0) {
+    return const Text('-');
+  }
+  return Text(value.toString());
 }

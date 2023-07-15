@@ -1,5 +1,6 @@
 import 'package:blood_pressure_app/components/settings_widgets.dart';
 import 'package:blood_pressure_app/model/blood_pressure.dart';
+import 'package:blood_pressure_app/model/blood_pressure_analyzer.dart';
 import 'package:blood_pressure_app/model/export_import.dart';
 import 'package:blood_pressure_app/model/settings_store.dart';
 import 'package:flutter/material.dart';
@@ -129,7 +130,9 @@ class ExportDataRangeSettings extends StatelessWidget {
             disabled: !settings.exportLimitDataRange || settings.exportFormat == ExportFormat.db,
             onPressed: (context) async {
               var model = Provider.of<BloodPressureModel>(context, listen: false);
-              var newRange = await showDateRangePicker(context: context, firstDate: await model.firstDay, lastDate: await model.lastDay);
+              var analyzer = BloodPressureAnalyser(await model.all);
+              if(!context.mounted) return;
+              var newRange = await showDateRangePicker(context: context, firstDate: analyzer.firstDay, lastDate: analyzer.lastDay);
               if (newRange == null && context.mounted) {
                 ScaffoldMessenger.of(context)
                     .showSnackBar(SnackBar(content: Text(AppLocalizations.of(context)!.errNoRangeForExport)));

@@ -1,5 +1,4 @@
 import 'dart:collection';
-import 'dart:math';
 
 import 'package:blood_pressure_app/model/blood_pressure.dart';
 import 'package:blood_pressure_app/model/export_import.dart';
@@ -34,52 +33,6 @@ class RamBloodPressureModel extends ChangeNotifier implements BloodPressureModel
 
   @override
   Future<UnmodifiableListView<BloodPressureRecord>> get all async => UnmodifiableListView(_records);
-
-  @override
-  Future<int> get count async => _records.length;
-
-  @override
-  Future<int> get avgDia async => _nonNullDia.reduce((a, b) => a + b) ~/ _nonNullDia.length;
-
-  @override
-  Future<int> get avgPul async => _nonNullPul.reduce((a, b) => a + b) ~/ _nonNullPul.length;
-
-  @override
-  Future<int> get avgSys async => _nonNullSys.reduce((a, b) => a + b) ~/ _nonNullSys.length;
-
-  @override
-  Future<int> get maxDia async => _nonNullDia.reduce(max);
-
-  @override
-  Future<int> get maxPul async => _nonNullPul.reduce(max);
-
-  @override
-  Future<int> get maxSys async => _nonNullSys.reduce(max);
-
-  @override
-  Future<int> get minDia async => _nonNullDia.reduce(min);
-
-  @override
-  Future<int> get minPul async => _nonNullPul.reduce(min);
-
-  @override
-  Future<int> get minSys async => _nonNullSys.reduce(min);
-
-  @override
-  Future<DateTime> get firstDay async {
-    _records.sort((a, b) => a.creationTime.compareTo(b.creationTime));
-    return _records.first.creationTime;
-  }
-
-  @override
-  Future<DateTime> get lastDay async {
-    _records.sort((a, b) => a.creationTime.compareTo(b.creationTime));
-    return _records.last.creationTime;
-  }
-
-  Iterable<int> get _nonNullDia => _records.where((e) => e.diastolic!=null).map<int>((e) => e.diastolic!);
-  Iterable<int> get _nonNullSys => _records.where((e) => e.systolic!=null).map<int>((e) => e.systolic!);
-  Iterable<int> get _nonNullPul => _records.where((e) => e.pulse!=null).map<int>((e) => e.pulse!);
 
   @override
   void close() {}

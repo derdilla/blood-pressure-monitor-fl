@@ -88,79 +88,8 @@ class BloodPressureModel extends ChangeNotifier {
     return UnmodifiableListView(_convert(await _database.query('bloodPressureModel', columns: ['*'])));
   }
 
-  Future<int> get count async {
-    return (await _database.rawQuery('SELECT COUNT(*) FROM bloodPressureModel'))[0]['COUNT(*)'] as int? ?? -1;
-  }
-
-  Future<DateTime> get firstDay async {
-    return DateTime.fromMillisecondsSinceEpoch(
-        (await _database.rawQuery('SELECT timestamp FROM bloodPressureModel ORDER BY timestamp ASC LIMIT 1'))[0]
-                ['timestamp'] as int? ??
-            -1);
-  }
-
-  Future<DateTime> get lastDay async {
-    return DateTime.fromMillisecondsSinceEpoch(
-        (await _database.rawQuery('SELECT timestamp FROM bloodPressureModel ORDER BY timestamp DESC LIMIT 1'))[0]
-                ['timestamp'] as int? ??
-            -1);
-  }
-
-  Future<int> get avgDia async {
-    var res = _toInt((await _database.rawQuery('SELECT AVG(diastolic) as dia FROM bloodPressureModel'))[0]['dia']);
-    return res ?? -1;
-  }
-
-  Future<int> get avgSys async {
-    var res = _toInt((await _database.rawQuery('SELECT AVG(systolic) as sys FROM bloodPressureModel'))[0]['sys']);
-    return res ?? -1;
-  }
-
-  Future<int> get avgPul async {
-    var res = _toInt((await _database.rawQuery('SELECT AVG(pulse) as pul FROM bloodPressureModel'))[0]['pul']);
-    return res ?? -1;
-  }
-
-  Future<int> get maxDia async {
-    var res = (await _database.rawQuery('SELECT MAX(diastolic) as dia FROM bloodPressureModel'))[0]['dia'];
-    return (res as int?) ?? -1;
-  }
-
-  Future<int> get maxSys async {
-    var res = (await _database.rawQuery('SELECT MAX(systolic) as sys FROM bloodPressureModel'))[0]['sys'];
-    return (res as int?) ?? -1;
-  }
-
-  Future<int> get maxPul async {
-    var res = (await _database.rawQuery('SELECT MAX(pulse) as pul FROM bloodPressureModel'))[0]['pul'];
-    return (res as int?) ?? -1;
-  }
-
-  Future<int> get minDia async {
-    var res = (await _database.rawQuery('SELECT MIN(diastolic) as dia FROM bloodPressureModel'))[0]['dia'];
-    return (res as int?) ?? -1;
-  }
-
-  Future<int> get minSys async {
-    var res = (await _database.rawQuery('SELECT MIN(systolic) as sys FROM bloodPressureModel'))[0]['sys'];
-    return (res as int?) ?? -1;
-  }
-
-  Future<int> get minPul async {
-    var res = (await _database.rawQuery('SELECT MIN(pulse) as pul FROM bloodPressureModel'))[0]['pul'];
-    return (res as int?) ?? -1;
-  }
-
   void close() {
     _database.close();
-  }
-
-  int? _toInt(Object? v) {
-    try {
-      return (v as int?);
-    } catch (e) {
-      return (v as double?)?.toInt();
-    }
   }
 
   List<BloodPressureRecord> _convert(List<Map<String, Object?>> dbResult) {
