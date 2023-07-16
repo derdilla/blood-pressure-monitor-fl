@@ -10,34 +10,42 @@ class BloodPressureAnalyser {
 
   int get count => _records.length;
 
-  int get avgDia => _nonNullDia.reduce((a, b) => a + b) ~/ _nonNullDia.length;
+  int get avgDia => _safeResult(() => _nonNullDia.average.toInt(), (r) => r.diastolic);
 
-  int get avgPul => _nonNullPul.reduce((a, b) => a + b) ~/ _nonNullPul.length;
+  int get avgPul => _safeResult(() => _nonNullPul.average.toInt(), (r) => r.pulse);
 
-  int get avgSys => _nonNullSys.reduce((a, b) => a + b) ~/ _nonNullSys.length;
+  int get avgSys => _safeResult(() => _nonNullSys.average.toInt(), (r) => r.systolic);
 
-  int get maxDia => _nonNullDia.reduce(max);
+  int get maxDia => _safeResult(() => _nonNullDia.reduce(max), (r) => r.diastolic);
 
-  int get maxPul => _nonNullPul.reduce(max);
+  int get maxPul => _safeResult(() => _nonNullPul.reduce(max), (r) => r.pulse);
 
-  int get maxSys => _nonNullSys.reduce(max);
+  int get maxSys => _safeResult(() => _nonNullSys.reduce(max), (r) => r.systolic);
 
-  int get minDia => _nonNullDia.reduce(min);
+  int get minDia => _safeResult(() => _nonNullDia.reduce(min), (r) => r.diastolic);
 
-  int get minPul => _nonNullPul.reduce(min);
+  int get minPul => _safeResult(() =>  _nonNullPul.reduce(min), (r) => r.pulse);
 
-  int get minSys => _nonNullSys.reduce(min);
+  int get minSys => _safeResult(() => _nonNullSys.reduce(min), (r) => r.systolic);
 
-  DateTime get firstDay {
+  //TODO make first and last day nullable
+  DateTime? get firstDay {
+    if (_records.isEmpty) return null;
     _records.sort((a, b) => a.creationTime.compareTo(b.creationTime));
     return _records.first.creationTime;
   }
 
-  DateTime get lastDay {
+  DateTime? get lastDay {
+    if (_records.isEmpty) return null;
     _records.sort((a, b) => a.creationTime.compareTo(b.creationTime));
     return _records.last.creationTime;
   }
 
+  int _safeResult(int Function() f, int? Function(BloodPressureRecord) lengthOneResult) {
+    if (_records.isEmpty) return -1;
+    if (_records.length == 1) return lengthOneResult(_records.first) ?? -1;
+    return f();
+  }
   Iterable<int> get _nonNullDia => _records.where((e) => e.diastolic!=null).map<int>((e) => e.diastolic!);
   Iterable<int> get _nonNullSys => _records.where((e) => e.systolic!=null).map<int>((e) => e.systolic!);
   Iterable<int> get _nonNullPul => _records.where((e) => e.pulse!=null).map<int>((e) => e.pulse!);
@@ -48,6 +56,7 @@ class BloodPressureAnalyser {
 
     final firstDay = this.firstDay;
     final lastDay = this.lastDay;
+    if (firstDay == null || lastDay == null) return -1;
 
     if (firstDay.millisecondsSinceEpoch == -1 || lastDay.millisecondsSinceEpoch == -1) {
       return -1;

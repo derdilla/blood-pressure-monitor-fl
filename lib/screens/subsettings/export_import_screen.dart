@@ -132,7 +132,11 @@ class ExportDataRangeSettings extends StatelessWidget {
               var model = Provider.of<BloodPressureModel>(context, listen: false);
               var analyzer = BloodPressureAnalyser(await model.all);
               if(!context.mounted) return;
-              var newRange = await showDateRangePicker(context: context, firstDate: analyzer.firstDay, lastDate: analyzer.lastDay);
+              var newRange = await showDateRangePicker(
+                  context: context,
+                  firstDate: analyzer.firstDay??DateTime.fromMillisecondsSinceEpoch(0),
+                  lastDate: analyzer.lastDay??DateTime.now()
+              );
               if (newRange == null && context.mounted) {
                 ScaffoldMessenger.of(context)
                     .showSnackBar(SnackBar(content: Text(AppLocalizations.of(context)!.errNoRangeForExport)));
