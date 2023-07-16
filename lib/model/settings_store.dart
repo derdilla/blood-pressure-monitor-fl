@@ -33,6 +33,15 @@ class Settings extends ChangeNotifier {
     if (keys.contains('overrideWarnValues')) {
       toAwait.add(_prefs.remove('overrideWarnValues'));
     }
+    if (keys.contains('exportLimitDataRange')) {
+      toAwait.add(_prefs.remove('exportLimitDataRange'));
+    }
+    if (keys.contains('exportDataRangeStartEpochMs')) {
+      toAwait.add(_prefs.remove('exportDataRangeStartEpochMs'));
+    }
+    if (keys.contains('exportDataRangeEndEpochMs')) {
+      toAwait.add(_prefs.remove('exportDataRangeEndEpochMs'));
+    }
 
     for (var e in toAwait) {
       await e;
@@ -369,27 +378,6 @@ class Settings extends ChangeNotifier {
       default:
         throw UnimplementedError();
     }
-    notifyListeners();
-  }
-
-  bool get exportLimitDataRange {
-    return _prefs.getBool('exportLimitDataRange') ?? false;
-  }
-
-  set exportLimitDataRange(bool value) {
-    _prefs.setBool('exportLimitDataRange', value);
-    notifyListeners();
-  }
-
-  DateTimeRange get exportDataRange {
-    final start = DateTime.fromMillisecondsSinceEpoch(_prefs.getInt('exportDataRangeStartEpochMs') ?? 0);
-    final end = DateTime.fromMillisecondsSinceEpoch(_prefs.getInt('exportDataRangeEndEpochMs') ?? 0);
-    return DateTimeRange(start: start, end: end);
-  }
-
-  set exportDataRange(DateTimeRange value) {
-    _prefs.setInt('exportDataRangeStartEpochMs', value.start.millisecondsSinceEpoch);
-    _prefs.setInt('exportDataRangeEndEpochMs', value.end.millisecondsSinceEpoch);
     notifyListeners();
   }
 

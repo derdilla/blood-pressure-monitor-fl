@@ -1,14 +1,13 @@
+import 'package:blood_pressure_app/components/display_interval_picker.dart';
 import 'package:blood_pressure_app/components/settings_widgets.dart';
-import 'package:blood_pressure_app/model/blood_pressure.dart';
-import 'package:blood_pressure_app/model/blood_pressure_analyzer.dart';
 import 'package:blood_pressure_app/model/export_import.dart';
 import 'package:blood_pressure_app/model/settings_store.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:intl/intl.dart';
 import 'package:jsaver/jSaver.dart';
 import 'package:provider/provider.dart';
 
+// TODO: control if warn messages work
 class ExportImportScreen extends StatelessWidget {
   const ExportImportScreen({super.key});
 
@@ -26,6 +25,11 @@ class ExportImportScreen extends StatelessWidget {
             child: Column(
               children: [
                 const ExportWarnBanner(),
+                const SizedBox(height: 15,),
+                Opacity(
+                  opacity: (settings.exportFormat == ExportFormat.db) ? 0.5 : 1, // TODO: centralize when restyle
+                  child: const IntervalPicker(),
+                ),
                 SettingsTile(
                   title: Text(AppLocalizations.of(context)!.exportDir),
                   description: Text(settings.defaultExportDir),
@@ -57,7 +61,6 @@ class ExportImportScreen extends StatelessWidget {
                     }
                   },
                 ),
-                const ExportDataRangeSettings(),
                 InputSettingsTile(
                   title: Text(AppLocalizations.of(context)!.fieldDelimiter),
                   inputWidth: 40,
@@ -98,58 +101,6 @@ class ExportImportScreen extends StatelessWidget {
       floatingActionButton: const ExportImportButtons(),
     );
   }
-}
-
-class ExportDataRangeSettings extends StatelessWidget {
-  const ExportDataRangeSettings({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Consumer<Settings>(builder: (context, settings, child) {
-      var exportRange = settings.exportDataRange;
-      String exportRangeText;
-      if (exportRange.start.millisecondsSinceEpoch != 0 && exportRange.end.millisecondsSinceEpoch != 0) {
-        var formatter = DateFormat.yMMMd(AppLocalizations.of(context)!.localeName);
-        exportRangeText = '${formatter.format(exportRange.start)} - ${formatter.format(exportRange.end)}';
-      } else {
-        exportRangeText = AppLocalizations.of(context)!.errPleaseSelect;
-      }
-      return Column(
-        children: [
-          SwitchSettingsTile(
-            title: Text(AppLocalizations.of(context)!.exportLimitDataRange),
-            initialValue: settings.exportLimitDataRange,
-            onToggle: (value) {
-              settings.exportLimitDataRange = value;
-            },
-            disabled: settings.exportFormat == ExportFormat.db,
-          ),
-          SettingsTile(
-            title: Text(AppLocalizations.of(context)!.exportInterval),
-            description: Text(exportRangeText),
-            disabled: !settings.exportLimitDataRange || settings.exportFormat == ExportFormat.db,
-            onPressed: (context) async {
-              var model = Provider.of<BloodPressureModel>(context, listen: false);
-              var analyzer = BloodPressureAnalyser(await model.all);
-              if(!context.mounted) return;
-              var newRange = await showDateRangePicker(
-                  context: context,
-                  firstDate: analyzer.firstDay??DateTime.fromMillisecondsSinceEpoch(0),
-                  lastDate: analyzer.lastDay??DateTime.now()
-              );
-              if (newRange == null && context.mounted) {
-                ScaffoldMessenger.of(context)
-                    .showSnackBar(SnackBar(content: Text(AppLocalizations.of(context)!.errNoRangeForExport)));
-                return;
-              }
-              settings.exportDataRange = newRange ?? DateTimeRange(start: DateTime.fromMillisecondsSinceEpoch(0), end: DateTime.fromMillisecondsSinceEpoch(0));
-            }
-          ),
-        ],
-      );
-    });
-  }
-
 }
 
 class ExportFieldCustomisationSetting extends StatelessWidget {
