@@ -18,87 +18,84 @@ class ExportImportScreen extends StatelessWidget {
         title: Text(AppLocalizations.of(context)!.exportImport),
         backgroundColor: Theme.of(context).primaryColor,
       ),
-      body: Container(
-        margin: const EdgeInsets.only(bottom: 80),
-        child: Consumer<Settings>(builder: (context, settings, child) {
-          return SingleChildScrollView(
-            child: Column(
-              children: [
-                const ExportWarnBanner(),
-                const SizedBox(height: 15,),
-                Opacity(
-                  opacity: (settings.exportFormat == ExportFormat.db) ? 0.5 : 1, // TODO: centralize when restyle
-                  child: const IntervalPicker(),
-                ),
-                SettingsTile(
-                  title: Text(AppLocalizations.of(context)!.exportDir),
-                  description: Text(settings.defaultExportDir),
-                  onPressed: (context) async {
-                    final appDir = await JSaver.instance.setDefaultSavingDirectory();
-                    settings.defaultExportDir = appDir.value;
+      body: Consumer<Settings>(builder: (context, settings, child) {
+        return SingleChildScrollView(
+          child: Column(
+            children: [
+              const ExportWarnBanner(),
+              const SizedBox(height: 15,),
+              Opacity(
+                opacity: (settings.exportFormat == ExportFormat.db) ? 0.5 : 1, // TODO: centralize when restyle
+                child: const IntervalPicker(),
+              ),
+              SettingsTile(
+                title: Text(AppLocalizations.of(context)!.exportDir),
+                description: Text(settings.defaultExportDir),
+                onPressed: (context) async {
+                  final appDir = await JSaver.instance.setDefaultSavingDirectory();
+                  settings.defaultExportDir = appDir.value;
+                }
+              ),
+              SwitchSettingsTile(
+                  title: Text(AppLocalizations.of(context)!.exportAfterEveryInput),
+                  description: Text(AppLocalizations.of(context)!.exportAfterEveryInputDesc),
+                  initialValue: settings.exportAfterEveryEntry,
+                  onToggle: (value) {
+                    settings.exportAfterEveryEntry = value;
                   }
-                ),
-                SwitchSettingsTile(
-                    title: Text(AppLocalizations.of(context)!.exportAfterEveryInput),
-                    description: Text(AppLocalizations.of(context)!.exportAfterEveryInputDesc),
-                    initialValue: settings.exportAfterEveryEntry,
-                    onToggle: (value) {
-                      settings.exportAfterEveryEntry = value;
-                    }
-                ),
-                DropDownSettingsTile<ExportFormat>(
-                  key: const Key('exportFormat'),
-                  title: Text(AppLocalizations.of(context)!.exportFormat),
-                  value: settings.exportFormat,
-                  items: [
-                    DropdownMenuItem(value: ExportFormat.csv, child: Text(AppLocalizations.of(context)!.csv)),
-                    //DropdownMenuItem(value: ExportFormat.pdf, child: Text(AppLocalizations.of(context)!.pdf)),
-                    DropdownMenuItem(value: ExportFormat.db, child: Text(AppLocalizations.of(context)!.db)),
-                  ],
-                  onChanged: (ExportFormat? value) {
-                    if (value != null) {
-                      settings.exportFormat = value;
-                    }
-                  },
-                ),
-                InputSettingsTile(
-                  title: Text(AppLocalizations.of(context)!.fieldDelimiter),
-                  inputWidth: 40,
-                  initialValue: settings.csvFieldDelimiter,
+              ),
+              DropDownSettingsTile<ExportFormat>(
+                key: const Key('exportFormat'),
+                title: Text(AppLocalizations.of(context)!.exportFormat),
+                value: settings.exportFormat,
+                items: [
+                  DropdownMenuItem(value: ExportFormat.csv, child: Text(AppLocalizations.of(context)!.csv)),
+                  //DropdownMenuItem(value: ExportFormat.pdf, child: Text(AppLocalizations.of(context)!.pdf)),
+                  DropdownMenuItem(value: ExportFormat.db, child: Text(AppLocalizations.of(context)!.db)),
+                ],
+                onChanged: (ExportFormat? value) {
+                  if (value != null) {
+                    settings.exportFormat = value;
+                  }
+                },
+              ),
+              InputSettingsTile(
+                title: Text(AppLocalizations.of(context)!.fieldDelimiter),
+                inputWidth: 40,
+                initialValue: settings.csvFieldDelimiter,
+                disabled: !(settings.exportFormat == ExportFormat.csv),
+                onEditingComplete: (value) {
+                  if (value != null) {
+                    settings.csvFieldDelimiter = value;
+                  }
+                },
+              ),
+              InputSettingsTile(
+                title: Text(AppLocalizations.of(context)!.textDelimiter),
+                inputWidth: 40,
+                initialValue: settings.csvTextDelimiter,
+                disabled: !(settings.exportFormat == ExportFormat.csv),
+                onEditingComplete: (value) {
+                  if (value != null) {
+                    settings.csvTextDelimiter = value;
+                  }
+                },
+              ),
+              SwitchSettingsTile(
+                  title: Text(AppLocalizations.of(context)!.exportCsvHeadline),
+                  description: Text(AppLocalizations.of(context)!.exportCsvHeadlineDesc),
+                  initialValue: settings.exportCsvHeadline,
                   disabled: !(settings.exportFormat == ExportFormat.csv),
-                  onEditingComplete: (value) {
-                    if (value != null) {
-                      settings.csvFieldDelimiter = value;
-                    }
-                  },
-                ),
-                InputSettingsTile(
-                  title: Text(AppLocalizations.of(context)!.textDelimiter),
-                  inputWidth: 40,
-                  initialValue: settings.csvTextDelimiter,
-                  disabled: !(settings.exportFormat == ExportFormat.csv),
-                  onEditingComplete: (value) {
-                    if (value != null) {
-                      settings.csvTextDelimiter = value;
-                    }
-                  },
-                ),
-                SwitchSettingsTile(
-                    title: Text(AppLocalizations.of(context)!.exportCsvHeadline),
-                    description: Text(AppLocalizations.of(context)!.exportCsvHeadlineDesc),
-                    initialValue: settings.exportCsvHeadline,
-                    disabled: !(settings.exportFormat == ExportFormat.csv),
-                    onToggle: (value) {
-                      settings.exportCsvHeadline = value;
-                    }
-                ),
-                const ExportFieldCustomisationSetting(),
-              ],
-            ),
-          );
-        })
-      ),
-      floatingActionButton: const ExportImportButtons(),
+                  onToggle: (value) {
+                    settings.exportCsvHeadline = value;
+                  }
+              ),
+              const ExportFieldCustomisationSetting(),
+            ],
+          ),
+        );
+      }),
+      bottomNavigationBar: const ExportImportButtons(),
     );
   }
 }
