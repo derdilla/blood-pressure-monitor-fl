@@ -51,7 +51,7 @@
   "@errNoRangeForExport": {},
   "errPleaseSelect": "Bitte auswählen",
   "@errPleaseSelect": {},
-  "errWrongImportFormat": "Es können nur Dateien im csv und SQLite db Format importiert werden.",
+  "errWrongImportFormat": "Es können nur Dateien im CSV und SQLite db Format importiert werden.",
   "@errWrongImportFormat": {},
   "errNeedHeadline": "Es können nur Dateien mit einer Überschrift importiert werden.",
   "@errNeedHeadline": {},
@@ -61,7 +61,7 @@
   "@errNotImportable": {},
   "btnCancel": "ABBRUCH",
   "@btnCancel": {},
-  "btnSave": "OK",
+  "btnSave": "SPEICHERN",
   "@btnSave": {},
   "btnConfirm": "OK",
   "@btnConfirm": {},
@@ -91,7 +91,7 @@
   "@allowManualTimeInput": {},
   "enterTimeFormatScreen": "Datums-/Zeitformat",
   "@enterTimeFormatScreen": {},
-  "theme": "Farbschema",
+  "theme": "Aussehen",
   "@theme": {},
   "system": "System",
   "@system": {},
@@ -167,7 +167,7 @@
       }
     }
   },
-  "sharedPrefsDump": "Shared preferences dump:",
+  "sharedPrefsDump": "Einstellungswerte:",
   "@sharedPrefsDump": {},
   "exportImport": "Exportieren / Importieren",
   "@exportImport": {},
@@ -187,7 +187,7 @@
   "@exportCustomEntries": {},
   "addEntry": "Feld hinzufügen",
   "@addEntry": {},
-  "exportMimeType": "Export MIME typ",
+  "exportMimeType": "Export medien typ",
   "@exportMimeType": {},
   "exportMimeTypeDesc": "gibt anderen dateityp weiter",
   "@exportMimeTypeDesc": {},
@@ -229,7 +229,7 @@
   "@sourceCode": {},
   "licenses": "Lizenzen dritter",
   "@licenses": {},
-  "importSuccess": "Es wurden {count} Einträge erfolgreich importiert",
+  "importSuccess": "Es wurden {count} Einträge importiert",
   "@importSuccess": {
     "placeholders": {
       "count": {
@@ -297,9 +297,9 @@
   "@time": {},
   "confirmDelete": "Löschen bestätigen",
   "@confirmDelete": {},
-  "confirmDeleteDesc": "Soll der Eintrag wirklich gelöscht werden? (Diese Rückfrage kann in den Einstellungen abgestellt werden.)",
+  "confirmDeleteDesc": "Soll der Eintrag gelöscht werden? (Diese Rückfrage kann in den Einstellungen abgestellt werden.)",
   "@confirmDeleteDesc": {},
-  "deletionConfirmed": "Eintrag wurde gelöscht",
+  "deletionConfirmed": "Eintrag gelöscht.",
   "@deletionConfirmed": {},
   "day": "Tag",
   "@day": {},
@@ -327,5 +327,18 @@
   "last7Days": "7 Tage",
   "@last7Days": {},
   "last30Days": "30 Tage",
-  "@last30Days": {}
+  "@last30Days": {},
+  "exportWarnNotEveryFieldExported": "Achtung, einige Felder werden nicht exportiert: {fields}.",
+  "@exportWarnNotEveryFieldExported": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "fields": {
+        "type": "String"
+      }
+    }
+  },
+  "allowMissingValues": "Fehlende Werte erlauben",
+  "@allowMissingValues": {}
 }
