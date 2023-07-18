@@ -16,7 +16,28 @@ class Settings extends ChangeNotifier {
   static Future<Settings> create() async {
     final component = Settings._create();
     component._prefs = await SharedPreferences.getInstance();
+    await component._update();
     return component;
+  }
+
+  Future<void> _update() async {
+    final keys = _prefs.getKeys();
+    List<Future> toAwait = [];
+
+    if (keys.contains('age')) {
+      final lastAge = _prefs.getInt('age') ?? 30;
+      sysWarn = BloodPressureWarnValues.getUpperSysWarnValue(lastAge);
+      diaWarn = BloodPressureWarnValues.getUpperDiaWarnValue(lastAge);
+      toAwait.add(_prefs.remove('age'));
+    }
+    if (keys.contains('overrideWarnValues')) {
+      toAwait.add(_prefs.remove('overrideWarnValues'));
+    }
+
+    for (var e in toAwait) {
+      await e;
+    }
+    return;
   }
 
   int get graphStepSize {
@@ -44,6 +65,7 @@ class Settings extends ChangeNotifier {
         displayDataEnd = oldEnd.copyWith(day: oldEnd.day + directionalStep);
         break;
       case TimeStep.week:
+      case TimeStep.last7Days:
         displayDataStart = oldStart.copyWith(day: oldStart.day + directionalStep * 7);
         displayDataEnd = oldEnd.copyWith(day: oldEnd.day + directionalStep * 7);
         break;
@@ -59,6 +81,9 @@ class Settings extends ChangeNotifier {
         displayDataStart = DateTime.fromMillisecondsSinceEpoch(0);
         displayDataEnd = DateTime.now();
         break;
+      case TimeStep.last30Days:
+        displayDataStart = oldStart.copyWith(day: oldStart.day + directionalStep * 30);
+        displayDataEnd = oldEnd.copyWith(day: oldEnd.day + directionalStep * 30);
     }
   }
 
@@ -79,6 +104,12 @@ class Settings extends ChangeNotifier {
         return [start, start.copyWith(year: now.year + 1)];
       case TimeStep.lifetime:
         final start = DateTime.fromMillisecondsSinceEpoch(0);
+        return [start, now];
+      case TimeStep.last7Days:
+        final start = now.copyWith(day: now.day-7);
+        return [start, now];
+      case TimeStep.last30Days:
+        final start = now.copyWith(day: now.day-30);
         return [start, now];
       default:
         assert(false);
@@ -186,45 +217,21 @@ class Settings extends ChangeNotifier {
     notifyListeners();
   }
 
-  double get sysWarn {
-    if (!overrideWarnValues) {
-      return BloodPressureWarnValues.getUpperSysWarnValue(age).toDouble();
-    }
-    return _prefs.getInt('sysWarn')?.toDouble() ?? 120;
+  int get sysWarn {
+    return _prefs.getInt('sysWarn') ?? 120;
   }
 
-  set sysWarn(double newWarn) {
-    _prefs.setInt('sysWarn', newWarn.toInt());
+  set sysWarn(int newWarn) {
+    _prefs.setInt('sysWarn', newWarn);
     notifyListeners();
   }
 
-  double get diaWarn {
-    if (!overrideWarnValues) {
-      return BloodPressureWarnValues.getUpperDiaWarnValue(age).toDouble();
-    }
-    return _prefs.getInt('diaWarn')?.toDouble() ?? 80;
+  int get diaWarn {
+    return _prefs.getInt('diaWarn') ?? 80;
   }
 
-  set diaWarn(double newWarn) {
-    _prefs.setInt('diaWarn', newWarn.toInt());
-    notifyListeners();
-  }
-
-  int get age {
-    return _prefs.getInt('age') ?? 30;
-  }
-
-  set age(int newAge) {
-    _prefs.setInt('age', newAge.toInt());
-    notifyListeners();
-  }
-
-  bool get overrideWarnValues {
-    return _prefs.getBool('overrideWarnValues') ?? false;
-  }
-
-  set overrideWarnValues(bool overrideWarnValues) {
-    _prefs.setBool('overrideWarnValues', overrideWarnValues);
+  set diaWarn(int newWarn) {
+    _prefs.setInt('diaWarn', newWarn);
     notifyListeners();
   }
 
@@ -234,6 +241,15 @@ class Settings extends ChangeNotifier {
 
   set validateInputs(bool validateInputs) {
     _prefs.setBool('validateInputs', validateInputs);
+    notifyListeners();
+  }
+
+  bool get allowMissingValues {
+    return _prefs.getBool('allowMissingValues') ?? false;
+  }
+
+  set allowMissingValues(bool allowMissingValues) {
+    _prefs.setBool('allowMissingValues', allowMissingValues);
     notifyListeners();
   }
 
@@ -430,14 +446,16 @@ class Settings extends ChangeNotifier {
   }
 }
 
-class TimeStep {
-  static const options = [0, 4, 1, 2, 3];
+class TimeStep { // TODO: replace with enum
+  static const options = [0, 4, 1, 2, 3, 5, 6];
 
   static const day = 0;
   static const month = 1;
   static const year = 2;
   static const lifetime = 3;
   static const week = 4;
+  static const last7Days = 5;
+  static const last30Days = 6;
 
   TimeStep._create();
 
@@ -453,6 +471,10 @@ class TimeStep {
         return AppLocalizations.of(context)!.lifetime;
       case week:
         return AppLocalizations.of(context)!.week;
+      case last7Days:
+        return AppLocalizations.of(context)!.last7Days;
+      case last30Days:
+        return AppLocalizations.of(context)!.last30Days;
     }
     assert(false);
     return '-';

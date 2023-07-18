@@ -38,11 +38,11 @@ class BloodPressureAnalyser {
 
     // sort all data
     final dbRes = await _model.all;
-    for (var entry in dbRes) {
-      DateTime ts = DateTime.fromMillisecondsSinceEpoch(entry.creationTime.millisecondsSinceEpoch);
-      allDiaValuesRelativeToTime[ts.hour].add(entry.diastolic);
-      allSysValuesRelativeToTime[ts.hour].add(entry.systolic);
-      allPulValuesRelativeToTime[ts.hour].add(entry.pulse);
+    for (var e in dbRes) {
+      DateTime ts = DateTime.fromMillisecondsSinceEpoch(e.creationTime.millisecondsSinceEpoch);
+      if (e.diastolic != null) allDiaValuesRelativeToTime[ts.hour].add(e.diastolic!);
+      if (e.systolic != null)allSysValuesRelativeToTime[ts.hour].add(e.systolic!);
+      if (e.pulse != null)allPulValuesRelativeToTime[ts.hour].add(e.pulse!);
     }
     for (int i = 0; i < 24; i++) {
       if (allDiaValuesRelativeToTime[i].isEmpty) {

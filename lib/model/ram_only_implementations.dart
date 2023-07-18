@@ -1,9 +1,10 @@
 import 'dart:collection';
+import 'dart:math';
 
 import 'package:blood_pressure_app/model/blood_pressure.dart';
 import 'package:blood_pressure_app/model/export_import.dart';
 import 'package:blood_pressure_app/model/settings_store.dart';
-import 'package:file_saver/src/utils/mime_types.dart';
+import 'package:file_saver/file_saver.dart' show MimeType;
 import 'package:flutter/material.dart';
 
 class RamBloodPressureModel extends ChangeNotifier implements BloodPressureModel {
@@ -38,31 +39,31 @@ class RamBloodPressureModel extends ChangeNotifier implements BloodPressureModel
   Future<int> get count async => _records.length;
 
   @override
-  Future<int> get avgDia async => _records.map((e) => e.diastolic).reduce((a, b) => a + b) ~/ _records.length;
+  Future<int> get avgDia async => _nonNullDia.reduce((a, b) => a + b) ~/ _nonNullDia.length;
 
   @override
-  Future<int> get avgPul async => _records.map((e) => e.pulse).reduce((a, b) => a + b) ~/ _records.length;
+  Future<int> get avgPul async => _nonNullPul.reduce((a, b) => a + b) ~/ _nonNullPul.length;
 
   @override
-  Future<int> get avgSys async => _records.map((e) => e.systolic).reduce((a, b) => a + b) ~/ _records.length;
+  Future<int> get avgSys async => _nonNullSys.reduce((a, b) => a + b) ~/ _nonNullSys.length;
 
   @override
-  Future<int> get maxDia async => _records.reduce((a, b) => (a.diastolic >= b.diastolic) ? a : b).diastolic;
+  Future<int> get maxDia async => _nonNullDia.reduce(max);
 
   @override
-  Future<int> get maxPul async => _records.reduce((a, b) => (a.pulse >= b.pulse) ? a : b).pulse;
+  Future<int> get maxPul async => _nonNullPul.reduce(max);
 
   @override
-  Future<int> get maxSys async => _records.reduce((a, b) => (a.systolic >= b.systolic) ? a : b).systolic;
+  Future<int> get maxSys async => _nonNullSys.reduce(max);
 
   @override
-  Future<int> get minDia async => _records.reduce((a, b) => (a.diastolic <= b.diastolic) ? a : b).diastolic;
+  Future<int> get minDia async => _nonNullDia.reduce(min);
 
   @override
-  Future<int> get minPul async => _records.reduce((a, b) => (a.pulse <= b.pulse) ? a : b).pulse;
+  Future<int> get minPul async => _nonNullPul.reduce(min);
 
   @override
-  Future<int> get minSys async => _records.reduce((a, b) => (a.systolic <= b.systolic) ? a : b).systolic;
+  Future<int> get minSys async => _nonNullSys.reduce(min);
 
   @override
   Future<DateTime> get firstDay async {
@@ -76,30 +77,32 @@ class RamBloodPressureModel extends ChangeNotifier implements BloodPressureModel
     return _records.last.creationTime;
   }
 
+  Iterable<int> get _nonNullDia => _records.where((e) => e.diastolic!=null).map<int>((e) => e.diastolic!);
+  Iterable<int> get _nonNullSys => _records.where((e) => e.systolic!=null).map<int>((e) => e.systolic!);
+  Iterable<int> get _nonNullPul => _records.where((e) => e.pulse!=null).map<int>((e) => e.pulse!);
+
   @override
   void close() {}
 }
 
 class RamSettings extends ChangeNotifier implements Settings {
   MaterialColor _accentColor = Colors.pink;
-  int _age = 30;
   bool _allowManualTimeInput = true;
   int _animationSpeed = 150;
   bool _confirmDeletion = true;
   bool _darkMode = true;
   String _dateFormatString = 'yyyy-MM-dd  HH:mm';
   MaterialColor _diaColor = Colors.pink;
-  double _diaWarn = 80;
+  int _diaWarn = 80;
   DateTime? _displayDataEnd;
   DateTime? _displayDataStart;
   bool _followSystemDarkMode = true;
   double _graphLineThickness = 3;
   int _graphStepSize = TimeStep.day;
   double _iconSize = 30;
-  bool _overrideWarnValues = false;
   MaterialColor _pulColor = Colors.pink;
   MaterialColor _sysColor = Colors.pink;
-  double _sysWarn = 120;
+  int _sysWarn = 120;
   bool _useExportCompatability = false;
   bool _validateInputs = true;
   int _graphTitlesCount = 5;
@@ -115,6 +118,7 @@ class RamSettings extends ChangeNotifier implements Settings {
   MimeType _exportMimeType = MimeType.csv;
   String _defaultExportDir = '';
   bool _exportAfterEveryEntry = false;
+  bool _allowMissingValues = false;
 
   RamSettings() {
     _accentColor = createMaterialColor(0xFF009688);
@@ -124,15 +128,12 @@ class RamSettings extends ChangeNotifier implements Settings {
   }
 
   @override
-  double get diaWarn {
-    if (!overrideWarnValues) {
-      return BloodPressureWarnValues.getUpperDiaWarnValue(age).toDouble();
-    }
+  int get diaWarn {
     return _diaWarn;
   }
 
   @override
-  set diaWarn(double newWarn) {
+  set diaWarn(int newWarn) {
     _diaWarn = newWarn;
     notifyListeners();
   }
@@ -160,15 +161,12 @@ class RamSettings extends ChangeNotifier implements Settings {
   }
 
   @override
-  double get sysWarn {
-    if (!overrideWarnValues) {
-      return BloodPressureWarnValues.getUpperSysWarnValue(age).toDouble();
-    }
+  int get sysWarn {
     return _sysWarn;
   }
 
   @override
-  set sysWarn(double newWarn) {
+  set sysWarn(int newWarn) {
     _sysWarn = newWarn;
     notifyListeners();
   }
@@ -179,15 +177,6 @@ class RamSettings extends ChangeNotifier implements Settings {
   @override
   set accentColor(MaterialColor value) {
     _accentColor = value;
-    notifyListeners();
-  }
-
-  @override
-  int get age => _age;
-
-  @override
-  set age(int value) {
-    _age = value;
     notifyListeners();
   }
 
@@ -278,15 +267,6 @@ class RamSettings extends ChangeNotifier implements Settings {
   @override
   set iconSize(double value) {
     _iconSize = value;
-    notifyListeners();
-  }
-
-  @override
-  bool get overrideWarnValues => _overrideWarnValues;
-
-  @override
-  set overrideWarnValues(bool value) {
-    _overrideWarnValues = value;
     notifyListeners();
   }
 
@@ -438,6 +418,15 @@ class RamSettings extends ChangeNotifier implements Settings {
   @override
   set exportAfterEveryEntry(bool value) {
     _exportAfterEveryEntry = value;
+    notifyListeners();
+  }
+
+  @override
+  bool get allowMissingValues => _allowMissingValues;
+
+  @override
+  set allowMissingValues(bool value) {
+    _allowMissingValues = value;
     notifyListeners();
   }
 
