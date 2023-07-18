@@ -1,6 +1,6 @@
-* make record list editable (click)
-* use graph time range option for list
-* add week range option
-* expand the system indicating warnings
-* update dependencies
-* change license
+* rendre la liste des enregistrements modifiable (clic)
+* utiliser l'option de fenêtrage temporel du graphique pour la liste
+* ajout de l'option de fenêtrage temporel par semaine
+* extension du système d'alertes
+* mise à jour des dépendances
+* modification de la licence
