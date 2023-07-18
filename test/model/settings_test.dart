@@ -1,7 +1,6 @@
 import 'package:blood_pressure_app/model/ram_only_implementations.dart';
 import 'package:blood_pressure_app/model/settings_store.dart';
 import 'package:file_saver/file_saver.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
@@ -44,8 +43,6 @@ void main() {
       expect(s.exportItems, ['timestampUnixMs', 'systolic', 'diastolic', 'pulse', 'notes']);
       expect(s.exportAddableItems, ['isoUTCTime']);
       expect(s.exportCsvHeadline, true);
-      expect(s.exportDataRange.start.millisecondsSinceEpoch, 0);
-      expect(s.exportLimitDataRange, false);
       expect(s.exportMimeType, MimeType.csv);
       expect(s.defaultExportDir.isEmpty, true);
       expect(s.exportAfterEveryEntry, false);
@@ -90,7 +87,6 @@ void main() {
       s.exportAddableItems = ['timestampUnixMs'];
       s.exportItems = ['systolic', 'diastolic', 'pulse', 'notes', 'isoUTCTime'];
       s.exportCsvHeadline = false;
-      s.exportLimitDataRange = true;
       s.exportMimeType = MimeType.pdf;
       s.defaultExportDir = '/storage/emulated/0/Android/data/com.derdilla.bloodPressureApp/files/file.csv';
       s.exportAfterEveryEntry = true;
@@ -118,7 +114,6 @@ void main() {
       expect(s.exportItems, ['systolic', 'diastolic', 'pulse', 'notes', 'isoUTCTime']);
       expect(s.exportAddableItems, ['timestampUnixMs']);
       expect(s.exportCsvHeadline, false);
-      expect(s.exportLimitDataRange, true);
       expect(s.exportMimeType, MimeType.pdf);
       expect(s.defaultExportDir, '/storage/emulated/0/Android/data/com.derdilla.bloodPressureApp/files/file.csv');
       expect(s.exportAfterEveryEntry, true);
@@ -157,14 +152,12 @@ void main() {
       s.exportAddableItems = ['timestampUnixMs'];
       s.exportItems = ['systolic', 'diastolic', 'pulse', 'notes', 'isoUTCTime'];
       s.exportCsvHeadline = false;
-      s.exportDataRange = DateTimeRange(start: DateTime.fromMillisecondsSinceEpoch(20), end: DateTime.now());
-      s.exportLimitDataRange = true;
       s.exportMimeType = MimeType.pdf;
       s.defaultExportDir = '/storage/emulated/0/Android/data/com.derdilla.bloodPressureApp/files/file.csv';
       s.exportAfterEveryEntry = true;
       s.allowMissingValues = true;
 
-      expect(i, 30);
+      expect(i, 28);
     });
   });
 
@@ -202,8 +195,6 @@ void main() {
       expect(s.exportItems, ['timestampUnixMs', 'systolic', 'diastolic', 'pulse', 'notes']);
       expect(s.exportAddableItems, ['isoUTCTime']);
       expect(s.exportCsvHeadline, true);
-      expect(s.exportDataRange.start.millisecondsSinceEpoch, 0);
-      expect(s.exportLimitDataRange, false);
       expect(s.exportMimeType, MimeType.csv);
       expect(s.defaultExportDir.isEmpty, true);
       expect(s.exportAfterEveryEntry, false);
@@ -248,7 +239,6 @@ void main() {
       s.exportAddableItems = ['timestampUnixMs'];
       s.exportItems = ['systolic', 'diastolic', 'pulse', 'notes', 'isoUTCTime'];
       s.exportCsvHeadline = false;
-      s.exportLimitDataRange = true;
       s.exportMimeType = MimeType.pdf;
       s.defaultExportDir = '/storage/emulated/0/Android/data/com.derdilla.bloodPressureApp/files/file.csv';
       s.exportAfterEveryEntry = true;
@@ -276,7 +266,6 @@ void main() {
       expect(s.exportItems, ['systolic', 'diastolic', 'pulse', 'notes', 'isoUTCTime']);
       expect(s.exportAddableItems, ['timestampUnixMs']);
       expect(s.exportCsvHeadline, false);
-      expect(s.exportLimitDataRange, true);
       expect(s.exportMimeType, MimeType.pdf);
       expect(s.defaultExportDir, '/storage/emulated/0/Android/data/com.derdilla.bloodPressureApp/files/file.csv');
       expect(s.exportAfterEveryEntry, true);
@@ -316,14 +305,12 @@ void main() {
       s.exportAddableItems = ['timestampUnixMs'];
       s.exportItems = ['systolic', 'diastolic', 'pulse', 'notes', 'isoUTCTime'];
       s.exportCsvHeadline = false;
-      s.exportDataRange = DateTimeRange(start: DateTime.fromMillisecondsSinceEpoch(20), end: DateTime.now());
-      s.exportLimitDataRange = true;
       s.exportMimeType = MimeType.pdf;
       s.defaultExportDir = '/storage/emulated/0/Android/data/com.derdilla.bloodPressureApp/files/file.csv';
       s.exportAfterEveryEntry = true;
       s.allowMissingValues = true;
 
-      expect(i, 30);
+      expect(i, 28);
     });
   });
 }

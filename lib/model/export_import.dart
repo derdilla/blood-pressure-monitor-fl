@@ -1,5 +1,4 @@
 
-import 'dart:collection';
 import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
@@ -224,17 +223,8 @@ class Exporter {
     final messenger = ScaffoldMessenger.of(context);
     final localizations = AppLocalizations.of(context);
 
-    final UnmodifiableListView<BloodPressureRecord> entries;
-    if (settings.exportLimitDataRange) {
-      var range = settings.exportDataRange;
-      if (range.start.millisecondsSinceEpoch == 0 || range.end.millisecondsSinceEpoch == 0) {
-        messenger.showSnackBar(SnackBar(content: Text(localizations!.errNoRangeForExport)));
-        return;
-      }
-      entries = await Provider.of<BloodPressureModel>(context, listen: false).getInTimeRange(settings.exportDataRange.start, settings.exportDataRange.end);
-    } else {
-      entries = await Provider.of<BloodPressureModel>(context, listen: false).all;
-    }
+    final entries = await Provider.of<BloodPressureModel>(context, listen: false)
+        .getInTimeRange(settings.displayDataStart, settings.displayDataEnd);
     var fileContents = await ExportFileCreator(settings).createFile(entries);
 
     String filename = 'blood_press_${DateTime.now().toIso8601String()}';

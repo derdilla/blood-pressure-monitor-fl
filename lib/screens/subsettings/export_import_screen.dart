@@ -1,13 +1,13 @@
+import 'package:blood_pressure_app/components/display_interval_picker.dart';
 import 'package:blood_pressure_app/components/settings_widgets.dart';
-import 'package:blood_pressure_app/model/blood_pressure.dart';
 import 'package:blood_pressure_app/model/export_import.dart';
 import 'package:blood_pressure_app/model/settings_store.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:intl/intl.dart';
 import 'package:jsaver/jSaver.dart';
 import 'package:provider/provider.dart';
 
+// TODO: control if warn messages work
 class ExportImportScreen extends StatelessWidget {
   const ExportImportScreen({super.key});
 
@@ -18,131 +18,86 @@ class ExportImportScreen extends StatelessWidget {
         title: Text(AppLocalizations.of(context)!.exportImport),
         backgroundColor: Theme.of(context).primaryColor,
       ),
-      body: Container(
-        margin: const EdgeInsets.only(bottom: 80),
-        child: Consumer<Settings>(builder: (context, settings, child) {
-          return SingleChildScrollView(
-            child: Column(
-              children: [
-                const ExportWarnBanner(),
-                SettingsTile(
-                  title: Text(AppLocalizations.of(context)!.exportDir),
-                  description: Text(settings.defaultExportDir),
-                  onPressed: (context) async {
-                    final appDir = await JSaver.instance.setDefaultSavingDirectory();
-                    settings.defaultExportDir = appDir.value;
+      body: Consumer<Settings>(builder: (context, settings, child) {
+        return SingleChildScrollView(
+          child: Column(
+            children: [
+              const ExportWarnBanner(),
+              const SizedBox(height: 15,),
+              Opacity(
+                opacity: (settings.exportFormat == ExportFormat.db) ? 0.5 : 1, // TODO: centralize when restyle
+                child: const IntervalPicker(),
+              ),
+              SettingsTile(
+                title: Text(AppLocalizations.of(context)!.exportDir),
+                description: Text(settings.defaultExportDir),
+                onPressed: (context) async {
+                  final appDir = await JSaver.instance.setDefaultSavingDirectory();
+                  settings.defaultExportDir = appDir.value;
+                }
+              ),
+              SwitchSettingsTile(
+                  title: Text(AppLocalizations.of(context)!.exportAfterEveryInput),
+                  description: Text(AppLocalizations.of(context)!.exportAfterEveryInputDesc),
+                  initialValue: settings.exportAfterEveryEntry,
+                  onToggle: (value) {
+                    settings.exportAfterEveryEntry = value;
                   }
-                ),
-                SwitchSettingsTile(
-                    title: Text(AppLocalizations.of(context)!.exportAfterEveryInput),
-                    description: Text(AppLocalizations.of(context)!.exportAfterEveryInputDesc),
-                    initialValue: settings.exportAfterEveryEntry,
-                    onToggle: (value) {
-                      settings.exportAfterEveryEntry = value;
-                    }
-                ),
-                DropDownSettingsTile<ExportFormat>(
-                  key: const Key('exportFormat'),
-                  title: Text(AppLocalizations.of(context)!.exportFormat),
-                  value: settings.exportFormat,
-                  items: [
-                    DropdownMenuItem(value: ExportFormat.csv, child: Text(AppLocalizations.of(context)!.csv)),
-                    //DropdownMenuItem(value: ExportFormat.pdf, child: Text(AppLocalizations.of(context)!.pdf)),
-                    DropdownMenuItem(value: ExportFormat.db, child: Text(AppLocalizations.of(context)!.db)),
-                  ],
-                  onChanged: (ExportFormat? value) {
-                    if (value != null) {
-                      settings.exportFormat = value;
-                    }
-                  },
-                ),
-                const ExportDataRangeSettings(),
-                InputSettingsTile(
-                  title: Text(AppLocalizations.of(context)!.fieldDelimiter),
-                  inputWidth: 40,
-                  initialValue: settings.csvFieldDelimiter,
+              ),
+              DropDownSettingsTile<ExportFormat>(
+                key: const Key('exportFormat'),
+                title: Text(AppLocalizations.of(context)!.exportFormat),
+                value: settings.exportFormat,
+                items: [
+                  DropdownMenuItem(value: ExportFormat.csv, child: Text(AppLocalizations.of(context)!.csv)),
+                  //DropdownMenuItem(value: ExportFormat.pdf, child: Text(AppLocalizations.of(context)!.pdf)),
+                  DropdownMenuItem(value: ExportFormat.db, child: Text(AppLocalizations.of(context)!.db)),
+                ],
+                onChanged: (ExportFormat? value) {
+                  if (value != null) {
+                    settings.exportFormat = value;
+                  }
+                },
+              ),
+              InputSettingsTile(
+                title: Text(AppLocalizations.of(context)!.fieldDelimiter),
+                inputWidth: 40,
+                initialValue: settings.csvFieldDelimiter,
+                disabled: !(settings.exportFormat == ExportFormat.csv),
+                onEditingComplete: (value) {
+                  if (value != null) {
+                    settings.csvFieldDelimiter = value;
+                  }
+                },
+              ),
+              InputSettingsTile(
+                title: Text(AppLocalizations.of(context)!.textDelimiter),
+                inputWidth: 40,
+                initialValue: settings.csvTextDelimiter,
+                disabled: !(settings.exportFormat == ExportFormat.csv),
+                onEditingComplete: (value) {
+                  if (value != null) {
+                    settings.csvTextDelimiter = value;
+                  }
+                },
+              ),
+              SwitchSettingsTile(
+                  title: Text(AppLocalizations.of(context)!.exportCsvHeadline),
+                  description: Text(AppLocalizations.of(context)!.exportCsvHeadlineDesc),
+                  initialValue: settings.exportCsvHeadline,
                   disabled: !(settings.exportFormat == ExportFormat.csv),
-                  onEditingComplete: (value) {
-                    if (value != null) {
-                      settings.csvFieldDelimiter = value;
-                    }
-                  },
-                ),
-                InputSettingsTile(
-                  title: Text(AppLocalizations.of(context)!.textDelimiter),
-                  inputWidth: 40,
-                  initialValue: settings.csvTextDelimiter,
-                  disabled: !(settings.exportFormat == ExportFormat.csv),
-                  onEditingComplete: (value) {
-                    if (value != null) {
-                      settings.csvTextDelimiter = value;
-                    }
-                  },
-                ),
-                SwitchSettingsTile(
-                    title: Text(AppLocalizations.of(context)!.exportCsvHeadline),
-                    description: Text(AppLocalizations.of(context)!.exportCsvHeadlineDesc),
-                    initialValue: settings.exportCsvHeadline,
-                    disabled: !(settings.exportFormat == ExportFormat.csv),
-                    onToggle: (value) {
-                      settings.exportCsvHeadline = value;
-                    }
-                ),
-                const ExportFieldCustomisationSetting(),
-              ],
-            ),
-          );
-        })
-      ),
-      floatingActionButton: const ExportImportButtons(),
+                  onToggle: (value) {
+                    settings.exportCsvHeadline = value;
+                  }
+              ),
+              const ExportFieldCustomisationSetting(),
+            ],
+          ),
+        );
+      }),
+      bottomNavigationBar: const ExportImportButtons(),
     );
   }
-}
-
-class ExportDataRangeSettings extends StatelessWidget {
-  const ExportDataRangeSettings({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Consumer<Settings>(builder: (context, settings, child) {
-      var exportRange = settings.exportDataRange;
-      String exportRangeText;
-      if (exportRange.start.millisecondsSinceEpoch != 0 && exportRange.end.millisecondsSinceEpoch != 0) {
-        var formatter = DateFormat.yMMMd(AppLocalizations.of(context)!.localeName);
-        exportRangeText = '${formatter.format(exportRange.start)} - ${formatter.format(exportRange.end)}';
-      } else {
-        exportRangeText = AppLocalizations.of(context)!.errPleaseSelect;
-      }
-      return Column(
-        children: [
-          SwitchSettingsTile(
-            title: Text(AppLocalizations.of(context)!.exportLimitDataRange),
-            initialValue: settings.exportLimitDataRange,
-            onToggle: (value) {
-              settings.exportLimitDataRange = value;
-            },
-            disabled: settings.exportFormat == ExportFormat.db,
-          ),
-          SettingsTile(
-            title: Text(AppLocalizations.of(context)!.exportInterval),
-            description: Text(exportRangeText),
-            disabled: !settings.exportLimitDataRange || settings.exportFormat == ExportFormat.db,
-            onPressed: (context) async {
-              var model = Provider.of<BloodPressureModel>(context, listen: false);
-              var newRange = await showDateRangePicker(context: context, firstDate: await model.firstDay, lastDate: await model.lastDay);
-              if (newRange == null && context.mounted) {
-                ScaffoldMessenger.of(context)
-                    .showSnackBar(SnackBar(content: Text(AppLocalizations.of(context)!.errNoRangeForExport)));
-                return;
-              }
-              settings.exportDataRange = newRange ?? DateTimeRange(start: DateTime.fromMillisecondsSinceEpoch(0), end: DateTime.fromMillisecondsSinceEpoch(0));
-            }
-          ),
-        ],
-      );
-    });
-  }
-
 }
 
 class ExportFieldCustomisationSetting extends StatelessWidget {

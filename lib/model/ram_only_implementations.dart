@@ -1,5 +1,4 @@
 import 'dart:collection';
-import 'dart:math';
 
 import 'package:blood_pressure_app/model/blood_pressure.dart';
 import 'package:blood_pressure_app/model/export_import.dart';
@@ -36,52 +35,6 @@ class RamBloodPressureModel extends ChangeNotifier implements BloodPressureModel
   Future<UnmodifiableListView<BloodPressureRecord>> get all async => UnmodifiableListView(_records);
 
   @override
-  Future<int> get count async => _records.length;
-
-  @override
-  Future<int> get avgDia async => _nonNullDia.reduce((a, b) => a + b) ~/ _nonNullDia.length;
-
-  @override
-  Future<int> get avgPul async => _nonNullPul.reduce((a, b) => a + b) ~/ _nonNullPul.length;
-
-  @override
-  Future<int> get avgSys async => _nonNullSys.reduce((a, b) => a + b) ~/ _nonNullSys.length;
-
-  @override
-  Future<int> get maxDia async => _nonNullDia.reduce(max);
-
-  @override
-  Future<int> get maxPul async => _nonNullPul.reduce(max);
-
-  @override
-  Future<int> get maxSys async => _nonNullSys.reduce(max);
-
-  @override
-  Future<int> get minDia async => _nonNullDia.reduce(min);
-
-  @override
-  Future<int> get minPul async => _nonNullPul.reduce(min);
-
-  @override
-  Future<int> get minSys async => _nonNullSys.reduce(min);
-
-  @override
-  Future<DateTime> get firstDay async {
-    _records.sort((a, b) => a.creationTime.compareTo(b.creationTime));
-    return _records.first.creationTime;
-  }
-
-  @override
-  Future<DateTime> get lastDay async {
-    _records.sort((a, b) => a.creationTime.compareTo(b.creationTime));
-    return _records.last.creationTime;
-  }
-
-  Iterable<int> get _nonNullDia => _records.where((e) => e.diastolic!=null).map<int>((e) => e.diastolic!);
-  Iterable<int> get _nonNullSys => _records.where((e) => e.systolic!=null).map<int>((e) => e.systolic!);
-  Iterable<int> get _nonNullPul => _records.where((e) => e.pulse!=null).map<int>((e) => e.pulse!);
-
-  @override
   void close() {}
 }
 
@@ -98,7 +51,7 @@ class RamSettings extends ChangeNotifier implements Settings {
   DateTime? _displayDataStart;
   bool _followSystemDarkMode = true;
   double _graphLineThickness = 3;
-  int _graphStepSize = TimeStep.day;
+  TimeStep _graphStepSize = TimeStep.day;
   double _iconSize = 30;
   MaterialColor _pulColor = Colors.pink;
   MaterialColor _sysColor = Colors.pink;
@@ -112,9 +65,7 @@ class RamSettings extends ChangeNotifier implements Settings {
   List<String> _exportAddableItems = ['isoUTCTime'];
   bool _exportCsvHeadline = true;
   bool _exportCustomEntries = false;
-  DateTimeRange _exportDataRange = DateTimeRange(start: DateTime.fromMillisecondsSinceEpoch(0), end: DateTime.fromMillisecondsSinceEpoch(0));
   List<String> _exportItems = ['timestampUnixMs', 'systolic', 'diastolic', 'pulse', 'notes'];
-  bool _exportLimitDataRange = false;
   MimeType _exportMimeType = MimeType.csv;
   String _defaultExportDir = '';
   bool _exportAfterEveryEntry = false;
@@ -253,10 +204,10 @@ class RamSettings extends ChangeNotifier implements Settings {
   }
 
   @override
-  int get graphStepSize => _graphStepSize;
+  TimeStep get graphStepSize => _graphStepSize;
 
   @override
-  set graphStepSize(int value) {
+  set graphStepSize(TimeStep value) {
     _graphStepSize = value;
     notifyListeners();
   }
@@ -368,29 +319,11 @@ class RamSettings extends ChangeNotifier implements Settings {
   }
 
   @override
-  DateTimeRange get exportDataRange => _exportDataRange;
-
-  @override
-  set exportDataRange(DateTimeRange value) {
-    _exportDataRange = value;
-    notifyListeners();
-  }
-
-  @override
   List<String> get exportItems => _exportItems;
 
   @override
   set exportItems(List<String> value) {
     _exportItems = value;
-    notifyListeners();
-  }
-
-  @override
-  bool get exportLimitDataRange => _exportLimitDataRange;
-
-  @override
-  set exportLimitDataRange(bool value) {
-    _exportLimitDataRange = value;
     notifyListeners();
   }
 
@@ -431,7 +364,7 @@ class RamSettings extends ChangeNotifier implements Settings {
   }
 
   @override
-  void changeStepSize(int value) {
+  void changeStepSize(TimeStep value) {
     graphStepSize = value;
     final newInterval = getMostRecentDisplayIntervall();
     displayDataStart = newInterval[0];
@@ -448,6 +381,7 @@ class RamSettings extends ChangeNotifier implements Settings {
         displayDataEnd = oldEnd.copyWith(day: oldEnd.day + directionalStep);
         break;
       case TimeStep.week:
+      case TimeStep.last7Days:
         displayDataStart = oldStart.copyWith(day: oldStart.day + directionalStep * 7);
         displayDataEnd = oldEnd.copyWith(day: oldEnd.day + directionalStep * 7);
         break;
@@ -463,6 +397,9 @@ class RamSettings extends ChangeNotifier implements Settings {
         displayDataStart = DateTime.fromMillisecondsSinceEpoch(0);
         displayDataEnd = DateTime.now();
         break;
+      case TimeStep.last30Days:
+        displayDataStart = oldStart.copyWith(day: oldStart.day + directionalStep * 30);
+        displayDataEnd = oldEnd.copyWith(day: oldEnd.day + directionalStep * 30);
     }
   }
 
@@ -484,6 +421,12 @@ class RamSettings extends ChangeNotifier implements Settings {
         return [start, start.copyWith(year: now.year + 1)];
       case TimeStep.lifetime:
         final start = DateTime.fromMillisecondsSinceEpoch(0);
+        return [start, now];
+      case TimeStep.last7Days:
+        final start = now.copyWith(day: now.day-7);
+        return [start, now];
+      case TimeStep.last30Days:
+        final start = now.copyWith(day: now.day-30);
         return [start, now];
       default:
         assert(false);
