@@ -47,17 +47,17 @@
   "btnSave": "保存",
   "btnConfirm": "确定",
   "btnUndo": "撤销",
-  "btnNext": "NEXT",
+  "btnNext": "继续",
 
   "sysLong": "高压",
-  "sysShort": "高",
+  "sysShort": "高压",
   "diaLong": "低压",
-  "diaShort": "低",
+  "diaShort": "低压",
   "pulLong": "脉搏",
-  "pulShort": "脉",
+  "pulShort": "脉搏",
   "addNote": "备注（选填）",
 
-  "settings": "Settings",
+  "settings": "设置",
   "layout": "布局",
   "allowManualTimeInput": "允许手动输入时间",
   "enterTimeFormatScreen": "时间格式",
@@ -164,7 +164,7 @@
 
   "statistics": "统计",
   "measurementCount": "测量次数",
-  "measurementsPerDay": "每日测量次数",
+  "measurementsPerDay": "日测量次数",
   "timeResolvedMetrics": "时间解析图表",
   "avgOf": "{txt} Ø",
   "@avgOf": {
@@ -192,13 +192,13 @@
   },
 
   "warnValues": "警告值",
-  "warnAboutTxt1": "警告值纯粹是个参考意见，不是医学建议。",
+  "warnAboutTxt1": "警告值仅供参考，并非医学建议。",
   "warnAboutTxt2": "不同年龄的默认参考值来源于此。",
   "warnAboutTxt3": "您可以按需随意修改此值，请遵从医生的建议。",
 
-  "enterTimeFormatTxt1": "格式化字符串是一个预定义的ICU/骨骼字符串和您想要包含的附加文字的混合体。",
-  "enterTimeFormatTxt2": " 如对有效格式的完整列表感到好奇，可在此处查看。",
-  "enterTimeFormatTxt3": " 友情提示：使用更长或更短的格式字符串不会神奇地改变表列宽度，这可能会导致意外的换行和文字显示不全。",
+  "enterTimeFormatTxt1": "格式化字符串是一个预定义的ICU/Skeleton字符串和您想要包含的其他文字的混合体。",
+  "enterTimeFormatTxt2": " 点击即可查看可用的格式化字符串的完整列表。",
+  "enterTimeFormatTxt3": " 友情提示：使用更长或更短的格式字符串不会改变表的列宽，还可能导致意外的换行和文字显示不全。",
   "enterTimeFormatTxt4": "默认：\"yy-MM-dd HH:mm\"",
   "enterTimeFormatString": "时间格式",
 
@@ -215,7 +215,9 @@
   "month": "月",
   "year": "年",
   "lifetime": "终身",
-  "weekOfYear": "{year}第{weekNum}周",
+  "7 days": "7天",
+  "30 days": "30天",
+  "weekOfYear": "{year}年第{weekNum}周",
   "@weekOfYear": {
     "placeholders": {
       "weekNum": {
