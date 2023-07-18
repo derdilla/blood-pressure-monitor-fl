@@ -46,5 +46,297 @@
   "animationSpeed": "Durée de l'animation",
   "@animationSpeed": {},
   "behavior": "Comportement",
-  "@behavior": {}
+  "@behavior": {},
+  "errNoRangeForExport": "Vous devez indiquer l'intervalle pour lequel vous voulez exporter les données.",
+  "@errNoRangeForExport": {},
+  "errPleaseSelect": "veuillez choisir",
+  "@errPleaseSelect": {},
+  "errWrongImportFormat": "Vous pouvez importer uniquement des fichiers au format CSV et des bases de données au format SQLite.",
+  "@errWrongImportFormat": {},
+  "confirmDeletion": "Confirmer la suppression",
+  "@confirmDeletion": {},
+  "diaWarn": "Alerte sur la diastole",
+  "@diaWarn": {},
+  "buildNumberOf": "Numéro de version : {buildNumber}",
+  "@buildNumberOf": {
+    "placeholders": {
+      "buildNumber": {
+        "type": "String"
+      }
+    }
+  },
+  "exportFormat": "Format d'exportation",
+  "@exportFormat": {},
+  "export": "EXPORTER",
+  "@export": {},
+  "exportCustomEntries": "Personnaliser les champs",
+  "@exportCustomEntries": {},
+  "textDelimiter": "Délimiteur de texte",
+  "@textDelimiter": {},
+  "enterTimeFormatTxt1": "Une chaine de formatage est un mélange de chaines ICU/Skeleton et de n'importe quel texte supplémentaire que vous souhaitez inclure.",
+  "@enterTimeFormatTxt1": {},
+  "enterTimeFormatTxt2": "Si vous souhaitez en savoir plus sur la liste complète des formats valides, vous pouvez trouver ces derniers juste ici.",
+  "@enterTimeFormatTxt2": {},
+  "success": "Réussite : {msg}",
+  "@success": {
+    "placeholders": {
+      "msg": {
+        "type": "String"
+      }
+    }
+  },
+  "loading": "chargement…",
+  "@loading": {},
+  "error": "Erreur : {msg}",
+  "@error": {
+    "placeholders": {
+      "msg": {
+        "type": "String"
+      }
+    }
+  },
+  "errNaN": "Veuillez entrer un Nombre",
+  "@errNaN": {},
+  "errLt30": "Nombre <= 30 ? Désactivez la validation dans les paramètres !",
+  "@errLt30": {},
+  "errUnrealistic": "Valeur irréaliste ? Désactivez la validation dans les paramètres !",
+  "@errUnrealistic": {},
+  "errDiaGtSys": "dia >= sys ? Désactivez la validation dans les paramètres !",
+  "@errDiaGtSys": {},
+  "errUnknown": "Erreur inconnue",
+  "@errUnknown": {},
+  "errCantOpenURL": "Impossible d'ouvrir l'adresse {url}",
+  "@errCantOpenURL": {
+    "placeholders": {
+      "url": {
+        "type": "String"
+      }
+    }
+  },
+  "errNoFileOpened": "aucun fichier ouvert",
+  "@errNoFileOpened": {},
+  "errNotStarted": "non démarré",
+  "@errNotStarted": {},
+  "errNoValue": "Veuillez entrer une valeur",
+  "@errNoValue": {},
+  "errNotEnoughDataToGraph": "Pas assez de données pour générer un graphique.",
+  "@errNotEnoughDataToGraph": {},
+  "errNoData": "pas de données",
+  "@errNoData": {},
+  "errNeedHeadline": "Vous ne pouvez importer que des fichiers avec une ligne d'entête.",
+  "@errNeedHeadline": {},
+  "errCantReadFile": "Le contenu du fichier ne peut pas être lu",
+  "@errCantReadFile": {},
+  "errNotImportable": "Ce fichier ne peut pas être importé",
+  "@errNotImportable": {},
+  "graphTitlesCount": "Compteur d'étiquettes de graphique",
+  "@graphTitlesCount": {},
+  "accentColor": "Couleur du thème",
+  "@accentColor": {},
+  "sysColor": "Couleur de la systole",
+  "@sysColor": {},
+  "diaColor": "Couleur de la diastole",
+  "@diaColor": {},
+  "pulColor": "Couleur de la fréquence cardiaque",
+  "@pulColor": {},
+  "validateInputs": "Confirmer les saisies",
+  "@validateInputs": {},
+  "age": "Âge",
+  "@age": {},
+  "determineWarnValues": "Déterminer les valeurs d'alerte",
+  "@determineWarnValues": {},
+  "aboutWarnValuesScreen": "À propos",
+  "@aboutWarnValuesScreen": {},
+  "aboutWarnValuesScreenDesc": "Plus d'informations sur les valeurs d'alerte",
+  "@aboutWarnValuesScreenDesc": {},
+  "sysWarn": "Alerte sur la systole",
+  "@sysWarn": {},
+  "data": "Données",
+  "@data": {},
+  "version": "Version",
+  "@version": {},
+  "versionOf": "Version : {version}",
+  "@versionOf": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "buildSignatureOf": "Signature de la compilation : {signature}",
+  "@buildSignatureOf": {
+    "placeholders": {
+      "signature": {
+        "type": "String"
+      }
+    }
+  },
+  "packageNameOf": "Nom du package : {name}",
+  "@packageNameOf": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "sharedPrefsDump": "Contenu des préférences partagées :",
+  "@sharedPrefsDump": {},
+  "exportDir": "Répertoire d'export",
+  "@exportDir": {},
+  "exportAfterEveryInput": "Exporter après chaque saisie",
+  "@exportAfterEveryInput": {},
+  "exportImport": "Exporter / Importer",
+  "@exportImport": {},
+  "exportAfterEveryInputDesc": "Non recommandé (explosion du fichier)",
+  "@exportAfterEveryInputDesc": {},
+  "exportLimitDataRange": "Limiter l'intervalle de données",
+  "@exportLimitDataRange": {},
+  "exportInterval": "Intervalle de données",
+  "@exportInterval": {},
+  "addEntry": "Ajouter un champ",
+  "@addEntry": {},
+  "exportMimeType": "Exporter le type de média",
+  "@exportMimeType": {},
+  "exportMimeTypeDesc": "Signaler le type aux autres applications",
+  "@exportMimeTypeDesc": {},
+  "exportCsvHeadline": "Ligne d'entête",
+  "@exportCsvHeadline": {},
+  "exportCsvHeadlineDesc": "Aide pour distinguer les types",
+  "@exportCsvHeadlineDesc": {},
+  "csv": "CSV",
+  "@csv": {},
+  "pdf": "PDF",
+  "@pdf": {},
+  "db": "BDD SQLite",
+  "@db": {},
+  "text": "texte",
+  "@text": {},
+  "other": "autre",
+  "@other": {},
+  "fieldDelimiter": "Délimiteur de champ",
+  "@fieldDelimiter": {},
+  "exportSuccess": "Exporté vers : {path}",
+  "@exportSuccess": {
+    "placeholders": {
+      "path": {
+        "type": "String"
+      }
+    }
+  },
+  "shared": "partagé",
+  "@shared": {},
+  "import": "IMPORTER",
+  "@import": {},
+  "sourceCode": "Code source",
+  "@sourceCode": {},
+  "licenses": "Licences de tierces parties",
+  "@licenses": {},
+  "importSuccess": "{count} lignes importées",
+  "@importSuccess": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "statistics": "Statistiques",
+  "@statistics": {},
+  "exportWarnConfigNotImportable": "Coucou ! Ceci est juste un avertissement amical : les options d'export choisies ne seront pas importables. Pour corriger cela, choisissez un export en CSV, activez la ligne d'entête et sélectionnez un des formats d'heure disponibles.",
+  "@exportWarnConfigNotImportable": {},
+  "exportWarnNotEveryFieldExported": "Attention, vous n'exportez pas tous les champs : {fields} {count, plural, one{est manquant} other{sont manquants}}.",
+  "@exportWarnNotEveryFieldExported": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "fields": {
+        "type": "String"
+      }
+    }
+  },
+  "measurementCount": "Compteur de mesures",
+  "@measurementCount": {},
+  "measurementsPerDay": "Mesures par jour",
+  "@measurementsPerDay": {},
+  "timeResolvedMetrics": "Mesures déterminées par heure",
+  "@timeResolvedMetrics": {},
+  "avgOf": "{txt} Ø",
+  "@avgOf": {
+    "placeholders": {
+      "txt": {
+        "type": "String"
+      }
+    }
+  },
+  "minOf": "{txt} min.",
+  "@minOf": {
+    "placeholders": {
+      "txt": {
+        "type": "String"
+      }
+    }
+  },
+  "maxOf": "{txt} max.",
+  "@maxOf": {
+    "placeholders": {
+      "txt": {
+        "type": "String"
+      }
+    }
+  },
+  "warnValues": "Valeurs d'alerte",
+  "@warnValues": {},
+  "warnAboutTxt1": "Les valeurs d'alerte ne sont que des suggestions et n'ont pas valeur d'avis médical.",
+  "@warnAboutTxt1": {},
+  "warnAboutTxt2": "Les valeurs par défaut dépendant de l'âge proviennent de cette source.",
+  "@warnAboutTxt2": {},
+  "warnAboutTxt3": "N'hésitez pas à modifier les valeurs pour qu'elles vous conviennent et suivent les recommandations de votre médecin.",
+  "@warnAboutTxt3": {},
+  "enterTimeFormatTxt4": "valeur par défaut : \"yy-MM-dd HH:mm\"",
+  "@enterTimeFormatTxt4": {},
+  "enterTimeFormatString": "format d'heure",
+  "@enterTimeFormatString": {},
+  "dateFormatting": "Formatage de date",
+  "@dateFormatting": {},
+  "now": "maintenant",
+  "@now": {},
+  "notes": "Notes",
+  "@notes": {},
+  "time": "Heure",
+  "@time": {},
+  "confirmDelete": "Confirmer la suppression",
+  "@confirmDelete": {},
+  "confirmDeleteDesc": "Supprimer cet enregistrement ? (Vous pouvez désactiver cette confirmation dans les paramètres.)",
+  "@confirmDeleteDesc": {},
+  "deletionConfirmed": "Enregistrement supprimé.",
+  "@deletionConfirmed": {},
+  "day": "Jour",
+  "@day": {},
+  "week": "Semaine",
+  "@week": {},
+  "month": "Mois",
+  "@month": {},
+  "year": "Année",
+  "@year": {},
+  "lifetime": "Durée de vie",
+  "@lifetime": {},
+  "weekOfYear": "Semaine {weekNum}, {year}",
+  "@weekOfYear": {
+    "placeholders": {
+      "weekNum": {
+        "type": "int"
+      },
+      "year": {
+        "type": "int"
+      }
+    }
+  },
+  "last7Days": "7 jours",
+  "@last7Days": {},
+  "last30Days": "30 jours",
+  "@last30Days": {},
+  "allowMissingValues": "Autoriser les valeurs manquantes",
+  "@allowMissingValues": {},
+  "enterTimeFormatTxt3": "Rappel amical : utiliser des chaines de formatage plus courtes ou plus longues ne modifieront pas la largeur des colonnes de table par magie, ce qui pourrait générer des retours à la ligne inattendus ou que du texte n'apparaisse pas.",
+  "@enterTimeFormatTxt3": {}
 }

@@ -254,7 +254,7 @@
   "@statistics": {},
   "measurementCount": "Measurement count",
   "@measurementCount": {},
-  "measurementsPerDay": "Measurements per Day",
+  "measurementsPerDay": "Measurements per day",
   "@measurementsPerDay": {},
   "timeResolvedMetrics": "Time-Resolved Metrics",
   "@timeResolvedMetrics": {},
@@ -292,9 +292,9 @@
   "@warnAboutTxt3": {},
   "enterTimeFormatTxt1": "A formatter string is a blend of predefined ICU/Skeleton strings and any additional text you'd like to include.",
   "@enterTimeFormatTxt1": {},
-  "enterTimeFormatTxt2": " If you're curious about the complete list of valid formats, you can find them right here.",
+  "enterTimeFormatTxt2": "If you're curious about the complete list of valid formats, you can find them right here.",
   "@enterTimeFormatTxt2": {},
-  "enterTimeFormatTxt3": " Just a friendly reminder, using longer or shorter format Strings won't magically alter the width of the table columns, which might lead to some amusing line breaks and text not showing.",
+  "enterTimeFormatTxt3": "Just a friendly reminder, using longer or shorter format Strings won't magically alter the width of the table columns, which might lead to some amusing line breaks and text not showing.",
   "@enterTimeFormatTxt3": {},
   "enterTimeFormatTxt4": "default: \"yy-MM-dd HH:mm\"",
   "@enterTimeFormatTxt4": {},
@@ -310,7 +310,7 @@
   "@time": {},
   "confirmDelete": "Confirm deletion",
   "@confirmDelete": {},
-  "confirmDeleteDesc": "Delete this entry? (You can turn of this question in the settings.)",
+  "confirmDeleteDesc": "Delete this entry? (You can turn of these confirmations in the settings.)",
   "@confirmDeleteDesc": {},
   "deletionConfirmed": "Entry deleted.",
   "@deletionConfirmed": {},
@@ -339,5 +339,6 @@
   "@last7Days": {},
   "last30Days": "30 days",
   "@last30Days": {},
-  "allowMissingValues": "Allow missing values"
+  "allowMissingValues": "Allow missing values",
+  "@allowMissingValues": {}
 }
