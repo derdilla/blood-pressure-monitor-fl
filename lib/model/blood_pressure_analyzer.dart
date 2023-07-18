@@ -28,7 +28,6 @@ class BloodPressureAnalyser {
 
   int get minSys => _safeResult(() => _nonNullSys.reduce(min), (r) => r.systolic);
 
-  //TODO make first and last day nullable
   DateTime? get firstDay {
     if (_records.isEmpty) return null;
     _records.sort((a, b) => a.creationTime.compareTo(b.creationTime));

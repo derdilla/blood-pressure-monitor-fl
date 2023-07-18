@@ -170,8 +170,8 @@ class Statistic extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    const double top = 20;
     double sides = 20;
-    double top = 20;
     double padding = 20;
     if (smallEdges) {
       sides = 0;

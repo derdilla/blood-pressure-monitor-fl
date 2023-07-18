@@ -51,7 +51,7 @@ class RamSettings extends ChangeNotifier implements Settings {
   DateTime? _displayDataStart;
   bool _followSystemDarkMode = true;
   double _graphLineThickness = 3;
-  int _graphStepSize = TimeStep.day;
+  TimeStep _graphStepSize = TimeStep.day;
   double _iconSize = 30;
   MaterialColor _pulColor = Colors.pink;
   MaterialColor _sysColor = Colors.pink;
@@ -65,9 +65,7 @@ class RamSettings extends ChangeNotifier implements Settings {
   List<String> _exportAddableItems = ['isoUTCTime'];
   bool _exportCsvHeadline = true;
   bool _exportCustomEntries = false;
-  DateTimeRange _exportDataRange = DateTimeRange(start: DateTime.fromMillisecondsSinceEpoch(0), end: DateTime.fromMillisecondsSinceEpoch(0));
   List<String> _exportItems = ['timestampUnixMs', 'systolic', 'diastolic', 'pulse', 'notes'];
-  bool _exportLimitDataRange = false;
   MimeType _exportMimeType = MimeType.csv;
   String _defaultExportDir = '';
   bool _exportAfterEveryEntry = false;
@@ -206,10 +204,10 @@ class RamSettings extends ChangeNotifier implements Settings {
   }
 
   @override
-  int get graphStepSize => _graphStepSize;
+  TimeStep get graphStepSize => _graphStepSize;
 
   @override
-  set graphStepSize(int value) {
+  set graphStepSize(TimeStep value) {
     _graphStepSize = value;
     notifyListeners();
   }
@@ -321,29 +319,11 @@ class RamSettings extends ChangeNotifier implements Settings {
   }
 
   @override
-  DateTimeRange get exportDataRange => _exportDataRange;
-
-  @override
-  set exportDataRange(DateTimeRange value) {
-    _exportDataRange = value;
-    notifyListeners();
-  }
-
-  @override
   List<String> get exportItems => _exportItems;
 
   @override
   set exportItems(List<String> value) {
     _exportItems = value;
-    notifyListeners();
-  }
-
-  @override
-  bool get exportLimitDataRange => _exportLimitDataRange;
-
-  @override
-  set exportLimitDataRange(bool value) {
-    _exportLimitDataRange = value;
     notifyListeners();
   }
 
@@ -384,7 +364,7 @@ class RamSettings extends ChangeNotifier implements Settings {
   }
 
   @override
-  void changeStepSize(int value) {
+  void changeStepSize(TimeStep value) {
     graphStepSize = value;
     final newInterval = getMostRecentDisplayIntervall();
     displayDataStart = newInterval[0];
@@ -401,6 +381,7 @@ class RamSettings extends ChangeNotifier implements Settings {
         displayDataEnd = oldEnd.copyWith(day: oldEnd.day + directionalStep);
         break;
       case TimeStep.week:
+      case TimeStep.last7Days:
         displayDataStart = oldStart.copyWith(day: oldStart.day + directionalStep * 7);
         displayDataEnd = oldEnd.copyWith(day: oldEnd.day + directionalStep * 7);
         break;
@@ -416,6 +397,9 @@ class RamSettings extends ChangeNotifier implements Settings {
         displayDataStart = DateTime.fromMillisecondsSinceEpoch(0);
         displayDataEnd = DateTime.now();
         break;
+      case TimeStep.last30Days:
+        displayDataStart = oldStart.copyWith(day: oldStart.day + directionalStep * 30);
+        displayDataEnd = oldEnd.copyWith(day: oldEnd.day + directionalStep * 30);
     }
   }
 
@@ -437,6 +421,12 @@ class RamSettings extends ChangeNotifier implements Settings {
         return [start, start.copyWith(year: now.year + 1)];
       case TimeStep.lifetime:
         final start = DateTime.fromMillisecondsSinceEpoch(0);
+        return [start, now];
+      case TimeStep.last7Days:
+        final start = now.copyWith(day: now.day-7);
+        return [start, now];
+      case TimeStep.last30Days:
+        final start = now.copyWith(day: now.day-30);
         return [start, now];
       default:
         assert(false);

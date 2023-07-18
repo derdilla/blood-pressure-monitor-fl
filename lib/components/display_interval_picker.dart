@@ -59,15 +59,15 @@ class IntervalPicker extends StatelessWidget {
             ),
             Expanded(
               flex: 40,
-              child: DropdownButton<int>(
+              child: DropdownButton<TimeStep>(
                 value: settings.graphStepSize,
                 isExpanded: true,
-                onChanged: (int? value) {
+                onChanged: (TimeStep? value) {
                   if (value != null) {
                     settings.changeStepSize(value);
                   }
                 },
-                items: TimeStep.options.map<DropdownMenuItem<int>>((v) {
+                items: TimeStep.options.map<DropdownMenuItem<TimeStep>>((v) {
                   return DropdownMenuItem(value: v, child: Text(TimeStep.getName(v, context)));
                 }).toList(),
               ),

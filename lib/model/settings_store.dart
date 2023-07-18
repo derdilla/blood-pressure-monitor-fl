@@ -49,16 +49,58 @@ class Settings extends ChangeNotifier {
     return;
   }
 
-  int get graphStepSize {
-    return _prefs.getInt('graphStepSize') ?? TimeStep.day;
+  TimeStep get graphStepSize {
+    int stepInt = _prefs.getInt('graphStepSize') ?? 0;
+    switch (stepInt) {
+      case 0:
+        return TimeStep.day;
+      case 1:
+        return TimeStep.month;
+      case 2:
+        return TimeStep.year;
+      case 3:
+        return TimeStep.lifetime;
+      case 4:
+        return TimeStep.week;
+      case 5:
+        return TimeStep.last7Days;
+      case 6:
+        return TimeStep.last30Days;
+    }
+    assert(false);
+    return TimeStep.day;
   }
 
-  set graphStepSize(int newStepSize) {
-    _prefs.setInt('graphStepSize', newStepSize);
+  set graphStepSize(TimeStep newStepSize) {
+    switch (newStepSize) {
+      case TimeStep.day:
+        _prefs.setInt('graphStepSize', 0);
+        break;
+      case TimeStep.month:
+        _prefs.setInt('graphStepSize', 1);
+        break;
+      case TimeStep.year:
+        _prefs.setInt('graphStepSize', 2);
+        break;
+      case TimeStep.lifetime:
+        _prefs.setInt('graphStepSize', 3);
+        break;
+      case TimeStep.week:
+        _prefs.setInt('graphStepSize', 4);
+        break;
+      case TimeStep.last7Days:
+        _prefs.setInt('graphStepSize', 5);
+        break;
+      case TimeStep.last30Days:
+        _prefs.setInt('graphStepSize', 6);
+        break;
+      default:
+        assert(false);
+    }
     notifyListeners();
   }
 
-  void changeStepSize(int value) {
+  void changeStepSize(TimeStep value) {
     graphStepSize = value;
     final newInterval = getMostRecentDisplayIntervall();
     displayDataStart = newInterval[0];
@@ -434,38 +476,34 @@ class Settings extends ChangeNotifier {
   }
 }
 
-class TimeStep { // TODO: replace with enum
-  static const options = [0, 4, 1, 2, 3, 5, 6];
+enum TimeStep {
+  day,
+  month,
+  year,
+  lifetime,
+  week,
+  last7Days,
+  last30Days;
 
-  static const day = 0;
-  static const month = 1;
-  static const year = 2;
-  static const lifetime = 3;
-  static const week = 4;
-  static const last7Days = 5;
-  static const last30Days = 6;
+  static const options = [TimeStep.day, TimeStep.week, TimeStep.month, TimeStep.year, TimeStep.lifetime, TimeStep.last7Days, TimeStep.last30Days];
 
-  TimeStep._create();
-
-  static String getName(int opt, BuildContext context) {
+  static String getName(TimeStep opt, BuildContext context) {
     switch (opt) {
-      case day:
+      case TimeStep.day:
         return AppLocalizations.of(context)!.day;
-      case month:
+      case TimeStep.month:
         return AppLocalizations.of(context)!.month;
-      case year:
+      case TimeStep.year:
         return AppLocalizations.of(context)!.year;
-      case lifetime:
+      case TimeStep.lifetime:
         return AppLocalizations.of(context)!.lifetime;
-      case week:
+      case TimeStep.week:
         return AppLocalizations.of(context)!.week;
-      case last7Days:
+      case TimeStep.last7Days:
         return AppLocalizations.of(context)!.last7Days;
-      case last30Days:
+      case TimeStep.last30Days:
         return AppLocalizations.of(context)!.last30Days;
     }
-    assert(false);
-    return '-';
   }
 }
 
