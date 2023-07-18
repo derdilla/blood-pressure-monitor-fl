@@ -69,14 +69,23 @@ class _AddMeasurementPageState extends State<AddMeasurementPage> {
                         if (settings.allowManualTimeInput) {
                           return GestureDetector(
                             onTap: () async {
+                              final now = DateTime.now();
+                              final selectionEnd = now.copyWith(minute: now.minute+5);
+                              final messenger = ScaffoldMessenger.of(context);
+                              final errTimeAfterNow = AppLocalizations.of(context)!.errTimeAfterNow;
                               var selectedTime = await showDateTimePicker(
                                   context: context,
                                   firstDate: DateTime.fromMillisecondsSinceEpoch(0),
-                                  lastDate: DateTime.now().copyWith(second: DateTime.now().second + 1),
+                                  lastDate: selectionEnd,
                                   initialDate: _time);
                               if (selectedTime != null) {
+                                if (settings.validateInputs && selectedTime.isAfter(selectionEnd)) {
+                                  messenger.showSnackBar(SnackBar(content: Text(errTimeAfterNow)));
+                                  if (selectedTime.hour > now.hour) selectedTime = selectedTime.copyWith(hour: now.hour);
+                                  if (selectedTime.minute > now.minute) selectedTime = selectedTime.copyWith(minute: now.minute);
+                                }
                                 setState(() {
-                                  _time = selectedTime;
+                                  _time = selectedTime!;
                                 });
                               }
                             },
@@ -100,7 +109,7 @@ class _AddMeasurementPageState extends State<AddMeasurementPage> {
                           initialValue: (_systolic ?? '').toString(),
                           hintText: AppLocalizations.of(context)!.sysLong,
                           basicValidation: !settings.allowMissingValues,
-                          preValidion: (v) => _systolic = int.tryParse(v ?? ''),
+                          preValidation: (v) => _systolic = int.tryParse(v ?? ''),
                           focusNode: _sysFocusNode,
                           additionalValidator: (String? value) {
                             _systolic = int.tryParse(value ?? '');
@@ -112,7 +121,7 @@ class _AddMeasurementPageState extends State<AddMeasurementPage> {
                           initialValue: (_diastolic ?? '').toString(),
                           hintText: AppLocalizations.of(context)!.diaLong,
                           basicValidation: !settings.allowMissingValues,
-                          preValidion: (v) => _diastolic = int.tryParse(v ?? ''),
+                          preValidation: (v) => _diastolic = int.tryParse(v ?? ''),
                           additionalValidator: (String? value) {
                             if (settings.validateInputs && (int.tryParse(value ?? '') ?? 0) >= (_systolic ?? 1)) {
                               return AppLocalizations.of(context)?.errDiaGtSys;
@@ -126,7 +135,7 @@ class _AddMeasurementPageState extends State<AddMeasurementPage> {
                           initialValue: (_pulse ?? '').toString(),
                           hintText: AppLocalizations.of(context)!.pulLong,
                           basicValidation: !settings.allowMissingValues,
-                          preValidion: (v) => _pulse = int.tryParse(v ?? ''),
+                          preValidation: (v) => _pulse = int.tryParse(v ?? ''),
                           additionalValidator: (String? value) {
                             if (settings.validateInputs && (int.tryParse(value ?? '') ?? 0) >= 600) { // https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3273956/
                               return AppLocalizations.of(context)?.errUnrealistic;
@@ -202,11 +211,11 @@ class ValueInput extends StatelessWidget {
   final String hintText;
   final FocusNode? focusNode;
   final bool basicValidation;
-  final void Function(String?)? preValidion;
+  final void Function(String?)? preValidation;
   final FormFieldValidator<String> additionalValidator;
 
   const ValueInput({super.key, required this.initialValue, required this.hintText, this.focusNode, this.basicValidation = true,
-    this.preValidion, required this.additionalValidator});
+    this.preValidation, required this.additionalValidator});
 
   @override
   Widget build(BuildContext context) {
@@ -223,7 +232,7 @@ class ValueInput extends StatelessWidget {
           }
         },
         validator: (String? value) {
-          if (preValidion != null) preValidion!(value);
+          if (preValidation != null) preValidation!(value);
           if (basicValidation) {
             if (value == null || value.isEmpty || (int.tryParse(value) == null)) {
               return AppLocalizations.of(context)?.errNaN;
