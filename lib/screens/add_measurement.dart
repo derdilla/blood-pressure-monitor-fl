@@ -83,7 +83,7 @@ class _AddMeasurementPageState extends State<AddMeasurementPage> {
                                   messenger.showSnackBar(SnackBar(content: Text(errTimeAfterNow)));
                                   if (selectedTime.hour > now.hour) selectedTime = selectedTime.copyWith(hour: now.hour);
                                   if (selectedTime.minute > now.minute) selectedTime = selectedTime.copyWith(minute: now.minute);
-                                }
+                                } // validation for first date is not needed here as intervall starts at 00:00
                                 setState(() {
                                   _time = selectedTime!;
                                 });
