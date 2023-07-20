@@ -10,8 +10,8 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class MeasurementList extends StatelessWidget {
-  late final _tableElementsSizes;
-  late final _sideFlex;
+  late final List<int> _tableElementsSizes;
+  late final int _sideFlex;
 
   MeasurementList(BuildContext context, {super.key}) {
     if (MediaQuery.of(context).size.width < 1000) {
@@ -37,7 +37,7 @@ class MeasurementList extends StatelessWidget {
                 ),
                 Expanded(
                     flex: _tableElementsSizes[0],
-                    child: Text(AppLocalizations.of(context)!.time, style: TextStyle(fontWeight: FontWeight.bold))),
+                    child: Text(AppLocalizations.of(context)!.time, style: const TextStyle(fontWeight: FontWeight.bold))),
                 Expanded(
                     flex: _tableElementsSizes[1],
                     child: Text(AppLocalizations.of(context)!.sysShort, style: TextStyle(fontWeight: FontWeight.bold, color: settings.sysColor))),
@@ -49,7 +49,7 @@ class MeasurementList extends StatelessWidget {
                     child: Text(AppLocalizations.of(context)!.pulShort, style: TextStyle(fontWeight: FontWeight.bold, color: settings.pulColor))),
                 Expanded(
                     flex: _tableElementsSizes[4],
-                    child: Text(AppLocalizations.of(context)!.notes, style: TextStyle(fontWeight: FontWeight.bold))),
+                    child: Text(AppLocalizations.of(context)!.notes, style: const TextStyle(fontWeight: FontWeight.bold))),
                 Expanded(
                   flex: _sideFlex,
                   child: const SizedBox(),

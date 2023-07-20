@@ -70,6 +70,7 @@ class RamSettings extends ChangeNotifier implements Settings {
   String _defaultExportDir = '';
   bool _exportAfterEveryEntry = false;
   bool _allowMissingValues = false;
+  Locale? _language;
 
   RamSettings() {
     _accentColor = createMaterialColor(0xFF009688);
@@ -360,6 +361,15 @@ class RamSettings extends ChangeNotifier implements Settings {
   @override
   set allowMissingValues(bool value) {
     _allowMissingValues = value;
+    notifyListeners();
+  }
+
+  @override
+  Locale? get language => _language;
+
+  @override
+  set language(Locale? value) {
+    _language = value;
     notifyListeners();
   }
 

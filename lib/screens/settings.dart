@@ -1,6 +1,7 @@
 import 'package:blood_pressure_app/components/consistent_future_builder.dart';
 import 'package:blood_pressure_app/components/settings_widgets.dart';
 import 'package:blood_pressure_app/model/blood_pressure.dart';
+import 'package:blood_pressure_app/model/iso_lang_names.dart';
 import 'package:blood_pressure_app/model/settings_store.dart';
 import 'package:blood_pressure_app/screens/subsettings/enter_timeformat.dart';
 import 'package:blood_pressure_app/screens/subsettings/export_import_screen.dart';
@@ -77,6 +78,20 @@ class SettingsPage extends StatelessWidget {
                     default:
                       assert(false);
                   }
+                },
+              ),
+              DropDownSettingsTile<Locale?>(
+                key: const Key('language'),
+                leading: const Icon(Icons.language),
+                title: Text(AppLocalizations.of(context)!.language),
+                value: settings.language,
+                items: [
+                  DropdownMenuItem(value: null, child: Text(AppLocalizations.of(context)!.system)),
+                  for (final l in AppLocalizations.supportedLocales)
+                    DropdownMenuItem(value: l, child: Text(getDisplayLanguage(l) ?? l.languageCode)),
+                ],
+                onChanged: (Locale? value) {
+                  settings.language = value;
                 },
               ),
               SliderSettingsTile(

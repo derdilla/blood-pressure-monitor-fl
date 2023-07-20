@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:blood_pressure_app/model/ram_only_implementations.dart';
 import 'package:blood_pressure_app/model/settings_store.dart';
 import 'package:file_saver/file_saver.dart';
@@ -47,6 +49,7 @@ void main() {
       expect(s.defaultExportDir.isEmpty, true);
       expect(s.exportAfterEveryEntry, false);
       expect(s.allowMissingValues, false);
+      expect(s.language, null);
     });
 
     test('setting fields should save changes', () async {
@@ -91,6 +94,7 @@ void main() {
       s.defaultExportDir = '/storage/emulated/0/Android/data/com.derdilla.bloodPressureApp/files/file.csv';
       s.exportAfterEveryEntry = true;
       s.allowMissingValues = true;
+      s.language = const Locale('de');
 
       expect(s.displayDataStart, DateTime.fromMillisecondsSinceEpoch(10000));
       expect(s.displayDataEnd, DateTime.fromMillisecondsSinceEpoch(200000));
@@ -118,6 +122,7 @@ void main() {
       expect(s.defaultExportDir, '/storage/emulated/0/Android/data/com.derdilla.bloodPressureApp/files/file.csv');
       expect(s.exportAfterEveryEntry, true);
       expect(s.allowMissingValues, true);
+      expect(s.language, const Locale('de'));
     });
 
     test('setting fields should notify listeners and change values', () async {
@@ -156,8 +161,9 @@ void main() {
       s.defaultExportDir = '/storage/emulated/0/Android/data/com.derdilla.bloodPressureApp/files/file.csv';
       s.exportAfterEveryEntry = true;
       s.allowMissingValues = true;
+      s.language = const Locale('de');
 
-      expect(i, 28);
+      expect(i, 29);
     });
   });
 
@@ -199,6 +205,7 @@ void main() {
       expect(s.defaultExportDir.isEmpty, true);
       expect(s.exportAfterEveryEntry, false);
       expect(s.allowMissingValues, false);
+      expect(s.language, null);
     });
 
     test('setting fields should save changes', () async {
@@ -243,6 +250,7 @@ void main() {
       s.defaultExportDir = '/storage/emulated/0/Android/data/com.derdilla.bloodPressureApp/files/file.csv';
       s.exportAfterEveryEntry = true;
       s.allowMissingValues = true;
+      s.language = const Locale('de');
 
       expect(s.displayDataStart, DateTime.fromMillisecondsSinceEpoch(10000));
       expect(s.displayDataEnd, DateTime.fromMillisecondsSinceEpoch(200000));
@@ -270,7 +278,7 @@ void main() {
       expect(s.defaultExportDir, '/storage/emulated/0/Android/data/com.derdilla.bloodPressureApp/files/file.csv');
       expect(s.exportAfterEveryEntry, true);
       expect(s.allowMissingValues, true);
-
+      expect(s.language, const Locale('de'));
     });
 
     test('setting fields should notify listeners and change values', () async {
@@ -309,8 +317,9 @@ void main() {
       s.defaultExportDir = '/storage/emulated/0/Android/data/com.derdilla.bloodPressureApp/files/file.csv';
       s.exportAfterEveryEntry = true;
       s.allowMissingValues = true;
+      s.language = const Locale('de');
 
-      expect(i, 28);
+      expect(i, 29);
     });
   });
 }
