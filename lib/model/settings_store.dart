@@ -106,7 +106,6 @@ class Settings extends ChangeNotifier {
     displayDataEnd = newInterval[1];
   }
 
-  // directional step either 1 or -1
   void moveDisplayDataByStep(int directionalStep) {
     final oldStart = displayDataStart;
     final oldEnd = displayDataEnd;
@@ -169,7 +168,8 @@ class Settings extends ChangeNotifier {
         final start = now.copyWith(day: now.day-30);
         return [start, now];
       case TimeStep.custom:
-        return [DateTime.fromMillisecondsSinceEpoch(-1), DateTime.fromMillisecondsSinceEpoch(-1)]; // TODO
+        // fallback, TimeStep will be reset by getter
+        return [DateTime.fromMillisecondsSinceEpoch(-1), DateTime.fromMillisecondsSinceEpoch(-1)];
     }
   }
 

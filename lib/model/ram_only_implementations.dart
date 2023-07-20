@@ -389,7 +389,6 @@ class RamSettings extends ChangeNotifier implements Settings {
     displayDataEnd = newInterval[1];
   }
 
-  // directional step either 1 or -1
   @override
   void moveDisplayDataByStep(int directionalStep) {
     final oldStart = displayDataStart;
@@ -454,7 +453,8 @@ class RamSettings extends ChangeNotifier implements Settings {
         final start = now.copyWith(day: now.day-30);
         return [start, now];
       case TimeStep.custom:
-        return [DateTime.fromMillisecondsSinceEpoch(-1), DateTime.fromMillisecondsSinceEpoch(-1)]; // TODO
+        // fallback, TimeStep will be reset by getter
+        return [DateTime.fromMillisecondsSinceEpoch(-1), DateTime.fromMillisecondsSinceEpoch(-1)];
     }
   }
 }
