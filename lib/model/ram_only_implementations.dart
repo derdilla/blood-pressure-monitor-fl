@@ -92,7 +92,11 @@ class RamSettings extends ChangeNotifier implements Settings {
 
   @override
   DateTime get displayDataStart {
-    return _displayDataStart ?? getMostRecentDisplayIntervall()[0];
+    final s = _displayDataStart ?? getMostRecentDisplayIntervall()[0];
+    if(s.millisecondsSinceEpoch < 0) {
+      changeStepSize(TimeStep.last7Days);
+    }
+    return s;
   }
 
   @override
@@ -103,7 +107,11 @@ class RamSettings extends ChangeNotifier implements Settings {
 
   @override
   DateTime get displayDataEnd {
-    return _displayDataEnd ?? getMostRecentDisplayIntervall()[1];
+    final s = _displayDataEnd ?? getMostRecentDisplayIntervall()[1];
+    if(s.millisecondsSinceEpoch < 0) {
+      changeStepSize(TimeStep.last7Days);
+    }
+    return s;
   }
 
   @override
@@ -381,6 +389,7 @@ class RamSettings extends ChangeNotifier implements Settings {
     displayDataEnd = newInterval[1];
   }
 
+  // directional step either 1 or -1
   @override
   void moveDisplayDataByStep(int directionalStep) {
     final oldStart = displayDataStart;
@@ -410,6 +419,12 @@ class RamSettings extends ChangeNotifier implements Settings {
       case TimeStep.last30Days:
         displayDataStart = oldStart.copyWith(day: oldStart.day + directionalStep * 30);
         displayDataEnd = oldEnd.copyWith(day: oldEnd.day + directionalStep * 30);
+        break;
+      case TimeStep.custom:
+        final step = oldStart.difference(oldEnd) * directionalStep;
+        displayDataStart = oldStart.add(step);
+        displayDataEnd = oldEnd.add(step);
+        break;
     }
   }
 
@@ -438,10 +453,8 @@ class RamSettings extends ChangeNotifier implements Settings {
       case TimeStep.last30Days:
         final start = now.copyWith(day: now.day-30);
         return [start, now];
-      default:
-        assert(false);
-        final start = DateTime.fromMillisecondsSinceEpoch(0);
-        return [start, now];
+      case TimeStep.custom:
+        return [DateTime.fromMillisecondsSinceEpoch(-1), DateTime.fromMillisecondsSinceEpoch(-1)]; // TODO
     }
   }
 }

@@ -119,6 +119,7 @@ class _LineChartState extends State<_LineChart> {
                                         formatter = DateFormat('yyyy');
                                         break;
                                       case TimeStep.last30Days:
+                                      case TimeStep.custom:
                                         formatter = DateFormat.MMMd();
                                     }
                                     return Text(formatter
