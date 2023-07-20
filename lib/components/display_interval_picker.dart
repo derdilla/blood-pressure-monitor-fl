@@ -31,12 +31,11 @@ class IntervalPicker extends StatelessWidget {
           break;
         case TimeStep.last7Days:
         case TimeStep.last30Days:
-          final f = DateFormat.MMMd(AppLocalizations.of(context)!.localeName);
+        case TimeStep.custom:
+          final f = DateFormat.yMMMd(AppLocalizations.of(context)!.localeName);
           intervallDisplay = Text('${f.format(settings.displayDataStart)} - ${f.format(settings.displayDataEnd)}');
           break;
-        default:
-          assert(false);
-          intervallDisplay =  const Text('-');
+
       }
       return Column(
         children: [
@@ -46,7 +45,7 @@ class IntervalPicker extends StatelessWidget {
           ),
           Row(children: [
             Expanded(
-              flex: 30,
+              flex: 3,
               child: MaterialButton(
                 onPressed: () {
                   settings.moveDisplayDataByStep(-1);
@@ -58,12 +57,20 @@ class IntervalPicker extends StatelessWidget {
               ),
             ),
             Expanded(
-              flex: 40,
+              flex: 4,
               child: DropdownButton<TimeStep>(
                 value: settings.graphStepSize,
                 isExpanded: true,
-                onChanged: (TimeStep? value) {
-                  if (value != null) {
+                onChanged: (TimeStep? value) async {
+                  if (value == TimeStep.custom) {
+                    settings.graphStepSize = value!;
+                    final res = await showDateRangePicker(
+                        context: context,
+                        firstDate: DateTime.fromMillisecondsSinceEpoch(0),
+                        lastDate: DateTime.now());
+                    settings.displayDataStart = res?.start ?? DateTime.fromMillisecondsSinceEpoch(-1);
+                    settings.displayDataEnd = res?.end ?? DateTime.fromMillisecondsSinceEpoch(-1);
+                  } else if (value != null) {
                     settings.changeStepSize(value);
                   }
                 },
@@ -73,7 +80,7 @@ class IntervalPicker extends StatelessWidget {
               ),
             ),
             Expanded(
-              flex: 30,
+              flex: 3,
               child: MaterialButton(
                 onPressed: () {
                   settings.moveDisplayDataByStep(1);

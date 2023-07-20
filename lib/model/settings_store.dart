@@ -66,37 +66,36 @@ class Settings extends ChangeNotifier {
         return TimeStep.last7Days;
       case 6:
         return TimeStep.last30Days;
+      case 7:
+        return TimeStep.custom;
     }
     assert(false);
     return TimeStep.day;
   }
 
   set graphStepSize(TimeStep newStepSize) {
-    switch (newStepSize) {
-      case TimeStep.day:
-        _prefs.setInt('graphStepSize', 0);
-        break;
-      case TimeStep.month:
-        _prefs.setInt('graphStepSize', 1);
-        break;
-      case TimeStep.year:
-        _prefs.setInt('graphStepSize', 2);
-        break;
-      case TimeStep.lifetime:
-        _prefs.setInt('graphStepSize', 3);
-        break;
-      case TimeStep.week:
-        _prefs.setInt('graphStepSize', 4);
-        break;
-      case TimeStep.last7Days:
-        _prefs.setInt('graphStepSize', 5);
-        break;
-      case TimeStep.last30Days:
-        _prefs.setInt('graphStepSize', 6);
-        break;
-      default:
-        assert(false);
-    }
+    _prefs.setInt('graphStepSize', ((){
+      switch (newStepSize) {
+        case TimeStep.day:
+          return 0;
+        case TimeStep.month:
+          return 1;
+        case TimeStep.year:
+          return 2;
+        case TimeStep.lifetime:
+          return 3;
+        case TimeStep.week:
+          return 4;
+        case TimeStep.last7Days:
+          return 5;
+        case TimeStep.last30Days:
+          return 6;
+        case TimeStep.custom:
+          return 7;
+      }
+    })());
+
+
     notifyListeners();
   }
 
@@ -135,6 +134,12 @@ class Settings extends ChangeNotifier {
       case TimeStep.last30Days:
         displayDataStart = oldStart.copyWith(day: oldStart.day + directionalStep * 30);
         displayDataEnd = oldEnd.copyWith(day: oldEnd.day + directionalStep * 30);
+        break;
+      case TimeStep.custom:
+        final step = oldStart.difference(oldEnd) * directionalStep;
+        displayDataStart = oldStart.add(step);
+        displayDataEnd = oldEnd.add(step);
+        break;
     }
   }
 
@@ -162,15 +167,18 @@ class Settings extends ChangeNotifier {
       case TimeStep.last30Days:
         final start = now.copyWith(day: now.day-30);
         return [start, now];
-      default:
-        assert(false);
-        final start = DateTime.fromMillisecondsSinceEpoch(0);
-        return [start, now];
+      case TimeStep.custom:
+        // fallback, TimeStep will be reset by getter
+        return [DateTime.fromMillisecondsSinceEpoch(-1), DateTime.fromMillisecondsSinceEpoch(-1)];
     }
   }
 
   DateTime get displayDataStart {
-    return _displayDataStart ?? getMostRecentDisplayIntervall()[0];
+    final s = _displayDataStart ?? getMostRecentDisplayIntervall()[0];
+    if(s.millisecondsSinceEpoch < 0) {
+      changeStepSize(TimeStep.last7Days);
+    }
+    return s;
   }
 
   set displayDataStart(DateTime newGraphStart) {
@@ -179,7 +187,11 @@ class Settings extends ChangeNotifier {
   }
 
   DateTime get displayDataEnd {
-    return _displayDataEnd ?? getMostRecentDisplayIntervall()[1];
+    final s = _displayDataEnd ?? getMostRecentDisplayIntervall()[1];
+    if(s.millisecondsSinceEpoch < 0) {
+      changeStepSize(TimeStep.last7Days);
+    }
+    return s;
   }
 
   set displayDataEnd(DateTime newGraphEnd) {
@@ -494,9 +506,10 @@ enum TimeStep {
   lifetime,
   week,
   last7Days,
-  last30Days;
+  last30Days,
+  custom;
 
-  static const options = [TimeStep.day, TimeStep.week, TimeStep.month, TimeStep.year, TimeStep.lifetime, TimeStep.last7Days, TimeStep.last30Days];
+  static const options = [TimeStep.day, TimeStep.week, TimeStep.month, TimeStep.year, TimeStep.lifetime, TimeStep.last7Days, TimeStep.last30Days, TimeStep.custom];
 
   static String getName(TimeStep opt, BuildContext context) {
     switch (opt) {
@@ -514,6 +527,8 @@ enum TimeStep {
         return AppLocalizations.of(context)!.last7Days;
       case TimeStep.last30Days:
         return AppLocalizations.of(context)!.last30Days;
+      case TimeStep.custom:
+        return AppLocalizations.of(context)!.custom;
     }
   }
 }
