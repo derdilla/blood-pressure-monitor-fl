@@ -1,6 +1,7 @@
 import 'package:blood_pressure_app/components/consistent_future_builder.dart';
 import 'package:blood_pressure_app/components/settings_widgets.dart';
 import 'package:blood_pressure_app/model/blood_pressure.dart';
+import 'package:blood_pressure_app/model/iso_lang_names.dart';
 import 'package:blood_pressure_app/model/settings_store.dart';
 import 'package:blood_pressure_app/screens/subsettings/enter_timeformat.dart';
 import 'package:blood_pressure_app/screens/subsettings/export_import_screen.dart';
@@ -9,7 +10,6 @@ import 'package:blood_pressure_app/screens/subsettings/warn_about.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:locale_names/locale_names.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -88,7 +88,7 @@ class SettingsPage extends StatelessWidget {
                 items: [
                   DropdownMenuItem(value: null, child: Text(AppLocalizations.of(context)!.system)),
                   for (final l in AppLocalizations.supportedLocales)
-                    DropdownMenuItem(value: l, child: Text(l.nativeDisplayLanguage ?? l.languageCode)),
+                    DropdownMenuItem(value: l, child: Text(getDisplayLanguage(l) ?? l.languageCode)),
                 ],
                 onChanged: (Locale? value) {
                   settings.language = value;
