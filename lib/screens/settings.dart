@@ -9,6 +9,7 @@ import 'package:blood_pressure_app/screens/subsettings/warn_about.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:locale_names/locale_names.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -77,6 +78,20 @@ class SettingsPage extends StatelessWidget {
                     default:
                       assert(false);
                   }
+                },
+              ),
+              DropDownSettingsTile<Locale?>(
+                key: const Key('language'),
+                leading: const Icon(Icons.language),
+                title: Text(AppLocalizations.of(context)!.language),
+                value: settings.language,
+                items: [
+                  DropdownMenuItem(value: null, child: Text(AppLocalizations.of(context)!.system)),
+                  for (final l in AppLocalizations.supportedLocales)
+                    DropdownMenuItem(value: l, child: Text(l.nativeDisplayLanguage ?? l.languageCode)),
+                ],
+                onChanged: (Locale? value) {
+                  settings.language = value;
                 },
               ),
               SliderSettingsTile(

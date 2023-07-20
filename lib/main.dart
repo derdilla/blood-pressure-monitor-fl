@@ -50,6 +50,7 @@ class AppRoot extends StatelessWidget {
           GlobalCupertinoLocalizations.delegate,
         ],
         supportedLocales: AppLocalizations.supportedLocales,
+        locale: settings.language,
         home: const AppHome(),
       );
     });

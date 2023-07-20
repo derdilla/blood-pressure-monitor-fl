@@ -474,6 +474,17 @@ class Settings extends ChangeNotifier {
     _prefs.setBool('exportAfterEveryEntry', value);
     notifyListeners();
   }
+
+  Locale? get language {
+    final value = _prefs.getString('language');
+    if (value?.isEmpty ?? true) return null;
+    return Locale(value ?? 'en');
+  }
+
+  set language (Locale? value) {
+    _prefs.setString('language', value?.languageCode ?? '');
+    notifyListeners();
+  }
 }
 
 enum TimeStep {
