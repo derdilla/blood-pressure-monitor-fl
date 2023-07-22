@@ -47,8 +47,6 @@
   "@animationSpeed": {},
   "behavior": "Comportement",
   "@behavior": {},
-  "errNoRangeForExport": "Vous devez indiquer l'intervalle pour lequel vous voulez exporter les données.",
-  "@errNoRangeForExport": {},
   "errPleaseSelect": "veuillez choisir",
   "@errPleaseSelect": {},
   "errWrongImportFormat": "Vous pouvez importer uniquement des fichiers au format CSV et des bases de données au format SQLite.",
@@ -189,8 +187,6 @@
   "@exportImport": {},
   "exportAfterEveryInputDesc": "Non recommandé (explosion du fichier)",
   "@exportAfterEveryInputDesc": {},
-  "exportLimitDataRange": "Limiter l'intervalle de données",
-  "@exportLimitDataRange": {},
   "exportInterval": "Intervalle de données",
   "@exportInterval": {},
   "addEntry": "Ajouter un champ",
@@ -338,5 +334,11 @@
   "allowMissingValues": "Autoriser les valeurs manquantes",
   "@allowMissingValues": {},
   "enterTimeFormatTxt3": "Rappel amical : utiliser des chaines de formatage plus courtes ou plus longues ne modifieront pas la largeur des colonnes de table par magie, ce qui pourrait générer des retours à la ligne inattendus ou que du texte n'apparaisse pas.",
-  "@enterTimeFormatTxt3": {}
+  "@enterTimeFormatTxt3": {},
+  "custom": "Personnalisé",
+  "@custom": {},
+  "language": "Langue",
+  "@language": {},
+  "errTimeAfterNow": "L'heure choisie est dans le futur. Nous avons automatiquement repositionné à l'heure courante. Vous pouvez désactiver ce comportement dans les paramètres !",
+  "@errTimeAfterNow": {}
 }
