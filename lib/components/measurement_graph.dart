@@ -36,8 +36,7 @@ class _LineChartState extends State<_LineChart> {
                 return Consumer<BloodPressureModel>(builder: (context, model, child) {
                   var end = settings.displayDataEnd;
                   return ConsistentFutureBuilder<UnmodifiableListView<BloodPressureRecord>>(
-                    future: (settings.graphStepSize == TimeStep.lifetime)
-                        ? model.all
+                    future: (settings.graphStepSize == TimeStep.lifetime) ? model.all
                         : model.getInTimeRange(settings.displayDataStart, end),
                     onData: (context, fetchedData) {
                       List<BloodPressureRecord> data = fetchedData.toList();
@@ -135,6 +134,9 @@ class _LineChartState extends State<_LineChart> {
                             _buildBarData(settings, sysSpots, settings.sysColor, true, settings.sysWarn.toDouble()),
                             _buildBarData(settings, diaSpots, settings.diaColor, true, settings.diaWarn.toDouble()),
                             _buildBarData(settings, pulSpots, settings.pulColor, false),
+                            _buildRegressionLine(sysSpots),
+                            _buildRegressionLine(diaSpots),
+                            _buildRegressionLine(pulSpots),
                           ]
                         )
                       );
@@ -165,6 +167,29 @@ class _LineChartState extends State<_LineChart> {
     );
   }
 
+  // Real world use is limited TODO: make toggleable
+  LineChartBarData _buildRegressionLine(List<FlSpot> data) {
+    final d = data.length * (data.sum((e) => pow(e.x, 2))) - pow(data.sum((e) => e.x), 2);
+    final gradient = (1/d) * (data.length * data.sum((e) => e.x * e.y) - data.sum((e) => e.x) * data.sum((e) => e.y));
+    final yIntercept = (1/d) * (data.sum((e) => pow(e.x,2)) * data.sum((e) => e.y) -
+                                data.sum((e) => (e.x * e.y)) * data.sum((e) => e.x));
+
+    double y(x) => x * gradient + yIntercept;
+    final start = data.map<double>((e) => e.x).min;
+    final end = data.map<double>((e) => e.x).max;
+
+    return LineChartBarData(
+      color: Colors.grey,
+      spots: [
+        FlSpot(start, y(start)),
+        FlSpot(end, y(end))
+      ],
+      barWidth: 2,
+      dotData: const FlDotData(
+        show: false,
+      ),
+    );
+  }
 }
 
 class MeasurementGraph extends StatelessWidget {
@@ -194,3 +219,27 @@ class MeasurementGraph extends StatelessWidget {
     );
   }
 }
+
+double _determineMedian(Iterable<num> data) {
+  final clonedList = [];
+  clonedList.addAll(data);
+  
+  clonedList.sort((a, b) => a.compareTo(b));
+  double median;
+
+  int middle = clonedList.length ~/ 2;
+  if (clonedList.length % 2 == 1) {
+    median = clonedList[middle];
+  } else {
+    median = ((clonedList[middle - 1] + clonedList[middle]) / 2.0);
+  }
+
+  return median;
+}
+
+extension Sum<T> on List<T> {
+  double sum(num Function(T value) f) {
+    return fold<double>(0, (prev, e) => prev + f(e).toDouble());
+  }
+}
+
