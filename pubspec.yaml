@@ -1,25 +1,11 @@
 name: blood_pressure_app
 description: Track your blood pressure wherever you go
-# The following line prevents the package from being accidentally published to
-# pub.dev using `flutter pub publish`. This is preferred for private packages.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
-# The following defines the version and build number for your application.
-# A version number is three numbers separated by dots, like 1.2.43
-# followed by an optional build number separated by a +.
-# Both the version and the builder number may be overridden in flutter
-# build by specifying --build-name and --build-number, respectively.
-# In Android, build-name is used as versionName while build-number used as versionCode.
-# Read more about Android versioning at https://developer.android.com/studio/publish/versioning
-# In iOS, build-name is used as CFBundleShortVersionString while build-number is used as CFBundleVersion.
-# Read more about iOS versioning at
-# https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-# In Windows, build-name is used as the major, minor, and patch parts
-# of the product and file versions while build-number is used as the build suffix.
 version: 1.4.1
 
 environment:
-  sdk: '>=2.19.6 <3.0.0'
+  sdk: '>=3.0.2 <4.0.0'
 
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
@@ -36,27 +22,28 @@ dependencies:
   sqflite:  # BSD-2-Clause
   path:  # BSD-3-Clause
 
-  intl: any  # BSD-3-Clause
+  intl: ^0.18.1  # BSD-3-Clause
   fl_chart: ^0.63.0  # MIT
-  file_saver: ^0.2.1  # BSD-3-Clause
   share_plus: ^7.0.1  # BSD-3-Clause
-  flutter_material_color_picker: ^1.1.0+2  # MIT
-  file_picker: ^5.2.11  # MIT
+  flutter_material_color_picker: ^1.2.0  # MIT
   csv: ^5.0.2  # MIT
   url_launcher: ^6.1.11  # BSD-3-Clause
   shared_preferences: ^2.1.1  # BSD-3-Clause
-  mockito: ^5.4.1
   pdf: ^3.10.4
-  jsaver: ^1.2.0
   package_info_plus: ^4.0.2
-  collection: any
+
+  # can become one custom dependency
+  file_saver: ^0.2.1  # BSD-3-Clause
+  file_picker: ^5.2.11  # MIT
+  jsaver: ^1.2.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   sqflite_common_ffi:
-  file:
+  file: any
   flutter_lints: ^2.0.0
+  mockito: ^5.4.1
 
 flutter:
 
