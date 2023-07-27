@@ -20,8 +20,9 @@ class AppHome extends StatelessWidget {
       padding = const EdgeInsets.all(80);
     }
 
-    return Scaffold(body: OrientationBuilder(
-      builder: (context, orientation) {
+    return Scaffold(
+      body: OrientationBuilder(
+        builder: (context, orientation) {
         if (orientation == Orientation.landscape && MediaQuery.of(context).size.height < 500) {
           return MeasurementGraph(
             height: MediaQuery.of(context).size.height,
@@ -37,62 +38,66 @@ class AppHome extends StatelessWidget {
           ),
         );
       },
-    ), floatingActionButton: OrientationBuilder(builder: (context, orientation) {
-      if (orientation == Orientation.landscape && MediaQuery.of(context).size.height < 500) {
-        SystemChrome.setEnabledSystemUIMode(SystemUiMode.leanBack);
-        return const SizedBox.shrink();
-      }
-      SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: SystemUiOverlay.values);
-      return Consumer<Settings>(builder: (context, settings, child) {
-        return Column(
-          verticalDirection: VerticalDirection.up,
-          children: [
-            Ink(
-              decoration: ShapeDecoration(shape: const CircleBorder(), color: Theme.of(context).primaryColor),
-              child: IconButton(
-                iconSize: settings.iconSize,
-                icon: const Icon(
-                  Icons.add,
-                  color: Colors.black,
+      ),
+      floatingActionButton: OrientationBuilder(
+        builder: (context, orientation) {
+          if (orientation == Orientation.landscape && MediaQuery.of(context).size.height < 500) {
+            SystemChrome.setEnabledSystemUIMode(SystemUiMode.leanBack);
+            return const SizedBox.shrink();
+          }
+          SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: SystemUiOverlay.values);
+          return Consumer<Settings>(builder: (context, settings, child) {
+            return Column(
+              verticalDirection: VerticalDirection.up,
+              children: [
+                Theme(
+                  data: Theme.of(context).copyWith(useMaterial3: true),
+                  child: FloatingActionButton(
+                    tooltip: 'Add measurement',
+                    autofocus: true,
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        _buildTransition(const AddMeasurementPage(), settings.animationSpeed),
+                      );
+                    },
+                    child: const Icon(Icons.add,),
+                  )
                 ),
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    _buildTransition(const AddMeasurementPage(), settings.animationSpeed),
-                  );
-                },
-              ),
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            Ink(
-              decoration: ShapeDecoration(shape: const CircleBorder(), color: Theme.of(context).unselectedWidgetColor),
-              child: IconButton(
-                iconSize: settings.iconSize,
-                icon: const Icon(Icons.insights, color: Colors.black),
-                onPressed: () {
-                  Navigator.push(context, _buildTransition(const StatisticsPage(), settings.animationSpeed));
-                },
-              ),
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            Ink(
-              decoration: ShapeDecoration(shape: const CircleBorder(), color: Theme.of(context).unselectedWidgetColor),
-              child: IconButton(
-                iconSize: settings.iconSize,
-                icon: const Icon(Icons.settings, color: Colors.black),
-                onPressed: () {
-                  Navigator.push(context, _buildTransition(const SettingsPage(), settings.animationSpeed));
-                },
-              ),
-            ),
-          ],
-        );
-      });
-    }));
+
+                const SizedBox(
+                  height: 10,
+                ),
+                Ink(
+                  decoration: ShapeDecoration(shape: const CircleBorder(), color: Theme.of(context).unselectedWidgetColor),
+                  child: IconButton(
+                    tooltip: 'Statistics',
+                    iconSize: settings.iconSize,
+                    icon: const Icon(Icons.insights, color: Colors.black),
+                    onPressed: () {
+                      Navigator.push(context, _buildTransition(const StatisticsPage(), settings.animationSpeed));
+                    },
+                  ),
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                Ink(
+                  decoration: ShapeDecoration(shape: const CircleBorder(), color: Theme.of(context).unselectedWidgetColor),
+                  child: IconButton(
+                    tooltip: 'Settings',
+                    iconSize: settings.iconSize,
+                    icon: const Icon(Icons.settings, color: Colors.black),
+                    onPressed: () {
+                      Navigator.push(context, _buildTransition(const SettingsPage(), settings.animationSpeed));
+                    },
+                  ),
+                ),
+              ],
+            );
+          });
+        })
+    );
   }
 }
 

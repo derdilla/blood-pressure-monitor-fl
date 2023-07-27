@@ -30,5 +30,4 @@ class ConsistentFutureBuilder<T> extends StatelessWidget {
         }
       });
   }
-
 }

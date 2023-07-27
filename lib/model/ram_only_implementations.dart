@@ -71,6 +71,7 @@ class RamSettings extends ChangeNotifier implements Settings {
   bool _exportAfterEveryEntry = false;
   bool _allowMissingValues = false;
   Locale? _language;
+  bool _drawRegressionLines = false;
 
   RamSettings() {
     _accentColor = createMaterialColor(0xFF009688);
@@ -378,6 +379,15 @@ class RamSettings extends ChangeNotifier implements Settings {
   @override
   set language(Locale? value) {
     _language = value;
+    notifyListeners();
+  }
+
+  @override
+  bool get drawRegressionLines => _drawRegressionLines;
+
+  @override
+  set drawRegressionLines(bool value) {
+    _drawRegressionLines = value;
     notifyListeners();
   }
 

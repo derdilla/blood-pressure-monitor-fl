@@ -339,5 +339,7 @@
   "@allowMissingValues": {},
   "errTimeAfterNow": "The selected time of day is after this moment. We have automatically reset it to the current time. You can disable this validation in the settings!",
   "language": "Language",
-  "custom": "Custom"
+  "custom": "Custom",
+  "drawRegressionLines": "Draw trend lines",
+  "drawRegressionLinesDesc": "Draws regression lines in graph. Only useful for large intervalls."
 }

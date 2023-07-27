@@ -244,6 +244,15 @@ class SettingsPage extends StatelessWidget {
                   );
                 }
               ),
+              SwitchSettingsTile(
+                  title: Text(AppLocalizations.of(context)!.drawRegressionLines),
+                  leading: const Icon(Icons.trending_down_outlined),
+                  description: Text(AppLocalizations.of(context)!.drawRegressionLinesDesc),
+                  initialValue: settings.drawRegressionLines,
+                  onToggle: (value) {
+                    settings.drawRegressionLines = value;
+                  }
+              ),
             ]),
             SettingsSection(
               title: Text(AppLocalizations.of(context)!.data),
