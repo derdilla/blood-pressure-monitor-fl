@@ -306,7 +306,7 @@
   "@time": {},
   "confirmDelete": "Confirm deletion",
   "@confirmDelete": {},
-  "confirmDeleteDesc": "Delete this entry? (You can turn of these confirmations in the settings.)",
+  "confirmDeleteDesc": "Delete this entry? (You can turn off these confirmations in the settings.)",
   "@confirmDeleteDesc": {},
   "deletionConfirmed": "Entry deleted.",
   "@deletionConfirmed": {},
@@ -337,7 +337,10 @@
   "@last30Days": {},
   "allowMissingValues": "Allow missing values",
   "@allowMissingValues": {},
-  "errTimeAfterNow": "The selected time of day is after this moment. We have automatically reset it to the current time. You can disable this validation in the settings!",
+  "errTimeAfterNow": "The selected time of day was reset to the current time, as is occurs after this moment. You can turn off this validation in the settings.",
+  "@errTimeAfterNow": {},
   "language": "Language",
-  "custom": "Custom"
+  "@language": {},
+  "custom": "Custom",
+  "@custom": {}
 }
