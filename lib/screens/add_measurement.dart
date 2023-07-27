@@ -157,42 +157,44 @@ class _AddMeasurementPageState extends State<AddMeasurementPage> {
                       ),
                       Row(
                         children: [
-                          ElevatedButton(
-                              key: const Key('btnCancel'),
-                              onPressed: () {
-                                if (widget.addInitialValuesOnCancel) {
-                                  assert(widget.initTime != null);
-                                  Provider.of<BloodPressureModel>(context, listen: false).add(BloodPressureRecord(
-                                      widget.initTime ?? DateTime.now(),
-                                      widget.initSys,
-                                      widget.initDia,
-                                      widget.initPul,
-                                      widget.initNote));
-                                }
-                                Navigator.of(context).pop();
-                              },
-                              style: ElevatedButton.styleFrom(backgroundColor: Theme.of(context).unselectedWidgetColor),
-                              child: Text(AppLocalizations.of(context)!.btnCancel)),
-                          const Spacer(),
-                          ElevatedButton(
-                              key: const Key('btnSave'),
-                              onPressed: () async {
-                                if ((_formKey.currentState?.validate() ?? false) ||
-                                    (_systolic == null && _diastolic == null && _pulse == null && _note != null)){
-                                  final settings = Provider.of<Settings>(context, listen: false);
-                                  final model = Provider.of<BloodPressureModel>(context, listen: false);
-                                  final navigator = Navigator.of(context);
+                          TextButton(
+                            key: const Key('btnCancel'),
+                            onPressed: () {
+                              if (widget.addInitialValuesOnCancel) {
+                                assert(widget.initTime != null);
+                                Provider.of<BloodPressureModel>(context, listen: false).add(BloodPressureRecord(
+                                    widget.initTime ?? DateTime.now(),
+                                    widget.initSys,
+                                    widget.initDia,
+                                    widget.initPul,
+                                    widget.initNote));
+                              }
+                              Navigator.of(context).pop();
+                            },
 
-                                  await model.add(BloodPressureRecord(_time, _systolic, _diastolic, _pulse, _note));
-                                  if (settings.exportAfterEveryEntry && context.mounted) {
-                                    final exporter = Exporter(context);
-                                    exporter.export();
-                                  }
-                                  navigator.pop();
+                            child: Text(AppLocalizations.of(context)!.btnCancel)
+                          ),
+                          const Spacer(),
+                          FilledButton.icon(
+                            key: const Key('btnSave'),
+                            icon: const Icon(Icons.save),
+                            label: Text(AppLocalizations.of(context)!.btnSave),
+                            onPressed: () async {
+                              if ((_formKey.currentState?.validate() ?? false) ||
+                                  (_systolic == null && _diastolic == null && _pulse == null && _note != null)){
+                                final settings = Provider.of<Settings>(context, listen: false);
+                                final model = Provider.of<BloodPressureModel>(context, listen: false);
+                                final navigator = Navigator.of(context);
+
+                                await model.add(BloodPressureRecord(_time, _systolic, _diastolic, _pulse, _note));
+                                if (settings.exportAfterEveryEntry && context.mounted) {
+                                  final exporter = Exporter(context);
+                                  exporter.export();
                                 }
-                              },
-                              style: ElevatedButton.styleFrom(backgroundColor: Theme.of(context).primaryColor),
-                              child: Text(AppLocalizations.of(context)!.btnSave))
+                                navigator.pop();
+                              }
+                            },
+                          )
                         ],
                       )
                     ]);

@@ -62,7 +62,7 @@ class MeasurementList extends StatelessWidget {
             Divider(
               height: 0,
               thickness: 2,
-              color: Theme.of(context).primaryColor,
+              color: Theme.of(context).colorScheme.primaryContainer,
             )
           ]);
         }),

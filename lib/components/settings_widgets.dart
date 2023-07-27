@@ -398,8 +398,7 @@ class SettingsSection extends StatelessWidget {
           child: Align(
             alignment: const Alignment(-0.93, 0),
             child: DefaultTextStyle(
-                style: (Theme.of(context).textTheme.bodyMedium ?? const TextStyle())
-                    .copyWith(color: Theme.of(context).primaryColor, fontWeight: FontWeight.bold),
+                style: Theme.of(context).textTheme.titleMedium!,
                 child: title),
           ),
         ),
