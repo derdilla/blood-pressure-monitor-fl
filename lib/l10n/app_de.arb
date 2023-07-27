@@ -336,5 +336,7 @@
     }
   },
   "allowMissingValues": "Fehlende Werte erlauben",
-  "@allowMissingValues": {}
+  "@allowMissingValues": {},
+  "custom": "Benutzerdefiniert",
+  "@custom": {}
 }
