@@ -497,6 +497,15 @@ class Settings extends ChangeNotifier {
     _prefs.setString('language', value?.languageCode ?? '');
     notifyListeners();
   }
+
+  bool get drawRegressionLines {
+    return _prefs.getBool('drawRegressionLines') ?? false;
+  }
+
+  set drawRegressionLines(bool value) {
+    _prefs.setBool('drawRegressionLines', value);
+    notifyListeners();
+  }
 }
 
 enum TimeStep {

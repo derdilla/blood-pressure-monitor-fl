@@ -32,34 +32,37 @@ class SettingsTile extends StatelessWidget {
 
     return InkWell(
       onTap: () => onPressed(context),
-      child: SizedBox(
-        height: 48,
+      child: ConstrainedBox(
+        constraints: BoxConstraints(minHeight: 48, maxWidth: MediaQuery.of(context).size.width),
         child: Row(
+          mainAxisSize: MainAxisSize.min,
           children: [
             lead,
             const SizedBox(
               width: 15,
             ),
-            SizedBox(
-              child: (() {
-                if (description != null) {
-                  return Column(
+            if (description != null)
+              Expanded(
+                flex: 10,
+                child: Container(
+                  padding: const EdgeInsets.only(top: 5, bottom: 5),
+                  child: Column(
                     mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       title,
-                      Flexible(
-                          child: DefaultTextStyle(
-                              style: const TextStyle(color: Colors.grey),
-                              overflow: TextOverflow.visible,
-                              child: description ?? const SizedBox.shrink()))
+                      DefaultTextStyle(
+                          style: const TextStyle(color: Colors.grey, ),
+                          child: description ?? const SizedBox.shrink()
+                      )
                     ],
-                  );
-                }
-                return title;
-              })(),
-            ),
-            const Expanded(child: SizedBox.shrink()),
+                  ),
+                ),
+              ),
+            if (description == null)
+              title,
+            const Spacer(),
+            //const Expanded(child: SizedBox.shrink()),
             trail
           ],
         ),

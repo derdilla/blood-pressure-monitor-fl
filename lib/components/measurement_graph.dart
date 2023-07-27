@@ -85,9 +85,12 @@ class _LineChartState extends State<_LineChart> {
                                   _buildBarData(value, sysSpots, settings.sysColor, true, settings.sysWarn.toDouble()),
                                   _buildBarData(value, diaSpots, settings.diaColor, true, settings.diaWarn.toDouble()),
                                   _buildBarData(value, pulSpots, settings.pulColor, false),
-                                  _buildRegressionLine(sysSpots),
-                                  _buildRegressionLine(diaSpots),
-                                  _buildRegressionLine(pulSpots),
+                                  if (settings.drawRegressionLines)
+                                    _buildRegressionLine(sysSpots),
+                                  if (settings.drawRegressionLines)
+                                    _buildRegressionLine(diaSpots),
+                                  if (settings.drawRegressionLines)
+                                    _buildRegressionLine(pulSpots),
                                 ]
                             ),
                             duration: const Duration(milliseconds: 200),
