@@ -293,7 +293,7 @@
   "@time": {},
   "confirmDelete": "Löschen bestätigen",
   "@confirmDelete": {},
-  "confirmDeleteDesc": "Soll der Eintrag gelöscht werden? (Diese Rückfrage kann in den Einstellungen abgestellt werden.)",
+  "confirmDeleteDesc": "Soll der Eintrag gelöscht werden? (Diese Rückfragen können in den Einstellungen abgestellt werden.)",
   "@confirmDeleteDesc": {},
   "deletionConfirmed": "Eintrag gelöscht.",
   "@deletionConfirmed": {},
@@ -324,7 +324,7 @@
   "@last7Days": {},
   "last30Days": "30 Tage",
   "@last30Days": {},
-  "exportWarnNotEveryFieldExported": "Achtung, einige Felder werden nicht exportiert: {fields}.",
+  "exportWarnNotEveryFieldExported": "Achtung, {count, plural, one{ein Feld wird} other{einige Felder werden}} nicht exportiert: {fields}.",
   "@exportWarnNotEveryFieldExported": {
     "placeholders": {
       "count": {
@@ -336,5 +336,11 @@
     }
   },
   "allowMissingValues": "Fehlende Werte erlauben",
-  "@allowMissingValues": {}
+  "@allowMissingValues": {},
+  "custom": "Benutzerdefiniert",
+  "@custom": {},
+  "errTimeAfterNow": "Die ausgewählte Uhrzeit wurde zurückgesetzt, da sie in der Zukunft liegt. Die Überprüfung lässt sich in den Einstellungen deaktivieren.",
+  "@errTimeAfterNow": {},
+  "language": "Sprache",
+  "@language": {}
 }
