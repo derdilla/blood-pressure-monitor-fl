@@ -39,12 +39,19 @@ class AppRoot extends StatelessWidget {
         // TODO: Use Material 3 everywhere. Some components like the add button on the start page and the settings
         // switches already use it, so they need to get this theme override removed
         theme: ThemeData(
-            primaryColor: settings.accentColor,
+            colorScheme: ColorScheme.fromSeed(
+                seedColor: settings.accentColor,
+                brightness: Brightness.light,
+            ),
+            useMaterial3: true
         ),
         darkTheme: ThemeData(
-          brightness: Brightness.dark,
-          canvasColor: Colors.black,
-          primaryColor: settings.accentColor.shade400,
+          colorScheme: ColorScheme.fromSeed(
+            seedColor: settings.accentColor,
+            brightness: Brightness.dark,
+            background: Colors.black
+          ),
+          useMaterial3: true
         ),
         themeMode: mode,
         localizationsDelegates: const [
