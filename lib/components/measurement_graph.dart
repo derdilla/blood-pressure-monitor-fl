@@ -68,77 +68,31 @@ class _LineChartState extends State<_LineChart> {
                         return Text(AppLocalizations.of(context)!.errNotEnoughDataToGraph);
                       }
 
-                      const noTitels = AxisTitles(sideTitles: SideTitles(reservedSize: 40, showTitles: false));
-                      return LineChart(
-                        LineChartData(
-                          minY: settings.validateInputs ? 30 : 0,
-                          maxY: max(pulMax.toDouble(), max(diaMax.toDouble(), sysMax.toDouble())) + 5,
-                          titlesData: FlTitlesData(
-                            topTitles: noTitels,
-                            rightTitles: noTitels,
-                            bottomTitles: AxisTitles(
-                              sideTitles: SideTitles(
-                                showTitles: true,
-                                interval: _lineChartTitleIntervall,
-                                getTitlesWidget: (double pos, TitleMeta meta) {
-                                  // calculate new intervall
-                                  // as graphWidth can technically be as low as one max is needed here to avoid freezes
-                                  double graphWidth = meta.max - meta.min;
-                                  if ((max(graphWidth - 2,1) / settings.graphTitlesCount) != _lineChartTitleIntervall) {
-                                    // simple hack needed to change the state during build
-                                    // https://stackoverflow.com/a/63607696/21489239
-                                    Future.delayed(Duration.zero, () async {
-                                      setState(() {
-                                        _lineChartTitleIntervall = max(graphWidth - 2,1) / settings.graphTitlesCount;
-                                      });
-                                    });
-                                  }
-
-                                  // don't show fixed titles, as they are replaced by long dates below
-                                  if (meta.axisPosition <= 1 || pos >= meta.max) {
-                                    return const SizedBox.shrink();
-                                  }
-
-                                  late final DateFormat formatter;
-                                  switch (settings.graphStepSize) {
-                                    case TimeStep.day:
-                                      formatter = DateFormat('H:m');
-                                      break;
-                                    case TimeStep.month:
-                                    case TimeStep.last7Days:
-                                      formatter = DateFormat('d');
-                                      break;
-                                    case TimeStep.week:
-                                      formatter = DateFormat('E');
-                                      break;
-                                    case TimeStep.year:
-                                      formatter = DateFormat('MMM');
-                                      break;
-                                    case TimeStep.lifetime:
-                                      formatter = DateFormat('yyyy');
-                                      break;
-                                    case TimeStep.last30Days:
-                                    case TimeStep.custom:
-                                      formatter = DateFormat.MMMd();
-                                  }
-                                  return Text(formatter
-                                      .format(DateTime.fromMillisecondsSinceEpoch(pos.toInt())));
-                                }
-                                ),
+                      
+                      return TweenAnimationBuilder<double>(
+                        duration: const Duration(milliseconds: 200), // interacts with LineChart duration property
+                        tween: Tween<double>(begin: 0, end: settings.graphLineThickness),
+                        builder: (context, value, child) {
+                          return LineChart(
+                            LineChartData(
+                                minY: settings.validateInputs ? 30 : 0,
+                                maxY: max(pulMax.toDouble(), max(diaMax.toDouble(), sysMax.toDouble())) + 5,
+                                titlesData: _buildFlTitlesData(settings),
+                                lineTouchData: const LineTouchData(
+                                    touchTooltipData: LineTouchTooltipData(
+                                        tooltipMargin: -200, tooltipRoundedRadius: 20)),
+                                lineBarsData: [
+                                  _buildBarData(value, sysSpots, settings.sysColor, true, settings.sysWarn.toDouble()),
+                                  _buildBarData(value, diaSpots, settings.diaColor, true, settings.diaWarn.toDouble()),
+                                  _buildBarData(value, pulSpots, settings.pulColor, false),
+                                  _buildRegressionLine(sysSpots),
+                                  _buildRegressionLine(diaSpots),
+                                  _buildRegressionLine(pulSpots),
+                                ]
                             ),
-                          ),
-                          lineTouchData: const LineTouchData(
-                              touchTooltipData:
-                              LineTouchTooltipData(tooltipMargin: -200, tooltipRoundedRadius: 20)),
-                          lineBarsData: [
-                            _buildBarData(settings, sysSpots, settings.sysColor, true, settings.sysWarn.toDouble()),
-                            _buildBarData(settings, diaSpots, settings.diaColor, true, settings.diaWarn.toDouble()),
-                            _buildBarData(settings, pulSpots, settings.pulColor, false),
-                            _buildRegressionLine(sysSpots),
-                            _buildRegressionLine(diaSpots),
-                            _buildRegressionLine(pulSpots),
-                          ]
-                        )
+                            duration: const Duration(milliseconds: 200),
+                          );
+                        },
                       );
                     }
                   );
@@ -151,11 +105,69 @@ class _LineChartState extends State<_LineChart> {
     );
   }
 
-  LineChartBarData _buildBarData(Settings settings, List<FlSpot> spots, Color color, bool hasAreaData, [double? areaDataCutOff]) {
+  FlTitlesData _buildFlTitlesData(Settings settings) {
+    const noTitels = AxisTitles(sideTitles: SideTitles(reservedSize: 40, showTitles: false));
+    return FlTitlesData(
+      topTitles: noTitels,
+      rightTitles: noTitels,
+      bottomTitles: AxisTitles(
+        sideTitles: SideTitles(
+          showTitles: true,
+          interval: _lineChartTitleIntervall,
+          getTitlesWidget: (double pos, TitleMeta meta) {
+            // calculate new intervall
+            // as graphWidth can technically be as low as one max is needed here to avoid freezes
+            double graphWidth = meta.max - meta.min;
+            if ((max(graphWidth - 2,1) / settings.graphTitlesCount) != _lineChartTitleIntervall) {
+              // simple hack needed to change the state during build
+              // https://stackoverflow.com/a/63607696/21489239
+              Future.delayed(Duration.zero, () async {
+                setState(() {
+                  _lineChartTitleIntervall = max(graphWidth - 2,1) / settings.graphTitlesCount;
+                });
+              });
+            }
+
+            // don't show fixed titles, as they are replaced by long dates below
+            if (meta.axisPosition <= 1 || pos >= meta.max) {
+              return const SizedBox.shrink();
+            }
+
+            late final DateFormat formatter;
+            switch (settings.graphStepSize) {
+              case TimeStep.day:
+                formatter = DateFormat('H:m');
+                break;
+              case TimeStep.month:
+              case TimeStep.last7Days:
+                formatter = DateFormat('d');
+                break;
+              case TimeStep.week:
+                formatter = DateFormat('E');
+                break;
+              case TimeStep.year:
+                formatter = DateFormat('MMM');
+                break;
+              case TimeStep.lifetime:
+                formatter = DateFormat('yyyy');
+                break;
+              case TimeStep.last30Days:
+              case TimeStep.custom:
+                formatter = DateFormat.MMMd();
+            }
+            return Text(formatter
+                .format(DateTime.fromMillisecondsSinceEpoch(pos.toInt())));
+          }
+        ),
+      ),
+    );
+  }
+
+  LineChartBarData _buildBarData(double lineThickness, List<FlSpot> spots, Color color, bool hasAreaData, [double? areaDataCutOff]) {
     return LineChartBarData(
         spots: spots,
         color: color,
-        barWidth: settings.graphLineThickness,
+        barWidth: lineThickness,
         dotData: const FlDotData(
           show: false,
         ),
