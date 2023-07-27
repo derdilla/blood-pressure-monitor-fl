@@ -235,23 +235,6 @@ class MeasurementGraph extends StatelessWidget {
   }
 }
 
-double _determineMedian(Iterable<num> data) {
-  final clonedList = [];
-  clonedList.addAll(data);
-  
-  clonedList.sort((a, b) => a.compareTo(b));
-  double median;
-
-  int middle = clonedList.length ~/ 2;
-  if (clonedList.length % 2 == 1) {
-    median = clonedList[middle];
-  } else {
-    median = ((clonedList[middle - 1] + clonedList[middle]) / 2.0);
-  }
-
-  return median;
-}
-
 extension Sum<T> on List<T> {
   double sum(num Function(T value) f) {
     return fold<double>(0, (prev, e) => prev + f(e).toDouble());

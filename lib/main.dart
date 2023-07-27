@@ -36,8 +36,12 @@ class AppRoot extends StatelessWidget {
       return MaterialApp(
         title: 'Blood Pressure App',
         onGenerateTitle: (context) => AppLocalizations.of(context)!.title,
-        theme: ThemeData(primaryColor: settings.accentColor),
+        theme: ThemeData(
+            primaryColor: settings.accentColor,
+            // useMaterial3: true TODO
+        ),
         darkTheme: ThemeData(
+          // useMaterial3: true, TODO
           brightness: Brightness.dark,
           canvasColor: Colors.black,
           primaryColor: settings.accentColor.shade400,

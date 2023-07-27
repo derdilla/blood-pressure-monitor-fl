@@ -254,7 +254,7 @@ class _SliderSettingsTileState extends State<SliderSettingsTile> {
                   min: widget.start,
                   max: widget.end,
                   divisions: (widget.end - widget.start) ~/ widget.stepSize,
-                ))
+                )),
               ],
             ),
           ),
