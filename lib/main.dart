@@ -36,12 +36,12 @@ class AppRoot extends StatelessWidget {
       return MaterialApp(
         title: 'Blood Pressure App',
         onGenerateTitle: (context) => AppLocalizations.of(context)!.title,
+        // TODO: Use Material 3 everywhere. Some components like the add button on the start page and the settings
+        // switches already use it, so they need to get this theme override removed
         theme: ThemeData(
             primaryColor: settings.accentColor,
-            // useMaterial3: true TODO
         ),
         darkTheme: ThemeData(
-          // useMaterial3: true, TODO
           brightness: Brightness.dark,
           canvasColor: Colors.black,
           primaryColor: settings.accentColor.shade400,

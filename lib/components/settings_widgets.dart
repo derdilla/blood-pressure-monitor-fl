@@ -164,7 +164,10 @@ class SwitchSettingsTile extends StatelessWidget {
       leading: leading,
       description: description,
       disabled: disabled,
-      trailing: s,
+      trailing: Theme(
+        data: Theme.of(context).copyWith(useMaterial3: true),
+        child: s
+      ),
     );
   }
 }

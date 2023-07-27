@@ -25,86 +25,76 @@ class _LineChartState extends State<_LineChart> {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        Align(
-          alignment: Alignment.topCenter,
-          child: SizedBox(
-            height: widget.height,
-            child: Consumer<Settings>(
-              builder: (context, settings, child) {
-                return Consumer<BloodPressureModel>(builder: (context, model, child) {
-                  var end = settings.displayDataEnd;
-                  return ConsistentFutureBuilder<UnmodifiableListView<BloodPressureRecord>>(
-                    future: (settings.graphStepSize == TimeStep.lifetime) ? model.all
-                        : model.getInTimeRange(settings.displayDataStart, end),
-                    onData: (context, fetchedData) {
-                      List<BloodPressureRecord> data = fetchedData.toList();
-                      data.sort((a, b) => a.creationTime.compareTo(b.creationTime));
+    return SizedBox(
+        height: widget.height,
+        child: Consumer<Settings>(
+          builder: (context, settings, child) {
+            return Consumer<BloodPressureModel>(builder: (context, model, child) {
+              var end = settings.displayDataEnd;
+              return ConsistentFutureBuilder<UnmodifiableListView<BloodPressureRecord>>(
+                  future: (settings.graphStepSize == TimeStep.lifetime) ? model.all
+                      : model.getInTimeRange(settings.displayDataStart, end),
+                  onData: (context, fetchedData) {
+                    List<BloodPressureRecord> data = fetchedData.toList();
+                    data.sort((a, b) => a.creationTime.compareTo(b.creationTime));
 
-                      List<FlSpot> pulSpots = [];
-                      List<FlSpot> diaSpots = [];
-                      List<FlSpot> sysSpots = [];
-                      int pulMax = 0;
-                      int diaMax = 0;
-                      int sysMax = 0;
-                      for (var e in data) {
-                        final x = e.creationTime.millisecondsSinceEpoch.toDouble();
-                        if (e.diastolic != null) {
-                          diaSpots.add(FlSpot(x, e.diastolic!.toDouble()));
-                          diaMax = max(diaMax, e.diastolic!);
-                        }
-                        if (e.systolic != null) {
-                          sysSpots.add(FlSpot(x, e.systolic!.toDouble()));
-                          sysMax = max(sysMax, e.systolic!);
-                        }
-                        if (e.pulse != null) {
-                          pulSpots.add(FlSpot(x, e.pulse!.toDouble()));
-                          pulMax = max(pulMax, e.pulse!);
-                        }
+                    // calculate lines for graph
+                    List<FlSpot> pulSpots = [], diaSpots = [], sysSpots = [];
+                    int maxValue = 0;
+                    for (var e in data) {
+                      final x = e.creationTime.millisecondsSinceEpoch.toDouble();
+                      if (e.diastolic != null) {
+                        diaSpots.add(FlSpot(x, e.diastolic!.toDouble()));
+                        maxValue = max(maxValue, e.diastolic!);
                       }
-
-                      if (fetchedData.length < 2 || (diaSpots.length < 2 && sysSpots.length < 2 && pulSpots.length < 2)) {
-                        return Text(AppLocalizations.of(context)!.errNotEnoughDataToGraph);
+                      if (e.systolic != null) {
+                        sysSpots.add(FlSpot(x, e.systolic!.toDouble()));
+                        maxValue = max(maxValue, e.systolic!);
                       }
-
-                      
-                      return TweenAnimationBuilder<double>(
-                        duration: const Duration(milliseconds: 200), // interacts with LineChart duration property
-                        tween: Tween<double>(begin: 0, end: settings.graphLineThickness),
-                        builder: (context, value, child) {
-                          return LineChart(
-                            LineChartData(
-                                minY: settings.validateInputs ? 30 : 0,
-                                maxY: max(pulMax.toDouble(), max(diaMax.toDouble(), sysMax.toDouble())) + 5,
-                                titlesData: _buildFlTitlesData(settings),
-                                lineTouchData: const LineTouchData(
-                                    touchTooltipData: LineTouchTooltipData(
-                                        tooltipMargin: -200, tooltipRoundedRadius: 20)),
-                                lineBarsData: [
-                                  _buildBarData(value, sysSpots, settings.sysColor, true, settings.sysWarn.toDouble()),
-                                  _buildBarData(value, diaSpots, settings.diaColor, true, settings.diaWarn.toDouble()),
-                                  _buildBarData(value, pulSpots, settings.pulColor, false),
-                                  if (settings.drawRegressionLines)
-                                    _buildRegressionLine(sysSpots),
-                                  if (settings.drawRegressionLines)
-                                    _buildRegressionLine(diaSpots),
-                                  if (settings.drawRegressionLines)
-                                    _buildRegressionLine(pulSpots),
-                                ]
-                            ),
-                            duration: const Duration(milliseconds: 200),
-                          );
-                        },
-                      );
+                      if (e.pulse != null) {
+                        pulSpots.add(FlSpot(x, e.pulse!.toDouble()));
+                        maxValue = max(maxValue, e.pulse!);
+                      }
                     }
-                  );
-                });
-              },
-            )
-          ),
-        ),
-      ],
+
+                    if (diaSpots.length < 2 && sysSpots.length < 2 && pulSpots.length < 2) {
+                      return Text(AppLocalizations.of(context)!.errNotEnoughDataToGraph);
+                    }
+
+
+                    return TweenAnimationBuilder<double>(
+                      duration: const Duration(milliseconds: 200), // interacts with LineChart duration property
+                      tween: Tween<double>(begin: 0, end: settings.graphLineThickness),
+                      builder: (context, animatedThickness, child) {
+                        return LineChart(
+                          duration: const Duration(milliseconds: 200),
+                          LineChartData(
+                              minY: settings.validateInputs ? 30 : 0,
+                              maxY: maxValue + 5,
+                              titlesData: _buildFlTitlesData(settings),
+                              lineTouchData: const LineTouchData(
+                                  touchTooltipData: LineTouchTooltipData(tooltipMargin: -200, tooltipRoundedRadius: 20)
+                              ),
+                              lineBarsData: [
+                                _buildBarData(animatedThickness, sysSpots, settings.sysColor, true, settings.sysWarn.toDouble()),
+                                _buildBarData(animatedThickness, diaSpots, settings.diaColor, true, settings.diaWarn.toDouble()),
+                                _buildBarData(animatedThickness, pulSpots, settings.pulColor, false),
+                                if (settings.drawRegressionLines)
+                                  _buildRegressionLine(sysSpots),
+                                if (settings.drawRegressionLines)
+                                  _buildRegressionLine(diaSpots),
+                                if (settings.drawRegressionLines)
+                                  _buildRegressionLine(pulSpots),
+                              ]
+                          ),
+                        );
+                      },
+                    );
+                  }
+              );
+            });
+          },
+        )
     );
   }
 
@@ -122,8 +112,7 @@ class _LineChartState extends State<_LineChart> {
             // as graphWidth can technically be as low as one max is needed here to avoid freezes
             double graphWidth = meta.max - meta.min;
             if ((max(graphWidth - 2,1) / settings.graphTitlesCount) != _lineChartTitleIntervall) {
-              // simple hack needed to change the state during build
-              // https://stackoverflow.com/a/63607696/21489239
+              // simple hack needed to change the state during build https://stackoverflow.com/a/63607696/21489239
               Future.delayed(Duration.zero, () async {
                 setState(() {
                   _lineChartTitleIntervall = max(graphWidth - 2,1) / settings.graphTitlesCount;
@@ -136,6 +125,7 @@ class _LineChartState extends State<_LineChart> {
               return const SizedBox.shrink();
             }
 
+            // format of titles
             late final DateFormat formatter;
             switch (settings.graphStepSize) {
               case TimeStep.day:
@@ -182,7 +172,7 @@ class _LineChartState extends State<_LineChart> {
     );
   }
 
-  // Real world use is limited TODO: make toggleable
+  // Real world use is limited
   LineChartBarData _buildRegressionLine(List<FlSpot> data) {
     final d = data.length * (data.sum((e) => pow(e.x, 2))) - pow(data.sum((e) => e.x), 2);
     final gradient = (1/d) * (data.length * data.sum((e) => e.x * e.y) - data.sum((e) => e.x) * data.sum((e) => e.y));
@@ -217,16 +207,10 @@ class MeasurementGraph extends StatelessWidget {
     return SizedBox(
       height: height,
       child: Padding(
-        padding: const EdgeInsets.only(right: 16, left: 6, top: 2),
+        padding: const EdgeInsets.only(right: 16, left: 6, top: 22),
         child: Column(
           children: [
-            const SizedBox(
-              height: 20,
-            ),
             _LineChart(height: height - 100),
-            const SizedBox(
-              height: 2,
-            ),
             const IntervalPicker()
           ],
         ),
