@@ -22,7 +22,7 @@ dependencies:
   sqflite:  # BSD-2-Clause
   path:  # BSD-3-Clause
 
-  intl: ^0.18.1  # BSD-3-Clause
+  intl: ^0.18.0  # BSD-3-Clause
   fl_chart: ^0.63.0  # MIT
   share_plus: ^7.0.1  # BSD-3-Clause
   flutter_material_color_picker: ^1.2.0  # MIT
