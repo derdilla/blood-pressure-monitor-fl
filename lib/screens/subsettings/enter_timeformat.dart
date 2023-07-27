@@ -25,7 +25,7 @@ class _EnterTimeFormatScreenState extends State<EnterTimeFormatScreen> {
           key: _formKey,
           child: SingleChildScrollView(
             child: Container(
-              padding: const EdgeInsets.all(90.0),
+              padding: const EdgeInsets.all(60.0),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -40,7 +40,7 @@ class _EnterTimeFormatScreenState extends State<EnterTimeFormatScreen> {
                                   const TimeFormattingHelp()));
                     },
                     child: SizedBox(
-                      height: 48,
+                      height: 65,
                       child: Center(
                         child: Text(
                           AppLocalizations.of(context)!.enterTimeFormatTxt2,
@@ -79,16 +79,16 @@ class _EnterTimeFormatScreenState extends State<EnterTimeFormatScreen> {
                   ),
                   Row(
                     children: [
-                      ElevatedButton(
+                      TextButton(
                           onPressed: () {
                             Navigator.of(context).pop();
                           },
-                          style: ElevatedButton.styleFrom(
-                              backgroundColor:
-                                  Theme.of(context).unselectedWidgetColor),
                           child: Text(AppLocalizations.of(context)!.btnCancel)),
                       const Spacer(),
-                      ElevatedButton(
+                      FilledButton.icon(
+                          key: const Key('btnSave'),
+                          icon: const Icon(Icons.save),
+                          label: Text(AppLocalizations.of(context)!.btnSave),
                           onPressed: () {
                             if (_formKey.currentState!.validate()) {
                               Provider.of<Settings>(context, listen: false)
@@ -96,9 +96,7 @@ class _EnterTimeFormatScreenState extends State<EnterTimeFormatScreen> {
                               Navigator.of(context).pop();
                             }
                           },
-                          style: ElevatedButton.styleFrom(
-                              backgroundColor: Theme.of(context).primaryColor),
-                          child: Text(AppLocalizations.of(context)!.btnSave))
+                      ),
                     ],
                   )
                 ],

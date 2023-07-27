@@ -177,6 +177,8 @@ class _AddMeasurementPageState extends State<AddMeasurementPage> {
                           const Spacer(),
                           FilledButton.icon(
                             key: const Key('btnSave'),
+                            icon: const Icon(Icons.save),
+                            label: Text(AppLocalizations.of(context)!.btnSave),
                             onPressed: () async {
                               if ((_formKey.currentState?.validate() ?? false) ||
                                   (_systolic == null && _diastolic == null && _pulse == null && _note != null)){
@@ -192,8 +194,6 @@ class _AddMeasurementPageState extends State<AddMeasurementPage> {
                                 navigator.pop();
                               }
                             },
-                            icon: Icon(Icons.save),
-                            label: Text(AppLocalizations.of(context)!.btnSave),
                           )
                         ],
                       )

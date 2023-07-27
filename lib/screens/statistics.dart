@@ -198,7 +198,7 @@ class Statistic extends StatelessWidget {
             child: Align(
               alignment: Alignment.center,
               child: DefaultTextStyle(
-                style: TextStyle(color: Theme.of(context).primaryColor, fontWeight: FontWeight.bold, fontSize: 40),
+                style: Theme.of(context).textTheme.displaySmall!,
                 child: FittedBox(
                   fit: BoxFit.fitHeight,
                   child: child
