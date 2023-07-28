@@ -50,12 +50,10 @@ android {
 
     defaultConfig {
         applicationId "com.derdilla.bloodPressureApp"
-        // You can update the following values to match your application needs.
-        // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-gradle-build-configuration.
         minSdkVersion 21
         targetSdkVersion flutter.targetSdkVersion
-        versionCode 17
-        versionName "1.4.1"
+        versionCode 18
+        versionName "1.4.2"
     }
     signingConfigs {
        release {

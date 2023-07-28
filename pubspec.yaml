@@ -2,17 +2,11 @@ name: blood_pressure_app
 description: Track your blood pressure wherever you go
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
-version: 1.4.1
+version: 1.4.2
 
 environment:
   sdk: '>=3.0.2 <4.0.0'
 
-# Dependencies specify other packages that your package needs in order to work.
-# To automatically upgrade your package dependencies to the latest versions
-# consider running `flutter pub upgrade --major-versions`. Alternatively,
-# dependencies can be manually updated by changing the version numbers below to
-# the latest version available on pub.dev. To see which dependencies have newer
-# versions available, run `flutter pub outdated`.
 dependencies:
   flutter:
     sdk: flutter
@@ -46,11 +40,6 @@ dev_dependencies:
   mockito: ^5.4.1
 
 flutter:
-
-  # The following line ensures that the Material Icons font is
-  # included with your application, so that you can use the icons in
-  # the material Icons class.
   uses-material-design: true
-
   generate: true
 
