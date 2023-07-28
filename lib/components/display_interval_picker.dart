@@ -63,13 +63,15 @@ class IntervalPicker extends StatelessWidget {
                 isExpanded: true,
                 onChanged: (TimeStep? value) async {
                   if (value == TimeStep.custom) {
-                    settings.graphStepSize = value!;
                     final res = await showDateRangePicker(
                         context: context,
                         firstDate: DateTime.fromMillisecondsSinceEpoch(0),
                         lastDate: DateTime.now());
-                    settings.displayDataStart = res?.start ?? DateTime.fromMillisecondsSinceEpoch(-1);
-                    settings.displayDataEnd = res?.end ?? DateTime.fromMillisecondsSinceEpoch(-1);
+                    if (res != null) {
+                      settings.graphStepSize = value!;
+                      settings.displayDataStart = res.start;
+                      settings.displayDataEnd = res.end;
+                    }
                   } else if (value != null) {
                     settings.changeStepSize(value);
                   }
