@@ -26,7 +26,7 @@
   A cross-platform app to save and analyze blood pressure values and allows easy data export
 </p>
 
-Track your blood pressure wherever you go. Offline, ad-free and open source.
+Track your blood pressure wherever you go. Offline, ad-free, and open source.
 This application allows you to easily store your records and export all your records to a CSV file. 
 
 ## Getting Started
@@ -42,10 +42,10 @@ Please note that when switching from another installation source, you first need
 This app is available on [F-Droid](https://f-droid.org/en/packages/com.derdilla.bloodPressureApp/). 
 
 #### GitHub
-You can download and install the APK directly through the Releases page. Keep in mind that you have to regulary check for new versions manually.
+You can download and install the APK directly through the Releases page. Keep in mind that you have to regularly check for new versions manually.
 
 ### I-OS
-While building an ios app would be no problem code wise, apple's restrictive behavior makes this more complicated (and expensive). So I wont take this step unless there is significant demand. 
+While building an ios app would be no problem code-wise, apple's restrictive behavior makes this more complicated (and expensive). So I won't take this step unless there is significant demand. 
 
 ### Windows, Linux and MacOS
 This would all be technically possible, but I don't really see a demand. Open an issue if you need them.
@@ -63,14 +63,23 @@ This would all be technically possible, but I don't really see a demand. Open an
 ## Contributing
 Contributions to this project are greatly appreciated and can come in many forms. Please note that when contributing you agree that your work is under the same license as the project.  
 ### Opening bugs and proposing features
-This is probably the simplest to do: Just use the app and find out what's wrong and what can be improved. There is no such thing as a wrong issue. Just make sure there is no existing one about the exact same topic If you are unsure about something just create a new issue, worst thing to happen is that it gets closed.
+This is probably the simplest to do: Just use the app and find out what's wrong and what can be improved. There is no such thing as a wrong issue. Just make sure there is no existing one about the exact same topic If you are unsure about something just create a new issue, the worst thing to happen is that it gets closed.
 
-### improving texts and translate
-Another easy way to help is to go through the texts (this one or the ones in the app) and fixing grammar/other mistakes or finding better (more precise / friendly) ways to put things.
+### Improving texts and translating
+Another easy way to help is to go through the texts (this one or the ones in the app) and fix grammar/other mistakes or find better (more precise/friendly) ways to put things.
 The easiest way to do this is [weblate](https://hosted.weblate.org/engage/blood-pressure-monitor-fl/).
 
 [![Translation status](https://hosted.weblate.org/widgets/blood-pressure-monitor-fl/-/multi-auto.svg)](https://hosted.weblate.org/engage/blood-pressure-monitor-fl/)
 
 
-### pull requests
+### Pull requests
 If you can code, you can fix issues or implement features from the issues page. While not a strict requirement, it's still probably best, if you talk about it in an issue first.
+
+### Donations
+If you have too much money, I would advise you to donate to either [F-Droid](https://f-droid.org/en/donate/), [Weblate](https://weblate.org/en/donate/), or some other service that has high unavoidable maintenance costs.
+
+In case you really want to give me something, I guess I can take crypto:
+- USDT: 0xd7c59b9033A35b5F4eB443C0Fcb96973bc1B3c19
+- Monero: 84XXubwz9BURBUctdpsqo7Q3BNXdaTacJjVTyAR6woEsamMS45mkPsGXvCJK7ZFXKCXR5VnmGi8B4ZDf71HTc6HYFiMMGN2
+- ETH: 0xd7c59b9033A35b5F4eB443C0Fcb96973bc1B3c19
+- BTC: bc1qrq44yrp8dp7z2fcwrpq64jamalrdefeakmzj2g
