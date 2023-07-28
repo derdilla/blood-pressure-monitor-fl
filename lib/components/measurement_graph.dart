@@ -22,6 +22,7 @@ class _LineChart extends StatefulWidget {
 
 class _LineChartState extends State<_LineChart> {
   double _lineChartTitleIntervall = 100000000;
+  int _reloadsLeft = 30;
 
   @override
   Widget build(BuildContext context) {
@@ -111,10 +112,11 @@ class _LineChartState extends State<_LineChart> {
             // calculate new intervall
             // as graphWidth can technically be as low as one max is needed here to avoid freezes
             double graphWidth = meta.max - meta.min;
-            if ((max(graphWidth - 2,1) / settings.graphTitlesCount) != _lineChartTitleIntervall) {
+            if ((max(graphWidth - 2,1) / settings.graphTitlesCount) != _lineChartTitleIntervall && (_reloadsLeft > 0)) {
               // simple hack needed to change the state during build https://stackoverflow.com/a/63607696/21489239
               Future.delayed(Duration.zero, () async {
                 setState(() {
+                  _reloadsLeft--;
                   _lineChartTitleIntervall = max(graphWidth - 2,1) / settings.graphTitlesCount;
                 });
               });
