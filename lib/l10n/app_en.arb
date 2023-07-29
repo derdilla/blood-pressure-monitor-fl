@@ -290,7 +290,7 @@
   "@enterTimeFormatTxt1": {},
   "enterTimeFormatTxt2": "If you're curious about the complete list of valid formats, you can find them right here.",
   "@enterTimeFormatTxt2": {},
-  "enterTimeFormatTxt3": "Just a friendly reminder, using longer or shorter format Strings won't magically alter the width of the table columns, which might lead to some amusing line breaks and text not showing.",
+  "enterTimeFormatTxt3": "Just a friendly reminder, using longer or shorter format Strings won't magically alter the width of the table columns, which might lead to some awkward line breaks and text not showing.",
   "@enterTimeFormatTxt3": {},
   "enterTimeFormatTxt4": "default: \"yy-MM-dd HH:mm\"",
   "@enterTimeFormatTxt4": {},
@@ -343,5 +343,9 @@
   "custom": "Custom",
   "@custom": {},
   "drawRegressionLines": "Draw trend lines",
-  "drawRegressionLinesDesc": "Draws regression lines in graph. Only useful for large intervalls."
+  "@drawRegressionLines": {},
+  "drawRegressionLinesDesc": "Draws regression lines in graph. Only useful for large intervalls.",
+  "@drawRegressionLinesDesc": {},
+  "exportHiddenFields": "hidden fields",
+  "@exportHiddenFields": {}
 }
