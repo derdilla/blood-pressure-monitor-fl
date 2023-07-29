@@ -1,6 +1,6 @@
-* allow comment only entries / incomplete data
-* add time periods
-* make the way warn values work clearer; don't store age directly
-* add Chinese, French, Norwegian translations (partially incomplete)
-* fix large system font sizes on small screens
-* fix problems when saving warn values
+* Nur-Kommentar-Einträge / unvollständige Daten zulassen
+* Zeiträume hinzufügen
+* die Funktionsweise von Warnwerten klarer gestalten; das Alter wird nicht direkt gespeichert
+* Chinesische, französische und norwegische Übersetzungen hinzugefügt (teilweise unvollständig)
+* große Systemschriftgrößen auf kleinen Bildschirmen korrigiert
+* Probleme beim Speichern von Warnwerten behoben

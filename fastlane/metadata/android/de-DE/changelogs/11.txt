@@ -1,4 +1,4 @@
-* improve design
-* Improve graph usability
-* validate inputs
-* changed default time format
+* Verbesserung des Designs
+* Verbesserung der Benutzerfreundlichkeit des Diagramms
+* Eingaben werden validiert
+* Standard-Zeitformat geändert
