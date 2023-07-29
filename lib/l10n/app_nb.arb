@@ -65,7 +65,7 @@
   "@week": {},
   "month": "måned",
   "@month": {},
-  "year": "år",
+  "year": "År",
   "@year": {},
   "btnSave": "Lagre",
   "@btnSave": {},
@@ -342,5 +342,9 @@
         "type": "String"
       }
     }
-  }
+  },
+  "drawRegressionLines": "Tegn trendlinjer",
+  "@drawRegressionLines": {},
+  "drawRegressionLinesDesc": "Tegner regresjonslinjer i diagram. Kun nyttig for store intervaller.",
+  "@drawRegressionLinesDesc": {}
 }

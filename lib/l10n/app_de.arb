@@ -342,5 +342,9 @@
   "errTimeAfterNow": "Die ausgewählte Uhrzeit wurde zurückgesetzt, da sie in der Zukunft liegt. Die Überprüfung lässt sich in den Einstellungen deaktivieren.",
   "@errTimeAfterNow": {},
   "language": "Sprache",
-  "@language": {}
+  "@language": {},
+  "drawRegressionLines": "Zeichne Trendlinien",
+  "@drawRegressionLines": {},
+  "drawRegressionLinesDesc": "Zeichne Regressionslinien im Graphen. Nur nützlich für große Intervalle.",
+  "@drawRegressionLinesDesc": {}
 }
