@@ -252,28 +252,30 @@ class CsvItemsOrderCreator extends StatelessWidget {
     });
   }
 
-  Opacity _buildListSectionDivider(BuildContext context) {
-    return Opacity(
+  Widget _buildListSectionDivider(BuildContext context) {
+    return IgnorePointer(
       key: UniqueKey(),
-      opacity: 0.7,
-      child: Row(
-        children: <Widget>[
-          const Expanded(
-            child: Divider()
-          ),
-          Container(
-            padding: const EdgeInsets.all(10),
-            child: const Icon(Icons.arrow_downward)
-          ),
-          Text(AppLocalizations.of(context)!.exportHiddenFields),
-          Container(
-            padding: const EdgeInsets.all(10),
-            child: const Icon(Icons.arrow_downward)
-          ),
-          const Expanded(
-            child: Divider()
-          ),
-        ]
+      child: Opacity(
+        opacity: 0.7,
+        child: Row(
+          children: <Widget>[
+            const Expanded(
+              child: Divider()
+            ),
+            Container(
+              padding: const EdgeInsets.all(10),
+              child: const Icon(Icons.arrow_downward)
+            ),
+            Text(AppLocalizations.of(context)!.exportHiddenFields),
+            Container(
+              padding: const EdgeInsets.all(10),
+              child: const Icon(Icons.arrow_downward)
+            ),
+            const Expanded(
+              child: Divider()
+            ),
+          ]
+        ),
       ),
     );
   }
