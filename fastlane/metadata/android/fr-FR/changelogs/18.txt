@@ -1,0 +1,3 @@
+* Update dependencies and migrate to Material 3 (You)
+* Fix app not responding when switching to custom intervall and then closing date range selection on main page
+* Add optional trend lines to graph
