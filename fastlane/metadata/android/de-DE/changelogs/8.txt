@@ -1,3 +1,3 @@
-* add library licenses screen
-* add missing symbols
-* link repository in app
+* Seite für Lizenzen der Bibliotheken hinzugefügt
+* Fehlende Symbole hinzugefügt
+* Repository in der App verlinkt
