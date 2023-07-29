@@ -51,7 +51,7 @@ class AppHome extends StatelessWidget {
               verticalDirection: VerticalDirection.up,
               children: [
                 Theme(
-                  data: Theme.of(context).copyWith(useMaterial3: true),
+                  data: Theme.of(context),
                   child: FloatingActionButton(
                     tooltip: 'Add measurement',
                     autofocus: true,

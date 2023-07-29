@@ -43,4 +43,7 @@ app.*.map.json
 /android/app/profile
 /android/app/release
 /main.dart.incremental.dill
+
 /l10n_errors.txt
+/fastlane/metadata/android/en-US/images/phoneScreenshots/resizeAll.sh
+/tmp6.csv
