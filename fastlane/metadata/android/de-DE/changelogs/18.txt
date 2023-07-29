@@ -1,3 +1,3 @@
-* Update dependencies and migrate to Material 3 (You)
-* Fix app not responding when switching to custom intervall and then closing date range selection on main page
-* Add optional trend lines to graph
+* Abhängigkeiten aktualisieren und zu Material 3 (You) design wechseln
+* Behebung eines Fehlers der dafür sorgt, das die Hauptseite nach Abbruch des Zeitauswahlvorgangs abstürzt
+* Füge optionale Trendlinien zum Graph hinzu
