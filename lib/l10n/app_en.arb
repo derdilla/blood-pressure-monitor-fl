@@ -352,10 +352,10 @@
   "@pdfDocumentTitle": {
     "placeholders": {
       "start": {
-        "type": "string"
+        "type": "String"
       },
       "end": {
-        "type": "string"
+        "type": "String"
       }
     }
   }

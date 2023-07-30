@@ -20,11 +20,18 @@ import 'package:sqflite/sqflite.dart';
 
 import 'blood_pressure.dart';
 
+extension PdfCompatability on Color {
+  PdfColor toPdfColor() {
+    return PdfColor(red / 256, green / 256, blue / 256, opacity);
+  }
+}
+
 class ExportFileCreator {
   final Settings settings;
   final AppLocalizations localizations;
+  final ThemeData theme;
 
-  ExportFileCreator(this.settings, this.localizations);
+  ExportFileCreator(this.settings, this.localizations, this.theme);
 
   Future<Uint8List> createFile(List<BloodPressureRecord> records) async {
     switch (settings.exportFormat) {
@@ -167,45 +174,93 @@ class ExportFileCreator {
   }
 
   Future<Uint8List> createPdfFile(List<BloodPressureRecord> data) async {
-    final analyzer = BloodPressureAnalyser(data);
+    final analyzer = BloodPressureAnalyser(data.toList());
     final dateFormatter = DateFormat(settings.dateFormatString);
 
     pw.Document pdf = pw.Document();
 
-    pdf.addPage(pw.Page(
+    pdf.addPage(pw.MultiPage(
         pageFormat: PdfPageFormat.a4,
         build: (pw.Context context) {
-          return pw.Column(
-            children: [
-              pw.Text(localizations.pdfDocumentTitle(dateFormatter.format(analyzer.firstDay!),
-                  dateFormatter.format(analyzer.lastDay!))),
-              pw.Table(
-                children: [
-                  pw.TableRow(
-                      children: [
-                        pw.Text('timestamp'),
-                        pw.Text('systolic'),
-                        pw.Text('diastolic'),
-                        pw.Text('pulse'),
-                        pw.Text('note')
-                      ]
-                  ),
-                  for (var entry in data)
-                    pw.TableRow(
-                        children: [
-                          pw.Text(dateFormatter.format(entry.creationTime)),
-                          pw.Text((entry.systolic ?? '-').toString()),
-                          pw.Text((entry.diastolic ?? '-').toString()),
-                          pw.Text((entry.pulse ?? '-').toString()),
-                          pw.Text(entry.notes ?? '-')
-                        ]
-                    )
-                ]
-              )
-            ],
-          );
+          return [
+            _buildDocumentTitle(dateFormatter, analyzer),
+            _buildPdfTable(data, dateFormatter),
+          ];
         }));
     return await pdf.save();
+  }
+
+  pw.Widget _buildDocumentTitle(DateFormat dateFormatter, BloodPressureAnalyser analyzer) {
+    return pw.Container(
+      child: pw.Text(
+        localizations.pdfDocumentTitle(dateFormatter.format(analyzer.firstDay!), dateFormatter.format(analyzer.lastDay!)),
+        style: const pw.TextStyle(
+          fontSize: 16,
+        )
+      )
+    );
+  }
+
+  pw.SpanningWidget _buildPdfTable(List<BloodPressureRecord> data, DateFormat dateFormatter) {
+    final tableHeaders = [
+      localizations.time,
+      localizations.sysLong,
+      localizations.diaLong,
+      localizations.pulLong,
+      localizations.notes
+    ];
+
+    return pw.TableHelper.fromTextArray(
+        border: null,
+        cellAlignment: pw.Alignment.centerLeft,
+        headerDecoration: const pw.BoxDecoration(
+          border: pw.Border(bottom: pw.BorderSide(color: PdfColors.black))
+        ),
+        headerHeight: 20,
+        cellHeight: 15,
+        cellAlignments: {
+          0: pw.Alignment.centerLeft,
+          1: pw.Alignment.centerLeft,
+          2: pw.Alignment.centerLeft,
+          3: pw.Alignment.centerLeft,
+          4: pw.Alignment.centerRight,
+        },
+        headerStyle: pw.TextStyle(
+          color: PdfColors.black,
+          fontSize: 10,
+          fontWeight: pw.FontWeight.bold,
+        ),
+        cellStyle: const pw.TextStyle(
+          fontSize: 8,
+        ),
+        headerCellDecoration: pw.BoxDecoration(
+          border: pw.Border(
+            bottom: pw.BorderSide(
+              color: theme.colorScheme.primaryContainer.toPdfColor(),
+              width: 5,
+            ),
+          ),
+        ),
+        rowDecoration: const pw.BoxDecoration(
+          border: pw.Border(
+            bottom: pw.BorderSide(
+              color: PdfColors.blueGrey,
+              width: .5,
+            ),
+          ),
+        ),
+        headers: tableHeaders,
+        data: List<List<String>>.generate(
+          data.length,
+              (row) => [
+                dateFormatter.format(data[row].creationTime),
+                (data[row].systolic ?? '-').toString(),
+                (data[row].diastolic ?? '-').toString(),
+                (data[row].pulse ?? '-').toString(),
+                data[row].notes ?? '-'
+              ],
+        )
+    );
   }
 
   Future<Uint8List> copyDBFile() async {
@@ -228,11 +283,13 @@ class Exporter {
   final BloodPressureModel model;
   final ScaffoldMessengerState messenger;
   final AppLocalizations localizations;
-  Exporter(this.settings, this.model, this.messenger, this.localizations);
+  final ThemeData theme;
+
+  Exporter(this.settings, this.model, this.messenger, this.localizations, this.theme);
 
   Future<void> export() async {
     final entries = await model.getInTimeRange(settings.displayDataStart, settings.displayDataEnd);
-    var fileContents = await ExportFileCreator(settings, localizations).createFile(entries);
+    var fileContents = await ExportFileCreator(settings, localizations, theme).createFile(entries);
     String filename = 'blood_press_${DateTime.now().toIso8601String()}';
     String ext;
     switch(settings.exportFormat) {
@@ -293,7 +350,7 @@ class Exporter {
     var path = result.files.single.path;
     assert(path != null); // null state directly linked to binary content
 
-    var fileContents = await ExportFileCreator(settings, localizations).parseFile(path! ,binaryContent);
+    var fileContents = await ExportFileCreator(settings, localizations, theme).parseFile(path! ,binaryContent);
     if (fileContents == null) {
       messenger.showSnackBar(SnackBar(content: Text(localizations.errNotImportable)));
       return;

@@ -290,6 +290,7 @@ class ExportImportButtons extends StatelessWidget {
     final model = Provider.of<BloodPressureModel>(context, listen: false);
     final messenger = ScaffoldMessenger.of(context);
     final localizations = AppLocalizations.of(context)!;
+    final theme = Theme.of(context);
 
     return Container(
       height: 60,
@@ -302,7 +303,7 @@ class ExportImportButtons extends StatelessWidget {
                 child: MaterialButton(
                   height: 60,
                   child:  Text(AppLocalizations.of(context)!.export),
-                  onPressed: () => Exporter(settings, model, messenger, localizations).export(),
+                  onPressed: () => Exporter(settings, model, messenger, localizations, theme).export(),
                 )
             ),
             const VerticalDivider(),
@@ -311,7 +312,7 @@ class ExportImportButtons extends StatelessWidget {
                 child: MaterialButton(
                   height: 60,
                   child: Text(AppLocalizations.of(context)!.import),
-                  onPressed: () => Exporter(settings, model, messenger, localizations).import(),
+                  onPressed: () => Exporter(settings, model, messenger, localizations, theme).import(),
                 )
             ),
           ],
