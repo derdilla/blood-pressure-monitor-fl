@@ -188,7 +188,7 @@ class _AddMeasurementPageState extends State<AddMeasurementPage> {
 
                                 await model.add(BloodPressureRecord(_time, _systolic, _diastolic, _pulse, _note));
                                 if (settings.exportAfterEveryEntry && context.mounted) {
-                                  final exporter = Exporter(context);
+                                  final exporter = Exporter(settings, model, ScaffoldMessenger.of(context), AppLocalizations.of(context)!);
                                   exporter.export();
                                 }
                                 navigator.pop();

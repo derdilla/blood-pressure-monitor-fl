@@ -347,5 +347,16 @@
   "drawRegressionLinesDesc": "Draws regression lines in graph. Only useful for large intervalls.",
   "@drawRegressionLinesDesc": {},
   "exportHiddenFields": "hidden fields",
-  "@exportHiddenFields": {}
+  "@exportHiddenFields": {},
+  "pdfDocumentTitle": "Blood pressure values from {start} until {end}",
+  "@pdfDocumentTitle": {
+    "placeholders": {
+      "start": {
+        "type": "string"
+      },
+      "end": {
+        "type": "string"
+      }
+    }
+  }
 }

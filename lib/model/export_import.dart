@@ -3,26 +3,28 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:blood_pressure_app/model/blood_pressure_analyzer.dart';
 import 'package:blood_pressure_app/model/settings_store.dart';
 import 'package:csv/csv.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:file_saver/file_saver.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:intl/intl.dart';
 import 'package:jsaver/jSaver.dart';
 import 'package:path/path.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
-import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:sqflite/sqflite.dart';
 
 import 'blood_pressure.dart';
 
 class ExportFileCreator {
-  Settings settings;
+  final Settings settings;
+  final AppLocalizations localizations;
 
-  ExportFileCreator(this.settings);
+  ExportFileCreator(this.settings, this.localizations);
 
   Future<Uint8List> createFile(List<BloodPressureRecord> records) async {
     switch (settings.exportFormat) {
@@ -165,13 +167,19 @@ class ExportFileCreator {
   }
 
   Future<Uint8List> createPdfFile(List<BloodPressureRecord> data) async {
+    final analyzer = BloodPressureAnalyser(data);
+    final dateFormatter = DateFormat(settings.dateFormatString);
+
     pw.Document pdf = pw.Document();
 
     pdf.addPage(pw.Page(
         pageFormat: PdfPageFormat.a4,
         build: (pw.Context context) {
-          return pw.Center(
-            child: pw.Table(
+          return pw.Column(
+            children: [
+              pw.Text(localizations.pdfDocumentTitle(dateFormatter.format(analyzer.firstDay!),
+                  dateFormatter.format(analyzer.lastDay!))),
+              pw.Table(
                 children: [
                   pw.TableRow(
                       children: [
@@ -193,7 +201,8 @@ class ExportFileCreator {
                         ]
                     )
                 ]
-            ),
+              )
+            ],
           );
         }));
     return await pdf.save();
@@ -215,18 +224,15 @@ class ExportFileCreator {
 }
 
 class Exporter {
-  BuildContext context;
-  Exporter(this.context);
+  final Settings settings;
+  final BloodPressureModel model;
+  final ScaffoldMessengerState messenger;
+  final AppLocalizations localizations;
+  Exporter(this.settings, this.model, this.messenger, this.localizations);
 
   Future<void> export() async {
-    var settings = Provider.of<Settings>(context, listen: false);
-    final messenger = ScaffoldMessenger.of(context);
-    final localizations = AppLocalizations.of(context);
-
-    final entries = await Provider.of<BloodPressureModel>(context, listen: false)
-        .getInTimeRange(settings.displayDataStart, settings.displayDataEnd);
-    var fileContents = await ExportFileCreator(settings).createFile(entries);
-
+    final entries = await model.getInTimeRange(settings.displayDataStart, settings.displayDataEnd);
+    var fileContents = await ExportFileCreator(settings, localizations).createFile(entries);
     String filename = 'blood_press_${DateTime.now().toIso8601String()}';
     String ext;
     switch(settings.exportFormat) {
@@ -243,14 +249,14 @@ class Exporter {
     String path = await FileSaver.instance.saveFile(name: filename, ext: ext, bytes: fileContents);
 
     if (Platform.isLinux || Platform.isWindows || Platform.isMacOS) {
-      messenger.showSnackBar(SnackBar(content: Text(localizations!.success(path))));
+      messenger.showSnackBar(SnackBar(content: Text(localizations.success(path))));
     } else if (Platform.isAndroid || Platform.isIOS) {
       if (settings.defaultExportDir.isNotEmpty) {
         JSaver.instance.save(
             fromPath: path,
             androidPathOptions: AndroidPathOptions(toDefaultDirectory: true)
         );
-        messenger.showSnackBar(SnackBar(content: Text(localizations!.success(settings.defaultExportDir))));
+        messenger.showSnackBar(SnackBar(content: Text(localizations.success(settings.defaultExportDir))));
       } else {
         Share.shareXFiles([
           XFile(
@@ -266,14 +272,8 @@ class Exporter {
 
 
   Future<void> import() async {
-    final messenger = ScaffoldMessenger.of(context);
-    final localizations = AppLocalizations.of(context);
-
-    final settings = Provider.of<Settings>(context, listen: false);
-    final model = Provider.of<BloodPressureModel>(context, listen: false);
-
     if (!([ExportFormat.csv, ExportFormat.db].contains(settings.exportFormat))) {
-      messenger.showSnackBar(SnackBar(content: Text(localizations!.errWrongImportFormat)));
+      messenger.showSnackBar(SnackBar(content: Text(localizations.errWrongImportFormat)));
       return;
     }
 
@@ -282,23 +282,23 @@ class Exporter {
       withData: true,
     );
     if (result == null) {
-      messenger.showSnackBar(SnackBar(content: Text(localizations!.errNoFileOpened)));
+      messenger.showSnackBar(SnackBar(content: Text(localizations.errNoFileOpened)));
       return;
     }
     var binaryContent = result.files.single.bytes;
     if (binaryContent == null) {
-      messenger.showSnackBar(SnackBar(content: Text(localizations!.errCantReadFile)));
+      messenger.showSnackBar(SnackBar(content: Text(localizations.errCantReadFile)));
       return;
     }
     var path = result.files.single.path;
     assert(path != null); // null state directly linked to binary content
 
-    var fileContents = await ExportFileCreator(settings).parseFile(path! ,binaryContent);
+    var fileContents = await ExportFileCreator(settings, localizations).parseFile(path! ,binaryContent);
     if (fileContents == null) {
-      messenger.showSnackBar(SnackBar(content: Text(localizations!.errNotImportable)));
+      messenger.showSnackBar(SnackBar(content: Text(localizations.errNotImportable)));
       return;
     }
-    messenger.showSnackBar(SnackBar(content: Text(localizations!.importSuccess(fileContents.length))));
+    messenger.showSnackBar(SnackBar(content: Text(localizations.importSuccess(fileContents.length))));
     for (final e in fileContents) {
       model.add(e);
     }

@@ -1,5 +1,6 @@
 import 'package:blood_pressure_app/components/display_interval_picker.dart';
 import 'package:blood_pressure_app/components/settings_widgets.dart';
+import 'package:blood_pressure_app/model/blood_pressure.dart';
 import 'package:blood_pressure_app/model/export_import.dart';
 import 'package:blood_pressure_app/model/settings_store.dart';
 import 'package:flutter/material.dart';
@@ -7,7 +8,6 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:jsaver/jSaver.dart';
 import 'package:provider/provider.dart';
 
-// TODO: control if warn messages work
 class ExportImportScreen extends StatelessWidget {
   const ExportImportScreen({super.key});
 
@@ -25,7 +25,7 @@ class ExportImportScreen extends StatelessWidget {
               const ExportWarnBanner(),
               const SizedBox(height: 15,),
               Opacity(
-                opacity: (settings.exportFormat == ExportFormat.db) ? 0.5 : 1, // TODO: centralize when restyle
+                opacity: (settings.exportFormat == ExportFormat.db) ? 0.5 : 1, // TODO: centralize opacity when restyle
                 child: const IntervalPicker(),
               ),
               SettingsTile(
@@ -286,6 +286,11 @@ class ExportImportButtons extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final settings = Provider.of<Settings>(context, listen: false);
+    final model = Provider.of<BloodPressureModel>(context, listen: false);
+    final messenger = ScaffoldMessenger.of(context);
+    final localizations = AppLocalizations.of(context)!;
+
     return Container(
       height: 60,
       color: Theme.of(context).colorScheme.onInverseSurface,
@@ -297,7 +302,7 @@ class ExportImportButtons extends StatelessWidget {
                 child: MaterialButton(
                   height: 60,
                   child:  Text(AppLocalizations.of(context)!.export),
-                  onPressed: () => Exporter(context).export(),
+                  onPressed: () => Exporter(settings, model, messenger, localizations).export(),
                 )
             ),
             const VerticalDivider(),
@@ -306,7 +311,7 @@ class ExportImportButtons extends StatelessWidget {
                 child: MaterialButton(
                   height: 60,
                   child: Text(AppLocalizations.of(context)!.import),
-                  onPressed: () => Exporter(context).import(),
+                  onPressed: () => Exporter(settings, model, messenger, localizations).import(),
                 )
             ),
           ],
