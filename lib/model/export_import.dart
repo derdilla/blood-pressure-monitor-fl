@@ -193,11 +193,11 @@ class ExportFileCreator {
                   for (var entry in data)
                     pw.TableRow(
                         children: [
-                          pw.Text(entry.creationTime.toIso8601String()),
-                          pw.Text((entry.systolic ?? '').toString()),
-                          pw.Text((entry.diastolic ?? '').toString()),
-                          pw.Text((entry.pulse ?? '').toString()),
-                          pw.Text(entry.notes ?? '')
+                          pw.Text(dateFormatter.format(entry.creationTime)),
+                          pw.Text((entry.systolic ?? '-').toString()),
+                          pw.Text((entry.diastolic ?? '-').toString()),
+                          pw.Text((entry.pulse ?? '-').toString()),
+                          pw.Text(entry.notes ?? '-')
                         ]
                     )
                 ]
