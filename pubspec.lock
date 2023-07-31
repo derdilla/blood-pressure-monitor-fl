@@ -269,6 +269,14 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  function_tree:
+    dependency: "direct main"
+    description:
+      name: function_tree
+      sha256: "204efae1786814cee404e68000aebda48bcf0419cc52b10e547c6c82f1b1da92"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.8.13"
   glob:
     dependency: transitive
     description:

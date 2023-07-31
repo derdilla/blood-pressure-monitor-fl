@@ -30,6 +30,7 @@ dependencies:
   file_saver: ^0.2.1  # BSD-3-Clause
   file_picker: ^5.2.11  # MIT
   jsaver: ^1.2.0
+  function_tree: ^0.8.13
 
 dev_dependencies:
   flutter_test:

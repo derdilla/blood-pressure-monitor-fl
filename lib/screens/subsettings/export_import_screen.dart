@@ -1,4 +1,5 @@
 import 'package:blood_pressure_app/components/display_interval_picker.dart';
+import 'package:blood_pressure_app/components/export_item_order.dart';
 import 'package:blood_pressure_app/components/settings_widgets.dart';
 import 'package:blood_pressure_app/model/blood_pressure.dart';
 import 'package:blood_pressure_app/model/export_import.dart';
@@ -116,168 +117,18 @@ class ExportFieldCustomisationSetting extends StatelessWidget {
                 settings.exportCustomEntries = value;
               }
           ),
-          (settings.exportFormat == ExportFormat.csv && settings.exportCustomEntries) ? const CsvItemsOrderCreator() : const SizedBox.shrink()
+          (settings.exportFormat == ExportFormat.csv && settings.exportCustomEntries) ?
+            ExportItemsCustomizer(
+              exportItems: settings.exportItems,
+              exportAddableItems: settings.exportAddableItems,
+              onReorder: (exportItems, exportAddableItems) {
+                settings.exportItems = exportItems;
+                settings.exportAddableItems = exportAddableItems;
+              },
+            ) : const SizedBox.shrink()
         ],
       );
     });
-  }
-}
-
-class CsvItemsOrderCreator extends StatelessWidget {
-  const CsvItemsOrderCreator({super.key});
-  @override
-  Widget build(BuildContext context) {
-    return Consumer<Settings>(builder: (context, settings, child) {
-      //settings.exportItems = ['timestampUnixMs', 'systolic', 'diastolic', 'pulse', 'notes'];
-      return Container(
-        margin: const EdgeInsets.all(25),
-        padding: const EdgeInsets.all(20),
-        height: 420,
-        decoration: BoxDecoration(
-          border: Border.all(color: Theme.of(context).textTheme.labelLarge?.color ?? Colors.teal),
-          borderRadius: const BorderRadius.all(Radius.circular(10)),
-        ),
-        clipBehavior: Clip.hardEdge,
-        child: ReorderableListView(
-          physics: const NeverScrollableScrollPhysics(),
-          shrinkWrap: true,
-          onReorder: (oldIndex, newIndex) {
-            /**
-             * We have a list of items that is structured like the following:
-             * [ exportItems.length, 1, exportAddableItems.length ]
-             *
-             * So oldIndex is either (0 <= oldIndex < exportItems.length) or
-             * ((exportItems.length + 1) <= oldIndex < (exportItems.length + 1 + exportAddableItems.length))
-             * newIndex is in the range (0 <= newIndex < (exportItems.length + 1 + exportAddableItems.length))
-             *
-             * In case the entry is moved upwards on the list the new position needs to have 1 subtracted because there
-             * is an entry missing above it now.
-             *
-             * If the newIndex is (0 <= newIndex < (exportItems.length + 1)) the Item got moved above the divider.
-             * The + 1 is needed to compensate for moving the item one position above the divider and thereby replacing
-             * its index.
-             */
-            var exportItems = settings.exportItems;
-            var exportAddableItems = settings.exportAddableItems;
-            if (oldIndex < newIndex) { // The
-              newIndex -= 1;
-            }
-
-            final String item;
-            if (0 <= oldIndex && oldIndex < exportItems.length) {
-              item = exportItems.removeAt(oldIndex);
-            } else if ((exportItems.length + 1) <= oldIndex && oldIndex < (exportItems.length + 1 + exportAddableItems.length)) {
-              item = exportAddableItems.removeAt(oldIndex - (exportItems.length + 1));
-            } else {
-              assert(false, 'oldIndex outside expected boundaries');
-              return;
-            }
-
-            if (newIndex < (exportItems.length + 1)) {
-              exportItems.insert(newIndex, item);
-            } else {
-              newIndex -= (exportItems.length + 1);
-              exportAddableItems.insert(newIndex, item);
-            }
-
-            settings.exportItems = exportItems;
-            settings.exportAddableItems = exportAddableItems;
-          },
-          /*
-          footer: (settings.exportItems.length < 5) ? InkWell(
-            onTap: () async {
-              await showDialog(context: context,
-                builder: (context) {
-                  var exportItems = settings.exportItems;
-                  var exportAddableItems = settings.exportAddableItems;
-                  return Dialog(
-                    shape: const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(50))
-                    ),
-                    child: Container(
-                      height: 330,
-                      padding: const EdgeInsets.all(30),
-                      child: ListView(
-                        children: [
-                          for (int i = 0; i < exportAddableItems.length; i += 1)
-                            ListTile(
-                              title: Text(exportAddableItems[i]),
-                              onTap: () {
-                                var addedItem = exportAddableItems.removeAt(i);
-                                exportItems.add(addedItem);
-                                Navigator.of(context).pop();
-                                settings.exportItems = exportItems;
-                                settings.exportAddableItems = exportAddableItems;
-                              },
-                            )
-                        ],
-                      ),
-                    ),
-                  );
-                }
-              );
-            },
-            child: Container(
-              margin: const EdgeInsets.only(top: 15),
-              child: Center(
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    const Icon(Icons.add),
-                    const SizedBox(width: 10,),
-                    Text(AppLocalizations.of(context)!.addEntry)
-                  ],
-                ),
-              ),
-            ),
-          ) : null,
-           */
-          children: <Widget>[
-            for (int i = 0; i < settings.exportItems.length; i += 1)
-              ListTile(
-                key: Key('l_${settings.exportItems[i]}'),
-                title: Text(settings.exportItems[i]),
-                trailing: const Icon(Icons.drag_handle),
-              ),
-            _buildListSectionDivider(context),
-            for (int i = 0; i < settings.exportAddableItems.length; i += 1)
-              ListTile(
-                key: Key('ul_${settings.exportAddableItems[i]}'),
-                title: Opacity(opacity: 0.7,child: Text(settings.exportAddableItems[i]),),
-                trailing: const Icon(Icons.drag_handle),
-              ),
-          ],
-        ),
-      );
-    });
-  }
-
-  Widget _buildListSectionDivider(BuildContext context) {
-    return IgnorePointer(
-      key: UniqueKey(),
-      child: Opacity(
-        opacity: 0.7,
-        child: Row(
-          children: <Widget>[
-            const Expanded(
-              child: Divider()
-            ),
-            Container(
-              padding: const EdgeInsets.all(10),
-              child: const Icon(Icons.arrow_downward)
-            ),
-            Text(AppLocalizations.of(context)!.exportHiddenFields),
-            Container(
-              padding: const EdgeInsets.all(10),
-              child: const Icon(Icons.arrow_downward)
-            ),
-            const Expanded(
-              child: Divider()
-            ),
-          ]
-        ),
-      ),
-    );
   }
 }
 
