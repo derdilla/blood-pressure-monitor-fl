@@ -1,10 +1,8 @@
 
 import 'dart:async';
 
-import 'package:blood_pressure_app/model/blood_pressure.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:function_tree/function_tree.dart';
 
 class ExportItemsCustomizer extends StatelessWidget {
   final List<String> exportItems;
@@ -114,54 +112,6 @@ class ExportItemsCustomizer extends StatelessWidget {
     }
 
     onReorder(exportItems, exportAddableItems);
-  }
-}
-
-class ExportColumn {
-  static const _functionRegex = r'\{\{([^}]*)}}';
-
-  /// pure name as in the title of the csv file and for internal purposes. Should not contain special characters and spaces.
-  final String internalColumnName;
-  /// Display title of the column. Possibly localized
-  final String columnTitle;
-  /// Pattern to create the field contents from: TODO implement input and documentation
-  late final String formatPattern;
-  final List<MultiVariableFunction> _parsedFunctions = [];
-
-  /// Example: ExportColumn(internalColumnName: 'pulsePressure', columnTitle: 'Pulse pressure', formatPattern: '{{SYS-DIA}}')
-  ExportColumn({required this.internalColumnName, required this.columnTitle, required String formatPattern}) {
-    this.formatPattern = formatPattern.replaceAll('{{}}', '');
-
-    final mathSnippets = RegExp(_functionRegex).allMatches(this.formatPattern);
-    for (final m in mathSnippets) {
-      assert(m.groupCount == 1, 'If a math block is found content is expected');
-      final function = m.group(0)!.toMultiVariableFunction(['SYS', 'DIA', 'PUL']);
-      _parsedFunctions.add(function);
-    }
-  }
-
-  String formatRecord(BloodPressureRecord record) {
-    var fieldContents = formatPattern;
-
-    int matchIndex = 0;
-    fieldContents = fieldContents.replaceAllMapped(RegExp(_functionRegex), (m) {
-      assert (_parsedFunctions.length > matchIndex);
-      final result = _parsedFunctions[matchIndex].call({
-        'SYS' : record.systolic ?? -1,
-        'DIA': record.diastolic ?? -1,
-        'PUL': record.pulse ?? -1
-      }) as double;
-      matchIndex++;
-      return result.toString();
-    });
-
-    /*
-    fieldContents.replaceAll('\$SYS', record.systolic.toString());
-    fieldContents.replaceAll('\$DIA', record.diastolic.toString());
-    fieldContents.replaceAll('\$PUL', record.pulse.toString());
-    */
-
-    return fieldContents;
   }
 }
 
