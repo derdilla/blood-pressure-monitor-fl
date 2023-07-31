@@ -1,10 +1,54 @@
+import 'dart:collection';
+
 import 'package:blood_pressure_app/model/blood_pressure.dart';
 import 'package:blood_pressure_app/model/settings_store.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:function_tree/function_tree.dart';
 import 'package:intl/intl.dart';
+import 'package:path/path.dart';
+import 'package:sqflite/sqflite.dart';
 
 class ExportConfigurationModel {
-  List<ExportColumn> getDefaultFormates(Settings settings) => [
+  static ExportConfigurationModel? _instance;
+
+  final Settings settings;
+  final AppLocalizations localizations;
+  late final Database _database;
+  
+  final List<ExportColumn> _availableFormats = [];
+
+  ExportConfigurationModel._create(this.settings, this.localizations);
+  Future<void> _asyncInit(String? dbPath, bool isFullPath) async {
+    dbPath ??= await getDatabasesPath();
+    if (dbPath != inMemoryDatabasePath && !isFullPath) {
+      dbPath = join(dbPath, 'config.db');
+    }
+
+    _database = await openDatabase(
+      dbPath,
+      onCreate: (db, version) {
+        return db.execute(
+            'CREATE TABLE exportStrings(internalColumnName STRING PRIMARY KEY, columnTitle STRING, formatPattern STRING)');
+      },
+      version: 1,
+    );
+
+    final existingDbEntries = await _database.rawQuery('SELECT * FROM exportStrings');
+    for (final e in existingDbEntries) {
+      _availableFormats.add(ExportColumn(internalColumnName: e['internalColumnName'].toString(),
+          columnTitle: e['columnTitle'].toString(), formatPattern: e['formatPattern'].toString()));
+    }
+    _availableFormats.addAll(_getDefaultFormates());
+  }
+  static Future<ExportConfigurationModel> get(Settings settings, AppLocalizations localizations, {String? dbPath, bool isFullPath = false}) async {
+    if (_instance == null) {
+      _instance = ExportConfigurationModel._create(settings, localizations);
+      await _instance!._asyncInit(dbPath, isFullPath);
+    }
+    return _instance!;
+  }
+
+  List<ExportColumn> _getDefaultFormates() => [
     ExportColumn(internalColumnName: 'timestampUnixMs', columnTitle: 'Unix timestamp', formatPattern: r'$TIMESTAMP'),
     ExportColumn(internalColumnName: 'formattedTimestamp', columnTitle: 'Time', formatPattern: '\$FORMAT{\$TIMESTAMP,${settings.dateFormatString}}'),
     ExportColumn(internalColumnName: 'systolic', columnTitle: 'Systolic', formatPattern: r'$SYS'),
@@ -12,6 +56,17 @@ class ExportConfigurationModel {
     ExportColumn(internalColumnName: 'pulse', columnTitle: 'Pulse', formatPattern: r'$PUL'),
     ExportColumn(internalColumnName: 'notes', columnTitle: 'Notes', formatPattern: r'$NOTE'),
   ];
+
+  void add(ExportColumn format) {
+    _availableFormats.add(format);
+    _database.insert('exportStrings', {
+      'internalColumnName': format.internalColumnName,
+      'columnTitle': format.columnTitle,
+      'formatPattern': format.formatPattern
+    },);
+  }
+
+  UnmodifiableListView<ExportColumn> get availableFormats => UnmodifiableListView(_availableFormats);
 }
 
 class ExportColumn {
@@ -83,5 +138,10 @@ class ExportColumn {
     });
 
     return fieldContents;
+  }
+
+  @override
+  String toString() {
+    return 'ExportColumn{internalColumnName: $internalColumnName, columnTitle: $columnTitle, formatPattern: $formatPattern}';
   }
 }
