@@ -4,6 +4,7 @@ import 'dart:async';
 import 'package:badges/badges.dart' as badges;
 import 'package:blood_pressure_app/components/consistent_future_builder.dart';
 import 'package:blood_pressure_app/model/export_options.dart';
+import 'package:blood_pressure_app/screens/subsettings/export_column_data.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
@@ -11,11 +12,11 @@ import 'package:provider/provider.dart';
 import '../model/settings_store.dart';
 
 class ExportItemsCustomizer extends StatefulWidget {
-  final List<String> exportItems;
-  final List<String> exportAddableItems;
-  final FutureOr<void> Function(List<String> exportItems, List<String> exportAddableItems) onReorder;
+  final List<ExportColumn> shownItems;
+  final List<ExportColumn> hiddenItems;
+  final FutureOr<void> Function(List<ExportColumn> exportItems, List<ExportColumn> exportAddableItems) onReorder;
 
-  const ExportItemsCustomizer({super.key, required this.exportItems, required this.exportAddableItems,
+  const ExportItemsCustomizer({super.key, required this.shownItems, required this.hiddenItems,
       required this.onReorder});
 
   @override
@@ -32,7 +33,6 @@ class _ExportItemsCustomizerState extends State<ExportItemsCustomizer> {
     return ConsistentFutureBuilder(
       future: _future!,
       onData: (BuildContext context, ExportConfigurationModel result) {
-        final formats = result.availableFormats;
         return badges.Badge(
           badgeStyle: badges.BadgeStyle(
             badgeColor: Theme.of(context).colorScheme.background,
@@ -40,15 +40,21 @@ class _ExportItemsCustomizerState extends State<ExportItemsCustomizer> {
           ),
           position: badges.BadgePosition.bottomEnd(bottom: 3, end: 3),
           badgeContent: Container(
-          decoration: BoxDecoration(
-              border: Border.all(color: Theme.of(context).colorScheme.onBackground),
-              shape: BoxShape.circle
-          ),
-          child: IconButton(
-            tooltip: 'add exportformat',
-            onPressed:() {},
-            icon: const Icon(Icons.add),
-          ),
+            decoration: BoxDecoration(
+                border: Border.all(color: Theme.of(context).colorScheme.onBackground),
+                shape: BoxShape.circle
+            ),
+            child: IconButton(
+              tooltip: 'add exportformat',
+              onPressed:() {// TODO move outside of potential reusable thing
+                Navigator.of(context).push(MaterialPageRoute(builder: (context) =>
+                  EditExportColumnPage(onValidSubmit: (value) {
+                    result.add(value); 
+                  },)
+                ));
+              },
+              icon: const Icon(Icons.add),
+            ),
           ),
           child: Container(
             margin: const EdgeInsets.all(25),
@@ -60,28 +66,56 @@ class _ExportItemsCustomizerState extends State<ExportItemsCustomizer> {
             ),
             clipBehavior: Clip.hardEdge,
             child: ReorderableListView(
-              physics: const NeverScrollableScrollPhysics(),
               shrinkWrap: true,
               onReorder: _onReorderList,
               children: <Widget>[
-                for (int i = 0; i < widget.exportItems.length; i += 1)
+                for (int i = 0; i < widget.shownItems.length; i += 1)
                   ListTile(
-                    key: Key('l_${widget.exportItems[i]}'),
-                    title: Text(formats[widget.exportItems[i]]?.columnTitle ?? widget.exportItems[i]),
-                    trailing: const Icon(Icons.drag_handle),
+                    key: Key('l_${widget.shownItems[i].internalName}'),
+                    title: Text(widget.shownItems[i].columnTitle),
+                    trailing: _buildListItemTrailing( context, widget.shownItems[i]),
+                    contentPadding: EdgeInsets.zero
                   ),
                 _buildListSectionDivider(context),
-                for (int i = 0; i < widget.exportAddableItems.length; i += 1)
+                for (int i = 0; i < widget.hiddenItems.length; i += 1)
                   ListTile(
-                    key: Key('ul_${widget.exportAddableItems[i]}'),
-                    title: Opacity(opacity: 0.7,child: Text(widget.exportAddableItems[i]),),
-                    trailing: const Icon(Icons.drag_handle),
+                    key: Key('ul_${widget.hiddenItems[i].internalName}'),
+                    title: Opacity(
+                      opacity: 0.7,
+                      child: Text(widget.hiddenItems[i].columnTitle),
+                    ),
+                    trailing: _buildListItemTrailing(context, widget.hiddenItems[i]),
+                    contentPadding: EdgeInsets.zero
                   ),
               ],
             ),
           ),
         );
       },
+    );
+  }
+
+  Widget _buildListItemTrailing(BuildContext context, ExportColumn data) {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        IconButton(
+          onPressed: () {
+            Navigator.of(context).push(MaterialPageRoute(builder: (context) =>
+                EditExportColumnPage(
+                  initialDisplayName: data.columnTitle,
+                  initialInternalName: data.internalName,
+                  initialFormatPattern: data.formatPattern,
+                  onValidSubmit: (value) {
+                    // TODO save
+                  },
+                )
+            ));
+          },
+          icon: const Icon(Icons.edit)
+        ),
+        const Icon(Icons.drag_handle),
+      ],
     );
   }
 
@@ -133,24 +167,24 @@ class _ExportItemsCustomizerState extends State<ExportItemsCustomizer> {
       newIndex -= 1;
     }
 
-    final String item;
-    if (0 <= oldIndex && oldIndex < widget.exportItems.length) {
-      item = widget.exportItems.removeAt(oldIndex);
-    } else if ((widget.exportItems.length + 1) <= oldIndex && oldIndex < (widget.exportItems.length + 1 + widget.exportAddableItems.length)) {
-      item = widget.exportAddableItems.removeAt(oldIndex - (widget.exportItems.length + 1));
+    final ExportColumn item;
+    if (0 <= oldIndex && oldIndex < widget.shownItems.length) {
+      item = widget.shownItems.removeAt(oldIndex);
+    } else if ((widget.shownItems.length + 1) <= oldIndex && oldIndex < (widget.shownItems.length + 1 + widget.hiddenItems.length)) {
+      item = widget.hiddenItems.removeAt(oldIndex - (widget.shownItems.length + 1));
     } else {
       assert(false, 'oldIndex outside expected boundaries');
       return;
     }
 
-    if (newIndex < (widget.exportItems.length + 1)) {
-      widget.exportItems.insert(newIndex, item);
+    if (newIndex < (widget.shownItems.length + 1)) {
+      widget.shownItems.insert(newIndex, item);
     } else {
-      newIndex -= (widget.exportItems.length + 1);
-      widget.exportAddableItems.insert(newIndex, item);
+      newIndex -= (widget.shownItems.length + 1);
+      widget.hiddenItems.insert(newIndex, item);
     }
 
-    widget.onReorder(widget.exportItems, widget.exportAddableItems);
+    widget.onReorder(widget.shownItems, widget.hiddenItems);
   }
 }
 

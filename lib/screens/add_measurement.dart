@@ -130,7 +130,7 @@ class _AddMeasurementPageState extends State<AddMeasurementPage> {
                             return null;
                           }
                       ),
-                      ValueInput(
+                      ValueInput(// TODO: multiline input (minlines and maxlines)
                           key: const Key('txtPul'),
                           initialValue: (_pulse ?? '').toString(),
                           hintText: AppLocalizations.of(context)!.pulLong,

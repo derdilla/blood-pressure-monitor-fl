@@ -35,7 +35,7 @@ class ExportConfigurationModel {
 
     final existingDbEntries = await _database.rawQuery('SELECT * FROM exportStrings');
     for (final e in existingDbEntries) {
-      _availableFormats.add(ExportColumn(internalColumnName: e['internalColumnName'].toString(),
+      _availableFormats.add(ExportColumn(internalName: e['internalColumnName'].toString(),
           columnTitle: e['columnTitle'].toString(), formatPattern: e['formatPattern'].toString()));
     }
     _availableFormats.addAll(_getDefaultFormates());
@@ -49,31 +49,31 @@ class ExportConfigurationModel {
   }
 
   List<ExportColumn> _getDefaultFormates() => [ // TODO: localizations
-    ExportColumn(internalColumnName: 'timestampUnixMs', columnTitle: 'Unix timestamp', formatPattern: r'$TIMESTAMP'),
-    ExportColumn(internalColumnName: 'formattedTimestamp', columnTitle: 'Time', formatPattern: '\$FORMAT{\$TIMESTAMP,${settings.dateFormatString}}'),
-    ExportColumn(internalColumnName: 'systolic', columnTitle: 'Systolic', formatPattern: r'$SYS'),
-    ExportColumn(internalColumnName: 'diastolic', columnTitle: 'Diastolic', formatPattern: r'$DIA'),
-    ExportColumn(internalColumnName: 'pulse', columnTitle: 'Pulse', formatPattern: r'$PUL'),
-    ExportColumn(internalColumnName: 'notes', columnTitle: 'Notes', formatPattern: r'$NOTE'),
-    ExportColumn(internalColumnName: 'pulsePressure', columnTitle: 'Pulse pressure', formatPattern: r'{{$SYS-$DIA}}')
+    ExportColumn(internalName: 'timestampUnixMs', columnTitle: 'Unix timestamp', formatPattern: r'$TIMESTAMP'),
+    ExportColumn(internalName: 'formattedTimestamp', columnTitle: 'Time', formatPattern: '\$FORMAT{\$TIMESTAMP,${settings.dateFormatString}}'),
+    ExportColumn(internalName: 'systolic', columnTitle: 'Systolic', formatPattern: r'$SYS'),
+    ExportColumn(internalName: 'diastolic', columnTitle: 'Diastolic', formatPattern: r'$DIA'),
+    ExportColumn(internalName: 'pulse', columnTitle: 'Pulse', formatPattern: r'$PUL'),
+    ExportColumn(internalName: 'notes', columnTitle: 'Notes', formatPattern: r'$NOTE'),
+    ExportColumn(internalName: 'pulsePressure', columnTitle: 'Pulse pressure', formatPattern: r'{{$SYS-$DIA}}')
   ];
 
   void add(ExportColumn format) {
     _availableFormats.add(format);
     _database.insert('exportStrings', {
-      'internalColumnName': format.internalColumnName,
+      'internalColumnName': format.internalName,
       'columnTitle': format.columnTitle,
       'formatPattern': format.formatPattern
     },);
   }
 
   UnmodifiableMapView<String, ExportColumn> get availableFormats =>
-      UnmodifiableMapView(Map.fromIterable(_availableFormats, key: (e) => e.internalColumnName));
+      UnmodifiableMapView(Map.fromIterable(_availableFormats, key: (e) => e.internalName));
 }
 
 class ExportColumn {
   /// pure name as in the title of the csv file and for internal purposes. Should not contain special characters and spaces.
-  late final String internalColumnName;
+  late final String internalName;
   /// Display title of the column. Possibly localized
   late final String columnTitle;
   /// Pattern to create the field contents from: TODO implement user input and documentation
@@ -94,20 +94,20 @@ class ExportColumn {
   late final String formatPattern;
 
   /// Example: ExportColumn(internalColumnName: 'pulsePressure', columnTitle: 'Pulse pressure', formatPattern: '{{$SYS-$DIA}}')
-  ExportColumn({required this.internalColumnName, required this.columnTitle, required String formatPattern}) {
+  ExportColumn({required this.internalName, required this.columnTitle, required String formatPattern}) {
     this.formatPattern = formatPattern.replaceAll('{{}}', '');
   }
 
   ExportColumn.fromJson(Map<String, dynamic> json) {
     ExportColumn(
-      internalColumnName: json['internalColumnName'],
+      internalName: json['internalColumnName'],
       columnTitle: json['columnTitle'],
       formatPattern: json['formatPattern']
     );
   }
 
   Map<String, dynamic> toJson() => {
-    'internalColumnName': internalColumnName,
+    'internalColumnName': internalName,
     'columnTitle': columnTitle,
     'formatPattern': formatPattern
   };
@@ -144,6 +144,6 @@ class ExportColumn {
 
   @override
   String toString() {
-    return 'ExportColumn{internalColumnName: $internalColumnName, columnTitle: $columnTitle, formatPattern: $formatPattern}';
+    return 'ExportColumn{internalColumnName: $internalName, columnTitle: $columnTitle, formatPattern: $formatPattern}';
   }
 }

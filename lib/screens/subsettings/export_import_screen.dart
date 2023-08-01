@@ -1,3 +1,4 @@
+import 'package:blood_pressure_app/components/consistent_future_builder.dart';
 import 'package:blood_pressure_app/components/display_interval_picker.dart';
 import 'package:blood_pressure_app/components/export_item_order.dart';
 import 'package:blood_pressure_app/components/settings_widgets.dart';
@@ -8,6 +9,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:jsaver/jSaver.dart';
 import 'package:provider/provider.dart';
+
+import '../../model/export_options.dart';
 
 class ExportImportScreen extends StatelessWidget {
   const ExportImportScreen({super.key});
@@ -101,34 +104,62 @@ class ExportImportScreen extends StatelessWidget {
   }
 }
 
-class ExportFieldCustomisationSetting extends StatelessWidget {
+class ExportFieldCustomisationSetting extends StatefulWidget {
   const ExportFieldCustomisationSetting({super.key});
 
   @override
+  State<ExportFieldCustomisationSetting> createState() => _ExportFieldCustomisationSettingState();
+}
+
+class _ExportFieldCustomisationSettingState extends State<ExportFieldCustomisationSetting> {
+  // hack so that FutureBuilder doesn't always rebuild
+  Future<ExportConfigurationModel>? _future;
+  
+  @override
   Widget build(BuildContext context) {
-    return Consumer<Settings>(builder: (context, settings, child) {
-      return Column(
-        children: [
-          SwitchSettingsTile(
-              title: Text(AppLocalizations.of(context)!.exportCustomEntries),
-              initialValue: settings.exportCustomEntries,
-              disabled: settings.exportFormat != ExportFormat.csv,
-              onToggle: (value) {
-                settings.exportCustomEntries = value;
-              }
-          ),
-          (settings.exportFormat == ExportFormat.csv && settings.exportCustomEntries) ?
-            ExportItemsCustomizer(
-              exportItems: settings.exportItems,
-              exportAddableItems: settings.exportAddableItems,
-              onReorder: (exportItems, exportAddableItems) {
-                settings.exportItems = exportItems;
-                settings.exportAddableItems = exportAddableItems;
-              },
-            ) : const SizedBox.shrink()
-        ],
-      );
-    });
+    _future ??= ExportConfigurationModel.get(Provider.of<Settings>(context, listen: false), AppLocalizations.of(context)!);
+    
+    
+    
+    return ConsistentFutureBuilder(
+      future: _future!,
+      onData: (context, result) {
+        return Consumer<Settings>(builder: (context, settings, child) {
+          final formats = result.availableFormats;
+          List<ExportColumn> activeFields = [];
+          List<ExportColumn> hiddenFields = [];
+          formats.forEach((internalName, e) { // todo: maintain ordering of exportItems
+            if (settings.exportItems.contains(internalName)) {
+              activeFields.add(e);
+            } else {
+              hiddenFields.add(e);
+            }
+          });
+          
+          return Column(
+            children: [
+              SwitchSettingsTile(
+                  title: Text(AppLocalizations.of(context)!.exportCustomEntries),
+                  initialValue: settings.exportCustomEntries,
+                  disabled: settings.exportFormat != ExportFormat.csv,
+                  onToggle: (value) {
+                    settings.exportCustomEntries = value;
+                  }
+              ),
+              (settings.exportFormat == ExportFormat.csv && settings.exportCustomEntries) ?
+                ExportItemsCustomizer(
+                  shownItems: activeFields,
+                  hiddenItems: hiddenFields,
+                  onReorder: (exportItems, exportAddableItems) {
+                    settings.exportItems = exportItems.map((e) => e.internalName).toList();
+                    //settings.exportAddableItems = exportAddableItems; // todo remove from data
+                  },
+                ) : const SizedBox.shrink()
+            ],
+          );
+        });
+      }
+    );
   }
 }
 

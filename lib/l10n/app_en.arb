@@ -358,5 +358,15 @@
         "type": "String"
       }
     }
-  }
+  },
+  "displayTitle": "Display title",
+  "@displayTitle": {},
+  "internalName": "Internal name",
+  "@internalName": {},
+  "errOnlyLatinCharactersAndArabicNumbers": "Only latin characters or arabic number allowed",
+  "@errOnlyLatinCharactersAndArabicNumbers":  {},
+  "fieldFormat": "Field format",
+  "@fieldFormat": {},
+  "result": "Result:",
+  "@result": {}
 }
