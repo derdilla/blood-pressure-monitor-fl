@@ -48,13 +48,14 @@ class ExportConfigurationModel {
     return _instance!;
   }
 
-  List<ExportColumn> _getDefaultFormates() => [
+  List<ExportColumn> _getDefaultFormates() => [ // TODO: localizations
     ExportColumn(internalColumnName: 'timestampUnixMs', columnTitle: 'Unix timestamp', formatPattern: r'$TIMESTAMP'),
     ExportColumn(internalColumnName: 'formattedTimestamp', columnTitle: 'Time', formatPattern: '\$FORMAT{\$TIMESTAMP,${settings.dateFormatString}}'),
     ExportColumn(internalColumnName: 'systolic', columnTitle: 'Systolic', formatPattern: r'$SYS'),
     ExportColumn(internalColumnName: 'diastolic', columnTitle: 'Diastolic', formatPattern: r'$DIA'),
     ExportColumn(internalColumnName: 'pulse', columnTitle: 'Pulse', formatPattern: r'$PUL'),
     ExportColumn(internalColumnName: 'notes', columnTitle: 'Notes', formatPattern: r'$NOTE'),
+    ExportColumn(internalColumnName: 'pulsePressure', columnTitle: 'Pulse pressure', formatPattern: r'{{$SYS-$DIA}}')
   ];
 
   void add(ExportColumn format) {
@@ -66,7 +67,8 @@ class ExportConfigurationModel {
     },);
   }
 
-  UnmodifiableListView<ExportColumn> get availableFormats => UnmodifiableListView(_availableFormats);
+  UnmodifiableMapView<String, ExportColumn> get availableFormats =>
+      UnmodifiableMapView(Map.fromIterable(_availableFormats, key: (e) => e.internalColumnName));
 }
 
 class ExportColumn {

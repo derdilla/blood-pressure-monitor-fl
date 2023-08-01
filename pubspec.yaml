@@ -31,6 +31,7 @@ dependencies:
   file_picker: ^5.2.11  # MIT
   jsaver: ^1.2.0
   function_tree: ^0.8.13
+  badges: ^3.1.1
 
 dev_dependencies:
   flutter_test:
