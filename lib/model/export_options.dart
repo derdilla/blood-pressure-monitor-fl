@@ -81,6 +81,13 @@ class ExportConfigurationModel {
     },);
   }
 
+  void delete(ExportColumn format) {
+    final existingEntries = _availableFormats.where((element) => (element.internalName == format.internalName) && element.editable);
+    assert(existingEntries.isNotEmpty, 'Tried to delete entry that doesn\'t exist');
+    _availableFormats.removeWhere((element) => element.internalName == format.internalName);
+    _database.delete('exportStrings', where: 'internalColumnName = ?', whereArgs: [format.internalName]);
+  }
+
   UnmodifiableListView<ExportColumn> get availableFormats => UnmodifiableListView(_availableFormats);
   UnmodifiableMapView<String, ExportColumn> get availableFormatsMap =>
       UnmodifiableMapView(Map.fromIterable(_availableFormats, key: (e) => e.internalName));

@@ -67,7 +67,7 @@ class _EditExportColumnPageState extends State<EditExportColumnPage> {
                                 setState(() {
                                   _displayName = value;
                                 });
-                                if (_editedInternalName) return;
+                                if (_editedInternalName || (widget.initialInternalName != null)) return;
                                 final asciiName = value.replaceAll(RegExp(r'[^A-Za-z0-9 ]'), '');
                                 final internalName = asciiName.replaceAllMapped(RegExp(r' (.)'), (match) {
                                   return match.group(1)!.toUpperCase();
@@ -83,6 +83,7 @@ class _EditExportColumnPageState extends State<EditExportColumnPage> {
                             key: Key('internalName$_internalNameKeyNr'), // it should update when display name is changed without unfocussing on edit
                             initialValue: _internalName,
                             decoration: InputDecoration(hintText: localizations.internalName),
+                            enabled: (widget.initialInternalName == null),
                             validator: (String? value) {
                               if (value == null || value.isEmpty || RegExp(r'[^A-Za-z0-9]').hasMatch(value)) {
                                 return localizations.errOnlyLatinCharactersAndArabicNumbers;

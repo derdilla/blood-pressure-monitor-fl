@@ -99,6 +99,18 @@ class _ExportItemsCustomizerState extends State<ExportItemsCustomizer> {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
+        if (data.editable)
+          IconButton(
+            onPressed: () async {
+              final config = await ExportConfigurationModel.get(Provider.of<Settings>(context, listen: false), AppLocalizations.of(context)!);
+              setState(() {
+                config.delete(data);
+              });
+            },
+            tooltip: AppLocalizations.of(context)!.delete,
+            icon: const Icon(Icons.delete),
+            color: Colors.red,
+          ),
         IconButton(
           onPressed: () {
             Navigator.of(context).push(MaterialPageRoute(builder: (context) =>
@@ -109,11 +121,14 @@ class _ExportItemsCustomizerState extends State<ExportItemsCustomizer> {
                   editable: data.editable,
                   onValidSubmit: (value) async {
                     final config = await ExportConfigurationModel.get(Provider.of<Settings>(context, listen: false), AppLocalizations.of(context)!);
-                    config.addOrUpdate(value);
+                    setState(() {
+                      config.addOrUpdate(value);
+                    });
                   },
                 )
             ));
           },
+          tooltip: AppLocalizations.of(context)!.edit,
           icon: const Icon(Icons.edit)
         ),
         const Icon(Icons.drag_handle),

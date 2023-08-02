@@ -375,5 +375,9 @@
   "@unixTimestamp": {},
   "errCantEditThis": "You can't edit this. Feel free to look at the values for creating a new entry.",
   "addExportformat": "Add exportformat",
-  "@addExportformat": {}
+  "@addExportformat": {},
+  "edit": "Edit",
+  "@edit": {},
+  "delete": "Delete",
+  "@delete": {}
 }
