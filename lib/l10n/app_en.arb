@@ -368,5 +368,12 @@
   "fieldFormat": "Field format",
   "@fieldFormat": {},
   "result": "Result:",
-  "@result": {}
+  "@result": {},
+  "pulsePressure": "Pulse pressure",
+  "@pulsePressure": {},
+  "unixTimestamp" : "Unix timestamp",
+  "@unixTimestamp": {},
+  "errCantEditThis": "You can't edit this. Feel free to look at the values for creating a new entry.",
+  "addExportformat": "Add exportformat",
+  "@addExportformat": {}
 }

@@ -26,6 +26,7 @@ extension PdfCompatability on Color {
   }
 }
 
+// TODO: respect new export columns
 class ExportFileCreator {
   final Settings settings;
   final AppLocalizations localizations;

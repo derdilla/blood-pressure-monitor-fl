@@ -45,11 +45,11 @@ class _ExportItemsCustomizerState extends State<ExportItemsCustomizer> {
                 shape: BoxShape.circle
             ),
             child: IconButton(
-              tooltip: 'add exportformat',
-              onPressed:() {// TODO move outside of potential reusable thing
+              tooltip: AppLocalizations.of(context)!.addExportformat,
+              onPressed:() {
                 Navigator.of(context).push(MaterialPageRoute(builder: (context) =>
                   EditExportColumnPage(onValidSubmit: (value) {
-                    result.add(value); 
+                    result.addOrUpdate(value);
                   },)
                 ));
               },
@@ -106,8 +106,10 @@ class _ExportItemsCustomizerState extends State<ExportItemsCustomizer> {
                   initialDisplayName: data.columnTitle,
                   initialInternalName: data.internalName,
                   initialFormatPattern: data.formatPattern,
-                  onValidSubmit: (value) {
-                    // TODO save
+                  editable: data.editable,
+                  onValidSubmit: (value) async {
+                    final config = await ExportConfigurationModel.get(Provider.of<Settings>(context, listen: false), AppLocalizations.of(context)!);
+                    config.addOrUpdate(value);
                   },
                 )
             ));

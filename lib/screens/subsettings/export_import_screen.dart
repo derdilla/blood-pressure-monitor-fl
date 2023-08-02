@@ -29,8 +29,8 @@ class ExportImportScreen extends StatelessWidget {
               const ExportWarnBanner(),
               const SizedBox(height: 15,),
               Opacity(
-                opacity: (settings.exportFormat == ExportFormat.db) ? 0.5 : 1, // TODO: centralize opacity when restyle
-                child: const IntervalPicker(),
+                opacity: (settings.exportFormat == ExportFormat.db) ? 0.7 : 1,
+                child: IgnorePointer(ignoring: (settings.exportFormat == ExportFormat.db), child: const IntervalPicker()),
               ),
               SettingsTile(
                 title: Text(AppLocalizations.of(context)!.exportDir),
@@ -125,16 +125,14 @@ class _ExportFieldCustomisationSettingState extends State<ExportFieldCustomisati
       future: _future!,
       onData: (context, result) {
         return Consumer<Settings>(builder: (context, settings, child) {
-          final formats = result.availableFormats;
+          final formats = result.availableFormats.toSet();
           List<ExportColumn> activeFields = [];
           List<ExportColumn> hiddenFields = [];
-          formats.forEach((internalName, e) { // todo: maintain ordering of exportItems
-            if (settings.exportItems.contains(internalName)) {
-              activeFields.add(e);
-            } else {
-              hiddenFields.add(e);
-            }
-          });
+          for (final internalName in settings.exportItems) {
+            activeFields.add(formats.singleWhere((e) => e.internalName == internalName));
+            formats.removeWhere((e) => e.internalName == internalName);
+          }
+          hiddenFields = formats.toList();
           
           return Column(
             children: [
@@ -152,7 +150,6 @@ class _ExportFieldCustomisationSettingState extends State<ExportFieldCustomisati
                   hiddenItems: hiddenFields,
                   onReorder: (exportItems, exportAddableItems) {
                     settings.exportItems = exportItems.map((e) => e.internalName).toList();
-                    //settings.exportAddableItems = exportAddableItems; // todo remove from data
                   },
                 ) : const SizedBox.shrink()
             ],

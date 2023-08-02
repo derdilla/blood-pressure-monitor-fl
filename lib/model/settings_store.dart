@@ -42,6 +42,9 @@ class Settings extends ChangeNotifier {
     if (keys.contains('exportDataRangeEndEpochMs')) {
       toAwait.add(_prefs.remove('exportDataRangeEndEpochMs'));
     }
+    if (keys.contains('exportAddableItems')) {
+      toAwait.add(_prefs.remove('exportAddableItems'));
+    }
 
     for (var e in toAwait) {
       await e;
@@ -443,15 +446,7 @@ class Settings extends ChangeNotifier {
     _prefs.setBool('exportCustomEntries', value);
     notifyListeners();
   }
-  
-  List<String> get exportAddableItems {
-    return _prefs.getStringList('exportAddableItems') ?? ['isoUTCTime'];
-  }
 
-  set exportAddableItems(List<String> value) {
-    _prefs.setStringList('exportAddableItems', value);
-    notifyListeners();
-  }
   List<String> get exportItems {
     return _prefs.getStringList('exportItems') ?? ['timestampUnixMs', 'systolic', 'diastolic', 'pulse', 'notes'];
   }

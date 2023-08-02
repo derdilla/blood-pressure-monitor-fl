@@ -8,9 +8,10 @@ class  EditExportColumnPage extends StatefulWidget {
   final String? initialDisplayName;
   final String? initialFormatPattern;
   final void Function(ExportColumn) onValidSubmit;
+  final bool editable;
   
   const EditExportColumnPage({super.key, this.initialDisplayName, this.initialInternalName, 
-    this.initialFormatPattern, required this.onValidSubmit});
+    this.initialFormatPattern, required this.onValidSubmit, this.editable = true});
 
   @override
   State<EditExportColumnPage> createState() => _EditExportColumnPageState();
@@ -48,78 +49,91 @@ class _EditExportColumnPageState extends State<EditExportColumnPage> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  TextFormField(
-                    key: const Key('displayName'),
-                    initialValue: _displayName,
-                    decoration: InputDecoration(hintText: localizations.displayTitle),
-                    onChanged: (String? value) {
-                      if (value != null && value.isNotEmpty) {
-                        setState(() {
-                          _displayName = value;
-                        });
-                        if (_editedInternalName) return;
-                        final asciiName = value.replaceAll(RegExp(r'[^A-Za-z0-9 ]'), '');
-                        final internalName = asciiName.replaceAllMapped(RegExp(r' (.)'), (match) {
-                          return match.group(1)!.toUpperCase();
-                        }).replaceAll(' ', '');
-                        setState(() {
-                          _internalNameKeyNr++;
-                          _internalName = internalName;
-                        });
-                      }
-                    },
+                  if (!widget.editable)
+                    Text(localizations.errCantEditThis),
+                  Opacity(
+                    opacity: widget.editable ? 1 : 0.7,
+                    child: IgnorePointer(
+                      ignoring: !widget.editable,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          TextFormField(
+                            key: const Key('displayName'),
+                            initialValue: _displayName,
+                            decoration: InputDecoration(hintText: localizations.displayTitle),
+                            onChanged: (String? value) {
+                              if (value != null && value.isNotEmpty) {
+                                setState(() {
+                                  _displayName = value;
+                                });
+                                if (_editedInternalName) return;
+                                final asciiName = value.replaceAll(RegExp(r'[^A-Za-z0-9 ]'), '');
+                                final internalName = asciiName.replaceAllMapped(RegExp(r' (.)'), (match) {
+                                  return match.group(1)!.toUpperCase();
+                                }).replaceAll(' ', '');
+                                setState(() {
+                                  _internalNameKeyNr++;
+                                  _internalName = internalName;
+                                });
+                              }
+                            },
+                          ),
+                          TextFormField(
+                            key: Key('internalName$_internalNameKeyNr'), // it should update when display name is changed without unfocussing on edit
+                            initialValue: _internalName,
+                            decoration: InputDecoration(hintText: localizations.internalName),
+                            validator: (String? value) {
+                              if (value == null || value.isEmpty || RegExp(r'[^A-Za-z0-9]').hasMatch(value)) {
+                                return localizations.errOnlyLatinCharactersAndArabicNumbers;
+                              } // TODO: check if one with this name already exists
+                              return null;
+                            },
+                            onChanged: (String? value) {
+                              if (value != null && value.isNotEmpty && !RegExp(r'[^A-Za-z0-9]').hasMatch(value)) {
+                                setState(() {
+                                  _internalName = value;
+                                  _editedInternalName = true;
+                                });
+                              }
+                            },
+                          ),
+                          TextFormField( // TODO: documentation
+                            key: const Key('formatPattern'),
+                            initialValue: _formatPattern,
+                            decoration: InputDecoration(hintText: localizations.fieldFormat),
+                            maxLines: 6,
+                            minLines: 1,
+                            validator: (String? value) {
+                              if (value == null || value.isEmpty) {
+                                return AppLocalizations.of(context)!.errNoValue;
+                              } else if (_internalName != null && _displayName != null) {
+                                try {
+                                  final column = ExportColumn(internalName: _internalName!, columnTitle: _displayName!, formatPattern: value);
+                                  column.formatRecord(BloodPressureRecord(DateTime.now(), 100, 80, 60, ''));
+                                  _formatPattern = value;
+                                } catch (e) {
+                                  _formatPattern = null;
+                                  return e.toString();
+                                }
+                              }
+                              return null;
+                            },
+                            onChanged: (value) => setState(() {_formatPattern = value;}),
+                          ),
+                          const SizedBox(height: 12,),
+                          Text(localizations.result),
+                          Text(((){try {
+                            final column = ExportColumn(internalName: _internalName!, columnTitle: _displayName!, formatPattern: _formatPattern!);
+                            return column.formatRecord(BloodPressureRecord(DateTime.now(), 100, 80, 60, 'test'));
+                          } catch (e) {
+                            return '-';
+                          }})()),
+                          const SizedBox(height: 24,),
+                        ],
+                      ),
+                    ),
                   ),
-                  TextFormField(
-                    key: Key('internalName$_internalNameKeyNr'), // it should update when display name is changed without unfocussing on edit
-                    initialValue: _internalName,
-                    decoration: InputDecoration(hintText: localizations.internalName),
-                    validator: (String? value) {
-                      if (value == null || value.isEmpty || RegExp(r'[^A-Za-z0-9]').hasMatch(value)) {
-                        return localizations.errOnlyLatinCharactersAndArabicNumbers;
-                      } // TODO: check if one with this name already exists
-                      return null;
-                    },
-                    onChanged: (String? value) {
-                      if (value != null && value.isNotEmpty && !RegExp(r'[^A-Za-z0-9]').hasMatch(value)) {
-                        setState(() {
-                          _internalName = value;
-                          _editedInternalName = true;
-                        });
-                      }
-                    },
-                  ),
-                  TextFormField( // TODO: documentation
-                    key: const Key('formatPattern'),
-                    initialValue: _formatPattern,
-                    decoration: InputDecoration(hintText: localizations.fieldFormat),
-                    maxLines: 6,
-                    minLines: 1,
-                    validator: (String? value) {
-                      if (value == null || value.isEmpty) {
-                        return AppLocalizations.of(context)!.errNoValue;
-                      } else if (_internalName != null && _displayName != null) {
-                        try {
-                          final column = ExportColumn(internalName: _internalName!, columnTitle: _displayName!, formatPattern: value);
-                          column.formatRecord(BloodPressureRecord(DateTime.now(), 100, 80, 60, ''));
-                          _formatPattern = value;
-                        } catch (e) {
-                          _formatPattern = null;
-                          return e.toString();
-                        }
-                      }
-                      return null;
-                    },
-                    onChanged: (value) => setState(() {_formatPattern = value;}),
-                  ),
-                  const SizedBox(height: 12,),
-                  Text(localizations.result),
-                  Text(((){try {
-                  final column = ExportColumn(internalName: _internalName!, columnTitle: _displayName!, formatPattern: _formatPattern!);
-                    return column.formatRecord(BloodPressureRecord(DateTime.now(), 100, 80, 60, 'test'));
-                  } catch (e) {
-                    return '-';
-                  }})()),
-                  const SizedBox(height: 24,),
                   Row(
                     children: [
                       TextButton(
@@ -135,7 +149,7 @@ class _EditExportColumnPageState extends State<EditExportColumnPage> {
                         key: const Key('btnSave'),
                         icon: const Icon(Icons.save),
                         label: Text(AppLocalizations.of(context)!.btnSave),
-                        onPressed: () async {
+                        onPressed: (widget.editable) ? (() async {
                           if (_formKey.currentState?.validate() ?? false) {
                             widget.onValidSubmit(ExportColumn(
                                 internalName: _internalName!,
@@ -144,7 +158,7 @@ class _EditExportColumnPageState extends State<EditExportColumnPage> {
                             ));
                             Navigator.of(context).pop();
                           }
-                        },
+                        }) : null,
                       )
                     ],
                   )

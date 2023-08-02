@@ -62,7 +62,6 @@ class RamSettings extends ChangeNotifier implements Settings {
   ExportFormat _exportFormat = ExportFormat.csv;
   String _csvFieldDelimiter = ',';
   String _csvTextDelimiter = '"';
-  List<String> _exportAddableItems = ['isoUTCTime'];
   bool _exportCsvHeadline = true;
   bool _exportCustomEntries = false;
   List<String> _exportItems = ['timestampUnixMs', 'systolic', 'diastolic', 'pulse', 'notes'];
@@ -298,15 +297,6 @@ class RamSettings extends ChangeNotifier implements Settings {
   @override
   set csvTextDelimiter(String value) {
     _csvTextDelimiter = value;
-    notifyListeners();
-  }
-
-  @override
-  List<String> get exportAddableItems => _exportAddableItems;
-
-  @override
-  set exportAddableItems(List<String> value) {
-    _exportAddableItems = value;
     notifyListeners();
   }
 

@@ -130,9 +130,11 @@ class _AddMeasurementPageState extends State<AddMeasurementPage> {
                             return null;
                           }
                       ),
-                      ValueInput(// TODO: multiline input (minlines and maxlines)
+                      ValueInput(
                           key: const Key('txtPul'),
                           initialValue: (_pulse ?? '').toString(),
+                          minLines: 1,
+                          maxLines: 4,
                           hintText: AppLocalizations.of(context)!.pulLong,
                           basicValidation: !settings.allowMissingValues,
                           preValidation: (v) => _pulse = int.tryParse(v ?? ''),
@@ -216,9 +218,11 @@ class ValueInput extends StatelessWidget {
   final bool basicValidation;
   final void Function(String?)? preValidation;
   final FormFieldValidator<String> additionalValidator;
+  final int? minLines;
+  final int? maxLines;
 
   const ValueInput({super.key, required this.initialValue, required this.hintText, this.focusNode, this.basicValidation = true,
-    this.preValidation, required this.additionalValidator});
+    this.preValidation, required this.additionalValidator, this.minLines, this.maxLines});
 
   @override
   Widget build(BuildContext context) {
@@ -226,6 +230,8 @@ class ValueInput extends StatelessWidget {
       return TextFormField(
         initialValue: initialValue,
         decoration: InputDecoration(hintText: hintText),
+        minLines: minLines,
+        maxLines: maxLines,
         keyboardType: TextInputType.number,
         inputFormatters: <TextInputFormatter>[FilteringTextInputFormatter.digitsOnly],
         focusNode: focusNode,

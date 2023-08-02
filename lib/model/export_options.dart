@@ -48,17 +48,31 @@ class ExportConfigurationModel {
     return _instance!;
   }
 
-  List<ExportColumn> _getDefaultFormates() => [ // TODO: localizations
-    ExportColumn(internalName: 'timestampUnixMs', columnTitle: 'Unix timestamp', formatPattern: r'$TIMESTAMP'),
-    ExportColumn(internalName: 'formattedTimestamp', columnTitle: 'Time', formatPattern: '\$FORMAT{\$TIMESTAMP,${settings.dateFormatString}}'),
-    ExportColumn(internalName: 'systolic', columnTitle: 'Systolic', formatPattern: r'$SYS'),
-    ExportColumn(internalName: 'diastolic', columnTitle: 'Diastolic', formatPattern: r'$DIA'),
-    ExportColumn(internalName: 'pulse', columnTitle: 'Pulse', formatPattern: r'$PUL'),
-    ExportColumn(internalName: 'notes', columnTitle: 'Notes', formatPattern: r'$NOTE'),
-    ExportColumn(internalName: 'pulsePressure', columnTitle: 'Pulse pressure', formatPattern: r'{{$SYS-$DIA}}')
+  List<ExportColumn> _getDefaultFormates() => [
+    ExportColumn(internalName: 'timestampUnixMs', columnTitle: localizations.unixTimestamp, formatPattern: r'$TIMESTAMP', editable: false),
+    ExportColumn(internalName: 'formattedTimestamp', columnTitle: localizations.time, formatPattern: '\$FORMAT{\$TIMESTAMP,${settings.dateFormatString}}', editable: false),
+    ExportColumn(internalName: 'systolic', columnTitle: localizations.sysLong, formatPattern: r'$SYS', editable: false),
+    ExportColumn(internalName: 'diastolic', columnTitle: localizations.diaLong, formatPattern: r'$DIA', editable: false),
+    ExportColumn(internalName: 'pulse', columnTitle: localizations.pulLong, formatPattern: r'$PUL', editable: false),
+    ExportColumn(internalName: 'notes', columnTitle: localizations.notes, formatPattern: r'$NOTE', editable: false),
+    ExportColumn(internalName: 'pulsePressure', columnTitle: localizations.pulsePressure, formatPattern: r'{{$SYS-$DIA}}', editable: false)
   ];
 
-  void add(ExportColumn format) {
+  void addOrUpdate(ExportColumn format) {
+    final existingEntries = _availableFormats.where((element) => element.internalName == format.internalName);
+    if (existingEntries.isNotEmpty) {
+      assert(existingEntries.length == 1);
+      if (!existingEntries.first.editable) {
+        assert(false, 'Attempted to update non editable field. While this doesn\'t cause any direct issues, it should not be made possible through the UI.');
+        return;
+      }
+      _availableFormats.remove(existingEntries.first);
+      _availableFormats.add(format);
+      _database.update('exportStrings', {
+        'columnTitle': format.columnTitle,
+        'formatPattern': format.formatPattern
+      }, where: 'internalColumnName = ?', whereArgs: [format.internalName]);
+    }
     _availableFormats.add(format);
     _database.insert('exportStrings', {
       'internalColumnName': format.internalName,
@@ -67,7 +81,8 @@ class ExportConfigurationModel {
     },);
   }
 
-  UnmodifiableMapView<String, ExportColumn> get availableFormats =>
+  UnmodifiableListView<ExportColumn> get availableFormats => UnmodifiableListView(_availableFormats);
+  UnmodifiableMapView<String, ExportColumn> get availableFormatsMap =>
       UnmodifiableMapView(Map.fromIterable(_availableFormats, key: (e) => e.internalName));
 }
 
@@ -76,7 +91,7 @@ class ExportColumn {
   late final String internalName;
   /// Display title of the column. Possibly localized
   late final String columnTitle;
-  /// Pattern to create the field contents from: TODO implement user input and documentation
+  /// Pattern to create the field contents from: TODO documentation
   /// It supports inserting values for $TIMESTAMP, $SYS $DIA $PUL and $NOTE. Where $TIMESTAMP is the time since unix epoch in milliseconds.
   /// To format a timestamp in the same format as the $TIMESTAMP variable, $FORMAT(<timestamp>, <formatString>).
   /// It is supported to use basic mathematics inside of double brackets ("{{}}"). In case one of them is not present in the record, -1 is provided.
@@ -93,16 +108,18 @@ class ExportColumn {
   /// 3. Date format
   late final String formatPattern;
 
+  final bool editable;
+
   /// Example: ExportColumn(internalColumnName: 'pulsePressure', columnTitle: 'Pulse pressure', formatPattern: '{{$SYS-$DIA}}')
-  ExportColumn({required this.internalName, required this.columnTitle, required String formatPattern}) {
+  ExportColumn({required this.internalName, required this.columnTitle, required String formatPattern, this.editable = true}) {
     this.formatPattern = formatPattern.replaceAll('{{}}', '');
   }
 
-  ExportColumn.fromJson(Map<String, dynamic> json) {
+  ExportColumn.fromJson(Map<String, dynamic> json, [this.editable = true]) {
     ExportColumn(
       internalName: json['internalColumnName'],
       columnTitle: json['columnTitle'],
-      formatPattern: json['formatPattern']
+      formatPattern: json['formatPattern'],
     );
   }
 
