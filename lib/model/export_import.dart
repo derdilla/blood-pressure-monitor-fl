@@ -4,6 +4,7 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:blood_pressure_app/model/blood_pressure_analyzer.dart';
+import 'package:blood_pressure_app/model/export_options.dart';
 import 'package:blood_pressure_app/model/settings_store.dart';
 import 'package:csv/csv.dart';
 import 'package:file_picker/file_picker.dart';
@@ -32,8 +33,9 @@ class ExportFileCreator {
   final Settings settings;
   final AppLocalizations localizations;
   final ThemeData theme;
+  final ExportConfigurationModel exportColumnsConfig;
 
-  ExportFileCreator(this.settings, this.localizations, this.theme);
+  ExportFileCreator(this.settings, this.localizations, this.theme, this.exportColumnsConfig);
 
   Future<Uint8List> createFile(List<BloodPressureRecord> records) async {
     switch (settings.exportFormat) {
@@ -62,17 +64,17 @@ class ExportFileCreator {
   }
 
   Uint8List createCSVCFile(List<BloodPressureRecord> records) {
-    List<String> exportItems;
+    List<ExportColumn> exportItems;
     if (settings.exportCustomEntries) {
-      exportItems = settings.exportItems;
+      exportItems = exportColumnsConfig.getActiveExportColumns();
     } else {
-      exportItems = ['timestampUnixMs', 'systolic', 'diastolic', 'pulse', 'notes'];
+      exportItems = exportColumnsConfig.getDefaultFormates();
     }
 
     var csvHead = '';
     if (settings.exportCsvHeadline) {
       for (var i = 0; i<exportItems.length; i++) {
-        csvHead += exportItems[i];
+        csvHead += exportItems[i].internalName;
         if (i<(exportItems.length - 1)) {
           csvHead += settings.csvFieldDelimiter;
         }
@@ -84,26 +86,7 @@ class ExportFileCreator {
     for (var record in records) {
       List<dynamic> row = [];
       for (var attribute in exportItems) {
-        switch (attribute) {
-          case 'timestampUnixMs':
-            row.add(record.creationTime.millisecondsSinceEpoch);
-            break;
-          case 'isoUTCTime':
-            row.add(record.creationTime.toIso8601String());
-            break;
-          case 'systolic':
-            row.add(record.systolic ?? '');
-            break;
-          case 'diastolic':
-            row.add(record.diastolic ?? '');
-            break;
-          case 'pulse':
-            row.add(record.pulse ?? '');
-            break;
-          case 'notes':
-            row.add(record.notes ?? '');
-            break;
-        }
+        row.add(attribute.formatRecord(record));
       }
       items.add(row);
     }
@@ -286,12 +269,13 @@ class Exporter {
   final ScaffoldMessengerState messenger;
   final AppLocalizations localizations;
   final ThemeData theme;
+  final ExportConfigurationModel exportColumnsConfig;
 
-  Exporter(this.settings, this.model, this.messenger, this.localizations, this.theme);
+  Exporter(this.settings, this.model, this.messenger, this.localizations, this.theme, this.exportColumnsConfig);
 
   Future<void> export() async {
     final entries = await model.getInTimeRange(settings.displayDataStart, settings.displayDataEnd);
-    var fileContents = await ExportFileCreator(settings, localizations, theme).createFile(entries);
+    var fileContents = await ExportFileCreator(settings, localizations, theme, exportColumnsConfig).createFile(entries);
     String filename = 'blood_press_${DateTime.now().toIso8601String()}';
     String ext;
     switch(settings.exportFormat) {
@@ -352,7 +336,7 @@ class Exporter {
     var path = result.files.single.path;
     assert(path != null); // null state directly linked to binary content
 
-    var fileContents = await ExportFileCreator(settings, localizations, theme).parseFile(path! ,binaryContent);
+    var fileContents = await ExportFileCreator(settings, localizations, theme, exportColumnsConfig).parseFile(path! ,binaryContent);
     if (fileContents == null) {
       messenger.showSnackBar(SnackBar(content: Text(localizations.errNotImportable)));
       return;

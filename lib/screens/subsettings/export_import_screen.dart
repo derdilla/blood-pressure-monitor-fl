@@ -118,9 +118,7 @@ class _ExportFieldCustomisationSettingState extends State<ExportFieldCustomisati
   @override
   Widget build(BuildContext context) {
     _future ??= ExportConfigurationModel.get(Provider.of<Settings>(context, listen: false), AppLocalizations.of(context)!);
-    
-    
-    
+
     return ConsistentFutureBuilder(
       future: _future!,
       onData: (context, result) {
@@ -182,7 +180,7 @@ class ExportImportButtons extends StatelessWidget {
                 child: MaterialButton(
                   height: 60,
                   child:  Text(AppLocalizations.of(context)!.export),
-                  onPressed: () => Exporter(settings, model, messenger, localizations, theme).export(),
+                  onPressed: () async => Exporter(settings, model, messenger, localizations, theme, await ExportConfigurationModel.get(settings, localizations)).export(),
                 )
             ),
             const VerticalDivider(),
@@ -191,7 +189,7 @@ class ExportImportButtons extends StatelessWidget {
                 child: MaterialButton(
                   height: 60,
                   child: Text(AppLocalizations.of(context)!.import),
-                  onPressed: () => Exporter(settings, model, messenger, localizations, theme).import(),
+                  onPressed: () async => Exporter(settings, model, messenger, localizations, theme, await ExportConfigurationModel.get(settings, localizations)).import(),
                 )
             ),
           ],

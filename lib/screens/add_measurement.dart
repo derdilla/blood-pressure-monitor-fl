@@ -1,6 +1,7 @@
 import 'package:blood_pressure_app/components/date_time_picker.dart';
 import 'package:blood_pressure_app/model/blood_pressure.dart';
 import 'package:blood_pressure_app/model/export_import.dart';
+import 'package:blood_pressure_app/model/export_options.dart';
 import 'package:blood_pressure_app/model/settings_store.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -191,7 +192,8 @@ class _AddMeasurementPageState extends State<AddMeasurementPage> {
                                 await model.add(BloodPressureRecord(_time, _systolic, _diastolic, _pulse, _note));
                                 if (settings.exportAfterEveryEntry && context.mounted) {
                                   final exporter = Exporter(settings, model, ScaffoldMessenger.of(context),
-                                      AppLocalizations.of(context)!, Theme.of(context));
+                                      AppLocalizations.of(context)!, Theme.of(context),
+                                      await ExportConfigurationModel.get(Provider.of<Settings>(context, listen: false), AppLocalizations.of(context)!));
                                   exporter.export();
                                 }
                                 navigator.pop();

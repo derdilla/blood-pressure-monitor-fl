@@ -38,7 +38,7 @@ class ExportConfigurationModel {
       _availableFormats.add(ExportColumn(internalName: e['internalColumnName'].toString(),
           columnTitle: e['columnTitle'].toString(), formatPattern: e['formatPattern'].toString()));
     }
-    _availableFormats.addAll(_getDefaultFormates());
+    _availableFormats.addAll(getDefaultFormates());
   }
   static Future<ExportConfigurationModel> get(Settings settings, AppLocalizations localizations, {String? dbPath, bool isFullPath = false}) async {
     if (_instance == null) {
@@ -48,7 +48,15 @@ class ExportConfigurationModel {
     return _instance!;
   }
 
-  List<ExportColumn> _getDefaultFormates() => [
+  List<ExportColumn> getActiveExportColumns() {
+    List<ExportColumn> activeFields = [];
+    for (final internalName in settings.exportItems) {
+      activeFields.add(availableFormats.singleWhere((e) => e.internalName == internalName));
+    }
+    return activeFields;
+  }
+  
+  List<ExportColumn> getDefaultFormates() => [
     ExportColumn(internalName: 'timestampUnixMs', columnTitle: localizations.unixTimestamp, formatPattern: r'$TIMESTAMP', editable: false),
     ExportColumn(internalName: 'formattedTimestamp', columnTitle: localizations.time, formatPattern: '\$FORMAT{\$TIMESTAMP,${settings.dateFormatString}}', editable: false),
     ExportColumn(internalName: 'systolic', columnTitle: localizations.sysLong, formatPattern: r'$SYS', editable: false),

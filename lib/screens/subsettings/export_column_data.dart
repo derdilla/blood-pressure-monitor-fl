@@ -100,7 +100,7 @@ class _EditExportColumnPageState extends State<EditExportColumnPage> {
                               }
                             },
                           ),
-                          TextFormField( // TODO: documentation
+                          TextFormField(
                             key: const Key('formatPattern'),
                             initialValue: _formatPattern,
                             decoration: InputDecoration(
