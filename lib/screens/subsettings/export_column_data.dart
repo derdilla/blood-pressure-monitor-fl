@@ -1,5 +1,6 @@
 import 'package:blood_pressure_app/model/blood_pressure.dart';
 import 'package:blood_pressure_app/model/export_options.dart';
+import 'package:blood_pressure_app/screens/subsettings/export_field_format_documentation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -61,7 +62,7 @@ class _EditExportColumnPageState extends State<EditExportColumnPage> {
                           TextFormField(
                             key: const Key('displayName'),
                             initialValue: _displayName,
-                            decoration: InputDecoration(hintText: localizations.displayTitle),
+                            decoration: InputDecoration(label: Text(localizations.displayTitle)),
                             onChanged: (String? value) {
                               if (value != null && value.isNotEmpty) {
                                 setState(() {
@@ -82,7 +83,7 @@ class _EditExportColumnPageState extends State<EditExportColumnPage> {
                           TextFormField(
                             key: Key('internalName$_internalNameKeyNr'), // it should update when display name is changed without unfocussing on edit
                             initialValue: _internalName,
-                            decoration: InputDecoration(hintText: localizations.internalName),
+                            decoration: InputDecoration(label: Text(localizations.internalName)),
                             enabled: (widget.initialInternalName == null),
                             validator: (String? value) {
                               if (value == null || value.isEmpty || RegExp(r'[^A-Za-z0-9]').hasMatch(value)) {
@@ -102,12 +103,21 @@ class _EditExportColumnPageState extends State<EditExportColumnPage> {
                           TextFormField( // TODO: documentation
                             key: const Key('formatPattern'),
                             initialValue: _formatPattern,
-                            decoration: InputDecoration(hintText: localizations.fieldFormat),
+                            decoration: InputDecoration(
+                              label: Text(localizations.fieldFormat),
+                              suffixIcon: IconButton(
+                                  onPressed: () {
+                                    Navigator.of(context).push(MaterialPageRoute(
+                                        builder: (context) => InformationScreen(text: localizations.exportFieldFormatDocumentation)));
+                                  },
+                                  icon: const Icon(Icons.info_outline)
+                              ),
+                            ),
                             maxLines: 6,
                             minLines: 1,
                             validator: (String? value) {
                               if (value == null || value.isEmpty) {
-                                return AppLocalizations.of(context)!.errNoValue;
+                                return localizations.errNoValue;
                               } else if (_internalName != null && _displayName != null) {
                                 try {
                                   final column = ExportColumn(internalName: _internalName!, columnTitle: _displayName!, formatPattern: value);
@@ -143,13 +153,13 @@ class _EditExportColumnPageState extends State<EditExportColumnPage> {
                             Navigator.of(context).pop();
                           },
 
-                          child: Text(AppLocalizations.of(context)!.btnCancel)
+                          child: Text(localizations.btnCancel)
                       ),
                       const Spacer(),
                       FilledButton.icon(
                         key: const Key('btnSave'),
                         icon: const Icon(Icons.save),
-                        label: Text(AppLocalizations.of(context)!.btnSave),
+                        label: Text(localizations.btnSave),
                         onPressed: (widget.editable) ? (() async {
                           if (_formKey.currentState?.validate() ?? false) {
                             widget.onValidSubmit(ExportColumn(

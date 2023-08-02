@@ -322,7 +322,7 @@
   "@enterTimeFormatTxt3": {},
   "enterTimeFormatTxt1": "En formateringsstreng er en miks av predefinert ICU/Skeleton -strenger og all annen tekst du vil inkludere.",
   "@enterTimeFormatTxt1": {},
-  "exportWarnConfigNotImportable": "Gjør eksportoppsettet importerbart ved å sette eksporttypen til \\\"CSV\\\", skru på overskrift, inkluder feltene 'diastolic', 'systolic', 'pulse', 'notes', sammen med ett av de tilgjengelige tidsformatene.",
+  "exportWarnConfigNotImportable": "Gjør eksportoppsettet importerbart ved å sette eksporttypen til \\\"CSV\\\", skru på overskrift, inkluder feltene ''diastolic'', ''systolic'', ''pulse'', ''notes'', sammen med ett av de tilgjengelige tidsformatene.",
   "@exportWarnConfigNotImportable": {},
   "allowMissingValues": "Tillat manglende verdier",
   "@allowMissingValues": {},
