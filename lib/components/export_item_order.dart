@@ -5,7 +5,6 @@ import 'package:badges/badges.dart' as badges;
 import 'package:blood_pressure_app/components/consistent_future_builder.dart';
 import 'package:blood_pressure_app/model/export_options.dart';
 import 'package:blood_pressure_app/screens/subsettings/export_column_data.dart';
-import 'package:blood_pressure_app/screens/subsettings/export_fields_presets_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
@@ -14,10 +13,10 @@ import '../model/settings_store.dart';
 
 class ExportItemsCustomizer extends StatefulWidget {
   final List<ExportColumn> shownItems;
-  final List<ExportColumn> hiddenItems;
+  final List<ExportColumn> disabledItems;
   final FutureOr<void> Function(List<ExportColumn> exportItems, List<ExportColumn> exportAddableItems) onReorder;
 
-  const ExportItemsCustomizer({super.key, required this.shownItems, required this.hiddenItems,
+  const ExportItemsCustomizer({super.key, required this.shownItems, required this.disabledItems,
       required this.onReorder});
 
   @override
@@ -64,15 +63,16 @@ class _ExportItemsCustomizerState extends State<ExportItemsCustomizer> {
                   contentPadding: EdgeInsets.zero
               ),
             _buildListSectionDivider(context),
-            for (int i = 0; i < widget.hiddenItems.length; i += 1)
-              ListTile(
-                  key: Key('ul_${widget.hiddenItems[i].internalName}'),
-                  title: Opacity(
-                    opacity: 0.7,
-                    child: Text(widget.hiddenItems[i].columnTitle),
-                  ),
-                  trailing: _buildListItemTrailing(context, widget.hiddenItems[i]),
-                  contentPadding: EdgeInsets.zero
+            for (int i = 0; i < widget.disabledItems.length; i += 1)
+              (widget.disabledItems[i].hidden) ? SizedBox.shrink(key: Key('ul_${widget.disabledItems[i].internalName}'),)
+              : ListTile(
+                key: Key('ul_${widget.disabledItems[i].internalName}'),
+                title: Opacity(
+                  opacity: 0.7,
+                  child: Text(widget.disabledItems[i].columnTitle),
+                ),
+                trailing: _buildListItemTrailing(context, widget.disabledItems[i]),
+                contentPadding: EdgeInsets.zero
               ),
           ],
         ),
@@ -231,8 +231,8 @@ class _ExportItemsCustomizerState extends State<ExportItemsCustomizer> {
     final ExportColumn item;
     if (0 <= oldIndex && oldIndex < widget.shownItems.length) {
       item = widget.shownItems.removeAt(oldIndex);
-    } else if ((widget.shownItems.length + 1) <= oldIndex && oldIndex < (widget.shownItems.length + 1 + widget.hiddenItems.length)) {
-      item = widget.hiddenItems.removeAt(oldIndex - (widget.shownItems.length + 1));
+    } else if ((widget.shownItems.length + 1) <= oldIndex && oldIndex < (widget.shownItems.length + 1 + widget.disabledItems.length)) {
+      item = widget.disabledItems.removeAt(oldIndex - (widget.shownItems.length + 1));
     } else {
       assert(false, 'oldIndex outside expected boundaries');
       return;
@@ -242,10 +242,10 @@ class _ExportItemsCustomizerState extends State<ExportItemsCustomizer> {
       widget.shownItems.insert(newIndex, item);
     } else {
       newIndex -= (widget.shownItems.length + 1);
-      widget.hiddenItems.insert(newIndex, item);
+      widget.disabledItems.insert(newIndex, item);
     }
 
-    widget.onReorder(widget.shownItems, widget.hiddenItems);
+    widget.onReorder(widget.shownItems, widget.disabledItems);
   }
 }
 

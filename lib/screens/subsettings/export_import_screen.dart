@@ -145,7 +145,7 @@ class _ExportFieldCustomisationSettingState extends State<ExportFieldCustomisati
               (settings.exportFormat == ExportFormat.csv && settings.exportCustomEntries) ?
                 ExportItemsCustomizer(
                   shownItems: activeFields,
-                  hiddenItems: hiddenFields,
+                  disabledItems: hiddenFields,
                   onReorder: (exportItems, exportAddableItems) {
                     settings.exportItems = exportItems.map((e) => e.internalName).toList();
                   },
