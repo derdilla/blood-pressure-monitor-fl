@@ -214,7 +214,7 @@ class _ExportWarnBannerState extends State<ExportWarnBanner> {
     return Consumer<Settings>(builder: (context, settings, child) {
       if (_showWarnBanner && ![ExportFormat.csv, ExportFormat.db].contains(settings.exportFormat) ||
           settings.exportCsvHeadline == false ||
-          settings.exportCustomEntries && !(['timestampUnixMs','isoUTCTime'].any((i) => settings.exportItems.contains(i))) ||
+          settings.exportCustomEntries && !(['timestampUnixMs'].any((i) => settings.exportItems.contains(i))) ||
           ![',', '|'].contains(settings.csvFieldDelimiter) ||
           !['"', '\''].contains(settings.csvTextDelimiter)
       ) {

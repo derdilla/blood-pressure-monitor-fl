@@ -68,7 +68,7 @@ class ExportFileCreator {
     if (settings.exportCustomEntries) {
       exportItems = exportColumnsConfig.getActiveExportColumns();
     } else {
-      exportItems = exportColumnsConfig.getDefaultFormates();
+      exportItems = exportColumnsConfig.getDefaultFormates().where((e) => ['timestampUnixMs','systolic','diastolic','pulse','notes'].contains(e.internalName)).toList();
     }
 
     var csvHead = '';

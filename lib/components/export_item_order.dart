@@ -5,6 +5,7 @@ import 'package:badges/badges.dart' as badges;
 import 'package:blood_pressure_app/components/consistent_future_builder.dart';
 import 'package:blood_pressure_app/model/export_options.dart';
 import 'package:blood_pressure_app/screens/subsettings/export_column_data.dart';
+import 'package:blood_pressure_app/screens/subsettings/export_fields_presets_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
@@ -33,65 +34,108 @@ class _ExportItemsCustomizerState extends State<ExportItemsCustomizer> {
     return ConsistentFutureBuilder(
       future: _future!,
       onData: (BuildContext context, ExportConfigurationModel result) {
-        return badges.Badge(
-          badgeStyle: badges.BadgeStyle(
-            badgeColor: Theme.of(context).colorScheme.background,
-            padding: const EdgeInsets.all(10)
-          ),
-          position: badges.BadgePosition.bottomEnd(bottom: 3, end: 3),
-          badgeContent: Container(
-            decoration: BoxDecoration(
-                border: Border.all(color: Theme.of(context).colorScheme.onBackground),
-                shape: BoxShape.circle
-            ),
-            child: IconButton(
-              tooltip: AppLocalizations.of(context)!.addExportformat,
-              onPressed:() {
-                Navigator.of(context).push(MaterialPageRoute(builder: (context) =>
-                  EditExportColumnPage(onValidSubmit: (value) {
-                    result.addOrUpdate(value);
-                  },)
-                ));
-              },
-              icon: const Icon(Icons.add),
-            ),
-          ),
-          child: Container(
-            margin: const EdgeInsets.all(25),
-            padding: const EdgeInsets.all(20),
-            height: 420,
-            decoration: BoxDecoration(
-              border: Border.all(color: Theme.of(context).textTheme.labelLarge?.color ?? Colors.teal),
-              borderRadius: const BorderRadius.all(Radius.circular(10)),
-            ),
-            clipBehavior: Clip.hardEdge,
-            child: ReorderableListView(
-              shrinkWrap: true,
-              onReorder: _onReorderList,
-              children: <Widget>[
-                for (int i = 0; i < widget.shownItems.length; i += 1)
-                  ListTile(
-                    key: Key('l_${widget.shownItems[i].internalName}'),
-                    title: Text(widget.shownItems[i].columnTitle),
-                    trailing: _buildListItemTrailing( context, widget.shownItems[i]),
-                    contentPadding: EdgeInsets.zero
-                  ),
-                _buildListSectionDivider(context),
-                for (int i = 0; i < widget.hiddenItems.length; i += 1)
-                  ListTile(
-                    key: Key('ul_${widget.hiddenItems[i].internalName}'),
-                    title: Opacity(
-                      opacity: 0.7,
-                      child: Text(widget.hiddenItems[i].columnTitle),
-                    ),
-                    trailing: _buildListItemTrailing(context, widget.hiddenItems[i]),
-                    contentPadding: EdgeInsets.zero
-                  ),
-              ],
-            ),
-          ),
+        return _buildAddItemBadge(context, result,
+          child: _buildManagePresetsBadge(context, result,
+            child:_buildList(context))
         );
       },
+    );
+  }
+
+  Container _buildList(BuildContext context) {
+    return Container(
+        margin: const EdgeInsets.all(25),
+        padding: const EdgeInsets.all(20),
+        height: 420,
+        decoration: BoxDecoration(
+          border: Border.all(color: Theme.of(context).textTheme.labelLarge?.color ?? Colors.teal),
+          borderRadius: const BorderRadius.all(Radius.circular(10)),
+        ),
+        clipBehavior: Clip.hardEdge,
+        child: ReorderableListView(
+          shrinkWrap: true,
+          onReorder: _onReorderList,
+          children: <Widget>[
+            for (int i = 0; i < widget.shownItems.length; i += 1)
+              ListTile(
+                  key: Key('l_${widget.shownItems[i].internalName}'),
+                  title: Text(widget.shownItems[i].columnTitle),
+                  trailing: _buildListItemTrailing( context, widget.shownItems[i]),
+                  contentPadding: EdgeInsets.zero
+              ),
+            _buildListSectionDivider(context),
+            for (int i = 0; i < widget.hiddenItems.length; i += 1)
+              ListTile(
+                  key: Key('ul_${widget.hiddenItems[i].internalName}'),
+                  title: Opacity(
+                    opacity: 0.7,
+                    child: Text(widget.hiddenItems[i].columnTitle),
+                  ),
+                  trailing: _buildListItemTrailing(context, widget.hiddenItems[i]),
+                  contentPadding: EdgeInsets.zero
+              ),
+          ],
+        ),
+      );
+  }
+
+  Widget _buildAddItemBadge(BuildContext context, ExportConfigurationModel result, {required Widget child}) {
+    return badges.Badge(
+      badgeStyle: badges.BadgeStyle(
+        badgeColor: Theme.of(context).colorScheme.background,
+        padding: const EdgeInsets.all(10)
+      ),
+      position: badges.BadgePosition.bottomEnd(bottom: 3, end: 3),
+      badgeContent: Container(
+        decoration: BoxDecoration(
+          border: Border.all(color: Theme.of(context).colorScheme.onBackground),
+          shape: BoxShape.circle
+        ),
+        child: IconButton(
+          tooltip: AppLocalizations.of(context)!.addExportformat,
+          onPressed:() {
+            Navigator.of(context).push(MaterialPageRoute(builder: (context) =>
+              EditExportColumnPage(onValidSubmit: (value) {
+                result.addOrUpdate(value);
+              },)
+            ));
+          },
+          icon: const Icon(Icons.add),
+        ),
+      ),
+      child: child,
+    );
+  }
+
+  Widget _buildManagePresetsBadge(BuildContext context, ExportConfigurationModel result, {required Widget child}) {
+    final localizations = AppLocalizations.of(context)!;
+    return badges.Badge(
+      position: badges.BadgePosition.topEnd(top: 3, end: 3),
+      badgeStyle: badges.BadgeStyle(
+        badgeColor: Theme.of(context).colorScheme.background,
+        padding: const EdgeInsets.all(5)
+      ),
+      badgeContent: PopupMenuButton<int>(
+        icon: const Icon(Icons.collections_bookmark),
+        itemBuilder: (BuildContext context) {
+          return [
+            PopupMenuItem<int>(value: 0, child: Text(localizations.default_)),
+            const PopupMenuItem<int>(value: 1, child: Text('"My Heart" export'))
+          ];
+        },
+        onSelected: (value) {
+          switch (value) {
+            case 0:
+              result.settings.exportItems = ['timestampUnixMs', 'systolic', 'diastolic', 'pulse', 'notes'];
+              return;
+            case 1:
+              result.settings.exportItems = ['DATUM', 'SYSTOLE', 'DIASTOLE', 'PULS', 'Beschreibung', 'Tags', 'Gewicht', 'Sauerstoffsättigung'];
+              return;
+          }
+          assert(false);
+        },
+      ),
+      child: child,
     );
   }
 

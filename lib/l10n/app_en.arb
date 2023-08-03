@@ -381,5 +381,9 @@
   "delete": "Delete",
   "@delete": {},
   "exportFieldFormatDocumentation": "'## Variables\nThe export field format support inserting values for the following placeholders:\n- `$TIMESTAMP:` Represents the time since the Unix epoch in milliseconds.\n- `$SYS:` Provides a value if available; otherwise, it defaults to -1.\n- `$DIA:` Provides a value if available; otherwise, it defaults to -1.\n- `$PUL:` Provides a value if available; otherwise, it defaults to -1.\n- `$NOTE:` Provides a value if available; otherwise, it defaults to -1.\n\nIf any of the placeholders mentioned above are not present in the blood pressure record, they will be replaced with -1.\n\n## Math\nYou can use basic mathematics inside double brackets (\"`{{}}`\").\n\nThe following mathematical operations are supported:\n- Operations: +, -, *, /, %, ^\n- One-parameter functions: abs, acos, asin, atan, ceil, cos, cosh, cot, coth, csc, csch, exp, floor, ln, log, round sec, sech, sin, sinh, sqrt, tan, tanh \n- Two-parameter functions: log, nrt, pow\n- Constants: e, pi, ln2, ln10, log2e, log10e, sqrt1_2, sqrt2\nFor the full math interpreter specification, you can refer to the [function_tree](https://pub.dev/documentation/function_tree/latest#interpreter) specification\n\n## Time\nTo format a timestamp, use the following syntax: `$FORMAT{<timestamp>,<formatString>}`. The `<formatString>` supports the same format as described on the ICU/Skeleton string [documentation page](screen://TimeFormattingHelp).\n\n## Processing order\n1. variable replacement\n2. Math\n3. Date format'",
-  "@exportFieldFormatDocumentation": {}
+  "@exportFieldFormatDocumentation": {},
+  "presets": "Presets",
+  "@presets": {},
+  "default_": "Default",
+  "@default_": {}
 }
