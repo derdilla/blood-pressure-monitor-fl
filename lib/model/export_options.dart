@@ -106,7 +106,7 @@ class ExportColumn {
   late final String internalName;
   /// Display title of the column. Possibly localized
   late final String columnTitle;
-  /// Pattern to create the field contents from: TODO documentation
+  /// Pattern to create the field contents from:
   /// It supports inserting values for $TIMESTAMP, $SYS $DIA $PUL and $NOTE. Where $TIMESTAMP is the time since unix epoch in milliseconds.
   /// To format a timestamp in the same format as the $TIMESTAMP variable, $FORMAT(<timestamp>, <formatString>).
   /// It is supported to use basic mathematics inside of double brackets ("{{}}"). In case one of them is not present in the record, -1 is provided.
@@ -174,8 +174,59 @@ class ExportColumn {
     return fieldContents;
   }
 
+  List<(RowDataFieldType, dynamic)> parseRecord(String formattedRecord) {
+    if (!isReversible || formattedRecord == 'null') return [];
+
+    if (formatPattern == r'$NOTE') return [(RowDataFieldType.notes, formattedRecord)];
+
+    // records are parse by replacing the values with capture groups
+    final types = RegExp(r'\$(TIMESTAMP|SYS|DIA|PUL)').allMatches(formatPattern).map((e) => e.group(0)).toList();
+    final numRegex = formatPattern.replaceAll(RegExp(r'\$(TIMESTAMP|SYS|DIA|PUL)'), '([0-9]+.?[0-9]*)'); // ints and doubles
+    final numMatches = RegExp(numRegex).allMatches(formattedRecord);
+    final numbers = [];
+    if (numMatches.isNotEmpty) {
+      for (var i = 1; i <= numMatches.first.groupCount; i++) {
+        numbers.add(numMatches.first[i]);
+      }
+    }
+
+    List<(RowDataFieldType, dynamic)> records = [];
+    for (var i = 0; i < types.length; i++) {
+      switch (types[i]) {
+        case r'$TIMESTAMP':
+          records.add((RowDataFieldType.timestamp, int.tryParse(numbers[i] ?? '')));
+          break;
+        case r'$SYS':
+          records.add((RowDataFieldType.sys, double.tryParse(numbers[i] ?? '')));
+          break;
+        case r'$DIA':
+          records.add((RowDataFieldType.dia, double.tryParse(numbers[i] ?? '')));
+          break;
+        case r'$PUL':
+          records.add((RowDataFieldType.pul, double.tryParse(numbers[i] ?? '')));
+          break;
+      }
+    }
+    return records;
+  }
+
+  /// Checks if the pattern can be used to parse records. This is the case when the pattern contains variables without
+  /// containing curly brackets or commas.
+  bool get isReversible {
+    return formatPattern == r'$TIMESTAMP' ||
+        formatPattern.contains(RegExp(r'\$(TIMESTAMP|SYS|DIA|PUL|NOTE)')) && !formatPattern.contains(RegExp(r'[{},]'));
+  }
+
   @override
   String toString() {
     return 'ExportColumn{internalColumnName: $internalName, columnTitle: $columnTitle, formatPattern: $formatPattern}';
   }
+}
+
+enum RowDataFieldType {
+  timestamp,
+  sys,
+  dia,
+  pul,
+  notes
 }

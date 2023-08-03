@@ -27,8 +27,8 @@ extension PdfCompatability on Color {
   }
 }
 
-// TODO: respect new export columns
-// TODO: delete entries in list | button
+// TODO: update import warning
+// TODO: more testing
 class ExportFileCreator {
   final Settings settings;
   final AppLocalizations localizations;
@@ -105,56 +105,59 @@ class ExportFileCreator {
       converter = CsvToListConverter(fieldDelimiter: settings.csvFieldDelimiter, textDelimiter: settings.csvTextDelimiter, eol: '\n');
       csvLines = converter.convert(fileContents);
     }
+
     final attributes = csvLines.removeAt(0);
-    var creationTimePos = -1;
-    var isoTimePos = -1;
-    var sysPos = -1;
-    var diaPos = -1;
-    var pulPos = -1;
-    var notePos = -1;
-    for (var i = 0; i<attributes.length; i++) {
-      switch (attributes[i].toString().trim()) {
-        case 'timestampUnixMs':
-          creationTimePos = i;
-          break;
-        case 'isoUTCTime':
-          isoTimePos = i;
-          break;
-        case 'systolic':
-          sysPos = i;
-          break;
-        case 'diastolic':
-          diaPos = i;
-          break;
-        case 'pulse':
-          pulPos = i;
-          break;
-        case 'notes':
-          notePos = i;
-          break;
+    final availableFormatsMap = exportColumnsConfig.availableFormatsMap;
+
+    for (var lineIndex = 0; lineIndex < csvLines.length; lineIndex++) {
+      // get values from columns
+      int? timestamp, sys, dia, pul;
+      String? notes;
+      for (var attributeIndex = 0; attributeIndex < attributes.length; attributeIndex++) {
+        if (timestamp != null && sys != null && dia !=null && pul != null) continue; // optimization
+
+        // get colum from internal name
+        final columnInternalTitle = attributes[attributeIndex].toString().trim();
+        final columnFormat = availableFormatsMap[columnInternalTitle];
+        if (columnFormat == null) {
+          throw ArgumentError('Unknown column: $columnInternalTitle');
+        }
+        if(!columnFormat.isReversible) continue;
+
+        final parsedRecord = columnFormat.parseRecord(csvLines[lineIndex][attributeIndex].toString());
+        for (final parsedRecordDataType in parsedRecord) {
+          switch (parsedRecordDataType.$1) {
+            case RowDataFieldType.notes:
+              assert(parsedRecordDataType.$2 is String?);
+              notes ??= parsedRecordDataType.$2;
+              break;
+            case RowDataFieldType.sys:
+              assert(parsedRecordDataType.$2 is double?);
+              sys ??= (parsedRecordDataType.$2 as double?)?.toInt();
+              break;
+            case RowDataFieldType.dia:
+              assert(parsedRecordDataType.$2 is double?);
+              dia ??= (parsedRecordDataType.$2 as double?)?.toInt();
+              break;
+            case RowDataFieldType.pul:
+              assert(parsedRecordDataType.$2 is double?);
+              pul ??= (parsedRecordDataType.$2 as double?)?.toInt();
+              break;
+            case RowDataFieldType.timestamp:
+              assert(parsedRecordDataType.$2 is int?);
+              timestamp ??= parsedRecordDataType.$2 as int?;
+              break;
+          }
+        }
       }
-    }
-    if(creationTimePos < 0 && isoTimePos < 0) {
-      throw ArgumentError('File didn\'t save timestamps');
+
+      // create record
+      if (timestamp == null) {
+        throw ArgumentError('File didn\'t save timestamps');
+      }
+      records.add(BloodPressureRecord(DateTime.fromMillisecondsSinceEpoch(timestamp), sys, dia, pul, notes ?? ''));
     }
 
-    int? convert(dynamic e) {
-      if (e is int?) {
-        return e;
-      }
-      return null;
-    }
-    for (final line in csvLines) {
-      records.add(
-          BloodPressureRecord(
-              (creationTimePos >= 0 ) ? DateTime.fromMillisecondsSinceEpoch(line[creationTimePos]) : DateTime.parse(line[isoTimePos]),
-              (sysPos >= 0) ? convert(line[sysPos]) : null,
-              (diaPos >= 0) ? convert(line[diaPos]) : null,
-              (pulPos >= 0) ? convert(line[pulPos]) : null,
-              (notePos >= 0) ? line[notePos] : null
-          )
-      );
-    }
     return records;
   }
 
@@ -242,7 +245,7 @@ class ExportFileCreator {
                 (data[row].systolic ?? '-').toString(),
                 (data[row].diastolic ?? '-').toString(),
                 (data[row].pulse ?? '-').toString(),
-                data[row].notes ?? '-'
+                (data[row].notes.isNotEmpty) ? data[row].notes : '-'
               ],
         )
     );

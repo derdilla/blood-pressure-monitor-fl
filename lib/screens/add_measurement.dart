@@ -170,7 +170,7 @@ class _AddMeasurementPageState extends State<AddMeasurementPage> {
                                     widget.initSys,
                                     widget.initDia,
                                     widget.initPul,
-                                    widget.initNote));
+                                    widget.initNote ?? ''));
                               }
                               Navigator.of(context).pop();
                             },
@@ -189,7 +189,7 @@ class _AddMeasurementPageState extends State<AddMeasurementPage> {
                                 final model = Provider.of<BloodPressureModel>(context, listen: false);
                                 final navigator = Navigator.of(context);
 
-                                await model.add(BloodPressureRecord(_time, _systolic, _diastolic, _pulse, _note));
+                                await model.add(BloodPressureRecord(_time, _systolic, _diastolic, _pulse, _note ?? ''));
                                 if (settings.exportAfterEveryEntry && context.mounted) {
                                   final exporter = Exporter(settings, model, ScaffoldMessenger.of(context),
                                       AppLocalizations.of(context)!, Theme.of(context),

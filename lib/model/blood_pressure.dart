@@ -106,7 +106,7 @@ class BloodPressureRecord {
   final int? systolic;
   final int? diastolic;
   final int? pulse;
-  final String? notes;
+  final String notes;
 
   const BloodPressureRecord(
       this.creationTime, this.systolic, this.diastolic, this.pulse, this.notes);
