@@ -64,35 +64,10 @@ class ExportFileCreator {
   }
 
   Uint8List createCSVCFile(List<BloodPressureRecord> records) {
-    List<ExportColumn> exportItems;
-    if (settings.exportCustomEntries) {
-      exportItems = exportColumnsConfig.getActiveExportColumns();
-    } else {
-      exportItems = exportColumnsConfig.getDefaultFormates().where((e) => ['timestampUnixMs','systolic','diastolic','pulse','notes'].contains(e.internalName)).toList();
-    }
-
-    var csvHead = '';
-    if (settings.exportCsvHeadline) {
-      for (var i = 0; i<exportItems.length; i++) {
-        csvHead += exportItems[i].internalName;
-        if (i<(exportItems.length - 1)) {
-          csvHead += settings.csvFieldDelimiter;
-        }
-      }
-      csvHead += '\r\n';
-    }
-
-    List<List<dynamic>> items = [];
-    for (var record in records) {
-      List<dynamic> row = [];
-      for (var attribute in exportItems) {
-        row.add(attribute.formatRecord(record));
-      }
-      items.add(row);
-    }
-    var converter = ListToCsvConverter(fieldDelimiter: settings.csvFieldDelimiter, textDelimiter: settings.csvTextDelimiter);
-    var csvData = converter.convert(items);
-    return Uint8List.fromList(utf8.encode(csvHead + csvData));
+    final items = exportColumnsConfig.createTable(records, settings.exportCsvHeadline);
+    final converter = ListToCsvConverter(fieldDelimiter: settings.csvFieldDelimiter, textDelimiter: settings.csvTextDelimiter);
+    final csvData = converter.convert(items);
+    return Uint8List.fromList(utf8.encode(csvData));
   }
 
   List<BloodPressureRecord> parseCSVFile(Uint8List data) {

@@ -65,7 +65,7 @@ class ExportConfigurationModel {
     ExportColumn(internalName: 'notes', columnTitle: localizations.notes, formatPattern: r'$NOTE', editable: false),
     ExportColumn(internalName: 'pulsePressure', columnTitle: localizations.pulsePressure, formatPattern: r'{{$SYS-$DIA}}', editable: false),
 
-    ExportColumn(internalName: 'DATUM', columnTitle: '"My Heart" export time', formatPattern: r'$FORMAT{$TIMESTAMP,yyyy-mm-dd HH:mm:ss}', editable: false, hidden: true),
+    ExportColumn(internalName: 'DATUM', columnTitle: '"My Heart" export time', formatPattern: r'$FORMAT{$TIMESTAMP,yyyy-MM-dd HH:mm:ss}', editable: false, hidden: true),
     ExportColumn(internalName: 'SYSTOLE', columnTitle: '"My Heart" export sys', formatPattern: r'$SYS', editable: false, hidden: true),
     ExportColumn(internalName: 'DIASTOLE', columnTitle: '"My Heart" export dia', formatPattern: r'$DIA', editable: false, hidden: true),
     ExportColumn(internalName: 'PULS', columnTitle: '"My Heart" export pul', formatPattern: r'$PUL', editable: false, hidden: true),
@@ -108,6 +108,33 @@ class ExportConfigurationModel {
   UnmodifiableListView<ExportColumn> get availableFormats => UnmodifiableListView(_availableFormats);
   UnmodifiableMapView<String, ExportColumn> get availableFormatsMap =>
       UnmodifiableMapView(Map.fromIterable(_availableFormats, key: (e) => e.internalName));
+
+  List<List<String>> createTable(List<BloodPressureRecord> data, bool createHeadline) {
+    List<ExportColumn> exportItems;
+    if (settings.exportCustomEntries) {
+      exportItems = getActiveExportColumns();
+    } else {
+      exportItems = getDefaultFormates().where((e) => ['timestampUnixMs','systolic','diastolic','pulse','notes'].contains(e.internalName)).toList();
+    }
+
+    List<List<String>> items = [];
+    if (createHeadline) {
+      List<String> headline = [];
+      for (var i = 0; i<exportItems.length; i++) {
+        headline.add(exportItems[i].internalName);
+      }
+      items.add(headline);
+    }
+
+    for (var record in data) {
+      List<String> row = [];
+      for (var attribute in exportItems) {
+        row.add(attribute.formatRecord(record));
+      }
+      items.add(row);
+    }
+    return items;
+  }
 }
 
 class ExportColumn {
