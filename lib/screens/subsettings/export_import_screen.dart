@@ -17,9 +17,10 @@ class ExportImportScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final localizations = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: AppBar(
-        title: Text(AppLocalizations.of(context)!.exportImport),
+        title: Text(localizations.exportImport),
         backgroundColor: Theme.of(context).primaryColor,
       ),
       body: Consumer<Settings>(builder: (context, settings, child) {
@@ -33,7 +34,7 @@ class ExportImportScreen extends StatelessWidget {
                 child: IgnorePointer(ignoring: (settings.exportFormat == ExportFormat.db), child: const IntervalPicker()),
               ),
               SettingsTile(
-                title: Text(AppLocalizations.of(context)!.exportDir),
+                title: Text(localizations.exportDir),
                 description: Text(settings.defaultExportDir),
                 onPressed: (context) async {
                   final appDir = await JSaver.instance.setDefaultSavingDirectory();
@@ -41,8 +42,8 @@ class ExportImportScreen extends StatelessWidget {
                 }
               ),
               SwitchSettingsTile(
-                  title: Text(AppLocalizations.of(context)!.exportAfterEveryInput),
-                  description: Text(AppLocalizations.of(context)!.exportAfterEveryInputDesc),
+                  title: Text(localizations.exportAfterEveryInput),
+                  description: Text(localizations.exportAfterEveryInputDesc),
                   initialValue: settings.exportAfterEveryEntry,
                   onToggle: (value) {
                     settings.exportAfterEveryEntry = value;
@@ -50,12 +51,12 @@ class ExportImportScreen extends StatelessWidget {
               ),
               DropDownSettingsTile<ExportFormat>(
                 key: const Key('exportFormat'),
-                title: Text(AppLocalizations.of(context)!.exportFormat),
+                title: Text(localizations.exportFormat),
                 value: settings.exportFormat,
                 items: [
-                  DropdownMenuItem(value: ExportFormat.csv, child: Text(AppLocalizations.of(context)!.csv)),
-                  DropdownMenuItem(value: ExportFormat.pdf, child: Text(AppLocalizations.of(context)!.pdf)),
-                  DropdownMenuItem(value: ExportFormat.db, child: Text(AppLocalizations.of(context)!.db)),
+                  DropdownMenuItem(value: ExportFormat.csv, child: Text(localizations.csv)),
+                  DropdownMenuItem(value: ExportFormat.pdf, child: Text(localizations.pdf)),
+                  DropdownMenuItem(value: ExportFormat.db, child: Text(localizations.db)),
                 ],
                 onChanged: (ExportFormat? value) {
                   if (value != null) {
@@ -64,7 +65,7 @@ class ExportImportScreen extends StatelessWidget {
                 },
               ),
               InputSettingsTile(
-                title: Text(AppLocalizations.of(context)!.fieldDelimiter),
+                title: Text(localizations.fieldDelimiter),
                 inputWidth: 40,
                 initialValue: settings.csvFieldDelimiter,
                 disabled: !(settings.exportFormat == ExportFormat.csv),
@@ -75,7 +76,7 @@ class ExportImportScreen extends StatelessWidget {
                 },
               ),
               InputSettingsTile(
-                title: Text(AppLocalizations.of(context)!.textDelimiter),
+                title: Text(localizations.textDelimiter),
                 inputWidth: 40,
                 initialValue: settings.csvTextDelimiter,
                 disabled: !(settings.exportFormat == ExportFormat.csv),
@@ -86,13 +87,57 @@ class ExportImportScreen extends StatelessWidget {
                 },
               ),
               SwitchSettingsTile(
-                  title: Text(AppLocalizations.of(context)!.exportCsvHeadline),
-                  description: Text(AppLocalizations.of(context)!.exportCsvHeadlineDesc),
-                  initialValue: settings.exportCsvHeadline,
-                  disabled: !(settings.exportFormat == ExportFormat.csv),
-                  onToggle: (value) {
-                    settings.exportCsvHeadline = value;
-                  }
+                title: Text(localizations.exportCsvHeadline),
+                description: Text(localizations.exportCsvHeadlineDesc),
+                initialValue: settings.exportCsvHeadline,
+                disabled: settings.exportFormat != ExportFormat.csv,
+                onToggle: (value) {
+                  settings.exportCsvHeadline = value;
+                }
+              ),
+              InputSettingsTile(
+                initialValue: settings.exportPdfHeaderHeight.toString(),
+                title: Text(localizations.exportPdfHeaderHeight),
+                onEditingComplete: (value) {
+                  final pV = double.tryParse(value??'');
+                  if (pV != null) settings.exportPdfHeaderHeight = pV;
+                },
+                disabled: (settings.exportFormat != ExportFormat.pdf),
+                keyboardType: TextInputType.number,
+                inputWidth: 40,
+              ),
+              InputSettingsTile(
+                initialValue: settings.exportPdfCellHeight.toString(),
+                title: Text(localizations.exportPdfCellHeight),
+                onEditingComplete: (value) {
+                  final pV = double.tryParse(value??'');
+                  if (pV != null) settings.exportPdfCellHeight = pV;
+                },
+                disabled: (settings.exportFormat != ExportFormat.pdf),
+                keyboardType: TextInputType.number,
+                inputWidth: 40,
+              ),
+              InputSettingsTile(
+                initialValue: settings.exportPdfHeaderFontSize.toString(),
+                title: Text(localizations.exportPdfHeaderFontSize),
+                onEditingComplete: (value) {
+                  final pV = double.tryParse(value??'');
+                  if (pV != null) settings.exportPdfHeaderFontSize = pV;
+                },
+                disabled: (settings.exportFormat != ExportFormat.pdf),
+                keyboardType: TextInputType.number,
+                inputWidth: 40,
+              ),
+              InputSettingsTile(
+                initialValue: settings.exportPdfCellFontSize.toString(),
+                title: Text(localizations.exportPdfCellFontSize),
+                onEditingComplete: (value) {
+                  final pV = double.tryParse(value??'');
+                  if (pV != null) settings.exportPdfCellFontSize = pV;
+                },
+                disabled: (settings.exportFormat != ExportFormat.pdf),
+                keyboardType: TextInputType.number,
+                inputWidth: 40,
               ),
               const ExportFieldCustomisationSetting(),
             ],
@@ -117,7 +162,8 @@ class _ExportFieldCustomisationSettingState extends State<ExportFieldCustomisati
   
   @override
   Widget build(BuildContext context) {
-    _future ??= ExportConfigurationModel.get(Provider.of<Settings>(context, listen: false), AppLocalizations.of(context)!);
+    final localizations = AppLocalizations.of(context)!;
+    _future ??= ExportConfigurationModel.get(Provider.of<Settings>(context, listen: false), localizations);
 
     return ConsistentFutureBuilder(
       future: _future!,
@@ -135,7 +181,7 @@ class _ExportFieldCustomisationSettingState extends State<ExportFieldCustomisati
           return Column(
             children: [
               SwitchSettingsTile(
-                  title: Text(AppLocalizations.of(context)!.exportCustomEntries),
+                  title: Text(localizations.exportCustomEntries),
                   initialValue: settings.exportCustomEntries,
                   disabled: ![ExportFormat.csv, ExportFormat.pdf].contains(settings.exportFormat),
                   onToggle: (value) {
@@ -179,7 +225,7 @@ class ExportImportButtons extends StatelessWidget {
                 flex: 50,
                 child: MaterialButton(
                   height: 60,
-                  child:  Text(AppLocalizations.of(context)!.export),
+                  child:  Text(localizations.export),
                   onPressed: () async => Exporter(settings, model, messenger, localizations, theme, await ExportConfigurationModel.get(settings, localizations)).export(),
                 )
             ),
@@ -188,7 +234,7 @@ class ExportImportButtons extends StatelessWidget {
                 flex: 50,
                 child: MaterialButton(
                   height: 60,
-                  child: Text(AppLocalizations.of(context)!.import),
+                  child: Text(localizations.import),
                   onPressed: () async => Exporter(settings, model, messenger, localizations, theme, await ExportConfigurationModel.get(settings, localizations)).import(),
                 )
             ),
@@ -210,6 +256,7 @@ class _ExportWarnBannerState extends State<ExportWarnBanner> {
   bool _showWarnBanner = true;
   @override
   Widget build(BuildContext context) {
+    final localizations = AppLocalizations.of(context)!;
     String? message;
     return Consumer<Settings>(builder: (context, settings, child) {
       if (_showWarnBanner && ![ExportFormat.csv, ExportFormat.db].contains(settings.exportFormat) ||
@@ -218,13 +265,13 @@ class _ExportWarnBannerState extends State<ExportWarnBanner> {
           ![',', '|'].contains(settings.csvFieldDelimiter) ||
           !['"', '\''].contains(settings.csvTextDelimiter)
       ) {
-        message = AppLocalizations.of(context)!.exportWarnConfigNotImportable;
+        message = localizations.exportWarnConfigNotImportable;
       } else if (_showWarnBanner && settings.exportCustomEntries &&
           !(['systolic','diastolic', 'pulse', 'notes'].every((i) => settings.exportItems.contains(i)))) {
         var missingAttributes = {'systolic','diastolic', 'pulse', 'notes'};
         missingAttributes.removeWhere((e) => settings.exportItems.contains(e));
 
-        message = AppLocalizations.of(context)!.exportWarnNotEveryFieldExported(missingAttributes.length, missingAttributes.toString());
+        message = localizations.exportWarnNotEveryFieldExported(missingAttributes.length, missingAttributes.toString());
       }
 
       if (message != null) {
@@ -238,7 +285,7 @@ class _ExportWarnBannerState extends State<ExportWarnBanner> {
                       _showWarnBanner = false;
                     });
                   },
-                  child: Text(AppLocalizations.of(context)!.btnConfirm))
+                  child: Text(localizations.btnConfirm))
             ]
         );
       }

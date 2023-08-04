@@ -501,6 +501,41 @@ class Settings extends ChangeNotifier {
     _prefs.setBool('drawRegressionLines', value);
     notifyListeners();
   }
+
+  double get exportPdfHeaderHeight {
+    return _prefs.getDouble('exportPdfHeaderHeight') ?? 20;
+  }
+
+  set exportPdfHeaderHeight(double value) {
+    _prefs.setDouble('exportPdfHeaderHeight', value);
+    notifyListeners();
+  }
+  double get exportPdfCellHeight {
+    return _prefs.getDouble('exportPdfCellHeight') ?? 15;
+  }
+
+  set exportPdfCellHeight(double value) {
+    _prefs.setDouble('exportPdfCellHeight', value);
+    notifyListeners();
+  }
+
+  double get exportPdfHeaderFontSize {
+    return _prefs.getDouble('exportPdfHeaderFontSize') ?? 10;
+  }
+
+  set exportPdfHeaderFontSize(double value) {
+    _prefs.setDouble('exportPdfHeaderFontSize', value);
+    notifyListeners();
+  }
+
+  double get exportPdfCellFontSize {
+    return _prefs.getDouble('exportPdfCellFontSize') ?? 8;
+  }
+
+  set exportPdfCellFontSize(double value) {
+    _prefs.setDouble('exportPdfCellFontSize', value);
+    notifyListeners();
+  }
 }
 
 enum TimeStep {

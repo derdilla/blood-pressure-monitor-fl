@@ -173,16 +173,16 @@ class ExportFileCreator {
         headerDecoration: const pw.BoxDecoration(
           border: pw.Border(bottom: pw.BorderSide(color: PdfColors.black))
         ),
-        headerHeight: 20,
-        cellHeight: 15,
+        headerHeight: settings.exportPdfHeaderHeight,
+        cellHeight: settings.exportPdfCellHeight,
         cellAlignments: { for (var v in List.generate(tableData.first.length, (idx)=>idx)) v : pw.Alignment.centerLeft },
         headerStyle: pw.TextStyle(
           color: PdfColors.black,
-          fontSize: 10,
+          fontSize: settings.exportPdfHeaderFontSize,
           fontWeight: pw.FontWeight.bold,
         ),
-        cellStyle: const pw.TextStyle(
-          fontSize: 8,
+        cellStyle: pw.TextStyle(
+          fontSize: settings.exportPdfCellFontSize,
         ),
         headerCellDecoration: pw.BoxDecoration(
           border: pw.Border(

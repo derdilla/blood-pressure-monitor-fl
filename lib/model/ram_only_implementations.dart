@@ -381,6 +381,54 @@ class RamSettings extends ChangeNotifier implements Settings {
     notifyListeners();
   }
 
+  double _exportPdfHeaderHeight = 20;
+  @override
+  double get exportPdfHeaderHeight {
+    return _exportPdfHeaderHeight;
+  }
+  @override
+  set exportPdfHeaderHeight(double value) {
+    _exportPdfHeaderHeight = value;
+    notifyListeners();
+  }
+
+  double _exportPdfCellHeight = 15;
+  @override
+  double get exportPdfCellHeight {
+    return _exportPdfCellHeight;
+  }
+  @override
+  set exportPdfCellHeight(double value) {
+    _exportPdfCellHeight = value;
+    notifyListeners();
+  }
+
+  double _exportPdfHeaderFontSize = 10;
+
+  @override
+  double get exportPdfHeaderFontSize {
+    return _exportPdfHeaderFontSize;
+  }
+
+  @override
+  set exportPdfHeaderFontSize(double value) {
+    _exportPdfHeaderFontSize = value;
+    notifyListeners();
+  }
+
+  double _exportPdfCellFontSize = 8;
+
+  @override
+  double get exportPdfCellFontSize {
+    return _exportPdfCellFontSize;
+  }
+
+  @override
+  set exportPdfCellFontSize(double value) {
+    _exportPdfCellFontSize = value;
+    notifyListeners();
+  }
+
   @override
   void changeStepSize(TimeStep value) {
     graphStepSize = value;
