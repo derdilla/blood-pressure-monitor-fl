@@ -137,12 +137,12 @@ class _ExportFieldCustomisationSettingState extends State<ExportFieldCustomisati
               SwitchSettingsTile(
                   title: Text(AppLocalizations.of(context)!.exportCustomEntries),
                   initialValue: settings.exportCustomEntries,
-                  disabled: settings.exportFormat != ExportFormat.csv,
+                  disabled: ![ExportFormat.csv, ExportFormat.pdf].contains(settings.exportFormat),
                   onToggle: (value) {
                     settings.exportCustomEntries = value;
                   }
               ),
-              (settings.exportFormat == ExportFormat.csv && settings.exportCustomEntries) ?
+              (settings.exportCustomEntries && [ExportFormat.csv, ExportFormat.pdf].contains(settings.exportFormat)) ?
                 ExportItemsCustomizer(
                   shownItems: activeFields,
                   disabledItems: hiddenFields,

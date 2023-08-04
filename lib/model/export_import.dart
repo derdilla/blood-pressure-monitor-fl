@@ -164,14 +164,8 @@ class ExportFileCreator {
     );
   }
 
-  pw.SpanningWidget _buildPdfTable(List<BloodPressureRecord> data, DateFormat dateFormatter) {
-    final tableHeaders = [
-      localizations.time,
-      localizations.sysLong,
-      localizations.diaLong,
-      localizations.pulLong,
-      localizations.notes
-    ];
+  pw.Widget _buildPdfTable(List<BloodPressureRecord> data, DateFormat dateFormatter) {
+    final tableData = exportColumnsConfig.createTable(data, true);
 
     return pw.TableHelper.fromTextArray(
         border: null,
@@ -181,13 +175,7 @@ class ExportFileCreator {
         ),
         headerHeight: 20,
         cellHeight: 15,
-        cellAlignments: {
-          0: pw.Alignment.centerLeft,
-          1: pw.Alignment.centerLeft,
-          2: pw.Alignment.centerLeft,
-          3: pw.Alignment.centerLeft,
-          4: pw.Alignment.centerRight,
-        },
+        cellAlignments: { for (var v in List.generate(tableData.first.length, (idx)=>idx)) v : pw.Alignment.centerLeft },
         headerStyle: pw.TextStyle(
           color: PdfColors.black,
           fontSize: 10,
@@ -212,17 +200,8 @@ class ExportFileCreator {
             ),
           ),
         ),
-        headers: tableHeaders,
-        data: List<List<String>>.generate(
-          data.length,
-              (row) => [
-                dateFormatter.format(data[row].creationTime),
-                (data[row].systolic ?? '-').toString(),
-                (data[row].diastolic ?? '-').toString(),
-                (data[row].pulse ?? '-').toString(),
-                (data[row].notes.isNotEmpty) ? data[row].notes : '-'
-              ],
-        )
+        headers: tableData.first.map((e) => exportColumnsConfig.availableFormatsMap[e]?.columnTitle ?? e).toList(),
+        data: tableData.getRange(1, tableData.length).toList(),
     );
   }
 
