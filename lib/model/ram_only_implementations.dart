@@ -429,6 +429,45 @@ class RamSettings extends ChangeNotifier implements Settings {
     notifyListeners();
   }
 
+  bool _exportPdfExportTitle = true;
+
+  @override
+  bool get exportPdfExportTitle {
+    return _exportPdfExportTitle;
+  }
+
+  @override
+  set exportPdfExportTitle(bool value) {
+    _exportPdfExportTitle = value;
+    notifyListeners();
+  }
+
+  bool _exportPdfExportStatistics = false;
+
+  @override
+  bool get exportPdfExportStatistics {
+    return _exportPdfExportStatistics;
+  }
+
+  @override
+  set exportPdfExportStatistics(bool value) {
+    _exportPdfExportStatistics = value;
+    notifyListeners();
+  }
+
+  bool _exportPdfExportData = true;
+
+  @override
+  bool get exportPdfExportData {
+    return _exportPdfExportData;
+  }
+
+  @override
+  set exportPdfExportData(bool value) {
+    _exportPdfExportData = value;
+    notifyListeners();
+  }
+
   @override
   void changeStepSize(TimeStep value) {
     graphStepSize = value;

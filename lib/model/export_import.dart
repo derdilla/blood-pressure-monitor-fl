@@ -146,9 +146,12 @@ class ExportFileCreator {
         pageFormat: PdfPageFormat.a4,
         build: (pw.Context context) {
           return [
-            _buildPdfTitle(dateFormatter, analyzer),
-            _buildPdfStatistics(analyzer),
-            _buildPdfTable(data, dateFormatter),
+            if (settings.exportPdfExportTitle)
+              _buildPdfTitle(dateFormatter, analyzer),
+            if (settings.exportPdfExportStatistics)
+              _buildPdfStatistics(analyzer),
+            if (settings.exportPdfExportData)
+              _buildPdfTable(data, dateFormatter),
           ];
         }));
     return await pdf.save();

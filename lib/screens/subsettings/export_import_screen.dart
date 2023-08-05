@@ -95,6 +95,30 @@ class ExportImportScreen extends StatelessWidget {
                   settings.exportCsvHeadline = value;
                 }
               ),
+              SwitchSettingsTile(
+                title: Text(localizations.exportPdfExportTitle),
+                initialValue: settings.exportPdfExportTitle,
+                disabled: settings.exportFormat != ExportFormat.pdf,
+                onToggle: (value) {
+                  settings.exportPdfExportTitle = value;
+                }
+              ),
+              SwitchSettingsTile(
+                title: Text(localizations.exportPdfExportStatistics),
+                initialValue: settings.exportPdfExportStatistics,
+                disabled: settings.exportFormat != ExportFormat.pdf,
+                onToggle: (value) {
+                  settings.exportPdfExportStatistics = value;
+                }
+              ),
+              SwitchSettingsTile(
+                title: Text(localizations.exportPdfExportData),
+                initialValue: settings.exportPdfExportData,
+                disabled: settings.exportFormat != ExportFormat.pdf,
+                onToggle: (value) {
+                  settings.exportPdfExportData = value;
+                }
+              ),
               InputSettingsTile(
                 initialValue: settings.exportPdfHeaderHeight.toString(),
                 title: Text(localizations.exportPdfHeaderHeight),
@@ -102,7 +126,7 @@ class ExportImportScreen extends StatelessWidget {
                   final pV = double.tryParse(value??'');
                   if (pV != null) settings.exportPdfHeaderHeight = pV;
                 },
-                disabled: (settings.exportFormat != ExportFormat.pdf),
+                disabled: !(settings.exportFormat == ExportFormat.pdf && settings.exportPdfExportData),
                 keyboardType: TextInputType.number,
                 inputWidth: 40,
               ),
@@ -113,7 +137,7 @@ class ExportImportScreen extends StatelessWidget {
                   final pV = double.tryParse(value??'');
                   if (pV != null) settings.exportPdfCellHeight = pV;
                 },
-                disabled: (settings.exportFormat != ExportFormat.pdf),
+                disabled: !(settings.exportFormat == ExportFormat.pdf && settings.exportPdfExportData),
                 keyboardType: TextInputType.number,
                 inputWidth: 40,
               ),
@@ -124,7 +148,7 @@ class ExportImportScreen extends StatelessWidget {
                   final pV = double.tryParse(value??'');
                   if (pV != null) settings.exportPdfHeaderFontSize = pV;
                 },
-                disabled: (settings.exportFormat != ExportFormat.pdf),
+                disabled: !(settings.exportFormat == ExportFormat.pdf && settings.exportPdfExportData),
                 keyboardType: TextInputType.number,
                 inputWidth: 40,
               ),
@@ -135,7 +159,7 @@ class ExportImportScreen extends StatelessWidget {
                   final pV = double.tryParse(value??'');
                   if (pV != null) settings.exportPdfCellFontSize = pV;
                 },
-                disabled: (settings.exportFormat != ExportFormat.pdf),
+                disabled: !(settings.exportFormat == ExportFormat.pdf && settings.exportPdfExportData),
                 keyboardType: TextInputType.number,
                 inputWidth: 40,
               ),
@@ -183,12 +207,14 @@ class _ExportFieldCustomisationSettingState extends State<ExportFieldCustomisati
               SwitchSettingsTile(
                   title: Text(localizations.exportCustomEntries),
                   initialValue: settings.exportCustomEntries,
-                  disabled: ![ExportFormat.csv, ExportFormat.pdf].contains(settings.exportFormat),
+                  disabled: !(settings.exportFormat == ExportFormat.csv || settings.exportFormat == ExportFormat.pdf &&
+                      settings.exportPdfExportData),
                   onToggle: (value) {
                     settings.exportCustomEntries = value;
                   }
               ),
-              (settings.exportCustomEntries && [ExportFormat.csv, ExportFormat.pdf].contains(settings.exportFormat)) ?
+              (settings.exportCustomEntries && (settings.exportFormat == ExportFormat.csv || settings.exportFormat == ExportFormat.pdf &&
+                  settings.exportPdfExportData)) ?
                 ExportItemsCustomizer(
                   shownItems: activeFields,
                   disabledItems: hiddenFields,

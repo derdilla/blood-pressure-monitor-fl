@@ -536,6 +536,33 @@ class Settings extends ChangeNotifier {
     _prefs.setDouble('exportPdfCellFontSize', value);
     notifyListeners();
   }
+
+  bool get exportPdfExportTitle {
+    return _prefs.getBool('exportPdfExportTitle') ?? true;
+  }
+
+  set exportPdfExportTitle(bool value) {
+    _prefs.setBool('exportPdfExportTitle', value);
+    notifyListeners();
+  }
+
+  bool get exportPdfExportStatistics {
+    return _prefs.getBool('exportPdfExportStatistics') ?? false;
+  }
+
+  set exportPdfExportStatistics(bool value) {
+    _prefs.setBool('exportPdfExportStatistics', value);
+    notifyListeners();
+  }
+
+  bool get exportPdfExportData {
+    return _prefs.getBool('exportPdfExportData') ?? true;
+  }
+
+  set exportPdfExportData(bool value) {
+    _prefs.setBool('exportPdfExportData', value);
+    notifyListeners();
+  }
 }
 
 enum TimeStep {

@@ -399,5 +399,11 @@
   "maximum": "Maximum",
   "@maximum": {},
   "minimum": "Minimum",
-  "@minimum": {}
+  "@minimum": {},
+  "exportPdfExportTitle": "Headline",
+  "@exportPdfExportTitle": {},
+  "exportPdfExportStatistics": "Statistics",
+  "@exportPdfExportStatistics": {},
+  "exportPdfExportData": "Data table",
+  "@exportPdfExportData": {}
 }
