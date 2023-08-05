@@ -146,14 +146,15 @@ class ExportFileCreator {
         pageFormat: PdfPageFormat.a4,
         build: (pw.Context context) {
           return [
-            _buildDocumentTitle(dateFormatter, analyzer),
+            _buildPdfTitle(dateFormatter, analyzer),
+            _buildPdfStatistics(analyzer),
             _buildPdfTable(data, dateFormatter),
           ];
         }));
     return await pdf.save();
   }
 
-  pw.Widget _buildDocumentTitle(DateFormat dateFormatter, BloodPressureAnalyser analyzer) {
+  pw.Widget _buildPdfTitle(DateFormat dateFormatter, BloodPressureAnalyser analyzer) {
     return pw.Container(
       child: pw.Text(
         localizations.pdfDocumentTitle(dateFormatter.format(analyzer.firstDay!), dateFormatter.format(analyzer.lastDay!)),
@@ -161,6 +162,20 @@ class ExportFileCreator {
           fontSize: 16,
         )
       )
+    );
+  }
+
+  pw.Widget _buildPdfStatistics(BloodPressureAnalyser analyzer) {
+    return pw.Container(
+      margin: const pw.EdgeInsets.all(20),
+      child: pw.TableHelper.fromTextArray(
+          data: [
+            ['',localizations.sysLong, localizations.diaLong, localizations.pulLong], // TODO: localizations.pulsePressure],
+            [localizations.average, analyzer.avgDia, analyzer.avgSys, analyzer.avgPul],
+            [localizations.maximum, analyzer.maxDia, analyzer.maxSys, analyzer.maxPul],
+            [localizations.minimum, analyzer.minDia, analyzer.minSys, analyzer.minPul],
+          ]
+      ),
     );
   }
 

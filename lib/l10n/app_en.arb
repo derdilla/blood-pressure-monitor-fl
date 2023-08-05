@@ -393,5 +393,11 @@
   "exportPdfHeaderFontSize": "Header font size",
   "@exportPdfHeaderFontSize": {},
   "exportPdfCellFontSize": "Row font size",
-  "@exportPdfCellFontSize": {}
+  "@exportPdfCellFontSize": {},
+  "average": "Average",
+  "@average": {},
+  "maximum": "Maximum",
+  "@maximum": {},
+  "minimum": "Minimum",
+  "@minimum": {}
 }
