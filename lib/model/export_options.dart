@@ -17,6 +17,12 @@ class ExportConfigurationModel {
   
   final List<ExportColumn> _availableFormats = [];
 
+  Map<String, List<String>> get exportConfigurations => {
+    // Not fully localized, as potemtial user added configurations can't be localized as well
+    localizations.default_: ['timestampUnixMs', 'systolic', 'diastolic', 'pulse', 'notes'],
+    '"My Heart" export': ['DATUM', 'SYSTOLE', 'DIASTOLE', 'PULS', 'Beschreibung', 'Tags', 'Gewicht', 'Sauerstoffsättigung'],
+  };
+
   ExportConfigurationModel._create(this.settings, this.localizations);
   Future<void> _asyncInit(String? dbPath, bool isFullPath) async {
     dbPath ??= await getDatabasesPath();

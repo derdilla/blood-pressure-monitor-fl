@@ -4,12 +4,11 @@ import 'dart:async';
 import 'package:badges/badges.dart' as badges;
 import 'package:blood_pressure_app/components/consistent_future_builder.dart';
 import 'package:blood_pressure_app/model/export_options.dart';
+import 'package:blood_pressure_app/model/settings_store.dart';
 import 'package:blood_pressure_app/screens/subsettings/export_column_data.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
-
-import '../model/settings_store.dart';
 
 class ExportItemsCustomizer extends StatefulWidget {
   final List<ExportColumn> shownItems;
@@ -94,11 +93,7 @@ class _ExportItemsCustomizerState extends State<ExportItemsCustomizer> {
         child: IconButton(
           tooltip: AppLocalizations.of(context)!.addExportformat,
           onPressed:() {
-            Navigator.of(context).push(MaterialPageRoute(builder: (context) =>
-              EditExportColumnPage(onValidSubmit: (value) {
-                result.addOrUpdate(value);
-              },)
-            ));
+            Navigator.of(context).push(MaterialPageRoute(builder: (context) => const EditExportColumnPage()));
           },
           icon: const Icon(Icons.add),
         ),
@@ -108,7 +103,8 @@ class _ExportItemsCustomizerState extends State<ExportItemsCustomizer> {
   }
 
   Widget _buildManagePresetsBadge(BuildContext context, ExportConfigurationModel result, {required Widget child}) {
-    final localizations = AppLocalizations.of(context)!;
+    final exportConfigurations = result.exportConfigurations;
+    final exportConfigurationKeys = exportConfigurations.keys.toList();
     return badges.Badge(
       position: badges.BadgePosition.topEnd(top: 3, end: 3),
       badgeStyle: badges.BadgeStyle(
@@ -119,20 +115,13 @@ class _ExportItemsCustomizerState extends State<ExportItemsCustomizer> {
         icon: const Icon(Icons.collections_bookmark),
         itemBuilder: (BuildContext context) {
           return [
-            PopupMenuItem<int>(value: 0, child: Text(localizations.default_)),
-            const PopupMenuItem<int>(value: 1, child: Text('"My Heart" export'))
+            for (var i = 0; i< exportConfigurationKeys.length; i++)
+              PopupMenuItem<int>(value: i, child: Text(exportConfigurationKeys[i])),
           ];
         },
         onSelected: (value) {
-          switch (value) {
-            case 0:
-              result.settings.exportItems = ['timestampUnixMs', 'systolic', 'diastolic', 'pulse', 'notes'];
-              return;
-            case 1:
-              result.settings.exportItems = ['DATUM', 'SYSTOLE', 'DIASTOLE', 'PULS', 'Beschreibung', 'Tags', 'Gewicht', 'Sauerstoffsättigung'];
-              return;
-          }
-          assert(false);
+          final settings = Provider.of<Settings>(context, listen: false);
+          settings.exportItems = exportConfigurations[exportConfigurationKeys[value]]!;
         },
       ),
       child: child,
@@ -163,12 +152,7 @@ class _ExportItemsCustomizerState extends State<ExportItemsCustomizer> {
                   initialInternalName: data.internalName,
                   initialFormatPattern: data.formatPattern,
                   editable: data.editable,
-                  onValidSubmit: (value) async {
-                    final config = await ExportConfigurationModel.get(Provider.of<Settings>(context, listen: false), AppLocalizations.of(context)!);
-                    setState(() {
-                      config.addOrUpdate(value);
-                    });
-                  },
+
                 )
             ));
           },
