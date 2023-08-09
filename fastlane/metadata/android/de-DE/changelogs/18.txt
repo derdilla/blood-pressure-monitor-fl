@@ -1,3 +1,3 @@
 * Abhängigkeiten aktualisieren und zu Material 3 (You) design wechseln
-* Behebung eines Fehlers der dafür sorgt, das die Hauptseite nach Abbruch des Zeitauswahlvorgangs abstürzt
+* Behebung eines Fehlers, der dafür sorgt, dass die Hauptseite nach Abbruch des Zeitauswahlvorgangs abstürzt
 * Füge optionale Trendlinien zum Graph hinzu

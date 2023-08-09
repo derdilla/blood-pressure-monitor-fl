@@ -3,31 +3,41 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:blood_pressure_app/model/blood_pressure_analyzer.dart';
+import 'package:blood_pressure_app/model/export_options.dart';
 import 'package:blood_pressure_app/model/settings_store.dart';
 import 'package:csv/csv.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:file_saver/file_saver.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:intl/intl.dart';
 import 'package:jsaver/jSaver.dart';
 import 'package:path/path.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
-import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:sqflite/sqflite.dart';
 
 import 'blood_pressure.dart';
 
-class ExportFileCreator {
-  Settings settings;
+extension PdfCompatability on Color {
+  PdfColor toPdfColor() => PdfColor(red / 256, green / 256, blue / 256, opacity);
+}
 
-  ExportFileCreator(this.settings);
+// TODO: more testing
+class ExportFileCreator {
+  final Settings settings;
+  final AppLocalizations localizations;
+  final ThemeData theme;
+  final ExportConfigurationModel exportColumnsConfig;
+
+  ExportFileCreator(this.settings, this.localizations, this.theme, this.exportColumnsConfig);
 
   Future<Uint8List> createFile(List<BloodPressureRecord> records) async {
     switch (settings.exportFormat) {
       case ExportFormat.csv:
-        return createCSVCFile(records);
+        return createCSVFile(records);
       case ExportFormat.pdf:
         return createPdfFile(records);
       case ExportFormat.db:
@@ -50,55 +60,11 @@ class ExportFileCreator {
     }
   }
 
-  Uint8List createCSVCFile(List<BloodPressureRecord> records) {
-    List<String> exportItems;
-    if (settings.exportCustomEntries) {
-      exportItems = settings.exportItems;
-    } else {
-      exportItems = ['timestampUnixMs', 'systolic', 'diastolic', 'pulse', 'notes'];
-    }
-
-    var csvHead = '';
-    if (settings.exportCsvHeadline) {
-      for (var i = 0; i<exportItems.length; i++) {
-        csvHead += exportItems[i];
-        if (i<(exportItems.length - 1)) {
-          csvHead += settings.csvFieldDelimiter;
-        }
-      }
-      csvHead += '\r\n';
-    }
-
-    List<List<dynamic>> items = [];
-    for (var record in records) {
-      List<dynamic> row = [];
-      for (var attribute in exportItems) {
-        switch (attribute) {
-          case 'timestampUnixMs':
-            row.add(record.creationTime.millisecondsSinceEpoch);
-            break;
-          case 'isoUTCTime':
-            row.add(record.creationTime.toIso8601String());
-            break;
-          case 'systolic':
-            row.add(record.systolic ?? '');
-            break;
-          case 'diastolic':
-            row.add(record.diastolic ?? '');
-            break;
-          case 'pulse':
-            row.add(record.pulse ?? '');
-            break;
-          case 'notes':
-            row.add(record.notes ?? '');
-            break;
-        }
-      }
-      items.add(row);
-    }
-    var converter = ListToCsvConverter(fieldDelimiter: settings.csvFieldDelimiter, textDelimiter: settings.csvTextDelimiter);
-    var csvData = converter.convert(items);
-    return Uint8List.fromList(utf8.encode(csvHead + csvData));
+  Uint8List createCSVFile(List<BloodPressureRecord> records) {
+    final items = exportColumnsConfig.createTable(records, settings.exportCsvHeadline);
+    final converter = ListToCsvConverter(fieldDelimiter: settings.csvFieldDelimiter, textDelimiter: settings.csvTextDelimiter);
+    final csvData = converter.convert(items);
+    return Uint8List.fromList(utf8.encode(csvData));
   }
 
   List<BloodPressureRecord> parseCSVFile(Uint8List data) {
@@ -111,92 +77,146 @@ class ExportFileCreator {
       converter = CsvToListConverter(fieldDelimiter: settings.csvFieldDelimiter, textDelimiter: settings.csvTextDelimiter, eol: '\n');
       csvLines = converter.convert(fileContents);
     }
-    final attributes = csvLines.removeAt(0);
-    var creationTimePos = -1;
-    var isoTimePos = -1;
-    var sysPos = -1;
-    var diaPos = -1;
-    var pulPos = -1;
-    var notePos = -1;
-    for (var i = 0; i<attributes.length; i++) {
-      switch (attributes[i].toString().trim()) {
-        case 'timestampUnixMs':
-          creationTimePos = i;
-          break;
-        case 'isoUTCTime':
-          isoTimePos = i;
-          break;
-        case 'systolic':
-          sysPos = i;
-          break;
-        case 'diastolic':
-          diaPos = i;
-          break;
-        case 'pulse':
-          pulPos = i;
-          break;
-        case 'notes':
-          notePos = i;
-          break;
-      }
-    }
-    if(creationTimePos < 0 && isoTimePos < 0) {
-      throw ArgumentError('File didn\'t save timestamps');
-    }
 
-    int? convert(dynamic e) {
-      if (e is int?) {
-        return e;
+    final attributes = csvLines.removeAt(0);
+    final availableFormatsMap = exportColumnsConfig.availableFormatsMap;
+
+    for (var lineIndex = 0; lineIndex < csvLines.length; lineIndex++) {
+      // get values from columns
+      int? timestamp, sys, dia, pul;
+      String? notes;
+      for (var attributeIndex = 0; attributeIndex < attributes.length; attributeIndex++) {
+        if (timestamp != null && sys != null && dia !=null && pul != null) continue; // optimization
+
+        // get colum from internal name
+        final columnInternalTitle = attributes[attributeIndex].toString().trim();
+        final columnFormat = availableFormatsMap[columnInternalTitle];
+        if (columnFormat == null) {
+          throw ArgumentError('Unknown column: $columnInternalTitle');
+        }
+        if(!columnFormat.isReversible) continue;
+
+        final parsedRecord = columnFormat.parseRecord(csvLines[lineIndex][attributeIndex].toString());
+        for (final parsedRecordDataType in parsedRecord) {
+          switch (parsedRecordDataType.$1) {
+            case RowDataFieldType.notes:
+              assert(parsedRecordDataType.$2 is String?);
+              notes ??= parsedRecordDataType.$2;
+              break;
+            case RowDataFieldType.sys:
+              assert(parsedRecordDataType.$2 is double?);
+              sys ??= (parsedRecordDataType.$2 as double?)?.toInt();
+              break;
+            case RowDataFieldType.dia:
+              assert(parsedRecordDataType.$2 is double?);
+              dia ??= (parsedRecordDataType.$2 as double?)?.toInt();
+              break;
+            case RowDataFieldType.pul:
+              assert(parsedRecordDataType.$2 is double?);
+              pul ??= (parsedRecordDataType.$2 as double?)?.toInt();
+              break;
+            case RowDataFieldType.timestamp:
+              assert(parsedRecordDataType.$2 is int?);
+              timestamp ??= parsedRecordDataType.$2 as int?;
+              break;
+          }
+        }
       }
-      return null;
-    }
-    for (final line in csvLines) {
-      records.add(
-          BloodPressureRecord(
-              (creationTimePos >= 0 ) ? DateTime.fromMillisecondsSinceEpoch(line[creationTimePos]) : DateTime.parse(line[isoTimePos]),
-              (sysPos >= 0) ? convert(line[sysPos]) : null,
-              (diaPos >= 0) ? convert(line[diaPos]) : null,
-              (pulPos >= 0) ? convert(line[pulPos]) : null,
-              (notePos >= 0) ? line[notePos] : null
-          )
-      );
+
+      // create record
+      if (timestamp == null) {
+        throw ArgumentError('File didn\'t save timestamps');
+      }
+      records.add(BloodPressureRecord(DateTime.fromMillisecondsSinceEpoch(timestamp), sys, dia, pul, notes ?? ''));
     }
     return records;
   }
 
   Future<Uint8List> createPdfFile(List<BloodPressureRecord> data) async {
+    final analyzer = BloodPressureAnalyser(data.toList());
+    final dateFormatter = DateFormat(settings.dateFormatString);
+
     pw.Document pdf = pw.Document();
 
-    pdf.addPage(pw.Page(
+    pdf.addPage(pw.MultiPage(
         pageFormat: PdfPageFormat.a4,
         build: (pw.Context context) {
-          return pw.Center(
-            child: pw.Table(
-                children: [
-                  pw.TableRow(
-                      children: [
-                        pw.Text('timestamp'),
-                        pw.Text('systolic'),
-                        pw.Text('diastolic'),
-                        pw.Text('pulse'),
-                        pw.Text('note')
-                      ]
-                  ),
-                  for (var entry in data)
-                    pw.TableRow(
-                        children: [
-                          pw.Text(entry.creationTime.toIso8601String()),
-                          pw.Text((entry.systolic ?? '').toString()),
-                          pw.Text((entry.diastolic ?? '').toString()),
-                          pw.Text((entry.pulse ?? '').toString()),
-                          pw.Text(entry.notes ?? '')
-                        ]
-                    )
-                ]
-            ),
-          );
+          return [
+            if (settings.exportPdfExportTitle)
+              _buildPdfTitle(dateFormatter, analyzer),
+            if (settings.exportPdfExportStatistics)
+              _buildPdfStatistics(analyzer),
+            if (settings.exportPdfExportData)
+              _buildPdfTable(data, dateFormatter),
+          ];
         }));
     return await pdf.save();
+  }
+
+  pw.Widget _buildPdfTitle(DateFormat dateFormatter, BloodPressureAnalyser analyzer) {
+    return pw.Container(
+      child: pw.Text(
+        localizations.pdfDocumentTitle(dateFormatter.format(analyzer.firstDay!), dateFormatter.format(analyzer.lastDay!)),
+        style: const pw.TextStyle(
+          fontSize: 16,
+        )
+      )
+    );
+  }
+
+  pw.Widget _buildPdfStatistics(BloodPressureAnalyser analyzer) {
+    return pw.Container(
+      margin: const pw.EdgeInsets.all(20),
+      child: pw.TableHelper.fromTextArray(
+          data: [
+            ['',localizations.sysLong, localizations.diaLong, localizations.pulLong], // TODO: localizations.pulsePressure],
+            [localizations.average, analyzer.avgDia, analyzer.avgSys, analyzer.avgPul],
+            [localizations.maximum, analyzer.maxDia, analyzer.maxSys, analyzer.maxPul],
+            [localizations.minimum, analyzer.minDia, analyzer.minSys, analyzer.minPul],
+          ]
+      ),
+    );
+  }
+
+  pw.Widget _buildPdfTable(List<BloodPressureRecord> data, DateFormat dateFormatter) {
+    final tableData = exportColumnsConfig.createTable(data, true);
+
+    return pw.TableHelper.fromTextArray(
+        border: null,
+        cellAlignment: pw.Alignment.centerLeft,
+        headerDecoration: const pw.BoxDecoration(
+          border: pw.Border(bottom: pw.BorderSide(color: PdfColors.black))
+        ),
+        headerHeight: settings.exportPdfHeaderHeight,
+        cellHeight: settings.exportPdfCellHeight,
+        cellAlignments: { for (var v in List.generate(tableData.first.length, (idx)=>idx)) v : pw.Alignment.centerLeft },
+        headerStyle: pw.TextStyle(
+          color: PdfColors.black,
+          fontSize: settings.exportPdfHeaderFontSize,
+          fontWeight: pw.FontWeight.bold,
+        ),
+        cellStyle: pw.TextStyle(
+          fontSize: settings.exportPdfCellFontSize,
+        ),
+        headerCellDecoration: pw.BoxDecoration(
+          border: pw.Border(
+            bottom: pw.BorderSide(
+              color: theme.colorScheme.primaryContainer.toPdfColor(),
+              width: 5,
+            ),
+          ),
+        ),
+        rowDecoration: const pw.BoxDecoration(
+          border: pw.Border(
+            bottom: pw.BorderSide(
+              color: PdfColors.blueGrey,
+              width: .5,
+            ),
+          ),
+        ),
+        headers: tableData.first.map((e) => exportColumnsConfig.availableFormatsMap[e]?.columnTitle ?? e).toList(),
+        data: tableData.getRange(1, tableData.length).toList(),
+    );
   }
 
   Future<Uint8List> copyDBFile() async {
@@ -215,18 +235,18 @@ class ExportFileCreator {
 }
 
 class Exporter {
-  BuildContext context;
-  Exporter(this.context);
+  final Settings settings;
+  final BloodPressureModel model;
+  final ScaffoldMessengerState messenger;
+  final AppLocalizations localizations;
+  final ThemeData theme;
+  final ExportConfigurationModel exportColumnsConfig;
+
+  Exporter(this.settings, this.model, this.messenger, this.localizations, this.theme, this.exportColumnsConfig);
 
   Future<void> export() async {
-    var settings = Provider.of<Settings>(context, listen: false);
-    final messenger = ScaffoldMessenger.of(context);
-    final localizations = AppLocalizations.of(context);
-
-    final entries = await Provider.of<BloodPressureModel>(context, listen: false)
-        .getInTimeRange(settings.displayDataStart, settings.displayDataEnd);
-    var fileContents = await ExportFileCreator(settings).createFile(entries);
-
+    final entries = await model.getInTimeRange(settings.displayDataStart, settings.displayDataEnd);
+    var fileContents = await ExportFileCreator(settings, localizations, theme, exportColumnsConfig).createFile(entries);
     String filename = 'blood_press_${DateTime.now().toIso8601String()}';
     String ext;
     switch(settings.exportFormat) {
@@ -243,14 +263,14 @@ class Exporter {
     String path = await FileSaver.instance.saveFile(name: filename, ext: ext, bytes: fileContents);
 
     if (Platform.isLinux || Platform.isWindows || Platform.isMacOS) {
-      messenger.showSnackBar(SnackBar(content: Text(localizations!.success(path))));
+      messenger.showSnackBar(SnackBar(content: Text(localizations.success(path))));
     } else if (Platform.isAndroid || Platform.isIOS) {
       if (settings.defaultExportDir.isNotEmpty) {
         JSaver.instance.save(
             fromPath: path,
             androidPathOptions: AndroidPathOptions(toDefaultDirectory: true)
         );
-        messenger.showSnackBar(SnackBar(content: Text(localizations!.success(settings.defaultExportDir))));
+        messenger.showSnackBar(SnackBar(content: Text(localizations.success(settings.defaultExportDir))));
       } else {
         Share.shareXFiles([
           XFile(
@@ -266,14 +286,8 @@ class Exporter {
 
 
   Future<void> import() async {
-    final messenger = ScaffoldMessenger.of(context);
-    final localizations = AppLocalizations.of(context);
-
-    final settings = Provider.of<Settings>(context, listen: false);
-    final model = Provider.of<BloodPressureModel>(context, listen: false);
-
     if (!([ExportFormat.csv, ExportFormat.db].contains(settings.exportFormat))) {
-      messenger.showSnackBar(SnackBar(content: Text(localizations!.errWrongImportFormat)));
+      messenger.showSnackBar(SnackBar(content: Text(localizations.errWrongImportFormat)));
       return;
     }
 
@@ -282,23 +296,23 @@ class Exporter {
       withData: true,
     );
     if (result == null) {
-      messenger.showSnackBar(SnackBar(content: Text(localizations!.errNoFileOpened)));
+      messenger.showSnackBar(SnackBar(content: Text(localizations.errNoFileOpened)));
       return;
     }
     var binaryContent = result.files.single.bytes;
     if (binaryContent == null) {
-      messenger.showSnackBar(SnackBar(content: Text(localizations!.errCantReadFile)));
+      messenger.showSnackBar(SnackBar(content: Text(localizations.errCantReadFile)));
       return;
     }
     var path = result.files.single.path;
     assert(path != null); // null state directly linked to binary content
 
-    var fileContents = await ExportFileCreator(settings).parseFile(path! ,binaryContent);
+    var fileContents = await ExportFileCreator(settings, localizations, theme, exportColumnsConfig).parseFile(path! ,binaryContent);
     if (fileContents == null) {
-      messenger.showSnackBar(SnackBar(content: Text(localizations!.errNotImportable)));
+      messenger.showSnackBar(SnackBar(content: Text(localizations.errNotImportable)));
       return;
     }
-    messenger.showSnackBar(SnackBar(content: Text(localizations!.importSuccess(fileContents.length))));
+    messenger.showSnackBar(SnackBar(content: Text(localizations.importSuccess(fileContents.length))));
     for (final e in fileContents) {
       model.add(e);
     }

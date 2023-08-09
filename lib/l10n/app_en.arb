@@ -29,7 +29,7 @@
   "@errDiaGtSys": {},
   "errUnknown": "Unknown error",
   "@errUnknown": {},
-  "errCantOpenURL": "Can't open URL: {url}",
+  "errCantOpenURL": "Can''t open URL: {url}",
   "@errCantOpenURL": {
     "placeholders": {
       "url": {
@@ -53,9 +53,9 @@
   "@errWrongImportFormat": {},
   "errNeedHeadline": "You can only import files with a headline.",
   "@errNeedHeadline": {},
-  "errCantReadFile": "The file's contents can not be read",
+  "errCantReadFile": "The file''s contents can not be read",
   "@errCantReadFile": {},
-  "errNotImportable": "This file can't be imported",
+  "errNotImportable": "This file can''t be imported",
   "@errNotImportable": {},
   "btnCancel": "CANCEL",
   "@btnCancel": {},
@@ -233,7 +233,7 @@
       }
     }
   },
-  "exportWarnConfigNotImportable": "Hey! Just a friendly heads up: the current export configuration won't be importable. To fix it, make sure you set the export type as CSV, enable the headline, and include one of the time formats available.",
+  "exportWarnConfigNotImportable": "Hey! Just a friendly heads up: the current export configuration won''t be importable. To fix it, make sure you set the export type as CSV, enable the headline, and include one of the time formats available.",
   "@exportWarnConfigNotImportable": {},
   "exportWarnNotEveryFieldExported": "Beware that you are not exporting all fields: {fields} {count, plural, one{is} other{are}} missing.",
   "@exportWarnNotEveryFieldExported": {
@@ -286,11 +286,11 @@
   "@warnAboutTxt2": {},
   "warnAboutTxt3": "Feel free to change the values to suit your needs and follow the recommendations of your doctor.",
   "@warnAboutTxt3": {},
-  "enterTimeFormatTxt1": "A formatter string is a blend of predefined ICU/Skeleton strings and any additional text you'd like to include.",
+  "enterTimeFormatTxt1": "A formatter string is a blend of predefined ICU/Skeleton strings and any additional text you''d like to include.",
   "@enterTimeFormatTxt1": {},
-  "enterTimeFormatTxt2": "If you're curious about the complete list of valid formats, you can find them right here.",
+  "enterTimeFormatTxt2": "If you''re curious about the complete list of valid formats, you can find them right here.",
   "@enterTimeFormatTxt2": {},
-  "enterTimeFormatTxt3": "Just a friendly reminder, using longer or shorter format Strings won't magically alter the width of the table columns, which might lead to some amusing line breaks and text not showing.",
+  "enterTimeFormatTxt3": "Just a friendly reminder, using longer or shorter format Strings won''t magically alter the width of the table columns, which might lead to some awkward line breaks and text not showing.",
   "@enterTimeFormatTxt3": {},
   "enterTimeFormatTxt4": "default: \"yy-MM-dd HH:mm\"",
   "@enterTimeFormatTxt4": {},
@@ -343,5 +343,67 @@
   "custom": "Custom",
   "@custom": {},
   "drawRegressionLines": "Draw trend lines",
-  "drawRegressionLinesDesc": "Draws regression lines in graph. Only useful for large intervalls."
+  "@drawRegressionLines": {},
+  "drawRegressionLinesDesc": "Draws regression lines in graph. Only useful for large intervalls.",
+  "@drawRegressionLinesDesc": {},
+  "exportHiddenFields": "hidden fields",
+  "@exportHiddenFields": {},
+  "pdfDocumentTitle": "Blood pressure values from {start} until {end}",
+  "@pdfDocumentTitle": {
+    "placeholders": {
+      "start": {
+        "type": "String"
+      },
+      "end": {
+        "type": "String"
+      }
+    }
+  },
+  "displayTitle": "Display title",
+  "@displayTitle": {},
+  "internalName": "Internal name",
+  "@internalName": {},
+  "errOnlyLatinCharactersAndArabicNumbers": "Only latin characters or arabic number allowed",
+  "@errOnlyLatinCharactersAndArabicNumbers":  {},
+  "fieldFormat": "Field format",
+  "@fieldFormat": {},
+  "result": "Result:",
+  "@result": {},
+  "pulsePressure": "Pulse pressure",
+  "@pulsePressure": {},
+  "unixTimestamp" : "Unix timestamp",
+  "@unixTimestamp": {},
+  "errCantEditThis": "You can''t edit this. Feel free to look at the values for creating a new entry.",
+  "addExportformat": "Add exportformat",
+  "@addExportformat": {},
+  "edit": "Edit",
+  "@edit": {},
+  "delete": "Delete",
+  "@delete": {},
+  "exportFieldFormatDocumentation": "'## Variables\nThe export field format support inserting values for the following placeholders:\n- `$TIMESTAMP:` Represents the time since the Unix epoch in milliseconds.\n- `$SYS:` Provides a value if available; otherwise, it defaults to -1.\n- `$DIA:` Provides a value if available; otherwise, it defaults to -1.\n- `$PUL:` Provides a value if available; otherwise, it defaults to -1.\n- `$NOTE:` Provides a value if available; otherwise, it defaults to -1.\n\nIf any of the placeholders mentioned above are not present in the blood pressure record, they will be replaced with -1.\n\n## Math\nYou can use basic mathematics inside double brackets (\"`{{}}`\").\n\nThe following mathematical operations are supported:\n- Operations: +, -, *, /, %, ^\n- One-parameter functions: abs, acos, asin, atan, ceil, cos, cosh, cot, coth, csc, csch, exp, floor, ln, log, round sec, sech, sin, sinh, sqrt, tan, tanh \n- Two-parameter functions: log, nrt, pow\n- Constants: e, pi, ln2, ln10, log2e, log10e, sqrt1_2, sqrt2\nFor the full math interpreter specification, you can refer to the [function_tree](https://pub.dev/documentation/function_tree/latest#interpreter) specification\n\n## Time\nTo format a timestamp, use the following syntax: `$FORMAT{<timestamp>,<formatString>}`. The `<formatString>` supports the same format as described on the ICU/Skeleton string [documentation page](screen://TimeFormattingHelp).\n\n## Processing order\n1. variable replacement\n2. Math\n3. Date format'",
+  "@exportFieldFormatDocumentation": {},
+  "presets": "Presets",
+  "@presets": {},
+  "default_": "Default",
+  "@default_": {},
+  "exportPdfHeaderHeight": "Header height",
+  "@exportPdfHeaderHeight": {},
+  "exportPdfCellHeight": "Row height",
+  "@exportPdfCellHeight": {},
+  "exportPdfHeaderFontSize": "Header font size",
+  "@exportPdfHeaderFontSize": {},
+  "exportPdfCellFontSize": "Row font size",
+  "@exportPdfCellFontSize": {},
+  "average": "Average",
+  "@average": {},
+  "maximum": "Maximum",
+  "@maximum": {},
+  "minimum": "Minimum",
+  "@minimum": {},
+  "exportPdfExportTitle": "Headline",
+  "@exportPdfExportTitle": {},
+  "exportPdfExportStatistics": "Statistics",
+  "@exportPdfExportStatistics": {},
+  "exportPdfExportData": "Data table",
+  "@exportPdfExportData": {}
 }

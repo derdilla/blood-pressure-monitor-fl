@@ -39,7 +39,7 @@
   },
   "errNoFileOpened": "Keine Datei geöffnet",
   "@errNoFileOpened": {},
-  "errNotStarted": "Nicht begonnen'",
+  "errNotStarted": "Nicht begonnen",
   "@errNotStarted": {},
   "errNoValue": "Bitte Wert eingeben",
   "@errNoValue": {},

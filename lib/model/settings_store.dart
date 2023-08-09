@@ -42,6 +42,9 @@ class Settings extends ChangeNotifier {
     if (keys.contains('exportDataRangeEndEpochMs')) {
       toAwait.add(_prefs.remove('exportDataRangeEndEpochMs'));
     }
+    if (keys.contains('exportAddableItems')) {
+      toAwait.add(_prefs.remove('exportAddableItems'));
+    }
 
     for (var e in toAwait) {
       await e;
@@ -443,15 +446,7 @@ class Settings extends ChangeNotifier {
     _prefs.setBool('exportCustomEntries', value);
     notifyListeners();
   }
-  
-  List<String> get exportAddableItems {
-    return _prefs.getStringList('exportAddableItems') ?? ['isoUTCTime'];
-  }
 
-  set exportAddableItems(List<String> value) {
-    _prefs.setStringList('exportAddableItems', value);
-    notifyListeners();
-  }
   List<String> get exportItems {
     return _prefs.getStringList('exportItems') ?? ['timestampUnixMs', 'systolic', 'diastolic', 'pulse', 'notes'];
   }
@@ -504,6 +499,68 @@ class Settings extends ChangeNotifier {
 
   set drawRegressionLines(bool value) {
     _prefs.setBool('drawRegressionLines', value);
+    notifyListeners();
+  }
+
+  double get exportPdfHeaderHeight {
+    return _prefs.getDouble('exportPdfHeaderHeight') ?? 20;
+  }
+
+  set exportPdfHeaderHeight(double value) {
+    _prefs.setDouble('exportPdfHeaderHeight', value);
+    notifyListeners();
+  }
+  double get exportPdfCellHeight {
+    return _prefs.getDouble('exportPdfCellHeight') ?? 15;
+  }
+
+  set exportPdfCellHeight(double value) {
+    _prefs.setDouble('exportPdfCellHeight', value);
+    notifyListeners();
+  }
+
+  double get exportPdfHeaderFontSize {
+    return _prefs.getDouble('exportPdfHeaderFontSize') ?? 10;
+  }
+
+  set exportPdfHeaderFontSize(double value) {
+    _prefs.setDouble('exportPdfHeaderFontSize', value);
+    notifyListeners();
+  }
+
+  double get exportPdfCellFontSize {
+    return _prefs.getDouble('exportPdfCellFontSize') ?? 8;
+  }
+
+  set exportPdfCellFontSize(double value) {
+    _prefs.setDouble('exportPdfCellFontSize', value);
+    notifyListeners();
+  }
+
+  bool get exportPdfExportTitle {
+    return _prefs.getBool('exportPdfExportTitle') ?? true;
+  }
+
+  set exportPdfExportTitle(bool value) {
+    _prefs.setBool('exportPdfExportTitle', value);
+    notifyListeners();
+  }
+
+  bool get exportPdfExportStatistics {
+    return _prefs.getBool('exportPdfExportStatistics') ?? false;
+  }
+
+  set exportPdfExportStatistics(bool value) {
+    _prefs.setBool('exportPdfExportStatistics', value);
+    notifyListeners();
+  }
+
+  bool get exportPdfExportData {
+    return _prefs.getBool('exportPdfExportData') ?? true;
+  }
+
+  set exportPdfExportData(bool value) {
+    _prefs.setBool('exportPdfExportData', value);
     notifyListeners();
   }
 }

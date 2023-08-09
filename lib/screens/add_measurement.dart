@@ -1,6 +1,7 @@
 import 'package:blood_pressure_app/components/date_time_picker.dart';
 import 'package:blood_pressure_app/model/blood_pressure.dart';
 import 'package:blood_pressure_app/model/export_import.dart';
+import 'package:blood_pressure_app/model/export_options.dart';
 import 'package:blood_pressure_app/model/settings_store.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -133,6 +134,8 @@ class _AddMeasurementPageState extends State<AddMeasurementPage> {
                       ValueInput(
                           key: const Key('txtPul'),
                           initialValue: (_pulse ?? '').toString(),
+                          minLines: 1,
+                          maxLines: 4,
                           hintText: AppLocalizations.of(context)!.pulLong,
                           basicValidation: !settings.allowMissingValues,
                           preValidation: (v) => _pulse = int.tryParse(v ?? ''),
@@ -167,7 +170,7 @@ class _AddMeasurementPageState extends State<AddMeasurementPage> {
                                     widget.initSys,
                                     widget.initDia,
                                     widget.initPul,
-                                    widget.initNote));
+                                    widget.initNote ?? ''));
                               }
                               Navigator.of(context).pop();
                             },
@@ -186,9 +189,11 @@ class _AddMeasurementPageState extends State<AddMeasurementPage> {
                                 final model = Provider.of<BloodPressureModel>(context, listen: false);
                                 final navigator = Navigator.of(context);
 
-                                await model.add(BloodPressureRecord(_time, _systolic, _diastolic, _pulse, _note));
+                                await model.add(BloodPressureRecord(_time, _systolic, _diastolic, _pulse, _note ?? ''));
                                 if (settings.exportAfterEveryEntry && context.mounted) {
-                                  final exporter = Exporter(context);
+                                  final exporter = Exporter(settings, model, ScaffoldMessenger.of(context),
+                                      AppLocalizations.of(context)!, Theme.of(context),
+                                      await ExportConfigurationModel.get(Provider.of<Settings>(context, listen: false), AppLocalizations.of(context)!));
                                   exporter.export();
                                 }
                                 navigator.pop();
@@ -215,9 +220,11 @@ class ValueInput extends StatelessWidget {
   final bool basicValidation;
   final void Function(String?)? preValidation;
   final FormFieldValidator<String> additionalValidator;
+  final int? minLines;
+  final int? maxLines;
 
   const ValueInput({super.key, required this.initialValue, required this.hintText, this.focusNode, this.basicValidation = true,
-    this.preValidation, required this.additionalValidator});
+    this.preValidation, required this.additionalValidator, this.minLines, this.maxLines});
 
   @override
   Widget build(BuildContext context) {
@@ -225,6 +232,8 @@ class ValueInput extends StatelessWidget {
       return TextFormField(
         initialValue: initialValue,
         decoration: InputDecoration(hintText: hintText),
+        minLines: minLines,
+        maxLines: maxLines,
         keyboardType: TextInputType.number,
         inputFormatters: <TextInputFormatter>[FilteringTextInputFormatter.digitsOnly],
         focusNode: focusNode,

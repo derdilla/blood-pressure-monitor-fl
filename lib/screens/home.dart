@@ -50,21 +50,17 @@ class AppHome extends StatelessWidget {
             return Column(
               verticalDirection: VerticalDirection.up,
               children: [
-                Theme(
-                  data: Theme.of(context).copyWith(useMaterial3: true),
-                  child: FloatingActionButton(
-                    tooltip: 'Add measurement',
-                    autofocus: true,
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        _buildTransition(const AddMeasurementPage(), settings.animationSpeed),
-                      );
-                    },
-                    child: const Icon(Icons.add,),
-                  )
+                FloatingActionButton(
+                  tooltip: 'Add measurement',
+                  autofocus: true,
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      _buildTransition(const AddMeasurementPage(), settings.animationSpeed),
+                    );
+                  },
+                  child: const Icon(Icons.add,),
                 ),
-
                 const SizedBox(
                   height: 10,
                 ),

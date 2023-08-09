@@ -62,7 +62,6 @@ class RamSettings extends ChangeNotifier implements Settings {
   ExportFormat _exportFormat = ExportFormat.csv;
   String _csvFieldDelimiter = ',';
   String _csvTextDelimiter = '"';
-  List<String> _exportAddableItems = ['isoUTCTime'];
   bool _exportCsvHeadline = true;
   bool _exportCustomEntries = false;
   List<String> _exportItems = ['timestampUnixMs', 'systolic', 'diastolic', 'pulse', 'notes'];
@@ -302,15 +301,6 @@ class RamSettings extends ChangeNotifier implements Settings {
   }
 
   @override
-  List<String> get exportAddableItems => _exportAddableItems;
-
-  @override
-  set exportAddableItems(List<String> value) {
-    _exportAddableItems = value;
-    notifyListeners();
-  }
-
-  @override
   bool get exportCsvHeadline => _exportCsvHeadline;
 
   @override
@@ -388,6 +378,93 @@ class RamSettings extends ChangeNotifier implements Settings {
   @override
   set drawRegressionLines(bool value) {
     _drawRegressionLines = value;
+    notifyListeners();
+  }
+
+  double _exportPdfHeaderHeight = 20;
+  @override
+  double get exportPdfHeaderHeight {
+    return _exportPdfHeaderHeight;
+  }
+  @override
+  set exportPdfHeaderHeight(double value) {
+    _exportPdfHeaderHeight = value;
+    notifyListeners();
+  }
+
+  double _exportPdfCellHeight = 15;
+  @override
+  double get exportPdfCellHeight {
+    return _exportPdfCellHeight;
+  }
+  @override
+  set exportPdfCellHeight(double value) {
+    _exportPdfCellHeight = value;
+    notifyListeners();
+  }
+
+  double _exportPdfHeaderFontSize = 10;
+
+  @override
+  double get exportPdfHeaderFontSize {
+    return _exportPdfHeaderFontSize;
+  }
+
+  @override
+  set exportPdfHeaderFontSize(double value) {
+    _exportPdfHeaderFontSize = value;
+    notifyListeners();
+  }
+
+  double _exportPdfCellFontSize = 8;
+
+  @override
+  double get exportPdfCellFontSize {
+    return _exportPdfCellFontSize;
+  }
+
+  @override
+  set exportPdfCellFontSize(double value) {
+    _exportPdfCellFontSize = value;
+    notifyListeners();
+  }
+
+  bool _exportPdfExportTitle = true;
+
+  @override
+  bool get exportPdfExportTitle {
+    return _exportPdfExportTitle;
+  }
+
+  @override
+  set exportPdfExportTitle(bool value) {
+    _exportPdfExportTitle = value;
+    notifyListeners();
+  }
+
+  bool _exportPdfExportStatistics = false;
+
+  @override
+  bool get exportPdfExportStatistics {
+    return _exportPdfExportStatistics;
+  }
+
+  @override
+  set exportPdfExportStatistics(bool value) {
+    _exportPdfExportStatistics = value;
+    notifyListeners();
+  }
+
+  bool _exportPdfExportData = true;
+
+  @override
+  bool get exportPdfExportData {
+    return _exportPdfExportData;
+  }
+
+  @override
+  set exportPdfExportData(bool value) {
+    _exportPdfExportData = value;
     notifyListeners();
   }
 

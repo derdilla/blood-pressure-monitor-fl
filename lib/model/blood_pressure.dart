@@ -31,9 +31,7 @@ class BloodPressureModel extends ChangeNotifier {
   // factory method, to allow for async constructor
   static Future<BloodPressureModel> create({String? dbPath, bool isFullPath = false}) async {
     if (Platform.isWindows || Platform.isLinux) {
-      // Initialize FFI
       sqfliteFfiInit();
-      // Change the default factory
       databaseFactory = databaseFactoryFfi;
     }
 
@@ -108,7 +106,7 @@ class BloodPressureRecord {
   final int? systolic;
   final int? diastolic;
   final int? pulse;
-  final String? notes;
+  final String notes;
 
   const BloodPressureRecord(
       this.creationTime, this.systolic, this.diastolic, this.pulse, this.notes);

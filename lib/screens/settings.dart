@@ -365,7 +365,6 @@ class _DetermineAgeValuesState extends State<DetermineAgeValues> {
                   context,
                   MaterialPageRoute(builder: (context) => const SettingsPage()),
                 );
-
               },
               child: Text(AppLocalizations.of(context)!.btnConfirm)
           );
