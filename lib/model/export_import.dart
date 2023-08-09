@@ -22,12 +22,9 @@ import 'package:sqflite/sqflite.dart';
 import 'blood_pressure.dart';
 
 extension PdfCompatability on Color {
-  PdfColor toPdfColor() {
-    return PdfColor(red / 256, green / 256, blue / 256, opacity);
-  }
+  PdfColor toPdfColor() => PdfColor(red / 256, green / 256, blue / 256, opacity);
 }
 
-// TODO: update import warning
 // TODO: more testing
 class ExportFileCreator {
   final Settings settings;
@@ -40,7 +37,7 @@ class ExportFileCreator {
   Future<Uint8List> createFile(List<BloodPressureRecord> records) async {
     switch (settings.exportFormat) {
       case ExportFormat.csv:
-        return createCSVCFile(records);
+        return createCSVFile(records);
       case ExportFormat.pdf:
         return createPdfFile(records);
       case ExportFormat.db:
@@ -63,7 +60,7 @@ class ExportFileCreator {
     }
   }
 
-  Uint8List createCSVCFile(List<BloodPressureRecord> records) {
+  Uint8List createCSVFile(List<BloodPressureRecord> records) {
     final items = exportColumnsConfig.createTable(records, settings.exportCsvHeadline);
     final converter = ListToCsvConverter(fieldDelimiter: settings.csvFieldDelimiter, textDelimiter: settings.csvTextDelimiter);
     final csvData = converter.convert(items);
@@ -132,7 +129,6 @@ class ExportFileCreator {
       }
       records.add(BloodPressureRecord(DateTime.fromMillisecondsSinceEpoch(timestamp), sys, dia, pul, notes ?? ''));
     }
-
     return records;
   }
 

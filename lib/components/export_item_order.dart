@@ -34,13 +34,14 @@ class _ExportItemsCustomizerState extends State<ExportItemsCustomizer> {
       onData: (BuildContext context, ExportConfigurationModel result) {
         return _buildAddItemBadge(context, result,
           child: _buildManagePresetsBadge(context, result,
-            child:_buildList(context))
+            child:_buildList(context, result)
+          )
         );
       },
     );
   }
 
-  Container _buildList(BuildContext context) {
+  Container _buildList(BuildContext context, ExportConfigurationModel exportConfigModel) {
     return Container(
         margin: const EdgeInsets.all(25),
         padding: const EdgeInsets.all(20),
@@ -58,7 +59,7 @@ class _ExportItemsCustomizerState extends State<ExportItemsCustomizer> {
               ListTile(
                   key: Key('l_${widget.shownItems[i].internalName}'),
                   title: Text(widget.shownItems[i].columnTitle),
-                  trailing: _buildListItemTrailing( context, widget.shownItems[i]),
+                  trailing: _buildListItemTrailing( context, widget.shownItems[i], exportConfigModel),
                   contentPadding: EdgeInsets.zero
               ),
             _buildListSectionDivider(context),
@@ -70,7 +71,7 @@ class _ExportItemsCustomizerState extends State<ExportItemsCustomizer> {
                   opacity: 0.7,
                   child: Text(widget.disabledItems[i].columnTitle),
                 ),
-                trailing: _buildListItemTrailing(context, widget.disabledItems[i]),
+                trailing: _buildListItemTrailing(context, widget.disabledItems[i], exportConfigModel),
                 contentPadding: EdgeInsets.zero
               ),
           ],
@@ -128,14 +129,13 @@ class _ExportItemsCustomizerState extends State<ExportItemsCustomizer> {
     );
   }
 
-  Widget _buildListItemTrailing(BuildContext context, ExportColumn data) {
+  Widget _buildListItemTrailing(BuildContext context, ExportColumn data, ExportConfigurationModel config) {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
         if (data.editable)
           IconButton(
             onPressed: () async {
-              final config = await ExportConfigurationModel.get(Provider.of<Settings>(context, listen: false), AppLocalizations.of(context)!);
               setState(() {
                 config.delete(data);
               });
@@ -147,13 +147,12 @@ class _ExportItemsCustomizerState extends State<ExportItemsCustomizer> {
         IconButton(
           onPressed: () {
             Navigator.of(context).push(MaterialPageRoute(builder: (context) =>
-                EditExportColumnPage(
-                  initialDisplayName: data.columnTitle,
-                  initialInternalName: data.internalName,
-                  initialFormatPattern: data.formatPattern,
-                  editable: data.editable,
-
-                )
+              EditExportColumnPage(
+                initialDisplayName: data.columnTitle,
+                initialInternalName: data.internalName,
+                initialFormatPattern: data.formatPattern,
+                editable: data.editable,
+              )
             ));
           },
           tooltip: AppLocalizations.of(context)!.edit,
@@ -232,6 +231,3 @@ class _ExportItemsCustomizerState extends State<ExportItemsCustomizer> {
     widget.onReorder(widget.shownItems, widget.disabledItems);
   }
 }
-
-
-// 100 - 80 + (50 / 80 * (100 % 50))

@@ -81,6 +81,7 @@ class ExportConfigurationModel {
     ExportColumn(internalName: 'Sauerstoffsättigung', columnTitle: '"My Heart" export oxygen', formatPattern: r'0', editable: false, hidden: true),
   ];
 
+  // TODO: testing
   void addOrUpdate(ExportColumn format) {
     final existingEntries = _availableFormats.where((element) => element.internalName == format.internalName);
     if (existingEntries.isNotEmpty) {
@@ -95,18 +96,20 @@ class ExportConfigurationModel {
         'columnTitle': format.columnTitle,
         'formatPattern': format.formatPattern
       }, where: 'internalColumnName = ?', whereArgs: [format.internalName]);
+    } else {
+      _availableFormats.add(format);
+      _database.insert('exportStrings', {
+        'internalColumnName': format.internalName,
+        'columnTitle': format.columnTitle,
+        'formatPattern': format.formatPattern
+      },);
     }
-    _availableFormats.add(format);
-    _database.insert('exportStrings', {
-      'internalColumnName': format.internalName,
-      'columnTitle': format.columnTitle,
-      'formatPattern': format.formatPattern
-    },);
+
   }
 
   void delete(ExportColumn format) {
     final existingEntries = _availableFormats.where((element) => (element.internalName == format.internalName) && element.editable);
-    assert(existingEntries.isNotEmpty, 'Tried to delete entry that doesn\'t exist');
+    assert(existingEntries.isNotEmpty, r"Tried to delete entry that doesn't exist or is not editable.");
     _availableFormats.removeWhere((element) => element.internalName == format.internalName);
     _database.delete('exportStrings', where: 'internalColumnName = ?', whereArgs: [format.internalName]);
   }
@@ -218,6 +221,7 @@ class ExportColumn {
     return fieldContents;
   }
 
+  /// Parses records if the format is easily reversible else returns an empty list
   List<(RowDataFieldType, dynamic)> parseRecord(String formattedRecord) {
     if (!isReversible || formattedRecord == 'null') return [];
 
