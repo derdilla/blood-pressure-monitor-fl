@@ -139,7 +139,7 @@ class Settings extends ChangeNotifier {
         displayDataEnd = oldEnd.copyWith(day: oldEnd.day + directionalStep * 30);
         break;
       case TimeStep.custom:
-        final step = oldStart.difference(oldEnd) * directionalStep;
+        final step = oldEnd.difference(oldStart) * directionalStep;
         displayDataStart = oldStart.add(step);
         displayDataEnd = oldEnd.add(step);
         break;
