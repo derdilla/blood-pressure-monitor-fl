@@ -12,6 +12,9 @@ void main() async {
   final dataModel = await BloodPressureModel.create();
   final settingsModel = await Settings.create();
 
+  // Reset the step size intervall to current on startup
+  settingsModel.changeStepSize(settingsModel.graphStepSize);
+
   runApp(MultiProvider(providers: [
     ChangeNotifierProvider(create: (context) => dataModel),
     ChangeNotifierProvider(create: (context) => settingsModel),
