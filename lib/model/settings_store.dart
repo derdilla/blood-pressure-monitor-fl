@@ -52,16 +52,16 @@ class Settings extends ChangeNotifier {
     // breaking values in the preferences
     switch (_prefs.getInt('lastAppVersion')) {
       case null:
-        _prefs.remove('exportCsvHeadline');
-        _prefs.remove('exportCustomEntries');
-        _prefs.remove('exportItems');
-        _prefs.remove('exportMimeType');
+        toAwait.add(_prefs.remove('exportCsvHeadline'));
+        toAwait.add(_prefs.remove('exportCustomEntries'));
+        toAwait.add(_prefs.remove('exportItems'));
+        toAwait.add(_prefs.remove('exportMimeType'));
     }
-    _prefs.setInt('lastAppVersion', int.parse((await PackageInfo.fromPlatform()).buildNumber));
 
     for (var e in toAwait) {
       await e;
     }
+    await _prefs.setInt('lastAppVersion', int.parse((await PackageInfo.fromPlatform()).buildNumber));
     return;
   }
 
