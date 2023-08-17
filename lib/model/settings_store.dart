@@ -3,6 +3,7 @@ import 'package:blood_pressure_app/model/export_import.dart';
 import 'package:file_saver/file_saver.dart' show MimeType;
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Settings extends ChangeNotifier {
@@ -24,6 +25,7 @@ class Settings extends ChangeNotifier {
     final keys = _prefs.getKeys();
     List<Future> toAwait = [];
 
+    // delete old keys
     if (keys.contains('age')) {
       final lastAge = _prefs.getInt('age') ?? 30;
       sysWarn = BloodPressureWarnValues.getUpperSysWarnValue(lastAge);
@@ -45,6 +47,17 @@ class Settings extends ChangeNotifier {
     if (keys.contains('exportAddableItems')) {
       toAwait.add(_prefs.remove('exportAddableItems'));
     }
+
+    // reset variables for new version. Necessary for reusing variable names in new version and avoid having unexpected
+    // breaking values in the preferences
+    switch (_prefs.getInt('lastAppVersion')) {
+      case null:
+        _prefs.remove('exportCsvHeadline');
+        _prefs.remove('exportCustomEntries');
+        _prefs.remove('exportItems');
+        _prefs.remove('exportMimeType');
+    }
+    _prefs.setInt('lastAppVersion', int.parse((await PackageInfo.fromPlatform()).buildNumber));
 
     for (var e in toAwait) {
       await e;
