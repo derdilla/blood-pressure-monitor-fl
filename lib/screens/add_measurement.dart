@@ -76,7 +76,7 @@ class _AddMeasurementPageState extends State<AddMeasurementPage> {
                               final errTimeAfterNow = AppLocalizations.of(context)!.errTimeAfterNow;
                               var selectedTime = await showDateTimePicker(
                                   context: context,
-                                  firstDate: DateTime.fromMillisecondsSinceEpoch(0),
+                                  firstDate: DateTime.fromMillisecondsSinceEpoch(1),
                                   lastDate: selectionEnd,
                                   initialDate: _time);
                               if (selectedTime != null) {

@@ -499,7 +499,7 @@ class RamSettings extends ChangeNotifier implements Settings {
         displayDataEnd = oldEnd.copyWith(year: oldEnd.year + directionalStep);
         break;
       case TimeStep.lifetime:
-        displayDataStart = DateTime.fromMillisecondsSinceEpoch(0);
+        displayDataStart = DateTime.fromMillisecondsSinceEpoch(1);
         displayDataEnd = DateTime.now();
         break;
       case TimeStep.last30Days:
@@ -531,7 +531,7 @@ class RamSettings extends ChangeNotifier implements Settings {
         final start = DateTime(now.year);
         return [start, start.copyWith(year: now.year + 1)];
       case TimeStep.lifetime:
-        final start = DateTime.fromMillisecondsSinceEpoch(0);
+        final start = DateTime.fromMillisecondsSinceEpoch(1);
         return [start, now];
       case TimeStep.last7Days:
         final start = now.copyWith(day: now.day-7);
