@@ -102,14 +102,26 @@ class BloodPressureModel extends ChangeNotifier {
 
 @immutable
 class BloodPressureRecord {
-  final DateTime creationTime;
+  late final DateTime _creationTime;
   final int? systolic;
   final int? diastolic;
   final int? pulse;
   final String notes;
 
-  const BloodPressureRecord(
-      this.creationTime, this.systolic, this.diastolic, this.pulse, this.notes);
+  BloodPressureRecord(DateTime creationTime, this.systolic, this.diastolic, this.pulse, this.notes) {
+    this.creationTime = creationTime;
+  }
+
+  DateTime get creationTime => _creationTime;
+  /// datetime needs to be after epoch
+  set creationTime(DateTime value) {
+    if (creationTime.millisecondsSinceEpoch > 0) {
+      _creationTime = creationTime;
+    } else {
+      assert(false, "Tried to create BloodPressureRecord at or before epoch");
+      _creationTime = DateTime.fromMillisecondsSinceEpoch(1);
+    }
+  }
 
   @override
   String toString() {
