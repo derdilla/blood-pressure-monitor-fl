@@ -115,8 +115,8 @@ class BloodPressureRecord {
   DateTime get creationTime => _creationTime;
   /// datetime needs to be after epoch
   set creationTime(DateTime value) {
-    if (creationTime.millisecondsSinceEpoch > 0) {
-      _creationTime = creationTime;
+    if (value.millisecondsSinceEpoch > 0) {
+      _creationTime = value;
     } else {
       assert(false, "Tried to create BloodPressureRecord at or before epoch");
       _creationTime = DateTime.fromMillisecondsSinceEpoch(1);
