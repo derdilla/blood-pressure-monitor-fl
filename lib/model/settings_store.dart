@@ -8,14 +8,15 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class Settings extends ChangeNotifier {
   late final SharedPreferences _prefs;
+  final PackageInfo _packageInfo;
 
   DateTime? _displayDataStart;
   DateTime? _displayDataEnd;
   
-  Settings._create();
+  Settings._create(this._packageInfo);
   // factory method, to allow for async constructor
-  static Future<Settings> create() async {
-    final component = Settings._create();
+  static Future<Settings> create([PackageInfo? packageInfo]) async {
+    final component = Settings._create(packageInfo ?? (await PackageInfo.fromPlatform()));
     component._prefs = await SharedPreferences.getInstance();
     await component._update();
     return component;
@@ -61,7 +62,7 @@ class Settings extends ChangeNotifier {
     for (var e in toAwait) {
       await e;
     }
-    await _prefs.setInt('lastAppVersion', int.parse((await PackageInfo.fromPlatform()).buildNumber));
+    await _prefs.setInt('lastAppVersion', int.parse(_packageInfo.buildNumber));
     return;
   }
 

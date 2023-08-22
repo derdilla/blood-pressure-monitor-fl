@@ -4,12 +4,14 @@ import 'package:blood_pressure_app/model/ram_only_implementations.dart';
 import 'package:blood_pressure_app/model/settings_store.dart';
 import 'package:file_saver/file_saver.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
   SharedPreferences.setMockInitialValues({});
+  final testPackageInfo = PackageInfo(appName: 'blood_pressure_app', packageName: 'com.derdilla.bloodPressureApp', version: 'UnitTests', buildNumber: '999999');
 
   group('Settings model', () {
     // setup db path
@@ -17,12 +19,12 @@ void main() {
 
     test('should initialize', () async {
       expect(() async {
-        await Settings.create();
+        await Settings.create(testPackageInfo);
       }, returnsNormally);
     });
 
     test('fields defaults should be set after initialization', () async {
-      var s = await Settings.create();
+      var s = await Settings.create(testPackageInfo);
       expect(s.graphStepSize, TimeStep.day);
       expect(s.followSystemDarkMode, true);
       expect(s.darkMode, true);
@@ -52,7 +54,7 @@ void main() {
     });
 
     test('setting fields should save changes', () async {
-      var s = await Settings.create();
+      var s = await Settings.create(testPackageInfo);
 
       int i = 0;
       s.addListener(() {
@@ -123,7 +125,7 @@ void main() {
     });
 
     test('setting fields should notify listeners and change values', () async {
-      var s = await Settings.create();
+      var s = await Settings.create(testPackageInfo);
 
       int i = 0;
       s.addListener(() {
