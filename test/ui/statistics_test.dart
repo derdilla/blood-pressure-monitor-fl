@@ -16,7 +16,7 @@ void main() {
     testWidgets("should report measurement count", (widgetTester) async {
       await _initStatsPage(widgetTester, _allMeasurements(), [
         for (int i = 1; i<51; i++) // can't safe entries at or before epoch
-          BloodPressureRecord(DateTime.fromMillisecondsSinceEpoch(i), 40+i, 60+i, 30+i, 'Test comment $i'),
+          BloodPressureRecord(DateTime.fromMillisecondsSinceEpoch(1582991592 + i), 40+i, 60+i, 30+i, 'Test comment $i'),
       ]);
       final measurementCountWidget = find.byKey(const Key('measurementCount'));
       expect(measurementCountWidget, findsOneWidget);

@@ -53,15 +53,13 @@ void main() {
 
     test('should determine special days', () async {
       var m = BloodPressureAnalyser([BloodPressureRecord(DateTime.fromMillisecondsSinceEpoch(100), 0, 0, 0, ''),
-        BloodPressureRecord(DateTime.fromMillisecondsSinceEpoch(-2200), 0, 0, 0, ''),
+        BloodPressureRecord(DateTime.fromMillisecondsSinceEpoch(20), 0, 0, 0, ''),
         BloodPressureRecord(DateTime.fromMillisecondsSinceEpoch(9000000), 0, 0, 0, ''),
         BloodPressureRecord(DateTime.fromMillisecondsSinceEpoch(3124159), 0, 0, 0, ''),
       ]);
       
-      expect((m.firstDay), DateTime.fromMillisecondsSinceEpoch(-2200));
+      expect((m.firstDay), DateTime.fromMillisecondsSinceEpoch(20));
       expect((m.lastDay), DateTime.fromMillisecondsSinceEpoch(9000000));
     });
-
-    // TODO null tests, test with 1 element
   });
 }
