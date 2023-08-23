@@ -468,6 +468,19 @@ class RamSettings extends ChangeNotifier implements Settings {
     notifyListeners();
   }
 
+  bool _startWithAddMeasurementPage = false;
+
+  @override
+  bool get startWithAddMeasurementPage {
+    return _startWithAddMeasurementPage;
+  }
+
+  @override
+  set startWithAddMeasurementPage(bool value) {
+    _startWithAddMeasurementPage = value;
+    notifyListeners();
+  }
+
   @override
   void changeStepSize(TimeStep value) {
     graphStepSize = value;

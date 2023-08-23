@@ -405,5 +405,9 @@
   "exportPdfExportStatistics": "Statistics",
   "@exportPdfExportStatistics": {},
   "exportPdfExportData": "Data table",
-  "@exportPdfExportData": {}
+  "@exportPdfExportData": {},
+  "startWithAddMeasurementPage": "Measurement on launch",
+  "@startWithAddMeasurementPage": {},
+  "startWithAddMeasurementPageDescription": "Upon app launch, measurement input screen shown.",
+  "@startWithAddMeasurementPageDescription": {}
 }

@@ -577,6 +577,15 @@ class Settings extends ChangeNotifier {
     _prefs.setBool('exportPdfExportData', value);
     notifyListeners();
   }
+
+  bool get startWithAddMeasurementPage {
+    return _prefs.getBool('startWithAddMeasurementPage') ?? false;
+  }
+
+  set startWithAddMeasurementPage(bool value) {
+    _prefs.setBool('startWithAddMeasurementPage', value);
+    notifyListeners();
+  }
 }
 
 enum TimeStep {
