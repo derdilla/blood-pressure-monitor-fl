@@ -1,0 +1,52 @@
+{
+  "errNoFileOpened": "Nessun file aperto",
+  "@errNoFileOpened": {},
+  "errNoValue": "Inserire un valore",
+  "@errNoValue": {},
+  "errNotEnoughDataToGraph": "Non ci sono dati sufficienti per tracciare un grafico.",
+  "@errNotEnoughDataToGraph": {},
+  "errNoData": "Nessun dato",
+  "@errNoData": {},
+  "errCantReadFile": "Impossibile leggere il contenuo del file",
+  "@errCantReadFile": {},
+  "errLt30": "Valore <= 30. Disattivare la convalida nelle impostazioni.",
+  "@errLt30": {},
+  "errUnrealistic": "Valore improbabile. Disattivare la convalida nelle impostazioni.",
+  "@errUnrealistic": {},
+  "errDiaGtSys": "PAD >= PAS. Disattivare la convalida nelle impostazioni.",
+  "@errDiaGtSys": {},
+  "exportPdfExportStatistics": "Statistiche",
+  "@exportPdfExportStatistics": {},
+  "errNotImportable": "Impossibile importare questo file",
+  "@errNotImportable": {},
+  "loading": "Caricamento in corso…",
+  "@loading": {},
+  "btnCancel": "ANNULLA",
+  "@btnCancel": {},
+  "btnSave": "SALVA",
+  "@btnSave": {},
+  "error": "Errore: {msg}",
+  "@error": {
+    "placeholders": {
+      "msg": {
+        "type": "String"
+      }
+    }
+  },
+  "btnConfirm": "OK",
+  "@btnConfirm": {},
+  "btnNext": "SUCCESSIVO",
+  "@btnNext": {},
+  "errNaN": "Inserire un numero",
+  "@errNaN": {},
+  "errUnknown": "Errore sconosciuto",
+  "@errUnknown": {},
+  "errCantOpenURL": "Impossibile aprire l''URL: {url}",
+  "@errCantOpenURL": {
+    "placeholders": {
+      "url": {
+        "type": "String"
+      }
+    }
+  }
+}
