@@ -5,8 +5,13 @@ import 'package:blood_pressure_app/screens/add_measurement.dart';
 import 'package:blood_pressure_app/screens/settings.dart';
 import 'package:blood_pressure_app/screens/statistics.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+
+/// The only use of this variable is to avoid loading the AddMeasurementPage twice,
+/// when startWithAddMeasurementPage is active
+bool _appStart = true;
 
 class AppHome extends StatelessWidget {
   const AppHome({super.key});
@@ -19,6 +24,14 @@ class AppHome extends StatelessWidget {
     } else {
       padding = const EdgeInsets.all(80);
     }
+
+    // direct use of settings possible as no listening is required
+    if (_appStart && Provider.of<Settings>(context, listen: false).startWithAddMeasurementPage) {
+      SchedulerBinding.instance.addPostFrameCallback((_) {
+        Navigator.of(context).push(MaterialPageRoute(builder: (context) => const AddMeasurementPage()));
+      });
+    }
+    _appStart = false;
 
     return Scaffold(
       body: OrientationBuilder(

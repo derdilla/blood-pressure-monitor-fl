@@ -245,13 +245,22 @@ class SettingsPage extends StatelessWidget {
                 }
               ),
               SwitchSettingsTile(
-                  title: Text(AppLocalizations.of(context)!.drawRegressionLines),
-                  leading: const Icon(Icons.trending_down_outlined),
-                  description: Text(AppLocalizations.of(context)!.drawRegressionLinesDesc),
-                  initialValue: settings.drawRegressionLines,
-                  onToggle: (value) {
-                    settings.drawRegressionLines = value;
-                  }
+                title: Text(AppLocalizations.of(context)!.drawRegressionLines),
+                leading: const Icon(Icons.trending_down_outlined),
+                description: Text(AppLocalizations.of(context)!.drawRegressionLinesDesc),
+                initialValue: settings.drawRegressionLines,
+                onToggle: (value) {
+                  settings.drawRegressionLines = value;
+                }
+              ),
+              SwitchSettingsTile(
+                title: Text(AppLocalizations.of(context)!.startWithAddMeasurementPage),
+                description: Text(AppLocalizations.of(context)!.startWithAddMeasurementPageDescription),
+                leading: const Icon(Icons.electric_bolt_outlined),
+                initialValue: settings.startWithAddMeasurementPage,
+                onToggle: (value) {
+                  settings.startWithAddMeasurementPage = value;
+                }
               ),
             ]),
             SettingsSection(
