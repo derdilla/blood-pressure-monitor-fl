@@ -227,8 +227,8 @@ class SettingsPage extends StatelessWidget {
                 title: Text(AppLocalizations.of(context)!.determineWarnValues),
                 onPressed: (context) {
                   showDialog(
-                      context: context,
-                      builder: (context) => const DetermineAgeValues(),
+                    context: context,
+                    builder: (context) => const DetermineAgeValues(),
                   );
                 },
               ),
