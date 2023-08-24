@@ -1,3 +1,4 @@
 * Fix csv and pdf export issue after update
 * Add setting to open screen for adding measurements on app launch
 * Fix loading entries at or before epoch
+* Added translations (russian, italian)
