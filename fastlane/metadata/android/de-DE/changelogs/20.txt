@@ -1,3 +1,3 @@
-* Fix csv and pdf export issue after update
-* Add setting to open screen for adding measurements on app launch
-* Fix loading entries at or before epoch
+* Behebe CSV und PDF exportprobleme nach update
+* Füge Einstellung zum Öffnen der Eintrags maske nach app start hinzu
+* Verhindere Einträge an oder vor unix epoch
