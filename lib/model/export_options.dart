@@ -118,12 +118,17 @@ class ExportConfigurationModel {
   UnmodifiableMapView<String, ExportColumn> get availableFormatsMap =>
       UnmodifiableMapView(Map.fromIterable(_availableFormats, key: (e) => e.internalName));
 
-  List<List<String>> createTable(List<BloodPressureRecord> data, bool createHeadline) {
+  List<List<String>> createTable(List<BloodPressureRecord> data, bool createHeadline, [bool shouldBeHumanReadable = false]) {
     List<ExportColumn> exportItems;
     if (settings.exportCustomEntries) {
       exportItems = getActiveExportColumns();
     } else {
-      exportItems = getDefaultFormates().where((e) => ['timestampUnixMs','systolic','diastolic','pulse','notes'].contains(e.internalName)).toList();
+      // https://github.com/NobodyForNothing/blood-pressure-monitor-fl/issues/131
+      // currently doesn't default when setting to manual options, maybe save PDF columns separate from the CSV ones
+      exportItems = getDefaultFormates().where((e) => [
+        shouldBeHumanReadable ? 'formattedTimestamp' : 'timestampUnixMs'
+        ,'systolic','diastolic','pulse','notes'
+      ].contains(e.internalName)).toList();
     }
 
     List<List<String>> items = [];

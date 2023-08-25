@@ -179,7 +179,7 @@ class ExportFileCreator {
   }
 
   pw.Widget _buildPdfTable(List<BloodPressureRecord> data, DateFormat dateFormatter) {
-    final tableData = exportColumnsConfig.createTable(data, true);
+    final tableData = exportColumnsConfig.createTable(data, true, true);
 
     return pw.TableHelper.fromTextArray(
         border: null,
