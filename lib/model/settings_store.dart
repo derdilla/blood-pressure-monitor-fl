@@ -49,6 +49,14 @@ class Settings extends ChangeNotifier {
     if (keys.contains('exportAddableItems')) {
       toAwait.add(_prefs.remove('exportAddableItems'));
     }
+    if (keys.contains('exportCustomEntries')) {
+      await _prefs.setBool('exportCustomEntriesCsv', _prefs.getBool('exportCustomEntries') ?? false);
+      toAwait.add(_prefs.remove('exportCustomEntries'));
+    }
+    if (keys.contains('exportItems')) {
+      await _prefs.setStringList('exportItemsCsv', _prefs.getStringList('exportItems') ?? ExportFields.defaultCsv);
+      toAwait.add(_prefs.remove('exportItems'));
+    }
 
     // reset variables for new version. Necessary for reusing variable names in new version and avoid having unexpected
     // breaking values in the preferences
@@ -454,20 +462,20 @@ class Settings extends ChangeNotifier {
   }
 
   bool get exportCustomEntriesCsv {
-    return _prefs.getBool('exportCustomEntries') ?? false;
+    return _prefs.getBool('exportCustomEntriesCsv') ?? false;
   }
 
   set exportCustomEntriesCsv(bool value) {
-    _prefs.setBool('exportCustomEntries', value);
+    _prefs.setBool('exportCustomEntriesCsv', value);
     notifyListeners();
   }
 
   List<String> get exportItemsCsv {
-    return _prefs.getStringList('exportItems') ?? ExportFields.defaultCsv; // TODO migrate var name
+    return _prefs.getStringList('exportItemsCsv') ?? ExportFields.defaultCsv;
   }
 
   set exportItemsCsv(List<String> value) {
-    _prefs.setStringList('exportItems', value);
+    _prefs.setStringList('exportItemsCsv', value);
     notifyListeners();
   }
 

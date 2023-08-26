@@ -3,6 +3,7 @@ import 'dart:async';
 
 import 'package:badges/badges.dart' as badges;
 import 'package:blood_pressure_app/components/consistent_future_builder.dart';
+import 'package:blood_pressure_app/model/export_import.dart';
 import 'package:blood_pressure_app/model/export_options.dart';
 import 'package:blood_pressure_app/model/settings_store.dart';
 import 'package:blood_pressure_app/screens/subsettings/export_column_data.dart';
@@ -105,7 +106,6 @@ class _ExportItemsCustomizerState extends State<ExportItemsCustomizer> {
 
   Widget _buildManagePresetsBadge(BuildContext context, ExportConfigurationModel result, {required Widget child}) {
     final exportConfigurations = result.exportConfigurations;
-    final exportConfigurationKeys = exportConfigurations.keys.toList();
     return badges.Badge(
       position: badges.BadgePosition.topEnd(top: 3, end: 3),
       badgeStyle: badges.BadgeStyle(
@@ -116,13 +116,18 @@ class _ExportItemsCustomizerState extends State<ExportItemsCustomizer> {
         icon: const Icon(Icons.collections_bookmark),
         itemBuilder: (BuildContext context) {
           return [
-            for (var i = 0; i< exportConfigurationKeys.length; i++)
-              PopupMenuItem<int>(value: i, child: Text(exportConfigurationKeys[i])),
+            for (var i = 0; i< exportConfigurations.length; i++)
+              PopupMenuItem<int>(value: i, child: Text(exportConfigurations[i].$1)),
           ];
         },
         onSelected: (value) {
           final settings = Provider.of<Settings>(context, listen: false);
-          settings.exportItemsCsv = exportConfigurations[exportConfigurationKeys[value]]!;
+          if (settings.exportFormat == ExportFormat.csv) {
+            settings.exportItemsCsv = exportConfigurations[value].$2;
+          } else {
+            assert(settings.exportFormat == ExportFormat.pdf);
+            settings.exportItemsPdf = exportConfigurations[value].$2;
+          }
         },
       ),
       child: child,

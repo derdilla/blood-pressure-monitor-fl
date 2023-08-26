@@ -23,11 +23,12 @@ class ExportConfigurationModel {
   
   final List<ExportColumn> _availableFormats = [];
 
-  Map<String, List<String>> get exportConfigurations => { // todo change type to List<String, List<String> and add pdf and csv seperately or remove entirely
-    // Not fully localized, as potemtial user added configurations can't be localized as well
-    localizations.default_: ['timestampUnixMs', 'systolic', 'diastolic', 'pulse', 'notes'],
-    '"My Heart" export': ['DATUM', 'SYSTOLE', 'DIASTOLE', 'PULS', 'Beschreibung', 'Tags', 'Gewicht', 'Sauerstoffsättigung'],
-  };
+  /// Format: (title, List<internalNameOfExportFormat>)
+  List<(String, List<String>)> get exportConfigurations => [
+    // Not fully localized, as potential user added configurations can't be localized as well
+    (localizations.default_, ['timestampUnixMs', 'systolic', 'diastolic', 'pulse', 'notes']),
+    ('"My Heart" export', ['DATUM', 'SYSTOLE', 'DIASTOLE', 'PULS', 'Beschreibung', 'Tags', 'Gewicht', 'Sauerstoffsättigung']),
+  ];
 
   ExportConfigurationModel._create(this.settings, this.localizations);
   Future<void> _asyncInit(String? dbPath, bool isFullPath) async {
