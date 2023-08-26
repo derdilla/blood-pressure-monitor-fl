@@ -570,6 +570,7 @@ class Settings extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// whether to add a section with all entries to pdf export
   bool get exportPdfExportData {
     return _prefs.getBool('exportPdfExportData') ?? true;
   }
