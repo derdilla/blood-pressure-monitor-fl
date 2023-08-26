@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 
+// TODO: save item order to pdf / csv depending on selection
 class ExportItemsCustomizer extends StatefulWidget {
   final List<ExportColumn> shownItems;
   final List<ExportColumn> disabledItems;
@@ -122,7 +123,7 @@ class _ExportItemsCustomizerState extends State<ExportItemsCustomizer> {
         },
         onSelected: (value) {
           final settings = Provider.of<Settings>(context, listen: false);
-          settings.exportItems = exportConfigurations[exportConfigurationKeys[value]]!;
+          settings.exportItemsCsv = exportConfigurations[exportConfigurationKeys[value]]!;
         },
       ),
       child: child,

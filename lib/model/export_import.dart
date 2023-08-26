@@ -61,7 +61,7 @@ class ExportFileCreator {
   }
 
   Uint8List createCSVFile(List<BloodPressureRecord> records) {
-    final items = exportColumnsConfig.createTable(records, settings.exportCsvHeadline);
+    final items = exportColumnsConfig.createTable(records, ExportFormat.csv, createHeadline: settings.exportCsvHeadline);
     final converter = ListToCsvConverter(fieldDelimiter: settings.csvFieldDelimiter, textDelimiter: settings.csvTextDelimiter);
     final csvData = converter.convert(items);
     return Uint8List.fromList(utf8.encode(csvData));
@@ -179,7 +179,7 @@ class ExportFileCreator {
   }
 
   pw.Widget _buildPdfTable(List<BloodPressureRecord> data, DateFormat dateFormatter) {
-    final tableData = exportColumnsConfig.createTable(data, true, true);
+    final tableData = exportColumnsConfig.createTable(data, ExportFormat.pdf, createHeadline: true);
 
     return pw.TableHelper.fromTextArray(
         border: null,

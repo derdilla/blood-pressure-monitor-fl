@@ -2,6 +2,7 @@ import 'dart:collection';
 
 import 'package:blood_pressure_app/model/blood_pressure.dart';
 import 'package:blood_pressure_app/model/export_import.dart';
+import 'package:blood_pressure_app/model/export_options.dart';
 import 'package:blood_pressure_app/model/settings_store.dart';
 import 'package:file_saver/file_saver.dart' show MimeType;
 import 'package:flutter/material.dart';
@@ -310,19 +311,19 @@ class RamSettings extends ChangeNotifier implements Settings {
   }
 
   @override
-  bool get exportCustomEntries => _exportCustomEntries;
+  bool get exportCustomEntriesCsv => _exportCustomEntries;
 
   @override
-  set exportCustomEntries(bool value) {
+  set exportCustomEntriesCsv(bool value) {
     _exportCustomEntries = value;
     notifyListeners();
   }
 
   @override
-  List<String> get exportItems => _exportItems;
+  List<String> get exportItemsCsv => _exportItems;
 
   @override
-  set exportItems(List<String> value) {
+  set exportItemsCsv(List<String> value) {
     _exportItems = value;
     notifyListeners();
   }
@@ -478,6 +479,32 @@ class RamSettings extends ChangeNotifier implements Settings {
   @override
   set startWithAddMeasurementPage(bool value) {
     _startWithAddMeasurementPage = value;
+    notifyListeners();
+  }
+
+  bool _exportCustomEntriesPdf = false;
+
+  @override
+  bool get exportCustomEntriesPdf {
+    return _exportCustomEntriesPdf;
+  }
+
+  @override
+  set exportCustomEntriesPdf(bool value) {
+    _exportCustomEntriesPdf = value;
+    notifyListeners();
+  }
+
+  List<String> _exportItemsPdf = ExportFields.defaultPdf;
+
+  @override
+  List<String> get exportItemsPdf {
+    return _exportItemsPdf;
+  }
+
+  @override
+  set exportItemsPdf(List<String> value) {
+    _exportItemsPdf = value;
     notifyListeners();
   }
 

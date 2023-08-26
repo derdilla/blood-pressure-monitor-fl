@@ -44,7 +44,7 @@ void main() {
       expect(s.graphTitlesCount, 5);
       expect(s.csvFieldDelimiter, ',');
       expect(s.csvTextDelimiter, '"');
-      expect(s.exportItems, ['timestampUnixMs', 'systolic', 'diastolic', 'pulse', 'notes']);
+      expect(s.exportItemsCsv, ['timestampUnixMs', 'systolic', 'diastolic', 'pulse', 'notes']);
       expect(s.exportCsvHeadline, true);
       expect(s.exportMimeType, MimeType.csv);
       expect(s.defaultExportDir.isEmpty, true);
@@ -88,7 +88,7 @@ void main() {
       s.graphTitlesCount = 7;
       s.csvFieldDelimiter = '|';
       s.csvTextDelimiter = '\'';
-      s.exportItems = ['systolic', 'diastolic', 'pulse', 'notes', 'isoUTCTime'];
+      s.exportItemsCsv = ['systolic', 'diastolic', 'pulse', 'notes', 'isoUTCTime'];
       s.exportCsvHeadline = false;
       s.exportMimeType = MimeType.pdf;
       s.defaultExportDir = '/storage/emulated/0/Android/data/com.derdilla.bloodPressureApp/files/file.csv';
@@ -115,7 +115,7 @@ void main() {
       expect(s.graphTitlesCount, 7);
       expect(s.csvFieldDelimiter, '|');
       expect(s.csvTextDelimiter, '\'');
-      expect(s.exportItems, ['systolic', 'diastolic', 'pulse', 'notes', 'isoUTCTime']);
+      expect(s.exportItemsCsv, ['systolic', 'diastolic', 'pulse', 'notes', 'isoUTCTime']);
       expect(s.exportCsvHeadline, false);
       expect(s.exportMimeType, MimeType.pdf);
       expect(s.defaultExportDir, '/storage/emulated/0/Android/data/com.derdilla.bloodPressureApp/files/file.csv');
@@ -153,7 +153,7 @@ void main() {
       s.graphTitlesCount = 2;
       s.csvFieldDelimiter = '|';
       s.csvTextDelimiter = '\'';
-      s.exportItems = ['systolic', 'diastolic', 'pulse', 'notes', 'isoUTCTime'];
+      s.exportItemsCsv = ['systolic', 'diastolic', 'pulse', 'notes', 'isoUTCTime'];
       s.exportCsvHeadline = false;
       s.exportMimeType = MimeType.pdf;
       s.defaultExportDir = '/storage/emulated/0/Android/data/com.derdilla.bloodPressureApp/files/file.csv';
@@ -196,7 +196,7 @@ void main() {
       expect(s.graphTitlesCount, 5);
       expect(s.csvFieldDelimiter, ',');
       expect(s.csvTextDelimiter, '"');
-      expect(s.exportItems, ['timestampUnixMs', 'systolic', 'diastolic', 'pulse', 'notes']);
+      expect(s.exportItemsCsv, ['timestampUnixMs', 'systolic', 'diastolic', 'pulse', 'notes']);
       expect(s.exportCsvHeadline, true);
       expect(s.exportMimeType, MimeType.csv);
       expect(s.defaultExportDir.isEmpty, true);
@@ -240,7 +240,7 @@ void main() {
       s.graphTitlesCount = 7;
       s.csvFieldDelimiter = '|';
       s.csvTextDelimiter = '\'';
-      s.exportItems = ['systolic', 'diastolic', 'pulse', 'notes', 'isoUTCTime'];
+      s.exportItemsCsv = ['systolic', 'diastolic', 'pulse', 'notes', 'isoUTCTime'];
       s.exportCsvHeadline = false;
       s.exportMimeType = MimeType.pdf;
       s.defaultExportDir = '/storage/emulated/0/Android/data/com.derdilla.bloodPressureApp/files/file.csv';
@@ -267,7 +267,7 @@ void main() {
       expect(s.graphTitlesCount, 7);
       expect(s.csvFieldDelimiter, '|');
       expect(s.csvTextDelimiter, '\'');
-      expect(s.exportItems, ['systolic', 'diastolic', 'pulse', 'notes', 'isoUTCTime']);
+      expect(s.exportItemsCsv, ['systolic', 'diastolic', 'pulse', 'notes', 'isoUTCTime']);
       expect(s.exportCsvHeadline, false);
       expect(s.exportMimeType, MimeType.pdf);
       expect(s.defaultExportDir, '/storage/emulated/0/Android/data/com.derdilla.bloodPressureApp/files/file.csv');
@@ -305,7 +305,7 @@ void main() {
       s.graphTitlesCount = 2;
       s.csvFieldDelimiter = '|';
       s.csvTextDelimiter = '\'';
-      s.exportItems = ['systolic', 'diastolic', 'pulse', 'notes', 'isoUTCTime'];
+      s.exportItemsCsv = ['systolic', 'diastolic', 'pulse', 'notes', 'isoUTCTime'];
       s.exportCsvHeadline = false;
       s.exportMimeType = MimeType.pdf;
       s.defaultExportDir = '/storage/emulated/0/Android/data/com.derdilla.bloodPressureApp/files/file.csv';

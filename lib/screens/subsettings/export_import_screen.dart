@@ -195,7 +195,7 @@ class _ExportFieldCustomisationSettingState extends State<ExportFieldCustomisati
           final formats = result.availableFormats.toSet();
           List<ExportColumn> activeFields = [];
           List<ExportColumn> hiddenFields = [];
-          for (final internalName in settings.exportItems) {
+          for (final internalName in settings.exportItemsCsv) {
             activeFields.add(formats.singleWhere((e) => e.internalName == internalName));
             formats.removeWhere((e) => e.internalName == internalName);
           }
@@ -205,20 +205,20 @@ class _ExportFieldCustomisationSettingState extends State<ExportFieldCustomisati
             children: [
               SwitchSettingsTile(
                   title: Text(localizations.exportCustomEntries),
-                  initialValue: settings.exportCustomEntries,
+                  initialValue: settings.exportCustomEntriesCsv,
                   disabled: !(settings.exportFormat == ExportFormat.csv || settings.exportFormat == ExportFormat.pdf &&
                       settings.exportPdfExportData),
                   onToggle: (value) {
-                    settings.exportCustomEntries = value;
+                    settings.exportCustomEntriesCsv = value;
                   }
               ),
-              (settings.exportCustomEntries && (settings.exportFormat == ExportFormat.csv || settings.exportFormat == ExportFormat.pdf &&
+              (settings.exportCustomEntriesCsv && (settings.exportFormat == ExportFormat.csv || settings.exportFormat == ExportFormat.pdf &&
                   settings.exportPdfExportData)) ?
                 ExportItemsCustomizer(
                   shownItems: activeFields,
                   disabledItems: hiddenFields,
                   onReorder: (exportItems, exportAddableItems) {
-                    settings.exportItems = exportItems.map((e) => e.internalName).toList();
+                    settings.exportItemsCsv = exportItems.map((e) => e.internalName).toList();
                   },
                 ) : const SizedBox.shrink()
             ],
@@ -286,15 +286,15 @@ class _ExportWarnBannerState extends State<ExportWarnBanner> {
     return Consumer<Settings>(builder: (context, settings, child) {
       if (_showWarnBanner && ![ExportFormat.csv, ExportFormat.db].contains(settings.exportFormat) ||
           settings.exportCsvHeadline == false ||
-          settings.exportCustomEntries && !(['timestampUnixMs'].any((i) => settings.exportItems.contains(i))) ||
+          settings.exportCustomEntriesCsv && !(['timestampUnixMs'].any((i) => settings.exportItemsCsv.contains(i))) ||
           ![',', '|'].contains(settings.csvFieldDelimiter) ||
           !['"', '\''].contains(settings.csvTextDelimiter)
       ) {
         message = localizations.exportWarnConfigNotImportable;
-      } else if (_showWarnBanner && settings.exportCustomEntries &&
-          !(['systolic','diastolic', 'pulse', 'notes'].every((i) => settings.exportItems.contains(i)))) {
+      } else if (_showWarnBanner && settings.exportCustomEntriesCsv &&
+          !(['systolic','diastolic', 'pulse', 'notes'].every((i) => settings.exportItemsCsv.contains(i)))) {
         var missingAttributes = {'systolic','diastolic', 'pulse', 'notes'};
-        missingAttributes.removeWhere((e) => settings.exportItems.contains(e));
+        missingAttributes.removeWhere((e) => settings.exportItemsCsv.contains(e));
 
         message = localizations.exportWarnNotEveryFieldExported(missingAttributes.length, missingAttributes.toString());
       }

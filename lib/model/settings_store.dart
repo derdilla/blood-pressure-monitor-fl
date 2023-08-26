@@ -1,5 +1,6 @@
 import 'package:blood_pressure_app/model/blood_pressure.dart';
 import 'package:blood_pressure_app/model/export_import.dart';
+import 'package:blood_pressure_app/model/export_options.dart';
 import 'package:file_saver/file_saver.dart' show MimeType;
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -452,20 +453,20 @@ class Settings extends ChangeNotifier {
     notifyListeners();
   }
 
-  bool get exportCustomEntries {
+  bool get exportCustomEntriesCsv {
     return _prefs.getBool('exportCustomEntries') ?? false;
   }
 
-  set exportCustomEntries(bool value) {
+  set exportCustomEntriesCsv(bool value) {
     _prefs.setBool('exportCustomEntries', value);
     notifyListeners();
   }
 
-  List<String> get exportItems {
-    return _prefs.getStringList('exportItems') ?? ['timestampUnixMs', 'systolic', 'diastolic', 'pulse', 'notes'];
+  List<String> get exportItemsCsv {
+    return _prefs.getStringList('exportItems') ?? ExportFields.defaultCsv; // TODO migrate var name
   }
 
-  set exportItems(List<String> value) {
+  set exportItemsCsv(List<String> value) {
     _prefs.setStringList('exportItems', value);
     notifyListeners();
   }
@@ -584,6 +585,24 @@ class Settings extends ChangeNotifier {
 
   set startWithAddMeasurementPage(bool value) {
     _prefs.setBool('startWithAddMeasurementPage', value);
+    notifyListeners();
+  }
+
+  bool get exportCustomEntriesPdf {
+    return _prefs.getBool('exportCustomEntriesPdf') ?? false;
+  }
+
+  set exportCustomEntriesPdf(bool value) {
+    _prefs.setBool('exportCustomEntriesPdf', value);
+    notifyListeners();
+  }
+
+  List<String> get exportItemsPdf {
+    return _prefs.getStringList('exportItemsPdf') ?? ExportFields.defaultPdf;
+  }
+
+  set exportItemsPdf(List<String> value) {
+    _prefs.setStringList('exportItemsPdf', value);
     notifyListeners();
   }
 }
