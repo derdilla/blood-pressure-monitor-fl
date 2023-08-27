@@ -258,8 +258,7 @@ class SettingsPage extends StatelessWidget {
               ),
               SettingsTile(
                 key: const Key('GraphMarkingsScreen'),
-                title: Text(AppLocalizations.of(context)!.text),
-                description: Text(AppLocalizations.of(context)!.text), // TODO desc u title
+                title: Text(AppLocalizations.of(context)!.customGraphMarkings),
                 leading: const Icon(Icons.legend_toggle_outlined),
                 trailing: const Icon(Icons.arrow_forward_ios),
                 onPressed: (context) {

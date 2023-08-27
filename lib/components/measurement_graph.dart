@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:blood_pressure_app/components/consistent_future_builder.dart';
 import 'package:blood_pressure_app/components/display_interval_picker.dart';
 import 'package:blood_pressure_app/model/blood_pressure.dart';
+import 'package:blood_pressure_app/model/horizontal_graph_line.dart';
 import 'package:blood_pressure_app/model/settings_store.dart';
 import 'package:collection/collection.dart';
 import 'package:fl_chart/fl_chart.dart';
@@ -42,6 +43,8 @@ class _LineChartState extends State<_LineChart> {
                     // calculate lines for graph
                     List<FlSpot> pulSpots = [], diaSpots = [], sysSpots = [];
                     int maxValue = 0;
+                    double? graphBegin;
+                    double? graphEnd;
                     for (var e in data) {
                       final x = e.creationTime.millisecondsSinceEpoch.toDouble();
                       if (e.diastolic != null) {
@@ -56,9 +59,13 @@ class _LineChartState extends State<_LineChart> {
                         pulSpots.add(FlSpot(x, e.pulse!.toDouble()));
                         maxValue = max(maxValue, e.pulse!);
                       }
+                      graphBegin ??= x;
+                      graphEnd ??= x;
+                      if (x < graphBegin) graphBegin = x;
+                      if (x > graphEnd) graphEnd = x;
                     }
 
-                    if (diaSpots.length < 2 && sysSpots.length < 2 && pulSpots.length < 2) {
+                    if (diaSpots.length < 2 && sysSpots.length < 2 && pulSpots.length < 2 || graphBegin == null || graphEnd == null) {
                       return Text(AppLocalizations.of(context)!.errNotEnoughDataToGraph);
                     }
 
@@ -86,6 +93,8 @@ class _LineChartState extends State<_LineChart> {
                                   _buildRegressionLine(diaSpots),
                                 if (settings.drawRegressionLines)
                                   _buildRegressionLine(pulSpots),
+                                for (final horizontalLine in settings.horizontalGraphLines)
+                                  _buildHorizontalLine(horizontalLine, graphBegin!, graphEnd!),
                               ]
                           ),
                         );
@@ -195,6 +204,21 @@ class _LineChartState extends State<_LineChart> {
       dotData: const FlDotData(
         show: false,
       ),
+    );
+  }
+
+  LineChartBarData _buildHorizontalLine(HorizontalGraphLine line, double start, double end) {
+    return LineChartBarData(
+      color: line.color,
+      spots: [
+        FlSpot(start, line.height.toDouble()),
+        FlSpot(end, line.height.toDouble())
+      ],
+      barWidth: 1,
+      dotData: const FlDotData(
+        show: false,
+      ),
+      dashArray: [10,5,]
     );
   }
 }

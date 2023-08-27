@@ -508,15 +508,15 @@ class RamSettings extends ChangeNotifier implements Settings {
     notifyListeners();
   }
 
-  Iterable<int> _horizontalGraphLines = [];
+  Iterable<HorizontalGraphLine> _horizontalGraphLines = [];
 
   @override
-  Iterable<int> get horizontalGraphLines {
+  Iterable<HorizontalGraphLine> get horizontalGraphLines {
     return _horizontalGraphLines;
   }
 
   @override
-  set horizontalGraphLines(Iterable<int> value) {
+  set horizontalGraphLines(Iterable<HorizontalGraphLine> value) {
     _horizontalGraphLines = value;
     notifyListeners();
   }

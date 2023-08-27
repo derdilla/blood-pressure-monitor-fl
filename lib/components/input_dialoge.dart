@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 
+// TODO: redo dialoges in flutter style
 class InputDialoge extends StatefulWidget {
   final String hintText;
   final void Function(String text) onSubmit;

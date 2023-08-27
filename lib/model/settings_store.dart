@@ -1,6 +1,9 @@
+import 'dart:convert';
+
 import 'package:blood_pressure_app/model/blood_pressure.dart';
 import 'package:blood_pressure_app/model/export_import.dart';
 import 'package:blood_pressure_app/model/export_options.dart';
+import 'package:blood_pressure_app/model/horizontal_graph_line.dart';
 import 'package:file_saver/file_saver.dart' show MimeType;
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -615,13 +618,13 @@ class Settings extends ChangeNotifier {
     notifyListeners();
   }
 
-  Iterable<int> get horizontalGraphLines {
+  Iterable<HorizontalGraphLine> get horizontalGraphLines {
     final linesStr = _prefs.getStringList('horizontalGraphLines') ?? [];
-    return linesStr.map((e) => int.parse(e));
+    return linesStr.map((e) => HorizontalGraphLine.fromJson(jsonDecode(e)));
   }
 
-  set horizontalGraphLines(Iterable<int> value) {
-    _prefs.setStringList('horizontalGraphLines', value.map((e) => e.toString()).toList());
+  set horizontalGraphLines(Iterable<HorizontalGraphLine> value) {
+    _prefs.setStringList('horizontalGraphLines', value.map((e) => jsonEncode(e)).toList());
     notifyListeners();
   }
 }
