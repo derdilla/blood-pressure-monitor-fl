@@ -192,10 +192,17 @@ class _ExportFieldCustomisationSettingState extends State<ExportFieldCustomisati
       future: _future!,
       onData: (context, result) {
         return Consumer<Settings>(builder: (context, settings, child) {
+          /// whether or not the currently selected export format supports field customization
+          final isApplicable = (settings.exportFormat == ExportFormat.csv || settings.exportFormat == ExportFormat.pdf &&
+              settings.exportPdfExportData);
+          final exportCustomEntries = (settings.exportFormat == ExportFormat.csv) ?
+              settings.exportCustomEntriesCsv : settings.exportCustomEntriesPdf;
+          final exportItems = (settings.exportFormat == ExportFormat.csv) ? settings.exportItemsCsv : settings.exportItemsPdf;
+
           final formats = result.availableFormats.toSet();
           List<ExportColumn> activeFields = [];
           List<ExportColumn> hiddenFields = [];
-          for (final internalName in settings.exportItems) {
+          for (final internalName in exportItems) {
             activeFields.add(formats.singleWhere((e) => e.internalName == internalName));
             formats.removeWhere((e) => e.internalName == internalName);
           }
@@ -205,20 +212,30 @@ class _ExportFieldCustomisationSettingState extends State<ExportFieldCustomisati
             children: [
               SwitchSettingsTile(
                   title: Text(localizations.exportCustomEntries),
-                  initialValue: settings.exportCustomEntries,
-                  disabled: !(settings.exportFormat == ExportFormat.csv || settings.exportFormat == ExportFormat.pdf &&
-                      settings.exportPdfExportData),
+                  initialValue: exportCustomEntries,
+                  disabled: !isApplicable,
                   onToggle: (value) {
-                    settings.exportCustomEntries = value;
+                    if (settings.exportFormat == ExportFormat.csv) {
+                      settings.exportCustomEntriesCsv = value;
+                    } else {
+                      assert(settings.exportFormat == ExportFormat.pdf);
+                      settings.exportCustomEntriesPdf = value;
+                    }
+
                   }
               ),
-              (settings.exportCustomEntries && (settings.exportFormat == ExportFormat.csv || settings.exportFormat == ExportFormat.pdf &&
-                  settings.exportPdfExportData)) ?
+              (exportCustomEntries && isApplicable) ?
                 ExportItemsCustomizer(
                   shownItems: activeFields,
                   disabledItems: hiddenFields,
                   onReorder: (exportItems, exportAddableItems) {
-                    settings.exportItems = exportItems.map((e) => e.internalName).toList();
+                    if (settings.exportFormat == ExportFormat.csv) {
+                      settings.exportItemsCsv = exportItems.map((e) => e.internalName).toList();
+                    } else {
+                      assert(settings.exportFormat == ExportFormat.pdf);
+                      settings.exportItemsPdf = exportItems.map((e) => e.internalName).toList();
+                    }
+
                   },
                 ) : const SizedBox.shrink()
             ],
@@ -284,17 +301,21 @@ class _ExportWarnBannerState extends State<ExportWarnBanner> {
     final localizations = AppLocalizations.of(context)!;
     String? message;
     return Consumer<Settings>(builder: (context, settings, child) {
+      final exportItems = (settings.exportFormat == ExportFormat.csv) ? settings.exportItemsCsv : settings.exportItemsPdf;
+      final exportCustomEntries = (settings.exportFormat == ExportFormat.csv) ?
+      settings.exportCustomEntriesCsv : settings.exportCustomEntriesPdf;
+
       if (_showWarnBanner && ![ExportFormat.csv, ExportFormat.db].contains(settings.exportFormat) ||
           settings.exportCsvHeadline == false ||
-          settings.exportCustomEntries && !(['timestampUnixMs'].any((i) => settings.exportItems.contains(i))) ||
+          exportCustomEntries && !(['timestampUnixMs'].any((i) => exportItems.contains(i))) ||
           ![',', '|'].contains(settings.csvFieldDelimiter) ||
           !['"', '\''].contains(settings.csvTextDelimiter)
       ) {
         message = localizations.exportWarnConfigNotImportable;
-      } else if (_showWarnBanner && settings.exportCustomEntries &&
-          !(['systolic','diastolic', 'pulse', 'notes'].every((i) => settings.exportItems.contains(i)))) {
+      } else if (_showWarnBanner && exportCustomEntries &&
+          !(['systolic','diastolic', 'pulse', 'notes'].every((i) => exportItems.contains(i)))) {
         var missingAttributes = {'systolic','diastolic', 'pulse', 'notes'};
-        missingAttributes.removeWhere((e) => settings.exportItems.contains(e));
+        missingAttributes.removeWhere((e) => exportItems.contains(e));
 
         message = localizations.exportWarnNotEveryFieldExported(missingAttributes.length, missingAttributes.toString());
       }

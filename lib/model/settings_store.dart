@@ -1,5 +1,6 @@
 import 'package:blood_pressure_app/model/blood_pressure.dart';
 import 'package:blood_pressure_app/model/export_import.dart';
+import 'package:blood_pressure_app/model/export_options.dart';
 import 'package:file_saver/file_saver.dart' show MimeType;
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -47,6 +48,14 @@ class Settings extends ChangeNotifier {
     }
     if (keys.contains('exportAddableItems')) {
       toAwait.add(_prefs.remove('exportAddableItems'));
+    }
+    if (keys.contains('exportCustomEntries')) {
+      await _prefs.setBool('exportCustomEntriesCsv', _prefs.getBool('exportCustomEntries') ?? false);
+      toAwait.add(_prefs.remove('exportCustomEntries'));
+    }
+    if (keys.contains('exportItems')) {
+      await _prefs.setStringList('exportItemsCsv', _prefs.getStringList('exportItems') ?? ExportFields.defaultCsv);
+      toAwait.add(_prefs.remove('exportItems'));
     }
 
     // reset variables for new version. Necessary for reusing variable names in new version and avoid having unexpected
@@ -452,21 +461,21 @@ class Settings extends ChangeNotifier {
     notifyListeners();
   }
 
-  bool get exportCustomEntries {
-    return _prefs.getBool('exportCustomEntries') ?? false;
+  bool get exportCustomEntriesCsv {
+    return _prefs.getBool('exportCustomEntriesCsv') ?? false;
   }
 
-  set exportCustomEntries(bool value) {
-    _prefs.setBool('exportCustomEntries', value);
+  set exportCustomEntriesCsv(bool value) {
+    _prefs.setBool('exportCustomEntriesCsv', value);
     notifyListeners();
   }
 
-  List<String> get exportItems {
-    return _prefs.getStringList('exportItems') ?? ['timestampUnixMs', 'systolic', 'diastolic', 'pulse', 'notes'];
+  List<String> get exportItemsCsv {
+    return _prefs.getStringList('exportItemsCsv') ?? ExportFields.defaultCsv;
   }
 
-  set exportItems(List<String> value) {
-    _prefs.setStringList('exportItems', value);
+  set exportItemsCsv(List<String> value) {
+    _prefs.setStringList('exportItemsCsv', value);
     notifyListeners();
   }
 
@@ -569,6 +578,7 @@ class Settings extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// whether to add a section with all entries to pdf export
   bool get exportPdfExportData {
     return _prefs.getBool('exportPdfExportData') ?? true;
   }
@@ -584,6 +594,24 @@ class Settings extends ChangeNotifier {
 
   set startWithAddMeasurementPage(bool value) {
     _prefs.setBool('startWithAddMeasurementPage', value);
+    notifyListeners();
+  }
+
+  bool get exportCustomEntriesPdf {
+    return _prefs.getBool('exportCustomEntriesPdf') ?? false;
+  }
+
+  set exportCustomEntriesPdf(bool value) {
+    _prefs.setBool('exportCustomEntriesPdf', value);
+    notifyListeners();
+  }
+
+  List<String> get exportItemsPdf {
+    return _prefs.getStringList('exportItemsPdf') ?? ExportFields.defaultPdf;
+  }
+
+  set exportItemsPdf(List<String> value) {
+    _prefs.setStringList('exportItemsPdf', value);
     notifyListeners();
   }
 }

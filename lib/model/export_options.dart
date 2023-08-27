@@ -1,12 +1,18 @@
 import 'dart:collection';
 
 import 'package:blood_pressure_app/model/blood_pressure.dart';
+import 'package:blood_pressure_app/model/export_import.dart';
 import 'package:blood_pressure_app/model/settings_store.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:function_tree/function_tree.dart';
 import 'package:intl/intl.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
+
+class ExportFields {
+  static const defaultCsv = ['timestampUnixMs', 'systolic', 'diastolic', 'pulse', 'notes']; 
+  static const defaultPdf = ['formattedTimestamp','systolic','diastolic','pulse','notes']; 
+}
 
 class ExportConfigurationModel {
   static ExportConfigurationModel? _instance;
@@ -17,11 +23,12 @@ class ExportConfigurationModel {
   
   final List<ExportColumn> _availableFormats = [];
 
-  Map<String, List<String>> get exportConfigurations => {
-    // Not fully localized, as potemtial user added configurations can't be localized as well
-    localizations.default_: ['timestampUnixMs', 'systolic', 'diastolic', 'pulse', 'notes'],
-    '"My Heart" export': ['DATUM', 'SYSTOLE', 'DIASTOLE', 'PULS', 'Beschreibung', 'Tags', 'Gewicht', 'Sauerstoffsättigung'],
-  };
+  /// Format: (title, List<internalNameOfExportFormat>)
+  List<(String, List<String>)> get exportConfigurations => [
+    // Not fully localized, as potential user added configurations can't be localized as well
+    (localizations.default_, ['timestampUnixMs', 'systolic', 'diastolic', 'pulse', 'notes']),
+    ('"My Heart" export', ['DATUM', 'SYSTOLE', 'DIASTOLE', 'PULS', 'Beschreibung', 'Tags', 'Gewicht', 'Sauerstoffsättigung']),
+  ];
 
   ExportConfigurationModel._create(this.settings, this.localizations);
   Future<void> _asyncInit(String? dbPath, bool isFullPath) async {
@@ -54,12 +61,20 @@ class ExportConfigurationModel {
     return _instance!;
   }
 
-  List<ExportColumn> getActiveExportColumns() {
-    List<ExportColumn> activeFields = [];
-    for (final internalName in settings.exportItems) {
-      activeFields.add(availableFormats.singleWhere((e) => e.internalName == internalName));
+  List<ExportColumn> _getActiveExportColumns(ExportFormat format) {
+    switch (format) {
+      case ExportFormat.csv:
+        return availableFormats.where((e) =>
+            ((settings.exportCustomEntriesCsv) ? settings.exportItemsCsv : ExportFields.defaultCsv)
+                .contains(e.internalName)).toList();
+      case ExportFormat.pdf:
+        return availableFormats.where((e) => 
+          ((settings.exportCustomEntriesPdf) ? settings.exportItemsPdf : ExportFields.defaultPdf)
+        .contains(e.internalName)).toList();
+      default:
+        assert(false, 'no data selection for this one');
+        return [];
     }
-    return activeFields;
   }
   
   List<ExportColumn> getDefaultFormates() => [
@@ -118,30 +133,15 @@ class ExportConfigurationModel {
   UnmodifiableMapView<String, ExportColumn> get availableFormatsMap =>
       UnmodifiableMapView(Map.fromIterable(_availableFormats, key: (e) => e.internalName));
 
-  List<List<String>> createTable(List<BloodPressureRecord> data, bool createHeadline) {
-    List<ExportColumn> exportItems;
-    if (settings.exportCustomEntries) {
-      exportItems = getActiveExportColumns();
-    } else {
-      exportItems = getDefaultFormates().where((e) => ['timestampUnixMs','systolic','diastolic','pulse','notes'].contains(e.internalName)).toList();
-    }
-
+  List<List<String>> createTable(List<BloodPressureRecord> data, ExportFormat format, {bool createHeadline = true,}) {
+    final exportItems = _getActiveExportColumns(format);
     List<List<String>> items = [];
     if (createHeadline) {
-      List<String> headline = [];
-      for (var i = 0; i<exportItems.length; i++) {
-        headline.add(exportItems[i].internalName);
-      }
-      items.add(headline);
+      items.add(exportItems.map((e) => e.internalName).toList());
     }
 
-    for (var record in data) {
-      List<String> row = [];
-      for (var attribute in exportItems) {
-        row.add(attribute.formatRecord(record));
-      }
-      items.add(row);
-    }
+    final dataRows = data.map((record) => exportItems.map((attribute) => attribute.formatRecord(record)).toList());
+    items.addAll(dataRows);
     return items;
   }
 }
