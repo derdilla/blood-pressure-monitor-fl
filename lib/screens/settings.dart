@@ -1,10 +1,12 @@
 import 'package:blood_pressure_app/components/consistent_future_builder.dart';
+import 'package:blood_pressure_app/components/input_dialoge.dart';
 import 'package:blood_pressure_app/components/settings_widgets.dart';
 import 'package:blood_pressure_app/model/blood_pressure.dart';
 import 'package:blood_pressure_app/model/iso_lang_names.dart';
 import 'package:blood_pressure_app/model/settings_store.dart';
 import 'package:blood_pressure_app/screens/subsettings/enter_timeformat.dart';
 import 'package:blood_pressure_app/screens/subsettings/export_import_screen.dart';
+import 'package:blood_pressure_app/screens/subsettings/graph_markings.dart';
 import 'package:blood_pressure_app/screens/subsettings/version.dart';
 import 'package:blood_pressure_app/screens/subsettings/warn_about.dart';
 import 'package:flutter/material.dart';
@@ -28,22 +30,11 @@ class SettingsPage extends StatelessWidget {
         return ListView(
           children: [
             SettingsSection(title: Text(AppLocalizations.of(context)!.layout), children: [
-              SwitchSettingsTile(
-                  key: const Key('allowManualTimeInput'),
-                  initialValue: settings.allowManualTimeInput,
-                  onToggle: (value) {
-                    settings.allowManualTimeInput = value;
-                  },
-                  leading: const Icon(Icons.details),
-                  title: Text(AppLocalizations.of(context)!.allowManualTimeInput)),
               SettingsTile(
                 key: const Key('EnterTimeFormatScreen'),
                 title: Text(AppLocalizations.of(context)!.enterTimeFormatScreen),
                 leading: const Icon(Icons.schedule),
-                trailing: Icon(
-                  Icons.arrow_forward_ios,
-                  color: Theme.of(context).highlightColor,
-                ),
+                trailing: const Icon(Icons.arrow_forward_ios),
                 description: Text(settings.dateFormatString),
                 onPressed: (context) {
                   Navigator.push(
@@ -80,6 +71,11 @@ class SettingsPage extends StatelessWidget {
                   }
                 },
               ),
+              ColorSelectionSettingsTile(
+                key: const Key('accentColor'),
+                onMainColorChanged: (color) => settings.accentColor = createMaterialColor((color ?? Colors.teal).value),
+                initialColor: settings.accentColor,
+                title: Text(AppLocalizations.of(context)!.accentColor)),
               DropDownSettingsTile<Locale?>(
                 key: const Key('language'),
                 leading: const Icon(Icons.language),
@@ -143,52 +139,55 @@ class SettingsPage extends StatelessWidget {
                 stepSize: 1,
               ),
               ColorSelectionSettingsTile(
-                  key: const Key('accentColor'),
-                  onMainColorChanged: (color) =>
-                      settings.accentColor = createMaterialColor((color ?? Colors.teal).value),
-                  initialColor: settings.accentColor,
-                  title: Text(AppLocalizations.of(context)!.accentColor)),
-              ColorSelectionSettingsTile(
-                  key: const Key('sysColor'),
-                  onMainColorChanged: (color) => settings.sysColor = createMaterialColor((color ?? Colors.green).value),
-                  initialColor: settings.sysColor,
+                key: const Key('sysColor'),
+                onMainColorChanged: (color) => settings.sysColor = createMaterialColor((color ?? Colors.green).value),
+                initialColor: settings.sysColor,
                   title: Text(AppLocalizations.of(context)!.sysColor)),
               ColorSelectionSettingsTile(
-                  key: const Key('diaColor'),
-                  onMainColorChanged: (color) => settings.diaColor = createMaterialColor((color ?? Colors.teal).value),
-                  initialColor: settings.diaColor,
-                  title: Text(AppLocalizations.of(context)!.diaColor)),
+                key: const Key('diaColor'),
+                onMainColorChanged: (color) => settings.diaColor = createMaterialColor((color ?? Colors.teal).value),
+                initialColor: settings.diaColor,
+                title: Text(AppLocalizations.of(context)!.diaColor)),
               ColorSelectionSettingsTile(
-                  key: const Key('pulColor'),
-                  onMainColorChanged: (color) => settings.pulColor = createMaterialColor((color ?? Colors.red).value),
-                  initialColor: settings.pulColor,
-                  title: Text(AppLocalizations.of(context)!.pulColor)),
+                key: const Key('pulColor'),
+                onMainColorChanged: (color) => settings.pulColor = createMaterialColor((color ?? Colors.red).value),
+                initialColor: settings.pulColor,
+                title: Text(AppLocalizations.of(context)!.pulColor)),
             ]),
+
             SettingsSection(title: Text(AppLocalizations.of(context)!.behavior), children: [
               SwitchSettingsTile(
-                  key: const Key('validateInputs'),
-                  initialValue: settings.validateInputs,
-                  title: Text(AppLocalizations.of(context)!.validateInputs),
-                  leading: const Icon(Icons.edit),
-                  onToggle: (value) {
-                    settings.validateInputs = value;
-                  }),
+                key: const Key('allowManualTimeInput'),
+                initialValue: settings.allowManualTimeInput,
+                onToggle: (value) {
+                  settings.allowManualTimeInput = value;
+                },
+                leading: const Icon(Icons.details),
+                title: Text(AppLocalizations.of(context)!.allowManualTimeInput)),
               SwitchSettingsTile(
-                  key: const Key('allowMissingValues'),
-                  initialValue: settings.allowMissingValues,
-                  title: Text(AppLocalizations.of(context)!.allowMissingValues),
-                  leading: const Icon(Icons.report_off_outlined),
-                  onToggle: (value) {
-                    settings.allowMissingValues = value;
-                  }),
+                key: const Key('validateInputs'),
+                initialValue: settings.validateInputs,
+                title: Text(AppLocalizations.of(context)!.validateInputs),
+                leading: const Icon(Icons.edit),
+                onToggle: (value) {
+                  settings.validateInputs = value;
+                }),
               SwitchSettingsTile(
-                  key: const Key('confirmDeletion'),
-                  initialValue: settings.confirmDeletion,
-                  title: Text(AppLocalizations.of(context)!.confirmDeletion),
-                  leading: const Icon(Icons.check),
-                  onToggle: (value) {
-                    settings.confirmDeletion = value;
-                  }),
+                key: const Key('allowMissingValues'),
+                initialValue: settings.allowMissingValues,
+                title: Text(AppLocalizations.of(context)!.allowMissingValues),
+                leading: const Icon(Icons.report_off_outlined),
+                onToggle: (value) {
+                  settings.allowMissingValues = value;
+                }),
+              SwitchSettingsTile(
+                key: const Key('confirmDeletion'),
+                initialValue: settings.confirmDeletion,
+                title: Text(AppLocalizations.of(context)!.confirmDeletion),
+                leading: const Icon(Icons.check),
+                onToggle: (value) {
+                  settings.confirmDeletion = value;
+                }),
               InputSettingsTile(
                 key: const Key('sysWarn'),
                 title: Text(AppLocalizations.of(context)!.sysWarn),
@@ -228,7 +227,19 @@ class SettingsPage extends StatelessWidget {
                 onPressed: (context) {
                   showDialog(
                     context: context,
-                    builder: (context) => const DetermineAgeValues(),
+                    builder: (context) => NumberInputDialoge(
+                      hintText: AppLocalizations.of(context)!.age,
+                      onParsableSubmit: (age) {
+                        settings.sysWarn = BloodPressureWarnValues.getUpperSysWarnValue(age);
+                        settings.diaWarn = BloodPressureWarnValues.getUpperDiaWarnValue(age);
+                        Navigator.of(context).pop();
+                        Navigator.of(context).pop();
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => const SettingsPage()),
+                        );
+                      },
+                    )
                   );
                 },
               ),
@@ -237,10 +248,24 @@ class SettingsPage extends StatelessWidget {
                 title: Text(AppLocalizations.of(context)!.aboutWarnValuesScreen),
                 description: Text(AppLocalizations.of(context)!.aboutWarnValuesScreenDesc),
                 leading: const Icon(Icons.info_outline),
+                trailing: const Icon(Icons.arrow_forward_ios),
                 onPressed: (context) {
                   Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) => const AboutWarnValuesScreen()),
+                  );
+                }
+              ),
+              SettingsTile(
+                key: const Key('GraphMarkingsScreen'),
+                title: Text(AppLocalizations.of(context)!.text),
+                description: Text(AppLocalizations.of(context)!.text), // TODO desc u title
+                leading: const Icon(Icons.legend_toggle_outlined),
+                trailing: const Icon(Icons.arrow_forward_ios),
+                onPressed: (context) {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const GraphMarkingsScreen()),
                   );
                 }
               ),
@@ -315,10 +340,7 @@ class SettingsPage extends StatelessWidget {
                 key: const Key('licenses'),
                 title: Text(AppLocalizations.of(context)!.licenses),
                 leading: const Icon(Icons.policy_outlined),
-                trailing: Icon(
-                  Icons.arrow_forward_ios,
-                  color: Theme.of(context).highlightColor,
-                ),
+                trailing: const Icon(Icons.arrow_forward_ios),
                 onPressed: (context) {
                   showLicensePage(context: context);
                 },
@@ -327,59 +349,6 @@ class SettingsPage extends StatelessWidget {
           ],
         );
       }),
-    );
-  }
-}
-
-class DetermineAgeValues extends StatefulWidget {
-  const DetermineAgeValues({super.key});
-
-  @override
-  State<DetermineAgeValues> createState() => _DetermineAgeValuesState();
-}
-
-class _DetermineAgeValuesState extends State<DetermineAgeValues> {
-  final formKey = GlobalKey<FormState>();
-  final controller = TextEditingController();
-
-  @override
-  void dispose() {
-    // Clean up the controller when the widget is disposed.
-    controller.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return AlertDialog(
-      content: TextFormField(
-        key: formKey,
-        controller: controller,
-        inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-        decoration: InputDecoration(hintText: AppLocalizations.of(context)!.age),
-      ),
-      actions: [
-        Consumer<Settings>(builder: (context, settings, child) {
-          return ElevatedButton(
-              onPressed: () {
-                if (controller.text.isEmpty || (int.tryParse(controller.text) == null)) {
-                  return;
-                }
-                int age = int.parse(controller.text);
-                settings.sysWarn = BloodPressureWarnValues.getUpperSysWarnValue(age);
-                settings.diaWarn = BloodPressureWarnValues.getUpperDiaWarnValue(age);
-                Navigator.of(context).pop();
-                Navigator.of(context).pop();
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const SettingsPage()),
-                );
-              },
-              child: Text(AppLocalizations.of(context)!.btnConfirm)
-          );
-        }),
-
-      ],
     );
   }
 }

@@ -614,6 +614,16 @@ class Settings extends ChangeNotifier {
     _prefs.setStringList('exportItemsPdf', value);
     notifyListeners();
   }
+
+  Iterable<int> get horizontalGraphLines {
+    final linesStr = _prefs.getStringList('horizontalGraphLines') ?? [];
+    return linesStr.map((e) => int.parse(e));
+  }
+
+  set horizontalGraphLines(Iterable<int> value) {
+    _prefs.setStringList('horizontalGraphLines', value.map((e) => e.toString()).toList());
+    notifyListeners();
+  }
 }
 
 enum TimeStep {

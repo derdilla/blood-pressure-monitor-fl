@@ -135,7 +135,7 @@ class _AddMeasurementPageState extends State<AddMeasurementPage> {
                           key: const Key('txtPul'),
                           initialValue: (_pulse ?? '').toString(),
                           minLines: 1,
-                          maxLines: 4,
+                          maxLines: 4, // TODO: check if this shouldn't be part of note input
                           hintText: AppLocalizations.of(context)!.pulLong,
                           basicValidation: !settings.allowMissingValues,
                           preValidation: (v) => _pulse = int.tryParse(v ?? ''),

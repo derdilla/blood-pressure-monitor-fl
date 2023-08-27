@@ -508,6 +508,19 @@ class RamSettings extends ChangeNotifier implements Settings {
     notifyListeners();
   }
 
+  Iterable<int> _horizontalGraphLines = [];
+
+  @override
+  Iterable<int> get horizontalGraphLines {
+    return _horizontalGraphLines;
+  }
+
+  @override
+  set horizontalGraphLines(Iterable<int> value) {
+    _horizontalGraphLines = value;
+    notifyListeners();
+  }
+
   @override
   void changeStepSize(TimeStep value) {
     graphStepSize = value;
