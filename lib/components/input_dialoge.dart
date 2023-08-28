@@ -20,6 +20,7 @@ class InputDialoge extends StatefulWidget {
 class _InputDialogeState extends State<InputDialoge> {
   final formKey = GlobalKey<FormState>();
   final controller = TextEditingController();
+  final inputFocusNode = FocusNode();
 
   @override
   void dispose() {
@@ -30,9 +31,11 @@ class _InputDialogeState extends State<InputDialoge> {
 
   @override
   Widget build(BuildContext context) {
+    inputFocusNode.requestFocus();
     return AlertDialog(
       content: TextFormField(
         key: formKey,
+        focusNode: inputFocusNode,
         controller: controller,
         inputFormatters: widget.inputFormatters,
         keyboardType: widget.keyboardType,

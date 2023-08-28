@@ -43,6 +43,7 @@ class _LineChartState extends State<_LineChart> {
                     // calculate lines for graph
                     List<FlSpot> pulSpots = [], diaSpots = [], sysSpots = [];
                     int maxValue = 0;
+                    int minValue = (settings.validateInputs ? 30 : 0);
                     double? graphBegin;
                     double? graphEnd;
                     for (var e in data) {
@@ -77,7 +78,7 @@ class _LineChartState extends State<_LineChart> {
                         return LineChart(
                           duration: const Duration(milliseconds: 200),
                           LineChartData(
-                              minY: settings.validateInputs ? 30 : 0,
+                              minY: minValue.toDouble(),
                               maxY: maxValue + 5,
                               titlesData: _buildFlTitlesData(settings),
                               lineTouchData: const LineTouchData(
@@ -94,7 +95,7 @@ class _LineChartState extends State<_LineChart> {
                                 if (settings.drawRegressionLines)
                                   _buildRegressionLine(pulSpots),
                                 for (final horizontalLine in settings.horizontalGraphLines)
-                                  if (horizontalLine.height < maxValue && horizontalLine.height > (settings.validateInputs ? 30 : 0))
+                                  if (horizontalLine.height < maxValue && horizontalLine.height > minValue)
                                     _buildHorizontalLine(horizontalLine, graphBegin!, graphEnd!),
                               ]
                           ),
