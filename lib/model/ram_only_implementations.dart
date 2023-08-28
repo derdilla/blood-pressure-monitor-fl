@@ -7,6 +7,8 @@ import 'package:blood_pressure_app/model/settings_store.dart';
 import 'package:file_saver/file_saver.dart' show MimeType;
 import 'package:flutter/material.dart';
 
+import 'horizontal_graph_line.dart';
+
 class RamBloodPressureModel extends ChangeNotifier implements BloodPressureModel {
   final List<BloodPressureRecord> _records = [];
 

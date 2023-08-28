@@ -94,7 +94,8 @@ class _LineChartState extends State<_LineChart> {
                                 if (settings.drawRegressionLines)
                                   _buildRegressionLine(pulSpots),
                                 for (final horizontalLine in settings.horizontalGraphLines)
-                                  _buildHorizontalLine(horizontalLine, graphBegin!, graphEnd!),
+                                  if (horizontalLine.height < maxValue && horizontalLine.height > (settings.validateInputs ? 30 : 0))
+                                    _buildHorizontalLine(horizontalLine, graphBegin!, graphEnd!),
                               ]
                           ),
                         );

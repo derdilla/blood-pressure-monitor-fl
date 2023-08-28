@@ -134,8 +134,6 @@ class _AddMeasurementPageState extends State<AddMeasurementPage> {
                       ValueInput(
                           key: const Key('txtPul'),
                           initialValue: (_pulse ?? '').toString(),
-                          minLines: 1,
-                          maxLines: 4, // TODO: check if this shouldn't be part of note input
                           hintText: AppLocalizations.of(context)!.pulLong,
                           basicValidation: !settings.allowMissingValues,
                           preValidation: (v) => _pulse = int.tryParse(v ?? ''),
@@ -149,6 +147,8 @@ class _AddMeasurementPageState extends State<AddMeasurementPage> {
                       ),
                       TextFormField(
                         initialValue: (_note ?? '').toString(),
+                        minLines: 1,
+                        maxLines: 4,
                         decoration: InputDecoration(hintText: AppLocalizations.of(context)?.addNote),
                         validator: (String? value) {
                           _note = value;

@@ -36,30 +36,30 @@ class GraphMarkingsScreen extends StatelessWidget {
               if (i > lines.length) { // last row
                 return ListTile(
                   leading: const Icon(Icons.add),
+                  title: Text(localizations.addLine),
                   onTap: () async {
                     final color = await showDialog<Color>(context: context,
                         builder: (context) => SimpleDialog(
                           children: [MaterialColorPicker(
-                              circleSize: 53,
-                              onMainColorChange: (color) {
-                                Navigator.of(context).pop(color);
-                              },
-                            )],));
+                            circleSize: 53,
+                            onMainColorChange: (color) {
+                              Navigator.of(context).pop(color);
+                            },
+                          )],));
                     if (!context.mounted) return;
                     final height = await showDialog<int>(context: context,
-                      builder: (context) => NumberInputDialoge(
-                        hintText: localizations.linePositionY,
-                        onParsableSubmit: (value) {
-                          Navigator.of(context).pop(value);
-                        }
-                      )
+                        builder: (context) => NumberInputDialoge(
+                            hintText: localizations.linePositionY,
+                            onParsableSubmit: (value) {
+                              Navigator.of(context).pop(value);
+                            }
+                        )
                     );
 
                     if (color == null || height == null) return;
                     lines.add(HorizontalGraphLine(color, height));
                     settings.horizontalGraphLines = lines;
                   },
-                  title: Text(localizations.addEntry),
                 );
               }
               return ListTile(
