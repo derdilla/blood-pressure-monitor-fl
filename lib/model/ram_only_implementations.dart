@@ -7,6 +7,8 @@ import 'package:blood_pressure_app/model/settings_store.dart';
 import 'package:file_saver/file_saver.dart' show MimeType;
 import 'package:flutter/material.dart';
 
+import 'horizontal_graph_line.dart';
+
 class RamBloodPressureModel extends ChangeNotifier implements BloodPressureModel {
   final List<BloodPressureRecord> _records = [];
 
@@ -505,6 +507,19 @@ class RamSettings extends ChangeNotifier implements Settings {
   @override
   set exportItemsPdf(List<String> value) {
     _exportItemsPdf = value;
+    notifyListeners();
+  }
+
+  Iterable<HorizontalGraphLine> _horizontalGraphLines = [];
+
+  @override
+  Iterable<HorizontalGraphLine> get horizontalGraphLines {
+    return _horizontalGraphLines;
+  }
+
+  @override
+  set horizontalGraphLines(Iterable<HorizontalGraphLine> value) {
+    _horizontalGraphLines = value;
     notifyListeners();
   }
 

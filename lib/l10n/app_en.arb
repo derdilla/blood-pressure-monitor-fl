@@ -409,5 +409,13 @@
   "startWithAddMeasurementPage": "Measurement on launch",
   "@startWithAddMeasurementPage": {},
   "startWithAddMeasurementPageDescription": "Upon app launch, measurement input screen shown.",
-  "@startWithAddMeasurementPageDescription": {}
+  "@startWithAddMeasurementPageDescription": {},
+  "horizontalLines": "Horizontal lines",
+  "@horizontalLines": {},
+  "linePositionY": "Line position (y)",
+  "@linePositionY": {},
+  "customGraphMarkings": "Custom markings",
+  "@customGraphMarkings": {},
+  "addLine": "Add line",
+  "@addLine": {}
 }
