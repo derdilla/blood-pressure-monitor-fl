@@ -1,5 +1,6 @@
+import 'package:blood_pressure_app/components/consistent_future_builder.dart';
 import 'package:blood_pressure_app/components/measurement_graph.dart';
-import 'package:blood_pressure_app/components/measurement_list.dart';
+import 'package:blood_pressure_app/model/blood_pressure.dart';
 import 'package:blood_pressure_app/model/settings_store.dart';
 import 'package:blood_pressure_app/screens/add_measurement.dart';
 import 'package:blood_pressure_app/screens/settings.dart';
@@ -8,6 +9,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+
+import '../components/measurement_list/measurement_list.dart';
 
 /// The only use of this variable is to avoid loading the AddMeasurementPage twice,
 /// when startWithAddMeasurementPage is active
@@ -46,7 +49,25 @@ class AppHome extends StatelessWidget {
             padding: padding,
             child: Column(children: [
               const MeasurementGraph(),
-              Expanded(flex: 50, child: MeasurementList(context)),
+              Expanded(
+                flex: 50,
+                child: Consumer<BloodPressureModel>(
+                  builder: (context, model, child) {
+                    return Consumer<Settings>(
+                      builder: (context, settings, child) {
+                        return ConsistentFutureBuilder(
+                            future: model.getInTimeRange(settings.displayDataStart, settings.displayDataEnd),
+                            onData: (context, data) {
+                              return MeasurementList(
+                                  entries: data
+                              );
+                            }
+                        );
+                      },
+                    );
+                  },
+                )
+              ),
             ]),
           ),
         );
