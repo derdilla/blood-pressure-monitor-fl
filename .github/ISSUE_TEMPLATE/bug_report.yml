@@ -1,0 +1,55 @@
+name: "🐛 Bug Report"
+description: Create a new ticket for a bug.
+title: "[BUG] - <title>"
+labels: [
+  "bug"
+]
+body:
+  - type: textarea
+    id: description
+    attributes:
+      label: "Description"
+      description: Please enter an explicit description of your issue
+      placeholder: Short and explicit description of your incident...
+    validations:
+      required: true
+  - type: input
+    id: device_version
+    attributes:
+      label: "Android version"
+      description: Enter your device version
+      placeholder: Android 14
+    validations:
+      required: false
+  - type: textarea
+    id: reprod
+    attributes:
+      label: "Reproduction steps"
+      description: If you want to, you can briefly write how to reproduce the issue
+      value: |
+        1. Go to '...'
+        2. Click on '....'
+        3. Scroll down to '....'
+        4. See error
+      render: bash
+    validations:
+      required: false
+  - type: textarea
+    id: screenshot
+    attributes:
+      label: "Screenshots"
+      description: If you want to, you can add screenshots to help explain your problem.
+      value: |
+        ![DESCRIPTION](LINK.png)
+      render: bash
+    validations:
+      required: false
+  - type: textarea
+    id: app_debug_info
+    attributes:
+      label: "App debug info"
+      description: Information about app version and Settings.
+      placeholder: You can make a screenshot of the page that appears when clicking on version at the bottom of the settings page.
+      render: bash
+    validations:
+      required: false
