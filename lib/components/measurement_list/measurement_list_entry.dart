@@ -13,6 +13,7 @@ class MeasurementListRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final localizations = AppLocalizations.of(context)!;
     return Consumer<Settings>(
       builder: (context, settings, child) {
         final formatter = DateFormat(settings.dateFormatString);
@@ -25,7 +26,18 @@ class MeasurementListRow extends StatelessWidget {
               children: [
                 Text(formatter.format(record.creationTime), textAlign: TextAlign.right,),
                 const Spacer(),
-                const MeasurementItemMenu()
+                IconButton(
+                  onPressed: () {
+                    // TODO: implement
+                  },
+                  icon: const Icon(Icons.edit, color: Colors.blue,),
+                  tooltip: localizations.edit,
+                ),
+                IconButton(
+                  onPressed: () => _deleteEntry(settings, context, localizations),
+                  icon: const Icon(Icons.delete, color: Colors.red,),
+                  tooltip: localizations.delete,
+                ),
               ],
             ),
            if (record.notes.isNotEmpty)
@@ -57,30 +69,41 @@ class MeasurementListRow extends StatelessWidget {
       ]
     );
   }
-}
 
-class MeasurementItemMenu extends StatelessWidget {
-  const MeasurementItemMenu({super.key});
+  void _deleteEntry(Settings settings, BuildContext context, AppLocalizations localizations) async {
+    final model = Provider.of<BloodPressureModel>(context, listen: false);
+    final messanger = ScaffoldMessenger.of(context);
+    bool confirmedDeletion = false;
+    if (settings.confirmDeletion) {
+      confirmedDeletion = await showDialog<bool>(context: context,
+          builder: (context) => AlertDialog(
+            title: Text(AppLocalizations.of(context)!.confirmDelete),
+            content: Text(AppLocalizations.of(context)!.confirmDeleteDesc),
+            actions: [
+              ElevatedButton(
+                  onPressed: () => Navigator.of(context).pop(false),
+                  child: Text(AppLocalizations.of(context)!.btnCancel)),
+              ElevatedButton(
+                  onPressed: () => Navigator.of(context).pop(true),
+                  child: Text(AppLocalizations.of(context)!.btnConfirm)),
+            ],
+          )
+      ) ?? false;
+    } else {
+      confirmedDeletion = true;
+    }
 
-  @override
-  Widget build(BuildContext context) {
-    final localizations = AppLocalizations.of(context)!;
-    return PopupMenuButton<MeasurementItemMenuOption>( // TODO: implement
-      itemBuilder: (context) => [
-        PopupMenuItem<MeasurementItemMenuOption>(
-          value: MeasurementItemMenuOption.edit,
-          child: Text(localizations.edit),
+    if (confirmedDeletion) {
+      model.delete(record.creationTime);
+      messanger.removeCurrentSnackBar();
+      messanger.showSnackBar(SnackBar(
+        duration: const Duration(seconds: 5),
+        content: Text(localizations.deletionConfirmed),
+        action: SnackBarAction(
+          label: localizations.btnUndo,
+          onPressed: () => model.add(record),
         ),
-        PopupMenuItem<MeasurementItemMenuOption>(
-          value: MeasurementItemMenuOption.delete,
-          child: Text(localizations.delete),
-        ),
-      ],
-    );
+      ));
+    }
   }
-}
-
-enum MeasurementItemMenuOption {
-  edit,
-  delete
 }
