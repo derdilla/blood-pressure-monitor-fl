@@ -87,18 +87,9 @@ class MeasurementList extends StatelessWidget {
                                 confirmDismiss: (direction) async {
                                   final model = Provider.of<BloodPressureModel>(context, listen: false);
                                   if (direction == DismissDirection.startToEnd) { // edit
-                                    model.delete(data[index].creationTime);
                                     Navigator.push(
                                       context,
-                                      MaterialPageRoute(
-                                          builder: (context) => AddMeasurementPage(
-                                            initTime: data[index].creationTime,
-                                            initSys: data[index].systolic,
-                                            initDia: data[index].diastolic,
-                                            initPul: data[index].pulse,
-                                            initNote: data[index].notes,
-                                            addInitialValuesOnCancel: true,
-                                          )),
+                                      MaterialPageRoute(builder: (context) => AddMeasurementPage.edit(data[index])),
                                     );
                                     return false;
                                   } else { // delete

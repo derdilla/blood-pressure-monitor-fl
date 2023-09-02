@@ -1,5 +1,6 @@
 import 'package:blood_pressure_app/model/blood_pressure.dart';
 import 'package:blood_pressure_app/model/settings_store.dart';
+import 'package:blood_pressure_app/screens/add_measurement.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
@@ -27,9 +28,7 @@ class MeasurementListRow extends StatelessWidget {
                 Text(formatter.format(record.creationTime), textAlign: TextAlign.right,),
                 const Spacer(),
                 IconButton(
-                  onPressed: () {
-                    // TODO: implement
-                  },
+                  onPressed: () => _editEntry(context),
                   icon: const Icon(Icons.edit, color: Colors.blue,),
                   tooltip: localizations.edit,
                 ),
@@ -105,5 +104,9 @@ class MeasurementListRow extends StatelessWidget {
         ),
       ));
     }
+  }
+
+  void _editEntry(BuildContext context) async {
+    Navigator.push(context, MaterialPageRoute(builder: (context) => AddMeasurementPage.edit(record)));
   }
 }

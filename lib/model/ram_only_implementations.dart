@@ -11,6 +11,14 @@ import 'horizontal_graph_line.dart';
 
 class RamBloodPressureModel extends ChangeNotifier implements BloodPressureModel {
   final List<BloodPressureRecord> _records = [];
+  
+  static RamBloodPressureModel fromEntries(List<BloodPressureRecord> records) {
+    final m = RamBloodPressureModel();
+    for (var e in records) {
+      m.add(e);
+    }
+    return m;
+  }
 
   @override
   Future<void> add(BloodPressureRecord measurement) async {

@@ -15,7 +15,7 @@ class AddMeasurementPage extends StatefulWidget {
   final int? initDia;
   final int? initPul;
   final String? initNote;
-  final bool addInitialValuesOnCancel;
+  final bool isEdit;
 
   const AddMeasurementPage(
       {super.key,
@@ -24,7 +24,18 @@ class AddMeasurementPage extends StatefulWidget {
       this.initDia,
       this.initPul,
       this.initNote,
-      this.addInitialValuesOnCancel = false});
+      this.isEdit = false});
+
+  static AddMeasurementPage edit(BloodPressureRecord record) {
+    return AddMeasurementPage(
+      initTime: record.creationTime,
+      initSys: record.systolic,
+      initDia: record.diastolic,
+      initPul: record.pulse,
+      initNote: record.notes,
+      isEdit: true,
+    );
+  }
 
   @override
   State<AddMeasurementPage> createState() => _AddMeasurementPageState();
@@ -146,6 +157,7 @@ class _AddMeasurementPageState extends State<AddMeasurementPage> {
                           }
                       ),
                       TextFormField(
+                        key: const Key('txtNote'),
                         initialValue: (_note ?? '').toString(),
                         minLines: 1,
                         maxLines: 4,
@@ -163,15 +175,6 @@ class _AddMeasurementPageState extends State<AddMeasurementPage> {
                           TextButton(
                             key: const Key('btnCancel'),
                             onPressed: () {
-                              if (widget.addInitialValuesOnCancel) {
-                                assert(widget.initTime != null);
-                                Provider.of<BloodPressureModel>(context, listen: false).add(BloodPressureRecord(
-                                    widget.initTime ?? DateTime.now(),
-                                    widget.initSys,
-                                    widget.initDia,
-                                    widget.initPul,
-                                    widget.initNote ?? ''));
-                              }
                               Navigator.of(context).pop();
                             },
 
@@ -189,6 +192,12 @@ class _AddMeasurementPageState extends State<AddMeasurementPage> {
                                 final model = Provider.of<BloodPressureModel>(context, listen: false);
                                 final navigator = Navigator.of(context);
 
+                                if (widget.isEdit) {
+                                  assert(widget.initTime != null);
+                                  if (widget.initTime != null) {
+                                    await model.delete(widget.initTime!);
+                                  }
+                                }
                                 await model.add(BloodPressureRecord(_time, _systolic, _diastolic, _pulse, _note ?? ''));
                                 if (settings.exportAfterEveryEntry && context.mounted) {
                                   final exporter = Exporter(settings, model, ScaffoldMessenger.of(context),
