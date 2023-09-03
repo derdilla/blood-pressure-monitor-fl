@@ -21,7 +21,7 @@ class MeasurementListRow extends StatelessWidget {
         return ExpansionTile(
           // Leading color possible
           title: buildRow(formatter),
-          childrenPadding: EdgeInsets.only(bottom: 10),
+          childrenPadding: const EdgeInsets.only(bottom: 10),
           children: [
             Row(
               children: [

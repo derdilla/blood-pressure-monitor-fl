@@ -49,6 +49,7 @@ class AppHome extends StatelessWidget {
             padding: padding,
             child: Column(children: [
               const MeasurementGraph(),
+              ModernListHeader(),
               Expanded(
                 flex: 50,
                 child: Consumer<BloodPressureModel>(
@@ -59,7 +60,7 @@ class AppHome extends StatelessWidget {
                             future: model.getInTimeRange(settings.displayDataStart, settings.displayDataEnd),
                             onData: (context, data) {
                               return MeasurementList(
-                                  entries: data
+                                entries: data
                               );
                             }
                         );
