@@ -29,6 +29,42 @@ void main() {
         final noteInput = tester.widget<TextFormField>(find.byKey(const Key('txtNote')));
         expect(noteInput.initialValue, '');
       });
+      testWidgets('should not save on cancel', (tester) async {
+        final record = BloodPressureRecord(DateTime.now(), 123, 89, 56, 'simple test note');
+        final model = RamBloodPressureModel.fromEntries([record]);
+        await _initPage(tester, const AddMeasurementPage(), model: model);
+        expect((await model.all).length, 1);
+
+        expect(find.byKey(const Key ('txtNote')), findsOneWidget);
+        await tester.enterText(find.byKey(const Key ('txtNote')), 'edited text');
+
+        expect(find.byKey(const Key('btnCancel')), findsOneWidget);
+        await tester.tap(find.byKey(const Key('btnCancel')));
+        await tester.pumpAndSettle();
+        expect((await model.all).length, 1);
+      });
+      testWidgets('should save changes', (tester) async {
+        final record = BloodPressureRecord(DateTime.now(), 123, 89, 56, 'simple test note');
+        final model = RamBloodPressureModel.fromEntries([record]);
+        await _initPage(tester, const AddMeasurementPage(), model: model);
+        expect((await model.all).first, record);
+
+        expect(find.byKey(const Key ('txtSys')), findsOneWidget);
+        await tester.enterText(find.byKey(const Key ('txtSys')), '120');
+        expect(find.byKey(const Key ('txtDia')), findsOneWidget);
+        await tester.enterText(find.byKey(const Key ('txtDia')), '70');
+        expect(find.byKey(const Key ('txtPul')), findsOneWidget);
+        await tester.enterText(find.byKey(const Key ('txtPul')), '60');
+        expect(find.byKey(const Key ('txtNote')), findsOneWidget);
+        await tester.enterText(find.byKey(const Key ('txtNote')), 'entered text');
+
+        expect(find.byKey(const Key('btnSave')), findsOneWidget);
+        await tester.tap(find.byKey(const Key('btnSave')));
+        await tester.pumpAndSettle();
+        expect((await model.all).length, 2);
+        expect((await model.all)[1].notes, 'entered text');
+        expect((await model.all)[1].diastolic, 70);
+      });
     });
     group('edit mode', () {
       testWidgets('smoke test', (tester) async {
