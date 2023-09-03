@@ -153,6 +153,14 @@ class SettingsPage extends StatelessWidget {
                 onMainColorChanged: (color) => settings.pulColor = createMaterialColor((color ?? Colors.red).value),
                 initialColor: settings.pulColor,
                 title: Text(AppLocalizations.of(context)!.pulColor)),
+              SwitchSettingsTile(
+                key: const Key('useLegacyList'),
+                initialValue: settings.useLegacyList,
+                onToggle: (value) {
+                  settings.useLegacyList = value;
+                },
+                leading: const Icon(Icons.list_alt_outlined),
+                title: Text(AppLocalizations.of(context)!.useLegacyList)),
             ]),
 
             SettingsSection(title: Text(AppLocalizations.of(context)!.behavior), children: [

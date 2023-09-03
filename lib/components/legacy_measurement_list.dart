@@ -9,11 +9,11 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
-class MeasurementList extends StatelessWidget {
+class LegacyMeasurementsList extends StatelessWidget {
   late final List<int> _tableElementsSizes;
   late final int _sideFlex;
 
-  MeasurementList(BuildContext context, {super.key}) {
+  LegacyMeasurementsList(BuildContext context, {super.key}) {
     if (MediaQuery.of(context).size.width < 1000) {
       _tableElementsSizes = [33, 9, 9, 9, 30];
       _sideFlex = 1;

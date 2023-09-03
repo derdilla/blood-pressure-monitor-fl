@@ -417,5 +417,7 @@
   "customGraphMarkings": "Custom markings",
   "@customGraphMarkings": {},
   "addLine": "Add line",
-  "@addLine": {}
+  "@addLine": {},
+  "useLegacyList": "Use legacy list",
+  "@useLegacyList": {}
 }

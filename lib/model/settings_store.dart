@@ -627,6 +627,15 @@ class Settings extends ChangeNotifier {
     _prefs.setStringList('horizontalGraphLines', value.map((e) => jsonEncode(e)).toList());
     notifyListeners();
   }
+
+  bool get useLegacyList {
+    return _prefs.getBool('useLegacyList') ?? false;
+  }
+
+  set useLegacyList(bool value) {
+    _prefs.setBool('useLegacyList', value);
+    notifyListeners();
+  }
 }
 
 enum TimeStep {

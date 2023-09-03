@@ -531,6 +531,19 @@ class RamSettings extends ChangeNotifier implements Settings {
     notifyListeners();
   }
 
+  bool _useLegacyList = false;
+
+  @override
+  bool get useLegacyList {
+    return _useLegacyList;
+  }
+
+  @override
+  set useLegacyList(bool value) {
+    _useLegacyList = value;
+    notifyListeners();
+  }
+
   @override
   void changeStepSize(TimeStep value) {
     graphStepSize = value;

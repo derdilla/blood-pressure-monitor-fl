@@ -1,4 +1,5 @@
 import 'package:blood_pressure_app/components/consistent_future_builder.dart';
+import 'package:blood_pressure_app/components/legacy_measurement_list.dart';
 import 'package:blood_pressure_app/components/measurement_graph.dart';
 import 'package:blood_pressure_app/model/blood_pressure.dart';
 import 'package:blood_pressure_app/model/settings_store.dart';
@@ -47,29 +48,35 @@ class AppHome extends StatelessWidget {
         return Center(
           child: Container(
             padding: padding,
-            child: Column(children: [
-              const MeasurementGraph(),
-              ModernListHeader(),
-              Expanded(
-                flex: 50,
-                child: Consumer<BloodPressureModel>(
-                  builder: (context, model, child) {
-                    return Consumer<Settings>(
-                      builder: (context, settings, child) {
-                        return ConsistentFutureBuilder(
+            child: Consumer<Settings>(
+              builder: (context, settings, child) {
+                return Column(children: [
+                  const MeasurementGraph(),
+                  if (!settings.useLegacyList)
+                    const ModernListHeader(),
+                  if (!settings.useLegacyList)
+                    Expanded(
+                      flex: 50,
+                      child: Consumer<BloodPressureModel>(
+                        builder: (context, model, child) {
+                          return ConsistentFutureBuilder(
                             future: model.getInTimeRange(settings.displayDataStart, settings.displayDataEnd),
                             onData: (context, data) {
                               return MeasurementList(
                                 entries: data
                               );
                             }
-                        );
-                      },
-                    );
-                  },
-                )
-              ),
-            ]),
+                          );
+                        },
+                      )
+                    ),
+                  if(settings.useLegacyList)
+                    Expanded(
+                      flex: 50,
+                      child: LegacyMeasurementsList(context)),
+                ]);
+              }
+            ),
           ),
         );
       },
