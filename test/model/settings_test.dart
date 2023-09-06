@@ -34,7 +34,6 @@ void main() {
       expect(s.pulColor.value, 0xFFF44336);
       expect(s.allowManualTimeInput, true);
       expect(s.dateFormatString, 'yyyy-MM-dd  HH:mm');
-      expect(s.iconSize, 30);
       expect(s.sysWarn, 120);
       expect(s.diaWarn, 80);
       expect(s.validateInputs, true);
@@ -78,7 +77,6 @@ void main() {
       s.pulColor = createMaterialColor(0xFF942DA7);
       s.allowManualTimeInput = false;
       s.dateFormatString = 'yy:dd @ H:mm.ss';
-      s.iconSize = 50;
       s.sysWarn = 314;
       s.diaWarn = 159;
       s.validateInputs = false;
@@ -105,7 +103,6 @@ void main() {
       expect(s.diaColor.value, 0xFF942DA6);
       expect(s.pulColor.value, 0xFF942DA7);
       expect(s.allowManualTimeInput, false);
-      expect(s.iconSize, 50);
       expect(s.sysWarn, 314);
       expect(s.diaWarn, 159);
       expect(s.validateInputs, false);
@@ -143,7 +140,6 @@ void main() {
       s.pulColor = createMaterialColor(0xFF942DA7);
       s.allowManualTimeInput = false;
       s.dateFormatString = 'yy:dd @ H:mm.ss';
-      s.iconSize = 10;
       s.sysWarn = 314;
       s.diaWarn = 159;
       s.validateInputs = false;
@@ -161,7 +157,7 @@ void main() {
       s.allowMissingValues = true;
       s.language = const Locale('de');
 
-      expect(i, 28);
+      expect(i, 27);
     });
   });
 
@@ -186,7 +182,6 @@ void main() {
       expect(s.pulColor.value, 0xFFF44336);
       expect(s.allowManualTimeInput, true);
       expect(s.dateFormatString, 'yyyy-MM-dd  HH:mm');
-      expect(s.iconSize, 30);
       expect(s.sysWarn, 120);
       expect(s.diaWarn, 80);
       expect(s.validateInputs, true);
@@ -230,7 +225,6 @@ void main() {
       s.pulColor = createMaterialColor(0xFF942DA7);
       s.allowManualTimeInput = false;
       s.dateFormatString = 'yy:dd @ H:mm.ss';
-      s.iconSize = 50;
       s.sysWarn = 314;
       s.diaWarn = 159;
       s.validateInputs = false;
@@ -257,7 +251,6 @@ void main() {
       expect(s.diaColor.value, 0xFF942DA6);
       expect(s.pulColor.value, 0xFF942DA7);
       expect(s.allowManualTimeInput, false);
-      expect(s.iconSize, 50);
       expect(s.sysWarn, 314);
       expect(s.diaWarn, 159);
       expect(s.validateInputs, false);
@@ -295,7 +288,6 @@ void main() {
       s.pulColor = createMaterialColor(0xFF942DA7);
       s.allowManualTimeInput = false;
       s.dateFormatString = 'yy:dd @ H:mm.ss';
-      s.iconSize = 10;
       s.sysWarn = 314;
       s.diaWarn = 159;
       s.validateInputs = false;
@@ -313,7 +305,7 @@ void main() {
       s.allowMissingValues = true;
       s.language = const Locale('de');
 
-      expect(i, 28);
+      expect(i, 27);
     });
   });
 }

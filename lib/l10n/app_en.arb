@@ -419,5 +419,7 @@
   "addLine": "Add line",
   "@addLine": {},
   "useLegacyList": "Use legacy list",
-  "@useLegacyList": {}
+  "@useLegacyList": {},
+  "addMeasurement": "Add measurement",
+  "@addMeasurement": {}
 }

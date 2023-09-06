@@ -63,7 +63,6 @@ class RamSettings extends ChangeNotifier implements Settings {
   bool _followSystemDarkMode = true;
   double _graphLineThickness = 3;
   TimeStep _graphStepSize = TimeStep.day;
-  double _iconSize = 30;
   MaterialColor _pulColor = Colors.pink;
   MaterialColor _sysColor = Colors.pink;
   int _sysWarn = 120;
@@ -229,15 +228,6 @@ class RamSettings extends ChangeNotifier implements Settings {
   @override
   set graphStepSize(TimeStep value) {
     _graphStepSize = value;
-    notifyListeners();
-  }
-
-  @override
-  double get iconSize => _iconSize;
-
-  @override
-  set iconSize(double value) {
-    _iconSize = value;
     notifyListeners();
   }
 

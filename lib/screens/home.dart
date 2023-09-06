@@ -98,7 +98,8 @@ class AppHome extends StatelessWidget {
                   dimension: 75,
                   child: FittedBox(
                     child: FloatingActionButton(
-                      tooltip: 'Add measurement', // TODO
+                      heroTag: "floatingActionAdd",
+                      tooltip: localizations.addMeasurement,
                       autofocus: true,
                       onPressed: () {
                         Navigator.push(
@@ -114,6 +115,7 @@ class AppHome extends StatelessWidget {
                   height: 10,
                 ),
                 FloatingActionButton(
+                  heroTag: "floatingActionStatistics",
                   tooltip: localizations.statistics,
                   backgroundColor: const Color(0xFF6F6F6F),
                   onPressed: () {
@@ -125,6 +127,7 @@ class AppHome extends StatelessWidget {
                   height: 10,
                 ),
                 FloatingActionButton(
+                  heroTag: "floatingActionSettings",
                   tooltip: localizations.settings,
                   backgroundColor: const Color(0xFF6F6F6F),
                   child: const Icon(Icons.settings, color: Colors.black),
