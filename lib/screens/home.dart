@@ -9,6 +9,7 @@ import 'package:blood_pressure_app/screens/statistics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 
 import '../components/measurement_list/measurement_list.dart';
@@ -22,6 +23,7 @@ class AppHome extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final localizations = AppLocalizations.of(context)!;
     EdgeInsets padding;
     if (MediaQuery.of(context).size.width < 1000) {
       padding = const EdgeInsets.only(left: 10, right: 10, bottom: 15, top: 30);
@@ -92,44 +94,43 @@ class AppHome extends StatelessWidget {
             return Column(
               verticalDirection: VerticalDirection.up,
               children: [
+                SizedBox.square(
+                  dimension: 75,
+                  child: FittedBox(
+                    child: FloatingActionButton(
+                      tooltip: 'Add measurement', // TODO
+                      autofocus: true,
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          _buildTransition(const AddMeasurementPage(), settings.animationSpeed),
+                        );
+                      },
+                      child: const Icon(Icons.add,),
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
                 FloatingActionButton(
-                  tooltip: 'Add measurement',
-                  autofocus: true,
+                  tooltip: localizations.statistics,
+                  backgroundColor: const Color(0xFF6F6F6F),
                   onPressed: () {
-                    Navigator.push(
-                      context,
-                      _buildTransition(const AddMeasurementPage(), settings.animationSpeed),
-                    );
+                    Navigator.push(context, _buildTransition(const StatisticsPage(), settings.animationSpeed));
                   },
-                  child: const Icon(Icons.add,),
+                  child: const Icon(Icons.insights),
                 ),
                 const SizedBox(
                   height: 10,
                 ),
-                Ink(
-                  decoration: ShapeDecoration(shape: const CircleBorder(), color: Theme.of(context).unselectedWidgetColor),
-                  child: IconButton(
-                    tooltip: 'Statistics',
-                    iconSize: settings.iconSize,
-                    icon: const Icon(Icons.insights, color: Colors.black),
-                    onPressed: () {
-                      Navigator.push(context, _buildTransition(const StatisticsPage(), settings.animationSpeed));
-                    },
-                  ),
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                Ink(
-                  decoration: ShapeDecoration(shape: const CircleBorder(), color: Theme.of(context).unselectedWidgetColor),
-                  child: IconButton(
-                    tooltip: 'Settings',
-                    iconSize: settings.iconSize,
-                    icon: const Icon(Icons.settings, color: Colors.black),
-                    onPressed: () {
-                      Navigator.push(context, _buildTransition(const SettingsPage(), settings.animationSpeed));
-                    },
-                  ),
+                FloatingActionButton(
+                  tooltip: localizations.settings,
+                  backgroundColor: const Color(0xFF6F6F6F),
+                  child: const Icon(Icons.settings, color: Colors.black),
+                  onPressed: () {
+                    Navigator.push(context, _buildTransition(const SettingsPage(), settings.animationSpeed));
+                  },
                 ),
               ],
             );
