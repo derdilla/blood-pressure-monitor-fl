@@ -43,14 +43,17 @@ class ModernListHeader extends StatelessWidget {
                     Expanded(
                         flex: 30,
                         child: Text(localizations.sysLong,
+                            overflow: TextOverflow.ellipsis,
                             style: TextStyle(fontWeight: FontWeight.bold, color: settings.sysColor))),
                     Expanded(
                         flex: 30,
                         child: Text(localizations.diaLong,
+                            overflow: TextOverflow.ellipsis,
                             style: TextStyle(fontWeight: FontWeight.bold, color: settings.diaColor))),
                     Expanded(
                         flex: 30,
                         child: Text(localizations.pulLong,
+                            overflow: TextOverflow.ellipsis,
                             style: TextStyle(fontWeight: FontWeight.bold, color: settings.pulColor))),
                     const Expanded(
                         flex: 20,

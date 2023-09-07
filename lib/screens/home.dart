@@ -121,7 +121,7 @@ class AppHome extends StatelessWidget {
                   onPressed: () {
                     Navigator.push(context, _buildTransition(const StatisticsPage(), settings.animationSpeed));
                   },
-                  child: const Icon(Icons.insights),
+                  child: const Icon(Icons.insights, color: Colors.black),
                 ),
                 const SizedBox(
                   height: 10,
