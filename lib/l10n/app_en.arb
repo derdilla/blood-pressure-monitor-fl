@@ -421,5 +421,9 @@
   "useLegacyList": "Use legacy list",
   "@useLegacyList": {},
   "addMeasurement": "Add measurement",
-  "@addMeasurement": {}
+  "@addMeasurement": {},
+  "timestamp": "Timestamp",
+  "@timestamp": {},
+  "note": "Note",
+  "@note": {}
 }

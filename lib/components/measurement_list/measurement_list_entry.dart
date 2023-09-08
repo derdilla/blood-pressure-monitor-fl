@@ -23,26 +23,29 @@ class MeasurementListRow extends StatelessWidget {
           title: buildRow(formatter),
           childrenPadding: const EdgeInsets.only(bottom: 10),
           children: [
-            Row(
-              children: [
-                Text(formatter.format(record.creationTime), textAlign: TextAlign.right,),
-                const Spacer(),
-                IconButton(
-                  onPressed: () => _editEntry(context),
-                  icon: const Icon(Icons.edit, color: Colors.blue,),
-                  tooltip: localizations.edit,
-                ),
-                IconButton(
-                  onPressed: () => _deleteEntry(settings, context, localizations),
-                  icon: const Icon(Icons.delete, color: Colors.red,),
-                  tooltip: localizations.delete,
-                ),
-              ],
+            ListTile(
+              subtitle: Text(formatter.format(record.creationTime)),
+              title: Text(localizations.timestamp),
+              trailing: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  IconButton(
+                    onPressed: () => _editEntry(context),
+                    icon: const Icon(Icons.edit),
+                    tooltip: localizations.edit,
+                  ),
+                  IconButton(
+                    onPressed: () => _deleteEntry(settings, context, localizations),
+                    icon: const Icon(Icons.delete),
+                    tooltip: localizations.delete,
+                  ),
+                ],
+              ),
             ),
            if (record.notes.isNotEmpty)
-             Align(
-               alignment: Alignment.centerLeft,
-               child: Text(record.notes),
+             ListTile(
+               title: Text(localizations.note),
+               subtitle: Text(record.notes),
              )
           ],
         );
