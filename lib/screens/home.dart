@@ -52,15 +52,12 @@ class AppHome extends StatelessWidget {
               builder: (context, settings, child) {
                 return Column(children: [
                   const MeasurementGraph(),
-                  if (!settings.useLegacyList)
-                    const Expanded(
-                        flex: 50,
-                        child: MeasurementList()
-                    ),
-                  if(settings.useLegacyList)
-                    Expanded(
-                      flex: 50,
-                      child: LegacyMeasurementsList(context)),
+                  Expanded(
+                    flex: 50,
+                    child: (settings.useLegacyList) ?
+                      LegacyMeasurementsList(context) :
+                      const MeasurementList()
+                  )
                 ]);
               }
             ),
