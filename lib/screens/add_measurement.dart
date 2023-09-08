@@ -193,10 +193,7 @@ class _AddMeasurementPageState extends State<AddMeasurementPage> {
                                 final navigator = Navigator.of(context);
 
                                 if (widget.isEdit) {
-                                  assert(widget.initTime != null);
-                                  if (widget.initTime != null) {
-                                    await model.delete(widget.initTime!);
-                                  }
+                                  await model.delete(widget.initTime!);
                                 }
                                 await model.add(BloodPressureRecord(_time, _systolic, _diastolic, _pulse, _note ?? ''));
                                 if (settings.exportAfterEveryEntry && context.mounted) {

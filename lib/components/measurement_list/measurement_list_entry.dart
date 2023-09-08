@@ -6,7 +6,6 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
-// TODO: finish
 class MeasurementListRow extends StatelessWidget {
   final BloodPressureRecord record;
 

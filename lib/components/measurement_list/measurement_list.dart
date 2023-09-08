@@ -1,3 +1,4 @@
+import 'package:blood_pressure_app/components/consistent_future_builder.dart';
 import 'package:blood_pressure_app/components/measurement_list/measurement_list_entry.dart';
 import 'package:blood_pressure_app/model/blood_pressure.dart';
 import 'package:blood_pressure_app/model/settings_store.dart';
@@ -6,9 +7,42 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 
 class MeasurementList extends StatelessWidget {
+  const MeasurementList({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Consumer<Settings>(
+      builder: (context, settings, child) {
+        return Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const MeasurementListHeader(),
+            Expanded(
+              child: Consumer<BloodPressureModel>(
+                builder: (context, model, child) {
+                  return ConsistentFutureBuilder(
+                    future: model.getInTimeRange(settings.displayDataStart, settings.displayDataEnd),
+                    onData: (context, data) {
+                      return MeasurementListEntries(
+                        entries: data
+                      );
+                    }
+                  );
+                },
+              )
+            )
+          ]
+        );
+      },
+    );
+  }
+}
+
+
+class MeasurementListEntries extends StatelessWidget {
   final List<BloodPressureRecord> entries;
   
-  const MeasurementList({super.key, required this.entries});
+  const MeasurementListEntries({super.key, required this.entries});
 
   @override
   Widget build(BuildContext context) {
@@ -25,8 +59,8 @@ class MeasurementList extends StatelessWidget {
   }
 }
 
-class ModernListHeader extends StatelessWidget {
-  const ModernListHeader({super.key});
+class MeasurementListHeader extends StatelessWidget {
+  const MeasurementListHeader({super.key});
 
   @override
   Widget build(BuildContext context) {
