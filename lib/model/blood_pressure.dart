@@ -107,6 +107,10 @@ class BloodPressureRecord {
   final int? diastolic;
   final int? pulse;
   final String notes;
+  //TODO: when adding a color / needle pin for entries:
+  // - the whole row in the table can be with that bg color
+  // - add lots of test to make sure this doesn't break records
+  // - maybe even store independently
 
   BloodPressureRecord(DateTime creationTime, this.systolic, this.diastolic, this.pulse, this.notes) {
     this.creationTime = creationTime;

@@ -91,18 +91,6 @@ class SettingsPage extends StatelessWidget {
                 },
               ),
               SliderSettingsTile(
-                key: const Key('iconSize'),
-                title: Text(AppLocalizations.of(context)!.iconSize),
-                leading: const Icon(Icons.zoom_in),
-                onChanged: (double value) {
-                  settings.iconSize = value;
-                },
-                initialValue: settings.iconSize,
-                start: 15,
-                end: 70,
-                stepSize: 5,
-              ),
-              SliderSettingsTile(
                 key: const Key('graphLineThickness'),
                 title: Text(AppLocalizations.of(context)!.graphLineThickness),
                 leading: const Icon(Icons.line_weight),
@@ -153,6 +141,14 @@ class SettingsPage extends StatelessWidget {
                 onMainColorChanged: (color) => settings.pulColor = createMaterialColor((color ?? Colors.red).value),
                 initialColor: settings.pulColor,
                 title: Text(AppLocalizations.of(context)!.pulColor)),
+              SwitchSettingsTile(
+                key: const Key('useLegacyList'),
+                initialValue: settings.useLegacyList,
+                onToggle: (value) {
+                  settings.useLegacyList = value;
+                },
+                leading: const Icon(Icons.list_alt_outlined),
+                title: Text(AppLocalizations.of(context)!.useLegacyList)),
             ]),
 
             SettingsSection(title: Text(AppLocalizations.of(context)!.behavior), children: [
@@ -324,14 +320,14 @@ class SettingsPage extends StatelessWidget {
                 title: Text(AppLocalizations.of(context)!.sourceCode),
                 leading: const Icon(Icons.merge),
                 onPressed: (context) async {
+                  final localizations = AppLocalizations.of(context)!;
+                  final scaffoldMessenger = ScaffoldMessenger.of(context);
                   var url = Uri.parse('https://github.com/NobodyForNothing/blood-pressure-monitor-fl');
                   if (await canLaunchUrl(url)) {
                     await launchUrl(url, mode: LaunchMode.externalApplication);
                   } else {
-                    if (!context.mounted) return;
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                        content: Text(AppLocalizations.of(context)!
-                            .errCantOpenURL('https://github.com/NobodyForNothing/blood-pressure-monitor-fl'))));
+                    scaffoldMessenger.showSnackBar(SnackBar(
+                        content: Text(localizations.errCantOpenURL(url.toString()))));
                   }
                 },
               ),

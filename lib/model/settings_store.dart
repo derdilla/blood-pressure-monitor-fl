@@ -60,6 +60,9 @@ class Settings extends ChangeNotifier {
       await _prefs.setStringList('exportItemsCsv', _prefs.getStringList('exportItems') ?? ExportFields.defaultCsv);
       toAwait.add(_prefs.remove('exportItems'));
     }
+    if (keys.contains('iconSize')) {
+      toAwait.add(_prefs.remove('iconSize'));
+    }
 
     // reset variables for new version. Necessary for reusing variable names in new version and avoid having unexpected
     // breaking values in the preferences
@@ -297,15 +300,6 @@ class Settings extends ChangeNotifier {
 
   set dateFormatString(String newFormatString) {
     _prefs.setString('dateFormatString', newFormatString);
-    notifyListeners();
-  }
-
-  double get iconSize {
-    return _prefs.getInt('iconSize')?.toDouble() ?? 30;
-  }
-
-  set iconSize(double newSize) {
-    _prefs.setInt('iconSize', newSize.toInt());
     notifyListeners();
   }
 
@@ -625,6 +619,15 @@ class Settings extends ChangeNotifier {
 
   set horizontalGraphLines(Iterable<HorizontalGraphLine> value) {
     _prefs.setStringList('horizontalGraphLines', value.map((e) => jsonEncode(e)).toList());
+    notifyListeners();
+  }
+
+  bool get useLegacyList {
+    return _prefs.getBool('useLegacyList') ?? false;
+  }
+
+  set useLegacyList(bool value) {
+    _prefs.setBool('useLegacyList', value);
     notifyListeners();
   }
 }
