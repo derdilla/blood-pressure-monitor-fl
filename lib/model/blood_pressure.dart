@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:collection/collection.dart';
-import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:path/path.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
@@ -107,14 +107,17 @@ class BloodPressureRecord {
   final int? diastolic;
   final int? pulse;
   final String notes;
+  final MeasurementNeedlePin? needlePin;
 
-  BloodPressureRecord(DateTime creationTime, this.systolic, this.diastolic, this.pulse, this.notes) {
+  BloodPressureRecord(DateTime creationTime, this.systolic, this.diastolic, this.pulse, this.notes, {
+    this.needlePin
+  }) {
     this.creationTime = creationTime;
   }
 
   DateTime get creationTime => _creationTime;
   /// datetime needs to be after epoch
-  set creationTime(DateTime value) {
+  set creationTime(DateTime value) { // TODO: fix ensire immutable or remove immutable
     if (value.millisecondsSinceEpoch > 0) {
       _creationTime = value;
     } else {
@@ -127,6 +130,13 @@ class BloodPressureRecord {
   String toString() {
     return 'BloodPressureRecord($creationTime, $systolic, $diastolic, $pulse, $notes)';
   }
+}
+
+@immutable
+class MeasurementNeedlePin {
+  final Color color;
+
+  const MeasurementNeedlePin(this.color);
 }
 
 // source: https://pressbooks.library.torontomu.ca/vitalsign/chapter/blood-pressure-ranges/ (last access: 20.05.2023)
