@@ -11,6 +11,14 @@ import 'horizontal_graph_line.dart';
 
 class RamBloodPressureModel extends ChangeNotifier implements BloodPressureModel {
   final List<BloodPressureRecord> _records = [];
+  
+  static RamBloodPressureModel fromEntries(List<BloodPressureRecord> records) {
+    final m = RamBloodPressureModel();
+    for (var e in records) {
+      m.add(e);
+    }
+    return m;
+  }
 
   @override
   Future<void> add(BloodPressureRecord measurement) async {
@@ -55,7 +63,6 @@ class RamSettings extends ChangeNotifier implements Settings {
   bool _followSystemDarkMode = true;
   double _graphLineThickness = 3;
   TimeStep _graphStepSize = TimeStep.day;
-  double _iconSize = 30;
   MaterialColor _pulColor = Colors.pink;
   MaterialColor _sysColor = Colors.pink;
   int _sysWarn = 120;
@@ -221,15 +228,6 @@ class RamSettings extends ChangeNotifier implements Settings {
   @override
   set graphStepSize(TimeStep value) {
     _graphStepSize = value;
-    notifyListeners();
-  }
-
-  @override
-  double get iconSize => _iconSize;
-
-  @override
-  set iconSize(double value) {
-    _iconSize = value;
     notifyListeners();
   }
 
@@ -520,6 +518,19 @@ class RamSettings extends ChangeNotifier implements Settings {
   @override
   set horizontalGraphLines(Iterable<HorizontalGraphLine> value) {
     _horizontalGraphLines = value;
+    notifyListeners();
+  }
+
+  bool _useLegacyList = false;
+
+  @override
+  bool get useLegacyList {
+    return _useLegacyList;
+  }
+
+  @override
+  set useLegacyList(bool value) {
+    _useLegacyList = value;
     notifyListeners();
   }
 
