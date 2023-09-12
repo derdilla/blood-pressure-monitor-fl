@@ -10,7 +10,7 @@ body:
     attributes:
       label: "What you want:"
       placeholder: Short and precise description of what you want...
-   type: textarea
+  - type: textarea
     id: description
     attributes:
       label: "Why you want it:"
