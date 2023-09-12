@@ -9,7 +9,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-// TODO: test
 class ErrorReporting {
   static bool isErrorState = false;
   ErrorReporting._create();
@@ -59,6 +58,7 @@ class ErrorScreen extends StatelessWidget {
           builder: (context) {
             final scaffoldMessenger = ScaffoldMessenger.of(context);
             return SingleChildScrollView(
+              padding: const EdgeInsets.symmetric(horizontal: 10),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -66,7 +66,7 @@ class ErrorScreen extends StatelessWidget {
                   Text('App version: ${debugInfo.version}'),
                   Text('Build number: ${debugInfo.buildNumber}'),
                   const Divider(),
-                  Text(title),
+                  Text(title, style: const TextStyle(fontSize: 20, ), ),
                   Text(text),
                   const Divider(),
                   TextButton(

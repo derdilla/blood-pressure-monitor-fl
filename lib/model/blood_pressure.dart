@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:blood_pressure_app/screens/error_reporting.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:path/path.dart';
@@ -23,6 +24,14 @@ class BloodPressureModel extends ChangeNotifier {
       onCreate: (db, version) {
         return db.execute(
             'CREATE TABLE bloodPressureModel(timestamp INTEGER(14) PRIMARY KEY, systolic INTEGER, diastolic INTEGER, pulse INTEGER, notes STRING)');
+      },
+      onUpgrade: (db, oldVersion, newVersion) async {
+        if (oldVersion == 1 && newVersion == 2) {
+          // TODO
+        } else {
+          await ErrorReporting.reportCriticalError('Unsupported database upgrade', 'Attempted to upgrade the measurement database from version $oldVersion to version $newVersion, which is not supported. This action failed to avoid data loss. Please contact the app developer by opening an issue with the link below or writing an email to contact@derdilla.com.');
+          // TODO: error, open emergency page
+        }
       },
       version: 1,
     );
@@ -107,6 +116,7 @@ class BloodPressureRecord {
   final int? diastolic;
   final int? pulse;
   final String notes;
+  final MeasurementNeedlePin? needlePin;
   //TODO: when adding a color / needle pin for entries:
   // - the whole row in the table can be with that bg color
   // - add lots of test to make sure this doesn't break records
