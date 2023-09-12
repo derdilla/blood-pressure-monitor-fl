@@ -208,12 +208,9 @@ class _AddMeasurementPageState extends State<AddMeasurementPage> {
                               if (color is MaterialColor) {
                                 _needlePin = MeasurementNeedlePin(color);
                               } else {
-                                _needlePin = null;
+                                _needlePin = null; // TODO: addable to comment only data points
                               }
-
                             });
-
-                            print(_needlePin?.color);
                           },
 
                         )
