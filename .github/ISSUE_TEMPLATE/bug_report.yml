@@ -1,4 +1,4 @@
-name: "🐛 Bug Report"
+name: "Bug Report"
 description: Create a new ticket for a bug.
 title: "[BUG] - <title>"
 labels: [
@@ -13,6 +13,9 @@ body:
       placeholder: Short and explicit description of your incident...
     validations:
       required: true
+  - type: markdown
+    attributes:
+      value: "Everything after here is not required, but might be helpful to think about."
   - type: input
     id: device_version
     attributes:
@@ -26,7 +29,7 @@ body:
     attributes:
       label: "Reproduction steps"
       description: If you want to, you can briefly write how to reproduce the issue
-      value: |
+      placeholder: |
         1. Go to '...'
         2. Click on '....'
         3. Scroll down to '....'
@@ -39,8 +42,6 @@ body:
     attributes:
       label: "Screenshots"
       description: If you want to, you can add screenshots to help explain your problem.
-      value: |
-        ![DESCRIPTION](LINK.png)
       render: bash
     validations:
       required: false
