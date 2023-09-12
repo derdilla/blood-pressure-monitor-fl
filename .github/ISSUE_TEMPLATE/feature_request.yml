@@ -6,12 +6,12 @@ labels: [
 ]
 body:
   - type: textarea
-    id: description
+    id: what
     attributes:
       label: "What you want:"
       placeholder: Short and precise description of what you want...
   - type: textarea
-    id: description
+    id: why
     attributes:
       label: "Why you want it:"
       description: What benefit does this feature bring you? How would this impact the average user?
