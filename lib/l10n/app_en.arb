@@ -425,5 +425,7 @@
   "timestamp": "Timestamp",
   "@timestamp": {},
   "note": "Note",
-  "@note": {}
+  "@note": {},
+  "color": "Color",
+  "@color": {}
 }

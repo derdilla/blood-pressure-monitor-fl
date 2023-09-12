@@ -134,7 +134,7 @@ class BloodPressureModel extends ChangeNotifier {
         e['diastolic'] as int?,
         e['pulse'] as int?,
         e['notes'].toString(),
-        needlePin: (needlePinJson == null) ? null : jsonDecode(needlePinJson) as MeasurementNeedlePin
+        needlePin: (needlePinJson == null) ? null : MeasurementNeedlePin.fromJson(jsonDecode(needlePinJson))
       ));
     }
     return records;

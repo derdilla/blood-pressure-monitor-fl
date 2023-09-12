@@ -6,6 +6,7 @@ import 'package:blood_pressure_app/model/settings_store.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_material_color_picker/flutter_material_color_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
@@ -15,6 +16,7 @@ class AddMeasurementPage extends StatefulWidget {
   final int? initDia;
   final int? initPul;
   final String? initNote;
+  final MeasurementNeedlePin? initNeedlePin;
   final bool isEdit;
 
   const AddMeasurementPage(
@@ -24,7 +26,8 @@ class AddMeasurementPage extends StatefulWidget {
       this.initDia,
       this.initPul,
       this.initNote,
-      this.isEdit = false});
+      this.initNeedlePin,
+      this.isEdit = false,});
 
   static AddMeasurementPage edit(BloodPressureRecord record) {
     return AddMeasurementPage(
@@ -33,6 +36,7 @@ class AddMeasurementPage extends StatefulWidget {
       initDia: record.diastolic,
       initPul: record.pulse,
       initNote: record.notes,
+      initNeedlePin: record.needlePin,
       isEdit: true,
     );
   }
@@ -48,6 +52,7 @@ class _AddMeasurementPageState extends State<AddMeasurementPage> {
   late int? _diastolic;
   late int? _pulse;
   late String? _note;
+  late MeasurementNeedlePin? _needlePin;
 
   final _sysFocusNode = FocusNode();
 
@@ -59,11 +64,13 @@ class _AddMeasurementPageState extends State<AddMeasurementPage> {
     _diastolic = widget.initDia;
     _pulse = widget.initPul;
     _note = widget.initNote;
+    _needlePin = widget.initNeedlePin;
   }
 
   @override
   Widget build(BuildContext context) {
     _sysFocusNode.requestFocus();
+    final localizations = AppLocalizations.of(context)!;
     return Scaffold(
       body: Center(
         child: Form(
@@ -84,7 +91,7 @@ class _AddMeasurementPageState extends State<AddMeasurementPage> {
                               final now = DateTime.now();
                               final selectionEnd = now.copyWith(minute: now.minute+5);
                               final messenger = ScaffoldMessenger.of(context);
-                              final errTimeAfterNow = AppLocalizations.of(context)!.errTimeAfterNow;
+                              final errTimeAfterNow = localizations.errTimeAfterNow;
                               var selectedTime = await showDateTimePicker(
                                   context: context,
                                   firstDate: DateTime.fromMillisecondsSinceEpoch(1),
@@ -119,7 +126,7 @@ class _AddMeasurementPageState extends State<AddMeasurementPage> {
                       ValueInput(
                           key: const Key('txtSys'),
                           initialValue: (_systolic ?? '').toString(),
-                          hintText: AppLocalizations.of(context)!.sysLong,
+                          hintText: localizations.sysLong,
                           basicValidation: !settings.allowMissingValues,
                           preValidation: (v) => _systolic = int.tryParse(v ?? ''),
                           focusNode: _sysFocusNode,
@@ -131,7 +138,7 @@ class _AddMeasurementPageState extends State<AddMeasurementPage> {
                       ValueInput(
                           key: const Key('txtDia'),
                           initialValue: (_diastolic ?? '').toString(),
-                          hintText: AppLocalizations.of(context)!.diaLong,
+                          hintText: localizations.diaLong,
                           basicValidation: !settings.allowMissingValues,
                           preValidation: (v) => _diastolic = int.tryParse(v ?? ''),
                           additionalValidator: (String? value) {
@@ -145,7 +152,7 @@ class _AddMeasurementPageState extends State<AddMeasurementPage> {
                       ValueInput(
                           key: const Key('txtPul'),
                           initialValue: (_pulse ?? '').toString(),
-                          hintText: AppLocalizations.of(context)!.pulLong,
+                          hintText: localizations.pulLong,
                           basicValidation: !settings.allowMissingValues,
                           preValidation: (v) => _pulse = int.tryParse(v ?? ''),
                           additionalValidator: (String? value) {
@@ -167,9 +174,51 @@ class _AddMeasurementPageState extends State<AddMeasurementPage> {
                           return null;
                         },
                       ),
-                      const SizedBox(
-                        height: 24,
+                      Padding(
+                        padding: const EdgeInsets.only(top: 10, bottom: 25),
+                        child: OutlinedButton.icon(
+                          icon: const Icon(Icons.palette),
+                          label: Text(localizations.color),
+                          style: OutlinedButton.styleFrom(
+                            backgroundColor: _needlePin?.color.withAlpha(50),
+                            side: (_needlePin != null) ? BorderSide(color: _needlePin!.color) : null
+                          ),
+                          onPressed: () async {
+                            final color = await showDialog(
+                              context: context,
+                              builder: (_) {
+                                return AlertDialog(
+                                  contentPadding: const EdgeInsets.all(6.0),
+                                  content: MaterialColorPicker(
+                                    circleSize: 53,
+                                    onMainColorChange: (color) {
+                                      Navigator.of(context).pop(color);
+                                    },
+                                  ),
+                                  actions: [
+                                    TextButton(
+                                      onPressed: Navigator.of(context).pop,
+                                      child: Text(localizations.btnCancel),
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
+                            setState(() {
+                              if (color is MaterialColor) {
+                                _needlePin = MeasurementNeedlePin(color);
+                              } else {
+                                _needlePin = null;
+                              }
+
+                            });
+
+                            print(_needlePin?.color);
+                          },
+
+                        )
                       ),
+
                       Row(
                         children: [
                           TextButton(
@@ -178,13 +227,13 @@ class _AddMeasurementPageState extends State<AddMeasurementPage> {
                               Navigator.of(context).pop();
                             },
 
-                            child: Text(AppLocalizations.of(context)!.btnCancel)
+                            child: Text(localizations.btnCancel)
                           ),
                           const Spacer(),
                           FilledButton.icon(
                             key: const Key('btnSave'),
                             icon: const Icon(Icons.save),
-                            label: Text(AppLocalizations.of(context)!.btnSave),
+                            label: Text(localizations.btnSave),
                             onPressed: () async {
                               if ((_formKey.currentState?.validate() ?? false) ||
                                   (_systolic == null && _diastolic == null && _pulse == null && _note != null)){
@@ -195,11 +244,12 @@ class _AddMeasurementPageState extends State<AddMeasurementPage> {
                                 if (widget.isEdit) {
                                   await model.delete(widget.initTime!);
                                 }
-                                await model.add(BloodPressureRecord(_time, _systolic, _diastolic, _pulse, _note ?? ''));
+                                await model.add(BloodPressureRecord(_time, _systolic, _diastolic, _pulse, _note ?? '',
+                                needlePin: _needlePin));
                                 if (settings.exportAfterEveryEntry && context.mounted) {
                                   final exporter = Exporter(settings, model, ScaffoldMessenger.of(context),
-                                      AppLocalizations.of(context)!, Theme.of(context),
-                                      await ExportConfigurationModel.get(Provider.of<Settings>(context, listen: false), AppLocalizations.of(context)!));
+                                      localizations, Theme.of(context),
+                                      await ExportConfigurationModel.get(Provider.of<Settings>(context, listen: false), localizations));
                                   exporter.export();
                                 }
                                 navigator.pop();
