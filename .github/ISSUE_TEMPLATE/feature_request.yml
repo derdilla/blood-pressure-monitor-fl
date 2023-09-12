@@ -1,0 +1,17 @@
+name: "Feature request"
+description: Suggest an idea for this project.
+title: "[FEATURE] - <title>"
+labels: [
+  "enhancement"
+]
+body:
+  - type: textarea
+    id: description
+    attributes:
+      label: "What you want:"
+      placeholder: Short and precise description of what you want...
+   type: textarea
+    id: description
+    attributes:
+      label: "Why you want it:"
+      description: What benefit does this feature bring you? How would this impact the average user?
