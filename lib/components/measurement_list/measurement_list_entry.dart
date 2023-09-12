@@ -21,6 +21,8 @@ class MeasurementListRow extends StatelessWidget {
           // Leading color possible
           title: buildRow(formatter),
           childrenPadding: const EdgeInsets.only(bottom: 10),
+          backgroundColor: record.needlePin?.color.withAlpha(30),
+          collapsedShape: record.needlePin != null ? Border(left: BorderSide(color: record.needlePin!.color, width: 8)) : null,
           children: [
             ListTile(
               subtitle: Text(formatter.format(record.creationTime)),
@@ -53,7 +55,7 @@ class MeasurementListRow extends StatelessWidget {
   }
 
   Row buildRow(DateFormat formatter) {
-    return Row(
+    return Row( // FIXME: null texts
       children: [
         Expanded(
           flex: 3,
