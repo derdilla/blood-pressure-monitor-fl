@@ -251,7 +251,7 @@ class Exporter {
     String ext;
     switch(settings.exportFormat) {
       case ExportFormat.csv:
-        ext = 'CSV'; // lower case 'csv' gets automatically converted to 'csv.xls' for some reason
+        ext = 'csv';
         break;
       case ExportFormat.pdf:
         ext = 'pdf';
