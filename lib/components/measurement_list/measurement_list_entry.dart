@@ -55,19 +55,20 @@ class MeasurementListRow extends StatelessWidget {
   }
 
   Row buildRow(DateFormat formatter) {
-    return Row( // FIXME: null texts
+    String formatNum(int? num) => (num ?? '-').toString();
+    return Row(
       children: [
         Expanded(
           flex: 3,
-          child: Text(record.systolic.toString()),
+          child: Text(formatNum(record.systolic)),
         ),
         Expanded(
           flex: 3,
-          child: Text(record.diastolic.toString()),
+          child: Text(formatNum(record.diastolic)),
         ),
         Expanded(
           flex: 3,
-          child: Text(record.pulse.toString()),
+          child: Text(formatNum(record.pulse)),
         ),
       ]
     );
