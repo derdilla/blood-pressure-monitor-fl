@@ -15,8 +15,6 @@ void main() async {
   // Reset the step size intervall to current on startup
   settingsModel.changeStepSize(settingsModel.graphStepSize);
 
-  // TODO error handling: https://docs.flutter.dev/testing/errors#handling-all-types-of-errors
-
   runApp(MultiProvider(providers: [
     ChangeNotifierProvider(create: (context) => dataModel),
     ChangeNotifierProvider(create: (context) => settingsModel),
