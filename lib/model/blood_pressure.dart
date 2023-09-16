@@ -35,13 +35,13 @@ class BloodPressureModel extends ChangeNotifier {
     _database = await openDatabase(
       dbPath,
       // runs when the database is first created
-      onCreate: _onDVCreate,
+      onCreate: _onDBCreate,
       onUpgrade: _onDBUpgrade,
       version: 2,
     );
   }
 
-  FutureOr<void> _onDVCreate(Database db, int version) {
+  FutureOr<void> _onDBCreate(Database db, int version) {
       return db.execute('CREATE TABLE bloodPressureModel('
           'timestamp INTEGER(14) PRIMARY KEY,'
           'systolic INTEGER, diastolic INTEGER,'
@@ -55,6 +55,7 @@ class BloodPressureModel extends ChangeNotifier {
     // might be useful, to avoid duplicated code. Currently this would only lead to complexity, without benefits.
     if (oldVersion == 1 && newVersion == 2) {
       db.execute('ALTER TABLE bloodPressureModel ADD COLUMN needlePin STRING;');
+      db.database.setVersion(2);
     } else {
       await ErrorReporting.reportCriticalError('Unsupported database upgrade', 'Attempted to upgrade the measurement database from version $oldVersion to version $newVersion, which is not supported. This action failed to avoid data loss. Please contact the app developer by opening an issue with the link below or writing an email to contact@derdilla.com.');
     }
@@ -143,31 +144,21 @@ class BloodPressureModel extends ChangeNotifier {
 
 @immutable
 class BloodPressureRecord {
-  late final DateTime _creationTime;
+  late final DateTime creationTime;
   final int? systolic;
   final int? diastolic;
   final int? pulse;
   final String notes;
   final MeasurementNeedlePin? needlePin;
-  //TODO: when adding a color / needle pin for entries:
-  // - the whole row in the table can be with that bg color
-  // - add lots of test to make sure this doesn't break records
-  // - maybe even store independently
 
   BloodPressureRecord(DateTime creationTime, this.systolic, this.diastolic, this.pulse, this.notes, {
     this.needlePin
   }) {
-    this.creationTime = creationTime;
-  }
-
-  DateTime get creationTime => _creationTime;
-  /// datetime needs to be after epoch
-  set creationTime(DateTime value) { // TODO: fix ensire immutable or remove immutable
-    if (value.millisecondsSinceEpoch > 0) {
-      _creationTime = value;
+    if (creationTime.millisecondsSinceEpoch > 0) {
+      this.creationTime = creationTime;
     } else {
       assert(false, "Tried to create BloodPressureRecord at or before epoch");
-      _creationTime = DateTime.fromMillisecondsSinceEpoch(1);
+      this.creationTime = DateTime.fromMillisecondsSinceEpoch(1);
     }
   }
 
