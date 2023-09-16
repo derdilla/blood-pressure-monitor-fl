@@ -67,6 +67,13 @@ class _AddMeasurementPageState extends State<AddMeasurementPage> {
     _needlePin = widget.initNeedlePin;
   }
 
+
+  @override
+  void dispose() {
+    super.dispose();
+    _sysFocusNode.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     _sysFocusNode.requestFocus();
@@ -83,46 +90,8 @@ class _AddMeasurementPageState extends State<AddMeasurementPage> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      (() {
-                        final formatter = DateFormat(settings.dateFormatString);
-                        if (settings.allowManualTimeInput) {
-                          return GestureDetector(
-                            onTap: () async {
-                              final now = DateTime.now();
-                              final selectionEnd = now.copyWith(minute: now.minute+5);
-                              final messenger = ScaffoldMessenger.of(context);
-                              final errTimeAfterNow = localizations.errTimeAfterNow;
-                              var selectedTime = await showDateTimePicker(
-                                  context: context,
-                                  firstDate: DateTime.fromMillisecondsSinceEpoch(1),
-                                  lastDate: selectionEnd,
-                                  initialDate: _time);
-                              if (selectedTime != null) {
-                                if (settings.validateInputs && selectedTime.isAfter(selectionEnd)) {
-                                  messenger.showSnackBar(SnackBar(content: Text(errTimeAfterNow)));
-                                  if (selectedTime.hour > now.hour) selectedTime = selectedTime.copyWith(hour: now.hour);
-                                  if (selectedTime.minute > now.minute) selectedTime = selectedTime.copyWith(minute: now.minute);
-                                } // validation for first date is not needed here as intervall starts at 00:00
-                                setState(() {
-                                  _time = selectedTime!;
-                                });
-                              }
-                            },
-                            child: Column(
-                              children: [
-                                Row(children: [Text(formatter.format(_time)), const Spacer(), const Icon(Icons.edit)]),
-                                const SizedBox(height: 3,),
-                                Divider(
-                                  color: Theme.of(context).disabledColor,
-                                  thickness: 1,
-                                )
-                              ],
-                            ),
-                          );
-                        } else {
-                          return const SizedBox.shrink();
-                        }
-                      })(),
+                      if (settings.allowManualTimeInput)
+                        buildTimeInput(context, settings, localizations),
                       ValueInput(
                           key: const Key('txtSys'),
                           initialValue: (_systolic ?? '').toString(),
@@ -174,48 +143,7 @@ class _AddMeasurementPageState extends State<AddMeasurementPage> {
                           return null;
                         },
                       ),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 10, bottom: 25),
-                        child: OutlinedButton.icon(
-                          icon: const Icon(Icons.palette),
-                          label: Text(localizations.color),
-                          style: OutlinedButton.styleFrom(
-                            backgroundColor: _needlePin?.color.withAlpha(50),
-                            side: (_needlePin != null) ? BorderSide(color: _needlePin!.color) : null
-                          ),
-                          onPressed: () async {
-                            final color = await showDialog(
-                              context: context,
-                              builder: (_) {
-                                return AlertDialog(
-                                  contentPadding: const EdgeInsets.all(6.0),
-                                  content: MaterialColorPicker(
-                                    circleSize: 53,
-                                    onMainColorChange: (color) {
-                                      Navigator.of(context).pop(color);
-                                    },
-                                  ),
-                                  actions: [
-                                    TextButton(
-                                      onPressed: Navigator.of(context).pop,
-                                      child: Text(localizations.btnCancel),
-                                    ),
-                                  ],
-                                );
-                              },
-                            );
-                            setState(() {
-                              if (color is MaterialColor) {
-                                _needlePin = MeasurementNeedlePin(color);
-                              } else {
-                                _needlePin = null; // TODO: addable to comment only data points
-                              }
-                            });
-                          },
-
-                        )
-                      ),
-
+                      buildNeedlePin(localizations, context),
                       Row(
                         children: [
                           TextButton(
@@ -223,7 +151,6 @@ class _AddMeasurementPageState extends State<AddMeasurementPage> {
                             onPressed: () {
                               Navigator.of(context).pop();
                             },
-
                             child: Text(localizations.btnCancel)
                           ),
                           const Spacer(),
@@ -233,7 +160,8 @@ class _AddMeasurementPageState extends State<AddMeasurementPage> {
                             label: Text(localizations.btnSave),
                             onPressed: () async {
                               if ((_formKey.currentState?.validate() ?? false) ||
-                                  (_systolic == null && _diastolic == null && _pulse == null && _note != null)){
+                                  (_systolic == null && _diastolic == null && _pulse == null &&
+                                      (_note != null || _needlePin != null))){
                                 final settings = Provider.of<Settings>(context, listen: false);
                                 final model = Provider.of<BloodPressureModel>(context, listen: false);
                                 final navigator = Navigator.of(context);
@@ -261,6 +189,86 @@ class _AddMeasurementPageState extends State<AddMeasurementPage> {
             ),
           ),
         ),
+      ),
+    );
+  }
+
+  Widget buildNeedlePin(AppLocalizations localizations, BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 10, bottom: 25),
+      child: OutlinedButton.icon(
+        icon: const Icon(Icons.palette),
+        label: Text(localizations.color),
+        style: OutlinedButton.styleFrom(
+          backgroundColor: _needlePin?.color.withAlpha(50),
+          side: (_needlePin != null) ? BorderSide(color: _needlePin!.color) : null
+        ),
+        onPressed: () async {
+          final color = await showDialog(
+            context: context,
+            builder: (_) {
+              return AlertDialog(
+                contentPadding: const EdgeInsets.all(6.0),
+                content: MaterialColorPicker(
+                  circleSize: 53,
+                  onMainColorChange: (color) {
+                    Navigator.of(context).pop(color);
+                  },
+                ),
+                actions: [
+                  TextButton(
+                    onPressed: Navigator.of(context).pop,
+                    child: Text(localizations.btnCancel),
+                  ),
+                ],
+              );
+            },
+          );
+          setState(() {
+            if (color is MaterialColor) {
+              _needlePin = MeasurementNeedlePin(color);
+            } else {
+              _needlePin = null;
+            }
+          });
+        },
+
+      )
+    );
+  }
+
+  Widget buildTimeInput(BuildContext context, Settings settings, AppLocalizations localizations) {
+    final formatter = DateFormat(settings.dateFormatString);
+    return GestureDetector(
+      onTap: () async {
+        final now = DateTime.now();
+        final selectionEnd = now.copyWith(minute: now.minute+5);
+        final messenger = ScaffoldMessenger.of(context);
+        var selectedTime = await showDateTimePicker(
+            context: context,
+            firstDate: DateTime.fromMillisecondsSinceEpoch(1),
+            lastDate: selectionEnd,
+            initialDate: _time);
+        if (selectedTime != null) {
+          if (settings.validateInputs && selectedTime.isAfter(selectionEnd)) {
+            messenger.showSnackBar(SnackBar(content: Text(localizations.errTimeAfterNow)));
+            if (selectedTime.hour > now.hour) selectedTime = selectedTime.copyWith(hour: now.hour);
+            if (selectedTime.minute > now.minute) selectedTime = selectedTime.copyWith(minute: now.minute);
+          } // validation for first date is not needed here as intervall starts at 00:00
+          setState(() {
+            _time = selectedTime!;
+          });
+        }
+      },
+      child: Column(
+        children: [
+          Row(children: [Text(formatter.format(_time)), const Spacer(), const Icon(Icons.edit)]),
+          const SizedBox(height: 3,),
+          Divider(
+            color: Theme.of(context).disabledColor,
+            thickness: 1,
+          )
+        ],
       ),
     );
   }
