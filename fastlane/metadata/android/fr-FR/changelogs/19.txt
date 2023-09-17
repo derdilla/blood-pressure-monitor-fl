@@ -1,3 +1,3 @@
-* Add pdf export support and comprehensive CSV-field formatting system
-* Fix custom time step move direction
-* Ensure relative intervals update on app startup
+* Ajout de la possibilité d'exporter en PDF et d'un système de formatage des champs CSV plus compréhensible
+* Correction de la direction du pas de temps mobile personnalisé
+* S'assurer de la mise à jour des intervalles relatifs lors de l'ouverture de l'application
