@@ -1,0 +1,431 @@
+{
+  "behavior": "Davranış",
+  "@behavior": {},
+  "weekOfYear": "Hafta {weekNum}, {year}",
+  "@weekOfYear": {
+    "placeholders": {
+      "weekNum": {
+        "type": "int"
+      },
+      "year": {
+        "type": "int"
+      }
+    }
+  },
+  "aboutWarnValuesScreenDesc": "Uyarı değerleri hakkında daha çok bilgi",
+  "@aboutWarnValuesScreenDesc": {},
+  "dateFormatting": "Tarih biçimlendirmesi",
+  "@dateFormatting": {},
+  "warnAboutTxt2": "Varsayılan yaşa bağlı değerler bu kaynaktan alındı.",
+  "@warnAboutTxt2": {},
+  "validateInputs": "Veri girişlerini doğrula",
+  "@validateInputs": {},
+  "month": "Ay",
+  "@month": {},
+  "unixTimestamp": "Unix zaman damgası",
+  "@unixTimestamp": {},
+  "addExportformat": "exportformat ekle",
+  "@addExportformat": {},
+  "exportDir": "Dışa aktarma dizini",
+  "@exportDir": {},
+  "csv": "CSV",
+  "@csv": {},
+  "exportSuccess": "Dışa aktarıldı: {path}",
+  "@exportSuccess": {
+    "placeholders": {
+      "path": {
+        "type": "String"
+      }
+    }
+  },
+  "default_": "Varsayılan",
+  "@default_": {},
+  "accentColor": "Tema rengi",
+  "@accentColor": {},
+  "title": "Kan Basıncı Uygulaması",
+  "@title": {},
+  "errTimeAfterNow": "Seçilen vakit şu andan sonra olduğundan dolayı sıfırlandı. Bu doğrulamayı ayarlardan kapatabilirsiniz.",
+  "@errTimeAfterNow": {},
+  "versionOf": "Sürüm: {version}",
+  "@versionOf": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "btnConfirm": "TAMAM",
+  "@btnConfirm": {},
+  "addMeasurement": "Ölçüm ekle",
+  "@addMeasurement": {},
+  "enterTimeFormatTxt3": "Bir hatırlatma, uzun ya da kısa biçim String kullanmak tablodaki sütunların genişliğini değiştirmeyecek, ki bu da garip satır atlamalarına ve metnin gözükmemesine yol açabilir.",
+  "@enterTimeFormatTxt3": {},
+  "startWithAddMeasurementPageDescription": "Uygulamanın açılışında, ölçüm giriş ekranı gösterilir.",
+  "@startWithAddMeasurementPageDescription": {},
+  "animationSpeed": "Animasyon süresi",
+  "@animationSpeed": {},
+  "licenses": "3. taraf lisanslar",
+  "@licenses": {},
+  "enterTimeFormatTxt1": "Biçim stringi önceden tanımladan ICU/Skeleton stringlerinin ve eklemek istediğiniz herhangi başka metinin birleşimidir.",
+  "@enterTimeFormatTxt1": {},
+  "exportPdfExportData": "Veri tablosu",
+  "@exportPdfExportData": {},
+  "allowManualTimeInput": "Elle süre girmeye izin ver",
+  "@allowManualTimeInput": {},
+  "exportHiddenFields": "gizli alanlar",
+  "@exportHiddenFields": {},
+  "drawRegressionLines": "Eğilim çizgilerini çiz",
+  "@drawRegressionLines": {},
+  "btnSave": "KAYDET",
+  "@btnSave": {},
+  "deletionConfirmed": "Giriş silindi.",
+  "@deletionConfirmed": {},
+  "last30Days": "30 gün",
+  "@last30Days": {},
+  "fieldDelimiter": "Alan sınırlayıcı",
+  "@fieldDelimiter": {},
+  "graphTitlesCount": "Grafik etiket sayısı",
+  "@graphTitlesCount": {},
+  "horizontalLines": "Yatay çizgiler",
+  "@horizontalLines": {},
+  "exportPdfExportTitle": "Başlık",
+  "@exportPdfExportTitle": {},
+  "import": "İÇE AKTAR",
+  "@import": {},
+  "pulShort": "pul",
+  "@pulShort": {},
+  "internalName": "İç adı",
+  "@internalName": {},
+  "exportMimeTypeDesc": "Türü diğer uygulamalara bildirir",
+  "@exportMimeTypeDesc": {},
+  "sysLong": "Sistolik",
+  "@sysLong": {},
+  "exportPdfCellHeight": "Satır yüksekliği",
+  "@exportPdfCellHeight": {},
+  "success": "Başarılı: {msg}",
+  "@success": {
+    "placeholders": {
+      "msg": {
+        "type": "String"
+      }
+    }
+  },
+  "exportCustomEntries": "Alanları kişileştir",
+  "@exportCustomEntries": {},
+  "exportImport": "Dışa aktar / İçe aktar",
+  "@exportImport": {},
+  "enterTimeFormatString": "zaman biçimi",
+  "@enterTimeFormatString": {},
+  "allowMissingValues": "Kayıp değerlere izin ver",
+  "@allowMissingValues": {},
+  "edit": "Düzenle",
+  "@edit": {},
+  "errLt30": "Numara <= 30? Ayarlardan doğrulamayı kapatın!",
+  "@errLt30": {},
+  "diaShort": "dia",
+  "@diaShort": {},
+  "export": "DIŞA AKTAR",
+  "@export": {},
+  "theme": "Tema",
+  "@theme": {},
+  "year": "Yıl",
+  "@year": {},
+  "warnAboutTxt1": "Uyarı değerleri sadece bir öneridir ve tıbbi bir tavsiye değildir.",
+  "@warnAboutTxt1": {},
+  "customGraphMarkings": "Özel işaretler",
+  "@customGraphMarkings": {},
+  "exportFormat": "Dışa aktarma biçimi",
+  "@exportFormat": {},
+  "errUnrealistic": "Gerçekçi olmayan değer? Ayarlardan doğrulamayı kapatın!",
+  "@errUnrealistic": {},
+  "exportPdfHeaderHeight": "Başlık yüksekliği",
+  "@exportPdfHeaderHeight": {},
+  "iconSize": "Simge boyutu",
+  "@iconSize": {},
+  "measurementsPerDay": "Günde ölçüm sayısı",
+  "@measurementsPerDay": {},
+  "errNoData": "veri yok",
+  "@errNoData": {},
+  "light": "Açık",
+  "@light": {},
+  "errNotStarted": "başlatılmadı",
+  "@errNotStarted": {},
+  "errCantOpenURL": "URL açılamadı: {url}",
+  "@errCantOpenURL": {
+    "placeholders": {
+      "url": {
+        "type": "String"
+      }
+    }
+  },
+  "sharedPrefsDump": "Shared preferences yığını:",
+  "@sharedPrefsDump": {},
+  "lifetime": "Ömür boyu",
+  "@lifetime": {},
+  "presets": "Ön ayarlar",
+  "@presets": {},
+  "exportMimeType": "Dışa aktarılan medya türü",
+  "@exportMimeType": {},
+  "delete": "Sil",
+  "@delete": {},
+  "errCantReadFile": "Dosyanın içeriği okunamıyor",
+  "@errCantReadFile": {},
+  "notes": "Notlar",
+  "@notes": {},
+  "importSuccess": "{count} giriş içe aktarıldı",
+  "@importSuccess": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "errDiaGtSys": "dia >= sys? Ayarlardan doğrulamayı kapatın!",
+  "@errDiaGtSys": {},
+  "graphLineThickness": "Çizgi kalınlığı",
+  "@graphLineThickness": {},
+  "data": "Veri",
+  "@data": {},
+  "version": "Sürüm",
+  "@version": {},
+  "errNoValue": "Lütfen bir değer girin",
+  "@errNoValue": {},
+  "other": "diğer",
+  "@other": {},
+  "enterTimeFormatTxt2": "Tanımlanan biçimlerin bütünün bir listesini merak ettiyseniz burada bulabilirsiniz.",
+  "@enterTimeFormatTxt2": {},
+  "exportWarnConfigNotImportable": "Hey! Sana dostça bir uyarı: Şu anki dışa aktarma ayarlarıyla içe aktarmak mümkün olmayacak. Bunu düzeltmek için dışa aktarma türünün CSV olduğuna emin olun, başlığı etkenliştirin ve uygun zaman biçimlerinden birini dahil edin.",
+  "@exportWarnConfigNotImportable": {},
+  "timestamp": "Zaman damgası",
+  "@timestamp": {},
+  "exportCsvHeadlineDesc": "Türleri ayırmakta yardımcı olur",
+  "@exportCsvHeadlineDesc": {},
+  "btnUndo": "GERİ AL",
+  "@btnUndo": {},
+  "addNote": "Not (isteğe bağlı)",
+  "@addNote": {},
+  "packageNameOf": "Paket adı: {name}",
+  "@packageNameOf": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "errCantEditThis": "Bunu düzenleyemezsiniz. Yeni bir giriş oluşturmak için değerleri inceleyebilirsiniz.",
+  "@errCantEditThis": {},
+  "drawRegressionLinesDesc": "Grafikte regresyon çizgilerini çiz. Yalnızca geniş zaman aralıklarında kullanışlı.",
+  "@drawRegressionLinesDesc": {},
+  "pulColor": "Nabız rengi",
+  "@pulColor": {},
+  "addLine": "Çizgi ekle",
+  "@addLine": {},
+  "buildSignatureOf": "İnşa imzası: {signature}",
+  "@buildSignatureOf": {
+    "placeholders": {
+      "signature": {
+        "type": "String"
+      }
+    }
+  },
+  "warnAboutTxt3": "Bu değerleri ihtiyacınıza göre değiştirebilirsiniz. Doktorunuzun tavsiyesine uyun.",
+  "@warnAboutTxt3": {},
+  "pulLong": "Nabız",
+  "@pulLong": {},
+  "errNotEnoughDataToGraph": "Grafik çizmeye yetecek kadar veri bulunmamakta.",
+  "@errNotEnoughDataToGraph": {},
+  "sysColor": "Sistolik rengi",
+  "@sysColor": {},
+  "maxOf": "{txt} azm.",
+  "@maxOf": {
+    "placeholders": {
+      "txt": {
+        "type": "String"
+      }
+    }
+  },
+  "startWithAddMeasurementPage": "Başlangıçta ölçüm",
+  "@startWithAddMeasurementPage": {},
+  "exportInterval": "Veri menzili",
+  "@exportInterval": {},
+  "pulsePressure": "Nabız basıncı",
+  "@pulsePressure": {},
+  "errNotImportable": "Bu dosya aktarılamaz",
+  "@errNotImportable": {},
+  "errPleaseSelect": "lütfen seçin",
+  "@errPleaseSelect": {},
+  "errNaN": "Lütfen bir Numara girin",
+  "@errNaN": {},
+  "confirmDeletion": "Silmeyi onayla",
+  "@confirmDeletion": {},
+  "textDelimiter": "Metin sınırlayıcı",
+  "@textDelimiter": {},
+  "diaColor": "Diyastolik rengi",
+  "@diaColor": {},
+  "pdf": "PDF",
+  "@pdf": {},
+  "aboutWarnValuesScreen": "Hakkında",
+  "@aboutWarnValuesScreen": {},
+  "exportPdfExportStatistics": "İstatislikler",
+  "@exportPdfExportStatistics": {},
+  "age": "Yaş",
+  "@age": {},
+  "db": "SQLite Veritabanı",
+  "@db": {},
+  "exportPdfCellFontSize": "Satır yazı tipi boyutu",
+  "@exportPdfCellFontSize": {},
+  "dark": "Koyu",
+  "@dark": {},
+  "maximum": "Azami",
+  "@maximum": {},
+  "btnNext": "İLERİ",
+  "@btnNext": {},
+  "exportCsvHeadline": "Başlık",
+  "@exportCsvHeadline": {},
+  "errNeedHeadline": "Sadece başlık bulunduran dosyaları aktarabilirsiniz.",
+  "@errNeedHeadline": {},
+  "determineWarnValues": "Uyarı değerlerini belirle",
+  "@determineWarnValues": {},
+  "errUnknown": "Bilinmeyen hata",
+  "@errUnknown": {},
+  "statistics": "İstatistikler",
+  "@statistics": {},
+  "diaWarn": "Diyastolik uyarı",
+  "@diaWarn": {},
+  "minimum": "Asgari",
+  "@minimum": {},
+  "shared": "paylaşıldı",
+  "@shared": {},
+  "btnCancel": "İPTAL",
+  "@btnCancel": {},
+  "language": "Dil",
+  "@language": {},
+  "exportWarnNotEveryFieldExported": "Bütün alanları dışa aktarmıyorsunuz: {fields} {count, plural, one{is} other{are}} kayıp.",
+  "@exportWarnNotEveryFieldExported": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "fields": {
+        "type": "String"
+      }
+    }
+  },
+  "average": "Ortalama",
+  "@average": {},
+  "addEntry": "Alan ekle",
+  "@addEntry": {},
+  "sourceCode": "Kaynak kodu",
+  "@sourceCode": {},
+  "error": "Hata: {msg}",
+  "@error": {
+    "placeholders": {
+      "msg": {
+        "type": "String"
+      }
+    }
+  },
+  "useLegacyList": "Eski tip liste kullan",
+  "@useLegacyList": {},
+  "measurementCount": "Ölçüm sayısı",
+  "@measurementCount": {},
+  "exportAfterEveryInputDesc": "Önerilmez (dosya patlaması)",
+  "@exportAfterEveryInputDesc": {},
+  "exportFieldFormatDocumentation": "'## Değişkenler\nDışa aktarma alanı biçimi şu yerler için değer doldurabiliyor:\n- `$TIMESTAMP:` Unix miladından itibaren geçen zamanı milisaniyede gösterir.\n- `$SYS:` Eğer mevcutsa bir değer sağlar; yoksa -1 sağlar.\n- `$DIA:` Eğer mevcutsa bir değer sağlar; yoksa -1 sağlar\n- `$PUL:` Eğer mevcutsa bir değer sağlar; yoksa -1 sağlar\n- `$NOTE:` Eğer mevcutsa bir değer sağlar; yoksa -1 sağlar\n\nBu adı geçen yerlerden herhangi biri kan basıncı kaydında yoksa, -1 ile değiştirilir.\n\n## Matematik\nÇift süslü parantez içinde basit matematiksel işlemler yapabilirsiniz (\"`{{}}`\").\n\nBu matematiksel işlemler desteklenir:\n- İşlemler: +, -, *, /, %, ^\n- Tek-parametreli fonksiyonlar: abs, acos, asin, atan, ceil, cos, cosh, cot, coth, csc, csch, exp, floor, ln, log, round sec, sech, sin, sinh, sqrt, tan, tanh\n- Çift-parametreli fonksiyonlar: log, nrt, pow\n- Sabit değişkenler: e, pi, ln2, ln10, log2e, log10e, sqrt1_2, sqrt2\nMatematik interpretor'unun bütün ayrıntıları için [function_tree](https://pub.dev/documentation/function_tree/latest#interpreter)'e bakabilirsiniz\n\n## Zaman\nZaman damgası biçimlendirmek için bunu kullanın: `$FORMAT{<timestamp>,<formatString>}`. `<formatString>` ICU/Skeleton string [dokümantasyon sayfasında](screen://TimeFormattingHelp) anlatılanla aynı biçimi destekler.\n\n## İşlem önceliği\n1. Değişken değişimi\n2. Matematik\n3. Zaman Biçimi'",
+  "@exportFieldFormatDocumentation": {},
+  "exportAfterEveryInput": "Her girişten sonra dışa aktar",
+  "@exportAfterEveryInput": {},
+  "week": "Hafta",
+  "@week": {},
+  "linePositionY": "Çizgi konumu (y)",
+  "@linePositionY": {},
+  "warnValues": "Uyarı değerleri",
+  "@warnValues": {},
+  "displayTitle": "Başlığı göster",
+  "@displayTitle": {},
+  "result": "Sonuç:",
+  "@result": {},
+  "settings": "Ayarlar",
+  "@settings": {},
+  "loading": "yükleniyor…",
+  "@loading": {},
+  "text": "metin",
+  "@text": {},
+  "avgOf": "{txt} Ø",
+  "@avgOf": {
+    "placeholders": {
+      "txt": {
+        "type": "String"
+      }
+    }
+  },
+  "errOnlyLatinCharactersAndArabicNumbers": "Yalnızca latin harfler iveya batı arap rakamları kabul edilir",
+  "@errOnlyLatinCharactersAndArabicNumbers": {},
+  "confirmDelete": "Silmeyi onayla",
+  "@confirmDelete": {},
+  "errWrongImportFormat": "Sadece CSV ve SQLite veritabanı biçiminde dosya aktarabilirsiniz.",
+  "@errWrongImportFormat": {},
+  "minOf": "{txt} asg.",
+  "@minOf": {
+    "placeholders": {
+      "txt": {
+        "type": "String"
+      }
+    }
+  },
+  "timeResolvedMetrics": "Saatlik Belirlenen Metrikler",
+  "@timeResolvedMetrics": {},
+  "enterTimeFormatScreen": "Zaman biçimi",
+  "@enterTimeFormatScreen": {},
+  "fieldFormat": "Alan biçimi",
+  "@fieldFormat": {},
+  "system": "Sistem",
+  "@system": {},
+  "sysShort": "sys",
+  "@sysShort": {},
+  "sysWarn": "Sistolik uyarı",
+  "@sysWarn": {},
+  "now": "şu an",
+  "@now": {},
+  "layout": "Düzen",
+  "@layout": {},
+  "diaLong": "Diyastolik",
+  "@diaLong": {},
+  "time": "Zaman",
+  "@time": {},
+  "enterTimeFormatTxt4": "varsayılan: \"yy-MM-dd HH:mm\"",
+  "@enterTimeFormatTxt4": {},
+  "custom": "Özel",
+  "@custom": {},
+  "day": "Gün",
+  "@day": {},
+  "note": "Not",
+  "@note": {},
+  "exportPdfHeaderFontSize": "Başlık yazı tipi boyutu",
+  "@exportPdfHeaderFontSize": {},
+  "last7Days": "7 gün",
+  "@last7Days": {},
+  "buildNumberOf": "Sürüm numarası: {buildNumber}",
+  "@buildNumberOf": {
+    "placeholders": {
+      "buildNumber": {
+        "type": "String"
+      }
+    }
+  },
+  "pdfDocumentTitle": "{start}'den {end}'e kan basıncı değerleri",
+  "@pdfDocumentTitle": {
+    "placeholders": {
+      "start": {
+        "type": "String"
+      },
+      "end": {
+        "type": "String"
+      }
+    }
+  },
+  "confirmDeleteDesc": "Bu girişi sil? (Bu onaylama mesajını ayarlardan kapatabilirsiniz.)",
+  "@confirmDeleteDesc": {},
+  "errNoFileOpened": "herhangi bir dosya açılmadı",
+  "@errNoFileOpened": {}
+}
