@@ -225,11 +225,7 @@ class _AddMeasurementPageState extends State<AddMeasurementPage> {
             },
           );
           setState(() {
-            if (color is MaterialColor) {
-              _needlePin = MeasurementNeedlePin(color);
-            } else {
-              _needlePin = null;
-            }
+            _needlePin = (color is MaterialColor) ? MeasurementNeedlePin(color) : null;
           });
         },
 
