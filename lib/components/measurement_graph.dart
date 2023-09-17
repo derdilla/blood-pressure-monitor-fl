@@ -80,24 +80,13 @@ class _LineChartState extends State<_LineChart> {
                           LineChartData(
                               minY: minValue.toDouble(),
                               maxY: maxValue + 5,
+                              clipData: FlClipData.all(),
                               titlesData: _buildFlTitlesData(settings),
                               lineTouchData: const LineTouchData(
                                   touchTooltipData: LineTouchTooltipData(tooltipMargin: -200, tooltipRoundedRadius: 20)
                               ),
-                              lineBarsData: [
-                                _buildBarData(animatedThickness, sysSpots, settings.sysColor, true, settings.sysWarn.toDouble()),
-                                _buildBarData(animatedThickness, diaSpots, settings.diaColor, true, settings.diaWarn.toDouble()),
-                                _buildBarData(animatedThickness, pulSpots, settings.pulColor, false),
-                                if (settings.drawRegressionLines)
-                                  _buildRegressionLine(sysSpots),
-                                if (settings.drawRegressionLines)
-                                  _buildRegressionLine(diaSpots),
-                                if (settings.drawRegressionLines)
-                                  _buildRegressionLine(pulSpots),
-                                for (final horizontalLine in settings.horizontalGraphLines)
-                                  if (horizontalLine.height < maxValue && horizontalLine.height > minValue)
-                                    _buildHorizontalLine(horizontalLine, graphBegin!, graphEnd!),
-                              ]
+                              lineBarsData: buildBars(animatedThickness, settings, sysSpots, diaSpots, pulSpots,
+                                  maxValue, minValue, graphBegin, graphEnd, fetchedData)
                           ),
                         );
                       },
@@ -108,6 +97,26 @@ class _LineChartState extends State<_LineChart> {
           },
         )
     );
+  }
+
+  List<LineChartBarData> buildBars(double animatedThickness, Settings settings, List<FlSpot> sysSpots, List<FlSpot> diaSpots, List<FlSpot> pulSpots, int maxValue, int minValue, double? graphBegin, double? graphEnd, Iterable<BloodPressureRecord> allRecords) {
+    var bars = [
+      _buildBarData(animatedThickness, sysSpots, settings.sysColor, true, settings.sysWarn.toDouble()),
+      _buildBarData(animatedThickness, diaSpots, settings.diaColor, true, settings.diaWarn.toDouble()),
+      _buildBarData(animatedThickness, pulSpots, settings.pulColor, false),
+      for (final horizontalLine in settings.horizontalGraphLines)
+        if (horizontalLine.height < maxValue && horizontalLine.height > minValue)
+          _buildHorizontalLine(horizontalLine, graphBegin!, graphEnd!),
+    ];
+    if (settings.drawRegressionLines) {
+      bars.addAll([
+          _buildRegressionLine(sysSpots),
+          _buildRegressionLine(diaSpots),
+          _buildRegressionLine(pulSpots),
+      ]);
+    }
+    bars.addAll(_buildNeedlePins(allRecords, minValue, maxValue));
+    return bars;
   }
 
   FlTitlesData _buildFlTitlesData(Settings settings) {
@@ -167,6 +176,22 @@ class _LineChartState extends State<_LineChart> {
         ),
       ),
     );
+  }
+
+  List<LineChartBarData> _buildNeedlePins(Iterable<BloodPressureRecord> allRecords, int min, int max) {
+    final pins = <LineChartBarData>[];
+    for (final r in allRecords.where((e) => e.needlePin != null)) {
+      pins.add(LineChartBarData(
+        spots: [
+          FlSpot(r.creationTime.millisecondsSinceEpoch.toDouble(), min.toDouble()),
+          FlSpot(r.creationTime.millisecondsSinceEpoch.toDouble(), max + 5)
+        ],
+        barWidth: 20,
+        dotData: FlDotData(show: false),
+        color: r.needlePin!.color.withAlpha(100),
+      ));
+    }
+    return pins;
   }
 
   LineChartBarData _buildBarData(double lineThickness, List<FlSpot> spots, Color color, bool hasAreaData, [double? areaDataCutOff]) {

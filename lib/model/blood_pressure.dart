@@ -1,7 +1,10 @@
+import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 
+import 'package:blood_pressure_app/screens/error_reporting.dart';
 import 'package:collection/collection.dart';
-import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:path/path.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
@@ -17,15 +20,45 @@ class BloodPressureModel extends ChangeNotifier {
       dbPath = join(dbPath, 'blood_pressure.db');
     }
 
+    // In case safer data loading is needed: finish this.
+    /*
+    String? backupPath;
+    if (dbPath != inMemoryDatabasePath) {
+      assert(_database.isUndefinedOrNull);
+      backupPath = join(Directory.systemTemp.path, 'blood_pressure_bu_${DateTime.now().millisecondsSinceEpoch}.db');
+      final copiedFile = File(dbPath).copy(backupPath);
+      copiedFile.onError((error, stackTrace) => null)
+    }
+    var preserveBackup = false;
+    */
+
     _database = await openDatabase(
       dbPath,
       // runs when the database is first created
-      onCreate: (db, version) {
-        return db.execute(
-            'CREATE TABLE bloodPressureModel(timestamp INTEGER(14) PRIMARY KEY, systolic INTEGER, diastolic INTEGER, pulse INTEGER, notes STRING)');
-      },
-      version: 1,
+      onCreate: _onDBCreate,
+      onUpgrade: _onDBUpgrade,
+      version: 2,
     );
+  }
+
+  FutureOr<void> _onDBCreate(Database db, int version) {
+      return db.execute('CREATE TABLE bloodPressureModel('
+          'timestamp INTEGER(14) PRIMARY KEY,'
+          'systolic INTEGER, diastolic INTEGER,'
+          'pulse INTEGER,'
+          'notes STRING,'
+          'needlePin STRING)');
+    }
+
+  FutureOr<void> _onDBUpgrade(Database db, int oldVersion, int newVersion) async {
+    // When adding more versions the upgrade procedure proposed in https://stackoverflow.com/a/75153875/21489239
+    // might be useful, to avoid duplicated code. Currently this would only lead to complexity, without benefits.
+    if (oldVersion == 1 && newVersion == 2) {
+      db.execute('ALTER TABLE bloodPressureModel ADD COLUMN needlePin STRING;');
+      db.database.setVersion(2);
+    } else {
+      await ErrorReporting.reportCriticalError('Unsupported database upgrade', 'Attempted to upgrade the measurement database from version $oldVersion to version $newVersion, which is not supported. This action failed to avoid data loss. Please contact the app developer by opening an issue with the link below or writing an email to contact@derdilla.com.');
+    }
   }
 
   // factory method, to allow for async constructor
@@ -51,7 +84,8 @@ class BloodPressureModel extends ChangeNotifier {
             'systolic': measurement.systolic,
             'diastolic': measurement.diastolic,
             'pulse': measurement.pulse,
-            'notes': measurement.notes
+            'notes': measurement.notes,
+            'needlePin': jsonEncode(measurement.needlePin)
           },
           where: 'timestamp = ?',
           whereArgs: [measurement.creationTime.millisecondsSinceEpoch]);
@@ -61,7 +95,8 @@ class BloodPressureModel extends ChangeNotifier {
         'systolic': measurement.systolic,
         'diastolic': measurement.diastolic,
         'pulse': measurement.pulse,
-        'notes': measurement.notes
+        'notes': measurement.notes,
+        'needlePin': jsonEncode(measurement.needlePin)
       });
     }
     notifyListeners();
@@ -93,8 +128,15 @@ class BloodPressureModel extends ChangeNotifier {
   List<BloodPressureRecord> _convert(List<Map<String, Object?>> dbResult) {
     List<BloodPressureRecord> records = [];
     for (var e in dbResult) {
-      records.add(BloodPressureRecord(DateTime.fromMillisecondsSinceEpoch(e['timestamp'] as int), e['systolic'] as int?,
-          e['diastolic'] as int?, e['pulse'] as int?, e['notes'].toString()));
+      final needlePinJson = e['needlePin'] as String?;
+      records.add(BloodPressureRecord(
+        DateTime.fromMillisecondsSinceEpoch(e['timestamp'] as int),
+        e['systolic'] as int?,
+        e['diastolic'] as int?,
+        e['pulse'] as int?,
+        e['notes'].toString(),
+        needlePin: (needlePinJson == null) ? null : MeasurementNeedlePin.fromJson(jsonDecode(needlePinJson))
+      ));
     }
     return records;
   }
@@ -102,28 +144,21 @@ class BloodPressureModel extends ChangeNotifier {
 
 @immutable
 class BloodPressureRecord {
-  late final DateTime _creationTime;
+  late final DateTime creationTime;
   final int? systolic;
   final int? diastolic;
   final int? pulse;
   final String notes;
-  //TODO: when adding a color / needle pin for entries:
-  // - the whole row in the table can be with that bg color
-  // - add lots of test to make sure this doesn't break records
-  // - maybe even store independently
+  final MeasurementNeedlePin? needlePin;
 
-  BloodPressureRecord(DateTime creationTime, this.systolic, this.diastolic, this.pulse, this.notes) {
-    this.creationTime = creationTime;
-  }
-
-  DateTime get creationTime => _creationTime;
-  /// datetime needs to be after epoch
-  set creationTime(DateTime value) {
-    if (value.millisecondsSinceEpoch > 0) {
-      _creationTime = value;
+  BloodPressureRecord(DateTime creationTime, this.systolic, this.diastolic, this.pulse, this.notes, {
+    this.needlePin
+  }) {
+    if (creationTime.millisecondsSinceEpoch > 0) {
+      this.creationTime = creationTime;
     } else {
       assert(false, "Tried to create BloodPressureRecord at or before epoch");
-      _creationTime = DateTime.fromMillisecondsSinceEpoch(1);
+      this.creationTime = DateTime.fromMillisecondsSinceEpoch(1);
     }
   }
 
@@ -131,6 +166,19 @@ class BloodPressureRecord {
   String toString() {
     return 'BloodPressureRecord($creationTime, $systolic, $diastolic, $pulse, $notes)';
   }
+}
+
+@immutable
+class MeasurementNeedlePin {
+  final Color color;
+
+  const MeasurementNeedlePin(this.color);
+  // When updating this, remember to be backwards compatible
+  MeasurementNeedlePin.fromJson(Map<String, dynamic> json)
+      : color = Color(json['color']);
+  Map<String, dynamic> toJson() => {
+    'color': color.value,
+  };
 }
 
 // source: https://pressbooks.library.torontomu.ca/vitalsign/chapter/blood-pressure-ranges/ (last access: 20.05.2023)

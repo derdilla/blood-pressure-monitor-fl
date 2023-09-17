@@ -21,6 +21,8 @@ class MeasurementListRow extends StatelessWidget {
           // Leading color possible
           title: buildRow(formatter),
           childrenPadding: const EdgeInsets.only(bottom: 10),
+          backgroundColor: record.needlePin?.color.withAlpha(30),
+          collapsedShape: record.needlePin != null ? Border(left: BorderSide(color: record.needlePin!.color, width: 8)) : null,
           children: [
             ListTile(
               subtitle: Text(formatter.format(record.creationTime)),
@@ -53,19 +55,20 @@ class MeasurementListRow extends StatelessWidget {
   }
 
   Row buildRow(DateFormat formatter) {
+    String formatNum(int? num) => (num ?? '-').toString();
     return Row(
       children: [
         Expanded(
           flex: 3,
-          child: Text(record.systolic.toString()),
+          child: Text(formatNum(record.systolic)),
         ),
         Expanded(
           flex: 3,
-          child: Text(record.diastolic.toString()),
+          child: Text(formatNum(record.diastolic)),
         ),
         Expanded(
           flex: 3,
-          child: Text(record.pulse.toString()),
+          child: Text(formatNum(record.pulse)),
         ),
       ]
     );
