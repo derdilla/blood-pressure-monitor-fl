@@ -1,5 +1,5 @@
-- Added a plethora of options for CSV export.
-- Enabled export as an SQLite database.
-- Addressed issues with the statistics page.
-- Incorporated display interval-specific time formats to avoid confusion.
-- Enhanced input validation to catch even more mistakes.
+- Aggiunta di una pletora di opzioni per l'esportazione CSV.
+- Abilitata l'esportazione come database SQLite.
+- Risolti i problemi con la pagina delle statistiche.
+- Incorporati i formati temporali specifici per gli intervalli di visualizzazione per evitare confusione.
+- Migliorata la convalida degli inserimenti per individuare un maggior numero di errori.

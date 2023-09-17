@@ -1,3 +1,3 @@
-* Update dependencies and migrate to Material 3 (You)
-* Fix the app not responding when switching to custom interval and then closing the date range selection on the main page
-* Add optional trend lines to graph
+* Aggiornamento delle dipendenze e migrazione a Material 3 (You)
+* Corretta la mancata risposta dell'applicazione quando si passa a un intervallo personalizzato e poi si chiude la selezione dell'intervallo di date nella pagina principale
+* Aggiunte linee di tendenza opzionali al grafico

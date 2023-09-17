@@ -1,1 +1,1 @@
-Save, analyze and export your blood pressure!
+Salva, analizza ed esporta i dati sulla prorpia pressione arteriosa.

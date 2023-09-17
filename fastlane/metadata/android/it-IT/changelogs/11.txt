@@ -1,4 +1,4 @@
-* improve design
-* Improve graph usability
-* validate inputs
-* changed default time format
+* Migliorato il design
+* Migliorata l'usabilità del grafico
+* Convalida degli inserimenti
+* Modifica del formato orario predefinito

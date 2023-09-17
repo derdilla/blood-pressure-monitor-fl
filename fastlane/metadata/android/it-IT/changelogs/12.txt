@@ -1,6 +1,6 @@
-This brand new release comes with more data safety and better usability!
-* add safety measures to entry deletion
-* fix utf8 character import and number only messages
-* more design customization
-* show more information when importing
-* fix time steps
+Questa nuova versione offre una maggiore sicurezza dei dati e una migliore usabilità!
+* Aggiunta di misure di sicurezza per l'eliminazione delle voci
+* Correzione dell'importazione dei caratteri UTF-8 e dei messaggi solo numerici
+* Maggiore personalizzazione del design
+* Maggiori informazioni mostrate durante l'importazione
+* Correzione delle fasi temporali
