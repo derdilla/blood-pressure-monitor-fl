@@ -1,0 +1,5 @@
+* liste der Messwerte umgestalten, um auf kleinen displays besser zu funktionieren
+* erlaube farbe mit einträgen zu speichern
+* füge einstellung für eigene horizontale Linie im Graph ein
+* mache das standard PDF-Datum lesbar
+* übersetzungen (Türkisch, Italienisch, Französisch, Deutsch)
