@@ -73,7 +73,7 @@
   "@textDelimiter": {},
   "enterTimeFormatTxt1": "Une chaine de formatage est un mélange de chaines ICU/Skeleton et de n''importe quel texte supplémentaire que vous souhaitez inclure.",
   "@enterTimeFormatTxt1": {},
-  "enterTimeFormatTxt2": "Si vous souhaitez en savoir plus sur la liste complète des formats valides, vous pouvez trouver ces derniers juste ici.",
+  "enterTimeFormatTxt2": "Si vous souhaitez en savoir plus sur la liste complète des formats valides, tapez ici.",
   "@enterTimeFormatTxt2": {},
   "success": "Réussite : {msg}",
   "@success": {
@@ -340,5 +340,46 @@
   "language": "Langue",
   "@language": {},
   "errTimeAfterNow": "L''heure choisie est dans le futur. Nous avons automatiquement repositionné à l''heure courante. Vous pouvez désactiver ce comportement dans les paramètres !",
-  "@errTimeAfterNow": {}
+  "@errTimeAfterNow": {},
+  "unixTimestamp": "Horodatage Unix",
+  "@unixTimestamp": {},
+  "addExportformat": "Ajouter un format d'export",
+  "@addExportformat": {},
+  "title": "Pression artérielle",
+  "@title": {},
+  "exportHiddenFields": "champs masqués",
+  "@exportHiddenFields": {},
+  "drawRegressionLines": "Dessiner des lignes de tendances",
+  "@drawRegressionLines": {},
+  "internalName": "Nom interne",
+  "@internalName": {},
+  "edit": "Éditer",
+  "@edit": {},
+  "delete": "Supprimer",
+  "@delete": {},
+  "errCantEditThis": "Edition impossible. Regardez les valeurs pour créer un nouvel enregistrement.",
+  "@errCantEditThis": {},
+  "drawRegressionLinesDesc": "Dessiner des lignes de régression dans les graphiques. Utile seulement pour les grands intervalles.",
+  "@drawRegressionLinesDesc": {},
+  "pulsePressure": "Pression pulsée",
+  "@pulsePressure": {},
+  "displayTitle": "Afficher un titre",
+  "@displayTitle": {},
+  "result": "Résultat :",
+  "@result": {},
+  "errOnlyLatinCharactersAndArabicNumbers": "Seuls les caractères latins et arabes sont autorisés",
+  "@errOnlyLatinCharactersAndArabicNumbers": {},
+  "fieldFormat": "Format de champ",
+  "@fieldFormat": {},
+  "pdfDocumentTitle": "Mesures de pression artérielle du {start} au {end}",
+  "@pdfDocumentTitle": {
+    "placeholders": {
+      "start": {
+        "type": "String"
+      },
+      "end": {
+        "type": "String"
+      }
+    }
+  }
 }

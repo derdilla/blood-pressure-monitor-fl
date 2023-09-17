@@ -7,7 +7,7 @@
   "@errNotEnoughDataToGraph": {},
   "errNoData": "Nessun dato",
   "@errNoData": {},
-  "errCantReadFile": "Impossibile leggere il contenuo del file",
+  "errCantReadFile": "Impossibile leggere il contenuto del file",
   "@errCantReadFile": {},
   "errLt30": "Valore <= 30. Disattivare la convalida nelle impostazioni.",
   "@errLt30": {},
@@ -21,9 +21,9 @@
   "@errNotImportable": {},
   "loading": "Caricamento in corso…",
   "@loading": {},
-  "btnCancel": "ANNULLA",
+  "btnCancel": "Annulla",
   "@btnCancel": {},
-  "btnSave": "SALVA",
+  "btnSave": "Salva",
   "@btnSave": {},
   "error": "Errore: {msg}",
   "@error": {
@@ -35,7 +35,7 @@
   },
   "btnConfirm": "OK",
   "@btnConfirm": {},
-  "btnNext": "SUCCESSIVO",
+  "btnNext": "Successivo",
   "@btnNext": {},
   "errNaN": "Inserire un numero",
   "@errNaN": {},
@@ -48,5 +48,384 @@
         "type": "String"
       }
     }
-  }
+  },
+  "sysColor": "Colore sistolica",
+  "@sysColor": {},
+  "determineWarnValues": "Determina i valori di allerta",
+  "@determineWarnValues": {},
+  "validateInputs": "Convalida inserimenti",
+  "@validateInputs": {},
+  "confirmDeletion": "Conferma eliminazione",
+  "@confirmDeletion": {},
+  "aboutWarnValuesScreenDesc": "Ulteriori informazioni sui valori di allerta",
+  "@aboutWarnValuesScreenDesc": {},
+  "exportAfterEveryInput": "Esporta dopo ogni inserimento",
+  "@exportAfterEveryInput": {},
+  "other": "Altro",
+  "@other": {},
+  "import": "Importa",
+  "@import": {},
+  "text": "Testo",
+  "@text": {},
+  "exportSuccess": "Esporta in: {path}",
+  "@exportSuccess": {
+    "placeholders": {
+      "path": {
+        "type": "String"
+      }
+    }
+  },
+  "sourceCode": "Codice sorgente",
+  "@sourceCode": {},
+  "licenses": "Licenze di terze parti",
+  "@licenses": {},
+  "minOf": "{txt} min.",
+  "@minOf": {
+    "placeholders": {
+      "txt": {
+        "type": "String"
+      }
+    }
+  },
+  "warnValues": "Valori di allerta",
+  "@warnValues": {},
+  "maxOf": "{txt} max.",
+  "@maxOf": {
+    "placeholders": {
+      "txt": {
+        "type": "String"
+      }
+    }
+  },
+  "dateFormatting": "Formattazione data",
+  "@dateFormatting": {},
+  "now": "Adesso",
+  "@now": {},
+  "notes": "Note",
+  "@notes": {},
+  "weekOfYear": "Settimana {weekNum}, {year}",
+  "@weekOfYear": {
+    "placeholders": {
+      "weekNum": {
+        "type": "int"
+      },
+      "year": {
+        "type": "int"
+      }
+    }
+  },
+  "exportPdfHeaderHeight": "Altezza intestazione",
+  "@exportPdfHeaderHeight": {},
+  "exportPdfCellHeight": "Altezza riga",
+  "@exportPdfCellHeight": {},
+  "exportPdfHeaderFontSize": "Dimensione del carattere dell'intestazione",
+  "@exportPdfHeaderFontSize": {},
+  "exportPdfCellFontSize": "Dimensione del carattere della riga",
+  "@exportPdfCellFontSize": {},
+  "average": "Media",
+  "@average": {},
+  "maximum": "Massima",
+  "@maximum": {},
+  "minimum": "Minima",
+  "@minimum": {},
+  "exportPdfExportTitle": "Riga di intestazione",
+  "@exportPdfExportTitle": {},
+  "exportPdfExportData": "Tabella dei dati",
+  "@exportPdfExportData": {},
+  "enterTimeFormatString": "Formato orario",
+  "@enterTimeFormatString": {},
+  "time": "Orario",
+  "@time": {},
+  "warnAboutTxt1": "I valori di allerta sono semplici suggerimenti e non consigli medici.",
+  "@warnAboutTxt1": {},
+  "startWithAddMeasurementPageDescription": "Subito dopo l'avvio dell'app, viene mostrata la schermata di inserimento della misurazione.",
+  "@startWithAddMeasurementPageDescription": {},
+  "exportMimeTypeDesc": "Segnala il tipo alle altre app",
+  "@exportMimeTypeDesc": {},
+  "errCantEditThis": "Impossibile modificare. Consultare i valori per la creazione di una nuova voce.",
+  "@errCantEditThis": {},
+  "presets": "Programmate",
+  "@presets": {},
+  "enterTimeFormatTxt1": "Una stringa di formattazione è un inseme di stringhe ICU/Skeleton predefinite e di qualsiasi testo aggiuntivo che si desidera aggiungere.",
+  "@enterTimeFormatTxt1": {},
+  "enterTimeFormatTxt2": "Qui è presente un elenco completo dei formati validi.",
+  "@enterTimeFormatTxt2": {},
+  "enterTimeFormatTxt3": "Avviso: l'uso di stringhe di formato più lungo o più corto non altera magicamente la larghezza delle colonne della tabella, il che potrebbe portare a problematiche interruzioni di riga e alla mancata visualizzazione del testo.",
+  "@enterTimeFormatTxt3": {},
+  "lifetime": "Vita",
+  "@lifetime": {},
+  "confirmDeleteDesc": "Eliminare questa voce? (È possibile disabilitare questa richiesta di convalida nelle impostazioni.)",
+  "@confirmDeleteDesc": {},
+  "errTimeAfterNow": "L'ora è stata reimpostata, in quanto era successiva all'ora attuale. È possibile disabilitare questa richiesta di convalida nelle impostazioni.",
+  "@errTimeAfterNow": {},
+  "custom": "Personalizzato",
+  "@custom": {},
+  "drawRegressionLinesDesc": "Disegna linee di regressione nel grafico. Utile solo per lunghi intervalli di tempo.",
+  "@drawRegressionLinesDesc": {},
+  "pulsePressure": "Pressione differenziale",
+  "@pulsePressure": {},
+  "unixTimestamp": "Marca temporale Unix",
+  "@unixTimestamp": {},
+  "addExportformat": "Aggiungi formato di esportazione",
+  "@addExportformat": {},
+  "timeResolvedMetrics": "Metriche risolte nel tempo",
+  "@timeResolvedMetrics": {},
+  "exportAfterEveryInputDesc": "Sconsigliato (aumento esponenziale delle informazioni e conseguente sovraccarico)",
+  "@exportAfterEveryInputDesc": {},
+  "exportFieldFormatDocumentation": "'## Variabili\nIl formato del campo di esportazione supporta l'inserimento di valori per le seguenti variabili:\n- `$TIMESTAMP:` Rappresenta il tempo trascorso dall'epoca Unix, espresso in millisecondi.\n- `$SYS:` Fornisce il valore se disponibile, in alternativa il valore predefinito è -1.\n- `$DIA:` Fornisce il valore se disponibile, in alternativa il valore predefinito è -1.\n- `$PUL:` Fornisce il valore se disponibile, in alternativa il valore predefinito è -1.\n- `$NOTE:` Fornisce il valore se disponibile, in alternativa il valore predefinito è -1.\n\nSe qualcuna delle variabili menzionate sopra non sono presenti nella registrazione della pressione arteriosa, verranno sostituite con il valore -1.\n\n## Matematica\nPossono essere utilizzate operazioni matematiche basiche all'interno di doppie graffe (\"`{{}}`\").\n\nSono supportate le seguenti operazioni matematiche:\n- Operazioni: +, -, *, /, %, ^\n- Equazioni di primo grado: abs, acos, asin, atan, ceil, cos, cosh, cot, coth, csc, csch, exp, floor, ln, log, round sec, sech, sin, sinh, sqrt, tan, tanh \n- Equazioni di secondo grado: log, nrt, pow\n- Costanti: e, pi, ln2, ln10, log2e, log10e, sqrt1_2, sqrt2\nPer le specifiche complete dell'interprete matematico, si può fare riferimento all'[albero delle funzioni](https://pub.dev/documentation/function_tree/latest#interpreter)\n\n## Tempo\nPer formattare una marca temporale, usare la seguente sintassi: `$FORMAT{<timestamp>,<formatString>}`. Il parametro `<formatString>` supporta lo stesso formato descritto nella [pagina della documentazione](screen://TimeFormattingHelp) sulla stringa ICU/Skeleton.\n\n## Ordine di elaborazione\n1. Sostituzione della variabile\n2. Matematica\n3. Formattazione della data'",
+  "@exportFieldFormatDocumentation": {},
+  "startWithAddMeasurementPage": "Misurazione all'avvio",
+  "@startWithAddMeasurementPage": {},
+  "errNotStarted": "Non avviato",
+  "@errNotStarted": {},
+  "errWrongImportFormat": "È possibile importare solo file in formato CSV e database SQLite.",
+  "@errWrongImportFormat": {},
+  "errNeedHeadline": "È possibile importare solo file con una riga di intestazione.",
+  "@errNeedHeadline": {},
+  "sysLong": "Sistolica",
+  "@sysLong": {},
+  "sysShort": "PAS",
+  "@sysShort": {},
+  "diaLong": "Diastolica",
+  "@diaLong": {},
+  "diaShort": "PAD",
+  "@diaShort": {},
+  "pulLong": "Frequenza cardiaca",
+  "@pulLong": {},
+  "pulShort": "FC",
+  "@pulShort": {},
+  "addNote": "Note (opzionale)",
+  "@addNote": {},
+  "settings": "Impostazioni",
+  "@settings": {},
+  "theme": "Tema",
+  "@theme": {},
+  "system": "Sistema",
+  "@system": {},
+  "dark": "Scuro",
+  "@dark": {},
+  "light": "Chiaro",
+  "@light": {},
+  "iconSize": "Dimensione icona",
+  "@iconSize": {},
+  "graphLineThickness": "Spessore linea",
+  "@graphLineThickness": {},
+  "animationSpeed": "Durata animazione",
+  "@animationSpeed": {},
+  "accentColor": "Colore del tema",
+  "@accentColor": {},
+  "layout": "Layout",
+  "@layout": {},
+  "errPleaseSelect": "Selezionare un elemento",
+  "@errPleaseSelect": {},
+  "btnUndo": "Precedente",
+  "@btnUndo": {},
+  "allowManualTimeInput": "Consentire inserimento orario manuale",
+  "@allowManualTimeInput": {},
+  "enterTimeFormatScreen": "Formato orario",
+  "@enterTimeFormatScreen": {},
+  "graphTitlesCount": "Conteggio etichette grafico",
+  "@graphTitlesCount": {},
+  "success": "Completato: {msg}",
+  "@success": {
+    "placeholders": {
+      "msg": {
+        "type": "String"
+      }
+    }
+  },
+  "title": "Monitoraggio pressorio",
+  "@title": {},
+  "diaColor": "Colore diastolica",
+  "@diaColor": {},
+  "pulColor": "Colore frequenza cardiaca",
+  "@pulColor": {},
+  "behavior": "Comportamento",
+  "@behavior": {},
+  "age": "Età",
+  "@age": {},
+  "aboutWarnValuesScreen": "Informazioni",
+  "@aboutWarnValuesScreen": {},
+  "sysWarn": "Avviso sistolica",
+  "@sysWarn": {},
+  "diaWarn": "Avviso diastolica",
+  "@diaWarn": {},
+  "data": "Dati",
+  "@data": {},
+  "version": "Versione",
+  "@version": {},
+  "versionOf": "Versione: {version}",
+  "@versionOf": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "buildNumberOf": "Numero versione: {buildNumber}",
+  "@buildNumberOf": {
+    "placeholders": {
+      "buildNumber": {
+        "type": "String"
+      }
+    }
+  },
+  "packageNameOf": "Nome pacchetto: {name}",
+  "@packageNameOf": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "exportImport": "Esporta / Importa",
+  "@exportImport": {},
+  "exportDir": "Directory di esportazione",
+  "@exportDir": {},
+  "exportInterval": "Intervallo dati",
+  "@exportInterval": {},
+  "exportFormat": "Formato di esportazione",
+  "@exportFormat": {},
+  "exportCustomEntries": "Personalizza campi",
+  "@exportCustomEntries": {},
+  "addEntry": "Aggiungi campo",
+  "@addEntry": {},
+  "exportCsvHeadline": "Riga di intestazione",
+  "@exportCsvHeadline": {},
+  "exportCsvHeadlineDesc": "Aiuta a determinare i tipi di valori",
+  "@exportCsvHeadlineDesc": {},
+  "csv": "CSV",
+  "@csv": {},
+  "pdf": "PDF",
+  "@pdf": {},
+  "db": "Database SQLite",
+  "@db": {},
+  "fieldDelimiter": "Delimitatore di campo",
+  "@fieldDelimiter": {},
+  "textDelimiter": "Delimitatore di testo",
+  "@textDelimiter": {},
+  "export": "Esporta",
+  "@export": {},
+  "buildSignatureOf": "Firma della versione: {signature}",
+  "@buildSignatureOf": {
+    "placeholders": {
+      "signature": {
+        "type": "String"
+      }
+    }
+  },
+  "sharedPrefsDump": "Salvataggio preferenze condivise:",
+  "@sharedPrefsDump": {},
+  "shared": "Condiviso",
+  "@shared": {},
+  "exportMimeType": "Tipo di supporto per l'esportazione",
+  "@exportMimeType": {},
+  "statistics": "Statistiche",
+  "@statistics": {},
+  "measurementCount": "Conteggio misurazioni",
+  "@measurementCount": {},
+  "measurementsPerDay": "Misurazioni giornaliere",
+  "@measurementsPerDay": {},
+  "avgOf": "{txt} Ø",
+  "@avgOf": {
+    "placeholders": {
+      "txt": {
+        "type": "String"
+      }
+    }
+  },
+  "warnAboutTxt2": "I valori predefiniti relativamente all'età provengono da questa fonte.",
+  "@warnAboutTxt2": {},
+  "warnAboutTxt3": "I valori possono essere modificati liberamente per adattarsi alle proprie necessità e seguire i suggerimenti del proprio medico.",
+  "@warnAboutTxt3": {},
+  "importSuccess": "Voci importate: {count}",
+  "@importSuccess": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "exportWarnConfigNotImportable": "Avviso: l'attuale configurazione di esportazione non potrà essere importata nuovamente. Per risolvere il problema, assicurarsi di impostare il formato di esportazione come CSV, abilitare la riga di intestazione e includere uno dei formati orari disponibili.",
+  "@exportWarnConfigNotImportable": {},
+  "exportWarnNotEveryFieldExported": "Attenzione, non si stanno esportando tutti i campi: {fields} {count, plural, one{is} other{are}} missing.",
+  "@exportWarnNotEveryFieldExported": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "fields": {
+        "type": "String"
+      }
+    }
+  },
+  "enterTimeFormatTxt4": "predefinito: \"yy-MM-dd HH:mm\"",
+  "@enterTimeFormatTxt4": {},
+  "confirmDelete": "Conferma eliminazione",
+  "@confirmDelete": {},
+  "day": "Giorno",
+  "@day": {},
+  "week": "Settimana",
+  "@week": {},
+  "month": "Mese",
+  "@month": {},
+  "year": "Anno",
+  "@year": {},
+  "last7Days": "7 giorni",
+  "@last7Days": {},
+  "last30Days": "30 giorni",
+  "@last30Days": {},
+  "allowMissingValues": "Consenti valori mancanti",
+  "@allowMissingValues": {},
+  "language": "Lingua",
+  "@language": {},
+  "drawRegressionLines": "Disegna linee di tendenza",
+  "@drawRegressionLines": {},
+  "exportHiddenFields": "Campi nascosti",
+  "@exportHiddenFields": {},
+  "pdfDocumentTitle": "Valori della pressione arteriosa: inizio monitoraggio {start} - fine monitoraggio {end}",
+  "@pdfDocumentTitle": {
+    "placeholders": {
+      "start": {
+        "type": "String"
+      },
+      "end": {
+        "type": "String"
+      }
+    }
+  },
+  "displayTitle": "Mostra il titolo",
+  "@displayTitle": {},
+  "internalName": "Nome interno",
+  "@internalName": {},
+  "errOnlyLatinCharactersAndArabicNumbers": "Sono ammessi solo caratteri latini o numeri arabi",
+  "@errOnlyLatinCharactersAndArabicNumbers": {},
+  "deletionConfirmed": "Voce eliminata.",
+  "@deletionConfirmed": {},
+  "fieldFormat": "Formato campo",
+  "@fieldFormat": {},
+  "result": "Risultato:",
+  "@result": {},
+  "edit": "Modifica",
+  "@edit": {},
+  "delete": "Elimina",
+  "@delete": {},
+  "default_": "Predefinito",
+  "@default_": {},
+  "horizontalLines": "Linee orizzontali",
+  "@horizontalLines": {},
+  "customGraphMarkings": "Contrassegni personalizzati",
+  "@customGraphMarkings": {},
+  "addLine": "Aggiungi linea",
+  "@addLine": {},
+  "linePositionY": "Posizione linea (y)",
+  "@linePositionY": {},
+  "addMeasurement": "Aggiungi misurazione",
+  "@addMeasurement": {},
+  "timestamp": "Marca temporale",
+  "@timestamp": {},
+  "useLegacyList": "Usa elenco obsoleto",
+  "@useLegacyList": {},
+  "note": "Nota",
+  "@note": {}
 }
