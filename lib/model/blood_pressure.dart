@@ -129,13 +129,14 @@ class BloodPressureModel extends ChangeNotifier {
     List<BloodPressureRecord> records = [];
     for (var e in dbResult) {
       final needlePinJson = e['needlePin'] as String?;
+      final needlePin = (needlePinJson != null) ? jsonDecode(needlePinJson) : null;
       records.add(BloodPressureRecord(
         DateTime.fromMillisecondsSinceEpoch(e['timestamp'] as int),
         e['systolic'] as int?,
         e['diastolic'] as int?,
         e['pulse'] as int?,
         e['notes'].toString(),
-        needlePin: (needlePinJson == null) ? null : MeasurementNeedlePin.fromJson(jsonDecode(needlePinJson))
+        needlePin: (needlePin != null) ? MeasurementNeedlePin.fromJson(needlePin) : null
       ));
     }
     return records;
