@@ -1,5 +1,5 @@
-* Feat range limited statistics
-* Fix selecting a time of day after the current time
-* Added in-app language selection
-* Add "Custom" display intervall
-* Update translations for Chinese, French, German,
+* Ajout du choix d'un intervalle spécifique pour les statistiques
+* Correction du choix d'une heure dans le futur
+* Ajout du choix de la langue directement dans l'application
+* Ajout d'un intervalle paramétrable
+* Mise à jour des traductions en chinois, français, allemand

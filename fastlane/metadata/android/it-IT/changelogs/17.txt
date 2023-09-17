@@ -1,5 +1,5 @@
-* Add range limiting for statistics
-* Fix selecting a time of day after the current time
-* Added in-app language selection
-* Add "Custom" display interval
-* Update translations for Chinese, French, German,
+* Aggiunta la limitazione dell'intervallo per le statistiche
+* Corretta la selezione di un'ora del giorno successiva all'ora corrente
+* Aggiunta della selezione della lingua in-app
+* Aggiunta dell'intervallo di visualizzazione "Personalizzato"
+* Aggiornamento delle traduzioni per cinese, francese e tedesco

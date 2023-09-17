@@ -1,5 +1,5 @@
-* Allow exporting to a specific directory
-* Fix legacy import
-* Fix glitches in graph
-* Add version and debug info in app
-* improve english texts
+* Consentita l'esportazione in una directory specifica
+* Corretta l'importazione legacy
+* Corretti i difetti del grafico
+* Aggiunta di informazioni sulla versione e sul debug nell'applicazione
+* Migliorati i testi in inglese

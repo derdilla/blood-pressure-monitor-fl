@@ -1,5 +1,5 @@
-This release focuses on stability and adds advanced language support
+Questa versione si concentra sulla stabilità e aggiunge un supporto linguistico avanzato
 
-- Add framework for supporting different languages
-- Add german translation
-- Fix various bugs
+- Aggiunta di un framework per il supporto di diverse lingue
+- Aggiunta della traduzione in tedesco
+- Correzione di vari bug
