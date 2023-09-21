@@ -427,5 +427,7 @@
   "useLegacyList": "Usa elenco obsoleto",
   "@useLegacyList": {},
   "note": "Nota",
-  "@note": {}
+  "@note": {},
+  "color": "Colore",
+  "@color": {}
 }
