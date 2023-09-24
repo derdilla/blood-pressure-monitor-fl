@@ -317,7 +317,7 @@ class Exporter {
       fileContentsError = error;
       return null;
     });
-    var fileContents = await fileContentsFuture;
+    final fileContents = await fileContentsFuture;
     if (fileContentsError != null) {
       messenger.showSnackBar(SnackBar(content: Text(localizations.error(fileContentsError.toString()))));
       return;
