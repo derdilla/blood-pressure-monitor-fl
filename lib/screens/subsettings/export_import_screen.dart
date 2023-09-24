@@ -331,7 +331,6 @@ class _ExportWarnBannerState extends State<ExportWarnBanner> {
     _future = ExportConfigurationModel.get(
         Provider.of<Settings>(context, listen: false), localizations);
     return Consumer<Settings>(builder: (context, settings, child) {
-      _showWarnBanner = true; // when settings change, warn banner should reset as well
       return ConsistentFutureBuilder(
           future: _future,
           onData: (context, configurationModel) {
