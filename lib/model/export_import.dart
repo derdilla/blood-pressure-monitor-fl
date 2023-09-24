@@ -87,7 +87,7 @@ class ExportFileCreator {
       Color? color;
       String? notes;
       for (var attributeIndex = 0; attributeIndex < attributes.length; attributeIndex++) {
-        if (timestamp != null && sys != null && dia !=null && pul != null) continue; // optimization
+        if (timestamp != null && sys != null && dia !=null && pul != null && notes != null && color != null) continue; // optimization
 
         // get colum from internal name
         final columnInternalTitle = attributes[attributeIndex].toString().trim();
