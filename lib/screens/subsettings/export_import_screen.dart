@@ -303,8 +303,7 @@ class ExportImportButtons extends StatelessWidget {
                           messenger,
                           localizations,
                           theme,
-                          await ExportConfigurationModel.get(
-                              settings, localizations))
+                          await ExportConfigurationModel.get(settings, localizations))
                       .import(),
                 )),
           ],
@@ -347,7 +346,8 @@ class _ExportWarnBannerState extends State<ExportWarnBanner> {
               RowDataFieldType.sys,
               RowDataFieldType.dia,
               RowDataFieldType.pul,
-              RowDataFieldType.notes
+              RowDataFieldType.notes,
+              RowDataFieldType.color
             };
             missingAttributes.removeWhere((e) => exportFormats.contains(e));
             if (_showWarnBanner &&

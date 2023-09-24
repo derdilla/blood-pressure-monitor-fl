@@ -4,6 +4,7 @@ import 'package:blood_pressure_app/main.dart';
 import 'package:blood_pressure_app/model/blood_pressure.dart';
 import 'package:blood_pressure_app/model/export_import.dart';
 import 'package:blood_pressure_app/model/settings_store.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:function_tree/function_tree.dart';
 import 'package:intl/intl.dart';
@@ -27,7 +28,7 @@ class ExportConfigurationModel {
   /// Format: (title, List<internalNameOfExportFormat>)
   List<(String, List<String>)> get exportConfigurations => [
     // Not fully localized, as potential user added configurations can't be localized as well
-    (localizations.default_, ['timestampUnixMs', 'systolic', 'diastolic', 'pulse', 'notes']),
+    (localizations.default_, ['timestampUnixMs', 'systolic', 'diastolic', 'pulse', 'notes', 'color']),
     ('"My Heart" export', ['DATUM', 'SYSTOLE', 'DIASTOLE', 'PULS', 'Beschreibung', 'Tags', 'Gewicht', 'Sauerstoffsättigung']),
   ];
 
@@ -86,6 +87,7 @@ class ExportConfigurationModel {
     ExportColumn(internalName: 'pulse', columnTitle: localizations.pulLong, formatPattern: r'$PUL', editable: false),
     ExportColumn(internalName: 'notes', columnTitle: localizations.notes, formatPattern: r'$NOTE', editable: false),
     ExportColumn(internalName: 'pulsePressure', columnTitle: localizations.pulsePressure, formatPattern: r'{{$SYS-$DIA}}', editable: false),
+    ExportColumn(internalName: 'color', columnTitle: localizations.color, formatPattern: r'$COLOR', editable: false),
 
     ExportColumn(internalName: 'DATUM', columnTitle: '"My Heart" export time', formatPattern: r'$FORMAT{$TIMESTAMP,yyyy-MM-dd HH:mm:ss}', editable: false, hidden: true),
     ExportColumn(internalName: 'SYSTOLE', columnTitle: '"My Heart" export sys', formatPattern: r'$SYS', editable: false, hidden: true),
@@ -201,6 +203,7 @@ class ExportColumn {
     fieldContents = fieldContents.replaceAll(r'$DIA', record.diastolic.toString());
     fieldContents = fieldContents.replaceAll(r'$PUL', record.pulse.toString());
     fieldContents = fieldContents.replaceAll(r'$NOTE', record.notes.toString());
+    fieldContents = fieldContents.replaceAll(r'$COLOR', record.needlePin?.color.value.toString() ?? '');
 
     // math
     fieldContents = fieldContents.replaceAllMapped(RegExp(r'\{\{([^}]*)}}'), (m) {
@@ -227,6 +230,12 @@ class ExportColumn {
     if (!isReversible || formattedRecord == 'null') return [];
 
     if (formatPattern == r'$NOTE') return [(RowDataFieldType.notes, formattedRecord)];
+    if (formatPattern == r'$COLOR') {
+      final value = int.tryParse(formattedRecord);
+      print(value);
+      print(formattedRecord);
+      return value == null ? [] : [(RowDataFieldType.color, Color(value))];
+    }
 
     // records are parse by replacing the values with capture groups
     final types = RegExp(r'\$(TIMESTAMP|SYS|DIA|PUL)').allMatches(formatPattern).map((e) => e.group(0)).toList();
@@ -262,13 +271,14 @@ class ExportColumn {
   /// Checks if the pattern can be used to parse records. This is the case when the pattern contains variables without
   /// containing curly brackets or commas.
   bool get isReversible {
-    return (formatPattern == r'$TIMESTAMP') ||
+    return (formatPattern == r'$TIMESTAMP') || (formatPattern == r'$COLOR') ||
         formatPattern.contains(RegExp(r'\$(SYS|DIA|PUL|NOTE)')) && !formatPattern.contains(RegExp(r'[{},]'));
   }
 
   RowDataFieldType? get parsableFormat {
     if (formatPattern.contains(RegExp(r'[{},]'))) return null;
     if (formatPattern == r'$TIMESTAMP') return RowDataFieldType.timestamp;
+    if (formatPattern == r'$COLOR') return RowDataFieldType.color;
     if (formatPattern.contains(RegExp(r'\$(SYS)'))) return RowDataFieldType.sys;
     if (formatPattern.contains(RegExp(r'\$(DIA)'))) return RowDataFieldType.dia;
     if (formatPattern.contains(RegExp(r'\$(PUL)'))) return RowDataFieldType.pul;
@@ -283,7 +293,7 @@ class ExportColumn {
 }
 
 enum RowDataFieldType {
-  timestamp, sys, dia, pul, notes;
+  timestamp, sys, dia, pul, notes, color;
 
   @override
   String toString() {
@@ -298,6 +308,8 @@ enum RowDataFieldType {
         return gLocalizations.pulLong;
       case 4:
         return gLocalizations.notes;
+      case 5:
+        return gLocalizations.color;
       default:
         return "unknown";
     };
