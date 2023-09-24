@@ -350,14 +350,14 @@ class _ExportWarnBannerState extends State<ExportWarnBanner> {
               RowDataFieldType.color
             };
             missingAttributes.removeWhere((e) => exportFormats.contains(e));
-            if (_showWarnBanner &&
-                    ![ExportFormat.csv, ExportFormat.db]
-                        .contains(settings.exportFormat) ||
+            if (ExportFormat.db == settings.exportFormat) {
+              // When exporting as database no wrong configuration is possible
+            } else if (_showWarnBanner && ((ExportFormat.pdf == settings.exportFormat) ||
                 settings.exportCsvHeadline == false ||
                 exportCustomEntries &&
                     missingAttributes.contains(RowDataFieldType.timestamp) ||
                 ![',', '|'].contains(settings.csvFieldDelimiter) ||
-                !['"', '\''].contains(settings.csvTextDelimiter)) {
+                !['"', '\''].contains(settings.csvTextDelimiter))) {
               message = localizations.exportWarnConfigNotImportable;
             } else if (_showWarnBanner && exportCustomEntries && missingAttributes.isNotEmpty) {
               message = localizations.exportWarnNotEveryFieldExported(

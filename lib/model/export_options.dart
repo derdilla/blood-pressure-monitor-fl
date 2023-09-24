@@ -73,8 +73,8 @@ class ExportConfigurationModel {
         return availableFormats.where((e) => 
           ((settings.exportCustomEntriesPdf) ? settings.exportItemsPdf : ExportFields.defaultPdf)
         .contains(e.internalName)).toList();
-      default:
-        assert(false, 'no data selection for this one');
+      case ExportFormat.db:
+        // Export formats don't work on this one
         return [];
     }
   }
@@ -232,8 +232,6 @@ class ExportColumn {
     if (formatPattern == r'$NOTE') return [(RowDataFieldType.notes, formattedRecord)];
     if (formatPattern == r'$COLOR') {
       final value = int.tryParse(formattedRecord);
-      print(value);
-      print(formattedRecord);
       return value == null ? [] : [(RowDataFieldType.color, Color(value))];
     }
 
