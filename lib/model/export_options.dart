@@ -1,5 +1,6 @@
 import 'dart:collection';
 
+import 'package:blood_pressure_app/main.dart';
 import 'package:blood_pressure_app/model/blood_pressure.dart';
 import 'package:blood_pressure_app/model/export_import.dart';
 import 'package:blood_pressure_app/model/settings_store.dart';
@@ -282,9 +283,23 @@ class ExportColumn {
 }
 
 enum RowDataFieldType {
-  timestamp,
-  sys,
-  dia,
-  pul,
-  notes
+  timestamp, sys, dia, pul, notes;
+
+  @override
+  String toString() {
+    switch(index) {
+      case 0:
+        return gLocalizations.timestamp;
+      case 1:
+        return gLocalizations.sysLong;
+      case 2:
+        return gLocalizations.diaLong;
+      case 3:
+        return gLocalizations.pulLong;
+      case 4:
+        return gLocalizations.notes;
+      default:
+        return "unknown";
+    };
+  }
 }

@@ -214,7 +214,8 @@ class _ExportFieldCustomisationSettingState
                 : settings.exportItemsPdf;
 
             final formats = configurationModel.availableFormats.toSet();
-            List<ExportColumn> activeFields = configurationModel.getActiveExportColumns(settings.exportFormat);
+            List<ExportColumn> activeFields = configurationModel
+                .getActiveExportColumns(settings.exportFormat);
             List<ExportColumn> hiddenFields = [];
             for (final internalName in exportItems) {
               formats.removeWhere((e) => e.internalName == internalName);
@@ -327,51 +328,50 @@ class _ExportWarnBannerState extends State<ExportWarnBanner> {
   @override
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
-    _future = ExportConfigurationModel.get(Provider.of<Settings>(context, listen: false), localizations);
+    _future = ExportConfigurationModel.get(
+        Provider.of<Settings>(context, listen: false), localizations);
     return Consumer<Settings>(builder: (context, settings, child) {
+      _showWarnBanner = true; // when settings change, warn banner should reset as well
       return ConsistentFutureBuilder(
           future: _future,
           onData: (context, configurationModel) {
             String? message;
-            final exportItems = (settings.exportFormat == ExportFormat.csv)
-                ? settings.exportItemsCsv
-                : settings.exportItemsPdf;
             final exportCustomEntries =
                 (settings.exportFormat == ExportFormat.csv)
                     ? settings.exportCustomEntriesCsv
                     : settings.exportCustomEntriesPdf;
-            final exportFormats = configurationModel.getActiveExportColumns(settings.exportFormat)
+            final exportFormats = configurationModel
+                .getActiveExportColumns(settings.exportFormat)
                 .map((e) => e.parsableFormat);
 
+            print(exportFormats.join(','));
+            var missingAttributes = {
+              RowDataFieldType.timestamp,
+              RowDataFieldType.sys,
+              RowDataFieldType.dia,
+              RowDataFieldType.pul,
+              RowDataFieldType.notes
+            };
+            missingAttributes.removeWhere((e) => exportFormats.contains(e));
+            print(missingAttributes);
             if (_showWarnBanner &&
                     ![ExportFormat.csv, ExportFormat.db]
                         .contains(settings.exportFormat) ||
                 settings.exportCsvHeadline == false ||
-                exportCustomEntries && exportFormats.where((e) => e == RowDataFieldType.timestamp).isEmpty ||
+                exportCustomEntries &&
+                    missingAttributes.contains(RowDataFieldType.timestamp) ||
                 ![',', '|'].contains(settings.csvFieldDelimiter) ||
                 !['"', '\''].contains(settings.csvTextDelimiter)) {
-              print(exportFormats.join(','));
               message = localizations.exportWarnConfigNotImportable;
-            } else if (_showWarnBanner &&
-                exportCustomEntries &&
-                !([RowDataFieldType.sys, RowDataFieldType.dia, RowDataFieldType.pul, RowDataFieldType.notes]
-                    .every((i) => exportFormats.contains(i)))) {
-              var missingAttributes = {
-                'systolic',
-                'diastolic',
-                'pulse',
-                'notes'
-              };
-              missingAttributes.removeWhere((e) => exportItems.contains(e));
-
+            } else if (_showWarnBanner && exportCustomEntries && missingAttributes.isNotEmpty) {
               message = localizations.exportWarnNotEveryFieldExported(
-                  missingAttributes.length, missingAttributes.toString());
+                  missingAttributes.length, missingAttributes.join(', '));
             }
 
             if (message != null) {
               return MaterialBanner(
                   padding: const EdgeInsets.all(20),
-                  content: Text(message!),
+                  content: Text(message),
                   actions: [
                     TextButton(
                         onPressed: () {

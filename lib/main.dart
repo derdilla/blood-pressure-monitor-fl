@@ -6,6 +6,8 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
 
+late AppLocalizations gLocalizations;
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   // 2 different db files
@@ -32,7 +34,10 @@ class AppRoot extends StatelessWidget {
 
       return MaterialApp(
         title: 'Blood Pressure App',
-        onGenerateTitle: (context) => AppLocalizations.of(context)!.title,
+        onGenerateTitle: (context) {
+          gLocalizations = AppLocalizations.of(context)!;
+          return gLocalizations.title;
+        },
         theme: ThemeData(
             colorScheme: ColorScheme.fromSeed(
                 seedColor: settings.accentColor,
