@@ -342,8 +342,6 @@ class _ExportWarnBannerState extends State<ExportWarnBanner> {
             final exportFormats = configurationModel
                 .getActiveExportColumns(settings.exportFormat)
                 .map((e) => e.parsableFormat);
-
-            print(exportFormats.join(','));
             var missingAttributes = {
               RowDataFieldType.timestamp,
               RowDataFieldType.sys,
@@ -352,7 +350,6 @@ class _ExportWarnBannerState extends State<ExportWarnBanner> {
               RowDataFieldType.notes
             };
             missingAttributes.removeWhere((e) => exportFormats.contains(e));
-            print(missingAttributes);
             if (_showWarnBanner &&
                     ![ExportFormat.csv, ExportFormat.db]
                         .contains(settings.exportFormat) ||
