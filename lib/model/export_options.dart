@@ -61,7 +61,7 @@ class ExportConfigurationModel {
     return _instance!;
   }
 
-  List<ExportColumn> _getActiveExportColumns(ExportFormat format) {
+  List<ExportColumn> getActiveExportColumns(ExportFormat format) {
     switch (format) {
       case ExportFormat.csv:
         return availableFormats.where((e) =>
@@ -134,7 +134,7 @@ class ExportConfigurationModel {
       UnmodifiableMapView(Map.fromIterable(_availableFormats, key: (e) => e.internalName));
 
   List<List<String>> createTable(List<BloodPressureRecord> data, ExportFormat format, {bool createHeadline = true,}) {
-    final exportItems = _getActiveExportColumns(format);
+    final exportItems = getActiveExportColumns(format);
     List<List<String>> items = [];
     if (createHeadline) {
       items.add(exportItems.map((e) => e.internalName).toList());
@@ -261,8 +261,18 @@ class ExportColumn {
   /// Checks if the pattern can be used to parse records. This is the case when the pattern contains variables without
   /// containing curly brackets or commas.
   bool get isReversible {
-    return formatPattern == r'$TIMESTAMP' ||
-        formatPattern.contains(RegExp(r'\$(TIMESTAMP|SYS|DIA|PUL|NOTE)')) && !formatPattern.contains(RegExp(r'[{},]'));
+    return (formatPattern == r'$TIMESTAMP') ||
+        formatPattern.contains(RegExp(r'\$(SYS|DIA|PUL|NOTE)')) && !formatPattern.contains(RegExp(r'[{},]'));
+  }
+
+  RowDataFieldType? get parsableFormat {
+    if (formatPattern.contains(RegExp(r'[{},]'))) return null;
+    if (formatPattern == r'$TIMESTAMP') return RowDataFieldType.timestamp;
+    if (formatPattern.contains(RegExp(r'\$(SYS)'))) return RowDataFieldType.sys;
+    if (formatPattern.contains(RegExp(r'\$(DIA)'))) return RowDataFieldType.dia;
+    if (formatPattern.contains(RegExp(r'\$(PUL)'))) return RowDataFieldType.pul;
+    if (formatPattern.contains(RegExp(r'\$(NOTE)'))) return RowDataFieldType.notes;
+    return null;
   }
 
   @override

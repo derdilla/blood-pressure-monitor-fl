@@ -27,35 +27,41 @@ class ExportImportScreen extends StatelessWidget {
           child: Column(
             children: [
               const ExportWarnBanner(),
-              const SizedBox(height: 15,),
+              const SizedBox(
+                height: 15,
+              ),
               Opacity(
                 opacity: (settings.exportFormat == ExportFormat.db) ? 0.7 : 1,
-                child: IgnorePointer(ignoring: (settings.exportFormat == ExportFormat.db), child: const IntervalPicker()),
+                child: IgnorePointer(
+                    ignoring: (settings.exportFormat == ExportFormat.db),
+                    child: const IntervalPicker()),
               ),
               SettingsTile(
-                title: Text(localizations.exportDir),
-                description: Text(settings.defaultExportDir),
-                onPressed: (context) async {
-                  final appDir = await JSaver.instance.setDefaultSavingDirectory();
-                  settings.defaultExportDir = appDir.value;
-                }
-              ),
+                  title: Text(localizations.exportDir),
+                  description: Text(settings.defaultExportDir),
+                  onPressed: (context) async {
+                    final appDir =
+                        await JSaver.instance.setDefaultSavingDirectory();
+                    settings.defaultExportDir = appDir.value;
+                  }),
               SwitchSettingsTile(
                   title: Text(localizations.exportAfterEveryInput),
                   description: Text(localizations.exportAfterEveryInputDesc),
                   initialValue: settings.exportAfterEveryEntry,
                   onToggle: (value) {
                     settings.exportAfterEveryEntry = value;
-                  }
-              ),
+                  }),
               DropDownSettingsTile<ExportFormat>(
                 key: const Key('exportFormat'),
                 title: Text(localizations.exportFormat),
                 value: settings.exportFormat,
                 items: [
-                  DropdownMenuItem(value: ExportFormat.csv, child: Text(localizations.csv)),
-                  DropdownMenuItem(value: ExportFormat.pdf, child: Text(localizations.pdf)),
-                  DropdownMenuItem(value: ExportFormat.db, child: Text(localizations.db)),
+                  DropdownMenuItem(
+                      value: ExportFormat.csv, child: Text(localizations.csv)),
+                  DropdownMenuItem(
+                      value: ExportFormat.pdf, child: Text(localizations.pdf)),
+                  DropdownMenuItem(
+                      value: ExportFormat.db, child: Text(localizations.db)),
                 ],
                 onChanged: (ExportFormat? value) {
                   if (value != null) {
@@ -86,46 +92,43 @@ class ExportImportScreen extends StatelessWidget {
                 },
               ),
               SwitchSettingsTile(
-                title: Text(localizations.exportCsvHeadline),
-                description: Text(localizations.exportCsvHeadlineDesc),
-                initialValue: settings.exportCsvHeadline,
-                disabled: settings.exportFormat != ExportFormat.csv,
-                onToggle: (value) {
-                  settings.exportCsvHeadline = value;
-                }
-              ),
+                  title: Text(localizations.exportCsvHeadline),
+                  description: Text(localizations.exportCsvHeadlineDesc),
+                  initialValue: settings.exportCsvHeadline,
+                  disabled: settings.exportFormat != ExportFormat.csv,
+                  onToggle: (value) {
+                    settings.exportCsvHeadline = value;
+                  }),
               SwitchSettingsTile(
-                title: Text(localizations.exportPdfExportTitle),
-                initialValue: settings.exportPdfExportTitle,
-                disabled: settings.exportFormat != ExportFormat.pdf,
-                onToggle: (value) {
-                  settings.exportPdfExportTitle = value;
-                }
-              ),
+                  title: Text(localizations.exportPdfExportTitle),
+                  initialValue: settings.exportPdfExportTitle,
+                  disabled: settings.exportFormat != ExportFormat.pdf,
+                  onToggle: (value) {
+                    settings.exportPdfExportTitle = value;
+                  }),
               SwitchSettingsTile(
-                title: Text(localizations.exportPdfExportStatistics),
-                initialValue: settings.exportPdfExportStatistics,
-                disabled: settings.exportFormat != ExportFormat.pdf,
-                onToggle: (value) {
-                  settings.exportPdfExportStatistics = value;
-                }
-              ),
+                  title: Text(localizations.exportPdfExportStatistics),
+                  initialValue: settings.exportPdfExportStatistics,
+                  disabled: settings.exportFormat != ExportFormat.pdf,
+                  onToggle: (value) {
+                    settings.exportPdfExportStatistics = value;
+                  }),
               SwitchSettingsTile(
-                title: Text(localizations.exportPdfExportData),
-                initialValue: settings.exportPdfExportData,
-                disabled: settings.exportFormat != ExportFormat.pdf,
-                onToggle: (value) {
-                  settings.exportPdfExportData = value;
-                }
-              ),
+                  title: Text(localizations.exportPdfExportData),
+                  initialValue: settings.exportPdfExportData,
+                  disabled: settings.exportFormat != ExportFormat.pdf,
+                  onToggle: (value) {
+                    settings.exportPdfExportData = value;
+                  }),
               InputSettingsTile(
                 initialValue: settings.exportPdfHeaderHeight.toString(),
                 title: Text(localizations.exportPdfHeaderHeight),
                 onEditingComplete: (value) {
-                  final pV = double.tryParse(value??'');
+                  final pV = double.tryParse(value ?? '');
                   if (pV != null) settings.exportPdfHeaderHeight = pV;
                 },
-                disabled: !(settings.exportFormat == ExportFormat.pdf && settings.exportPdfExportData),
+                disabled: !(settings.exportFormat == ExportFormat.pdf &&
+                    settings.exportPdfExportData),
                 keyboardType: TextInputType.number,
                 inputWidth: 40,
               ),
@@ -133,10 +136,11 @@ class ExportImportScreen extends StatelessWidget {
                 initialValue: settings.exportPdfCellHeight.toString(),
                 title: Text(localizations.exportPdfCellHeight),
                 onEditingComplete: (value) {
-                  final pV = double.tryParse(value??'');
+                  final pV = double.tryParse(value ?? '');
                   if (pV != null) settings.exportPdfCellHeight = pV;
                 },
-                disabled: !(settings.exportFormat == ExportFormat.pdf && settings.exportPdfExportData),
+                disabled: !(settings.exportFormat == ExportFormat.pdf &&
+                    settings.exportPdfExportData),
                 keyboardType: TextInputType.number,
                 inputWidth: 40,
               ),
@@ -144,10 +148,11 @@ class ExportImportScreen extends StatelessWidget {
                 initialValue: settings.exportPdfHeaderFontSize.toString(),
                 title: Text(localizations.exportPdfHeaderFontSize),
                 onEditingComplete: (value) {
-                  final pV = double.tryParse(value??'');
+                  final pV = double.tryParse(value ?? '');
                   if (pV != null) settings.exportPdfHeaderFontSize = pV;
                 },
-                disabled: !(settings.exportFormat == ExportFormat.pdf && settings.exportPdfExportData),
+                disabled: !(settings.exportFormat == ExportFormat.pdf &&
+                    settings.exportPdfExportData),
                 keyboardType: TextInputType.number,
                 inputWidth: 40,
               ),
@@ -155,10 +160,11 @@ class ExportImportScreen extends StatelessWidget {
                 initialValue: settings.exportPdfCellFontSize.toString(),
                 title: Text(localizations.exportPdfCellFontSize),
                 onEditingComplete: (value) {
-                  final pV = double.tryParse(value??'');
+                  final pV = double.tryParse(value ?? '');
                   if (pV != null) settings.exportPdfCellFontSize = pV;
                 },
-                disabled: !(settings.exportFormat == ExportFormat.pdf && settings.exportPdfExportData),
+                disabled: !(settings.exportFormat == ExportFormat.pdf &&
+                    settings.exportPdfExportData),
                 keyboardType: TextInputType.number,
                 inputWidth: 40,
               ),
@@ -176,73 +182,79 @@ class ExportFieldCustomisationSetting extends StatefulWidget {
   const ExportFieldCustomisationSetting({super.key});
 
   @override
-  State<ExportFieldCustomisationSetting> createState() => _ExportFieldCustomisationSettingState();
+  State<ExportFieldCustomisationSetting> createState() =>
+      _ExportFieldCustomisationSettingState();
 }
 
-class _ExportFieldCustomisationSettingState extends State<ExportFieldCustomisationSetting> {
+class _ExportFieldCustomisationSettingState
+    extends State<ExportFieldCustomisationSetting> {
   // hack so that FutureBuilder doesn't always rebuild
   Future<ExportConfigurationModel>? _future;
-  
+
   @override
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
-    _future ??= ExportConfigurationModel.get(Provider.of<Settings>(context, listen: false), localizations);
+    _future ??= ExportConfigurationModel.get(
+        Provider.of<Settings>(context, listen: false), localizations);
 
     return ConsistentFutureBuilder(
-      future: _future!,
-      onData: (context, result) {
-        return Consumer<Settings>(builder: (context, settings, child) {
-          /// whether or not the currently selected export format supports field customization
-          final isApplicable = (settings.exportFormat == ExportFormat.csv || settings.exportFormat == ExportFormat.pdf &&
-              settings.exportPdfExportData);
-          final exportCustomEntries = (settings.exportFormat == ExportFormat.csv) ?
-              settings.exportCustomEntriesCsv : settings.exportCustomEntriesPdf;
-          final exportItems = (settings.exportFormat == ExportFormat.csv) ? settings.exportItemsCsv : settings.exportItemsPdf;
+        future: _future!,
+        onData: (context, configurationModel) {
+          return Consumer<Settings>(builder: (context, settings, child) {
+            /// whether or not the currently selected export format supports field customization
+            final isApplicable = (settings.exportFormat == ExportFormat.csv ||
+                settings.exportFormat == ExportFormat.pdf &&
+                    settings.exportPdfExportData);
+            final exportCustomEntries =
+                (settings.exportFormat == ExportFormat.csv)
+                    ? settings.exportCustomEntriesCsv
+                    : settings.exportCustomEntriesPdf;
+            final exportItems = (settings.exportFormat == ExportFormat.csv)
+                ? settings.exportItemsCsv
+                : settings.exportItemsPdf;
 
-          final formats = result.availableFormats.toSet();
-          List<ExportColumn> activeFields = [];
-          List<ExportColumn> hiddenFields = [];
-          for (final internalName in exportItems) {
-            activeFields.add(formats.singleWhere((e) => e.internalName == internalName));
-            formats.removeWhere((e) => e.internalName == internalName);
-          }
-          hiddenFields = formats.toList();
-          
-          return Column(
-            children: [
-              SwitchSettingsTile(
-                  title: Text(localizations.exportCustomEntries),
-                  initialValue: exportCustomEntries,
-                  disabled: !isApplicable,
-                  onToggle: (value) {
-                    if (settings.exportFormat == ExportFormat.csv) {
-                      settings.exportCustomEntriesCsv = value;
-                    } else {
-                      assert(settings.exportFormat == ExportFormat.pdf);
-                      settings.exportCustomEntriesPdf = value;
-                    }
+            final formats = configurationModel.availableFormats.toSet();
+            List<ExportColumn> activeFields = configurationModel.getActiveExportColumns(settings.exportFormat);
+            List<ExportColumn> hiddenFields = [];
+            for (final internalName in exportItems) {
+              formats.removeWhere((e) => e.internalName == internalName);
+            }
+            hiddenFields = formats.toList();
 
-                  }
-              ),
-              (exportCustomEntries && isApplicable) ?
-                ExportItemsCustomizer(
-                  shownItems: activeFields,
-                  disabledItems: hiddenFields,
-                  onReorder: (exportItems, exportAddableItems) {
-                    if (settings.exportFormat == ExportFormat.csv) {
-                      settings.exportItemsCsv = exportItems.map((e) => e.internalName).toList();
-                    } else {
-                      assert(settings.exportFormat == ExportFormat.pdf);
-                      settings.exportItemsPdf = exportItems.map((e) => e.internalName).toList();
-                    }
-
-                  },
-                ) : const SizedBox.shrink()
-            ],
-          );
+            return Column(
+              children: [
+                SwitchSettingsTile(
+                    title: Text(localizations.exportCustomEntries),
+                    initialValue: exportCustomEntries,
+                    disabled: !isApplicable,
+                    onToggle: (value) {
+                      if (settings.exportFormat == ExportFormat.csv) {
+                        settings.exportCustomEntriesCsv = value;
+                      } else {
+                        assert(settings.exportFormat == ExportFormat.pdf);
+                        settings.exportCustomEntriesPdf = value;
+                      }
+                    }),
+                (exportCustomEntries && isApplicable)
+                    ? ExportItemsCustomizer(
+                        shownItems: activeFields,
+                        disabledItems: hiddenFields,
+                        onReorder: (exportItems, exportAddableItems) {
+                          if (settings.exportFormat == ExportFormat.csv) {
+                            settings.exportItemsCsv =
+                                exportItems.map((e) => e.internalName).toList();
+                          } else {
+                            assert(settings.exportFormat == ExportFormat.pdf);
+                            settings.exportItemsPdf =
+                                exportItems.map((e) => e.internalName).toList();
+                          }
+                        },
+                      )
+                    : const SizedBox.shrink()
+              ],
+            );
+          });
         });
-      }
-    );
   }
 }
 
@@ -267,19 +279,33 @@ class ExportImportButtons extends StatelessWidget {
                 flex: 50,
                 child: MaterialButton(
                   height: 60,
-                  child:  Text(localizations.export),
-                  onPressed: () async => Exporter(settings, model, messenger, localizations, theme, await ExportConfigurationModel.get(settings, localizations)).export(),
-                )
-            ),
+                  child: Text(localizations.export),
+                  onPressed: () async => Exporter(
+                          settings,
+                          model,
+                          messenger,
+                          localizations,
+                          theme,
+                          await ExportConfigurationModel.get(
+                              settings, localizations))
+                      .export(),
+                )),
             const VerticalDivider(),
             Expanded(
                 flex: 50,
                 child: MaterialButton(
                   height: 60,
                   child: Text(localizations.import),
-                  onPressed: () async => Exporter(settings, model, messenger, localizations, theme, await ExportConfigurationModel.get(settings, localizations)).import(),
-                )
-            ),
+                  onPressed: () async => Exporter(
+                          settings,
+                          model,
+                          messenger,
+                          localizations,
+                          theme,
+                          await ExportConfigurationModel.get(
+                              settings, localizations))
+                      .import(),
+                )),
           ],
         ),
       ),
@@ -296,47 +322,68 @@ class ExportWarnBanner extends StatefulWidget {
 
 class _ExportWarnBannerState extends State<ExportWarnBanner> {
   bool _showWarnBanner = true;
+  late Future<ExportConfigurationModel> _future;
+
   @override
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
-    String? message;
+    _future = ExportConfigurationModel.get(Provider.of<Settings>(context, listen: false), localizations);
     return Consumer<Settings>(builder: (context, settings, child) {
-      final exportItems = (settings.exportFormat == ExportFormat.csv) ? settings.exportItemsCsv : settings.exportItemsPdf;
-      final exportCustomEntries = (settings.exportFormat == ExportFormat.csv) ?
-      settings.exportCustomEntriesCsv : settings.exportCustomEntriesPdf;
+      return ConsistentFutureBuilder(
+          future: _future,
+          onData: (context, configurationModel) {
+            String? message;
+            final exportItems = (settings.exportFormat == ExportFormat.csv)
+                ? settings.exportItemsCsv
+                : settings.exportItemsPdf;
+            final exportCustomEntries =
+                (settings.exportFormat == ExportFormat.csv)
+                    ? settings.exportCustomEntriesCsv
+                    : settings.exportCustomEntriesPdf;
+            final exportFormats = configurationModel.getActiveExportColumns(settings.exportFormat)
+                .map((e) => e.parsableFormat);
 
-      if (_showWarnBanner && ![ExportFormat.csv, ExportFormat.db].contains(settings.exportFormat) ||
-          settings.exportCsvHeadline == false ||
-          exportCustomEntries && !(['timestampUnixMs'].any((i) => exportItems.contains(i))) ||
-          ![',', '|'].contains(settings.csvFieldDelimiter) ||
-          !['"', '\''].contains(settings.csvTextDelimiter)
-      ) {
-        message = localizations.exportWarnConfigNotImportable;
-      } else if (_showWarnBanner && exportCustomEntries &&
-          !(['systolic','diastolic', 'pulse', 'notes'].every((i) => exportItems.contains(i)))) {
-        var missingAttributes = {'systolic','diastolic', 'pulse', 'notes'};
-        missingAttributes.removeWhere((e) => exportItems.contains(e));
+            if (_showWarnBanner &&
+                    ![ExportFormat.csv, ExportFormat.db]
+                        .contains(settings.exportFormat) ||
+                settings.exportCsvHeadline == false ||
+                exportCustomEntries && exportFormats.where((e) => e == RowDataFieldType.timestamp).isEmpty ||
+                ![',', '|'].contains(settings.csvFieldDelimiter) ||
+                !['"', '\''].contains(settings.csvTextDelimiter)) {
+              print(exportFormats.join(','));
+              message = localizations.exportWarnConfigNotImportable;
+            } else if (_showWarnBanner &&
+                exportCustomEntries &&
+                !([RowDataFieldType.sys, RowDataFieldType.dia, RowDataFieldType.pul, RowDataFieldType.notes]
+                    .every((i) => exportFormats.contains(i)))) {
+              var missingAttributes = {
+                'systolic',
+                'diastolic',
+                'pulse',
+                'notes'
+              };
+              missingAttributes.removeWhere((e) => exportItems.contains(e));
 
-        message = localizations.exportWarnNotEveryFieldExported(missingAttributes.length, missingAttributes.toString());
-      }
+              message = localizations.exportWarnNotEveryFieldExported(
+                  missingAttributes.length, missingAttributes.toString());
+            }
 
-      if (message != null) {
-        return MaterialBanner(
-            padding: const EdgeInsets.all(20),
-            content: Text(message!),
-            actions: [
-              TextButton(
-                  onPressed: () {
-                    setState(() {
-                      _showWarnBanner = false;
-                    });
-                  },
-                  child: Text(localizations.btnConfirm))
-            ]
-        );
-      }
-      return const SizedBox.shrink();
+            if (message != null) {
+              return MaterialBanner(
+                  padding: const EdgeInsets.all(20),
+                  content: Text(message!),
+                  actions: [
+                    TextButton(
+                        onPressed: () {
+                          setState(() {
+                            _showWarnBanner = false;
+                          });
+                        },
+                        child: Text(localizations.btnConfirm))
+                  ]);
+            }
+            return const SizedBox.shrink();
+          });
     });
-    }
   }
-
+}
