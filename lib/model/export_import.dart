@@ -51,7 +51,7 @@ class ExportFileCreator {
         try {
           return parseCSVFile(data);
         } catch (e) {
-          return null;
+          return Future.error(e);
         }
       case ExportFormat.pdf:
         return null;
@@ -84,9 +84,10 @@ class ExportFileCreator {
     for (var lineIndex = 0; lineIndex < csvLines.length; lineIndex++) {
       // get values from columns
       int? timestamp, sys, dia, pul;
+      Color? color;
       String? notes;
       for (var attributeIndex = 0; attributeIndex < attributes.length; attributeIndex++) {
-        if (timestamp != null && sys != null && dia !=null && pul != null) continue; // optimization
+        if (timestamp != null && sys != null && dia !=null && pul != null && notes != null && color != null) continue; // optimization
 
         // get colum from internal name
         final columnInternalTitle = attributes[attributeIndex].toString().trim();
@@ -119,6 +120,8 @@ class ExportFileCreator {
               assert(parsedRecordDataType.$2 is int?);
               timestamp ??= parsedRecordDataType.$2 as int?;
               break;
+            case RowDataFieldType.color:
+              color ??= parsedRecordDataType.$2 as Color?;
           }
         }
       }
@@ -127,7 +130,8 @@ class ExportFileCreator {
       if (timestamp == null) {
         throw ArgumentError('File didn\'t save timestamps');
       }
-      records.add(BloodPressureRecord(DateTime.fromMillisecondsSinceEpoch(timestamp), sys, dia, pul, notes ?? ''));
+      records.add(BloodPressureRecord(DateTime.fromMillisecondsSinceEpoch(timestamp), sys, dia, pul, notes ?? '',
+          needlePin: (color == null) ? null : MeasurementNeedlePin(color)));
     }
     return records;
   }
@@ -307,8 +311,17 @@ class Exporter {
     var path = result.files.single.path;
     assert(path != null); // null state directly linked to binary content
 
-    var fileContents = await ExportFileCreator(settings, localizations, theme, exportColumnsConfig).parseFile(path! ,binaryContent);
-    if (fileContents == null) {
+    final fileContentsFuture = ExportFileCreator(settings, localizations, theme, exportColumnsConfig).parseFile(path! ,binaryContent);
+    Object? fileContentsError;
+    fileContentsFuture.onError((error, stackTrace) {
+      fileContentsError = error;
+      return null;
+    });
+    final fileContents = await fileContentsFuture;
+    if (fileContentsError != null) {
+      messenger.showSnackBar(SnackBar(content: Text(localizations.error(fileContentsError.toString()))));
+      return;
+    } else if (fileContents == null) {
       messenger.showSnackBar(SnackBar(content: Text(localizations.errNotImportable)));
       return;
     }
