@@ -614,7 +614,7 @@ class RamSettings extends ChangeNotifier implements Settings {
         final endOfToday = now.copyWith(hour: 23, minute: 59, second: 59);
         return [start, endOfToday];
       case TimeStep.custom:
-      // fallback, TimeStep will be reset by getter
+        // fallback, TimeStep will be reset by getter
         return [DateTime.fromMillisecondsSinceEpoch(-1), DateTime.fromMillisecondsSinceEpoch(-1)];
     }
   }
