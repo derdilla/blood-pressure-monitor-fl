@@ -127,7 +127,6 @@ class _LineChartState extends State<_LineChart> {
       bottomTitles: AxisTitles(
         sideTitles: SideTitles(
           showTitles: true,
-
           getTitlesWidget: (double pos, TitleMeta meta) {
             // don't show fixed titles, as they are replaced by long dates below
             if (meta.axisPosition <= 1 || pos >= meta.max) {
@@ -136,11 +135,10 @@ class _LineChartState extends State<_LineChart> {
 
             // format of titles
             late final DateFormat formatter;
-
             if (graphRange.duration < const Duration(days: 2)) {
               formatter = DateFormat.Hm();
             } else if (graphRange.duration < const Duration(days: 15)) {
-              formatter = DateFormat.EEEE();
+              formatter = DateFormat.E();
             } else if (graphRange.duration < const Duration(days: 30)) {
               formatter = DateFormat.d();
             } else if (graphRange.duration < const Duration(days: 500)) {
@@ -148,8 +146,9 @@ class _LineChartState extends State<_LineChart> {
             } else {
               formatter = DateFormat.y();
             }
-              return Text(formatter
-                  .format(DateTime.fromMillisecondsSinceEpoch(pos.toInt())));
+              return Text(
+                formatter.format(DateTime.fromMillisecondsSinceEpoch(pos.toInt()))
+              );
           }
         ),
       ),

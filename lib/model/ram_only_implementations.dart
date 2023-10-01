@@ -68,7 +68,6 @@ class RamSettings extends ChangeNotifier implements Settings {
   int _sysWarn = 120;
   bool _useExportCompatability = false;
   bool _validateInputs = true;
-  int _graphTitlesCount = 5;
   ExportFormat _exportFormat = ExportFormat.csv;
   String _csvFieldDelimiter = ',';
   String _csvTextDelimiter = '"';
@@ -255,15 +254,6 @@ class RamSettings extends ChangeNotifier implements Settings {
   @override
   set validateInputs(bool value) {
     _validateInputs = value;
-    notifyListeners();
-  }
-
-  @override
-  int get graphTitlesCount => _graphTitlesCount;
-
-  @override
-  set graphTitlesCount(int value) {
-    _graphTitlesCount = value;
     notifyListeners();
   }
 

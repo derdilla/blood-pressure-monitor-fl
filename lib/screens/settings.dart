@@ -114,18 +114,6 @@ class SettingsPage extends StatelessWidget {
                 end: 1000,
                 stepSize: 50,
               ),
-              SliderSettingsTile(
-                key: const Key('graphTitlesCount'),
-                title: Text(AppLocalizations.of(context)!.graphTitlesCount),
-                leading: const Icon(Icons.functions),
-                onChanged: (double value) {
-                  settings.graphTitlesCount = value.toInt();
-                },
-                initialValue: settings.graphTitlesCount.toDouble(),
-                start: 2,
-                end: 10,
-                stepSize: 1,
-              ),
               ColorSelectionSettingsTile(
                 key: const Key('sysColor'),
                 onMainColorChanged: (color) => settings.sysColor = createMaterialColor((color ?? Colors.green).value),

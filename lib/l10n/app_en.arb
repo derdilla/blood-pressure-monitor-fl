@@ -103,8 +103,6 @@
   "@graphLineThickness": {},
   "animationSpeed": "Animation duration",
   "@animationSpeed": {},
-  "graphTitlesCount": "Graph label count",
-  "@graphTitlesCount": {},
   "accentColor": "Theme color",
   "@accentColor": {},
   "sysColor": "Systolic color",
