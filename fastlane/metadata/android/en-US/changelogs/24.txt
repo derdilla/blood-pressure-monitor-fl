@@ -1,0 +1,6 @@
+* Fix columns swapped in export statistics
+* Fix display of new entries
+* Fix colors not exported by default
+* improve in-app debug info
+* fix graph labels
+* update translations (french)

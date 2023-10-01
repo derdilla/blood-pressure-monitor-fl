@@ -1,0 +1,6 @@
+* Behebe vertauschte werte in export statistik
+* Behebe anzeigen neuer Einträge
+* Exportiere Farben standardmässig
+* verbessere in-app debug Informationen
+* verbessere graph beschriftungen
+* aktualisiere Übersetzungen (Französisch)
