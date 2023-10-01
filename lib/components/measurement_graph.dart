@@ -22,9 +22,6 @@ class _LineChart extends StatefulWidget {
 }
 
 class _LineChartState extends State<_LineChart> {
-  double _lineChartTitleIntervall = 100000000; // TODO: remove settings as well
-  int _reloadsLeft = 30;
-
   @override
   Widget build(BuildContext context) {
     return SizedBox(
