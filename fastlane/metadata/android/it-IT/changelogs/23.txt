@@ -1,0 +1,3 @@
+* Fix export page warn banner
+* FIX color not included in export
+* Norwegian and italian translations update
