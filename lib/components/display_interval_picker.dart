@@ -27,7 +27,9 @@ class IntervalPicker extends StatelessWidget {
           intervallDisplayText = DateFormat.y(AppLocalizations.of(context)!.localeName).format(settings.displayDataStart);
           break;
         case TimeStep.lifetime:
-          intervallDisplayText =  '-';
+          // TODO revert after testing
+          intervallDisplayText = settings.displayDataStart.toIso8601String() +  ' - ' + settings.displayDataEnd.toIso8601String();
+          // intervallDisplayText =  '-';
           break;
         case TimeStep.last7Days:
         case TimeStep.last30Days:
