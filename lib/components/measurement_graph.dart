@@ -22,9 +22,6 @@ class _LineChart extends StatefulWidget {
 }
 
 class _LineChartState extends State<_LineChart> {
-  double _lineChartTitleIntervall = 100000000;
-  int _reloadsLeft = 30;
-
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -34,8 +31,7 @@ class _LineChartState extends State<_LineChart> {
             return Consumer<BloodPressureModel>(builder: (context, model, child) {
               var end = settings.displayDataEnd;
               return ConsistentFutureBuilder<UnmodifiableListView<BloodPressureRecord>>(
-                  future: (settings.graphStepSize == TimeStep.lifetime) ? model.all
-                      : model.getInTimeRange(settings.displayDataStart, end),
+                  future: model.getInTimeRange(settings.displayDataStart, end),
                   onData: (context, fetchedData) {
                     List<BloodPressureRecord> data = fetchedData.toList();
                     data.sort((a, b) => a.creationTime.compareTo(b.creationTime));
@@ -80,8 +76,9 @@ class _LineChartState extends State<_LineChart> {
                           LineChartData(
                               minY: minValue.toDouble(),
                               maxY: maxValue + 5,
-                              clipData: FlClipData.all(),
-                              titlesData: _buildFlTitlesData(settings),
+                              clipData: const FlClipData.all(),
+                              titlesData: _buildFlTitlesData(settings,
+                                  DateTimeRange(start: data.first.creationTime, end: data.last.creationTime)),
                               lineTouchData: const LineTouchData(
                                   touchTooltipData: LineTouchTooltipData(tooltipMargin: -200, tooltipRoundedRadius: 20)
                               ),
@@ -119,7 +116,7 @@ class _LineChartState extends State<_LineChart> {
     return bars;
   }
 
-  FlTitlesData _buildFlTitlesData(Settings settings) {
+  FlTitlesData _buildFlTitlesData(Settings settings, DateTimeRange graphRange) {
     const noTitels = AxisTitles(sideTitles: SideTitles(reservedSize: 40, showTitles: false));
     return FlTitlesData(
       topTitles: noTitels,
@@ -127,21 +124,7 @@ class _LineChartState extends State<_LineChart> {
       bottomTitles: AxisTitles(
         sideTitles: SideTitles(
           showTitles: true,
-          interval: _lineChartTitleIntervall,
           getTitlesWidget: (double pos, TitleMeta meta) {
-            // calculate new intervall
-            // as graphWidth can technically be as low as one max is needed here to avoid freezes
-            double graphWidth = meta.max - meta.min;
-            if ((max(graphWidth - 2,1) / settings.graphTitlesCount) != _lineChartTitleIntervall && (_reloadsLeft > 0)) {
-              // simple hack needed to change the state during build https://stackoverflow.com/a/63607696/21489239
-              Future.delayed(Duration.zero, () async {
-                setState(() {
-                  _reloadsLeft--;
-                  _lineChartTitleIntervall = max(graphWidth - 2,1) / settings.graphTitlesCount;
-                });
-              });
-            }
-
             // don't show fixed titles, as they are replaced by long dates below
             if (meta.axisPosition <= 1 || pos >= meta.max) {
               return const SizedBox.shrink();
@@ -149,29 +132,20 @@ class _LineChartState extends State<_LineChart> {
 
             // format of titles
             late final DateFormat formatter;
-            switch (settings.graphStepSize) {
-              case TimeStep.day:
-                formatter = DateFormat('H:m');
-                break;
-              case TimeStep.month:
-              case TimeStep.last7Days:
-                formatter = DateFormat('d');
-                break;
-              case TimeStep.week:
-                formatter = DateFormat('E');
-                break;
-              case TimeStep.year:
-                formatter = DateFormat('MMM');
-                break;
-              case TimeStep.lifetime:
-                formatter = DateFormat('yyyy');
-                break;
-              case TimeStep.last30Days:
-              case TimeStep.custom:
-                formatter = DateFormat.MMMd();
+            if (graphRange.duration < const Duration(days: 2)) {
+              formatter = DateFormat.Hm();
+            } else if (graphRange.duration < const Duration(days: 15)) {
+              formatter = DateFormat.E();
+            } else if (graphRange.duration < const Duration(days: 30)) {
+              formatter = DateFormat.d();
+            } else if (graphRange.duration < const Duration(days: 500)) {
+              formatter = DateFormat.MMM();
+            } else {
+              formatter = DateFormat.y();
             }
-            return Text(formatter
-                .format(DateTime.fromMillisecondsSinceEpoch(pos.toInt())));
+              return Text(
+                formatter.format(DateTime.fromMillisecondsSinceEpoch(pos.toInt()))
+              );
           }
         ),
       ),

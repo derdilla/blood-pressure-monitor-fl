@@ -40,7 +40,6 @@ void main() {
       expect(s.graphLineThickness, 3);
       expect(s.animationSpeed, 150);
       expect(s.confirmDeletion, true);
-      expect(s.graphTitlesCount, 5);
       expect(s.csvFieldDelimiter, ',');
       expect(s.csvTextDelimiter, '"');
       expect(s.exportCsvHeadline, true);
@@ -82,7 +81,6 @@ void main() {
       s.graphLineThickness = 5;
       s.animationSpeed = 100;
       s.confirmDeletion = false;
-      s.graphTitlesCount = 7;
       s.csvFieldDelimiter = '|';
       s.csvTextDelimiter = '\'';
       s.exportItemsCsv = ['systolic', 'diastolic', 'pulse', 'notes', 'isoUTCTime'];
@@ -108,7 +106,6 @@ void main() {
       expect(s.graphLineThickness, 5);
       expect(s.animationSpeed, 100);
       expect(s.confirmDeletion, false);
-      expect(s.graphTitlesCount, 7);
       expect(s.csvFieldDelimiter, '|');
       expect(s.csvTextDelimiter, '\'');
       expect(s.exportItemsCsv, ['systolic', 'diastolic', 'pulse', 'notes', 'isoUTCTime']);
@@ -145,7 +142,6 @@ void main() {
       s.graphLineThickness = 5;
       s.animationSpeed = 100;
       s.confirmDeletion = true;
-      s.graphTitlesCount = 2;
       s.csvFieldDelimiter = '|';
       s.csvTextDelimiter = '\'';
       s.exportItemsCsv = ['systolic', 'diastolic', 'pulse', 'notes', 'isoUTCTime'];
@@ -156,7 +152,7 @@ void main() {
       s.allowMissingValues = true;
       s.language = const Locale('de');
 
-      expect(i, 27);
+      expect(i, 26);
     });
   });
 
@@ -187,7 +183,6 @@ void main() {
       expect(s.graphLineThickness, 3);
       expect(s.animationSpeed, 150);
       expect(s.confirmDeletion, true);
-      expect(s.graphTitlesCount, 5);
       expect(s.csvFieldDelimiter, ',');
       expect(s.csvTextDelimiter, '"');
       expect(s.exportCsvHeadline, true);
@@ -229,7 +224,6 @@ void main() {
       s.graphLineThickness = 5;
       s.animationSpeed = 100;
       s.confirmDeletion = false;
-      s.graphTitlesCount = 7;
       s.csvFieldDelimiter = '|';
       s.csvTextDelimiter = '\'';
       s.exportItemsCsv = ['systolic', 'diastolic', 'pulse', 'notes', 'isoUTCTime'];
@@ -255,7 +249,6 @@ void main() {
       expect(s.graphLineThickness, 5);
       expect(s.animationSpeed, 100);
       expect(s.confirmDeletion, false);
-      expect(s.graphTitlesCount, 7);
       expect(s.csvFieldDelimiter, '|');
       expect(s.csvTextDelimiter, '\'');
       expect(s.exportItemsCsv, ['systolic', 'diastolic', 'pulse', 'notes', 'isoUTCTime']);
@@ -292,7 +285,6 @@ void main() {
       s.graphLineThickness = 5;
       s.animationSpeed = 100;
       s.confirmDeletion = true;
-      s.graphTitlesCount = 2;
       s.csvFieldDelimiter = '|';
       s.csvTextDelimiter = '\'';
       s.exportItemsCsv = ['systolic', 'diastolic', 'pulse', 'notes', 'isoUTCTime'];
@@ -303,7 +295,7 @@ void main() {
       s.allowMissingValues = true;
       s.language = const Locale('de');
 
-      expect(i, 27);
+      expect(i, 26);
     });
   });
 }

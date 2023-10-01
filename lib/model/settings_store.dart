@@ -63,6 +63,9 @@ class Settings extends ChangeNotifier {
     if (keys.contains('iconSize')) {
       toAwait.add(_prefs.remove('iconSize'));
     }
+    if (keys.contains('titlesCount')) {
+      toAwait.add(_prefs.remove('titlesCount'));
+    }
 
     // reset variables for new version. Necessary for reusing variable names in new version and avoid having unexpected
     // breaking values in the preferences
@@ -370,15 +373,6 @@ class Settings extends ChangeNotifier {
 
   set confirmDeletion(bool confirmDeletion) {
     _prefs.setBool('confirmDeletion', confirmDeletion);
-    notifyListeners();
-  }
-
-  int get graphTitlesCount {
-    return _prefs.getInt('titlesCount') ?? 5;
-  }
-
-  set graphTitlesCount(int newCount) {
-    _prefs.setInt('titlesCount', newCount);
     notifyListeners();
   }
 
