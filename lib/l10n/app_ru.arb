@@ -222,8 +222,6 @@
       }
     }
   },
-  "graphTitlesCount": "Число точек на графике",
-  "@graphTitlesCount": {},
   "behavior": "Поведение приложения",
   "@behavior": {},
   "exportDir": "Место экспорта",
