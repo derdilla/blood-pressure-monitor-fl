@@ -117,6 +117,24 @@ class ErrorScreen extends StatelessWidget {
                   TextButton(
                       onPressed: () async {
                         try {
+                          var dbPath = await getDatabasesPath();
+
+                          assert(dbPath != inMemoryDatabasePath);
+                          dbPath = join(dbPath, 'config.db');
+                          assert(Platform.isAndroid);
+                          Share.shareXFiles([
+                            XFile(dbPath,)
+                          ]);
+                        } catch(e) {
+                          scaffoldMessenger.showSnackBar(SnackBar(
+                              content: Text('ERR: ${e.toString()}')));
+                        }
+                      },
+                      child: const Text('rescue config.db')
+                  ),
+                  TextButton(
+                      onPressed: () async {
+                        try {
                           final prefs = await SharedPreferences.getInstance();
                           var prefsText = '';
                           for (final key in prefs.getKeys()) {

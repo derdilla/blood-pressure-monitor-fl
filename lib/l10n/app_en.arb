@@ -427,5 +427,7 @@
   "note": "Note",
   "@note": {},
   "color": "Color",
-  "@color": {}
+  "@color": {},
+  "exportConfigDB": "export config.db",
+  "configDBExplainer": "The config.db does not include all configuration info. For more debug information use the copy button at the top."
 }
