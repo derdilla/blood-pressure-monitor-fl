@@ -25,7 +25,7 @@ class VersionScreen extends StatelessWidget {
             onPressed: () async {
               final packageInfo = await PackageInfo.fromPlatform();
               final prefs = await SharedPreferences.getInstance();
-              var prefsText = '';
+              String prefsText = '';
               for (final key in prefs.getKeys()) {
                 prefsText += '$key:\t${prefs.get(key).toString()}\n';
               }
@@ -63,7 +63,7 @@ class VersionScreen extends StatelessWidget {
                             Center(
                               child: FilledButton.icon(
                                 onPressed: () async {
-                                  var dbPath = await getDatabasesPath();
+                                  String dbPath = await getDatabasesPath();
 
                                   assert(dbPath != inMemoryDatabasePath);
                                   dbPath = join(dbPath, 'config.db');
