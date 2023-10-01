@@ -103,8 +103,6 @@
   "@graphLineThickness": {},
   "animationSpeed": "动画时长",
   "@animationSpeed": {},
-  "graphTitlesCount": "图表标签数量",
-  "@graphTitlesCount": {},
   "accentColor": "主题颜色",
   "@accentColor": {},
   "sysColor": "高压颜色",

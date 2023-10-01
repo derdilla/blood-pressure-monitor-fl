@@ -103,8 +103,6 @@
   "@graphLineThickness": {},
   "animationSpeed": "Animationsdauer",
   "@animationSpeed": {},
-  "graphTitlesCount": "Anzahl der Label am Graphen",
-  "@graphTitlesCount": {},
   "accentColor": "Farbschema",
   "@accentColor": {},
   "sysColor": "Farbe für Systole",
