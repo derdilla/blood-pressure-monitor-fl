@@ -99,7 +99,7 @@ class ErrorScreen extends StatelessWidget {
                   TextButton(
                       onPressed: () async {
                         try {
-                          var dbPath = await getDatabasesPath();
+                          String dbPath = await getDatabasesPath();
 
                           assert(dbPath != inMemoryDatabasePath);
                           dbPath = join(dbPath, 'blood_pressure.db');
@@ -117,7 +117,7 @@ class ErrorScreen extends StatelessWidget {
                   TextButton(
                       onPressed: () async {
                         try {
-                          var dbPath = await getDatabasesPath();
+                          String dbPath = await getDatabasesPath();
 
                           assert(dbPath != inMemoryDatabasePath);
                           dbPath = join(dbPath, 'config.db');
