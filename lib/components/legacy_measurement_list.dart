@@ -69,9 +69,8 @@ class LegacyMeasurementsList extends StatelessWidget {
         Expanded(
           child: Consumer<BloodPressureModel>(builder: (context, model, child) {
             return Consumer<Settings>(builder: (context, settings, child) {
-              final items = model.getInTimeRange(settings.displayDataStart, settings.displayDataEnd);
               return ConsistentFutureBuilder<UnmodifiableListView<BloodPressureRecord>>(
-                future: items,
+                future: model.getInTimeRange(settings.displayDataStart, settings.displayDataEnd),
                 onData: (context, data) {
                   if (data.isNotEmpty) {
                     return ListView.builder(
