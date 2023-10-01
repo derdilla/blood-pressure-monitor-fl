@@ -138,6 +138,10 @@ class Settings extends ChangeNotifier {
     displayDataEnd = newInterval[1];
   }
 
+  void setToMostRecentIntervall() {
+    changeStepSize(graphStepSize);
+  }
+
   void moveDisplayDataByStep(int directionalStep) {
     final oldStart = displayDataStart;
     final oldEnd = displayDataEnd;
@@ -161,7 +165,7 @@ class Settings extends ChangeNotifier {
         break;
       case TimeStep.lifetime:
         displayDataStart = DateTime.fromMillisecondsSinceEpoch(1);
-        displayDataEnd = DateTime.now();
+        displayDataEnd = DateTime.now().copyWith(hour: 23, minute: 59, second: 59);
         break;
       case TimeStep.last30Days:
         displayDataStart = oldStart.copyWith(day: oldStart.day + directionalStep * 30);
@@ -192,13 +196,16 @@ class Settings extends ChangeNotifier {
         return [start, start.copyWith(year: now.year + 1)];
       case TimeStep.lifetime:
         final start = DateTime.fromMillisecondsSinceEpoch(1);
-        return [start, now];
+        final endOfToday = now.copyWith(hour: 23, minute: 59, second: 59);
+        return [start, endOfToday];
       case TimeStep.last7Days:
-        final start = now.copyWith(day: now.day-7);
-        return [start, now];
+        final start = now.copyWith(day: now.day - 7);
+        final endOfToday = now.copyWith(hour: 23, minute: 59, second: 59);
+        return [start, endOfToday];
       case TimeStep.last30Days:
-        final start = now.copyWith(day: now.day-30);
-        return [start, now];
+        final start = now.copyWith(day: now.day - 30);
+        final endOfToday = now.copyWith(hour: 23, minute: 59, second: 59);
+        return [start, endOfToday];
       case TimeStep.custom:
         // fallback, TimeStep will be reset by getter
         return [DateTime.fromMillisecondsSinceEpoch(-1), DateTime.fromMillisecondsSinceEpoch(-1)];

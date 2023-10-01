@@ -1,8 +1,10 @@
 import 'dart:collection';
 
+import 'package:blood_pressure_app/main.dart';
 import 'package:blood_pressure_app/model/blood_pressure.dart';
 import 'package:blood_pressure_app/model/export_import.dart';
 import 'package:blood_pressure_app/model/settings_store.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:function_tree/function_tree.dart';
 import 'package:intl/intl.dart';
@@ -10,7 +12,7 @@ import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
 class ExportFields {
-  static const defaultCsv = ['timestampUnixMs', 'systolic', 'diastolic', 'pulse', 'notes']; 
+  static const defaultCsv = ['timestampUnixMs', 'systolic', 'diastolic', 'pulse', 'notes', 'color'];
   static const defaultPdf = ['formattedTimestamp','systolic','diastolic','pulse','notes']; 
 }
 
@@ -26,7 +28,8 @@ class ExportConfigurationModel {
   /// Format: (title, List<internalNameOfExportFormat>)
   List<(String, List<String>)> get exportConfigurations => [
     // Not fully localized, as potential user added configurations can't be localized as well
-    (localizations.default_, ['timestampUnixMs', 'systolic', 'diastolic', 'pulse', 'notes']),
+    // TODO: explain why check for pdf is not needed; write guides for modifying this code;
+    (localizations.default_, ['timestampUnixMs', 'systolic', 'diastolic', 'pulse', 'notes', 'color']),
     ('"My Heart" export', ['DATUM', 'SYSTOLE', 'DIASTOLE', 'PULS', 'Beschreibung', 'Tags', 'Gewicht', 'Sauerstoffsättigung']),
   ];
 
@@ -61,7 +64,7 @@ class ExportConfigurationModel {
     return _instance!;
   }
 
-  List<ExportColumn> _getActiveExportColumns(ExportFormat format) {
+  List<ExportColumn> getActiveExportColumns(ExportFormat format) {
     switch (format) {
       case ExportFormat.csv:
         return availableFormats.where((e) =>
@@ -71,8 +74,8 @@ class ExportConfigurationModel {
         return availableFormats.where((e) => 
           ((settings.exportCustomEntriesPdf) ? settings.exportItemsPdf : ExportFields.defaultPdf)
         .contains(e.internalName)).toList();
-      default:
-        assert(false, 'no data selection for this one');
+      case ExportFormat.db:
+        // Export formats don't work on this one
         return [];
     }
   }
@@ -85,6 +88,7 @@ class ExportConfigurationModel {
     ExportColumn(internalName: 'pulse', columnTitle: localizations.pulLong, formatPattern: r'$PUL', editable: false),
     ExportColumn(internalName: 'notes', columnTitle: localizations.notes, formatPattern: r'$NOTE', editable: false),
     ExportColumn(internalName: 'pulsePressure', columnTitle: localizations.pulsePressure, formatPattern: r'{{$SYS-$DIA}}', editable: false),
+    ExportColumn(internalName: 'color', columnTitle: localizations.color, formatPattern: r'$COLOR', editable: false),
 
     ExportColumn(internalName: 'DATUM', columnTitle: '"My Heart" export time', formatPattern: r'$FORMAT{$TIMESTAMP,yyyy-MM-dd HH:mm:ss}', editable: false, hidden: true),
     ExportColumn(internalName: 'SYSTOLE', columnTitle: '"My Heart" export sys', formatPattern: r'$SYS', editable: false, hidden: true),
@@ -134,7 +138,7 @@ class ExportConfigurationModel {
       UnmodifiableMapView(Map.fromIterable(_availableFormats, key: (e) => e.internalName));
 
   List<List<String>> createTable(List<BloodPressureRecord> data, ExportFormat format, {bool createHeadline = true,}) {
-    final exportItems = _getActiveExportColumns(format);
+    final exportItems = getActiveExportColumns(format);
     List<List<String>> items = [];
     if (createHeadline) {
       items.add(exportItems.map((e) => e.internalName).toList());
@@ -200,6 +204,7 @@ class ExportColumn {
     fieldContents = fieldContents.replaceAll(r'$DIA', record.diastolic.toString());
     fieldContents = fieldContents.replaceAll(r'$PUL', record.pulse.toString());
     fieldContents = fieldContents.replaceAll(r'$NOTE', record.notes.toString());
+    fieldContents = fieldContents.replaceAll(r'$COLOR', record.needlePin?.color.value.toString() ?? '');
 
     // math
     fieldContents = fieldContents.replaceAllMapped(RegExp(r'\{\{([^}]*)}}'), (m) {
@@ -226,6 +231,10 @@ class ExportColumn {
     if (!isReversible || formattedRecord == 'null') return [];
 
     if (formatPattern == r'$NOTE') return [(RowDataFieldType.notes, formattedRecord)];
+    if (formatPattern == r'$COLOR') {
+      final value = int.tryParse(formattedRecord);
+      return value == null ? [] : [(RowDataFieldType.color, Color(value))];
+    }
 
     // records are parse by replacing the values with capture groups
     final types = RegExp(r'\$(TIMESTAMP|SYS|DIA|PUL)').allMatches(formatPattern).map((e) => e.group(0)).toList();
@@ -261,8 +270,19 @@ class ExportColumn {
   /// Checks if the pattern can be used to parse records. This is the case when the pattern contains variables without
   /// containing curly brackets or commas.
   bool get isReversible {
-    return formatPattern == r'$TIMESTAMP' ||
-        formatPattern.contains(RegExp(r'\$(TIMESTAMP|SYS|DIA|PUL|NOTE)')) && !formatPattern.contains(RegExp(r'[{},]'));
+    return (formatPattern == r'$TIMESTAMP') || (formatPattern == r'$COLOR') ||
+        formatPattern.contains(RegExp(r'\$(SYS|DIA|PUL|NOTE)')) && !formatPattern.contains(RegExp(r'[{},]'));
+  }
+
+  RowDataFieldType? get parsableFormat {
+    if (formatPattern.contains(RegExp(r'[{},]'))) return null;
+    if (formatPattern == r'$TIMESTAMP') return RowDataFieldType.timestamp;
+    if (formatPattern == r'$COLOR') return RowDataFieldType.color;
+    if (formatPattern.contains(RegExp(r'\$(SYS)'))) return RowDataFieldType.sys;
+    if (formatPattern.contains(RegExp(r'\$(DIA)'))) return RowDataFieldType.dia;
+    if (formatPattern.contains(RegExp(r'\$(PUL)'))) return RowDataFieldType.pul;
+    if (formatPattern.contains(RegExp(r'\$(NOTE)'))) return RowDataFieldType.notes;
+    return null;
   }
 
   @override
@@ -272,9 +292,25 @@ class ExportColumn {
 }
 
 enum RowDataFieldType {
-  timestamp,
-  sys,
-  dia,
-  pul,
-  notes
+  timestamp, sys, dia, pul, notes, color;
+
+  @override
+  String toString() {
+    switch(index) {
+      case 0:
+        return gLocalizations.timestamp;
+      case 1:
+        return gLocalizations.sysLong;
+      case 2:
+        return gLocalizations.diaLong;
+      case 3:
+        return gLocalizations.pulLong;
+      case 4:
+        return gLocalizations.notes;
+      case 5:
+        return gLocalizations.color;
+      default:
+        return "unknown";
+    };
+  }
 }

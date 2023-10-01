@@ -177,6 +177,10 @@ class _AddMeasurementPageState extends State<AddMeasurementPage> {
                                       await ExportConfigurationModel.get(Provider.of<Settings>(context, listen: false), localizations));
                                   exporter.export();
                                 }
+                                // ensures the most recent entry is visible when submitting a new measurement
+                                if (settings.graphStepSize != TimeStep.custom) {
+                                  settings.setToMostRecentIntervall();
+                                }
                                 navigator.pop();
                               }
                             },

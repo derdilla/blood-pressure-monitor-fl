@@ -1,0 +1,3 @@
+* Behebe fehlerbedingungen für warnbanner auf der export seite
+* Füge Farbe dem Export bei
+* Aktualisiere Norwegische und Italienische Übersetzungen
