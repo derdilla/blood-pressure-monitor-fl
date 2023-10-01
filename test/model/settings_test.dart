@@ -43,7 +43,6 @@ void main() {
       expect(s.graphTitlesCount, 5);
       expect(s.csvFieldDelimiter, ',');
       expect(s.csvTextDelimiter, '"');
-      expect(s.exportItemsCsv, ['timestampUnixMs', 'systolic', 'diastolic', 'pulse', 'notes']);
       expect(s.exportCsvHeadline, true);
       expect(s.exportMimeType, MimeType.csv);
       expect(s.defaultExportDir.isEmpty, true);
@@ -191,7 +190,6 @@ void main() {
       expect(s.graphTitlesCount, 5);
       expect(s.csvFieldDelimiter, ',');
       expect(s.csvTextDelimiter, '"');
-      expect(s.exportItemsCsv, ['timestampUnixMs', 'systolic', 'diastolic', 'pulse', 'notes']);
       expect(s.exportCsvHeadline, true);
       expect(s.exportMimeType, MimeType.csv);
       expect(s.defaultExportDir.isEmpty, true);
