@@ -12,7 +12,7 @@ import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
 class ExportFields {
-  static const defaultCsv = ['timestampUnixMs', 'systolic', 'diastolic', 'pulse', 'notes']; 
+  static const defaultCsv = ['timestampUnixMs', 'systolic', 'diastolic', 'pulse', 'notes', 'color'];
   static const defaultPdf = ['formattedTimestamp','systolic','diastolic','pulse','notes']; 
 }
 
@@ -28,6 +28,7 @@ class ExportConfigurationModel {
   /// Format: (title, List<internalNameOfExportFormat>)
   List<(String, List<String>)> get exportConfigurations => [
     // Not fully localized, as potential user added configurations can't be localized as well
+    // TODO: explain why check for pdf is not needed; write guides for modifying this code;
     (localizations.default_, ['timestampUnixMs', 'systolic', 'diastolic', 'pulse', 'notes', 'color']),
     ('"My Heart" export', ['DATUM', 'SYSTOLE', 'DIASTOLE', 'PULS', 'Beschreibung', 'Tags', 'Gewicht', 'Sauerstoffsättigung']),
   ];
