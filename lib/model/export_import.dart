@@ -174,9 +174,9 @@ class ExportFileCreator {
       child: pw.TableHelper.fromTextArray(
           data: [
             ['',localizations.sysLong, localizations.diaLong, localizations.pulLong], // TODO: localizations.pulsePressure],
-            [localizations.average, analyzer.avgDia, analyzer.avgSys, analyzer.avgPul],
-            [localizations.maximum, analyzer.maxDia, analyzer.maxSys, analyzer.maxPul],
-            [localizations.minimum, analyzer.minDia, analyzer.minSys, analyzer.minPul],
+            [localizations.average, analyzer.avgSys, analyzer.avgDia, analyzer.avgPul],
+            [localizations.maximum, analyzer.maxSys, analyzer.maxDia, analyzer.maxPul],
+            [localizations.minimum, analyzer.minSys, analyzer.minDia, analyzer.minPul],
           ]
       ),
     );
