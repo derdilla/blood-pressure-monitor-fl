@@ -224,8 +224,6 @@
   "@allowManualTimeInput": {},
   "enterTimeFormatScreen": "Formato orario",
   "@enterTimeFormatScreen": {},
-  "graphTitlesCount": "Conteggio etichette grafico",
-  "@graphTitlesCount": {},
   "success": "Completato: {msg}",
   "@success": {
     "placeholders": {
