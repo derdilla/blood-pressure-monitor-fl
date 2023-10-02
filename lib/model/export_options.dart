@@ -17,6 +17,8 @@ class ExportFields {
 }
 
 class ExportConfigurationModel {
+  // TODO: remove database functionality and use configDB, this should not touch the file, because it would be read by
+  // 2 sources.
   static ExportConfigurationModel? _instance;
 
   final Settings settings;
