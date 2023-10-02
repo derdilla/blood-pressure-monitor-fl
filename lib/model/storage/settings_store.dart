@@ -11,7 +11,7 @@ import 'package:flutter/material.dart';
 /// - [ ] Add private variable with default value
 /// - [ ] Add getter and setter, where setter calls `notifyListeners()`
 /// - [ ] Add as nullable to constructor definition and if != null assign it to the private variable in the body
-/// - [ ] Add parsable representation (as String, Integer or Boolean) to the .toMap
+/// - [ ] Add parsable representation (string, boolean or integer) to the .toMap
 /// - [ ] Parse it in the .fromMap factory method
 /// - [ ] Make sure edge cases are handled in .fromMap (does not exist (update), not parsable (user))
 class Settings extends ChangeNotifier {
@@ -23,11 +23,42 @@ class Settings extends ChangeNotifier {
     MaterialColor? sysColor,
     MaterialColor? diaColor,
     MaterialColor? pulColor,
+    String? dateFormatString,
+    double? graphLineThickness,
+    int? animationSpeed,
+    int? sysWarn,
+    int? diaWarn,
+    bool? allowManualTimeInput,
+    bool? confirmDeletion,
+    bool? darkMode,
+    bool? followSystemDarkMode,
+    bool? validateInputs,
+    bool? useExportCompatability,
+    bool? allowMissingValues,
+    bool? drawRegressionLines,
+    bool? startWithAddMeasurementPage,
+    bool? useLegacyList,
+    // TODO: save locale
   }) {
     if (accentColor != null) _accentColor = accentColor;
     if (sysColor != null) _sysColor = sysColor;
     if (diaColor != null) _diaColor = diaColor;
     if (pulColor != null) _pulColor = pulColor;
+    if (allowManualTimeInput != null) _allowManualTimeInput = allowManualTimeInput;
+    if (confirmDeletion != null) _confirmDeletion = confirmDeletion;
+    if (darkMode != null) _darkMode = darkMode;
+    if (dateFormatString != null) _dateFormatString = dateFormatString;
+    if (animationSpeed != null) _animationSpeed = animationSpeed;
+    if (sysWarn != null) _sysWarn = sysWarn;
+    if (diaWarn != null) _diaWarn = diaWarn;
+    if (graphLineThickness != null) _graphLineThickness = graphLineThickness;
+    if (followSystemDarkMode != null) _followSystemDarkMode = followSystemDarkMode;
+    if (validateInputs != null) _validateInputs = validateInputs;
+    if (useExportCompatability != null) _useExportCompatability = useExportCompatability;
+    if (allowMissingValues != null) _allowMissingValues = allowMissingValues;
+    if (drawRegressionLines != null) _drawRegressionLines = drawRegressionLines;
+    if (startWithAddMeasurementPage != null) _startWithAddMeasurementPage = startWithAddMeasurementPage;
+    if (useLegacyList != null) _useLegacyList = useLegacyList;
   }
 
   factory Settings.fromMap(Map<String, dynamic> map) => Settings(
@@ -35,6 +66,21 @@ class Settings extends ChangeNotifier {
     sysColor: _parseMaterialColor(map['sysColor']),
     diaColor: _parseMaterialColor(map['diaColor']),
     pulColor: _parseMaterialColor(map['pulColor']),
+    allowManualTimeInput: _parseBool(map['allowManualTimeInput']),
+    confirmDeletion: _parseBool(map['confirmDeletion']),
+    darkMode: _parseBool(map['darkMode']),
+    dateFormatString: _parseString(map['dateFormatString']),
+    animationSpeed: _parseInt(map['animationSpeed']),
+    sysWarn: _parseInt(map['sysWarn']),
+    diaWarn: _parseInt(map['diaWarn']),
+    graphLineThickness: _parseDouble(map['graphLineThickness']),
+    followSystemDarkMode: _parseBool(map['followSystemDarkMode']),
+    validateInputs: _parseBool(map['validateInputs']),
+    useExportCompatability: _parseBool(map['useExportCompatability']),
+    allowMissingValues: _parseBool(map['allowMissingValues']),
+    drawRegressionLines: _parseBool(map['drawRegressionLines']),
+    startWithAddMeasurementPage: _parseBool(map['startWithAddMeasurementPage']),
+    useLegacyList: _parseBool(map['useLegacyList']),
   );
       
   factory Settings.fromJson(String json) => Settings.fromMap(jsonDecode(json));
@@ -45,6 +91,20 @@ class Settings extends ChangeNotifier {
       'sysColor': sysColor.value,
       'diaColor': diaColor.value,
       'pulColor': pulColor.value,
+      'dateFormatString': dateFormatString,
+      'graphLineThickness': graphLineThickness,
+      'animationSpeed': animationSpeed,
+      'sysWarn': sysWarn,
+      'diaWarn': diaWarn,
+      'allowManualTimeInput': allowManualTimeInput,
+      'confirmDeletion': confirmDeletion,
+      'darkMode': darkMode,
+      'followSystemDarkMode': followSystemDarkMode,
+      'useExportCompatability': useExportCompatability,
+      'allowMissingValues': allowMissingValues,
+      'drawRegressionLines': drawRegressionLines,
+      'startWithAddMeasurementPage': startWithAddMeasurementPage,
+      'useLegacyList': useLegacyList,
     };
   }
 
@@ -78,7 +138,115 @@ class Settings extends ChangeNotifier {
     notifyListeners();
   }
 
-  // When adding fields notice the checklist at the top.
+  String _dateFormatString = 'yyyy-MM-dd  HH:mm';
+  String get dateFormatString => _dateFormatString;
+  set dateFormatString(String value) {
+    _dateFormatString = value;
+    notifyListeners();
+  }
+
+  double _graphLineThickness = 3;
+  double get graphLineThickness => _graphLineThickness;
+  set graphLineThickness(double value) {
+    _graphLineThickness = value;
+    notifyListeners();
+  }
+
+  int _animationSpeed = 150;
+  int get animationSpeed => _animationSpeed;
+  set animationSpeed(int value) {
+    _animationSpeed = value;
+    notifyListeners();
+  }
+
+  int _sysWarn = 120;
+  int get sysWarn => _sysWarn;
+  set sysWarn(int value) {
+    _sysWarn = value;
+    notifyListeners();
+  }
+
+  int _diaWarn = 80;
+  int get diaWarn => _diaWarn;
+  set diaWarn(int value) {
+    _diaWarn = value;
+    notifyListeners();
+  }
+
+  bool _allowManualTimeInput = true;
+  bool get allowManualTimeInput => _allowManualTimeInput;
+  set allowManualTimeInput(bool value) {
+    _allowManualTimeInput = false;
+    notifyListeners();
+  }
+
+  bool _confirmDeletion = true;
+  bool get confirmDeletion => _confirmDeletion;
+  set confirmDeletion(bool value) {
+    _confirmDeletion = value;
+    notifyListeners();
+  }
+
+  bool _darkMode = true;
+  bool get darkMode => _darkMode;
+  set darkMode(bool value) {
+    _darkMode = value;
+    notifyListeners();
+  }
+
+
+  bool _followSystemDarkMode = true;
+  bool get followSystemDarkMode => _followSystemDarkMode;
+  set followSystemDarkMode(bool value) {
+    _followSystemDarkMode = value;
+    notifyListeners();
+  }
+
+  bool _validateInputs = true;
+  bool get validateInputs => _validateInputs;
+  set validateInputs(bool value) {
+    _validateInputs = value;
+    notifyListeners();
+  }
+
+  bool _useExportCompatability = false;
+  bool get useExportCompatability => _useExportCompatability;
+  set useExportCompatability(bool value) {
+    _useExportCompatability = value;
+    notifyListeners();
+  }
+
+  bool _allowMissingValues = false;
+  bool get allowMissingValues => _allowMissingValues;
+  set allowMissingValues(bool value) {
+    _allowMissingValues = value;
+    notifyListeners();
+  }
+
+  bool _drawRegressionLines = false;
+  bool get drawRegressionLines => _drawRegressionLines;
+  set drawRegressionLines(bool value) {
+    _drawRegressionLines = value;
+    notifyListeners();
+  }
+
+  bool _startWithAddMeasurementPage = false;
+  bool get startWithAddMeasurementPage => _startWithAddMeasurementPage;
+  set startWithAddMeasurementPage(bool value) {
+    _startWithAddMeasurementPage = value;
+    notifyListeners();
+  }
+
+  bool _useLegacyList = false;
+  bool get useLegacyList => _useLegacyList;
+  set useLegacyList(bool value) {
+    _useLegacyList = value;
+    notifyListeners();
+  }
+
+
+
+// When adding fields notice the checklist at the top.
 
 }
 
@@ -117,6 +285,32 @@ MaterialColor? _parseMaterialColor(dynamic value) {
     );
   }
   return MaterialColor(value, swatch);
+}
+
+/// Parses all forms of a boolean someone might put in a a boolean.
+bool? _parseBool(dynamic value) {
+  if (value is bool) return value;
+  if (value == 'true' || value == 1) return true;
+  if (value == 'false' || value == 0) return false;
+  return null;
+}
+
+int? _parseInt(dynamic value) {
+  if (value is int) return value;
+  if (value is String) return int.tryParse(value);
+  return null;
+}
+
+double? _parseDouble(dynamic value) {
+  if (value is double) return value;
+  if (value is String) return double.tryParse(value);
+  return null;
+}
+
+String? _parseString(dynamic value) {
+  if (value is String) return value;
+  if (value is int || value is double || value is bool) return value.toString();
+  return null;
 }
 
 
