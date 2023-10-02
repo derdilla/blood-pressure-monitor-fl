@@ -15,7 +15,10 @@ class ConfigDB {
   
   /// Name of the settings table.
   ///
-  /// It is used to store json representations of [Settings] objects.
+  /// It is used to store json representations of [Settings] objects. Settings are saved as json, as there is no use
+  /// case where accessing individual fields for SQLs logic and matching is needed and the complexity of maintaining
+  /// different settings formats (export) is not worth it. Disk space doesn't play a role, as in most cases there will
+  /// be only one entry in the table.
   ///
   /// Format:
   /// `CREATE TABLE settings(profile_id: INTEGER PRIMARY KEY, settings_json: STRING)`
@@ -25,7 +28,10 @@ class ConfigDB {
       'CREATE TABLE settings(profile_id: INTEGER PRIMARY KEY, settings_json: STRING)';
 
   /// Name of the exportStrings table. It is used to store formats used in the [ExportConfigurationModel].
-  static const String exportStrings = 'exportStrings';
+  ///
+  /// Format:
+  /// `CREATE TABLE exportStrings(internalColumnName STRING PRIMARY KEY, columnTitle STRING, formatPattern STRING)`
+  static const String exportStringsTable = 'exportStrings';
   // instead of just changing this string when changing the format, _onDBUpgrade should be used.
   static const String _exportStringsTableCreationString =
       'CREATE TABLE exportStrings(internalColumnName STRING PRIMARY KEY, columnTitle STRING, formatPattern STRING)';
@@ -68,7 +74,7 @@ class ConfigDB {
   ///
   /// [dbPath] is the path to the folder the database is in. When [dbPath] is left empty the default database file is
   /// used. The [isFullPath] option tells the constructor not to add the default filename at the end of [dbPath].
-  Future<ConfigDB> open({String? dbPath, bool isFullPath = false}) async {
+  static Future<ConfigDB> open({String? dbPath, bool isFullPath = false}) async {
     final instance = ConfigDB._create();
     await instance._asyncInit(dbPath, isFullPath);
     return instance;

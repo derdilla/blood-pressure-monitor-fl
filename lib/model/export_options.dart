@@ -4,12 +4,11 @@ import 'package:blood_pressure_app/main.dart';
 import 'package:blood_pressure_app/model/blood_pressure.dart';
 import 'package:blood_pressure_app/model/export_import.dart';
 import 'package:blood_pressure_app/model/settings_store.dart';
+import 'package:blood_pressure_app/model/storage/db/config_dao.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:function_tree/function_tree.dart';
 import 'package:intl/intl.dart';
-import 'package:path/path.dart';
-import 'package:sqflite/sqflite.dart';
 
 class ExportFields {
   static const defaultCsv = ['timestampUnixMs', 'systolic', 'diastolic', 'pulse', 'notes', 'color'];
@@ -23,7 +22,7 @@ class ExportConfigurationModel {
 
   final Settings settings;
   final AppLocalizations localizations;
-  late final Database _database;
+  final ConfigDao _configDao; // TODO: remove after #181 is complete
   
   final List<ExportColumn> _availableFormats = [];
 
@@ -35,33 +34,16 @@ class ExportConfigurationModel {
     ('"My Heart" export', ['DATUM', 'SYSTOLE', 'DIASTOLE', 'PULS', 'Beschreibung', 'Tags', 'Gewicht', 'Sauerstoffsättigung']),
   ];
 
-  ExportConfigurationModel._create(this.settings, this.localizations);
-  Future<void> _asyncInit(String? dbPath, bool isFullPath) async {
-    dbPath ??= await getDatabasesPath();
-    if (dbPath != inMemoryDatabasePath && !isFullPath) {
-      dbPath = join(dbPath, 'config.db');
-    }
+  ExportConfigurationModel._create(this.settings, this.localizations, this._configDao);
+  Future<void> _asyncInit() async {
 
-    _database = await openDatabase(
-      dbPath,
-      onCreate: (db, version) {
-        return db.execute(
-            'CREATE TABLE exportStrings(internalColumnName STRING PRIMARY KEY, columnTitle STRING, formatPattern STRING)');
-      },
-      version: 1,
-    );
-
-    final existingDbEntries = await _database.rawQuery('SELECT * FROM exportStrings');
-    for (final e in existingDbEntries) {
-      _availableFormats.add(ExportColumn(internalName: e['internalColumnName'].toString(),
-          columnTitle: e['columnTitle'].toString(), formatPattern: e['formatPattern'].toString()));
-    }
     _availableFormats.addAll(getDefaultFormates());
+    _availableFormats.addAll(await _configDao.loadExportColumns());
   }
   static Future<ExportConfigurationModel> get(Settings settings, AppLocalizations localizations, {String? dbPath, bool isFullPath = false}) async {
     if (_instance == null) {
-      _instance = ExportConfigurationModel._create(settings, localizations);
-      await _instance!._asyncInit(dbPath, isFullPath);
+      _instance = ExportConfigurationModel._create(settings, localizations, globalConfigDao);
+      await _instance!._asyncInit();
     }
     return _instance!;
   }
@@ -102,37 +84,16 @@ class ExportConfigurationModel {
     ExportColumn(internalName: 'Sauerstoffsättigung', columnTitle: '"My Heart" export oxygen', formatPattern: r'0', editable: false, hidden: true),
   ];
 
-  // TODO: testing
   void addOrUpdate(ExportColumn format) {
-    final existingEntries = _availableFormats.where((element) => element.internalName == format.internalName);
-    if (existingEntries.isNotEmpty) {
-      assert(existingEntries.length == 1);
-      if (!existingEntries.first.editable) {
-        assert(false, 'Attempted to update non editable field. While this doesn\'t cause any direct issues, it should not be made possible through the UI.');
-        return;
-      }
-      _availableFormats.remove(existingEntries.first);
-      _availableFormats.add(format);
-      _database.update('exportStrings', {
-        'columnTitle': format.columnTitle,
-        'formatPattern': format.formatPattern
-      }, where: 'internalColumnName = ?', whereArgs: [format.internalName]);
-    } else {
-      _availableFormats.add(format);
-      _database.insert('exportStrings', {
-        'internalColumnName': format.internalName,
-        'columnTitle': format.columnTitle,
-        'formatPattern': format.formatPattern
-      },);
-    }
-
+    _availableFormats.add(format);
+    _configDao.updateExportColumn(format);
   }
 
   void delete(ExportColumn format) {
     final existingEntries = _availableFormats.where((element) => (element.internalName == format.internalName) && element.editable);
     assert(existingEntries.isNotEmpty, r"Tried to delete entry that doesn't exist or is not editable.");
     _availableFormats.removeWhere((element) => element.internalName == format.internalName);
-    _database.delete('exportStrings', where: 'internalColumnName = ?', whereArgs: [format.internalName]);
+    _configDao.deleteExportColumn(format.internalName);
   }
 
   UnmodifiableListView<ExportColumn> get availableFormats => UnmodifiableListView(_availableFormats);

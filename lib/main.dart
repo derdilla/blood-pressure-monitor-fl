@@ -1,18 +1,26 @@
 import 'package:blood_pressure_app/model/blood_pressure.dart';
 import 'package:blood_pressure_app/model/settings_store.dart';
+import 'package:blood_pressure_app/model/storage/db/config_dao.dart';
+import 'package:blood_pressure_app/model/storage/db/config_db.dart';
 import 'package:blood_pressure_app/screens/home.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
 
+@Deprecated('see #182')
 late AppLocalizations gLocalizations;
+@Deprecated('This should not be used for new code, but rather for migrating existing code.')
+late final ConfigDao globalConfigDao;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   // 2 different db files
   final dataModel = await BloodPressureModel.create();
   final settingsModel = await Settings.create();
+
+  // TODO:
+  globalConfigDao = ConfigDao(await ConfigDB.open());
 
   // Reset the step size intervall to current on startup
   settingsModel.changeStepSize(settingsModel.graphStepSize);
