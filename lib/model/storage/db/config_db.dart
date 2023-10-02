@@ -12,6 +12,23 @@ import 'package:sqflite/sqflite.dart';
 /// internalColumnName STRING PRIMARY KEY, columnTitle STRING, formatPattern STRING
 class ConfigDB {
   ConfigDB._create();
+  
+  /// Name of the settings table.
+  ///
+  /// It is used to store json representations of [Settings] objects.
+  ///
+  /// Format:
+  /// `CREATE TABLE settings(profile_id: INTEGER PRIMARY KEY, settings_json: STRING)`
+  static const String settingsTable = 'settings';
+  // instead of just changing this string when changing the format, _onDBUpgrade should be used.
+  static const String _settingsTableCreationString =
+      'CREATE TABLE settings(profile_id: INTEGER PRIMARY KEY, settings_json: STRING)';
+
+  /// Name of the exportStrings table. It is used to store formats used in the [ExportConfigurationModel].
+  static const String exportStrings = 'exportStrings';
+  // instead of just changing this string when changing the format, _onDBUpgrade should be used.
+  static const String _exportStringsTableCreationString =
+      'CREATE TABLE exportStrings(internalColumnName STRING PRIMARY KEY, columnTitle STRING, formatPattern STRING)';
 
   late final Database _database;
 
@@ -32,16 +49,15 @@ class ConfigDB {
   }
 
   FutureOr<void> _onDBCreate(Database db, int version) {
-    db.execute(
-        'CREATE TABLE exportStrings(internalColumnName STRING PRIMARY KEY, columnTitle STRING, formatPattern STRING)');
-    db.execute('CREATE TABLE settings(profile_id: INTEGER PRIMARY KEY, settings_json: STRING)');
+    db.execute(_exportStringsTableCreationString);
+    db.execute(_settingsTableCreationString);
   }
 
   FutureOr<void> _onDBUpgrade(Database db, int oldVersion, int newVersion) async {
     // When adding more versions the upgrade procedure proposed in https://stackoverflow.com/a/75153875/21489239
     // might be useful, to avoid duplicated code. Currently this would only lead to complexity, without benefits.
     if (oldVersion == 1 && newVersion == 2) {
-      db.execute('CREATE TABLE settings(profile_id: INTEGER PRIMARY KEY, settings_json: STRING)');
+      db.execute(_settingsTableCreationString);
       db.database.setVersion(2);
     } else {
       assert(false, 'Unexpected version upgrade from $oldVersion to $newVersion.');

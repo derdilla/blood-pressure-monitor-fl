@@ -17,7 +17,7 @@ import 'package:flutter/material.dart';
 class Settings extends ChangeNotifier {
   /// Creates a settings object with the default values.
   ///
-  /// Should only be called directly by tests and from factory methods.
+  /// When the values should be set consider using the factory methods.
   Settings({
     MaterialColor? accentColor,
     MaterialColor? sysColor,
