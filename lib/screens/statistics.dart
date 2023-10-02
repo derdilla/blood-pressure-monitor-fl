@@ -10,7 +10,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 
-// TODO: rewrite to be smaller is possible
 class StatisticsPage extends StatelessWidget {
   const StatisticsPage({super.key});
 

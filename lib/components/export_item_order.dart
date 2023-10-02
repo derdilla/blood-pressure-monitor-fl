@@ -24,14 +24,10 @@ class ExportItemsCustomizer extends StatefulWidget {
 }
 
 class _ExportItemsCustomizerState extends State<ExportItemsCustomizer> {
-  // hack so that FutureBuilder doesn't always rebuild
-  Future<ExportConfigurationModel>? _future;
-
   @override
   Widget build(BuildContext context) {
-    _future ??= ExportConfigurationModel.get(Provider.of<Settings>(context, listen: false), AppLocalizations.of(context)!);
     return ConsistentFutureBuilder(
-      future: _future!,
+      future: ExportConfigurationModel.get(Provider.of<Settings>(context, listen: false), AppLocalizations.of(context)!),
       onData: (BuildContext context, ExportConfigurationModel result) {
         return _buildAddItemBadge(context, result,
           child: _buildManagePresetsBadge(context, result,

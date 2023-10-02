@@ -178,27 +178,14 @@ class ExportImportScreen extends StatelessWidget {
   }
 }
 
-class ExportFieldCustomisationSetting extends StatefulWidget {
+class ExportFieldCustomisationSetting extends StatelessWidget {
   const ExportFieldCustomisationSetting({super.key});
-
-  @override
-  State<ExportFieldCustomisationSetting> createState() =>
-      _ExportFieldCustomisationSettingState();
-}
-
-class _ExportFieldCustomisationSettingState
-    extends State<ExportFieldCustomisationSetting> {
-  // hack so that FutureBuilder doesn't always rebuild
-  Future<ExportConfigurationModel>? _future;
 
   @override
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
-    _future ??= ExportConfigurationModel.get(
-        Provider.of<Settings>(context, listen: false), localizations);
-
     return ConsistentFutureBuilder(
-        future: _future!,
+        future: ExportConfigurationModel.get(Provider.of<Settings>(context, listen: false), localizations),
         onData: (context, configurationModel) {
           return Consumer<Settings>(builder: (context, settings, child) {
             /// whether or not the currently selected export format supports field customization
@@ -322,16 +309,13 @@ class ExportWarnBanner extends StatefulWidget {
 
 class _ExportWarnBannerState extends State<ExportWarnBanner> {
   bool _showWarnBanner = true;
-  late Future<ExportConfigurationModel> _future;
 
   @override
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
-    _future = ExportConfigurationModel.get(
-        Provider.of<Settings>(context, listen: false), localizations);
     return Consumer<Settings>(builder: (context, settings, child) {
       return ConsistentFutureBuilder(
-          future: _future,
+          future: ExportConfigurationModel.get(Provider.of<Settings>(context, listen: false), localizations),
           onData: (context, configurationModel) {
             String? message;
             final exportCustomEntries =
