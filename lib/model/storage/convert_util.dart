@@ -14,8 +14,14 @@ class ConvertUtil {
   }
 
   static int? parseInt(dynamic value) {
-    if (value is int || value is int?) return value;
-    if (value is String) return int.tryParse(value);
+    if (value is int) return value;
+    if (value is double) return _isInt(value);
+    if (value is String) return int.tryParse(value) ?? _isInt(double.tryParse(value));
+    return null;
+  }
+
+  static int? _isInt(double? value) {
+    if (value?.toInt() == value) return value?.toInt();
     return null;
   }
 
@@ -39,7 +45,8 @@ class ConvertUtil {
   }
 
   static Locale? parseLocale(dynamic value) {
-    if (value == 'NULL') return null;
+    if (value is Locale) return value;
+    if (value is String && value.toLowerCase() == 'null') return null;
     if (value is String) return Locale(value);
     return null;
   }
@@ -77,7 +84,7 @@ class ConvertUtil {
         1,
       );
     }
-    return MaterialColor(value, swatch);
+    return MaterialColor(color.value, swatch);
   }
 
   static DateTimeRange? parseRange(dynamic start, dynamic end) {
