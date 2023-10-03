@@ -33,61 +33,6 @@ void main() {
       ));
     });
 
-    test('should create json without error', () {
-      final intervall = IntervallStorage(stepSize: TimeStep.year);
-      final json = intervall.toJson();
-      expect(json.length, greaterThan(0));
-    });
-
-    test('should load same data from json', () {
-      final initialData = IntervallStorage();
-      final json = initialData.toJson();
-      final recreatedData = IntervallStorage.fromJson(json);
-
-      expect(initialData.stepSize, recreatedData.stepSize);
-      expect(initialData.currentRange.start.millisecondsSinceEpoch,
-          recreatedData.currentRange.start.millisecondsSinceEpoch);
-      expect(initialData.currentRange.end.millisecondsSinceEpoch,
-          recreatedData.currentRange.end.millisecondsSinceEpoch);
-    });
-
-    test('should load same data from json in edge cases', () {
-      final initialData = IntervallStorage(stepSize: TimeStep.month, range: DateTimeRange(
-          start: DateTime.fromMillisecondsSinceEpoch(1234),
-          end: DateTime.fromMillisecondsSinceEpoch(5678)
-      ));
-      final json = initialData.toJson();
-      final recreatedData = IntervallStorage.fromJson(json);
-
-      expect(initialData.stepSize, TimeStep.month);
-      expect(recreatedData.currentRange.start.millisecondsSinceEpoch, 1234);
-      expect(recreatedData.currentRange.end.millisecondsSinceEpoch, 5678);
-    });
-
-    test('should not crash when parsing incorrect json', () {
-      IntervallStorage.fromJson('banana');
-      IntervallStorage.fromJson('{"stepSize" = 1}');
-      IntervallStorage.fromJson('{"stepSize": 1');
-      IntervallStorage.fromJson('{stepSize: 1}');
-      IntervallStorage.fromJson('green{stepSize: 1}');
-    });
-
-    test('should not crash when parsing invalid values and ignore them', () {
-      final v1 = IntervallStorage.fromJson('{"stepSize": true}');
-      final v2 = IntervallStorage.fromJson('{"stepSize": "month"}');
-      final v3 = IntervallStorage.fromJson('{"start": "month", "end": 10.5}');
-      final v4 = IntervallStorage.fromJson('{"start": 18.6, "end": 90.65}');
-
-      expect(v1.stepSize, TimeStep.last7Days);
-      expect(v2.stepSize, TimeStep.last7Days);
-      expect(v3.stepSize, TimeStep.last7Days);
-
-      // in minutes to avoid failing through performance
-      expect(v2.currentRange.duration.inMinutes, v1.currentRange.duration.inMinutes);
-      expect(v3.currentRange.duration.inMinutes, v1.currentRange.duration.inMinutes);
-      expect(v4.currentRange.duration.inMinutes, v1.currentRange.duration.inMinutes);
-    });
-
 
     test('intervall lengths should match step size', () {
       final dayIntervall = IntervallStorage(stepSize: TimeStep.day);

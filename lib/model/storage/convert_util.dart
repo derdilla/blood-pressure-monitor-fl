@@ -21,6 +21,7 @@ class ConvertUtil {
 
   static double? parseDouble(dynamic value) {
     if (value is double) return value;
+    if (value is int) return value.toDouble();
     if (value is String) return double.tryParse(value);
     return null;
   }
@@ -39,7 +40,8 @@ class ConvertUtil {
 
   static Locale? parseLocale(dynamic value) {
     if (value == 'NULL') return null;
-    return Locale(value);
+    if (value is String) return Locale(value);
+    return null;
   }
 
   static MaterialColor? parseMaterialColor(dynamic value) {
@@ -56,7 +58,6 @@ class ConvertUtil {
       if (parsedValue == null) return null;
       color = Color(parsedValue);
     } else {
-      assert(false);
       return null;
     }
 

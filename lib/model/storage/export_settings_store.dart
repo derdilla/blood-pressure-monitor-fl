@@ -20,7 +20,13 @@ class ExportSettings extends ChangeNotifier {
     exportAfterEveryEntry: ConvertUtil.parseBool(map['exportAfterEveryEntry'])
   );
 
-  factory ExportSettings.fromJson(String json) => ExportSettings.fromMap(jsonDecode(json));
+  factory ExportSettings.fromJson(String json) {
+    try {
+      return ExportSettings.fromMap(jsonDecode(json));
+    } catch (exception) {
+      return ExportSettings();
+    }
+  }
 
   Map<String, dynamic> toMap() => <String, dynamic>{
     'exportFormat': exportFormat.serialize(),

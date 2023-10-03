@@ -20,7 +20,13 @@ class CsvExportSettings extends ChangeNotifier {
       exportHeadline: ConvertUtil.parseBool(map['exportHeadline'])
   );
 
-  factory CsvExportSettings.fromJson(String json) => CsvExportSettings.fromMap(jsonDecode(json));
+  factory CsvExportSettings.fromJson(String json) {
+    try {
+      return CsvExportSettings.fromMap(jsonDecode(json));
+    } catch (exception) {
+      return CsvExportSettings();
+    }
+  }
 
   Map<String, dynamic> toMap() => <String, dynamic>{
     'fieldDelimiter': fieldDelimiter,

@@ -15,6 +15,7 @@ import 'package:flutter/material.dart';
 /// - [ ] Add parsable representation (string, boolean or integer) to the .toMap
 /// - [ ] Parse it in the .fromMap factory method
 /// - [ ] Make sure edge cases are handled in .fromMap (does not exist (update), not parsable (user))
+/// - [ ] To verify everything was done correctly, tests should be expanded with the newly added fields (json_serialization_test.dart)
 class Settings extends ChangeNotifier {
   /// Creates a settings object with the default values.
   ///
@@ -82,8 +83,14 @@ class Settings extends ChangeNotifier {
     useLegacyList: ConvertUtil.parseBool(map['useLegacyList']),
     language: ConvertUtil.parseLocale(map['language'])
   );
-      
-  factory Settings.fromJson(String json) => Settings.fromMap(jsonDecode(json));
+
+  factory Settings.fromJson(String json) {
+    try {
+      return Settings.fromMap(jsonDecode(json));
+    } catch (exception) {
+      return Settings();
+    }
+  }
 
   Map<String, dynamic> toMap() => <String, dynamic>{
       'accentColor': accentColor.value,
@@ -99,6 +106,7 @@ class Settings extends ChangeNotifier {
       'confirmDeletion': confirmDeletion,
       'darkMode': darkMode,
       'followSystemDarkMode': followSystemDarkMode,
+      'validateInputs': validateInputs,
       'allowMissingValues': allowMissingValues,
       'drawRegressionLines': drawRegressionLines,
       'startWithAddMeasurementPage': startWithAddMeasurementPage,

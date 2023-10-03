@@ -33,7 +33,13 @@ class PdfExportSettings extends ChangeNotifier {
     cellFontSize: ConvertUtil.parseDouble(map['cellFontSize']),
   );
 
-  factory PdfExportSettings.fromJson(String json) => PdfExportSettings.fromMap(jsonDecode(json));
+  factory PdfExportSettings.fromJson(String json) {
+    try {
+      return PdfExportSettings.fromMap(jsonDecode(json));
+    } catch (exception) {
+      return PdfExportSettings();
+    }
+  }
 
   Map<String, dynamic> toMap() => <String, dynamic>{
     'exportTitle': exportTitle,
