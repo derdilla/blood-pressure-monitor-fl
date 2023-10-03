@@ -87,8 +87,7 @@ class Settings extends ChangeNotifier {
       
   factory Settings.fromJson(String json) => Settings.fromMap(jsonDecode(json));
 
-  Map<String, dynamic> toMap() {
-    return <String, dynamic>{
+  Map<String, dynamic> toMap() => <String, dynamic>{
       'accentColor': accentColor.value,
       'sysColor': sysColor.value,
       'diaColor': diaColor.value,
@@ -109,7 +108,6 @@ class Settings extends ChangeNotifier {
       'useLegacyList': useLegacyList,
       'language': _serializeLocale(language),
     };
-  }
 
   String toJson() => jsonEncode(toMap());
 
