@@ -28,6 +28,7 @@ class ConvertUtil {
   static String? parseString(dynamic value) {
     if (value is String) return value;
     if (value is int || value is double || value is bool) return value.toString();
+    // No check for Object. While this would be convertible to string,
     return null;
   }
 
