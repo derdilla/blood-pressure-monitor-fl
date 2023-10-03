@@ -34,7 +34,6 @@ class Settings extends ChangeNotifier {
     bool? darkMode,
     bool? followSystemDarkMode,
     bool? validateInputs,
-    bool? useExportCompatability,
     bool? allowMissingValues,
     bool? drawRegressionLines,
     bool? startWithAddMeasurementPage,
@@ -54,7 +53,6 @@ class Settings extends ChangeNotifier {
     if (graphLineThickness != null) _graphLineThickness = graphLineThickness;
     if (followSystemDarkMode != null) _followSystemDarkMode = followSystemDarkMode;
     if (validateInputs != null) _validateInputs = validateInputs;
-    if (useExportCompatability != null) _useExportCompatability = useExportCompatability;
     if (allowMissingValues != null) _allowMissingValues = allowMissingValues;
     if (drawRegressionLines != null) _drawRegressionLines = drawRegressionLines;
     if (startWithAddMeasurementPage != null) _startWithAddMeasurementPage = startWithAddMeasurementPage;
@@ -77,7 +75,6 @@ class Settings extends ChangeNotifier {
     graphLineThickness: _parseDouble(map['graphLineThickness']),
     followSystemDarkMode: _parseBool(map['followSystemDarkMode']),
     validateInputs: _parseBool(map['validateInputs']),
-    useExportCompatability: _parseBool(map['useExportCompatability']),
     allowMissingValues: _parseBool(map['allowMissingValues']),
     drawRegressionLines: _parseBool(map['drawRegressionLines']),
     startWithAddMeasurementPage: _parseBool(map['startWithAddMeasurementPage']),
@@ -101,7 +98,6 @@ class Settings extends ChangeNotifier {
       'confirmDeletion': confirmDeletion,
       'darkMode': darkMode,
       'followSystemDarkMode': followSystemDarkMode,
-      'useExportCompatability': useExportCompatability,
       'allowMissingValues': allowMissingValues,
       'drawRegressionLines': drawRegressionLines,
       'startWithAddMeasurementPage': startWithAddMeasurementPage,
@@ -215,13 +211,6 @@ class Settings extends ChangeNotifier {
   bool get validateInputs => _validateInputs;
   set validateInputs(bool value) {
     _validateInputs = value;
-    notifyListeners();
-  }
-
-  bool _useExportCompatability = false;
-  bool get useExportCompatability => _useExportCompatability;
-  set useExportCompatability(bool value) {
-    _useExportCompatability = value;
     notifyListeners();
   }
 

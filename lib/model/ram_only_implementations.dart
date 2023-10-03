@@ -266,12 +266,6 @@ class RamSettings extends ChangeNotifier implements Settings {
     notifyListeners();
   }
 
-  bool get useExportCompatability => _useExportCompatability;
-
-  set useExportCompatability(bool value) {
-    _useExportCompatability = value;
-    notifyListeners();
-  }
 
   @override
   String get csvFieldDelimiter => _csvFieldDelimiter;
