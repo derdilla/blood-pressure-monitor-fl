@@ -19,6 +19,7 @@ class Settings extends ChangeNotifier {
   ///
   /// When the values should be set consider using the factory methods.
   Settings({
+    Locale? language,
     MaterialColor? accentColor,
     MaterialColor? sysColor,
     MaterialColor? diaColor,
@@ -38,7 +39,6 @@ class Settings extends ChangeNotifier {
     bool? drawRegressionLines,
     bool? startWithAddMeasurementPage,
     bool? useLegacyList,
-    // TODO: save locale
   }) {
     if (accentColor != null) _accentColor = accentColor;
     if (sysColor != null) _sysColor = sysColor;
@@ -59,6 +59,7 @@ class Settings extends ChangeNotifier {
     if (drawRegressionLines != null) _drawRegressionLines = drawRegressionLines;
     if (startWithAddMeasurementPage != null) _startWithAddMeasurementPage = startWithAddMeasurementPage;
     if (useLegacyList != null) _useLegacyList = useLegacyList;
+    _language = language; // No check here, as null is the default as well. In general values should not be null
   }
 
   factory Settings.fromMap(Map<String, dynamic> map) => Settings(
@@ -81,6 +82,7 @@ class Settings extends ChangeNotifier {
     drawRegressionLines: _parseBool(map['drawRegressionLines']),
     startWithAddMeasurementPage: _parseBool(map['startWithAddMeasurementPage']),
     useLegacyList: _parseBool(map['useLegacyList']),
+    language: _parseLocale(map['language'])
   );
       
   factory Settings.fromJson(String json) => Settings.fromMap(jsonDecode(json));
@@ -105,10 +107,19 @@ class Settings extends ChangeNotifier {
       'drawRegressionLines': drawRegressionLines,
       'startWithAddMeasurementPage': startWithAddMeasurementPage,
       'useLegacyList': useLegacyList,
+      'language': _serializeLocale(language),
     };
   }
 
   String toJson() => jsonEncode(toMap());
+
+  Locale? _language; // default null
+  /// When the value is null, 
+  Locale? get language => _language;
+  set language(Locale? value) {
+    _language = value;
+    notifyListeners();
+  }
 
   MaterialColor _accentColor = Colors.teal;
   MaterialColor get accentColor => _accentColor;
@@ -243,11 +254,8 @@ class Settings extends ChangeNotifier {
     _useLegacyList = value;
     notifyListeners();
   }
-
-
-
+  
 // When adding fields notice the checklist at the top.
-
 }
 
 MaterialColor? _parseMaterialColor(dynamic value) {
@@ -311,6 +319,16 @@ String? _parseString(dynamic value) {
   if (value is String) return value;
   if (value is int || value is double || value is bool) return value.toString();
   return null;
+}
+
+String _serializeLocale(Locale? value) {
+  if (value == null) return 'NULL';
+  return value.languageCode;
+}
+
+Locale? _parseLocale(dynamic value) {
+  if (value == 'NULL') return null;
+  return Locale(value);
 }
 
 
