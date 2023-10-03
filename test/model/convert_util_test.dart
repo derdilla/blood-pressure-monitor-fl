@@ -100,5 +100,18 @@ void main() {
       expect(ConvertUtil.parseLocale('null'), null);
       expect(ConvertUtil.parseLocale('NuLl'), null);
     });
+
+    test('parseList should convert valid values correctly', () {
+      expect(ConvertUtil.parseList<int>([1234,567,89,0]), [1234,567,89,0]);
+      expect(ConvertUtil.parseList<String>(['1234','567','89','0', 'test']), ['1234','567','89','0', 'test']);
+      expect(ConvertUtil.parseList<String>(<dynamic>['1234','567','89','0', 'test']), ['1234','567','89','0', 'test']);
+      expect(ConvertUtil.parseList<String>([]), []);
+    });
+    test('parseList should parse invalid values as null', () {
+      expect(ConvertUtil.parseList<int>(['1234','567','89','0', 'test']), null);
+      expect(ConvertUtil.parseList<String>({'test': 5}), null);
+      expect(ConvertUtil.parseList<String>([1234,567,89,0]), null);
+      expect(ConvertUtil.parseList<String>('tests'), null);
+    });
   });
 }

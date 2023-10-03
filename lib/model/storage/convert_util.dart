@@ -96,4 +96,17 @@ class ConvertUtil {
         end: DateTime.fromMillisecondsSinceEpoch(endTimestamp)
     );
   }
+
+  static List<T>? parseList<T>(dynamic value) {
+    if (value is List<T>) return value;
+    if (value is List<dynamic>) {
+      List<T> validValues = [];
+      for (final v in value) {
+        if (v is T) validValues.add(v);
+      }
+      if (value.length == validValues.length) return validValues;
+    }
+    if (value is List && value.isEmpty) return [];
+    return null;
+  }
 }

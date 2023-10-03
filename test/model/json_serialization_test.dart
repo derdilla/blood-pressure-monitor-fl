@@ -175,12 +175,16 @@ void main() {
         fieldDelimiter: 'asdfghjklö',
         textDelimiter: 'asdfghjklö2',
         exportHeadline: false,
+        exportCustomFields: true,
+        customFields: ['test1', 'test2'],
       );
       final fromJson = CsvExportSettings.fromJson(initial.toJson());
 
       expect(initial.fieldDelimiter, fromJson.fieldDelimiter);
       expect(initial.textDelimiter, fromJson.textDelimiter);
       expect(initial.exportHeadline, fromJson.exportHeadline);
+      expect(initial.exportCustomFields, fromJson.exportCustomFields);
+      expect(initial.customFields, fromJson.customFields);
 
       expect(initial.toJson(), fromJson.toJson());
     });
@@ -201,6 +205,8 @@ void main() {
       expect(v1.fieldDelimiter, CsvExportSettings().fieldDelimiter);
       expect(v2.exportHeadline, CsvExportSettings().exportHeadline);
       expect(v3.textDelimiter, CsvExportSettings().textDelimiter);
+      expect(v3.exportCustomFields, CsvExportSettings().exportCustomFields);
+      expect(v3.customFields, CsvExportSettings().customFields);
     });
   });
 
