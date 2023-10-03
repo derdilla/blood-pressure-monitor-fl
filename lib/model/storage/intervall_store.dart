@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:blood_pressure_app/model/storage/convert_util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -15,7 +16,7 @@ class IntervallStorage extends ChangeNotifier {
 
   factory IntervallStorage.fromMap(Map<String, dynamic> map) => IntervallStorage(
     stepSize: TimeStep.deserialize(map['stepSize']),
-    range: _parseRange(map['start'], map['end']),
+    range: ConvertUtil.parseRange(map['start'], map['end']),
   );
 
   factory IntervallStorage.fromJson(String json) {
@@ -202,7 +203,7 @@ enum TimeStep {
   }
 
   factory TimeStep.deserialize(dynamic value) {
-    int? intValue = _parseInt(value);
+    int? intValue = ConvertUtil.parseInt(value);
     if (value == null || intValue == null) return TimeStep.last7Days;
 
     switch (intValue) {
@@ -227,24 +228,4 @@ enum TimeStep {
         return TimeStep.last7Days;
     }
   }
-}
-
-DateTimeRange? _parseRange(dynamic start, dynamic end) {
-  final startTimestamp = _parseInt(start);
-  final endTimestamp = _parseInt(end);
-  if (startTimestamp == null || endTimestamp == null) return null;
-  return DateTimeRange(
-      start: DateTime.fromMillisecondsSinceEpoch(startTimestamp),
-      end: DateTime.fromMillisecondsSinceEpoch(endTimestamp)
-  );
-}
-
-int? _parseInt(dynamic value) {
-  if (value is int || value is int?) {
-    return value;
-  }
-  if (value is String) {
-    return int.tryParse(value);
-  }
-  return null;
 }

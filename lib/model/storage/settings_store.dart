@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:blood_pressure_app/model/storage/convert_util.dart';
 import 'package:flutter/material.dart';
 
 /// Stores settings that are directly controllable by the user through the Settings screen.
@@ -61,25 +62,25 @@ class Settings extends ChangeNotifier {
   }
 
   factory Settings.fromMap(Map<String, dynamic> map) => Settings(
-    accentColor: _parseMaterialColor(map['accentColor']),
-    sysColor: _parseMaterialColor(map['sysColor']),
-    diaColor: _parseMaterialColor(map['diaColor']),
-    pulColor: _parseMaterialColor(map['pulColor']),
-    allowManualTimeInput: _parseBool(map['allowManualTimeInput']),
-    confirmDeletion: _parseBool(map['confirmDeletion']),
-    darkMode: _parseBool(map['darkMode']),
-    dateFormatString: _parseString(map['dateFormatString']),
-    animationSpeed: _parseInt(map['animationSpeed']),
-    sysWarn: _parseInt(map['sysWarn']),
-    diaWarn: _parseInt(map['diaWarn']),
-    graphLineThickness: _parseDouble(map['graphLineThickness']),
-    followSystemDarkMode: _parseBool(map['followSystemDarkMode']),
-    validateInputs: _parseBool(map['validateInputs']),
-    allowMissingValues: _parseBool(map['allowMissingValues']),
-    drawRegressionLines: _parseBool(map['drawRegressionLines']),
-    startWithAddMeasurementPage: _parseBool(map['startWithAddMeasurementPage']),
-    useLegacyList: _parseBool(map['useLegacyList']),
-    language: _parseLocale(map['language'])
+    accentColor: ConvertUtil.parseMaterialColor(map['accentColor']),
+    sysColor: ConvertUtil.parseMaterialColor(map['sysColor']),
+    diaColor: ConvertUtil.parseMaterialColor(map['diaColor']),
+    pulColor: ConvertUtil.parseMaterialColor(map['pulColor']),
+    allowManualTimeInput: ConvertUtil.parseBool(map['allowManualTimeInput']),
+    confirmDeletion: ConvertUtil.parseBool(map['confirmDeletion']),
+    darkMode: ConvertUtil.parseBool(map['darkMode']),
+    dateFormatString: ConvertUtil.parseString(map['dateFormatString']),
+    animationSpeed: ConvertUtil.parseInt(map['animationSpeed']),
+    sysWarn: ConvertUtil.parseInt(map['sysWarn']),
+    diaWarn: ConvertUtil.parseInt(map['diaWarn']),
+    graphLineThickness: ConvertUtil.parseDouble(map['graphLineThickness']),
+    followSystemDarkMode: ConvertUtil.parseBool(map['followSystemDarkMode']),
+    validateInputs: ConvertUtil.parseBool(map['validateInputs']),
+    allowMissingValues: ConvertUtil.parseBool(map['allowMissingValues']),
+    drawRegressionLines: ConvertUtil.parseBool(map['drawRegressionLines']),
+    startWithAddMeasurementPage: ConvertUtil.parseBool(map['startWithAddMeasurementPage']),
+    useLegacyList: ConvertUtil.parseBool(map['useLegacyList']),
+    language: ConvertUtil.parseLocale(map['language'])
   );
       
   factory Settings.fromJson(String json) => Settings.fromMap(jsonDecode(json));
@@ -102,7 +103,7 @@ class Settings extends ChangeNotifier {
       'drawRegressionLines': drawRegressionLines,
       'startWithAddMeasurementPage': startWithAddMeasurementPage,
       'useLegacyList': useLegacyList,
-      'language': _serializeLocale(language),
+      'language': ConvertUtil.serializeLocale(language),
     };
 
   String toJson() => jsonEncode(toMap());
@@ -243,79 +244,6 @@ class Settings extends ChangeNotifier {
   }
   
 // When adding fields notice the checklist at the top.
-}
-
-MaterialColor? _parseMaterialColor(dynamic value) {
-  if (value is MaterialColor) return value;
-  if (value == null) return null;
-  
-  late final Color color;
-  if (value is Color) {
-    color = value;
-  } else if (value is int) {
-    color = Color(value);
-  } else if (value is String) {
-    final int? parsedValue = int.tryParse(value);
-    if (parsedValue == null) return null;
-    color = Color(parsedValue);
-  } else {
-    assert(false);
-    return null;
-  }
-  
-  List strengths = <double>[.05];
-  Map<int, Color> swatch = {};
-  final int r = color.red, g = color.green, b = color.blue;
-
-  for (int i = 1; i < 10; i++) {
-    strengths.add(0.1 * i);
-  }
-  for (var strength in strengths) {
-    final double ds = 0.5 - strength;
-    swatch[(strength * 1000).round()] = Color.fromRGBO(
-      r + ((ds < 0 ? r : (255 - r)) * ds).round(),
-      g + ((ds < 0 ? g : (255 - g)) * ds).round(),
-      b + ((ds < 0 ? b : (255 - b)) * ds).round(),
-      1,
-    );
-  }
-  return MaterialColor(value, swatch);
-}
-
-/// Parses all forms of a boolean someone might put in a a boolean.
-bool? _parseBool(dynamic value) {
-  if (value is bool) return value;
-  if (value == 'true' || value == 1) return true;
-  if (value == 'false' || value == 0) return false;
-  return null;
-}
-
-int? _parseInt(dynamic value) {
-  if (value is int) return value;
-  if (value is String) return int.tryParse(value);
-  return null;
-}
-
-double? _parseDouble(dynamic value) {
-  if (value is double) return value;
-  if (value is String) return double.tryParse(value);
-  return null;
-}
-
-String? _parseString(dynamic value) {
-  if (value is String) return value;
-  if (value is int || value is double || value is bool) return value.toString();
-  return null;
-}
-
-String _serializeLocale(Locale? value) {
-  if (value == null) return 'NULL';
-  return value.languageCode;
-}
-
-Locale? _parseLocale(dynamic value) {
-  if (value == 'NULL') return null;
-  return Locale(value);
 }
 
 
