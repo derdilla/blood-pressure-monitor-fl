@@ -3,6 +3,7 @@ import 'package:blood_pressure_app/model/storage/db/config_db.dart';
 import 'package:blood_pressure_app/model/storage/export_csv_settings_store.dart';
 import 'package:blood_pressure_app/model/storage/export_pdf_settings_store.dart';
 import 'package:blood_pressure_app/model/storage/export_settings_store.dart';
+import 'package:blood_pressure_app/model/storage/intervall_store.dart';
 import 'package:blood_pressure_app/model/storage/settings_store.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -171,6 +172,43 @@ class ConfigDao {
       _updatePdfExportSettings(profileID, exportSettings);
     });
     return exportSettings;
+  }
+
+  Future<IntervallStorage> loadIntervallStorage(int profileID, int storageID) async {
+    final dbEntry = await _configDB.database.query(
+        ConfigDB.selectedIntervallStorageTable,
+        columns: ['stepSize', 'start', 'end'],
+        where: 'profile_id = ? AND storage_id = ?',
+        whereArgs: [profileID, storageID]
+    );
+    late final IntervallStorage intervallStorage;
+    if (dbEntry.isEmpty) {
+      intervallStorage = IntervallStorage();
+    } else {
+      assert(dbEntry.length == 1, 'Keys should ensure only one entry is possible.');
+      intervallStorage = IntervallStorage.fromMap(dbEntry.first);
+    }
+
+    intervallStorage.addListener(() {
+      _updateIntervallStorage(profileID, storageID, intervallStorage);
+    });
+    return intervallStorage;
+  }
+
+  /// Update specific [IntervallStorage] for a profile in the database.
+  ///
+  /// Adds an entry if necessary.
+  Future<void> _updateIntervallStorage(int profileID, int storageID, IntervallStorage intervallStorage) async {
+    final Map<String, dynamic> columnValueMap = {
+      'profile_id': profileID,
+      'storage_id': storageID,
+    };
+    columnValueMap.addAll(intervallStorage.toMap());
+    await _configDB.database.insert(
+        ConfigDB.selectedIntervallStorageTable,
+        columnValueMap,
+        conflictAlgorithm: ConflictAlgorithm.replace
+    );
   }
 
   /// Update [PdfExportSettings] for a profile in the database.

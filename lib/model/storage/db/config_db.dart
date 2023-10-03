@@ -60,6 +60,22 @@ class ConfigDB {
   static const String _exportPdfSettingsTableCreationString =
       'CREATE TABLE exportPdfSettings(profile_id: INTEGER PRIMARY KEY, json: STRING)';
 
+  /// Name of the table for storing time intervals to display.
+  ///
+  /// It is used to store json representations of [IntervallStorage] objects. Data is saved in as fields, to save space
+  /// on the disk and because no changes in the data format are expected. The field names are made to match the variable
+  /// names in the class.
+  ///
+  /// Note that this table has 2 keys: profile_key to support multiple profiles and storage_id to support saving
+  /// multiple entries per profile (e.g. export screen and main page).
+  ///
+  /// Format: `CREATE TABLE selectedIntervallStorage(profile_id: INTEGER, storage_id: INTEGER, stepSize: INTEGER,`
+  /// ` start: INTEGER, end: INTEGER, PRIMARY KEY(profile_id, storage_id))`
+  static const String selectedIntervallStorageTable = 'selectedIntervallStorage';
+  static const String _selectedIntervallStorageCreationString = 'CREATE TABLE selectedIntervallStorage(profile_id: '
+      'INTEGER, storage_id: INTEGER, stepSize: INTEGER, start: INTEGER, end: INTEGER, '
+      'PRIMARY KEY(profile_id, storage_id))';
+
   /// Name of the exportStrings table. It is used to store formats used in the [ExportConfigurationModel].
   ///
   /// Format:
@@ -92,6 +108,7 @@ class ConfigDB {
     db.execute(_exportSettingsTableCreationString);
     db.execute(_exportCsvSettingsTableCreationString);
     db.execute(_exportPdfSettingsTableCreationString);
+    db.execute(_selectedIntervallStorageCreationString);
   }
 
   FutureOr<void> _onDBUpgrade(Database db, int oldVersion, int newVersion) async {
@@ -102,6 +119,7 @@ class ConfigDB {
       db.execute(_exportSettingsTableCreationString);
       db.execute(_exportCsvSettingsTableCreationString);
       db.execute(_exportPdfSettingsTableCreationString);
+      db.execute(_selectedIntervallStorageCreationString);
       db.database.setVersion(2);
     } else {
       assert(false, 'Unexpected version upgrade from $oldVersion to $newVersion.');
