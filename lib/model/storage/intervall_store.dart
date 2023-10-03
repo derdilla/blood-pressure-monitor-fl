@@ -10,7 +10,7 @@ class IntervallStorage extends ChangeNotifier {
     _stepSize = stepSize ?? TimeStep.last7Days;
     _currentRange = range ?? _getMostRecentDisplayIntervall();
   }
-  
+   //TODO: add to database
   late TimeStep _stepSize;
   late DateTimeRange _currentRange;
 

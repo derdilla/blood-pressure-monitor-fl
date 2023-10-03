@@ -27,12 +27,44 @@ class ConfigDB {
   static const String _settingsTableCreationString =
       'CREATE TABLE settings(profile_id: INTEGER PRIMARY KEY, settings_json: STRING)';
 
+  /// Name of the export settings table.
+  ///
+  /// It is used to store json representations of [ExportSettings] objects. Data is saved the same way as with
+  /// [settingsTable]
+  ///
+  /// Format:
+  /// `CREATE TABLE exportSettings(profile_id: INTEGER PRIMARY KEY, json: STRING)`
+  static const String exportSettingsTable = 'exportSettings';
+  static const String _exportSettingsTableCreationString =
+      'CREATE TABLE exportSettings(profile_id: INTEGER PRIMARY KEY, json: STRING)';
+
+  /// Name of the table for csv export settings.
+  ///
+  /// It is used to store json representations of [CsvExportSettings] objects. Data is saved the same way as with
+  /// [settingsTable]
+  ///
+  /// Format:
+  /// `CREATE TABLE exportCsvSettings(profile_id: INTEGER PRIMARY KEY, json: STRING)`
+  static const String exportCsvSettingsTable = 'exportCsvSettings';
+  static const String _exportCsvSettingsTableCreationString =
+      'CREATE TABLE exportCsvSettings(profile_id: INTEGER PRIMARY KEY, json: STRING)';
+
+  /// Name of the table for pdf export settings.
+  ///
+  /// It is used to store json representations of [PdfExportSettings] objects. Data is saved the same way as with
+  /// [settingsTable]
+  ///
+  /// Format:
+  /// `CREATE TABLE exportPdfSettings(profile_id: INTEGER PRIMARY KEY, json: STRING)`
+  static const String exportPdfSettingsTable = 'exportPdfSettings';
+  static const String _exportPdfSettingsTableCreationString =
+      'CREATE TABLE exportPdfSettings(profile_id: INTEGER PRIMARY KEY, json: STRING)';
+
   /// Name of the exportStrings table. It is used to store formats used in the [ExportConfigurationModel].
   ///
   /// Format:
   /// `CREATE TABLE exportStrings(internalColumnName STRING PRIMARY KEY, columnTitle STRING, formatPattern STRING)`
   static const String exportStringsTable = 'exportStrings';
-  // instead of just changing this string when changing the format, _onDBUpgrade should be used.
   static const String _exportStringsTableCreationString =
       'CREATE TABLE exportStrings(internalColumnName STRING PRIMARY KEY, columnTitle STRING, formatPattern STRING)';
 
@@ -57,6 +89,9 @@ class ConfigDB {
   FutureOr<void> _onDBCreate(Database db, int version) {
     db.execute(_exportStringsTableCreationString);
     db.execute(_settingsTableCreationString);
+    db.execute(_exportSettingsTableCreationString);
+    db.execute(_exportCsvSettingsTableCreationString);
+    db.execute(_exportPdfSettingsTableCreationString);
   }
 
   FutureOr<void> _onDBUpgrade(Database db, int oldVersion, int newVersion) async {
@@ -64,6 +99,9 @@ class ConfigDB {
     // might be useful, to avoid duplicated code. Currently this would only lead to complexity, without benefits.
     if (oldVersion == 1 && newVersion == 2) {
       db.execute(_settingsTableCreationString);
+      db.execute(_exportSettingsTableCreationString);
+      db.execute(_exportCsvSettingsTableCreationString);
+      db.execute(_exportPdfSettingsTableCreationString);
       db.database.setVersion(2);
     } else {
       assert(false, 'Unexpected version upgrade from $oldVersion to $newVersion.');
