@@ -220,6 +220,8 @@ void main() {
         cellHeight: 67.89,
         headerFontSize: 67.89,
         cellFontSize: 67.89,
+        exportCustomFields: true,
+        customFields: ['test1', 'test2'],
       );
       final fromJson = PdfExportSettings.fromJson(initial.toJson());
 
@@ -230,6 +232,8 @@ void main() {
       expect(initial.cellHeight, fromJson.cellHeight);
       expect(initial.headerFontSize, fromJson.headerFontSize);
       expect(initial.cellFontSize, fromJson.cellFontSize);
+      expect(initial.exportCustomFields, fromJson.exportCustomFields);
+      expect(initial.customFields, fromJson.customFields);
 
       expect(initial.toJson(), fromJson.toJson());
     });

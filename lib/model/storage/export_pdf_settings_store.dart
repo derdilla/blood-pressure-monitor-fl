@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:blood_pressure_app/model/export_options.dart';
 import 'package:blood_pressure_app/model/storage/convert_util.dart';
 import 'package:flutter/material.dart';
 
@@ -8,10 +9,12 @@ class PdfExportSettings extends ChangeNotifier {
     bool? exportTitle,
     bool? exportStatistics,
     bool? exportData,
+    bool? exportCustomFields,
     double? headerHeight,
     double? cellHeight,
     double? headerFontSize,
     double? cellFontSize,
+    List<String>? customFields,
   }) {
     if (exportTitle != null) _exportTitle = exportTitle;
     if (exportStatistics != null) _exportStatistics = exportStatistics;
@@ -20,7 +23,8 @@ class PdfExportSettings extends ChangeNotifier {
     if (cellHeight != null) _cellHeight = cellHeight;
     if (headerFontSize != null) _headerFontSize = headerFontSize;
     if (cellFontSize != null) _cellFontSize = cellFontSize;
-
+    if (exportCustomFields != null) _exportCustomFields = exportCustomFields;
+    if (customFields != null) _customFields = customFields;
   }
 
   factory PdfExportSettings.fromMap(Map<String, dynamic> map) => PdfExportSettings(
@@ -31,6 +35,8 @@ class PdfExportSettings extends ChangeNotifier {
     cellHeight: ConvertUtil.parseDouble(map['cellHeight']),
     headerFontSize: ConvertUtil.parseDouble(map['headerFontSize']),
     cellFontSize: ConvertUtil.parseDouble(map['cellFontSize']),
+    exportCustomFields: ConvertUtil.parseBool(map['exportCustomFields']),
+    customFields: ConvertUtil.parseList<String>(map['customFields']),
   );
 
   factory PdfExportSettings.fromJson(String json) {
@@ -49,6 +55,8 @@ class PdfExportSettings extends ChangeNotifier {
     'cellHeight': cellHeight,
     'headerFontSize': headerFontSize,
     'cellFontSize': cellFontSize,
+    'exportCustomFields': exportCustomFields,
+    'customFields': customFields,
   };
 
   String toJson() => jsonEncode(toMap());
@@ -102,5 +110,19 @@ class PdfExportSettings extends ChangeNotifier {
     notifyListeners();
   }
 
-// Procedure for adding more entries described in the settings_store.dart doc comment
+  bool _exportCustomFields = false;
+  bool get exportCustomFields => _exportCustomFields;
+  set exportCustomFields(bool value) {
+    _exportCustomFields = value;
+    notifyListeners();
+  }
+
+  List<String> _customFields = ExportFields.defaultPdf;
+  List<String> get customFields => _customFields;
+  set customFields(List<String> value) {
+    _customFields = value;
+    notifyListeners();
+  }
+
+  // Procedure for adding more entries described in the settings_store.dart doc comment
 }
