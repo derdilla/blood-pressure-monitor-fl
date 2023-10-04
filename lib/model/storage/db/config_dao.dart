@@ -7,6 +7,10 @@ import 'package:blood_pressure_app/model/storage/intervall_store.dart';
 import 'package:blood_pressure_app/model/storage/settings_store.dart';
 import 'package:sqflite/sqflite.dart';
 
+/// Class for loading data from the database.
+///
+/// The user of this class needs to pay attention not to dispose all old instances of objects in order to ensure there
+/// are no concurrent writes to the database. Having multiple instances will cause data loss.
 class ConfigDao {
   ConfigDao(this._configDB);
   
