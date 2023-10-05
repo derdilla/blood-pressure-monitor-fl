@@ -1,4 +1,5 @@
 import 'package:blood_pressure_app/model/blood_pressure.dart';
+import 'package:blood_pressure_app/model/settings_store.dart';
 import 'package:blood_pressure_app/model/storage/settings_store.dart';
 import 'package:blood_pressure_app/screens/add_measurement.dart';
 import 'package:flutter/material.dart';
