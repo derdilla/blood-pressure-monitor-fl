@@ -2,9 +2,9 @@ import 'dart:collection';
 
 import 'package:blood_pressure_app/main.dart';
 import 'package:blood_pressure_app/model/blood_pressure.dart';
-import 'package:blood_pressure_app/model/export_import.dart';
-import 'package:blood_pressure_app/model/settings_store.dart';
+import 'package:blood_pressure_app/model/storage/common_settings_intervaces.dart';
 import 'package:blood_pressure_app/model/storage/db/config_dao.dart';
+import 'package:blood_pressure_app/model/storage/export_settings_store.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:function_tree/function_tree.dart';
@@ -20,7 +20,6 @@ class ExportConfigurationModel {
   // 2 sources.
   static ExportConfigurationModel? _instance;
 
-  final Settings settings;
   final AppLocalizations localizations;
   final ConfigDao _configDao; // TODO: remove after #181 is complete
   
@@ -34,30 +33,30 @@ class ExportConfigurationModel {
     ('"My Heart" export', ['DATUM', 'SYSTOLE', 'DIASTOLE', 'PULS', 'Beschreibung', 'Tags', 'Gewicht', 'Sauerstoffsättigung']),
   ];
 
-  ExportConfigurationModel._create(this.settings, this.localizations, this._configDao);
+  ExportConfigurationModel._create(this.localizations, this._configDao);
   Future<void> _asyncInit() async {
-
     _availableFormats.addAll(getDefaultFormates());
     _availableFormats.addAll(await _configDao.loadExportColumns());
   }
-  static Future<ExportConfigurationModel> get(Settings settings, AppLocalizations localizations, {String? dbPath, bool isFullPath = false}) async {
+  static Future<ExportConfigurationModel> get(AppLocalizations localizations) async {
     if (_instance == null) {
-      _instance = ExportConfigurationModel._create(settings, localizations, globalConfigDao);
+      _instance = ExportConfigurationModel._create(localizations, globalConfigDao);
       await _instance!._asyncInit();
     }
     return _instance!;
   }
 
-  List<ExportColumn> getActiveExportColumns(ExportFormat format) {
+  /// Determines which export columns should be used.
+  ///
+  /// The [fieldSettings] parameter describes the settings of the current export format and should be set accordingly.
+  List<ExportColumn> getActiveExportColumns(ExportFormat format, CustomFieldsSettings fieldsSettings) {
     switch (format) {
       case ExportFormat.csv:
-        return availableFormats.where((e) =>
-            ((settings.exportCustomEntriesCsv) ? settings.exportItemsCsv : ExportFields.defaultCsv)
-                .contains(e.internalName)).toList();
+        final fields = (fieldsSettings.exportCustomFields) ? fieldsSettings.customFields : ExportFields.defaultCsv;
+        return availableFormats.where((e) => fields.contains(e.internalName)).toList();
       case ExportFormat.pdf:
-        return availableFormats.where((e) => 
-          ((settings.exportCustomEntriesPdf) ? settings.exportItemsPdf : ExportFields.defaultPdf)
-        .contains(e.internalName)).toList();
+        final fields = (fieldsSettings.exportCustomFields) ? fieldsSettings.customFields : ExportFields.defaultPdf;
+        return availableFormats.where((e) => fields.contains(e.internalName)).toList();
       case ExportFormat.db:
         // Export formats don't work on this one
         return [];
@@ -66,7 +65,7 @@ class ExportConfigurationModel {
   
   List<ExportColumn> getDefaultFormates() => [
     ExportColumn(internalName: 'timestampUnixMs', columnTitle: localizations.unixTimestamp, formatPattern: r'$TIMESTAMP', editable: false),
-    ExportColumn(internalName: 'formattedTimestamp', columnTitle: localizations.time, formatPattern: '\$FORMAT{\$TIMESTAMP,${settings.dateFormatString}}', editable: false),
+    ExportColumn(internalName: 'formattedTimestamp', columnTitle: localizations.time, formatPattern: '\$FORMAT{\$TIMESTAMP,yyyy-MM-dd HH:mm:ss}', editable: false),
     ExportColumn(internalName: 'systolic', columnTitle: localizations.sysLong, formatPattern: r'$SYS', editable: false),
     ExportColumn(internalName: 'diastolic', columnTitle: localizations.diaLong, formatPattern: r'$DIA', editable: false),
     ExportColumn(internalName: 'pulse', columnTitle: localizations.pulLong, formatPattern: r'$PUL', editable: false),
@@ -100,14 +99,17 @@ class ExportConfigurationModel {
   UnmodifiableMapView<String, ExportColumn> get availableFormatsMap =>
       UnmodifiableMapView(Map.fromIterable(_availableFormats, key: (e) => e.internalName));
 
-  List<List<String>> createTable(List<BloodPressureRecord> data, ExportFormat format, {bool createHeadline = true,}) {
-    final exportItems = getActiveExportColumns(format);
+
+  List<List<String>> createTable(Iterable<BloodPressureRecord> data, List<ExportColumn> activeExportColumns,
+      {bool createHeadline = true,}) {
     List<List<String>> items = [];
     if (createHeadline) {
-      items.add(exportItems.map((e) => e.internalName).toList());
+      items.add(activeExportColumns.map((e) => e.internalName).toList());
     }
 
-    final dataRows = data.map((record) => exportItems.map((attribute) => attribute.formatRecord(record)).toList());
+    final dataRows = data.map((record) =>
+        activeExportColumns.map((attribute) =>
+            attribute.formatRecord(record)).toList());
     items.addAll(dataRows);
     return items;
   }

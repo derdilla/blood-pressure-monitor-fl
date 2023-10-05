@@ -1,10 +1,11 @@
 import 'dart:convert';
 
 import 'package:blood_pressure_app/model/export_options.dart';
+import 'package:blood_pressure_app/model/storage/common_settings_intervaces.dart';
 import 'package:blood_pressure_app/model/storage/convert_util.dart';
 import 'package:flutter/material.dart';
 
-class CsvExportSettings extends ChangeNotifier {
+class CsvExportSettings extends ChangeNotifier implements CustomFieldsSettings {
   CsvExportSettings({
     String? fieldDelimiter,
     String? textDelimiter,

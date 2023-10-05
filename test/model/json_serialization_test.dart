@@ -1,4 +1,5 @@
 
+import 'package:blood_pressure_app/model/horizontal_graph_line.dart';
 import 'package:blood_pressure_app/model/storage/export_csv_settings_store.dart';
 import 'package:blood_pressure_app/model/storage/export_pdf_settings_store.dart';
 import 'package:blood_pressure_app/model/storage/export_settings_store.dart';
@@ -87,6 +88,7 @@ void main() {
         drawRegressionLines: false,
         startWithAddMeasurementPage: false,
         useLegacyList: false,
+        horizontalGraphLines: [HorizontalGraphLine(Colors.blue, 1230)],
       );
       final fromJson = Settings.fromJson(initial.toJson());
 
@@ -109,6 +111,9 @@ void main() {
       expect(initial.drawRegressionLines, fromJson.drawRegressionLines);
       expect(initial.startWithAddMeasurementPage, fromJson.startWithAddMeasurementPage);
       expect(initial.useLegacyList, fromJson.useLegacyList);
+      expect(initial.horizontalGraphLines.length, fromJson.horizontalGraphLines.length);
+      expect(initial.horizontalGraphLines.first.color.value, fromJson.horizontalGraphLines.first.color.value);
+      expect(initial.horizontalGraphLines.first.height, fromJson.horizontalGraphLines.first.height);
 
       expect(initial.toJson(), fromJson.toJson());
     });

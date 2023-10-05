@@ -1,10 +1,8 @@
 import 'package:blood_pressure_app/model/blood_pressure.dart';
 import 'package:blood_pressure_app/model/export_options.dart';
-import 'package:blood_pressure_app/model/settings_store.dart';
 import 'package:blood_pressure_app/screens/subsettings/export_field_format_documentation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:provider/provider.dart';
 
 class  EditExportColumnPage extends StatefulWidget {
   final String? initialInternalName;
@@ -163,9 +161,8 @@ class _EditExportColumnPageState extends State<EditExportColumnPage> {
                         label: Text(localizations.btnSave),
                         onPressed: (widget.editable) ? (() async {
                           if (_formKey.currentState?.validate() ?? false) {
-                            final settings = Provider.of<Settings>(context, listen: false);
                             final navigator = Navigator.of(context);
-                            (await ExportConfigurationModel.get(settings, localizations)).addOrUpdate(ExportColumn(
+                            (await ExportConfigurationModel.get(localizations)).addOrUpdate(ExportColumn(
                                 internalName: _internalName!,
                                 columnTitle: _displayName!,
                                 formatPattern: _formatPattern!

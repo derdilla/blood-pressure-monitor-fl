@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:blood_pressure_app/model/horizontal_graph_line.dart';
 import 'package:blood_pressure_app/model/storage/convert_util.dart';
 import 'package:flutter/material.dart';
 
@@ -26,6 +27,7 @@ class Settings extends ChangeNotifier {
     MaterialColor? sysColor,
     MaterialColor? diaColor,
     MaterialColor? pulColor,
+    List<HorizontalGraphLine>? horizontalGraphLines,
     String? dateFormatString,
     double? graphLineThickness,
     int? animationSpeed,
@@ -59,6 +61,7 @@ class Settings extends ChangeNotifier {
     if (drawRegressionLines != null) _drawRegressionLines = drawRegressionLines;
     if (startWithAddMeasurementPage != null) _startWithAddMeasurementPage = startWithAddMeasurementPage;
     if (useLegacyList != null) _useLegacyList = useLegacyList;
+    if (horizontalGraphLines != null) _horizontalGraphLines = horizontalGraphLines;
     _language = language; // No check here, as null is the default as well. In general values should not be null
   }
 
@@ -81,7 +84,9 @@ class Settings extends ChangeNotifier {
     drawRegressionLines: ConvertUtil.parseBool(map['drawRegressionLines']),
     startWithAddMeasurementPage: ConvertUtil.parseBool(map['startWithAddMeasurementPage']),
     useLegacyList: ConvertUtil.parseBool(map['useLegacyList']),
-    language: ConvertUtil.parseLocale(map['language'])
+    language: ConvertUtil.parseLocale(map['language']),
+    horizontalGraphLines: ConvertUtil.parseList<String>(map['horizontalGraphLines'])?.map((e) =>
+        HorizontalGraphLine.fromJson(jsonDecode(e))).toList(),
   );
 
   factory Settings.fromJson(String json) {
@@ -112,6 +117,7 @@ class Settings extends ChangeNotifier {
       'startWithAddMeasurementPage': startWithAddMeasurementPage,
       'useLegacyList': useLegacyList,
       'language': ConvertUtil.serializeLocale(language),
+      'horizontalGraphLines': horizontalGraphLines.map((e) => jsonEncode(e)).toList()
     };
 
   String toJson() => jsonEncode(toMap());
@@ -149,6 +155,13 @@ class Settings extends ChangeNotifier {
   MaterialColor get pulColor => _pulColor;
   set pulColor(MaterialColor newColor) {
     _pulColor = newColor;
+    notifyListeners();
+  }
+
+  List<HorizontalGraphLine> _horizontalGraphLines = [];
+  List<HorizontalGraphLine> get horizontalGraphLines => _horizontalGraphLines;
+  set horizontalGraphLines(List<HorizontalGraphLine> value) {
+    _horizontalGraphLines = value;
     notifyListeners();
   }
 

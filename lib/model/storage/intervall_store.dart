@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:blood_pressure_app/model/storage/convert_util.dart';
+import 'package:blood_pressure_app/model/storage/db/config_dao.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -228,4 +229,42 @@ enum TimeStep {
         return TimeStep.last7Days;
     }
   }
+}
+
+/// Class that stores the interval objects that are needed in the app and provides named access to them. 
+class IntervallStoreManager extends ChangeNotifier {
+  IntervallStoreManager(this.mainPage, this.exportPage, this.statsPage) {
+    mainPage.addListener(notifyListeners);
+    exportPage.addListener(notifyListeners);
+    statsPage.addListener(notifyListeners);
+  }
+
+  static Future<IntervallStoreManager> load(ConfigDao configDao, int profileID) async =>
+      IntervallStoreManager(
+          await configDao.loadIntervallStorage(profileID, 0),
+          await configDao.loadIntervallStorage(profileID, 1),
+          await configDao.loadIntervallStorage(profileID, 2),
+      );
+
+  IntervallStorage get(IntervallStoreManagerLocation type) {
+    switch (type) {
+      case IntervallStoreManagerLocation.mainPage:
+        return mainPage;
+      case IntervallStoreManagerLocation.exportPage:
+        return exportPage;
+      case IntervallStoreManagerLocation.statsPage:
+        return statsPage;
+    }
+  }
+  
+  IntervallStorage mainPage;
+  IntervallStorage exportPage;
+  IntervallStorage statsPage;
+}
+
+/// enum of all locations supported by IntervallStoreManager
+enum IntervallStoreManagerLocation {
+  mainPage,
+  exportPage,
+  statsPage,
 }

@@ -2,13 +2,16 @@ import 'package:blood_pressure_app/components/date_time_picker.dart';
 import 'package:blood_pressure_app/model/blood_pressure.dart';
 import 'package:blood_pressure_app/model/export_import.dart';
 import 'package:blood_pressure_app/model/export_options.dart';
-import 'package:blood_pressure_app/model/settings_store.dart';
+import 'package:blood_pressure_app/model/storage/export_settings_store.dart';
+import 'package:blood_pressure_app/model/storage/settings_store.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_material_color_picker/flutter_material_color_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+
+import '../model/storage/intervall_store.dart';
 
 class AddMeasurementPage extends StatefulWidget {
   final DateTime? initTime;
@@ -162,7 +165,8 @@ class _AddMeasurementPageState extends State<AddMeasurementPage> {
                               if ((_formKey.currentState?.validate() ?? false) ||
                                   (_systolic == null && _diastolic == null && _pulse == null &&
                                       (_note != null || _needlePin != null))){
-                                final settings = Provider.of<Settings>(context, listen: false);
+                                final settings = Provider.of<ExportSettings>(context, listen: false);
+                                final intervalls = Provider.of<IntervallStoreManager>(context, listen: false);
                                 final model = Provider.of<BloodPressureModel>(context, listen: false);
                                 final navigator = Navigator.of(context);
 
@@ -172,14 +176,12 @@ class _AddMeasurementPageState extends State<AddMeasurementPage> {
                                 await model.add(BloodPressureRecord(_time, _systolic, _diastolic, _pulse, _note ?? '',
                                 needlePin: _needlePin));
                                 if (settings.exportAfterEveryEntry && context.mounted) {
-                                  final exporter = Exporter(settings, model, ScaffoldMessenger.of(context),
-                                      localizations, Theme.of(context),
-                                      await ExportConfigurationModel.get(Provider.of<Settings>(context, listen: false), localizations));
+                                  final exporter = Exporter.load(context, await model.all, await ExportConfigurationModel.get(localizations));
                                   exporter.export();
                                 }
                                 // ensures the most recent entry is visible when submitting a new measurement
-                                if (settings.graphStepSize != TimeStep.custom) {
-                                  settings.setToMostRecentIntervall();
+                                if (intervalls.mainPage.stepSize != TimeStep.custom) {
+                                  intervalls.mainPage.setToMostRecentIntervall();
                                 }
                                 navigator.pop();
                               }

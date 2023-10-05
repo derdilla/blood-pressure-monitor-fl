@@ -1,30 +1,33 @@
-import 'package:blood_pressure_app/model/settings_store.dart';
+import 'package:blood_pressure_app/model/storage/intervall_store.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class IntervalPicker extends StatelessWidget {
-  const IntervalPicker({super.key});
+  const IntervalPicker({super.key, required this.type});
 
+  final IntervallStoreManagerLocation type;
+  
   @override
   Widget build(BuildContext context) {
-    return Consumer<Settings>(builder: (context, settings, child) {
+    return Consumer<IntervallStoreManager>(builder: (context, intervallStoreManager, child) {
+      final intervall = intervallStoreManager.get(type);
       final String intervallDisplayText;
-      switch (settings.graphStepSize) {
+      switch (intervall.stepSize) {
         case TimeStep.day:
-          intervallDisplayText = DateFormat.yMMMd(AppLocalizations.of(context)!.localeName).format(settings.displayDataStart);
+          intervallDisplayText = DateFormat.yMMMd(AppLocalizations.of(context)!.localeName).format(intervall.currentRange.start);
           break;
         case TimeStep.week:
-          final dayOfYear = int.parse(DateFormat("D").format(settings.displayDataStart));
-          final weekOfYear = ((dayOfYear - settings.displayDataStart.weekday + 10) / 7).floor();
-          intervallDisplayText = AppLocalizations.of(context)!.weekOfYear(weekOfYear, settings.displayDataStart.year);
+          final dayOfYear = int.parse(DateFormat("D").format(intervall.currentRange.start));
+          final weekOfYear = ((dayOfYear - intervall.currentRange.start.weekday + 10) / 7).floor();
+          intervallDisplayText = AppLocalizations.of(context)!.weekOfYear(weekOfYear, intervall.currentRange.start.year);
           break;
         case TimeStep.month:
-          intervallDisplayText =  DateFormat.yMMM(AppLocalizations.of(context)!.localeName).format(settings.displayDataStart);
+          intervallDisplayText =  DateFormat.yMMM(AppLocalizations.of(context)!.localeName).format(intervall.currentRange.start);
           break;
         case TimeStep.year:
-          intervallDisplayText = DateFormat.y(AppLocalizations.of(context)!.localeName).format(settings.displayDataStart);
+          intervallDisplayText = DateFormat.y(AppLocalizations.of(context)!.localeName).format(intervall.currentRange.start);
           break;
         case TimeStep.lifetime:
           intervallDisplayText =  '-';
@@ -33,7 +36,7 @@ class IntervalPicker extends StatelessWidget {
         case TimeStep.last30Days:
         case TimeStep.custom:
           final f = DateFormat.yMMMd(AppLocalizations.of(context)!.localeName);
-          intervallDisplayText = '${f.format(settings.displayDataStart)} - ${f.format(settings.displayDataEnd)}';
+          intervallDisplayText = '${f.format(intervall.currentRange.start)} - ${f.format(intervall.currentRange.end)}';
           break;
       }
       return Column(
@@ -47,7 +50,7 @@ class IntervalPicker extends StatelessWidget {
               flex: 3,
               child: MaterialButton(
                 onPressed: () {
-                  settings.moveDisplayDataByStep(-1);
+                  intervall.moveDataRangeByStep(-1);
                 },
                 child: const Icon(
                   Icons.chevron_left,
@@ -58,7 +61,7 @@ class IntervalPicker extends StatelessWidget {
             Expanded(
               flex: 4,
               child: DropdownButton<TimeStep>(
-                value: settings.graphStepSize,
+                value: intervall.stepSize,
                 isExpanded: true,
                 onChanged: (TimeStep? value) async {
                   if (value == TimeStep.custom) {
@@ -67,12 +70,11 @@ class IntervalPicker extends StatelessWidget {
                         firstDate: DateTime.fromMillisecondsSinceEpoch(1),
                         lastDate: DateTime.now());
                     if (res != null) {
-                      settings.graphStepSize = value!;
-                      settings.displayDataStart = res.start;
-                      settings.displayDataEnd = res.end;
+                      intervall.changeStepSize(value!);
+                      intervall.currentRange = res;
                     }
                   } else if (value != null) {
-                    settings.changeStepSize(value);
+                    intervall.changeStepSize(value);
                   }
                 },
                 items: TimeStep.options.map<DropdownMenuItem<TimeStep>>((v) {
@@ -84,7 +86,7 @@ class IntervalPicker extends StatelessWidget {
               flex: 3,
               child: MaterialButton(
                 onPressed: () {
-                  settings.moveDisplayDataByStep(1);
+                  intervall.moveDataRangeByStep(1);
                 },
                 child: const Icon(
                   Icons.chevron_right,

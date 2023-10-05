@@ -1,10 +1,11 @@
 import 'dart:math';
 
-import 'package:blood_pressure_app/components/consistent_future_builder.dart';
+import 'package:blood_pressure_app/components/blood_pressure_builder.dart';
 import 'package:blood_pressure_app/components/display_interval_picker.dart';
 import 'package:blood_pressure_app/model/blood_pressure.dart';
 import 'package:blood_pressure_app/model/horizontal_graph_line.dart';
-import 'package:blood_pressure_app/model/settings_store.dart';
+import 'package:blood_pressure_app/model/storage/intervall_store.dart';
+import 'package:blood_pressure_app/model/storage/settings_store.dart';
 import 'package:collection/collection.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
@@ -28,69 +29,66 @@ class _LineChartState extends State<_LineChart> {
         height: widget.height,
         child: Consumer<Settings>(
           builder: (context, settings, child) {
-            return Consumer<BloodPressureModel>(builder: (context, model, child) {
-              var end = settings.displayDataEnd;
-              return ConsistentFutureBuilder<UnmodifiableListView<BloodPressureRecord>>(
-                  future: model.getInTimeRange(settings.displayDataStart, end),
-                  onData: (context, fetchedData) {
-                    List<BloodPressureRecord> data = fetchedData.toList();
-                    data.sort((a, b) => a.creationTime.compareTo(b.creationTime));
+            return BloodPressureBuilder(
+              rangeType: IntervallStoreManagerLocation.mainPage,
+              onData: (BuildContext context, UnmodifiableListView<BloodPressureRecord> records) {
+                List<BloodPressureRecord> data = records.toList();
+                data.sort((a, b) => a.creationTime.compareTo(b.creationTime));
 
-                    // calculate lines for graph
-                    List<FlSpot> pulSpots = [], diaSpots = [], sysSpots = [];
-                    int maxValue = 0;
-                    int minValue = (settings.validateInputs ? 30 : 0);
-                    double? graphBegin;
-                    double? graphEnd;
-                    for (var e in data) {
-                      final x = e.creationTime.millisecondsSinceEpoch.toDouble();
-                      if (e.diastolic != null) {
-                        diaSpots.add(FlSpot(x, e.diastolic!.toDouble()));
-                        maxValue = max(maxValue, e.diastolic!);
-                      }
-                      if (e.systolic != null) {
-                        sysSpots.add(FlSpot(x, e.systolic!.toDouble()));
-                        maxValue = max(maxValue, e.systolic!);
-                      }
-                      if (e.pulse != null) {
-                        pulSpots.add(FlSpot(x, e.pulse!.toDouble()));
-                        maxValue = max(maxValue, e.pulse!);
-                      }
-                      graphBegin ??= x;
-                      graphEnd ??= x;
-                      if (x < graphBegin) graphBegin = x;
-                      if (x > graphEnd) graphEnd = x;
-                    }
-
-                    if (diaSpots.length < 2 && sysSpots.length < 2 && pulSpots.length < 2 || graphBegin == null || graphEnd == null) {
-                      return Text(AppLocalizations.of(context)!.errNotEnoughDataToGraph);
-                    }
-
-
-                    return TweenAnimationBuilder<double>(
-                      duration: const Duration(milliseconds: 200), // interacts with LineChart duration property
-                      tween: Tween<double>(begin: 0, end: settings.graphLineThickness),
-                      builder: (context, animatedThickness, child) {
-                        return LineChart(
-                          duration: const Duration(milliseconds: 200),
-                          LineChartData(
-                              minY: minValue.toDouble(),
-                              maxY: maxValue + 5,
-                              clipData: const FlClipData.all(),
-                              titlesData: _buildFlTitlesData(settings,
-                                  DateTimeRange(start: data.first.creationTime, end: data.last.creationTime)),
-                              lineTouchData: const LineTouchData(
-                                  touchTooltipData: LineTouchTooltipData(tooltipMargin: -200, tooltipRoundedRadius: 20)
-                              ),
-                              lineBarsData: buildBars(animatedThickness, settings, sysSpots, diaSpots, pulSpots,
-                                  maxValue, minValue, graphBegin, graphEnd, fetchedData)
-                          ),
-                        );
-                      },
-                    );
+                // calculate lines for graph
+                List<FlSpot> pulSpots = [], diaSpots = [], sysSpots = [];
+                int maxValue = 0;
+                int minValue = (settings.validateInputs ? 30 : 0);
+                double? graphBegin;
+                double? graphEnd;
+                for (var e in data) {
+                  final x = e.creationTime.millisecondsSinceEpoch.toDouble();
+                  if (e.diastolic != null) {
+                    diaSpots.add(FlSpot(x, e.diastolic!.toDouble()));
+                    maxValue = max(maxValue, e.diastolic!);
                   }
-              );
-            });
+                  if (e.systolic != null) {
+                    sysSpots.add(FlSpot(x, e.systolic!.toDouble()));
+                    maxValue = max(maxValue, e.systolic!);
+                  }
+                  if (e.pulse != null) {
+                    pulSpots.add(FlSpot(x, e.pulse!.toDouble()));
+                    maxValue = max(maxValue, e.pulse!);
+                  }
+                  graphBegin ??= x;
+                  graphEnd ??= x;
+                  if (x < graphBegin) graphBegin = x;
+                  if (x > graphEnd) graphEnd = x;
+                }
+
+                if (diaSpots.length < 2 && sysSpots.length < 2 && pulSpots.length < 2 || graphBegin == null || graphEnd == null) {
+                  return Text(AppLocalizations.of(context)!.errNotEnoughDataToGraph);
+                }
+
+
+                return TweenAnimationBuilder<double>(
+                  duration: const Duration(milliseconds: 200), // interacts with LineChart duration property
+                  tween: Tween<double>(begin: 0, end: settings.graphLineThickness),
+                  builder: (context, animatedThickness, child) {
+                    return LineChart(
+                      duration: const Duration(milliseconds: 200),
+                      LineChartData(
+                          minY: minValue.toDouble(),
+                          maxY: maxValue + 5,
+                          clipData: const FlClipData.all(),
+                          titlesData: _buildFlTitlesData(settings,
+                              DateTimeRange(start: data.first.creationTime, end: data.last.creationTime)),
+                          lineTouchData: const LineTouchData(
+                              touchTooltipData: LineTouchTooltipData(tooltipMargin: -200, tooltipRoundedRadius: 20)
+                          ),
+                          lineBarsData: buildBars(animatedThickness, settings, sysSpots, diaSpots, pulSpots,
+                              maxValue, minValue, graphBegin, graphEnd, records)
+                      ),
+                    );
+                  },
+                );
+              },
+            );
           },
         )
     );
@@ -238,7 +236,7 @@ class MeasurementGraph extends StatelessWidget {
         child: Column(
           children: [
             _LineChart(height: height - 100),
-            const IntervalPicker()
+            const IntervalPicker(type: IntervallStoreManagerLocation.mainPage,)
           ],
         ),
       ),
