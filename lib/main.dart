@@ -1,9 +1,9 @@
 import 'package:blood_pressure_app/model/blood_pressure.dart';
-import 'package:blood_pressure_app/model/settings_store.dart';
 import 'package:blood_pressure_app/model/storage/db/config_dao.dart';
 import 'package:blood_pressure_app/model/storage/db/config_db.dart';
 import 'package:blood_pressure_app/model/storage/intervall_store.dart';
 import 'package:blood_pressure_app/model/storage/settings_store.dart';
+import 'package:blood_pressure_app/model/storage/update_legacy_settings.dart';
 import 'package:blood_pressure_app/screens/home.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -20,7 +20,6 @@ void main() async {
   // 2 different db files
   final dataModel = await BloodPressureModel.create();
 
-  // TODO:
   final configDB = await ConfigDB.open();
   final configDao = ConfigDao(configDB);
 
@@ -30,7 +29,7 @@ void main() async {
   final pdfExportSettings = await configDao.loadPdfExportSettings(0);
   final intervalStorageManager = await IntervallStoreManager.load(configDao, 0);
 
-  // TODO: old settings migration
+  await updateLegacySettings(settings, exportSettings, csvExportSettings, pdfExportSettings, intervalStorageManager);
 
   globalConfigDao = configDao;
 
