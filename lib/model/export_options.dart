@@ -16,7 +16,6 @@ class ExportFields {
 }
 
 class ExportConfigurationModel {
-  // TODO: remove database functionality and use configDB, this should not touch the file, because it would be read by
   // 2 sources.
   static ExportConfigurationModel? _instance;
 
@@ -83,7 +82,11 @@ class ExportConfigurationModel {
     ExportColumn(internalName: 'Sauerstoffsättigung', columnTitle: '"My Heart" export oxygen', formatPattern: r'0', editable: false, hidden: true),
   ];
 
+  /// Saves a new [ExportColumn] to the list of the available columns.
+  ///
+  /// In case one with the same internal name exists it gets updated with the new values
   void addOrUpdate(ExportColumn format) {
+    _availableFormats.removeWhere((e) => e.internalName == format.internalName);
     _availableFormats.add(format);
     _configDao.updateExportColumn(format);
   }
@@ -100,6 +103,10 @@ class ExportConfigurationModel {
       UnmodifiableMapView(Map.fromIterable(_availableFormats, key: (e) => e.internalName));
 
 
+  /// Creates list of rows with that follow the order and format described by [activeExportColumns].
+  ///
+  /// The [createHeadline] option will create put a row at the start that contains [ExportColumn.internalName] of the
+  /// given [activeExportColumns].
   List<List<String>> createTable(Iterable<BloodPressureRecord> data, List<ExportColumn> activeExportColumns,
       {bool createHeadline = true,}) {
     List<List<String>> items = [];
