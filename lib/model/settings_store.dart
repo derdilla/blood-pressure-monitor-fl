@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 
 // TODO: remove file
 
-MaterialColor createMaterialColor(int value) { // TODO: remove
+@Deprecated('replaced by slightly different ConvertUtil.parseMaterialColor')
+MaterialColor createMaterialColor(int value) {
   final color = Color(value);
   List strengths = <double>[.05];
   Map<int, Color> swatch = {};
