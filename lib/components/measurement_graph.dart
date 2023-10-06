@@ -1,11 +1,9 @@
 import 'dart:math';
 
 import 'package:blood_pressure_app/components/blood_pressure_builder.dart';
-import 'package:blood_pressure_app/components/consistent_future_builder.dart';
 import 'package:blood_pressure_app/components/display_interval_picker.dart';
 import 'package:blood_pressure_app/model/blood_pressure.dart';
 import 'package:blood_pressure_app/model/horizontal_graph_line.dart';
-import 'package:blood_pressure_app/model/settings_store.dart';
 import 'package:blood_pressure_app/model/storage/intervall_store.dart';
 import 'package:blood_pressure_app/model/storage/settings_store.dart';
 import 'package:collection/collection.dart';

@@ -1,8 +1,6 @@
-import 'package:blood_pressure_app/model/settings_store.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:provider/provider.dart';
 
 // TODO: redo dialoges in flutter style
 class InputDialoge extends StatefulWidget {

@@ -50,7 +50,7 @@ void main() {
 
     test('should initialize', () async {
       final rawDB = await ConfigDB.open(dbPath: inMemoryDatabasePath, isFullPath: true);
-      final dao = ConfigDao(rawDB);
+      ConfigDao(rawDB);
     });
     test('should create classes when no data is present', () async {
       final rawDB = await ConfigDB.open(dbPath: inMemoryDatabasePath, isFullPath: true);

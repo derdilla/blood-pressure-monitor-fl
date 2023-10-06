@@ -1,6 +1,5 @@
 import 'package:blood_pressure_app/components/legacy_measurement_list.dart';
 import 'package:blood_pressure_app/components/measurement_graph.dart';
-import 'package:blood_pressure_app/model/settings_store.dart';
 import 'package:blood_pressure_app/model/storage/settings_store.dart';
 import 'package:blood_pressure_app/screens/add_measurement.dart';
 import 'package:blood_pressure_app/screens/settings.dart';

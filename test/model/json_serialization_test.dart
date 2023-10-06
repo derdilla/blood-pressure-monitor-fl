@@ -130,7 +130,7 @@ void main() {
       final v1 = Settings.fromJson('{"pulColor": true}');
       final v2 = Settings.fromJson('{"validateInputs": "red"}');
       final v3 = Settings.fromJson('{"validateInputs": "month", "useLegacyList": 10.5}');
-      final v4 = Settings.fromJson('{"sysWarn": 18.6, "diaWarn": 90.65}');
+      Settings.fromJson('{"sysWarn": 18.6, "diaWarn": 90.65}');
 
       expect(v1.pulColor.value, Settings().pulColor.value);
       expect(v2.validateInputs, Settings().validateInputs);
