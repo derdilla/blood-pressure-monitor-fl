@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:blood_pressure_app/components/consistent_future_builder.dart';
 import 'package:blood_pressure_app/components/input_dialoge.dart';
 import 'package:blood_pressure_app/components/settings_widgets.dart';
@@ -10,11 +12,16 @@ import 'package:blood_pressure_app/screens/subsettings/export_import_screen.dart
 import 'package:blood_pressure_app/screens/subsettings/graph_markings.dart';
 import 'package:blood_pressure_app/screens/subsettings/version.dart';
 import 'package:blood_pressure_app/screens/subsettings/warn_about.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:path/path.dart';
 import 'package:provider/provider.dart';
+import 'package:restart_app/restart_app.dart';
+import 'package:share_plus/share_plus.dart';
+import 'package:sqflite/sqflite.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class SettingsPage extends StatelessWidget {
@@ -22,18 +29,19 @@ class SettingsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final localizations = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: AppBar(
-        title: Text(AppLocalizations.of(context)!.settings),
+        title: Text(localizations.settings),
         backgroundColor: Theme.of(context).primaryColor,
       ),
       body: Consumer<Settings>(builder: (context, settings, child) {
         return ListView(
           children: [
-            SettingsSection(title: Text(AppLocalizations.of(context)!.layout), children: [
+            SettingsSection(title: Text(localizations.layout), children: [
               SettingsTile(
                 key: const Key('EnterTimeFormatScreen'),
-                title: Text(AppLocalizations.of(context)!.enterTimeFormatScreen),
+                title: Text(localizations.enterTimeFormatScreen),
                 leading: const Icon(Icons.schedule),
                 trailing: const Icon(Icons.arrow_forward_ios),
                 description: Text(settings.dateFormatString),
@@ -47,12 +55,12 @@ class SettingsPage extends StatelessWidget {
               DropDownSettingsTile<int>(
                 key: const Key('thema'),
                 leading: const Icon(Icons.brightness_4),
-                title: Text(AppLocalizations.of(context)!.theme),
+                title: Text(localizations.theme),
                 value: settings.followSystemDarkMode ? 0 : (settings.darkMode ? 1 : 2),
                 items: [
-                  DropdownMenuItem(value: 0, child: Text(AppLocalizations.of(context)!.system)),
-                  DropdownMenuItem(value: 1, child: Text(AppLocalizations.of(context)!.dark)),
-                  DropdownMenuItem(value: 2, child: Text(AppLocalizations.of(context)!.light))
+                  DropdownMenuItem(value: 0, child: Text(localizations.system)),
+                  DropdownMenuItem(value: 1, child: Text(localizations.dark)),
+                  DropdownMenuItem(value: 2, child: Text(localizations.light))
                 ],
                 onChanged: (int? value) {
                   switch (value) {
@@ -76,14 +84,14 @@ class SettingsPage extends StatelessWidget {
                 key: const Key('accentColor'),
                 onMainColorChanged: (color) => settings.accentColor = createMaterialColor((color ?? Colors.teal).value),
                 initialColor: settings.accentColor,
-                title: Text(AppLocalizations.of(context)!.accentColor)),
+                title: Text(localizations.accentColor)),
               DropDownSettingsTile<Locale?>(
                 key: const Key('language'),
                 leading: const Icon(Icons.language),
-                title: Text(AppLocalizations.of(context)!.language),
+                title: Text(localizations.language),
                 value: settings.language,
                 items: [
-                  DropdownMenuItem(value: null, child: Text(AppLocalizations.of(context)!.system)),
+                  DropdownMenuItem(value: null, child: Text(localizations.system)),
                   for (final l in AppLocalizations.supportedLocales)
                     DropdownMenuItem(value: l, child: Text(getDisplayLanguage(l) ?? l.languageCode)),
                 ],
@@ -93,7 +101,7 @@ class SettingsPage extends StatelessWidget {
               ),
               SliderSettingsTile(
                 key: const Key('graphLineThickness'),
-                title: Text(AppLocalizations.of(context)!.graphLineThickness),
+                title: Text(localizations.graphLineThickness),
                 leading: const Icon(Icons.line_weight),
                 onChanged: (double value) {
                   settings.graphLineThickness = value;
@@ -105,7 +113,7 @@ class SettingsPage extends StatelessWidget {
               ),
               SliderSettingsTile(
                 key: const Key('animationSpeed'),
-                title: Text(AppLocalizations.of(context)!.animationSpeed),
+                title: Text(localizations.animationSpeed),
                 leading: const Icon(Icons.speed),
                 onChanged: (double value) {
                   settings.animationSpeed = value.toInt();
@@ -119,17 +127,17 @@ class SettingsPage extends StatelessWidget {
                 key: const Key('sysColor'),
                 onMainColorChanged: (color) => settings.sysColor = createMaterialColor((color ?? Colors.green).value),
                 initialColor: settings.sysColor,
-                  title: Text(AppLocalizations.of(context)!.sysColor)),
+                  title: Text(localizations.sysColor)),
               ColorSelectionSettingsTile(
                 key: const Key('diaColor'),
                 onMainColorChanged: (color) => settings.diaColor = createMaterialColor((color ?? Colors.teal).value),
                 initialColor: settings.diaColor,
-                title: Text(AppLocalizations.of(context)!.diaColor)),
+                title: Text(localizations.diaColor)),
               ColorSelectionSettingsTile(
                 key: const Key('pulColor'),
                 onMainColorChanged: (color) => settings.pulColor = createMaterialColor((color ?? Colors.red).value),
                 initialColor: settings.pulColor,
-                title: Text(AppLocalizations.of(context)!.pulColor)),
+                title: Text(localizations.pulColor)),
               SwitchSettingsTile(
                 key: const Key('useLegacyList'),
                 initialValue: settings.useLegacyList,
@@ -137,10 +145,10 @@ class SettingsPage extends StatelessWidget {
                   settings.useLegacyList = value;
                 },
                 leading: const Icon(Icons.list_alt_outlined),
-                title: Text(AppLocalizations.of(context)!.useLegacyList)),
+                title: Text(localizations.useLegacyList)),
             ]),
 
-            SettingsSection(title: Text(AppLocalizations.of(context)!.behavior), children: [
+            SettingsSection(title: Text(localizations.behavior), children: [
               SwitchSettingsTile(
                 key: const Key('allowManualTimeInput'),
                 initialValue: settings.allowManualTimeInput,
@@ -148,11 +156,11 @@ class SettingsPage extends StatelessWidget {
                   settings.allowManualTimeInput = value;
                 },
                 leading: const Icon(Icons.details),
-                title: Text(AppLocalizations.of(context)!.allowManualTimeInput)),
+                title: Text(localizations.allowManualTimeInput)),
               SwitchSettingsTile(
                 key: const Key('validateInputs'),
                 initialValue: settings.validateInputs,
-                title: Text(AppLocalizations.of(context)!.validateInputs),
+                title: Text(localizations.validateInputs),
                 leading: const Icon(Icons.edit),
                 onToggle: (value) {
                   settings.validateInputs = value;
@@ -160,7 +168,7 @@ class SettingsPage extends StatelessWidget {
               SwitchSettingsTile(
                 key: const Key('allowMissingValues'),
                 initialValue: settings.allowMissingValues,
-                title: Text(AppLocalizations.of(context)!.allowMissingValues),
+                title: Text(localizations.allowMissingValues),
                 leading: const Icon(Icons.report_off_outlined),
                 onToggle: (value) {
                   settings.allowMissingValues = value;
@@ -168,14 +176,14 @@ class SettingsPage extends StatelessWidget {
               SwitchSettingsTile(
                 key: const Key('confirmDeletion'),
                 initialValue: settings.confirmDeletion,
-                title: Text(AppLocalizations.of(context)!.confirmDeletion),
+                title: Text(localizations.confirmDeletion),
                 leading: const Icon(Icons.check),
                 onToggle: (value) {
                   settings.confirmDeletion = value;
                 }),
               InputSettingsTile(
                 key: const Key('sysWarn'),
-                title: Text(AppLocalizations.of(context)!.sysWarn),
+                title: Text(localizations.sysWarn),
                 leading: const Icon(Icons.warning_amber_outlined),
                 keyboardType: TextInputType.number,
                 inputFormatters: [FilteringTextInputFormatter.digitsOnly],
@@ -186,12 +194,12 @@ class SettingsPage extends StatelessWidget {
                   }
                   settings.sysWarn = int.parse(value);
                 },
-                decoration: InputDecoration(hintText: AppLocalizations.of(context)!.sysWarn),
+                decoration: InputDecoration(hintText: localizations.sysWarn),
                 inputWidth: 120,
               ),
               InputSettingsTile(
                 key: const Key('diaWarn'),
-                title: Text(AppLocalizations.of(context)!.diaWarn),
+                title: Text(localizations.diaWarn),
                 leading: const Icon(Icons.warning_amber_outlined),
                 keyboardType: TextInputType.number,
                 inputFormatters: [FilteringTextInputFormatter.digitsOnly],
@@ -202,18 +210,18 @@ class SettingsPage extends StatelessWidget {
                   }
                   settings.diaWarn = int.parse(value);
                 },
-                decoration: InputDecoration(hintText: AppLocalizations.of(context)!.diaWarn),
+                decoration: InputDecoration(hintText: localizations.diaWarn),
                 inputWidth: 120,
               ),
               SettingsTile(
                 key: const Key('determineWarnValues'),
                 leading: const Icon(Icons.settings_applications_outlined),
-                title: Text(AppLocalizations.of(context)!.determineWarnValues),
+                title: Text(localizations.determineWarnValues),
                 onPressed: (context) {
                   showDialog(
                     context: context,
                     builder: (context) => NumberInputDialoge(
-                      hintText: AppLocalizations.of(context)!.age,
+                      hintText: localizations.age,
                       onParsableSubmit: (age) {
                         settings.sysWarn = BloodPressureWarnValues.getUpperSysWarnValue(age);
                         settings.diaWarn = BloodPressureWarnValues.getUpperDiaWarnValue(age);
@@ -230,8 +238,8 @@ class SettingsPage extends StatelessWidget {
               ),
               SettingsTile(
                 key: const Key('AboutWarnValuesScreen'),
-                title: Text(AppLocalizations.of(context)!.aboutWarnValuesScreen),
-                description: Text(AppLocalizations.of(context)!.aboutWarnValuesScreenDesc),
+                title: Text(localizations.aboutWarnValuesScreen),
+                description: Text(localizations.aboutWarnValuesScreenDesc),
                 leading: const Icon(Icons.info_outline),
                 trailing: const Icon(Icons.arrow_forward_ios),
                 onPressed: (context) {
@@ -243,7 +251,7 @@ class SettingsPage extends StatelessWidget {
               ),
               SettingsTile(
                 key: const Key('GraphMarkingsScreen'),
-                title: Text(AppLocalizations.of(context)!.customGraphMarkings),
+                title: Text(localizations.customGraphMarkings),
                 leading: const Icon(Icons.legend_toggle_outlined),
                 trailing: const Icon(Icons.arrow_forward_ios),
                 onPressed: (context) {
@@ -254,17 +262,17 @@ class SettingsPage extends StatelessWidget {
                 }
               ),
               SwitchSettingsTile(
-                title: Text(AppLocalizations.of(context)!.drawRegressionLines),
+                title: Text(localizations.drawRegressionLines),
                 leading: const Icon(Icons.trending_down_outlined),
-                description: Text(AppLocalizations.of(context)!.drawRegressionLinesDesc),
+                description: Text(localizations.drawRegressionLinesDesc),
                 initialValue: settings.drawRegressionLines,
                 onToggle: (value) {
                   settings.drawRegressionLines = value;
                 }
               ),
               SwitchSettingsTile(
-                title: Text(AppLocalizations.of(context)!.startWithAddMeasurementPage),
-                description: Text(AppLocalizations.of(context)!.startWithAddMeasurementPageDescription),
+                title: Text(localizations.startWithAddMeasurementPage),
+                description: Text(localizations.startWithAddMeasurementPageDescription),
                 leading: const Icon(Icons.electric_bolt_outlined),
                 initialValue: settings.startWithAddMeasurementPage,
                 onToggle: (value) {
@@ -273,10 +281,10 @@ class SettingsPage extends StatelessWidget {
               ),
             ]),
             SettingsSection(
-              title: Text(AppLocalizations.of(context)!.data),
+              title: Text(localizations.data),
               children: [
                 SettingsTile(
-                    title: Text(AppLocalizations.of(context)!.exportImport),
+                    title: Text(localizations.exportImport),
                     leading: const Icon(Icons.download),
                     trailing: const Icon(Icons.arrow_forward_ios),
                     onPressed: (context) {
@@ -286,12 +294,57 @@ class SettingsPage extends StatelessWidget {
                       );
                     }
                 ),
+                SettingsTile(
+                    title: Text(localizations.exportSettings),
+                    leading: const Icon(Icons.tune),
+                    onPressed: (context) async {
+                      String dbPath = await getDatabasesPath();
+                      assert(dbPath != inMemoryDatabasePath);
+                      dbPath = join(dbPath, 'config.db');
+                      assert(Platform.isAndroid);
+                      Share.shareXFiles([
+                        XFile(dbPath,)
+                      ]);
+                    }
+                ),
+                SettingsTile(
+                    title: Text(localizations.importSettings),
+                    description: Text(localizations.requiresAppRestart),
+                    leading: const Icon(Icons.settings_backup_restore),
+                    onPressed: (context) async {
+                      final messenger = ScaffoldMessenger.of(context);
+                      var result = await FilePicker.platform.pickFiles(
+                        allowMultiple: false,
+                        withData: true,
+                      );
+                      if (result == null) {
+                        messenger.showSnackBar(SnackBar(content: Text(localizations.errNoFileOpened)));
+                        return;
+                      }
+                      var binaryContent = result.files.single.bytes;
+                      if (binaryContent == null) {
+                        messenger.showSnackBar(SnackBar(content: Text(localizations.errCantReadFile)));
+                        return;
+                      }
+                      var path = result.files.single.path;
+                      assert(path != null); // null state directly linked to binary content
+
+                      String dbPath = await getDatabasesPath();
+                      assert(dbPath != inMemoryDatabasePath);
+                      dbPath = join(dbPath, 'config.db');
+                      File(path!).copySync(dbPath);
+                      if (!await Restart.restartApp()) {
+                        messenger.showSnackBar(SnackBar(content: Text(localizations.pleaseRestart)));
+                        return;
+                      }
+                    }
+                ),
               ],
             ),
-            SettingsSection(title: Text(AppLocalizations.of(context)!.aboutWarnValuesScreen), children: [
+            SettingsSection(title: Text(localizations.aboutWarnValuesScreen), children: [
               SettingsTile(
                   key: const Key('version'),
-                  title: Text(AppLocalizations.of(context)!.version),
+                  title: Text(localizations.version),
                   leading: const Icon(Icons.info_outline),
                   description: ConsistentFutureBuilder<PackageInfo>(
                     future: PackageInfo.fromPlatform(),
@@ -306,10 +359,9 @@ class SettingsPage extends StatelessWidget {
               ),
               SettingsTile(
                 key: const Key('sourceCode'),
-                title: Text(AppLocalizations.of(context)!.sourceCode),
+                title: Text(localizations.sourceCode),
                 leading: const Icon(Icons.merge),
                 onPressed: (context) async {
-                  final localizations = AppLocalizations.of(context)!;
                   final scaffoldMessenger = ScaffoldMessenger.of(context);
                   var url = Uri.parse('https://github.com/NobodyForNothing/blood-pressure-monitor-fl');
                   if (await canLaunchUrl(url)) {
@@ -322,7 +374,7 @@ class SettingsPage extends StatelessWidget {
               ),
               SettingsTile(
                 key: const Key('licenses'),
-                title: Text(AppLocalizations.of(context)!.licenses),
+                title: Text(localizations.licenses),
                 leading: const Icon(Icons.policy_outlined),
                 trailing: const Icon(Icons.arrow_forward_ios),
                 onPressed: (context) {

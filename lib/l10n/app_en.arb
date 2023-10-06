@@ -428,8 +428,12 @@
   "@note": {},
   "color": "Color",
   "@color": {},
-  "exportConfigDB": "export config.db",
-  "@exportConfigDB": {},
-  "configDBExplainer": "The config.db does not include all configuration info. For more debug information use the copy button at the top.",
-  "@configDBExplainer": {}
+  "exportSettings": "Backup settings",
+  "@exportSettings": {},
+  "importSettings": "Restore settings",
+  "@importSettings": {},
+  "requiresAppRestart": "Requires app restart",
+  "@requiresAppRestart": {},
+  "pleaseRestart": "Please restart the app to apply changes",
+  "@pleaseRestart": {}
 }
