@@ -1,24 +1,23 @@
 import 'dart:async';
 
+import 'package:blood_pressure_app/model/storage/export_csv_settings_store.dart';
+import 'package:blood_pressure_app/model/storage/export_pdf_settings_store.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
-/// The config database has the following tables:
+/// Database for storing settings and internal app state.
 ///
-/// settings
-/// profile_id INTEGER PRIMARY KEY, settings_json STRING
-///
-/// exportStrings
-/// internalColumnName STRING PRIMARY KEY, columnTitle STRING, formatPattern STRING
+/// The table names ensured by this class are stored as constant public strings ending in Table.
 class ConfigDB {
   ConfigDB._create();
   
   /// Name of the settings table.
   ///
-  /// It is used to store json representations of [Settings] objects. Settings are saved as json, as there is no use
-  /// case where accessing individual fields for SQLs logic and matching is needed and the complexity of maintaining
-  /// different settings formats (export) is not worth it. Disk space doesn't play a role, as in most cases there will
-  /// be only one entry in the table.
+  /// It is used to store json representations of [Settings] objects. The json representation is chosen to allow editing
+  /// and editing fields without changing the database structure and because there is no use case where accessing
+  /// individual fields for SQLs logic and matching is needed and the complexity of maintaining different settings
+  /// formats (export) is not worth it. Disk space doesn't play a role, as in most cases there will be only one entry in
+  /// the table.
   ///
   /// Format:
   /// `CREATE TABLE settings(profile_id INTEGER PRIMARY KEY, settings_json STRING)`
@@ -27,10 +26,9 @@ class ConfigDB {
   static const String _settingsTableCreationString =
       'CREATE TABLE settings(profile_id INTEGER PRIMARY KEY, settings_json STRING)';
 
-  /// Name of the export settings table.
+  /// Name of the table for storing [ExportSettings] objects.
   ///
-  /// It is used to store json representations of [ExportSettings] objects. Data is saved the same way as with
-  /// [settingsTable]
+  /// Data is saved the same way as with [settingsTable].
   ///
   /// Format:
   /// `CREATE TABLE exportSettings(profile_id INTEGER PRIMARY KEY, json STRING)`
@@ -38,10 +36,9 @@ class ConfigDB {
   static const String _exportSettingsTableCreationString =
       'CREATE TABLE exportSettings(profile_id INTEGER PRIMARY KEY, json STRING)';
 
-  /// Name of the table for csv export settings.
+  /// Name of the table for storing [CsvExportSettings] objects.
   ///
-  /// It is used to store json representations of [CsvExportSettings] objects. Data is saved the same way as with
-  /// [settingsTable]
+  /// Data is saved the same way as with [settingsTable].
   ///
   /// Format:
   /// `CREATE TABLE exportCsvSettings(profile_id INTEGER PRIMARY KEY, json STRING)`
@@ -49,10 +46,9 @@ class ConfigDB {
   static const String _exportCsvSettingsTableCreationString =
       'CREATE TABLE exportCsvSettings(profile_id INTEGER PRIMARY KEY, json STRING)';
 
-  /// Name of the table for pdf export settings.
+  /// Name of the table for storing [PdfExportSettings] objects.
   ///
-  /// It is used to store json representations of [PdfExportSettings] objects. Data is saved the same way as with
-  /// [settingsTable]
+  /// Data is saved the same way as with [settingsTable].
   ///
   /// Format:
   /// `CREATE TABLE exportPdfSettings(profile_id INTEGER PRIMARY KEY, json STRING)`
@@ -62,7 +58,7 @@ class ConfigDB {
 
   /// Name of the table for storing time intervals to display.
   ///
-  /// It is used to store json representations of [IntervallStorage] objects. Data is saved in as fields, to save space
+  /// It is used to store json representations of [IntervallStorage] objects. Data is saved as fields, to save space
   /// on the disk and because no changes in the data format are expected. The field names are made to match the variable
   /// names in the class.
   ///
@@ -86,7 +82,8 @@ class ConfigDB {
 
   late final Database _database;
 
-  /// The meaning of the arguments is the same as in the create constructor.
+  /// [dbPath] is the path to the folder the database is in. When [dbPath] is left empty the default database file is
+  /// used. The [isFullPath] option tells the constructor not to add the default filename at the end of [dbPath].
   Future<void> _asyncInit(String? dbPath, bool isFullPath) async {
     dbPath ??= await getDatabasesPath();
     if (dbPath != inMemoryDatabasePath && !isFullPath) {
@@ -113,7 +110,7 @@ class ConfigDB {
 
   FutureOr<void> _onDBUpgrade(Database db, int oldVersion, int newVersion) async {
     // When adding more versions the upgrade procedure proposed in https://stackoverflow.com/a/75153875/21489239
-    // might be useful, to avoid duplicated code. Currently this would only lead to complexity, without benefits.
+    // might be useful, to avoid duplicated code. Currently this would only lead to complexity without benefits.
     if (oldVersion == 1 && newVersion == 2) {
       await db.execute(_settingsTableCreationString);
       await db.execute(_exportSettingsTableCreationString);
@@ -136,5 +133,9 @@ class ConfigDB {
     return instance;
   }
 
+  /// The database created by this class for getting and setting entries.
+  ///
+  /// Changes to the database structure should be done by altering the [_onDBCreate] and [_onDBUpgrade] methods of this
+  /// class to ensure smooth upgrades without the possibility of error.
   Database get database => _database;
 }
