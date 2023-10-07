@@ -3,13 +3,17 @@ import 'package:flutter/material.dart';
 
 /// Utility class for converting dynamic values to concrete data types.
 ///
-/// Mainly used for PDF conversion. There is no guarantee that the internal logic will be useful anywhere else.
+/// The functions this class provides interprets dynamic values as values of the data type. This makes them useful for
+/// contexts in which user generated data needs to be parsed.
+///
+/// An example for this are boolean fields in json data. Users could write `true` which will be converted to a boolean
+/// automatically and can be just checked with the `is boolean` condition, but the user may also write `"true"` or 1
+/// which are equally valid but would not get converted automatically.
 class ConvertUtil {
-  /// Parses all forms of a boolean someone might put in a a boolean.
   static bool? parseBool(dynamic value) {
     if (value is bool) return value;
-    if (value == 'true' || value == 1) return true;
-    if (value == 'false' || value == 0) return false;
+    if (parseString(value)?.toLowerCase() == 'true' || parseInt(value) == 1) return true;
+    if (parseString(value)?.toLowerCase() == 'false' || parseInt(value) == 0) return false;
     return null;
   }
 
@@ -46,6 +50,7 @@ class ConvertUtil {
 
   static Locale? parseLocale(dynamic value) {
     if (value is Locale) return value;
+    // Should not use parseString, as values that get caught by it can not be locales.
     if (value is String && value.toLowerCase() == 'null') return null;
     if (value is String) return Locale(value);
     return null;
@@ -58,12 +63,8 @@ class ConvertUtil {
     late final Color color;
     if (value is Color) {
       color = value;
-    } else if (value is int) {
-      color = Color(value);
-    } else if (value is String) {
-      final int? parsedValue = int.tryParse(value);
-      if (parsedValue == null) return null;
-      color = Color(parsedValue);
+    } else if (parseInt(value) != null) {
+      color = Color(parseInt(value)!);
     } else {
       return null;
     }
