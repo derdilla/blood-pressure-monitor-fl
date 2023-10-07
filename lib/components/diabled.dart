@@ -1,7 +1,7 @@
 
 import 'package:flutter/material.dart';
 
-/// A widget that visually indicates that it's subtree is disabled and block interaction with it.
+/// A widget that visually indicates that it's subtree is disabled and blocks all interaction with it.
 class Disabled extends StatelessWidget {
   /// Create a widget that visually indicates that it's subtree is disabled and blocks interaction with it.
   ///
@@ -19,7 +19,7 @@ class Disabled extends StatelessWidget {
   Widget build(BuildContext context) {
     if (disabled) {
       return Opacity(
-        opacity: ignoring ? 0.8 : 0.7,
+        opacity: 0.7,
         child: IgnorePointer(
           ignoring: ignoring,
           child: child,
