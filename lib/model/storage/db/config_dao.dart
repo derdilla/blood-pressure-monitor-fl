@@ -252,7 +252,7 @@ class ConfigDao {
   // TODO: test if custom export columns still work
   /// Loads the current export columns from the database.
   ///
-  /// Changes will *not* be saved automatically, pleas use [updateExportColumn] for doing so.
+  /// Changes will *not* be saved automatically, see [updateExportColumn].
   Future<List<ExportColumn>> loadExportColumns() async {
     final existingDbEntries = await _configDB.database.query(
       ConfigDB.exportStringsTable,
@@ -283,7 +283,7 @@ class ConfigDao {
     );
   }
 
-  /// Deletes the [ExportColumn] with the given [internalName] from the database.
+  /// Deletes the [ExportColumn] where [ExportColumn.internalName] matches [internalName] from the database.
   Future<void> deleteExportColumn(String internalName) async {
     await _configDB.database.delete('exportStrings', where: 'internalColumnName = ?', whereArgs: [internalName]);
   }
