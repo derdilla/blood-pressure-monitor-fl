@@ -1,4 +1,5 @@
 import 'package:blood_pressure_app/components/consistent_future_builder.dart';
+import 'package:blood_pressure_app/components/diabled.dart';
 import 'package:blood_pressure_app/components/display_interval_picker.dart';
 import 'package:blood_pressure_app/components/export_item_order.dart';
 import 'package:blood_pressure_app/components/settings_widgets.dart';
@@ -35,11 +36,9 @@ class ExportImportScreen extends StatelessWidget {
               const SizedBox(
                 height: 15,
               ),
-              Opacity(
-                opacity: (settings.exportFormat == ExportFormat.db) ? 0.7 : 1,
-                child: IgnorePointer(
-                    ignoring: (settings.exportFormat == ExportFormat.db),
-                    child: const IntervalPicker(type: IntervallStoreManagerLocation.exportPage,)),
+              Disabled(
+                disabled: settings.exportFormat == ExportFormat.db,
+                child: const IntervalPicker(type: IntervallStoreManagerLocation.exportPage,),
               ),
               SettingsTile(
                   title: Text(localizations.exportDir),
@@ -277,9 +276,10 @@ class ExportImportButtons extends StatelessWidget {
                 child: MaterialButton(
                   height: 60,
                   child: Text(localizations.import),
-                  onPressed: () async => 
+                  onPressed: () async =>
                       Exporter.load(context, [], await ExportConfigurationModel.get(localizations)).import(),
-                )),
+                )
+            ),
           ],
         ),
       ),
@@ -303,37 +303,21 @@ class _ExportWarnBannerState extends State<ExportWarnBanner> {
     return Consumer<Settings>(builder: (context, settings, child) =>
       Consumer<ExportSettings>(builder: (context, exportSettings, child) =>
         Consumer<CsvExportSettings>(builder: (context, csvExportSettings, child) =>
-          Consumer<PdfExportSettings>(builder: (context, pdfExportSettings, child) {
-            return ConsistentFutureBuilder(
+          Consumer<PdfExportSettings>(builder: (context, pdfExportSettings, child) =>
+            ConsistentFutureBuilder(
               future: ExportConfigurationModel.get(localizations),
               onData: (context, configurationModel) {
                 String? message;
-                final exportCustomEntries = (exportSettings.exportFormat == ExportFormat.csv)
-                    ? csvExportSettings.exportCustomFields : pdfExportSettings.exportCustomFields;
                 final CustomFieldsSettings fieldSettings = (exportSettings.exportFormat == ExportFormat.csv
                     ? csvExportSettings : pdfExportSettings) as CustomFieldsSettings;
-                final exportFormats = configurationModel
-                    .getActiveExportColumns(exportSettings.exportFormat, fieldSettings)
-                    .map((e) => e.parsableFormat);
-                var missingAttributes = {
-                  RowDataFieldType.timestamp,
-                  RowDataFieldType.sys,
-                  RowDataFieldType.dia,
-                  RowDataFieldType.pul,
-                  RowDataFieldType.notes,
-                  RowDataFieldType.color
-                };
-                missingAttributes.removeWhere((e) => exportFormats.contains(e));
+
+                final missingAttributes = _getMissingAttributes(exportSettings, fieldSettings, configurationModel);
                 if (ExportFormat.db == exportSettings.exportFormat) {
                   // When exporting as database no wrong configuration is possible
-                } else if (_showWarnBanner && ((ExportFormat.pdf == exportSettings.exportFormat) ||
-                    csvExportSettings.exportHeadline == false ||
-                    exportCustomEntries &&
-                        missingAttributes.contains(RowDataFieldType.timestamp) ||
-                    ![',', '|'].contains(csvExportSettings.fieldDelimiter) ||
-                    !['"', '\''].contains(csvExportSettings.textDelimiter))) {
+                } else if (_showWarnBanner && _isExportable(exportSettings, csvExportSettings,
+                    fieldSettings.exportCustomFields, missingAttributes)) {
                   message = localizations.exportWarnConfigNotImportable;
-                } else if (_showWarnBanner && exportCustomEntries && missingAttributes.isNotEmpty) {
+                } else if (_showWarnBanner && fieldSettings.exportCustomFields && missingAttributes.isNotEmpty) {
                   message = localizations.exportWarnNotEveryFieldExported(
                       missingAttributes.length, missingAttributes.join(', '));
                 }
@@ -353,10 +337,35 @@ class _ExportWarnBannerState extends State<ExportWarnBanner> {
                       ]);
                 }
                 return const SizedBox.shrink();
-              });
-          })
+              }))
         )
       )
     );
   }
+}
+
+bool _isExportable(ExportSettings exportSettings, CsvExportSettings csvExportSettings, bool exportCustomEntries, Set<RowDataFieldType> missingAttributes) {
+  return ((ExportFormat.pdf == exportSettings.exportFormat) ||
+      csvExportSettings.exportHeadline == false ||
+      exportCustomEntries &&
+          missingAttributes.contains(RowDataFieldType.timestamp) ||
+      ![',', '|'].contains(csvExportSettings.fieldDelimiter) ||
+      !['"', '\''].contains(csvExportSettings.textDelimiter));
+}
+
+Set<RowDataFieldType> _getMissingAttributes(ExportSettings exportSettings, CustomFieldsSettings fieldSettings,
+    ExportConfigurationModel configurationModel) {
+  final exportFormats = configurationModel
+      .getActiveExportColumns(exportSettings.exportFormat, fieldSettings)
+      .map((e) => e.parsableFormat);
+  var missingAttributes = {
+    RowDataFieldType.timestamp,
+    RowDataFieldType.sys,
+    RowDataFieldType.dia,
+    RowDataFieldType.pul,
+    RowDataFieldType.notes,
+    RowDataFieldType.color
+  };
+  missingAttributes.removeWhere((e) => exportFormats.contains(e));
+  return missingAttributes;
 }

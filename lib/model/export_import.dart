@@ -265,11 +265,11 @@ class Exporter {
       this.settings, this.exportSettings, this.csvExportSettings, this.pdfExportSettings);
   factory Exporter.load(BuildContext context, Iterable<BloodPressureRecord> data, ExportConfigurationModel exportColumnsConfig) {
 
-    final settings = Provider.of<Settings>(context);
-    final exportSettings = Provider.of<ExportSettings>(context);
-    final csvExportSettings = Provider.of<CsvExportSettings>(context);
-    final pdfExportSettings = Provider.of<PdfExportSettings>(context);
-    final model = Provider.of<BloodPressureModel>(context);
+    final settings = Provider.of<Settings>(context, listen: false);
+    final exportSettings = Provider.of<ExportSettings>(context, listen: false);
+    final csvExportSettings = Provider.of<CsvExportSettings>(context, listen: false);
+    final pdfExportSettings = Provider.of<PdfExportSettings>(context, listen: false);
+    final model = Provider.of<BloodPressureModel>(context, listen: false);
     final localizations = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
     final messenger = ScaffoldMessenger.of(context);
