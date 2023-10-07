@@ -315,24 +315,22 @@ class SettingsPage extends StatelessWidget {
                       final messenger = ScaffoldMessenger.of(context);
                       var result = await FilePicker.platform.pickFiles(
                         allowMultiple: false,
-                        withData: true,
+                        withData: false,
                       );
                       if (result == null) {
                         messenger.showSnackBar(SnackBar(content: Text(localizations.errNoFileOpened)));
                         return;
                       }
-                      var binaryContent = result.files.single.bytes;
-                      if (binaryContent == null) {
+                      var path = result.files.single.path;
+                      if (path == null) {
                         messenger.showSnackBar(SnackBar(content: Text(localizations.errCantReadFile)));
                         return;
                       }
-                      var path = result.files.single.path;
-                      assert(path != null); // null state directly linked to binary content
 
                       String dbPath = await getDatabasesPath();
                       assert(dbPath != inMemoryDatabasePath);
                       dbPath = join(dbPath, 'config.db');
-                      File(path!).copySync(dbPath);
+                      File(path).copySync(dbPath);
                       if (!await Restart.restartApp()) {
                         messenger.showSnackBar(SnackBar(content: Text(localizations.pleaseRestart)));
                         return;

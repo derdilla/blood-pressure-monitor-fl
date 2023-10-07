@@ -3,6 +3,7 @@ import 'package:blood_pressure_app/model/blood_pressure.dart';
 import 'package:blood_pressure_app/model/export_import.dart';
 import 'package:blood_pressure_app/model/export_options.dart';
 import 'package:blood_pressure_app/model/storage/export_settings_store.dart';
+import 'package:blood_pressure_app/model/storage/intervall_store.dart';
 import 'package:blood_pressure_app/model/storage/settings_store.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -10,8 +11,6 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_material_color_picker/flutter_material_color_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-
-import '../model/storage/intervall_store.dart';
 
 class AddMeasurementPage extends StatefulWidget {
   final DateTime? initTime;
@@ -179,10 +178,8 @@ class _AddMeasurementPageState extends State<AddMeasurementPage> {
                                   final exporter = Exporter.load(context, await model.all, await ExportConfigurationModel.get(localizations));
                                   exporter.export();
                                 }
-                                // ensures the most recent entry is visible when submitting a new measurement
-                                if (intervalls.mainPage.stepSize != TimeStep.custom) {
-                                  intervalls.mainPage.setToMostRecentIntervall();
-                                }
+                                // ensures the most recent entry is visible when adding measurements to avoid confusion
+                                intervalls.mainPage.setToMostRecentIntervall();
                                 navigator.pop();
                               }
                             },

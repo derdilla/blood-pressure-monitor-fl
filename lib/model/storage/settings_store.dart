@@ -63,7 +63,7 @@ class Settings extends ChangeNotifier {
     if (startWithAddMeasurementPage != null) _startWithAddMeasurementPage = startWithAddMeasurementPage;
     if (useLegacyList != null) _useLegacyList = useLegacyList;
     if (horizontalGraphLines != null) _horizontalGraphLines = horizontalGraphLines;
-    _language = language; // No check here, as null is the default as well. In general values should not be null
+    _language = language; // No check here, as null is the default as well.
   }
 
   factory Settings.fromMap(Map<String, dynamic> map) => Settings(
@@ -123,8 +123,10 @@ class Settings extends ChangeNotifier {
 
   String toJson() => jsonEncode(toMap());
 
-  Locale? _language; // default null
-  /// When the value is null, 
+  Locale? _language;
+  /// Language to use the app in.
+  ///
+  /// When the value is null, the device default language is chosen.
   Locale? get language => _language;
   set language(Locale? value) {
     _language = value;
