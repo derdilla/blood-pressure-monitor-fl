@@ -2,14 +2,13 @@ import 'dart:collection';
 
 import 'package:blood_pressure_app/main.dart';
 import 'package:blood_pressure_app/model/blood_pressure.dart';
-import 'package:blood_pressure_app/model/export_import.dart';
-import 'package:blood_pressure_app/model/settings_store.dart';
+import 'package:blood_pressure_app/model/storage/common_settings_interfaces.dart';
+import 'package:blood_pressure_app/model/storage/db/config_dao.dart';
+import 'package:blood_pressure_app/model/storage/export_settings_store.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:function_tree/function_tree.dart';
 import 'package:intl/intl.dart';
-import 'package:path/path.dart';
-import 'package:sqflite/sqflite.dart';
 
 class ExportFields {
   static const defaultCsv = ['timestampUnixMs', 'systolic', 'diastolic', 'pulse', 'notes', 'color'];
@@ -17,11 +16,11 @@ class ExportFields {
 }
 
 class ExportConfigurationModel {
+  // 2 sources.
   static ExportConfigurationModel? _instance;
 
-  final Settings settings;
   final AppLocalizations localizations;
-  late final Database _database;
+  final ConfigDao _configDao; // TODO: remove after #181 is complete
   
   final List<ExportColumn> _availableFormats = [];
 
@@ -33,47 +32,30 @@ class ExportConfigurationModel {
     ('"My Heart" export', ['DATUM', 'SYSTOLE', 'DIASTOLE', 'PULS', 'Beschreibung', 'Tags', 'Gewicht', 'Sauerstoffsättigung']),
   ];
 
-  ExportConfigurationModel._create(this.settings, this.localizations);
-  Future<void> _asyncInit(String? dbPath, bool isFullPath) async {
-    dbPath ??= await getDatabasesPath();
-    if (dbPath != inMemoryDatabasePath && !isFullPath) {
-      dbPath = join(dbPath, 'config.db');
-    }
-
-    _database = await openDatabase(
-      dbPath,
-      onCreate: (db, version) {
-        return db.execute(
-            'CREATE TABLE exportStrings(internalColumnName STRING PRIMARY KEY, columnTitle STRING, formatPattern STRING)');
-      },
-      version: 1,
-    );
-
-    final existingDbEntries = await _database.rawQuery('SELECT * FROM exportStrings');
-    for (final e in existingDbEntries) {
-      _availableFormats.add(ExportColumn(internalName: e['internalColumnName'].toString(),
-          columnTitle: e['columnTitle'].toString(), formatPattern: e['formatPattern'].toString()));
-    }
+  ExportConfigurationModel._create(this.localizations, this._configDao);
+  Future<void> _asyncInit() async {
     _availableFormats.addAll(getDefaultFormates());
+    _availableFormats.addAll(await _configDao.loadExportColumns());
   }
-  static Future<ExportConfigurationModel> get(Settings settings, AppLocalizations localizations, {String? dbPath, bool isFullPath = false}) async {
+  static Future<ExportConfigurationModel> get(AppLocalizations localizations) async {
     if (_instance == null) {
-      _instance = ExportConfigurationModel._create(settings, localizations);
-      await _instance!._asyncInit(dbPath, isFullPath);
+      _instance = ExportConfigurationModel._create(localizations, globalConfigDao);
+      await _instance!._asyncInit();
     }
     return _instance!;
   }
 
-  List<ExportColumn> getActiveExportColumns(ExportFormat format) {
+  /// Determines which export columns should be used.
+  ///
+  /// The [fieldSettings] parameter describes the settings of the current export format and should be set accordingly.
+  List<ExportColumn> getActiveExportColumns(ExportFormat format, CustomFieldsSettings fieldsSettings) {
     switch (format) {
       case ExportFormat.csv:
-        return availableFormats.where((e) =>
-            ((settings.exportCustomEntriesCsv) ? settings.exportItemsCsv : ExportFields.defaultCsv)
-                .contains(e.internalName)).toList();
+        final fields = (fieldsSettings.exportCustomFields) ? fieldsSettings.customFields : ExportFields.defaultCsv;
+        return availableFormats.where((e) => fields.contains(e.internalName)).toList();
       case ExportFormat.pdf:
-        return availableFormats.where((e) => 
-          ((settings.exportCustomEntriesPdf) ? settings.exportItemsPdf : ExportFields.defaultPdf)
-        .contains(e.internalName)).toList();
+        final fields = (fieldsSettings.exportCustomFields) ? fieldsSettings.customFields : ExportFields.defaultPdf;
+        return availableFormats.where((e) => fields.contains(e.internalName)).toList();
       case ExportFormat.db:
         // Export formats don't work on this one
         return [];
@@ -82,7 +64,7 @@ class ExportConfigurationModel {
   
   List<ExportColumn> getDefaultFormates() => [
     ExportColumn(internalName: 'timestampUnixMs', columnTitle: localizations.unixTimestamp, formatPattern: r'$TIMESTAMP', editable: false),
-    ExportColumn(internalName: 'formattedTimestamp', columnTitle: localizations.time, formatPattern: '\$FORMAT{\$TIMESTAMP,${settings.dateFormatString}}', editable: false),
+    ExportColumn(internalName: 'formattedTimestamp', columnTitle: localizations.time, formatPattern: '\$FORMAT{\$TIMESTAMP,yyyy-MM-dd HH:mm:ss}', editable: false),
     ExportColumn(internalName: 'systolic', columnTitle: localizations.sysLong, formatPattern: r'$SYS', editable: false),
     ExportColumn(internalName: 'diastolic', columnTitle: localizations.diaLong, formatPattern: r'$DIA', editable: false),
     ExportColumn(internalName: 'pulse', columnTitle: localizations.pulLong, formatPattern: r'$PUL', editable: false),
@@ -100,51 +82,41 @@ class ExportConfigurationModel {
     ExportColumn(internalName: 'Sauerstoffsättigung', columnTitle: '"My Heart" export oxygen', formatPattern: r'0', editable: false, hidden: true),
   ];
 
-  // TODO: testing
+  /// Saves a new [ExportColumn] to the list of the available columns.
+  ///
+  /// In case one with the same internal name exists it gets updated with the new values
   void addOrUpdate(ExportColumn format) {
-    final existingEntries = _availableFormats.where((element) => element.internalName == format.internalName);
-    if (existingEntries.isNotEmpty) {
-      assert(existingEntries.length == 1);
-      if (!existingEntries.first.editable) {
-        assert(false, 'Attempted to update non editable field. While this doesn\'t cause any direct issues, it should not be made possible through the UI.');
-        return;
-      }
-      _availableFormats.remove(existingEntries.first);
-      _availableFormats.add(format);
-      _database.update('exportStrings', {
-        'columnTitle': format.columnTitle,
-        'formatPattern': format.formatPattern
-      }, where: 'internalColumnName = ?', whereArgs: [format.internalName]);
-    } else {
-      _availableFormats.add(format);
-      _database.insert('exportStrings', {
-        'internalColumnName': format.internalName,
-        'columnTitle': format.columnTitle,
-        'formatPattern': format.formatPattern
-      },);
-    }
-
+    _availableFormats.removeWhere((e) => e.internalName == format.internalName);
+    _availableFormats.add(format);
+    _configDao.updateExportColumn(format);
   }
 
   void delete(ExportColumn format) {
     final existingEntries = _availableFormats.where((element) => (element.internalName == format.internalName) && element.editable);
     assert(existingEntries.isNotEmpty, r"Tried to delete entry that doesn't exist or is not editable.");
     _availableFormats.removeWhere((element) => element.internalName == format.internalName);
-    _database.delete('exportStrings', where: 'internalColumnName = ?', whereArgs: [format.internalName]);
+    _configDao.deleteExportColumn(format.internalName);
   }
 
   UnmodifiableListView<ExportColumn> get availableFormats => UnmodifiableListView(_availableFormats);
   UnmodifiableMapView<String, ExportColumn> get availableFormatsMap =>
       UnmodifiableMapView(Map.fromIterable(_availableFormats, key: (e) => e.internalName));
 
-  List<List<String>> createTable(List<BloodPressureRecord> data, ExportFormat format, {bool createHeadline = true,}) {
-    final exportItems = getActiveExportColumns(format);
+
+  /// Creates list of rows with that follow the order and format described by [activeExportColumns].
+  ///
+  /// The [createHeadline] option will create put a row at the start that contains [ExportColumn.internalName] of the
+  /// given [activeExportColumns].
+  List<List<String>> createTable(Iterable<BloodPressureRecord> data, List<ExportColumn> activeExportColumns,
+      {bool createHeadline = true,}) {
     List<List<String>> items = [];
     if (createHeadline) {
-      items.add(exportItems.map((e) => e.internalName).toList());
+      items.add(activeExportColumns.map((e) => e.internalName).toList());
     }
 
-    final dataRows = data.map((record) => exportItems.map((attribute) => attribute.formatRecord(record)).toList());
+    final dataRows = data.map((record) =>
+        activeExportColumns.map((attribute) =>
+            attribute.formatRecord(record)).toList());
     items.addAll(dataRows);
     return items;
   }
@@ -311,6 +283,6 @@ enum RowDataFieldType {
         return gLocalizations.color;
       default:
         return "unknown";
-    };
+    }
   }
 }

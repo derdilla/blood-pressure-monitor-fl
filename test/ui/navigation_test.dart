@@ -1,7 +1,11 @@
 import 'package:blood_pressure_app/main.dart';
 import 'package:blood_pressure_app/model/blood_pressure.dart';
 import 'package:blood_pressure_app/model/ram_only_implementations.dart';
-import 'package:blood_pressure_app/model/settings_store.dart';
+import 'package:blood_pressure_app/model/storage/export_csv_settings_store.dart';
+import 'package:blood_pressure_app/model/storage/export_pdf_settings_store.dart';
+import 'package:blood_pressure_app/model/storage/export_settings_store.dart';
+import 'package:blood_pressure_app/model/storage/intervall_store.dart';
+import 'package:blood_pressure_app/model/storage/settings_store.dart';
 import 'package:blood_pressure_app/screens/add_measurement.dart';
 import 'package:blood_pressure_app/screens/settings.dart';
 import 'package:blood_pressure_app/screens/statistics.dart';
@@ -80,12 +84,26 @@ void main() {
   });
 }
 
-Future<void> _pumpAppRoot(WidgetTester widgetTester) async {
+Future<void> _pumpAppRoot(WidgetTester widgetTester, {
+  Settings? settings,
+  ExportSettings? exportSettings,
+  CsvExportSettings? csvExportSettings,
+  PdfExportSettings? pdfExportSettings,
+  IntervallStoreManager? intervallStoreManager,
+}) async {
   final model = RamBloodPressureModel();
-  final settings = RamSettings();
+  settings ??= Settings();
+  exportSettings ??= ExportSettings();
+  csvExportSettings ??= CsvExportSettings();
+  pdfExportSettings ??= PdfExportSettings();
+  intervallStoreManager ??= IntervallStoreManager(IntervallStorage(), IntervallStorage(), IntervallStorage());
 
   await widgetTester.pumpWidget(MultiProvider(providers: [
-    ChangeNotifierProvider<Settings>(create: (_) => settings),
+    ChangeNotifierProvider(create: (_) => settings),
+    ChangeNotifierProvider(create: (_) => exportSettings),
+    ChangeNotifierProvider(create: (_) => csvExportSettings),
+    ChangeNotifierProvider(create: (_) => pdfExportSettings),
+    ChangeNotifierProvider(create: (_) => intervallStoreManager),
     ChangeNotifierProvider<BloodPressureModel>(create: (_) => model),
   ], child: const AppRoot()));
 }

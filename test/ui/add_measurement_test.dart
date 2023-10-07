@@ -1,6 +1,10 @@
 import 'package:blood_pressure_app/model/blood_pressure.dart';
 import 'package:blood_pressure_app/model/ram_only_implementations.dart';
-import 'package:blood_pressure_app/model/settings_store.dart';
+import 'package:blood_pressure_app/model/storage/export_csv_settings_store.dart';
+import 'package:blood_pressure_app/model/storage/export_pdf_settings_store.dart';
+import 'package:blood_pressure_app/model/storage/export_settings_store.dart';
+import 'package:blood_pressure_app/model/storage/intervall_store.dart';
+import 'package:blood_pressure_app/model/storage/settings_store.dart';
 import 'package:blood_pressure_app/screens/add_measurement.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -126,13 +130,30 @@ void main() {
   });
 }
 
-Future<void> _initPage(WidgetTester widgetTester, Widget pageWidget, {Settings? settings, BloodPressureModel? model}) async {
+Future<void> _initPage(WidgetTester widgetTester, Widget pageWidget, {
+  Settings? settings,
+  ExportSettings? exportSettings,
+  CsvExportSettings? csvExportSettings,
+  PdfExportSettings? pdfExportSettings,
+  IntervallStoreManager? intervallStoreManager,
+  BloodPressureModel? model,
+}) async {
+  model ??= RamBloodPressureModel();
+  settings ??= Settings();
+  exportSettings ??= ExportSettings();
+  csvExportSettings ??= CsvExportSettings();
+  pdfExportSettings ??= PdfExportSettings();
+  intervallStoreManager ??= IntervallStoreManager(IntervallStorage(), IntervallStorage(), IntervallStorage());
   await widgetTester.pumpWidget(
     MaterialApp(
       home: MultiProvider(
           providers: [
-            ChangeNotifierProvider<Settings>(create: (_) => settings ?? RamSettings()),
-            ChangeNotifierProvider<BloodPressureModel>(create: (_) => model ?? RamBloodPressureModel()),
+            ChangeNotifierProvider(create: (_) => settings),
+            ChangeNotifierProvider(create: (_) => exportSettings),
+            ChangeNotifierProvider(create: (_) => csvExportSettings),
+            ChangeNotifierProvider(create: (_) => pdfExportSettings),
+            ChangeNotifierProvider(create: (_) => intervallStoreManager),
+            ChangeNotifierProvider<BloodPressureModel>(create: (_) => model!),
           ],
           child: Localizations(
             delegates: AppLocalizations.localizationsDelegates,

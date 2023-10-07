@@ -3,9 +3,10 @@ import 'dart:async';
 
 import 'package:badges/badges.dart' as badges;
 import 'package:blood_pressure_app/components/consistent_future_builder.dart';
-import 'package:blood_pressure_app/model/export_import.dart';
 import 'package:blood_pressure_app/model/export_options.dart';
-import 'package:blood_pressure_app/model/settings_store.dart';
+import 'package:blood_pressure_app/model/storage/export_csv_settings_store.dart';
+import 'package:blood_pressure_app/model/storage/export_pdf_settings_store.dart';
+import 'package:blood_pressure_app/model/storage/export_settings_store.dart';
 import 'package:blood_pressure_app/screens/subsettings/export_column_data.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -27,7 +28,7 @@ class _ExportItemsCustomizerState extends State<ExportItemsCustomizer> {
   @override
   Widget build(BuildContext context) {
     return ConsistentFutureBuilder(
-      future: ExportConfigurationModel.get(Provider.of<Settings>(context, listen: false), AppLocalizations.of(context)!),
+      future: ExportConfigurationModel.get(AppLocalizations.of(context)!),
       onData: (BuildContext context, ExportConfigurationModel result) {
         return _buildAddItemBadge(context, result,
           child: _buildManagePresetsBadge(context, result,
@@ -117,12 +118,12 @@ class _ExportItemsCustomizerState extends State<ExportItemsCustomizer> {
           ];
         },
         onSelected: (value) {
-          final settings = Provider.of<Settings>(context, listen: false);
-          if (settings.exportFormat == ExportFormat.csv) {
-            settings.exportItemsCsv = exportConfigurations[value].$2;
+          final exportSettings = Provider.of<ExportSettings>(context, listen: false);
+          if (exportSettings.exportFormat == ExportFormat.csv) {
+            Provider.of<CsvExportSettings>(context, listen: false).customFields = exportConfigurations[value].$2;
           } else {
-            assert(settings.exportFormat == ExportFormat.pdf);
-            settings.exportItemsPdf = exportConfigurations[value].$2;
+            assert(exportSettings.exportFormat == ExportFormat.pdf);
+            Provider.of<PdfExportSettings>(context, listen: false).customFields = exportConfigurations[value].$2;
           }
         },
       ),

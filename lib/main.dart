@@ -1,25 +1,48 @@
 import 'package:blood_pressure_app/model/blood_pressure.dart';
-import 'package:blood_pressure_app/model/settings_store.dart';
+import 'package:blood_pressure_app/model/storage/db/config_dao.dart';
+import 'package:blood_pressure_app/model/storage/db/config_db.dart';
+import 'package:blood_pressure_app/model/storage/intervall_store.dart';
+import 'package:blood_pressure_app/model/storage/settings_store.dart';
+import 'package:blood_pressure_app/model/storage/update_legacy_settings.dart';
 import 'package:blood_pressure_app/screens/home.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
 
+@Deprecated('see #182')
 late AppLocalizations gLocalizations;
+@Deprecated('This should not be used for new code, but rather for migrating existing code.')
+late final ConfigDao globalConfigDao;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   // 2 different db files
   final dataModel = await BloodPressureModel.create();
-  final settingsModel = await Settings.create();
+
+  final configDB = await ConfigDB.open();
+  final configDao = ConfigDao(configDB);
+
+  final settings = await configDao.loadSettings(0);
+  final exportSettings = await configDao.loadExportSettings(0);
+  final csvExportSettings = await configDao.loadCsvExportSettings(0);
+  final pdfExportSettings = await configDao.loadPdfExportSettings(0);
+  final intervalStorageManager = await IntervallStoreManager.load(configDao, 0);
+
+  await updateLegacySettings(settings, exportSettings, csvExportSettings, pdfExportSettings, intervalStorageManager);
+
+  globalConfigDao = configDao;
 
   // Reset the step size intervall to current on startup
-  settingsModel.changeStepSize(settingsModel.graphStepSize);
+  intervalStorageManager.mainPage.setToMostRecentIntervall();
 
   runApp(MultiProvider(providers: [
     ChangeNotifierProvider(create: (context) => dataModel),
-    ChangeNotifierProvider(create: (context) => settingsModel),
+    ChangeNotifierProvider(create: (context) => settings),
+    ChangeNotifierProvider(create: (context) => exportSettings),
+    ChangeNotifierProvider(create: (context) => csvExportSettings),
+    ChangeNotifierProvider(create: (context) => pdfExportSettings),
+    ChangeNotifierProvider(create: (context) => intervalStorageManager),
   ], child: const AppRoot()));
 }
 

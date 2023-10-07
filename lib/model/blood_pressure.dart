@@ -34,9 +34,9 @@ class BloodPressureModel extends ChangeNotifier {
 
     _database = await openDatabase(
       dbPath,
-      // runs when the database is first created
       onCreate: _onDBCreate,
       onUpgrade: _onDBUpgrade,
+      // When increasing the version an update procedure from every other possible version is needed
       version: 2,
     );
   }
@@ -61,9 +61,12 @@ class BloodPressureModel extends ChangeNotifier {
     }
   }
 
-  // factory method, to allow for async constructor
+  /// Factory method to create a BloodPressureModel for a database file. This is needed to allow an async constructor.
+  ///
+  /// [dbPath] is the path to the folder the database is in. When [dbPath] is left empty the default database file is
+  /// used. The [isFullPath] option tells the constructor not to add the default filename at the end of [dbPath].
   static Future<BloodPressureModel> create({String? dbPath, bool isFullPath = false}) async {
-    if (Platform.isWindows || Platform.isLinux) {
+    if (Platform.isWindows || Platform.isLinux) { // TODO: drop desktop support
       sqfliteFfiInit();
       databaseFactory = databaseFactoryFfi;
     }

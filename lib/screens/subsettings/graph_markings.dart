@@ -1,6 +1,6 @@
 import 'package:blood_pressure_app/components/input_dialoge.dart';
 import 'package:blood_pressure_app/model/horizontal_graph_line.dart';
-import 'package:blood_pressure_app/model/settings_store.dart';
+import 'package:blood_pressure_app/model/storage/settings_store.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_material_color_picker/flutter_material_color_picker.dart';

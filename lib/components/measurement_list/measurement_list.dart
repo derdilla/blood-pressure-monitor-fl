@@ -1,7 +1,8 @@
-import 'package:blood_pressure_app/components/consistent_future_builder.dart';
+import 'package:blood_pressure_app/components/blood_pressure_builder.dart';
 import 'package:blood_pressure_app/components/measurement_list/measurement_list_entry.dart';
 import 'package:blood_pressure_app/model/blood_pressure.dart';
-import 'package:blood_pressure_app/model/settings_store.dart';
+import 'package:blood_pressure_app/model/storage/intervall_store.dart';
+import 'package:blood_pressure_app/model/storage/settings_store.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
@@ -11,29 +12,21 @@ class MeasurementList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<Settings>(
-      builder: (context, settings, child) {
-        return Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const MeasurementListHeader(),
-            Expanded(
-              child: Consumer<BloodPressureModel>(
-                builder: (context, model, child) {
-                  return ConsistentFutureBuilder(
-                    future: model.getInTimeRange(settings.displayDataStart, settings.displayDataEnd),
-                    onData: (context, data) {
-                      return MeasurementListEntries(
-                        entries: data
-                      );
-                    }
+    return Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          const MeasurementListHeader(),
+          Expanded(
+              child: BloodPressureBuilder(
+                rangeType: IntervallStoreManagerLocation.mainPage,
+                onData: (context, data) {
+                  return MeasurementListEntries(
+                      entries: data
                   );
                 },
               )
-            )
-          ]
-        );
-      },
+          )
+        ]
     );
   }
 }

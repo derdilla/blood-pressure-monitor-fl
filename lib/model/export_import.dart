@@ -5,7 +5,10 @@ import 'dart:typed_data';
 
 import 'package:blood_pressure_app/model/blood_pressure_analyzer.dart';
 import 'package:blood_pressure_app/model/export_options.dart';
-import 'package:blood_pressure_app/model/settings_store.dart';
+import 'package:blood_pressure_app/model/storage/export_csv_settings_store.dart';
+import 'package:blood_pressure_app/model/storage/export_pdf_settings_store.dart';
+import 'package:blood_pressure_app/model/storage/export_settings_store.dart';
+import 'package:blood_pressure_app/model/storage/settings_store.dart';
 import 'package:csv/csv.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:file_saver/file_saver.dart';
@@ -16,6 +19,7 @@ import 'package:jsaver/jSaver.dart';
 import 'package:path/path.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
+import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -28,14 +32,18 @@ extension PdfCompatability on Color {
 // TODO: more testing
 class ExportFileCreator {
   final Settings settings;
+  final ExportSettings exportSettings;
+  final CsvExportSettings csvExportSettings;
+  final PdfExportSettings pdfExportSettings;
   final AppLocalizations localizations;
   final ThemeData theme;
   final ExportConfigurationModel exportColumnsConfig;
 
-  ExportFileCreator(this.settings, this.localizations, this.theme, this.exportColumnsConfig);
+  ExportFileCreator(this.settings, this.exportSettings, this.csvExportSettings, this.pdfExportSettings,
+      this.localizations, this.theme, this.exportColumnsConfig,);
 
-  Future<Uint8List> createFile(List<BloodPressureRecord> records) async {
-    switch (settings.exportFormat) {
+  Future<Uint8List> createFile(Iterable<BloodPressureRecord> records) async {
+    switch (exportSettings.exportFormat) {
       case ExportFormat.csv:
         return createCSVFile(records);
       case ExportFormat.pdf:
@@ -46,7 +54,7 @@ class ExportFileCreator {
   }
 
   Future<List<BloodPressureRecord>?> parseFile(String filePath, Uint8List data) async {
-    switch(settings.exportFormat) {
+    switch(exportSettings.exportFormat) {
       case ExportFormat.csv:
         try {
           return parseCSVFile(data);
@@ -60,9 +68,11 @@ class ExportFileCreator {
     }
   }
 
-  Uint8List createCSVFile(List<BloodPressureRecord> records) {
-    final items = exportColumnsConfig.createTable(records, ExportFormat.csv, createHeadline: settings.exportCsvHeadline);
-    final converter = ListToCsvConverter(fieldDelimiter: settings.csvFieldDelimiter, textDelimiter: settings.csvTextDelimiter);
+  Uint8List createCSVFile(Iterable<BloodPressureRecord> records) {
+    final columns = exportColumnsConfig.getActiveExportColumns(ExportFormat.csv, csvExportSettings);
+    final items = exportColumnsConfig.createTable(records, columns, createHeadline: csvExportSettings.exportHeadline);
+    final converter = ListToCsvConverter(fieldDelimiter: csvExportSettings.fieldDelimiter,
+        textDelimiter: csvExportSettings.textDelimiter);
     final csvData = converter.convert(items);
     return Uint8List.fromList(utf8.encode(csvData));
   }
@@ -71,10 +81,10 @@ class ExportFileCreator {
     List<BloodPressureRecord> records = [];
 
     String fileContents = utf8.decode(data.toList());
-    var converter = CsvToListConverter(fieldDelimiter: settings.csvFieldDelimiter, textDelimiter: settings.csvTextDelimiter);
+    var converter = CsvToListConverter(fieldDelimiter: csvExportSettings.fieldDelimiter, textDelimiter: csvExportSettings.textDelimiter);
     var csvLines = converter.convert(fileContents);
     if (csvLines.length <= 1) { // legacy files
-      converter = CsvToListConverter(fieldDelimiter: settings.csvFieldDelimiter, textDelimiter: settings.csvTextDelimiter, eol: '\n');
+      converter = CsvToListConverter(fieldDelimiter: csvExportSettings.fieldDelimiter, textDelimiter: csvExportSettings.textDelimiter, eol: '\n');
       csvLines = converter.convert(fileContents);
     }
 
@@ -136,7 +146,7 @@ class ExportFileCreator {
     return records;
   }
 
-  Future<Uint8List> createPdfFile(List<BloodPressureRecord> data) async {
+  Future<Uint8List> createPdfFile(Iterable<BloodPressureRecord> data) async {
     final analyzer = BloodPressureAnalyser(data.toList());
     final dateFormatter = DateFormat(settings.dateFormatString);
 
@@ -146,11 +156,11 @@ class ExportFileCreator {
         pageFormat: PdfPageFormat.a4,
         build: (pw.Context context) {
           return [
-            if (settings.exportPdfExportTitle)
+            if (pdfExportSettings.exportTitle)
               _buildPdfTitle(dateFormatter, analyzer),
-            if (settings.exportPdfExportStatistics)
+            if (pdfExportSettings.exportStatistics)
               _buildPdfStatistics(analyzer),
-            if (settings.exportPdfExportData)
+            if (pdfExportSettings.exportData)
               _buildPdfTable(data, dateFormatter),
           ];
         }));
@@ -182,8 +192,9 @@ class ExportFileCreator {
     );
   }
 
-  pw.Widget _buildPdfTable(List<BloodPressureRecord> data, DateFormat dateFormatter) {
-    final tableData = exportColumnsConfig.createTable(data, ExportFormat.pdf, createHeadline: true);
+  pw.Widget _buildPdfTable(Iterable<BloodPressureRecord> data, DateFormat dateFormatter) {
+    final columns = exportColumnsConfig.getActiveExportColumns(ExportFormat.pdf, pdfExportSettings);
+    final tableData = exportColumnsConfig.createTable(data, columns, createHeadline: true);
 
     return pw.TableHelper.fromTextArray(
         border: null,
@@ -191,16 +202,16 @@ class ExportFileCreator {
         headerDecoration: const pw.BoxDecoration(
           border: pw.Border(bottom: pw.BorderSide(color: PdfColors.black))
         ),
-        headerHeight: settings.exportPdfHeaderHeight,
-        cellHeight: settings.exportPdfCellHeight,
+        headerHeight: pdfExportSettings.headerHeight,
+        cellHeight: pdfExportSettings.cellHeight,
         cellAlignments: { for (var v in List.generate(tableData.first.length, (idx)=>idx)) v : pw.Alignment.centerLeft },
         headerStyle: pw.TextStyle(
           color: PdfColors.black,
-          fontSize: settings.exportPdfHeaderFontSize,
+          fontSize: pdfExportSettings.headerFontSize,
           fontWeight: pw.FontWeight.bold,
         ),
         cellStyle: pw.TextStyle(
-          fontSize: settings.exportPdfCellFontSize,
+          fontSize: pdfExportSettings.cellFontSize,
         ),
         headerCellDecoration: pw.BoxDecoration(
           border: pw.Border(
@@ -239,21 +250,39 @@ class ExportFileCreator {
 }
 
 class Exporter {
+  final Iterable<BloodPressureRecord> data;
   final Settings settings;
+  final ExportSettings exportSettings;
+  final CsvExportSettings csvExportSettings;
+  final PdfExportSettings pdfExportSettings;
   final BloodPressureModel model;
   final ScaffoldMessengerState messenger;
   final AppLocalizations localizations;
   final ThemeData theme;
   final ExportConfigurationModel exportColumnsConfig;
 
-  Exporter(this.settings, this.model, this.messenger, this.localizations, this.theme, this.exportColumnsConfig);
+  Exporter(this.data, this.model, this.messenger, this.localizations, this.theme, this.exportColumnsConfig,
+      this.settings, this.exportSettings, this.csvExportSettings, this.pdfExportSettings);
+  factory Exporter.load(BuildContext context, Iterable<BloodPressureRecord> data, ExportConfigurationModel exportColumnsConfig) {
+
+    final settings = Provider.of<Settings>(context);
+    final exportSettings = Provider.of<ExportSettings>(context);
+    final csvExportSettings = Provider.of<CsvExportSettings>(context);
+    final pdfExportSettings = Provider.of<PdfExportSettings>(context);
+    final model = Provider.of<BloodPressureModel>(context);
+    final localizations = AppLocalizations.of(context)!;
+    final theme = Theme.of(context);
+    final messenger = ScaffoldMessenger.of(context);
+    return Exporter(data, model, messenger, localizations, theme, exportColumnsConfig, settings, exportSettings,
+        csvExportSettings, pdfExportSettings);
+  }
 
   Future<void> export() async {
-    final entries = await model.getInTimeRange(settings.displayDataStart, settings.displayDataEnd);
-    var fileContents = await ExportFileCreator(settings, localizations, theme, exportColumnsConfig).createFile(entries);
+    var fileContents = await ExportFileCreator(settings, exportSettings, csvExportSettings, pdfExportSettings,
+        localizations, theme, exportColumnsConfig).createFile(data);
     String filename = 'blood_press_${DateTime.now().toIso8601String()}';
     String ext;
-    switch(settings.exportFormat) {
+    switch(exportSettings.exportFormat) {
       case ExportFormat.csv:
         ext = 'csv';
         break;
@@ -269,12 +298,12 @@ class Exporter {
     if (Platform.isLinux || Platform.isWindows || Platform.isMacOS) {
       messenger.showSnackBar(SnackBar(content: Text(localizations.success(path))));
     } else if (Platform.isAndroid || Platform.isIOS) {
-      if (settings.defaultExportDir.isNotEmpty) {
+      if (exportSettings.defaultExportDir.isNotEmpty) {
         JSaver.instance.save(
             fromPath: path,
             androidPathOptions: AndroidPathOptions(toDefaultDirectory: true)
         );
-        messenger.showSnackBar(SnackBar(content: Text(localizations.success(settings.defaultExportDir))));
+        messenger.showSnackBar(SnackBar(content: Text(localizations.success(exportSettings.defaultExportDir))));
       } else {
         Share.shareXFiles([
           XFile(
@@ -290,7 +319,7 @@ class Exporter {
 
 
   Future<void> import() async {
-    if (!([ExportFormat.csv, ExportFormat.db].contains(settings.exportFormat))) {
+    if (!([ExportFormat.csv, ExportFormat.db].contains(exportSettings.exportFormat))) {
       messenger.showSnackBar(SnackBar(content: Text(localizations.errWrongImportFormat)));
       return;
     }
@@ -311,7 +340,8 @@ class Exporter {
     var path = result.files.single.path;
     assert(path != null); // null state directly linked to binary content
 
-    final fileContentsFuture = ExportFileCreator(settings, localizations, theme, exportColumnsConfig).parseFile(path! ,binaryContent);
+    final fileContentsFuture = ExportFileCreator(settings, exportSettings, csvExportSettings, pdfExportSettings,
+        localizations, theme, exportColumnsConfig).parseFile(path! ,binaryContent);
     Object? fileContentsError;
     fileContentsFuture.onError((error, stackTrace) {
       fileContentsError = error;
@@ -330,10 +360,4 @@ class Exporter {
       model.add(e);
     }
   }
-}
-
-enum ExportFormat {
-  csv,
-  pdf,
-  db
 }

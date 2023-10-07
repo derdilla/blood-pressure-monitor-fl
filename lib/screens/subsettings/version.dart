@@ -1,14 +1,9 @@
-import 'dart:io';
-
 import 'package:blood_pressure_app/components/consistent_future_builder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-import 'package:path/path.dart';
-import 'package:share_plus/share_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:sqflite/sqflite.dart';
 
 class VersionScreen extends StatelessWidget {
 
@@ -56,31 +51,6 @@ class VersionScreen extends StatelessWidget {
                       Text(localizations.versionOf(packageInfo.version)),
                       Text(localizations.buildNumberOf(packageInfo.buildNumber)),
                       Text(localizations.buildSignatureOf(packageInfo.buildSignature)),
-                      Container(
-                        padding: const EdgeInsets.symmetric(vertical: 20),
-                        child: Column(
-                          children: [
-                            Center(
-                              child: FilledButton.icon(
-                                onPressed: () async {
-                                  String dbPath = await getDatabasesPath();
-
-                                  assert(dbPath != inMemoryDatabasePath);
-                                  dbPath = join(dbPath, 'config.db');
-                                  assert(Platform.isAndroid);
-                                  Share.shareXFiles([
-                                    XFile(dbPath,)
-                                  ]);
-                                },
-                                icon: const Icon(Icons.share),
-                                label: Text(localizations.exportConfigDB),
-                              ),
-                            ),
-                            Text(localizations.configDBExplainer,
-                                style: Theme.of(context).textTheme.labelMedium,),
-                          ],
-                        ),
-                      ),
                       Text(localizations.sharedPrefsDump),
                       Table(
                         children: [
