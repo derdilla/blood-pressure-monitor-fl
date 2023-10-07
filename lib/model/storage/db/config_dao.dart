@@ -53,6 +53,7 @@ class ConfigDao {
   ///
   /// Adds an entry if no settings where saved for this profile.
   Future<void> _updateSettings(int profileID, Settings settings) async {
+    if (!_configDB.database.isOpen) return;
     await _configDB.database.insert(
       ConfigDB.settingsTable,
       {
@@ -99,6 +100,7 @@ class ConfigDao {
   ///
   /// Adds an entry if necessary.
   Future<void> _updateExportSettings(int profileID, ExportSettings settings) async {
+    if (!_configDB.database.isOpen) return;
     await _configDB.database.insert(
         ConfigDB.exportSettingsTable,
         {
@@ -145,6 +147,7 @@ class ConfigDao {
   ///
   /// Adds an entry if necessary.
   Future<void> _updateCsvExportSettings(int profileID, CsvExportSettings settings) async {
+    if (!_configDB.database.isOpen) return;
     await _configDB.database.insert(
         ConfigDB.exportCsvSettingsTable,
         {
@@ -191,6 +194,7 @@ class ConfigDao {
   ///
   /// Adds an entry if necessary.
   Future<void> _updatePdfExportSettings(int profileID, PdfExportSettings settings) async {
+    if (!_configDB.database.isOpen) return;
     await _configDB.database.insert(
         ConfigDB.exportPdfSettingsTable,
         {
@@ -237,6 +241,7 @@ class ConfigDao {
   ///
   /// Adds an entry if necessary.
   Future<void> _updateIntervallStorage(int profileID, int storageID, IntervallStorage intervallStorage) async {
+    if (!_configDB.database.isOpen) return;
     final Map<String, dynamic> columnValueMap = {
       'profile_id': profileID,
       'storage_id': storageID,
@@ -272,6 +277,7 @@ class ConfigDao {
   ///
   /// If one with the same [ExportColumn.internalName] exists, it will get replaced by the new one regardless of content.
   Future<void> updateExportColumn(ExportColumn exportColumn) async {
+    if (!_configDB.database.isOpen) return;
     await _configDB.database.insert(
         ConfigDB.exportStringsTable,
         {
@@ -285,6 +291,7 @@ class ConfigDao {
 
   /// Deletes the [ExportColumn] where [ExportColumn.internalName] matches [internalName] from the database.
   Future<void> deleteExportColumn(String internalName) async {
+    if (!_configDB.database.isOpen) return;
     await _configDB.database.delete('exportStrings', where: 'internalColumnName = ?', whereArgs: [internalName]);
   }
 }
