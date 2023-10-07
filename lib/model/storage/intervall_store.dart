@@ -42,7 +42,6 @@ class IntervallStorage extends ChangeNotifier {
   void changeStepSize(TimeStep value) {
     _stepSize = value;
     setToMostRecentIntervall();
-    notifyListeners();
   }
 
   DateTimeRange get currentRange {
@@ -139,11 +138,10 @@ class IntervallStorage extends ChangeNotifier {
         final endOfToday = now.copyWith(hour: 23, minute: 59, second: 59);
         return DateTimeRange(start: start, end: endOfToday);
       case TimeStep.custom:
-        // fallback, TimeStep will be reset by getter
-        // TODO: evaluate above comment for the new class
         return DateTimeRange(
-          start: DateTime.fromMillisecondsSinceEpoch(-1), 
-          end: DateTime.fromMillisecondsSinceEpoch(-1));
+          start: now.subtract(currentRange.duration),
+          end: now
+        );
     }
   }
 }
@@ -161,24 +159,24 @@ enum TimeStep {
 
   static const options = [TimeStep.day, TimeStep.week, TimeStep.month, TimeStep.year, TimeStep.lifetime, TimeStep.last7Days, TimeStep.last30Days, TimeStep.custom];
 
-  static String getName(TimeStep opt, BuildContext context) {
-    switch (opt) {
+  String getName(AppLocalizations localizations) {
+    switch (this) {
       case TimeStep.day:
-        return AppLocalizations.of(context)!.day;
+        return localizations.day;
       case TimeStep.month:
-        return AppLocalizations.of(context)!.month;
+        return localizations.month;
       case TimeStep.year:
-        return AppLocalizations.of(context)!.year;
+        return localizations.year;
       case TimeStep.lifetime:
-        return AppLocalizations.of(context)!.lifetime;
+        return localizations.lifetime;
       case TimeStep.week:
-        return AppLocalizations.of(context)!.week;
+        return localizations.week;
       case TimeStep.last7Days:
-        return AppLocalizations.of(context)!.last7Days;
+        return localizations.last7Days;
       case TimeStep.last30Days:
-        return AppLocalizations.of(context)!.last30Days;
+        return localizations.last30Days;
       case TimeStep.custom:
-        return AppLocalizations.of(context)!.custom;
+        return localizations.custom;
     }
   }
 
@@ -205,7 +203,7 @@ enum TimeStep {
 
   factory TimeStep.deserialize(dynamic value) {
     int? intValue = ConvertUtil.parseInt(value);
-    if (value == null || intValue == null) return TimeStep.last7Days;
+    if (intValue == null) return TimeStep.last7Days;
 
     switch (intValue) {
       case 0:
@@ -233,6 +231,10 @@ enum TimeStep {
 
 /// Class that stores the interval objects that are needed in the app and provides named access to them. 
 class IntervallStoreManager extends ChangeNotifier {
+  /// Constructor for creating [IntervallStoreManager] from items.
+  ///
+  /// Consider using [IntervallStoreManager.load] for loading [IntervallStorage] objects from the database, as it
+  /// automatically uses the correct storage ids.
   IntervallStoreManager(this.mainPage, this.exportPage, this.statsPage) {
     mainPage.addListener(notifyListeners);
     exportPage.addListener(notifyListeners);

@@ -78,7 +78,7 @@ class IntervalPicker extends StatelessWidget {
                   }
                 },
                 items: TimeStep.options.map<DropdownMenuItem<TimeStep>>((v) {
-                  return DropdownMenuItem(value: v, child: Text(TimeStep.getName(v, context)));
+                  return DropdownMenuItem(value: v, child: Text(v.getName(AppLocalizations.of(context)!)));
                 }).toList(),
               ),
             ),
