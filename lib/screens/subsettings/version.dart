@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class VersionScreen extends StatelessWidget {
 
@@ -19,13 +18,10 @@ class VersionScreen extends StatelessWidget {
           IconButton(
             onPressed: () async {
               final packageInfo = await PackageInfo.fromPlatform();
-              final prefs = await SharedPreferences.getInstance();
-              String prefsText = '';
-              for (final key in prefs.getKeys()) {
-                prefsText += '$key:\t${prefs.get(key).toString()}\n';
-              }
               Clipboard.setData(ClipboardData(
-                  text: 'Blood pressure monitor\nBuild number:${packageInfo.buildNumber}\n$prefsText'
+                  text: 'Blood pressure monitor\n'
+                      '${packageInfo.packageName}\n'
+                      '${packageInfo.version} - ${packageInfo.buildNumber}'
               ));
             },
             tooltip: localizations.export,
@@ -34,37 +30,21 @@ class VersionScreen extends StatelessWidget {
         ],
         backgroundColor: Theme.of(context).primaryColor,
       ),
-      body: SingleChildScrollView(
+      body: Container(
+        padding: const EdgeInsets.all(10.0),
         child: Center(
-          child: Container(
-            padding: const EdgeInsets.all(10.0),
-            child: ConsistentFutureBuilder<List<Object>>(
-              future: Future.wait([PackageInfo.fromPlatform(), SharedPreferences.getInstance()]),
-              onData: (context, data) {
-                PackageInfo packageInfo = data[0] as PackageInfo;
-                SharedPreferences sharedPrefs = data[1] as SharedPreferences;
-
-                return Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(localizations.packageNameOf(packageInfo.packageName)),
-                      Text(localizations.versionOf(packageInfo.version)),
-                      Text(localizations.buildNumberOf(packageInfo.buildNumber)),
-                      Text(localizations.buildSignatureOf(packageInfo.buildSignature)),
-                      Text(localizations.sharedPrefsDump),
-                      Table(
-                        children: [
-                          for (final key in sharedPrefs.getKeys())
-                            TableRow(children: [
-                              Text(key),
-                              Text(sharedPrefs.get(key).toString())
-                            ]),
-                        ],
-                      )
-                    ]
-                );
-              },
-            ),
+          child: ConsistentFutureBuilder<PackageInfo>(
+            future: PackageInfo.fromPlatform(),
+            onData: (context, packageInfo) {
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(localizations.packageNameOf(packageInfo.packageName)),
+                  Text(localizations.versionOf(packageInfo.version)),
+                  Text(localizations.buildNumberOf(packageInfo.buildNumber)),
+                ]
+              );
+            },
           ),
         ),
       ),
