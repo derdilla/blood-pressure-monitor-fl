@@ -9,8 +9,9 @@ import 'package:sqflite/sqflite.dart';
 
 /// Class for loading data from the database.
 ///
-/// The user of this class needs to pay attention not to dispose all old instances of objects in order to ensure there
-/// are no concurrent writes to the database. Having multiple instances will cause data loss.
+/// The user of this class needs to pay attention to dispose all old instances of objects created by the instance
+/// methods in order to ensure there are no concurrent writes to the database. Having multiple instances will cause data
+/// loss because states are not synced again after one changes.
 class ConfigDao {
   ConfigDao(this._configDB);
   
@@ -20,6 +21,8 @@ class ConfigDao {
   ///
   /// If any errors occur or the object is not present, a default one will be created. Changes in the object
   /// will save to the database automatically (a listener gets attached).
+  ///
+  /// Changes to the database will not propagate to the object.
   Future<Settings> loadSettings(int profileID) async {
     final dbEntry = await _configDB.database.query(
       ConfigDB.settingsTable,
@@ -48,7 +51,7 @@ class ConfigDao {
 
   /// Update settings for a profile in the database.
   ///
-  /// Adds an entry if necessary.
+  /// Adds an entry if no settings where saved for this profile.
   Future<void> _updateSettings(int profileID, Settings settings) async {
     await _configDB.database.insert(
       ConfigDB.settingsTable,
@@ -64,6 +67,8 @@ class ConfigDao {
   ///
   /// If any errors occur or the object is not present, a default one will be created. Changes in the object
   /// will save to the database automatically (a listener gets attached).
+  ///
+  /// Changes to the database will not propagate to the object.
   Future<ExportSettings> loadExportSettings(int profileID) async {
     final dbEntry = await _configDB.database.query(
         ConfigDB.exportSettingsTable,
@@ -108,6 +113,8 @@ class ConfigDao {
   ///
   /// If any errors occur or the object is not present, a default one will be created. Changes in the object
   /// will save to the database automatically (a listener gets attached).
+  ///
+  /// Changes to the database will not propagate to the object.
   Future<CsvExportSettings> loadCsvExportSettings(int profileID) async {
     final dbEntry = await _configDB.database.query(
         ConfigDB.exportCsvSettingsTable,
@@ -152,6 +159,8 @@ class ConfigDao {
   ///
   /// If any errors occur or the object is not present, a default one will be created. Changes in the object
   /// will save to the database automatically (a listener gets attached).
+  ///
+  /// Changes to the database will not propagate to the object.
   Future<PdfExportSettings> loadPdfExportSettings(int profileID) async {
     final dbEntry = await _configDB.database.query(
         ConfigDB.exportPdfSettingsTable,
@@ -178,6 +187,31 @@ class ConfigDao {
     return exportSettings;
   }
 
+  /// Update [PdfExportSettings] for a profile in the database.
+  ///
+  /// Adds an entry if necessary.
+  Future<void> _updatePdfExportSettings(int profileID, PdfExportSettings settings) async {
+    await _configDB.database.insert(
+        ConfigDB.exportPdfSettingsTable,
+        {
+          'profile_id': profileID,
+          'json': settings.toJson()
+        },
+        conflictAlgorithm: ConflictAlgorithm.replace
+    );
+  }
+
+  /// Loads a [IntervallStorage] object of a [profileID] from the database.
+  ///
+  /// The [storageID] allows for associating multiple intervalls with one profile.
+  ///
+  /// If any errors occur or the object is not present, a default one will be created. Changes in the object
+  /// will save to the database automatically (a listener gets attached).
+  ///
+  /// Changes to the database will not propagate to the object.
+  ///
+  /// This should not be invoked directly in order to centralise [storageID] allocation. Currently this is done by
+  /// the [IntervallStoreManager] class.
   Future<IntervallStorage> loadIntervallStorage(int profileID, int storageID) async {
     final dbEntry = await _configDB.database.query(
         ConfigDB.selectedIntervallStorageTable,
@@ -215,21 +249,10 @@ class ConfigDao {
     );
   }
 
-  /// Update [PdfExportSettings] for a profile in the database.
-  ///
-  /// Adds an entry if necessary.
-  Future<void> _updatePdfExportSettings(int profileID, PdfExportSettings settings) async {
-    await _configDB.database.insert(
-        ConfigDB.exportPdfSettingsTable,
-        {
-          'profile_id': profileID,
-          'json': settings.toJson()
-        },
-        conflictAlgorithm: ConflictAlgorithm.replace
-    );
-  }
-
   // TODO: test if custom export columns still work
+  /// Loads the current export columns from the database.
+  ///
+  /// Changes will *not* be saved automatically, pleas use [updateExportColumn] for doing so.
   Future<List<ExportColumn>> loadExportColumns() async {
     final existingDbEntries = await _configDB.database.query(
       ConfigDB.exportStringsTable,
@@ -245,6 +268,9 @@ class ConfigDao {
     ];
   }
 
+  /// Saves a [ExportColumn] to the database.
+  ///
+  /// If one with the same [ExportColumn.internalName] exists, it will get replaced by the new one regardless of content.
   Future<void> updateExportColumn(ExportColumn exportColumn) async {
     await _configDB.database.insert(
         ConfigDB.exportStringsTable,
@@ -257,10 +283,8 @@ class ConfigDao {
     );
   }
 
+  /// Deletes the [ExportColumn] with the given [internalName] from the database.
   Future<void> deleteExportColumn(String internalName) async {
     await _configDB.database.delete('exportStrings', where: 'internalColumnName = ?', whereArgs: [internalName]);
   }
-
-
-  // TODO: ExportConfigurationModel
 }
