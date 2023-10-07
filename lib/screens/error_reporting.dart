@@ -5,7 +5,6 @@ import 'package:flutter/services.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:path/path.dart';
 import 'package:share_plus/share_plus.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -131,26 +130,6 @@ class ErrorScreen extends StatelessWidget {
                         }
                       },
                       child: const Text('rescue config.db')
-                  ),
-                  TextButton(
-                      onPressed: () async {
-                        try {
-                          final prefs = await SharedPreferences.getInstance();
-                          var prefsText = '';
-                          for (final key in prefs.getKeys()) {
-                            prefsText += '$key:\t${prefs.get(key).toString()}\n';
-                          }
-                          Clipboard.setData(ClipboardData(
-                              text: prefsText
-                          ));
-                          scaffoldMessenger.showSnackBar(const SnackBar(
-                              content: Text('Copied to clipboard')));
-                        } catch(e) {
-                          scaffoldMessenger.showSnackBar(SnackBar(
-                              content: Text('ERR: ${e.toString()}')));
-                        }
-                      },
-                      child: const Text('export settings')
                   ),
                 ],
               ),

@@ -149,14 +149,6 @@
       }
     }
   },
-  "buildSignatureOf": "Build signature: {signature}",
-  "@buildSignatureOf": {
-    "placeholders": {
-      "signature": {
-        "type": "String"
-      }
-    }
-  },
   "packageNameOf": "Package name: {name}",
   "@packageNameOf": {
     "placeholders": {
@@ -165,8 +157,6 @@
       }
     }
   },
-  "sharedPrefsDump": "Shared preferences dump:",
-  "@sharedPrefsDump": {},
   "exportImport": "Export / Import",
   "@exportImport": {},
   "exportDir": "Export directory",
