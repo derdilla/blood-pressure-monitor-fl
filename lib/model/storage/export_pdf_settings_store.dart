@@ -5,6 +5,7 @@ import 'package:blood_pressure_app/model/storage/common_settings_interfaces.dart
 import 'package:blood_pressure_app/model/storage/convert_util.dart';
 import 'package:flutter/material.dart';
 
+/// Settings that are only important for exporting measurements as a pdf file.
 class PdfExportSettings extends ChangeNotifier implements CustomFieldsSettings {
   PdfExportSettings({
     bool? exportTitle,

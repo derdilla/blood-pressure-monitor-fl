@@ -11,7 +11,6 @@ class IntervallStorage extends ChangeNotifier {
     _stepSize = stepSize ?? TimeStep.last7Days;
     _currentRange = range ?? _getMostRecentDisplayIntervall();
   }
-   //TODO: add to database
   late TimeStep _stepSize;
   late DateTimeRange _currentRange;
 
@@ -149,6 +148,7 @@ class IntervallStorage extends ChangeNotifier {
   }
 }
 
+/// Different range types supported by the interval switcher.
 enum TimeStep {
   day,
   month,

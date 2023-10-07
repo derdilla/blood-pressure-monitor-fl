@@ -5,6 +5,7 @@ import 'package:blood_pressure_app/model/storage/common_settings_interfaces.dart
 import 'package:blood_pressure_app/model/storage/convert_util.dart';
 import 'package:flutter/material.dart';
 
+/// Settings that are only important for exporting entries to csv files.
 class CsvExportSettings extends ChangeNotifier implements CustomFieldsSettings {
   CsvExportSettings({
     String? fieldDelimiter,

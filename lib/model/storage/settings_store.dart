@@ -7,7 +7,8 @@ import 'package:flutter/material.dart';
 /// Stores settings that are directly controllable by the user through the Settings screen.
 ///
 /// This class should not be used to save persistent state that the user doesn't know about. To do this use one of the
-/// other classes in the storage directory or add a table to config_db and create your own class.
+/// other classes in the storage directory or add a table to config_db and create your own class. Keeping data modular
+/// helps to reduce the amount of data saved to the database and makes the internal purpose of a setting more clear.
 ///
 /// Steps for expanding this class:
 /// - [ ] Add private variable with default value

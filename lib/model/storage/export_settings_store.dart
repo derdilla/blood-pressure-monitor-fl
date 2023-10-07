@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:blood_pressure_app/model/storage/convert_util.dart';
 import 'package:flutter/material.dart';
 
+/// General settings for exporting measurements that are applicable to all export formats.
 class ExportSettings extends ChangeNotifier {
   ExportSettings({
     ExportFormat? exportFormat,
@@ -59,6 +60,7 @@ class ExportSettings extends ChangeNotifier {
 
 }
 
+/// File formats to which measurements can be exported.
 enum ExportFormat {
   csv,
   pdf,
