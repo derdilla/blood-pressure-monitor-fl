@@ -188,16 +188,6 @@
       }
     }
   },
-  "buildSignatureOf": "Хэш сборки: {signature}",
-  "@buildSignatureOf": {
-    "placeholders": {
-      "signature": {
-        "type": "String"
-      }
-    }
-  },
-  "sharedPrefsDump": "Дамп общих настроек:",
-  "@sharedPrefsDump": {},
   "exportImport": "Экспорт / Импорт",
   "@exportImport": {},
   "animationSpeed": "Длительность анимации",
