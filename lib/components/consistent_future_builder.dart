@@ -3,35 +3,52 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ConsistentFutureBuilder<T> extends StatefulWidget {
   /// Future that gets evaluated.
-  ///
-  /// This Future is saved as a state, so the build function won't get called again when a rebuild occurs. The future
-  /// gets evaluated once.
   final Future<T> future;
   final Widget Function(BuildContext context, T result) onData;
   
   final Widget? onNotStarted;
   final Widget? onWaiting;
   final Widget? Function(BuildContext context, String errorMsg)? onError;
-  
-  const ConsistentFutureBuilder({super.key, required this.future, this.onNotStarted, this.onWaiting, this.onError, required this.onData});
+
+  /// Internally save the future and avoid rebuilds.
+  ///
+  /// Caching will allow the future builder not to load again in some cases where a rebuild is triggered. But it comes at
+  /// the cost that onData will not be called again, even if data changed.
+  ///
+  /// The parameter is false by default and should only be set to true when rebuilds are disruptive to the user and it
+  /// is certain that the data will not change over the lifetime of the screen.
+  final bool cacheFuture;
+
+  /// When loading the next result the child that got build the last time will be returned.
+  ///
+  /// If this is the first build, [onWaiting] os respected.
+  final bool lastChildWhileWaiting;
+
+  const ConsistentFutureBuilder({super.key, required this.future, this.onNotStarted, this.onWaiting, this.onError,
+    required this.onData, this.cacheFuture = false, this.lastChildWhileWaiting = false});
 
   @override
   State<ConsistentFutureBuilder<T>> createState() => _ConsistentFutureBuilderState<T>();
 }
 
 class _ConsistentFutureBuilderState<T> extends State<ConsistentFutureBuilder<T>> {
-  late final Future<T> _future; // avoid rebuilds
+  Future<T>? _future; // avoid rebuilds
+  /// Used for returning the last child during load when rebuilding.
+  Widget? _lastChild;
 
   @override
   void initState() {
     super.initState();
-    _future = widget.future;
+    if (widget.cacheFuture) {
+      _future = widget.future;
+    }
+     // TODO: avoid functionality that avoids rebuilds, as this causes various issues with widgets that should be rebuild like the measurement list
   }
 
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<T>(
-      future: _future,
+      future: _future ?? widget.future,
       builder: (BuildContext context, AsyncSnapshot<T> snapshot) {
         if (snapshot.hasError) {
           return Text(AppLocalizations.of(context)!.error(snapshot.error.toString()));
@@ -41,9 +58,11 @@ class _ConsistentFutureBuilderState<T> extends State<ConsistentFutureBuilder<T>>
             return widget.onNotStarted ?? Text(AppLocalizations.of(context)!.errNotStarted);
           case ConnectionState.waiting:
           case ConnectionState.active:
+            if (widget.lastChildWhileWaiting && _lastChild != null) return _lastChild!;
             return widget.onWaiting ?? Text(AppLocalizations.of(context)!.loading);
           case ConnectionState.done:
-            return widget.onData(context, snapshot.data as T);
+            _lastChild = widget.onData(context, snapshot.data as T);
+            return _lastChild!;
         }
       });
   }

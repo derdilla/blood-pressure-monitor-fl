@@ -206,6 +206,7 @@ class ExportFieldCustomisationSetting extends StatelessWidget {
     final localizations = AppLocalizations.of(context)!;
     return ConsistentFutureBuilder(
       future: ExportConfigurationModel.get(localizations),
+      lastChildWhileWaiting: true,
       onData: (context, configurationModel) {
         return Consumer<ExportSettings>(builder: (context, settings, child) {
           final formats = configurationModel.availableFormats.toSet();
@@ -306,6 +307,7 @@ class _ExportWarnBannerState extends State<ExportWarnBanner> {
           Consumer<PdfExportSettings>(builder: (context, pdfExportSettings, child) =>
             ConsistentFutureBuilder(
               future: ExportConfigurationModel.get(localizations),
+              lastChildWhileWaiting: true,
               onData: (context, configurationModel) {
                 String? message;
                 final CustomFieldsSettings fieldSettings = (exportSettings.exportFormat == ExportFormat.csv
@@ -339,8 +341,7 @@ class _ExportWarnBannerState extends State<ExportWarnBanner> {
                 return const SizedBox.shrink();
               }))
         )
-      )
-    );
+    ));
   }
 }
 

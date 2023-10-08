@@ -359,6 +359,7 @@ class SettingsPage extends StatelessWidget {
                   trailing: const Icon(Icons.arrow_forward_ios),
                   description: ConsistentFutureBuilder<PackageInfo>(
                     future: PackageInfo.fromPlatform(),
+                    cacheFuture: true,
                     onData: (context, info) => Text(info.version)
                   ),
                   onPressed: (context) {

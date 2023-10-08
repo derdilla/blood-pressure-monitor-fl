@@ -29,6 +29,7 @@ class _ExportItemsCustomizerState extends State<ExportItemsCustomizer> {
   Widget build(BuildContext context) {
     return ConsistentFutureBuilder(
       future: ExportConfigurationModel.get(AppLocalizations.of(context)!),
+      cacheFuture: true,
       onData: (BuildContext context, ExportConfigurationModel result) {
         return _buildAddItemBadge(context, result,
           child: _buildManagePresetsBadge(context, result,

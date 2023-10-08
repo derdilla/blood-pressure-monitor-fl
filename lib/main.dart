@@ -46,6 +46,7 @@ void main() async {
     ChangeNotifierProvider(create: (context) => csvExportSettings),
     ChangeNotifierProvider(create: (context) => pdfExportSettings),
     ChangeNotifierProvider(create: (context) => intervalStorageManager),
+    ChangeNotifierProvider(create: (context) => intervalStorageManager),
   ], child: const AppRoot()));
 }
 
