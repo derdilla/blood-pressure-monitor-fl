@@ -22,7 +22,6 @@ class _DeleteDataScreenState extends State<DeleteDataScreen> {
   /// Should never be reset to false.
   bool _deletedData = false;
 
-  // TODO: localize texts
   @override
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;

@@ -15,7 +15,7 @@ class ExportFields {
   static const defaultPdf = ['formattedTimestamp','systolic','diastolic','pulse','notes']; 
 }
 
-class ExportConfigurationModel extends ChangeNotifier {
+class ExportConfigurationModel {
   // 2 sources.
   static ExportConfigurationModel? _instance;
 
@@ -89,7 +89,6 @@ class ExportConfigurationModel extends ChangeNotifier {
     _availableFormats.removeWhere((e) => e.internalName == format.internalName);
     _availableFormats.add(format);
     _configDao.updateExportColumn(format);
-    notifyListeners();
   }
 
   void delete(ExportColumn format) {
@@ -97,7 +96,6 @@ class ExportConfigurationModel extends ChangeNotifier {
     assert(existingEntries.isNotEmpty, r"Tried to delete entry that doesn't exist or is not editable.");
     _availableFormats.removeWhere((element) => element.internalName == format.internalName);
     _configDao.deleteExportColumn(format.internalName);
-    notifyListeners();
   }
 
   UnmodifiableListView<ExportColumn> get availableFormats => UnmodifiableListView(_availableFormats);

@@ -46,7 +46,6 @@ void main() async {
     ChangeNotifierProvider(create: (context) => csvExportSettings),
     ChangeNotifierProvider(create: (context) => pdfExportSettings),
     ChangeNotifierProvider(create: (context) => intervalStorageManager),
-    ChangeNotifierProvider(create: (context) => intervalStorageManager),
   ], child: const AppRoot()));
 }
 
@@ -104,15 +103,15 @@ class AppRoot extends StatelessWidget {
   }
 }
 
-bool _areAllProvidersUnregistered = false;
+bool _isDatabaseClosed = false;
 /// Close all connections to the databases and remove all listeners from provided objects.
 ///
 /// The app will most likely stop working after invoking this.
 ///
 /// Invoking the function multiple times is safe.
 Future<void> closeDatabases() async {
-  if (_areAllProvidersUnregistered) return;
-  _areAllProvidersUnregistered = true;
+  if (_isDatabaseClosed) return;
+  _isDatabaseClosed = true;
 
   await _database.database.close();
   await _bloodPressureModel.close();

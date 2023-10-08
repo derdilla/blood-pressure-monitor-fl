@@ -42,7 +42,6 @@ class _ConsistentFutureBuilderState<T> extends State<ConsistentFutureBuilder<T>>
     if (widget.cacheFuture) {
       _future = widget.future;
     }
-     // TODO: avoid functionality that avoids rebuilds, as this causes various issues with widgets that should be rebuild like the measurement list
   }
 
   @override
