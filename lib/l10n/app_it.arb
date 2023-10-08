@@ -304,16 +304,6 @@
   "@textDelimiter": {},
   "export": "Esporta",
   "@export": {},
-  "buildSignatureOf": "Firma della versione: {signature}",
-  "@buildSignatureOf": {
-    "placeholders": {
-      "signature": {
-        "type": "String"
-      }
-    }
-  },
-  "sharedPrefsDump": "Salvataggio preferenze condivise:",
-  "@sharedPrefsDump": {},
   "shared": "Condiviso",
   "@shared": {},
   "exportMimeType": "Tipo di supporto per l''esportazione",
