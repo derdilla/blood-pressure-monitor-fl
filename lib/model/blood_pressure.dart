@@ -78,6 +78,7 @@ class BloodPressureModel extends ChangeNotifier {
 
   /// Adds a new measurement at the correct chronological position in the List.
   Future<void> add(BloodPressureRecord measurement) async {
+    if (!_database.isOpen) return;
     final existing = await _database.query('bloodPressureModel',
         where: 'timestamp = ?', whereArgs: [measurement.creationTime.millisecondsSinceEpoch]);
     if (existing.isNotEmpty) {
@@ -106,12 +107,14 @@ class BloodPressureModel extends ChangeNotifier {
   }
 
   Future<void> delete(DateTime timestamp) async {
+    if (!_database.isOpen) return;
     _database.delete('bloodPressureModel', where: 'timestamp = ?', whereArgs: [timestamp.millisecondsSinceEpoch]);
     notifyListeners();
   }
 
   /// Returns all recordings in saved in a range in ascending order
   Future<UnmodifiableListView<BloodPressureRecord>> getInTimeRange(DateTime from, DateTime to) async {
+    if (!_database.isOpen) return UnmodifiableListView([]);
     final dbEntries = await _database.query('bloodPressureModel',
         orderBy: 'timestamp DESC',
         where: 'timestamp BETWEEN ? AND ?',
@@ -121,11 +124,12 @@ class BloodPressureModel extends ChangeNotifier {
   }
 
   Future<UnmodifiableListView<BloodPressureRecord>> get all async {
+    if (!_database.isOpen) return UnmodifiableListView([]);
     return UnmodifiableListView(_convert(await _database.query('bloodPressureModel', columns: ['*'])));
   }
 
-  void close() {
-    _database.close();
+  Future<void> close() {
+    return _database.close();
   }
 
   List<BloodPressureRecord> _convert(List<Map<String, Object?>> dbResult) {

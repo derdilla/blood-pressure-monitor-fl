@@ -22,6 +22,7 @@ class SettingsTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // TODO: use Proper disabled widget, convert to ListTile
     if (disabled) return const SizedBox.shrink();
 
     var lead = SizedBox(
@@ -29,7 +30,6 @@ class SettingsTile extends StatelessWidget {
       child: leading ?? const SizedBox.shrink(),
     );
     var trail = trailing ?? const SizedBox.shrink();
-
     return InkWell(
       onTap: () => onPressed(context),
       child: ConstrainedBox(

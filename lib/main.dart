@@ -15,13 +15,16 @@ late AppLocalizations gLocalizations;
 @Deprecated('This should not be used for new code, but rather for migrating existing code.')
 late final ConfigDao globalConfigDao;
 
+late final ConfigDB _database;
+late final BloodPressureModel _bloodPressureModel;
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   // 2 different db files
-  final dataModel = await BloodPressureModel.create();
+  _bloodPressureModel = await BloodPressureModel.create();
 
-  final configDB = await ConfigDB.open();
-  final configDao = ConfigDao(configDB);
+  _database = await ConfigDB.open();
+  final configDao = ConfigDao(_database);
 
   final settings = await configDao.loadSettings(0);
   final exportSettings = await configDao.loadExportSettings(0);
@@ -37,7 +40,7 @@ void main() async {
   intervalStorageManager.mainPage.setToMostRecentIntervall();
 
   runApp(MultiProvider(providers: [
-    ChangeNotifierProvider(create: (context) => dataModel),
+    ChangeNotifierProvider(create: (context) => _bloodPressureModel),
     ChangeNotifierProvider(create: (context) => settings),
     ChangeNotifierProvider(create: (context) => exportSettings),
     ChangeNotifierProvider(create: (context) => csvExportSettings),
@@ -98,4 +101,18 @@ class AppRoot extends StatelessWidget {
       return ThemeMode.light;
     }
   }
+}
+
+bool _isDatabaseClosed = false;
+/// Close all connections to the databases and remove all listeners from provided objects.
+///
+/// The app will most likely stop working after invoking this.
+///
+/// Invoking the function multiple times is safe.
+Future<void> closeDatabases() async {
+  if (_isDatabaseClosed) return;
+  _isDatabaseClosed = true;
+
+  await _database.database.close();
+  await _bloodPressureModel.close();
 }

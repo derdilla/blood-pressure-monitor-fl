@@ -7,6 +7,7 @@ import 'package:blood_pressure_app/model/blood_pressure.dart';
 import 'package:blood_pressure_app/model/iso_lang_names.dart';
 import 'package:blood_pressure_app/model/settings_store.dart';
 import 'package:blood_pressure_app/model/storage/settings_store.dart';
+import 'package:blood_pressure_app/screens/subsettings/delete_data.dart';
 import 'package:blood_pressure_app/screens/subsettings/enter_timeformat.dart';
 import 'package:blood_pressure_app/screens/subsettings/export_import_screen.dart';
 import 'package:blood_pressure_app/screens/subsettings/graph_markings.dart';
@@ -337,6 +338,17 @@ class SettingsPage extends StatelessWidget {
                       }
                     }
                 ),
+                SettingsTile(
+                    title: Text(localizations.delete),
+                    leading: const Icon(Icons.delete),
+                    trailing: const Icon(Icons.arrow_forward_ios),
+                    onPressed: (context) {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => const DeleteDataScreen()),
+                      );
+                    }
+                )
               ],
             ),
             SettingsSection(title: Text(localizations.aboutWarnValuesScreen), children: [
@@ -344,8 +356,10 @@ class SettingsPage extends StatelessWidget {
                   key: const Key('version'),
                   title: Text(localizations.version),
                   leading: const Icon(Icons.info_outline),
+                  trailing: const Icon(Icons.arrow_forward_ios),
                   description: ConsistentFutureBuilder<PackageInfo>(
                     future: PackageInfo.fromPlatform(),
+                    cacheFuture: true,
                     onData: (context, info) => Text(info.version)
                   ),
                   onPressed: (context) {

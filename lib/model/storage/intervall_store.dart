@@ -262,6 +262,14 @@ class IntervallStoreManager extends ChangeNotifier {
   IntervallStorage mainPage;
   IntervallStorage exportPage;
   IntervallStorage statsPage;
+
+  @override
+  void dispose() {
+    super.dispose();
+    mainPage.dispose();
+    exportPage.dispose();
+    statsPage.dispose();
+  }
 }
 
 /// enum of all locations supported by IntervallStoreManager

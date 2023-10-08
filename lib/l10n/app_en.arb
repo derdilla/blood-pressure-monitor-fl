@@ -425,5 +425,19 @@
   "requiresAppRestart": "Requires app restart",
   "@requiresAppRestart": {},
   "pleaseRestart": "Please restart the app to apply changes",
-  "@pleaseRestart": {}
+  "@pleaseRestart": {},
+  "restartNow": "Restart now",
+  "@restartNow": {},
+  "warnNeedsRestartForUsingApp": "Files where deleted this session. Restart the app to continue using returning to other parts of the app!",
+  "@warnNeedsRestartForUsingApp": {},
+  "deleteAllMeasurements": "Delete all measurements",
+  "@deleteAllMeasurements": {},
+  "deleteAllSettings": "Delete all settings",
+  "@deleteAllSettings": {},
+  "warnDeletionUnrecoverable": "This step not revertible unless you manually made a backup. Do you really want to delete this?",
+  "@warnDeletionUnrecoverable": {},
+  "fileDeleted": "File deleted",
+  "@fileDeleted": {},
+  "fileAlreadyDeleted": "File already deleted",
+  "@fileAlreadyDeleted": {}
 }

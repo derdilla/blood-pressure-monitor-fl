@@ -40,5 +40,5 @@ class RamBloodPressureModel extends ChangeNotifier implements BloodPressureModel
   Future<UnmodifiableListView<BloodPressureRecord>> get all async => UnmodifiableListView(_records);
 
   @override
-  void close() {}
+  Future<void> close() async {}
 }
