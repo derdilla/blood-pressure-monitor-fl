@@ -147,14 +147,6 @@
       }
     }
   },
-  "buildSignatureOf": "生成签名：{signature}",
-  "@buildSignatureOf": {
-    "placeholders": {
-      "signature": {
-        "type": "String"
-      }
-    }
-  },
   "packageNameOf": "软件包名称：{name}",
   "@packageNameOf": {
     "placeholders": {
@@ -163,8 +155,6 @@
       }
     }
   },
-  "sharedPrefsDump": "共享首选项转储：",
-  "@sharedPrefsDump": {},
   "exportImport": "导出/导入",
   "@exportImport": {},
   "exportDir": "导出目录",
