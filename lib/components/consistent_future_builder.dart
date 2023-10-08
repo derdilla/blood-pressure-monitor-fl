@@ -21,7 +21,7 @@ class ConsistentFutureBuilder<T> extends StatefulWidget {
 
   /// When loading the next result the child that got build the last time will be returned.
   ///
-  /// If this is the first build, [onWaiting] os respected.
+  /// During the first build, [onWaiting] os respected instead.
   final bool lastChildWhileWaiting;
 
   const ConsistentFutureBuilder({super.key, required this.future, this.onNotStarted, this.onWaiting, this.onError,
