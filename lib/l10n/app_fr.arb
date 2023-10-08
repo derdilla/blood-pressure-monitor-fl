@@ -159,14 +159,6 @@
       }
     }
   },
-  "buildSignatureOf": "Signature de la compilation : {signature}",
-  "@buildSignatureOf": {
-    "placeholders": {
-      "signature": {
-        "type": "String"
-      }
-    }
-  },
   "packageNameOf": "Nom du package : {name}",
   "@packageNameOf": {
     "placeholders": {
@@ -175,8 +167,6 @@
       }
     }
   },
-  "sharedPrefsDump": "Contenu des préférences partagées :",
-  "@sharedPrefsDump": {},
   "exportDir": "Répertoire d''export",
   "@exportDir": {},
   "exportAfterEveryInput": "Exporter après chaque saisie",
