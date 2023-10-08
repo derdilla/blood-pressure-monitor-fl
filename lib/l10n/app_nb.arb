@@ -81,14 +81,6 @@
   "@btnConfirm": {},
   "version": "Versjon",
   "@version": {},
-  "buildSignatureOf": "Byggsignatur: {signature}",
-  "@buildSignatureOf": {
-    "placeholders": {
-      "signature": {
-        "type": "String"
-      }
-    }
-  },
   "licenses": "Tredjepartslisenser",
   "@licenses": {},
   "errNaN": "Skriv inn et tall",
@@ -179,8 +171,6 @@
   "@sysWarn": {},
   "diaWarn": "Diastolisk advarsel",
   "@diaWarn": {},
-  "sharedPrefsDump": "Dump av delte innstillinger:",
-  "@sharedPrefsDump": {},
   "exportImport": "Eksporter/importer",
   "@exportImport": {},
   "exportDir": "Eksporter mappe",
