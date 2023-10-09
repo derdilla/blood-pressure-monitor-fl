@@ -263,26 +263,30 @@ class ExportColumn {
   }
 }
 
+/// Type a [ExportColumn] can be parsed as.
 enum RowDataFieldType {
   timestamp, sys, dia, pul, notes, color;
 
   @override
   String toString() {
-    switch(index) {
-      case 0:
-        return gLocalizations.timestamp;
-      case 1:
-        return gLocalizations.sysLong;
-      case 2:
-        return gLocalizations.diaLong;
-      case 3:
-        return gLocalizations.pulLong;
-      case 4:
-        return gLocalizations.notes;
-      case 5:
-        return gLocalizations.color;
-      default:
-        return "unknown";
+    assert(false, "RowDataFieldType.toString should not be called by UI code. Use localize instead.");
+    return name;
+  }
+
+  String localize(AppLocalizations localizations) {
+    switch(this) {
+      case RowDataFieldType.timestamp:
+        return localizations.timestamp;
+      case RowDataFieldType.sys:
+        return localizations.sysLong;
+      case RowDataFieldType.dia:
+        return localizations.diaLong;
+      case pul:
+        return localizations.pulLong;
+      case RowDataFieldType.notes:
+        return localizations.notes;
+      case RowDataFieldType.color:
+        return localizations.color;
     }
   }
 }
