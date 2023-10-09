@@ -1,0 +1,5 @@
+* make settings exportable
+* add a page for deleting all measurements and settings
+* avoid parts of app rebuilding while scrolling
+* migrate from old shared preferences key-value storage to new DB based system
+* update localizations (german)
