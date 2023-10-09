@@ -1,5 +1,5 @@
 * Erlaube export der Einstellungen
 * Füge Seite zum Löschen von allen Einstellungen und Messwerten hinzu
-* Verhindere flackern mancher komponenten beim scrollen
+* Verhindere flackern mancher Komponenten beim scrollen
 * Wechsel von shared preferences Speicher zu Datenbank (intern)
 * Übersetzungen ergänzen (deutsch)
