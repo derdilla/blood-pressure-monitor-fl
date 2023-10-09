@@ -19,7 +19,6 @@ Future<void> updateLegacySettings(Settings settings, ExportSettings exportSettin
 
   final keys = sharedPreferences.getKeys();
   for (final key in keys) { // remove these first
-    print(key);
     switch (key) {
       case 'age':
         final age = sharedPreferences.getInt('age') ?? 30;
@@ -81,7 +80,7 @@ Future<void> updateLegacySettings(Settings settings, ExportSettings exportSettin
         settings.sysWarn = sharedPreferences.getInt(key)!;
         break;
       case 'diaWarn':
-        settings.sysWarn = sharedPreferences.getInt(key)!;
+        settings.diaWarn = sharedPreferences.getInt(key)!;
         break;
       case 'validateInputs':
         settings.validateInputs = sharedPreferences.getBool(key)!;
