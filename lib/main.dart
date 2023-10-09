@@ -10,8 +10,6 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
 
-@Deprecated('see #182')
-late AppLocalizations gLocalizations;
 @Deprecated('This should not be used for new code, but rather for migrating existing code.')
 late final ConfigDao globalConfigDao;
 
@@ -61,8 +59,7 @@ class AppRoot extends StatelessWidget {
       return MaterialApp(
         title: 'Blood Pressure App',
         onGenerateTitle: (context) {
-          gLocalizations = AppLocalizations.of(context)!;
-          return gLocalizations.title;
+          return AppLocalizations.of(context)!.title;
         },
         theme: ThemeData(
             colorScheme: ColorScheme.fromSeed(

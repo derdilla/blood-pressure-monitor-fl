@@ -321,7 +321,7 @@ class _ExportWarnBannerState extends State<ExportWarnBanner> {
                   message = localizations.exportWarnConfigNotImportable;
                 } else if (_showWarnBanner && fieldSettings.exportCustomFields && missingAttributes.isNotEmpty) {
                   message = localizations.exportWarnNotEveryFieldExported(
-                      missingAttributes.length, missingAttributes.join(', '));
+                      missingAttributes.length, missingAttributes.map((e) => e.localize(localizations)).join(', '));
                 }
 
                 if (message != null) {
