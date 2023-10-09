@@ -2,3 +2,4 @@
 * Füge Seite zum Löschen von allen Einstellungen und Messwerten hinzu
 * Verhindere flackern mancher komponenten beim scrollen
 * Wechsel von shared preferences Speicher zu Datenbank (intern)
+* Übersetzungen ergänzen (deutsch)
