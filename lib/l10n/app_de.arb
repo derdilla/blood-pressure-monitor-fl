@@ -147,14 +147,6 @@
       }
     }
   },
-  "buildSignatureOf": "Build Signatur: {signature}",
-  "@buildSignatureOf": {
-    "placeholders": {
-      "signature": {
-        "type": "String"
-      }
-    }
-  },
   "packageNameOf": "Paketname: {name}",
   "@packageNameOf": {
     "name": {
@@ -163,8 +155,6 @@
       }
     }
   },
-  "sharedPrefsDump": "Einstellungswerte:",
-  "@sharedPrefsDump": {},
   "exportImport": "Exportieren / Importieren",
   "@exportImport": {},
   "exportDir": "Export Ordner",
@@ -425,5 +415,15 @@
   "useLegacyList": "Bisheriges Listenlayout verwenden",
   "@useLegacyList": {},
   "note": "Anmerkung",
-  "@note": {}
+  "@note": {},
+  "importSettings": "Einstellungen wiederherstellen",
+  "@importSettings": {},
+  "exportSettings": "Einstellungen sichern",
+  "@exportSettings": {},
+  "pleaseRestart": "Bitte starte die App erneut, um die Änderungen anzuwenden",
+  "@pleaseRestart": {},
+  "requiresAppRestart": "Erfordert Neustart der App",
+  "@requiresAppRestart": {},
+  "color": "Farbe",
+  "@color": {}
 }

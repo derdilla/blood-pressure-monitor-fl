@@ -156,8 +156,6 @@
       }
     }
   },
-  "sharedPrefsDump": "Shared preferences yığını:",
-  "@sharedPrefsDump": {},
   "lifetime": "Ömür boyu",
   "@lifetime": {},
   "presets": "Ön ayarlar",
@@ -218,14 +216,6 @@
   "@pulColor": {},
   "addLine": "Çizgi ekle",
   "@addLine": {},
-  "buildSignatureOf": "İnşa imzası: {signature}",
-  "@buildSignatureOf": {
-    "placeholders": {
-      "signature": {
-        "type": "String"
-      }
-    }
-  },
   "warnAboutTxt3": "Bu değerleri ihtiyacınıza göre değiştirebilirsiniz. Doktorunuzun tavsiyesine uyun.",
   "@warnAboutTxt3": {},
   "pulLong": "Nabız",
