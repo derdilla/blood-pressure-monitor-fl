@@ -82,16 +82,17 @@ class ColorPicker extends StatefulWidget {
 class _ColorPickerState extends State<ColorPicker> {
   /// Currently selected color.
   late Color _selected;
+  late final List<Color> availableColors;
 
   @override
   void initState() {
     super.initState();
     _selected = widget.initialColor ?? Colors.transparent;
+    availableColors = widget.availableColors ?? ColorPicker.allColors;
   }
-
   @override
   Widget build(BuildContext context) {
-    final availableColors = widget.availableColors ?? ColorPicker.allColors;
+
     return Wrap(
       children: [
         for (final color in availableColors)
