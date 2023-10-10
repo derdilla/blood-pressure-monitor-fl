@@ -1,7 +1,7 @@
+import 'package:blood_pressure_app/components/color_picker.dart';
+import 'package:blood_pressure_app/model/storage/convert_util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:flutter_material_color_picker/flutter_material_color_picker.dart';
 
 class SettingsTile extends StatelessWidget {
   final Widget title;
@@ -73,9 +73,8 @@ class SettingsTile extends StatelessWidget {
 
 class ColorSelectionSettingsTile extends StatelessWidget {
   final Widget title;
-  final ValueChanged<ColorSwatch?>? onMainColorChanged;
+  final ValueChanged<MaterialColor>? onMainColorChanged;
   final MaterialColor initialColor;
-  final Widget? leading;
   final Widget? trailing;
   final Widget? description;
   final bool disabled;
@@ -85,7 +84,6 @@ class ColorSelectionSettingsTile extends StatelessWidget {
       required this.title,
       required this.onMainColorChanged,
       required this.initialColor,
-      this.leading,
       this.trailing,
       this.description,
       this.disabled = false});
@@ -105,29 +103,9 @@ class ColorSelectionSettingsTile extends StatelessWidget {
       trailing: trailing,
       description: description,
       disabled: disabled,
-      onPressed: (context) {
-        showDialog(
-          context: context,
-          builder: (_) {
-            return AlertDialog(
-              contentPadding: const EdgeInsets.all(6.0),
-              content: MaterialColorPicker(
-                circleSize: 53,
-                selectedColor: initialColor,
-                onMainColorChange: (color) {
-                  onMainColorChanged?.call(color);
-                  Navigator.of(context).pop();
-                },
-              ),
-              actions: [
-                TextButton(
-                  onPressed: Navigator.of(context).pop,
-                  child: Text(AppLocalizations.of(context)!.btnCancel),
-                ),
-              ],
-            );
-          },
-        );
+      onPressed: (context) async {
+        final color = ConvertUtil.parseMaterialColor(await showColorPickerDialog(context, initialColor));
+        if (color != null) onMainColorChanged?.call(color);
       },
     );
   }

@@ -131,7 +131,7 @@ class SettingsPage extends StatelessWidget {
                   title: Text(localizations.sysColor)),
               ColorSelectionSettingsTile(
                 key: const Key('diaColor'),
-                onMainColorChanged: (color) => settings.diaColor = createMaterialColor((color ?? Colors.teal).value),
+                onMainColorChanged: (color) => settings.diaColor = color,
                 initialColor: settings.diaColor,
                 title: Text(localizations.diaColor)),
               ColorSelectionSettingsTile(
