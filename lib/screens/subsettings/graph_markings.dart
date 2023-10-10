@@ -1,9 +1,9 @@
+import 'package:blood_pressure_app/components/color_picker.dart';
 import 'package:blood_pressure_app/components/input_dialoge.dart';
 import 'package:blood_pressure_app/model/horizontal_graph_line.dart';
 import 'package:blood_pressure_app/model/storage/settings_store.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:flutter_material_color_picker/flutter_material_color_picker.dart';
 import 'package:provider/provider.dart';
 
 class GraphMarkingsScreen extends StatelessWidget {
@@ -38,14 +38,7 @@ class GraphMarkingsScreen extends StatelessWidget {
                   leading: const Icon(Icons.add),
                   title: Text(localizations.addLine),
                   onTap: () async {
-                    final color = await showDialog<Color>(context: context,
-                        builder: (context) => SimpleDialog(
-                          children: [MaterialColorPicker(
-                            circleSize: 53,
-                            onMainColorChange: (color) {
-                              Navigator.of(context).pop(color);
-                            },
-                          )],));
+                    final color = await showColorPickerDialog(context);
                     if (!context.mounted) return;
                     final height = await showDialog<int>(context: context,
                         builder: (context) => NumberInputDialoge(

@@ -19,7 +19,6 @@ dependencies:
   intl: ^0.18.0  # BSD-3-Clause
   fl_chart: ^0.63.0  # MIT
   share_plus: ^7.0.1  # BSD-3-Clause
-  flutter_material_color_picker: ^1.2.0  # MIT
   csv: ^5.0.2  # MIT
   url_launcher: ^6.1.11  # BSD-3-Clause
   shared_preferences: ^2.1.1  # BSD-3-Clause
