@@ -140,7 +140,7 @@ class _ColorPickerState extends State<ColorPicker> {
 /// Shows a dialog with a ColorPicker and with an cancel button inside.
 ///
 /// Returns the selected color or null when cancel is pressed.
-Future<Color?> showColorPickerDialog(BuildContext context, Color? initialColor) async {
+Future<Color?> showColorPickerDialog(BuildContext context, [Color? initialColor]) async {
   return await showDialog(
     context: context,
     builder: (_) {
