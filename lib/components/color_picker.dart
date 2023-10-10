@@ -3,11 +3,13 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+/// A list of colors in circles where one can be selected at a time.
 class ColorPicker extends StatefulWidget {
+  /// Create a widget to select one color from a list.
   const ColorPicker({super.key,
+    required this.onColorSelected,
     this.availableColors,
     this.initialColor,
-    required this.onColorSelected,
     this.showTransparentColor = true,
     this.circleSize = 50
   });
