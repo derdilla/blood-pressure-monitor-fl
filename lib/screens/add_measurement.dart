@@ -207,33 +207,7 @@ class _AddMeasurementPageState extends State<AddMeasurementPage> {
           side: (_needlePin != null) ? BorderSide(color: _needlePin!.color) : null
         ),
         onPressed: () async {
-          final color = await showDialog(
-            context: context,
-            builder: (_) {
-              return AlertDialog(
-                contentPadding: const EdgeInsets.all(6.0),
-                content: /* TODO
-                MaterialColorPicker(
-                  circleSize: 53,
-                  onMainColorChange: (color) {
-                    Navigator.of(context).pop(color);
-                  },
-                )*/
-                ColorPicker(
-                  initialColor: _needlePin?.color,
-                  onColorSelected: (color) {
-                    Navigator.of(context).pop(color);
-                  }
-                ),
-                actions: [
-                  TextButton(
-                    onPressed: Navigator.of(context).pop,
-                    child: Text(localizations.btnCancel),
-                  ),
-                ],
-              );
-            },
-          );
+          final color = await showColorPickerDialog(context, _needlePin?.color);
           setState(() {
             if (color != null) {
               _needlePin = (color == Colors.transparent) ? null : MeasurementNeedlePin(color);

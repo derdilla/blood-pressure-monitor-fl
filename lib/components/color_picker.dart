@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ColorPicker extends StatefulWidget {
   const ColorPicker({super.key,
@@ -134,4 +135,30 @@ class _ColorPickerState extends State<ColorPicker> {
       ],
     );
   }
+}
+
+/// Shows a dialog with a ColorPicker and with an cancel button inside.
+///
+/// Returns the selected color or null when cancel is pressed.
+Future<Color?> showColorPickerDialog(BuildContext context, Color? initialColor) async {
+  return await showDialog(
+    context: context,
+    builder: (_) {
+      return AlertDialog(
+        contentPadding: const EdgeInsets.all(6.0),
+        content: ColorPicker(
+          initialColor: initialColor,
+          onColorSelected: (color) {
+            Navigator.of(context).pop(color);
+          }
+        ),
+        actions: [
+          TextButton(
+            onPressed: Navigator.of(context).pop,
+            child: Text(AppLocalizations.of(context)!.btnCancel),
+          ),
+        ],
+      );
+    },
+  );
 }
