@@ -1,5 +1,4 @@
 import 'package:blood_pressure_app/components/color_picker.dart';
-import 'package:blood_pressure_app/model/storage/convert_util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -73,8 +72,8 @@ class SettingsTile extends StatelessWidget {
 
 class ColorSelectionSettingsTile extends StatelessWidget {
   final Widget title;
-  final ValueChanged<MaterialColor>? onMainColorChanged;
-  final MaterialColor initialColor;
+  final ValueChanged<Color>? onMainColorChanged;
+  final Color initialColor;
   final Widget? trailing;
   final Widget? description;
   final bool disabled;
@@ -104,7 +103,7 @@ class ColorSelectionSettingsTile extends StatelessWidget {
       description: description,
       disabled: disabled,
       onPressed: (context) async {
-        final color = ConvertUtil.parseMaterialColor(await showColorPickerDialog(context, initialColor));
+        final color = await showColorPickerDialog(context, initialColor);
         if (color != null) onMainColorChanged?.call(color);
       },
     );

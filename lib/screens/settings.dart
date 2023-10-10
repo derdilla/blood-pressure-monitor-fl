@@ -5,7 +5,6 @@ import 'package:blood_pressure_app/components/input_dialoge.dart';
 import 'package:blood_pressure_app/components/settings_widgets.dart';
 import 'package:blood_pressure_app/model/blood_pressure.dart';
 import 'package:blood_pressure_app/model/iso_lang_names.dart';
-import 'package:blood_pressure_app/model/settings_store.dart';
 import 'package:blood_pressure_app/model/storage/settings_store.dart';
 import 'package:blood_pressure_app/screens/subsettings/delete_data.dart';
 import 'package:blood_pressure_app/screens/subsettings/enter_timeformat.dart';
@@ -83,7 +82,7 @@ class SettingsPage extends StatelessWidget {
               ),
               ColorSelectionSettingsTile(
                 key: const Key('accentColor'),
-                onMainColorChanged: (color) => settings.accentColor = createMaterialColor((color ?? Colors.teal).value),
+                onMainColorChanged: (color) => settings.accentColor = color,
                 initialColor: settings.accentColor,
                 title: Text(localizations.accentColor)),
               DropDownSettingsTile<Locale?>(
@@ -126,7 +125,7 @@ class SettingsPage extends StatelessWidget {
               ),
               ColorSelectionSettingsTile(
                 key: const Key('sysColor'),
-                onMainColorChanged: (color) => settings.sysColor = createMaterialColor((color ?? Colors.green).value),
+                onMainColorChanged: (color) => settings.sysColor = color,
                 initialColor: settings.sysColor,
                   title: Text(localizations.sysColor)),
               ColorSelectionSettingsTile(
@@ -136,7 +135,7 @@ class SettingsPage extends StatelessWidget {
                 title: Text(localizations.diaColor)),
               ColorSelectionSettingsTile(
                 key: const Key('pulColor'),
-                onMainColorChanged: (color) => settings.pulColor = createMaterialColor((color ?? Colors.red).value),
+                onMainColorChanged: (color) => settings.pulColor = color,
                 initialColor: settings.pulColor,
                 title: Text(localizations.pulColor)),
               SwitchSettingsTile(

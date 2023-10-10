@@ -24,10 +24,10 @@ class Settings extends ChangeNotifier {
   /// When the values should be set consider using the factory methods.
   Settings({
     Locale? language,
-    MaterialColor? accentColor,
-    MaterialColor? sysColor,
-    MaterialColor? diaColor,
-    MaterialColor? pulColor,
+    Color? accentColor,
+    Color? sysColor,
+    Color? diaColor,
+    Color? pulColor,
     List<HorizontalGraphLine>? horizontalGraphLines,
     String? dateFormatString,
     double? graphLineThickness,
@@ -67,10 +67,10 @@ class Settings extends ChangeNotifier {
   }
 
   factory Settings.fromMap(Map<String, dynamic> map) => Settings(
-    accentColor: ConvertUtil.parseMaterialColor(map['accentColor']),
-    sysColor: ConvertUtil.parseMaterialColor(map['sysColor']),
-    diaColor: ConvertUtil.parseMaterialColor(map['diaColor']),
-    pulColor: ConvertUtil.parseMaterialColor(map['pulColor']),
+    accentColor: ConvertUtil.parseColor(map['accentColor']),
+    sysColor: ConvertUtil.parseColor(map['sysColor']),
+    diaColor: ConvertUtil.parseColor(map['diaColor']),
+    pulColor: ConvertUtil.parseColor(map['pulColor']),
     allowManualTimeInput: ConvertUtil.parseBool(map['allowManualTimeInput']),
     confirmDeletion: ConvertUtil.parseBool(map['confirmDeletion']),
     darkMode: ConvertUtil.parseBool(map['darkMode']),
@@ -133,30 +133,30 @@ class Settings extends ChangeNotifier {
     notifyListeners();
   }
 
-  MaterialColor _accentColor = Colors.teal;
-  MaterialColor get accentColor => _accentColor;
-  set accentColor(MaterialColor newColor) {
+  Color _accentColor = Colors.teal;
+  Color get accentColor => _accentColor;
+  set accentColor(Color newColor) {
     _accentColor = newColor;
     notifyListeners();
   }
 
-  MaterialColor _sysColor = Colors.teal;
-  MaterialColor get sysColor => _sysColor;
-  set sysColor(MaterialColor newColor) {
+  Color _sysColor = Colors.teal;
+  Color get sysColor => _sysColor;
+  set sysColor(Color newColor) {
     _sysColor = newColor;
     notifyListeners();
   }
 
-  MaterialColor _diaColor = Colors.green;
-  MaterialColor get diaColor => _diaColor;
-  set diaColor(MaterialColor newColor) {
+  Color _diaColor = Colors.green;
+  Color get diaColor => _diaColor;
+  set diaColor(Color newColor) {
     _diaColor = newColor;
     notifyListeners();
   }
 
-  MaterialColor _pulColor = Colors.red;
-  MaterialColor get pulColor => _pulColor;
-  set pulColor(MaterialColor newColor) {
+  Color _pulColor = Colors.red;
+  Color get pulColor => _pulColor;
+  set pulColor(Color newColor) {
     _pulColor = newColor;
     notifyListeners();
   }

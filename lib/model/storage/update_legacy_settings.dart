@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:blood_pressure_app/model/blood_pressure.dart';
 import 'package:blood_pressure_app/model/horizontal_graph_line.dart';
-import 'package:blood_pressure_app/model/settings_store.dart';
+import 'package:blood_pressure_app/model/storage/convert_util.dart';
 import 'package:blood_pressure_app/model/storage/export_csv_settings_store.dart';
 import 'package:blood_pressure_app/model/storage/export_pdf_settings_store.dart';
 import 'package:blood_pressure_app/model/storage/export_settings_store.dart';
@@ -59,16 +59,16 @@ Future<void> updateLegacySettings(Settings settings, ExportSettings exportSettin
         settings.darkMode = sharedPreferences.getBool(key)!;
         break;
       case 'accentColor':
-        settings.accentColor = createMaterialColor(sharedPreferences.getInt(key)!);
+        settings.accentColor = ConvertUtil.parseColor(sharedPreferences.getInt(key)!)!;
         break;
       case 'diaColor':
-        settings.diaColor = createMaterialColor(sharedPreferences.getInt(key)!);
+        settings.diaColor = ConvertUtil.parseColor(sharedPreferences.getInt(key)!)!;
         break;
       case 'sysColor':
-        settings.sysColor = createMaterialColor(sharedPreferences.getInt(key)!);
+        settings.sysColor = ConvertUtil.parseColor(sharedPreferences.getInt(key)!)!;
         break;
       case 'pulColor':
-        settings.pulColor = createMaterialColor(sharedPreferences.getInt(key)!);
+        settings.pulColor = ConvertUtil.parseColor(sharedPreferences.getInt(key)!)!;
         break;
       case 'allowManualTimeInput':
         settings.allowManualTimeInput = sharedPreferences.getBool(key)!;
