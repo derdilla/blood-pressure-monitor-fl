@@ -7,7 +7,7 @@ class ColorPicker extends StatefulWidget {
     this.availableColors,
     this.initialColor,
     required this.onColorSelected,
-    this.showNullColor = true,
+    this.showTransparentColor = true,
     this.circleSize = 50
   });
 
@@ -18,14 +18,15 @@ class ColorPicker extends StatefulWidget {
 
   /// Color that starts out highlighted.
   ///
-  /// When [initialColor] is null and [showNullColor] is false no color is selected.
+  /// When [initialColor] is null the transparent color is selected. When [showTransparentColor] is false as well no
+  /// color is selected.
   final Color? initialColor;
 
   /// Called after a click on a color.
   final FutureOr<void> Function(Color? color) onColorSelected;
 
-  /// Controls whether a option for selecting no color is displayed.
-  final bool showNullColor;
+  /// Controls whether a option for selecting that no color is displayed.
+  final bool showTransparentColor;
 
   /// List of all material colors and black/white
   static final List<Color> allColors = [
@@ -77,12 +78,12 @@ class ColorPicker extends StatefulWidget {
 
 class _ColorPickerState extends State<ColorPicker> {
   /// Currently selected color.
-  Color? _selected;
+  late Color _selected;
 
   @override
   void initState() {
     super.initState();
-    _selected = widget.initialColor;
+    _selected = widget.initialColor ?? Colors.transparent;
   }
 
   @override
@@ -95,8 +96,8 @@ class _ColorPickerState extends State<ColorPicker> {
               onTap: () {
                 setState(() {
                   _selected = color;
+                  widget.onColorSelected(_selected);
                 });
-                widget.onColorSelected(color);
               },
               child: Container(
                 decoration: BoxDecoration(
@@ -110,23 +111,22 @@ class _ColorPickerState extends State<ColorPicker> {
                 ),
               ),
             ),
-        if (widget.showNullColor)
+        if (widget.showTransparentColor)
           InkWell(
             onTap: () {
               setState(() {
-                _selected = null;
+                _selected = Colors.transparent;
+                widget.onColorSelected(_selected);
               });
-              widget.onColorSelected(null);
             },
             child: Container(
               padding: const EdgeInsets.all(5),
               decoration: BoxDecoration(
-                color: _selected == null ? Theme.of(context).disabledColor : Colors.transparent,
+                color: _selected == Colors.transparent ? Theme.of(context).disabledColor : Colors.transparent,
                 shape: BoxShape.circle,),
-              child: Container(
+              child: SizedBox(
                 height: widget.circleSize,
                 width: widget.circleSize,
-                decoration: const BoxDecoration(color: Colors.transparent, shape: BoxShape.circle,),
                 child: const Icon(Icons.block),
               ),
             ),

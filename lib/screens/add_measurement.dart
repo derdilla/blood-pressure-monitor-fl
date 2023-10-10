@@ -1,3 +1,4 @@
+import 'package:blood_pressure_app/components/color_picker.dart';
 import 'package:blood_pressure_app/components/date_time_picker.dart';
 import 'package:blood_pressure_app/model/blood_pressure.dart';
 import 'package:blood_pressure_app/model/export_import.dart';
@@ -8,7 +9,6 @@ import 'package:blood_pressure_app/model/storage/settings_store.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:flutter_material_color_picker/flutter_material_color_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
@@ -212,11 +212,18 @@ class _AddMeasurementPageState extends State<AddMeasurementPage> {
             builder: (_) {
               return AlertDialog(
                 contentPadding: const EdgeInsets.all(6.0),
-                content: MaterialColorPicker(
+                content: /* TODO
+                MaterialColorPicker(
                   circleSize: 53,
                   onMainColorChange: (color) {
                     Navigator.of(context).pop(color);
                   },
+                )*/
+                ColorPicker(
+                  initialColor: _needlePin?.color,
+                  onColorSelected: (color) {
+                    Navigator.of(context).pop(color);
+                  }
                 ),
                 actions: [
                   TextButton(
@@ -228,7 +235,9 @@ class _AddMeasurementPageState extends State<AddMeasurementPage> {
             },
           );
           setState(() {
-            _needlePin = (color is MaterialColor) ? MeasurementNeedlePin(color) : null;
+            if (color != null) {
+              _needlePin = (color == Colors.transparent) ? null : MeasurementNeedlePin(color);
+            }
           });
         },
 
