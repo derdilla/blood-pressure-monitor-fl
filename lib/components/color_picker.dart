@@ -92,7 +92,6 @@ class _ColorPickerState extends State<ColorPicker> {
   }
   @override
   Widget build(BuildContext context) {
-
     return Wrap(
       children: [
         for (final color in availableColors)
