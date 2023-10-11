@@ -1,3 +1,5 @@
+*developer documentation - users can safely ignore this*
+
 App release checklist 
 - [ ] milestone finished
 - [ ] no remaining breaking issues
@@ -7,7 +9,6 @@ App release checklist
 - [ ] verify no tests fail
 - [ ] compile apk `flutter build apk --release --flavor github --obfuscate --split-debug-info=./build/debug-info`
 - [ ] compile play-store `flutter build appbundle --release --flavor github --obfuscate --split-debug-info=./build/debug-info`
-- [ ] test if app update works in vm
-
-
-Compiling the app with obfuscation reduces app size by multiple megabytes. [This makes reading crashes and stack traces a bit harder](https://docs.flutter.dev/deployment/obfuscate#read-an-obfuscated-stack-trace).
+- [ ] google play beta release
+- [ ] once a user confirms the update works, promote play release and create github release
+- [ ] Add debug symbols in `./build/debug-info` to github release
