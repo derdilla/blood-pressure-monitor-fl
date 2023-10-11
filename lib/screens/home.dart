@@ -22,13 +22,7 @@ class AppHome extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
-    EdgeInsets padding;
-    if (MediaQuery.of(context).size.width < 1000) {
-      padding = const EdgeInsets.only(left: 10, right: 10, bottom: 15, top: 30);
-    } else {
-      padding = const EdgeInsets.all(80);
-    }
-
+    //
     // direct use of settings possible as no listening is required
     if (_appStart && Provider.of<Settings>(context, listen: false).startWithAddMeasurementPage) {
       SchedulerBinding.instance.addPostFrameCallback((_) {
@@ -40,20 +34,20 @@ class AppHome extends StatelessWidget {
     return Scaffold(
       body: OrientationBuilder(
         builder: (context, orientation) {
-        if (orientation == Orientation.landscape && MediaQuery.of(context).size.height < 500) {
+        if (orientation == Orientation.landscape) {
           return MeasurementGraph(
             height: MediaQuery.of(context).size.height,
           );
         }
         return Center(
           child: Container(
-            padding: padding,
+            // TODO: utilize more of the screen width
+            padding: const EdgeInsets.only(left: 10, right: 10, bottom: 15, top: 30),
             child: Consumer<Settings>(
               builder: (context, settings, child) {
                 return Column(children: [
                   const MeasurementGraph(),
                   Expanded(
-                    flex: 50,
                     child: (settings.useLegacyList) ?
                       LegacyMeasurementsList(context) :
                       const MeasurementList()
