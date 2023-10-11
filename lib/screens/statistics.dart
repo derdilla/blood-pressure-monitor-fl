@@ -161,7 +161,7 @@ class StatisticsPage extends StatelessWidget {
 class Statistic extends StatelessWidget {
   final Widget caption;
   final Widget child;
-  /// Reduce the padding at the sites, which allows putting it in rows.
+  /// Reduces the padding at the sites to allow packing [Statistic] widgets tighter together.
   ///
   /// TODO: should not depend on property and padding should be added outside of Statistic
   final bool smallEdges;

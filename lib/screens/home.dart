@@ -22,7 +22,6 @@ class AppHome extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
-    //
     // direct use of settings possible as no listening is required
     if (_appStart && Provider.of<Settings>(context, listen: false).startWithAddMeasurementPage) {
       SchedulerBinding.instance.addPostFrameCallback((_) {
