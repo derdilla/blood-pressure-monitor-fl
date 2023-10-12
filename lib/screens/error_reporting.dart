@@ -100,7 +100,7 @@ class ErrorScreen extends StatelessWidget {
 
                           assert(dbPath != inMemoryDatabasePath);
                           dbPath = join(dbPath, 'blood_pressure.db');
-                          PlatformClient.shareFile(dbPath, 'application/vnd.sqlite3'); // TODO: test
+                          PlatformClient.shareFile(dbPath, 'application/vnd.sqlite3');
                         } catch(e) {
                           scaffoldMessenger.showSnackBar(SnackBar(
                               content: Text('ERR: ${e.toString()}')));
