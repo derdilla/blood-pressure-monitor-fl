@@ -306,12 +306,6 @@ class Exporter {
         messenger.showSnackBar(SnackBar(content: Text(localizations.success(exportSettings.defaultExportDir))));
       } else {
         PlatformClient.shareFile(path, 'text/csv'); // TODO: set mime type according to data type
-        /*Share.shareXFiles([
-          XFile(
-              path,
-              mimeType: MimeType.csv.type
-          )
-        ]);*/
       }
     } else {
       messenger.showSnackBar(const SnackBar(content: Text('UNSUPPORTED PLATFORM')));

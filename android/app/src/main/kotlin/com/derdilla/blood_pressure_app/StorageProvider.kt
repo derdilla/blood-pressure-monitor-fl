@@ -42,6 +42,7 @@ class StorageProvider(private var context: Context,
     private fun sharableUriFromPath(path: String): Uri {
         val initialFile = File(path)
         val sharablePath = File(shareFolder, initialFile.name)
+        if (sharablePath.exists()) sharablePath.delete()
         initialFile.copyTo(sharablePath)
         return getUriForFile(context, "com.derdilla.bloodPressureApp.share", sharablePath)
     }
