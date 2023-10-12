@@ -18,9 +18,11 @@ class PlatformClient {
   /// Share a file from application storage.
   ///
   /// The file present at the [path] specified will be copied to a sharable location. The file in the sharable location
-  /// will be shared with the specified [mimeType].
+  /// will be shared with the specified [mimeType] through a
+  /// [Android Sharesheet](https://developer.android.com/training/sharing/send#using-android-system-sharesheet).
   ///
-  /// The user will be shown the Android Sharesheet.
+  /// The [mimeType] can be any string but should generally follow the `*/*` pattern. All official mime types can be
+  /// found here: https://mimetype.io/all-types
   /// 
   /// The returned value indicates whether a [PlatformException] was thrown.
   static Future<bool> shareFile(String path, String mimeType) async {
