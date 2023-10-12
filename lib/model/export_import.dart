@@ -9,6 +9,7 @@ import 'package:blood_pressure_app/model/storage/export_csv_settings_store.dart'
 import 'package:blood_pressure_app/model/storage/export_pdf_settings_store.dart';
 import 'package:blood_pressure_app/model/storage/export_settings_store.dart';
 import 'package:blood_pressure_app/model/storage/settings_store.dart';
+import 'package:blood_pressure_app/platform_integration/platform_client.dart';
 import 'package:csv/csv.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:file_saver/file_saver.dart';
@@ -20,7 +21,6 @@ import 'package:path/path.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:provider/provider.dart';
-import 'package:share_plus/share_plus.dart';
 import 'package:sqflite/sqflite.dart';
 
 import 'blood_pressure.dart';
@@ -305,12 +305,13 @@ class Exporter {
         );
         messenger.showSnackBar(SnackBar(content: Text(localizations.success(exportSettings.defaultExportDir))));
       } else {
-        Share.shareXFiles([
+        PlatformClient.shareFile(path, 'text/csv'); // TODO: set mime type according to data type
+        /*Share.shareXFiles([
           XFile(
               path,
               mimeType: MimeType.csv.type
           )
-        ]);
+        ]);*/
       }
     } else {
       messenger.showSnackBar(const SnackBar(content: Text('UNSUPPORTED PLATFORM')));
