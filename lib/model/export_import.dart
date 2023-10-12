@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:blood_pressure_app/model/blood_pressure.dart';
 import 'package:blood_pressure_app/model/blood_pressure_analyzer.dart';
 import 'package:blood_pressure_app/model/export_options.dart';
 import 'package:blood_pressure_app/model/storage/export_csv_settings_store.dart';
@@ -12,7 +13,6 @@ import 'package:blood_pressure_app/model/storage/settings_store.dart';
 import 'package:blood_pressure_app/platform_integration/platform_client.dart';
 import 'package:csv/csv.dart';
 import 'package:file_picker/file_picker.dart';
-import 'package:file_saver/file_saver.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
@@ -22,8 +22,6 @@ import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:provider/provider.dart';
 import 'package:sqflite/sqflite.dart';
-
-import 'blood_pressure.dart';
 
 extension PdfCompatability on Color {
   PdfColor toPdfColor() => PdfColor(red / 256, green / 256, blue / 256, opacity);
@@ -279,21 +277,23 @@ class Exporter {
   }
 
   Future<void> export() async {
-    var fileContents = await ExportFileCreator(settings, exportSettings, csvExportSettings, pdfExportSettings,
+    final fileContents = await ExportFileCreator(settings, exportSettings, csvExportSettings, pdfExportSettings,
         localizations, theme, exportColumnsConfig).createFile(data);
-    String filename = 'blood_press_${DateTime.now().toIso8601String()}';
-    String ext = exportSettings.exportFormat.name;
-    String path = await FileSaver.instance.saveFile(name: filename, ext: ext, bytes: fileContents);
+    final filename = 'blood_press_${DateTime.now().toIso8601String()}';
+    final ext = exportSettings.exportFormat.name;
+
+    final file = File(join(Directory.systemTemp.path, '$filename.$ext'));
+    file.writeAsBytesSync(fileContents);
 
     assert(Platform.isAndroid || Platform.isIOS);
     if (exportSettings.defaultExportDir.isNotEmpty) {
       JSaver.instance.save(
-          fromPath: path,
+          fromPath: file.path,
           androidPathOptions: AndroidPathOptions(toDefaultDirectory: true)
       );
       messenger.showSnackBar(SnackBar(content: Text(localizations.success(exportSettings.defaultExportDir))));
     } else {
-      PlatformClient.shareFile(path, 'text/csv');
+      PlatformClient.shareFile(file.path, 'text/csv', '$filename.$ext');
     }
   }
 

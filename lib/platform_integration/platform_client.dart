@@ -23,13 +23,16 @@ class PlatformClient {
   ///
   /// The [mimeType] can be any string but should generally follow the `*/*` pattern. All official mime types can be
   /// found here: https://mimetype.io/all-types
+  ///
+  /// When [name] is set to a non-null value the file will be shared with this name instead of the original file name.
   /// 
   /// The returned value indicates whether a [PlatformException] was thrown.
-  static Future<bool> shareFile(String path, String mimeType) async {
+  static Future<bool> shareFile(String path, String mimeType, [String? name]) async {
     try {
       await _platformChannel.invokeMethod('shareFile', {
         'path': path,
-        'mimeType': mimeType
+        'mimeType': mimeType,
+        'name': name
       });
       return true;
     } on PlatformException {
