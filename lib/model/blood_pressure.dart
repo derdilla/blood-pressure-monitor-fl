@@ -1,12 +1,11 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:blood_pressure_app/screens/error_reporting.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:path/path.dart';
-import 'package:sqflite_common_ffi/sqflite_ffi.dart';
+import 'package:sqflite/sqflite.dart';
 
 class BloodPressureModel extends ChangeNotifier {
   static const maxEntries = 2E64; // https://www.sqlite.org/limits.html Nr.13
@@ -66,11 +65,6 @@ class BloodPressureModel extends ChangeNotifier {
   /// [dbPath] is the path to the folder the database is in. When [dbPath] is left empty the default database file is
   /// used. The [isFullPath] option tells the constructor not to add the default filename at the end of [dbPath].
   static Future<BloodPressureModel> create({String? dbPath, bool isFullPath = false}) async {
-    if (Platform.isWindows || Platform.isLinux) { // TODO: drop desktop support
-      sqfliteFfiInit();
-      databaseFactory = databaseFactoryFfi;
-    }
-
     final component = BloodPressureModel._create();
     await component._asyncInit(dbPath, isFullPath);
     return component;

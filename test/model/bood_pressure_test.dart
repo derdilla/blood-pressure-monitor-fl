@@ -1,6 +1,7 @@
 import 'package:blood_pressure_app/model/blood_pressure.dart';
 import 'package:blood_pressure_app/model/ram_only_implementations.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:path/path.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
 void main() {
@@ -22,22 +23,24 @@ void main() {
   });
 
   group('BloodPressureModel', () {
-    // setup db path
-    databaseFactory = databaseFactoryFfi;
+    setUpAll(() {
+      sqfliteFfiInit();
+      databaseFactory = databaseFactoryFfi;
+    });
 
     test('should initialize', () async {
       expect(() async {
-        await BloodPressureModel.create(dbPath: '/tmp/bp_test/should_init');
+        await BloodPressureModel.create(dbPath: join(inMemoryDatabasePath, 'BPMShouldInit.db'));
       }, returnsNormally);
     });
     test('should start empty', () async {
-      var m = await BloodPressureModel.create(dbPath: '/tmp/bp_test/should_start_empty');
+      var m = await BloodPressureModel.create(dbPath: join(inMemoryDatabasePath, 'BPMShouldStartEmpty.db'));
 
       expect((await m.getInTimeRange(DateTime.fromMillisecondsSinceEpoch(1), DateTime.now())).length, 0);
     });
 
     test('should notify when adding entries', () async {
-      var m = await BloodPressureModel.create(dbPath: '/tmp/bp_test/should_notify_when_add');
+      var m = await BloodPressureModel.create(dbPath: join(inMemoryDatabasePath, 'BPMShouldNotifyWhenAdding.db'));
 
       int listenerCalls = 0;
       m.addListener(() {
@@ -52,7 +55,7 @@ void main() {
     });
 
     test('should return entries as added', () async {
-      var m = await BloodPressureModel.create(dbPath: '/tmp/bp_test/should_return_as_added');
+      var m = await BloodPressureModel.create(dbPath: join(inMemoryDatabasePath, 'BPMShouldReturnAddedEntries.db'));
 
       var r = BloodPressureRecord(DateTime.fromMillisecondsSinceEpoch(31415926), -172, 10000, 0,
           "((V⍳V)=⍳⍴V)/V←,V    ⌷←⍳→⍴∆∇⊃‾⍎⍕⌈๏ แผ่นดินฮั่นเABCDEFGHIJKLMNOPQRSTUVWXYZ /0123456789abcdefghijklmnopqrstuvwxyz £©µÀÆÖÞßéöÿ–—‘“”„†•…‰™œŠŸž€ ΑΒΓΔΩαβγδω АБВГДабвг, \n \t д∀∂∈ℝ∧∪≡∞ ↑↗↨↻⇣ ┐┼╔╘░►☺♀ ﬁ�⑀₂ἠḂӥẄɐː⍎אԱა");
@@ -71,12 +74,12 @@ void main() {
     });
 
     test('should save and load between objects/sessions', () async {
-      var m = await BloodPressureModel.create(dbPath: '/tmp/bp_test/should_store_between_sessions');
+      var m = await BloodPressureModel.create(dbPath: join(inMemoryDatabasePath, 'BPMShouldPersist.db'));
       var r = BloodPressureRecord(DateTime.fromMillisecondsSinceEpoch(31415926), -172, 10000, 0,
           "((V⍳V)=⍳⍴V)/V←,V    ⌷←⍳→⍴∆∇⊃‾⍎⍕⌈๏ แผ่นดินฮั่นเABCDEFGHIJKLMNOPQRSTUVWXYZ /0123456789abcdefghijklmnopqrstuvwxyz £©µÀÆÖÞßéöÿ–—‘“”„†•…‰™œŠŸž€ ΑΒΓΔΩαβγδω АБВГДабвг, \n \t д∀∂∈ℝ∧∪≡∞ ↑↗↨↻⇣ ┐┼╔╘░►☺♀ ﬁ�⑀₂ἠḂӥẄɐː⍎אԱა");
       await m.add(r);
 
-      var m2 = await BloodPressureModel.create(dbPath: '/tmp/bp_test/should_store_between_sessions');
+      var m2 = await BloodPressureModel.create(dbPath: join(inMemoryDatabasePath, 'BPMShouldPersist.db'));
       var res = (await m2.getInTimeRange(DateTime.fromMillisecondsSinceEpoch(1), DateTime.now())).first;
 
       expect(res.creationTime, r.creationTime);
@@ -87,7 +90,7 @@ void main() {
     });
 
     test('should delete', () async {
-      var m = await BloodPressureModel.create(dbPath: '/tmp/bp_test/should_delete');
+      var m = await BloodPressureModel.create(dbPath: join(inMemoryDatabasePath, 'BPMShouldDelete.db'));
 
       await m.add(BloodPressureRecord(DateTime.fromMillisecondsSinceEpoch(758934), 123, 87, 65, ';)'));
       expect((await m.getInTimeRange(DateTime.fromMillisecondsSinceEpoch(1), DateTime.now())).length, 1);
