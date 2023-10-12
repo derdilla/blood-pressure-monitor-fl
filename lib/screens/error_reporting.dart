@@ -1,10 +1,8 @@
-import 'dart:io';
-
+import 'package:blood_pressure_app/platform_integration/platform_client.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:path/path.dart';
-import 'package:share_plus/share_plus.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -102,10 +100,7 @@ class ErrorScreen extends StatelessWidget {
 
                           assert(dbPath != inMemoryDatabasePath);
                           dbPath = join(dbPath, 'blood_pressure.db');
-                          assert(Platform.isAndroid);
-                          Share.shareXFiles([
-                            XFile(dbPath,)
-                          ]);
+                          PlatformClient.shareFile(dbPath, 'application/vnd.sqlite3');
                         } catch(e) {
                           scaffoldMessenger.showSnackBar(SnackBar(
                               content: Text('ERR: ${e.toString()}')));
@@ -120,10 +115,7 @@ class ErrorScreen extends StatelessWidget {
 
                           assert(dbPath != inMemoryDatabasePath);
                           dbPath = join(dbPath, 'config.db');
-                          assert(Platform.isAndroid);
-                          Share.shareXFiles([
-                            XFile(dbPath,)
-                          ]);
+                          PlatformClient.shareFile(dbPath, 'application/vnd.sqlite3');
                         } catch(e) {
                           scaffoldMessenger.showSnackBar(SnackBar(
                               content: Text('ERR: ${e.toString()}')));

@@ -6,6 +6,7 @@ import 'package:blood_pressure_app/components/settings_widgets.dart';
 import 'package:blood_pressure_app/model/blood_pressure.dart';
 import 'package:blood_pressure_app/model/iso_lang_names.dart';
 import 'package:blood_pressure_app/model/storage/settings_store.dart';
+import 'package:blood_pressure_app/platform_integration/platform_client.dart';
 import 'package:blood_pressure_app/screens/subsettings/delete_data.dart';
 import 'package:blood_pressure_app/screens/subsettings/enter_timeformat.dart';
 import 'package:blood_pressure_app/screens/subsettings/export_import_screen.dart';
@@ -20,7 +21,6 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:path/path.dart';
 import 'package:provider/provider.dart';
 import 'package:restart_app/restart_app.dart';
-import 'package:share_plus/share_plus.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -302,9 +302,7 @@ class SettingsPage extends StatelessWidget {
                       assert(dbPath != inMemoryDatabasePath);
                       dbPath = join(dbPath, 'config.db');
                       assert(Platform.isAndroid);
-                      Share.shareXFiles([
-                        XFile(dbPath,)
-                      ]);
+                      PlatformClient.shareFile(dbPath, 'application/vnd.sqlite3');
                     }
                 ),
                 SettingsTile(
