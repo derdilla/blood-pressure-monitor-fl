@@ -89,7 +89,7 @@ class StatisticsPage extends StatelessWidget {
                   // Time-Resolved Metrics
                   Statistic(
                     caption: Text(AppLocalizations.of(context)!.timeResolvedMetrics),
-                    child: (() {
+                    child: () {
                       final data = analyzer.allAvgsRelativeToDaytime;
                       const opacity = 0.5;
                       return SizedBox(
@@ -133,7 +133,7 @@ class StatisticsPage extends StatelessWidget {
                           ),
                         ),
                       );
-                    })(),
+                    }(),
                   ),
                 ],
               );
@@ -161,6 +161,9 @@ class StatisticsPage extends StatelessWidget {
 class Statistic extends StatelessWidget {
   final Widget caption;
   final Widget child;
+  /// Reduces the padding at the sites to allow packing [Statistic] widgets tighter together.
+  ///
+  /// TODO: should not depend on property and padding should be added outside of Statistic
   final bool smallEdges;
 
   const Statistic({super.key, required this.caption, required this.child, this.smallEdges = false});

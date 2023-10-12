@@ -32,7 +32,6 @@ dependencies:
   badges: ^3.1.1
   flutter_markdown: ^0.6.17
   collection: ^1.17.1
-  sqflite_common_ffi: ^2.3.0
   restart_app: ^1.2.1
 
 dev_dependencies:
@@ -41,6 +40,7 @@ dev_dependencies:
   file: any
   flutter_lints: ^2.0.0
   mockito: ^5.4.1
+  sqflite_common_ffi: ^2.3.0
 
 flutter:
   uses-material-design: true

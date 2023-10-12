@@ -168,6 +168,7 @@ class ExportFileCreator {
   }
 
   pw.Widget _buildPdfTitle(DateFormat dateFormatter, BloodPressureAnalyser analyzer) {
+    if (analyzer.firstDay == null || analyzer.lastDay == null) return pw.Text(localizations.errNoData);
     return pw.Container(
       child: pw.Text(
         localizations.pdfDocumentTitle(dateFormatter.format(analyzer.firstDay!), dateFormatter.format(analyzer.lastDay!)),
@@ -281,34 +282,18 @@ class Exporter {
     var fileContents = await ExportFileCreator(settings, exportSettings, csvExportSettings, pdfExportSettings,
         localizations, theme, exportColumnsConfig).createFile(data);
     String filename = 'blood_press_${DateTime.now().toIso8601String()}';
-    String ext;
-    switch(exportSettings.exportFormat) {
-      case ExportFormat.csv:
-        ext = 'csv';
-        break;
-      case ExportFormat.pdf:
-        ext = 'pdf';
-        break;
-      case ExportFormat.db:
-        ext = 'db';
-        break;
-    }
+    String ext = exportSettings.exportFormat.name;
     String path = await FileSaver.instance.saveFile(name: filename, ext: ext, bytes: fileContents);
 
-    if (Platform.isLinux || Platform.isWindows || Platform.isMacOS) {
-      messenger.showSnackBar(SnackBar(content: Text(localizations.success(path))));
-    } else if (Platform.isAndroid || Platform.isIOS) {
-      if (exportSettings.defaultExportDir.isNotEmpty) {
-        JSaver.instance.save(
-            fromPath: path,
-            androidPathOptions: AndroidPathOptions(toDefaultDirectory: true)
-        );
-        messenger.showSnackBar(SnackBar(content: Text(localizations.success(exportSettings.defaultExportDir))));
-      } else {
-        PlatformClient.shareFile(path, 'text/csv'); // TODO: set mime type according to data type
-      }
+    assert(Platform.isAndroid || Platform.isIOS);
+    if (exportSettings.defaultExportDir.isNotEmpty) {
+      JSaver.instance.save(
+          fromPath: path,
+          androidPathOptions: AndroidPathOptions(toDefaultDirectory: true)
+      );
+      messenger.showSnackBar(SnackBar(content: Text(localizations.success(exportSettings.defaultExportDir))));
     } else {
-      messenger.showSnackBar(const SnackBar(content: Text('UNSUPPORTED PLATFORM')));
+      PlatformClient.shareFile(path, 'text/csv');
     }
   }
 
