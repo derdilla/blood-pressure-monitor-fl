@@ -282,18 +282,17 @@ class Exporter {
     final filename = 'blood_press_${DateTime.now().toIso8601String()}';
     final ext = exportSettings.exportFormat.name;
 
-    final file = File(join(Directory.systemTemp.path, '$filename.$ext'));
-    file.writeAsBytesSync(fileContents);
-
     assert(Platform.isAndroid || Platform.isIOS);
     if (exportSettings.defaultExportDir.isNotEmpty) {
+      final file = File(join(Directory.systemTemp.path, '$filename.$ext'));
+      file.writeAsBytesSync(fileContents);
       JSaver.instance.save(
           fromPath: file.path,
           androidPathOptions: AndroidPathOptions(toDefaultDirectory: true)
       );
       messenger.showSnackBar(SnackBar(content: Text(localizations.success(exportSettings.defaultExportDir))));
     } else {
-      PlatformClient.shareFile(file.path, 'text/csv', '$filename.$ext');
+      PlatformClient.shareData(fileContents, 'text/csv', '$filename.$ext');
     }
   }
 
