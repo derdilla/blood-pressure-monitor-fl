@@ -81,6 +81,7 @@ android {
             signingConfig signingConfigs.debug
         }
     }
+    namespace 'com.derdilla.blood_pressure_app'
 
     android.applicationVariants.all { variant ->
         if (variant.flavorName == "fdroid") {
