@@ -113,5 +113,12 @@ void main() {
       expect(ConvertUtil.parseList<String>([1234,567,89,0]), null);
       expect(ConvertUtil.parseList<String>('tests'), null);
     });
+
+    test('parseThemeMode should convert valid values correctly', () {
+      expect(ConvertUtil.parseThemeMode(0), ThemeMode.system);
+      expect(ConvertUtil.parseThemeMode(1), ThemeMode.dark);
+      expect(ConvertUtil.parseThemeMode(2), ThemeMode.light);
+      expect(ConvertUtil.parseThemeMode(null), ThemeMode.light);
+    });
   });
 }
