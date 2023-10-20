@@ -81,8 +81,7 @@ void main() {
         diaWarn: 78,
         allowManualTimeInput: false,
         confirmDeletion: false,
-        darkMode: false,
-        followSystemDarkMode: false,
+        themeMode: ThemeMode.light,
         validateInputs: false,
         allowMissingValues: false,
         drawRegressionLines: false,
@@ -104,8 +103,7 @@ void main() {
       expect(initial.diaWarn, fromJson.diaWarn);
       expect(initial.allowManualTimeInput, fromJson.allowManualTimeInput);
       expect(initial.confirmDeletion, fromJson.confirmDeletion);
-      expect(initial.darkMode, fromJson.darkMode);
-      expect(initial.followSystemDarkMode, fromJson.followSystemDarkMode);
+      expect(initial.themeMode, fromJson.themeMode);
       expect(initial.validateInputs, fromJson.validateInputs);
       expect(initial.allowMissingValues, fromJson.allowMissingValues);
       expect(initial.drawRegressionLines, fromJson.drawRegressionLines);

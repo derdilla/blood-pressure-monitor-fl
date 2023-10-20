@@ -36,8 +36,7 @@ class Settings extends ChangeNotifier {
     int? diaWarn,
     bool? allowManualTimeInput,
     bool? confirmDeletion,
-    bool? darkMode,
-    bool? followSystemDarkMode,
+    ThemeMode? themeMode,
     bool? validateInputs,
     bool? allowMissingValues,
     bool? drawRegressionLines,
@@ -50,13 +49,12 @@ class Settings extends ChangeNotifier {
     if (pulColor != null) _pulColor = pulColor;
     if (allowManualTimeInput != null) _allowManualTimeInput = allowManualTimeInput;
     if (confirmDeletion != null) _confirmDeletion = confirmDeletion;
-    if (darkMode != null) _darkMode = darkMode;
+    if (themeMode != null) _themeMode = themeMode;
     if (dateFormatString != null) _dateFormatString = dateFormatString;
     if (animationSpeed != null) _animationSpeed = animationSpeed;
     if (sysWarn != null) _sysWarn = sysWarn;
     if (diaWarn != null) _diaWarn = diaWarn;
     if (graphLineThickness != null) _graphLineThickness = graphLineThickness;
-    if (followSystemDarkMode != null) _followSystemDarkMode = followSystemDarkMode;
     if (validateInputs != null) _validateInputs = validateInputs;
     if (allowMissingValues != null) _allowMissingValues = allowMissingValues;
     if (drawRegressionLines != null) _drawRegressionLines = drawRegressionLines;
@@ -66,29 +64,36 @@ class Settings extends ChangeNotifier {
     _language = language; // No check here, as null is the default as well.
   }
 
-  factory Settings.fromMap(Map<String, dynamic> map) => Settings(
-    accentColor: ConvertUtil.parseColor(map['accentColor']),
-    sysColor: ConvertUtil.parseColor(map['sysColor']),
-    diaColor: ConvertUtil.parseColor(map['diaColor']),
-    pulColor: ConvertUtil.parseColor(map['pulColor']),
-    allowManualTimeInput: ConvertUtil.parseBool(map['allowManualTimeInput']),
-    confirmDeletion: ConvertUtil.parseBool(map['confirmDeletion']),
-    darkMode: ConvertUtil.parseBool(map['darkMode']),
-    dateFormatString: ConvertUtil.parseString(map['dateFormatString']),
-    animationSpeed: ConvertUtil.parseInt(map['animationSpeed']),
-    sysWarn: ConvertUtil.parseInt(map['sysWarn']),
-    diaWarn: ConvertUtil.parseInt(map['diaWarn']),
-    graphLineThickness: ConvertUtil.parseDouble(map['graphLineThickness']),
-    followSystemDarkMode: ConvertUtil.parseBool(map['followSystemDarkMode']),
-    validateInputs: ConvertUtil.parseBool(map['validateInputs']),
-    allowMissingValues: ConvertUtil.parseBool(map['allowMissingValues']),
-    drawRegressionLines: ConvertUtil.parseBool(map['drawRegressionLines']),
-    startWithAddMeasurementPage: ConvertUtil.parseBool(map['startWithAddMeasurementPage']),
-    useLegacyList: ConvertUtil.parseBool(map['useLegacyList']),
-    language: ConvertUtil.parseLocale(map['language']),
-    horizontalGraphLines: ConvertUtil.parseList<String>(map['horizontalGraphLines'])?.map((e) =>
-        HorizontalGraphLine.fromJson(jsonDecode(e))).toList(),
-  );
+  factory Settings.fromMap(Map<String, dynamic> map) {
+    var settingsObject = Settings(
+      accentColor: ConvertUtil.parseColor(map['accentColor']),
+      sysColor: ConvertUtil.parseColor(map['sysColor']),
+      diaColor: ConvertUtil.parseColor(map['diaColor']),
+      pulColor: ConvertUtil.parseColor(map['pulColor']),
+      allowManualTimeInput: ConvertUtil.parseBool(map['allowManualTimeInput']),
+      confirmDeletion: ConvertUtil.parseBool(map['confirmDeletion']),
+      themeMode: ConvertUtil.parseThemeMode(map['themeMode']),
+      dateFormatString: ConvertUtil.parseString(map['dateFormatString']),
+      animationSpeed: ConvertUtil.parseInt(map['animationSpeed']),
+      sysWarn: ConvertUtil.parseInt(map['sysWarn']),
+      diaWarn: ConvertUtil.parseInt(map['diaWarn']),
+      graphLineThickness: ConvertUtil.parseDouble(map['graphLineThickness']),
+      validateInputs: ConvertUtil.parseBool(map['validateInputs']),
+      allowMissingValues: ConvertUtil.parseBool(map['allowMissingValues']),
+      drawRegressionLines: ConvertUtil.parseBool(map['drawRegressionLines']),
+      startWithAddMeasurementPage: ConvertUtil.parseBool(map['startWithAddMeasurementPage']),
+      useLegacyList: ConvertUtil.parseBool(map['useLegacyList']),
+      language: ConvertUtil.parseLocale(map['language']),
+      horizontalGraphLines: ConvertUtil.parseList<String>(map['horizontalGraphLines'])?.map((e) =>
+          HorizontalGraphLine.fromJson(jsonDecode(e))).toList(),
+    );
+
+    // update
+    if (ConvertUtil.parseBool(map['followSystemThemeMode']) == false) { // when this is true the default is the same
+      settingsObject.themeMode = (ConvertUtil.parseBool(map['themeMode']) ?? true) ? ThemeMode.dark : ThemeMode.light;
+    }
+    return settingsObject;
+  }
 
   factory Settings.fromJson(String json) {
     try {
@@ -110,8 +115,7 @@ class Settings extends ChangeNotifier {
       'diaWarn': diaWarn,
       'allowManualTimeInput': allowManualTimeInput,
       'confirmDeletion': confirmDeletion,
-      'darkMode': darkMode,
-      'followSystemDarkMode': followSystemDarkMode,
+      'themeMode': themeMode.serialize(),
       'validateInputs': validateInputs,
       'allowMissingValues': allowMissingValues,
       'drawRegressionLines': drawRegressionLines,
@@ -217,20 +221,13 @@ class Settings extends ChangeNotifier {
     notifyListeners();
   }
 
-  bool _darkMode = true;
-  bool get darkMode => _darkMode;
-  set darkMode(bool value) {
-    _darkMode = value;
+  ThemeMode _themeMode = ThemeMode.system;
+  ThemeMode get themeMode => _themeMode;
+  set themeMode(ThemeMode value) {
+    _themeMode = value;
     notifyListeners();
   }
 
-
-  bool _followSystemDarkMode = true;
-  bool get followSystemDarkMode => _followSystemDarkMode;
-  set followSystemDarkMode(bool value) {
-    _followSystemDarkMode = value;
-    notifyListeners();
-  }
 
   bool _validateInputs = true;
   bool get validateInputs => _validateInputs;
@@ -270,4 +267,16 @@ class Settings extends ChangeNotifier {
 // When adding fields notice the checklist at the top.
 }
 
+extension Serialization on ThemeMode {
+  int serialize() {
+    switch(this) {
+      case ThemeMode.system:
+        return 0;
+      case ThemeMode.dark:
+        return 1;
+      case ThemeMode.light:
+        return 2;
+    }
+  }
+}
 

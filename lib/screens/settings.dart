@@ -52,32 +52,18 @@ class SettingsPage extends StatelessWidget {
                   );
                 },
               ),
-              DropDownSettingsTile<int>(
-                key: const Key('thema'),
+              DropDownSettingsTile<ThemeMode>(
+                key: const Key('theme'),
                 leading: const Icon(Icons.brightness_4),
                 title: Text(localizations.theme),
-                value: settings.followSystemDarkMode ? 0 : (settings.darkMode ? 1 : 2),
+                value: settings.themeMode,
                 items: [
-                  DropdownMenuItem(value: 0, child: Text(localizations.system)),
-                  DropdownMenuItem(value: 1, child: Text(localizations.dark)),
-                  DropdownMenuItem(value: 2, child: Text(localizations.light))
+                  DropdownMenuItem(value: ThemeMode.system, child: Text(localizations.system)),
+                  DropdownMenuItem(value: ThemeMode.dark, child: Text(localizations.dark)),
+                  DropdownMenuItem(value: ThemeMode.light, child: Text(localizations.light))
                 ],
-                onChanged: (int? value) {
-                  switch (value) {
-                    case 0:
-                      settings.followSystemDarkMode = true;
-                      break;
-                    case 1:
-                      settings.followSystemDarkMode = false;
-                      settings.darkMode = true;
-                      break;
-                    case 2:
-                      settings.followSystemDarkMode = false;
-                      settings.darkMode = false;
-                      break;
-                    default:
-                      assert(false);
-                  }
+                onChanged: (ThemeMode? value) {
+                  if (value != null) settings.themeMode = value;
                 },
               ),
               ColorSelectionSettingsTile(

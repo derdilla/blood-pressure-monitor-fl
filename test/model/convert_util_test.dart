@@ -1,4 +1,5 @@
 import 'package:blood_pressure_app/model/storage/convert_util.dart';
+import 'package:blood_pressure_app/model/storage/settings_store.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -112,6 +113,13 @@ void main() {
       expect(ConvertUtil.parseList<String>({'test': 5}), null);
       expect(ConvertUtil.parseList<String>([1234,567,89,0]), null);
       expect(ConvertUtil.parseList<String>('tests'), null);
+    });
+
+    test('parseThemeMode should convert values correctly', () {
+      expect(ConvertUtil.parseThemeMode(ThemeMode.system.serialize()), ThemeMode.system);
+      expect(ConvertUtil.parseThemeMode(ThemeMode.dark.serialize()), ThemeMode.dark);
+      expect(ConvertUtil.parseThemeMode(ThemeMode.light.serialize()), ThemeMode.light);
+      expect(ConvertUtil.parseThemeMode(null), null);
     });
   });
 }

@@ -54,8 +54,6 @@ class AppRoot extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Consumer<Settings>(builder: (context, settings, child) {
-      final mode = getMode(settings);
-
       return MaterialApp(
         title: 'Blood Pressure App',
         onGenerateTitle: (context) {
@@ -76,7 +74,7 @@ class AppRoot extends StatelessWidget {
           ),
           useMaterial3: true
         ),
-        themeMode: mode,
+        themeMode: settings.themeMode,
         localizationsDelegates: const [
           AppLocalizations.delegate,
           GlobalMaterialLocalizations.delegate,
@@ -87,16 +85,6 @@ class AppRoot extends StatelessWidget {
         home: const AppHome(),
       );
     });
-  }
-
-  ThemeMode getMode(Settings settings) {
-    if (settings.followSystemDarkMode) {
-      return ThemeMode.system;
-    } else if (settings.darkMode) {
-      return ThemeMode.dark;
-    } else {
-      return ThemeMode.light;
-    }
   }
 }
 

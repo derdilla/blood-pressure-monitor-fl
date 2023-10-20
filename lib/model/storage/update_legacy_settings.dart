@@ -43,6 +43,10 @@ Future<void> updateLegacySettings(Settings settings, ExportSettings exportSettin
         csvExportSettings.customFields = sharedPreferences.getStringList(key)!;
         await sharedPreferences.remove(key);
         break;
+      case 'darkMode':
+        settings.themeMode = sharedPreferences.getBool(key)! ? ThemeMode.dark : ThemeMode.light;
+        await sharedPreferences.remove(key);
+        break;
     }
   }
   for (final key in keys) {
@@ -53,10 +57,7 @@ Future<void> updateLegacySettings(Settings settings, ExportSettings exportSettin
         intervallStoreManager.exportPage.changeStepSize(TimeStep.deserialize(sharedPreferences.getInt(key)!));
         break;
       case 'followSystemDarkMode':
-        settings.followSystemDarkMode = sharedPreferences.getBool(key)!;
-        break;
-      case 'darkMode':
-        settings.darkMode = sharedPreferences.getBool(key)!;
+        if (sharedPreferences.getBool(key)!) settings.themeMode = ThemeMode.system;
         break;
       case 'accentColor':
         settings.accentColor = ConvertUtil.parseColor(sharedPreferences.getInt(key)!)!;

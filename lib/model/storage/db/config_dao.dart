@@ -12,6 +12,8 @@ import 'package:sqflite/sqflite.dart';
 /// The user of this class needs to pay attention to dispose all old instances of objects created by the instance
 /// methods in order to ensure there are no concurrent writes to the database. Having multiple instances will cause data
 /// loss because states are not synced again after one changes.
+///
+/// The load... methods have to schedule a initial save to db in case an migration / update of fields occurred.
 class ConfigDao {
   ConfigDao(this._configDB);
   
@@ -43,6 +45,7 @@ class ConfigDao {
         settings = Settings.fromJson(settingsJson.toString());
       }
     }
+    _updateSettings(profileID, settings);
     settings.addListener(() {
       _updateSettings(profileID, settings);
     });
@@ -90,6 +93,7 @@ class ConfigDao {
         exportSettings = ExportSettings.fromJson(settingsJson.toString());
       }
     }
+    _updateExportSettings(profileID, exportSettings);
     exportSettings.addListener(() {
       _updateExportSettings(profileID, exportSettings);
     });
@@ -137,6 +141,7 @@ class ConfigDao {
         exportSettings = CsvExportSettings.fromJson(settingsJson.toString());
       }
     }
+    _updateCsvExportSettings(profileID, exportSettings);
     exportSettings.addListener(() {
       _updateCsvExportSettings(profileID, exportSettings);
     });
@@ -184,6 +189,7 @@ class ConfigDao {
         exportSettings = PdfExportSettings.fromJson(settingsJson.toString());
       }
     }
+    _updatePdfExportSettings(profileID, exportSettings);
     exportSettings.addListener(() {
       _updatePdfExportSettings(profileID, exportSettings);
     });
@@ -231,6 +237,7 @@ class ConfigDao {
       intervallStorage = IntervallStorage.fromMap(dbEntry.first);
     }
 
+    _updateIntervallStorage(profileID, storageID, intervallStorage);
     intervallStorage.addListener(() {
       _updateIntervallStorage(profileID, storageID, intervallStorage);
     });
@@ -254,7 +261,6 @@ class ConfigDao {
     );
   }
 
-  // TODO: test if custom export columns still work
   /// Loads the current export columns from the database.
   ///
   /// Changes will *not* be saved automatically, see [updateExportColumn].

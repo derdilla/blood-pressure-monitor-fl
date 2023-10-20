@@ -88,4 +88,21 @@ class ConvertUtil {
     if (value is List && value.isEmpty) return [];
     return null;
   }
+
+  static ThemeMode? parseThemeMode(dynamic value) {
+    int? intValue = ConvertUtil.parseInt(value);
+    switch(intValue) {
+      case null:
+        return null;
+      case 0:
+        return ThemeMode.system;
+      case 1:
+        return ThemeMode.dark;
+      case 2:
+        return ThemeMode.light;
+      default:
+        assert(false);
+        return null;
+    }
+  }
 }
