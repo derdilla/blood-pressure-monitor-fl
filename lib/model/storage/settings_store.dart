@@ -267,7 +267,7 @@ class Settings extends ChangeNotifier {
 // When adding fields notice the checklist at the top.
 }
 
-extension on ThemeMode {
+extension Serialization on ThemeMode {
   int serialize() {
     switch(this) {
       case ThemeMode.system:
