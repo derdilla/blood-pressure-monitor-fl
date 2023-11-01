@@ -12,15 +12,12 @@ import 'package:blood_pressure_app/screens/statistics.dart';
 import 'package:blood_pressure_app/screens/subsettings/enter_timeformat.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mockito/mockito.dart';
 import 'package:provider/provider.dart';
-
-class MockNavigatorObserver extends Mock implements NavigatorObserver {}
 
 void main() {
   group('start page', () {
     testWidgets('should navigate to add measurements page', (widgetTester) async {
-      await _pumpAppRoot(widgetTester);
+      await pumpAppRoot(widgetTester);
       expect(find.byIcon(Icons.add), findsOneWidget);
       await widgetTester.tap(find.byIcon(Icons.add));
       await widgetTester.pumpAndSettle();
@@ -28,7 +25,7 @@ void main() {
       expect(find.byType(AddMeasurementPage), findsOneWidget);
     });
     testWidgets('should navigate to settings page', (widgetTester) async {
-      await _pumpAppRoot(widgetTester);
+      await pumpAppRoot(widgetTester);
       expect(find.byIcon(Icons.settings), findsOneWidget);
       await widgetTester.tap(find.byIcon(Icons.settings));
       await widgetTester.pumpAndSettle();
@@ -36,7 +33,7 @@ void main() {
       expect(find.byType(SettingsPage), findsOneWidget);
     });
     testWidgets('should navigate to stats page', (widgetTester) async {
-      await _pumpAppRoot(widgetTester);
+      await pumpAppRoot(widgetTester);
       expect(find.byIcon(Icons.insights), findsOneWidget);
       await widgetTester.tap(find.byIcon(Icons.insights));
       await widgetTester.pumpAndSettle();
@@ -46,7 +43,7 @@ void main() {
   });
   group('add measurement page', () {
     testWidgets('should cancel', (widgetTester) async {
-      await _pumpAppRoot(widgetTester);
+      await pumpAppRoot(widgetTester);
       expect(find.byIcon(Icons.add), findsOneWidget);
       await widgetTester.tap(find.byIcon(Icons.add));
       await widgetTester.pumpAndSettle();
@@ -59,15 +56,15 @@ void main() {
       expect(find.byType(AddMeasurementPage), findsNothing);
     });
     testWidgets('should submit', (widgetTester) async {
-      await _pumpAppRoot(widgetTester);
-      await _addMeasurementThroughPage(widgetTester, 100, 70, 60);
+      await pumpAppRoot(widgetTester);
+      await addMeasurementThroughPage(widgetTester, 100, 70, 60);
 
       expect(find.byType(AddMeasurementPage), findsNothing);
     });
   });
   group('settings page', () {
     testWidgets('open EnterTimeFormatScreen', (widgetTester) async {
-      await _pumpAppRoot(widgetTester);
+      await pumpAppRoot(widgetTester);
       expect(find.byIcon(Icons.settings), findsOneWidget);
       await widgetTester.tap(find.byIcon(Icons.settings));
       await widgetTester.pumpAndSettle();
@@ -84,14 +81,16 @@ void main() {
   });
 }
 
-Future<void> _pumpAppRoot(WidgetTester widgetTester, {
+/// Creates a the same App as the main method 
+Future<void> pumpAppRoot(WidgetTester widgetTester, {
   Settings? settings,
   ExportSettings? exportSettings,
   CsvExportSettings? csvExportSettings,
   PdfExportSettings? pdfExportSettings,
   IntervallStoreManager? intervallStoreManager,
+  BloodPressureModel? model
 }) async {
-  final model = RamBloodPressureModel();
+  model ??= RamBloodPressureModel();
   settings ??= Settings();
   exportSettings ??= ExportSettings();
   csvExportSettings ??= CsvExportSettings();
@@ -104,12 +103,12 @@ Future<void> _pumpAppRoot(WidgetTester widgetTester, {
     ChangeNotifierProvider(create: (_) => csvExportSettings),
     ChangeNotifierProvider(create: (_) => pdfExportSettings),
     ChangeNotifierProvider(create: (_) => intervallStoreManager),
-    ChangeNotifierProvider<BloodPressureModel>(create: (_) => model),
+    ChangeNotifierProvider<BloodPressureModel>(create: (_) => model!),
   ], child: const AppRoot()));
 }
 
 // starts at AppRoot, ends at AppRoot
-Future<void> _addMeasurementThroughPage(WidgetTester widgetTester, int sys, int dia, int pul) async {
+Future<void> addMeasurementThroughPage(WidgetTester widgetTester, int sys, int dia, int pul) async {
   expect(find.byType(AppRoot), findsOneWidget);
   expect(find.byIcon(Icons.add), findsOneWidget);
   await widgetTester.tap(find.byIcon(Icons.add));
