@@ -30,6 +30,24 @@ void main() {
       expect(find.descendant(of: measurementCountWidget, matching: find.text('51')), findsNothing);
       expect(find.descendant(of: measurementCountWidget, matching: find.text('50')), findsOneWidget);
     });
+    testWidgets("should not display 'null' when filled", (widgetTester) async {
+      await _initStatsPage(widgetTester, [
+        BloodPressureRecord(DateTime.fromMillisecondsSinceEpoch(1), 40, 60, null, ''),
+        BloodPressureRecord(DateTime.fromMillisecondsSinceEpoch(2), null, null, null, ''),
+        for (int i = 1; i<51; i++) // can't safe entries at or before epoch
+          BloodPressureRecord(DateTime.fromMillisecondsSinceEpoch(1582991592 + i), 40+i, 60+i, 30+i, 'Test comment $i'),
+      ],
+          intervallStoreManager: IntervallStoreManager(IntervallStorage(), IntervallStorage(), IntervallStorage(stepSize: TimeStep.lifetime))
+      );
+      expect(find.text('null',findRichText: true, skipOffstage: false), findsNothing);
+    });
+
+    testWidgets("should not display 'null' when empty", (widgetTester) async {
+      await _initStatsPage(widgetTester, [],
+          intervallStoreManager: IntervallStoreManager(IntervallStorage(), IntervallStorage(), IntervallStorage(stepSize: TimeStep.lifetime))
+      );
+      expect(find.text('null',findRichText: true, skipOffstage: false), findsNothing);
+    });
   });
 }
 
