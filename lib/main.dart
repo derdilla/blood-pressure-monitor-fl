@@ -1,3 +1,4 @@
+import 'package:blood_pressure_app/components/consistent_future_builder.dart';
 import 'package:blood_pressure_app/model/blood_pressure.dart';
 import 'package:blood_pressure_app/model/storage/db/config_dao.dart';
 import 'package:blood_pressure_app/model/storage/db/config_db.dart';
@@ -5,6 +6,7 @@ import 'package:blood_pressure_app/model/storage/intervall_store.dart';
 import 'package:blood_pressure_app/model/storage/settings_store.dart';
 import 'package:blood_pressure_app/model/storage/update_legacy_settings.dart';
 import 'package:blood_pressure_app/screens/home.dart';
+import 'package:blood_pressure_app/screens/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -17,6 +19,15 @@ late final ConfigDB _database;
 late final BloodPressureModel _bloodPressureModel;
 
 void main() async {
+  runApp(ConsistentFutureBuilder(
+      future: _loadApp(),
+      onWaiting: const LoadingScreen(),
+      onData: (context, widget) => widget
+  ));
+}
+
+/// Load the primary app data asynchronously to allow adding load animations.
+Future<Widget> _loadApp() async {
   WidgetsFlutterBinding.ensureInitialized();
   // 2 different db files
   _bloodPressureModel = await BloodPressureModel.create();
@@ -37,17 +48,16 @@ void main() async {
   // Reset the step size intervall to current on startup
   intervalStorageManager.mainPage.setToMostRecentIntervall();
 
-  runApp(MultiProvider(providers: [
+  return MultiProvider(providers: [
     ChangeNotifierProvider(create: (context) => _bloodPressureModel),
     ChangeNotifierProvider(create: (context) => settings),
     ChangeNotifierProvider(create: (context) => exportSettings),
     ChangeNotifierProvider(create: (context) => csvExportSettings),
     ChangeNotifierProvider(create: (context) => pdfExportSettings),
     ChangeNotifierProvider(create: (context) => intervalStorageManager),
-  ], child: const AppRoot()));
+  ], child: const AppRoot());
 }
 
-// TODO: centralize disabling
 class AppRoot extends StatelessWidget {
   const AppRoot({super.key});
 
