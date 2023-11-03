@@ -439,5 +439,7 @@
   "fileDeleted": "File deleted",
   "@fileDeleted": {},
   "fileAlreadyDeleted": "File already deleted",
-  "@fileAlreadyDeleted": {}
+  "@fileAlreadyDeleted": {},
+  "errExportColumnWithThisNameAlreadyExists": "Export column with this name already exists.",
+  "@errExportColumnWithThisNameAlreadyExists": {}
 }
