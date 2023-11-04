@@ -1,3 +1,4 @@
+import 'package:blood_pressure_app/components/dialoges/enter_timeformat.dart';
 import 'package:blood_pressure_app/main.dart';
 import 'package:blood_pressure_app/model/blood_pressure.dart';
 import 'package:blood_pressure_app/model/ram_only_implementations.dart';
@@ -9,7 +10,6 @@ import 'package:blood_pressure_app/model/storage/settings_store.dart';
 import 'package:blood_pressure_app/screens/add_measurement.dart';
 import 'package:blood_pressure_app/screens/settings.dart';
 import 'package:blood_pressure_app/screens/statistics.dart';
-import 'package:blood_pressure_app/screens/subsettings/enter_timeformat.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:provider/provider.dart';
@@ -70,18 +70,18 @@ void main() {
       await widgetTester.pumpAndSettle();
 
       expect(find.byType(SettingsPage), findsOneWidget);
-      expect(find.byType(EnterTimeFormatScreen), findsNothing);
+      expect(find.byType(EnterTimeFormatDialoge), findsNothing);
       expect(find.byKey(const Key('EnterTimeFormatScreen')), findsOneWidget);
       await widgetTester.tap(find.byKey(const Key('EnterTimeFormatScreen')));
       await widgetTester.pumpAndSettle();
 
-      expect(find.byType(EnterTimeFormatScreen), findsOneWidget);
+      expect(find.byType(EnterTimeFormatDialoge), findsOneWidget);
     });
     // ...
   });
 }
 
-/// Creates a the same App as the main method 
+/// Creates a the same App as the main method.
 Future<void> pumpAppRoot(WidgetTester widgetTester, {
   Settings? settings,
   ExportSettings? exportSettings,

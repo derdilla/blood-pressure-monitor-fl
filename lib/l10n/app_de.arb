@@ -261,14 +261,6 @@
   "@warnAboutTxt2": {},
   "warnAboutTxt3": "Ändere die Werte nach Bedarf und stimme dich mit deinem Arzt ab.",
   "@warnAboutTxt3": {},
-  "enterTimeFormatTxt1": "Das Datumsformat besteht aus einer Mischung vordefinierter ICU-Strings sowie anderer Zeichen deiner Wahl.",
-  "@enterTimeFormatTxt1": {},
-  "enterTimeFormatTxt2": "Die vollständige Liste gültiger Formate findest du hier.",
-  "@enterTimeFormatTxt2": {},
-  "enterTimeFormatTxt3": "Bitte beachte, dass kürzere/längere Zeitformat-Strings nicht die Spaltenbreiten ändern. Sie führen eher zu unerwünschten Umbrüchen.",
-  "@enterTimeFormatTxt3": {},
-  "enterTimeFormatTxt4": "Voreingestellt: \"yy-MM-dd HH:mm\"",
-  "@enterTimeFormatTxt4": {},
   "enterTimeFormatString": "Zeitformat-String",
   "@enterTimeFormatString": {},
   "dateFormatting": "Datumsformat",
@@ -425,5 +417,7 @@
   "requiresAppRestart": "Erfordert Neustart der App",
   "@requiresAppRestart": {},
   "color": "Farbe",
-  "@color": {}
+  "@color": {},
+  "enterTimeFormatDesc": "Das Datumsformat besteht aus einer Mischung vordefinierter ICU-Strings sowie anderer Zeichen deiner Wahl.\n\n[Die vollständige Liste gültiger Formate findest du hier.](screen://TimeFormattingHelp)\n\nBitte beachte, dass kürzere/längere Zeitformat-Strings nicht die Spaltenbreiten ändern. Sie führen eher zu unerwünschten Umbrüchen.\n\nVoreingestellt: \"yy-MM-dd HH:mm\"",
+  "@enterTimeFormatDesc": {}
 }

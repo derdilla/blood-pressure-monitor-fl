@@ -146,12 +146,6 @@
   "@errCantEditThis": {},
   "presets": "Programmate",
   "@presets": {},
-  "enterTimeFormatTxt1": "Una stringa di formattazione è un inseme di stringhe ICU/Skeleton predefinite e di qualsiasi testo aggiuntivo che si desidera aggiungere.",
-  "@enterTimeFormatTxt1": {},
-  "enterTimeFormatTxt2": "Qui è presente un elenco completo dei formati validi.",
-  "@enterTimeFormatTxt2": {},
-  "enterTimeFormatTxt3": "Avviso: l''uso di stringhe di formato più lungo o più corto non altera magicamente la larghezza delle colonne della tabella, il che potrebbe portare a problematiche interruzioni di riga e alla mancata visualizzazione del testo.",
-  "@enterTimeFormatTxt3": {},
   "lifetime": "Vita",
   "@lifetime": {},
   "confirmDeleteDesc": "Eliminare questa voce? (È possibile disabilitare questa richiesta di convalida nelle impostazioni.)",
@@ -347,8 +341,6 @@
       }
     }
   },
-  "enterTimeFormatTxt4": "predefinito: \"yy-MM-dd HH:mm\"",
-  "@enterTimeFormatTxt4": {},
   "confirmDelete": "Conferma eliminazione",
   "@confirmDelete": {},
   "day": "Giorno",
@@ -417,5 +409,7 @@
   "note": "Nota",
   "@note": {},
   "color": "Colore",
-  "@color": {}
+  "@color": {},
+  "enterTimeFormatDesc": "Una stringa di formattazione è un inseme di stringhe ICU/Skeleton predefinite e di qualsiasi testo aggiuntivo che si desidera aggiungere.\n\n[Qui è presente un elenco completo dei formati validi.](screen://TimeFormattingHelp)\n\nAvviso: l''uso di stringhe di formato più lungo o più corto non altera magicamente la larghezza delle colonne della tabella, il che potrebbe portare a problematiche interruzioni di riga e alla mancata visualizzazione del testo.\n\npredefinito: \"yy-MM-dd HH:mm\"",
+  "@enterTimeFormatDesc": {}
 }

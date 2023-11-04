@@ -71,10 +71,6 @@
   "@exportCustomEntries": {},
   "textDelimiter": "Délimiteur de texte",
   "@textDelimiter": {},
-  "enterTimeFormatTxt1": "Une chaine de formatage est un mélange de chaines ICU/Skeleton et de n''importe quel texte supplémentaire que vous souhaitez inclure.",
-  "@enterTimeFormatTxt1": {},
-  "enterTimeFormatTxt2": "Si vous souhaitez en savoir plus sur la liste complète des formats valides, tapez ici.",
-  "@enterTimeFormatTxt2": {},
   "success": "Réussite : {msg}",
   "@success": {
     "placeholders": {
@@ -276,8 +272,6 @@
   "@warnAboutTxt2": {},
   "warnAboutTxt3": "N''hésitez pas à modifier les valeurs pour qu''elles vous conviennent et suivent les recommandations de votre médecin.",
   "@warnAboutTxt3": {},
-  "enterTimeFormatTxt4": "valeur par défaut : \"yy-MM-dd HH:mm\"",
-  "@enterTimeFormatTxt4": {},
   "enterTimeFormatString": "format d''heure",
   "@enterTimeFormatString": {},
   "dateFormatting": "Formatage de date",
@@ -321,8 +315,6 @@
   "@last30Days": {},
   "allowMissingValues": "Autoriser les valeurs manquantes",
   "@allowMissingValues": {},
-  "enterTimeFormatTxt3": "Rappel amical : utiliser des chaines de formatage plus courtes ou plus longues ne modifieront pas la largeur des colonnes de table par magie, ce qui pourrait générer des retours à la ligne inattendus ou que du texte n''apparaisse pas.",
-  "@enterTimeFormatTxt3": {},
   "custom": "Personnalisé",
   "@custom": {},
   "language": "Langue",
@@ -415,5 +407,7 @@
   "exportPdfHeaderFontSize": "Taille de caractère de l''en-tête",
   "@exportPdfHeaderFontSize": {},
   "color": "Couleur",
-  "@color": {}
+  "@color": {},
+  "enterTimeFormatDesc": "Une chaine de formatage est un mélange de chaines ICU/Skeleton et de n''importe quel texte supplémentaire que vous souhaitez inclure.\n\n[Si vous souhaitez en savoir plus sur la liste complète des formats valides, tapez ici.](screen://TimeFormattingHelp)\n\nRappel amical: utiliser des chaines de formatage plus courtes ou plus longues ne modifieront pas la largeur des colonnes de table par magie, ce qui pourrait générer des retours à la ligne inattendus ou que du texte n''apparaisse pas.\n\nvaleur par défaut: \"yy-MM-dd HH:mm\"",
+  "@enterTimeFormatDesc": {}
 }

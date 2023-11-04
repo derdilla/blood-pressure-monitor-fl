@@ -1,14 +1,14 @@
 import 'dart:io';
 
 import 'package:blood_pressure_app/components/consistent_future_builder.dart';
-import 'package:blood_pressure_app/components/input_dialoge.dart';
+import 'package:blood_pressure_app/components/dialoges/enter_timeformat.dart';
+import 'package:blood_pressure_app/components/dialoges/input_dialoge.dart';
 import 'package:blood_pressure_app/components/settings_widgets.dart';
 import 'package:blood_pressure_app/model/blood_pressure.dart';
 import 'package:blood_pressure_app/model/iso_lang_names.dart';
 import 'package:blood_pressure_app/model/storage/settings_store.dart';
 import 'package:blood_pressure_app/platform_integration/platform_client.dart';
 import 'package:blood_pressure_app/screens/subsettings/delete_data.dart';
-import 'package:blood_pressure_app/screens/subsettings/enter_timeformat.dart';
 import 'package:blood_pressure_app/screens/subsettings/export_import_screen.dart';
 import 'package:blood_pressure_app/screens/subsettings/graph_markings.dart';
 import 'package:blood_pressure_app/screens/subsettings/version.dart';
@@ -45,11 +45,11 @@ class SettingsPage extends StatelessWidget {
                 leading: const Icon(Icons.schedule),
                 trailing: const Icon(Icons.arrow_forward_ios),
                 description: Text(settings.dateFormatString),
-                onPressed: (context) {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => const EnterTimeFormatScreen()),
-                  );
+                onPressed: (context) async {
+                  final pickedFormat = await showTimeFormatPickerDialoge(context, settings.dateFormatString);
+                  if (pickedFormat != null) {
+                    settings.dateFormatString = pickedFormat;
+                  }
                 },
               ),
               DropDownSettingsTile<ThemeMode>(

@@ -261,14 +261,6 @@
   "@warnAboutTxt2": {},
   "warnAboutTxt3": "您可以按需随意修改此值，请遵从医生的建议。",
   "@warnAboutTxt3": {},
-  "enterTimeFormatTxt1": "格式化字符串是一个预定义的ICU/Skeleton字符串和您想要包含的其他文字的混合体。",
-  "@enterTimeFormatTxt1": {},
-  "enterTimeFormatTxt2": "点击即可查看可用的格式化字符串的完整列表。",
-  "@enterTimeFormatTxt2": {},
-  "enterTimeFormatTxt3": " 友情提示：使用更长或更短的格式字符串不会改变表的列宽，还可能导致意外的换行和文字显示不全。",
-  "@enterTimeFormatTxt3": {},
-  "enterTimeFormatTxt4": "默认：\"yy-MM-dd HH:mm\"",
-  "@enterTimeFormatTxt4": {},
   "enterTimeFormatString": "时间格式",
   "@enterTimeFormatString": {},
   "dateFormatting": "日期格式",
@@ -305,5 +297,7 @@
         "type": "int"
       }
     }
-  }
+  },
+  "enterTimeFormatDesc": "格式化字符串是一个预定义的ICU/Skeleton字符串和您想要包含的其他文字的混合体。\n\n[点击即可查看可用的格式化字符串的完整列表。](screen://TimeFormattingHelp)\n\n友情提示：使用更长或更短的格式字符串不会改变表的列宽，还可能导致意外的换行和文字显示不全。\n\n默认：\"yy-MM-dd HH:mm\"",
+  "@enterTimeFormatDesc": {}
 }
