@@ -2,7 +2,7 @@ name: blood_pressure_app
 description: Track your blood pressure wherever you go
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
-version: 1.5.5
+version: 1.5.6
 
 environment:
   sdk: '>=3.0.2 <4.0.0'
