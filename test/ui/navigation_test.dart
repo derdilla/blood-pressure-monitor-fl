@@ -70,18 +70,18 @@ void main() {
       await widgetTester.pumpAndSettle();
 
       expect(find.byType(SettingsPage), findsOneWidget);
-      expect(find.byType(EnterTimeFormatScreen), findsNothing);
+      expect(find.byType(EnterTimeFormatDialoge), findsNothing);
       expect(find.byKey(const Key('EnterTimeFormatScreen')), findsOneWidget);
       await widgetTester.tap(find.byKey(const Key('EnterTimeFormatScreen')));
       await widgetTester.pumpAndSettle();
 
-      expect(find.byType(EnterTimeFormatScreen), findsOneWidget);
+      expect(find.byType(EnterTimeFormatDialoge), findsOneWidget);
     });
     // ...
   });
 }
 
-/// Creates a the same App as the main method 
+/// Creates a the same App as the main method.
 Future<void> pumpAppRoot(WidgetTester widgetTester, {
   Settings? settings,
   ExportSettings? exportSettings,

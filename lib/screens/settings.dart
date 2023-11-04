@@ -45,11 +45,11 @@ class SettingsPage extends StatelessWidget {
                 leading: const Icon(Icons.schedule),
                 trailing: const Icon(Icons.arrow_forward_ios),
                 description: Text(settings.dateFormatString),
-                onPressed: (context) {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => const EnterTimeFormatScreen()),
-                  );
+                onPressed: (context) async {
+                  final pickedFormat = await showTimeFormatPickerDialoge(context, settings.dateFormatString);
+                  if (pickedFormat != null) {
+                    settings.dateFormatString = pickedFormat;
+                  }
                 },
               ),
               DropDownSettingsTile<ThemeMode>(

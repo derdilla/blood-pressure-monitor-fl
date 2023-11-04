@@ -274,14 +274,6 @@
   "@warnAboutTxt2": {},
   "warnAboutTxt3": "Feel free to change the values to suit your needs and follow the recommendations of your doctor.",
   "@warnAboutTxt3": {},
-  "enterTimeFormatTxt1": "A formatter string is a blend of predefined ICU/Skeleton strings and any additional text you''d like to include.",
-  "@enterTimeFormatTxt1": {},
-  "enterTimeFormatTxt2": "If you''re curious about the complete list of valid formats, you can find them right here.",
-  "@enterTimeFormatTxt2": {},
-  "enterTimeFormatTxt3": "Just a friendly reminder, using longer or shorter format Strings won''t magically alter the width of the table columns, which might lead to some awkward line breaks and text not showing.",
-  "@enterTimeFormatTxt3": {},
-  "enterTimeFormatTxt4": "default: \"yy-MM-dd HH:mm\"",
-  "@enterTimeFormatTxt4": {},
   "enterTimeFormatString": "time format",
   "@enterTimeFormatString": {},
   "dateFormatting": "Date formatting",
@@ -441,5 +433,7 @@
   "fileAlreadyDeleted": "File already deleted",
   "@fileAlreadyDeleted": {},
   "errExportColumnWithThisNameAlreadyExists": "Export column with this name already exists.",
-  "@errExportColumnWithThisNameAlreadyExists": {}
+  "@errExportColumnWithThisNameAlreadyExists": {},
+  "enterTimeFormatDesc": "A formatter string is a blend of predefined ICU/Skeleton strings and any additional text you''d like to include.\n\n[If you''re curious about the complete list of valid formats, you can find them right here.](screen://TimeFormattingHelp)\n\nJust a friendly reminder, using longer or shorter format Strings won''t magically alter the width of the table columns, which might lead to some awkward line breaks and text not showing.\n\ndefault: \"yy-MM-dd HH:mm\"",
+  "@enterTimeFormatDesc": {}
 }

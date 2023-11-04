@@ -237,10 +237,6 @@
   "@warnAboutTxt2": {},
   "warnAboutTxt3": "Endre gjerne verdiene, og følg anbefalingene din doktor gir deg.",
   "@warnAboutTxt3": {},
-  "enterTimeFormatTxt2": "En fullstendig liste over gyldige formater er å finne her.",
-  "@enterTimeFormatTxt2": {},
-  "enterTimeFormatTxt4": "forvalg: \"yy-MM-dd HH:mm\"",
-  "@enterTimeFormatTxt4": {},
   "confirmDeleteDesc": "Slett oppføringen? (Du kan skru av disse bekreftelsene i innstillingene.)",
   "@confirmDeleteDesc": {},
   "weekOfYear": "Uke {weekNum}, {year}",
@@ -306,10 +302,6 @@
       }
     }
   },
-  "enterTimeFormatTxt3": "Bruk av lengre eller kortere formatstrenger endrer ikke også bredden på tabellkolonnene, noe som fører til linjeskift og tekst som ikke vises.",
-  "@enterTimeFormatTxt3": {},
-  "enterTimeFormatTxt1": "En formateringsstreng er en miks av predefinert ICU/Skeleton -strenger og all annen tekst du vil inkludere.",
-  "@enterTimeFormatTxt1": {},
   "exportWarnConfigNotImportable": "Gjør eksportoppsettet importerbart ved å sette eksporttypen til \\\"CSV\\\", skru på overskrift, inkluder feltene ''diastolic'', ''systolic'', ''pulse'', ''notes'', sammen med ett av de tilgjengelige tidsformatene.",
   "@exportWarnConfigNotImportable": {},
   "allowMissingValues": "Tillat manglende verdier",
@@ -374,5 +366,7 @@
   "note": "Notat",
   "@note": {},
   "color": "Farge",
-  "@color": {}
+  "@color": {},
+  "enterTimeFormatDesc": "En formateringsstreng er en miks av predefinert ICU/Skeleton -strenger og all annen tekst du vil inkludere.\n\n[En fullstendig liste over gyldige formater er å finne her.](screen://TimeFormattingHelp)\n\nBruk av lengre eller kortere formatstrenger endrer ikke også bredden på tabellkolonnene, noe som fører til linjeskift og tekst som ikke vises.\n\nforvalg: \"yy-MM-dd HH:mm\"",
+  "@enterTimeFormatDesc": {}
 }
