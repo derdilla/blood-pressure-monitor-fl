@@ -6,10 +6,15 @@ import 'package:intl/intl.dart';
 
 /// Dialoge that explains the time format and pops the context with either null or a time format string.
 class EnterTimeFormatDialoge extends StatefulWidget {
-  const EnterTimeFormatDialoge({super.key, required this.initialValue});
+  const EnterTimeFormatDialoge({super.key, required this.initialValue, this.previewTime});
 
   /// Text that is initially in time format field.
   final String initialValue;
+
+  /// Timestamp used to generate time format preview.
+  ///
+  /// When previewTime is null [DateTime.now] will be used.
+  final DateTime? previewTime;
 
   @override
   State<EnterTimeFormatDialoge> createState() => _EnterTimeFormatDialogeState();
@@ -68,7 +73,7 @@ class _EnterTimeFormatDialogeState extends State<EnterTimeFormatDialoge> {
                 physics: const NeverScrollableScrollPhysics(),
                 data: localizations.enterTimeFormatDesc
               ),
-              Text(DateFormat(timeFormatFieldController.text).format(DateTime.now())),
+              Text(DateFormat(timeFormatFieldController.text).format(widget.previewTime ?? DateTime.now())),
               Padding(
                 padding: const EdgeInsets.all(12),
                 child: TextField(
