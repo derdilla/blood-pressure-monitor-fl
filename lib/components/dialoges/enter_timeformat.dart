@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 
 /// Dialoge that explains the time format and pops the context with either null or a time format string.
 class EnterTimeFormatDialoge extends StatefulWidget {
+  /// Create dialoge for entering time formats as used by the [DateFormat] class.
   const EnterTimeFormatDialoge({super.key, required this.initialValue, this.previewTime});
 
   /// Text that is initially in time format field.

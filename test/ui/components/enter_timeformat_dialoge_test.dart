@@ -40,7 +40,7 @@ void main() {
       await widgetTester.pumpAndSettle();
       expect(find.text('3rd quarter + July'), findsOneWidget);
     });
-    testWidgets('should close page on button pressed', (widgetTester) async {
+    testWidgets('should close page on close button pressed', (widgetTester) async {
       await widgetTester.pumpWidget(const MaterialApp(
           localizationsDelegates: [AppLocalizations.delegate,],
           locale: Locale('en'),
