@@ -97,12 +97,9 @@ class ColorSelectionListTile extends StatelessWidget {
     return ListTile(
       title: title,
       subtitle: subtitle,
-      leading: Container(
-        decoration: BoxDecoration(
-          color: initialColor,
-          shape: BoxShape.circle,
-        ),
-        child: const SizedBox.square(dimension: 24,),
+      leading: CircleAvatar(
+        backgroundColor: initialColor,
+        radius: 12,
       ),
       onTap: () async {
         final color = await showColorPickerDialog(context, initialColor);
