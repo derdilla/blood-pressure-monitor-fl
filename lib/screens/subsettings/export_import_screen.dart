@@ -2,7 +2,7 @@ import 'package:blood_pressure_app/components/consistent_future_builder.dart';
 import 'package:blood_pressure_app/components/diabled.dart';
 import 'package:blood_pressure_app/components/display_interval_picker.dart';
 import 'package:blood_pressure_app/components/export_item_order.dart';
-import 'package:blood_pressure_app/components/settings_widgets.dart';
+import 'package:blood_pressure_app/components/settings/settings_widgets.dart';
 import 'package:blood_pressure_app/model/blood_pressure.dart';
 import 'package:blood_pressure_app/model/export_import.dart';
 import 'package:blood_pressure_app/model/export_options.dart';
