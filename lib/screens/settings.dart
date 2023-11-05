@@ -39,13 +39,13 @@ class SettingsPage extends StatelessWidget {
         return ListView(
           children: [
             SettingsSection(title: Text(localizations.layout), children: [
-              SettingsTile(
+              ListTile(
                 key: const Key('EnterTimeFormatScreen'),
                 title: Text(localizations.enterTimeFormatScreen),
+                subtitle: Text(settings.dateFormatString),
                 leading: const Icon(Icons.schedule),
                 trailing: const Icon(Icons.arrow_forward_ios),
-                description: Text(settings.dateFormatString),
-                onPressed: (context) async {
+                onTap: () async {
                   final pickedFormat = await showTimeFormatPickerDialoge(context, settings.dateFormatString);
                   if (pickedFormat != null) {
                     settings.dateFormatString = pickedFormat;
@@ -199,11 +199,11 @@ class SettingsPage extends StatelessWidget {
                 decoration: InputDecoration(hintText: localizations.diaWarn),
                 inputWidth: 120,
               ),
-              SettingsTile(
+              ListTile(
                 key: const Key('determineWarnValues'),
                 leading: const Icon(Icons.settings_applications_outlined),
                 title: Text(localizations.determineWarnValues),
-                onPressed: (context) {
+                onTap: () {
                   showDialog(
                     context: context,
                     builder: (context) => NumberInputDialoge(
@@ -222,25 +222,25 @@ class SettingsPage extends StatelessWidget {
                   );
                 },
               ),
-              SettingsTile(
+              ListTile(
                 key: const Key('AboutWarnValuesScreen'),
                 title: Text(localizations.aboutWarnValuesScreen),
-                description: Text(localizations.aboutWarnValuesScreenDesc),
+                subtitle: Text(localizations.aboutWarnValuesScreenDesc),
                 leading: const Icon(Icons.info_outline),
                 trailing: const Icon(Icons.arrow_forward_ios),
-                onPressed: (context) {
+                onTap: () {
                   Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) => const AboutWarnValuesScreen()),
                   );
                 }
               ),
-              SettingsTile(
+              ListTile(
                 key: const Key('GraphMarkingsScreen'),
                 title: Text(localizations.customGraphMarkings),
                 leading: const Icon(Icons.legend_toggle_outlined),
                 trailing: const Icon(Icons.arrow_forward_ios),
-                onPressed: (context) {
+                onTap: () {
                   Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) => const GraphMarkingsScreen()),
@@ -269,21 +269,21 @@ class SettingsPage extends StatelessWidget {
             SettingsSection(
               title: Text(localizations.data),
               children: [
-                SettingsTile(
+                ListTile(
                     title: Text(localizations.exportImport),
                     leading: const Icon(Icons.download),
                     trailing: const Icon(Icons.arrow_forward_ios),
-                    onPressed: (context) {
+                    onTap: () {
                       Navigator.push(
                         context,
                         MaterialPageRoute(builder: (context) => const ExportImportScreen()),
                       );
                     }
                 ),
-                SettingsTile(
+                ListTile(
                     title: Text(localizations.exportSettings),
                     leading: const Icon(Icons.tune),
-                    onPressed: (context) async {
+                    onTap: () async {
                       String dbPath = await getDatabasesPath();
                       assert(dbPath != inMemoryDatabasePath);
                       dbPath = join(dbPath, 'config.db');
@@ -291,11 +291,11 @@ class SettingsPage extends StatelessWidget {
                       PlatformClient.shareFile(dbPath, 'application/vnd.sqlite3');
                     }
                 ),
-                SettingsTile(
+                ListTile(
                     title: Text(localizations.importSettings),
-                    description: Text(localizations.requiresAppRestart),
+                    subtitle: Text(localizations.requiresAppRestart),
                     leading: const Icon(Icons.settings_backup_restore),
-                    onPressed: (context) async {
+                    onTap: () async {
                       final messenger = ScaffoldMessenger.of(context);
                       var result = await FilePicker.platform.pickFiles(
                         allowMultiple: false,
@@ -321,11 +321,11 @@ class SettingsPage extends StatelessWidget {
                       }
                     }
                 ),
-                SettingsTile(
+                ListTile(
                     title: Text(localizations.delete),
                     leading: const Icon(Icons.delete),
                     trailing: const Icon(Icons.arrow_forward_ios),
-                    onPressed: (context) {
+                    onTap: () {
                       Navigator.push(
                         context,
                         MaterialPageRoute(builder: (context) => const DeleteDataScreen()),
@@ -335,28 +335,28 @@ class SettingsPage extends StatelessWidget {
               ],
             ),
             SettingsSection(title: Text(localizations.aboutWarnValuesScreen), children: [
-              SettingsTile(
+              ListTile(
                   key: const Key('version'),
                   title: Text(localizations.version),
                   leading: const Icon(Icons.info_outline),
                   trailing: const Icon(Icons.arrow_forward_ios),
-                  description: ConsistentFutureBuilder<PackageInfo>(
+                  subtitle: ConsistentFutureBuilder<PackageInfo>(
                     future: PackageInfo.fromPlatform(),
                     cacheFuture: true,
                     onData: (context, info) => Text(info.version)
                   ),
-                  onPressed: (context) {
+                  onTap: () {
                     Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) => const VersionScreen()),
                     );
                   }
               ),
-              SettingsTile(
+              ListTile(
                 key: const Key('sourceCode'),
                 title: Text(localizations.sourceCode),
                 leading: const Icon(Icons.merge),
-                onPressed: (context) async {
+                onTap: () async {
                   final scaffoldMessenger = ScaffoldMessenger.of(context);
                   var url = Uri.parse('https://github.com/NobodyForNothing/blood-pressure-monitor-fl');
                   if (await canLaunchUrl(url)) {
@@ -367,12 +367,12 @@ class SettingsPage extends StatelessWidget {
                   }
                 },
               ),
-              SettingsTile(
+              ListTile(
                 key: const Key('licenses'),
                 title: Text(localizations.licenses),
                 leading: const Icon(Icons.policy_outlined),
                 trailing: const Icon(Icons.arrow_forward_ios),
-                onPressed: (context) {
+                onTap: () {
                   showLicensePage(context: context);
                 },
               ),
