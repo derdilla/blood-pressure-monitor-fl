@@ -48,11 +48,11 @@ class ExportImportScreen extends StatelessWidget {
                         await JSaver.instance.setDefaultSavingDirectory();
                     settings.defaultExportDir = appDir.value;
                   }),
-              SwitchSettingsTile(
+              SwitchListTile(
                   title: Text(localizations.exportAfterEveryInput),
                   subtitle: Text(localizations.exportAfterEveryInputDesc),
-                  initialValue: settings.exportAfterEveryEntry,
-                  onToggle: (value) {
+                  value: settings.exportAfterEveryEntry,
+                  onChanged: (value) {
                     settings.exportAfterEveryEntry = value;
                   },
               ),
@@ -98,11 +98,11 @@ class ExportImportScreen extends StatelessWidget {
                           }
                         },
                       ),
-                      SwitchSettingsTile(
+                      SwitchListTile(
                         title: Text(localizations.exportCsvHeadline),
                         subtitle: Text(localizations.exportCsvHeadlineDesc),
-                        initialValue: csvExportSettings.exportHeadline,
-                        onToggle: (value) {
+                        value: csvExportSettings.exportHeadline,
+                        onChanged: (value) {
                           csvExportSettings.exportHeadline = value;
                         }
                       ),
@@ -116,22 +116,22 @@ class ExportImportScreen extends StatelessWidget {
                 Consumer<PdfExportSettings>(builder: (context, pdfExportSettings, child) =>
                   Column(
                     children: [
-                      SwitchSettingsTile(
+                      SwitchListTile(
                           title: Text(localizations.exportPdfExportTitle),
-                          initialValue: pdfExportSettings.exportTitle,
-                          onToggle: (value) {
+                          value: pdfExportSettings.exportTitle,
+                          onChanged: (value) {
                             pdfExportSettings.exportTitle = value;
                           }),
-                      SwitchSettingsTile(
+                      SwitchListTile(
                           title: Text(localizations.exportPdfExportStatistics),
-                          initialValue: pdfExportSettings.exportStatistics,
-                          onToggle: (value) {
+                          value: pdfExportSettings.exportStatistics,
+                          onChanged: (value) {
                             pdfExportSettings.exportStatistics = value;
                           }),
-                      SwitchSettingsTile(
+                      SwitchListTile(
                           title: Text(localizations.exportPdfExportData),
-                          initialValue: pdfExportSettings.exportData,
-                          onToggle: (value) {
+                          value: pdfExportSettings.exportData,
+                          onChanged: (value) {
                             pdfExportSettings.exportData = value;
                           }),
                       InputSettingsTile(
@@ -218,10 +218,10 @@ class ExportFieldCustomisationSetting extends StatelessWidget {
 
           return Column(
             children: [
-              SwitchSettingsTile(
+              SwitchListTile(
                 title: Text(localizations.exportCustomEntries),
-                initialValue: fieldsSettings.exportCustomFields,
-                onToggle: (value) {
+                value: fieldsSettings.exportCustomFields,
+                onChanged: (value) {
                   fieldsSettings.exportCustomFields = value;
                 }
               ),

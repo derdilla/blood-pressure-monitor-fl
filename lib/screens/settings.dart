@@ -124,47 +124,47 @@ class SettingsPage extends StatelessWidget {
                 onMainColorChanged: (color) => settings.pulColor = color,
                 initialColor: settings.pulColor,
                 title: Text(localizations.pulColor)),
-              SwitchSettingsTile(
+              SwitchListTile(
                 key: const Key('useLegacyList'),
-                initialValue: settings.useLegacyList,
-                onToggle: (value) {
+                value: settings.useLegacyList,
+                onChanged: (value) {
                   settings.useLegacyList = value;
                 },
-                leading: const Icon(Icons.list_alt_outlined),
-                title: Text(localizations.useLegacyList)),
+                secondary: const Icon(Icons.list_alt_outlined),
+                title: Text(localizations.useLegacyList),),
             ]),
 
             SettingsSection(title: Text(localizations.behavior), children: [
-              SwitchSettingsTile(
+              SwitchListTile(
                 key: const Key('allowManualTimeInput'),
-                initialValue: settings.allowManualTimeInput,
-                onToggle: (value) {
+                value: settings.allowManualTimeInput,
+                onChanged: (value) {
                   settings.allowManualTimeInput = value;
                 },
-                leading: const Icon(Icons.details),
+                secondary: const Icon(Icons.details),
                 title: Text(localizations.allowManualTimeInput)),
-              SwitchSettingsTile(
+              SwitchListTile(
                 key: const Key('validateInputs'),
-                initialValue: settings.validateInputs,
+                value: settings.validateInputs,
                 title: Text(localizations.validateInputs),
-                leading: const Icon(Icons.edit),
-                onToggle: (value) {
+                secondary: const Icon(Icons.edit),
+                onChanged: (value) {
                   settings.validateInputs = value;
                 }),
-              SwitchSettingsTile(
+              SwitchListTile(
                 key: const Key('allowMissingValues'),
-                initialValue: settings.allowMissingValues,
+                value: settings.allowMissingValues,
                 title: Text(localizations.allowMissingValues),
-                leading: const Icon(Icons.report_off_outlined),
-                onToggle: (value) {
+                secondary: const Icon(Icons.report_off_outlined),
+                onChanged: (value) {
                   settings.allowMissingValues = value;
                 }),
-              SwitchSettingsTile(
+              SwitchListTile(
                 key: const Key('confirmDeletion'),
-                initialValue: settings.confirmDeletion,
+                value: settings.confirmDeletion,
                 title: Text(localizations.confirmDeletion),
-                leading: const Icon(Icons.check),
-                onToggle: (value) {
+                secondary: const Icon(Icons.check),
+                onChanged: (value) {
                   settings.confirmDeletion = value;
                 }),
               InputSettingsTile(
@@ -247,21 +247,21 @@ class SettingsPage extends StatelessWidget {
                   );
                 }
               ),
-              SwitchSettingsTile(
+              SwitchListTile(
                 title: Text(localizations.drawRegressionLines),
-                leading: const Icon(Icons.trending_down_outlined),
+                secondary: const Icon(Icons.trending_down_outlined),
                 subtitle: Text(localizations.drawRegressionLinesDesc),
-                initialValue: settings.drawRegressionLines,
-                onToggle: (value) {
+                value: settings.drawRegressionLines,
+                onChanged: (value) {
                   settings.drawRegressionLines = value;
                 }
               ),
-              SwitchSettingsTile(
+              SwitchListTile(
                 title: Text(localizations.startWithAddMeasurementPage),
                 subtitle: Text(localizations.startWithAddMeasurementPageDescription),
-                leading: const Icon(Icons.electric_bolt_outlined),
-                initialValue: settings.startWithAddMeasurementPage,
-                onToggle: (value) {
+                secondary: const Icon(Icons.electric_bolt_outlined),
+                value: settings.startWithAddMeasurementPage,
+                onChanged: (value) {
                   settings.startWithAddMeasurementPage = value;
                 }
               ),

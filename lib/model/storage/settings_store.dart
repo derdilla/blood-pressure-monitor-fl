@@ -210,7 +210,7 @@ class Settings extends ChangeNotifier {
   bool _allowManualTimeInput = true;
   bool get allowManualTimeInput => _allowManualTimeInput;
   set allowManualTimeInput(bool value) {
-    _allowManualTimeInput = false;
+    _allowManualTimeInput = value;
     notifyListeners();
   }
 

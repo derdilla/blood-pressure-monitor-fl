@@ -112,39 +112,6 @@ class ColorSelectionListTile extends StatelessWidget {
   }
 }
 
-/// A ListTile with a trailing switch.
-///
-/// The properties behave like those of [ListTile] and [Switch] respectively.
-class SwitchSettingsTile extends StatelessWidget {
-  /// Creates a new [ListTile] with a trailing switch. 
-  const SwitchSettingsTile(
-      {super.key,
-      required this.title,
-      required this.onToggle,
-      required this.initialValue,
-      this.leading,
-      this.subtitle,});
-
-  final Widget title;
-  final Widget? subtitle;
-  final void Function(bool newValue) onToggle;
-  final Widget? leading;
-  final bool initialValue;
-
-  @override
-  Widget build(BuildContext context) {
-    return ListTile(
-      title: title,
-      leading: leading,
-      subtitle: subtitle,
-      trailing: Switch(
-        value: initialValue,
-        onChanged: onToggle,
-      ),
-    );
-  }
-}
-
 class SliderSettingsTile extends StatefulWidget {
   final Widget title;
   final void Function(double newValue) onChanged;
