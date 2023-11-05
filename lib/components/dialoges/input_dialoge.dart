@@ -6,6 +6,8 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 class InputDialoge extends StatefulWidget {
   final String hintText;
   final String? initialValue;
+
+  /// Gets called when the user submits the text field or presses the submit button.
   final void Function(String text) onSubmit;
   final List<TextInputFormatter>? inputFormatters;
   final TextInputType? keyboardType;

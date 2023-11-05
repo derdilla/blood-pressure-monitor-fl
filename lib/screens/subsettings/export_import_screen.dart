@@ -78,27 +78,20 @@ class ExportImportScreen extends StatelessWidget {
                 Consumer<CsvExportSettings>(builder: (context, csvExportSettings, child) =>
                   Column(
                     children: [
-                      /* TODO
-                      NumberInputSettingsTile(
+                      InputListTile(
                         label: localizations.fieldDelimiter,
                         initialValue: csvExportSettings.fieldDelimiter,
-                        onEditingComplete: (value) {
-                          if (value != null) {
-                            csvExportSettings.fieldDelimiter = value;
-                          }
+                        onSubmit: (value) {
+                          csvExportSettings.fieldDelimiter = value;
                         },
                       ),
-                      NumberInputSettingsTile(
-                        label: Text(localizations.textDelimiter),
-                        inputWidth: 40,
+                      InputListTile(
+                        label: localizations.textDelimiter,
                         initialValue: csvExportSettings.textDelimiter,
-                        onEditingComplete: (value) {
-                          if (value != null) {
-                            csvExportSettings.textDelimiter = value;
-                          }
+                        onSubmit: (value) {
+                          csvExportSettings.textDelimiter = value;
                         },
                       ),
-                       */
                       SwitchListTile(
                         title: Text(localizations.exportCsvHeadline),
                         subtitle: Text(localizations.exportCsvHeadlineDesc),
