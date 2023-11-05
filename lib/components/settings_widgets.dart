@@ -70,41 +70,43 @@ class SettingsTile extends StatelessWidget {
   }
 }
 
-class ColorSelectionSettingsTile extends StatelessWidget {
-  final Widget title;
-  final ValueChanged<Color>? onMainColorChanged;
-  final Color initialColor;
-  final Widget? trailing;
-  final Widget? description;
-  final bool disabled;
-
-  const ColorSelectionSettingsTile(
+/// A ListTile that shows a color preview and allows changing it.
+class ColorSelectionListTile extends StatelessWidget {
+  /// Creates a ListTile with a color preview that opens a color picker on tap.
+  const ColorSelectionListTile(
       {super.key,
       required this.title,
       required this.onMainColorChanged,
       required this.initialColor,
-      this.trailing,
-      this.description,
-      this.disabled = false});
+      this.subtitle});
+
+  /// The primary label of the list tile.
+  final Widget title;
+  
+  /// Additional content displayed below the title.
+  final Widget? subtitle;
+
+  /// Gets called when a color gets successfully picked.
+  final ValueChanged<Color> onMainColorChanged;
+
+  /// Initial color displayed in the preview.
+  final Color initialColor;
 
   @override
   Widget build(BuildContext context) {
-    return SettingsTile(
+    return ListTile(
+      title: title,
+      subtitle: subtitle,
       leading: Container(
-        width: 25.0,
-        height: 25.0,
         decoration: BoxDecoration(
           color: initialColor,
           shape: BoxShape.circle,
         ),
+        child: const SizedBox.square(dimension: 24,),
       ),
-      title: title,
-      trailing: trailing,
-      description: description,
-      disabled: disabled,
-      onPressed: (context) async {
+      onTap: () async {
         final color = await showColorPickerDialog(context, initialColor);
-        if (color != null) onMainColorChanged?.call(color);
+        if (color != null) onMainColorChanged(color);
       },
     );
   }

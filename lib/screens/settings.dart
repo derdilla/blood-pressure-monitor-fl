@@ -66,7 +66,7 @@ class SettingsPage extends StatelessWidget {
                   if (value != null) settings.themeMode = value;
                 },
               ),
-              ColorSelectionSettingsTile(
+              ColorSelectionListTile(
                 key: const Key('accentColor'),
                 onMainColorChanged: (color) => settings.accentColor = color,
                 initialColor: settings.accentColor,
@@ -109,17 +109,17 @@ class SettingsPage extends StatelessWidget {
                 end: 1000,
                 stepSize: 50,
               ),
-              ColorSelectionSettingsTile(
+              ColorSelectionListTile(
                 key: const Key('sysColor'),
                 onMainColorChanged: (color) => settings.sysColor = color,
                 initialColor: settings.sysColor,
                   title: Text(localizations.sysColor)),
-              ColorSelectionSettingsTile(
+              ColorSelectionListTile(
                 key: const Key('diaColor'),
                 onMainColorChanged: (color) => settings.diaColor = color,
                 initialColor: settings.diaColor,
                 title: Text(localizations.diaColor)),
-              ColorSelectionSettingsTile(
+              ColorSelectionListTile(
                 key: const Key('pulColor'),
                 onMainColorChanged: (color) => settings.pulColor = color,
                 initialColor: settings.pulColor,

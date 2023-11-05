@@ -54,7 +54,8 @@ class ExportImportScreen extends StatelessWidget {
                   initialValue: settings.exportAfterEveryEntry,
                   onToggle: (value) {
                     settings.exportAfterEveryEntry = value;
-                  }),
+                  },
+              ),
               DropDownSettingsTile<ExportFormat>(
                 key: const Key('exportFormat'),
                 title: Text(localizations.exportFormat),
