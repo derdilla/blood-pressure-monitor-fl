@@ -5,11 +5,17 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 // TODO: redo dialoges in flutter style
 class InputDialoge extends StatefulWidget {
   final String hintText;
+  final String? initialValue;
   final void Function(String text) onSubmit;
   final List<TextInputFormatter>? inputFormatters;
   final TextInputType? keyboardType;
 
-  const InputDialoge({super.key, required this.hintText, required this.onSubmit, this.inputFormatters, this.keyboardType});
+  const InputDialoge({super.key,
+    required this.hintText,
+    required this.onSubmit,
+    this.inputFormatters,
+    this.keyboardType,
+    this.initialValue});
 
   @override
   State<InputDialoge> createState() => _InputDialogeState();
@@ -22,9 +28,15 @@ class _InputDialogeState extends State<InputDialoge> {
 
   @override
   void dispose() {
-    // Clean up the controller when the widget is disposed.
     controller.dispose();
     super.dispose();
+  }
+
+
+  @override
+  void initState() {
+    super.initState();
+    controller.text = widget.initialValue ?? '';
   }
 
   @override
@@ -37,7 +49,10 @@ class _InputDialogeState extends State<InputDialoge> {
         controller: controller,
         inputFormatters: widget.inputFormatters,
         keyboardType: widget.keyboardType,
-        decoration: InputDecoration(hintText: widget.hintText),
+        decoration: InputDecoration(
+          hintText: widget.hintText
+        ),
+        onFieldSubmitted: widget.onSubmit,
       ),
       actions: [
         ElevatedButton(
@@ -51,23 +66,32 @@ class _InputDialogeState extends State<InputDialoge> {
   }
 }
 
+typedef NumberInputResult = void Function(double result);
+
 class NumberInputDialoge extends StatelessWidget {
   final String hintText;
-  final void Function(int text) onParsableSubmit;
+  final NumberInputResult onParsableSubmit;
+  final String? initialValue;
 
-  const NumberInputDialoge({super.key, required this.hintText, required this.onParsableSubmit});
+  const NumberInputDialoge({
+    super.key,
+    required this.hintText,
+    required this.onParsableSubmit,
+    this.initialValue});
 
   @override
   Widget build(BuildContext context) {
     return InputDialoge(
       hintText: hintText,
-      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+      inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r'([0-9]+(\.([0-9]*))?)')),],
       keyboardType: TextInputType.number,
+      initialValue: initialValue,
       onSubmit: (text) {
-        if (text.isEmpty || (int.tryParse(text) == null)) {
+        double? value = double.tryParse(text);
+        value ??= int.tryParse(text)?.toDouble();
+        if (text.isEmpty || value == null) {
           return;
         }
-        int value = int.parse(text);
         onParsableSubmit(value);
       }
     );

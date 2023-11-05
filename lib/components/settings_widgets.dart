@@ -1,6 +1,6 @@
 import 'package:blood_pressure_app/components/color_picker.dart';
+import 'package:blood_pressure_app/components/dialoges/input_dialoge.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 class SettingsTile extends StatelessWidget {
   final Widget title;
@@ -206,81 +206,53 @@ class _SliderSettingsTileState extends State<SliderSettingsTile> {
   }
 }
 
-class InputSettingsTile extends StatefulWidget {
-  final Widget title;
-  final Widget? leading;
-  final Widget? description;
-  final bool disabled;
-
-  final double inputWidth;
-  final String? initialValue;
-  final InputDecoration? decoration;
-  final void Function(String?)? onEditingComplete;
-  final TextInputType? keyboardType;
-  final List<TextInputFormatter>? inputFormatters;
-
-  const InputSettingsTile(
+/// Widget for editing numbers in a list tile.
+class NumberInputListTile extends StatelessWidget {
+  /// Creates a widget for editing numbers in a list tile.
+  const NumberInputListTile(
       {super.key,
-      required this.title,
-      required this.inputWidth,
-      this.leading,
-      this.description,
-      this.disabled = false,
-      this.initialValue,
-      this.decoration,
-      this.onEditingComplete,
-      this.keyboardType,
-      this.inputFormatters});
+        required this.label,
+        this.leading,
+        this.initialValue,
+        required this.onParsableSubmit,});
 
-  @override
-  State<StatefulWidget> createState() => _InputSettingsTileState();
-}
+  /// Short label describing the required field contents.
+  /// 
+  /// This will be both the title of the list tile as well as the hint text in the input dialoge. 
+  final String label;
 
-class _InputSettingsTileState extends State<InputSettingsTile> {
-  late String _value;
+  /// Widget to display before the label in the list tile.
+  final Widget? leading;
 
-  @override
-  void initState() {
-    super.initState();
-    _value = widget.initialValue ?? "";
-  }
+  /// Initial content of the input field.
+  final num? initialValue;
+
+  /// Gets called once the user submits a new valid number to the field.
+  final NumberInputResult onParsableSubmit;
 
   @override
   Widget build(BuildContext context) {
-    final focusNode = FocusNode();
-
-    return SettingsTile(
-      title: widget.title,
-      description: widget.description,
-      leading: widget.leading,
-      disabled: widget.disabled,
-      onPressed: (context) {
-        focusNode.requestFocus();
+    return ListTile(
+      title: Text(label),
+      subtitle: Text(initialValue.toString()),
+      leading: leading,
+      trailing: const Icon(Icons.edit),
+      onTap: () {
+        showDialog(
+          context: context,
+          builder: (context) => NumberInputDialoge(
+            initialValue: initialValue?.toString(),
+            hintText: label,
+            onParsableSubmit: (value) {
+              Navigator.of(context).pop();
+              onParsableSubmit(value);
+            },
+          ),
+        );
       },
-      trailing: Row(
-        children: [
-          SizedBox(
-            width: widget.inputWidth,
-            child: TextFormField(
-              initialValue: widget.initialValue,
-              decoration: widget.decoration,
-              onChanged: (value) {
-                _value = value;
-              },
-              onEditingComplete: () => widget.onEditingComplete!(_value),
-              onTapOutside: (e) => widget.onEditingComplete!(_value),
-              keyboardType: widget.keyboardType,
-              inputFormatters: widget.inputFormatters,
-              focusNode: focusNode,
-            ),
-          ),
-          const SizedBox(
-            width: 20,
-          ),
-        ],
-      ),
     );
   }
+  
 }
 
 /// A ListTile that allows choosing from a dropdown.

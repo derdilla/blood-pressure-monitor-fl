@@ -78,9 +78,9 @@ class ExportImportScreen extends StatelessWidget {
                 Consumer<CsvExportSettings>(builder: (context, csvExportSettings, child) =>
                   Column(
                     children: [
-                      InputSettingsTile(
-                        title: Text(localizations.fieldDelimiter),
-                        inputWidth: 40,
+                      /* TODO
+                      NumberInputSettingsTile(
+                        label: localizations.fieldDelimiter,
                         initialValue: csvExportSettings.fieldDelimiter,
                         onEditingComplete: (value) {
                           if (value != null) {
@@ -88,8 +88,8 @@ class ExportImportScreen extends StatelessWidget {
                           }
                         },
                       ),
-                      InputSettingsTile(
-                        title: Text(localizations.textDelimiter),
+                      NumberInputSettingsTile(
+                        label: Text(localizations.textDelimiter),
                         inputWidth: 40,
                         initialValue: csvExportSettings.textDelimiter,
                         onEditingComplete: (value) {
@@ -98,6 +98,7 @@ class ExportImportScreen extends StatelessWidget {
                           }
                         },
                       ),
+                       */
                       SwitchListTile(
                         title: Text(localizations.exportCsvHeadline),
                         subtitle: Text(localizations.exportCsvHeadlineDesc),
@@ -134,53 +135,41 @@ class ExportImportScreen extends StatelessWidget {
                           onChanged: (value) {
                             pdfExportSettings.exportData = value;
                           }),
-                      InputSettingsTile(
-                        initialValue: pdfExportSettings.headerHeight.toString(),
-                        title: Text(localizations.exportPdfHeaderHeight),
-                        onEditingComplete: (value) {
-                          final pV = double.tryParse(value ?? '');
-                          if (pV != null) pdfExportSettings.headerHeight = pV;
-                        },
-                        disabled: !(pdfExportSettings.exportData),
-                        keyboardType: TextInputType.number,
-                        inputWidth: 40,
-                      ),
-                      InputSettingsTile(
-                        initialValue: pdfExportSettings.cellHeight.toString(),
-                        title: Text(localizations.exportPdfCellHeight),
-                        onEditingComplete: (value) {
-                          final pV = double.tryParse(value ?? '');
-                          if (pV != null) pdfExportSettings.cellHeight = pV;
-                        },
-                        disabled: !pdfExportSettings.exportData,
-                        keyboardType: TextInputType.number,
-                        inputWidth: 40,
-                      ),
-                      InputSettingsTile(
-                        initialValue: pdfExportSettings.headerFontSize.toString(),
-                        title: Text(localizations.exportPdfHeaderFontSize),
-                        onEditingComplete: (value) {
-                          final pV = double.tryParse(value ?? '');
-                          if (pV != null) pdfExportSettings.headerFontSize = pV;
-                        },
-                        disabled: !pdfExportSettings.exportData,
-                        keyboardType: TextInputType.number,
-                        inputWidth: 40,
-                      ),
-                      InputSettingsTile(
-                        initialValue: pdfExportSettings.cellFontSize.toString(),
-                        title: Text(localizations.exportPdfCellFontSize),
-                        onEditingComplete: (value) {
-                          final pV = double.tryParse(value ?? '');
-                          if (pV != null) pdfExportSettings.cellFontSize = pV;
-                        },
-                        disabled: !pdfExportSettings.exportData,
-                        keyboardType: TextInputType.number,
-                        inputWidth: 40,
-                      ),
                       if (pdfExportSettings.exportData)
-                        ExportFieldCustomisationSetting(
-                          fieldsSettings: pdfExportSettings,
+                        Column(
+                          children: [
+                            NumberInputListTile(
+                              initialValue: pdfExportSettings.headerHeight,
+                              label: localizations.exportPdfHeaderHeight,
+                              onParsableSubmit: (value) {
+                                pdfExportSettings.headerHeight = value;
+                              },
+                            ),
+                            NumberInputListTile(
+                              initialValue: pdfExportSettings.cellHeight,
+                              label: localizations.exportPdfCellHeight,
+                              onParsableSubmit: (value) {
+                                pdfExportSettings.cellHeight = value;
+                              },
+                            ),
+                            NumberInputListTile(
+                              initialValue: pdfExportSettings.headerFontSize,
+                              label: localizations.exportPdfHeaderFontSize,
+                              onParsableSubmit: (value) {
+                                pdfExportSettings.headerFontSize = value;
+                              },
+                            ),
+                            NumberInputListTile(
+                              initialValue: pdfExportSettings.cellFontSize,
+                              label: localizations.exportPdfCellFontSize,
+                              onParsableSubmit: (value) {
+                                pdfExportSettings.cellFontSize = value;
+                              },
+                            ),
+                            ExportFieldCustomisationSetting(
+                              fieldsSettings: pdfExportSettings,
+                            ),
+                          ],
                         ),
                     ]
                   )

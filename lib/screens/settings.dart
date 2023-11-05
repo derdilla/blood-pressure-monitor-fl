@@ -15,7 +15,6 @@ import 'package:blood_pressure_app/screens/subsettings/version.dart';
 import 'package:blood_pressure_app/screens/subsettings/warn_about.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:path/path.dart';
@@ -167,37 +166,23 @@ class SettingsPage extends StatelessWidget {
                 onChanged: (value) {
                   settings.confirmDeletion = value;
                 }),
-              InputSettingsTile(
+              NumberInputListTile(
                 key: const Key('sysWarn'),
-                title: Text(localizations.sysWarn),
+                label: localizations.sysWarn,
                 leading: const Icon(Icons.warning_amber_outlined),
-                keyboardType: TextInputType.number,
-                inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                initialValue: settings.sysWarn.toInt().toString(),
-                onEditingComplete: (String? value) {
-                  if (value == null || value.isEmpty || (int.tryParse(value) == null)) {
-                    return;
-                  }
-                  settings.sysWarn = int.parse(value);
+                initialValue: settings.sysWarn,
+                onParsableSubmit: (double value) {
+                  settings.sysWarn = value.round();
                 },
-                decoration: InputDecoration(hintText: localizations.sysWarn),
-                inputWidth: 120,
               ),
-              InputSettingsTile(
+              NumberInputListTile(
                 key: const Key('diaWarn'),
-                title: Text(localizations.diaWarn),
+                label: localizations.diaWarn,
                 leading: const Icon(Icons.warning_amber_outlined),
-                keyboardType: TextInputType.number,
-                inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                initialValue: settings.diaWarn.toInt().toString(),
-                onEditingComplete: (String? value) {
-                  if (value == null || value.isEmpty || (int.tryParse(value) == null)) {
-                    return;
-                  }
-                  settings.diaWarn = int.parse(value);
+                initialValue: settings.diaWarn,
+                onParsableSubmit: (double value) {
+                  settings.diaWarn = value.round();
                 },
-                decoration: InputDecoration(hintText: localizations.diaWarn),
-                inputWidth: 120,
               ),
               ListTile(
                 key: const Key('determineWarnValues'),
@@ -208,7 +193,8 @@ class SettingsPage extends StatelessWidget {
                     context: context,
                     builder: (context) => NumberInputDialoge(
                       hintText: localizations.age,
-                      onParsableSubmit: (age) {
+                      onParsableSubmit: (value) {
+                        int age = value.round();
                         settings.sysWarn = BloodPressureWarnValues.getUpperSysWarnValue(age);
                         settings.diaWarn = BloodPressureWarnValues.getUpperDiaWarnValue(age);
                         Navigator.of(context).pop();
