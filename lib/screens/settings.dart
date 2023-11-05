@@ -250,7 +250,7 @@ class SettingsPage extends StatelessWidget {
               SwitchSettingsTile(
                 title: Text(localizations.drawRegressionLines),
                 leading: const Icon(Icons.trending_down_outlined),
-                description: Text(localizations.drawRegressionLinesDesc),
+                subtitle: Text(localizations.drawRegressionLinesDesc),
                 initialValue: settings.drawRegressionLines,
                 onToggle: (value) {
                   settings.drawRegressionLines = value;
@@ -258,7 +258,7 @@ class SettingsPage extends StatelessWidget {
               ),
               SwitchSettingsTile(
                 title: Text(localizations.startWithAddMeasurementPage),
-                description: Text(localizations.startWithAddMeasurementPageDescription),
+                subtitle: Text(localizations.startWithAddMeasurementPageDescription),
                 leading: const Icon(Icons.electric_bolt_outlined),
                 initialValue: settings.startWithAddMeasurementPage,
                 onToggle: (value) {

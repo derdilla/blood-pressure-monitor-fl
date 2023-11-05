@@ -50,7 +50,7 @@ class ExportImportScreen extends StatelessWidget {
                   }),
               SwitchSettingsTile(
                   title: Text(localizations.exportAfterEveryInput),
-                  description: Text(localizations.exportAfterEveryInputDesc),
+                  subtitle: Text(localizations.exportAfterEveryInputDesc),
                   initialValue: settings.exportAfterEveryEntry,
                   onToggle: (value) {
                     settings.exportAfterEveryEntry = value;
@@ -81,7 +81,6 @@ class ExportImportScreen extends StatelessWidget {
                         title: Text(localizations.fieldDelimiter),
                         inputWidth: 40,
                         initialValue: csvExportSettings.fieldDelimiter,
-                        disabled: !(settings.exportFormat == ExportFormat.csv),
                         onEditingComplete: (value) {
                           if (value != null) {
                             csvExportSettings.fieldDelimiter = value;
@@ -92,7 +91,6 @@ class ExportImportScreen extends StatelessWidget {
                         title: Text(localizations.textDelimiter),
                         inputWidth: 40,
                         initialValue: csvExportSettings.textDelimiter,
-                        disabled: !(settings.exportFormat == ExportFormat.csv),
                         onEditingComplete: (value) {
                           if (value != null) {
                             csvExportSettings.textDelimiter = value;
@@ -101,9 +99,8 @@ class ExportImportScreen extends StatelessWidget {
                       ),
                       SwitchSettingsTile(
                         title: Text(localizations.exportCsvHeadline),
-                        description: Text(localizations.exportCsvHeadlineDesc),
+                        subtitle: Text(localizations.exportCsvHeadlineDesc),
                         initialValue: csvExportSettings.exportHeadline,
-                        disabled: settings.exportFormat != ExportFormat.csv,
                         onToggle: (value) {
                           csvExportSettings.exportHeadline = value;
                         }
