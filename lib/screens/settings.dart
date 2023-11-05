@@ -52,7 +52,7 @@ class SettingsPage extends StatelessWidget {
                   }
                 },
               ),
-              DropDownSettingsTile<ThemeMode>(
+              DropDownListTile<ThemeMode>(
                 key: const Key('theme'),
                 leading: const Icon(Icons.brightness_4),
                 title: Text(localizations.theme),
@@ -71,7 +71,7 @@ class SettingsPage extends StatelessWidget {
                 onMainColorChanged: (color) => settings.accentColor = color,
                 initialColor: settings.accentColor,
                 title: Text(localizations.accentColor)),
-              DropDownSettingsTile<Locale?>(
+              DropDownListTile<Locale?>(
                 key: const Key('language'),
                 leading: const Icon(Icons.language),
                 title: Text(localizations.language),

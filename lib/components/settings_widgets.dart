@@ -283,41 +283,41 @@ class _InputSettingsTileState extends State<InputSettingsTile> {
   }
 }
 
-class DropDownSettingsTile<T> extends StatelessWidget {
+/// A ListTile that allows choosing from a dropdown.
+class DropDownListTile<T> extends StatelessWidget {
+  /// Creates a list tile that allows choosing an item from a dropdown.
+  ///
+  /// Using this is equivalent to using a [ListTile] with a trailing [DropdownButton].
+  const DropDownListTile({
+    required this.title,
+    required this.value,
+    required this.onChanged,
+    required this.items,
+    this.leading,
+    this.subtitle,
+    super.key});
+  
   final Widget title;
+  final Widget? subtitle;
   final Widget? leading;
-  final Widget? description;
-  final bool disabled;
 
   final T value;
   final List<DropdownMenuItem<T>> items;
   final void Function(T? value) onChanged;
 
-
-  const DropDownSettingsTile({required this.title, required this.value,
-    required this.onChanged, required this.items, this.disabled = false, this.leading, this.description, super.key});
-
   @override
   Widget build(BuildContext context) {
-    return SettingsTile(
+    return ListTile(
       title: title,
-      description: description,
+      subtitle: subtitle,
       leading: leading,
-      disabled: disabled,
-      onPressed: (BuildContext context) {  },
-      trailing: Row(
-        children: [
-          DropdownButton<T>(
-            value: value,
-            items: items,
-            onChanged: onChanged,
-          ),
-          const SizedBox(width: 15,)
-        ],
+      trailing: DropdownButton<T>(
+        value: value,
+        items: items,
+        onChanged: onChanged,
       ),
     );
   }
-
 }
 
 class SettingsSection extends StatelessWidget {
