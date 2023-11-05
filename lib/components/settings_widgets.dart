@@ -231,32 +231,35 @@ class DropDownListTile<T> extends StatelessWidget {
   }
 }
 
-class SettingsSection extends StatelessWidget {
-  final Widget title;
-  final List<Widget> children;
+/// A [Column] with a leading title.
+class TitledColumn extends StatelessWidget {
 
-  const SettingsSection({super.key, required this.title, required this.children});
+  /// Create a [Column] with a leading title.
+  ///
+  /// Useful for labeling sub lists.
+  const TitledColumn({super.key, required this.title, required this.children});
+
+  /// Title to display above the [children].
+  ///
+  /// Usually a [Text] widget.
+  final Widget title;
+
+  /// Items that get listed.
+  final List<Widget> children;
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Container(
-          padding: const EdgeInsets.only(top: 15),
-          child: Align(
-            alignment: const Alignment(-0.93, 0),
-            child: DefaultTextStyle(
-                style: Theme.of(context).textTheme.titleMedium!,
-                child: title),
-          ),
+    final List<Widget> items = [
+      ListTile(
+        title: DefaultTextStyle(
+          style: Theme.of(context).textTheme.titleLarge!,
+          child: title
         ),
-        Container(
-          padding: const EdgeInsets.only(left: 10, right: 20), // TODO: remove
-          child: Column(
-            children: children,
-          ),
-        )
-      ],
+      ),
+    ];
+    items.addAll(children);
+    return Column(
+      children: items,
     );
   }
 }

@@ -37,7 +37,7 @@ class SettingsPage extends StatelessWidget {
       body: Consumer<Settings>(builder: (context, settings, child) {
         return ListView(
           children: [
-            SettingsSection(title: Text(localizations.layout), children: [
+            TitledColumn(title: Text(localizations.layout), children: [
               ListTile(
                 key: const Key('EnterTimeFormatScreen'),
                 title: Text(localizations.enterTimeFormatScreen),
@@ -133,7 +133,7 @@ class SettingsPage extends StatelessWidget {
                 title: Text(localizations.useLegacyList),),
             ]),
 
-            SettingsSection(title: Text(localizations.behavior), children: [
+            TitledColumn(title: Text(localizations.behavior), children: [
               SwitchListTile(
                 key: const Key('allowManualTimeInput'),
                 value: settings.allowManualTimeInput,
@@ -252,7 +252,7 @@ class SettingsPage extends StatelessWidget {
                 }
               ),
             ]),
-            SettingsSection(
+            TitledColumn(
               title: Text(localizations.data),
               children: [
                 ListTile(
@@ -320,7 +320,7 @@ class SettingsPage extends StatelessWidget {
                 )
               ],
             ),
-            SettingsSection(title: Text(localizations.aboutWarnValuesScreen), children: [
+            TitledColumn(title: Text(localizations.aboutWarnValuesScreen), children: [
               ListTile(
                   key: const Key('version'),
                   title: Text(localizations.version),
