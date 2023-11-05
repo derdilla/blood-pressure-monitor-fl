@@ -342,6 +342,7 @@ class SettingsPage extends StatelessWidget {
                 key: const Key('sourceCode'),
                 title: Text(localizations.sourceCode),
                 leading: const Icon(Icons.merge),
+                trailing: const Icon(Icons.open_in_new),
                 onTap: () async {
                   final scaffoldMessenger = ScaffoldMessenger.of(context);
                   var url = Uri.parse('https://github.com/NobodyForNothing/blood-pressure-monitor-fl');

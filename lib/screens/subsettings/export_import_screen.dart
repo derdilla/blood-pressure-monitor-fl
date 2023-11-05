@@ -40,21 +40,21 @@ class ExportImportScreen extends StatelessWidget {
                 disabled: settings.exportFormat == ExportFormat.db,
                 child: const IntervalPicker(type: IntervallStoreManagerLocation.exportPage,),
               ),
-              SettingsTile(
-                  title: Text(localizations.exportDir),
-                  description: Text(settings.defaultExportDir),
-                  onPressed: (context) async {
-                    final appDir =
-                        await JSaver.instance.setDefaultSavingDirectory();
-                    settings.defaultExportDir = appDir.value;
-                  }),
+              ListTile(
+                title: Text(localizations.exportDir),
+                subtitle: settings.defaultExportDir.isNotEmpty ? Text(settings.defaultExportDir) : null,
+                onTap: () async {
+                  final appDir = await JSaver.instance.setDefaultSavingDirectory();
+                  settings.defaultExportDir = appDir.value;
+                }
+              ),
               SwitchListTile(
-                  title: Text(localizations.exportAfterEveryInput),
-                  subtitle: Text(localizations.exportAfterEveryInputDesc),
-                  value: settings.exportAfterEveryEntry,
-                  onChanged: (value) {
-                    settings.exportAfterEveryEntry = value;
-                  },
+                title: Text(localizations.exportAfterEveryInput),
+                subtitle: Text(localizations.exportAfterEveryInputDesc),
+                value: settings.exportAfterEveryEntry,
+                onChanged: (value) {
+                  settings.exportAfterEveryEntry = value;
+                },
               ),
               DropDownListTile<ExportFormat>(
                 key: const Key('exportFormat'),
