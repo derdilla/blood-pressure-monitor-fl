@@ -15,7 +15,7 @@
 /// List tiles that find no use in the app:
 /// - [CheckboxListTile]
 /// - [RadioListTile]
-library settings;
+library settings_widgets;
 
 import 'package:flutter/material.dart';
 
