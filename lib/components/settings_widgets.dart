@@ -70,7 +70,7 @@ class SettingsTile extends StatelessWidget {
   }
 }
 
-/// A ListTile that shows a color preview and allows changing it.
+/// A [ListTile] that shows a color preview and allows changing it.
 class ColorSelectionListTile extends StatelessWidget {
   /// Creates a ListTile with a color preview that opens a color picker on tap.
   const ColorSelectionListTile(
@@ -109,98 +109,62 @@ class ColorSelectionListTile extends StatelessWidget {
   }
 }
 
-class SliderSettingsTile extends StatefulWidget {
+/// A [ListTile] with a [Slider] attached to it. 
+class SliderListTile extends StatelessWidget {
+  /// Creates a [ListTile] with an attached [Slider].
+  const SliderListTile({
+    super.key, 
+    required this.title,
+    required this.onChanged,
+    required this.value,
+    required this.min,
+    required this.max,
+    this.stepSize = 1,
+    this.leading,
+    this.trailing});
+  
+  /// The primary content of the list tile.
   final Widget title;
-  final void Function(double newValue) onChanged;
+  
+  /// A widget to display before the title.
   final Widget? leading;
-  final Widget? description;
+  
+  /// A widget to display after the title.
   final Widget? trailing;
-  final bool disabled;
-  final double start;
-  final double end;
+
+  /// Minimum selectable value on the slider.
+  final double min;
+
+  /// Maximum selectable value on the slider.
+  final double max;
+  
+  /// Amount of steps the slider supports.
   final double stepSize;
-  final double initialValue;
+  
+  /// Current position of the slider thumb.
+  /// 
+  /// Should be a value that is selectable through by the user.
+  final double value;
 
-  const SliderSettingsTile(
-      {super.key,
-      required this.title,
-      required this.onChanged,
-      required this.initialValue,
-      required this.start,
-      required this.end,
-      this.stepSize = 1,
-      this.description,
-      this.leading,
-      this.trailing,
-      this.disabled = false});
-
-  @override
-  State<StatefulWidget> createState() => _SliderSettingsTileState();
-}
-
-class _SliderSettingsTileState extends State<SliderSettingsTile> {
-  late double _value = -1;
-
-  _SliderSettingsTileState();
-
-  @override
-  void initState() {
-    super.initState();
-    _value = widget.initialValue;
-  }
+  /// Called during a drag when the user is selecting a new value for the slider
+  /// by dragging.
+  final void Function(double newValue) onChanged;
 
   @override
   Widget build(BuildContext context) {
-    if (widget.disabled) return const SizedBox.shrink();
-
-    var lead = SizedBox(
-      width: 40,
-      child: widget.leading ?? const SizedBox.shrink(),
-    );
-    var trail = widget.trailing ?? const SizedBox.shrink();
-
-    return SizedBox(
-      height: 50,
-      child: Row(
-        children: [
-          lead,
-          const SizedBox(
-            width: 15,
-          ),
-          SizedBox(
-            width: MediaQuery.of(context).size.width - 150,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                widget.title,
-                Flexible(
-                    child: DefaultTextStyle(
-                        style: const TextStyle(color: Colors.grey),
-                        overflow: TextOverflow.visible,
-                        child: widget.description ?? const SizedBox.shrink())),
-                const SizedBox(
-                  height: 7,
-                ),
-                Expanded(
-                    child: Slider(
-                  value: _value,
-                  onChanged: (newValue) {
-                    setState(() {
-                      _value = newValue;
-                    });
-                    widget.onChanged(newValue);
-                  },
-                  min: widget.start,
-                  max: widget.end,
-                  divisions: (widget.end - widget.start) ~/ widget.stepSize,
-                )),
-              ],
-            ),
-          ),
-          const Expanded(child: SizedBox.shrink()),
-          trail
-        ],
+    return ListTile(
+      title: title,
+      leading: leading,
+      trailing: trailing,
+      subtitle: SizedBox(
+        height: 30,
+        child: Slider(
+          value: value,
+          min: min,
+          max: max,
+          divisions: (max - min) ~/ stepSize,
+          onChanged: onChanged,
+        ),
       ),
     );
   }
@@ -301,7 +265,8 @@ class InputListTile extends StatelessWidget {
 class DropDownListTile<T> extends StatelessWidget {
   /// Creates a list tile that allows choosing an item from a dropdown.
   ///
-  /// Using this is equivalent to using a [ListTile] with a trailing [DropdownButton].
+  /// Using this is equivalent to using a [ListTile] with a trailing [DropdownButton]. Please refer to those classes for 
+  /// argument definitions.
   const DropDownListTile({
     required this.title,
     required this.value,
@@ -354,7 +319,7 @@ class SettingsSection extends StatelessWidget {
           ),
         ),
         Container(
-          padding: const EdgeInsets.only(left: 10, right: 20),
+          padding: const EdgeInsets.only(left: 10, right: 20), // TODO: remove
           child: Column(
             children: children,
           ),

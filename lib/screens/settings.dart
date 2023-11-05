@@ -84,28 +84,28 @@ class SettingsPage extends StatelessWidget {
                   settings.language = value;
                 },
               ),
-              SliderSettingsTile(
+              SliderListTile(
                 key: const Key('graphLineThickness'),
                 title: Text(localizations.graphLineThickness),
                 leading: const Icon(Icons.line_weight),
                 onChanged: (double value) {
                   settings.graphLineThickness = value;
                 },
-                initialValue: settings.graphLineThickness,
-                start: 1,
-                end: 5,
+                value: settings.graphLineThickness,
+                min: 1,
+                max: 5,
                 stepSize: 1,
               ),
-              SliderSettingsTile(
+              SliderListTile(
                 key: const Key('animationSpeed'),
                 title: Text(localizations.animationSpeed),
                 leading: const Icon(Icons.speed),
                 onChanged: (double value) {
                   settings.animationSpeed = value.toInt();
                 },
-                initialValue: settings.animationSpeed.toDouble(),
-                start: 0,
-                end: 1000,
+                value: settings.animationSpeed.toDouble(),
+                min: 0,
+                max: 1000,
                 stepSize: 50,
               ),
               ColorSelectionListTile(
