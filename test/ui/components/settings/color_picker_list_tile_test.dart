@@ -9,13 +9,17 @@ void main() {
     testWidgets('should initialize without errors', (widgetTester) async {
       await widgetTester.pumpWidget(_materialApp(ColorSelectionListTile(
         title: const Text('Test'),
-        onMainColorChanged: (Color value) {  },
+        onMainColorChanged: (Color value) {
+          assert(false, 'should not be called');
+        },
         initialColor: Colors.teal,)));
     });
     testWidgets('should preview color', (widgetTester) async {
       await widgetTester.pumpWidget(_materialApp(ColorSelectionListTile(
         title: const Text('Test'),
-        onMainColorChanged: (Color value) {  },
+        onMainColorChanged: (Color value) {
+          assert(false, 'should not be called');
+        },
         initialColor: Colors.teal,)));
 
       expect(find.byType(CircleAvatar), findsOneWidget);
@@ -25,7 +29,9 @@ void main() {
     testWidgets('should show colorPicker on tap', (widgetTester) async {
       await widgetTester.pumpWidget(_materialApp(ColorSelectionListTile(
         title: const Text('Test'),
-        onMainColorChanged: (Color value) {  },
+        onMainColorChanged: (Color value) {
+          assert(false, 'should not be called');
+        },
         initialColor: Colors.teal,)));
 
       expect(find.byType(ColorPicker), findsNothing);

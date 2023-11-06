@@ -7,7 +7,9 @@ void main() {
     testWidgets('should not throw errors', (widgetTester) async {
       await widgetTester.pumpWidget(_materialApp(DropDownListTile<int>(
         title: const Text('test title'),
-        onChanged: (int? newValue) {},
+        onChanged: (int? newValue) {
+          assert(false, 'should not be called');
+        },
         items: [
           for (int i = 0; i < 10; i++)
             DropdownMenuItem(value: i, child: Text('option $i'))
@@ -18,7 +20,9 @@ void main() {
         title: const Text('This is a very long test title.'),
         subtitle: const Text('This is a very long test subtitle that should go over multiple lines.'),
         leading: const Icon(Icons.add),
-        onChanged: (int? newValue) {},
+        onChanged: (int? newValue) {
+          assert(false, 'should not be called');
+        },
         items: [
           for (int i = 0; i < 1000; i++)
             DropdownMenuItem(value: i, child: Text('option $i'))
@@ -29,7 +33,9 @@ void main() {
     testWidgets('should display selected option', (widgetTester) async {
       await widgetTester.pumpWidget(_materialApp(DropDownListTile<int>(
         title: const Text('test title'),
-        onChanged: (int? newValue) {},
+        onChanged: (int? newValue) {
+          assert(false, 'should not be called');
+        },
         items: [
           for (int i = 0; i < 10; i++)
             DropdownMenuItem(value: i, child: Text('option $i'))

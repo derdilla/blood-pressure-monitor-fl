@@ -7,14 +7,18 @@ void main() {
     testWidgets('should not throw errors', (widgetTester) async {
       await widgetTester.pumpWidget(_materialApp(SliderListTile(
         title: const Text('test title'),
-        onChanged: (double newValue) {  },
+        onChanged: (double newValue) {
+          assert(false, 'should not be called');
+        },
         value: 15,
         min: 1,
         max: 20,
       )));
       await widgetTester.pumpWidget(_materialApp(SliderListTile(
         title: const Text('Very long title that could overflow'),
-        onChanged: (double newValue) {  },
+        onChanged: (double newValue) {
+          assert(false, 'should not be called');
+        },
         value: 15,
         min: 1,
         max: 20,

@@ -75,14 +75,14 @@ class ExportImportScreen extends StatelessWidget {
                     children: [
                       InputListTile(
                         label: localizations.fieldDelimiter,
-                        initialValue: csvExportSettings.fieldDelimiter,
+                        value: csvExportSettings.fieldDelimiter,
                         onSubmit: (value) {
                           csvExportSettings.fieldDelimiter = value;
                         },
                       ),
                       InputListTile(
                         label: localizations.textDelimiter,
-                        initialValue: csvExportSettings.textDelimiter,
+                        value: csvExportSettings.textDelimiter,
                         onSubmit: (value) {
                           csvExportSettings.textDelimiter = value;
                         },

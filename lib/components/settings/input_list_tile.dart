@@ -6,7 +6,7 @@ class InputListTile extends StatelessWidget {
   /// Creates a list tile that allows editing a string
   const InputListTile({super.key,
     required this.label,
-    required this.initialValue,
+    required this.value,
     required this.onSubmit});
 
   /// Short label describing the required field contents.
@@ -14,8 +14,8 @@ class InputListTile extends StatelessWidget {
   /// This will be both the title of the list tile as well as the hint text in the input dialoge.
   final String label;
 
-  /// Initial content of the input field.
-  final String initialValue;
+  /// Current content of the input field.
+  final String value;
 
   /// Gets called when the user submits a new value
   final void Function(String text) onSubmit;
@@ -24,13 +24,13 @@ class InputListTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       title: Text(label),
-      subtitle: Text(initialValue.toString()),
+      subtitle: Text(value.toString()),
       trailing: const Icon(Icons.edit),
       onTap: () {
         showDialog(
           context: context,
           builder: (context) => InputDialoge(
-            initialValue: initialValue,
+            initialValue: value,
             hintText: label,
             onSubmit: (value) {
               Navigator.of(context).pop();
