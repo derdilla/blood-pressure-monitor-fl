@@ -8,7 +8,7 @@ class NumberInputListTile extends StatelessWidget {
       {super.key,
         required this.label,
         this.leading,
-        this.initialValue,
+        this.value,
         required this.onParsableSubmit,});
 
   /// Short label describing the required field contents.
@@ -19,8 +19,8 @@ class NumberInputListTile extends StatelessWidget {
   /// Widget to display before the label in the list tile.
   final Widget? leading;
 
-  /// Initial content of the input field.
-  final num? initialValue;
+  /// Current content of the input field.
+  final num? value;
 
   /// Gets called once the user submits a new valid number to the field.
   final NumberInputResult onParsableSubmit;
@@ -29,14 +29,14 @@ class NumberInputListTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       title: Text(label),
-      subtitle: Text(initialValue.toString()),
+      subtitle: Text(value.toString()),
       leading: leading,
       trailing: const Icon(Icons.edit),
       onTap: () {
         showDialog(
           context: context,
           builder: (context) => NumberInputDialoge(
-            initialValue: initialValue?.toString(),
+            initialValue: value?.toString(),
             hintText: label,
             onParsableSubmit: (value) {
               Navigator.of(context).pop();

@@ -170,7 +170,7 @@ class SettingsPage extends StatelessWidget {
                 key: const Key('sysWarn'),
                 label: localizations.sysWarn,
                 leading: const Icon(Icons.warning_amber_outlined),
-                initialValue: settings.sysWarn,
+                value: settings.sysWarn,
                 onParsableSubmit: (double value) {
                   settings.sysWarn = value.round();
                 },
@@ -179,7 +179,7 @@ class SettingsPage extends StatelessWidget {
                 key: const Key('diaWarn'),
                 label: localizations.diaWarn,
                 leading: const Icon(Icons.warning_amber_outlined),
-                initialValue: settings.diaWarn,
+                value: settings.diaWarn,
                 onParsableSubmit: (double value) {
                   settings.diaWarn = value.round();
                 },

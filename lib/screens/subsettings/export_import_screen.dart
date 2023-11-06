@@ -127,28 +127,28 @@ class ExportImportScreen extends StatelessWidget {
                         Column(
                           children: [
                             NumberInputListTile(
-                              initialValue: pdfExportSettings.headerHeight,
+                              value: pdfExportSettings.headerHeight,
                               label: localizations.exportPdfHeaderHeight,
                               onParsableSubmit: (value) {
                                 pdfExportSettings.headerHeight = value;
                               },
                             ),
                             NumberInputListTile(
-                              initialValue: pdfExportSettings.cellHeight,
+                              value: pdfExportSettings.cellHeight,
                               label: localizations.exportPdfCellHeight,
                               onParsableSubmit: (value) {
                                 pdfExportSettings.cellHeight = value;
                               },
                             ),
                             NumberInputListTile(
-                              initialValue: pdfExportSettings.headerFontSize,
+                              value: pdfExportSettings.headerFontSize,
                               label: localizations.exportPdfHeaderFontSize,
                               onParsableSubmit: (value) {
                                 pdfExportSettings.headerFontSize = value;
                               },
                             ),
                             NumberInputListTile(
-                              initialValue: pdfExportSettings.cellFontSize,
+                              value: pdfExportSettings.cellFontSize,
                               label: localizations.exportPdfCellFontSize,
                               onParsableSubmit: (value) {
                                 pdfExportSettings.cellFontSize = value;
