@@ -4,7 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   group('SliderListTile', () {
-    testWidgets('should not throw without errors', (widgetTester) async {
+    testWidgets('should not throw errors', (widgetTester) async {
       await widgetTester.pumpWidget(_materialApp(SliderListTile(
         title: const Text('test title'),
         onChanged: (double newValue) {  },
