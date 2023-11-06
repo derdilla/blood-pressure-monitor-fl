@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 /// A list tile for exposing editable strings.
 class InputListTile extends StatelessWidget {
-  /// Creates a list tile that allows editing a string
+  /// Creates a list tile that allows editing a string.
   const InputListTile({super.key,
     required this.label,
     required this.value,
