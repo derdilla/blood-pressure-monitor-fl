@@ -29,16 +29,15 @@ class SliderListTile extends StatelessWidget {
   /// Maximum selectable value on the slider.
   final double max;
 
-  /// Amount of steps the slider supports.
+  /// Amount of units after which a selectable step is placed on the slider.
   final double stepSize;
 
   /// Current position of the slider thumb.
   ///
-  /// Should be a value that is selectable through by the user.
+  /// Should be a value that is selectable by the user.
   final double value;
 
-  /// Called during a drag when the user is selecting a new value for the slider
-  /// by dragging.
+  /// Called during a drag when the user is selecting a new value for the slider by dragging.
   final void Function(double newValue) onChanged;
 
   @override

@@ -7,7 +7,7 @@ class TitledColumn extends StatelessWidget {
   /// Useful for labeling sub lists.
   const TitledColumn({super.key,
     required this.title,
-    required this.children}); // TODO: test all in file, maybe even split file to folder
+    required this.children});
 
   /// Title to display above the [children].
   ///

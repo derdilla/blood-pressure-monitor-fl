@@ -24,7 +24,7 @@ class InputListTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       title: Text(label),
-      subtitle: Text(value.toString()),
+      subtitle: Text(value),
       trailing: const Icon(Icons.edit),
       onTap: () {
         showDialog(

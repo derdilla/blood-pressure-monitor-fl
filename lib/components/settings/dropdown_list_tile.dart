@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-/// A ListTile that allows choosing from a dropdown.
+/// A [ListTile] that allows choosing from a dropdown.
 class DropDownListTile<T> extends StatefulWidget {
   /// Creates a list tile that allows choosing an item from a dropdown.
   ///
