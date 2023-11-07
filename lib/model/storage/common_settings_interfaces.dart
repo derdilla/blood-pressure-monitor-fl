@@ -1,6 +1,3 @@
-/// This library hosts interfaces with attributes that different settings classes provide.
-library;
-
 import 'package:blood_pressure_app/model/storage/export_csv_settings_store.dart';
 import 'package:blood_pressure_app/model/storage/export_pdf_settings_store.dart';
 

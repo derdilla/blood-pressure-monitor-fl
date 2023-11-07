@@ -4,20 +4,11 @@ import 'package:blood_pressure_app/model/horizontal_graph_line.dart';
 import 'package:blood_pressure_app/model/storage/convert_util.dart';
 import 'package:flutter/material.dart';
 
-/// Stores settings that are directly controllable by the user through the Settings screen.
+/// Stores settings that are directly controllable by the user through the settings screen.
 ///
-/// This class should not be used to save persistent state that the user doesn't know about. To do this use one of the
-/// other classes in the storage directory or add a table to config_db and create your own class. Keeping data modular
-/// helps to reduce the amount of data saved to the database and makes the internal purpose of a setting more clear.
+/// This class should not be used to save persistent state that the user doesn't know about.
 ///
-/// Steps for expanding this class:
-/// - [ ] Add private variable with default value
-/// - [ ] Add getter and setter, where setter calls `notifyListeners()`
-/// - [ ] Add as nullable to constructor definition and if != null assign it to the private variable in the body
-/// - [ ] Add parsable representation (string, boolean or integer) to the .toMap
-/// - [ ] Parse it in the .fromMap factory method
-/// - [ ] Make sure edge cases are handled in .fromMap (does not exist (update), not parsable (user))
-/// - [ ] To verify everything was done correctly, tests should be expanded with the newly added fields (json_serialization_test.dart)
+/// The [storage] library comment has more information on the architecture for adding persistent fields.
 class Settings extends ChangeNotifier {
   /// Creates a settings object with the default values.
   ///
@@ -210,7 +201,7 @@ class Settings extends ChangeNotifier {
   bool _allowManualTimeInput = true;
   bool get allowManualTimeInput => _allowManualTimeInput;
   set allowManualTimeInput(bool value) {
-    _allowManualTimeInput = false;
+    _allowManualTimeInput = value;
     notifyListeners();
   }
 
