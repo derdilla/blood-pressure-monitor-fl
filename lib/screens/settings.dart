@@ -94,6 +94,19 @@ class SettingsPage extends StatelessWidget {
                 value: settings.graphLineThickness,
                 min: 1,
                 max: 5,
+                stepSize: 0.5,
+              ),
+              SliderListTile(
+                key: const Key('needlePinBarWidth'),
+                title: Text(localizations.needlePinBarWidth),
+                subtitle: Text(localizations.needlePinBarWidthDesc),
+                leading: const Icon(Icons.line_weight),
+                onChanged: (double value) {
+                  settings.needlePinBarWidth = value;
+                },
+                value: settings.needlePinBarWidth,
+                min: 1,
+                max: 20,
                 stepSize: 1,
               ),
               SliderListTile(

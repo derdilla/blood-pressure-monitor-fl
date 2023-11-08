@@ -110,7 +110,7 @@ class _LineChartState extends State<_LineChart> {
           _buildRegressionLine(pulSpots),
       ]);
     }
-    bars.addAll(_buildNeedlePins(allRecords, minValue, maxValue));
+    bars.addAll(_buildNeedlePins(allRecords, minValue, maxValue, settings));
     return bars;
   }
 
@@ -150,7 +150,7 @@ class _LineChartState extends State<_LineChart> {
     );
   }
 
-  List<LineChartBarData> _buildNeedlePins(Iterable<BloodPressureRecord> allRecords, int min, int max) {
+  List<LineChartBarData> _buildNeedlePins(Iterable<BloodPressureRecord> allRecords, int min, int max, Settings settings,) {
     final pins = <LineChartBarData>[];
     for (final r in allRecords.where((e) => e.needlePin != null)) {
       pins.add(LineChartBarData(
@@ -158,7 +158,7 @@ class _LineChartState extends State<_LineChart> {
           FlSpot(r.creationTime.millisecondsSinceEpoch.toDouble(), min.toDouble()),
           FlSpot(r.creationTime.millisecondsSinceEpoch.toDouble(), max + 5)
         ],
-        barWidth: 20,
+        barWidth: settings.needlePinBarWidth,
         dotData: const FlDotData(show: false),
         color: r.needlePin!.color.withAlpha(100),
       ));

@@ -435,5 +435,9 @@
   "errExportColumnWithThisNameAlreadyExists": "Export column with this name already exists.",
   "@errExportColumnWithThisNameAlreadyExists": {},
   "enterTimeFormatDesc": "A formatter string is a blend of predefined ICU/Skeleton strings and any additional text you''d like to include.\n\n[If you''re curious about the complete list of valid formats, you can find them right here.](screen://TimeFormattingHelp)\n\nJust a friendly reminder, using longer or shorter format Strings won''t magically alter the width of the table columns, which might lead to some awkward line breaks and text not showing.\n\ndefault: \"yy-MM-dd HH:mm\"",
-  "@enterTimeFormatDesc": {}
+  "@enterTimeFormatDesc": {},
+  "needlePinBarWidth": "Color thickness",
+  "@needlePinBarWidth": {},
+  "needlePinBarWidthDesc": "The width of the lines colored entries make on the graph.",
+  "@needlePinBarWidthDesc": {}
 }
