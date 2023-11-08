@@ -159,7 +159,7 @@ class _LineChartState extends State<_LineChart> {
           FlSpot(r.creationTime.millisecondsSinceEpoch.toDouble(), max + 5)
         ],
         barWidth: 20,
-        dotData: FlDotData(show: false),
+        dotData: const FlDotData(show: false),
         color: r.needlePin!.color.withAlpha(100),
       ));
     }
