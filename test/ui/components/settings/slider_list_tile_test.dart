@@ -25,6 +25,7 @@ void main() {
         stepSize: 0.001,
         leading: const Icon(Icons.add),
         trailing: const Icon(Icons.add),
+        subtitle: const Text('While sliders support subtitle widgets, they should not interfere with the slider!'),
       )));
     });
     testWidgets('should report value changes', (widgetTester) async {
@@ -38,6 +39,7 @@ void main() {
         value: 3,
         min: 1,
         max: 10,
+        subtitle: const Text('While sliders support subtitle widgets, they should not interfere with the slider!'),
       )));
 
       final topLeft = widgetTester.getTopLeft(find.byType(Slider));
