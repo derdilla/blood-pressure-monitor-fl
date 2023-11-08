@@ -74,6 +74,7 @@ void main() {
         sysColor: Colors.deepOrange,
         diaColor: Colors.deepOrange,
         pulColor: Colors.deepOrange,
+        needlePinBarWidth: 123.456789,
         dateFormatString: 'Lorem Ipsum',
         graphLineThickness: 134.23123,
         animationSpeed: 78,
@@ -112,6 +113,7 @@ void main() {
       expect(initial.horizontalGraphLines.length, fromJson.horizontalGraphLines.length);
       expect(initial.horizontalGraphLines.first.color.value, fromJson.horizontalGraphLines.first.color.value);
       expect(initial.horizontalGraphLines.first.height, fromJson.horizontalGraphLines.first.height);
+      expect(initial.needlePinBarWidth, fromJson.needlePinBarWidth);
 
       expect(initial.toJson(), fromJson.toJson());
     });

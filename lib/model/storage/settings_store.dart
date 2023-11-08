@@ -22,6 +22,7 @@ class Settings extends ChangeNotifier {
     List<HorizontalGraphLine>? horizontalGraphLines,
     String? dateFormatString,
     double? graphLineThickness,
+    double? needlePinBarWidth,
     int? animationSpeed,
     int? sysWarn,
     int? diaWarn,
@@ -46,6 +47,7 @@ class Settings extends ChangeNotifier {
     if (sysWarn != null) _sysWarn = sysWarn;
     if (diaWarn != null) _diaWarn = diaWarn;
     if (graphLineThickness != null) _graphLineThickness = graphLineThickness;
+    if (needlePinBarWidth != null) _needlePinBarWidth = needlePinBarWidth;
     if (validateInputs != null) _validateInputs = validateInputs;
     if (allowMissingValues != null) _allowMissingValues = allowMissingValues;
     if (drawRegressionLines != null) _drawRegressionLines = drawRegressionLines;
@@ -77,6 +79,7 @@ class Settings extends ChangeNotifier {
       language: ConvertUtil.parseLocale(map['language']),
       horizontalGraphLines: ConvertUtil.parseList<String>(map['horizontalGraphLines'])?.map((e) =>
           HorizontalGraphLine.fromJson(jsonDecode(e))).toList(),
+      needlePinBarWidth: ConvertUtil.parseDouble(map['needlePinBarWidth'])
     );
 
     // update
@@ -113,7 +116,8 @@ class Settings extends ChangeNotifier {
       'startWithAddMeasurementPage': startWithAddMeasurementPage,
       'useLegacyList': useLegacyList,
       'language': ConvertUtil.serializeLocale(language),
-      'horizontalGraphLines': horizontalGraphLines.map((e) => jsonEncode(e)).toList()
+      'horizontalGraphLines': horizontalGraphLines.map((e) => jsonEncode(e)).toList(),
+      'needlePinBarWidth': _needlePinBarWidth
     };
 
   String toJson() => jsonEncode(toMap());
@@ -252,6 +256,13 @@ class Settings extends ChangeNotifier {
   bool get useLegacyList => _useLegacyList;
   set useLegacyList(bool value) {
     _useLegacyList = value;
+    notifyListeners();
+  }
+
+  double _needlePinBarWidth = 5;
+  double get needlePinBarWidth => _needlePinBarWidth;
+  set needlePinBarWidth(double value) {
+    _needlePinBarWidth = value;
     notifyListeners();
   }
   
