@@ -6,6 +6,7 @@ class SliderListTile extends StatelessWidget {
   const SliderListTile({
     super.key,
     required this.title,
+    this.subtitle,
     required this.onChanged,
     required this.value,
     required this.min,
@@ -16,6 +17,9 @@ class SliderListTile extends StatelessWidget {
 
   /// The primary content of the list tile.
   final Widget title;
+
+  /// A widget to display below the title.
+  final Widget? subtitle;
 
   /// A widget to display before the title.
   final Widget? leading;
@@ -46,16 +50,25 @@ class SliderListTile extends StatelessWidget {
       title: title,
       leading: leading,
       trailing: trailing,
-      subtitle: SizedBox(
-        height: 30,
-        child: Slider(
-          value: value,
-          min: min,
-          max: max,
-          divisions: (max - min) ~/ stepSize,
-          onChanged: onChanged,
-        ),
+      subtitle: (subtitle == null) ? _buildSlider() : Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          subtitle!,
+          _buildSlider()
+        ],
       ),
     );
   }
+
+  Widget _buildSlider() => SizedBox(
+      height: 30,
+      child: Slider(
+        value: value,
+        min: min,
+        max: max,
+        divisions: (max - min) ~/ stepSize,
+        onChanged: onChanged,
+      ),
+    );
+
 }
