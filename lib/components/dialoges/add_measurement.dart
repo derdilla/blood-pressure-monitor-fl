@@ -33,6 +33,7 @@ class AddMeasurementDialoge extends StatefulWidget {
 
 class _AddMeasurementDialogeState extends State<AddMeasurementDialoge> {
   final formKey = GlobalKey<FormState>();
+  final firstFocusNode = FocusNode();
 
   /// Currently selected time.
   late DateTime time;
@@ -57,6 +58,15 @@ class _AddMeasurementDialogeState extends State<AddMeasurementDialoge> {
     super.initState();
     time = widget.initialRecord?.creationTime ?? DateTime.now();
     needlePin = widget.initialRecord?.needlePin;
+
+    firstFocusNode.requestFocus();
+  }
+
+
+  @override
+  void dispose() {
+    firstFocusNode.dispose();
+    super.dispose();
   }
 
   Widget buildTimeInput(AppLocalizations localizations) =>
@@ -100,13 +110,14 @@ class _AddMeasurementDialogeState extends State<AddMeasurementDialoge> {
     int? initialValue,
     String? hintText,
     void Function(String?)? onSaved,
-    // FocusNode? focusNode, TODO: check if works without
+    FocusNode? focusNode,
   }) {
     return Expanded(
       child: TextFormField(
         initialValue: (initialValue ?? '').toString(),
         decoration: getInputDecoration(hintText),
         keyboardType: TextInputType.number,
+        focusNode: focusNode,
         onSaved: onSaved,
         inputFormatters: <TextInputFormatter>[FilteringTextInputFormatter.digitsOnly],
         onChanged: (String? value) {
@@ -154,9 +165,7 @@ class _AddMeasurementDialogeState extends State<AddMeasurementDialoge> {
       appBar: AppBar(
         forceMaterialTransparency: true,
         leading: IconButton(
-            onPressed: () {
-              Navigator.of(context).pop(null);
-            },
+            onPressed: () => Navigator.of(context).pop(null),
             icon: const Icon(Icons.close)
         ),
         actions: [
@@ -183,6 +192,7 @@ class _AddMeasurementDialogeState extends State<AddMeasurementDialoge> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 buildValueInput(localizations,
+                  focusNode: firstFocusNode,
                   hintText: localizations.sysLong,
                   initialValue: widget.initialRecord?.systolic,
                   onSaved: (value) => setState(() => systolic = int.tryParse(value ?? '')),

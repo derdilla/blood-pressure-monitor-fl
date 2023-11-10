@@ -79,7 +79,8 @@ class AppHome extends StatelessWidget {
                       autofocus: true,
                       onPressed: () async {
                         final value = await showAddMeasurementDialoge(context, settings);
-                        // TODO: save
+                        // TODO: save value
+                        // TODO: use new dialog when editing measurements
                       },
                       child: const Icon(Icons.add,),
                     ),
