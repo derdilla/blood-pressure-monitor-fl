@@ -61,6 +61,16 @@ void main() {
 
       expect(callCount, 1);
     });
+    testWidgets('should hide color when transparent is selected', (widgetTester) async {
+      await widgetTester.pumpWidget(_materialApp(ColorSelectionListTile(
+        title: const Text('Test'),
+        onMainColorChanged: (Color value) {
+          assert(false, 'should not be called');
+        },
+        initialColor: Colors.transparent,)));
+
+      expect(find.byType(CircleAvatar), findsNothing);
+    });
   });
 }
 
