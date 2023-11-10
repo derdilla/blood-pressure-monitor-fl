@@ -78,12 +78,8 @@ class AppHome extends StatelessWidget {
                       tooltip: localizations.addMeasurement,
                       autofocus: true,
                       onPressed: () async {
-                        await showDialog(context: context, builder: (context) => AddMeasurementDialoge(settings: settings));
-                        // TODO: move to function in file and save measurements
-                        /*Navigator.push(
-                          context,
-                          _buildTransition(const AddMeasurementPage(), settings.animationSpeed),
-                        );*/
+                        final value = await showAddMeasurementDialoge(context, settings);
+                        // TODO: save
                       },
                       child: const Icon(Icons.add,),
                     ),

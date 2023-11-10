@@ -178,7 +178,7 @@ class _AddMeasurementDialogeState extends State<AddMeasurementDialoge> {
           children: [
             if (widget.settings.allowManualTimeInput)
               buildTimeInput(localizations),
-            const SizedBox(height: 10,),
+            const SizedBox(height: 16,),
             Row(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -187,13 +187,13 @@ class _AddMeasurementDialogeState extends State<AddMeasurementDialoge> {
                   initialValue: widget.initialRecord?.systolic,
                   onSaved: (value) => setState(() => systolic = int.tryParse(value ?? '')),
                 ),
-                const SizedBox(width: 10,),
+                const SizedBox(width: 16,),
                 buildValueInput(localizations,
                   hintText: localizations.diaLong,
                   initialValue: widget.initialRecord?.diastolic,
                   onSaved: (value) => setState(() => diastolic = int.tryParse(value ?? '')),
                 ),
-                const SizedBox(width: 10,),
+                const SizedBox(width: 16,),
                 buildValueInput(localizations,
                   hintText: localizations.pulLong,
                   initialValue: widget.initialRecord?.pulse,
@@ -202,7 +202,7 @@ class _AddMeasurementDialogeState extends State<AddMeasurementDialoge> {
               ],
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(vertical: 10),
+              padding: const EdgeInsets.symmetric(vertical: 16),
               child: TextFormField(
                 initialValue: widget.initialRecord?.notes,
                 decoration: getInputDecoration(localizations.addNote),
@@ -240,7 +240,7 @@ class _AddMeasurementDialogeState extends State<AddMeasurementDialoge> {
   }
 }
 
-Future<BloodPressureRecord> showAddMeasurementDialoge([BloodPressureRecord? initialRecord]) async {
-  // TODO: implement and change method signature
-  throw UnimplementedError();
-}
+Future<BloodPressureRecord?> showAddMeasurementDialoge(BuildContext context, Settings settings, [BloodPressureRecord? initialRecord]) =>
+  showDialog<BloodPressureRecord?>(context: context, builder: (context) => Dialog.fullscreen(
+    child: AddMeasurementDialoge(settings: settings, initialRecord: initialRecord,),
+  ));
