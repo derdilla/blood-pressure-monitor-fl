@@ -113,14 +113,18 @@ class PdfExportSettings extends ChangeNotifier implements CustomFieldsSettings {
   }
 
   bool _exportCustomFields = false;
+  @override
   bool get exportCustomFields => _exportCustomFields;
+  @override
   set exportCustomFields(bool value) {
     _exportCustomFields = value;
     notifyListeners();
   }
 
   List<String> _customFields = ExportFields.defaultPdf;
+  @override
   List<String> get customFields => _customFields;
+  @override
   set customFields(List<String> value) {
     _customFields = value;
     notifyListeners();

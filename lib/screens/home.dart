@@ -1,3 +1,4 @@
+import 'package:blood_pressure_app/components/dialoges/add_measurement.dart';
 import 'package:blood_pressure_app/components/legacy_measurement_list.dart';
 import 'package:blood_pressure_app/components/measurement_graph.dart';
 import 'package:blood_pressure_app/model/storage/settings_store.dart';
@@ -76,11 +77,13 @@ class AppHome extends StatelessWidget {
                       heroTag: "floatingActionAdd",
                       tooltip: localizations.addMeasurement,
                       autofocus: true,
-                      onPressed: () {
-                        Navigator.push(
+                      onPressed: () async {
+                        await showDialog(context: context, builder: (context) => AddMeasurementDialoge(settings: settings));
+                        // TODO: move to function in file and save measurements
+                        /*Navigator.push(
                           context,
                           _buildTransition(const AddMeasurementPage(), settings.animationSpeed),
-                        );
+                        );*/
                       },
                       child: const Icon(Icons.add,),
                     ),

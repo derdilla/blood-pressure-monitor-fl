@@ -27,9 +27,9 @@ class _DeleteDataScreenState extends State<DeleteDataScreen> {
     final localizations = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: AppBar(
-        title: Text('Delete data'),
+        title: const Text('Delete data'),
         leading: IconButton(
-          icon: Icon(Icons.arrow_back),
+          icon: const Icon(Icons.arrow_back),
           onPressed: () {
             if (_deletedData) {
               Restart.restartApp();

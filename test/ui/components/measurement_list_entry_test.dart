@@ -16,7 +16,7 @@ void main() {
       await widgetTester.pumpWidget(_materialApp(MeasurementListRow(
           record: BloodPressureRecord(DateTime.fromMillisecondsSinceEpoch(31279811), null, null, null, 'null test'))));
       await widgetTester.pumpWidget(_materialApp(MeasurementListRow(
-          record: BloodPressureRecord(DateTime(2023), 124, 85, 63, 'color', needlePin: MeasurementNeedlePin(Colors.cyan)))));
+          record: BloodPressureRecord(DateTime(2023), 124, 85, 63, 'color', needlePin: const MeasurementNeedlePin(Colors.cyan)))));
 
     });
     testWidgets('should expand correctly', (widgetTester) async {
