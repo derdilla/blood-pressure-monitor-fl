@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 /// A [ListTile] that shows a color preview and allows changing it.
 class ColorSelectionListTile extends StatelessWidget {
   /// Creates a [ListTile] with a color preview that opens a color picker on tap.
+  ///
+  /// This allows also allows picking the color [Colors.transparent], which can be used as a null color.
   const ColorSelectionListTile(
       {super.key,
         required this.title,

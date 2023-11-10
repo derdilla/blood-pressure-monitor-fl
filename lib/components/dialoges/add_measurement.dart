@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:blood_pressure_app/components/date_time_picker.dart';
+import 'package:blood_pressure_app/components/settings/settings_widgets.dart';
 import 'package:blood_pressure_app/model/blood_pressure.dart';
 import 'package:blood_pressure_app/model/storage/storage.dart';
 import 'package:flutter/material.dart';
@@ -34,11 +35,13 @@ class _AddMeasurementDialogeState extends State<AddMeasurementDialoge> {
   final formKey = GlobalKey<FormState>();
 
   late DateTime time;
+  MeasurementNeedlePin? needlePin;
 
   @override
   void initState() {
     super.initState();
     time = widget.initialRecord?.creationTime ?? DateTime.now();
+    needlePin = widget.initialRecord?.needlePin;
   }
 
   Widget buildTimeInput(AppLocalizations localizations) =>
@@ -103,6 +106,7 @@ class _AddMeasurementDialogeState extends State<AddMeasurementDialoge> {
             // https://pubmed.ncbi.nlm.nih.gov/7741618/
             return localizations.errUnrealistic;
           }
+          return null;
         },
       ),
     );
@@ -178,15 +182,37 @@ class _AddMeasurementDialogeState extends State<AddMeasurementDialoge> {
                 ),
               ],
             ),
-            const SizedBox(height: 10,),
-            TextFormField(
-              initialValue: widget.initialRecord?.notes,
-              decoration: getInputDecoration(localizations.addNote),
-              minLines: 1,
-              maxLines: 4,
-            )
-
-            // TODO: color input
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 10),
+              child: TextFormField(
+                initialValue: widget.initialRecord?.notes,
+                decoration: getInputDecoration(localizations.addNote),
+                minLines: 1,
+                maxLines: 4,
+              ),
+            ),
+            ColorSelectionListTile(
+              title: Text(localizations.color),
+              onMainColorChanged: (Color value) {
+                if (value == Colors.transparent) {
+                  setState(() {
+                    needlePin = null;
+                  });
+                } else {
+                  setState(() {
+                    needlePin = MeasurementNeedlePin(value);
+                  });
+                }
+              },
+              initialColor: needlePin?.color ?? Colors.transparent,
+              shape: RoundedRectangleBorder(
+                  side: BorderSide(
+                      width: 2,
+                      color: needlePin?.color ?? Theme.of(context).primaryColor
+                  ),
+                  borderRadius: BorderRadius.circular(20)
+              )
+            ),
           ],
         ),
       ),

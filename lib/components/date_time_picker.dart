@@ -5,7 +5,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 ///
 /// As per the decision of the material design team a TimePicker isn't able to limit the range
 /// (https://github.com/flutter/flutter/issues/23717#issuecomment-966601311), therefore a manual check for the time of
-/// day will be needed. Please refer to the validator on the AddMeasurementPage for an example
+/// day will be needed. Refer to the validator on the AddMeasurementPage for an example
 Future<DateTime?> showDateTimePicker({
   required BuildContext context,
   DateTime? initialDate,
