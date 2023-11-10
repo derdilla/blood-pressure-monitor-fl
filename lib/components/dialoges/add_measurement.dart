@@ -34,8 +34,23 @@ class AddMeasurementDialoge extends StatefulWidget {
 class _AddMeasurementDialogeState extends State<AddMeasurementDialoge> {
   final formKey = GlobalKey<FormState>();
 
+  /// Currently selected time.
   late DateTime time;
+
+  /// Current selected needlePin.
   MeasurementNeedlePin? needlePin;
+
+  /// Last [FormState.save]d systolic value.
+  int? systolic;
+
+  /// Last [FormState.save]d diastolic value.
+  int? diastolic;
+
+  /// Last [FormState.save]d pulse value.
+  int? pulse;
+
+  /// Last [FormState.save]d note.
+  String? notes;
 
   @override
   void initState() {
@@ -84,6 +99,7 @@ class _AddMeasurementDialogeState extends State<AddMeasurementDialoge> {
   Widget buildValueInput(AppLocalizations localizations, {
     int? initialValue,
     String? hintText,
+    void Function(String?)? onSaved,
     // FocusNode? focusNode, TODO: check if works without
   }) {
     return Expanded(
@@ -91,6 +107,7 @@ class _AddMeasurementDialogeState extends State<AddMeasurementDialoge> {
         initialValue: (initialValue ?? '').toString(),
         decoration: getInputDecoration(hintText),
         keyboardType: TextInputType.number,
+        onSaved: onSaved,
         inputFormatters: <TextInputFormatter>[FilteringTextInputFormatter.digitsOnly],
         onChanged: (String? value) {
           if (value != null && value.isNotEmpty && (int.tryParse(value) ?? -1) > 40) {
@@ -146,11 +163,10 @@ class _AddMeasurementDialogeState extends State<AddMeasurementDialoge> {
           TextButton(
               onPressed: () {
                 if (formKey.currentState?.validate() ?? false) {
-                  // TODO: save; get values from form
+                  formKey.currentState?.save();
+                  final record = BloodPressureRecord(time, systolic, diastolic, pulse, notes ?? '', needlePin: needlePin);
+                  Navigator.of(context).pop(record);
                 }
-                /*if(inputs valid) {
-                  Navigator.of(context).pop(timeFormatFieldController.text);
-                }*/
               },
               child: Text(localizations.btnSave)
           )
@@ -169,16 +185,19 @@ class _AddMeasurementDialogeState extends State<AddMeasurementDialoge> {
                 buildValueInput(localizations,
                   hintText: localizations.sysLong,
                   initialValue: widget.initialRecord?.systolic,
+                  onSaved: (value) => setState(() => systolic = int.tryParse(value ?? '')),
                 ),
                 const SizedBox(width: 10,),
                 buildValueInput(localizations,
                   hintText: localizations.diaLong,
                   initialValue: widget.initialRecord?.diastolic,
+                  onSaved: (value) => setState(() => diastolic = int.tryParse(value ?? '')),
                 ),
                 const SizedBox(width: 10,),
                 buildValueInput(localizations,
                   hintText: localizations.pulLong,
                   initialValue: widget.initialRecord?.pulse,
+                  onSaved: (value) => setState(() => pulse = int.tryParse(value ?? '')),
                 ),
               ],
             ),
@@ -189,6 +208,7 @@ class _AddMeasurementDialogeState extends State<AddMeasurementDialoge> {
                 decoration: getInputDecoration(localizations.addNote),
                 minLines: 1,
                 maxLines: 4,
+                onSaved: (value) => setState(() => notes = value),
               ),
             ),
             ColorSelectionListTile(

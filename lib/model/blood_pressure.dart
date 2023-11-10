@@ -166,7 +166,7 @@ class BloodPressureRecord {
 
   @override
   String toString() {
-    return 'BloodPressureRecord($creationTime, $systolic, $diastolic, $pulse, $notes)';
+    return 'BloodPressureRecord($creationTime, $systolic, $diastolic, $pulse, $notes, $needlePin)';
   }
 }
 
@@ -181,6 +181,11 @@ class MeasurementNeedlePin {
   Map<String, dynamic> toJson() => {
     'color': color.value,
   };
+
+  @override
+  String toString() {
+    return 'MeasurementNeedlePin{$color}';
+  }
 }
 
 // source: https://pressbooks.library.torontomu.ca/vitalsign/chapter/blood-pressure-ranges/ (last access: 20.05.2023)
