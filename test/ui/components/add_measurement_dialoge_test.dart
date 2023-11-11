@@ -86,6 +86,7 @@ void main() {
           'should return initial values as they were not modified',
           (record.creationTime, record.systolic, record.diastolic, record.pulse, record.notes, record.needlePin!.color)));
     });
+    // TODO: test inputting values
   });
 }
 

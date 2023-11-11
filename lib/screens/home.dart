@@ -46,9 +46,8 @@ class AppHome extends StatelessWidget {
           );
         }
         return Center(
-          child: Container(
-            // TODO: utilize more of the screen width
-            padding: const EdgeInsets.only(left: 10, right: 10, bottom: 15, top: 30),
+          child: Padding(
+            padding: const EdgeInsets.only(top: 20),
             child: Consumer<Settings>(
               builder: (context, settings, child) {
                 return Column(children: [
