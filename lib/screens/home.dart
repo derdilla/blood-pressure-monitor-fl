@@ -1,8 +1,8 @@
 import 'package:blood_pressure_app/components/dialoges/add_measurement.dart';
 import 'package:blood_pressure_app/components/legacy_measurement_list.dart';
 import 'package:blood_pressure_app/components/measurement_graph.dart';
+import 'package:blood_pressure_app/model/blood_pressure.dart';
 import 'package:blood_pressure_app/model/storage/settings_store.dart';
-import 'package:blood_pressure_app/screens/add_measurement.dart';
 import 'package:blood_pressure_app/screens/settings.dart';
 import 'package:blood_pressure_app/screens/statistics.dart';
 import 'package:flutter/material.dart';
@@ -13,7 +13,9 @@ import 'package:provider/provider.dart';
 
 import '../components/measurement_list/measurement_list.dart';
 
-/// The only use of this variable is to avoid loading the AddMeasurementPage twice,
+/// Is true during the first [AppHome.build].
+///
+/// The only use of this variable is to avoid calling [showAddMeasurementDialoge] twice,
 /// when startWithAddMeasurementPage is active
 bool _appStart = true;
 
@@ -25,8 +27,12 @@ class AppHome extends StatelessWidget {
     final localizations = AppLocalizations.of(context)!;
     // direct use of settings possible as no listening is required
     if (_appStart && Provider.of<Settings>(context, listen: false).startWithAddMeasurementPage) {
-      SchedulerBinding.instance.addPostFrameCallback((_) {
-        Navigator.of(context).push(MaterialPageRoute(builder: (context) => const AddMeasurementPage()));
+      SchedulerBinding.instance.addPostFrameCallback((_) async {
+        final future = showAddMeasurementDialoge(context, Provider.of<Settings>(context, listen: false));
+        final model = Provider.of<BloodPressureModel>(context, listen: false);
+        final measurement = await future;
+        if (measurement == null) return;
+        model.add(measurement);
       });
     }
     _appStart = false;
@@ -78,9 +84,12 @@ class AppHome extends StatelessWidget {
                       tooltip: localizations.addMeasurement,
                       autofocus: true,
                       onPressed: () async {
-                        final value = await showAddMeasurementDialoge(context, settings);
-                        // TODO: save value
-                        // TODO: use new dialog when editing measurements
+                        final future = showAddMeasurementDialoge(context, settings);
+                        final model = Provider.of<BloodPressureModel>(context, listen: false);
+                        final measurement = await future;
+                        if (measurement == null) return;
+                        model.add(measurement);
+                        // TODO: call export after every entry
                       },
                       child: const Icon(Icons.add,),
                     ),

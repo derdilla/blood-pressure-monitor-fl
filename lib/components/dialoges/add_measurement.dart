@@ -217,7 +217,7 @@ class _AddMeasurementDialogeState extends State<AddMeasurementDialoge> {
                 initialValue: widget.initialRecord?.notes,
                 decoration: getInputDecoration(localizations.addNote),
                 minLines: 1,
-                maxLines: 4,
+                //maxLines: 4, There is a bug in the flutter framework: https://github.com/flutter/flutter/issues/138219
                 onSaved: (value) => setState(() => notes = value),
               ),
             ),

@@ -1,6 +1,6 @@
+import 'package:blood_pressure_app/components/dialoges/add_measurement.dart';
 import 'package:blood_pressure_app/model/blood_pressure.dart';
 import 'package:blood_pressure_app/model/storage/storage.dart';
-import 'package:blood_pressure_app/screens/add_measurement.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
@@ -31,7 +31,13 @@ class MeasurementListRow extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   IconButton(
-                    onPressed: () => _editEntry(context),
+                    onPressed: () async {
+                      final future = showAddMeasurementDialoge(context, settings, record);
+                      final model = Provider.of<BloodPressureModel>(context, listen: false);
+                      final measurement = await future;
+                      if (measurement == null) return;
+                      model.add(measurement);
+                    },
                     icon: const Icon(Icons.edit),
                     tooltip: localizations.edit,
                   ),
@@ -109,9 +115,5 @@ class MeasurementListRow extends StatelessWidget {
         ),
       ));
     }
-  }
-
-  void _editEntry(BuildContext context) async {
-    Navigator.push(context, MaterialPageRoute(builder: (context) => AddMeasurementPage.edit(record)));
   }
 }

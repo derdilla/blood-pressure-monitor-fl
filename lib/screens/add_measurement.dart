@@ -12,6 +12,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
+@Deprecated("use dialoge instead")
 class AddMeasurementPage extends StatefulWidget {
   final DateTime? initTime;
   final int? initSys;
