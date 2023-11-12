@@ -54,8 +54,7 @@ void main() {
       await widgetTester.pumpAndSettle();
       expect(find.byType(ColorPicker), findsOneWidget);
 
-      // tap red (color list offset by one)
-      await widgetTester.tap(find.byType(InkWell).at(3));
+      await widgetTester.tap(find.byElementPredicate(findColored(Colors.red)));
       await widgetTester.pumpAndSettle();
       expect(find.byType(ColorPicker), findsNothing);
 
@@ -80,4 +79,11 @@ Widget _materialApp(Widget child) {
     locale: const Locale('en'),
     home: Scaffold(body:child),
   );
+}
+
+bool Function(Element e) findColored(Color color) {
+  return (e) =>
+    e.widget is Container &&
+      (e.widget as Container).decoration is BoxDecoration &&
+        ((e.widget as Container).decoration as BoxDecoration).color == color;
 }

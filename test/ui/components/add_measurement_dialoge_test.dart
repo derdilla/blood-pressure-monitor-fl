@@ -1,9 +1,12 @@
 import 'package:blood_pressure_app/components/dialoges/add_measurement.dart';
+import 'package:blood_pressure_app/components/settings/color_picker_list_tile.dart';
 import 'package:blood_pressure_app/model/blood_pressure.dart';
 import 'package:blood_pressure_app/model/storage/settings_store.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
+
+import 'settings/color_picker_list_tile_test.dart';
 
 void main() {
   group('AddMeasurementDialoge', () {
@@ -18,6 +21,7 @@ void main() {
       expect(find.text('Systolic'), findsAny);
       expect(find.text('Diastolic'), findsAny);
       expect(find.text('Pulse'), findsAny);
+      expect(find.byType(ColorSelectionListTile), findsOneWidget);
     });
     testWidgets('should prefill initialRecord values', (widgetTester) async {
       await widgetTester.pumpWidget(_materialApp(
@@ -36,6 +40,9 @@ void main() {
       expect(find.text('123'), findsOneWidget);
       expect(find.text('56'), findsOneWidget);
       expect(find.text('43'), findsOneWidget);
+      expect(find.byType(ColorSelectionListTile), findsOneWidget);
+      expect(find.byType(ColorSelectionListTile).evaluate().first.widget, isA<ColorSelectionListTile>().
+      having((p0) => p0.initialColor, 'ColorSelectionListTile should have correct initial color', Colors.teal));
     });
   });
   group('showAddMeasurementDialoge', () {
@@ -86,7 +93,40 @@ void main() {
           'should return initial values as they were not modified',
           (record.creationTime, record.systolic, record.diastolic, record.pulse, record.notes, record.needlePin!.color)));
     });
-    // TODO: test inputting values
+    testWidgets('should be able to input values', (WidgetTester widgetTester) async {
+      dynamic result = 'not null';
+      await widgetTester.pumpWidget(_materialApp(
+          Builder(
+            builder: (BuildContext context) => TextButton(onPressed: () async {
+              result = await showAddMeasurementDialoge(context, Settings());
+            }, child: const Text('TEST')),
+          )));
+      await widgetTester.tap(find.text('TEST'));
+      await widgetTester.pumpAndSettle();
+
+      await widgetTester.enterText(find.ancestor(of: find.text('Systolic').first, matching: find.byType(TextFormField)), '123');
+      await widgetTester.enterText(find.ancestor(of: find.text('Diastolic').first, matching: find.byType(TextFormField)), '67');
+      await widgetTester.enterText(find.ancestor(of: find.text('Pulse').first, matching: find.byType(TextFormField)), '89');
+      await widgetTester.enterText(find.ancestor(of: find.text('Note (optional)').first, matching: find.byType(TextFormField)), 'Test note');
+
+
+      await widgetTester.tap(find.byType(ColorSelectionListTile));
+      await widgetTester.pumpAndSettle();
+      await widgetTester.tap(find.byElementPredicate(findColored(Colors.red)));
+      await widgetTester.pumpAndSettle();
+
+      expect(find.text('SAVE'), findsOneWidget);
+      await widgetTester.tap(find.text('SAVE'));
+      await widgetTester.pumpAndSettle();
+
+      expect(result, isA<BloodPressureRecord>());
+      BloodPressureRecord castResult = result;
+      expect(castResult.systolic, 123);
+      expect(castResult.diastolic, 67);
+      expect(castResult.pulse, 89);
+      expect(castResult.notes, 'Test note');
+      expect(castResult.needlePin?.color, Colors.red);
+    });
   });
 }
 

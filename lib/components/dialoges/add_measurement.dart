@@ -184,6 +184,7 @@ class _AddMeasurementDialogeState extends State<AddMeasurementDialoge> {
       body: Form(
         key: formKey,
         child: ListView(
+          padding: const EdgeInsets.symmetric(horizontal: 8),
           children: [
             if (widget.settings.allowManualTimeInput)
               buildTimeInput(localizations),
