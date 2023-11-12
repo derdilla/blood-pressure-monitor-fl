@@ -109,7 +109,6 @@ void main() {
       await widgetTester.enterText(find.ancestor(of: find.text('Pulse').first, matching: find.byType(TextFormField)), '89');
       await widgetTester.enterText(find.ancestor(of: find.text('Note (optional)').first, matching: find.byType(TextFormField)), 'Test note');
 
-
       await widgetTester.tap(find.byType(ColorSelectionListTile));
       await widgetTester.pumpAndSettle();
       await widgetTester.tap(find.byElementPredicate(findColored(Colors.red)));
@@ -126,6 +125,76 @@ void main() {
       expect(castResult.pulse, 89);
       expect(castResult.notes, 'Test note');
       expect(castResult.needlePin?.color, Colors.red);
+    });
+    testWidgets('should not allow invalid values', (widgetTester) async {
+      await widgetTester.pumpWidget(_materialApp(Container()));
+      late final BuildContext buildContext;
+
+      await widgetTester.pumpWidget(_materialApp(
+          Builder(
+            builder: (BuildContext context) {
+              buildContext = context;
+              return TextButton(onPressed: () async {
+                await showAddMeasurementDialoge(context, Settings());
+              }, child: const Text('TEST'));
+            },
+          )));
+      await widgetTester.tap(find.text('TEST'));
+      await widgetTester.pumpAndSettle();
+      final localizations = AppLocalizations.of(buildContext)!;
+
+      expect(find.byType(AddMeasurementDialoge), findsOneWidget);
+      expect(find.text(localizations.errNaN), findsNothing);
+      expect(find.text(localizations.errLt30), findsNothing);
+      expect(find.text(localizations.errUnrealistic), findsNothing);
+
+      await widgetTester.enterText(find.ancestor(of: find.text('Systolic').first, matching: find.byType(TextFormField)), '123');
+      await widgetTester.enterText(find.ancestor(of: find.text('Diastolic').first, matching: find.byType(TextFormField)), '67');
+
+      await widgetTester.tap(find.text('SAVE'));
+      await widgetTester.pumpAndSettle();
+      expect(find.byType(AddMeasurementDialoge), findsOneWidget);
+      expect(find.text(localizations.errNaN), findsOneWidget);
+
+      await widgetTester.enterText(find.ancestor(of: find.text('Pulse').first, matching: find.byType(TextFormField)), '20');
+      await widgetTester.tap(find.text('SAVE'));
+      await widgetTester.pumpAndSettle();
+      expect(find.byType(AddMeasurementDialoge), findsOneWidget);
+      expect(find.text(localizations.errNaN), findsNothing);
+      expect(find.text(localizations.errLt30), findsOneWidget);
+
+      await widgetTester.enterText(find.ancestor(of: find.text('Pulse').first, matching: find.byType(TextFormField)), '60');
+      await widgetTester.enterText(find.ancestor(of: find.text('Diastolic').first, matching: find.byType(TextFormField)), '500');
+      await widgetTester.tap(find.text('SAVE'));
+      await widgetTester.pumpAndSettle();
+      expect(find.byType(AddMeasurementDialoge), findsOneWidget);
+      expect(find.text(localizations.errNaN), findsNothing);
+      expect(find.text(localizations.errLt30), findsNothing);
+      expect(find.text(localizations.errUnrealistic), findsOneWidget);
+
+      await widgetTester.enterText(find.ancestor(of: find.text('Diastolic').first, matching: find.byType(TextFormField)), '80');
+      await widgetTester.tap(find.text('SAVE'));
+      await widgetTester.pumpAndSettle();
+      expect(find.byType(AddMeasurementDialoge), findsNothing);
+      expect(find.text(localizations.errNaN), findsNothing);
+      expect(find.text(localizations.errLt30), findsNothing);
+      expect(find.text(localizations.errUnrealistic), findsNothing);
+    });
+    testWidgets('should allow invalid values when setting is set', (widgetTester) async {
+      await widgetTester.pumpWidget(_materialApp(
+          Builder(
+            builder: (BuildContext context) => TextButton(onPressed: () async {
+              await showAddMeasurementDialoge(context, Settings(validateInputs: false, allowMissingValues: true));
+            }, child: const Text('TEST')),
+          )));
+      await widgetTester.tap(find.text('TEST'));
+      await widgetTester.pumpAndSettle();
+
+      await widgetTester.enterText(find.ancestor(of: find.text('Systolic').first, matching: find.byType(TextFormField)), '2');
+      await widgetTester.enterText(find.ancestor(of: find.text('Diastolic').first, matching: find.byType(TextFormField)), '500');
+      await widgetTester.tap(find.text('SAVE'));
+      await widgetTester.pumpAndSettle();
+      expect(find.byType(AddMeasurementDialoge), findsNothing);
     });
   });
 }

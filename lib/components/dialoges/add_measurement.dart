@@ -126,14 +126,15 @@ class _AddMeasurementDialogeState extends State<AddMeasurementDialoge> {
           }
         },
         validator: (String? value) {
-          if (value == null || value.isEmpty || int.tryParse(value) == null) {
+          if (!widget.settings.allowMissingValues && (value == null || value.isEmpty || int.tryParse(value) == null)) {
             return localizations.errNaN;
-          } else if (widget.settings.validateInputs && (int.tryParse(value) ?? -1) <= 30) {
+          } else if (widget.settings.validateInputs && (int.tryParse(value ?? '') ?? -1) <= 30) {
             return localizations.errLt30;
-          } else if (widget.settings.validateInputs && (int.tryParse(value) ?? 0) >= 400) {
+          } else if (widget.settings.validateInputs && (int.tryParse(value ?? '') ?? 0) >= 400) {
             // https://pubmed.ncbi.nlm.nih.gov/7741618/
             return localizations.errUnrealistic;
           }
+          // TODO: check dia > sys
           return null;
         },
       ),
