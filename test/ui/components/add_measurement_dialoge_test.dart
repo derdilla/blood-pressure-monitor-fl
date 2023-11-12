@@ -147,6 +147,8 @@ void main() {
       expect(find.text(localizations.errNaN), findsNothing);
       expect(find.text(localizations.errLt30), findsNothing);
       expect(find.text(localizations.errUnrealistic), findsNothing);
+      expect(find.text(localizations.errDiaGtSys), findsNothing);
+
 
       await widgetTester.enterText(find.ancestor(of: find.text('Systolic').first, matching: find.byType(TextFormField)), '123');
       await widgetTester.enterText(find.ancestor(of: find.text('Diastolic').first, matching: find.byType(TextFormField)), '67');
@@ -155,6 +157,9 @@ void main() {
       await widgetTester.pumpAndSettle();
       expect(find.byType(AddMeasurementDialoge), findsOneWidget);
       expect(find.text(localizations.errNaN), findsOneWidget);
+      expect(find.text(localizations.errLt30), findsNothing);
+      expect(find.text(localizations.errUnrealistic), findsNothing);
+      expect(find.text(localizations.errDiaGtSys), findsNothing);
 
       await widgetTester.enterText(find.ancestor(of: find.text('Pulse').first, matching: find.byType(TextFormField)), '20');
       await widgetTester.tap(find.text('SAVE'));
@@ -162,6 +167,8 @@ void main() {
       expect(find.byType(AddMeasurementDialoge), findsOneWidget);
       expect(find.text(localizations.errNaN), findsNothing);
       expect(find.text(localizations.errLt30), findsOneWidget);
+      expect(find.text(localizations.errUnrealistic), findsNothing);
+      expect(find.text(localizations.errDiaGtSys), findsNothing);
 
       await widgetTester.enterText(find.ancestor(of: find.text('Pulse').first, matching: find.byType(TextFormField)), '60');
       await widgetTester.enterText(find.ancestor(of: find.text('Diastolic').first, matching: find.byType(TextFormField)), '500');
@@ -171,14 +178,28 @@ void main() {
       expect(find.text(localizations.errNaN), findsNothing);
       expect(find.text(localizations.errLt30), findsNothing);
       expect(find.text(localizations.errUnrealistic), findsOneWidget);
+      expect(find.text(localizations.errDiaGtSys), findsNothing);
 
-      await widgetTester.enterText(find.ancestor(of: find.text('Diastolic').first, matching: find.byType(TextFormField)), '80');
+      await widgetTester.enterText(find.ancestor(of: find.text('Diastolic').first, matching: find.byType(TextFormField)), '100');
+      await widgetTester.enterText(find.ancestor(of: find.text('Systolic').first, matching: find.byType(TextFormField)), '90');
+      await widgetTester.tap(find.text('SAVE'));
+      await widgetTester.pumpAndSettle();
+      expect(find.byType(AddMeasurementDialoge), findsOneWidget);
+      expect(find.text(localizations.errNaN), findsNothing);
+      expect(find.text(localizations.errLt30), findsNothing);
+      expect(find.text(localizations.errUnrealistic), findsNothing);
+      expect(find.text(localizations.errDiaGtSys), findsOneWidget);
+
+
+      await widgetTester.enterText(find.ancestor(of: find.text('Diastolic').first, matching: find.byType(TextFormField)), '78');
+      await widgetTester.enterText(find.ancestor(of: find.text('Systolic').first, matching: find.byType(TextFormField)), '123');
       await widgetTester.tap(find.text('SAVE'));
       await widgetTester.pumpAndSettle();
       expect(find.byType(AddMeasurementDialoge), findsNothing);
       expect(find.text(localizations.errNaN), findsNothing);
       expect(find.text(localizations.errLt30), findsNothing);
       expect(find.text(localizations.errUnrealistic), findsNothing);
+      expect(find.text(localizations.errDiaGtSys), findsNothing);
     });
     testWidgets('should allow invalid values when setting is set', (widgetTester) async {
       await widgetTester.pumpWidget(_materialApp(
@@ -200,7 +221,7 @@ void main() {
       await widgetTester.pumpWidget(_materialApp(
           Builder(
             builder: (BuildContext context) => TextButton(onPressed: () async {
-              await showAddMeasurementDialoge(context, Settings(validateInputs: false, allowMissingValues: true));
+              await showAddMeasurementDialoge(context, Settings(allowManualTimeInput: false));
             }, child: const Text('TEST')),
           )));
       await widgetTester.tap(find.text('TEST'));

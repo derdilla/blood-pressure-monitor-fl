@@ -34,6 +34,7 @@ class AddMeasurementDialoge extends StatefulWidget {
 class _AddMeasurementDialogeState extends State<AddMeasurementDialoge> {
   final formKey = GlobalKey<FormState>();
   final firstFocusNode = FocusNode();
+  late final TextEditingController sysController;
 
   /// Currently selected time.
   late DateTime time;
@@ -58,6 +59,7 @@ class _AddMeasurementDialogeState extends State<AddMeasurementDialoge> {
     super.initState();
     time = widget.initialRecord?.creationTime ?? DateTime.now();
     needlePin = widget.initialRecord?.needlePin;
+    sysController = TextEditingController(text: (widget.initialRecord?.systolic ?? '').toString());
 
     firstFocusNode.requestFocus();
   }
@@ -111,14 +113,18 @@ class _AddMeasurementDialogeState extends State<AddMeasurementDialoge> {
     String? hintText,
     void Function(String?)? onSaved,
     FocusNode? focusNode,
+    TextEditingController? controller,
+    String? Function(String?)? validator,
   }) {
+    assert(initialValue == null || controller == null);
     return Expanded(
       child: TextFormField(
-        initialValue: (initialValue ?? '').toString(),
+        initialValue: initialValue?.toString(),
         decoration: getInputDecoration(hintText),
         keyboardType: TextInputType.number,
         focusNode: focusNode,
         onSaved: onSaved,
+        controller: controller,
         inputFormatters: <TextInputFormatter>[FilteringTextInputFormatter.digitsOnly],
         onChanged: (String? value) {
           if (value != null && value.isNotEmpty && (int.tryParse(value) ?? -1) > 40) {
@@ -134,8 +140,7 @@ class _AddMeasurementDialogeState extends State<AddMeasurementDialoge> {
             // https://pubmed.ncbi.nlm.nih.gov/7741618/
             return localizations.errUnrealistic;
           }
-          // TODO: check dia > sys
-          return null;
+          return validator?.call(value);
         },
       ),
     );
@@ -196,7 +201,7 @@ class _AddMeasurementDialogeState extends State<AddMeasurementDialoge> {
                 buildValueInput(localizations,
                   focusNode: firstFocusNode,
                   hintText: localizations.sysLong,
-                  initialValue: widget.initialRecord?.systolic,
+                  controller: sysController,
                   onSaved: (value) => setState(() => systolic = int.tryParse(value ?? '')),
                 ),
                 const SizedBox(width: 16,),
@@ -204,6 +209,12 @@ class _AddMeasurementDialogeState extends State<AddMeasurementDialoge> {
                   hintText: localizations.diaLong,
                   initialValue: widget.initialRecord?.diastolic,
                   onSaved: (value) => setState(() => diastolic = int.tryParse(value ?? '')),
+                  validator: (value) {
+                    if (widget.settings.validateInputs && (int.tryParse(value ?? '') ?? 0) >= (int.tryParse(sysController.text) ?? 1)) {
+                      return AppLocalizations.of(context)?.errDiaGtSys;
+                    }
+                    return null;
+                  }
                 ),
                 const SizedBox(width: 16,),
                 buildValueInput(localizations,
