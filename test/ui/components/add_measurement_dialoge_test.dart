@@ -196,6 +196,18 @@ void main() {
       await widgetTester.pumpAndSettle();
       expect(find.byType(AddMeasurementDialoge), findsNothing);
     });
+    testWidgets('should respect settings.allowManualTimeInput', (widgetTester) async {
+      await widgetTester.pumpWidget(_materialApp(
+          Builder(
+            builder: (BuildContext context) => TextButton(onPressed: () async {
+              await showAddMeasurementDialoge(context, Settings(validateInputs: false, allowMissingValues: true));
+            }, child: const Text('TEST')),
+          )));
+      await widgetTester.tap(find.text('TEST'));
+      await widgetTester.pumpAndSettle();
+
+      expect(find.byIcon(Icons.edit), findsNothing);
+    });
   });
 }
 
