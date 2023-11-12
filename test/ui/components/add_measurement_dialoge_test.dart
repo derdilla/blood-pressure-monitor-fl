@@ -231,10 +231,72 @@ void main() {
       expect(find.byIcon(Icons.edit), findsNothing);
     });
     testWidgets('should start with sys input focused', (widgetTester) async {
+      await widgetTester.pumpWidget(_materialApp(
+          Builder(
+            builder: (BuildContext context) => TextButton(onPressed: () async {
+              await showAddMeasurementDialoge(context, Settings(allowManualTimeInput: false),
+                  BloodPressureRecord(DateTime.now(), 12, 3, 4, 'note'));
+            }, child: const Text('TEST')),
+          )));
+      await widgetTester.tap(find.text('TEST'));
+      await widgetTester.pumpAndSettle();
 
+      final primaryFocus = FocusManager.instance.primaryFocus;
+      expect(primaryFocus?.context?.widget, isNotNull);
+      final focusedTextFormField = find.ancestor(
+        of: find.byWidget(primaryFocus!.context!.widget),
+        matching: find.byType(TextFormField),
+      );
+      expect(focusedTextFormField, findsOneWidget);
+      expect(focusedTextFormField.evaluate().first.widget, isA<TextFormField>()
+          .having((p0) => p0.initialValue, 'expecting systolic field to be selected', '12'));
     });
     testWidgets('should focus next on input finished', (widgetTester) async {
+      await widgetTester.pumpWidget(_materialApp(
+          Builder(
+            builder: (BuildContext context) => TextButton(onPressed: () async {
+              await showAddMeasurementDialoge(context, Settings(allowManualTimeInput: false),
+                  BloodPressureRecord(DateTime.now(), 12, 3, 4, 'note'));
+            }, child: const Text('TEST')),
+          )));
+      await widgetTester.tap(find.text('TEST'));
+      await widgetTester.pumpAndSettle();
 
+      await widgetTester.enterText(find.ancestor(of: find.text('Systolic').first, matching: find.byType(TextFormField)), '123');
+
+      final firstFocused = FocusManager.instance.primaryFocus;
+      expect(firstFocused?.context?.widget, isNotNull);
+      final focusedTextFormField = find.ancestor(
+        of: find.byWidget(firstFocused!.context!.widget),
+        matching: find.byType(TextFormField),
+      );
+      expect(focusedTextFormField, findsOneWidget);
+      expect(focusedTextFormField.evaluate().first.widget, isA<TextFormField>()
+          .having((p0) => p0.initialValue, 'expecting diastolic field to be selected second', '3'));
+
+      await widgetTester.enterText(find.ancestor(of: find.text('Diastolic').first, matching: find.byType(TextFormField)), '78');
+
+      final secondFocused = FocusManager.instance.primaryFocus;
+      expect(secondFocused?.context?.widget, isNotNull);
+      final secondFocusedTextFormField = find.ancestor(
+        of: find.byWidget(secondFocused!.context!.widget),
+        matching: find.byType(TextFormField),
+      );
+      expect(secondFocusedTextFormField, findsOneWidget);
+      expect(secondFocusedTextFormField.evaluate().first.widget, isA<TextFormField>()
+          .having((p0) => p0.initialValue, 'expecting pulse field to be selected third', '4'));
+
+      await widgetTester.enterText(find.ancestor(of: find.text('Pulse').first, matching: find.byType(TextFormField)), '60');
+
+      final thirdFocused = FocusManager.instance.primaryFocus;
+      expect(thirdFocused?.context?.widget, isNotNull);
+      final thirdFocusedTextFormField = find.ancestor(
+        of: find.byWidget(thirdFocused!.context!.widget),
+        matching: find.byType(TextFormField),
+      );
+      expect(thirdFocusedTextFormField, findsOneWidget);
+      expect(thirdFocusedTextFormField.evaluate().first.widget, isA<TextFormField>()
+          .having((p0) => p0.initialValue, 'expecting pulse field to be selected third', 'note'));
     });
   });
 }
