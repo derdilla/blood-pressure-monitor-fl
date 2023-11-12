@@ -16,6 +16,7 @@ void main() {
           settings: Settings(),
         )
       ));
+      expect(widgetTester.takeException(), isNull);
       expect(find.text('SAVE'), findsOneWidget);
       expect(find.byIcon(Icons.close), findsOneWidget);
       expect(find.text('Systolic'), findsAny);
@@ -228,6 +229,12 @@ void main() {
       await widgetTester.pumpAndSettle();
 
       expect(find.byIcon(Icons.edit), findsNothing);
+    });
+    testWidgets('should start with sys input focused', (widgetTester) async {
+
+    });
+    testWidgets('should focus next on input finished', (widgetTester) async {
+
     });
   });
 }

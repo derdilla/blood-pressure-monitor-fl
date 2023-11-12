@@ -14,6 +14,7 @@ void main() {
         min: 1,
         max: 20,
       )));
+      expect(widgetTester.takeException(), isNull);
       await widgetTester.pumpWidget(_materialApp(SliderListTile(
         title: const Text('Very long title that could overflow'),
         onChanged: (double newValue) {
@@ -27,6 +28,7 @@ void main() {
         trailing: const Icon(Icons.add),
         subtitle: const Text('While sliders support subtitle widgets, they should not interfere with the slider!'),
       )));
+      expect(widgetTester.takeException(), isNull);
     });
     testWidgets('should report value changes', (widgetTester) async {
       int callCount = 0;

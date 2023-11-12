@@ -13,6 +13,7 @@ void main() {
           assert(false, 'should not be called');
         },
         initialColor: Colors.teal,)));
+      expect(widgetTester.takeException(), isNull);
     });
     testWidgets('should preview color', (widgetTester) async {
       await widgetTester.pumpWidget(_materialApp(ColorSelectionListTile(

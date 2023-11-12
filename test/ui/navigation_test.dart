@@ -1,3 +1,4 @@
+import 'package:blood_pressure_app/components/dialoges/add_measurement.dart';
 import 'package:blood_pressure_app/components/dialoges/enter_timeformat.dart';
 import 'package:blood_pressure_app/main.dart';
 import 'package:blood_pressure_app/model/blood_pressure.dart';
@@ -22,7 +23,7 @@ void main() {
       await widgetTester.tap(find.byIcon(Icons.add));
       await widgetTester.pumpAndSettle();
 
-      expect(find.byType(AddMeasurementPage), findsOneWidget);
+      expect(find.byType(AddMeasurementDialoge), findsOneWidget);
     });
     testWidgets('should navigate to settings page', (widgetTester) async {
       await pumpAppRoot(widgetTester);

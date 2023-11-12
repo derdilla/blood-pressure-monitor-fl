@@ -16,6 +16,7 @@ void main() {
           const ListTile(title: Text('ListTile text 2'),),
         ],
       )));
+      expect(widgetTester.takeException(), isNull);
 
       expect(find.text('test title'), findsOneWidget);
       expect(find.text('ListTile text 1'), findsOneWidget);

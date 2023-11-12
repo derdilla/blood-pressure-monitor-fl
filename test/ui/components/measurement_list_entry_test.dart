@@ -13,11 +13,13 @@ void main() {
     testWidgets('should initialize without errors', (widgetTester) async {
       await widgetTester.pumpWidget(_materialApp(MeasurementListRow(
           record: BloodPressureRecord(DateTime(2023), 123, 80, 60, 'test'))));
+      expect(widgetTester.takeException(), isNull);
       await widgetTester.pumpWidget(_materialApp(MeasurementListRow(
           record: BloodPressureRecord(DateTime.fromMillisecondsSinceEpoch(31279811), null, null, null, 'null test'))));
+      expect(widgetTester.takeException(), isNull);
       await widgetTester.pumpWidget(_materialApp(MeasurementListRow(
           record: BloodPressureRecord(DateTime(2023), 124, 85, 63, 'color', needlePin: const MeasurementNeedlePin(Colors.cyan)))));
-
+      expect(widgetTester.takeException(), isNull);
     });
     testWidgets('should expand correctly', (widgetTester) async {
       await widgetTester.pumpWidget(_materialApp(MeasurementListRow(
