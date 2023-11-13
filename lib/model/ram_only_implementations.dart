@@ -41,4 +41,9 @@ class RamBloodPressureModel extends ChangeNotifier implements BloodPressureModel
 
   @override
   Future<void> close() async {}
+
+  @override
+  Future<void> addAndExport(BuildContext context, BloodPressureRecord record) async {
+    add(record);
+  }
 }

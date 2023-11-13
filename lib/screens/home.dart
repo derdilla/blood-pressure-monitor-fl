@@ -2,7 +2,6 @@ import 'package:blood_pressure_app/components/dialoges/add_measurement.dart';
 import 'package:blood_pressure_app/components/legacy_measurement_list.dart';
 import 'package:blood_pressure_app/components/measurement_graph.dart';
 import 'package:blood_pressure_app/model/blood_pressure.dart';
-import 'package:blood_pressure_app/model/central_callback.dart';
 import 'package:blood_pressure_app/model/storage/settings_store.dart';
 import 'package:blood_pressure_app/screens/settings.dart';
 import 'package:blood_pressure_app/screens/statistics.dart';
@@ -14,10 +13,7 @@ import 'package:provider/provider.dart';
 
 import '../components/measurement_list/measurement_list.dart';
 
-/// Is true during the first [AppHome.build].
-///
-/// The only use of this variable is to avoid calling [showAddMeasurementDialoge] twice,
-/// when startWithAddMeasurementPage is active
+/// Is true during the first [AppHome.build] before creating the widget.
 bool _appStart = true;
 
 class AppHome extends StatelessWidget {
@@ -28,14 +24,17 @@ class AppHome extends StatelessWidget {
     final localizations = AppLocalizations.of(context)!;
     // direct use of settings possible as no listening is required
     if (_appStart) {
-      CentralCallback.init(context);
       if (Provider.of<Settings>(context, listen: false).startWithAddMeasurementPage) {
         SchedulerBinding.instance.addPostFrameCallback((_) async {
           final future = showAddMeasurementDialoge(context, Provider.of<Settings>(context, listen: false));
           final model = Provider.of<BloodPressureModel>(context, listen: false);
           final measurement = await future;
           if (measurement == null) return;
-          model.add(measurement);
+          if (context.mounted) {
+            model.addAndExport(context, measurement);
+          } else {
+            model.add(measurement);
+          }
         });
       }
     }
@@ -91,14 +90,11 @@ class AppHome extends StatelessWidget {
                         final model = Provider.of<BloodPressureModel>(context, listen: false);
                         final measurement = await future;
                         if (measurement == null) return;
-                        model.add(measurement);
-                        // TODO: call export after every entry
-                        /*
-                        if (settings.exportAfterEveryEntry && context.mounted) {
-                                  final exporter = Exporter.load(context, await model.all, await ExportConfigurationModel.get(localizations));
-                                  exporter.export();
-                                }
-                         */
+                        if (context.mounted) {
+                          model.addAndExport(context, measurement);
+                        } else {
+                          model.add(measurement);
+                        }
                       },
                       child: const Icon(Icons.add,),
                     ),

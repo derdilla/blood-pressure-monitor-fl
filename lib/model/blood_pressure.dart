@@ -1,11 +1,15 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:blood_pressure_app/model/central_callback.dart';
+import 'package:blood_pressure_app/model/export_import.dart';
+import 'package:blood_pressure_app/model/export_options.dart';
+import 'package:blood_pressure_app/model/storage/storage.dart';
 import 'package:blood_pressure_app/screens/error_reporting.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:path/path.dart';
+import 'package:provider/provider.dart';
 import 'package:sqflite/sqflite.dart';
 
 class BloodPressureModel extends ChangeNotifier {
@@ -71,6 +75,9 @@ class BloodPressureModel extends ChangeNotifier {
   }
 
   /// Adds a new measurement at the correct chronological position in the List.
+  ///
+  /// This is not suitable for user inputs, as in this case export is needed as well. Consider using
+  /// [BloodPressureModel.addAndExport] instead.
   Future<void> add(BloodPressureRecord measurement) async {
     if (!_database.isOpen) return;
     final existing = await _database.query('bloodPressureModel',
@@ -97,8 +104,23 @@ class BloodPressureModel extends ChangeNotifier {
         'needlePin': jsonEncode(measurement.needlePin)
       });
     }
-    CentralCallback.instance?.onMeasurementAdded(measurement);
     notifyListeners();
+  }
+
+  Future<void> addAndExport(BuildContext context, BloodPressureRecord record) async {
+    await add(record);
+
+    if (!context.mounted) return;
+    final exportSettings = Provider.of<ExportSettings>(context, listen: false);
+    if (exportSettings.exportAfterEveryEntry) {
+      final r = Provider.of<IntervallStoreManager>(context, listen: false).exportPage.currentRange;
+      final loc = AppLocalizations.of(context)!;
+      final exportConfigurationModel = await ExportConfigurationModel.get(loc);
+      final allMeasurements = await getInTimeRange(r.start, r.end);
+      if (!context.mounted) return;
+      final exporter = Exporter.load(context, allMeasurements, exportConfigurationModel);
+      await exporter.export();
+    }
   }
 
   Future<void> delete(DateTime timestamp) async {

@@ -86,7 +86,11 @@ class LegacyMeasurementsList extends StatelessWidget {
                                 final model = Provider.of<BloodPressureModel>(context, listen: false);
                                 final measurement = await future;
                                 if (measurement == null) return false;
-                                model.add(measurement);
+                                if (context.mounted) {
+                                  model.addAndExport(context, measurement);
+                                } else {
+                                  model.add(measurement);
+                                }
                                 return false;
                               } else { // delete
                                 bool dialogeDeletionConfirmed = false;
@@ -126,7 +130,7 @@ class LegacyMeasurementsList extends StatelessWidget {
                                     action: SnackBarAction(
                                       label: AppLocalizations.of(context)!.btnUndo,
                                       onPressed: () async {
-                                        model.add(BloodPressureRecord(
+                                        model.addAndExport(context, BloodPressureRecord(
                                             data[index].creationTime,
                                             data[index].systolic,
                                             data[index].diastolic,

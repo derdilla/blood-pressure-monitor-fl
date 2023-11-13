@@ -36,7 +36,11 @@ class MeasurementListRow extends StatelessWidget {
                       final model = Provider.of<BloodPressureModel>(context, listen: false);
                       final measurement = await future;
                       if (measurement == null) return;
-                      model.add(measurement);
+                      if (context.mounted) {
+                        model.addAndExport(context, measurement);
+                      } else {
+                        model.add(measurement);
+                      }
                     },
                     icon: const Icon(Icons.edit),
                     tooltip: localizations.edit,
