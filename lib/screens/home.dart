@@ -89,6 +89,12 @@ class AppHome extends StatelessWidget {
                         if (measurement == null) return;
                         model.add(measurement);
                         // TODO: call export after every entry
+                        /*
+                        if (settings.exportAfterEveryEntry && context.mounted) {
+                                  final exporter = Exporter.load(context, await model.all, await ExportConfigurationModel.get(localizations));
+                                  exporter.export();
+                                }
+                         */
                       },
                       child: const Icon(Icons.add,),
                     ),
