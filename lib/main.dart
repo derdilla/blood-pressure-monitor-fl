@@ -1,6 +1,5 @@
 import 'package:blood_pressure_app/components/consistent_future_builder.dart';
 import 'package:blood_pressure_app/model/blood_pressure.dart';
-import 'package:blood_pressure_app/model/central_callback.dart';
 import 'package:blood_pressure_app/model/storage/db/config_dao.dart';
 import 'package:blood_pressure_app/model/storage/db/config_db.dart';
 import 'package:blood_pressure_app/model/storage/intervall_store.dart';
@@ -56,7 +55,7 @@ Future<Widget> _loadApp() async {
     ChangeNotifierProvider(create: (context) => csvExportSettings),
     ChangeNotifierProvider(create: (context) => pdfExportSettings),
     ChangeNotifierProvider(create: (context) => intervalStorageManager),
-  ], child: AppRoot());
+  ], child: const AppRoot());
 }
 
 class AppRoot extends StatelessWidget {
@@ -94,7 +93,7 @@ class AppRoot extends StatelessWidget {
         ],
         supportedLocales: AppLocalizations.supportedLocales,
         locale: settings.language,
-        home: const CentralCallbackInitializer(child: AppHome()),
+        home: const AppHome(),
       );
     });
   }

@@ -2,6 +2,7 @@ import 'package:blood_pressure_app/components/dialoges/add_measurement.dart';
 import 'package:blood_pressure_app/components/legacy_measurement_list.dart';
 import 'package:blood_pressure_app/components/measurement_graph.dart';
 import 'package:blood_pressure_app/model/blood_pressure.dart';
+import 'package:blood_pressure_app/model/central_callback.dart';
 import 'package:blood_pressure_app/model/storage/settings_store.dart';
 import 'package:blood_pressure_app/screens/settings.dart';
 import 'package:blood_pressure_app/screens/statistics.dart';
@@ -26,14 +27,17 @@ class AppHome extends StatelessWidget {
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
     // direct use of settings possible as no listening is required
-    if (_appStart && Provider.of<Settings>(context, listen: false).startWithAddMeasurementPage) {
-      SchedulerBinding.instance.addPostFrameCallback((_) async {
-        final future = showAddMeasurementDialoge(context, Provider.of<Settings>(context, listen: false));
-        final model = Provider.of<BloodPressureModel>(context, listen: false);
-        final measurement = await future;
-        if (measurement == null) return;
-        model.add(measurement);
-      });
+    if (_appStart) {
+      CentralCallback.init(context);
+      if (Provider.of<Settings>(context, listen: false).startWithAddMeasurementPage) {
+        SchedulerBinding.instance.addPostFrameCallback((_) async {
+          final future = showAddMeasurementDialoge(context, Provider.of<Settings>(context, listen: false));
+          final model = Provider.of<BloodPressureModel>(context, listen: false);
+          final measurement = await future;
+          if (measurement == null) return;
+          model.add(measurement);
+        });
+      }
     }
     _appStart = false;
 
