@@ -68,6 +68,7 @@ class _AddMeasurementDialogeState extends State<AddMeasurementDialoge> {
   @override
   void dispose() {
     firstFocusNode.dispose();
+    sysController.dispose();
     super.dispose();
   }
 
@@ -237,15 +238,9 @@ class _AddMeasurementDialogeState extends State<AddMeasurementDialoge> {
             ColorSelectionListTile(
               title: Text(localizations.color),
               onMainColorChanged: (Color value) {
-                if (value == Colors.transparent) {
-                  setState(() {
-                    needlePin = null;
-                  });
-                } else {
-                  setState(() {
-                    needlePin = MeasurementNeedlePin(value);
-                  });
-                }
+                setState(() {
+                  needlePin = (value == Colors.transparent) ? null : MeasurementNeedlePin(value);
+                });
               },
               initialColor: needlePin?.color ?? Colors.transparent,
               shape: RoundedRectangleBorder(

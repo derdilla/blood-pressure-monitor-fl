@@ -82,6 +82,7 @@ Widget _materialApp(Widget child) {
   );
 }
 
+/// Finds the widget with a specific color inside a [ColorPicker], when put into a [CommonFinders.byElementPredicate].
 bool Function(Element e) findColored(Color color) {
   return (e) =>
     e.widget is Container &&

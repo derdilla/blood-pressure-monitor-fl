@@ -107,6 +107,8 @@ class BloodPressureModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// Adds a measurement to the model and tries to export all measurements, if [ExportSettings.exportAfterEveryEntry] is
+  /// true.
   Future<void> addAndExport(BuildContext context, BloodPressureRecord record) async {
     await add(record);
 
@@ -211,7 +213,7 @@ class MeasurementNeedlePin {
   }
 }
 
-// source: https://pressbooks.library.torontomu.ca/vitalsign/chapter/blood-pressure-ranges/ (last access: 20.05.2023)
+// source: https://pressbooks.library.torontomu.ca/vitalsign/chapter/blood-pressure-ranges/ (last access: 14.11.2023)
 class BloodPressureWarnValues {
   BloodPressureWarnValues._create();
 
