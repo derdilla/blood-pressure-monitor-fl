@@ -19,9 +19,9 @@ void main() {
       expect(widgetTester.takeException(), isNull);
       expect(find.text('SAVE'), findsOneWidget);
       expect(find.byIcon(Icons.close), findsOneWidget);
-      expect(find.text('Systolic'), findsAny);
-      expect(find.text('Diastolic'), findsAny);
-      expect(find.text('Pulse'), findsAny);
+      expect(find.text('Systolic'), findsWidgets);
+      expect(find.text('Diastolic'), findsWidgets);
+      expect(find.text('Pulse'), findsWidgets);
       expect(find.byType(ColorSelectionListTile), findsOneWidget);
     });
     testWidgets('should prefill initialRecord values', (widgetTester) async {
