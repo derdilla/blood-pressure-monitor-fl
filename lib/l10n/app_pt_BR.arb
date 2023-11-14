@@ -1,0 +1,365 @@
+{
+  "title": "App de Pressão Arterial",
+  "@title": {},
+  "success": "Sucesso: {msg}",
+  "@success": {
+    "placeholders": {
+      "msg": {
+        "type": "String"
+      }
+    }
+  },
+  "errNaN": "Por favor digite um número",
+  "@errNaN": {},
+  "error": "Erro: {msg}",
+  "@error": {
+    "placeholders": {
+      "msg": {
+        "type": "String"
+      }
+    }
+  },
+  "loading": "Carregando…",
+  "@loading": {},
+  "behavior": "Comportamento",
+  "@behavior": {},
+  "weekOfYear": "Semana {weekNum}, {year}",
+  "@weekOfYear": {
+    "placeholders": {
+      "weekNum": {
+        "type": "int"
+      },
+      "year": {
+        "type": "int"
+      }
+    }
+  },
+  "aboutWarnValuesScreenDesc": "Mais informções sobre valores de aviso",
+  "@aboutWarnValuesScreenDesc": {},
+  "dateFormatting": "Formato da data",
+  "@dateFormatting": {},
+  "warnAboutTxt2": "Os valores padrões dependentes da idade vieram desta fonte.",
+  "@warnAboutTxt2": {},
+  "validateInputs": "Validar campos de entrada",
+  "@validateInputs": {},
+  "month": "Mês",
+  "@month": {},
+  "unixTimestamp": "Timestamp do unix",
+  "@unixTimestamp": {},
+  "addExportformat": "Incluir formato de exportação",
+  "@addExportformat": {},
+  "exportDir": "Diretório de exportação",
+  "@exportDir": {},
+  "csv": "CSV",
+  "@csv": {},
+  "exportSuccess": "Exportar para: {path}",
+  "@exportSuccess": {
+    "placeholders": {
+      "path": {
+        "type": "String"
+      }
+    }
+  },
+  "accentColor": "Cor do tema",
+  "@accentColor": {},
+  "errTimeAfterNow": "A hora do dia selecionada foi revertida, porque ela está no futuro. Você pode desligar essa validação nas configurações.",
+  "@errTimeAfterNow": {},
+  "versionOf": "Versão: {version}",
+  "@versionOf": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "btnConfirm": "OK",
+  "@btnConfirm": {},
+  "animationSpeed": "Duração da animação",
+  "@animationSpeed": {},
+  "licenses": "Licenças de terceiros",
+  "@licenses": {},
+  "allowManualTimeInput": "Permitir digitar o tempo manualmente",
+  "@allowManualTimeInput": {},
+  "exportHiddenFields": "campos escondidos",
+  "@exportHiddenFields": {},
+  "drawRegressionLines": "Desenhar linhas de tendência",
+  "@drawRegressionLines": {},
+  "btnSave": "SALVAR",
+  "@btnSave": {},
+  "deletionConfirmed": "Registro apagado.",
+  "@deletionConfirmed": {},
+  "last30Days": "30 dias",
+  "@last30Days": {},
+  "fieldDelimiter": "Encontrar delimitador",
+  "@fieldDelimiter": {},
+  "import": "IMPORTAR",
+  "@import": {},
+  "pulShort": "pul",
+  "@pulShort": {},
+  "internalName": "Nome interno",
+  "@internalName": {},
+  "exportMimeTypeDesc": "Sinalizar tipo para outros apps",
+  "@exportMimeTypeDesc": {},
+  "sysLong": "Sistólica",
+  "@sysLong": {},
+  "exportCustomEntries": "Campos personalizados",
+  "@exportCustomEntries": {},
+  "exportImport": "Exportar / Importar",
+  "@exportImport": {},
+  "enterTimeFormatString": "Formato da hora",
+  "@enterTimeFormatString": {},
+  "allowMissingValues": "Permitir valores em falta",
+  "@allowMissingValues": {},
+  "edit": "Editar",
+  "@edit": {},
+  "errLt30": "Número <= 30? Desligue a validação nas configurações!",
+  "@errLt30": {},
+  "diaShort": "dias",
+  "@diaShort": {},
+  "export": "EXPORTAR",
+  "@export": {},
+  "theme": "Tema",
+  "@theme": {},
+  "year": "Ano",
+  "@year": {},
+  "warnAboutTxt1": "Os valores de alerta são apenas sugestões e não são opiniões médicas.",
+  "@warnAboutTxt1": {},
+  "exportFormat": "Formato da exportação",
+  "@exportFormat": {},
+  "errUnrealistic": "Valor fora da realidade? Desligue a validação nas configurações!",
+  "@errUnrealistic": {},
+  "iconSize": "Tamanho do Ícone",
+  "@iconSize": {},
+  "measurementsPerDay": "Medições por dia",
+  "@measurementsPerDay": {},
+  "errNoData": "sem dados",
+  "@errNoData": {},
+  "light": "Claro",
+  "@light": {},
+  "errNotStarted": "não iniciado",
+  "@errNotStarted": {},
+  "errCantOpenURL": "Não foi possível abrir a URL: {url}",
+  "@errCantOpenURL": {
+    "placeholders": {
+      "url": {
+        "type": "String"
+      }
+    }
+  },
+  "lifetime": "Vitalícia",
+  "@lifetime": {},
+  "exportMimeType": "Tipo da mídia para exportação",
+  "@exportMimeType": {},
+  "delete": "Deletar",
+  "@delete": {},
+  "errCantReadFile": "Não foi possível ler o conteúdo do arquivo",
+  "@errCantReadFile": {},
+  "notes": "Anotações",
+  "@notes": {},
+  "importSuccess": "{count} registros foram importados",
+  "@importSuccess": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "errDiaGtSys": "dia >= sys? Desligue a validação nas configurações!",
+  "@errDiaGtSys": {},
+  "graphLineThickness": "Grossura da Linha",
+  "@graphLineThickness": {},
+  "data": "Dados",
+  "@data": {},
+  "version": "Versão",
+  "@version": {},
+  "errNoValue": "Por favor digite um valor",
+  "@errNoValue": {},
+  "other": "outro",
+  "@other": {},
+  "exportWarnConfigNotImportable": "Olá! Apenas um aviso amigável: a configuração da exportção atual impedirá a importação. Para corregir isso, tenha certeza de escolher o tipo de exportação com CSV, ativar o título, e incluir um dos formatos de tempo disponíveis.",
+  "@exportWarnConfigNotImportable": {},
+  "exportCsvHeadlineDesc": "Ajuda a diferenciar tipos",
+  "@exportCsvHeadlineDesc": {},
+  "btnUndo": "DESFAZER",
+  "@btnUndo": {},
+  "addNote": "Nota (opcional)",
+  "@addNote": {},
+  "packageNameOf": "Nome do pacote: {name}",
+  "@packageNameOf": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "errCantEditThis": "Você não pode editar isso. Veja os valore para criar um novo registro.",
+  "@errCantEditThis": {},
+  "drawRegressionLinesDesc": "Desenha linhas de regressão no gráfico. Útil para intervalos grandes.",
+  "@drawRegressionLinesDesc": {},
+  "pulColor": "Cor do pulso",
+  "@pulColor": {},
+  "warnAboutTxt3": "Você pode mudar os valores para atenderem às suas necessidades e para seguir as recomendações do seu médico.",
+  "@warnAboutTxt3": {},
+  "pulLong": "Pulso",
+  "@pulLong": {},
+  "errNotEnoughDataToGraph": "Sem dados suficientes para desenhar um gráfico.",
+  "@errNotEnoughDataToGraph": {},
+  "sysColor": "Cor sistólica",
+  "@sysColor": {},
+  "maxOf": "{txt} máx.",
+  "@maxOf": {
+    "placeholders": {
+      "txt": {
+        "type": "String"
+      }
+    }
+  },
+  "exportInterval": "Intervalo de dados",
+  "@exportInterval": {},
+  "pulsePressure": "Pressão da pulsação",
+  "@pulsePressure": {},
+  "errNotImportable": "Não foi possível importar este arquivo",
+  "@errNotImportable": {},
+  "errPleaseSelect": "Por favor selecione",
+  "@errPleaseSelect": {},
+  "confirmDeletion": "Confirmar deleção",
+  "@confirmDeletion": {},
+  "textDelimiter": "Delimitador de texto",
+  "@textDelimiter": {},
+  "diaColor": "Cor diastólica",
+  "@diaColor": {},
+  "pdf": "PDF",
+  "@pdf": {},
+  "aboutWarnValuesScreen": "Sobre",
+  "@aboutWarnValuesScreen": {},
+  "age": "Idade",
+  "@age": {},
+  "db": "BD SQLite",
+  "@db": {},
+  "dark": "Escuro",
+  "@dark": {},
+  "btnNext": "PRÓXIMO",
+  "@btnNext": {},
+  "exportCsvHeadline": "Título",
+  "@exportCsvHeadline": {},
+  "errNeedHeadline": "Você só pode importar arquivos que tenham cabeçalho.",
+  "@errNeedHeadline": {},
+  "determineWarnValues": "Determinar valores de aviso",
+  "@determineWarnValues": {},
+  "errUnknown": "Erro desconhecido",
+  "@errUnknown": {},
+  "statistics": "Estatísticas",
+  "@statistics": {},
+  "diaWarn": "Aviso para pressão diastólica",
+  "@diaWarn": {},
+  "shared": "Compartilhado",
+  "@shared": {},
+  "btnCancel": "CANCELAR",
+  "@btnCancel": {},
+  "language": "Língua",
+  "@language": {},
+  "exportWarnNotEveryFieldExported": "Atenção você não exportando todos os campos: {fields} {count, plural, one{está} other{estão}} faltando.",
+  "@exportWarnNotEveryFieldExported": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "fields": {
+        "type": "String"
+      }
+    }
+  },
+  "addEntry": "Adicionar campo",
+  "@addEntry": {},
+  "sourceCode": "Código fonte",
+  "@sourceCode": {},
+  "measurementCount": "Quantidade de medições",
+  "@measurementCount": {},
+  "exportAfterEveryInputDesc": "Não recomendado (explosão do arquivo)",
+  "@exportAfterEveryInputDesc": {},
+  "exportAfterEveryInput": "Exportar depois de cada entrada",
+  "@exportAfterEveryInput": {},
+  "week": "Semana",
+  "@week": {},
+  "warnValues": "Valores para alerta",
+  "@warnValues": {},
+  "displayTitle": "Mostrar título",
+  "@displayTitle": {},
+  "result": "Resultado:",
+  "@result": {},
+  "settings": "Configurações",
+  "@settings": {},
+  "text": "text",
+  "@text": {},
+  "avgOf": "{txt} Ø",
+  "@avgOf": {
+    "placeholders": {
+      "txt": {
+        "type": "String"
+      }
+    }
+  },
+  "errOnlyLatinCharactersAndArabicNumbers": "Apenas caracteres latinos ou números arábicos permitidos",
+  "@errOnlyLatinCharactersAndArabicNumbers": {},
+  "confirmDelete": "Confirmar deleção",
+  "@confirmDelete": {},
+  "errWrongImportFormat": "Você só pode importar arquivos nos formatos CSV e banco de dados do SQLite.",
+  "@errWrongImportFormat": {},
+  "minOf": "{txt} mín.",
+  "@minOf": {
+    "placeholders": {
+      "txt": {
+        "type": "String"
+      }
+    }
+  },
+  "timeResolvedMetrics": "Métricas relacionadas ao tempo",
+  "@timeResolvedMetrics": {},
+  "enterTimeFormatScreen": "Forma da hora",
+  "@enterTimeFormatScreen": {},
+  "fieldFormat": "Formato do campo",
+  "@fieldFormat": {},
+  "system": "Sistema",
+  "@system": {},
+  "sysShort": "sís",
+  "@sysShort": {},
+  "sysWarn": "Aviso para pressão sistólica",
+  "@sysWarn": {},
+  "now": "agora",
+  "@now": {},
+  "layout": "Layout",
+  "@layout": {},
+  "diaLong": "Diastólica",
+  "@diaLong": {},
+  "time": "Hora",
+  "@time": {},
+  "custom": "Personalizado",
+  "@custom": {},
+  "day": "Dia",
+  "@day": {},
+  "last7Days": "7 dias",
+  "@last7Days": {},
+  "buildNumberOf": "Número da versão: {buildNumber}",
+  "@buildNumberOf": {
+    "placeholders": {
+      "buildNumber": {
+        "type": "String"
+      }
+    }
+  },
+  "pdfDocumentTitle": "Valores de pressão sanguínea de {start} até {end}",
+  "@pdfDocumentTitle": {
+    "placeholders": {
+      "start": {
+        "type": "String"
+      },
+      "end": {
+        "type": "String"
+      }
+    }
+  },
+  "confirmDeleteDesc": "Apagar esse registro? (Você pode desligar essa confirmações nas configurações)",
+  "@confirmDeleteDesc": {},
+  "errNoFileOpened": "nenhum arquivo aberto",
+  "@errNoFileOpened": {}
+}
