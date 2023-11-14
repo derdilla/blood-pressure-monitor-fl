@@ -33,8 +33,12 @@ class AddMeasurementDialoge extends StatefulWidget {
 
 class _AddMeasurementDialogeState extends State<AddMeasurementDialoge> {
   final formKey = GlobalKey<FormState>();
-  final firstFocusNode = FocusNode();
+  final sysFocusNode = FocusNode();
+  final diaFocusNode = FocusNode();
+  final pulFocusNode = FocusNode();
+  final noteFocusNode = FocusNode();
   late final TextEditingController sysController;
+
 
   /// Currently selected time.
   late DateTime time;
@@ -61,15 +65,32 @@ class _AddMeasurementDialogeState extends State<AddMeasurementDialoge> {
     needlePin = widget.initialRecord?.needlePin;
     sysController = TextEditingController(text: (widget.initialRecord?.systolic ?? '').toString());
 
-    firstFocusNode.requestFocus();
+    sysFocusNode.requestFocus();
+    ServicesBinding.instance.keyboard.addHandler(_onKey);
   }
 
 
   @override
   void dispose() {
-    firstFocusNode.dispose();
     sysController.dispose();
+    sysFocusNode.dispose();
+    diaFocusNode.dispose();
+    pulFocusNode.dispose();
+    noteFocusNode.dispose();
+    ServicesBinding.instance.keyboard.removeHandler(_onKey);
     super.dispose();
+  }
+
+  bool _onKey(KeyEvent event) {
+    if (event is! KeyDownEvent) return false;
+    final isBackspace = event.logicalKey.keyId == 0x00100000008;
+    if (!isBackspace) return false;
+    formKey.currentState?.save();
+    if (diaFocusNode.hasFocus && diastolic == null 
+        || pulFocusNode.hasFocus && pulse == null
+        || noteFocusNode.hasFocus && (notes?.isEmpty ?? true)
+    ) FocusScope.of(context).previousFocus();
+    return false;
   }
 
   Widget buildTimeInput(AppLocalizations localizations) =>
@@ -200,7 +221,7 @@ class _AddMeasurementDialogeState extends State<AddMeasurementDialoge> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 buildValueInput(localizations,
-                  focusNode: firstFocusNode,
+                  focusNode: sysFocusNode,
                   hintText: localizations.sysLong,
                   controller: sysController,
                   onSaved: (value) => setState(() => systolic = int.tryParse(value ?? '')),
@@ -210,6 +231,7 @@ class _AddMeasurementDialogeState extends State<AddMeasurementDialoge> {
                   hintText: localizations.diaLong,
                   initialValue: widget.initialRecord?.diastolic,
                   onSaved: (value) => setState(() => diastolic = int.tryParse(value ?? '')),
+                  focusNode: diaFocusNode,
                   validator: (value) {
                     if (widget.settings.validateInputs && (int.tryParse(value ?? '') ?? 0) >= (int.tryParse(sysController.text) ?? 1)) {
                       return AppLocalizations.of(context)?.errDiaGtSys;
@@ -221,6 +243,7 @@ class _AddMeasurementDialogeState extends State<AddMeasurementDialoge> {
                 buildValueInput(localizations,
                   hintText: localizations.pulLong,
                   initialValue: widget.initialRecord?.pulse,
+                  focusNode: pulFocusNode,
                   onSaved: (value) => setState(() => pulse = int.tryParse(value ?? '')),
                 ),
               ],
@@ -229,6 +252,7 @@ class _AddMeasurementDialogeState extends State<AddMeasurementDialoge> {
               padding: const EdgeInsets.symmetric(vertical: 16),
               child: TextFormField(
                 initialValue: widget.initialRecord?.notes,
+                focusNode: noteFocusNode,
                 decoration: getInputDecoration(localizations.addNote),
                 minLines: 1,
                 //maxLines: 4, There is a bug in the flutter framework: https://github.com/flutter/flutter/issues/138219
