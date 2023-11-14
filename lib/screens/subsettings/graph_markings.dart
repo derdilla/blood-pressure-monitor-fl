@@ -66,7 +66,7 @@ class GraphMarkingsScreen extends StatelessWidget {
                 ),
                 title: Text(lines[i-1].height.toString()),
                 trailing: IconButton(
-                  icon: Icon(Icons.delete),
+                  icon: const Icon(Icons.delete),
                   onPressed: () {
                     lines.removeAt(i-1);
                     settings.horizontalGraphLines = lines;

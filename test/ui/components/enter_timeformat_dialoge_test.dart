@@ -11,6 +11,7 @@ void main() {
         locale: Locale('en'),
         home: EnterTimeFormatDialoge(initialValue: 'yyyy-MM-dd HH:mm',)
       ));
+      expect(widgetTester.takeException(), isNull);
       expect(find.byType(EnterTimeFormatDialoge), findsOneWidget);
     });
     testWidgets('should prefill time format', (widgetTester) async {

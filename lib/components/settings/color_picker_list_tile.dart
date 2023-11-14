@@ -4,12 +4,15 @@ import 'package:flutter/material.dart';
 /// A [ListTile] that shows a color preview and allows changing it.
 class ColorSelectionListTile extends StatelessWidget {
   /// Creates a [ListTile] with a color preview that opens a color picker on tap.
+  ///
+  /// This allows also allows picking the color [Colors.transparent], which can be used as a null color.
   const ColorSelectionListTile(
       {super.key,
         required this.title,
         required this.onMainColorChanged,
         required this.initialColor,
-        this.subtitle});
+        this.subtitle,
+        this.shape});
 
   /// The primary label of the list tile.
   final Widget title;
@@ -23,12 +26,16 @@ class ColorSelectionListTile extends StatelessWidget {
   /// Initial color displayed in the preview.
   final Color initialColor;
 
+  /// Defines the tile's [InkWell.customBorder] and [Ink.decoration] shape.
+  final ShapeBorder? shape;
+
   @override
   Widget build(BuildContext context) {
     return ListTile(
       title: title,
       subtitle: subtitle,
-      leading: CircleAvatar(
+      shape: shape,
+      leading: (initialColor == Colors.transparent) ? null : CircleAvatar(
         backgroundColor: initialColor,
         radius: 12,
       ),

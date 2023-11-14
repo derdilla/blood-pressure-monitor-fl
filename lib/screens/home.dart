@@ -1,7 +1,8 @@
+import 'package:blood_pressure_app/components/dialoges/add_measurement.dart';
 import 'package:blood_pressure_app/components/legacy_measurement_list.dart';
 import 'package:blood_pressure_app/components/measurement_graph.dart';
+import 'package:blood_pressure_app/model/blood_pressure.dart';
 import 'package:blood_pressure_app/model/storage/settings_store.dart';
-import 'package:blood_pressure_app/screens/add_measurement.dart';
 import 'package:blood_pressure_app/screens/settings.dart';
 import 'package:blood_pressure_app/screens/statistics.dart';
 import 'package:flutter/material.dart';
@@ -12,8 +13,7 @@ import 'package:provider/provider.dart';
 
 import '../components/measurement_list/measurement_list.dart';
 
-/// The only use of this variable is to avoid loading the AddMeasurementPage twice,
-/// when startWithAddMeasurementPage is active
+/// Is true during the first [AppHome.build] before creating the widget.
 bool _appStart = true;
 
 class AppHome extends StatelessWidget {
@@ -23,10 +23,20 @@ class AppHome extends StatelessWidget {
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
     // direct use of settings possible as no listening is required
-    if (_appStart && Provider.of<Settings>(context, listen: false).startWithAddMeasurementPage) {
-      SchedulerBinding.instance.addPostFrameCallback((_) {
-        Navigator.of(context).push(MaterialPageRoute(builder: (context) => const AddMeasurementPage()));
-      });
+    if (_appStart) {
+      if (Provider.of<Settings>(context, listen: false).startWithAddMeasurementPage) {
+        SchedulerBinding.instance.addPostFrameCallback((_) async {
+          final future = showAddMeasurementDialoge(context, Provider.of<Settings>(context, listen: false));
+          final model = Provider.of<BloodPressureModel>(context, listen: false);
+          final measurement = await future;
+          if (measurement == null) return;
+          if (context.mounted) {
+            model.addAndExport(context, measurement);
+          } else {
+            model.add(measurement);
+          }
+        });
+      }
     }
     _appStart = false;
 
@@ -39,9 +49,8 @@ class AppHome extends StatelessWidget {
           );
         }
         return Center(
-          child: Container(
-            // TODO: utilize more of the screen width
-            padding: const EdgeInsets.only(left: 10, right: 10, bottom: 15, top: 30),
+          child: Padding(
+            padding: const EdgeInsets.only(top: 20),
             child: Consumer<Settings>(
               builder: (context, settings, child) {
                 return Column(children: [
@@ -76,11 +85,16 @@ class AppHome extends StatelessWidget {
                       heroTag: "floatingActionAdd",
                       tooltip: localizations.addMeasurement,
                       autofocus: true,
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          _buildTransition(const AddMeasurementPage(), settings.animationSpeed),
-                        );
+                      onPressed: () async {
+                        final future = showAddMeasurementDialoge(context, settings);
+                        final model = Provider.of<BloodPressureModel>(context, listen: false);
+                        final measurement = await future;
+                        if (measurement == null) return;
+                        if (context.mounted) {
+                          model.addAndExport(context, measurement);
+                        } else {
+                          model.add(measurement);
+                        }
                       },
                       child: const Icon(Icons.add,),
                     ),

@@ -1,10 +1,10 @@
 import 'dart:collection';
 
 import 'package:blood_pressure_app/components/blood_pressure_builder.dart';
+import 'package:blood_pressure_app/components/dialoges/add_measurement.dart';
 import 'package:blood_pressure_app/model/blood_pressure.dart';
 import 'package:blood_pressure_app/model/storage/intervall_store.dart';
 import 'package:blood_pressure_app/model/storage/settings_store.dart';
-import 'package:blood_pressure_app/screens/add_measurement.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
@@ -82,10 +82,15 @@ class LegacyMeasurementsList extends StatelessWidget {
                             confirmDismiss: (direction) async {
                               final model = Provider.of<BloodPressureModel>(context, listen: false);
                               if (direction == DismissDirection.startToEnd) { // edit
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(builder: (context) => AddMeasurementPage.edit(data[index])),
-                                );
+                                final future = showAddMeasurementDialoge(context, settings, data[index]);
+                                final model = Provider.of<BloodPressureModel>(context, listen: false);
+                                final measurement = await future;
+                                if (measurement == null) return false;
+                                if (context.mounted) {
+                                  model.addAndExport(context, measurement);
+                                } else {
+                                  model.add(measurement);
+                                }
                                 return false;
                               } else { // delete
                                 bool dialogeDeletionConfirmed = false;
@@ -125,7 +130,7 @@ class LegacyMeasurementsList extends StatelessWidget {
                                     action: SnackBarAction(
                                       label: AppLocalizations.of(context)!.btnUndo,
                                       onPressed: () async {
-                                        model.add(BloodPressureRecord(
+                                        model.addAndExport(context, BloodPressureRecord(
                                             data[index].creationTime,
                                             data[index].systolic,
                                             data[index].diastolic,

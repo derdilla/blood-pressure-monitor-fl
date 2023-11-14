@@ -14,6 +14,7 @@ void main() {
           assert(false, 'should not be called');
         },
       )));
+      expect(widgetTester.takeException(), isNull);
       expect(find.text('test title'), findsOneWidget);
       expect(find.text('initial'), findsOneWidget);
     });

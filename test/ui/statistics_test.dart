@@ -15,6 +15,7 @@ void main() {
   group("StatisticsPage", () {
     testWidgets('should load page', (widgetTester) async {
       await _initStatsPage(widgetTester, []);
+      expect(widgetTester.takeException(), isNull);
       expect(find.text('Statistics'), findsOneWidget);
     });
     testWidgets("should report measurement count", (widgetTester) async {

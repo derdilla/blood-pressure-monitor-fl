@@ -16,6 +16,7 @@ void main() {
         ],
         value: 3,
       )));
+      expect(widgetTester.takeException(), isNull);
       await widgetTester.pumpWidget(_materialApp(DropDownListTile<int>(
         title: const Text('This is a very long test title.'),
         subtitle: const Text('This is a very long test subtitle that should go over multiple lines.'),
@@ -29,6 +30,7 @@ void main() {
         ],
         value: 527,
       )));
+      expect(widgetTester.takeException(), isNull);
     });
     testWidgets('should display selected option', (widgetTester) async {
       await widgetTester.pumpWidget(_materialApp(DropDownListTile<int>(

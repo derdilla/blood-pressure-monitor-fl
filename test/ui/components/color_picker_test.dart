@@ -4,16 +4,17 @@ import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   group('ColorPicker', () {
-    testWidgets('should initialize without errors', (tester) async {
-      await tester.pumpWidget(_materialApp(ColorPicker(onColorSelected: (color) {})));
-      await tester.pumpWidget(_materialApp(ColorPicker(availableColors: const [], onColorSelected: (color) {})));
-      await tester.pumpWidget(_materialApp(ColorPicker(showTransparentColor: false, onColorSelected: (color) {})));
-      await tester.pumpWidget(_materialApp(ColorPicker(circleSize: 15, onColorSelected: (color) {})));
-      await tester.pumpWidget(_materialApp(ColorPicker(availableColors: const [], initialColor: Colors.red, onColorSelected: (color) {})));
+    testWidgets('should initialize without errors', (widgetTester) async {
+      await widgetTester.pumpWidget(_materialApp(ColorPicker(onColorSelected: (color) {})));
+      await widgetTester.pumpWidget(_materialApp(ColorPicker(availableColors: const [], onColorSelected: (color) {})));
+      await widgetTester.pumpWidget(_materialApp(ColorPicker(showTransparentColor: false, onColorSelected: (color) {})));
+      await widgetTester.pumpWidget(_materialApp(ColorPicker(circleSize: 15, onColorSelected: (color) {})));
+      await widgetTester.pumpWidget(_materialApp(ColorPicker(availableColors: const [], initialColor: Colors.red, onColorSelected: (color) {})));
+      expect(widgetTester.takeException(), isNull);
     });
-    testWidgets('should report correct picked color', (tester) async {
+    testWidgets('should report correct picked color', (widgetTester) async {
       int onColorSelectedCallCount = 0;
-      await tester.pumpWidget(_materialApp(ColorPicker(onColorSelected: (color) {
+      await widgetTester.pumpWidget(_materialApp(ColorPicker(onColorSelected: (color) {
         expect(color, Colors.blue);
         onColorSelectedCallCount += 1;
       })));
@@ -28,7 +29,7 @@ void main() {
         return false;
       });
       expect(blueColor.length, 1);
-      await tester.tap(find.byWidget(blueColor.first.widget));
+      await widgetTester.tap(find.byWidget(blueColor.first.widget));
       expect(onColorSelectedCallCount, 1);
     });
   });

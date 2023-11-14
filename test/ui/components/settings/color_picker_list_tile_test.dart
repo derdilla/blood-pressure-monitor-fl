@@ -13,6 +13,7 @@ void main() {
           assert(false, 'should not be called');
         },
         initialColor: Colors.teal,)));
+      expect(widgetTester.takeException(), isNull);
     });
     testWidgets('should preview color', (widgetTester) async {
       await widgetTester.pumpWidget(_materialApp(ColorSelectionListTile(
@@ -54,12 +55,21 @@ void main() {
       await widgetTester.pumpAndSettle();
       expect(find.byType(ColorPicker), findsOneWidget);
 
-      // tap red (color list offset by one)
-      await widgetTester.tap(find.byType(InkWell).at(3));
+      await widgetTester.tap(find.byElementPredicate(findColored(Colors.red)));
       await widgetTester.pumpAndSettle();
       expect(find.byType(ColorPicker), findsNothing);
 
       expect(callCount, 1);
+    });
+    testWidgets('should hide color when transparent is selected', (widgetTester) async {
+      await widgetTester.pumpWidget(_materialApp(ColorSelectionListTile(
+        title: const Text('Test'),
+        onMainColorChanged: (Color value) {
+          assert(false, 'should not be called');
+        },
+        initialColor: Colors.transparent,)));
+
+      expect(find.byType(CircleAvatar), findsNothing);
     });
   });
 }
@@ -70,4 +80,12 @@ Widget _materialApp(Widget child) {
     locale: const Locale('en'),
     home: Scaffold(body:child),
   );
+}
+
+/// Finds the widget with a specific color inside a [ColorPicker], when put into a [CommonFinders.byElementPredicate].
+bool Function(Element e) findColored(Color color) {
+  return (e) =>
+    e.widget is Container &&
+      (e.widget as Container).decoration is BoxDecoration &&
+        ((e.widget as Container).decoration as BoxDecoration).color == color;
 }
