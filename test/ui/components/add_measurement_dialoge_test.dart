@@ -3,6 +3,7 @@ import 'package:blood_pressure_app/components/settings/color_picker_list_tile.da
 import 'package:blood_pressure_app/model/blood_pressure.dart';
 import 'package:blood_pressure_app/model/storage/settings_store.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -296,7 +297,75 @@ void main() {
       );
       expect(thirdFocusedTextFormField, findsOneWidget);
       expect(thirdFocusedTextFormField.evaluate().first.widget, isA<TextFormField>()
-          .having((p0) => p0.initialValue, 'expecting pulse field to be selected third', 'note'));
+          .having((p0) => p0.initialValue, 'expecting note field to be selected third', 'note'));
+    });
+
+    testWidgets('should focus last input field on backspace pressed in empty input field', (widgetTester) async {
+      await widgetTester.pumpWidget(_materialApp(
+          Builder(
+            builder: (BuildContext context) => TextButton(onPressed: () async {
+              await showAddMeasurementDialoge(context, Settings(allowManualTimeInput: false),
+                  BloodPressureRecord(DateTime.now(), 12, 3, 4, 'note'));
+            }, child: const Text('TEST')),
+          )));
+      await widgetTester.tap(find.text('TEST'));
+      await widgetTester.pumpAndSettle();
+
+
+      await widgetTester.enterText(find.ancestor(of: find.text('note').first, matching: find.byType(TextFormField)), '');
+      await widgetTester.sendKeyEvent(LogicalKeyboardKey.backspace);
+
+      final firstFocused = FocusManager.instance.primaryFocus;
+      expect(firstFocused?.context?.widget, isNotNull);
+      final focusedTextFormField = find.ancestor(
+        of: find.byWidget(firstFocused!.context!.widget),
+        matching: find.byType(TextFormField),
+      );
+      expect(focusedTextFormField, findsOneWidget);
+      expect(find.descendant(of: focusedTextFormField, matching: find.text('Note (optional)')), findsNothing);
+      expect(find.descendant(of: focusedTextFormField, matching: find.text('Pulse')), findsWidgets);
+
+
+      await widgetTester.enterText(find.ancestor(of: find.text('Pulse').first, matching: find.byType(TextFormField)), '');
+      await widgetTester.sendKeyEvent(LogicalKeyboardKey.backspace);
+
+      final secondFocused = FocusManager.instance.primaryFocus;
+      expect(secondFocused?.context?.widget, isNotNull);
+      final secondFocusedTextFormField = find.ancestor(
+        of: find.byWidget(secondFocused!.context!.widget),
+        matching: find.byType(TextFormField),
+      );
+      expect(secondFocusedTextFormField, findsOneWidget);
+      expect(find.descendant(of: secondFocusedTextFormField, matching: find.text('Pulse')), findsNothing);
+      expect(find.descendant(of: secondFocusedTextFormField, matching: find.text('Diastolic')), findsWidgets);
+
+
+      await widgetTester.enterText(find.ancestor(of: find.text('Diastolic').first, matching: find.byType(TextFormField)), '');
+      await widgetTester.sendKeyEvent(LogicalKeyboardKey.backspace);
+
+      final thirdFocused = FocusManager.instance.primaryFocus;
+      expect(thirdFocused?.context?.widget, isNotNull);
+      final thirdFocusedTextFormField = find.ancestor(
+        of: find.byWidget(thirdFocused!.context!.widget),
+        matching: find.byType(TextFormField),
+      );
+      expect(thirdFocusedTextFormField, findsOneWidget);
+      expect(find.descendant(of: thirdFocusedTextFormField, matching: find.text('Diastolic')), findsNothing);
+      expect(find.descendant(of: thirdFocusedTextFormField, matching: find.text('Systolic')), findsWidgets);
+
+
+      // should not go back further than systolic
+      await widgetTester.enterText(find.ancestor(of: find.text('Systolic').first, matching: find.byType(TextFormField)), '');
+      await widgetTester.sendKeyEvent(LogicalKeyboardKey.backspace);
+
+      final fourthFocused = FocusManager.instance.primaryFocus;
+      expect(fourthFocused?.context?.widget, isNotNull);
+      final fourthFocusedTextFormField = find.ancestor(
+        of: find.byWidget(fourthFocused!.context!.widget),
+        matching: find.byType(TextFormField),
+      );
+      expect(fourthFocusedTextFormField, findsOneWidget);
+      expect(find.descendant(of: fourthFocusedTextFormField, matching: find.text('Systolic')), findsWidgets);
     });
   });
 }
