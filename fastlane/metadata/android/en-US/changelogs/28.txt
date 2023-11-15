@@ -1,0 +1,5 @@
+* make measurement color width on graph configurable
+* redesign add measurement page to be faster
+* use back button on empty add measurement dialog field to enter last input field
+* use material widgets on settings page
+* update italian translations and add portuguese

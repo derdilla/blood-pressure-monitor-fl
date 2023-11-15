@@ -52,8 +52,8 @@ android {
         applicationId "com.derdilla.bloodPressureApp"
         minSdkVersion 21
         targetSdkVersion flutter.targetSdkVersion
-        versionCode 27
-        versionName "1.5.6"
+        versionCode 28
+        versionName "1.5.7"
     }
     signingConfigs {
        release {
