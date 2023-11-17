@@ -20,7 +20,7 @@ class ExportColumn {
   late final String columnTitle;
 
   /// Pattern to create the field contents from:
-  /// It supports inserting values for $TIMESTAMP, $SYS $DIA $PUL and $NOTE. Where $TIMESTAMP is the time since unix epoch in milliseconds.
+  /// It supports inserting values for $TIMESTAMP, $SYS $DIA $PUL, $COLOR and $NOTE. Where $TIMESTAMP is the time since unix epoch in milliseconds.
   /// To format a timestamp in the same format as the $TIMESTAMP variable, $FORMAT(<timestamp>, <formatString>).
   /// It is supported to use basic mathematics inside of double brackets ("{{}}"). In case one of them is not present in the record, -1 is provided.
   /// The following math is supported:
@@ -41,13 +41,14 @@ class ExportColumn {
   /// doesn't show up as unused / hidden field in list
   final bool hidden;
 
-  ExportColumn.fromJson(Map<String, dynamic> json, [this.editable = true, this.hidden = false]) {
+  factory ExportColumn.fromJson(Map<String, dynamic> json, [editable = true, hidden = false]) =>
     ExportColumn(
       internalName: json['internalColumnName'],
       columnTitle: json['columnTitle'],
       formatPattern: json['formatPattern'],
+      editable: editable,
+      hidden: hidden
     );
-  }
 
   Map<String, dynamic> toJson() => {
     'internalColumnName': internalName,
@@ -131,8 +132,8 @@ class ExportColumn {
   /// Checks if the pattern can be used to parse records. This is the case when the pattern contains variables without
   /// containing curly brackets or commas.
   bool get isReversible {
-    return (formatPattern == r'$TIMESTAMP') || (formatPattern == r'$COLOR') ||
-        formatPattern.contains(RegExp(r'\$(SYS|DIA|PUL|NOTE)')) && !formatPattern.contains(RegExp(r'[{},]'));
+    final match = RegExp(r'([^{},$]*(\$SYS|\$DIA|\$PUL|\$NOTE)[^{},$]*)|\$TIMESTAMP|\$COLOR').firstMatch(formatPattern);
+    return (match != null) && (match.start == 0) && (match.end == formatPattern.length);
   }
 
   RowDataFieldType? get parsableFormat {

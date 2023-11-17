@@ -1,4 +1,4 @@
-import 'package:blood_pressure_app/model/export-import/export_column.dart';
+import 'package:blood_pressure_app/model/export_import/column.dart';
 import 'package:blood_pressure_app/model/storage/db/config_db.dart';
 import 'package:blood_pressure_app/model/storage/export_csv_settings_store.dart';
 import 'package:blood_pressure_app/model/storage/export_pdf_settings_store.dart';
