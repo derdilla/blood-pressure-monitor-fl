@@ -167,7 +167,7 @@ class Settings extends ChangeNotifier {
     notifyListeners();
   }
 
-  String _dateFormatString = 'yyyy-MM-dd  HH:mm';
+  String _dateFormatString = 'yyyy-MM-dd HH:mm';
   String get dateFormatString => _dateFormatString;
   set dateFormatString(String value) {
     _dateFormatString = value;
