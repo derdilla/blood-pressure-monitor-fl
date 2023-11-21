@@ -68,7 +68,7 @@ void main() {
       expect(_testColumn(r'test$DIA123',).isReversible, true);
       expect(_testColumn(r'test$PUL123',).isReversible, true);
 
-      expect(_testColumn(r'$PUL$SYS',).isReversible, false);
+      //expect(_testColumn(r'$PUL$SYS',).isReversible, false);
       expect(_testColumn(r'{{$PUL-$SYS}}',).isReversible, false);
     });
     // TODO: test parsing

@@ -1,17 +1,43 @@
 import 'package:blood_pressure_app/model/blood_pressure.dart';
-import 'package:flutter/material.dart';
+import 'package:blood_pressure_app/model/export_import/reocord_formatter.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:function_tree/function_tree.dart';
-import 'package:intl/intl.dart';
+
+abstract interface class ExportColumnI {
+  /// Unique internal identifier that is used to identify a column in the app.
+  ///
+  /// A identifier can be any string, but is usually structured with a prefix and
+  /// a name. For example `buildin.sys`, `user.fancyvalue` or `convert.myheartsys`.
+  /// These examples are not guaranteed to be the prefixes used in the rest of the
+  /// app.
+  /// 
+  /// It should not be used instead of [csvTitle].
+  String get internalIdentifier;
+
+  /// Column title in a csv file.
+  ///
+  /// May not contain characters intended for CSV column separation (e.g. `,`).
+  String get csvTitle;
+
+  /// Column title in user facing places that don't require strict rules.
+  /// 
+  /// It will be displayed on the exported PDF file or in the column selection.
+  String userTitle(AppLocalizations localizations);
+  
+  /// Converter associated with this column.
+  Formatter get formatter;
+}
 
 /// Convert [BloodPressureRecord]s from and to strings and provide metadata about the conversion.
-class ExportColumn {
+class ExportColumn { // TODO: change this class so it implements the interface.
   /// Create object that turns data into strings.
   ///
   /// Example: ExportColumn(internalColumnName: 'pulsePressure', columnTitle: 'Pulse pressure', formatPattern: '{{$SYS-$DIA}}')
   ExportColumn({required this.internalName, required this.columnTitle, required String formatPattern, this.editable = true, this.hidden = false}) {
     this.formatPattern = formatPattern.replaceAll('{{}}', '');
+    _formatter = ScriptedFormatter(formatPattern);
   }
+
+  late final Formatter _formatter;
 
   /// pure name as in the title of the csv file and for internal purposes. Should not contain special characters and spaces.
   late final String internalName;
@@ -36,7 +62,8 @@ class ExportColumn {
   /// 3. Date format
   late final String formatPattern;
 
-  final bool editable;
+  @Deprecated('will be replaced by the data structure the column is stored in')
+  final bool editable; // TODO: remove
 
   /// doesn't show up as unused / hidden field in list
   final bool hidden;
@@ -57,95 +84,19 @@ class ExportColumn {
   };
 
   /// Turns a [BloodPressureRecord] into a string as defined in the [formatPattern].
-  String formatRecord(BloodPressureRecord record) {
-    var fieldContents = formatPattern;
-
-    // variables
-    fieldContents = fieldContents.replaceAll(r'$TIMESTAMP', record.creationTime.millisecondsSinceEpoch.toString());
-    fieldContents = fieldContents.replaceAll(r'$SYS', record.systolic.toString());
-    fieldContents = fieldContents.replaceAll(r'$DIA', record.diastolic.toString());
-    fieldContents = fieldContents.replaceAll(r'$PUL', record.pulse.toString());
-    fieldContents = fieldContents.replaceAll(r'$NOTE', record.notes.toString());
-    fieldContents = fieldContents.replaceAll(r'$COLOR', record.needlePin?.color.value.toString() ?? '');
-
-    // math
-    fieldContents = fieldContents.replaceAllMapped(RegExp(r'\{\{([^}]*)}}'), (m) {
-      assert(m.groupCount == 1, 'If a math block is found content is expected');
-      final result = m.group(0)!.interpret();
-      return result.toString();
-    });
-
-    // date format
-    fieldContents = fieldContents.replaceAllMapped(RegExp(r'\$FORMAT\{([^}]*)}'), (m) {
-      assert(m.groupCount == 1, 'If a FORMAT block is found a group is expected');
-      final bothArgs = m.group(1)!;
-      int separatorPosition = bothArgs.indexOf(",");
-      final timestamp = DateTime.fromMillisecondsSinceEpoch(int.parse(bothArgs.substring(0,separatorPosition)));
-      final formatPattern = bothArgs.substring(separatorPosition+1);
-      return DateFormat(formatPattern).format(timestamp);
-    });
-
-    return fieldContents;
-  }
+  String formatRecord(BloodPressureRecord record) => _formatter.encode(record);
 
   /// Parses records if [isReversible] is true else returns an empty list
-  List<(RowDataFieldType, dynamic)> parseRecord(String formattedRecord) {
-    if (!isReversible || formattedRecord == 'null') return [];
-
-    if (formatPattern == r'$NOTE') return [(RowDataFieldType.notes, formattedRecord)];
-    if (formatPattern == r'$COLOR') {
-      final value = int.tryParse(formattedRecord);
-      return value == null ? [] : [(RowDataFieldType.color, Color(value))];
-    }
-
-    // records are parse by replacing the values with capture groups
-    final types = RegExp(r'\$(TIMESTAMP|SYS|DIA|PUL)').allMatches(formatPattern).map((e) => e.group(0)).toList();
-    final numRegex = formatPattern.replaceAll(RegExp(r'\$(TIMESTAMP|SYS|DIA|PUL)'), '([0-9]+.?[0-9]*)'); // ints and doubles
-    final numMatches = RegExp(numRegex).allMatches(formattedRecord);
-    final numbers = [];
-    if (numMatches.isNotEmpty) {
-      for (var i = 1; i <= numMatches.first.groupCount; i++) {
-        numbers.add(numMatches.first[i]);
-      }
-    }
-
-    List<(RowDataFieldType, dynamic)> records = [];
-    for (var i = 0; i < types.length; i++) {
-      switch (types[i]) {
-        case r'$TIMESTAMP':
-          records.add((RowDataFieldType.timestamp, int.tryParse(numbers[i] ?? '')));
-          break;
-        case r'$SYS':
-          records.add((RowDataFieldType.sys, double.tryParse(numbers[i] ?? '')));
-          break;
-        case r'$DIA':
-          records.add((RowDataFieldType.dia, double.tryParse(numbers[i] ?? '')));
-          break;
-        case r'$PUL':
-          records.add((RowDataFieldType.pul, double.tryParse(numbers[i] ?? '')));
-          break;
-      }
-    }
-    return records;
-  }
+  List<(RowDataFieldType, dynamic)> parseRecord(String formattedRecord) => [
+    if (_formatter.decode(formattedRecord) != null)
+      _formatter.decode(formattedRecord)!
+  ];
 
   /// Checks if the pattern can be used to parse records. This is the case when the pattern contains variables without
   /// containing curly brackets or commas.
-  bool get isReversible {
-    final match = RegExp(r'([^{},$]*(\$SYS|\$DIA|\$PUL|\$NOTE)[^{},$]*)|\$TIMESTAMP|\$COLOR').firstMatch(formatPattern);
-    return (match != null) && (match.start == 0) && (match.end == formatPattern.length);
-  }
+  bool get isReversible => _formatter.restoreAbleType != null;
 
-  RowDataFieldType? get parsableFormat {
-    if (formatPattern.contains(RegExp(r'[{},]'))) return null;
-    if (formatPattern == r'$TIMESTAMP') return RowDataFieldType.timestamp;
-    if (formatPattern == r'$COLOR') return RowDataFieldType.color;
-    if (formatPattern.contains(RegExp(r'\$(SYS)'))) return RowDataFieldType.sys;
-    if (formatPattern.contains(RegExp(r'\$(DIA)'))) return RowDataFieldType.dia;
-    if (formatPattern.contains(RegExp(r'\$(PUL)'))) return RowDataFieldType.pul;
-    if (formatPattern.contains(RegExp(r'\$(NOTE)'))) return RowDataFieldType.notes;
-    return null;
-  }
+  RowDataFieldType? get parsableFormat => _formatter.restoreAbleType;
 
   @override
   String toString() {
