@@ -1,6 +1,6 @@
 
 import 'package:blood_pressure_app/model/blood_pressure.dart';
-import 'package:blood_pressure_app/model/export_import/column.dart';
+import 'package:blood_pressure_app/model/export_import/legacy_column.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:intl/intl.dart';

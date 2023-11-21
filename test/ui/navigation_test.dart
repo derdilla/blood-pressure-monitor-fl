@@ -2,7 +2,7 @@ import 'package:blood_pressure_app/components/dialoges/add_measurement.dart';
 import 'package:blood_pressure_app/components/dialoges/enter_timeformat.dart';
 import 'package:blood_pressure_app/main.dart';
 import 'package:blood_pressure_app/model/blood_pressure.dart';
-import 'package:blood_pressure_app/model/export_import/column.dart';
+import 'package:blood_pressure_app/model/export_import/legacy_column.dart';
 import 'package:blood_pressure_app/model/ram_only_implementations.dart';
 import 'package:blood_pressure_app/model/storage/db/config_dao.dart';
 import 'package:blood_pressure_app/model/storage/export_csv_settings_store.dart';

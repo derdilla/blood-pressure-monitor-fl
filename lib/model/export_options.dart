@@ -2,7 +2,7 @@ import 'dart:collection';
 
 import 'package:blood_pressure_app/main.dart';
 import 'package:blood_pressure_app/model/blood_pressure.dart';
-import 'package:blood_pressure_app/model/export_import/column.dart';
+import 'package:blood_pressure_app/model/export_import/legacy_column.dart';
 import 'package:blood_pressure_app/model/storage/common_settings_interfaces.dart';
 import 'package:blood_pressure_app/model/storage/db/config_dao.dart';
 import 'package:blood_pressure_app/model/storage/export_settings_store.dart';
