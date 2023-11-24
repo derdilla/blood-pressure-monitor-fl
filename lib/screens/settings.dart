@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:blood_pressure_app/components/consistent_future_builder.dart';
 import 'package:blood_pressure_app/components/dialoges/enter_timeformat.dart';
-import 'package:blood_pressure_app/components/dialoges/input_dialoge.dart';
+import 'package:blood_pressure_app/components/dialoges/oldinput_dialoge.dart';
 import 'package:blood_pressure_app/components/settings/settings_widgets.dart';
 import 'package:blood_pressure_app/model/blood_pressure.dart';
 import 'package:blood_pressure_app/model/iso_lang_names.dart';

@@ -2,100 +2,82 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-// TODO: redo dialoges in flutter style
+/// Dialoge for prompting single value input from the user.
 class InputDialoge extends StatefulWidget {
-  final String hintText;
-  final String? initialValue;
-
-  /// Gets called when the user submits the text field or presses the submit button.
-  final void Function(String text) onSubmit;
-  final List<TextInputFormatter>? inputFormatters;
-  final TextInputType? keyboardType;
-
+  /// Creates an [AlertDialog] with an text input field.
+  ///
+  /// Pops the context after value submission with object of type [String?].
   const InputDialoge({super.key,
-    required this.hintText,
-    required this.onSubmit,
     this.inputFormatters,
     this.keyboardType,
+    this.hintText,
     this.initialValue});
+
+  /// Initial content of the input field.
+  final String? initialValue;
+
+  /// Supporting text describing the input field.
+  final String? hintText;
+
+  /// Optional input validation and formatting overrides.
+  final List<TextInputFormatter>? inputFormatters;
+
+  final TextInputType? keyboardType;
 
   @override
   State<InputDialoge> createState() => _InputDialogeState();
 }
 
 class _InputDialogeState extends State<InputDialoge> {
-  final formKey = GlobalKey<FormState>();
   final controller = TextEditingController();
-  final inputFocusNode = FocusNode();
-
-  @override
-  void dispose() {
-    controller.dispose();
-    super.dispose();
-  }
-
+  final focusNode = FocusNode();
 
   @override
   void initState() {
     super.initState();
-    controller.text = widget.initialValue ?? '';
+    if (widget.initialValue != null) controller.text = widget.initialValue!;
+    focusNode.requestFocus();
+  }
+
+  @override
+  void dispose() {
+    controller.dispose();
+    focusNode.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    inputFocusNode.requestFocus();
+    final localizations = AppLocalizations.of(context)!;
     return AlertDialog(
-      content: TextFormField(
-        key: formKey,
-        focusNode: inputFocusNode,
+      content: TextField(
         controller: controller,
+        focusNode: focusNode,
         inputFormatters: widget.inputFormatters,
         keyboardType: widget.keyboardType,
         decoration: InputDecoration(
-          hintText: widget.hintText
+          hintText: widget.hintText,
+          labelText: widget.hintText
         ),
-        onFieldSubmitted: widget.onSubmit,
+        onSubmitted: _onSubmit,
       ),
       actions: [
         ElevatedButton(
-          onPressed: () {
-            widget.onSubmit(controller.text);
-          },
-          child: Text(AppLocalizations.of(context)!.btnConfirm)
-        )
+            onPressed: () => Navigator.of(context).pop(null),
+            child: Text(localizations.btnCancel)),
+        ElevatedButton(
+            onPressed: () => _onSubmit(controller.text),
+            child: Text(localizations.btnConfirm)),
       ],
     );
   }
-}
 
-typedef NumberInputResult = void Function(double result);
-
-class NumberInputDialoge extends StatelessWidget {
-  final String hintText;
-  final NumberInputResult onParsableSubmit;
-  final String? initialValue;
-
-  const NumberInputDialoge({
-    super.key,
-    required this.hintText,
-    required this.onParsableSubmit,
-    this.initialValue});
-
-  @override
-  Widget build(BuildContext context) {
-    return InputDialoge(
-      hintText: hintText,
-      inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r'([0-9]+(\.([0-9]*))?)')),],
-      keyboardType: TextInputType.number,
-      initialValue: initialValue,
-      onSubmit: (text) {
-        double? value = double.tryParse(text);
-        value ??= int.tryParse(text)?.toDouble();
-        if (text.isEmpty || value == null) {
-          return;
-        }
-        onParsableSubmit(value);
-      }
-    );
+  void _onSubmit(String value) {
+    Navigator.of(context).pop(value);
   }
 }
+
+/// Creates a dialoge for prompting a single user input.
+Future<String?> showInputDialoge(BuildContext context, {String? hintText, String? initialValue}) async =>
+  showDialog<String?>(context: context, builder: (context) =>
+      InputDialoge(hintText: hintText, initialValue: initialValue,));

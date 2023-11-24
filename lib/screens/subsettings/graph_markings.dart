@@ -1,5 +1,5 @@
 import 'package:blood_pressure_app/components/color_picker.dart';
-import 'package:blood_pressure_app/components/dialoges/input_dialoge.dart';
+import 'package:blood_pressure_app/components/dialoges/oldinput_dialoge.dart';
 import 'package:blood_pressure_app/model/horizontal_graph_line.dart';
 import 'package:blood_pressure_app/model/storage/settings_store.dart';
 import 'package:flutter/material.dart';
