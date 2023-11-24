@@ -8,10 +8,11 @@ class InputDialoge extends StatefulWidget {
   ///
   /// Pops the context after value submission with object of type [String?].
   const InputDialoge({super.key,
+    this.hintText,
+    this.initialValue,
     this.inputFormatters,
     this.keyboardType,
-    this.hintText,
-    this.initialValue});
+    this.validator,});
 
   /// Initial content of the input field.
   final String? initialValue;
@@ -24,6 +25,16 @@ class InputDialoge extends StatefulWidget {
 
   final TextInputType? keyboardType;
 
+  /// Validation function called after submit.
+  ///
+  /// When the validator returns null the dialoge completes normally,
+  /// in case of receiving a String it will be displayed to the user
+  /// and pressing of the submit button will be ignored.
+  ///
+  /// It is still possible to cancel a dialoge in case the validator fails.
+  /// TODO: test
+  final String? Function(String)? validator;
+
   @override
   State<InputDialoge> createState() => _InputDialogeState();
 }
@@ -31,6 +42,8 @@ class InputDialoge extends StatefulWidget {
 class _InputDialogeState extends State<InputDialoge> {
   final controller = TextEditingController();
   final focusNode = FocusNode();
+
+  String? errorText;
 
   @override
   void initState() {
@@ -57,7 +70,8 @@ class _InputDialogeState extends State<InputDialoge> {
         keyboardType: widget.keyboardType,
         decoration: InputDecoration(
           hintText: widget.hintText,
-          labelText: widget.hintText
+          labelText: widget.hintText,
+          errorText: errorText
         ),
         onSubmitted: _onSubmit,
       ),
@@ -73,11 +87,44 @@ class _InputDialogeState extends State<InputDialoge> {
   }
 
   void _onSubmit(String value) {
+    final validationResult = widget.validator?.call(value);
+    if (validationResult != null) {
+      setState(() {
+        errorText = validationResult;
+      });
+      return;
+    }
     Navigator.of(context).pop(value);
   }
 }
 
 /// Creates a dialoge for prompting a single user input.
+///
+/// Add supporting text describing the input field through [hintText].
+/// [initialValue] specifies the initial input field content.
 Future<String?> showInputDialoge(BuildContext context, {String? hintText, String? initialValue}) async =>
   showDialog<String?>(context: context, builder: (context) =>
       InputDialoge(hintText: hintText, initialValue: initialValue,));
+
+Future<double?> showNumberInputDialoge(BuildContext context, {String? hintText, num? initialValue}) async {
+  final result = await showDialog<String?>(context: context, builder: (context) =>
+    InputDialoge(
+      hintText: hintText,
+      initialValue: initialValue?.toString(),
+      inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r'([0-9]+(\.([0-9]*))?)')),],
+      keyboardType: TextInputType.number,
+      validator: (text) {
+        double? value = double.tryParse(text);
+        value ??= int.tryParse(text)?.toDouble();
+        if (text.isEmpty || value == null) {
+          return AppLocalizations.of(context)!.errNaN;
+        }
+        return null;
+      },
+    ));
+
+  if (result == null) return null;
+  double? value = double.tryParse(result);
+  value ??= int.tryParse(result)?.toDouble();
+  return value;
+}

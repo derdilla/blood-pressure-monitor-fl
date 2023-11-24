@@ -100,4 +100,78 @@ void main() {
       expect(result, null);
     });
   });
+  group('showNumberInputDialoge', () {
+    testWidgets('should start with input focused', (widgetTester) async {
+      await widgetTester.pumpWidget(MaterialApp(
+          localizationsDelegates: const [AppLocalizations.delegate,], locale: const Locale('en'),
+          home: Builder(builder: (BuildContext context) => TextButton(onPressed:
+              () => showNumberInputDialoge(context, initialValue: 123), child: const Text('X')))
+      ));
+      await widgetTester.tap(find.text('X'));
+      await widgetTester.pumpAndSettle();
+
+      expect(find.byType(InputDialoge), findsOneWidget);
+      expect(find.text('123'), findsOneWidget);
+
+      final primaryFocus = FocusManager.instance.primaryFocus;
+      expect(primaryFocus?.context?.widget, isNotNull);
+      final focusedTextField = find.ancestor(
+        of: find.byWidget(primaryFocus!.context!.widget),
+        matching: find.byType(TextField),
+      );
+      expect(find.descendant(of: focusedTextField, matching: find.text('123')), findsOneWidget);
+    });
+    testWidgets('should allow entering a number', (widgetTester) async {
+      double? result = -1;
+      await widgetTester.pumpWidget(MaterialApp(
+          localizationsDelegates: const [AppLocalizations.delegate,], locale: const Locale('en'),
+          home: Builder(builder: (BuildContext context) => TextButton(onPressed:
+              () async {
+            result = await showNumberInputDialoge(context);
+          }, child: const Text('X')))
+      ));
+      final localizations = await AppLocalizations.delegate.load(const Locale('en'));
+      await widgetTester.tap(find.text('X'));
+      await widgetTester.pumpAndSettle();
+
+      expect(find.byType(InputDialoge), findsOneWidget);
+      expect(find.byType(TextField), findsOneWidget);
+
+      await widgetTester.enterText(find.byType(TextField), '123.76');
+      expect(find.text(localizations.btnConfirm), findsOneWidget);
+      await widgetTester.tap(find.text(localizations.btnConfirm));
+      await widgetTester.pumpAndSettle();
+
+      expect(result, 123.76);
+    });
+    testWidgets('should not allow entering text', (widgetTester) async {
+      double? result = -1;
+      await widgetTester.pumpWidget(MaterialApp(
+          localizationsDelegates: const [AppLocalizations.delegate,], locale: const Locale('en'),
+          home: Builder(builder: (BuildContext context) => TextButton(onPressed:
+              () async {
+            result = await showNumberInputDialoge(context);
+          }, child: const Text('X')))
+      ));
+      final localizations = await AppLocalizations.delegate.load(const Locale('en'));
+      await widgetTester.tap(find.text('X'));
+      await widgetTester.pumpAndSettle();
+
+      expect(find.byType(InputDialoge), findsOneWidget);
+
+      await widgetTester.enterText(find.byType(TextField), 'test');
+      expect(find.text(localizations.btnConfirm), findsOneWidget);
+      await widgetTester.tap(find.text(localizations.btnConfirm));
+      await widgetTester.pumpAndSettle();
+
+      expect(find.byType(InputDialoge), findsOneWidget); // unclosable through confirm
+      expect(find.text(localizations.errNaN), findsOneWidget);
+
+      expect(find.text(localizations.btnCancel), findsOneWidget);
+      await widgetTester.tap(find.text(localizations.btnCancel));
+      await widgetTester.pumpAndSettle();
+
+      expect(result, null);
+    });
+  });
 }
