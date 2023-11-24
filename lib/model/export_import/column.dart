@@ -1,17 +1,11 @@
+import 'dart:convert';
+
 import 'package:blood_pressure_app/model/blood_pressure.dart';
 import 'package:blood_pressure_app/model/export_import/legacy_column.dart';
 import 'package:blood_pressure_app/model/export_import/reocord_formatter.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-/// Class for storing export behavior of columns.
-class ExportColumn implements Formatter {
-  /// Create a object that handles export behavior for data in a column.
-  ///
-  /// [formatter] will be created according to [formatString].
-  ExportColumn(this.internalIdentifier, this.csvTitle, String formatString) {
-    formatter = ScriptedFormatter(formatString);
-  }
-
+sealed class ExportColumn implements Formatter {
   /// Unique internal identifier that is used to identify a column in the app.
   ///
   /// A identifier can be any string, but is usually structured with a prefix and
@@ -20,16 +14,49 @@ class ExportColumn implements Formatter {
   /// app.
   ///
   /// It should not be used instead of [csvTitle].
-  final String internalIdentifier;
+  String get internalIdentifier;
 
   /// Column title in a csv file.
   ///
   /// May not contain characters intended for CSV column separation (e.g. `,`).
-  final String csvTitle;
+  String get csvTitle;
 
   /// Column title in user facing places that don't require strict rules.
   ///
   /// It will be displayed on the exported PDF file or in the column selection.
+  String userTitle(AppLocalizations localizations);
+
+  static String serialize(ExportColumn column) {
+    int type = switch (column) {
+      UserColumn() => 1,
+    };
+    return jsonEncode({
+      't': type,
+      'id': column.internalIdentifier,
+      'csvTitle': column.csvTitle,
+      // TODO: class specific json data?
+    });
+  }
+}
+
+/// Class for storing export behavior of columns.
+///
+/// In most cases using the sealed
+class UserColumn extends ExportColumn {
+  /// Create a object that handles export behavior for data in a column.
+  ///
+  /// [formatter] will be created according to [formatString].
+  UserColumn(this.internalIdentifier, this.csvTitle, String formatString) {
+    formatter = ScriptedFormatter(formatString);
+  }
+
+  @override
+  final String internalIdentifier;
+
+  @override
+  final String csvTitle;
+
+  @override
   String userTitle(AppLocalizations localizations) => csvTitle;
 
   /// Converter associated with this column.
