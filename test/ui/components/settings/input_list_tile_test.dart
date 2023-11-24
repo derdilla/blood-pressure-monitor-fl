@@ -1,4 +1,4 @@
-import 'package:blood_pressure_app/components/dialoges/oldinput_dialoge.dart';
+import 'package:blood_pressure_app/components/dialoges/input_dialoge.dart';
 import 'package:blood_pressure_app/components/settings/input_list_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -67,7 +67,8 @@ void main() {
       await widgetTester.tap(find.byType(InputListTile));
       await widgetTester.pumpAndSettle();
 
-      await widgetTester.enterText(find.byType(TextFormField), 'changed');
+      expect(find.byType(TextField), findsOneWidget);
+      await widgetTester.enterText(find.byType(TextField), 'changed');
       await widgetTester.tap(find.text('OK'));
       await widgetTester.pumpAndSettle();
 

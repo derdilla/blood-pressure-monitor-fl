@@ -1,4 +1,4 @@
-import 'package:blood_pressure_app/components/dialoges/oldinput_dialoge.dart';
+import 'package:blood_pressure_app/components/dialoges/input_dialoge.dart';
 import 'package:flutter/material.dart';
 
 /// Widget for editing numbers in a list tile.
@@ -23,7 +23,7 @@ class NumberInputListTile extends StatelessWidget {
   final num? value;
 
   /// Gets called once the user submits a new valid number to the field.
-  final NumberInputResult onParsableSubmit;
+  final void Function(double result) onParsableSubmit;
 
   @override
   Widget build(BuildContext context) {
@@ -32,18 +32,12 @@ class NumberInputListTile extends StatelessWidget {
       subtitle: Text(value.toString()),
       leading: leading,
       trailing: const Icon(Icons.edit),
-      onTap: () {
-        showDialog(
-          context: context,
-          builder: (context) => NumberInputDialoge(
-            initialValue: value?.toString(),
-            hintText: label,
-            onParsableSubmit: (value) {
-              Navigator.of(context).pop();
-              onParsableSubmit(value);
-            },
-          ),
+      onTap: () async {
+        final result = await showNumberInputDialoge(context,
+          initialValue: value,
+          hintText: label
         );
+        if (result != null) onParsableSubmit(result);
       },
     );
   }

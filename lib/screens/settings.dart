@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:blood_pressure_app/components/consistent_future_builder.dart';
 import 'package:blood_pressure_app/components/dialoges/enter_timeformat.dart';
-import 'package:blood_pressure_app/components/dialoges/oldinput_dialoge.dart';
+import 'package:blood_pressure_app/components/dialoges/input_dialoge.dart';
 import 'package:blood_pressure_app/components/settings/settings_widgets.dart';
 import 'package:blood_pressure_app/model/blood_pressure.dart';
 import 'package:blood_pressure_app/model/iso_lang_names.dart';
@@ -201,24 +201,14 @@ class SettingsPage extends StatelessWidget {
                 key: const Key('determineWarnValues'),
                 leading: const Icon(Icons.settings_applications_outlined),
                 title: Text(localizations.determineWarnValues),
-                onTap: () {
-                  showDialog(
-                    context: context,
-                    builder: (context) => NumberInputDialoge(
-                      hintText: localizations.age,
-                      onParsableSubmit: (value) {
-                        int age = value.round();
-                        settings.sysWarn = BloodPressureWarnValues.getUpperSysWarnValue(age);
-                        settings.diaWarn = BloodPressureWarnValues.getUpperDiaWarnValue(age);
-                        Navigator.of(context).pop();
-                        Navigator.of(context).pop();
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => const SettingsPage()),
-                        );
-                      },
-                    )
-                  );
+                onTap: () async {
+                  final age = (await showNumberInputDialoge(context,
+                    hintText: localizations.age,
+                  ))?.round();
+                  if (age != null) {
+                    settings.sysWarn = BloodPressureWarnValues.getUpperSysWarnValue(age);
+                    settings.diaWarn = BloodPressureWarnValues.getUpperDiaWarnValue(age);
+                  }
                 },
               ),
               ListTile(
