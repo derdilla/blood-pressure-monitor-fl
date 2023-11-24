@@ -32,7 +32,6 @@ class InputDialoge extends StatefulWidget {
   /// and pressing of the submit button will be ignored.
   ///
   /// It is still possible to cancel a dialoge in case the validator fails.
-  /// TODO: test
   final String? Function(String)? validator;
 
   @override
@@ -106,6 +105,9 @@ Future<String?> showInputDialoge(BuildContext context, {String? hintText, String
   showDialog<String?>(context: context, builder: (context) =>
       InputDialoge(hintText: hintText, initialValue: initialValue,));
 
+/// Creates a dialoge that only allows int and double inputs.
+///
+/// Variables behave similar to [showInputDialoge].
 Future<double?> showNumberInputDialoge(BuildContext context, {String? hintText, num? initialValue}) async {
   final result = await showDialog<String?>(context: context, builder: (context) =>
     InputDialoge(
@@ -123,8 +125,7 @@ Future<double?> showNumberInputDialoge(BuildContext context, {String? hintText, 
       },
     ));
 
-  if (result == null) return null;
-  double? value = double.tryParse(result);
-  value ??= int.tryParse(result)?.toDouble();
+  double? value = double.tryParse(result ?? '');
+  value ??= int.tryParse(result ?? '')?.toDouble();
   return value;
 }

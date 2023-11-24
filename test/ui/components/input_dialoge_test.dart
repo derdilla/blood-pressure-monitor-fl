@@ -33,6 +33,48 @@ void main() {
       expect(find.text('initial text'), findsOneWidget);
       expect(find.text('test hint'), findsNWidgets(2));
     });
+    testWidgets('should show validator errors', (widgetTester) async {
+      await widgetTester.pumpWidget(MaterialApp(
+          localizationsDelegates: const [AppLocalizations.delegate,], locale: const Locale('en'),
+          home: InputDialoge(
+            initialValue: 'initial text',
+            validator: (_) => 'test error',
+          )
+      ));
+      final localizations = await AppLocalizations.delegate.load(const Locale('en'));
+
+      expect(find.text(localizations.btnConfirm), findsOneWidget);
+      await widgetTester.tap(find.text(localizations.btnConfirm));
+      await widgetTester.pumpAndSettle();
+
+      expect(find.byType(InputDialoge), findsOneWidget);
+      expect(find.text('test error'), findsOneWidget);
+    });
+    testWidgets('should send current text to validator', (widgetTester) async {
+      int validatorCalls = 0;
+      await widgetTester.pumpWidget(MaterialApp(
+          localizationsDelegates: const [AppLocalizations.delegate,], locale: const Locale('en'),
+          home: InputDialoge(
+            initialValue: 'initial text',
+            validator: (value) {
+              expect(value, 'initial text');
+              validatorCalls += 1;
+              return null;
+            },
+          )
+      ));
+      final localizations = await AppLocalizations.delegate.load(const Locale('en'));
+
+      expect(validatorCalls, 0);
+
+      expect(find.text(localizations.btnConfirm), findsOneWidget);
+      await widgetTester.tap(find.text(localizations.btnConfirm));
+      await widgetTester.pumpAndSettle();
+
+      expect(validatorCalls, 1);
+
+      expect(find.byType(InputDialoge), findsNothing);
+    });
   });
   group('showInputDialoge', () {
     testWidgets('should start with input focused', (widgetTester) async {
