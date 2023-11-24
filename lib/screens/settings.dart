@@ -201,24 +201,14 @@ class SettingsPage extends StatelessWidget {
                 key: const Key('determineWarnValues'),
                 leading: const Icon(Icons.settings_applications_outlined),
                 title: Text(localizations.determineWarnValues),
-                onTap: () {
-                  showDialog(
-                    context: context,
-                    builder: (context) => NumberInputDialoge(
-                      hintText: localizations.age,
-                      onParsableSubmit: (value) {
-                        int age = value.round();
-                        settings.sysWarn = BloodPressureWarnValues.getUpperSysWarnValue(age);
-                        settings.diaWarn = BloodPressureWarnValues.getUpperDiaWarnValue(age);
-                        Navigator.of(context).pop();
-                        Navigator.of(context).pop();
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => const SettingsPage()),
-                        );
-                      },
-                    )
-                  );
+                onTap: () async {
+                  final age = (await showNumberInputDialoge(context,
+                    hintText: localizations.age,
+                  ))?.round();
+                  if (age != null) {
+                    settings.sysWarn = BloodPressureWarnValues.getUpperSysWarnValue(age);
+                    settings.diaWarn = BloodPressureWarnValues.getUpperDiaWarnValue(age);
+                  }
                 },
               ),
               ListTile(

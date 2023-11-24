@@ -79,25 +79,29 @@ void main() {
       expect(find.text('15'), findsOneWidget);
       await widgetTester.tap(find.byType(NumberInputListTile));
       await widgetTester.pumpAndSettle();
-      await widgetTester.enterText(find.byType(TextFormField), '17');
+      expect(find.byType(TextField), findsOneWidget);
+      await widgetTester.enterText(find.byType(TextField), '17');
       await widgetTester.tap(find.text('OK'));
       await widgetTester.pumpAndSettle();
 
       await widgetTester.tap(find.byType(NumberInputListTile));
       await widgetTester.pumpAndSettle();
-      await widgetTester.enterText(find.byType(TextFormField), '15.0');
+      expect(find.byType(TextField), findsOneWidget);
+      await widgetTester.enterText(find.byType(TextField), '15.0');
       await widgetTester.tap(find.text('OK'));
       await widgetTester.pumpAndSettle();
 
       await widgetTester.tap(find.byType(NumberInputListTile));
       await widgetTester.pumpAndSettle();
-      await widgetTester.enterText(find.byType(TextFormField), '0.123');
+      expect(find.byType(TextField), findsOneWidget);
+      await widgetTester.enterText(find.byType(TextField), '0.123');
       await widgetTester.tap(find.text('OK'));
       await widgetTester.pumpAndSettle();
 
       await widgetTester.tap(find.byType(NumberInputListTile));
       await widgetTester.pumpAndSettle();
-      await widgetTester.enterText(find.byType(TextFormField), '5.4');
+      expect(find.byType(TextField), findsOneWidget);
+      await widgetTester.enterText(find.byType(TextField), '5.4');
       await widgetTester.tap(find.text('OK'));
       await widgetTester.pumpAndSettle();
 
