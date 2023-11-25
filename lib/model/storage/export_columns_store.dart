@@ -5,6 +5,11 @@ import 'package:blood_pressure_app/model/export_import/column.dart';
 import 'package:flutter/material.dart';
 
 class ExportColumnsManager extends ChangeNotifier {
+  /// Create a new class for managing export columns.
+  ///
+  /// It will be filled with the default columns but won't contain initial user columns.
+  ExportColumnsManager();
+
   static const List<String> reservedNamespaces = ['buildIn', 'myHeart'];
 
   /// Map between all [ExportColumn.internalIdentifier]s and [ExportColumn]s added by a user.
@@ -12,13 +17,14 @@ class ExportColumnsManager extends ChangeNotifier {
 
   /// View of map between all [ExportColumn.internalName]s and [ExportColumn]s added by a user.
   UnmodifiableMapView<String, ExportColumn> get userColumns => UnmodifiableMapView(_userColumns);
+  // TODO: consider replacing with a allColumns getter once build ins are added.
 
   /// Tries to save the column to the map with the [ExportColumn.internalName] key.
   ///
   /// This method fails and returns false when there is a default [ExportColumn] with the same internal name is
   /// available.
   bool addOrUpdate(ExportColumn column) {
-    if (reservedNamespaces.any((element) => column.internalIdentifier.startsWith(element)) return false;
+    if (reservedNamespaces.any((element) => column.internalIdentifier.startsWith(element))) return false;
     _userColumns[column.internalIdentifier] = column;
     notifyListeners();
     return true;
@@ -34,7 +40,35 @@ class ExportColumnsManager extends ChangeNotifier {
   }
 
   String toJson() {
-    // TODO
-    throw UnimplementedError();
+    final columns = [];
+    for (final c in _userColumns.values) {
+      switch (c) {
+        case UserColumn():
+          columns.add({
+            't': 0, // class type
+            'id': c.internalIdentifier,
+            'csvTitle': c.csvTitle,
+            'formatString': c.formatPattern
+          });
+          break;
+      }
+    }
+    return jsonEncode({'userColumns': columns});
+  }
+
+  factory ExportColumnsManager.fromJson(String jsonString) {
+    final List<dynamic> jsonUserColumns = jsonDecode(jsonString)['userColumns'];
+    final manager = ExportColumnsManager();
+    for (final Map<String, dynamic> c in jsonUserColumns) {
+      switch (c['t']) {
+        case 0:
+          manager.addOrUpdate(UserColumn(c['id'], c['csvTitle'], c['formatString']));
+          break;
+        default:
+          assert(false, 'Unexpected column type ${c['t']}.');
+      }
+    }
+
+    return manager;
   }
 }
