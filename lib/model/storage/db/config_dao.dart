@@ -1,5 +1,6 @@
 import 'package:blood_pressure_app/model/export_import/legacy_column.dart';
 import 'package:blood_pressure_app/model/storage/db/config_db.dart';
+import 'package:blood_pressure_app/model/storage/export_columns_store.dart';
 import 'package:blood_pressure_app/model/storage/export_csv_settings_store.dart';
 import 'package:blood_pressure_app/model/storage/export_pdf_settings_store.dart';
 import 'package:blood_pressure_app/model/storage/export_settings_store.dart';
@@ -257,6 +258,54 @@ class ConfigDao {
     await _configDB.database.insert(
         ConfigDB.selectedIntervallStorageTable,
         columnValueMap,
+        conflictAlgorithm: ConflictAlgorithm.replace
+    );
+  }
+  
+  /// Loads the profiles [ExportColumnsManager] object from the database.
+  ///
+  /// If any errors occur or the object is not present, a default one will be created. Changes in the object
+  /// will save to the database automatically (a listener gets attached).
+  ///
+  /// Changes to the database will not propagate to the object.
+  Future<ExportColumnsManager> loadExportColumnsManager(int profileID) async {
+    final dbEntry = await _configDB.database.query(
+        ConfigDB.exportColumnsTable,
+        columns: ['json'],
+        where: 'profile_id = ?',
+        whereArgs: [profileID]
+    );
+
+    late final ExportColumnsManager columnsManager;
+    if (dbEntry.isEmpty) {
+      columnsManager = ExportColumnsManager();
+    } else {
+      assert(dbEntry.length == 1, 'The profile_id should be unique.');
+      final json = dbEntry.first['json'];
+      if (json == null) {
+        columnsManager = ExportColumnsManager();
+      } else {
+        columnsManager = ExportColumnsManager.fromJson(json.toString());
+      }
+    }
+    _updateExportColumnsManager(profileID, columnsManager);
+    columnsManager.addListener(() {
+      _updateExportColumnsManager(profileID, columnsManager);
+    });
+    return columnsManager;
+  }
+
+  /// Update [ExportColumnsManager] for a profile in the database.
+  ///
+  /// Adds an entry if necessary.
+  Future<void> _updateExportColumnsManager(int profileID, ExportColumnsManager manager) async {
+    if (!_configDB.database.isOpen) return;
+    await _configDB.database.insert(
+        ConfigDB.exportColumnsTable,
+        {
+          'profile_id': profileID,
+          'json': manager.toJson()
+        },
         conflictAlgorithm: ConflictAlgorithm.replace
     );
   }

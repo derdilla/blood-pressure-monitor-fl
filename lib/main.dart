@@ -40,6 +40,7 @@ Future<Widget> _loadApp() async {
   final csvExportSettings = await configDao.loadCsvExportSettings(0);
   final pdfExportSettings = await configDao.loadPdfExportSettings(0);
   final intervalStorageManager = await IntervallStoreManager.load(configDao, 0);
+  final exportColumnsManager = await configDao.loadExportColumnsManager(0);
 
   await updateLegacySettings(settings, exportSettings, csvExportSettings, pdfExportSettings, intervalStorageManager);
 
@@ -55,6 +56,7 @@ Future<Widget> _loadApp() async {
     ChangeNotifierProvider(create: (context) => csvExportSettings),
     ChangeNotifierProvider(create: (context) => pdfExportSettings),
     ChangeNotifierProvider(create: (context) => intervalStorageManager),
+    ChangeNotifierProvider(create: (context) => exportColumnsManager),
   ], child: const AppRoot());
 }
 

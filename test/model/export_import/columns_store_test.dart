@@ -16,7 +16,7 @@ void main() {
       expect(manager.userColumns['test2']?.csvTitle, 'test2');
     });
 
-    test('should be restoreable from json', () async {
+    test('should be restoreable from json', () async { // TODO: consider moving to json_serialization_test and adding crash tests
       final init = ExportColumnsManager();
       init.addOrUpdate(UserColumn('test', 'test', '\$SYS'));
       init.addOrUpdate(UserColumn('test2', 'test2', '234'));

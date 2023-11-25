@@ -37,6 +37,7 @@ class ExportColumnsManager extends ChangeNotifier {
   void deleteUserColumn(String identifier) {
     assert(_userColumns.containsKey(identifier), 'Don\'t call for non user columns');
     _userColumns.remove(identifier);
+    notifyListeners();
   }
 
   String toJson() {
