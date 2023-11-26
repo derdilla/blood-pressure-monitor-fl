@@ -4,7 +4,7 @@ import 'dart:convert';
 import 'package:blood_pressure_app/model/export_import/column.dart';
 import 'package:flutter/material.dart';
 
-class ExportColumnsManager extends ChangeNotifier {
+class ExportColumnsManager extends ChangeNotifier { // TODO: separate ExportColumnsManager for export and import ?
   /// Create a new class for managing export columns.
   ///
   /// It will be filled with the default columns but won't contain initial user columns.
@@ -52,6 +52,8 @@ class ExportColumnsManager extends ChangeNotifier {
             'formatString': c.formatPattern
           });
           break;
+        case NativeColumn():
+          assert(false, 'User is currently not able to create native columns.');
       }
     }
     return jsonEncode({'userColumns': columns});

@@ -13,6 +13,7 @@ class ExportFields {
   static const defaultPdf = ['formattedTimestamp','systolic','diastolic','pulse','notes']; 
 }
 
+@Deprecated('will get replaced with ExportColumnsManager')
 class ExportConfigurationModel {
   // 2 sources.
   static ExportConfigurationModel? _instance;

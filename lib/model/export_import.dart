@@ -131,6 +131,8 @@ class ExportFileCreator {
               break;
             case RowDataFieldType.color:
               color ??= parsedRecordDataType.$2 as Color?;
+            case RowDataFieldType.needlePin:
+              color = (parsedRecordDataType.$2 as MeasurementNeedlePin?)?.color;
           }
         }
       }

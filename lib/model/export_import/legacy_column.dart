@@ -82,7 +82,10 @@ class ExportColumn { // TODO: change this class so it implements the interface.
 
 /// Type a [ExportColumn] can be parsed as.
 enum RowDataFieldType {
-  timestamp, sys, dia, pul, notes, color;
+  timestamp, sys, dia, pul, notes,
+  @Deprecated('use needlePin instead')
+  color,
+  needlePin;
 
   String localize(AppLocalizations localizations) {
     switch(this) {
@@ -97,6 +100,8 @@ enum RowDataFieldType {
       case RowDataFieldType.notes:
         return localizations.notes;
       case RowDataFieldType.color:
+        return localizations.color;
+      case RowDataFieldType.needlePin:
         return localizations.color;
     }
   }
