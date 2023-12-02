@@ -8,7 +8,9 @@ class ExportColumnsManager extends ChangeNotifier { // TODO: separate ExportColu
   /// Create a new class for managing export columns.
   ///
   /// It will be filled with the default columns but won't contain initial user columns.
-  ExportColumnsManager();
+  ExportColumnsManager({
+    this.activePreset = ExportImportPreset.bloodPressureApp
+  });
 
   static const List<String> reservedNamespaces = ['buildIn', 'myHeart'];
 
@@ -40,6 +42,25 @@ class ExportColumnsManager extends ChangeNotifier { // TODO: separate ExportColu
     notifyListeners();
   }
 
+  final List<String> _activeColumnIDs = []; // TODO import/export
+  ExportImportPreset activePreset;
+
+  List<ExportColumn> getActiveColumns() => switch (activePreset) {
+    // TODO: Handle this case.
+    ExportImportPreset.none => [],
+    // TODO: Handle this case.
+    ExportImportPreset.bloodPressureApp => [
+      NativeColumn.timestamp,
+      NativeColumn.systolic,
+      NativeColumn.diastolic,
+      NativeColumn.pulse,
+      NativeColumn.notes,
+      NativeColumn.color,
+    ],
+    // TODO: Handle this case.
+    ExportImportPreset.myHeart => [],
+  }
+
   String toJson() {
     final columns = [];
     for (final c in _userColumns.values) {
@@ -56,12 +77,17 @@ class ExportColumnsManager extends ChangeNotifier { // TODO: separate ExportColu
           assert(false, 'User is currently not able to create native columns.');
       }
     }
-    return jsonEncode({'userColumns': columns});
+    return jsonEncode({
+      'userColumns': columns,
+      'preset': activePreset.encode(),
+    });
   }
 
   factory ExportColumnsManager.fromJson(String jsonString) {
-    final List<dynamic> jsonUserColumns = jsonDecode(jsonString)['userColumns'];
-    final manager = ExportColumnsManager();
+    final json = jsonDecode(jsonString);
+    final ExportImportPreset preset = ExportImportPreset.decode(json['preset']) ?? ExportImportPreset.bloodPressureApp;
+    final List<dynamic> jsonUserColumns = json['userColumns'];
+    final manager = ExportColumnsManager(activePreset: preset);
     for (final Map<String, dynamic> c in jsonUserColumns) {
       switch (c['t']) {
         case 0:
@@ -73,5 +99,32 @@ class ExportColumnsManager extends ChangeNotifier { // TODO: separate ExportColu
     }
 
     return manager;
+  }
+}
+
+enum ExportImportPreset {
+  /// Custom export configuration.
+  none,
+
+  /// Default preset, that ensures working exports and restoration.
+  bloodPressureApp,
+  myHeart;
+
+  int encode() => switch (this) {
+    ExportImportPreset.none => 0,
+    ExportImportPreset.bloodPressureApp => 1,
+    ExportImportPreset.myHeart => 2
+  };
+
+  static ExportImportPreset? decode(dynamic e) {
+    return switch(e) {
+      0 => ExportImportPreset.none,
+      1 => ExportImportPreset.bloodPressureApp,
+      2 => ExportImportPreset.myHeart,
+      _ => (){
+        assert(false);
+        return null;
+      }(),
+    };
   }
 }
