@@ -8,7 +8,9 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 /// Converters for [BloodPressureRecord] attributes.
 class NativeColumn extends ExportColumn {
-  NativeColumn._create(this._csvTitle, this._restoreableType, this._encode, this._decode);
+  NativeColumn._create(this._csvTitle, this._restoreableType, this._encode, this._decode) {
+    allColumns.add(this);
+  }
   
   final String _csvTitle;
   final RowDataFieldType _restoreableType;
@@ -72,6 +74,8 @@ class NativeColumn extends ExportColumn {
         }
       }
   );
+
+  static final List<NativeColumn> allColumns = [];
 
   @override
   String get csvTitle => _csvTitle;
