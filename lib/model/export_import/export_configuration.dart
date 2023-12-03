@@ -56,8 +56,16 @@ class ActiveExportColumnConfiguration extends ChangeNotifier {
         NativeColumn.notes,
         NativeColumn.color,
       ],
-      // TODO: Handle this case. once myheart options are reimplemented.
-      ExportImportPreset.myHeart => [],
+      ExportImportPreset.myHeart => [
+        BuildInColumn.mhDate,
+        BuildInColumn.mhSys,
+        BuildInColumn.mhDia,
+        BuildInColumn.mhPul,
+        BuildInColumn.mhDesc,
+        BuildInColumn.mhTags,
+        BuildInColumn.mhWeight,
+        BuildInColumn.mhOxygen,
+      ],
     });
 }
 

@@ -107,22 +107,71 @@ class NativeColumn extends ExportColumn {
 /// Useful columns that are present by default and recreatable through a formatPattern.
 class BuildInColumn extends ExportColumn {
   /// Creates a build in column and adds it to allColumns.
-  ///
-  /// [internalIdentifier] will be csvTitle prefixed with "buildin".
-  BuildInColumn._create(this.csvTitle, String formatString, this._userTitle) {
+  BuildInColumn._create(this.internalIdentifier, this.csvTitle, String formatString, this._userTitle) {
     allColumns.add(this);
   }
   
   static final List<BuildInColumn> allColumns = [];
   
   static final pulsePressure = BuildInColumn._create(
-      'pulsePressure', 
+      'buildin.pulsePressure',
+      'pulsePressure',
       r'{{$SYS-$DIA}}', 
       (localizations) => localizations.pulsePressure
   );
 
+  // my heart columns
+  static final mhDate = BuildInColumn._create(
+      'buildin.mhDate',
+      'DATUM',
+      r'$FORMAT{$TIMESTAMP,yyyy-MM-dd HH:mm:ss}',
+      (_) => '"My Heart" export time'
+  );
+  static final mhSys = BuildInColumn._create(
+      'buildin.mhSys',
+      'SYSTOLE',
+      r'$SYS',
+      (_) => '"My Heart" export sys'
+  );
+  static final mhDia = BuildInColumn._create(
+      'buildin.mhDia',
+      'DIASTOLE',
+      r'$DIA',
+      (_) => '"My Heart" export dia'
+  );
+  static final mhPul = BuildInColumn._create(
+      'buildin.mhPul',
+      'PULSE',
+      r'$PUL',
+      (_) => '"My Heart" export pul'
+  );
+  static final mhDesc = BuildInColumn._create(
+      'buildin.mhDesc',
+      'Beschreibung',
+      r'null',
+      (_) => '"My Heart" export description'
+  );
+  static final mhTags = BuildInColumn._create(
+      'buildin.mhTags',
+      'Tags',
+      r'',
+      (_) => '"My Heart" export tags'
+  );
+  static final mhWeight = BuildInColumn._create(
+      'buildin.mhWeight',
+      'Gewicht',
+      r'0.0',
+      (_) => '"My Heart" export weight'
+  );
+  static final mhOxygen = BuildInColumn._create(
+      'buildin.mhOxygen',
+      'Sauerstoffsättigung',
+      r'0',
+      (_) => '"My Heart" export oxygen'
+  );
+
   @override
-  String get internalIdentifier => 'buildin.$csvTitle';
+  final String internalIdentifier;
 
   @override
   final String csvTitle;

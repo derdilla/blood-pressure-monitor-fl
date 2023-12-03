@@ -62,8 +62,9 @@ class ExportColumnsManager extends ChangeNotifier { // TODO: separate ExportColu
             'formatString': c.formatPattern
           });
           break;
+        case BuildInColumn():
         case NativeColumn():
-          assert(false, 'User is currently not able to create native columns.');
+          assert(false, 'User is currently not able to create these columns.');
       }
     }
     return jsonEncode({
