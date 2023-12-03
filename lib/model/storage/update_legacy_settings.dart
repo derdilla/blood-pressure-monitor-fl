@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:blood_pressure_app/model/blood_pressure.dart';
+import 'package:blood_pressure_app/model/export_import/export_configuration.dart';
 import 'package:blood_pressure_app/model/horizontal_graph_line.dart';
 import 'package:blood_pressure_app/model/storage/convert_util.dart';
 import 'package:blood_pressure_app/model/storage/export_csv_settings_store.dart';
@@ -36,11 +37,12 @@ Future<void> updateLegacySettings(Settings settings, ExportSettings exportSettin
         await sharedPreferences.remove(key);
         break;
       case 'exportCustomEntries':
-        csvExportSettings.exportCustomFields = sharedPreferences.getBool(key)!;
+        csvExportSettings.exportFieldsConfiguration.activePreset =
+          sharedPreferences.getBool(key)! ? ExportImportPreset.none : ExportImportPreset.bloodPressureApp;
         await sharedPreferences.remove(key);
         break;
       case 'exportItems':
-        csvExportSettings.customFields = sharedPreferences.getStringList(key)!;
+        //csvExportSettings.customFields = sharedPreferences.getStringList(key)!; TODO: update
         await sharedPreferences.remove(key);
         break;
       case 'darkMode':
@@ -110,10 +112,11 @@ Future<void> updateLegacySettings(Settings settings, ExportSettings exportSettin
       case 'exportMimeType':
         break;
       case 'exportCustomEntriesCsv':
-        csvExportSettings.exportCustomFields = sharedPreferences.getBool(key)!;
+        csvExportSettings.exportFieldsConfiguration.activePreset =
+          sharedPreferences.getBool(key)! ? ExportImportPreset.none : ExportImportPreset.bloodPressureApp;
         break;
       case 'exportItemsCsv':
-        csvExportSettings.customFields = sharedPreferences.getStringList(key)!;
+        // csvExportSettings.customFields = sharedPreferences.getStringList(key)!;TODO: update
         break;
       case 'exportCsvHeadline':
         csvExportSettings.exportHeadline = sharedPreferences.getBool(key)!;
@@ -160,10 +163,12 @@ Future<void> updateLegacySettings(Settings settings, ExportSettings exportSettin
         settings.startWithAddMeasurementPage = sharedPreferences.getBool(key)!;
         break;
       case 'exportCustomEntriesPdf':
-        pdfExportSettings.exportCustomFields = sharedPreferences.getBool(key)!;
+        pdfExportSettings.exportFieldsConfiguration.activePreset =
+            sharedPreferences.getBool(key)!
+              ? ExportImportPreset.none : ExportImportPreset.bloodPressureApp;
         break;
       case 'exportItemsPdf':
-        pdfExportSettings.customFields = sharedPreferences.getStringList(key)!;
+        // pdfExportSettings.customFields = sharedPreferences.getStringList(key)!; TODO: update
         break;
       case 'horizontalGraphLines':
         settings.horizontalGraphLines = sharedPreferences.getStringList(key)!.map((e) =>

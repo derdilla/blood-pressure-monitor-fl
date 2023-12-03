@@ -43,7 +43,6 @@ class ActiveExportColumnConfiguration extends ChangeNotifier {
     _activePreset = value;
     notifyListeners();
   }
-  // TODO: put in CsvExportSettings, PdfExportSettings
 
   /// Columns to respect for export.
   UnmodifiableListView<ExportColumn> getActiveColumns(ExportColumnsManager availableColumns) => UnmodifiableListView(

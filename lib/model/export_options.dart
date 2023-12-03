@@ -47,18 +47,9 @@ class ExportConfigurationModel {
   /// Determines which export columns should be used.
   ///
   /// The [fieldSettings] parameter describes the settings of the current export format and should be set accordingly.
+  @Deprecated('not implemented anymore')
   List<ExportColumn> getActiveExportColumns(ExportFormat format, CustomFieldsSettings fieldsSettings) {
-    switch (format) {
-      case ExportFormat.csv:
-        final fields = (fieldsSettings.exportCustomFields) ? fieldsSettings.customFields : ExportFields.defaultCsv;
-        return availableFormats.where((e) => fields.contains(e.internalName)).toList();
-      case ExportFormat.pdf:
-        final fields = (fieldsSettings.exportCustomFields) ? fieldsSettings.customFields : ExportFields.defaultPdf;
-        return availableFormats.where((e) => fields.contains(e.internalName)).toList();
-      case ExportFormat.db:
-        // Export formats don't work on this one
-        return [];
-    }
+    return [];
   }
   
   List<ExportColumn> getDefaultFormates() => [

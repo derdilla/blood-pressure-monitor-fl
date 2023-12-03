@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:blood_pressure_app/model/export_options.dart';
+import 'package:blood_pressure_app/model/export_import/export_configuration.dart';
 import 'package:blood_pressure_app/model/storage/common_settings_interfaces.dart';
 import 'package:blood_pressure_app/model/storage/convert_util.dart';
 import 'package:flutter/material.dart';
@@ -11,12 +11,11 @@ class PdfExportSettings extends ChangeNotifier implements CustomFieldsSettings {
     bool? exportTitle,
     bool? exportStatistics,
     bool? exportData,
-    bool? exportCustomFields,
     double? headerHeight,
     double? cellHeight,
     double? headerFontSize,
     double? cellFontSize,
-    List<String>? customFields,
+    ActiveExportColumnConfiguration? exportFieldsConfiguration,
   }) {
     if (exportTitle != null) _exportTitle = exportTitle;
     if (exportStatistics != null) _exportStatistics = exportStatistics;
@@ -25,8 +24,7 @@ class PdfExportSettings extends ChangeNotifier implements CustomFieldsSettings {
     if (cellHeight != null) _cellHeight = cellHeight;
     if (headerFontSize != null) _headerFontSize = headerFontSize;
     if (cellFontSize != null) _cellFontSize = cellFontSize;
-    if (exportCustomFields != null) _exportCustomFields = exportCustomFields;
-    if (customFields != null) _customFields = customFields;
+    if (exportFieldsConfiguration != null) _exportFieldsConfiguration = exportFieldsConfiguration;
   }
 
   factory PdfExportSettings.fromMap(Map<String, dynamic> map) => PdfExportSettings(
@@ -37,8 +35,8 @@ class PdfExportSettings extends ChangeNotifier implements CustomFieldsSettings {
     cellHeight: ConvertUtil.parseDouble(map['cellHeight']),
     headerFontSize: ConvertUtil.parseDouble(map['headerFontSize']),
     cellFontSize: ConvertUtil.parseDouble(map['cellFontSize']),
-    exportCustomFields: ConvertUtil.parseBool(map['exportCustomFields']),
-    customFields: ConvertUtil.parseList<String>(map['customFields']),
+    exportFieldsConfiguration: ActiveExportColumnConfiguration.fromJson(map['exportFieldsConfiguration']),
+    // TODO: migrate exportCustomFields and customFields before release
   );
 
   factory PdfExportSettings.fromJson(String json) {
@@ -57,8 +55,7 @@ class PdfExportSettings extends ChangeNotifier implements CustomFieldsSettings {
     'cellHeight': cellHeight,
     'headerFontSize': headerFontSize,
     'cellFontSize': cellFontSize,
-    'exportCustomFields': exportCustomFields,
-    'customFields': customFields,
+    'exportFieldsConfiguration': exportFieldsConfiguration.toJson()
   };
 
   String toJson() => jsonEncode(toMap());
@@ -112,23 +109,10 @@ class PdfExportSettings extends ChangeNotifier implements CustomFieldsSettings {
     notifyListeners();
   }
 
-  bool _exportCustomFields = false;
+  ActiveExportColumnConfiguration _exportFieldsConfiguration = ActiveExportColumnConfiguration();
   @override
-  bool get exportCustomFields => _exportCustomFields;
-  @override
-  set exportCustomFields(bool value) {
-    _exportCustomFields = value;
-    notifyListeners();
-  }
-
-  List<String> _customFields = ExportFields.defaultPdf;
-  @override
-  List<String> get customFields => _customFields;
-  @override
-  set customFields(List<String> value) {
-    _customFields = value;
-    notifyListeners();
-  }
+  // TODO: implement exportFieldsConfiguration
+  ActiveExportColumnConfiguration get exportFieldsConfiguration => _exportFieldsConfiguration;
 
   // Procedure for adding more entries described in the settings_store.dart doc comment
 }
