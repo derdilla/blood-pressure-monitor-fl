@@ -43,10 +43,11 @@ class ExportColumnsManager extends ChangeNotifier { // TODO: separate ExportColu
 
   /// Get any defined column (user or build in) by identifier.
   ExportColumn? getColumn(String identifier) {// TODO test
-    return userColumns[identifier] ??
-        NativeColumn.allColumns.where(
-            (c) => c.internalIdentifier == identifier)
-        .firstOrNull; // ?? ...
+    return userColumns[identifier]
+        ?? NativeColumn.allColumns.where(
+            (c) => c.internalIdentifier == identifier).firstOrNull
+        ?? BuildInColumn.allColumns.where(
+                (c) => c.internalIdentifier == identifier).firstOrNull; // ?? ...
   }
 
   String toJson() {

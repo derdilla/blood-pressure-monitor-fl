@@ -11,6 +11,7 @@ class NativeColumn extends ExportColumn {
   NativeColumn._create(this._csvTitle, this._restoreableType, this._encode, this._decode) {
     allColumns.add(this);
   }
+  static final List<NativeColumn> allColumns = [];
   
   final String _csvTitle;
   final RowDataFieldType _restoreableType;
@@ -75,8 +76,6 @@ class NativeColumn extends ExportColumn {
       }
   );
 
-  static final List<NativeColumn> allColumns = [];
-
   @override
   String get csvTitle => _csvTitle;
 
@@ -94,7 +93,7 @@ class NativeColumn extends ExportColumn {
   String? get formatPattern => null;
 
   @override
-  String get internalIdentifier => 'buildin.$csvTitle';
+  String get internalIdentifier => 'native.$csvTitle';
 
   @override
   RowDataFieldType? get restoreAbleType => _restoreableType;
@@ -105,33 +104,50 @@ class NativeColumn extends ExportColumn {
 
 }
 
-// TODO: add class for formattedTimestamp
-// TODO: keep pulsePressure option
-
-
-/// Interface for converters that allow formatting and provide metadata.
-sealed class ExportColumn implements Formatter {
-  /// Unique internal identifier that is used to identify a column in the app.
+/// Useful columns that are present by default and recreatable through a formatPattern.
+class BuildInColumn extends ExportColumn {
+  /// Creates a build in column and adds it to allColumns.
   ///
-  /// A identifier can be any string, but is usually structured with a prefix and
-  /// a name. For example `buildin.sys`, `user.fancyvalue` or `convert.myheartsys`.
-  /// These examples are not guaranteed to be the prefixes used in the rest of the
-  /// app.
-  ///
-  /// It should not be used instead of [csvTitle].
-  String get internalIdentifier;
+  /// [internalIdentifier] will be csvTitle prefixed with "buildin".
+  BuildInColumn._create(this.csvTitle, String formatString, this._userTitle) {
+    allColumns.add(this);
+  }
+  
+  static final List<BuildInColumn> allColumns = [];
+  
+  static final pulsePressure = BuildInColumn._create(
+      'pulsePressure', 
+      r'{{$SYS-$DIA}}', 
+      (localizations) => localizations.pulsePressure
+  );
 
-  /// Column title in a csv file.
-  ///
-  /// May not contain characters intended for CSV column separation (e.g. `,`).
-  String get csvTitle;
+  @override
+  String get internalIdentifier => 'buildin.$csvTitle';
 
-  /// Column title in user facing places that don't require strict rules.
-  ///
-  /// It will be displayed on the exported PDF file or in the column selection.
-  String userTitle(AppLocalizations localizations);
+  @override
+  final String csvTitle;
+
+  final String Function(AppLocalizations localizations) _userTitle;
+
+  @override
+  String userTitle(AppLocalizations localizations) => _userTitle(localizations);
+
+  late final Formatter _formatter;
+
+  @override
+  (RowDataFieldType, dynamic)? decode(String pattern) => _formatter.decode(pattern);
+
+  @override
+  String encode(BloodPressureRecord record) => _formatter.encode(record);
+
+  @override
+  String? get formatPattern => _formatter.formatPattern;
+
+  @override
+  RowDataFieldType? get restoreAbleType => _formatter.restoreAbleType;
 }
 
+// TODO: add class for formattedTimestamp
 
 /// Class for storing export behavior of columns.
 ///
@@ -167,4 +183,28 @@ class UserColumn extends ExportColumn {
 
   @override
   RowDataFieldType? get restoreAbleType => formatter.restoreAbleType;
+}
+
+
+/// Interface for converters that allow formatting and provide metadata.
+sealed class ExportColumn implements Formatter {
+  /// Unique internal identifier that is used to identify a column in the app.
+  ///
+  /// A identifier can be any string, but is usually structured with a prefix and
+  /// a name. For example `buildin.sys`, `user.fancyvalue` or `convert.myheartsys`.
+  /// These examples are not guaranteed to be the prefixes used in the rest of the
+  /// app.
+  ///
+  /// It should not be used instead of [csvTitle].
+  String get internalIdentifier;
+
+  /// Column title in a csv file.
+  ///
+  /// May not contain characters intended for CSV column separation (e.g. `,`).
+  String get csvTitle;
+
+  /// Column title in user facing places that don't require strict rules.
+  ///
+  /// It will be displayed on the exported PDF file or in the column selection.
+  String userTitle(AppLocalizations localizations);
 }
