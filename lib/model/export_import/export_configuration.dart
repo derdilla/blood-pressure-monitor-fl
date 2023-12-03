@@ -10,33 +10,32 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 class ActiveExportColumnConfiguration extends ChangeNotifier {
   /// Create a manager of the currently relevant [ExportColumn]s.
   ActiveExportColumnConfiguration({
-    required ExportImportPreset activePreset,
-    List<ExportColumn>? userSelectedColumns
-  }) : _activePreset = activePreset, _userSelectedColumns = userSelectedColumns ?? [];
+    ExportImportPreset? activePreset,
+    List<String>? userSelectedColumnIds
+  }) :
+      _activePreset = activePreset ?? ExportImportPreset.bloodPressureApp,
+      _userSelectedColumns = userSelectedColumnIds ?? [];
 
-  factory ActiveExportColumnConfiguration.fromJson(String jsonString, ExportColumnsManager availableColumns) {
+  factory ActiveExportColumnConfiguration.fromJson(String jsonString) {
     final json = jsonDecode(jsonString);
     final columns = (){
       final columns = json['columns'];
-      if (columns is! List<String>) return <ExportColumn>[];
-      return [
-        for (final c in columns)
-          availableColumns.getColumn(c),
-      ].whereNotNull().toList();
+      if (columns is! List<String>) return <String>[];
+      return columns;
     }();
     return ActiveExportColumnConfiguration(
       activePreset: ExportImportPreset.decode(json['preset']) ?? ExportImportPreset.bloodPressureApp,
-      userSelectedColumns: columns
+      userSelectedColumnIds: columns
     );
   }
 
   String toJson() => jsonEncode({
-    'columns': _userSelectedColumns.map((e) => e.internalIdentifier),
+    'columns': _userSelectedColumns,
     'preset': _activePreset.encode()
   });
 
   /// The last selected columns, different from [getActiveColumns].
-  final List<ExportColumn> _userSelectedColumns;
+  final List<String> _userSelectedColumns;
 
   ExportImportPreset _activePreset;
   ExportImportPreset get activePreset => _activePreset;
@@ -47,9 +46,9 @@ class ActiveExportColumnConfiguration extends ChangeNotifier {
   // TODO: put in CsvExportSettings, PdfExportSettings
 
   /// Columns to respect for export.
-  UnmodifiableListView<ExportColumn> getActiveColumns() => UnmodifiableListView( 
+  UnmodifiableListView<ExportColumn> getActiveColumns(ExportColumnsManager availableColumns) => UnmodifiableListView(
     switch (_activePreset) {
-      ExportImportPreset.none => _userSelectedColumns,
+      ExportImportPreset.none => _userSelectedColumns.map((e) => availableColumns.getColumn(e)).whereNotNull(),
       ExportImportPreset.bloodPressureApp => [
         NativeColumn.timestamp,
         NativeColumn.systolic,
