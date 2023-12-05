@@ -1,16 +1,10 @@
 
 import 'dart:async';
 
-import 'package:badges/badges.dart' as badges;
-import 'package:blood_pressure_app/components/consistent_future_builder.dart';
-import 'package:blood_pressure_app/model/export_import/legacy_column.dart';
-import 'package:blood_pressure_app/model/export_options.dart';
-import 'package:blood_pressure_app/model/storage/storage.dart';
-import 'package:blood_pressure_app/screens/subsettings/export_column_data.dart';
+import 'package:blood_pressure_app/model/export_import/column.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:provider/provider.dart';
 
+@Deprecated("TODO: repalace")
 class ExportItemsCustomizer extends StatefulWidget {
   final List<ExportColumn> shownItems;
   final List<ExportColumn> disabledItems;
@@ -25,21 +19,17 @@ class ExportItemsCustomizer extends StatefulWidget {
 
 class _ExportItemsCustomizerState extends State<ExportItemsCustomizer> {
   @override
-  Widget build(BuildContext context) {
-    return ConsistentFutureBuilder(
-      future: ExportConfigurationModel.get(AppLocalizations.of(context)!),
-      cacheFuture: true,
-      onData: (BuildContext context, ExportConfigurationModel result) {
-        return _buildAddItemBadge(context, result,
-          child: _buildManagePresetsBadge(context, result,
-            child:_buildList(context, result)
-          )
-        );
-      },
-    );
-  }
+  Widget build(BuildContext context) => Text('TODO - ExportItemsCustomizer');
+/* => Consumer<ExportColumnsManager>(
+    builder: (context, manager, child) => _buildAddItemBadge(context,
+        child: _buildManagePresetsBadge(context, manager,
+            child: _buildList(context, manager)
+        )
+    )
+  );
 
-  Container _buildList(BuildContext context, ExportConfigurationModel exportConfigModel) {
+
+  Container _buildList(BuildContext context, ExportColumnsManager manager) {
     return Container(
         margin: const EdgeInsets.all(25),
         padding: const EdgeInsets.all(20),
@@ -53,7 +43,7 @@ class _ExportItemsCustomizerState extends State<ExportItemsCustomizer> {
           shrinkWrap: true,
           onReorder: _onReorderList,
           children: <Widget>[
-            for (int i = 0; i < widget.shownItems.length; i += 1)
+            for (int i = 0; i < manger.shownItems.length; i += 1)
               ListTile(
                   key: Key('l_${widget.shownItems[i].internalName}'),
                   title: Text(widget.shownItems[i].columnTitle),
@@ -77,7 +67,7 @@ class _ExportItemsCustomizerState extends State<ExportItemsCustomizer> {
       );
   }
 
-  Widget _buildAddItemBadge(BuildContext context, ExportConfigurationModel result, {required Widget child}) {
+  Widget _buildAddItemBadge(BuildContext context, {required Widget child}) {
     return badges.Badge(
       badgeStyle: badges.BadgeStyle(
         badgeColor: Theme.of(context).colorScheme.background,
@@ -101,7 +91,7 @@ class _ExportItemsCustomizerState extends State<ExportItemsCustomizer> {
     );
   }
 
-  Widget _buildManagePresetsBadge(BuildContext context, ExportConfigurationModel result, {required Widget child}) {
+  Widget _buildManagePresetsBadge(BuildContext context, ExportColumnsManager manager, {required Widget child}) {
     final exportConfigurations = result.exportConfigurations;
     return badges.Badge(
       position: badges.BadgePosition.topEnd(top: 3, end: 3),
@@ -232,4 +222,6 @@ class _ExportItemsCustomizerState extends State<ExportItemsCustomizer> {
 
     widget.onReorder(widget.shownItems, widget.disabledItems);
   }
+
+   */
 }

@@ -1,4 +1,5 @@
 
+import 'package:blood_pressure_app/model/export_import/export_configuration.dart';
 import 'package:blood_pressure_app/model/horizontal_graph_line.dart';
 import 'package:blood_pressure_app/model/storage/export_csv_settings_store.dart';
 import 'package:blood_pressure_app/model/storage/export_pdf_settings_store.dart';
@@ -180,16 +181,17 @@ void main() {
         fieldDelimiter: 'asdfghjklö',
         textDelimiter: 'asdfghjklö2',
         exportHeadline: false,
-        exportCustomFields: true,
-        customFields: ['test1', 'test2'],
+        exportFieldsConfiguration: ActiveExportColumnConfiguration(
+          activePreset: ExportImportPreset.myHeart,
+          userSelectedColumnIds: ['a', 'b', 'c'],
+        ),
       );
       final fromJson = CsvExportSettings.fromJson(initial.toJson());
 
       expect(initial.fieldDelimiter, fromJson.fieldDelimiter);
       expect(initial.textDelimiter, fromJson.textDelimiter);
       expect(initial.exportHeadline, fromJson.exportHeadline);
-      expect(initial.exportCustomFields, fromJson.exportCustomFields);
-      expect(initial.customFields, fromJson.customFields);
+      expect(initial.exportFieldsConfiguration.toJson(), fromJson.exportFieldsConfiguration.toJson());
 
       expect(initial.toJson(), fromJson.toJson());
     });
@@ -210,8 +212,7 @@ void main() {
       expect(v1.fieldDelimiter, CsvExportSettings().fieldDelimiter);
       expect(v2.exportHeadline, CsvExportSettings().exportHeadline);
       expect(v3.textDelimiter, CsvExportSettings().textDelimiter);
-      expect(v3.exportCustomFields, CsvExportSettings().exportCustomFields);
-      expect(v3.customFields, CsvExportSettings().customFields);
+      expect(v3.exportFieldsConfiguration.toJson(), CsvExportSettings().exportFieldsConfiguration.toJson());
     });
   });
 
@@ -225,8 +226,10 @@ void main() {
         cellHeight: 67.89,
         headerFontSize: 67.89,
         cellFontSize: 67.89,
-        exportCustomFields: true,
-        customFields: ['test1', 'test2'],
+        exportFieldsConfiguration: ActiveExportColumnConfiguration(
+          activePreset: ExportImportPreset.myHeart,
+          userSelectedColumnIds: ['a', 'b', 'c'],
+        ),
       );
       final fromJson = PdfExportSettings.fromJson(initial.toJson());
 
@@ -237,8 +240,7 @@ void main() {
       expect(initial.cellHeight, fromJson.cellHeight);
       expect(initial.headerFontSize, fromJson.headerFontSize);
       expect(initial.cellFontSize, fromJson.cellFontSize);
-      expect(initial.exportCustomFields, fromJson.exportCustomFields);
-      expect(initial.customFields, fromJson.customFields);
+      expect(initial.exportFieldsConfiguration.toJson(), fromJson.exportFieldsConfiguration.toJson());
 
       expect(initial.toJson(), fromJson.toJson());
     });

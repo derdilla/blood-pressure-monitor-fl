@@ -5,6 +5,7 @@ import 'package:blood_pressure_app/model/blood_pressure.dart';
 import 'package:blood_pressure_app/model/export_import/legacy_column.dart';
 import 'package:blood_pressure_app/model/ram_only_implementations.dart';
 import 'package:blood_pressure_app/model/storage/db/config_dao.dart';
+import 'package:blood_pressure_app/model/storage/export_columns_store.dart';
 import 'package:blood_pressure_app/model/storage/export_csv_settings_store.dart';
 import 'package:blood_pressure_app/model/storage/export_pdf_settings_store.dart';
 import 'package:blood_pressure_app/model/storage/export_settings_store.dart';
@@ -120,4 +121,6 @@ class MockConfigDao implements ConfigDao {
     columns = {};
   }
 
+  @override
+  Future<ExportColumnsManager> loadExportColumnsManager(int profileID) async => ExportColumnsManager();
 }

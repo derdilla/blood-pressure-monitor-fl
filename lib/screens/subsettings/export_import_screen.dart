@@ -1,10 +1,10 @@
 import 'package:blood_pressure_app/components/consistent_future_builder.dart';
 import 'package:blood_pressure_app/components/diabled.dart';
 import 'package:blood_pressure_app/components/display_interval_picker.dart';
-import 'package:blood_pressure_app/components/export_item_order.dart';
 import 'package:blood_pressure_app/components/settings/settings_widgets.dart';
 import 'package:blood_pressure_app/model/blood_pressure.dart';
 import 'package:blood_pressure_app/model/export_import.dart';
+import 'package:blood_pressure_app/model/export_import/export_configuration.dart';
 import 'package:blood_pressure_app/model/export_import/legacy_column.dart';
 import 'package:blood_pressure_app/model/export_options.dart';
 import 'package:blood_pressure_app/model/storage/storage.dart';
@@ -184,6 +184,8 @@ class ExportFieldCustomisationSetting extends StatelessWidget {
       future: ExportConfigurationModel.get(localizations),
       lastChildWhileWaiting: true,
       onData: (context, configurationModel) {
+        return const Text('TODO - ExportFieldCustomisationSetting');
+        /* TODO: rewrite with dropdown and reorderable list view, consider extracting this class into file
         return Consumer<ExportSettings>(builder: (context, settings, child) {
           final formats = configurationModel.availableFormats.toSet();
           List<ExportColumn> activeFields = configurationModel
@@ -214,6 +216,7 @@ class ExportFieldCustomisationSetting extends StatelessWidget {
             ],
           );
         });
+       */
       }
     );
   }
@@ -293,9 +296,10 @@ class _ExportWarnBannerState extends State<ExportWarnBanner> {
                 if (ExportFormat.db == exportSettings.exportFormat) {
                   // When exporting as database no wrong configuration is possible
                 } else if (_showWarnBanner && _isExportable(exportSettings, csvExportSettings,
-                    fieldSettings.exportCustomFields, missingAttributes)) {
+                    fieldSettings.exportFieldsConfiguration, missingAttributes)) {
                   message = localizations.exportWarnConfigNotImportable;
-                } else if (_showWarnBanner && fieldSettings.exportCustomFields && missingAttributes.isNotEmpty) {
+                } else if (_showWarnBanner &&
+                    fieldSettings.exportFieldsConfiguration.activePreset != ExportImportPreset.bloodPressureApp && missingAttributes.isNotEmpty) {
                   message = localizations.exportWarnNotEveryFieldExported(
                       missingAttributes.length, missingAttributes.map((e) => e.localize(localizations)).join(', '));
                 }
@@ -321,10 +325,10 @@ class _ExportWarnBannerState extends State<ExportWarnBanner> {
   }
 }
 
-bool _isExportable(ExportSettings exportSettings, CsvExportSettings csvExportSettings, bool exportCustomEntries, Set<RowDataFieldType> missingAttributes) {
+bool _isExportable(ExportSettings exportSettings, CsvExportSettings csvExportSettings, ActiveExportColumnConfiguration exportConfig, Set<RowDataFieldType> missingAttributes) {
   return ((ExportFormat.pdf == exportSettings.exportFormat) ||
       csvExportSettings.exportHeadline == false ||
-      exportCustomEntries &&
+      // exportCustomEntries && TODO: replace or rewrite method?
           missingAttributes.contains(RowDataFieldType.timestamp) ||
       ![',', '|'].contains(csvExportSettings.fieldDelimiter) ||
       !['"', '\''].contains(csvExportSettings.textDelimiter));
