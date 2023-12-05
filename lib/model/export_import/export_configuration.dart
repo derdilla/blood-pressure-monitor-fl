@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:blood_pressure_app/model/export_import/column.dart';
+import 'package:blood_pressure_app/model/storage/convert_util.dart';
 import 'package:blood_pressure_app/model/storage/export_columns_store.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/widgets.dart';
@@ -17,16 +18,16 @@ class ActiveExportColumnConfiguration extends ChangeNotifier {
       _userSelectedColumns = userSelectedColumnIds ?? [];
 
   factory ActiveExportColumnConfiguration.fromJson(String jsonString) {
-    final json = jsonDecode(jsonString);
-    final columns = (){
-      final columns = json['columns'];
-      if (columns is! List<String>) return <String>[];
-      return columns;
-    }();
-    return ActiveExportColumnConfiguration(
-      activePreset: ExportImportPreset.decode(json['preset']) ?? ExportImportPreset.bloodPressureApp,
-      userSelectedColumnIds: columns
-    );
+    try {
+      final json = jsonDecode(jsonString);
+      return ActiveExportColumnConfiguration(
+          activePreset: ExportImportPreset.decode(json['preset']) ?? ExportImportPreset.bloodPressureApp,
+          userSelectedColumnIds: ConvertUtil.parseList<String>(json['columns'])
+      );
+    } on FormatException {
+      return ActiveExportColumnConfiguration();
+    }
+
   }
 
   String toJson() => jsonEncode({
@@ -97,7 +98,7 @@ enum ExportImportPreset {
       1 => ExportImportPreset.bloodPressureApp,
       2 => ExportImportPreset.myHeart,
       _ => (){
-        assert(false);
+        assert(e is! int, 'non ints can happen through bad user values, other ints can happen as well, but should developers should be notified.');
         return null;
       }(),
     };

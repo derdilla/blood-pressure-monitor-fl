@@ -32,7 +32,9 @@ class CsvExportSettings extends ChangeNotifier implements CustomFieldsSettings {
   factory CsvExportSettings.fromJson(String json) {
     try {
       return CsvExportSettings.fromMap(jsonDecode(json));
-    } catch (exception) {
+    } on FormatException {
+      return CsvExportSettings();
+    } on TypeError {
       return CsvExportSettings();
     }
   }

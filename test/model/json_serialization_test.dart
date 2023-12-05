@@ -174,6 +174,35 @@ void main() {
       expect(v3.exportAfterEveryEntry, ExportSettings().exportAfterEveryEntry);
     });
   });
+  group('ActiveExportColumnConfiguration', () {
+    test('should be able to recreate all values from json', () {
+      final initial = ActiveExportColumnConfiguration(
+        activePreset: ExportImportPreset.myHeart,
+        userSelectedColumnIds: ['a', 'b', 'c'],
+      );
+      final fromJson = ActiveExportColumnConfiguration.fromJson(initial.toJson());
+
+      expect(initial.activePreset, fromJson.activePreset);
+      expect(initial.toJson(), fromJson.toJson());
+    });
+    test('should not crash when parsing incorrect json', () {
+      ActiveExportColumnConfiguration.fromJson('banana');
+      ActiveExportColumnConfiguration.fromJson('{"preset" = false}');
+      ActiveExportColumnConfiguration.fromJson('{"preset": false');
+      ActiveExportColumnConfiguration.fromJson('{"preset": null');
+      ActiveExportColumnConfiguration.fromJson('{"columns": null');
+      ActiveExportColumnConfiguration.fromJson('{"columns": [123]');
+      ActiveExportColumnConfiguration.fromJson('{preset: false}');
+      ActiveExportColumnConfiguration.fromJson('green{preset: false}');
+    });
+    test('should not crash when parsing invalid values and ignore them', () {
+      final v1 = ActiveExportColumnConfiguration.fromJson('{"preset": ["test"]}');
+      final v2 = ActiveExportColumnConfiguration.fromJson('{"columns": [123, 456]}');
+
+      expect(v1.activePreset, ActiveExportColumnConfiguration().activePreset);
+      expect(v2.toJson(), ActiveExportColumnConfiguration().toJson());
+    });
+  });
 
   group('CsvExportSettings', (){
     test('should be able to recreate all values from json', () {
