@@ -25,16 +25,15 @@ class CsvExportSettings extends ChangeNotifier implements CustomFieldsSettings {
       fieldDelimiter: ConvertUtil.parseString(map['fieldDelimiter']),
       textDelimiter: ConvertUtil.parseString(map['textDelimiter']),
       exportHeadline: ConvertUtil.parseBool(map['exportHeadline']),
-      exportFieldsConfiguration: ActiveExportColumnConfiguration.fromJson(map['exportCustomFields']),
+      exportFieldsConfiguration: ActiveExportColumnConfiguration.fromJson(map['exportFieldsConfiguration']),
       // TODO: migrate exportCustomFields and customFields before release
   );
 
   factory CsvExportSettings.fromJson(String json) {
     try {
       return CsvExportSettings.fromMap(jsonDecode(json));
-    } on FormatException {
-      return CsvExportSettings();
-    } on TypeError {
+    } catch (e) {
+      assert(e is FormatException || e is TypeError);
       return CsvExportSettings();
     }
   }
