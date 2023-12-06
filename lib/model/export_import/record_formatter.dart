@@ -38,40 +38,36 @@ class ScriptedFormatter implements Formatter {
 
   @override
   (RowDataFieldType, dynamic)? decode(String formattedRecord) {
-    // TODO: rewrite contents
+    print('$pattern.decode($formattedRecord)');
     if (restoreAbleType == null) return null;
 
-    if (pattern == r'$NOTE') return (RowDataFieldType.notes, formattedRecord);
-    if (pattern == r'$COLOR') {
-      final value = int.tryParse(formattedRecord);
-      return value == null ? null : (RowDataFieldType.color, Color(value));
-    }
+    final valueRegex = RegExp(pattern.replaceAll(RegExp(r'\$(TIMESTAMP|COLOR|SYS|DIA|PUL|NOTE)'), '(?<value>.*)'),);
+    final match = valueRegex.firstMatch(formattedRecord);
+    if (match == null) return null;
+    var text = match.namedGroup('value');
+    if (text == null) return null;
 
-    // records are parse by replacing the values with capture groups
-    final types = RegExp(r'\$(TIMESTAMP|SYS|DIA|PUL)').allMatches(pattern).map((e) => e.group(0)).toList();
-    final numRegex = pattern.replaceAll(RegExp(r'\$(TIMESTAMP|SYS|DIA|PUL)'), '([0-9]+.?[0-9]*)'); // ints and doubles
-    final numMatches = RegExp(numRegex).allMatches(formattedRecord);
-    final numbers = [];
-    if (numMatches.isNotEmpty) {
-      for (var i = 1; i <= numMatches.first.groupCount; i++) {
-        numbers.add(numMatches.first[i]);
-      }
-    }
-
-    for (var i = 0; i < types.length; i++) {
-      switch (types[i]) {
-        case r'$TIMESTAMP':
-          return (RowDataFieldType.timestamp, int.tryParse(numbers[i] ?? ''));
-        case r'$SYS':
-          return (RowDataFieldType.sys, double.tryParse(numbers[i] ?? ''));
-        case r'$DIA':
-          return (RowDataFieldType.dia, double.tryParse(numbers[i] ?? ''));
-        case r'$PUL':
-          return (RowDataFieldType.pul, double.tryParse(numbers[i] ?? ''));
-      }
-    }
-
-    assert(false);
+    final value = (){switch(restoreAbleType!) {
+      case RowDataFieldType.timestamp:
+        final num = int.tryParse(text);
+        if (num != null) return DateTime.fromMillisecondsSinceEpoch(num);
+        return null;
+      case RowDataFieldType.sys:
+      case RowDataFieldType.dia:
+      case RowDataFieldType.pul:
+        return int.tryParse(text);
+      case RowDataFieldType.notes:
+        return text;
+      case RowDataFieldType.color:
+        final num = int.tryParse(text);
+        if (num != null) return Color(num);
+        return null;
+      case RowDataFieldType.needlePin:
+        final num = int.tryParse(text);
+        if (num == null) return null;
+        return MeasurementNeedlePin(Color(num));
+    }}();
+    if (value != null) return (restoreAbleType!, value);
     return null;
   }
 
@@ -114,7 +110,6 @@ class ScriptedFormatter implements Formatter {
   RowDataFieldType? _restoreAbleType;
 
   @override
-  // TODO: rewrite (logic)
   RowDataFieldType? get restoreAbleType {
     if (_hasRestoreableType == false) {
       if (pattern.contains(RegExp(r'[{},]'))) {
@@ -123,14 +118,14 @@ class ScriptedFormatter implements Formatter {
         _restoreAbleType = RowDataFieldType.timestamp; 
       } else if (pattern == r'$COLOR') { 
         _restoreAbleType = RowDataFieldType.color; 
-      } else if (pattern.contains(RegExp(r'[^{},$]*\$(SYS)[^{},$]*'))) { 
+      } else if (pattern == r'$NOTE') {
+        _restoreAbleType = RowDataFieldType.notes;
+      } else if (pattern.contains(RegExp(r'[^{},$]*\$(SYS)[^{},$]*'))) {
         _restoreAbleType = RowDataFieldType.sys; 
       } else if (pattern.contains(RegExp(r'[^{},$]*\$(DIA)[^{},$]*'))) { 
         _restoreAbleType = RowDataFieldType.dia; 
       } else if (pattern.contains(RegExp(r'[^{},$]*\$(PUL)[^{},$]*'))) { 
         _restoreAbleType = RowDataFieldType.pul; 
-      } else if (pattern.contains(RegExp(r'[^{},$]*\$(NOTE)[^{},$]*'))) { 
-        _restoreAbleType = RowDataFieldType.notes; 
       } else { _restoreAbleType = null; }
       _hasRestoreableType = true;
     }

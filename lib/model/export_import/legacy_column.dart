@@ -1,5 +1,5 @@
 import 'package:blood_pressure_app/model/blood_pressure.dart';
-import 'package:blood_pressure_app/model/export_import/reocord_formatter.dart';
+import 'package:blood_pressure_app/model/export_import/record_formatter.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 /// Convert [BloodPressureRecord]s from and to strings and provide metadata about the conversion.
@@ -80,12 +80,24 @@ class ExportColumn { // TODO: change this class so it implements the interface.
   }
 }
 
-/// Type a [ExportColumn] can be parsed as.
+/// Type a [Formatter] can uses to indicate the kind of data returned.
+///
+/// The data types returned from the deprecated [ExportColumn] may differ from the guarantees.
 enum RowDataFieldType {
-  timestamp, sys, dia, pul, notes,
-  @Deprecated('use needlePin instead')
+  /// Guarantees [DateTime] is returned.
+  timestamp,
+  /// Guarantees [int] is returned.
+  sys,
+  /// Guarantees [int] is returned.
+  dia,
+  /// Guarantees [int] is returned.
+  pul,
+  /// Guarantees [String] is returned.
+  notes,
+  @Deprecated('use needlePin instead') // TODO: implement conversion to needle pin?
   color,
-  needlePin;
+  /// Guarantees that the returned type is of type [MeasurementNeedlePin].
+  needlePin;  // TODO implement in ScriptedFormatter
 
   String localize(AppLocalizations localizations) {
     switch(this) {
