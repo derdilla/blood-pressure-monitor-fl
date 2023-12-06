@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 
 /// Class for managing columns available to the user.
 class ExportColumnsManager extends ChangeNotifier { // TODO: separate ExportColumnsManager for export and import ?
-  /// Create a new class for managing export columns.
+  /// Create a new manager for export columns.
   ///
   /// It will be filled with the default columns but won't contain initial user columns.
   ExportColumnsManager();
@@ -50,7 +50,7 @@ class ExportColumnsManager extends ChangeNotifier { // TODO: separate ExportColu
                 (c) => c.internalIdentifier == identifier).firstOrNull; // ?? ...
   }
 
-  String toJson() {
+  String toJson() { // TODO: update from and TO json to new style
     final columns = [];
     for (final c in _userColumns.values) {
       switch (c) {
