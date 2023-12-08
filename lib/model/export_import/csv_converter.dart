@@ -28,6 +28,8 @@ class CsvConverter {
         (column) => column.encode(record)
       ).toList()
     ).toList();
+
+    // TODO: reimplement setting for disabling headline
     table.insert(0, columns.map((c) => c.csvTitle).toList());
 
     final csvCreator = ListToCsvConverter(
@@ -89,7 +91,7 @@ class CsvConverter {
         }
         if (piece != null) recordPieces.add(piece);
       }
-      
+
       final DateTime timestamp = recordPieces.firstWhere(
               (piece) => piece.$1 == RowDataFieldType.timestamp).$2;
       final int? sys = recordPieces.firstWhereOrNull(
