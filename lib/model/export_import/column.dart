@@ -43,7 +43,7 @@ class NativeColumn extends ExportColumn {
     'pulse',
     RowDataFieldType.pul,
     (record) => record.pulse.toString(),
-    (pattern) => pattern
+    (pattern) => int.tryParse(pattern)
   );
   static final NativeColumn notes = NativeColumn._create(
     'notes',
