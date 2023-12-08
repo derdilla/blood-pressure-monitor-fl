@@ -28,6 +28,7 @@ class CsvConverter {
         (column) => column.encode(record)
       ).toList()
     ).toList();
+    table.insert(0, columns.map((c) => c.csvTitle).toList());
 
     final csvCreator = ListToCsvConverter(
         fieldDelimiter: settings.fieldDelimiter,
@@ -55,7 +56,7 @@ class CsvConverter {
         if (csvLines.length < 2) return converter.convert(csvString, eol: '\n');
         return csvLines;
     }();
-    if (lines.length < 2) return RecordParsingResult.err(RecordParsingErrorType.emptyFile);
+    if (lines.length < 2) return RecordParsingResult.err(RecordParsingErrorEmptyFile());
 
     // Get and validate columns from csv title.
     final List<ExportColumn> columns = [];
@@ -64,26 +65,27 @@ class CsvConverter {
       final column = availableColumns.firstWhere(
               (c) => c.csvTitle == titleText
                   && c.restoreAbleType != null);
-      if (column == null) return RecordParsingResult.err(RecordParsingErrorType.unknownColumn);
+      if (column == null) return RecordParsingResult.err(RecordParsingErrorUnknownColumn(titleText));
       columns.add(column);
     }
     if (columns.where((e) => e.restoreAbleType == RowDataFieldType.timestamp).isEmpty) {
-      return RecordParsingResult.err(RecordParsingErrorType.timeNotRestoreable);
+      return RecordParsingResult.err(RecordParsingErrorTimeNotRestoreable());
     }
 
     // Convert data to records.
     final List<BloodPressureRecord> records = [];
+    int currentLineNumber = 1;
     for (final currentLine in lines) {
       if (currentLine.length < columns.length) {
-        return RecordParsingResult.err(RecordParsingErrorType.expectedMoreFields);
+        return RecordParsingResult.err(RecordParsingErrorExpectedMoreFields(currentLineNumber));
       }
       
       final List<(RowDataFieldType, dynamic)> recordPieces = [];
-      for (int idx = 0; idx < columns.length; idx++) {
-        assert(currentLine[idx] is String);
-        final piece = columns[idx].decode(currentLine[idx]);
-        if (piece?.$1 != columns[idx].restoreAbleType) { // validation
-          return RecordParsingResult.err(RecordParsingErrorType.unparsableField);
+      for (int fieldIndex = 0; fieldIndex < columns.length; fieldIndex++) {
+        assert(currentLine[fieldIndex] is String);
+        final piece = columns[fieldIndex].decode(currentLine[fieldIndex]);
+        if (piece?.$1 != columns[fieldIndex].restoreAbleType) { // validation
+          return RecordParsingResult.err(RecordParsingErrorUnparsableField(currentLineNumber, currentLine[fieldIndex]));
         }
         if (piece != null) recordPieces.add(piece);
       }
@@ -107,6 +109,7 @@ class CsvConverter {
       }
 
       records.add(BloodPressureRecord(timestamp, sys, dia, pul, note, needlePin: needlePin));
+      currentLineNumber++;
     }
     
     assert(records.length == lines.length, 'every line should have been parse'); // first line got removed
