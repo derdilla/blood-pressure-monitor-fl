@@ -34,14 +34,22 @@ class RecordParsingResult {
   }
 }
 
+// TODO: consider converting to sealed class to allow passing error details.
 /// Indicates what type error occurred while trying to decode a csv data.
 enum RecordParsingErrorType {
   /// There are not enough lines in the csv file to parse the record.
   emptyFile,
 
-  formatNotReversible,
+  /// There is no column with this csv title that can be reversed.
+  unknownColumn,
 
-  /// There is no column with this csv title.
-  unknownColumn
+  /// The current line has less fields than the first line.
+  expectedMoreFields,
+
+  /// There is no column that allows restoring a timestamp.
+  timeNotRestoreable,
+
+  /// The corresponding column couldn't decode a specific field in the csv file.
+  unparsableField,
   // TODO ...
 }

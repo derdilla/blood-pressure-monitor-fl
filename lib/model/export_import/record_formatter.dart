@@ -38,7 +38,6 @@ class ScriptedFormatter implements Formatter {
 
   @override
   (RowDataFieldType, dynamic)? decode(String formattedRecord) {
-    print('$pattern.decode($formattedRecord)');
     if (restoreAbleType == null) return null;
 
     final valueRegex = RegExp(pattern.replaceAll(RegExp(r'\$(TIMESTAMP|COLOR|SYS|DIA|PUL|NOTE)'), '(?<value>.*)'),);

@@ -95,6 +95,7 @@ enum RowDataFieldType {
   /// Guarantees [String] is returned.
   notes,
   @Deprecated('use needlePin instead') // TODO: implement conversion to needle pin?
+  /// Guarantees [Color] is returned.
   color,
   /// Guarantees that the returned type is of type [MeasurementNeedlePin].
   needlePin;  // TODO implement in ScriptedFormatter

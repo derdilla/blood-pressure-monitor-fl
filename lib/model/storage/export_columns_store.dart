@@ -41,13 +41,23 @@ class ExportColumnsManager extends ChangeNotifier { // TODO: separate ExportColu
     notifyListeners();
   }
 
+  // TODO test
   /// Get any defined column (user or build in) by identifier.
-  ExportColumn? getColumn(String identifier) {// TODO test
-    return userColumns[identifier]
-        ?? NativeColumn.allColumns.where(
-            (c) => c.internalIdentifier == identifier).firstOrNull
-        ?? BuildInColumn.allColumns.where(
-                (c) => c.internalIdentifier == identifier).firstOrNull; // ?? ...
+  ExportColumn? getColumn(String identifier) => 
+      firstWhere((c) => c.internalIdentifier == identifier);
+  
+  // TODO test
+  /// Get the first of column that satisfies [test].
+  /// 
+  /// Checks in the order: 
+  /// 1. userColumns 
+  /// 2. NativeColumn 
+  /// 3. BuildInColumn
+  ExportColumn? firstWhere(bool Function(ExportColumn) test) {
+    return userColumns.values.where(test).firstOrNull
+        ?? NativeColumn.allColumns.where(test).firstOrNull
+        ?? BuildInColumn.allColumns.where(test).firstOrNull; 
+        // ?? ...
   }
 
   String toJson() { // TODO: update from and TO json to new style
