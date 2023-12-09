@@ -29,8 +29,7 @@ class CsvConverter {
       ).toList()
     ).toList();
 
-    // TODO: reimplement setting for disabling headline
-    table.insert(0, columns.map((c) => c.csvTitle).toList());
+    if (settings.exportHeadline) table.insert(0, columns.map((c) => c.csvTitle).toList());
 
     final csvCreator = ListToCsvConverter(
         fieldDelimiter: settings.fieldDelimiter,

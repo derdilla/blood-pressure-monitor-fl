@@ -22,6 +22,16 @@ void main() {
       expect(csv, stringContainsInOrder(columns.map((e) => e.csvTitle).toList()));
     });
 
+    test('should not create first line when setting is off', () {
+      final converter = CsvConverter(
+          CsvExportSettings(exportHeadline: false),
+          ExportColumnsManager()
+      );
+      final csv = converter.create([]);
+      final columns = CsvExportSettings().exportFieldsConfiguration.getActiveColumns(ExportColumnsManager());
+      expect(csv, isNot(stringContainsInOrder(columns.map((e) => e.csvTitle).toList())));
+    });
+
     test('should be able to recreate records from csv in default configuration', () {
       final converter = CsvConverter(CsvExportSettings(), ExportColumnsManager());
       final initialRecords = createRecords();
