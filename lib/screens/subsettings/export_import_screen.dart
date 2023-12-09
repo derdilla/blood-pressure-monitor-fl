@@ -1,13 +1,19 @@
+import 'dart:convert';
+
 import 'package:blood_pressure_app/components/consistent_future_builder.dart';
 import 'package:blood_pressure_app/components/diabled.dart';
 import 'package:blood_pressure_app/components/display_interval_picker.dart';
 import 'package:blood_pressure_app/components/settings/settings_widgets.dart';
 import 'package:blood_pressure_app/model/blood_pressure.dart';
 import 'package:blood_pressure_app/model/export_import.dart';
+import 'package:blood_pressure_app/model/export_import/csv_converter.dart';
 import 'package:blood_pressure_app/model/export_import/export_configuration.dart';
 import 'package:blood_pressure_app/model/export_import/legacy_column.dart';
+import 'package:blood_pressure_app/model/export_import/record_parsing_result.dart';
 import 'package:blood_pressure_app/model/export_options.dart';
+import 'package:blood_pressure_app/model/storage/export_columns_store.dart';
 import 'package:blood_pressure_app/model/storage/storage.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:jsaver/jSaver.dart';
@@ -256,8 +262,66 @@ class ExportImportButtons extends StatelessWidget {
                 child: MaterialButton(
                   height: 60,
                   child: Text(localizations.import),
-                  onPressed: () async =>
-                      Exporter.load(context, [], await ExportConfigurationModel.get(localizations)).import(),
+                  onPressed: () async {
+                    final messenger = ScaffoldMessenger.of(context);
+
+                    final file = (await FilePicker.platform.pickFiles(
+                      allowMultiple: false,
+                      withData: true,
+                    ))?.files.firstOrNull;
+                    if (file == null) {
+                      showError(messenger, localizations.errNoFileOpened);
+                      return;
+                    }
+                    if (!context.mounted) return;
+                    switch(file.extension?.toLowerCase()) {
+                      case 'csv':
+                        final binaryContent = file.bytes;
+                        if (binaryContent == null) {
+                          showError(messenger, localizations.errCantReadFile);
+                          return;
+                        }
+                        final converter = CsvConverter(
+                          Provider.of<CsvExportSettings>(context, listen: false),
+                          Provider.of<ExportColumnsManager>(context, listen: false),
+                        );
+                        final result = converter.parse(utf8.decode(binaryContent));
+                        final importedRecords = result.getOr((error) {
+                          switch (error) {
+                            case RecordParsingErrorEmptyFile():
+                              showError(messenger, localizations.errParseEmptyCsvFile);
+                              break;
+                            case RecordParsingErrorTimeNotRestoreable():
+                              showError(messenger, localizations.errParseTimeNotRestoreable);
+                              break;
+                            case RecordParsingErrorUnknownColumn():
+                              showError(messenger, localizations.errParseUnknownColumn(error.title));
+                              break;
+                            case RecordParsingErrorExpectedMoreFields():
+                              showError(messenger, localizations.errParseLineTooShort(error.lineNumber));
+                              break;
+                            case RecordParsingErrorUnparsableField():
+                              showError(messenger, localizations.errParseFailedDecodingField(
+                                  error.lineNumber, error.fieldContents));
+                              break;
+                          }
+                          return null;
+                        });
+                        if (result.hasError()) return;
+                        final model = Provider.of<BloodPressureModel>(context, listen: false);
+                        for (final record in importedRecords) { // TODO: background thread
+                          await model.add(record);
+                        }
+                        messenger.showSnackBar(SnackBar(content: Text(
+                            localizations.importSuccess(importedRecords.length))));
+                        break;
+                      case 'db':
+                        // TODO
+                        break;
+                      default:
+                        showError(messenger, localizations.errWrongImportFormat);
+                    }
+                  },
                 )
             ),
           ],
@@ -265,6 +329,10 @@ class ExportImportButtons extends StatelessWidget {
       ),
     );
   }
+
+  void showError(ScaffoldMessengerState messenger, String text) =>
+    messenger.showSnackBar(SnackBar(content: Text(text)));
+
 }
 
 class ExportWarnBanner extends StatefulWidget {

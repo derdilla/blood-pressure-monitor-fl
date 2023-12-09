@@ -28,7 +28,7 @@ extension PdfCompatability on Color {
   PdfColor toPdfColor() => PdfColor(red / 256, green / 256, blue / 256, opacity);
 }
 
-// TODO: more testing
+@Deprecated('replaced with export_import directory')
 class ExportFileCreator {
   final Settings settings;
   final ExportSettings exportSettings;
@@ -251,6 +251,7 @@ class ExportFileCreator {
   }
 }
 
+@Deprecated('replaced with export_import directory')
 class Exporter {
   final Iterable<BloodPressureRecord> data;
   final Settings settings;

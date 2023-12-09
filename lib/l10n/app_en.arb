@@ -439,5 +439,36 @@
   "needlePinBarWidth": "Color thickness",
   "@needlePinBarWidth": {},
   "needlePinBarWidthDesc": "The width of the lines colored entries make on the graph.",
-  "@needlePinBarWidthDesc": {}
+  "@needlePinBarWidthDesc": {},
+  "errParseEmptyCsvFile": "There are not enough lines in the csv file to parse the record.",
+  "@errParseEmptyCsvFile": {},
+  "errParseTimeNotRestoreable": "There is no column that allows restoring a timestamp.",
+  "@errParseTimeNotRestoreable": {},
+  "errParseUnknownColumn": "There is no column with title \"{title}\".",
+  "@errParseUnknownColumn": {
+    "placeholders": {
+      "title": {
+        "type": "String"
+      }
+    }
+  },
+  "errParseLineTooShort": "Line {lineNumber} has fewer columns than the first line.",
+  "@errParseLineTooShort": {
+    "placeholders": {
+      "lineNumber": {
+        "type": "int"
+      }
+    }
+  },
+  "errParseFailedDecodingField": "Decoding field \"{fieldContent}\" in line {lineNumber} failed.",
+  "@errParseFailedDecodingField": {
+    "placeholders": {
+      "lineNumber": {
+        "type": "int"
+      },
+      "fieldContent": {
+        "type": "String"
+      }
+    }
+  }
 }

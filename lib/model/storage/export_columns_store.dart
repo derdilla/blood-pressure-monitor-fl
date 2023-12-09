@@ -46,7 +46,7 @@ class ExportColumnsManager extends ChangeNotifier { // TODO: separate ExportColu
   ExportColumn? getColumn(String identifier) => 
       firstWhere((c) => c.internalIdentifier == identifier);
   
-  // TODO test
+  // TODO test / fix
   /// Get the first of column that satisfies [test].
   /// 
   /// Checks in the order: 
