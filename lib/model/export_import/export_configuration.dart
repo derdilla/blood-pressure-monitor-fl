@@ -51,14 +51,7 @@ class ActiveExportColumnConfiguration extends ChangeNotifier {
   UnmodifiableListView<ExportColumn> getActiveColumns(ExportColumnsManager availableColumns) => UnmodifiableListView(
     switch (_activePreset) {
       ExportImportPreset.none => _userSelectedColumns.map((e) => availableColumns.getColumn(e)).whereNotNull(),
-      ExportImportPreset.bloodPressureApp => [
-        NativeColumn.timestamp,
-        NativeColumn.systolic,
-        NativeColumn.diastolic,
-        NativeColumn.pulse,
-        NativeColumn.notes,
-        NativeColumn.color,
-      ],
+      ExportImportPreset.bloodPressureApp => NativeColumn.allColumns,
       ExportImportPreset.myHeart => [
         BuildInColumn.mhDate,
         BuildInColumn.mhSys,
@@ -79,6 +72,8 @@ enum ExportImportPreset {
   none,
 
   /// Default preset, that ensures working exports and restoration.
+  ///
+  /// All [NativeColumn]s.
   bloodPressureApp,
   myHeart;
 

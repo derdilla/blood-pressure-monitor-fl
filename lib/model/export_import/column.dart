@@ -8,64 +8,60 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 /// Converters for [BloodPressureRecord] attributes.
 class NativeColumn extends ExportColumn {
-  NativeColumn._create(this._csvTitle, this._restoreableType, this._encode, this._decode) {
-    allColumns.add(this);
-  }
-  static final List<NativeColumn> allColumns = [];
-  
-  final String _csvTitle;
-  final RowDataFieldType _restoreableType;
-  final String Function(BloodPressureRecord record) _encode;
-  final Object? Function(String pattern) _decode;
-  
-  static final NativeColumn timestamp = NativeColumn._create(
-    'timestampUnixMs',
-    RowDataFieldType.timestamp,
-    (record) => record.creationTime.millisecondsSinceEpoch.toString(),
-    (pattern) {
-      final value = int.tryParse(pattern);
-      return (value == null) ? null : DateTime.fromMillisecondsSinceEpoch(value);
-    }
-  );
-  static final NativeColumn systolic = NativeColumn._create(
-    'systolic',
-    RowDataFieldType.sys,
-    (record) => record.systolic.toString(),
-    (pattern) => int.tryParse(pattern)
-  );
-  static final NativeColumn diastolic = NativeColumn._create(
-    'diastolic',
-    RowDataFieldType.dia,
-    (record) => record.diastolic.toString(),
-    (pattern) => int.tryParse(pattern)
-  );
-  static final NativeColumn pulse = NativeColumn._create(
-    'pulse',
-    RowDataFieldType.pul,
-    (record) => record.pulse.toString(),
-    (pattern) => int.tryParse(pattern)
-  );
-  static final NativeColumn notes = NativeColumn._create(
-    'notes',
-    RowDataFieldType.notes,
-    (record) => record.notes,
-    (pattern) => pattern
-  );
-  static final NativeColumn color = NativeColumn._create(
-    'color',
-    RowDataFieldType.needlePin,
-    (record) => record.needlePin?.color.value.toString() ?? '',
-    (pattern) {
-      final value = int.tryParse(pattern);
-      if (value == null) return null;
-      return MeasurementNeedlePin(Color(value));
-    }
-  );
-  static final NativeColumn needlePin = NativeColumn._create(
+  NativeColumn._create(this._csvTitle, this._restoreableType, this._encode, this._decode);
+
+  /// All native columns that exist.
+  ///
+  /// They are all part of [ExportImportPreset.bloodPressureApp].
+  static final List<NativeColumn> allColumns = [
+    NativeColumn._create(
+      'timestampUnixMs',
+      RowDataFieldType.timestamp,
+          (record) => record.creationTime.millisecondsSinceEpoch.toString(),
+          (pattern) {
+        final value = int.tryParse(pattern);
+        return (value == null) ? null : DateTime.fromMillisecondsSinceEpoch(value);
+      }
+    ),
+    NativeColumn._create(
+      'systolic',
+      RowDataFieldType.sys,
+      (record) => record.systolic.toString(),
+      (pattern) => int.tryParse(pattern)
+    ),
+    NativeColumn._create(
+      'diastolic',
+      RowDataFieldType.dia,
+      (record) => record.diastolic.toString(),
+      (pattern) => int.tryParse(pattern)
+    ),
+    NativeColumn._create(
+      'pulse',
+      RowDataFieldType.pul,
+      (record) => record.pulse.toString(),
+      (pattern) => int.tryParse(pattern)
+    ),
+    NativeColumn._create(
+      'notes',
+      RowDataFieldType.notes,
+      (record) => record.notes,
+      (pattern) => pattern
+    ),
+    NativeColumn._create(
+      'color',
+      RowDataFieldType.needlePin,
+          (record) => record.needlePin?.color.value.toString() ?? '',
+          (pattern) {
+        final value = int.tryParse(pattern);
+        if (value == null) return null;
+        return MeasurementNeedlePin(Color(value));
+      }
+    ),
+    NativeColumn._create(
       'needlePin',
       RowDataFieldType.needlePin,
-      (record) => jsonEncode(record.needlePin?.toJson()),
-      (pattern) {
+          (record) => jsonEncode(record.needlePin?.toJson()),
+          (pattern) {
         final json = jsonDecode(pattern);
         if (json is! Map<String, dynamic>) return null;
         try {
@@ -74,7 +70,13 @@ class NativeColumn extends ExportColumn {
           return null;
         }
       }
-  );
+    )
+  ];
+  
+  final String _csvTitle;
+  final RowDataFieldType _restoreableType;
+  final String Function(BloodPressureRecord record) _encode;
+  final Object? Function(String pattern) _decode;
 
   @override
   String get csvTitle => _csvTitle;
@@ -107,11 +109,19 @@ class NativeColumn extends ExportColumn {
 /// Useful columns that are present by default and recreatable through a formatPattern.
 class BuildInColumn extends ExportColumn {
   /// Creates a build in column and adds it to allColumns.
-  BuildInColumn._create(this.internalIdentifier, this.csvTitle, String formatString, this._userTitle) {
-    allColumns.add(this);
-  }
+  BuildInColumn._create(this.internalIdentifier, this.csvTitle, String formatString, this._userTitle);
   
-  static final List<BuildInColumn> allColumns = [];
+  static final List<BuildInColumn> allColumns = [
+    pulsePressure,
+    mhDate,
+    mhSys,
+    mhDia,
+    mhPul,
+    mhDesc,
+    mhTags,
+    mhWeight,
+    mhOxygen,
+  ];
   
   static final pulsePressure = BuildInColumn._create(
       'buildin.pulsePressure',
