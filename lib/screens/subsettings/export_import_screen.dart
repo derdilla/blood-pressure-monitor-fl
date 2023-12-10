@@ -316,7 +316,11 @@ class ExportImportButtons extends StatelessWidget {
                             localizations.importSuccess(importedRecords.length))));
                         break;
                       case 'db':
-                        // TODO
+                        final model = Provider.of<BloodPressureModel>(context, listen: false);
+                        final importedModel = await BloodPressureModel.create(dbPath: file.path, isFullPath: true);
+                        for (final record in await importedModel.all) {
+                          await model.add(record);
+                        }
                         break;
                       default:
                         showError(messenger, localizations.errWrongImportFormat);
