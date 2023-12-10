@@ -1,23 +1,27 @@
 import 'dart:convert';
+import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:blood_pressure_app/components/consistent_future_builder.dart';
 import 'package:blood_pressure_app/components/diabled.dart';
 import 'package:blood_pressure_app/components/display_interval_picker.dart';
 import 'package:blood_pressure_app/components/settings/settings_widgets.dart';
 import 'package:blood_pressure_app/model/blood_pressure.dart';
-import 'package:blood_pressure_app/model/export_import.dart';
 import 'package:blood_pressure_app/model/export_import/csv_converter.dart';
 import 'package:blood_pressure_app/model/export_import/export_configuration.dart';
 import 'package:blood_pressure_app/model/export_import/legacy_column.dart';
+import 'package:blood_pressure_app/model/export_import/pdf_converter.dart';
 import 'package:blood_pressure_app/model/export_import/record_parsing_result.dart';
 import 'package:blood_pressure_app/model/export_options.dart';
 import 'package:blood_pressure_app/model/storage/export_columns_store.dart';
 import 'package:blood_pressure_app/model/storage/storage.dart';
+import 'package:blood_pressure_app/platform_integration/platform_client.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:jsaver/jSaver.dart';
 import 'package:provider/provider.dart';
+import 'package:sqflite/sqflite.dart';
 
 class ExportImportScreen extends StatelessWidget {
   const ExportImportScreen({super.key});
@@ -247,13 +251,33 @@ class ExportImportButtons extends StatelessWidget {
                   height: 60,
                   child: Text(localizations.export),
                   onPressed: () async {
-                    final model = Provider.of<BloodPressureModel>(context, listen: false);
-                    final interval = Provider.of<IntervallStoreManager>(context, listen: false).exportPage.currentRange;
+                    final exportSettings = Provider.of<ExportSettings>(context, listen: false);
+                    final filename = 'blood_press_${DateTime.now().toIso8601String()}';
+                    switch (exportSettings.exportFormat) {
+                      case ExportFormat.db:
+                        final path = joinPath(await getDatabasesPath(), 'blood_pressure.db');
 
-                    Exporter.load(context,
-                        await model.getInTimeRange(interval.start, interval.end),
-                        await ExportConfigurationModel.get(localizations)
-                    ).export();
+                        if (context.mounted) _exportFile(context, path, '$filename.db', 'text/db');
+                        break;
+                      case ExportFormat.csv:
+                        final csvConverter = CsvConverter(
+                          Provider.of<CsvExportSettings>(context, listen: false),
+                          Provider.of<ExportColumnsManager>(context, listen: false),
+                        );
+                        final csvString = csvConverter.create(await _getRecords(context));
+                        final data = Uint8List.fromList(utf8.encode(csvString));
+                        if (context.mounted) _exportData(context, data, '$filename.csv', 'text/csv');
+                        break;
+                      case ExportFormat.pdf:
+                        final pdfConverter = PdfConverter(
+                            Provider.of<PdfExportSettings>(context, listen: false), 
+                            localizations,
+                            Provider.of<Settings>(context, listen: false),
+                            Provider.of<ExportColumnsManager>(context, listen: false)
+                        );
+                        final pdf = await pdfConverter.create(await _getRecords(context));
+                        if (context.mounted) _exportData(context, pdf, '$filename.pdf', 'text/pdf');
+                    }
                   }
                 )),
             const VerticalDivider(),
@@ -270,7 +294,7 @@ class ExportImportButtons extends StatelessWidget {
                       withData: true,
                     ))?.files.firstOrNull;
                     if (file == null) {
-                      showError(messenger, localizations.errNoFileOpened);
+                      _showError(messenger, localizations.errNoFileOpened);
                       return;
                     }
                     if (!context.mounted) return;
@@ -278,7 +302,7 @@ class ExportImportButtons extends StatelessWidget {
                       case 'csv':
                         final binaryContent = file.bytes;
                         if (binaryContent == null) {
-                          showError(messenger, localizations.errCantReadFile);
+                          _showError(messenger, localizations.errCantReadFile);
                           return;
                         }
                         final converter = CsvConverter(
@@ -289,19 +313,19 @@ class ExportImportButtons extends StatelessWidget {
                         final importedRecords = result.getOr((error) {
                           switch (error) {
                             case RecordParsingErrorEmptyFile():
-                              showError(messenger, localizations.errParseEmptyCsvFile);
+                              _showError(messenger, localizations.errParseEmptyCsvFile);
                               break;
                             case RecordParsingErrorTimeNotRestoreable():
-                              showError(messenger, localizations.errParseTimeNotRestoreable);
+                              _showError(messenger, localizations.errParseTimeNotRestoreable);
                               break;
                             case RecordParsingErrorUnknownColumn():
-                              showError(messenger, localizations.errParseUnknownColumn(error.title));
+                              _showError(messenger, localizations.errParseUnknownColumn(error.title));
                               break;
                             case RecordParsingErrorExpectedMoreFields():
-                              showError(messenger, localizations.errParseLineTooShort(error.lineNumber));
+                              _showError(messenger, localizations.errParseLineTooShort(error.lineNumber));
                               break;
                             case RecordParsingErrorUnparsableField():
-                              showError(messenger, localizations.errParseFailedDecodingField(
+                              _showError(messenger, localizations.errParseFailedDecodingField(
                                   error.lineNumber, error.fieldContents));
                               break;
                           }
@@ -323,7 +347,7 @@ class ExportImportButtons extends StatelessWidget {
                         }
                         break;
                       default:
-                        showError(messenger, localizations.errWrongImportFormat);
+                        _showError(messenger, localizations.errWrongImportFormat);
                     }
                   },
                 )
@@ -334,9 +358,42 @@ class ExportImportButtons extends StatelessWidget {
     );
   }
 
-  void showError(ScaffoldMessengerState messenger, String text) =>
+  void _showError(ScaffoldMessengerState messenger, String text) =>
     messenger.showSnackBar(SnackBar(content: Text(text)));
+  
+  /// Get the records that should be exported.
+  Future<List<BloodPressureRecord>> _getRecords(BuildContext context) {
+    final range = Provider.of<IntervallStoreManager>(context, listen: false).exportPage.currentRange;
+    final model = Provider.of<BloodPressureModel>(context, listen: false);
+    return model.getInTimeRange(range.start, range.end);
+  }
+  
+  /// Save to default export path or share by providing a path. 
+  Future<void> _exportFile(BuildContext context, String path, String fullFileName, String mimeType) async {
+    final settings = Provider.of<ExportSettings>(context, listen: false);
+    if (settings.defaultExportDir.isEmpty) {
+      await PlatformClient.shareFile(path, mimeType, fullFileName);
+    } else {
+      JSaver.instance.save(
+          fromPath: path,
+          androidPathOptions: AndroidPathOptions(toDefaultDirectory: true)
+      );
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(AppLocalizations.of(context)!.success(settings.defaultExportDir))));
+    }
+  }
 
+  /// Save to default export path or share by providing binary data.
+  Future<void> _exportData(BuildContext context, Uint8List data, String fullFileName, String mimeType) async {
+    final settings = Provider.of<ExportSettings>(context, listen: false);
+    if (settings.defaultExportDir.isEmpty) {
+      await PlatformClient.shareData(data, mimeType, fullFileName);
+    } else {
+      final file = File(joinPath(Directory.systemTemp.path, fullFileName));
+      file.writeAsBytesSync(data);
+      await _exportFile(context, file.path, fullFileName, mimeType);
+    }
+  }
 }
 
 class ExportWarnBanner extends StatefulWidget {

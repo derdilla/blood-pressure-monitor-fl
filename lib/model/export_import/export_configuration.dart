@@ -51,7 +51,7 @@ class ActiveExportColumnConfiguration extends ChangeNotifier {
   UnmodifiableListView<ExportColumn> getActiveColumns(ExportColumnsManager availableColumns) => UnmodifiableListView(
     switch (_activePreset) {
       ExportImportPreset.none => _userSelectedColumns.map((e) => availableColumns.getColumn(e)).whereNotNull(),
-      ExportImportPreset.bloodPressureApp => NativeColumn.allColumns,
+      ExportImportPreset.bloodPressureApp => NativeColumn.allColumns, // FIXME: not color AND needlePin
       ExportImportPreset.myHeart => [
         BuildInColumn.mhDate,
         BuildInColumn.mhSys,
