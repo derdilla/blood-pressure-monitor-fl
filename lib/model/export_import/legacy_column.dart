@@ -4,7 +4,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 /// Convert [BloodPressureRecord]s from and to strings and provide metadata about the conversion.
 @Deprecated("repaced by class in column.dart")
-class LegacyExportColumn { // TODO: change this class so it implements the interface.
+class LegacyExportColumn { // TODO: delete
   /// Create object that turns data into strings.
   ///
   /// Example: ExportColumn(internalColumnName: 'pulsePressure', columnTitle: 'Pulse pressure', formatPattern: '{{$SYS-$DIA}}')

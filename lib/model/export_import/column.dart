@@ -14,7 +14,15 @@ class NativeColumn extends ExportColumn {
   ///
   /// They are all part of [ExportImportPreset.bloodPressureApp].
   static final List<NativeColumn> allColumns = [
-    NativeColumn._create(
+    timestampUnixMs,
+    systolic,
+    diastolic,
+    pulse,
+    notes,
+    color,
+    needlePin,
+  ];
+  static final NativeColumn timestampUnixMs = NativeColumn._create(
       'timestampUnixMs',
       RowDataFieldType.timestamp,
           (record) => record.creationTime.millisecondsSinceEpoch.toString(),
@@ -22,46 +30,46 @@ class NativeColumn extends ExportColumn {
         final value = int.tryParse(pattern);
         return (value == null) ? null : DateTime.fromMillisecondsSinceEpoch(value);
       }
-    ),
-    NativeColumn._create(
+    );
+    static final NativeColumn systolic = NativeColumn._create(
       'systolic',
       RowDataFieldType.sys,
       (record) => record.systolic.toString(),
       (pattern) => int.tryParse(pattern)
-    ),
-    NativeColumn._create(
+    );
+    static final NativeColumn diastolic = NativeColumn._create(
       'diastolic',
       RowDataFieldType.dia,
       (record) => record.diastolic.toString(),
       (pattern) => int.tryParse(pattern)
-    ),
-    NativeColumn._create(
+    );
+    static final NativeColumn pulse = NativeColumn._create(
       'pulse',
       RowDataFieldType.pul,
       (record) => record.pulse.toString(),
       (pattern) => int.tryParse(pattern)
-    ),
-    NativeColumn._create(
+    );
+    static final NativeColumn notes = NativeColumn._create(
       'notes',
       RowDataFieldType.notes,
       (record) => record.notes,
       (pattern) => pattern
-    ),
-    NativeColumn._create(
+    );
+    static final NativeColumn color = NativeColumn._create(
       'color',
       RowDataFieldType.needlePin,
-          (record) => record.needlePin?.color.value.toString() ?? '',
-          (pattern) {
+      (record) => record.needlePin?.color.value.toString() ?? '',
+      (pattern) {
         final value = int.tryParse(pattern);
         if (value == null) return null;
         return MeasurementNeedlePin(Color(value));
       }
-    ),
-    NativeColumn._create(
+    );
+    static final NativeColumn needlePin = NativeColumn._create(
       'needlePin',
       RowDataFieldType.needlePin,
-          (record) => jsonEncode(record.needlePin?.toJson()),
-          (pattern) {
+      (record) => jsonEncode(record.needlePin?.toJson()),
+      (pattern) {
         final json = jsonDecode(pattern);
         if (json is! Map<String, dynamic>) return null;
         try {
@@ -70,8 +78,8 @@ class NativeColumn extends ExportColumn {
           return null;
         }
       }
-    )
-  ];
+    );
+
   
   final String _csvTitle;
   final RowDataFieldType _restoreableType;
