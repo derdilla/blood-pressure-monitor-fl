@@ -7,6 +7,7 @@ import 'package:blood_pressure_app/components/diabled.dart';
 import 'package:blood_pressure_app/components/display_interval_picker.dart';
 import 'package:blood_pressure_app/components/settings/settings_widgets.dart';
 import 'package:blood_pressure_app/model/blood_pressure.dart';
+import 'package:blood_pressure_app/model/export_import/column.dart';
 import 'package:blood_pressure_app/model/export_import/csv_converter.dart';
 import 'package:blood_pressure_app/model/export_import/export_configuration.dart';
 import 'package:blood_pressure_app/model/export_import/legacy_column.dart';
@@ -106,9 +107,6 @@ class ExportImportScreen extends StatelessWidget {
                           csvExportSettings.exportHeadline = value;
                         }
                       ),
-                      ExportFieldCustomisationSetting(
-                        fieldsSettings: csvExportSettings,
-                      ),
                     ],
                   )
                 ),
@@ -165,14 +163,14 @@ class ExportImportScreen extends StatelessWidget {
                                 pdfExportSettings.cellFontSize = value;
                               },
                             ),
-                            ExportFieldCustomisationSetting(
-                              fieldsSettings: pdfExportSettings,
-                            ),
                           ],
                         ),
                     ]
                   )
                 ),
+              ExportFieldCustomisationSetting(
+                format: settings.exportFormat,
+              ),
             ],
           ),
         );
@@ -182,52 +180,96 @@ class ExportImportScreen extends StatelessWidget {
   }
 }
 
-class ExportFieldCustomisationSetting extends StatelessWidget {
-  const ExportFieldCustomisationSetting({super.key, required this.fieldsSettings});
+class ExportFieldCustomisationSetting extends StatelessWidget { // TODO: consider extracting class into file
+  const ExportFieldCustomisationSetting({super.key,
+    required this.format,});
 
-  final CustomFieldsSettings fieldsSettings;
+  final ExportFormat format;
 
   @override
-  Widget build(BuildContext context) {
-    final localizations = AppLocalizations.of(context)!;
-    return ConsistentFutureBuilder(
-      future: ExportConfigurationModel.get(localizations),
-      lastChildWhileWaiting: true,
-      onData: (context, configurationModel) {
-        return const Text('TODO - ExportFieldCustomisationSetting');
-        /* TODO: rewrite with dropdown and reorderable list view, consider extracting this class into file
-        return Consumer<ExportSettings>(builder: (context, settings, child) {
-          final formats = configurationModel.availableFormats.toSet();
-          List<ExportColumn> activeFields = configurationModel
-              .getActiveExportColumns(settings.exportFormat, fieldsSettings);
-          List<ExportColumn> hiddenFields = [];
-          for (final internalName in fieldsSettings.customFields) {
-            formats.removeWhere((e) => e.internalName == internalName);
-          }
-          hiddenFields = formats.toList();
+  Widget build(BuildContext context) => switch (format) {
+      ExportFormat.csv => Consumer<CsvExportSettings>(builder: _builder),
+      ExportFormat.pdf => Consumer<PdfExportSettings>(builder: _builder),
+      ExportFormat.db => const SizedBox.shrink()
+    };
 
-          return Column(
-            children: [
-              SwitchListTile(
-                title: Text(localizations.exportCustomEntries),
-                value: fieldsSettings.exportCustomFields,
-                onChanged: (value) {
-                  fieldsSettings.exportCustomFields = value;
-                }
-              ),
-              if (fieldsSettings.exportCustomFields)
-                ExportItemsCustomizer(
-                  shownItems: activeFields,
-                  disabledItems: hiddenFields,
-                  onReorder: (exportItems, exportAddableItems) {
-                    fieldsSettings.customFields = exportItems.map((e) => e.internalName).toList();
-                  },
-                ),
-            ],
-          );
-        });
-       */
-      }
+  Widget _builder(BuildContext context, CustomFieldsSettings settings, Widget? child) {
+    final localizations = AppLocalizations.of(context)!;
+    final fieldsConfig = settings.exportFieldsConfiguration;
+    final dropdown = DropDownListTile(
+      title: Text(localizations.exportFieldsPreset),
+      value: fieldsConfig.activePreset,
+      items: ExportImportPreset.values.map(
+              (e) => DropdownMenuItem(
+            value: e,
+            child: Text(e.localize(localizations)),
+          )
+      ).toList(),
+      onChanged: (selectedPreset) {
+        if (selectedPreset != null) {
+          fieldsConfig.activePreset = selectedPreset;
+        }
+      },
+    );
+
+    if (fieldsConfig.activePreset != ExportImportPreset.none) {
+      return dropdown;
+    }
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+        children: [
+          dropdown,
+          Container(
+            margin: const EdgeInsets.all(16),
+            height: 400,
+            decoration: BoxDecoration(
+              border: Border.all(color: Theme.of(context).textTheme.labelLarge?.color ?? Colors.teal),
+              borderRadius: const BorderRadius.all(Radius.circular(10)),
+            ),
+            child: Consumer<ExportColumnsManager>(
+              builder: (context, availableColumns, child) {
+                final activeColumns = fieldsConfig.getActiveColumns(availableColumns);
+                return ReorderableListView.builder(
+                    itemBuilder: (context, idx) {
+                      if (idx >= activeColumns.length) {
+                        return ListTile(
+                          key: const Key('add field'),
+                          leading: const Icon(Icons.add),
+                          title: Text(localizations.addEntry),
+                          onTap: () async {
+                            final column = await showDialog<ExportColumn?>(context: context, builder: (context) =>
+                              SimpleDialog(
+                                title: Text(localizations.addEntry),
+                                insetPadding: EdgeInsets.symmetric(
+                                  vertical: 64,
+                                ),
+                                children: availableColumns.getAllColumns().map((column) =>
+                                  ListTile(
+                                    title: Text(column.userTitle(localizations)),
+                                    onTap: () => Navigator.of(context).pop(column),
+                                  )
+                                ).toList(),
+                              )
+                            );
+                            if (column != null) fieldsConfig.addUserColumn(column);
+                          },
+                        );
+                      }
+                      return ListTile(
+                        key: Key(activeColumns[idx].internalIdentifier + idx.toString()),
+                        title: Text(activeColumns[idx].userTitle(localizations)),
+                        trailing: const Icon(Icons.drag_handle),
+                        // TODO: removing columns
+                      );
+                    },
+                    itemCount: activeColumns.length + 1,
+                    onReorder: fieldsConfig.reorderUserColumns
+                );
+              }
+            ),
+          )
+          // TODO implement adding / editing columns => separate ColumnsManagerScreen ?
+        ],
     );
   }
 }

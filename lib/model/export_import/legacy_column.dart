@@ -4,11 +4,11 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 /// Convert [BloodPressureRecord]s from and to strings and provide metadata about the conversion.
 @Deprecated("repaced by class in column.dart")
-class ExportColumn { // TODO: change this class so it implements the interface.
+class LegacyExportColumn { // TODO: change this class so it implements the interface.
   /// Create object that turns data into strings.
   ///
   /// Example: ExportColumn(internalColumnName: 'pulsePressure', columnTitle: 'Pulse pressure', formatPattern: '{{$SYS-$DIA}}')
-  ExportColumn({required this.internalName, required this.columnTitle, required String formatPattern, this.editable = true, this.hidden = false}) {
+  LegacyExportColumn({required this.internalName, required this.columnTitle, required String formatPattern, this.editable = true, this.hidden = false}) {
     this.formatPattern = formatPattern.replaceAll('{{}}', '');
     _formatter = ScriptedFormatter(formatPattern);
   }
@@ -44,8 +44,8 @@ class ExportColumn { // TODO: change this class so it implements the interface.
   /// doesn't show up as unused / hidden field in list
   final bool hidden;
 
-  factory ExportColumn.fromJson(Map<String, dynamic> json, [editable = true, hidden = false]) =>
-    ExportColumn(
+  factory LegacyExportColumn.fromJson(Map<String, dynamic> json, [editable = true, hidden = false]) =>
+    LegacyExportColumn(
       internalName: json['internalColumnName'],
       columnTitle: json['columnTitle'],
       formatPattern: json['formatPattern'],
@@ -82,7 +82,7 @@ class ExportColumn { // TODO: change this class so it implements the interface.
 
 /// Type a [Formatter] can uses to indicate the kind of data returned.
 ///
-/// The data types returned from the deprecated [ExportColumn] may differ from the guarantees.
+/// The data types returned from the deprecated [LegacyExportColumn] may differ from the guarantees.
 enum RowDataFieldType {
   /// Guarantees [DateTime] is returned.
   timestamp,

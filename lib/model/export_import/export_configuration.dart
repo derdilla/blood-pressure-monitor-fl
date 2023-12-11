@@ -37,13 +37,35 @@ class ActiveExportColumnConfiguration extends ChangeNotifier {
     'preset': _activePreset.encode()
   });
 
-  /// The last selected columns, different from [getActiveColumns].
+  /// The [UserColumn.internalIdentifier] of columns currently selected by user.
+  ///
+  /// Note that this is persistent different from [getActiveColumns].
   final List<String> _userSelectedColumns;
 
   ExportImportPreset _activePreset;
   ExportImportPreset get activePreset => _activePreset;
   set activePreset(ExportImportPreset value) {
     _activePreset = value;
+    notifyListeners();
+  }
+
+  /// Put the user column at [oldIndex] to [newIndex].
+  void reorderUserColumns(int oldIndex, int newIndex) {
+    assert(_activePreset == ExportImportPreset.none, 'user columns are not modifiable while another configuration is active');
+    assert(oldIndex >= 0 && oldIndex < _userSelectedColumns.length);
+    assert(newIndex >= 0 && newIndex < _userSelectedColumns.length);
+    if (oldIndex < newIndex) {
+      newIndex -= 1;
+    }
+    final item = _userSelectedColumns.removeAt(oldIndex);
+    _userSelectedColumns.insert(newIndex, item);
+    notifyListeners();
+  }
+
+  /// Add a export column to the end of user columns.
+  void addUserColumn(ExportColumn column) {
+    assert(_activePreset == ExportImportPreset.none, 'user columns are not modifiable while another configuration is active');
+    _userSelectedColumns.add(column.internalIdentifier);
     notifyListeners();
   }
 

@@ -313,14 +313,14 @@ class ConfigDao {
   /// Loads the current export columns from the database.
   ///
   /// Changes will *not* be saved automatically, see [updateExportColumn].
-  Future<List<ExportColumn>> loadExportColumns() async {
+  Future<List<LegacyExportColumn>> loadExportColumns() async {
     final existingDbEntries = await _configDB.database.query(
       ConfigDB.exportStringsTable,
       columns: ['internalColumnName', 'columnTitle', 'formatPattern']
     );
     return [
       for (final e in existingDbEntries)
-        ExportColumn(
+        LegacyExportColumn(
             internalName: e['internalColumnName'].toString(),
             columnTitle: e['columnTitle'].toString(),
             formatPattern: e['formatPattern'].toString()
@@ -328,10 +328,10 @@ class ConfigDao {
     ];
   }
 
-  /// Saves a [ExportColumn] to the database.
+  /// Saves a [LegacyExportColumn] to the database.
   ///
-  /// If one with the same [ExportColumn.internalName] exists, it will get replaced by the new one regardless of content.
-  Future<void> updateExportColumn(ExportColumn exportColumn) async {
+  /// If one with the same [LegacyExportColumn.internalName] exists, it will get replaced by the new one regardless of content.
+  Future<void> updateExportColumn(LegacyExportColumn exportColumn) async {
     if (!_configDB.database.isOpen) return;
     await _configDB.database.insert(
         ConfigDB.exportStringsTable,
@@ -344,7 +344,7 @@ class ConfigDao {
     );
   }
 
-  /// Deletes the [ExportColumn] where [ExportColumn.internalName] matches [internalName] from the database.
+  /// Deletes the [LegacyExportColumn] where [LegacyExportColumn.internalName] matches [internalName] from the database.
   Future<void> deleteExportColumn(String internalName) async {
     if (!_configDB.database.isOpen) return;
     await _configDB.database.delete('exportStrings', where: 'internalColumnName = ?', whereArgs: [internalName]);

@@ -91,7 +91,7 @@ Future<void> pumpAppRoot(WidgetTester widgetTester, {
 }
 
 class MockConfigDao implements ConfigDao {
-  Map<String, ExportColumn> columns = {};
+  Map<String, LegacyExportColumn> columns = {};
 
   @override
   Future<void> deleteExportColumn(String internalName) async => columns.remove(internalName);
@@ -100,7 +100,7 @@ class MockConfigDao implements ConfigDao {
   Future<CsvExportSettings> loadCsvExportSettings(int profileID) async => CsvExportSettings();
 
   @override
-  Future<List<ExportColumn>> loadExportColumns() async => columns.values.toList();
+  Future<List<LegacyExportColumn>> loadExportColumns() async => columns.values.toList();
 
   @override
   Future<ExportSettings> loadExportSettings(int profileID) async => ExportSettings();
@@ -115,7 +115,7 @@ class MockConfigDao implements ConfigDao {
   Future<Settings> loadSettings(int profileID) async => Settings();
 
   @override
-  Future<void> updateExportColumn(ExportColumn exportColumn) async => columns.update(exportColumn.internalName, (value) => exportColumn);
+  Future<void> updateExportColumn(LegacyExportColumn exportColumn) async => columns.update(exportColumn.internalName, (value) => exportColumn);
 
   void reset() {
     columns = {};

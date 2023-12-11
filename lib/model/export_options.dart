@@ -21,7 +21,7 @@ class ExportConfigurationModel {
   final AppLocalizations localizations;
   final ConfigDao _configDao; // TODO: remove after #181 is complete
   
-  final List<ExportColumn> _availableFormats = [];
+  final List<LegacyExportColumn> _availableFormats = [];
 
   /// Format: (title, List<internalNameOfExportFormat>)
   List<(String, List<String>)> get exportConfigurations => [
@@ -48,56 +48,56 @@ class ExportConfigurationModel {
   ///
   /// The [fieldSettings] parameter describes the settings of the current export format and should be set accordingly.
   @Deprecated('not implemented anymore')
-  List<ExportColumn> getActiveExportColumns(ExportFormat format, CustomFieldsSettings fieldsSettings) {
+  List<LegacyExportColumn> getActiveExportColumns(ExportFormat format, CustomFieldsSettings fieldsSettings) {
     return [];
   }
   
-  List<ExportColumn> getDefaultFormates() => [
-    ExportColumn(internalName: 'timestampUnixMs', columnTitle: localizations.unixTimestamp, formatPattern: r'$TIMESTAMP', editable: false),
-    ExportColumn(internalName: 'formattedTimestamp', columnTitle: localizations.time, formatPattern: '\$FORMAT{\$TIMESTAMP,yyyy-MM-dd HH:mm:ss}', editable: false),
-    ExportColumn(internalName: 'systolic', columnTitle: localizations.sysLong, formatPattern: r'$SYS', editable: false),
-    ExportColumn(internalName: 'diastolic', columnTitle: localizations.diaLong, formatPattern: r'$DIA', editable: false),
-    ExportColumn(internalName: 'pulse', columnTitle: localizations.pulLong, formatPattern: r'$PUL', editable: false),
-    ExportColumn(internalName: 'notes', columnTitle: localizations.notes, formatPattern: r'$NOTE', editable: false),
-    ExportColumn(internalName: 'pulsePressure', columnTitle: localizations.pulsePressure, formatPattern: r'{{$SYS-$DIA}}', editable: false),
-    ExportColumn(internalName: 'color', columnTitle: localizations.color, formatPattern: r'$COLOR', editable: false),
+  List<LegacyExportColumn> getDefaultFormates() => [
+    LegacyExportColumn(internalName: 'timestampUnixMs', columnTitle: localizations.unixTimestamp, formatPattern: r'$TIMESTAMP', editable: false),
+    LegacyExportColumn(internalName: 'formattedTimestamp', columnTitle: localizations.time, formatPattern: '\$FORMAT{\$TIMESTAMP,yyyy-MM-dd HH:mm:ss}', editable: false),
+    LegacyExportColumn(internalName: 'systolic', columnTitle: localizations.sysLong, formatPattern: r'$SYS', editable: false),
+    LegacyExportColumn(internalName: 'diastolic', columnTitle: localizations.diaLong, formatPattern: r'$DIA', editable: false),
+    LegacyExportColumn(internalName: 'pulse', columnTitle: localizations.pulLong, formatPattern: r'$PUL', editable: false),
+    LegacyExportColumn(internalName: 'notes', columnTitle: localizations.notes, formatPattern: r'$NOTE', editable: false),
+    LegacyExportColumn(internalName: 'pulsePressure', columnTitle: localizations.pulsePressure, formatPattern: r'{{$SYS-$DIA}}', editable: false),
+    LegacyExportColumn(internalName: 'color', columnTitle: localizations.color, formatPattern: r'$COLOR', editable: false),
 
-    ExportColumn(internalName: 'DATUM', columnTitle: '"My Heart" export time', formatPattern: r'$FORMAT{$TIMESTAMP,yyyy-MM-dd HH:mm:ss}', editable: false, hidden: true),
-    ExportColumn(internalName: 'SYSTOLE', columnTitle: '"My Heart" export sys', formatPattern: r'$SYS', editable: false, hidden: true),
-    ExportColumn(internalName: 'DIASTOLE', columnTitle: '"My Heart" export dia', formatPattern: r'$DIA', editable: false, hidden: true),
-    ExportColumn(internalName: 'PULS', columnTitle: '"My Heart" export pul', formatPattern: r'$PUL', editable: false, hidden: true),
-    ExportColumn(internalName: 'Beschreibung', columnTitle: '"My Heart" export description', formatPattern: r'null', editable: false, hidden: true),
-    ExportColumn(internalName: 'Tags', columnTitle: '"My Heart" export tags', formatPattern: r'', editable: false, hidden: true),
-    ExportColumn(internalName: 'Gewicht', columnTitle: '"My Heart" export weight', formatPattern: r'0.0', editable: false, hidden: true),
-    ExportColumn(internalName: 'Sauerstoffsättigung', columnTitle: '"My Heart" export oxygen', formatPattern: r'0', editable: false, hidden: true),
+    LegacyExportColumn(internalName: 'DATUM', columnTitle: '"My Heart" export time', formatPattern: r'$FORMAT{$TIMESTAMP,yyyy-MM-dd HH:mm:ss}', editable: false, hidden: true),
+    LegacyExportColumn(internalName: 'SYSTOLE', columnTitle: '"My Heart" export sys', formatPattern: r'$SYS', editable: false, hidden: true),
+    LegacyExportColumn(internalName: 'DIASTOLE', columnTitle: '"My Heart" export dia', formatPattern: r'$DIA', editable: false, hidden: true),
+    LegacyExportColumn(internalName: 'PULS', columnTitle: '"My Heart" export pul', formatPattern: r'$PUL', editable: false, hidden: true),
+    LegacyExportColumn(internalName: 'Beschreibung', columnTitle: '"My Heart" export description', formatPattern: r'null', editable: false, hidden: true),
+    LegacyExportColumn(internalName: 'Tags', columnTitle: '"My Heart" export tags', formatPattern: r'', editable: false, hidden: true),
+    LegacyExportColumn(internalName: 'Gewicht', columnTitle: '"My Heart" export weight', formatPattern: r'0.0', editable: false, hidden: true),
+    LegacyExportColumn(internalName: 'Sauerstoffsättigung', columnTitle: '"My Heart" export oxygen', formatPattern: r'0', editable: false, hidden: true),
   ];
 
-  /// Saves a new [ExportColumn] to the list of the available columns.
+  /// Saves a new [LegacyExportColumn] to the list of the available columns.
   ///
   /// In case one with the same internal name exists it gets updated with the new values
-  void addOrUpdate(ExportColumn format) {
+  void addOrUpdate(LegacyExportColumn format) {
     _availableFormats.removeWhere((e) => e.internalName == format.internalName);
     _availableFormats.add(format);
     _configDao.updateExportColumn(format);
   }
 
-  void delete(ExportColumn format) {
+  void delete(LegacyExportColumn format) {
     final existingEntries = _availableFormats.where((element) => (element.internalName == format.internalName) && element.editable);
     assert(existingEntries.isNotEmpty, r"Tried to delete entry that doesn't exist or is not editable.");
     _availableFormats.removeWhere((element) => element.internalName == format.internalName);
     _configDao.deleteExportColumn(format.internalName);
   }
 
-  UnmodifiableListView<ExportColumn> get availableFormats => UnmodifiableListView(_availableFormats);
-  UnmodifiableMapView<String, ExportColumn> get availableFormatsMap =>
+  UnmodifiableListView<LegacyExportColumn> get availableFormats => UnmodifiableListView(_availableFormats);
+  UnmodifiableMapView<String, LegacyExportColumn> get availableFormatsMap =>
       UnmodifiableMapView(Map.fromIterable(_availableFormats, key: (e) => e.internalName));
 
 
   /// Creates list of rows with that follow the order and format described by [activeExportColumns].
   ///
-  /// The [createHeadline] option will create put a row at the start that contains [ExportColumn.internalName] of the
+  /// The [createHeadline] option will create put a row at the start that contains [LegacyExportColumn.internalName] of the
   /// given [activeExportColumns].
-  List<List<String>> createTable(Iterable<BloodPressureRecord> data, List<ExportColumn> activeExportColumns,
+  List<List<String>> createTable(Iterable<BloodPressureRecord> data, List<LegacyExportColumn> activeExportColumns,
       {bool createHeadline = true,}) {
     List<List<String>> items = [];
     if (createHeadline) {

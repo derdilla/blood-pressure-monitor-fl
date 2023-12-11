@@ -58,6 +58,17 @@ class ExportColumnsManager extends ChangeNotifier { // TODO: separate ExportColu
         // ?? ...
   }
 
+  /// Returns a list of all userColumns, NativeColumns and BuildInColumns defined.
+  ///
+  /// Prefer using other methods like [firstWhere] when possible.
+  UnmodifiableListView<ExportColumn> getAllColumns() {
+    final columns = <ExportColumn>[];
+    columns.addAll(NativeColumn.allColumns);
+    columns.addAll(userColumns.values);
+    columns.addAll(BuildInColumn.allColumns);
+    return UnmodifiableListView(columns);
+  }
+
   String toJson() { // TODO: update from and TO json to new style
     final columns = [];
     for (final c in _userColumns.values) {

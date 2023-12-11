@@ -127,7 +127,7 @@ class _EditExportColumnPageState extends State<EditExportColumnPage> {
                                   return localizations.errNoValue;
                                 } else if (_internalName != null && _displayName != null) {
                                   try {
-                                    final column = ExportColumn(internalName: _internalName!, columnTitle: _displayName!, formatPattern: value);
+                                    final column = LegacyExportColumn(internalName: _internalName!, columnTitle: _displayName!, formatPattern: value);
                                     column.formatRecord(BloodPressureRecord(DateTime.now(), 100, 80, 60, ''));
                                     _formatPattern = value;
                                   } catch (e) {
@@ -142,7 +142,7 @@ class _EditExportColumnPageState extends State<EditExportColumnPage> {
                             const SizedBox(height: 12,),
                             Text(localizations.result),
                             Text(((){try {
-                              final column = ExportColumn(internalName: _internalName!, columnTitle: _displayName!, formatPattern: _formatPattern!);
+                              final column = LegacyExportColumn(internalName: _internalName!, columnTitle: _displayName!, formatPattern: _formatPattern!);
                               return column.formatRecord(BloodPressureRecord(DateTime.now(), 100, 80, 60, 'test'));
                             } catch (e) {
                               return '-';
@@ -170,7 +170,7 @@ class _EditExportColumnPageState extends State<EditExportColumnPage> {
                           onPressed: (widget.editable) ? (() async {
                             if (_formKey.currentState?.validate() ?? false) {
                               final navigator = Navigator.of(context);
-                              exportConfigurationModel.addOrUpdate(ExportColumn(
+                              exportConfigurationModel.addOrUpdate(LegacyExportColumn(
                                   internalName: _internalName!,
                                   columnTitle: _displayName!,
                                   formatPattern: _formatPattern!
