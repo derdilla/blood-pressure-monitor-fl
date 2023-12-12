@@ -9,10 +9,15 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 /// Banner that gives the user information on the importability of their export.
 class ExportWarnBanner extends StatefulWidget {
+  /// Create either a banner that informs the user of import problems or an empty widget.
+  ///
+  /// Whether the config is importable is determined by the passed settings.
   const ExportWarnBanner({super.key,
     required this.exportSettings,
     required this.csvExportSettings,
     required this.availableColumns});
+  // TODO: consider attempting to import a file with that config and checking success.
+  // This would allow fore more detailed error messages as well.
 
   final ExportSettings exportSettings;
   final CsvExportSettings csvExportSettings;
@@ -39,7 +44,6 @@ class _ExportWarnBannerState extends State<ExportWarnBanner> {
         if (widget.csvExportSettings.exportHeadline == false) return _buildNotExportable(context);
         if (widget.csvExportSettings.fieldDelimiter != ',' && widget.csvExportSettings.fieldDelimiter != '|') return _buildNotExportable(context);
         if (widget.csvExportSettings.textDelimiter != '"' && widget.csvExportSettings.textDelimiter != "'") return _buildNotExportable(context);
-        if (widget.csvExportSettings.exportHeadline == false) return _buildNotExportable(context);
         final preset = widget.csvExportSettings.exportFieldsConfiguration.activePreset;
         switch (preset) {
           case ExportImportPreset.bloodPressureApp:

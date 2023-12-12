@@ -57,8 +57,12 @@ class ExportImportScreen extends StatelessWidget {
                 title: Text(localizations.exportDir),
                 subtitle: settings.defaultExportDir.isNotEmpty ? Text(settings.defaultExportDir) : null,
                 onTap: () async {
-                  final appDir = await JSaver.instance.setDefaultSavingDirectory();
-                  settings.defaultExportDir = appDir.value;
+                  if (settings.defaultExportDir.isEmpty) {
+                    final appDir = await JSaver.instance.setDefaultSavingDirectory();
+                    settings.defaultExportDir = appDir.value;
+                  } else {
+                    settings.defaultExportDir = '';
+                  }
                 }
               ),
               SwitchListTile(
