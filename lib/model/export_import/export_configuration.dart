@@ -69,6 +69,14 @@ class ActiveExportColumnConfiguration extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// Removes the first export column from user columns where
+  /// [ExportColumn.internalIdentifier] matches [identifier].
+  void removeUserColumn(String identifier) {
+    assert(_activePreset == ExportImportPreset.none, 'user columns are not modifiable while another configuration is active');
+    _userSelectedColumns.removeWhere((c) => c == identifier);
+    notifyListeners();
+  }
+
   /// Columns to respect for export.
   UnmodifiableListView<ExportColumn> getActiveColumns(ExportColumnsManager availableColumns) => UnmodifiableListView(
     switch (_activePreset) {

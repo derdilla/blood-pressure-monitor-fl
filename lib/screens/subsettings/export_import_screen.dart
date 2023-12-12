@@ -268,8 +268,19 @@ class ExportFieldCustomisationSetting extends StatelessWidget { // TODO: conside
                       return ListTile(
                         key: Key(activeColumns[idx].internalIdentifier + idx.toString()),
                         title: Text(activeColumns[idx].userTitle(localizations)),
-                        trailing: const Icon(Icons.drag_handle),
-                        // TODO: removing columns
+                        trailing: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            IconButton(
+                              tooltip: localizations.remove,
+                              onPressed: () {
+                                fieldsConfig.removeUserColumn(activeColumns[idx].internalIdentifier);
+                              },
+                              icon: const Icon(Icons.remove_circle_outline)
+                            ),
+                            const Icon(Icons.drag_handle),
+                          ],
+                        ),
                       );
                     },
                     itemCount: activeColumns.length + 1,
@@ -277,7 +288,7 @@ class ExportFieldCustomisationSetting extends StatelessWidget { // TODO: conside
                 );
               }
             ),
-          )
+          ),
           // TODO implement adding / editing columns => separate ColumnsManagerScreen ?
         ],
     );

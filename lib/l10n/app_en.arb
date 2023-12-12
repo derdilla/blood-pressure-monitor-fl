@@ -472,5 +472,7 @@
     }
   },
   "exportFieldsPreset": "Export fields preset",
-  "@exportFieldsPreset": {}
+  "@exportFieldsPreset": {},
+  "remove": "Remove",
+  "@remove": {}
 }
