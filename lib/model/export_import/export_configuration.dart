@@ -10,6 +10,8 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 /// Class for managing columns currently used for ex- and import.
 class ActiveExportColumnConfiguration extends ChangeNotifier {
   /// Create a manager of the currently relevant [ExportColumn]s.
+  ///
+  /// The default configuration is guaranteed to be restoreable.
   ActiveExportColumnConfiguration({
     ExportImportPreset? activePreset,
     List<String>? userSelectedColumnIds

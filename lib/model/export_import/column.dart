@@ -117,7 +117,8 @@ class NativeColumn extends ExportColumn {
 /// Useful columns that are present by default and recreatable through a formatPattern.
 class BuildInColumn extends ExportColumn {
   /// Creates a build in column and adds it to allColumns.
-  BuildInColumn._create(this.internalIdentifier, this.csvTitle, String formatString, this._userTitle);
+  BuildInColumn._create(this.internalIdentifier, this.csvTitle, String formatString, this._userTitle)
+      : _formatter = ScriptedFormatter(formatString);
   
   static final List<BuildInColumn> allColumns = [
     pulsePressure,
@@ -199,7 +200,7 @@ class BuildInColumn extends ExportColumn {
   @override
   String userTitle(AppLocalizations localizations) => _userTitle(localizations);
 
-  late final Formatter _formatter;
+  final Formatter _formatter;
 
   @override
   (RowDataFieldType, dynamic)? decode(String pattern) => _formatter.decode(pattern);
@@ -223,9 +224,8 @@ class UserColumn extends ExportColumn {
   /// Create a object that handles export behavior for data in a column.
   ///
   /// [formatter] will be created according to [formatString].
-  UserColumn(this.internalIdentifier, this.csvTitle, String formatString) {
-    formatter = ScriptedFormatter(formatString);
-  }
+  UserColumn(this.internalIdentifier, this.csvTitle, String formatString):
+        formatter = ScriptedFormatter(formatString);
 
   @override
   final String internalIdentifier;
@@ -237,7 +237,7 @@ class UserColumn extends ExportColumn {
   String userTitle(AppLocalizations localizations) => csvTitle;
 
   /// Converter associated with this column.
-  late final Formatter formatter;
+  final Formatter formatter;
 
   @override
   (RowDataFieldType, dynamic)? decode(String pattern) => formatter.decode(pattern);
