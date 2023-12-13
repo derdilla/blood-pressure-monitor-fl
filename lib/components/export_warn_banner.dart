@@ -41,7 +41,7 @@ class _ExportWarnBannerState extends State<ExportWarnBanner> {
       case ExportFormat.pdf:
         return _buildNotExportable(context);
       case ExportFormat.csv:
-        if (widget.csvExportSettings.exportHeadline == false) return _buildNotExportable(context);
+        if (widget.csvExportSettings.exportHeadline == false) return _buildNoHeadline(context);
         if (widget.csvExportSettings.fieldDelimiter != ',' && widget.csvExportSettings.fieldDelimiter != '|') return _buildNotExportable(context);
         if (widget.csvExportSettings.textDelimiter != '"' && widget.csvExportSettings.textDelimiter != "'") return _buildNotExportable(context);
         final preset = widget.csvExportSettings.exportFieldsConfiguration.activePreset;
@@ -76,6 +76,13 @@ class _ExportWarnBannerState extends State<ExportWarnBanner> {
   Widget _buildNotExportable(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
     return _banner(localizations.exportWarnConfigNotImportable, localizations);
+  }
+
+  /// Exports made with this configuration are not importable because there
+  /// is no headline to infer types.
+  Widget _buildNoHeadline(BuildContext context) {
+    final localizations = AppLocalizations.of(context)!;
+    return _banner(localizations.errNeedHeadline, localizations);
   }
 
   /// Exports made with this configuration are not fully importable.

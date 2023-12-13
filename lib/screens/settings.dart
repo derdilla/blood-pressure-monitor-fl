@@ -9,7 +9,7 @@ import 'package:blood_pressure_app/model/iso_lang_names.dart';
 import 'package:blood_pressure_app/model/storage/storage.dart';
 import 'package:blood_pressure_app/platform_integration/platform_client.dart';
 import 'package:blood_pressure_app/screens/subsettings/delete_data.dart';
-import 'package:blood_pressure_app/screens/subsettings/export_import_screen.dart';
+import 'package:blood_pressure_app/screens/subsettings/export_import/export_import_screen.dart';
 import 'package:blood_pressure_app/screens/subsettings/graph_markings.dart';
 import 'package:blood_pressure_app/screens/subsettings/version.dart';
 import 'package:blood_pressure_app/screens/subsettings/warn_about.dart';
