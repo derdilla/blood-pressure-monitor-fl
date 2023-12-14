@@ -1,4 +1,3 @@
-import 'package:blood_pressure_app/model/export_import/legacy_column.dart';
 import 'package:blood_pressure_app/model/storage/db/config_db.dart';
 import 'package:blood_pressure_app/model/storage/export_columns_store.dart';
 import 'package:blood_pressure_app/model/storage/export_csv_settings_store.dart';
@@ -17,7 +16,7 @@ import 'package:sqflite/sqflite.dart';
 /// The load... methods have to schedule a initial save to db in case an migration / update of fields occurred.
 class ConfigDao {
   ConfigDao(this._configDB);
-  
+
   final ConfigDB _configDB;
 
   /// Loads the profiles [Settings] object from the database.
@@ -28,10 +27,10 @@ class ConfigDao {
   /// Changes to the database will not propagate to the object.
   Future<Settings> loadSettings(int profileID) async {
     final dbEntry = await _configDB.database.query(
-      ConfigDB.settingsTable,
-      columns: ['settings_json'],
-      where: 'profile_id = ?',
-      whereArgs: [profileID]
+        ConfigDB.settingsTable,
+        columns: ['settings_json'],
+        where: 'profile_id = ?',
+        whereArgs: [profileID]
     );
 
     late final Settings settings;
@@ -59,12 +58,12 @@ class ConfigDao {
   Future<void> _updateSettings(int profileID, Settings settings) async {
     if (!_configDB.database.isOpen) return;
     await _configDB.database.insert(
-      ConfigDB.settingsTable,
-      {
-        'profile_id': profileID,
-        'settings_json': settings.toJson()
-      },
-      conflictAlgorithm: ConflictAlgorithm.replace
+        ConfigDB.settingsTable,
+        {
+          'profile_id': profileID,
+          'settings_json': settings.toJson()
+        },
+        conflictAlgorithm: ConflictAlgorithm.replace
     );
   }
 
@@ -261,7 +260,7 @@ class ConfigDao {
         conflictAlgorithm: ConflictAlgorithm.replace
     );
   }
-  
+
   /// Loads the profiles [ExportColumnsManager] object from the database.
   ///
   /// If any errors occur or the object is not present, a default one will be created. Changes in the object
@@ -308,45 +307,5 @@ class ConfigDao {
         },
         conflictAlgorithm: ConflictAlgorithm.replace
     );
-  }
-
-  /// Loads the current export columns from the database.
-  ///
-  /// Changes will *not* be saved automatically, see [updateExportColumn].
-  Future<List<LegacyExportColumn>> loadExportColumns() async {
-    final existingDbEntries = await _configDB.database.query(
-      ConfigDB.exportStringsTable,
-      columns: ['internalColumnName', 'columnTitle', 'formatPattern']
-    );
-    return [
-      for (final e in existingDbEntries)
-        LegacyExportColumn(
-            internalName: e['internalColumnName'].toString(),
-            columnTitle: e['columnTitle'].toString(),
-            formatPattern: e['formatPattern'].toString()
-        ),
-    ];
-  }
-
-  /// Saves a [LegacyExportColumn] to the database.
-  ///
-  /// If one with the same [LegacyExportColumn.internalName] exists, it will get replaced by the new one regardless of content.
-  Future<void> updateExportColumn(LegacyExportColumn exportColumn) async {
-    if (!_configDB.database.isOpen) return;
-    await _configDB.database.insert(
-        ConfigDB.exportStringsTable,
-        {
-          'internalColumnName': exportColumn.internalName,
-          'columnTitle': exportColumn.columnTitle,
-          'formatPattern': exportColumn.formatPattern
-        },
-        conflictAlgorithm: ConflictAlgorithm.replace
-    );
-  }
-
-  /// Deletes the [LegacyExportColumn] where [LegacyExportColumn.internalName] matches [internalName] from the database.
-  Future<void> deleteExportColumn(String internalName) async {
-    if (!_configDB.database.isOpen) return;
-    await _configDB.database.delete('exportStrings', where: 'internalColumnName = ?', whereArgs: [internalName]);
   }
 }

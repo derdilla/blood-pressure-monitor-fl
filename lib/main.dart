@@ -12,9 +12,6 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
 
-@Deprecated('This should not be used for new code, but rather for migrating existing code.')
-late final ConfigDao globalConfigDao;
-
 late final ConfigDB _database;
 late final BloodPressureModel _bloodPressureModel;
 
@@ -43,8 +40,6 @@ Future<Widget> _loadApp() async {
   final exportColumnsManager = await configDao.loadExportColumnsManager(0);
 
   await updateLegacySettings(settings, exportSettings, csvExportSettings, pdfExportSettings, intervalStorageManager);
-
-  globalConfigDao = configDao;
 
   // Reset the step size intervall to current on startup
   intervalStorageManager.mainPage.setToMostRecentIntervall();

@@ -48,7 +48,7 @@ class ExportButtonBar extends StatelessWidget {
                   case ExportFormat.db:
                     final path = join(await getDatabasesPath(), 'blood_pressure.db');
 
-                    if (context.mounted) _exportFile(context, path, '$filename.db', 'text/db');
+                    if (context.mounted) _exportFile(context, path, '$filename.db', 'text/sqlite');
                     break;
                   case ExportFormat.csv:
                     final csvConverter = CsvConverter(
