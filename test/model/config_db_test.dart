@@ -63,7 +63,6 @@ void main() {
       expect((await dao.loadPdfExportSettings(0)).toJson(), PdfExportSettings().toJson());
       expect((await dao.loadIntervallStorage(0,0)).stepSize, IntervallStorage().stepSize);
       expect((await dao.loadExportColumnsManager(0)).userColumns, ExportColumnsManager().userColumns);
-      expect((await dao.loadExportColumnsManager(0)), ExportColumnsManager().userColumns);
     });
     test('should save changes', () async {
       final rawDB = await ConfigDB.open(dbPath: inMemoryDatabasePath, isFullPath: true);
