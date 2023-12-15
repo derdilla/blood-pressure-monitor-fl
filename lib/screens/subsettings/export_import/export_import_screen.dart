@@ -47,6 +47,7 @@ class ExportImportScreen extends StatelessWidget {
               ListTile(
                 title: Text(localizations.exportDir),
                 subtitle: settings.defaultExportDir.isNotEmpty ? Text(settings.defaultExportDir) : null,
+                trailing: settings.defaultExportDir.isEmpty ? const Icon(Icons.folder_open) : const Icon(Icons.delete),
                 onTap: () async {
                   if (settings.defaultExportDir.isEmpty) {
                     final appDir = await JSaver.instance.setDefaultSavingDirectory();
