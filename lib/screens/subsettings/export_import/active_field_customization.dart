@@ -6,6 +6,7 @@ import 'package:blood_pressure_app/model/storage/export_columns_store.dart';
 import 'package:blood_pressure_app/model/storage/export_csv_settings_store.dart';
 import 'package:blood_pressure_app/model/storage/export_pdf_settings_store.dart';
 import 'package:blood_pressure_app/model/storage/export_settings_store.dart';
+import 'package:blood_pressure_app/screens/subsettings/export_import/export_column_management_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
@@ -44,84 +45,89 @@ class ActiveExportFieldCustomization extends StatelessWidget {
       },
     );
 
-    if (fieldsConfig.activePreset != ExportImportPreset.none) {
-      return dropdown;
-    }
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
         dropdown,
-        Container(
-          margin: const EdgeInsets.symmetric(
-              horizontal: 16,
-              vertical: 5
-          ),
-          height: 400,
-          decoration: BoxDecoration(
-            border: Border.all(color: Theme.of(context).textTheme.labelLarge?.color ?? Colors.teal),
-            borderRadius: const BorderRadius.all(Radius.circular(10)),
-          ),
-          child: Consumer<ExportColumnsManager>(
-              builder: (context, availableColumns, child) {
-                final activeColumns = fieldsConfig.getActiveColumns(availableColumns);
-                return ReorderableListView.builder(
-                    itemBuilder: (context, idx) {
-                      if (idx >= activeColumns.length) {
-                        return ListTile(
-                          key: const Key('add field'),
-                          leading: const Icon(Icons.add),
-                          title: Text(localizations.addEntry),
-                          onTap: () async {
-                            final column = await showDialog<ExportColumn?>(context: context, builder: (context) =>
-                                SimpleDialog(
-                                  title: Text(localizations.addEntry),
-                                  insetPadding: const EdgeInsets.symmetric(
-                                    vertical: 64,
-                                  ),
-                                  children: availableColumns.getAllColumns().map((column) =>
-                                      ListTile(
-                                        title: Text(column.userTitle(localizations)),
-                                        onTap: () => Navigator.of(context).pop(column),
-                                      )
-                                  ).toList(),
-                                )
-                            );
-                            if (column != null) fieldsConfig.addUserColumn(column);
-                          },
-                        );
-                      }
-                      return ListTile(
-                        key: Key(activeColumns[idx].internalIdentifier + idx.toString()),
-                        title: Text(activeColumns[idx].userTitle(localizations)),
-                        trailing: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            IconButton(
-                                tooltip: localizations.remove,
-                                onPressed: () {
-                                  fieldsConfig.removeUserColumn(activeColumns[idx].internalIdentifier);
-                                },
-                                icon: const Icon(Icons.remove_circle_outline)
-                            ),
-                            const Icon(Icons.drag_handle),
-                          ],
-                        ),
-                      );
-                    },
-                    itemCount: activeColumns.length + 1,
-                    onReorder: fieldsConfig.reorderUserColumns
-                );
-              }
-          ),
-        ),
         ListTile(
           title: Text(localizations.manageExportColumns),
           trailing: const Icon(Icons.arrow_forward_ios),
           onTap: () {
-            // TODO implement adding / editing columns => separate ColumnsManagerScreen ?
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const ExportColumnsManagementScreen()),);
           },
         ),
+        if (fieldsConfig.activePreset == ExportImportPreset.none)
+          _buildActiveColumnsEditor(context, localizations, fieldsConfig),
       ],
     );
   }
+
+  Widget _buildActiveColumnsEditor(BuildContext context,
+    AppLocalizations localizations,
+    ActiveExportColumnConfiguration fieldsConfig) =>
+      Container(
+        margin: const EdgeInsets.symmetric(
+            horizontal: 16,
+            vertical: 5
+        ),
+        height: 400,
+        decoration: BoxDecoration(
+          border: Border.all(color: Theme.of(context).textTheme.labelLarge?.color ?? Colors.teal),
+          borderRadius: const BorderRadius.all(Radius.circular(10)),
+        ),
+        child: Consumer<ExportColumnsManager>(
+          builder: (context, availableColumns, child) {
+            final activeColumns = fieldsConfig.getActiveColumns(availableColumns);
+            return ReorderableListView.builder(
+              itemBuilder: (context, idx) {
+                if (idx >= activeColumns.length) {
+                  return ListTile(
+                    key: const Key('add field'),
+                    leading: const Icon(Icons.add),
+                    title: Text(localizations.addEntry),
+                    onTap: () async {
+                      final column = await showDialog<ExportColumn?>(context: context, builder: (context) =>
+                          SimpleDialog(
+                            title: Text(localizations.addEntry),
+                            insetPadding: const EdgeInsets.symmetric(
+                              vertical: 64,
+                            ),
+                            children: availableColumns.getAllColumns().map((column) =>
+                              ListTile(
+                                title: Text(column.userTitle(localizations)),
+                                onTap: () => Navigator.of(context).pop(column),
+                              )
+                            ).toList(),
+                          )
+                      );
+                      if (column != null) fieldsConfig.addUserColumn(column);
+                    },
+                  );
+                }
+                return ListTile(
+                  key: Key(activeColumns[idx].internalIdentifier + idx.toString()),
+                  title: Text(activeColumns[idx].userTitle(localizations)),
+                  trailing: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      IconButton(
+                        tooltip: localizations.remove,
+                        onPressed: () {
+                          fieldsConfig.removeUserColumn(activeColumns[idx].internalIdentifier);
+                        },
+                        icon: const Icon(Icons.remove_circle_outline)
+                      ),
+                      const Icon(Icons.drag_handle),
+                    ],
+                  ),
+                );
+              },
+              itemCount: activeColumns.length + 1,
+              onReorder: fieldsConfig.reorderUserColumns
+            );
+          }
+        ),
+      );
 }

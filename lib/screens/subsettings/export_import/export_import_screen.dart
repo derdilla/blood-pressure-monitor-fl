@@ -12,6 +12,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:jsaver/jSaver.dart';
 import 'package:provider/provider.dart';
 
+/// Screen to configure and perform exports and imports of blood pressure values.
 class ExportImportScreen extends StatelessWidget {
   const ExportImportScreen({super.key});
 

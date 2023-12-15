@@ -18,7 +18,6 @@ class ExportColumnsManager extends ChangeNotifier { // TODO: separate ExportColu
 
   /// View of map between all [ExportColumn.internalName]s and [ExportColumn]s added by a user.
   UnmodifiableMapView<String, ExportColumn> get userColumns => UnmodifiableMapView(_userColumns);
-  // TODO: consider replacing with a allColumns getter once build ins are added.
 
   /// Tries to save the column to the map with the [ExportColumn.internalName] key.
   ///
@@ -65,6 +64,14 @@ class ExportColumnsManager extends ChangeNotifier { // TODO: separate ExportColu
     final columns = <ExportColumn>[];
     columns.addAll(NativeColumn.allColumns);
     columns.addAll(userColumns.values);
+    columns.addAll(BuildInColumn.allColumns);
+    return UnmodifiableListView(columns);
+  }
+
+  /// Returns a list of all NativeColumns and BuildInColumns defined.
+  UnmodifiableListView<ExportColumn> getAllUnmodifiableColumns() {
+    final columns = <ExportColumn>[];
+    columns.addAll(NativeColumn.allColumns);
     columns.addAll(BuildInColumn.allColumns);
     return UnmodifiableListView(columns);
   }

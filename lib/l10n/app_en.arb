@@ -476,5 +476,7 @@
   "remove": "Remove",
   "@remove": {},
   "manageExportColumns": "Manage export columns",
-  "@manageExportColumns": {}
+  "@manageExportColumns": {},
+  "buildIn": "Build-in",
+  "@buildIn": {}
 }
