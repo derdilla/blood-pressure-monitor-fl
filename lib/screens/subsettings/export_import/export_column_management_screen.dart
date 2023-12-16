@@ -1,4 +1,5 @@
 import 'package:blood_pressure_app/components/dialoges/add_export_column_dialoge.dart';
+import 'package:blood_pressure_app/model/export_import/column.dart';
 import 'package:blood_pressure_app/model/storage/export_columns_store.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -39,16 +40,24 @@ class ExportColumnsManagementScreen extends StatelessWidget {
                     title: Text(column.userTitle(localizations)),
                     subtitle: Text(column.formatPattern.toString()),
                     trailing: const Icon(Icons.edit),
-                    onTap: () {
-                      // TODO: implement tile editing
+                    onTap: () async {
+                      final editedColumn = await showAddExportColumnDialoge(context, column);
+                      if (editedColumn != null) {
+                        columnsManager.addOrUpdate(editedColumn);
+                      } // TODO: deleting
                     },
                   ),
                 ListTile(
                   leading: const Icon(Icons.add),
                   title: Text(localizations.addExportformat),
-                  onTap: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => AddExportColumnDialoge()));
-                    // TODO: reimplement tile adding
+                  onTap: () async{
+                    UserColumn? editedColumn = await showAddExportColumnDialoge(context);
+                    if (editedColumn != null) {
+                      while (columnsManager.userColumns.containsKey(editedColumn!.internalIdentifier)) {
+                        editedColumn = UserColumn('${editedColumn.internalIdentifier}I', editedColumn.csvTitle, editedColumn.formatPattern!);
+                      }
+                      columnsManager.addOrUpdate(editedColumn);
+                    }
                   },
                 )
               ],

@@ -8,7 +8,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 /// Dialoge widget for creating and editing a [UserColumn].
 ///
-/// For further documentation please refer to [showAddMeasurementDialoge].
+/// For further documentation please refer to [showAddExportColumnDialoge].
 class AddExportColumnDialoge extends StatefulWidget {
   /// Create a widget for creating and editing a [UserColumn].
   const AddExportColumnDialoge({super.key, this.initialColumn});
@@ -56,8 +56,10 @@ class _AddExportColumnDialogeState extends State<AddExportColumnDialoge> {
             onPressed: () {
               if (formKey.currentState?.validate() ?? false) {
                 formKey.currentState!.save();
-                final column = UserColumn(widget.initialColumn?.internalIdentifier ?? csvTitle,
-                    csvTitle, formatPattern);
+                final column = (widget.initialColumn != null) ?
+                  UserColumn.explicit(widget.initialColumn!.internalIdentifier, csvTitle, formatPattern) :
+                  UserColumn(csvTitle, csvTitle, formatPattern);
+
                 Navigator.pop(context, column);
               }
             },
@@ -159,7 +161,7 @@ class _AddExportColumnDialogeState extends State<AddExportColumnDialoge> {
 /// Internal identifier and display title are generated from
 /// the CSV title. There is no check whether a userColumn
 /// with the generated title exists.
-Future<UserColumn?> showAddMeasurementDialoge(BuildContext context, [ExportColumn? initialColumn]) =>
+Future<UserColumn?> showAddExportColumnDialoge(BuildContext context, [ExportColumn? initialColumn]) =>
     showDialog<UserColumn?>(context: context, builder: (context) => Dialog.fullscreen(
       child: AddExportColumnDialoge(initialColumn: initialColumn,),
     ));

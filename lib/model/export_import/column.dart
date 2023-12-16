@@ -228,10 +228,14 @@ class UserColumn extends ExportColumn {
         formatter = ScriptedFormatter(formatPattern),
         internalIdentifier = 'userColumn.$internalIdentifier';
 
+  /// UserColumn constructor that keeps the internalIdentifier.
+  UserColumn.explicit(this.internalIdentifier, this.csvTitle, String formatPattern):
+        formatter = ScriptedFormatter(formatPattern);
+
   @override
   /// Unique identifier of userColumn.
   ///
-  /// Is automatically be prefixed with `userColumn.` to avoid name collisions with build-ins.
+  /// Is automatically prefixed with `userColumn.` to avoid name collisions with build-ins.
   final String internalIdentifier;
 
   @override
