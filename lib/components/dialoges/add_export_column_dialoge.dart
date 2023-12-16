@@ -1,12 +1,16 @@
 import 'package:blood_pressure_app/components/measurement_list/measurement_list_entry.dart';
 import 'package:blood_pressure_app/model/blood_pressure.dart';
 import 'package:blood_pressure_app/model/export_import/column.dart';
+import 'package:blood_pressure_app/model/export_import/record_formatter.dart';
 import 'package:blood_pressure_app/screens/subsettings/export_import/export_field_format_documentation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+/// Dialoge widget for creating and editing a [UserColumn].
+///
+/// For further documentation please refer to [showAddMeasurementDialoge].
 class AddExportColumnDialoge extends StatefulWidget {
-
+  /// Create a widget for creating and editing a [UserColumn].
   const AddExportColumnDialoge({super.key, this.initialColumn});
 
   final ExportColumn? initialColumn;
@@ -18,12 +22,11 @@ class AddExportColumnDialoge extends StatefulWidget {
 class _AddExportColumnDialogeState extends State<AddExportColumnDialoge> {
   final formKey = GlobalKey<FormState>();
 
-  /// Csv column title used to compute remaining titles.
+  /// Csv column title used to compute internal identifier in case [widget.initialColumn] is null.
   late String csvTitle;
 
-  /// Pattern to
+  /// Pattern for the preview and for column creation on save.
   late String formatPattern;
-
 
   @override
   void initState() {
@@ -53,8 +56,8 @@ class _AddExportColumnDialogeState extends State<AddExportColumnDialoge> {
             onPressed: () {
               if (formKey.currentState?.validate() ?? false) {
                 formKey.currentState!.save();
-                final column = UserColumn(formatPattern, csvTitle, formatPattern);
-                // TODO: validate internalIdentifier doesn't exist and find append index ?
+                final column = UserColumn(widget.initialColumn?.internalIdentifier ?? csvTitle,
+                    csvTitle, formatPattern);
                 Navigator.pop(context, column);
               }
             },
@@ -99,17 +102,16 @@ class _AddExportColumnDialogeState extends State<AddExportColumnDialoge> {
               ),
               child: (){
                   final record = BloodPressureRecord(DateTime.now(), 123, 78, 65, 'test note');
-                  final column = UserColumn('', '', formatPattern);
-                  String? text = column.encode(record);
-                  final decoded = column.decode(text);
-                  if (text.isEmpty) text = null;
+                  final formatter = ScriptedFormatter(formatPattern);
+                  final text = formatter.encode(record);
+                  final decoded = formatter.decode(text);
                   return Column(
                     children: [
                       MeasurementListRow(record: record,),
                       const SizedBox(height: 8,),
                       const Icon(Icons.arrow_downward),
                       const SizedBox(height: 8,),
-                      (text != null) ? Text(text) :
+                      text.isNotEmpty ? Text(text) :
                         Text(localizations.errNoValue, style: const TextStyle(fontStyle: FontStyle.italic),),
                       const SizedBox(height: 8,),
                       const Icon(Icons.arrow_downward),
@@ -144,4 +146,20 @@ class _AddExportColumnDialogeState extends State<AddExportColumnDialoge> {
   }
 }
 
-// TODO: showdialoge function and use in manager
+/// Shows a dialoge containing a export column editor.
+///
+/// In case [initialColumn] is null fields are initially empty.
+/// When initialColumn is provided, it is ensured that the
+/// returned column has the same [UserColumn.internalIdentifier].
+///
+/// The dialoge allows entering a csv title and a format
+/// pattern from which it generates a preview encoding and
+/// shows values decode able.
+///
+/// Internal identifier and display title are generated from
+/// the CSV title. There is no check whether a userColumn
+/// with the generated title exists.
+Future<UserColumn?> showAddMeasurementDialoge(BuildContext context, [ExportColumn? initialColumn]) =>
+    showDialog<UserColumn?>(context: context, builder: (context) => Dialog.fullscreen(
+      child: AddExportColumnDialoge(initialColumn: initialColumn,),
+    ));
