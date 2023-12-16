@@ -30,7 +30,7 @@ class PdfConverter {
 
   /// Create a pdf from a record list.
   Future<Uint8List> create(List<BloodPressureRecord> records) async {
-    pw.Document pdf = pw.Document();
+    final pdf = pw.Document();
     final analyzer = BloodPressureAnalyser(records.toList());
 
     pdf.addPage(pw.MultiPage(
