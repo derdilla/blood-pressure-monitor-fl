@@ -7,27 +7,33 @@ void main() {
   group('ExportColumnsManager', () {
     test('should allow adding columns', () async {
       final manager = ExportColumnsManager();
-      manager.addOrUpdate(UserColumn('test', 'test', '\$SYS'));
-      manager.addOrUpdate(UserColumn('test2', 'test2', '234'));
-      manager.addOrUpdate(UserColumn('test', 'test', ''));
+      final c1 = UserColumn('test', 'test', '\$SYS');
+      final c2 = UserColumn('test2', 'test2', '234');
+      manager.addOrUpdate(c1);
+      manager.addOrUpdate(c2);
+      manager.addOrUpdate(UserColumn('test', 'testx', ''));
 
       expect(manager.userColumns.length, 2);
-      expect(manager.userColumns['test']?.csvTitle, 'test');
-      expect(manager.userColumns['test2']?.csvTitle, 'test2');
+      expect(manager.userColumns[c1.internalIdentifier]?.csvTitle, 'testx');
+      expect(manager.userColumns[c2.internalIdentifier]?.csvTitle, 'test2');
     });
 
     test('should be restoreable from json', () async { // TODO: consider moving to json_serialization_test and adding crash tests
       final init = ExportColumnsManager();
+      final c2 = UserColumn('test2', 'test2', '234');
       init.addOrUpdate(UserColumn('test', 'test', '\$SYS'));
-      init.addOrUpdate(UserColumn('test2', 'test2', '234'));
+      init.addOrUpdate(c2);
 
       final fromJson = ExportColumnsManager.fromJson(init.toJson());
 
       expect(fromJson.userColumns.length, init.userColumns.length);
       expect(fromJson.userColumns.keys, init.userColumns.keys);
-      expect(fromJson.userColumns['test2']?.internalIdentifier, init.userColumns['test2']?.internalIdentifier);
-      expect(fromJson.userColumns['test2']?.csvTitle, init.userColumns['test2']?.csvTitle);
-      expect(fromJson.userColumns['test2']?.formatPattern, init.userColumns['test2']?.formatPattern);
+      expect(fromJson.userColumns[c2.internalIdentifier]?.internalIdentifier,
+          init.userColumns[c2.internalIdentifier]?.internalIdentifier);
+      expect(fromJson.userColumns[c2.internalIdentifier]?.csvTitle,
+          init.userColumns[c2.internalIdentifier]?.csvTitle);
+      expect(fromJson.userColumns[c2.internalIdentifier]?.formatPattern,
+          init.userColumns[c2.internalIdentifier]?.formatPattern);
       expect(fromJson.toJson(), init.toJson());
     });
   });

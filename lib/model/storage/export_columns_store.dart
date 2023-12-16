@@ -105,7 +105,7 @@ class ExportColumnsManager extends ChangeNotifier { // TODO: separate ExportColu
     for (final Map<String, dynamic> c in jsonUserColumns) {
       switch (c['t']) {
         case 0:
-          manager.addOrUpdate(UserColumn(c['id'], c['csvTitle'], c['formatString']));
+          manager.addOrUpdate(UserColumn.explicit(c['id'], c['csvTitle'], c['formatString']));
           break;
         default:
           assert(false, 'Unexpected column type ${c['t']}.');
