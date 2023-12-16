@@ -111,6 +111,8 @@ class ScriptedFormatter implements Formatter {
   @override
   RowDataFieldType? get restoreAbleType {
     if (_hasRestoreableType == false) {
+      final replaced = pattern.replaceFirst(RegExp(r'[^{},$]*\$(SYS|DIA|PUL)[^{},$]*'), '');
+      print('$pattern - $replaced - ${replaced.contains(RegExp(r'[^{},$]*\$(PUL|DIA|SYS)[^{},$]*'))}');
       if (pattern.contains(RegExp(r'[{},]'))) {
         _restoreAbleType = null;
       } else if (pattern == r'$TIMESTAMP') { 
@@ -119,11 +121,13 @@ class ScriptedFormatter implements Formatter {
         _restoreAbleType = RowDataFieldType.color; 
       } else if (pattern == r'$NOTE') {
         _restoreAbleType = RowDataFieldType.notes;
+      } else if (replaced.contains(RegExp(r'[^{},$]*\$(PUL|DIA|SYS)[^{},$]*'))) {
+        _restoreAbleType = null;
       } else if (pattern.contains(RegExp(r'[^{},$]*\$(SYS)[^{},$]*'))) {
         _restoreAbleType = RowDataFieldType.sys; 
-      } else if (pattern.contains(RegExp(r'[^{},$]*\$(DIA)[^{},$]*'))) { 
+      } else if (pattern.contains(RegExp(r'[^{},$]*\$(DIA)[^{},$]*'))) {
         _restoreAbleType = RowDataFieldType.dia; 
-      } else if (pattern.contains(RegExp(r'[^{},$]*\$(PUL)[^{},$]*'))) { 
+      } else if (pattern.contains(RegExp(r'[^{},$]*\$(PUL)[^{},$]*'))) {
         _restoreAbleType = RowDataFieldType.pul; 
       } else { _restoreAbleType = null; }
       _hasRestoreableType = true;

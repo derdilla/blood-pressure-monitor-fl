@@ -26,6 +26,10 @@ void main() {
       expect(ScriptedFormatter(r'$COLOR',).encode(testRecord), testRecord.needlePin!.color.value.toString());
       expect(ScriptedFormatter(r'$NOTE',).encode(testRecord), testRecord.notes);
       expect(ScriptedFormatter(r'$TIMESTAMP',).encode(testRecord), testRecord.creationTime.millisecondsSinceEpoch.toString());
+      expect(ScriptedFormatter(r'$SYS$DIA$PUL',).encode(testRecord), (testRecord.systolic.toString()
+          + testRecord.diastolic.toString() + testRecord.pulse.toString()));
+      expect(ScriptedFormatter(r'$SYS$SYS',).encode(testRecord), (testRecord.systolic.toString()
+          + testRecord.systolic.toString()));
       expect(ScriptedFormatter(r'{{$SYS-$DIA}}',).encode(testRecord),
           (testRecord.systolic! - testRecord.diastolic!).toDouble().toString());
       expect(ScriptedFormatter(r'{{$SYS*$DIA-$PUL}}',).encode(testRecord),
@@ -47,10 +51,11 @@ void main() {
       expect(ScriptedFormatter(r'test$DIA123',).restoreAbleType, RowDataFieldType.dia);
       expect(ScriptedFormatter(r'test$PUL123',).restoreAbleType, RowDataFieldType.pul);
 
-      //expect(ScriptedFormatter(r'$PUL$SYS',).isReversible, false);
       expect(ScriptedFormatter(r'test$NOTE',).restoreAbleType, null);
       expect(ScriptedFormatter(r'test$NOTE123',).restoreAbleType, null);
       expect(ScriptedFormatter(r'{{$PUL-$SYS}}',).restoreAbleType, null);
+      expect(ScriptedFormatter(r'$PUL$SYS',).restoreAbleType, null);
+      expect(ScriptedFormatter(r'$SYS$SYS',).restoreAbleType, null);
     });
     test('should correctly decode reversible patterns', () {
       expect(ScriptedFormatter(r'$SYS',).decode('123'), (RowDataFieldType.sys, 123));
@@ -69,5 +74,16 @@ void main() {
       expect(ScriptedFormatter(r'test$DIA123',).decode('test567123'), (RowDataFieldType.dia, 567));
       expect(ScriptedFormatter(r'test$PUL123',).decode('test567123'), (RowDataFieldType.pul, 567));
     });
+
+    test('should not decode irreversible patterns', () {
+      expect(ScriptedFormatter(r'test$NOTE',).decode('testNote'), null);
+      expect(ScriptedFormatter(r'test$NOTE123',).decode('testNote123'), null);
+      expect(ScriptedFormatter(r'{{$PUL-$SYS}}',).decode('1234'), null);
+      expect(ScriptedFormatter(r'$PUL$SYS',).decode('123456'), null);
+      expect(ScriptedFormatter(r'$SYS$SYS',).decode('123123'), null);
+    });
+    // TODO: test amd fix:
+    // - 'Unterminated group' error
+    // - exports containing regex
   });
 }
