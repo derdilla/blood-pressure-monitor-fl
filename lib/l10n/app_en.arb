@@ -478,5 +478,7 @@
   "manageExportColumns": "Manage export columns",
   "@manageExportColumns": {},
   "buildIn": "Build-in",
-  "@buildIn": {}
+  "@buildIn": {},
+  "csvTitle": "CSV-title",
+  "@csvTitle": {}
 }

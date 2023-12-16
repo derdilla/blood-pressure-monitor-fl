@@ -217,17 +217,21 @@ class BuildInColumn extends ExportColumn {
 
 // TODO: add class for formattedTimestamp
 
-/// Class for storing export behavior of columns.
-///
-/// In most cases using the sealed
+/// Class for storing data of user added columns.
 class UserColumn extends ExportColumn {
   /// Create a object that handles export behavior for data in a column.
   ///
-  /// [formatter] will be created according to [formatString].
-  UserColumn(this.internalIdentifier, this.csvTitle, String formatString):
-        formatter = ScriptedFormatter(formatString);
+  /// [formatter] will be created according to [formatPattern].
+  ///
+  /// [internalIdentifier] is automatically prefixed with 'userColumn.' during object creation.
+  UserColumn(String internalIdentifier, this.csvTitle, String formatPattern):
+        formatter = ScriptedFormatter(formatPattern),
+        internalIdentifier = 'userColumn.$internalIdentifier';
 
   @override
+  /// Unique identifier of userColumn.
+  ///
+  /// Is automatically be prefixed with `userColumn.` to avoid name collisions with build-ins.
   final String internalIdentifier;
 
   @override

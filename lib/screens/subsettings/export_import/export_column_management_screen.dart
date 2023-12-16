@@ -1,3 +1,4 @@
+import 'package:blood_pressure_app/components/dialoges/add_export_column_dialoge.dart';
 import 'package:blood_pressure_app/model/storage/export_columns_store.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -46,6 +47,7 @@ class ExportColumnsManagementScreen extends StatelessWidget {
                   leading: const Icon(Icons.add),
                   title: Text(localizations.addExportformat),
                   onTap: () {
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => AddExportColumnDialoge()));
                     // TODO: reimplement tile adding
                   },
                 )

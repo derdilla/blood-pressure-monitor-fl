@@ -14,7 +14,7 @@ class InformationScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          backgroundColor: Theme.of(context).primaryColor,
+          forceMaterialTransparency: true,
         ),
         body: Container(
           padding: const EdgeInsets.all(10),
