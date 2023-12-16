@@ -91,6 +91,15 @@ class ExportColumnsManager extends ChangeNotifier { // TODO: separate ExportColu
         case BuildInColumn():
         case NativeColumn():
           assert(false, 'User is currently not able to create these columns.');
+          break;
+        case TimeColumn():
+          columns.add({
+            't': 1, // class type
+            'id': c.internalIdentifier,
+            'csvTitle': c.csvTitle,
+            'formatPattern': c.formatPattern
+          });
+          break;
       }
     }
     return jsonEncode({
@@ -106,6 +115,9 @@ class ExportColumnsManager extends ChangeNotifier { // TODO: separate ExportColu
       switch (c['t']) {
         case 0:
           manager.addOrUpdate(UserColumn.explicit(c['id'], c['csvTitle'], c['formatString']));
+          break;
+        case 1:
+          manager.addOrUpdate(TimeColumn.explicit(c['id'], c['csvTitle'], c['formatPattern']));
           break;
         default:
           assert(false, 'Unexpected column type ${c['t']}.');

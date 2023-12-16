@@ -19,6 +19,8 @@ class ExportWarnBanner extends StatefulWidget {
   // TODO: consider attempting to import a file with that config and checking success.
   // This would allow fore more detailed error messages as well.
 
+  // TODO: warn about potential quality loss when using TimeColumn
+
   final ExportSettings exportSettings;
   final CsvExportSettings csvExportSettings;
   final ExportColumnsManager availableColumns;

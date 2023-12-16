@@ -215,8 +215,6 @@ class BuildInColumn extends ExportColumn {
   RowDataFieldType? get restoreAbleType => _formatter.restoreAbleType;
 }
 
-// TODO: add class for formattedTimestamp
-
 /// Class for storing data of user added columns.
 class UserColumn extends ExportColumn {
   /// Create a object that handles export behavior for data in a column.
@@ -232,10 +230,10 @@ class UserColumn extends ExportColumn {
   UserColumn.explicit(this.internalIdentifier, this.csvTitle, String formatPattern):
         formatter = ScriptedFormatter(formatPattern);
 
-  @override
   /// Unique identifier of userColumn.
   ///
   /// Is automatically prefixed with `userColumn.` to avoid name collisions with build-ins.
+  @override
   final String internalIdentifier;
 
   @override
@@ -260,6 +258,49 @@ class UserColumn extends ExportColumn {
   RowDataFieldType? get restoreAbleType => formatter.restoreAbleType;
 }
 
+class TimeColumn extends ExportColumn {
+  /// Create a formatter that converts between [String]s and [DateTime]s through a format pattern
+  ///
+  /// [internalIdentifier] is automatically prefixed with 'userColumn.' during object creation.
+  TimeColumn(this.csvTitle, this.formatPattern):
+        internalIdentifier = 'timeFormatter.$csvTitle';
+
+  /// UserColumn constructor that does not change the [internalIdentifier].
+  TimeColumn.explicit(this.internalIdentifier, this.csvTitle, this.formatPattern);
+
+  ScriptedTimeFormatter? _formatter;
+
+  @override
+  final String csvTitle;
+
+  @override
+  (RowDataFieldType, dynamic)? decode(String pattern) {
+    _formatter ??= ScriptedTimeFormatter(formatPattern);
+    return _formatter!.decode(pattern);
+  }
+
+  @override
+  String encode(BloodPressureRecord record) {
+    _formatter ??= ScriptedTimeFormatter(formatPattern);
+    return _formatter!.encode(record);
+  }
+
+  @override
+  final String formatPattern;
+
+  /// Unique identifier of userColumn.
+  ///
+  /// Is automatically prefixed with `timeFormatter.` to avoid name collisions with build-ins.
+  @override
+  final String internalIdentifier;
+
+  @override
+  RowDataFieldType? get restoreAbleType => RowDataFieldType.timestamp;
+
+  @override
+  String userTitle(AppLocalizations localizations) => csvTitle;
+
+}
 
 /// Interface for converters that allow formatting and provide metadata.
 sealed class ExportColumn implements Formatter {

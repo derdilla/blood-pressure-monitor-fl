@@ -7,7 +7,6 @@ import 'package:intl/intl.dart';
 /// Class to serialize and deserialize [BloodPressureRecord] values.
 abstract interface class Formatter {
   /// Pattern that a user can use to achieve the effect of [convertToCsvValue].
-  // TODO: consider making this implementer specific later in the development process
   String? get formatPattern;
 
   /// Creates a string representation of the record.
@@ -161,4 +160,38 @@ class ScriptedFormatter implements Formatter {
     return _restoreAbleType;
   }
 
+}
+
+/// Record formatter to format encode and decode formatted timestamps.
+///
+/// Where possible the direct timestamp should be used as this may reduce
+/// accuracy of timestamps.
+///
+/// This class is mainly a wrapper around [DateFormat].
+class ScriptedTimeFormatter implements Formatter {
+  /// Creates a new scripted time formatter from a format pattern.
+  ///
+  /// The pattern follows the ICU style like [DateFormat].
+  ScriptedTimeFormatter(String newPattern):
+    timeFormatter = DateFormat(newPattern);
+
+  final DateFormat timeFormatter;
+  
+  @override
+  (RowDataFieldType, dynamic)? decode(String pattern) {
+    try {
+      return (RowDataFieldType.timestamp, timeFormatter.parseLoose(pattern));
+    } on FormatException {
+      return null;
+    }
+  }
+
+  @override
+  String encode(BloodPressureRecord record) => timeFormatter.format(record.creationTime);
+
+  @override
+  String? get formatPattern => timeFormatter.pattern;
+
+  @override
+  RowDataFieldType? get restoreAbleType => RowDataFieldType.timestamp;
 }

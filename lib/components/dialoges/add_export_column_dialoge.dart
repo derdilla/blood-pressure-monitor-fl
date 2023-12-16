@@ -99,6 +99,7 @@ class _AddExportColumnDialogeState extends State<AddExportColumnDialoge> {
               onSaved: (value) => setState(() {formatPattern = value!;}),
             ),
             const SizedBox(height: 8,),
+            // TODO: add switcher to allow creating TimeColumn
             Container(
               padding: const EdgeInsets.all(24),
               decoration: BoxDecoration(
