@@ -7,61 +7,58 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class MeasurementListRow extends StatelessWidget {
-  final BloodPressureRecord record;
+  const MeasurementListRow({super.key, required this.record, required this.settings});
 
-  const MeasurementListRow({super.key, required this.record});
+  final BloodPressureRecord record;
+  final Settings settings;
 
   @override
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
-    return Consumer<Settings>(
-      builder: (context, settings, child) {
-        final formatter = DateFormat(settings.dateFormatString);
-        return ExpansionTile(
-          // Leading color possible
-          title: buildRow(formatter),
-          childrenPadding: const EdgeInsets.only(bottom: 10),
-          backgroundColor: record.needlePin?.color.withAlpha(30),
-          collapsedShape: record.needlePin != null ? Border(left: BorderSide(color: record.needlePin!.color, width: 8)) : null,
-          children: [
-            ListTile(
-              subtitle: Text(formatter.format(record.creationTime)),
-              title: Text(localizations.timestamp),
-              trailing: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  IconButton(
-                    onPressed: () async {
-                      final future = showAddMeasurementDialoge(context, settings, record);
-                      final model = Provider.of<BloodPressureModel>(context, listen: false);
-                      final measurement = await future;
-                      if (measurement == null) return;
-                      if (context.mounted) {
-                        model.addAndExport(context, measurement);
-                      } else {
-                        assert(false, 'context not mounted');
-                        model.add(measurement);
-                      }
-                    },
-                    icon: const Icon(Icons.edit),
-                    tooltip: localizations.edit,
-                  ),
-                  IconButton(
-                    onPressed: () => _deleteEntry(settings, context, localizations),
-                    icon: const Icon(Icons.delete),
-                    tooltip: localizations.delete,
-                  ),
-                ],
+    final formatter = DateFormat(settings.dateFormatString);
+    return ExpansionTile(
+      // Leading color possible
+      title: buildRow(formatter),
+      childrenPadding: const EdgeInsets.only(bottom: 10),
+      backgroundColor: record.needlePin?.color.withAlpha(30),
+      collapsedShape: record.needlePin != null ? Border(left: BorderSide(color: record.needlePin!.color, width: 8)) : null,
+      children: [
+        ListTile(
+          subtitle: Text(formatter.format(record.creationTime)),
+          title: Text(localizations.timestamp),
+          trailing: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              IconButton(
+                onPressed: () async {
+                  final future = showAddMeasurementDialoge(context, settings, record);
+                  final model = Provider.of<BloodPressureModel>(context, listen: false);
+                  final measurement = await future;
+                  if (measurement == null) return;
+                  if (context.mounted) {
+                    model.addAndExport(context, measurement);
+                  } else {
+                    assert(false, 'context not mounted');
+                    model.add(measurement);
+                  }
+                },
+                icon: const Icon(Icons.edit),
+                tooltip: localizations.edit,
               ),
-            ),
-           if (record.notes.isNotEmpty)
-             ListTile(
-               title: Text(localizations.note),
-               subtitle: Text(record.notes),
-             )
-          ],
-        );
-      },
+              IconButton(
+                onPressed: () => _deleteEntry(settings, context, localizations),
+                icon: const Icon(Icons.delete),
+                tooltip: localizations.delete,
+              ),
+            ],
+          ),
+        ),
+        if (record.notes.isNotEmpty)
+          ListTile(
+            title: Text(localizations.note),
+            subtitle: Text(record.notes),
+          )
+      ],
     );
   }
 

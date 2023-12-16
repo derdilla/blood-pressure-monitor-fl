@@ -12,17 +12,21 @@ void main() {
   group('MeasurementListRow', () {
     testWidgets('should initialize without errors', (widgetTester) async {
       await widgetTester.pumpWidget(_materialApp(MeasurementListRow(
-          record: BloodPressureRecord(DateTime(2023), 123, 80, 60, 'test'))));
+        settings: Settings(),
+        record: BloodPressureRecord(DateTime(2023), 123, 80, 60, 'test'))));
       expect(widgetTester.takeException(), isNull);
       await widgetTester.pumpWidget(_materialApp(MeasurementListRow(
-          record: BloodPressureRecord(DateTime.fromMillisecondsSinceEpoch(31279811), null, null, null, 'null test'))));
+        settings: Settings(),
+        record: BloodPressureRecord(DateTime.fromMillisecondsSinceEpoch(31279811), null, null, null, 'null test'))));
       expect(widgetTester.takeException(), isNull);
       await widgetTester.pumpWidget(_materialApp(MeasurementListRow(
-          record: BloodPressureRecord(DateTime(2023), 124, 85, 63, 'color', needlePin: const MeasurementNeedlePin(Colors.cyan)))));
+        settings: Settings(),
+        record: BloodPressureRecord(DateTime(2023), 124, 85, 63, 'color', needlePin: const MeasurementNeedlePin(Colors.cyan)))));
       expect(widgetTester.takeException(), isNull);
     });
     testWidgets('should expand correctly', (widgetTester) async {
       await widgetTester.pumpWidget(_materialApp(MeasurementListRow(
+          settings: Settings(),
           record: BloodPressureRecord(DateTime(2023), 123, 78, 56, 'Test texts'))));
       expect(find.byIcon(Icons.expand_more), findsOneWidget);
       await widgetTester.tap(find.byIcon(Icons.expand_more));
@@ -33,6 +37,7 @@ void main() {
     });
     testWidgets('should display correct information', (widgetTester) async {
       await widgetTester.pumpWidget(_materialApp(MeasurementListRow(
+          settings: Settings(),
           record: BloodPressureRecord(DateTime(2023), 123, 78, 56, 'Test text'))));
       expect(find.text('123'), findsOneWidget);
       expect(find.text('78'), findsOneWidget);
@@ -49,6 +54,7 @@ void main() {
     });
     testWidgets('should not display null values', (widgetTester) async {
       await widgetTester.pumpWidget(_materialApp(MeasurementListRow(
+          settings: Settings(),
           record: BloodPressureRecord(DateTime(2023), null, null, null, ''))));
       expect(find.text('null'), findsNothing);
       expect(find.byIcon(Icons.expand_more), findsOneWidget);
@@ -66,7 +72,6 @@ Widget _materialApp(Widget child) {
       locale: const Locale('en'),
       child: MultiProvider(
           providers: [
-            ChangeNotifierProvider(create: (_) => Settings()),
             ChangeNotifierProvider(create: (_) => IntervallStoreManager(IntervallStorage(), IntervallStorage(), IntervallStorage())),
             ChangeNotifierProvider<BloodPressureModel>(create: (_) => RamBloodPressureModel()),
           ],

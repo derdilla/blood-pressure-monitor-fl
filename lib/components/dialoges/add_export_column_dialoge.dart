@@ -2,6 +2,7 @@ import 'package:blood_pressure_app/components/measurement_list/measurement_list_
 import 'package:blood_pressure_app/model/blood_pressure.dart';
 import 'package:blood_pressure_app/model/export_import/column.dart';
 import 'package:blood_pressure_app/model/export_import/record_formatter.dart';
+import 'package:blood_pressure_app/model/storage/settings_store.dart';
 import 'package:blood_pressure_app/screens/subsettings/export_import/export_field_format_documentation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -11,9 +12,11 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 /// For further documentation please refer to [showAddExportColumnDialoge].
 class AddExportColumnDialoge extends StatefulWidget {
   /// Create a widget for creating and editing a [UserColumn].
-  const AddExportColumnDialoge({super.key, this.initialColumn});
+  const AddExportColumnDialoge({super.key, this.initialColumn, required this.settings});
 
   final ExportColumn? initialColumn;
+
+  final Settings settings;
 
   @override
   State<AddExportColumnDialoge> createState() => _AddExportColumnDialogeState();
@@ -109,7 +112,7 @@ class _AddExportColumnDialogeState extends State<AddExportColumnDialoge> {
                   final decoded = formatter.decode(text);
                   return Column(
                     children: [
-                      MeasurementListRow(record: record,),
+                      MeasurementListRow(record: record, settings: widget.settings,),
                       const SizedBox(height: 8,),
                       const Icon(Icons.arrow_downward),
                       const SizedBox(height: 8,),
@@ -161,7 +164,7 @@ class _AddExportColumnDialogeState extends State<AddExportColumnDialoge> {
 /// Internal identifier and display title are generated from
 /// the CSV title. There is no check whether a userColumn
 /// with the generated title exists.
-Future<UserColumn?> showAddExportColumnDialoge(BuildContext context, [ExportColumn? initialColumn]) =>
+Future<UserColumn?> showAddExportColumnDialoge(BuildContext context, Settings settings, [ExportColumn? initialColumn]) =>
     showDialog<UserColumn?>(context: context, builder: (context) => Dialog.fullscreen(
-      child: AddExportColumnDialoge(initialColumn: initialColumn,),
+      child: AddExportColumnDialoge(initialColumn: initialColumn, settings: settings,),
     ));
