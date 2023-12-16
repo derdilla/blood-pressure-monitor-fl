@@ -39,13 +39,41 @@ class ExportColumnsManagementScreen extends StatelessWidget {
                   ListTile(
                     title: Text(column.userTitle(localizations)),
                     subtitle: Text(column.formatPattern.toString()),
-                    trailing: const Icon(Icons.edit),
-                    onTap: () async {
-                      final editedColumn = await showAddExportColumnDialoge(context, column);
-                      if (editedColumn != null) {
-                        columnsManager.addOrUpdate(editedColumn);
-                      } // TODO: deleting
-                    },
+                    trailing: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        IconButton(
+                          icon: const Icon(Icons.edit),
+                          onPressed: () async {
+                            final editedColumn = await showAddExportColumnDialoge(context, column);
+                            if (editedColumn != null) {
+                              columnsManager.addOrUpdate(editedColumn);
+                            }
+                          },
+                        ),
+                        IconButton(
+                          onPressed: () async {
+                            final confirmed = await showDialog<bool>(context: context,
+                              builder: (context) => AlertDialog(
+                                title: Text(AppLocalizations.of(context)!.confirmDelete),
+                                actions: [
+                                  ElevatedButton(
+                                    onPressed: () => Navigator.of(context).pop(false),
+                                    child: Text(AppLocalizations.of(context)!.btnCancel)),
+                                  ElevatedButton(
+                                    onPressed: () => Navigator.of(context).pop(true),
+                                    child: Text(AppLocalizations.of(context)!.btnConfirm)),
+                                ],
+                              )
+                            ) ?? false;
+                            if (confirmed) {
+                              columnsManager.deleteUserColumn(column.internalIdentifier);
+                            }
+                          },
+                          icon: const Icon(Icons.delete)
+                        )
+                      ],
+                    ),
                   ),
                 ListTile(
                   leading: const Icon(Icons.add),
