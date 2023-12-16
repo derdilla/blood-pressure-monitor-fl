@@ -82,8 +82,34 @@ void main() {
       expect(ScriptedFormatter(r'$PUL$SYS',).decode('123456'), null);
       expect(ScriptedFormatter(r'$SYS$SYS',).decode('123123'), null);
     });
-    // TODO: test amd fix:
-    // - 'Unterminated group' error
-    // - exports containing regex
+
+    test('should when ignore groups in format strings', () {
+      expect(ScriptedFormatter(r'($SYS)',).encode(mockRecord(sys: 123)), '(123)');
+      expect(ScriptedFormatter(r'($SYS',).encode(mockRecord(sys: 123)), '(123');
+      expect(ScriptedFormatter(r'($NOTE',).encode(mockRecord(note: 'test')), '(test');
+
+      expect(ScriptedFormatter(r'($SYS)',).restoreAbleType, RowDataFieldType.sys);
+      expect(ScriptedFormatter(r'($SYS',).restoreAbleType, RowDataFieldType.sys);
+      expect(ScriptedFormatter(r'($NOTE',).restoreAbleType, null);
+
+      expect(ScriptedFormatter(r'($SYS)',).decode('(123)'), (RowDataFieldType.sys, 123));
+      expect(ScriptedFormatter(r'($SYS',).decode('(123'), (RowDataFieldType.sys, 123));
+      expect(ScriptedFormatter(r'($NOTE',).decode('(test'), null);
+    });
   });
 }
+
+BloodPressureRecord mockRecord({
+  DateTime? time,
+  int? sys,
+  int? dia,
+  int? pul,
+  String? note,
+  Color? pin,
+}) => BloodPressureRecord(
+    time ?? DateTime.now(),
+    sys,
+    dia,
+    pul,
+    note ?? '',
+    needlePin: pin == null ? null : MeasurementNeedlePin(pin));

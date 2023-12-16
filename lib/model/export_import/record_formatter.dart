@@ -40,11 +40,7 @@ class ScriptedFormatter implements Formatter {
   (RowDataFieldType, dynamic)? decode(String formattedRecord) {
     if (restoreAbleType == null) return null;
 
-    final valueRegex = RegExp(pattern.replaceAll(RegExp(r'\$(TIMESTAMP|COLOR|SYS|DIA|PUL|NOTE)'), '(?<value>.*)'),);
-    final match = valueRegex.firstMatch(formattedRecord);
-    if (match == null) return null;
-    var text = match.namedGroup('value');
-    if (text == null) return null;
+    final text = formattedRecord.substring(_padLeft!, formattedRecord.length - _padRight!);
 
     final value = (){switch(restoreAbleType!) {
       case RowDataFieldType.timestamp:
@@ -104,33 +100,63 @@ class ScriptedFormatter implements Formatter {
 
   @override
   String? get formatPattern => pattern;
-  
+
   bool _hasRestoreableType = false;
   RowDataFieldType? _restoreAbleType;
+
+  /// Count of characters to the left of the value to parse in [pattern].
+  ///
+  /// Guaranteed to be not null when [restoreAbleType] != null.
+  int? _padLeft;
+
+  /// Count of characters to the right of the value to parse in [pattern].
+  ///
+  /// Guaranteed to be not null when [restoreAbleType] != null.
+  int? _padRight;
+
 
   @override
   RowDataFieldType? get restoreAbleType {
     if (_hasRestoreableType == false) {
       final replaced = pattern.replaceFirst(RegExp(r'[^{},$]*\$(SYS|DIA|PUL)[^{},$]*'), '');
-      print('$pattern - $replaced - ${replaced.contains(RegExp(r'[^{},$]*\$(PUL|DIA|SYS)[^{},$]*'))}');
       if (pattern.contains(RegExp(r'[{},]'))) {
         _restoreAbleType = null;
-      } else if (pattern == r'$TIMESTAMP') { 
-        _restoreAbleType = RowDataFieldType.timestamp; 
-      } else if (pattern == r'$COLOR') { 
-        _restoreAbleType = RowDataFieldType.color; 
+      } else if (pattern == r'$TIMESTAMP') {
+        _restoreAbleType = RowDataFieldType.timestamp;
+      } else if (pattern == r'$COLOR') {
+        _restoreAbleType = RowDataFieldType.color;
       } else if (pattern == r'$NOTE') {
         _restoreAbleType = RowDataFieldType.notes;
       } else if (replaced.contains(RegExp(r'[^{},$]*\$(PUL|DIA|SYS)[^{},$]*'))) {
         _restoreAbleType = null;
       } else if (pattern.contains(RegExp(r'[^{},$]*\$(SYS)[^{},$]*'))) {
-        _restoreAbleType = RowDataFieldType.sys; 
+        _restoreAbleType = RowDataFieldType.sys;
       } else if (pattern.contains(RegExp(r'[^{},$]*\$(DIA)[^{},$]*'))) {
-        _restoreAbleType = RowDataFieldType.dia; 
+        _restoreAbleType = RowDataFieldType.dia;
       } else if (pattern.contains(RegExp(r'[^{},$]*\$(PUL)[^{},$]*'))) {
-        _restoreAbleType = RowDataFieldType.pul; 
+        _restoreAbleType = RowDataFieldType.pul;
       } else { _restoreAbleType = null; }
       _hasRestoreableType = true;
+
+      if (_restoreAbleType != null) {
+        int index = pattern.indexOf(RegExp(r'\$(SYS|DIA|PUL)'));
+        int len = 3;
+        if (index < 0) {
+          index = pattern.indexOf(RegExp(r'\$(NOTE)'));
+          len = 4;
+        }
+        if (index < 0) {
+          index = pattern.indexOf(RegExp(r'\$(COLOR)'));
+          len = 5;
+        }
+        if (index < 0) {
+          index = pattern.indexOf(RegExp(r'\$(TIMESTAMP)'));
+          len = 9;
+        }
+        assert(index >= 0);
+        _padLeft = index;
+        _padRight = pattern.length - (index + len + 1);
+      }
     }
     return _restoreAbleType;
   }
