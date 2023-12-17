@@ -6,6 +6,7 @@ import 'package:blood_pressure_app/model/storage/settings_store.dart';
 import 'package:blood_pressure_app/screens/subsettings/export_import/export_field_format_documentation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:intl/intl.dart';
 
 /// Dialoge widget for creating and editing a [UserColumn].
 ///
@@ -22,25 +23,48 @@ class AddExportColumnDialoge extends StatefulWidget {
   State<AddExportColumnDialoge> createState() => _AddExportColumnDialogeState();
 }
 
-class _AddExportColumnDialogeState extends State<AddExportColumnDialoge> {
+class _AddExportColumnDialogeState extends State<AddExportColumnDialoge> with SingleTickerProviderStateMixin {
   final formKey = GlobalKey<FormState>();
 
   /// Csv column title used to compute internal identifier in case [widget.initialColumn] is null.
   late String csvTitle;
 
-  /// Pattern for the preview and for column creation on save.
-  late String formatPattern;
+  /// Pattern for record formatting preview and for column creation on save.
+  String? recordPattern;
+
+  /// Pattern for time formatting and time column creation
+  String? timePattern;
+
+  /// Kind of column created
+  ///
+  /// Determines whether [recordPattern] or [timePattern] is active.
+  late _FormatterType type;
+
+  late final AnimationController _controller;
 
   @override
   void initState() {
     super.initState();
     csvTitle = widget.initialColumn?.csvTitle ?? '';
-    formatPattern = widget.initialColumn?.formatPattern ?? '';
-  }
 
+    if (widget.initialColumn is TimeColumn) {
+      type = _FormatterType.time;
+      timePattern = widget.initialColumn?.formatPattern;
+    } else {
+      type = _FormatterType.record;
+      recordPattern = widget.initialColumn?.formatPattern;
+    }
+
+    _controller = AnimationController(
+      value: (type == _FormatterType.record) ? 1 : 0,
+      duration: Duration(milliseconds: widget.settings.animationSpeed),
+      vsync: this,
+    );
+  }
 
   @override
   void dispose() {
+    _controller.dispose();
     super.dispose();
   }
 
@@ -59,11 +83,23 @@ class _AddExportColumnDialogeState extends State<AddExportColumnDialoge> {
             onPressed: () {
               if (formKey.currentState?.validate() ?? false) {
                 formKey.currentState!.save();
-                final column = (widget.initialColumn != null) ?
-                  UserColumn.explicit(widget.initialColumn!.internalIdentifier, csvTitle, formatPattern) :
-                  UserColumn(csvTitle, csvTitle, formatPattern);
-
-                Navigator.pop(context, column);
+                late ExportColumn column;
+                if (type == _FormatterType.record) {
+                  assert(recordPattern != null, 'validator should check');
+                  column = (widget.initialColumn != null)
+                      ? UserColumn.explicit(widget.initialColumn!.internalIdentifier, csvTitle, recordPattern!)
+                      : UserColumn(csvTitle, csvTitle, recordPattern!);
+                  Navigator.pop(context, column);
+                } else {
+                  assert(type == _FormatterType.time);
+                  assert(timePattern != null, 'validator should check');
+                  column = (widget.initialColumn != null)
+                      ? TimeColumn.explicit(widget.initialColumn!.internalIdentifier, csvTitle, timePattern!)
+                      : TimeColumn(csvTitle, timePattern!);
+                  Navigator.pop(context, column);
+                }
+              } else {
+                print(formKey.currentState?.validate());
               }
             },
             child: Text(localizations.btnSave)
@@ -81,25 +117,57 @@ class _AddExportColumnDialogeState extends State<AddExportColumnDialoge> {
               onSaved: (value) => setState(() {csvTitle = value!;}),
             ),
             const SizedBox(height: 8,),
-            TextFormField(
-              initialValue: formatPattern,
-              onChanged: (value) => setState(() {
-                formatPattern = value;
-              }),
-              decoration: getInputDecoration(localizations.fieldFormat).copyWith(
-                suffixIcon: IconButton(
-                    onPressed: () {
-                      Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => InformationScreen(text: localizations.exportFieldFormatDocumentation)));
-                    },
-                    icon: const Icon(Icons.info_outline)
+            SegmentedButton(
+              onSelectionChanged: (v) {
+                assert(v.length == 1);
+                setState(() {
+                  type = v.first;
+                  switch (type) {
+                    case _FormatterType.record:
+                      _controller.forward();
+                    case _FormatterType.time:
+                      _controller.reverse();
+                  }
+                });
+              },
+              segments: [
+                ButtonSegment(
+                    value: _FormatterType.record,
+                    label: Text(localizations.recordFormat)
                 ),
-              ),
-              validator: (value) => (value != null && value.isNotEmpty) ? null : localizations.errNoValue,
-              onSaved: (value) => setState(() {formatPattern = value!;}),
+                ButtonSegment(
+                    value: _FormatterType.time,
+                    label: Text(localizations.timeFormat)
+                ),
+              ],
+              selected: { type }
             ),
             const SizedBox(height: 8,),
-            // TODO: add switcher to allow creating TimeColumn
+            Stack(
+              children: [
+                SlideTransition(
+                  position: Tween<Offset>(
+                    begin: Offset.zero,
+                    end: const Offset(1.1, 0.0),
+                  ).animate(CurvedAnimation(
+                    parent: _controller,
+                    curve: Curves.easeIn,
+                  )),
+                  child: _createTimeFormatInput(localizations, context),
+                ),
+                SlideTransition(
+                  position: Tween<Offset>(
+                    begin: const Offset(-1.1, 0.0),
+                    end: Offset.zero,
+                  ).animate(CurvedAnimation(
+                    parent: _controller,
+                    curve: Curves.easeIn,
+                  )),
+                  child: _createRecordFormatInput(localizations, context),
+                ),
+              ],
+            ),
+            const SizedBox(height: 8,),
             Container(
               padding: const EdgeInsets.all(24),
               decoration: BoxDecoration(
@@ -108,12 +176,14 @@ class _AddExportColumnDialogeState extends State<AddExportColumnDialoge> {
               ),
               child: (){
                   final record = BloodPressureRecord(DateTime.now(), 123, 78, 65, 'test note');
-                  final formatter = ScriptedFormatter(formatPattern);
+                  final formatter = (type == _FormatterType.record) ? ScriptedFormatter(recordPattern ?? '')
+                      : ScriptedTimeFormatter(timePattern ?? '');
                   final text = formatter.encode(record);
                   final decoded = formatter.decode(text);
                   return Column(
                     children: [
-                      MeasurementListRow(record: record, settings: widget.settings,),
+                      (type == _FormatterType.record) ? MeasurementListRow(record: record, settings: widget.settings,)
+                          : Text(DateFormat('MMM d, y - h:m.s').format(record.creationTime)),
                       const SizedBox(height: 8,),
                       const Icon(Icons.arrow_downward),
                       const SizedBox(height: 8,),
@@ -134,6 +204,60 @@ class _AddExportColumnDialogeState extends State<AddExportColumnDialoge> {
     );
   }
 
+  Column _createFormatInput(AppLocalizations localizations,
+      BuildContext context,
+      String inputHint,
+      String inputDocumentation,
+      String initialValue,
+      void Function(String) onChanged,
+      String? Function(String?) validator
+      ) {
+    return Column(
+      children: [
+        TextFormField(
+          initialValue: initialValue,
+          onChanged: onChanged,
+          decoration: getInputDecoration(inputHint).copyWith(
+            suffixIcon: IconButton(
+                onPressed: () {
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => InformationScreen(text: inputDocumentation)));
+                },
+                icon: const Icon(Icons.info_outline)
+            ),
+          ),
+          validator: validator,
+          onSaved: (value) => onChanged),
+      ],
+    );
+  }
+
+  Column _createRecordFormatInput(AppLocalizations localizations, BuildContext context) =>
+      _createFormatInput(localizations,
+          context,
+          localizations.fieldFormat,
+          localizations.exportFieldFormatDocumentation,
+          recordPattern ?? '',
+          (value) => setState(() {
+            recordPattern = value;
+          }),
+          (value) => (type == _FormatterType.time || value != null && value.isNotEmpty) ? null
+              : localizations.errNoValue
+      );
+  
+  Column _createTimeFormatInput(AppLocalizations localizations, BuildContext context) =>
+      _createFormatInput(localizations,
+          context,
+          localizations.timeFormat,
+          localizations.enterTimeFormatDesc,
+          timePattern ?? '',
+          (value) => setState(() {
+            timePattern = value;
+          }),
+          (value) => (type == _FormatterType.record || (value != null && value.isNotEmpty)) ? null
+            : localizations.errNoValue
+      );
+
   InputDecoration getInputDecoration(String? labelText) {
     final border = OutlineInputBorder(
         borderSide: BorderSide(
@@ -152,7 +276,12 @@ class _AddExportColumnDialogeState extends State<AddExportColumnDialoge> {
   }
 }
 
-/// Shows a dialoge containing a export column editor.
+enum _FormatterType {
+  record,
+  time,
+}
+
+/// Shows a dialoge containing a export column editor to create a [UserColumn] or [TimeColumn].
 ///
 /// In case [initialColumn] is null fields are initially empty.
 /// When initialColumn is provided, it is ensured that the
@@ -165,7 +294,7 @@ class _AddExportColumnDialogeState extends State<AddExportColumnDialoge> {
 /// Internal identifier and display title are generated from
 /// the CSV title. There is no check whether a userColumn
 /// with the generated title exists.
-Future<UserColumn?> showAddExportColumnDialoge(BuildContext context, Settings settings, [ExportColumn? initialColumn]) =>
-    showDialog<UserColumn?>(context: context, builder: (context) => Dialog.fullscreen(
+Future<ExportColumn?> showAddExportColumnDialoge(BuildContext context, Settings settings, [ExportColumn? initialColumn]) =>
+    showDialog<ExportColumn?>(context: context, builder: (context) => Dialog.fullscreen(
       child: AddExportColumnDialoge(initialColumn: initialColumn, settings: settings,),
     ));

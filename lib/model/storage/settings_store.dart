@@ -182,6 +182,9 @@ class Settings extends ChangeNotifier {
   }
 
   int _animationSpeed = 150;
+  /// Time in which animations run. Higher = slower.
+  ///
+  /// Usually between 0 and 1000.
   int get animationSpeed => _animationSpeed;
   set animationSpeed(int value) {
     _animationSpeed = value;

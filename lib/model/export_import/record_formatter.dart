@@ -178,7 +178,7 @@ class ScriptedTimeFormatter implements Formatter {
   final DateFormat timeFormatter;
   
   @override
-  (RowDataFieldType, dynamic)? decode(String pattern) {
+  (RowDataFieldType, dynamic)? decode(String pattern) { // TODO: empty strings should not decode at all
     try {
       return (RowDataFieldType.timestamp, timeFormatter.parseLoose(pattern));
     } on FormatException {

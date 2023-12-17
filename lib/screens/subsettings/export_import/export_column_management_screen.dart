@@ -82,10 +82,15 @@ class ExportColumnsManagementScreen extends StatelessWidget {
                   title: Text(localizations.addExportformat),
                   onTap: () async{
                     final settings = Provider.of<Settings>(context, listen: false);
-                    UserColumn? editedColumn = await showAddExportColumnDialoge(context, settings);
+                    ExportColumn? editedColumn = await showAddExportColumnDialoge(context, settings);
                     if (editedColumn != null) {
                       while (columnsManager.userColumns.containsKey(editedColumn!.internalIdentifier)) {
-                        editedColumn = UserColumn('${editedColumn.internalIdentifier}I', editedColumn.csvTitle, editedColumn.formatPattern!);
+                        if (editedColumn is UserColumn) {
+                          editedColumn = UserColumn.explicit('${editedColumn.internalIdentifier}I', editedColumn.csvTitle, editedColumn.formatPattern!);
+                        } else {
+                          assert(editedColumn is TimeColumn, 'Creation of other types not supported in dialoge.');
+                          editedColumn = TimeColumn.explicit('${editedColumn.internalIdentifier}I', editedColumn.csvTitle, editedColumn.formatPattern!);
+                        }
                       }
                       columnsManager.addOrUpdate(editedColumn);
                     }

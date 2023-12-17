@@ -480,5 +480,9 @@
   "buildIn": "Build-in",
   "@buildIn": {},
   "csvTitle": "CSV-title",
-  "@csvTitle": {}
+  "@csvTitle": {},
+  "recordFormat": "Record format",
+  "@recordFormat": {},
+  "timeFormat": "Time format",
+  "@timeFormat": {}
 }
