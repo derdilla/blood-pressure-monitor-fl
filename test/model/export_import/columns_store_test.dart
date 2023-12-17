@@ -36,5 +36,19 @@ void main() {
           init.userColumns[c2.internalIdentifier]?.formatPattern);
       expect(fromJson.toJson(), init.toJson());
     });
+
+    test('should restore TimeColumns from configurations', () {
+      final initialManager = ExportColumnsManager();
+      initialManager.addOrUpdate(TimeColumn('testA', 'dd'));
+      initialManager.addOrUpdate(TimeColumn('testB', 'mmm'));
+      initialManager.addOrUpdate(TimeColumn('testC', 'asdsa'));
+
+      expect(initialManager.userColumns.length, 3);
+      expect(initialManager.userColumns.values, everyElement(isA<TimeColumn>()));
+
+      final fromJson = ExportColumnsManager.fromJson(initialManager.toJson());
+      expect(fromJson.userColumns.length, 3);
+      expect(fromJson.userColumns.values, everyElement(isA<TimeColumn>()));
+    });
   });
 }

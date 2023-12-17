@@ -16,7 +16,7 @@ void main() {
     test('should return correct columns depending on mode', () {
       final config = ActiveExportColumnConfiguration(
           activePreset: ExportImportPreset.bloodPressureApp,
-          userSelectedColumnIds: ['a', 'b', 'c'],
+          userSelectedColumnIds: ['userColumn.a', 'userColumn.b', 'userColumn.c'],
       );
       expect(config.getActiveColumns(ExportColumnsManager()), everyElement(isA<NativeColumn>()));
 

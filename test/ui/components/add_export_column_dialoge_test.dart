@@ -20,7 +20,7 @@ void main() {
       expect(find.text('Please enter a value'), findsOneWidget);
       expect(find.text('null'), findsOneWidget);
       expect(find.byType(MeasurementListRow), findsOneWidget);
-      expect(find.byIcon(Icons.info_outline), findsOneWidget);
+      expect(find.byIcon(Icons.info_outline).hitTestable(), findsOneWidget);
       expect(find.byIcon(Icons.arrow_downward), findsNWidgets(2));
     });
     testWidgets('should prefill values', (widgetTester) async {
@@ -36,7 +36,7 @@ void main() {
       expect(find.text('csvTitle'), findsOneWidget);
       expect(find.text(r'formatPattern$SYS'), findsOneWidget);
       expect(find.byType(MeasurementListRow), findsOneWidget);
-      expect(find.byIcon(Icons.info_outline), findsOneWidget);
+      expect(find.byIcon(Icons.info_outline).hitTestable(), findsOneWidget);
       expect(find.byIcon(Icons.arrow_downward), findsNWidgets(2));
     });
     testWidgets('should show preview', (widgetTester) async {
@@ -55,8 +55,8 @@ void main() {
 
       expect(find.byType(InformationScreen), findsNothing);
 
-      expect(find.byIcon(Icons.info_outline), findsOneWidget);
-      await widgetTester.tap(find.byIcon(Icons.info_outline));
+      expect(find.byIcon(Icons.info_outline).hitTestable(), findsOneWidget);
+      await widgetTester.tap(find.byIcon(Icons.info_outline).hitTestable(),);
       await widgetTester.pumpAndSettle();
 
       expect(find.byType(InformationScreen), findsOneWidget);
