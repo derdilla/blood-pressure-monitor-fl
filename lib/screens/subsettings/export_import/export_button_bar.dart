@@ -41,35 +41,7 @@ class ExportButtonBar extends StatelessWidget {
             child: MaterialButton(
               height: 60,
               child: Text(localizations.export),
-              onPressed: () async {
-                final exportSettings = Provider.of<ExportSettings>(context, listen: false);
-                final filename = 'blood_press_${DateTime.now().toIso8601String()}';
-                switch (exportSettings.exportFormat) {
-                  case ExportFormat.db:
-                    final path = join(await getDatabasesPath(), 'blood_pressure.db');
-
-                    if (context.mounted) _exportFile(context, path, '$filename.db', 'text/sqlite');
-                    break;
-                  case ExportFormat.csv:
-                    final csvConverter = CsvConverter(
-                      Provider.of<CsvExportSettings>(context, listen: false),
-                      Provider.of<ExportColumnsManager>(context, listen: false),
-                    );
-                    final csvString = csvConverter.create(await _getRecords(context));
-                    final data = Uint8List.fromList(utf8.encode(csvString));
-                    if (context.mounted) _exportData(context, data, '$filename.csv', 'text/csv');
-                    break;
-                  case ExportFormat.pdf:
-                    final pdfConverter = PdfConverter(
-                        Provider.of<PdfExportSettings>(context, listen: false),
-                        localizations,
-                        Provider.of<Settings>(context, listen: false),
-                        Provider.of<ExportColumnsManager>(context, listen: false)
-                    );
-                    final pdf = await pdfConverter.create(await _getRecords(context));
-                    if (context.mounted) _exportData(context, pdf, '$filename.pdf', 'text/pdf');
-                }
-              }
+              onPressed: () => performExport(context, localizations)
             )
           ),
           const VerticalDivider(),
@@ -152,38 +124,69 @@ class ExportButtonBar extends StatelessWidget {
 
   void _showError(ScaffoldMessengerState messenger, String text) =>
       messenger.showSnackBar(SnackBar(content: Text(text)));
+}
 
-  /// Get the records that should be exported.
-  Future<List<BloodPressureRecord>> _getRecords(BuildContext context) {
-    final range = Provider.of<IntervallStoreManager>(context, listen: false).exportPage.currentRange;
-    final model = Provider.of<BloodPressureModel>(context, listen: false);
-    return model.getInTimeRange(range.start, range.end);
-  }
+void performExport(BuildContext context, [AppLocalizations? localizations]) async {
+  localizations ??= AppLocalizations.of(context);
+  final exportSettings = Provider.of<ExportSettings>(context, listen: false);
+  final filename = 'blood_press_${DateTime.now().toIso8601String()}';
+  switch (exportSettings.exportFormat) {
+    case ExportFormat.db:
+      final path = join(await getDatabasesPath(), 'blood_pressure.db');
 
-  /// Save to default export path or share by providing a path.
-  Future<void> _exportFile(BuildContext context, String path, String fullFileName, String mimeType) async {
-    final settings = Provider.of<ExportSettings>(context, listen: false);
-    if (settings.defaultExportDir.isEmpty) {
-      await PlatformClient.shareFile(path, mimeType, fullFileName);
-    } else {
-      JSaver.instance.save(
-          fromPath: path,
-          androidPathOptions: AndroidPathOptions(toDefaultDirectory: true)
+      if (context.mounted) _exportFile(context, path, '$filename.db', 'text/sqlite');
+      break;
+    case ExportFormat.csv:
+      final csvConverter = CsvConverter(
+        Provider.of<CsvExportSettings>(context, listen: false),
+        Provider.of<ExportColumnsManager>(context, listen: false),
       );
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text(AppLocalizations.of(context)!.success(settings.defaultExportDir))));
-    }
+      final csvString = csvConverter.create(await _getRecords(context));
+      final data = Uint8List.fromList(utf8.encode(csvString));
+      if (context.mounted) _exportData(context, data, '$filename.csv', 'text/csv');
+      break;
+    case ExportFormat.pdf:
+      final pdfConverter = PdfConverter(
+          Provider.of<PdfExportSettings>(context, listen: false),
+          localizations!,
+          Provider.of<Settings>(context, listen: false),
+          Provider.of<ExportColumnsManager>(context, listen: false)
+      );
+      final pdf = await pdfConverter.create(await _getRecords(context));
+      if (context.mounted) _exportData(context, pdf, '$filename.pdf', 'text/pdf');
   }
+}
 
-  /// Save to default export path or share by providing binary data.
-  Future<void> _exportData(BuildContext context, Uint8List data, String fullFileName, String mimeType) async {
-    final settings = Provider.of<ExportSettings>(context, listen: false);
-    if (settings.defaultExportDir.isEmpty) {
-      await PlatformClient.shareData(data, mimeType, fullFileName);
-    } else {
-      final file = File(joinPath(Directory.systemTemp.path, fullFileName));
-      file.writeAsBytesSync(data);
-      await _exportFile(context, file.path, fullFileName, mimeType);
-    }
+/// Get the records that should be exported.
+Future<List<BloodPressureRecord>> _getRecords(BuildContext context) {
+  final range = Provider.of<IntervallStoreManager>(context, listen: false).exportPage.currentRange;
+  final model = Provider.of<BloodPressureModel>(context, listen: false);
+  return model.getInTimeRange(range.start, range.end);
+}
+
+/// Save to default export path or share by providing a path.
+Future<void> _exportFile(BuildContext context, String path, String fullFileName, String mimeType) async {
+  final settings = Provider.of<ExportSettings>(context, listen: false);
+  if (settings.defaultExportDir.isEmpty) {
+    await PlatformClient.shareFile(path, mimeType, fullFileName);
+  } else {
+    JSaver.instance.save(
+        fromPath: path,
+        androidPathOptions: AndroidPathOptions(toDefaultDirectory: true)
+    );
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(AppLocalizations.of(context)!.success(settings.defaultExportDir))));
+  }
+}
+
+/// Save to default export path or share by providing binary data.
+Future<void> _exportData(BuildContext context, Uint8List data, String fullFileName, String mimeType) async {
+  final settings = Provider.of<ExportSettings>(context, listen: false);
+  if (settings.defaultExportDir.isEmpty) {
+    await PlatformClient.shareData(data, mimeType, fullFileName);
+  } else {
+    final file = File(joinPath(Directory.systemTemp.path, fullFileName));
+    file.writeAsBytesSync(data);
+    await _exportFile(context, file.path, fullFileName, mimeType);
   }
 }
