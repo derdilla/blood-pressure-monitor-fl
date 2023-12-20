@@ -1,6 +1,8 @@
 
+import 'package:blood_pressure_app/model/export_import/column.dart';
 import 'package:blood_pressure_app/model/export_import/export_configuration.dart';
 import 'package:blood_pressure_app/model/horizontal_graph_line.dart';
+import 'package:blood_pressure_app/model/storage/export_columns_store.dart';
 import 'package:blood_pressure_app/model/storage/export_csv_settings_store.dart';
 import 'package:blood_pressure_app/model/storage/export_pdf_settings_store.dart';
 import 'package:blood_pressure_app/model/storage/export_settings_store.dart';
@@ -291,6 +293,35 @@ void main() {
       expect(v2.cellFontSize, PdfExportSettings().cellFontSize);
       expect(v3.headerFontSize, PdfExportSettings().headerFontSize);
       expect(v3.exportData, PdfExportSettings().exportData);
+    });
+  });
+
+  group('ExportColumnsManager', (){
+    test('should be able to recreate all values from json', () {
+      final initial = ExportColumnsManager();
+      final c1 = UserColumn('test', 'test', '\$SYS');
+      final c2 = TimeColumn('testB', 'mmm');
+      initial.addOrUpdate(c1);
+      initial.addOrUpdate(c2);
+      final fromJson = ExportColumnsManager.fromJson(initial.toJson());
+
+      expect(initial.toJson(), fromJson.toJson());
+    });
+
+    test('should not crash when parsing incorrect json', () {
+      ExportColumnsManager.fromJson('banana');
+      ExportColumnsManager.fromJson('{"userColumns" = 1}');
+      ExportColumnsManager.fromJson('{"userColumns": 1');
+      ExportColumnsManager.fromJson('{userColumns: 1}');
+      ExportColumnsManager.fromJson('green{userColumns: 1}');
+    });
+
+    test('should not crash when parsing invalid values and ignore them', () {
+      final v1 = ExportColumnsManager.fromJson('{"userColumns": [1]}');
+      final v2 = ExportColumnsManager.fromJson('{"cellFontSize": "red"}');
+
+      expect(v1.userColumns.length, ExportColumnsManager().userColumns.length);
+      expect(v2.userColumns.length, ExportColumnsManager().userColumns.length);
     });
   });
 }
