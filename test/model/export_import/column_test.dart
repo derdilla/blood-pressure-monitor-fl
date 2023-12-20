@@ -1,12 +1,13 @@
 import 'package:blood_pressure_app/model/blood_pressure.dart';
 import 'package:blood_pressure_app/model/export_import/column.dart';
 import 'package:blood_pressure_app/model/export_import/import_field_type.dart';
+import 'package:blood_pressure_app/model/export_import/record_formatter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   group('NativeColumn', () {
-    test('allColumns should contain fields', () {
+    test('should contain fields in allColumns', () {
       expect(NativeColumn.allColumns, containsAll([
         NativeColumn.timestampUnixMs,
         NativeColumn.systolic,
@@ -17,24 +18,24 @@ void main() {
         NativeColumn.needlePin,
       ]));
     });
-    test('columns should have internalIdentifier prefixed with "native."', () {
+    test('should have internalIdentifier prefixed with "native."', () {
       for (final c in NativeColumn.allColumns) {
         expect(c.internalIdentifier, startsWith("native."));
       }
     });
-    test('columns should encode into non-empty string', () {
+    test('should encode into non-empty string', () {
       // Use BuildInColumn for utility columns
       for (final c in NativeColumn.allColumns) {
         expect(c.encode(getRecord()), isNotEmpty);
       }
     });
-    test('columns should only contain restoreable types', () {
+    test('should only contain restoreable types', () {
       // Use BuildInColumn for utility columns
       for (final c in NativeColumn.allColumns) {
         expect(c.restoreAbleType, isNotNull);
       }
     });
-    test('columns should decode correctly', () {
+    test('should decode correctly', () {
       final r = getRecord();
       for (final c in NativeColumn.allColumns) {
         final txt = c.encode(r);
@@ -75,7 +76,7 @@ void main() {
   });
 
   group('BuildInColumn', () {
-    test('allColumns should contain fields', () {
+    test('should contain fields in allColumns', () {
       expect(BuildInColumn.allColumns, containsAll([
         BuildInColumn.pulsePressure,
         BuildInColumn.mhDate,
@@ -88,12 +89,17 @@ void main() {
         BuildInColumn.mhOxygen,
       ]));
     });
-    test('columns should have internalIdentifier prefixed with "buildin."', () {
+    test('should have internalIdentifier prefixed with "buildin."', () {
       for (final c in BuildInColumn.allColumns) {
         expect(c.internalIdentifier, startsWith("buildin."));
       }
     });
-    test('columns should decode correctly', () {
+    test('should encode without problems', () {
+      for (final c in BuildInColumn.allColumns) {
+        expect(c.encode(getRecord()), isNotNull);
+      }
+    });
+    test('should decode correctly', () {
       final r = getRecord();
       for (final c in BuildInColumn.allColumns) {
         final txt = c.encode(r);
@@ -134,7 +140,32 @@ void main() {
     });
   });
 
-  // TODO: UserColumn, TimeColumn
+  group('UserColumn', () {
+    test('should have internalIdentifier prefixed with "userColumn."', () {
+      final column = UserColumn('test', 'csvTitle', 'pattern');
+      expect(column.internalIdentifier, startsWith('userColumn.'));
+    });
+    test('should encode like ScriptedFormatter', () {
+      final r = getRecord();
+      expect(UserColumn('','', 'TEST').encode(r), ScriptedFormatter('TEST').encode(r));
+      expect(UserColumn('','', r'$SYS').encode(r), ScriptedFormatter(r'$SYS').encode(r));
+      expect(UserColumn('','', r'$SYS-$DIA').encode(r), ScriptedFormatter(r'$SYS-$DIA').encode(r));
+      expect(UserColumn('','', r'$TIMESTAMP').encode(r), ScriptedFormatter(r'$TIMESTAMP').encode(r));
+      expect(UserColumn('','', '').encode(r), ScriptedFormatter('').encode(r));
+    });
+    test('should decode like ScriptedFormatter', () {
+      final r = getRecord();
+      final testPatterns = ['TEST', r'$SYS', r'{{$SYS-$DIA}}', r'$TIMESTAMP', ''];
+
+      for (final pattern in testPatterns) {
+        final column = UserColumn('','', pattern);
+        final formatter = ScriptedFormatter(pattern);
+        expect(column.decode(column.encode(r)), formatter.decode(formatter.encode(r)))
+      }
+    });
+  });
+
+  // TODO: TimeColumn
 }
 
 BloodPressureRecord getRecord() => BloodPressureRecord(DateTime.now(), 123, 456, 678, 'notes', needlePin: const MeasurementNeedlePin(Colors.pink));
