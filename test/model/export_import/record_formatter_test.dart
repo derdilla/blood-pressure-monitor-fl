@@ -97,6 +97,20 @@ void main() {
       expect(ScriptedFormatter(r'($NOTE',).decode('(test'), null);
     });
   });
+
+  group('ScriptedTimeFormatter', () {
+    test('should create non-empty string', () {
+      expect(ScriptedTimeFormatter('dd').encode(mockRecord()), isNotNull);
+      expect(ScriptedTimeFormatter('dd').encode(mockRecord()), isNotEmpty);
+    });
+    test('should decode rough time', () {
+      final formatter = ScriptedTimeFormatter('yyyy.MMMM.dd GGG hh:mm.ss aaa');
+      final r = mockRecord();
+      expect(formatter.encode(r), isNotNull);
+      expect(formatter.decode(formatter.encode(r))?.$2, isA<DateTime>()
+          .having((p0) => p0.millisecondsSinceEpoch, 'time(up to one second difference)', closeTo(r.creationTime.millisecondsSinceEpoch, 1000)));
+    });
+  });
 }
 
 BloodPressureRecord mockRecord({

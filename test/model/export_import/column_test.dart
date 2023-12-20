@@ -5,6 +5,8 @@ import 'package:blood_pressure_app/model/export_import/record_formatter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import 'record_formatter_test.dart';
+
 void main() {
   group('NativeColumn', () {
     test('should contain fields in allColumns', () {
@@ -26,7 +28,7 @@ void main() {
     test('should encode into non-empty string', () {
       // Use BuildInColumn for utility columns
       for (final c in NativeColumn.allColumns) {
-        expect(c.encode(getRecord()), isNotEmpty);
+        expect(c.encode(mockRecord()), isNotEmpty);
       }
     });
     test('should only contain restoreable types', () {
@@ -36,7 +38,7 @@ void main() {
       }
     });
     test('should decode correctly', () {
-      final r = getRecord();
+      final r = mockRecord();
       for (final c in NativeColumn.allColumns) {
         final txt = c.encode(r);
         final decoded = c.decode(txt);
@@ -96,11 +98,11 @@ void main() {
     });
     test('should encode without problems', () {
       for (final c in BuildInColumn.allColumns) {
-        expect(c.encode(getRecord()), isNotNull);
+        expect(c.encode(mockRecord()), isNotNull);
       }
     });
     test('should decode correctly', () {
-      final r = getRecord();
+      final r = mockRecord();
       for (final c in BuildInColumn.allColumns) {
         final txt = c.encode(r);
         final decoded = c.decode(txt);
@@ -146,7 +148,7 @@ void main() {
       expect(column.internalIdentifier, startsWith('userColumn.'));
     });
     test('should encode like ScriptedFormatter', () {
-      final r = getRecord();
+      final r = mockRecord();
       expect(UserColumn('','', 'TEST').encode(r), ScriptedFormatter('TEST').encode(r));
       expect(UserColumn('','', r'$SYS').encode(r), ScriptedFormatter(r'$SYS').encode(r));
       expect(UserColumn('','', r'$SYS-$DIA').encode(r), ScriptedFormatter(r'$SYS-$DIA').encode(r));
@@ -154,18 +156,21 @@ void main() {
       expect(UserColumn('','', '').encode(r), ScriptedFormatter('').encode(r));
     });
     test('should decode like ScriptedFormatter', () {
-      final r = getRecord();
+      final r = mockRecord();
       final testPatterns = ['TEST', r'$SYS', r'{{$SYS-$DIA}}', r'$TIMESTAMP', ''];
 
       for (final pattern in testPatterns) {
         final column = UserColumn('','', pattern);
         final formatter = ScriptedFormatter(pattern);
-        expect(column.decode(column.encode(r)), formatter.decode(formatter.encode(r)))
+        expect(column.decode(column.encode(r)), formatter.decode(formatter.encode(r)));
       }
     });
   });
 
-  // TODO: TimeColumn
+  group('TimeColumn', () {
+    test('should have internalIdentifier prefixed with "timeFormatter."', () {
+      final column = TimeColumn('csvTitle', 'formatPattern');
+      expect(column.internalIdentifier, startsWith('timeFormatter.'));
+    });
+  });
 }
-
-BloodPressureRecord getRecord() => BloodPressureRecord(DateTime.now(), 123, 456, 678, 'notes', needlePin: const MeasurementNeedlePin(Colors.pink));
