@@ -50,5 +50,61 @@ void main() {
       expect(fromJson.userColumns.length, 3);
       expect(fromJson.userColumns.values, everyElement(isA<TimeColumn>()));
     });
+
+    test('should delete columns', () {
+      final manger = ExportColumnsManager();
+      final c1 = UserColumn('test', 'test', '\$SYS');
+      final c2 = TimeColumn('testA', 'dd');
+      manger.addOrUpdate(c1);
+      manger.addOrUpdate(c2);
+
+      expect(manger.userColumns.length, 2);
+      expect(() => manger.deleteUserColumn('none'), throwsAssertionError);
+      expect(manger.userColumns.length, 2);
+
+      manger.deleteUserColumn(c1.internalIdentifier);
+      expect(manger.userColumns.length, 1);
+      expect(() => manger.deleteUserColumn(c1.internalIdentifier), throwsAssertionError);
+      expect(manger.userColumns.length, 1);
+
+      manger.deleteUserColumn(c2.internalIdentifier);
+      expect(manger.userColumns.length, 0);
+    });
+
+    test('should include all columns in firstWhere search', () {
+      final manger = ExportColumnsManager();
+      final c1 = UserColumn('test', 'test', '\$SYS');
+      final c2 = TimeColumn('testA', 'dd');
+      manger.addOrUpdate(c1);
+      manger.addOrUpdate(c2);
+
+      expect(manger.firstWhere((p0) => p0.internalIdentifier == c1.internalIdentifier), c1);
+      expect(manger.firstWhere((p0) => p0.internalIdentifier == c2.internalIdentifier), c2);
+      expect(manger.firstWhere((p0) => p0.csvTitle == c2.csvTitle), c2);
+      expect(manger.firstWhere((p0) => p0.formatPattern == c1.formatPattern), c1);
+
+      expect(manger.firstWhere((p0) => p0.csvTitle == NativeColumn.timestampUnixMs.csvTitle), NativeColumn.timestampUnixMs);
+      expect(manger.firstWhere((p0) => p0.internalIdentifier == BuildInColumn.pulsePressure.internalIdentifier), BuildInColumn.pulsePressure);
+
+      expect(manger.firstWhere((p0) => p0.internalIdentifier == 'non existent'), null);
+    });
+
+    test('should get all columns', () {
+      final manager = ExportColumnsManager();
+
+      expect(manager.getAllColumns().length, NativeColumn.allColumns.length + BuildInColumn.allColumns.length);
+
+      manager.addOrUpdate(UserColumn('test', '', ''));
+      expect(manager.getAllColumns().length, NativeColumn.allColumns.length + BuildInColumn.allColumns.length + 1);
+    });
+
+    test('should get only unmodifiable columns', () {
+      final manager = ExportColumnsManager();
+
+      expect(manager.getAllUnmodifiableColumns().length, NativeColumn.allColumns.length + BuildInColumn.allColumns.length);
+
+      manager.addOrUpdate(UserColumn('test', '', ''));
+      expect(manager.getAllUnmodifiableColumns().length, NativeColumn.allColumns.length + BuildInColumn.allColumns.length);
+    });
   });
 }

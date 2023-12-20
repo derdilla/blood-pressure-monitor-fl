@@ -35,7 +35,7 @@ class ExportColumnsManager extends ChangeNotifier { // TODO: separate ExportColu
   /// Calling this with the [ExportColumnI.internalIdentifier] of build-in columns
   /// or undefined columns will have no effect.
   void deleteUserColumn(String identifier) {
-    assert(_userColumns.containsKey(identifier), 'Don\'t call for non user columns');
+    assert(_userColumns.containsKey(identifier), 'Don\'t call deleteUserColumn for non-existent or non-user columns');
     _userColumns.remove(identifier);
     notifyListeners();
   }
