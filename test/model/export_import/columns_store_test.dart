@@ -4,7 +4,7 @@ import 'package:blood_pressure_app/model/storage/export_columns_store.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  group('ExportColumnsManager', () {
+  group('ExportColumnsManager', () { // TODO merge with export_columns_store_test
     test('should allow adding columns', () async {
       final manager = ExportColumnsManager();
       final c1 = UserColumn('test', 'test', '\$SYS');

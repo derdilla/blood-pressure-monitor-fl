@@ -76,7 +76,7 @@ class ExportColumnsManager extends ChangeNotifier { // TODO: separate ExportColu
     return UnmodifiableListView(columns);
   }
 
-  String toJson() { // TODO: update from and TO json to new style
+  Map<String, dynamic> toMap() {
     final columns = [];
     for (final c in _userColumns.values) {
       switch (c) {
@@ -102,14 +102,15 @@ class ExportColumnsManager extends ChangeNotifier { // TODO: separate ExportColu
           break;
       }
     }
-    return jsonEncode({
+    return {
       'userColumns': columns,
-    });
+    };
   }
 
-  factory ExportColumnsManager.fromJson(String jsonString) {
-    final json = jsonDecode(jsonString);
-    final List<dynamic> jsonUserColumns = json['userColumns'];
+  String toJson() => jsonEncode(toMap());
+
+  factory ExportColumnsManager.fromMap(Map<String, dynamic> map) {
+    final List<dynamic> jsonUserColumns = map['userColumns'];
     final manager = ExportColumnsManager();
     for (final Map<String, dynamic> c in jsonUserColumns) {
       switch (c['t']) {
@@ -123,8 +124,16 @@ class ExportColumnsManager extends ChangeNotifier { // TODO: separate ExportColu
           assert(false, 'Unexpected column type ${c['t']}.');
       }
     }
-
     return manager;
+  }
+
+  factory ExportColumnsManager.fromJson(String jsonString) {
+    try {
+      return ExportColumnsManager.fromMap(jsonDecode(jsonString));
+    } catch (e) {
+      assert(e is FormatException || e is TypeError);
+      return ExportColumnsManager();
+    }
   }
 }
 
