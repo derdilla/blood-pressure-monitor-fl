@@ -38,8 +38,8 @@ class MeasurementListRow extends StatelessWidget {
                   if (context.mounted) {
                     model.addAndExport(context, measurement);
                   } else {
-                    assert(false, 'context not mounted');
                     model.add(measurement);
+                    assert(false, 'context not mounted');
                   }
                 },
                 icon: const Icon(Icons.edit),
