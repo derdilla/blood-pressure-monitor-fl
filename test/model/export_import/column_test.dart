@@ -28,7 +28,7 @@ void main() {
     test('should encode into non-empty string', () {
       // Use BuildInColumn for utility columns
       for (final c in NativeColumn.allColumns) {
-        expect(c.encode(mockRecord()), isNotEmpty);
+        expect(c.encode(_filledRecord()), isNotEmpty, reason: '${c.internalIdentifier} is NativeColumn');
       }
     });
     test('should only contain restoreable types', () {
@@ -38,11 +38,11 @@ void main() {
       }
     });
     test('should decode correctly', () {
-      final r = mockRecord();
+      final r = _filledRecord();
       for (final c in NativeColumn.allColumns) {
         final txt = c.encode(r);
         final decoded = c.decode(txt);
-        expect(decoded, isNotNull);
+        expect(decoded, isNotNull, reason: 'a real value was encoded: ${c.internalIdentifier}: $r > $txt');
         switch (decoded!.$1) {
           case RowDataFieldType.timestamp:
             expect(decoded.$2, isA<DateTime>().having(
@@ -98,11 +98,11 @@ void main() {
     });
     test('should encode without problems', () {
       for (final c in BuildInColumn.allColumns) {
-        expect(c.encode(mockRecord()), isNotNull);
+        expect(c.encode(_filledRecord()), isNotNull);
       }
     });
     test('should decode correctly', () {
-      final r = mockRecord();
+      final r = _filledRecord();
       for (final c in BuildInColumn.allColumns) {
         final txt = c.encode(r);
         final decoded = c.decode(txt);
@@ -148,7 +148,7 @@ void main() {
       expect(column.internalIdentifier, startsWith('userColumn.'));
     });
     test('should encode like ScriptedFormatter', () {
-      final r = mockRecord();
+      final r = _filledRecord();
       expect(UserColumn('','', 'TEST').encode(r), ScriptedFormatter('TEST').encode(r));
       expect(UserColumn('','', r'$SYS').encode(r), ScriptedFormatter(r'$SYS').encode(r));
       expect(UserColumn('','', r'$SYS-$DIA').encode(r), ScriptedFormatter(r'$SYS-$DIA').encode(r));
@@ -156,7 +156,7 @@ void main() {
       expect(UserColumn('','', '').encode(r), ScriptedFormatter('').encode(r));
     });
     test('should decode like ScriptedFormatter', () {
-      final r = mockRecord();
+      final r = _filledRecord();
       final testPatterns = ['TEST', r'$SYS', r'{{$SYS-$DIA}}', r'$TIMESTAMP', ''];
 
       for (final pattern in testPatterns) {
@@ -174,3 +174,11 @@ void main() {
     });
   });
 }
+
+BloodPressureRecord _filledRecord() => mockRecord(
+  sys: 123,
+  dia: 456,
+  pul: 789,
+  note: 'test',
+  pin: Colors.pink
+);
