@@ -21,13 +21,27 @@ class CsvExportSettings extends ChangeNotifier implements CustomFieldsSettings {
     _exportFieldsConfiguration.addListener(() => notifyListeners());
   }
 
-  factory CsvExportSettings.fromMap(Map<String, dynamic> map) => CsvExportSettings(
-      fieldDelimiter: ConvertUtil.parseString(map['fieldDelimiter']),
-      textDelimiter: ConvertUtil.parseString(map['textDelimiter']),
-      exportHeadline: ConvertUtil.parseBool(map['exportHeadline']),
-      exportFieldsConfiguration: ActiveExportColumnConfiguration.fromJson(map['exportFieldsConfiguration']),
-      // TODO: migrate exportCustomFields and customFields before release
-  );
+  factory CsvExportSettings.fromMap(Map<String, dynamic> map) {
+    if (map.containsKey('exportFieldsConfiguration')) {
+      return CsvExportSettings(
+        fieldDelimiter: ConvertUtil.parseString(map['fieldDelimiter']),
+        textDelimiter: ConvertUtil.parseString(map['textDelimiter']),
+        exportHeadline: ConvertUtil.parseBool(map['exportHeadline']),
+        exportFieldsConfiguration: ActiveExportColumnConfiguration.fromJson(map['exportFieldsConfiguration']),
+      );
+    } else {
+      return CsvExportSettings(
+        fieldDelimiter: ConvertUtil.parseString(map['fieldDelimiter']),
+        textDelimiter: ConvertUtil.parseString(map['textDelimiter']),
+        exportHeadline: ConvertUtil.parseBool(map['exportHeadline']),
+        exportFieldsConfiguration: ActiveExportColumnConfiguration(
+          activePreset: ConvertUtil.parseBool(map['exportCustomFields']) ?? false ? ExportImportPreset.none : ExportImportPreset.bloodPressureApp,
+          // Can't migrate user columns ('customFields') as no prefix available
+        ),
+      );
+    }
+
+  }
 
   factory CsvExportSettings.fromJson(String json) {
     try {

@@ -14,7 +14,7 @@ class ActiveExportColumnConfiguration extends ChangeNotifier {
   /// The default configuration is guaranteed to be restoreable.
   ActiveExportColumnConfiguration({
     ExportImportPreset? activePreset,
-    List<String>? userSelectedColumnIds
+    List<String>? userSelectedColumnIds,
   }) :
       _activePreset = activePreset ?? ExportImportPreset.bloodPressureApp,
       _userSelectedColumns = userSelectedColumnIds ?? [];

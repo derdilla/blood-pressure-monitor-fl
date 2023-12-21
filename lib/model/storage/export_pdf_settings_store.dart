@@ -35,8 +35,9 @@ class PdfExportSettings extends ChangeNotifier implements CustomFieldsSettings {
     cellHeight: ConvertUtil.parseDouble(map['cellHeight']),
     headerFontSize: ConvertUtil.parseDouble(map['headerFontSize']),
     cellFontSize: ConvertUtil.parseDouble(map['cellFontSize']),
-    exportFieldsConfiguration: ActiveExportColumnConfiguration.fromJson(map['exportFieldsConfiguration']),
-    // TODO: migrate exportCustomFields and customFields before release
+    exportFieldsConfiguration: map.containsKey('exportFieldsConfiguration')
+        ? ActiveExportColumnConfiguration.fromJson(map['exportFieldsConfiguration'])
+        : ActiveExportColumnConfiguration(activePreset: ConvertUtil.parseBool(map['exportCustomFields']) ?? false ? ExportImportPreset.none : ExportImportPreset.bloodPressureApp),
   );
 
   factory PdfExportSettings.fromJson(String json) {

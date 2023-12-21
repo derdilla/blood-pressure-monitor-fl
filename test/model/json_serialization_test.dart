@@ -245,6 +245,13 @@ void main() {
       expect(v3.textDelimiter, CsvExportSettings().textDelimiter);
       expect(v3.exportFieldsConfiguration.toJson(), CsvExportSettings().exportFieldsConfiguration.toJson());
     });
+    test('should load settings from 1.5.7 and earlier', () {
+      final settings = CsvExportSettings.fromJson('{"fieldDelimiter":"A","textDelimiter":"B","exportHeadline":false,"exportCustomFields":true,"customFields":["timestampUnixMs","systolic","diastolic","pulse","notes","color"]}');
+      expect(settings.fieldDelimiter, 'A');
+      expect(settings.textDelimiter, 'B');
+      expect(settings.exportHeadline, false);
+      expect(settings.exportFieldsConfiguration.activePreset, ExportImportPreset.none);
+    });
   });
 
   group('PdfExportSettings', (){
@@ -293,6 +300,17 @@ void main() {
       expect(v2.cellFontSize, PdfExportSettings().cellFontSize);
       expect(v3.headerFontSize, PdfExportSettings().headerFontSize);
       expect(v3.exportData, PdfExportSettings().exportData);
+    });
+    test('should load settings from 1.5.7 and earlier', () {
+      final settings = PdfExportSettings.fromJson('{"exportTitle":false,"exportStatistics":true,"exportData":false,"headerHeight":42.0,"cellHeight":42.0,"headerFontSize":42.0,"cellFontSize":42.0,"exportCustomFields":true,"customFields":["formattedTimestamp","systolic","diastolic","pulse","notes"]}');
+      expect(settings.exportTitle, false);
+      expect(settings.exportStatistics, true);
+      expect(settings.exportData, false);
+      expect(settings.headerHeight, 42);
+      expect(settings.cellHeight, 42);
+      expect(settings.headerFontSize, 42);
+      expect(settings.cellFontSize, 42);
+      expect(settings.exportFieldsConfiguration.activePreset, ExportImportPreset.none);
     });
   });
 
