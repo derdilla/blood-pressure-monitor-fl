@@ -1,9 +1,12 @@
 import 'dart:convert';
 
 import 'package:blood_pressure_app/model/blood_pressure.dart';
+import 'package:blood_pressure_app/model/export_import/column.dart';
 import 'package:blood_pressure_app/model/export_import/export_configuration.dart';
 import 'package:blood_pressure_app/model/horizontal_graph_line.dart';
 import 'package:blood_pressure_app/model/storage/convert_util.dart';
+import 'package:blood_pressure_app/model/storage/db/config_db.dart';
+import 'package:blood_pressure_app/model/storage/export_columns_store.dart';
 import 'package:blood_pressure_app/model/storage/export_csv_settings_store.dart';
 import 'package:blood_pressure_app/model/storage/export_pdf_settings_store.dart';
 import 'package:blood_pressure_app/model/storage/export_settings_store.dart';
@@ -11,7 +14,9 @@ import 'package:blood_pressure_app/model/storage/intervall_store.dart';
 import 'package:blood_pressure_app/model/storage/settings_store.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sqflite/sqflite.dart';
 
+/// Function for upgrading shared preferences from pre 1.5.5 versions.
 Future<void> updateLegacySettings(Settings settings, ExportSettings exportSettings, CsvExportSettings csvExportSettings,
     PdfExportSettings pdfExportSettings, IntervallStoreManager intervallStoreManager) async {
   SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
@@ -189,3 +194,31 @@ Future<void> updateLegacySettings(Settings settings, ExportSettings exportSettin
     await f;
   }
 }
+
+/// Function for upgrading pre 1.5.8 columns and settings to new structures.
+/// 
+/// - Adds columns from old db table to [manager].
+Future<void> updateLegacyExport(ConfigDB database, ExportColumnsManager manager) async {
+  if (await _tableExists(database.database, ConfigDB.exportStringsTable)) {
+    final existingDbEntries = await database.database.query(
+        ConfigDB.exportStringsTable,
+        columns: ['internalColumnName', 'columnTitle', 'formatPattern']
+    );
+    for (final e in existingDbEntries) {
+      final column = UserColumn(
+          e['internalColumnName'].toString(),
+          e['columnTitle'].toString(),
+          e['formatPattern'].toString()
+      );
+      if (column.formatPattern?.contains(r'$FORMAT') ?? false) {
+        // TODO: handle removed field
+      }
+      manager.addOrUpdate(column);
+    }
+
+    await database.database.execute("DROP TABLE IF EXISTS ${ConfigDB.exportStringsTable};");
+  }
+}
+
+Future<bool> _tableExists(Database database, String tableName) async => (await database.rawQuery(
+  "SELECT name FROM sqlite_master WHERE type='table' AND name='$tableName';")).isNotEmpty;

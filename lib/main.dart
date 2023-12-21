@@ -40,6 +40,7 @@ Future<Widget> _loadApp() async {
   final exportColumnsManager = await configDao.loadExportColumnsManager(0);
 
   await updateLegacySettings(settings, exportSettings, csvExportSettings, pdfExportSettings, intervalStorageManager);
+  await updateLegacyExport(_database, exportColumnsManager);
 
   // Reset the step size intervall to current on startup
   intervalStorageManager.mainPage.setToMostRecentIntervall();
