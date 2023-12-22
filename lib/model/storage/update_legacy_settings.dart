@@ -13,6 +13,7 @@ import 'package:blood_pressure_app/model/storage/export_settings_store.dart';
 import 'package:blood_pressure_app/model/storage/intervall_store.dart';
 import 'package:blood_pressure_app/model/storage/settings_store.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -211,7 +212,9 @@ Future<void> updateLegacyExport(ConfigDB database, ExportColumnsManager manager)
           e['formatPattern'].toString()
       );
       if (column.formatPattern?.contains(r'$FORMAT') ?? false) {
-        // TODO: handle removed field
+        Fluttertoast.showToast(
+          msg: r'The export $FORMAT pattern got replaced. Your export columns broke.',
+        );
       }
       manager.addOrUpdate(column);
     }
