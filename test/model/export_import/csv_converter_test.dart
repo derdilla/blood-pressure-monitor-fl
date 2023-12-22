@@ -50,6 +50,43 @@ void main() {
                   p0.needlePin?.color == p1.needlePin?.color,
             'equal to'));
     });
+    test('should allow partial imports', () {
+      final text = File('test/model/export_import/exported_formats/incomplete_export.csv').readAsStringSync();
+
+      final converter = CsvConverter(
+          CsvExportSettings(),
+          ExportColumnsManager()
+      );
+      final parsed = converter.parse(text);
+      final records = parsed.getOr(failParse);
+      expect(records, isNotNull);
+      expect(records.length, 3);
+      expect(records, anyElement(isA<BloodPressureRecord>()
+          .having((p0) => p0.creationTime.millisecondsSinceEpoch, 'timestamp', 1703239921194)
+          .having((p0) => p0.systolic, 'systolic', null)
+          .having((p0) => p0.diastolic, 'diastolic', null)
+          .having((p0) => p0.pulse, 'pulse', null)
+          .having((p0) => p0.notes, 'notes', 'note')
+          .having((p0) => p0.needlePin, 'pin', null)
+      ));
+      expect(records, anyElement(isA<BloodPressureRecord>()
+          .having((p0) => p0.creationTime.millisecondsSinceEpoch, 'timestamp', 1703239908244)
+          .having((p0) => p0.systolic, 'systolic', null)
+          .having((p0) => p0.diastolic, 'diastolic', 45)
+          .having((p0) => p0.pulse, 'pulse', null)
+          .having((p0) => p0.notes, 'notes', 'test')
+          .having((p0) => p0.needlePin, 'pin', null)
+      ));
+      expect(records, anyElement(isA<BloodPressureRecord>()
+          .having((p0) => p0.creationTime.millisecondsSinceEpoch, 'timestamp', 1703239905395)
+          .having((p0) => p0.systolic, 'systolic', 123)
+          .having((p0) => p0.diastolic, 'diastolic', null)
+          .having((p0) => p0.pulse, 'pulse', null)
+          .having((p0) => p0.notes, 'notes', '')
+          .having((p0) => p0.needlePin, 'pin', null)
+      ));
+    });
+
 
     test('should import v1.0.0 measurements', () {
       final text = File('test/model/export_import/exported_formats/v1.0.csv').readAsStringSync();
@@ -260,7 +297,6 @@ void main() {
       ));
       // TODO: test time columns
     });
-    // TODO: test importing partially null fields
   });
 }
 
