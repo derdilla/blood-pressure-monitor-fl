@@ -17,9 +17,6 @@ enum RowDataFieldType {
   pul,
   /// Guarantees [String] is returned.
   notes,
-  @Deprecated('use needlePin instead. Can be removed in code as all colors can be expressed as needle pins')
-  /// Guarantees [MeasurementNeedlePin] is returned.
-  color,
   /// Guarantees that the returned type is of type [MeasurementNeedlePin].
   needlePin;
 
@@ -35,8 +32,6 @@ enum RowDataFieldType {
         return localizations.pulLong;
       case RowDataFieldType.notes:
         return localizations.notes;
-      case RowDataFieldType.color:
-        return localizations.color;
       case RowDataFieldType.needlePin:
         return localizations.color;
     }

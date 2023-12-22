@@ -54,8 +54,6 @@ class ScriptedFormatter implements Formatter {
         return int.tryParse(text);
       case RowDataFieldType.notes:
         return text;
-      case RowDataFieldType.color:
-        assert(false);
       case RowDataFieldType.needlePin:
         final num = int.tryParse(text);
         if (num != null) return MeasurementNeedlePin(Color(num));

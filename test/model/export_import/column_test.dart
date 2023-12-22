@@ -64,10 +64,6 @@ void main() {
             expect(decoded.$2, isA<String>().having(
                     (p0) => p0, 'pulse', r.notes));
             break;
-          case RowDataFieldType.color:
-            expect(decoded.$2, isA<Color>().having(
-                    (p0) => p0, 'color', r.needlePin?.color));
-            break;
           case RowDataFieldType.needlePin:
             expect(decoded.$2, isA<MeasurementNeedlePin>().having(
                     (p0) => p0.toJson(), 'pin', r.needlePin?.toJson()));
@@ -126,10 +122,6 @@ void main() {
           case RowDataFieldType.notes:
             expect(decoded?.$2, isA<String>().having(
                     (p0) => p0, 'pulse', r.notes));
-            break;
-          case RowDataFieldType.color:
-            expect(decoded?.$2, isA<Color>().having(
-                    (p0) => p0, 'color', r.needlePin?.color));
             break;
           case RowDataFieldType.needlePin:
             expect(decoded?.$2, isA<MeasurementNeedlePin>().having(
