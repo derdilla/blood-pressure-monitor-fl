@@ -25,6 +25,8 @@ class PdfExportSettings extends ChangeNotifier implements CustomFieldsSettings {
     if (headerFontSize != null) _headerFontSize = headerFontSize;
     if (cellFontSize != null) _cellFontSize = cellFontSize;
     if (exportFieldsConfiguration != null) _exportFieldsConfiguration = exportFieldsConfiguration;
+
+    _exportFieldsConfiguration.addListener(() => notifyListeners());
   }
 
   factory PdfExportSettings.fromMap(Map<String, dynamic> map) => PdfExportSettings(
@@ -112,7 +114,6 @@ class PdfExportSettings extends ChangeNotifier implements CustomFieldsSettings {
 
   ActiveExportColumnConfiguration _exportFieldsConfiguration = ActiveExportColumnConfiguration();
   @override
-  // TODO: implement exportFieldsConfiguration
   ActiveExportColumnConfiguration get exportFieldsConfiguration => _exportFieldsConfiguration;
 
   // Procedure for adding more entries described in the settings_store.dart doc comment

@@ -71,7 +71,7 @@ class PdfConverter {
       margin: const pw.EdgeInsets.all(20),
       child: pw.TableHelper.fromTextArray(
           data: [
-            ['',localizations.sysLong, localizations.diaLong, localizations.pulLong], // TODO: localizations.pulsePressure],
+            ['',localizations.sysLong, localizations.diaLong, localizations.pulLong],
             [localizations.average, analyzer.avgSys, analyzer.avgDia, analyzer.avgPul],
             [localizations.maximum, analyzer.maxSys, analyzer.maxDia, analyzer.maxPul],
             [localizations.minimum, analyzer.minSys, analyzer.minDia, analyzer.minPul],

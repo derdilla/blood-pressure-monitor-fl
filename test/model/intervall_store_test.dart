@@ -96,7 +96,6 @@ void main() {
       expect(last30DaysIntervall.currentRange.duration.inDays, 30);
       expect(customIntervall.currentRange.duration.inMilliseconds, 24 * 60 * 60 * 1000);
     });
-    // TODO: test if it's the most recent intervall
   });
 
 }

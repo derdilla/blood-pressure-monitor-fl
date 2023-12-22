@@ -5,7 +5,7 @@ import 'package:blood_pressure_app/model/export_import/column.dart';
 import 'package:flutter/material.dart';
 
 /// Class for managing columns available to the user.
-class ExportColumnsManager extends ChangeNotifier { // TODO: separate ExportColumnsManager for export and import ?
+class ExportColumnsManager extends ChangeNotifier {
   /// Create a new manager for export columns.
   ///
   /// It will be filled with the default columns but won't contain initial user columns.

@@ -122,7 +122,7 @@ class ConfigDB {
     // When adding more versions the upgrade procedure proposed in https://stackoverflow.com/a/75153875/21489239
     // might be useful, to avoid duplicated code. Currently this would only lead to complexity without benefits.
     assert(newVersion == 3);
-    if (oldVersion == 1) { // TODO: migrate data, delete old table and test update
+    if (oldVersion == 1) {
       await db.execute(_settingsTableCreationString);
       await db.execute(_exportSettingsTableCreationString);
       await db.execute(_exportCsvSettingsTableCreationString);

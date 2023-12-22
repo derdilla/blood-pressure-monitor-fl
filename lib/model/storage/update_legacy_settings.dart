@@ -47,7 +47,7 @@ Future<void> updateLegacySettings(Settings settings, ExportSettings exportSettin
         await sharedPreferences.remove(key);
         break;
       case 'exportItems':
-        //csvExportSettings.customFields = sharedPreferences.getStringList(key)!; TODO: update
+        // can't be migrated as internalIdentifier changed
         await sharedPreferences.remove(key);
         break;
       case 'darkMode':
@@ -121,7 +121,7 @@ Future<void> updateLegacySettings(Settings settings, ExportSettings exportSettin
           sharedPreferences.getBool(key)! ? ExportImportPreset.none : ExportImportPreset.bloodPressureApp;
         break;
       case 'exportItemsCsv':
-        // csvExportSettings.customFields = sharedPreferences.getStringList(key)!;TODO: update
+        // can't be migrated as internalIdentifier changed
         break;
       case 'exportCsvHeadline':
         csvExportSettings.exportHeadline = sharedPreferences.getBool(key)!;
@@ -173,7 +173,7 @@ Future<void> updateLegacySettings(Settings settings, ExportSettings exportSettin
               ? ExportImportPreset.none : ExportImportPreset.bloodPressureApp;
         break;
       case 'exportItemsPdf':
-        // pdfExportSettings.customFields = sharedPreferences.getStringList(key)!; TODO: update
+        // can't be migrated as internalIdentifier changed
         break;
       case 'horizontalGraphLines':
         settings.horizontalGraphLines = sharedPreferences.getStringList(key)!.map((e) =>

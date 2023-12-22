@@ -97,7 +97,7 @@ class ExportButtonBar extends StatelessWidget {
                     });
                     if (result.hasError()) return;
                     final model = Provider.of<BloodPressureModel>(context, listen: false);
-                    for (final record in importedRecords) { // TODO: background thread
+                    for (final record in importedRecords) {
                       await model.add(record);
                     }
                     messenger.showSnackBar(SnackBar(content: Text(

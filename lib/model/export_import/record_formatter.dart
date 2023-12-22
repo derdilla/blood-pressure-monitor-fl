@@ -32,7 +32,7 @@ abstract interface class Formatter {
 class ScriptedFormatter implements Formatter {
   ScriptedFormatter(this.pattern);
 
-  /// Pattern used for formatting values. TODO: explain
+  /// Pattern used for formatting values.
   final String pattern;
 
   @override
@@ -178,7 +178,8 @@ class ScriptedTimeFormatter implements Formatter {
   final DateFormat timeFormatter;
   
   @override
-  (RowDataFieldType, dynamic)? decode(String pattern) { // TODO: empty strings should not decode at all
+  (RowDataFieldType, dynamic)? decode(String pattern) {
+    if (pattern.isEmpty) return null;
     try {
       return (RowDataFieldType.timestamp, timeFormatter.parseLoose(pattern));
     } on FormatException {

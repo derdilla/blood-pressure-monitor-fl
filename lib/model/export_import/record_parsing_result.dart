@@ -44,7 +44,6 @@ class RecordParsingErrorEmptyFile implements RecordParsingError {}
 class RecordParsingErrorTimeNotRestoreable implements RecordParsingError {}
 
 /// There is no column with this csv title that can be reversed.
-/// TODO: remove reversed limitation
 class RecordParsingErrorUnknownColumn implements RecordParsingError {
   RecordParsingErrorUnknownColumn(this.title);
   
