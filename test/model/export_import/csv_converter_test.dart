@@ -1,4 +1,6 @@
 
+import 'dart:io';
+
 import 'package:blood_pressure_app/model/blood_pressure.dart';
 import 'package:blood_pressure_app/model/export_import/csv_converter.dart';
 import 'package:blood_pressure_app/model/export_import/record_parsing_result.dart';
@@ -49,7 +51,216 @@ void main() {
             'equal to'));
     });
 
-    // TODO: test more
+    test('should import v1.0.0 measurements', () {
+      final text = File('test/model/export_import/exported_formats/v1.0.csv').readAsStringSync();
+
+      final converter = CsvConverter(
+          CsvExportSettings(),
+          ExportColumnsManager()
+      );
+      final parsed = converter.parse(text);
+      final records = parsed.getOr(failParse);
+      expect(records, isNotNull);
+      expect(records.length, 2);
+      expect(records, everyElement(isA<BloodPressureRecord>()));
+      expect(records, anyElement(isA<BloodPressureRecord>()
+          .having((p0) => p0.creationTime.millisecondsSinceEpoch, 'timestamp', 1703175660000)
+          .having((p0) => p0.systolic, 'systolic', 312)
+          .having((p0) => p0.diastolic, 'diastolic', 315)
+          .having((p0) => p0.pulse, 'pulse', 46)
+          .having((p0) => p0.notes.trim(), 'notes', 'testfkajkfb')
+      ));
+      expect(records, anyElement(isA<BloodPressureRecord>()
+          .having((p0) => p0.creationTime.millisecondsSinceEpoch, 'timestamp', 1703175600000)
+          .having((p0) => p0.systolic, 'systolic', 123)
+          .having((p0) => p0.diastolic, 'diastolic', 41)
+          .having((p0) => p0.pulse, 'pulse', 43)
+          .having((p0) => p0.notes.trim(), 'notes', '1214s3')
+      ));
+    });
+    test('should import v1.1.0 measurements', () {
+      final text = File('test/model/export_import/exported_formats/v1.1.0').readAsStringSync();
+
+      final converter = CsvConverter(
+          CsvExportSettings(),
+          ExportColumnsManager()
+      );
+      final parsed = converter.parse(text);
+      final records = parsed.getOr(failParse);
+      expect(records, isNotNull);
+      expect(records.length, 4);
+      expect(records, everyElement(isA<BloodPressureRecord>()));
+      expect(records, anyElement(isA<BloodPressureRecord>()
+          .having((p0) => p0.creationTime.millisecondsSinceEpoch, 'timestamp', 1703175660000)
+          .having((p0) => p0.systolic, 'systolic', 312)
+          .having((p0) => p0.diastolic, 'diastolic', 315)
+          .having((p0) => p0.pulse, 'pulse', 46)
+          .having((p0) => p0.notes.trim(), 'notes', 'testfkajkfb')
+      ));
+      expect(records, anyElement(isA<BloodPressureRecord>()
+          .having((p0) => p0.creationTime.millisecondsSinceEpoch, 'timestamp', 1703175600000)
+          .having((p0) => p0.systolic, 'systolic', 123)
+          .having((p0) => p0.diastolic, 'diastolic', 41)
+          .having((p0) => p0.pulse, 'pulse', 43)
+          .having((p0) => p0.notes.trim(), 'notes', '1214s3')
+      ));
+    });
+    test('should import v1.4.0 measurements', () {
+      final text = File('test/model/export_import/exported_formats/v1.4.0.CSV').readAsStringSync();
+
+      final converter = CsvConverter(
+          CsvExportSettings(),
+          ExportColumnsManager()
+      );
+      final parsed = converter.parse(text);
+      final records = parsed.getOr(failParse);
+      expect(records, isNotNull);
+      expect(records.length, 186);
+      expect(records, everyElement(isA<BloodPressureRecord>()));
+      expect(records, anyElement(isA<BloodPressureRecord>()
+          .having((p0) => p0.creationTime.millisecondsSinceEpoch, 'timestamp', 1703175660000)
+          .having((p0) => p0.systolic, 'systolic', 312)
+          .having((p0) => p0.diastolic, 'diastolic', 315)
+          .having((p0) => p0.pulse, 'pulse', 46)
+          .having((p0) => p0.notes, 'notes', 'testfkajkfb')
+      ));
+      expect(records, anyElement(isA<BloodPressureRecord>()
+          .having((p0) => p0.creationTime.millisecondsSinceEpoch, 'timestamp', 1703175600000)
+          .having((p0) => p0.systolic, 'systolic', 123)
+          .having((p0) => p0.diastolic, 'diastolic', 41)
+          .having((p0) => p0.pulse, 'pulse', 43)
+          .having((p0) => p0.notes, 'notes', '1214s3')
+      ));
+      expect(records, anyElement(isA<BloodPressureRecord>()
+          .having((p0) => p0.creationTime.millisecondsSinceEpoch, 'timestamp', 10893142303200)
+          .having((p0) => p0.systolic, 'systolic', 106)
+          .having((p0) => p0.diastolic, 'diastolic', 77)
+          .having((p0) => p0.pulse, 'pulse', 53)
+          .having((p0) => p0.notes, 'notes', '')
+      ));
+    });
+    test('should import v1.5.1 measurements', () {
+      final text = File('test/model/export_import/exported_formats/v1.5.1.csv').readAsStringSync();
+
+      final converter = CsvConverter(
+          CsvExportSettings(),
+          ExportColumnsManager()
+      );
+      final parsed = converter.parse(text);
+      final records = parsed.getOr(failParse);
+      expect(records, isNotNull);
+      expect(records.length, 185);
+      expect(records, everyElement(isA<BloodPressureRecord>()));
+      expect(records, anyElement(isA<BloodPressureRecord>()
+          .having((p0) => p0.creationTime.millisecondsSinceEpoch, 'timestamp', 1703175660000)
+          .having((p0) => p0.systolic, 'systolic', 312)
+          .having((p0) => p0.diastolic, 'diastolic', 315)
+          .having((p0) => p0.pulse, 'pulse', 46)
+          .having((p0) => p0.notes, 'notes', 'testfkajkfb')
+          .having((p0) => p0.needlePin, 'pin', null)
+      ));
+      expect(records, anyElement(isA<BloodPressureRecord>()
+          .having((p0) => p0.creationTime.millisecondsSinceEpoch, 'timestamp', 1703175600000)
+          .having((p0) => p0.systolic, 'systolic', 123)
+          .having((p0) => p0.diastolic, 'diastolic', 41)
+          .having((p0) => p0.pulse, 'pulse', 43)
+          .having((p0) => p0.notes, 'notes', '1214s3')
+          .having((p0) => p0.needlePin, 'pin', null)
+      ));
+      expect(records, anyElement(isA<BloodPressureRecord>()
+          .having((p0) => p0.creationTime.millisecondsSinceEpoch, 'timestamp', 1077625200000)
+          .having((p0) => p0.systolic, 'systolic', 100)
+          .having((p0) => p0.diastolic, 'diastolic', 82)
+          .having((p0) => p0.pulse, 'pulse', 63)
+          .having((p0) => p0.notes, 'notes', '')
+          .having((p0) => p0.needlePin, 'pin', null)
+      ));
+    });
+    test('should import v1.5.7 measurements', () {
+      final text = File('test/model/export_import/exported_formats/v1.5.7.csv').readAsStringSync();
+
+      final converter = CsvConverter(
+          CsvExportSettings(),
+          ExportColumnsManager()
+      );
+      final parsed = converter.parse(text);
+      final records = parsed.getOr(failParse);
+      expect(records, isNotNull);
+      expect(records.length, 185);
+      expect(records, everyElement(isA<BloodPressureRecord>()));
+      expect(records, anyElement(isA<BloodPressureRecord>()
+          .having((p0) => p0.creationTime.millisecondsSinceEpoch, 'timestamp', 1703175660000)
+          .having((p0) => p0.systolic, 'systolic', 312)
+          .having((p0) => p0.diastolic, 'diastolic', 315)
+          .having((p0) => p0.pulse, 'pulse', 46)
+          .having((p0) => p0.notes, 'notes', 'testfkajkfb')
+          .having((p0) => p0.needlePin, 'pin', null)
+      ));
+      expect(records, anyElement(isA<BloodPressureRecord>()
+          .having((p0) => p0.creationTime.millisecondsSinceEpoch, 'timestamp', 1703175600000)
+          .having((p0) => p0.systolic, 'systolic', 123)
+          .having((p0) => p0.diastolic, 'diastolic', 41)
+          .having((p0) => p0.pulse, 'pulse', 43)
+          .having((p0) => p0.notes, 'notes', '1214s3')
+          .having((p0) => p0.needlePin, 'pin', null)
+      ));
+      expect(records, anyElement(isA<BloodPressureRecord>()
+          .having((p0) => p0.creationTime.millisecondsSinceEpoch, 'timestamp', 1077625200000)
+          .having((p0) => p0.systolic, 'systolic', 100)
+          .having((p0) => p0.diastolic, 'diastolic', 82)
+          .having((p0) => p0.pulse, 'pulse', 63)
+          .having((p0) => p0.notes, 'notes', '')
+          .having((p0) => p0.needlePin, 'pin', null)
+      ));
+      // TODO: test color
+    });
+    test('should import v1.5.8 measurements', () {
+      final text = File('test/model/export_import/exported_formats/v1.5.8.csv').readAsStringSync();
+
+      final converter = CsvConverter(
+          CsvExportSettings(),
+          ExportColumnsManager()
+      );
+      final parsed = converter.parse(text);
+      final records = parsed.getOr(failParse);
+      expect(records, isNotNull);
+      expect(records.length, 9478);
+      expect(records, everyElement(isA<BloodPressureRecord>()));
+      expect(records, anyElement(isA<BloodPressureRecord>()
+          .having((p0) => p0.creationTime.millisecondsSinceEpoch, 'timestamp', 1703175193324)
+          .having((p0) => p0.systolic, 'systolic', 123)
+          .having((p0) => p0.diastolic, 'diastolic', 43)
+          .having((p0) => p0.pulse, 'pulse', 53)
+          .having((p0) => p0.notes, 'notes', 'sdfsdfds')
+          .having((p0) => p0.needlePin?.color, 'pin', const Color(0xff69f0ae))
+      ));
+      expect(records, anyElement(isA<BloodPressureRecord>()
+          .having((p0) => p0.creationTime.millisecondsSinceEpoch, 'timestamp', 1702883511000)
+          .having((p0) => p0.systolic, 'systolic', 114)
+          .having((p0) => p0.diastolic, 'diastolic', 71)
+          .having((p0) => p0.pulse, 'pulse', 66)
+          .having((p0) => p0.notes, 'notes', 'fsaf &_*¢|^✓[=%®©')
+          .having((p0) => p0.needlePin?.color.value, 'pin', Colors.lightGreen.value)
+      ));
+      expect(records, anyElement(isA<BloodPressureRecord>()
+          .having((p0) => p0.creationTime.millisecondsSinceEpoch, 'timestamp', 1701034952000)
+          .having((p0) => p0.systolic, 'systolic', 125)
+          .having((p0) => p0.diastolic, 'diastolic', 77)
+          .having((p0) => p0.pulse, 'pulse', 60)
+          .having((p0) => p0.notes, 'notes', '')
+          .having((p0) => p0.needlePin, 'pin', null)
+      ));
+      expect(records, anyElement(isA<BloodPressureRecord>()
+          .having((p0) => p0.creationTime.millisecondsSinceEpoch, 'timestamp', 1077625200000)
+          .having((p0) => p0.systolic, 'systolic', 100)
+          .having((p0) => p0.diastolic, 'diastolic', 82)
+          .having((p0) => p0.pulse, 'pulse', 63)
+          .having((p0) => p0.notes, 'notes', '')
+          .having((p0) => p0.needlePin, 'pin', null)
+      ));
+      // TODO: test time columns
+    });
+    // TODO: test importing partially null fields
   });
 }
 

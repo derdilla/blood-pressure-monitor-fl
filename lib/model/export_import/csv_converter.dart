@@ -63,8 +63,9 @@ class CsvConverter {
     final List<ExportColumn> columns = [];
     for (final titleText in lines.removeAt(0)) {
       assert(titleText is String);
+      final formattedTitleText = (titleText as String).trim();
       final column = availableColumns.firstWhere(
-              (c) => c.csvTitle == titleText
+              (c) => c.csvTitle == formattedTitleText
                   && c.restoreAbleType != null);
       if (column == null) return RecordParsingResult.err(RecordParsingErrorUnknownColumn(titleText));
       columns.add(column);
@@ -85,14 +86,21 @@ class CsvConverter {
       for (int fieldIndex = 0; fieldIndex < columns.length; fieldIndex++) {
         assert(currentLine[fieldIndex] is String);
         final piece = columns[fieldIndex].decode(currentLine[fieldIndex]);
-        if (piece?.$1 != columns[fieldIndex].restoreAbleType) { // validation
+        // Validate that the column parsed the expected type.
+        // Null can be the result of empty fields.
+        if (piece?.$1 != columns[fieldIndex].restoreAbleType
+            && piece != null) { // TODO: consider making some RowDataFieldType values nullable and handling this in the parser.
           return RecordParsingResult.err(RecordParsingErrorUnparsableField(currentLineNumber, currentLine[fieldIndex]));
         }
         if (piece != null) recordPieces.add(piece);
       }
 
-      final DateTime timestamp = recordPieces.firstWhere(
-              (piece) => piece.$1 == RowDataFieldType.timestamp).$2;
+      final DateTime? timestamp = recordPieces.firstWhereOrNull(
+              (piece) => piece.$1 == RowDataFieldType.timestamp)?.$2;
+      if (timestamp == null) {
+        return RecordParsingResult.err(RecordParsingErrorTimeNotRestoreable());
+      }
+
       final int? sys = recordPieces.firstWhereOrNull(
               (piece) => piece.$1 == RowDataFieldType.sys)?.$2;
       final int? dia = recordPieces.firstWhereOrNull(

@@ -17,7 +17,7 @@ enum RowDataFieldType {
   pul,
   /// Guarantees [String] is returned.
   notes,
-  @Deprecated('use needlePin instead') // TODO: implement conversion to needle pin?
+  @Deprecated('use needlePin instead. Can be removed in code as all colors can be expressed as needle pins') // TODO: implement conversion to needle pin?
   /// Guarantees [Color] is returned.
   color,
   /// Guarantees that the returned type is of type [MeasurementNeedlePin].
