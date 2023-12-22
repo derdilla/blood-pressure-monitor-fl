@@ -484,5 +484,7 @@
   "recordFormat": "Record format",
   "@recordFormat": {},
   "timeFormat": "Time format",
-  "@timeFormat": {}
+  "@timeFormat": {},
+  "errAccuracyLoss": "There is precision loss expected when exporting with custom time formatters.",
+  "@errAccuracyLoss": {}
 }

@@ -1,3 +1,4 @@
+import 'package:blood_pressure_app/model/export_import/column.dart';
 import 'package:blood_pressure_app/model/export_import/export_configuration.dart';
 import 'package:blood_pressure_app/model/export_import/import_field_type.dart';
 import 'package:blood_pressure_app/model/storage/export_columns_store.dart';
@@ -51,11 +52,14 @@ class _ExportWarnBannerState extends State<ExportWarnBanner> {
           case ExportImportPreset.myHeart:
             return _buildNotExportable(context);
           case ExportImportPreset.none:
-            final exportedTypes = widget.csvExportSettings.exportFieldsConfiguration
-                .getActiveColumns(widget.availableColumns)
+            final exportedColumns = widget.csvExportSettings.exportFieldsConfiguration
+                .getActiveColumns(widget.availableColumns);
+            final exportedTypes = exportedColumns
                 .map((column) => column.restoreAbleType);
 
             if (!exportedTypes.contains(RowDataFieldType.timestamp)) return _buildNotExportable(context);
+
+            if (exportedColumns.firstWhereOrNull((e) => (e is TimeColumn)) != null) return _buildAccuracyLoss(context);
 
             final neededForFullExport = ActiveExportColumnConfiguration()
                 .getActiveColumns(widget.availableColumns)
@@ -83,6 +87,12 @@ class _ExportWarnBannerState extends State<ExportWarnBanner> {
   Widget _buildNoHeadline(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
     return _banner(localizations.errNeedHeadline, localizations);
+  }
+
+  /// The exported time looses accuracy.
+  Widget _buildAccuracyLoss(BuildContext context) {
+    final localizations = AppLocalizations.of(context)!;
+    return _banner(localizations.errAccuracyLoss, localizations);
   }
 
   /// Exports made with this configuration are not fully importable.
