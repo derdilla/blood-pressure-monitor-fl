@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:blood_pressure_app/model/blood_pressure.dart';
 import 'package:blood_pressure_app/model/export_import/import_field_type.dart';
 import 'package:flutter/material.dart';
@@ -53,13 +55,16 @@ class ScriptedFormatter implements Formatter {
       case RowDataFieldType.notes:
         return text;
       case RowDataFieldType.color:
-        final num = int.tryParse(text);
-        if (num != null) return Color(num);
-        return null;
+        assert(false);
       case RowDataFieldType.needlePin:
         final num = int.tryParse(text);
-        if (num == null) return null;
-        return MeasurementNeedlePin(Color(num));
+        if (num != null) return MeasurementNeedlePin(Color(num));
+        try {
+          return MeasurementNeedlePin.fromJson(jsonDecode(text));
+        } catch (e) {
+          assert(e is FormatException || e is TypeError);
+          return null;
+        }
     }}();
     if (value != null) return (restoreAbleType!, value);
     return null;
@@ -75,7 +80,7 @@ class ScriptedFormatter implements Formatter {
     fieldContents = fieldContents.replaceAll(r'$DIA', record.diastolic.toString());
     fieldContents = fieldContents.replaceAll(r'$PUL', record.pulse.toString());
     fieldContents = fieldContents.replaceAll(r'$NOTE', record.notes.toString());
-    fieldContents = fieldContents.replaceAll(r'$COLOR', record.needlePin?.color.value.toString() ?? '');
+    fieldContents = fieldContents.replaceAll(r'$COLOR', jsonEncode(record.needlePin?.toJson()));
 
     // math
     fieldContents = fieldContents.replaceAllMapped(RegExp(r'\{\{([^}]*)}}'), (m) {
@@ -123,7 +128,7 @@ class ScriptedFormatter implements Formatter {
       } else if (pattern == r'$TIMESTAMP') {
         _restoreAbleType = RowDataFieldType.timestamp;
       } else if (pattern == r'$COLOR') {
-        _restoreAbleType = RowDataFieldType.color;
+        _restoreAbleType = RowDataFieldType.needlePin;
       } else if (pattern == r'$NOTE') {
         _restoreAbleType = RowDataFieldType.notes;
       } else if (replaced.contains(RegExp(r'[^{},$]*\$(PUL|DIA|SYS)[^{},$]*'))) {

@@ -7,7 +7,6 @@ import 'package:blood_pressure_app/model/storage/export_columns_store.dart';
 import 'package:blood_pressure_app/model/storage/export_csv_settings_store.dart';
 import 'package:collection/collection.dart';
 import 'package:csv/csv.dart';
-import 'package:flutter/material.dart';
 
 /// Utility class to convert between csv strings and [BloodPressureRecord]s.
 class CsvConverter {
@@ -111,11 +110,6 @@ class CsvConverter {
               (piece) => piece.$1 == RowDataFieldType.notes)?.$2 ?? '';
       MeasurementNeedlePin? needlePin = recordPieces.firstWhereOrNull(
               (piece) => piece.$1 == RowDataFieldType.needlePin)?.$2;
-      if (needlePin == null) {
-        final Color? color = recordPieces.firstWhereOrNull(
-                (piece) => piece.$1 == RowDataFieldType.color)?.$2;
-        if (color != null) needlePin = MeasurementNeedlePin(color);
-      }
 
       records.add(BloodPressureRecord(timestamp, sys, dia, pul, note, needlePin: needlePin));
       currentLineNumber++;

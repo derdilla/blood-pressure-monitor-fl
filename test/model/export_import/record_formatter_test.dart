@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:blood_pressure_app/model/blood_pressure.dart';
 import 'package:blood_pressure_app/model/export_import/import_field_type.dart';
 import 'package:blood_pressure_app/model/export_import/record_formatter.dart';
@@ -23,7 +25,7 @@ void main() {
       expect(ScriptedFormatter(r'$SYS',).encode(testRecord), testRecord.systolic.toString());
       expect(ScriptedFormatter(r'$DIA',).encode(testRecord), testRecord.diastolic.toString());
       expect(ScriptedFormatter(r'$PUL',).encode(testRecord), testRecord.pulse.toString());
-      expect(ScriptedFormatter(r'$COLOR',).encode(testRecord), testRecord.needlePin!.color.value.toString());
+      expect(ScriptedFormatter(r'$COLOR',).encode(testRecord), jsonEncode(testRecord.needlePin!.toJson()));
       expect(ScriptedFormatter(r'$NOTE',).encode(testRecord), testRecord.notes);
       expect(ScriptedFormatter(r'$TIMESTAMP',).encode(testRecord), testRecord.creationTime.millisecondsSinceEpoch.toString());
       expect(ScriptedFormatter(r'$SYS$DIA$PUL',).encode(testRecord), (testRecord.systolic.toString()
@@ -46,7 +48,7 @@ void main() {
       expect(ScriptedFormatter(r'$PUL',).restoreAbleType, RowDataFieldType.pul);
       expect(ScriptedFormatter(r'$TIMESTAMP',).restoreAbleType, RowDataFieldType.timestamp);
       expect(ScriptedFormatter(r'$NOTE',).restoreAbleType, RowDataFieldType.notes);
-      expect(ScriptedFormatter(r'$COLOR',).restoreAbleType, RowDataFieldType.color);
+      expect(ScriptedFormatter(r'$COLOR',).restoreAbleType, RowDataFieldType.needlePin);
       expect(ScriptedFormatter(r'test$SYS123',).restoreAbleType, RowDataFieldType.sys);
       expect(ScriptedFormatter(r'test$DIA123',).restoreAbleType, RowDataFieldType.dia);
       expect(ScriptedFormatter(r'test$PUL123',).restoreAbleType, RowDataFieldType.pul);
@@ -66,9 +68,9 @@ void main() {
       final encodedPurple = ScriptedFormatter(r'$COLOR',)
           .encode(BloodPressureRecord(DateTime.now(), null, null, null, '',
           needlePin: const MeasurementNeedlePin(Colors.purple)));
-      expect(ScriptedFormatter(r'$COLOR',).decode(encodedPurple)?.$1, RowDataFieldType.color);
-      expect(ScriptedFormatter(r'$COLOR',).decode(encodedPurple)?.$2, isA<Color>()
-          .having((p0) => p0.value, 'color', Colors.purple.value));
+      expect(ScriptedFormatter(r'$COLOR',).decode(encodedPurple)?.$1, RowDataFieldType.needlePin);
+      expect(ScriptedFormatter(r'$COLOR',).decode(encodedPurple)?.$2, isA<MeasurementNeedlePin>()
+          .having((p0) => p0.color.value, 'color', Colors.purple.value));
       expect(ScriptedFormatter(r'test$SYS',).decode('test567'), (RowDataFieldType.sys, 567));
       expect(ScriptedFormatter(r'test$SYS123',).decode('test567123'), (RowDataFieldType.sys, 567));
       expect(ScriptedFormatter(r'test$DIA123',).decode('test567123'), (RowDataFieldType.dia, 567));
@@ -95,6 +97,13 @@ void main() {
       expect(ScriptedFormatter(r'($SYS)',).decode('(123)'), (RowDataFieldType.sys, 123));
       expect(ScriptedFormatter(r'($SYS',).decode('(123'), (RowDataFieldType.sys, 123));
       expect(ScriptedFormatter(r'($NOTE',).decode('(test'), null);
+    });
+    test('should needlepin ignore invalid json', () {
+      expect(ScriptedFormatter(r'$COLOR',).decode(''), null);
+      expect(ScriptedFormatter(r'$COLOR',).decode('null'), null);
+      expect(ScriptedFormatter(r'$COLOR',).decode('{test'), null);
+      expect(ScriptedFormatter(r'$COLOR',).decode('{"test": 1}'), null);
+      expect(ScriptedFormatter(r'$COLOR',).decode('{}'), null);
     });
   });
 
