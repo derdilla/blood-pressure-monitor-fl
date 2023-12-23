@@ -10,10 +10,9 @@ import 'package:blood_pressure_app/screens/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:provider/provider.dart';
-
-@Deprecated('This should not be used for new code, but rather for migrating existing code.')
-late final ConfigDao globalConfigDao;
 
 late final ConfigDB _database;
 late final BloodPressureModel _bloodPressureModel;
@@ -40,10 +39,20 @@ Future<Widget> _loadApp() async {
   final csvExportSettings = await configDao.loadCsvExportSettings(0);
   final pdfExportSettings = await configDao.loadPdfExportSettings(0);
   final intervalStorageManager = await IntervallStoreManager.load(configDao, 0);
+  final exportColumnsManager = await configDao.loadExportColumnsManager(0);
 
-  await updateLegacySettings(settings, exportSettings, csvExportSettings, pdfExportSettings, intervalStorageManager);
+  // update logic
+  if (settings.lastVersion == 0) {
+    await updateLegacySettings(settings, exportSettings, csvExportSettings, pdfExportSettings, intervalStorageManager);
+    await updateLegacyExport(_database, exportColumnsManager);
 
-  globalConfigDao = configDao;
+    settings.lastVersion = int.parse((await PackageInfo.fromPlatform()).buildNumber);
+    if (exportSettings.exportAfterEveryEntry) {
+      await Fluttertoast.showToast(
+        msg: r'Please review your export settings to ensure everything works as expected.',
+      );
+    }
+  }
 
   // Reset the step size intervall to current on startup
   intervalStorageManager.mainPage.setToMostRecentIntervall();
@@ -55,6 +64,7 @@ Future<Widget> _loadApp() async {
     ChangeNotifierProvider(create: (context) => csvExportSettings),
     ChangeNotifierProvider(create: (context) => pdfExportSettings),
     ChangeNotifierProvider(create: (context) => intervalStorageManager),
+    ChangeNotifierProvider(create: (context) => exportColumnsManager),
   ], child: const AppRoot());
 }
 

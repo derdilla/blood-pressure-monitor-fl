@@ -162,8 +162,6 @@ class Statistic extends StatelessWidget {
   final Widget caption;
   final Widget child;
   /// Reduces the padding at the sites to allow packing [Statistic] widgets tighter together.
-  ///
-  /// TODO: should not depend on property and padding should be added outside of Statistic
   final bool smallEdges;
 
   const Statistic({super.key, required this.caption, required this.child, this.smallEdges = false});

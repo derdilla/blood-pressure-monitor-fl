@@ -58,7 +58,7 @@ class AppHome extends StatelessWidget {
                   Expanded(
                     child: (settings.useLegacyList) ?
                       LegacyMeasurementsList(context) :
-                      const MeasurementList()
+                      MeasurementList(settings: settings,)
                   )
                 ]);
               }

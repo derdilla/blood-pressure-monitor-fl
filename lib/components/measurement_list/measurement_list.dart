@@ -5,23 +5,25 @@ import 'package:blood_pressure_app/model/storage/intervall_store.dart';
 import 'package:blood_pressure_app/model/storage/settings_store.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:provider/provider.dart';
 
 class MeasurementList extends StatelessWidget {
-  const MeasurementList({super.key});
+  const MeasurementList({super.key, required this.settings});
+
+  final Settings settings;
 
   @override
   Widget build(BuildContext context) {
     return Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          const MeasurementListHeader(),
+          MeasurementListHeader(settings: settings,),
           Expanded(
               child: BloodPressureBuilder(
                 rangeType: IntervallStoreManagerLocation.mainPage,
                 onData: (context, data) {
                   return MeasurementListEntries(
-                      entries: data
+                    entries: data,
+                    settings: settings,
                   );
                 },
               )
@@ -33,9 +35,11 @@ class MeasurementList extends StatelessWidget {
 
 
 class MeasurementListEntries extends StatelessWidget {
+  const MeasurementListEntries({super.key, required this.entries, required this.settings});
+
   final List<BloodPressureRecord> entries;
-  
-  const MeasurementListEntries({super.key, required this.entries});
+
+  final Settings settings;
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +49,8 @@ class MeasurementListEntries extends StatelessWidget {
       itemCount: entries.length,
       itemBuilder: (context, idx) {
         return MeasurementListRow(
-          record: entries[idx]
+          record: entries[idx],
+          settings: settings,
         );
       },
     );
@@ -53,51 +58,49 @@ class MeasurementListEntries extends StatelessWidget {
 }
 
 class MeasurementListHeader extends StatelessWidget {
-  const MeasurementListHeader({super.key});
+  const MeasurementListHeader({super.key, required this.settings});
+
+  final Settings settings;
 
   @override
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
-    return Consumer<Settings>(
-        builder: (context, settings, child) {
-          return Column(
-              children: [
-                Row(
-                  children: [
-                    const Expanded(
-                        flex: 4,
-                        child: SizedBox()),
-                    Expanded(
-                        flex: 30,
-                        child: Text(localizations.sysLong,
-                            overflow: TextOverflow.ellipsis,
-                            style: TextStyle(fontWeight: FontWeight.bold, color: settings.sysColor))),
-                    Expanded(
-                        flex: 30,
-                        child: Text(localizations.diaLong,
-                            overflow: TextOverflow.ellipsis,
-                            style: TextStyle(fontWeight: FontWeight.bold, color: settings.diaColor))),
-                    Expanded(
-                        flex: 30,
-                        child: Text(localizations.pulLong,
-                            overflow: TextOverflow.ellipsis,
-                            style: TextStyle(fontWeight: FontWeight.bold, color: settings.pulColor))),
-                    const Expanded(
-                        flex: 20,
-                        child: SizedBox()),
-                  ],
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                Divider(
-                  height: 0,
-                  thickness: 2,
-                  color: Theme.of(context).colorScheme.primaryContainer,
-                )
-              ]);
-        }
-    );
+    return Column(
+        children: [
+          Row(
+            children: [
+              const Expanded(
+                  flex: 4,
+                  child: SizedBox()),
+              Expanded(
+                  flex: 30,
+                  child: Text(localizations.sysLong,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(fontWeight: FontWeight.bold, color: settings.sysColor))),
+              Expanded(
+                  flex: 30,
+                  child: Text(localizations.diaLong,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(fontWeight: FontWeight.bold, color: settings.diaColor))),
+              Expanded(
+                  flex: 30,
+                  child: Text(localizations.pulLong,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(fontWeight: FontWeight.bold, color: settings.pulColor))),
+              const Expanded(
+                  flex: 20,
+                  child: SizedBox()),
+            ],
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          Divider(
+            height: 0,
+            thickness: 2,
+            color: Theme.of(context).colorScheme.primaryContainer,
+          )
+        ]);
   }
 
 }

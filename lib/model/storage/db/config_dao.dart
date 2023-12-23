@@ -1,5 +1,5 @@
-import 'package:blood_pressure_app/model/export_options.dart';
 import 'package:blood_pressure_app/model/storage/db/config_db.dart';
+import 'package:blood_pressure_app/model/storage/export_columns_store.dart';
 import 'package:blood_pressure_app/model/storage/export_csv_settings_store.dart';
 import 'package:blood_pressure_app/model/storage/export_pdf_settings_store.dart';
 import 'package:blood_pressure_app/model/storage/export_settings_store.dart';
@@ -16,7 +16,7 @@ import 'package:sqflite/sqflite.dart';
 /// The load... methods have to schedule a initial save to db in case an migration / update of fields occurred.
 class ConfigDao {
   ConfigDao(this._configDB);
-  
+
   final ConfigDB _configDB;
 
   /// Loads the profiles [Settings] object from the database.
@@ -27,10 +27,10 @@ class ConfigDao {
   /// Changes to the database will not propagate to the object.
   Future<Settings> loadSettings(int profileID) async {
     final dbEntry = await _configDB.database.query(
-      ConfigDB.settingsTable,
-      columns: ['settings_json'],
-      where: 'profile_id = ?',
-      whereArgs: [profileID]
+        ConfigDB.settingsTable,
+        columns: ['settings_json'],
+        where: 'profile_id = ?',
+        whereArgs: [profileID]
     );
 
     late final Settings settings;
@@ -58,12 +58,12 @@ class ConfigDao {
   Future<void> _updateSettings(int profileID, Settings settings) async {
     if (!_configDB.database.isOpen) return;
     await _configDB.database.insert(
-      ConfigDB.settingsTable,
-      {
-        'profile_id': profileID,
-        'settings_json': settings.toJson()
-      },
-      conflictAlgorithm: ConflictAlgorithm.replace
+        ConfigDB.settingsTable,
+        {
+          'profile_id': profileID,
+          'settings_json': settings.toJson()
+        },
+        conflictAlgorithm: ConflictAlgorithm.replace
     );
   }
 
@@ -261,43 +261,51 @@ class ConfigDao {
     );
   }
 
-  /// Loads the current export columns from the database.
+  /// Loads the profiles [ExportColumnsManager] object from the database.
   ///
-  /// Changes will *not* be saved automatically, see [updateExportColumn].
-  Future<List<ExportColumn>> loadExportColumns() async {
-    final existingDbEntries = await _configDB.database.query(
-      ConfigDB.exportStringsTable,
-      columns: ['internalColumnName', 'columnTitle', 'formatPattern']
+  /// If any errors occur or the object is not present, a default one will be created. Changes in the object
+  /// will save to the database automatically (a listener gets attached).
+  ///
+  /// Changes to the database will not propagate to the object.
+  Future<ExportColumnsManager> loadExportColumnsManager(int profileID) async {
+    final dbEntry = await _configDB.database.query(
+        ConfigDB.exportColumnsTable,
+        columns: ['json'],
+        where: 'profile_id = ?',
+        whereArgs: [profileID]
     );
-    return [
-      for (final e in existingDbEntries)
-        ExportColumn(
-            internalName: e['internalColumnName'].toString(),
-            columnTitle: e['columnTitle'].toString(),
-            formatPattern: e['formatPattern'].toString()
-        ),
-    ];
+
+    late final ExportColumnsManager columnsManager;
+    if (dbEntry.isEmpty) {
+      columnsManager = ExportColumnsManager();
+    } else {
+      assert(dbEntry.length == 1, 'The profile_id should be unique.');
+      final json = dbEntry.first['json'];
+      if (json == null) {
+        columnsManager = ExportColumnsManager();
+      } else {
+        columnsManager = ExportColumnsManager.fromJson(json.toString());
+      }
+    }
+    _updateExportColumnsManager(profileID, columnsManager);
+    columnsManager.addListener(() {
+      _updateExportColumnsManager(profileID, columnsManager);
+    });
+    return columnsManager;
   }
 
-  /// Saves a [ExportColumn] to the database.
+  /// Update [ExportColumnsManager] for a profile in the database.
   ///
-  /// If one with the same [ExportColumn.internalName] exists, it will get replaced by the new one regardless of content.
-  Future<void> updateExportColumn(ExportColumn exportColumn) async {
+  /// Adds an entry if necessary.
+  Future<void> _updateExportColumnsManager(int profileID, ExportColumnsManager manager) async {
     if (!_configDB.database.isOpen) return;
     await _configDB.database.insert(
-        ConfigDB.exportStringsTable,
+        ConfigDB.exportColumnsTable,
         {
-          'internalColumnName': exportColumn.internalName,
-          'columnTitle': exportColumn.columnTitle,
-          'formatPattern': exportColumn.formatPattern
+          'profile_id': profileID,
+          'json': manager.toJson()
         },
         conflictAlgorithm: ConflictAlgorithm.replace
     );
-  }
-
-  /// Deletes the [ExportColumn] where [ExportColumn.internalName] matches [internalName] from the database.
-  Future<void> deleteExportColumn(String internalName) async {
-    if (!_configDB.database.isOpen) return;
-    await _configDB.database.delete('exportStrings', where: 'internalColumnName = ?', whereArgs: [internalName]);
   }
 }

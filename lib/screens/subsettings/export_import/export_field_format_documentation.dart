@@ -5,16 +5,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+/// Screen to show large markdown text.
 class InformationScreen extends StatelessWidget {
+  const InformationScreen({super.key, required this.text});
+
   /// text in markdown format
   final String text;
-  const InformationScreen({super.key, required this.text});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          backgroundColor: Theme.of(context).primaryColor,
+          forceMaterialTransparency: true,
         ),
         body: Container(
           padding: const EdgeInsets.all(10),

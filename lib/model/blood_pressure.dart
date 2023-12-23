@@ -1,13 +1,11 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:blood_pressure_app/model/export_import.dart';
-import 'package:blood_pressure_app/model/export_options.dart';
 import 'package:blood_pressure_app/model/storage/storage.dart';
 import 'package:blood_pressure_app/screens/error_reporting.dart';
+import 'package:blood_pressure_app/screens/subsettings/export_import/export_button_bar.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:path/path.dart';
 import 'package:provider/provider.dart';
 import 'package:sqflite/sqflite.dart';
@@ -115,13 +113,7 @@ class BloodPressureModel extends ChangeNotifier {
     if (!context.mounted) return;
     final exportSettings = Provider.of<ExportSettings>(context, listen: false);
     if (exportSettings.exportAfterEveryEntry) {
-      final r = Provider.of<IntervallStoreManager>(context, listen: false).exportPage.currentRange;
-      final loc = AppLocalizations.of(context)!;
-      final exportConfigurationModel = await ExportConfigurationModel.get(loc);
-      final allMeasurements = await getInTimeRange(r.start, r.end);
-      if (!context.mounted) return;
-      final exporter = Exporter.load(context, allMeasurements, exportConfigurationModel);
-      await exporter.export();
+      performExport(context);
     }
   }
 
