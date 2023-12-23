@@ -76,6 +76,7 @@ class ConvertUtil {
     );
   }
 
+  /// Example usage: `ConvertUtil.parseList<String>(json['columns'])`
   static List<T>? parseList<T>(dynamic value) {
     if (value is List<T>) return value;
     if (value is List<dynamic>) {

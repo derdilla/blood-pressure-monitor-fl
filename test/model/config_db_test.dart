@@ -1,5 +1,6 @@
 import 'package:blood_pressure_app/model/storage/db/config_dao.dart';
 import 'package:blood_pressure_app/model/storage/db/config_db.dart';
+import 'package:blood_pressure_app/model/storage/export_columns_store.dart';
 import 'package:blood_pressure_app/model/storage/export_csv_settings_store.dart';
 import 'package:blood_pressure_app/model/storage/export_pdf_settings_store.dart';
 import 'package:blood_pressure_app/model/storage/export_settings_store.dart';
@@ -30,7 +31,7 @@ void main() {
       expect(tableNames.contains(ConfigDB.exportCsvSettingsTable), true);
       expect(tableNames.contains(ConfigDB.exportPdfSettingsTable), true);
       expect(tableNames.contains(ConfigDB.selectedIntervallStorageTable), true);
-      expect(tableNames.contains(ConfigDB.exportStringsTable), true);
+      expect(tableNames.contains(ConfigDB.exportColumnsTable), true);
     });
     test('should save and load table entries', () async {
       final db = await ConfigDB.open(dbPath: inMemoryDatabasePath, isFullPath: true);
@@ -55,13 +56,13 @@ void main() {
     test('should create classes when no data is present', () async {
       final rawDB = await ConfigDB.open(dbPath: inMemoryDatabasePath, isFullPath: true);
       final dao = ConfigDao(rawDB);
-      
-      expect(await dao.loadExportColumns(), []);
+
       expect((await dao.loadSettings(0)).toJson(), Settings().toJson());
       expect((await dao.loadExportSettings(0)).toJson(), ExportSettings().toJson());
       expect((await dao.loadCsvExportSettings(0)).toJson(), CsvExportSettings().toJson());
       expect((await dao.loadPdfExportSettings(0)).toJson(), PdfExportSettings().toJson());
       expect((await dao.loadIntervallStorage(0,0)).stepSize, IntervallStorage().stepSize);
+      expect((await dao.loadExportColumnsManager(0)).userColumns, ExportColumnsManager().userColumns);
     });
     test('should save changes', () async {
       final rawDB = await ConfigDB.open(dbPath: inMemoryDatabasePath, isFullPath: true);

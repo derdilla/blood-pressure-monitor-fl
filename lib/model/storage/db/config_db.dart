@@ -76,9 +76,18 @@ class ConfigDB {
   ///
   /// Format:
   /// `CREATE TABLE exportStrings(internalColumnName STRING PRIMARY KEY, columnTitle STRING, formatPattern STRING)`
+  @Deprecated('removed after all usages are replaced by export_columns_store')
   static const String exportStringsTable = 'exportStrings';
   static const String _exportStringsTableCreationString =
       'CREATE TABLE exportStrings(internalColumnName STRING PRIMARY KEY, columnTitle STRING, formatPattern STRING)';
+
+  /// Name of table of storing [ExportColumnsManager] objects
+  ///
+  /// Format:
+  /// `CREATE TABLE exportColumns(profile_id INTEGER PRIMARY KEY, json STRING)`
+  static const String exportColumnsTable = 'exportColumns';
+  static const String _exportColumnsTableCreationString =
+      'CREATE TABLE exportColumns(profile_id INTEGER PRIMARY KEY, json STRING)';
 
   late final Database _database;
 
@@ -95,7 +104,7 @@ class ConfigDB {
       onCreate: _onDBCreate,
       onUpgrade: _onDBUpgrade,
       // When increasing the version an update procedure from every other possible version is needed
-      version: 2,
+      version: 3,
     );
   }
 
@@ -106,18 +115,23 @@ class ConfigDB {
     await db.execute(_exportCsvSettingsTableCreationString);
     await db.execute(_exportPdfSettingsTableCreationString);
     await db.execute(_selectedIntervallStorageCreationString);
+    await db.execute(_exportColumnsTableCreationString);
   }
 
   FutureOr<void> _onDBUpgrade(Database db, int oldVersion, int newVersion) async {
     // When adding more versions the upgrade procedure proposed in https://stackoverflow.com/a/75153875/21489239
     // might be useful, to avoid duplicated code. Currently this would only lead to complexity without benefits.
-    if (oldVersion == 1 && newVersion == 2) {
+    assert(newVersion == 3);
+    if (oldVersion == 1) {
       await db.execute(_settingsTableCreationString);
       await db.execute(_exportSettingsTableCreationString);
       await db.execute(_exportCsvSettingsTableCreationString);
       await db.execute(_exportPdfSettingsTableCreationString);
       await db.execute(_selectedIntervallStorageCreationString);
+      await db.execute(_exportColumnsTableCreationString);
       await db.database.setVersion(2);
+    } else if (oldVersion == 2) {
+      await db.execute(_exportColumnsTableCreationString);
     } else {
       assert(false, 'Unexpected version upgrade from $oldVersion to $newVersion.');
     }

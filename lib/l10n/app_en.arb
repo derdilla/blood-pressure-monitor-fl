@@ -221,7 +221,7 @@
       }
     }
   },
-  "exportWarnConfigNotImportable": "Hey! Just a friendly heads up: the current export configuration won''t be importable. To fix it, make sure you set the export type as CSV, enable the headline, and include one of the time formats available.",
+  "exportWarnConfigNotImportable": "Hey! Just a friendly heads up: the current export configuration won''t be importable. To fix it, make sure you set the export type as CSV and include one of the time formats available.",
   "@exportWarnConfigNotImportable": {},
   "exportWarnNotEveryFieldExported": "Beware that you are not exporting all fields: {fields} {count, plural, one{is} other{are}} missing.",
   "@exportWarnNotEveryFieldExported": {
@@ -362,7 +362,7 @@
   "@edit": {},
   "delete": "Delete",
   "@delete": {},
-  "exportFieldFormatDocumentation": "'## Variables\nThe export field format supports inserting values for the following placeholders:\n- `$TIMESTAMP:` Represents the time since the Unix epoch in milliseconds.\n- `$SYS:` Provides a value if available; otherwise, it defaults to -1.\n- `$DIA:` Provides a value if available; otherwise, it defaults to -1.\n- `$PUL:` Provides a value if available; otherwise, it defaults to -1.\n- `$NOTE:` Provides a value if available; otherwise, it defaults to -1.\n- `$COLOR:` Represents the color of a measurement as a number. (example value: `4291681337`)\n\nIf any of the placeholders mentioned above are not present in the blood pressure record, they will be replaced with -1.\n\n## Math\nYou can use basic mathematics inside double brackets (\"`{{}}`\").\n\nThe following mathematical operations are supported:\n- Operations: +, -, *, /, %, ^\n- One-parameter functions: abs, acos, asin, atan, ceil, cos, cosh, cot, coth, csc, csch, exp, floor, ln, log, round sec, sech, sin, sinh, sqrt, tan, tanh \n- Two-parameter functions: log, nrt, pow\n- Constants: e, pi, ln2, ln10, log2e, log10e, sqrt1_2, sqrt2\nFor the full math interpreter specification, you can refer to the [function_tree](https://pub.dev/documentation/function_tree/latest#interpreter) specification\n\n## Time\nTo format a timestamp, use the following syntax: `$FORMAT{<timestamp>,<formatString>}`. The `<formatString>` supports the same format as described on the ICU/Skeleton string [documentation page](screen://TimeFormattingHelp).\n\n## Processing order\n1. variable replacement\n2. Math\n3. Date format'",
+  "exportFieldFormatDocumentation": "'## Variables\nThe export field format supports inserting values for the following placeholders:\n- `$TIMESTAMP:` Represents the time since the Unix epoch in milliseconds.\n- `$SYS:` Provides a value if available; otherwise, it defaults to -1.\n- `$DIA:` Provides a value if available; otherwise, it defaults to -1.\n- `$PUL:` Provides a value if available; otherwise, it defaults to -1.\n- `$NOTE:` Provides a value if available; otherwise, it defaults to -1.\n- `$COLOR:` Represents the color of a measurement as a number. (example value: `4291681337`)\n\nIf any of the placeholders mentioned above are not present in the blood pressure record, they will be replaced with `null`.\n\n## Math\nYou can use basic mathematics inside double brackets (\"`{{}}`\").\n\nThe following mathematical operations are supported:\n- Operations: +, -, *, /, %, ^\n- One-parameter functions: abs, acos, asin, atan, ceil, cos, cosh, cot, coth, csc, csch, exp, floor, ln, log, round sec, sech, sin, sinh, sqrt, tan, tanh \n- Two-parameter functions: log, nrt, pow\n- Constants: e, pi, ln2, ln10, log2e, log10e, sqrt1_2, sqrt2\n\nFor the full math interpreter specification, you can refer to the [function_tree](https://pub.dev/documentation/function_tree/latest#interpreter) documentation.\n\n## Processing order\n1. variable replacement\n2. Math'",
   "@exportFieldFormatDocumentation": {},
   "presets": "Presets",
   "@presets": {},
@@ -439,5 +439,52 @@
   "needlePinBarWidth": "Color thickness",
   "@needlePinBarWidth": {},
   "needlePinBarWidthDesc": "The width of the lines colored entries make on the graph.",
-  "@needlePinBarWidthDesc": {}
+  "@needlePinBarWidthDesc": {},
+  "errParseEmptyCsvFile": "There are not enough lines in the csv file to parse the record.",
+  "@errParseEmptyCsvFile": {},
+  "errParseTimeNotRestoreable": "There is no column that allows restoring a timestamp.",
+  "@errParseTimeNotRestoreable": {},
+  "errParseUnknownColumn": "There is no column with title \"{title}\".",
+  "@errParseUnknownColumn": {
+    "placeholders": {
+      "title": {
+        "type": "String"
+      }
+    }
+  },
+  "errParseLineTooShort": "Line {lineNumber} has fewer columns than the first line.",
+  "@errParseLineTooShort": {
+    "placeholders": {
+      "lineNumber": {
+        "type": "int"
+      }
+    }
+  },
+  "errParseFailedDecodingField": "Decoding field \"{fieldContent}\" in line {lineNumber} failed.",
+  "@errParseFailedDecodingField": {
+    "placeholders": {
+      "lineNumber": {
+        "type": "int"
+      },
+      "fieldContent": {
+        "type": "String"
+      }
+    }
+  },
+  "exportFieldsPreset": "Export fields preset",
+  "@exportFieldsPreset": {},
+  "remove": "Remove",
+  "@remove": {},
+  "manageExportColumns": "Manage export columns",
+  "@manageExportColumns": {},
+  "buildIn": "Build-in",
+  "@buildIn": {},
+  "csvTitle": "CSV-title",
+  "@csvTitle": {},
+  "recordFormat": "Record format",
+  "@recordFormat": {},
+  "timeFormat": "Time format",
+  "@timeFormat": {},
+  "errAccuracyLoss": "There is precision loss expected when exporting with custom time formatters.",
+  "@errAccuracyLoss": {}
 }

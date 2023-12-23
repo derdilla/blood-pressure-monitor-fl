@@ -26,6 +26,7 @@ class Settings extends ChangeNotifier {
     int? animationSpeed,
     int? sysWarn,
     int? diaWarn,
+    int? lastVersion,
     bool? allowManualTimeInput,
     bool? confirmDeletion,
     ThemeMode? themeMode,
@@ -54,6 +55,7 @@ class Settings extends ChangeNotifier {
     if (startWithAddMeasurementPage != null) _startWithAddMeasurementPage = startWithAddMeasurementPage;
     if (useLegacyList != null) _useLegacyList = useLegacyList;
     if (horizontalGraphLines != null) _horizontalGraphLines = horizontalGraphLines;
+    if (lastVersion != null) _lastVersion = lastVersion;
     _language = language; // No check here, as null is the default as well.
   }
 
@@ -79,7 +81,8 @@ class Settings extends ChangeNotifier {
       language: ConvertUtil.parseLocale(map['language']),
       horizontalGraphLines: ConvertUtil.parseList<String>(map['horizontalGraphLines'])?.map((e) =>
           HorizontalGraphLine.fromJson(jsonDecode(e))).toList(),
-      needlePinBarWidth: ConvertUtil.parseDouble(map['needlePinBarWidth'])
+      needlePinBarWidth: ConvertUtil.parseDouble(map['needlePinBarWidth']),
+      lastVersion: ConvertUtil.parseInt(map['lastVersion'])
     );
 
     // update
@@ -117,7 +120,8 @@ class Settings extends ChangeNotifier {
       'useLegacyList': useLegacyList,
       'language': ConvertUtil.serializeLocale(language),
       'horizontalGraphLines': horizontalGraphLines.map((e) => jsonEncode(e)).toList(),
-      'needlePinBarWidth': _needlePinBarWidth
+      'needlePinBarWidth': _needlePinBarWidth,
+      'lastVersion': lastVersion
     };
 
   String toJson() => jsonEncode(toMap());
@@ -182,6 +186,9 @@ class Settings extends ChangeNotifier {
   }
 
   int _animationSpeed = 150;
+  /// Time in which animations run. Higher = slower.
+  ///
+  /// Usually between 0 and 1000.
   int get animationSpeed => _animationSpeed;
   set animationSpeed(int value) {
     _animationSpeed = value;
@@ -199,6 +206,13 @@ class Settings extends ChangeNotifier {
   int get diaWarn => _diaWarn;
   set diaWarn(int value) {
     _diaWarn = value;
+    notifyListeners();
+  }
+
+  int _lastVersion = 0;
+  int get lastVersion => _lastVersion;
+  set lastVersion(int value) {
+    _lastVersion = value;
     notifyListeners();
   }
 

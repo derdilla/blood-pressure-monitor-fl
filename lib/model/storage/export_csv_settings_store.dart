@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:blood_pressure_app/model/export_options.dart';
+import 'package:blood_pressure_app/model/export_import/export_configuration.dart';
 import 'package:blood_pressure_app/model/storage/common_settings_interfaces.dart';
 import 'package:blood_pressure_app/model/storage/convert_util.dart';
 import 'package:flutter/material.dart';
@@ -11,28 +11,43 @@ class CsvExportSettings extends ChangeNotifier implements CustomFieldsSettings {
     String? fieldDelimiter,
     String? textDelimiter,
     bool? exportHeadline,
-    bool? exportCustomFields,
-    List<String>? customFields,
+    ActiveExportColumnConfiguration? exportFieldsConfiguration,
   }) {
     if (fieldDelimiter != null) _fieldDelimiter = fieldDelimiter;
     if (textDelimiter != null) _textDelimiter = textDelimiter;
     if (exportHeadline != null) _exportHeadline = exportHeadline;
-    if (exportCustomFields != null) _exportCustomFields = exportCustomFields;
-    if (customFields != null) _customFields = customFields;
+    if (exportFieldsConfiguration != null) _exportFieldsConfiguration = exportFieldsConfiguration;
+
+    _exportFieldsConfiguration.addListener(() => notifyListeners());
   }
 
-  factory CsvExportSettings.fromMap(Map<String, dynamic> map) => CsvExportSettings(
-      fieldDelimiter: ConvertUtil.parseString(map['fieldDelimiter']),
-      textDelimiter: ConvertUtil.parseString(map['textDelimiter']),
-      exportHeadline: ConvertUtil.parseBool(map['exportHeadline']),
-      exportCustomFields: ConvertUtil.parseBool(map['exportCustomFields']),
-      customFields: ConvertUtil.parseList<String>(map['customFields']),
-  );
+  factory CsvExportSettings.fromMap(Map<String, dynamic> map) {
+    if (map.containsKey('exportFieldsConfiguration')) {
+      return CsvExportSettings(
+        fieldDelimiter: ConvertUtil.parseString(map['fieldDelimiter']),
+        textDelimiter: ConvertUtil.parseString(map['textDelimiter']),
+        exportHeadline: ConvertUtil.parseBool(map['exportHeadline']),
+        exportFieldsConfiguration: ActiveExportColumnConfiguration.fromJson(map['exportFieldsConfiguration']),
+      );
+    } else {
+      return CsvExportSettings(
+        fieldDelimiter: ConvertUtil.parseString(map['fieldDelimiter']),
+        textDelimiter: ConvertUtil.parseString(map['textDelimiter']),
+        exportHeadline: ConvertUtil.parseBool(map['exportHeadline']),
+        exportFieldsConfiguration: ActiveExportColumnConfiguration(
+          activePreset: ConvertUtil.parseBool(map['exportCustomFields']) ?? false ? ExportImportPreset.none : ExportImportPreset.bloodPressureApp,
+          // Can't migrate user columns ('customFields') as no prefix available
+        ),
+      );
+    }
+
+  }
 
   factory CsvExportSettings.fromJson(String json) {
     try {
       return CsvExportSettings.fromMap(jsonDecode(json));
-    } catch (exception) {
+    } catch (e) {
+      assert(e is FormatException || e is TypeError);
       return CsvExportSettings();
     }
   }
@@ -41,8 +56,7 @@ class CsvExportSettings extends ChangeNotifier implements CustomFieldsSettings {
     'fieldDelimiter': fieldDelimiter,
     'textDelimiter': textDelimiter,
     'exportHeadline': exportHeadline,
-    'exportCustomFields': exportCustomFields,
-    'customFields': customFields,
+    'exportFieldsConfiguration': exportFieldsConfiguration.toJson()
   };
 
   String toJson() => jsonEncode(toMap());
@@ -68,23 +82,9 @@ class CsvExportSettings extends ChangeNotifier implements CustomFieldsSettings {
     notifyListeners();
   }
 
-  bool _exportCustomFields = false;
+  ActiveExportColumnConfiguration _exportFieldsConfiguration = ActiveExportColumnConfiguration();
   @override
-  bool get exportCustomFields => _exportCustomFields;
-  @override
-  set exportCustomFields(bool value) {
-    _exportCustomFields = value;
-    notifyListeners();
-  }
-
-  List<String> _customFields = ExportFields.defaultCsv;
-  @override
-  List<String> get customFields => _customFields;
-  @override
-  set customFields(List<String> value) {
-    _customFields = value;
-    notifyListeners();
-  }
+  ActiveExportColumnConfiguration get exportFieldsConfiguration => _exportFieldsConfiguration;
 
   // Procedure for adding more entries described in the settings_store.dart doc comment
 }
