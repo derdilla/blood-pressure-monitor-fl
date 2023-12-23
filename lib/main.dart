@@ -10,6 +10,8 @@ import 'package:blood_pressure_app/screens/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:provider/provider.dart';
 
 late final ConfigDB _database;
@@ -39,8 +41,18 @@ Future<Widget> _loadApp() async {
   final intervalStorageManager = await IntervallStoreManager.load(configDao, 0);
   final exportColumnsManager = await configDao.loadExportColumnsManager(0);
 
-  await updateLegacySettings(settings, exportSettings, csvExportSettings, pdfExportSettings, intervalStorageManager);
-  await updateLegacyExport(_database, exportColumnsManager);
+  // update logic
+  if (settings.lastVersion == 0) {
+    await updateLegacySettings(settings, exportSettings, csvExportSettings, pdfExportSettings, intervalStorageManager);
+    await updateLegacyExport(_database, exportColumnsManager);
+
+    settings.lastVersion = int.parse((await PackageInfo.fromPlatform()).buildNumber);
+    if (exportSettings.exportAfterEveryEntry) {
+      await Fluttertoast.showToast(
+        msg: r'Please review your export settings to ensure everything works as expected.',
+      );
+    }
+  }
 
   // Reset the step size intervall to current on startup
   intervalStorageManager.mainPage.setToMostRecentIntervall();
