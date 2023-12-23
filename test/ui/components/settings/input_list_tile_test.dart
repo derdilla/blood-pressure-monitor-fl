@@ -67,7 +67,8 @@ void main() {
       await widgetTester.tap(find.byType(InputListTile));
       await widgetTester.pumpAndSettle();
 
-      await widgetTester.enterText(find.byType(TextFormField), 'changed');
+      expect(find.byType(TextField), findsOneWidget);
+      await widgetTester.enterText(find.byType(TextField), 'changed');
       await widgetTester.tap(find.text('OK'));
       await widgetTester.pumpAndSettle();
 

@@ -53,10 +53,10 @@ This would all be technically possible, but I don't really see a demand. Open an
 ## Screenshots
 <table style="width: 100%; border-collapse: collapse;">
   <tr>
-    <td><img src="https://github.com/NobodyForNothing/blood-pressure-monitor-fl/blob/e685edb9a3835e8b8b5ca27862060715b02d5e8c/screenshots/example_home.png" height="100%" alt="Home"></img></td>
-    <td><img src="https://github.com/NobodyForNothing/blood-pressure-monitor-fl/blob/e685edb9a3835e8b8b5ca27862060715b02d5e8c/screenshots/example_settings.png" height="100%" alt="Settings"></img></td>
-    <td><img src="https://github.com/NobodyForNothing/blood-pressure-monitor-fl/blob/e685edb9a3835e8b8b5ca27862060715b02d5e8c/screenshots/example_stats.png" height="100%" alt="Statistics"></img></td>
-    <td><img src="https://github.com/NobodyForNothing/blood-pressure-monitor-fl/blob/e685edb9a3835e8b8b5ca27862060715b02d5e8c/screenshots/example_add.png" height="100%" alt="Add"></img></td>
+    <td><img src="https://github.com/NobodyForNothing/blood-pressure-monitor-fl/blob/main/fastlane/metadata/android/en-US/images/phoneScreenshots/01-example_add.png?raw=true" height="100%" alt="Home"></img></td>
+    <td><img src="https://github.com/NobodyForNothing/blood-pressure-monitor-fl/blob/main/fastlane/metadata/android/en-US/images/phoneScreenshots/03-example_settings.png?raw=true" height="100%" alt="Settings"></img></td>
+  <td><img src="https://github.com/NobodyForNothing/blood-pressure-monitor-fl/blob/main/fastlane/metadata/android/en-US/images/phoneScreenshots/02-example_home.png?raw=true" height="100%" alt="Home"></img></td>
+    <td><img src="https://github.com/NobodyForNothing/blood-pressure-monitor-fl/blob/main/fastlane/metadata/android/en-US/images/phoneScreenshots/04-example_stats.png?raw=true" height="100%" alt="Statistics"></img></td>
   </tr>
 </table>
 
@@ -76,10 +76,4 @@ The easiest way to do this is [weblate](https://hosted.weblate.org/engage/blood-
 If you can code, you can fix issues or implement features from the issues page. While not a strict requirement, it's still probably best, if you talk about it in an issue first.
 
 ### Donations
-If you have too much money, I would advise you to donate to either [F-Droid](https://f-droid.org/en/donate/), [Weblate](https://weblate.org/en/donate/), or some other service that has high unavoidable maintenance costs.
-
-In case you really want to give me something, I guess I can take crypto:
-- USDT: 0xd7c59b9033A35b5F4eB443C0Fcb96973bc1B3c19
-- Monero: 84XXubwz9BURBUctdpsqo7Q3BNXdaTacJjVTyAR6woEsamMS45mkPsGXvCJK7ZFXKCXR5VnmGi8B4ZDf71HTc6HYFiMMGN2
-- ETH: 0xd7c59b9033A35b5F4eB443C0Fcb96973bc1B3c19
-- BTC: bc1qrq44yrp8dp7z2fcwrpq64jamalrdefeakmzj2g
+If you have too much money, I would advise you to donate to either [F-Droid](https://f-droid.org/en/donate/), [Weblate](https://weblate.org/en/donate/), or some other service that has unavoidable maintenance costs.

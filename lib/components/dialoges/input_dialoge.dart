@@ -2,99 +2,130 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+/// Dialoge for prompting single value input from the user.
 class InputDialoge extends StatefulWidget {
-  final String hintText;
-  final String? initialValue;
-
-  /// Gets called when the user submits the text field or presses the submit button.
-  final void Function(String text) onSubmit;
-  final List<TextInputFormatter>? inputFormatters;
-  final TextInputType? keyboardType;
-
+  /// Creates an [AlertDialog] with an text input field.
+  ///
+  /// Pops the context after value submission with object of type [String?].
   const InputDialoge({super.key,
-    required this.hintText,
-    required this.onSubmit,
+    this.hintText,
+    this.initialValue,
     this.inputFormatters,
     this.keyboardType,
-    this.initialValue});
+    this.validator,});
+
+  /// Initial content of the input field.
+  final String? initialValue;
+
+  /// Supporting text describing the input field.
+  final String? hintText;
+
+  /// Optional input validation and formatting overrides.
+  final List<TextInputFormatter>? inputFormatters;
+
+  final TextInputType? keyboardType;
+
+  /// Validation function called after submit.
+  ///
+  /// When the validator returns null the dialoge completes normally,
+  /// in case of receiving a String it will be displayed to the user
+  /// and pressing of the submit button will be ignored.
+  ///
+  /// It is still possible to cancel a dialoge in case the validator fails.
+  final String? Function(String)? validator;
 
   @override
   State<InputDialoge> createState() => _InputDialogeState();
 }
 
 class _InputDialogeState extends State<InputDialoge> {
-  final formKey = GlobalKey<FormState>();
   final controller = TextEditingController();
-  final inputFocusNode = FocusNode();
+  final focusNode = FocusNode();
 
-  @override
-  void dispose() {
-    controller.dispose();
-    super.dispose();
-  }
-
+  String? errorText;
 
   @override
   void initState() {
     super.initState();
-    controller.text = widget.initialValue ?? '';
+    if (widget.initialValue != null) controller.text = widget.initialValue!;
+    focusNode.requestFocus();
+  }
+
+  @override
+  void dispose() {
+    controller.dispose();
+    focusNode.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    inputFocusNode.requestFocus();
+    final localizations = AppLocalizations.of(context)!;
     return AlertDialog(
-      content: TextFormField(
-        key: formKey,
-        focusNode: inputFocusNode,
+      content: TextField(
         controller: controller,
+        focusNode: focusNode,
         inputFormatters: widget.inputFormatters,
         keyboardType: widget.keyboardType,
         decoration: InputDecoration(
-          hintText: widget.hintText
+          hintText: widget.hintText,
+          labelText: widget.hintText,
+          errorText: errorText
         ),
-        onFieldSubmitted: widget.onSubmit,
+        onSubmitted: _onSubmit,
       ),
       actions: [
         ElevatedButton(
-          onPressed: () {
-            widget.onSubmit(controller.text);
-          },
-          child: Text(AppLocalizations.of(context)!.btnConfirm)
-        )
+            onPressed: () => Navigator.of(context).pop(null),
+            child: Text(localizations.btnCancel)),
+        ElevatedButton(
+            onPressed: () => _onSubmit(controller.text),
+            child: Text(localizations.btnConfirm)),
       ],
     );
   }
+
+  void _onSubmit(String value) {
+    final validationResult = widget.validator?.call(value);
+    if (validationResult != null) {
+      setState(() {
+        errorText = validationResult;
+      });
+      return;
+    }
+    Navigator.of(context).pop(value);
+  }
 }
 
-typedef NumberInputResult = void Function(double result);
+/// Creates a dialoge for prompting a single user input.
+///
+/// Add supporting text describing the input field through [hintText].
+/// [initialValue] specifies the initial input field content.
+Future<String?> showInputDialoge(BuildContext context, {String? hintText, String? initialValue}) async =>
+  showDialog<String?>(context: context, builder: (context) =>
+      InputDialoge(hintText: hintText, initialValue: initialValue,));
 
-class NumberInputDialoge extends StatelessWidget {
-  final String hintText;
-  final NumberInputResult onParsableSubmit;
-  final String? initialValue;
-
-  const NumberInputDialoge({
-    super.key,
-    required this.hintText,
-    required this.onParsableSubmit,
-    this.initialValue});
-
-  @override
-  Widget build(BuildContext context) {
-    return InputDialoge(
+/// Creates a dialoge that only allows int and double inputs.
+///
+/// Variables behave similar to [showInputDialoge].
+Future<double?> showNumberInputDialoge(BuildContext context, {String? hintText, num? initialValue}) async {
+  final result = await showDialog<String?>(context: context, builder: (context) =>
+    InputDialoge(
       hintText: hintText,
+      initialValue: initialValue?.toString(),
       inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r'([0-9]+(\.([0-9]*))?)')),],
       keyboardType: TextInputType.number,
-      initialValue: initialValue,
-      onSubmit: (text) {
+      validator: (text) {
         double? value = double.tryParse(text);
         value ??= int.tryParse(text)?.toDouble();
         if (text.isEmpty || value == null) {
-          return;
+          return AppLocalizations.of(context)!.errNaN;
         }
-        onParsableSubmit(value);
-      }
-    );
-  }
+        return null;
+      },
+    ));
+
+  double? value = double.tryParse(result ?? '');
+  value ??= int.tryParse(result ?? '')?.toDouble();
+  return value;
 }

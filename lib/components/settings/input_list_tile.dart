@@ -26,18 +26,9 @@ class InputListTile extends StatelessWidget {
       title: Text(label),
       subtitle: Text(value),
       trailing: const Icon(Icons.edit),
-      onTap: () {
-        showDialog(
-          context: context,
-          builder: (context) => InputDialoge(
-            initialValue: value,
-            hintText: label,
-            onSubmit: (value) {
-              Navigator.of(context).pop();
-              onSubmit(value);
-            },
-          ),
-        );
+      onTap: () async {
+        final input = await showInputDialoge(context, initialValue: value, hintText: label);
+        if (input != null) onSubmit(input);
       },
     );
   }

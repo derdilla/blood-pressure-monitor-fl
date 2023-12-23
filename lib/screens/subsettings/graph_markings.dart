@@ -40,17 +40,10 @@ class GraphMarkingsScreen extends StatelessWidget {
                   onTap: () async {
                     final color = await showColorPickerDialog(context);
                     if (!context.mounted) return;
-                    final height = await showDialog<int>(context: context,
-                        builder: (context) => NumberInputDialoge(
-                            hintText: localizations.linePositionY,
-                            onParsableSubmit: (value) {
-                              Navigator.of(context).pop(value);
-                            }
-                        )
-                    );
+                    final height = await showNumberInputDialoge(context, hintText: localizations.linePositionY);
 
                     if (color == null || height == null) return;
-                    lines.add(HorizontalGraphLine(color, height));
+                    lines.add(HorizontalGraphLine(color, height.round()));
                     settings.horizontalGraphLines = lines;
                   },
                 );
