@@ -10,6 +10,8 @@ App release checklist
 - [ ] `flutter clean`
 - [ ] compile apk `flutter build apk --release --flavor github --obfuscate --split-debug-info=./build/debug-info`
 - [ ] compile play-store `flutter build appbundle --release --flavor github --obfuscate --split-debug-info=./build/debug-info`
+- [ ] obtain Playstore debug symbols by running `7z a debug-info.zip ./lib/arm64-v8a/ ./lib/armeabi-v7a/ ./lib/x86_64/
+` in folder `build/app/intermediates/merged_native_libs/githubRelease/out/`
 - [ ] Google Play beta release
 - [ ] Once a successful update has been reported and the app works, promote the Play release and create a GitHub release
 - [ ] Add debug symbols in `./build/debug-info` to GitHub release
