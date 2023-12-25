@@ -1,10 +1,10 @@
 
-import 'package:blood_pressure_app/components/diabled.dart';
+import 'package:blood_pressure_app/components/disabled.dart';
 import 'package:blood_pressure_app/components/export_warn_banner.dart';
 import 'package:blood_pressure_app/components/settings/settings_widgets.dart';
 import 'package:blood_pressure_app/model/storage/export_columns_store.dart';
 import 'package:blood_pressure_app/model/storage/storage.dart';
-import 'package:blood_pressure_app/screens/display_interval_picker.dart';
+import 'package:blood_pressure_app/screens/elements/display_interval_picker.dart';
 import 'package:blood_pressure_app/screens/subsettings/export_import/active_field_customization.dart';
 import 'package:blood_pressure_app/screens/subsettings/export_import/export_button_bar.dart';
 import 'package:flutter/material.dart';
