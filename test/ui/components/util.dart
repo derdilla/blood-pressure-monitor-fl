@@ -11,19 +11,19 @@ Widget materialApp(Widget child) {
   );
 }
 
-/// Open a dialoge through a button press.
+/// Open a dialogue through a button press.
 ///
 /// Example usage:
 /// ```dart
 /// dynamic returnedValue = false;
-/// await loadDialoge(widgetTester, (context) async => returnedValue =
-///    await showAddExportColumnDialoge(context, Settings(),
+/// await loadDialogue(widgetTester, (context) async => returnedValue =
+///    await showAddExportColumnDialogue(context, Settings(),
 ///      UserColumn('initialInternalIdentifier', 'csvTitle', 'formatPattern')
 /// ));
 /// ```
-Future<void> loadDialoge(WidgetTester tester, void Function(BuildContext context) dialogeStarter, { String dialogeStarterText = 'X' }) async {
+Future<void> loadDialogue(WidgetTester tester, void Function(BuildContext context) dialogueStarter, { String dialogueStarterText = 'X' }) async {
   await tester.pumpWidget(materialApp(Builder(builder: (context) =>
-      TextButton(onPressed: () => dialogeStarter(context), child: Text(dialogeStarterText)))));
-  await tester.tap(find.text(dialogeStarterText));
+      TextButton(onPressed: () => dialogueStarter(context), child: Text(dialogueStarterText)))));
+  await tester.tap(find.text(dialogueStarterText));
   await tester.pumpAndSettle();
 }

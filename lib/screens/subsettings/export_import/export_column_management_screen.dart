@@ -1,4 +1,4 @@
-import 'package:blood_pressure_app/components/dialoges/add_export_column_dialoge.dart';
+import 'package:blood_pressure_app/components/dialogues/add_export_column_dialogue.dart';
 import 'package:blood_pressure_app/model/export_import/column.dart';
 import 'package:blood_pressure_app/model/storage/export_columns_store.dart';
 import 'package:blood_pressure_app/model/storage/settings_store.dart';
@@ -47,7 +47,7 @@ class ExportColumnsManagementScreen extends StatelessWidget {
                           icon: const Icon(Icons.edit),
                           onPressed: () async {
                             final settings = Provider.of<Settings>(context, listen: false);
-                            final editedColumn = await showAddExportColumnDialoge(context, settings, column);
+                            final editedColumn = await showAddExportColumnDialogue(context, settings, column);
                             if (editedColumn != null) {
                               columnsManager.addOrUpdate(editedColumn);
                             }
@@ -82,13 +82,13 @@ class ExportColumnsManagementScreen extends StatelessWidget {
                   title: Text(localizations.addExportformat),
                   onTap: () async{
                     final settings = Provider.of<Settings>(context, listen: false);
-                    ExportColumn? editedColumn = await showAddExportColumnDialoge(context, settings);
+                    ExportColumn? editedColumn = await showAddExportColumnDialogue(context, settings);
                     if (editedColumn != null) {
                       while (columnsManager.userColumns.containsKey(editedColumn!.internalIdentifier)) {
                         if (editedColumn is UserColumn) {
                           editedColumn = UserColumn.explicit('${editedColumn.internalIdentifier}I', editedColumn.csvTitle, editedColumn.formatPattern!);
                         } else {
-                          assert(editedColumn is TimeColumn, 'Creation of other types not supported in dialoge.');
+                          assert(editedColumn is TimeColumn, 'Creation of other types not supported in dialogue.');
                           editedColumn = TimeColumn.explicit('${editedColumn.internalIdentifier}I', editedColumn.csvTitle, editedColumn.formatPattern!);
                         }
                       }

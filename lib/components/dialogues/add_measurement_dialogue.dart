@@ -11,16 +11,16 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
 
 /// Input mask for entering measurements.
-class AddMeasurementDialoge extends StatefulWidget {
+class AddMeasurementDialogue extends StatefulWidget {
   /// Create a input mask for entering measurements.
   /// 
-  /// This is usually created through the [showAddMeasurementDialoge] function.
-  const AddMeasurementDialoge(
+  /// This is usually created through the [showAddMeasurementDialogue] function.
+  const AddMeasurementDialogue(
       {super.key,
       required this.settings,
       this.initialRecord});
 
-  /// Settings are followed by the dialoge.
+  /// Settings are followed by the dialogue.
   final Settings settings;
 
   /// Values that are prefilled.
@@ -29,10 +29,10 @@ class AddMeasurementDialoge extends StatefulWidget {
   final BloodPressureRecord? initialRecord;
 
   @override
-  State<AddMeasurementDialoge> createState() => _AddMeasurementDialogeState();
+  State<AddMeasurementDialogue> createState() => _AddMeasurementDialogueState();
 }
 
-class _AddMeasurementDialogeState extends State<AddMeasurementDialoge> {
+class _AddMeasurementDialogueState extends State<AddMeasurementDialogue> {
   final formKey = GlobalKey<FormState>();
   final sysFocusNode = FocusNode();
   final diaFocusNode = FocusNode();
@@ -283,7 +283,7 @@ class _AddMeasurementDialogeState extends State<AddMeasurementDialoge> {
   }
 }
 
-Future<BloodPressureRecord?> showAddMeasurementDialoge(BuildContext context, Settings settings, [BloodPressureRecord? initialRecord]) =>
+Future<BloodPressureRecord?> showAddMeasurementDialogue(BuildContext context, Settings settings, [BloodPressureRecord? initialRecord]) =>
   showDialog<BloodPressureRecord?>(context: context, builder: (context) => Dialog.fullscreen(
-    child: AddMeasurementDialoge(settings: settings, initialRecord: initialRecord,),
+    child: AddMeasurementDialogue(settings: settings, initialRecord: initialRecord,),
   ));

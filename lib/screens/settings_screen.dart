@@ -1,8 +1,8 @@
 import 'dart:io';
 
 import 'package:blood_pressure_app/components/consistent_future_builder.dart';
-import 'package:blood_pressure_app/components/dialoges/enter_timeformat.dart';
-import 'package:blood_pressure_app/components/dialoges/input_dialoge.dart';
+import 'package:blood_pressure_app/components/dialogues/enter_timeformat_dialogue.dart';
+import 'package:blood_pressure_app/components/dialogues/input_dialogue.dart';
 import 'package:blood_pressure_app/components/settings/settings_widgets.dart';
 import 'package:blood_pressure_app/model/blood_pressure/warn_values.dart';
 import 'package:blood_pressure_app/model/iso_lang_names.dart';
@@ -45,7 +45,7 @@ class SettingsPage extends StatelessWidget {
                 leading: const Icon(Icons.schedule),
                 trailing: const Icon(Icons.arrow_forward_ios),
                 onTap: () async {
-                  final pickedFormat = await showTimeFormatPickerDialoge(context, settings.dateFormatString);
+                  final pickedFormat = await showTimeFormatPickerDialogue(context, settings.dateFormatString);
                   if (pickedFormat != null) {
                     settings.dateFormatString = pickedFormat;
                   }
@@ -202,7 +202,7 @@ class SettingsPage extends StatelessWidget {
                 leading: const Icon(Icons.settings_applications_outlined),
                 title: Text(localizations.determineWarnValues),
                 onTap: () async {
-                  final age = (await showNumberInputDialoge(context,
+                  final age = (await showNumberInputDialogue(context,
                     hintText: localizations.age,
                   ))?.round();
                   if (age != null) {

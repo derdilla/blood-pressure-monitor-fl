@@ -1,5 +1,5 @@
-import 'package:blood_pressure_app/components/dialoges/add_measurement.dart';
-import 'package:blood_pressure_app/components/dialoges/enter_timeformat.dart';
+import 'package:blood_pressure_app/components/dialogues/add_measurement_dialogue.dart';
+import 'package:blood_pressure_app/components/dialogues/enter_timeformat_dialogue.dart';
 import 'package:blood_pressure_app/main.dart';
 import 'package:blood_pressure_app/model/blood_pressure/model.dart';
 import 'package:blood_pressure_app/model/storage/db/config_dao.dart';
@@ -25,7 +25,7 @@ void main() {
       await widgetTester.tap(find.byIcon(Icons.add));
       await widgetTester.pumpAndSettle();
 
-      expect(find.byType(AddMeasurementDialoge), findsOneWidget);
+      expect(find.byType(AddMeasurementDialogue), findsOneWidget);
     });
     testWidgets('should navigate to settings page', (widgetTester) async {
       await pumpAppRoot(widgetTester);
@@ -52,12 +52,12 @@ void main() {
       await widgetTester.pumpAndSettle();
 
       expect(find.byType(SettingsPage), findsOneWidget);
-      expect(find.byType(EnterTimeFormatDialoge), findsNothing);
+      expect(find.byType(EnterTimeFormatDialogue), findsNothing);
       expect(find.byKey(const Key('EnterTimeFormatScreen')), findsOneWidget);
       await widgetTester.tap(find.byKey(const Key('EnterTimeFormatScreen')));
       await widgetTester.pumpAndSettle();
 
-      expect(find.byType(EnterTimeFormatDialoge), findsOneWidget);
+      expect(find.byType(EnterTimeFormatDialogue), findsOneWidget);
     });
     // ...
   });

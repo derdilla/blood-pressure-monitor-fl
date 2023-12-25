@@ -1,4 +1,4 @@
-import 'package:blood_pressure_app/components/dialoges/add_measurement.dart';
+import 'package:blood_pressure_app/components/dialogues/add_measurement_dialogue.dart';
 import 'package:blood_pressure_app/components/settings/color_picker_list_tile.dart';
 import 'package:blood_pressure_app/model/blood_pressure/needle_pin.dart';
 import 'package:blood_pressure_app/model/blood_pressure/record.dart';
@@ -13,10 +13,10 @@ import 'settings/color_picker_list_tile_test.dart';
 import 'util.dart';
 
 void main() {
-  group('AddMeasurementDialoge', () {
+  group('AddMeasurementDialogue', () {
     testWidgets('should show everything on initial page', (widgetTester) async {
       await widgetTester.pumpWidget(materialApp(
-        AddMeasurementDialoge(
+        AddMeasurementDialogue(
           settings: Settings(),
         )
       ));
@@ -30,7 +30,7 @@ void main() {
     });
     testWidgets('should prefill initialRecord values', (widgetTester) async {
       await widgetTester.pumpWidget(materialApp(
-          AddMeasurementDialoge(
+          AddMeasurementDialogue(
             settings: Settings(),
             initialRecord: BloodPressureRecord(
               DateTime.now(), 123, 56, 43, 'Test note',
@@ -50,30 +50,30 @@ void main() {
       having((p0) => p0.initialColor, 'ColorSelectionListTile should have correct initial color', Colors.teal));
     });
   });
-  group('showAddMeasurementDialoge', () {
+  group('showAddMeasurementDialogue', () {
     testWidgets('should return null on cancel', (widgetTester) async {
       dynamic result = 'not null';
-      await loadDialoge(widgetTester, (context) async
-        => result = await showAddMeasurementDialoge(context, Settings(),
+      await loadDialogue(widgetTester, (context) async
+        => result = await showAddMeasurementDialogue(context, Settings(),
           mockRecord(sys: 123, dia: 56, pul: 43, note: 'Test note', pin: Colors.teal)));
 
-      expect(find.byType(AddMeasurementDialoge), findsOneWidget);
+      expect(find.byType(AddMeasurementDialogue), findsOneWidget);
       await widgetTester.tap(find.byIcon(Icons.close));
       await widgetTester.pumpAndSettle();
-      expect(find.byType(AddMeasurementDialoge), findsNothing);
+      expect(find.byType(AddMeasurementDialogue), findsNothing);
 
       expect(result, null);
     });
     testWidgets('should return values on cancel', (widgetTester) async {
       dynamic result = 'not null';
       final record = mockRecord(sys: 123, dia: 56, pul: 43, note: 'Test note', pin: Colors.teal);
-      await loadDialoge(widgetTester, (context) async
-        => result = await showAddMeasurementDialoge(context, Settings(), record));
+      await loadDialogue(widgetTester, (context) async
+        => result = await showAddMeasurementDialogue(context, Settings(), record));
 
-      expect(find.byType(AddMeasurementDialoge), findsOneWidget);
+      expect(find.byType(AddMeasurementDialogue), findsOneWidget);
       await widgetTester.tap(find.text('SAVE'));
       await widgetTester.pumpAndSettle();
-      expect(find.byType(AddMeasurementDialoge), findsNothing);
+      expect(find.byType(AddMeasurementDialogue), findsNothing);
 
       expect(result, isA<BloodPressureRecord>().having(
               (p0) => (p0.creationTime, p0.systolic, p0.diastolic, p0.pulse, p0.notes, p0.needlePin!.color),
@@ -82,8 +82,8 @@ void main() {
     });
     testWidgets('should be able to input values', (WidgetTester widgetTester) async {
       dynamic result = 'not null';
-      await loadDialoge(widgetTester, (context) async
-        => result = await showAddMeasurementDialoge(context, Settings()));
+      await loadDialogue(widgetTester, (context) async
+        => result = await showAddMeasurementDialogue(context, Settings()));
 
       await widgetTester.enterText(find.ancestor(of: find.text('Systolic').first, matching: find.byType(TextFormField)), '123');
       await widgetTester.enterText(find.ancestor(of: find.text('Diastolic').first, matching: find.byType(TextFormField)), '67');
@@ -108,10 +108,10 @@ void main() {
       expect(castResult.needlePin?.color, Colors.red);
     });
     testWidgets('should not allow invalid values', (widgetTester) async {
-      await loadDialoge(widgetTester, (context) => showAddMeasurementDialoge(context, Settings()));
+      await loadDialogue(widgetTester, (context) => showAddMeasurementDialogue(context, Settings()));
       final localizations = await AppLocalizations.delegate.load(const Locale('en'));
 
-      expect(find.byType(AddMeasurementDialoge), findsOneWidget);
+      expect(find.byType(AddMeasurementDialogue), findsOneWidget);
       expect(find.text(localizations.errNaN), findsNothing);
       expect(find.text(localizations.errLt30), findsNothing);
       expect(find.text(localizations.errUnrealistic), findsNothing);
@@ -122,7 +122,7 @@ void main() {
 
       await widgetTester.tap(find.text('SAVE'));
       await widgetTester.pumpAndSettle();
-      expect(find.byType(AddMeasurementDialoge), findsOneWidget);
+      expect(find.byType(AddMeasurementDialogue), findsOneWidget);
       expect(find.text(localizations.errNaN), findsOneWidget);
       expect(find.text(localizations.errLt30), findsNothing);
       expect(find.text(localizations.errUnrealistic), findsNothing);
@@ -131,7 +131,7 @@ void main() {
       await widgetTester.enterText(find.ancestor(of: find.text('Pulse').first, matching: find.byType(TextFormField)), '20');
       await widgetTester.tap(find.text('SAVE'));
       await widgetTester.pumpAndSettle();
-      expect(find.byType(AddMeasurementDialoge), findsOneWidget);
+      expect(find.byType(AddMeasurementDialogue), findsOneWidget);
       expect(find.text(localizations.errNaN), findsNothing);
       expect(find.text(localizations.errLt30), findsOneWidget);
       expect(find.text(localizations.errUnrealistic), findsNothing);
@@ -141,7 +141,7 @@ void main() {
       await widgetTester.enterText(find.ancestor(of: find.text('Diastolic').first, matching: find.byType(TextFormField)), '500');
       await widgetTester.tap(find.text('SAVE'));
       await widgetTester.pumpAndSettle();
-      expect(find.byType(AddMeasurementDialoge), findsOneWidget);
+      expect(find.byType(AddMeasurementDialogue), findsOneWidget);
       expect(find.text(localizations.errNaN), findsNothing);
       expect(find.text(localizations.errLt30), findsNothing);
       expect(find.text(localizations.errUnrealistic), findsOneWidget);
@@ -151,7 +151,7 @@ void main() {
       await widgetTester.enterText(find.ancestor(of: find.text('Systolic').first, matching: find.byType(TextFormField)), '90');
       await widgetTester.tap(find.text('SAVE'));
       await widgetTester.pumpAndSettle();
-      expect(find.byType(AddMeasurementDialoge), findsOneWidget);
+      expect(find.byType(AddMeasurementDialogue), findsOneWidget);
       expect(find.text(localizations.errNaN), findsNothing);
       expect(find.text(localizations.errLt30), findsNothing);
       expect(find.text(localizations.errUnrealistic), findsNothing);
@@ -162,31 +162,31 @@ void main() {
       await widgetTester.enterText(find.ancestor(of: find.text('Systolic').first, matching: find.byType(TextFormField)), '123');
       await widgetTester.tap(find.text('SAVE'));
       await widgetTester.pumpAndSettle();
-      expect(find.byType(AddMeasurementDialoge), findsNothing);
+      expect(find.byType(AddMeasurementDialogue), findsNothing);
       expect(find.text(localizations.errNaN), findsNothing);
       expect(find.text(localizations.errLt30), findsNothing);
       expect(find.text(localizations.errUnrealistic), findsNothing);
       expect(find.text(localizations.errDiaGtSys), findsNothing);
     });
     testWidgets('should allow invalid values when setting is set', (widgetTester) async {
-      await loadDialoge(widgetTester, (context) =>
-          showAddMeasurementDialoge(context, Settings(validateInputs: false, allowMissingValues: true)));
+      await loadDialogue(widgetTester, (context) =>
+          showAddMeasurementDialogue(context, Settings(validateInputs: false, allowMissingValues: true)));
 
       await widgetTester.enterText(find.ancestor(of: find.text('Systolic').first, matching: find.byType(TextFormField)), '2');
       await widgetTester.enterText(find.ancestor(of: find.text('Diastolic').first, matching: find.byType(TextFormField)), '500');
       await widgetTester.tap(find.text('SAVE'));
       await widgetTester.pumpAndSettle();
-      expect(find.byType(AddMeasurementDialoge), findsNothing);
+      expect(find.byType(AddMeasurementDialogue), findsNothing);
     });
     testWidgets('should respect settings.allowManualTimeInput', (widgetTester) async {
-      await loadDialoge(widgetTester, (context) =>
-          showAddMeasurementDialoge(context, Settings(allowManualTimeInput: false)));
+      await loadDialogue(widgetTester, (context) =>
+          showAddMeasurementDialogue(context, Settings(allowManualTimeInput: false)));
 
       expect(find.byIcon(Icons.edit), findsNothing);
     });
     testWidgets('should start with sys input focused', (widgetTester) async {
-      await loadDialoge(widgetTester, (context) =>
-          showAddMeasurementDialoge(context, Settings(), mockRecord(sys: 12)));
+      await loadDialogue(widgetTester, (context) =>
+          showAddMeasurementDialogue(context, Settings(), mockRecord(sys: 12)));
 
       final primaryFocus = FocusManager.instance.primaryFocus;
       expect(primaryFocus?.context?.widget, isNotNull);
@@ -199,8 +199,8 @@ void main() {
           .having((p0) => p0.initialValue, 'systolic content', '12'));
     });
     testWidgets('should focus next on input finished', (widgetTester) async {
-      await loadDialoge(widgetTester, (context) =>
-          showAddMeasurementDialoge(context, Settings(), mockRecord(sys: 12, dia: 3, pul: 4, note: 'note')));
+      await loadDialogue(widgetTester, (context) =>
+          showAddMeasurementDialogue(context, Settings(), mockRecord(sys: 12, dia: 3, pul: 4, note: 'note')));
 
       await widgetTester.enterText(find.ancestor(of: find.text('Systolic').first, matching: find.byType(TextFormField)), '123');
 
@@ -240,8 +240,8 @@ void main() {
     });
 
     testWidgets('should focus last input field on backspace pressed in empty input field', (widgetTester) async {
-      await loadDialoge(widgetTester, (context) =>
-          showAddMeasurementDialoge(context, Settings(), mockRecord(sys: 12, dia: 3, pul: 4, note: 'note')));
+      await loadDialogue(widgetTester, (context) =>
+          showAddMeasurementDialogue(context, Settings(), mockRecord(sys: 12, dia: 3, pul: 4, note: 'note')));
 
 
       await widgetTester.enterText(find.ancestor(of: find.text('note').first, matching: find.byType(TextFormField)), '');

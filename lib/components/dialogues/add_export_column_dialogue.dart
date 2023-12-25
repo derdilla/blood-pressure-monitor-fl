@@ -8,22 +8,22 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
 
-/// Dialoge widget for creating and editing a [UserColumn].
+/// Dialogue widget for creating and editing a [UserColumn].
 ///
-/// For further documentation please refer to [showAddExportColumnDialoge].
-class AddExportColumnDialoge extends StatefulWidget {
+/// For further documentation please refer to [showAddExportColumnDialogue].
+class AddExportColumnDialogue extends StatefulWidget {
   /// Create a widget for creating and editing a [UserColumn].
-  const AddExportColumnDialoge({super.key, this.initialColumn, required this.settings});
+  const AddExportColumnDialogue({super.key, this.initialColumn, required this.settings});
 
   final ExportColumn? initialColumn;
 
   final Settings settings;
 
   @override
-  State<AddExportColumnDialoge> createState() => _AddExportColumnDialogeState();
+  State<AddExportColumnDialogue> createState() => _AddExportColumnDialogueState();
 }
 
-class _AddExportColumnDialogeState extends State<AddExportColumnDialoge> with SingleTickerProviderStateMixin {
+class _AddExportColumnDialogueState extends State<AddExportColumnDialogue> with SingleTickerProviderStateMixin {
   final formKey = GlobalKey<FormState>();
 
   /// Csv column title used to compute internal identifier in case [widget.initialColumn] is null.
@@ -279,20 +279,20 @@ enum _FormatterType {
   time,
 }
 
-/// Shows a dialoge containing a export column editor to create a [UserColumn] or [TimeColumn].
+/// Shows a dialogue containing a export column editor to create a [UserColumn] or [TimeColumn].
 ///
 /// In case [initialColumn] is null fields are initially empty.
 /// When initialColumn is provided, it is ensured that the
 /// returned column has the same [UserColumn.internalIdentifier].
 ///
-/// The dialoge allows entering a csv title and a format
+/// The dialogue allows entering a csv title and a format
 /// pattern from which it generates a preview encoding and
 /// shows values decode able.
 ///
 /// Internal identifier and display title are generated from
 /// the CSV title. There is no check whether a userColumn
 /// with the generated title exists.
-Future<ExportColumn?> showAddExportColumnDialoge(BuildContext context, Settings settings, [ExportColumn? initialColumn]) =>
+Future<ExportColumn?> showAddExportColumnDialogue(BuildContext context, Settings settings, [ExportColumn? initialColumn]) =>
     showDialog<ExportColumn?>(context: context, builder: (context) => Dialog.fullscreen(
-      child: AddExportColumnDialoge(initialColumn: initialColumn, settings: settings,),
+      child: AddExportColumnDialogue(initialColumn: initialColumn, settings: settings,),
     ));

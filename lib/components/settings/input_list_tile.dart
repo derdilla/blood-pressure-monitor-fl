@@ -1,4 +1,4 @@
-import 'package:blood_pressure_app/components/dialoges/input_dialoge.dart';
+import 'package:blood_pressure_app/components/dialogues/input_dialogue.dart';
 import 'package:flutter/material.dart';
 
 /// A list tile for exposing editable strings.
@@ -11,7 +11,7 @@ class InputListTile extends StatelessWidget {
 
   /// Short label describing the required field contents.
   ///
-  /// This will be both the title of the list tile as well as the hint text in the input dialoge.
+  /// This will be both the title of the list tile as well as the hint text in the input dialogue.
   final String label;
 
   /// Current content of the input field.
@@ -27,7 +27,7 @@ class InputListTile extends StatelessWidget {
       subtitle: Text(value),
       trailing: const Icon(Icons.edit),
       onTap: () async {
-        final input = await showInputDialoge(context, initialValue: value, hintText: label);
+        final input = await showInputDialogue(context, initialValue: value, hintText: label);
         if (input != null) onSubmit(input);
       },
     );

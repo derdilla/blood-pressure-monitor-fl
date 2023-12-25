@@ -1,4 +1,4 @@
-import 'package:blood_pressure_app/components/dialoges/add_measurement.dart';
+import 'package:blood_pressure_app/components/dialogues/add_measurement_dialogue.dart';
 import 'package:blood_pressure_app/model/blood_pressure/model.dart';
 import 'package:blood_pressure_app/model/storage/intervall_store.dart';
 import 'package:blood_pressure_app/model/storage/settings_store.dart';
@@ -28,7 +28,7 @@ class AppHome extends StatelessWidget {
     if (_appStart) {
       if (Provider.of<Settings>(context, listen: false).startWithAddMeasurementPage) {
         SchedulerBinding.instance.addPostFrameCallback((_) async {
-          final future = showAddMeasurementDialoge(context, Provider.of<Settings>(context, listen: false));
+          final future = showAddMeasurementDialogue(context, Provider.of<Settings>(context, listen: false));
           final model = Provider.of<BloodPressureModel>(context, listen: false);
           final measurement = await future;
           if (measurement == null) return;
@@ -94,7 +94,7 @@ class AppHome extends StatelessWidget {
                       tooltip: localizations.addMeasurement,
                       autofocus: true,
                       onPressed: () async {
-                        final future = showAddMeasurementDialoge(context, settings);
+                        final future = showAddMeasurementDialogue(context, settings);
                         final model = Provider.of<BloodPressureModel>(context, listen: false);
                         final measurement = await future;
                         if (measurement == null) return;

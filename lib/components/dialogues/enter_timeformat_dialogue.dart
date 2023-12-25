@@ -4,10 +4,10 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:intl/intl.dart';
 
-/// Dialoge that explains the time format and pops the context with either null or a time format string.
-class EnterTimeFormatDialoge extends StatefulWidget {
-  /// Create dialoge for entering time formats as used by the [DateFormat] class.
-  const EnterTimeFormatDialoge({super.key, required this.initialValue, this.previewTime});
+/// Dialogue that explains the time format and pops the context with either null or a time format string.
+class EnterTimeFormatDialogue extends StatefulWidget {
+  /// Create dialogue for entering time formats as used by the [DateFormat] class.
+  const EnterTimeFormatDialogue({super.key, required this.initialValue, this.previewTime});
 
   /// Text that is initially in time format field.
   final String initialValue;
@@ -18,10 +18,10 @@ class EnterTimeFormatDialoge extends StatefulWidget {
   final DateTime? previewTime;
 
   @override
-  State<EnterTimeFormatDialoge> createState() => _EnterTimeFormatDialogeState();
+  State<EnterTimeFormatDialogue> createState() => _EnterTimeFormatDialogueState();
 }
 
-class _EnterTimeFormatDialogeState extends State<EnterTimeFormatDialoge> {
+class _EnterTimeFormatDialogueState extends State<EnterTimeFormatDialogue> {
   final timeFormatFieldController = TextEditingController();
   final focusNode = FocusNode();
 
@@ -95,10 +95,10 @@ class _EnterTimeFormatDialogeState extends State<EnterTimeFormatDialoge> {
   }
 }
 
-/// Shows a dialoge that explains the ICU DateTime format and allows editing [initialTimeFormat] with a preview.
+/// Shows a dialogue that explains the ICU DateTime format and allows editing [initialTimeFormat] with a preview.
 ///
 /// When canceled null is returned.
-Future<String?> showTimeFormatPickerDialoge(BuildContext context, String initialTimeFormat) =>
+Future<String?> showTimeFormatPickerDialogue(BuildContext context, String initialTimeFormat) =>
     showDialog<String?>(context: context, builder: (context) => Dialog.fullscreen(
-        child: EnterTimeFormatDialoge(initialValue: initialTimeFormat),
+        child: EnterTimeFormatDialogue(initialValue: initialTimeFormat),
     ));

@@ -1,5 +1,5 @@
 import 'package:blood_pressure_app/components/color_picker.dart';
-import 'package:blood_pressure_app/components/dialoges/input_dialoge.dart';
+import 'package:blood_pressure_app/components/dialogues/input_dialogue.dart';
 import 'package:blood_pressure_app/model/horizontal_graph_line.dart';
 import 'package:blood_pressure_app/model/storage/settings_store.dart';
 import 'package:flutter/material.dart';
@@ -40,7 +40,7 @@ class GraphMarkingsScreen extends StatelessWidget {
                   onTap: () async {
                     final color = await showColorPickerDialog(context);
                     if (!context.mounted) return;
-                    final height = await showNumberInputDialoge(context, hintText: localizations.linePositionY);
+                    final height = await showNumberInputDialogue(context, hintText: localizations.linePositionY);
 
                     if (color == null || height == null) return;
                     lines.add(HorizontalGraphLine(color, height.round()));
