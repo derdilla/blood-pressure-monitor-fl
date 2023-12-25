@@ -1,8 +1,8 @@
 import 'package:blood_pressure_app/components/dialoges/add_measurement.dart';
-import 'package:blood_pressure_app/components/legacy_measurement_list.dart';
-import 'package:blood_pressure_app/components/measurement_graph.dart';
 import 'package:blood_pressure_app/model/blood_pressure.dart';
 import 'package:blood_pressure_app/model/storage/settings_store.dart';
+import 'package:blood_pressure_app/screens/legacy_measurement_list.dart';
+import 'package:blood_pressure_app/screens/measurement_graph.dart';
 import 'package:blood_pressure_app/screens/settings_screen.dart';
 import 'package:blood_pressure_app/screens/statistics_screen.dart';
 import 'package:flutter/material.dart';

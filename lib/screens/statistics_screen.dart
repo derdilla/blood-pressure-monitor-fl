@@ -1,9 +1,9 @@
 
-import 'package:blood_pressure_app/components/blood_pressure_builder.dart';
-import 'package:blood_pressure_app/components/display_interval_picker.dart';
 import 'package:blood_pressure_app/model/blood_pressure_analyzer.dart';
 import 'package:blood_pressure_app/model/storage/intervall_store.dart';
 import 'package:blood_pressure_app/model/storage/settings_store.dart';
+import 'package:blood_pressure_app/screens/blood_pressure_builder.dart';
+import 'package:blood_pressure_app/screens/display_interval_picker.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
