@@ -1,31 +1,31 @@
 import 'package:blood_pressure_app/components/measurement_list/measurement_list_entry.dart';
-import 'package:blood_pressure_app/model/blood_pressure.dart';
-import 'package:blood_pressure_app/model/ram_only_implementations.dart';
-import 'package:blood_pressure_app/model/storage/intervall_store.dart';
+import 'package:blood_pressure_app/model/blood_pressure/needle_pin.dart';
+import 'package:blood_pressure_app/model/blood_pressure/record.dart';
 import 'package:blood_pressure_app/model/storage/settings_store.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:provider/provider.dart';
+
+import '../../model/export_import/record_formatter_test.dart';
+import 'util.dart';
 
 void main() {
   group('MeasurementListRow', () {
     testWidgets('should initialize without errors', (widgetTester) async {
-      await widgetTester.pumpWidget(_materialApp(MeasurementListRow(
+      await widgetTester.pumpWidget(materialApp(MeasurementListRow(
         settings: Settings(),
         record: BloodPressureRecord(DateTime(2023), 123, 80, 60, 'test'))));
       expect(widgetTester.takeException(), isNull);
-      await widgetTester.pumpWidget(_materialApp(MeasurementListRow(
+      await widgetTester.pumpWidget(materialApp(MeasurementListRow(
         settings: Settings(),
         record: BloodPressureRecord(DateTime.fromMillisecondsSinceEpoch(31279811), null, null, null, 'null test'))));
       expect(widgetTester.takeException(), isNull);
-      await widgetTester.pumpWidget(_materialApp(MeasurementListRow(
+      await widgetTester.pumpWidget(materialApp(MeasurementListRow(
         settings: Settings(),
         record: BloodPressureRecord(DateTime(2023), 124, 85, 63, 'color', needlePin: const MeasurementNeedlePin(Colors.cyan)))));
       expect(widgetTester.takeException(), isNull);
     });
     testWidgets('should expand correctly', (widgetTester) async {
-      await widgetTester.pumpWidget(_materialApp(MeasurementListRow(
+      await widgetTester.pumpWidget(materialApp(MeasurementListRow(
           settings: Settings(),
           record: BloodPressureRecord(DateTime(2023), 123, 78, 56, 'Test texts'))));
       expect(find.byIcon(Icons.expand_more), findsOneWidget);
@@ -36,7 +36,7 @@ void main() {
       expect(find.byIcon(Icons.delete), findsOneWidget);
     });
     testWidgets('should display correct information', (widgetTester) async {
-      await widgetTester.pumpWidget(_materialApp(MeasurementListRow(
+      await widgetTester.pumpWidget(materialApp(MeasurementListRow(
           settings: Settings(),
           record: BloodPressureRecord(DateTime(2023), 123, 78, 56, 'Test text'))));
       expect(find.text('123'), findsOneWidget);
@@ -53,9 +53,8 @@ void main() {
       expect(find.textContaining('2023'), findsOneWidget);
     });
     testWidgets('should not display null values', (widgetTester) async {
-      await widgetTester.pumpWidget(_materialApp(MeasurementListRow(
-          settings: Settings(),
-          record: BloodPressureRecord(DateTime(2023), null, null, null, ''))));
+      await widgetTester.pumpWidget(materialApp(MeasurementListRow(
+        settings: Settings(), record: mockRecord(time: DateTime(2023)))));
       expect(find.text('null'), findsNothing);
       expect(find.byIcon(Icons.expand_more), findsOneWidget);
       await widgetTester.tap(find.byIcon(Icons.expand_more));
@@ -63,24 +62,4 @@ void main() {
       expect(find.text('null'), findsNothing);
     });
   });
-}
-
-Widget _materialApp(Widget child) {
-  return MaterialApp(
-    home: Localizations(
-      delegates: AppLocalizations.localizationsDelegates,
-      locale: const Locale('en'),
-      child: MultiProvider(
-          providers: [
-            ChangeNotifierProvider(create: (_) => IntervallStoreManager(IntervallStorage(), IntervallStorage(), IntervallStorage())),
-            ChangeNotifierProvider<BloodPressureModel>(create: (_) => RamBloodPressureModel()),
-          ],
-          child: Localizations(
-            delegates: AppLocalizations.localizationsDelegates,
-            locale: const Locale('en'),
-            child: Scaffold(body: child),
-          ),
-      )
-    ),
-  );
 }

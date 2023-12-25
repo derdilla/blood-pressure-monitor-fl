@@ -1,5 +1,6 @@
 
-import 'package:blood_pressure_app/model/blood_pressure.dart';
+import 'package:blood_pressure_app/model/blood_pressure/needle_pin.dart';
+import 'package:blood_pressure_app/model/blood_pressure/record.dart';
 import 'package:blood_pressure_app/model/export_import/pdf_converter.dart';
 import 'package:blood_pressure_app/model/storage/export_columns_store.dart';
 import 'package:blood_pressure_app/model/storage/export_pdf_settings_store.dart';

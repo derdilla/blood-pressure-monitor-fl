@@ -1,7 +1,8 @@
 
 import 'dart:io';
 
-import 'package:blood_pressure_app/model/blood_pressure.dart';
+import 'package:blood_pressure_app/model/blood_pressure/needle_pin.dart';
+import 'package:blood_pressure_app/model/blood_pressure/record.dart';
 import 'package:blood_pressure_app/model/export_import/csv_converter.dart';
 import 'package:blood_pressure_app/model/export_import/record_parsing_result.dart';
 import 'package:blood_pressure_app/model/storage/export_columns_store.dart';

@@ -1,13 +1,14 @@
 import 'package:blood_pressure_app/components/color_picker.dart';
 import 'package:blood_pressure_app/components/settings/color_picker_list_tile.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
+
+import '../util.dart';
 
 void main() {
   group('ColorSelectionListTile', () {
     testWidgets('should initialize without errors', (widgetTester) async {
-      await widgetTester.pumpWidget(_materialApp(ColorSelectionListTile(
+      await widgetTester.pumpWidget(materialApp(ColorSelectionListTile(
         title: const Text('Test'),
         onMainColorChanged: (Color value) {
           assert(false, 'should not be called');
@@ -16,7 +17,7 @@ void main() {
       expect(widgetTester.takeException(), isNull);
     });
     testWidgets('should preview color', (widgetTester) async {
-      await widgetTester.pumpWidget(_materialApp(ColorSelectionListTile(
+      await widgetTester.pumpWidget(materialApp(ColorSelectionListTile(
         title: const Text('Test'),
         onMainColorChanged: (Color value) {
           assert(false, 'should not be called');
@@ -28,7 +29,7 @@ void main() {
               (p0) => p0.backgroundColor, 'display color', Colors.teal));
     });
     testWidgets('should show colorPicker on tap', (widgetTester) async {
-      await widgetTester.pumpWidget(_materialApp(ColorSelectionListTile(
+      await widgetTester.pumpWidget(materialApp(ColorSelectionListTile(
         title: const Text('Test'),
         onMainColorChanged: (Color value) {
           assert(false, 'should not be called');
@@ -42,7 +43,7 @@ void main() {
     });
     testWidgets('should notify on color changed', (widgetTester) async {
       int callCount = 0;
-      await widgetTester.pumpWidget(_materialApp(ColorSelectionListTile(
+      await widgetTester.pumpWidget(materialApp(ColorSelectionListTile(
         title: const Text('Test'),
         onMainColorChanged: (Color value) {
           callCount += 1;
@@ -62,7 +63,7 @@ void main() {
       expect(callCount, 1);
     });
     testWidgets('should hide color when transparent is selected', (widgetTester) async {
-      await widgetTester.pumpWidget(_materialApp(ColorSelectionListTile(
+      await widgetTester.pumpWidget(materialApp(ColorSelectionListTile(
         title: const Text('Test'),
         onMainColorChanged: (Color value) {
           assert(false, 'should not be called');
@@ -72,14 +73,6 @@ void main() {
       expect(find.byType(CircleAvatar), findsNothing);
     });
   });
-}
-
-Widget _materialApp(Widget child) {
-  return MaterialApp(
-    localizationsDelegates: const [AppLocalizations.delegate,],
-    locale: const Locale('en'),
-    home: Scaffold(body:child),
-  );
 }
 
 /// Finds the widget with a specific color inside a [ColorPicker], when put into a [CommonFinders.byElementPredicate].

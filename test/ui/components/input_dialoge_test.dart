@@ -3,14 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import 'util.dart';
+
 void main() {
   group('InputDialoge', () {
     testWidgets('should initialize without errors', (widgetTester) async {
-      await widgetTester.pumpWidget(const MaterialApp(
-          localizationsDelegates: [AppLocalizations.delegate,],
-          locale: Locale('en'),
-          home: InputDialoge()
-      ));
+      await widgetTester.pumpWidget(materialApp(const InputDialoge()));
       expect(widgetTester.takeException(), isNull);
       await widgetTester.pumpWidget(const MaterialApp(
           localizationsDelegates: [AppLocalizations.delegate,], locale: Locale('en'),
@@ -23,24 +21,18 @@ void main() {
       expect(find.byType(InputDialoge), findsOneWidget);
     });
     testWidgets('should show prefilled text', (widgetTester) async {
-      await widgetTester.pumpWidget(const MaterialApp(
-          localizationsDelegates: [AppLocalizations.delegate,], locale: Locale('en'),
-          home: InputDialoge(
-            hintText: 'test hint',
-            initialValue: 'initial text',
-          )
-      ));
+      await widgetTester.pumpWidget(materialApp(const InputDialoge(
+        hintText: 'test hint',
+        initialValue: 'initial text',
+      )));
       expect(find.text('initial text'), findsOneWidget);
       expect(find.text('test hint'), findsNWidgets(2));
     });
     testWidgets('should show validator errors', (widgetTester) async {
-      await widgetTester.pumpWidget(MaterialApp(
-          localizationsDelegates: const [AppLocalizations.delegate,], locale: const Locale('en'),
-          home: InputDialoge(
-            initialValue: 'initial text',
-            validator: (_) => 'test error',
-          )
-      ));
+      await widgetTester.pumpWidget(materialApp(InputDialoge(
+        initialValue: 'initial text',
+        validator: (_) => 'test error',
+      )));
       final localizations = await AppLocalizations.delegate.load(const Locale('en'));
 
       expect(find.text(localizations.btnConfirm), findsOneWidget);
@@ -52,17 +44,14 @@ void main() {
     });
     testWidgets('should send current text to validator', (widgetTester) async {
       int validatorCalls = 0;
-      await widgetTester.pumpWidget(MaterialApp(
-          localizationsDelegates: const [AppLocalizations.delegate,], locale: const Locale('en'),
-          home: InputDialoge(
-            initialValue: 'initial text',
-            validator: (value) {
-              expect(value, 'initial text');
-              validatorCalls += 1;
-              return null;
-            },
-          )
-      ));
+      await widgetTester.pumpWidget(materialApp(InputDialoge(
+        initialValue: 'initial text',
+        validator: (value) {
+          expect(value, 'initial text');
+          validatorCalls += 1;
+          return null;
+        },
+      )));
       final localizations = await AppLocalizations.delegate.load(const Locale('en'));
 
       expect(validatorCalls, 0);
@@ -78,13 +67,7 @@ void main() {
   });
   group('showInputDialoge', () {
     testWidgets('should start with input focused', (widgetTester) async {
-      await widgetTester.pumpWidget(MaterialApp(
-          localizationsDelegates: const [AppLocalizations.delegate,], locale: const Locale('en'),
-          home: Builder(builder: (BuildContext context) => TextButton(onPressed:
-              () => showInputDialoge(context, initialValue: 'testval'), child: const Text('X')))
-      ));
-      await widgetTester.tap(find.text('X'));
-      await widgetTester.pumpAndSettle();
+      await loadDialoge(widgetTester, (context) => showInputDialoge(context, initialValue: 'testval'));
 
       expect(find.byType(InputDialoge), findsOneWidget);
       final primaryFocus = FocusManager.instance.primaryFocus;
@@ -97,16 +80,8 @@ void main() {
     });
     testWidgets('should allow entering a value', (widgetTester) async {
       String? result = 'init';
-      await widgetTester.pumpWidget(MaterialApp(
-          localizationsDelegates: const [AppLocalizations.delegate,], locale: const Locale('en'),
-          home: Builder(builder: (BuildContext context) => TextButton(onPressed:
-              () async {
-                result = await showInputDialoge(context);
-              }, child: const Text('X')))
-      ));
+      await loadDialoge(widgetTester, (context) async => result = await showInputDialoge(context));
       final localizations = await AppLocalizations.delegate.load(const Locale('en'));
-      await widgetTester.tap(find.text('X'));
-      await widgetTester.pumpAndSettle();
 
       expect(find.byType(InputDialoge), findsOneWidget);
       expect(find.byType(TextField), findsOneWidget);
@@ -120,16 +95,8 @@ void main() {
     });
     testWidgets('should not return value on cancel', (widgetTester) async {
       String? result = 'init';
-      await widgetTester.pumpWidget(MaterialApp(
-          localizationsDelegates: const [AppLocalizations.delegate,], locale: const Locale('en'),
-          home: Builder(builder: (BuildContext context) => TextButton(onPressed:
-              () async {
-            result = await showInputDialoge(context, initialValue: 'test');
-          }, child: const Text('X')))
-      ));
+      await loadDialoge(widgetTester, (context) async => result = await showInputDialoge(context, initialValue: 'test'));
       final localizations = await AppLocalizations.delegate.load(const Locale('en'));
-      await widgetTester.tap(find.text('X'));
-      await widgetTester.pumpAndSettle();
 
       expect(find.byType(InputDialoge), findsOneWidget);
       expect(find.byType(TextField), findsOneWidget);
@@ -144,13 +111,7 @@ void main() {
   });
   group('showNumberInputDialoge', () {
     testWidgets('should start with input focused', (widgetTester) async {
-      await widgetTester.pumpWidget(MaterialApp(
-          localizationsDelegates: const [AppLocalizations.delegate,], locale: const Locale('en'),
-          home: Builder(builder: (BuildContext context) => TextButton(onPressed:
-              () => showNumberInputDialoge(context, initialValue: 123), child: const Text('X')))
-      ));
-      await widgetTester.tap(find.text('X'));
-      await widgetTester.pumpAndSettle();
+      await loadDialoge(widgetTester, (context) => showNumberInputDialoge(context, initialValue: 123));
 
       expect(find.byType(InputDialoge), findsOneWidget);
       expect(find.text('123'), findsOneWidget);
@@ -165,16 +126,8 @@ void main() {
     });
     testWidgets('should allow entering a number', (widgetTester) async {
       double? result = -1;
-      await widgetTester.pumpWidget(MaterialApp(
-          localizationsDelegates: const [AppLocalizations.delegate,], locale: const Locale('en'),
-          home: Builder(builder: (BuildContext context) => TextButton(onPressed:
-              () async {
-            result = await showNumberInputDialoge(context);
-          }, child: const Text('X')))
-      ));
+      await loadDialoge(widgetTester, (context) async => result = await showNumberInputDialoge(context));
       final localizations = await AppLocalizations.delegate.load(const Locale('en'));
-      await widgetTester.tap(find.text('X'));
-      await widgetTester.pumpAndSettle();
 
       expect(find.byType(InputDialoge), findsOneWidget);
       expect(find.byType(TextField), findsOneWidget);
@@ -188,16 +141,8 @@ void main() {
     });
     testWidgets('should not allow entering text', (widgetTester) async {
       double? result = -1;
-      await widgetTester.pumpWidget(MaterialApp(
-          localizationsDelegates: const [AppLocalizations.delegate,], locale: const Locale('en'),
-          home: Builder(builder: (BuildContext context) => TextButton(onPressed:
-              () async {
-            result = await showNumberInputDialoge(context);
-          }, child: const Text('X')))
-      ));
+      await loadDialoge(widgetTester, (context) async => result = await showNumberInputDialoge(context));
       final localizations = await AppLocalizations.delegate.load(const Locale('en'));
-      await widgetTester.tap(find.text('X'));
-      await widgetTester.pumpAndSettle();
 
       expect(find.byType(InputDialoge), findsOneWidget);
 

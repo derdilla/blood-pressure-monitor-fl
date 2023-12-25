@@ -1,18 +1,18 @@
 import 'dart:io';
 
 import 'package:blood_pressure_app/components/consistent_future_builder.dart';
-import 'package:blood_pressure_app/components/dialoges/enter_timeformat.dart';
+import 'package:blood_pressure_app/components/dialoges/enter_timeformat_dialoge.dart';
 import 'package:blood_pressure_app/components/dialoges/input_dialoge.dart';
 import 'package:blood_pressure_app/components/settings/settings_widgets.dart';
-import 'package:blood_pressure_app/model/blood_pressure.dart';
+import 'package:blood_pressure_app/model/blood_pressure/warn_values.dart';
 import 'package:blood_pressure_app/model/iso_lang_names.dart';
 import 'package:blood_pressure_app/model/storage/storage.dart';
 import 'package:blood_pressure_app/platform_integration/platform_client.dart';
-import 'package:blood_pressure_app/screens/subsettings/delete_data.dart';
+import 'package:blood_pressure_app/screens/subsettings/delete_data_screen.dart';
 import 'package:blood_pressure_app/screens/subsettings/export_import/export_import_screen.dart';
-import 'package:blood_pressure_app/screens/subsettings/graph_markings.dart';
-import 'package:blood_pressure_app/screens/subsettings/version.dart';
-import 'package:blood_pressure_app/screens/subsettings/warn_about.dart';
+import 'package:blood_pressure_app/screens/subsettings/graph_markings_screen.dart';
+import 'package:blood_pressure_app/screens/subsettings/version_screen.dart';
+import 'package:blood_pressure_app/screens/subsettings/warn_about_screen.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';

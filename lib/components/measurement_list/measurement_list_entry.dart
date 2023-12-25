@@ -1,5 +1,6 @@
-import 'package:blood_pressure_app/components/dialoges/add_measurement.dart';
-import 'package:blood_pressure_app/model/blood_pressure.dart';
+import 'package:blood_pressure_app/components/dialoges/add_measurement_dialoge.dart';
+import 'package:blood_pressure_app/model/blood_pressure/model.dart';
+import 'package:blood_pressure_app/model/blood_pressure/record.dart';
 import 'package:blood_pressure_app/model/storage/storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';

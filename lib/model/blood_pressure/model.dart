@@ -1,8 +1,10 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:blood_pressure_app/model/blood_pressure/needle_pin.dart';
+import 'package:blood_pressure_app/model/blood_pressure/record.dart';
 import 'package:blood_pressure_app/model/storage/storage.dart';
-import 'package:blood_pressure_app/screens/error_reporting.dart';
+import 'package:blood_pressure_app/screens/error_reporting_screen.dart';
 import 'package:blood_pressure_app/screens/subsettings/export_import/export_button_bar.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
@@ -43,13 +45,13 @@ class BloodPressureModel extends ChangeNotifier {
   }
 
   FutureOr<void> _onDBCreate(Database db, int version) {
-      return db.execute('CREATE TABLE bloodPressureModel('
-          'timestamp INTEGER(14) PRIMARY KEY,'
-          'systolic INTEGER, diastolic INTEGER,'
-          'pulse INTEGER,'
-          'notes STRING,'
-          'needlePin STRING)');
-    }
+    return db.execute('CREATE TABLE bloodPressureModel('
+        'timestamp INTEGER(14) PRIMARY KEY,'
+        'systolic INTEGER, diastolic INTEGER,'
+        'pulse INTEGER,'
+        'notes STRING,'
+        'needlePin STRING)');
+  }
 
   FutureOr<void> _onDBUpgrade(Database db, int oldVersion, int newVersion) async {
     // When adding more versions the upgrade procedure proposed in https://stackoverflow.com/a/75153875/21489239
@@ -149,97 +151,15 @@ class BloodPressureModel extends ChangeNotifier {
       final needlePinJson = e['needlePin'] as String?;
       final needlePin = (needlePinJson != null) ? jsonDecode(needlePinJson) : null;
       records.add(BloodPressureRecord(
-        DateTime.fromMillisecondsSinceEpoch(e['timestamp'] as int),
-        e['systolic'] as int?,
-        e['diastolic'] as int?,
-        e['pulse'] as int?,
-        e['notes'].toString(),
-        needlePin: (needlePin != null) ? MeasurementNeedlePin.fromJson(needlePin) : null
+          DateTime.fromMillisecondsSinceEpoch(e['timestamp'] as int),
+          e['systolic'] as int?,
+          e['diastolic'] as int?,
+          e['pulse'] as int?,
+          e['notes'].toString(),
+          needlePin: (needlePin != null) ? MeasurementNeedlePin.fromJson(needlePin) : null
       ));
     }
     return records;
   }
 }
 
-@immutable
-class BloodPressureRecord {
-  late final DateTime creationTime;
-  final int? systolic;
-  final int? diastolic;
-  final int? pulse;
-  final String notes;
-  final MeasurementNeedlePin? needlePin;
-
-  BloodPressureRecord(DateTime creationTime, this.systolic, this.diastolic, this.pulse, this.notes, {
-    this.needlePin
-  }) {
-    if (creationTime.millisecondsSinceEpoch > 0) {
-      this.creationTime = creationTime;
-    } else {
-      assert(false, "Tried to create BloodPressureRecord at or before epoch");
-      this.creationTime = DateTime.fromMillisecondsSinceEpoch(1);
-    }
-  }
-
-  @override
-  String toString() {
-    return 'BloodPressureRecord($creationTime, $systolic, $diastolic, $pulse, $notes, $needlePin)';
-  }
-}
-
-@immutable
-class MeasurementNeedlePin {
-  final Color color;
-
-  const MeasurementNeedlePin(this.color);
-  // When updating this, remember to be backwards compatible
-  MeasurementNeedlePin.fromJson(Map<String, dynamic> json)
-      : color = Color(json['color']);
-  Map<String, dynamic> toJson() => {
-    'color': color.value,
-  };
-
-  @override
-  String toString() {
-    return 'MeasurementNeedlePin{$color}';
-  }
-}
-
-// source: https://pressbooks.library.torontomu.ca/vitalsign/chapter/blood-pressure-ranges/ (last access: 14.11.2023)
-class BloodPressureWarnValues {
-  BloodPressureWarnValues._create();
-
-  static String source = 'https://pressbooks.library.torontomu.ca/vitalsign/chapter/blood-pressure-ranges/';
-
-  static int getUpperDiaWarnValue(int age) {
-    if (age <= 2) {
-      return 70;
-    } else if (age <= 13) {
-      return 80;
-    } else if (age <= 18) {
-      return 80;
-    } else if (age <= 40) {
-      return 80;
-    } else if (age <= 60) {
-      return 90;
-    } else {
-      return 90;
-    }
-  }
-
-  static int getUpperSysWarnValue(int age) {
-    if (age <= 2) {
-      return 100;
-    } else if (age <= 13) {
-      return 120;
-    } else if (age <= 18) {
-      return 120;
-    } else if (age <= 40) {
-      return 125;
-    } else if (age <= 60) {
-      return 145;
-    } else {
-      return 145;
-    }
-  }
-}

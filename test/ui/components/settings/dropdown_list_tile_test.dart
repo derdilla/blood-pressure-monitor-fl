@@ -2,10 +2,12 @@ import 'package:blood_pressure_app/components/settings/dropdown_list_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import '../util.dart';
+
 void main() {
   group('DropDownListTile', () {
     testWidgets('should not throw errors', (widgetTester) async {
-      await widgetTester.pumpWidget(_materialApp(DropDownListTile<int>(
+      await widgetTester.pumpWidget(materialApp(DropDownListTile<int>(
         title: const Text('test title'),
         onChanged: (int? newValue) {
           assert(false, 'should not be called');
@@ -17,7 +19,7 @@ void main() {
         value: 3,
       )));
       expect(widgetTester.takeException(), isNull);
-      await widgetTester.pumpWidget(_materialApp(DropDownListTile<int>(
+      await widgetTester.pumpWidget(materialApp(DropDownListTile<int>(
         title: const Text('This is a very long test title.'),
         subtitle: const Text('This is a very long test subtitle that should go over multiple lines.'),
         leading: const Icon(Icons.add),
@@ -33,7 +35,7 @@ void main() {
       expect(widgetTester.takeException(), isNull);
     });
     testWidgets('should display selected option', (widgetTester) async {
-      await widgetTester.pumpWidget(_materialApp(DropDownListTile<int>(
+      await widgetTester.pumpWidget(materialApp(DropDownListTile<int>(
         title: const Text('test title'),
         onChanged: (int? newValue) {
           assert(false, 'should not be called');
@@ -49,7 +51,7 @@ void main() {
     });
     testWidgets('should call onChanged on option selected', (widgetTester) async {
       int callCount = 0;
-      await widgetTester.pumpWidget(_materialApp(DropDownListTile<int>(
+      await widgetTester.pumpWidget(materialApp(DropDownListTile<int>(
         title: const Text('test title'),
         onChanged: (int? newValue) {
           callCount += 1;
@@ -72,10 +74,4 @@ void main() {
       expect(callCount, 1);
     });
   });
-}
-
-Widget _materialApp(Widget child) {
-  return MaterialApp(
-    home: Scaffold(body: child),
-  );
 }

@@ -17,8 +17,6 @@ class ExportWarnBanner extends StatefulWidget {
     required this.exportSettings,
     required this.csvExportSettings,
     required this.availableColumns});
-  // TODO: consider attempting to import a file with that config and checking success.
-  // This would allow for more detailed error messages as well.
 
   final ExportSettings exportSettings;
   final CsvExportSettings csvExportSettings;

@@ -1,10 +1,12 @@
-import 'package:blood_pressure_app/components/dialoges/add_measurement.dart';
-import 'package:blood_pressure_app/components/legacy_measurement_list.dart';
-import 'package:blood_pressure_app/components/measurement_graph.dart';
-import 'package:blood_pressure_app/model/blood_pressure.dart';
+import 'package:blood_pressure_app/components/dialoges/add_measurement_dialoge.dart';
+import 'package:blood_pressure_app/model/blood_pressure/model.dart';
+import 'package:blood_pressure_app/model/storage/intervall_store.dart';
 import 'package:blood_pressure_app/model/storage/settings_store.dart';
-import 'package:blood_pressure_app/screens/settings.dart';
-import 'package:blood_pressure_app/screens/statistics.dart';
+import 'package:blood_pressure_app/screens/elements/blood_pressure_builder.dart';
+import 'package:blood_pressure_app/screens/elements/legacy_measurement_list.dart';
+import 'package:blood_pressure_app/screens/elements/measurement_graph.dart';
+import 'package:blood_pressure_app/screens/settings_screen.dart';
+import 'package:blood_pressure_app/screens/statistics_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
@@ -58,7 +60,13 @@ class AppHome extends StatelessWidget {
                   Expanded(
                     child: (settings.useLegacyList) ?
                       LegacyMeasurementsList(context) :
-                      MeasurementList(settings: settings,)
+                      BloodPressureBuilder(
+                        rangeType: IntervallStoreManagerLocation.mainPage,
+                        onData: (context, records) => MeasurementList(
+                          settings: settings,
+                          records: records,
+                        )
+                      )
                   )
                 ]);
               }

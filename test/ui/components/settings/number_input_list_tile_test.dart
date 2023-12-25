@@ -1,13 +1,14 @@
 import 'package:blood_pressure_app/components/dialoges/input_dialoge.dart';
 import 'package:blood_pressure_app/components/settings/number_input_list_tile.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
+
+import '../util.dart';
 
 void main() {
   group('NumberInputListTile', () {
     testWidgets('should show fields', (widgetTester) async {
-      await widgetTester.pumpWidget(_materialApp(NumberInputListTile(
+      await widgetTester.pumpWidget(materialApp(NumberInputListTile(
         label: 'test title',
         value: 15,
         onParsableSubmit: (double newValue) {
@@ -19,7 +20,7 @@ void main() {
       expect(find.text('15'), findsOneWidget);
     });
     testWidgets('should allow canceling edit', (widgetTester) async {
-      await widgetTester.pumpWidget(_materialApp(NumberInputListTile(
+      await widgetTester.pumpWidget(materialApp(NumberInputListTile(
         label: 'test title',
         value: 15,
         onParsableSubmit: (double newValue) {
@@ -38,7 +39,7 @@ void main() {
       expect(find.byType(InputDialoge), findsNothing);
     });
     testWidgets('should prefill value on edit', (widgetTester) async {
-      await widgetTester.pumpWidget(_materialApp(NumberInputListTile(
+      await widgetTester.pumpWidget(materialApp(NumberInputListTile(
         label: 'test title',
         value: 15,
         onParsableSubmit: (double newValue) {
@@ -54,7 +55,7 @@ void main() {
     });
     testWidgets('should allow editing values', (widgetTester) async {
       int callCount = 0;
-      await widgetTester.pumpWidget(_materialApp(NumberInputListTile(
+      await widgetTester.pumpWidget(materialApp(NumberInputListTile(
         label: 'test title',
         value: 15,
         onParsableSubmit: (double newValue) {
@@ -109,12 +110,4 @@ void main() {
       expect(callCount, 4);
     });
   });
-}
-
-Widget _materialApp(Widget child) {
-  return MaterialApp(
-    localizationsDelegates: const [AppLocalizations.delegate,],
-    locale: const Locale('en'),
-    home: Scaffold(body:child),
-  );
 }
