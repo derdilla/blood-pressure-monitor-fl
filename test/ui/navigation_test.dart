@@ -10,8 +10,8 @@ import 'package:blood_pressure_app/model/storage/export_pdf_settings_store.dart'
 import 'package:blood_pressure_app/model/storage/export_settings_store.dart';
 import 'package:blood_pressure_app/model/storage/intervall_store.dart';
 import 'package:blood_pressure_app/model/storage/settings_store.dart';
-import 'package:blood_pressure_app/screens/settings.dart';
-import 'package:blood_pressure_app/screens/statistics.dart';
+import 'package:blood_pressure_app/screens/settings_screen.dart';
+import 'package:blood_pressure_app/screens/statistics_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:provider/provider.dart';

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class TimeFormattingHelp extends StatelessWidget {
-  const TimeFormattingHelp({super.key});
+class TimeFormattingReferenceScreen extends StatelessWidget {
+  const TimeFormattingReferenceScreen({super.key});
   // https://pub.dev/documentation/intl/latest/intl/DateFormat-class.html
   static const _formats = '''DAY                          d
  ABBR_WEEKDAY                 E

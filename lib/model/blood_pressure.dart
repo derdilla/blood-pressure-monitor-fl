@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:blood_pressure_app/model/storage/storage.dart';
-import 'package:blood_pressure_app/screens/error_reporting.dart';
+import 'package:blood_pressure_app/screens/error_reporting_screen.dart';
 import 'package:blood_pressure_app/screens/subsettings/export_import/export_button_bar.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';

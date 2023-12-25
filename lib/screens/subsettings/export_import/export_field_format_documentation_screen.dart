@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:blood_pressure_app/screens/subsettings/time_formats_explainer.dart';
+import 'package:blood_pressure_app/screens/subsettings/time_formats_reference_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -45,7 +45,7 @@ LinkTapHandler getLinkTapHandler(BuildContext context) => (String text, String? 
   } else if (destination.startsWith('screen://')) {
     switch (destination.split('//')[1]) {
       case 'TimeFormattingHelp':
-        Navigator.of(context).push(MaterialPageRoute(builder: (context) => const TimeFormattingHelp()));
+        Navigator.of(context).push(MaterialPageRoute(builder: (context) => const TimeFormattingReferenceScreen()));
         return;
     }
   }
