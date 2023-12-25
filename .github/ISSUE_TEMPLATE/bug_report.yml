@@ -1,6 +1,6 @@
 name: "Bug Report"
 description: Create a new ticket for a bug.
-title: "[BUG] - <title>"
+title: ""
 labels: [
   "bug"
 ]
@@ -40,8 +40,8 @@ body:
   - type: textarea
     id: screenshot
     attributes:
-      label: "Screenshots"
-      description: If you want to, you can add screenshots to help explain your problem.
+      label: "Screenshots & Settings backup"
+      description: Some bugs are easier to understand/reproduce when the correct settings are provided. If you want to, you can add screenshots to help explain your problem.
       render: bash
     validations:
       required: false
@@ -50,7 +50,7 @@ body:
     attributes:
       label: "App debug info"
       description: Information about app version and Settings.
-      placeholder: You can make a screenshot of the page that appears when clicking on version at the bottom of the settings page.
+      placeholder: You can copy the information through the version page at the end of the settings list.
       render: bash
     validations:
       required: false
