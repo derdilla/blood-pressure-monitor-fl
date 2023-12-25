@@ -2,10 +2,12 @@ import 'package:blood_pressure_app/components/settings/slider_list_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import '../util.dart';
+
 void main() {
   group('SliderListTile', () {
     testWidgets('should not throw errors', (widgetTester) async {
-      await widgetTester.pumpWidget(_materialApp(SliderListTile(
+      await widgetTester.pumpWidget(materialApp(SliderListTile(
         title: const Text('test title'),
         onChanged: (double newValue) {
           assert(false, 'should not be called');
@@ -15,7 +17,7 @@ void main() {
         max: 20,
       )));
       expect(widgetTester.takeException(), isNull);
-      await widgetTester.pumpWidget(_materialApp(SliderListTile(
+      await widgetTester.pumpWidget(materialApp(SliderListTile(
         title: const Text('Very long title that could overflow'),
         onChanged: (double newValue) {
           assert(false, 'should not be called');
@@ -32,7 +34,7 @@ void main() {
     });
     testWidgets('should report value changes', (widgetTester) async {
       int callCount = 0;
-      await widgetTester.pumpWidget(_materialApp(SliderListTile(
+      await widgetTester.pumpWidget(materialApp(SliderListTile(
         title: const Text('title'),
         onChanged: (double newValue) {
           callCount += 1;
@@ -53,10 +55,4 @@ void main() {
       expect(callCount, 1);
     });
   });
-}
-
-Widget _materialApp(Widget child) {
-  return MaterialApp(
-    home: Scaffold(body: child),
-  );
 }

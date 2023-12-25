@@ -1,12 +1,13 @@
 import 'package:blood_pressure_app/components/settings/settings_widgets.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
+
+import '../util.dart';
 
 void main() {
   group('TitledColumn', () {
     testWidgets('should show title and widgets', (widgetTester) async {
-      await widgetTester.pumpWidget(_materialApp(TitledColumn(
+      await widgetTester.pumpWidget(materialApp(TitledColumn(
         title: const Text('test title'),
         children: [
           const ListTile(title: Text('ListTile text 1'),),
@@ -24,7 +25,7 @@ void main() {
       expect(find.text('ListTile text 2'), findsOneWidget);
     });
     testWidgets('should show title first', (widgetTester) async {
-      await widgetTester.pumpWidget(_materialApp(TitledColumn(
+      await widgetTester.pumpWidget(materialApp(TitledColumn(
         title: const Text('test title'),
         children: [
           const ListTile(title: Text('ListTile text 1'),),
@@ -43,12 +44,4 @@ void main() {
       );
     });
   });
-}
-
-Widget _materialApp(Widget child) {
-  return MaterialApp(
-    localizationsDelegates: const [AppLocalizations.delegate,],
-    locale: const Locale('en'),
-    home: Scaffold(body:child),
-  );
 }

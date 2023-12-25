@@ -7,10 +7,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import 'util.dart';
+
 void main() {
   group('AddExportColumnDialoge', () {
     testWidgets('should show everything on load', (widgetTester) async {
-      await widgetTester.pumpWidget(_materialApp(AddExportColumnDialoge(settings: Settings(),)));
+      await widgetTester.pumpWidget(materialApp(AddExportColumnDialoge(settings: Settings(),)));
       expect(widgetTester.takeException(), isNull);
 
       expect(find.text('SAVE'), findsOneWidget);
@@ -24,7 +26,7 @@ void main() {
       expect(find.byIcon(Icons.arrow_downward), findsNWidgets(2));
     });
     testWidgets('should prefill values', (widgetTester) async {
-      await widgetTester.pumpWidget(_materialApp(
+      await widgetTester.pumpWidget(materialApp(
           AddExportColumnDialoge(initialColumn: UserColumn('id', 'csvTitle', r'formatPattern$SYS'), settings: Settings(),)
       ));
       expect(widgetTester.takeException(), isNull);
@@ -40,7 +42,7 @@ void main() {
       expect(find.byIcon(Icons.arrow_downward), findsNWidgets(2));
     });
     testWidgets('should show preview', (widgetTester) async {
-      await widgetTester.pumpWidget(_materialApp(
+      await widgetTester.pumpWidget(materialApp(
           AddExportColumnDialoge(initialColumn: UserColumn('id', 'csvTitle', r'formatPattern$SYS'), settings: Settings(),)
       ));
       await widgetTester.pumpAndSettle();
@@ -51,7 +53,7 @@ void main() {
       expect(find.textContaining('RowDataFieldType.sys'), findsOneWidget);
     });
     testWidgets('should open format Info screen', (widgetTester) async {
-      await widgetTester.pumpWidget(_materialApp(AddExportColumnDialoge(settings: Settings(),)));
+      await widgetTester.pumpWidget(materialApp(AddExportColumnDialoge(settings: Settings(),)));
 
       expect(find.byType(InformationScreen), findsNothing);
 
@@ -64,7 +66,7 @@ void main() {
   });
   group('showAddExportColumnDialoge', () {
     testWidgets('should open AddExportColumnDialoge', (widgetTester) async {
-      await widgetTester.pumpWidget(_materialApp(Builder(builder: (context) => TextButton(onPressed: () =>
+      await widgetTester.pumpWidget(materialApp(Builder(builder: (context) => TextButton(onPressed: () =>
           showAddExportColumnDialoge(context, Settings()), child: const Text('X')))));
 
       expect(find.byType(AddExportColumnDialoge), findsNothing);
@@ -76,7 +78,7 @@ void main() {
     });
     testWidgets('should return null on cancel', (widgetTester) async {
       dynamic returnedValue = false;
-      await widgetTester.pumpWidget(_materialApp(Builder(builder: (context) => TextButton(onPressed: () async =>
+      await widgetTester.pumpWidget(materialApp(Builder(builder: (context) => TextButton(onPressed: () async =>
           returnedValue = await showAddExportColumnDialoge(context, Settings()), child: const Text('X')))));
       await widgetTester.tap(find.text('X'));
       await widgetTester.pumpAndSettle();
@@ -91,7 +93,7 @@ void main() {
     });
     testWidgets('should save entered values', (widgetTester) async {
       dynamic returnedValue = false;
-      await widgetTester.pumpWidget(_materialApp(Builder(builder: (context) => TextButton(onPressed: () async =>
+      await widgetTester.pumpWidget(materialApp(Builder(builder: (context) => TextButton(onPressed: () async =>
         returnedValue = await showAddExportColumnDialoge(context, Settings()), child: const Text('X')))));
       final localizations = await AppLocalizations.delegate.load(const Locale('en'));
 
@@ -122,7 +124,7 @@ void main() {
     });
     testWidgets('should keep internalIdentifier on edit', (widgetTester) async {
       dynamic returnedValue = false;
-      await widgetTester.pumpWidget(_materialApp(Builder(builder: (context) => TextButton(onPressed: () async =>
+      await widgetTester.pumpWidget(materialApp(Builder(builder: (context) => TextButton(onPressed: () async =>
         returnedValue = await showAddExportColumnDialoge(context, Settings(),
             UserColumn('initialInternalIdentifier', 'csvTitle', 'formatPattern')
       ), child: const Text('X')))));
@@ -148,12 +150,4 @@ void main() {
     });
   });
 
-}
-
-Widget _materialApp(Widget child) {
-  return MaterialApp(
-    localizationsDelegates: const [AppLocalizations.delegate,],
-    locale: const Locale('en'),
-    home:  Scaffold(body:child),
-  );
 }
