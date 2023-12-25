@@ -7,6 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import '../../model/export_import/record_formatter_test.dart';
 import 'settings/color_picker_list_tile_test.dart';
 import 'util.dart';
 
@@ -51,18 +52,9 @@ void main() {
   group('showAddMeasurementDialoge', () {
     testWidgets('should return null on cancel', (widgetTester) async {
       dynamic result = 'not null';
-      await widgetTester.pumpWidget(materialApp(
-          Builder(
-            builder: (BuildContext context) => TextButton(onPressed: () async {
-              result = await showAddMeasurementDialoge(context, Settings(),
-                  BloodPressureRecord(
-                      DateTime.now(), 123, 56, 43, 'Test note',
-                      needlePin: const MeasurementNeedlePin(Colors.teal)
-                  ));
-            }, child: const Text('TEST')),
-      )));
-      await widgetTester.tap(find.text('TEST'));
-      await widgetTester.pumpAndSettle();
+      await loadDialoge(widgetTester, (context) async
+        => result = await showAddMeasurementDialoge(context, Settings(),
+          mockRecord(sys: 123, dia: 56, pul: 43, note: 'Test note', pin: Colors.teal)));
 
       expect(find.byType(AddMeasurementDialoge), findsOneWidget);
       await widgetTester.tap(find.byIcon(Icons.close));
@@ -73,18 +65,9 @@ void main() {
     });
     testWidgets('should return values on cancel', (widgetTester) async {
       dynamic result = 'not null';
-      final record = BloodPressureRecord(
-          DateTime.now(), 123, 56, 43, 'Test note',
-          needlePin: const MeasurementNeedlePin(Colors.teal)
-      );
-      await widgetTester.pumpWidget(materialApp(
-          Builder(
-            builder: (BuildContext context) => TextButton(onPressed: () async {
-              result = await showAddMeasurementDialoge(context, Settings(), record);
-            }, child: const Text('TEST')),
-          )));
-      await widgetTester.tap(find.text('TEST'));
-      await widgetTester.pumpAndSettle();
+      final record = mockRecord(sys: 123, dia: 56, pul: 43, note: 'Test note', pin: Colors.teal);
+      await loadDialoge(widgetTester, (context) async
+        => result = await showAddMeasurementDialoge(context, Settings(), record));
 
       expect(find.byType(AddMeasurementDialoge), findsOneWidget);
       await widgetTester.tap(find.text('SAVE'));
@@ -98,14 +81,8 @@ void main() {
     });
     testWidgets('should be able to input values', (WidgetTester widgetTester) async {
       dynamic result = 'not null';
-      await widgetTester.pumpWidget(materialApp(
-          Builder(
-            builder: (BuildContext context) => TextButton(onPressed: () async {
-              result = await showAddMeasurementDialoge(context, Settings());
-            }, child: const Text('TEST')),
-          )));
-      await widgetTester.tap(find.text('TEST'));
-      await widgetTester.pumpAndSettle();
+      await loadDialoge(widgetTester, (context) async
+        => result = await showAddMeasurementDialoge(context, Settings()));
 
       await widgetTester.enterText(find.ancestor(of: find.text('Systolic').first, matching: find.byType(TextFormField)), '123');
       await widgetTester.enterText(find.ancestor(of: find.text('Diastolic').first, matching: find.byType(TextFormField)), '67');
@@ -130,28 +107,14 @@ void main() {
       expect(castResult.needlePin?.color, Colors.red);
     });
     testWidgets('should not allow invalid values', (widgetTester) async {
-      await widgetTester.pumpWidget(materialApp(Container()));
-      late final BuildContext buildContext;
-
-      await widgetTester.pumpWidget(materialApp(
-          Builder(
-            builder: (BuildContext context) {
-              buildContext = context;
-              return TextButton(onPressed: () async {
-                await showAddMeasurementDialoge(context, Settings());
-              }, child: const Text('TEST'));
-            },
-          )));
-      await widgetTester.tap(find.text('TEST'));
-      await widgetTester.pumpAndSettle();
-      final localizations = AppLocalizations.of(buildContext)!;
+      await loadDialoge(widgetTester, (context) => showAddMeasurementDialoge(context, Settings()));
+      final localizations = await AppLocalizations.delegate.load(const Locale('en'));
 
       expect(find.byType(AddMeasurementDialoge), findsOneWidget);
       expect(find.text(localizations.errNaN), findsNothing);
       expect(find.text(localizations.errLt30), findsNothing);
       expect(find.text(localizations.errUnrealistic), findsNothing);
       expect(find.text(localizations.errDiaGtSys), findsNothing);
-
 
       await widgetTester.enterText(find.ancestor(of: find.text('Systolic').first, matching: find.byType(TextFormField)), '123');
       await widgetTester.enterText(find.ancestor(of: find.text('Diastolic').first, matching: find.byType(TextFormField)), '67');
@@ -205,14 +168,8 @@ void main() {
       expect(find.text(localizations.errDiaGtSys), findsNothing);
     });
     testWidgets('should allow invalid values when setting is set', (widgetTester) async {
-      await widgetTester.pumpWidget(materialApp(
-          Builder(
-            builder: (BuildContext context) => TextButton(onPressed: () async {
-              await showAddMeasurementDialoge(context, Settings(validateInputs: false, allowMissingValues: true));
-            }, child: const Text('TEST')),
-          )));
-      await widgetTester.tap(find.text('TEST'));
-      await widgetTester.pumpAndSettle();
+      await loadDialoge(widgetTester, (context) =>
+          showAddMeasurementDialoge(context, Settings(validateInputs: false, allowMissingValues: true)));
 
       await widgetTester.enterText(find.ancestor(of: find.text('Systolic').first, matching: find.byType(TextFormField)), '2');
       await widgetTester.enterText(find.ancestor(of: find.text('Diastolic').first, matching: find.byType(TextFormField)), '500');
@@ -221,27 +178,14 @@ void main() {
       expect(find.byType(AddMeasurementDialoge), findsNothing);
     });
     testWidgets('should respect settings.allowManualTimeInput', (widgetTester) async {
-      await widgetTester.pumpWidget(materialApp(
-          Builder(
-            builder: (BuildContext context) => TextButton(onPressed: () async {
-              await showAddMeasurementDialoge(context, Settings(allowManualTimeInput: false));
-            }, child: const Text('TEST')),
-          )));
-      await widgetTester.tap(find.text('TEST'));
-      await widgetTester.pumpAndSettle();
+      await loadDialoge(widgetTester, (context) =>
+          showAddMeasurementDialoge(context, Settings(allowManualTimeInput: false)));
 
       expect(find.byIcon(Icons.edit), findsNothing);
     });
     testWidgets('should start with sys input focused', (widgetTester) async {
-      await widgetTester.pumpWidget(materialApp(
-          Builder(
-            builder: (BuildContext context) => TextButton(onPressed: () async {
-              await showAddMeasurementDialoge(context, Settings(allowManualTimeInput: false),
-                  BloodPressureRecord(DateTime.now(), 12, 3, 4, 'note'));
-            }, child: const Text('TEST')),
-          )));
-      await widgetTester.tap(find.text('TEST'));
-      await widgetTester.pumpAndSettle();
+      await loadDialoge(widgetTester, (context) =>
+          showAddMeasurementDialoge(context, Settings(), mockRecord(sys: 12)));
 
       final primaryFocus = FocusManager.instance.primaryFocus;
       expect(primaryFocus?.context?.widget, isNotNull);
@@ -251,18 +195,11 @@ void main() {
       );
       expect(focusedTextFormField, findsOneWidget);
       expect(focusedTextFormField.evaluate().first.widget, isA<TextFormField>()
-          .having((p0) => p0.initialValue, 'expecting systolic field to be selected', '12'));
+          .having((p0) => p0.initialValue, 'systolic content', '12'));
     });
     testWidgets('should focus next on input finished', (widgetTester) async {
-      await widgetTester.pumpWidget(materialApp(
-          Builder(
-            builder: (BuildContext context) => TextButton(onPressed: () async {
-              await showAddMeasurementDialoge(context, Settings(allowManualTimeInput: false),
-                  BloodPressureRecord(DateTime.now(), 12, 3, 4, 'note'));
-            }, child: const Text('TEST')),
-          )));
-      await widgetTester.tap(find.text('TEST'));
-      await widgetTester.pumpAndSettle();
+      await loadDialoge(widgetTester, (context) =>
+          showAddMeasurementDialoge(context, Settings(), mockRecord(sys: 12, dia: 3, pul: 4, note: 'note')));
 
       await widgetTester.enterText(find.ancestor(of: find.text('Systolic').first, matching: find.byType(TextFormField)), '123');
 
@@ -274,7 +211,7 @@ void main() {
       );
       expect(focusedTextFormField, findsOneWidget);
       expect(focusedTextFormField.evaluate().first.widget, isA<TextFormField>()
-          .having((p0) => p0.initialValue, 'expecting diastolic field to be selected second', '3'));
+          .having((p0) => p0.initialValue, 'diastolic content', '3'));
 
       await widgetTester.enterText(find.ancestor(of: find.text('Diastolic').first, matching: find.byType(TextFormField)), '78');
 
@@ -286,7 +223,7 @@ void main() {
       );
       expect(secondFocusedTextFormField, findsOneWidget);
       expect(secondFocusedTextFormField.evaluate().first.widget, isA<TextFormField>()
-          .having((p0) => p0.initialValue, 'expecting pulse field to be selected third', '4'));
+          .having((p0) => p0.initialValue, 'pulse content', '4'));
 
       await widgetTester.enterText(find.ancestor(of: find.text('Pulse').first, matching: find.byType(TextFormField)), '60');
 
@@ -298,19 +235,12 @@ void main() {
       );
       expect(thirdFocusedTextFormField, findsOneWidget);
       expect(thirdFocusedTextFormField.evaluate().first.widget, isA<TextFormField>()
-          .having((p0) => p0.initialValue, 'expecting note field to be selected third', 'note'));
+          .having((p0) => p0.initialValue, 'note input content', 'note'));
     });
 
     testWidgets('should focus last input field on backspace pressed in empty input field', (widgetTester) async {
-      await widgetTester.pumpWidget(materialApp(
-          Builder(
-            builder: (BuildContext context) => TextButton(onPressed: () async {
-              await showAddMeasurementDialoge(context, Settings(allowManualTimeInput: false),
-                  BloodPressureRecord(DateTime.now(), 12, 3, 4, 'note'));
-            }, child: const Text('TEST')),
-          )));
-      await widgetTester.tap(find.text('TEST'));
-      await widgetTester.pumpAndSettle();
+      await loadDialoge(widgetTester, (context) =>
+          showAddMeasurementDialoge(context, Settings(), mockRecord(sys: 12, dia: 3, pul: 4, note: 'note')));
 
 
       await widgetTester.enterText(find.ancestor(of: find.text('note').first, matching: find.byType(TextFormField)), '');

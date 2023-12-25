@@ -66,22 +66,13 @@ void main() {
   });
   group('showAddExportColumnDialoge', () {
     testWidgets('should open AddExportColumnDialoge', (widgetTester) async {
-      await widgetTester.pumpWidget(materialApp(Builder(builder: (context) => TextButton(onPressed: () =>
-          showAddExportColumnDialoge(context, Settings()), child: const Text('X')))));
-
-      expect(find.byType(AddExportColumnDialoge), findsNothing);
-      expect(find.text('X'), findsOneWidget);
-      await widgetTester.tap(find.text('X'));
-      await widgetTester.pumpAndSettle();
+      await loadDialoge(widgetTester, (context) => showAddExportColumnDialoge(context, Settings()));
 
       expect(find.byType(AddExportColumnDialoge), findsOneWidget);
     });
     testWidgets('should return null on cancel', (widgetTester) async {
       dynamic returnedValue = false;
-      await widgetTester.pumpWidget(materialApp(Builder(builder: (context) => TextButton(onPressed: () async =>
-          returnedValue = await showAddExportColumnDialoge(context, Settings()), child: const Text('X')))));
-      await widgetTester.tap(find.text('X'));
-      await widgetTester.pumpAndSettle();
+      await loadDialoge(widgetTester, (context) async => returnedValue = await showAddExportColumnDialoge(context, Settings()));
 
       expect(returnedValue, false);
       expect(find.byIcon(Icons.close), findsOneWidget);
@@ -93,12 +84,10 @@ void main() {
     });
     testWidgets('should save entered values', (widgetTester) async {
       dynamic returnedValue = false;
-      await widgetTester.pumpWidget(materialApp(Builder(builder: (context) => TextButton(onPressed: () async =>
-        returnedValue = await showAddExportColumnDialoge(context, Settings()), child: const Text('X')))));
+      await loadDialoge(widgetTester, (context) async => returnedValue = await showAddExportColumnDialoge(context, Settings()));
+
       final localizations = await AppLocalizations.delegate.load(const Locale('en'));
 
-      await widgetTester.tap(find.text('X'));
-      await widgetTester.pumpAndSettle();
       expect(returnedValue, false);
 
       expect(find.ancestor(of: find.text(localizations.csvTitle).first, matching: find.byType(TextFormField)),
@@ -123,15 +112,14 @@ void main() {
           .having((p0) => p0.formatter.formatPattern, 'formatter', r'test$SYSformat'));
     });
     testWidgets('should keep internalIdentifier on edit', (widgetTester) async {
-      dynamic returnedValue = false;
-      await widgetTester.pumpWidget(materialApp(Builder(builder: (context) => TextButton(onPressed: () async =>
-        returnedValue = await showAddExportColumnDialoge(context, Settings(),
-            UserColumn('initialInternalIdentifier', 'csvTitle', 'formatPattern')
-      ), child: const Text('X')))));
       final localizations = await AppLocalizations.delegate.load(const Locale('en'));
 
-      await widgetTester.tap(find.text('X'));
-      await widgetTester.pumpAndSettle();
+      dynamic returnedValue = false;
+      await loadDialoge(widgetTester, (context) async => returnedValue =
+        await showAddExportColumnDialoge(context, Settings(),
+          UserColumn('initialInternalIdentifier', 'csvTitle', 'formatPattern')
+      ));
+
       expect(returnedValue, false);
 
       expect(find.ancestor(of: find.text(localizations.csvTitle).first, matching: find.byType(TextFormField)),

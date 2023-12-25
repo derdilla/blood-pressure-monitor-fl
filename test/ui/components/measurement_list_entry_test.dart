@@ -4,6 +4,7 @@ import 'package:blood_pressure_app/model/storage/settings_store.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import '../../model/export_import/record_formatter_test.dart';
 import 'util.dart';
 
 void main() {
@@ -52,8 +53,7 @@ void main() {
     });
     testWidgets('should not display null values', (widgetTester) async {
       await widgetTester.pumpWidget(materialApp(MeasurementListRow(
-          settings: Settings(),
-          record: BloodPressureRecord(DateTime(2023), null, null, null, ''))));
+        settings: Settings(), record: mockRecord(time: DateTime(2023)))));
       expect(find.text('null'), findsNothing);
       expect(find.byIcon(Icons.expand_more), findsOneWidget);
       await widgetTester.tap(find.byIcon(Icons.expand_more));
