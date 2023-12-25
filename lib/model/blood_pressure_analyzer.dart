@@ -43,11 +43,16 @@ class BloodPressureAnalyser {
   int _safeResult(int Function() f, int? Function(BloodPressureRecord) lengthOneResult) {
     if (_records.isEmpty) return -1;
     if (_records.length == 1) return lengthOneResult(_records.first) ?? -1;
-    return f();
+    try {
+      return f();
+    } on StateError {
+      return -1;
+    }
+
   }
-  Iterable<int> get _nonNullDia => _records.where((e) => e.diastolic!=null).map<int>((e) => e.diastolic!);
-  Iterable<int> get _nonNullSys => _records.where((e) => e.systolic!=null).map<int>((e) => e.systolic!);
-  Iterable<int> get _nonNullPul => _records.where((e) => e.pulse!=null).map<int>((e) => e.pulse!);
+  Iterable<int> get _nonNullDia => _records.map((e) => e.diastolic).whereNotNull();
+  Iterable<int> get _nonNullSys => _records.map((e) => e.systolic).whereNotNull();
+  Iterable<int> get _nonNullPul => _records.map((e) => e.pulse).whereNotNull();
 
   int get measurementsPerDay {
     final c = count;

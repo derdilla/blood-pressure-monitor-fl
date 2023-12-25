@@ -84,6 +84,7 @@ class AppRoot extends StatelessWidget {
                 seedColor: settings.accentColor,
                 brightness: Brightness.light,
             ),
+
             useMaterial3: true
         ),
         darkTheme: ThemeData(
