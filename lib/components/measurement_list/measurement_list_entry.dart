@@ -1,4 +1,4 @@
-import 'package:blood_pressure_app/components/dialogues/add_measurement_dialogue.dart';
+import 'package:blood_pressure_app/components/dialoges/add_measurement_dialoge.dart';
 import 'package:blood_pressure_app/model/blood_pressure/model.dart';
 import 'package:blood_pressure_app/model/blood_pressure/record.dart';
 import 'package:blood_pressure_app/model/storage/storage.dart';
@@ -32,7 +32,7 @@ class MeasurementListRow extends StatelessWidget {
             children: [
               IconButton(
                 onPressed: () async {
-                  final future = showAddMeasurementDialogue(context, settings, record);
+                  final future = showAddMeasurementDialoge(context, settings, record);
                   final model = Provider.of<BloodPressureModel>(context, listen: false);
                   final measurement = await future;
                   if (measurement == null) return;

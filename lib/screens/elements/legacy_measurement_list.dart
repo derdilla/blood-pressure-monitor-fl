@@ -1,6 +1,6 @@
 import 'dart:collection';
 
-import 'package:blood_pressure_app/components/dialogues/add_measurement_dialogue.dart';
+import 'package:blood_pressure_app/components/dialoges/add_measurement_dialoge.dart';
 import 'package:blood_pressure_app/model/blood_pressure/model.dart';
 import 'package:blood_pressure_app/model/blood_pressure/record.dart';
 import 'package:blood_pressure_app/model/storage/intervall_store.dart';
@@ -83,7 +83,7 @@ class LegacyMeasurementsList extends StatelessWidget {
                             confirmDismiss: (direction) async {
                               final model = Provider.of<BloodPressureModel>(context, listen: false);
                               if (direction == DismissDirection.startToEnd) { // edit
-                                final future = showAddMeasurementDialogue(context, settings, data[index]);
+                                final future = showAddMeasurementDialoge(context, settings, data[index]);
                                 final model = Provider.of<BloodPressureModel>(context, listen: false);
                                 final measurement = await future;
                                 if (measurement == null) return false;
@@ -94,7 +94,7 @@ class LegacyMeasurementsList extends StatelessWidget {
                                 }
                                 return false;
                               } else { // delete
-                                bool dialogueDeletionConfirmed = false;
+                                bool dialogeDeletionConfirmed = false;
                                 if (settings.confirmDeletion) {
                                   await showDialog(
                                       context: context,
@@ -110,7 +110,7 @@ class LegacyMeasurementsList extends StatelessWidget {
                                                 onPressed: () {
                                                   model.delete(data[index].creationTime);
 
-                                                  dialogueDeletionConfirmed = true;
+                                                  dialogeDeletionConfirmed = true;
                                                   Navigator.of(context).pop();
                                                 },
                                                 child: Text(AppLocalizations.of(context)!.btnConfirm)),
@@ -119,10 +119,10 @@ class LegacyMeasurementsList extends StatelessWidget {
                                       });
                                 } else {
                                   model.delete(data[index].creationTime);
-                                  dialogueDeletionConfirmed = true;
+                                  dialogeDeletionConfirmed = true;
                                 }
 
-                                if (dialogueDeletionConfirmed) {
+                                if (dialogeDeletionConfirmed) {
                                   if (!context.mounted) return true;
                                   ScaffoldMessenger.of(context).removeCurrentSnackBar();
                                   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -141,7 +141,7 @@ class LegacyMeasurementsList extends StatelessWidget {
                                     ),
                                   ));
                                 }
-                                return dialogueDeletionConfirmed;
+                                return dialogeDeletionConfirmed;
                               }
                             },
                             onDismissed: (direction) {},

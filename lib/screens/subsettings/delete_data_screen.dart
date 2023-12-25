@@ -88,7 +88,7 @@ class _DeleteDataScreenState extends State<DeleteDataScreen> {
                           trailing: const Icon(Icons.delete_forever),
                           onTap: () async {
                             final messanger = ScaffoldMessenger.of(context);
-                            if (await showDeleteDialogue(context, localizations)) {
+                            if (await showDeleteDialoge(context, localizations)) {
                             final String dbPath = join(await getDatabasesPath(), 'blood_pressure.db');
                             final String dbJournalPath = join(await getDatabasesPath(), 'blood_pressure.db-journal');
                             await closeDatabases();
@@ -125,7 +125,7 @@ class _DeleteDataScreenState extends State<DeleteDataScreen> {
                           trailing: const Icon(Icons.delete_forever),
                           onTap: () async {
                             final messanger = ScaffoldMessenger.of(context);
-                            if (await showDeleteDialogue(context, localizations)) {
+                            if (await showDeleteDialoge(context, localizations)) {
                               final String dbPath = join(await getDatabasesPath(), 'config.db');
                               final String dbJournalPath = join(await getDatabasesPath(), 'config.db-journal');
                               await closeDatabases();
@@ -153,7 +153,7 @@ class _DeleteDataScreenState extends State<DeleteDataScreen> {
                             trailing: const Icon(Icons.delete_forever),
                             onTap: () async {
                               final messanger = ScaffoldMessenger.of(context);
-                              if (await showDeleteDialogue(context, localizations)) {
+                              if (await showDeleteDialoge(context, localizations)) {
                                 if (!context.mounted) return;
                                 await unregisterAllProviders(context);
                                 files[idx].deleteSync();
@@ -187,7 +187,7 @@ class _DeleteDataScreenState extends State<DeleteDataScreen> {
     return '${(sizeBytes / pow(1024, i)).toStringAsFixed(1)} ${suffixes[i]}';
   }
 
-  Future<bool> showDeleteDialogue(BuildContext context, AppLocalizations localizations) async {
+  Future<bool> showDeleteDialoge(BuildContext context, AppLocalizations localizations) async {
     return await showDialog<bool>(context: context, builder: (context) =>
         AlertDialog(
           title: Text(localizations.confirmDelete),

@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-/// Dialogue for prompting single value input from the user.
-class InputDialogue extends StatefulWidget {
+/// Dialoge for prompting single value input from the user.
+class InputDialoge extends StatefulWidget {
   /// Creates an [AlertDialog] with an text input field.
   ///
   /// Pops the context after value submission with object of type [String?].
-  const InputDialogue({super.key,
+  const InputDialoge({super.key,
     this.hintText,
     this.initialValue,
     this.inputFormatters,
@@ -27,18 +27,18 @@ class InputDialogue extends StatefulWidget {
 
   /// Validation function called after submit.
   ///
-  /// When the validator returns null the dialogue completes normally,
+  /// When the validator returns null the dialoge completes normally,
   /// in case of receiving a String it will be displayed to the user
   /// and pressing of the submit button will be ignored.
   ///
-  /// It is still possible to cancel a dialogue in case the validator fails.
+  /// It is still possible to cancel a dialoge in case the validator fails.
   final String? Function(String)? validator;
 
   @override
-  State<InputDialogue> createState() => _InputDialogueState();
+  State<InputDialoge> createState() => _InputDialogeState();
 }
 
-class _InputDialogueState extends State<InputDialogue> {
+class _InputDialogeState extends State<InputDialoge> {
   final controller = TextEditingController();
   final focusNode = FocusNode();
 
@@ -97,20 +97,20 @@ class _InputDialogueState extends State<InputDialogue> {
   }
 }
 
-/// Creates a dialogue for prompting a single user input.
+/// Creates a dialoge for prompting a single user input.
 ///
 /// Add supporting text describing the input field through [hintText].
 /// [initialValue] specifies the initial input field content.
-Future<String?> showInputDialogue(BuildContext context, {String? hintText, String? initialValue}) async =>
+Future<String?> showInputDialoge(BuildContext context, {String? hintText, String? initialValue}) async =>
   showDialog<String?>(context: context, builder: (context) =>
-      InputDialogue(hintText: hintText, initialValue: initialValue,));
+      InputDialoge(hintText: hintText, initialValue: initialValue,));
 
-/// Creates a dialogue that only allows int and double inputs.
+/// Creates a dialoge that only allows int and double inputs.
 ///
-/// Variables behave similar to [showInputDialogue].
-Future<double?> showNumberInputDialogue(BuildContext context, {String? hintText, num? initialValue}) async {
+/// Variables behave similar to [showInputDialoge].
+Future<double?> showNumberInputDialoge(BuildContext context, {String? hintText, num? initialValue}) async {
   final result = await showDialog<String?>(context: context, builder: (context) =>
-    InputDialogue(
+    InputDialoge(
       hintText: hintText,
       initialValue: initialValue?.toString(),
       inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r'([0-9]+(\.([0-9]*))?)')),],
