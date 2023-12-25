@@ -1,6 +1,7 @@
 import 'dart:collection';
 
-import 'package:blood_pressure_app/model/blood_pressure.dart';
+import 'package:blood_pressure_app/model/blood_pressure/model.dart';
+import 'package:blood_pressure_app/model/blood_pressure/record.dart';
 import 'package:flutter/material.dart';
 
 class RamBloodPressureModel extends ChangeNotifier implements BloodPressureModel {

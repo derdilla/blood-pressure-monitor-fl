@@ -1,4 +1,3 @@
-import 'package:blood_pressure_app/model/blood_pressure.dart';
 import 'package:flutter/material.dart';
 
 class HorizontalGraphLine {

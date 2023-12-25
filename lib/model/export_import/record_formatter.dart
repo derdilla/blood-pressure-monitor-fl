@@ -1,6 +1,7 @@
 import 'dart:convert';
 
-import 'package:blood_pressure_app/model/blood_pressure.dart';
+import 'package:blood_pressure_app/model/blood_pressure/needle_pin.dart';
+import 'package:blood_pressure_app/model/blood_pressure/record.dart';
 import 'package:blood_pressure_app/model/export_import/import_field_type.dart';
 import 'package:flutter/material.dart';
 import 'package:function_tree/function_tree.dart';

@@ -1,7 +1,8 @@
 import 'dart:collection';
 
 import 'package:blood_pressure_app/components/consistent_future_builder.dart';
-import 'package:blood_pressure_app/model/blood_pressure.dart';
+import 'package:blood_pressure_app/model/blood_pressure/model.dart';
+import 'package:blood_pressure_app/model/blood_pressure/record.dart';
 import 'package:blood_pressure_app/model/storage/intervall_store.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

@@ -1,5 +1,5 @@
 
-import 'package:blood_pressure_app/model/blood_pressure.dart';
+import 'package:blood_pressure_app/model/blood_pressure/record.dart';
 import 'package:blood_pressure_app/model/blood_pressure_analyzer.dart';
 import 'package:flutter_test/flutter_test.dart';
 

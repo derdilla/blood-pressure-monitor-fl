@@ -1,4 +1,5 @@
-import 'package:blood_pressure_app/model/blood_pressure.dart';
+import 'package:blood_pressure_app/model/blood_pressure/model.dart';
+import 'package:blood_pressure_app/model/blood_pressure/record.dart';
 import 'package:blood_pressure_app/model/ram_only_implementations.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:path/path.dart';

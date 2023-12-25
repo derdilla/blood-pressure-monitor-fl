@@ -1,6 +1,6 @@
 import 'dart:math';
 
-import 'package:blood_pressure_app/model/blood_pressure.dart';
+import 'package:blood_pressure_app/model/blood_pressure/record.dart';
 import 'package:collection/collection.dart';
 
 class BloodPressureAnalyser {
