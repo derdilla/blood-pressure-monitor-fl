@@ -53,6 +53,7 @@ Future<Widget> _loadApp() async {
       );
     }
   }
+  if (settings.allowMissingValues && settings.validateInputs) settings.validateInputs = false;
 
   // Reset the step size intervall to current on startup
   intervalStorageManager.mainPage.setToMostRecentIntervall();

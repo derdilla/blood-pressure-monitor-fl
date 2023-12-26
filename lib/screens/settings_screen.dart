@@ -162,7 +162,8 @@ class SettingsPage extends StatelessWidget {
                 value: settings.validateInputs,
                 title: Text(localizations.validateInputs),
                 secondary: const Icon(Icons.edit),
-                onChanged: (value) {
+                onChanged: settings.allowMissingValues ? null : (value) {
+                  assert(!settings.allowMissingValues);
                   settings.validateInputs = value;
                 }),
               SwitchListTile(
@@ -172,6 +173,7 @@ class SettingsPage extends StatelessWidget {
                 secondary: const Icon(Icons.report_off_outlined),
                 onChanged: (value) {
                   settings.allowMissingValues = value;
+                  if (value) settings.validateInputs = false;
                 }),
               SwitchListTile(
                 key: const Key('confirmDeletion'),
