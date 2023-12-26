@@ -256,6 +256,14 @@ class SettingsPage extends StatelessWidget {
                   settings.startWithAddMeasurementPage = value;
                 }
               ),
+              SwitchListTile(
+                  title: Text(localizations.bottomAppBars),
+                  secondary: const Icon(Icons.vertical_align_bottom),
+                  value: settings.bottomAppBars,
+                  onChanged: (value) {
+                    settings.bottomAppBars = value;
+                  }
+              ),
             ]),
             TitledColumn(
               title: Text(localizations.data),
