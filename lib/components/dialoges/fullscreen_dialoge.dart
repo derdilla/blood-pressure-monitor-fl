@@ -25,7 +25,7 @@ class FullscreenDialoge extends StatelessWidget {
   ///
   /// Usually `localizations.btnSave`
   ///
-  /// Setting the text to null will remove the button.
+  /// Setting the text to null will hide the button entirely.
   final String? actionButtonText;
 
   /// Action on press of the button.
