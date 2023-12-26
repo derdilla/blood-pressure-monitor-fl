@@ -35,6 +35,7 @@ class Settings extends ChangeNotifier {
     bool? drawRegressionLines,
     bool? startWithAddMeasurementPage,
     bool? useLegacyList,
+    bool? bottomAppBars,
   }) {
     if (accentColor != null) _accentColor = accentColor;
     if (sysColor != null) _sysColor = sysColor;
@@ -56,6 +57,7 @@ class Settings extends ChangeNotifier {
     if (useLegacyList != null) _useLegacyList = useLegacyList;
     if (horizontalGraphLines != null) _horizontalGraphLines = horizontalGraphLines;
     if (lastVersion != null) _lastVersion = lastVersion;
+    if (bottomAppBars != null) _bottomAppBars = bottomAppBars;
     _language = language; // No check here, as null is the default as well.
   }
 
@@ -82,7 +84,8 @@ class Settings extends ChangeNotifier {
       horizontalGraphLines: ConvertUtil.parseList<String>(map['horizontalGraphLines'])?.map((e) =>
           HorizontalGraphLine.fromJson(jsonDecode(e))).toList(),
       needlePinBarWidth: ConvertUtil.parseDouble(map['needlePinBarWidth']),
-      lastVersion: ConvertUtil.parseInt(map['lastVersion'])
+      lastVersion: ConvertUtil.parseInt(map['lastVersion']),
+      bottomAppBars: ConvertUtil.parseBool(map['bottomAppBars']),
     );
 
     // update
@@ -121,7 +124,8 @@ class Settings extends ChangeNotifier {
       'language': ConvertUtil.serializeLocale(language),
       'horizontalGraphLines': horizontalGraphLines.map((e) => jsonEncode(e)).toList(),
       'needlePinBarWidth': _needlePinBarWidth,
-      'lastVersion': lastVersion
+      'lastVersion': lastVersion,
+      'bottomAppBars': bottomAppBars,
     };
 
   String toJson() => jsonEncode(toMap());
@@ -277,6 +281,14 @@ class Settings extends ChangeNotifier {
   double get needlePinBarWidth => _needlePinBarWidth;
   set needlePinBarWidth(double value) {
     _needlePinBarWidth = value;
+    notifyListeners();
+  }
+
+  bool _bottomAppBars = false;
+  /// Whether to put the app bar in dialoges at the bottom of the screen.
+  bool get bottomAppBars => _bottomAppBars;
+  set bottomAppBars(bool value) {
+    _bottomAppBars = value;
     notifyListeners();
   }
   
