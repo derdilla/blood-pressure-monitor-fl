@@ -45,7 +45,9 @@ class SettingsPage extends StatelessWidget {
                 leading: const Icon(Icons.schedule),
                 trailing: const Icon(Icons.arrow_forward_ios),
                 onTap: () async {
-                  final pickedFormat = await showTimeFormatPickerDialoge(context, settings.dateFormatString);
+                  final pickedFormat = await showTimeFormatPickerDialoge(context,
+                      settings.dateFormatString,
+                      settings.bottomAppBars);
                   if (pickedFormat != null) {
                     settings.dateFormatString = pickedFormat;
                   }
