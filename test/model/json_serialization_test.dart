@@ -92,6 +92,7 @@ void main() {
         startWithAddMeasurementPage: false,
         useLegacyList: false,
         horizontalGraphLines: [HorizontalGraphLine(Colors.blue, 1230)],
+        bottomAppBars: true
       );
       final fromJson = Settings.fromJson(initial.toJson());
 
@@ -117,6 +118,7 @@ void main() {
       expect(initial.horizontalGraphLines.first.color.value, fromJson.horizontalGraphLines.first.color.value);
       expect(initial.horizontalGraphLines.first.height, fromJson.horizontalGraphLines.first.height);
       expect(initial.needlePinBarWidth, fromJson.needlePinBarWidth);
+      expect(initial.bottomAppBars, fromJson.bottomAppBars);
 
       expect(initial.toJson(), fromJson.toJson());
     });

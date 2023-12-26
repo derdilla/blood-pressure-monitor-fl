@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-/// Dialoge for prompting single value input from the user.
+/// Alert dialoge for prompting single value input from the user.
 class InputDialoge extends StatefulWidget {
   /// Creates an [AlertDialog] with an text input field.
   ///

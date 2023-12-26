@@ -1,13 +1,18 @@
+import 'package:blood_pressure_app/components/dialoges/fullscreen_dialoge.dart';
 import 'package:blood_pressure_app/screens/subsettings/export_import/export_field_format_documentation_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:intl/intl.dart';
 
-/// Dialoge that explains the time format and pops the context with either null or a time format string.
+/// Fullscreen dialoge that explains the time format and pops the context with either null or a time format string.
 class EnterTimeFormatDialoge extends StatefulWidget {
   /// Create dialoge for entering time formats as used by the [DateFormat] class.
-  const EnterTimeFormatDialoge({super.key, required this.initialValue, this.previewTime});
+  const EnterTimeFormatDialoge({super.key,
+    required this.initialValue,
+    this.previewTime,
+    this.bottomAppBars = false
+  });
 
   /// Text that is initially in time format field.
   final String initialValue;
@@ -16,6 +21,8 @@ class EnterTimeFormatDialoge extends StatefulWidget {
   ///
   /// When previewTime is null [DateTime.now] will be used.
   final DateTime? previewTime;
+
+  final bool bottomAppBars;
 
   @override
   State<EnterTimeFormatDialoge> createState() => _EnterTimeFormatDialogeState();
@@ -43,26 +50,14 @@ class _EnterTimeFormatDialogeState extends State<EnterTimeFormatDialoge> {
   @override
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
-    return Scaffold(
-      appBar: AppBar(
-        forceMaterialTransparency: true,
-        leading: IconButton(
-          onPressed: () {
-            Navigator.of(context).pop(null);
-          },
-          icon: const Icon(Icons.close)
-        ),
-        actions: [
-          TextButton(
-            onPressed: () {
-              if(timeFormatFieldController.text.isNotEmpty) {
-                Navigator.of(context).pop(timeFormatFieldController.text);
-              }
-            },
-            child: Text(localizations.btnSave)
-          )
-        ],
-      ),
+    return FullscreenDialoge(
+      actionButtonText: localizations.btnSave,
+      bottomAppBar: widget.bottomAppBars,
+      onActionButtonPressed: () {
+        if(timeFormatFieldController.text.isNotEmpty) {
+          Navigator.of(context).pop(timeFormatFieldController.text);
+        }
+      },
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(24),
@@ -98,7 +93,7 @@ class _EnterTimeFormatDialogeState extends State<EnterTimeFormatDialoge> {
 /// Shows a dialoge that explains the ICU DateTime format and allows editing [initialTimeFormat] with a preview.
 ///
 /// When canceled null is returned.
-Future<String?> showTimeFormatPickerDialoge(BuildContext context, String initialTimeFormat) =>
-    showDialog<String?>(context: context, builder: (context) => Dialog.fullscreen(
-        child: EnterTimeFormatDialoge(initialValue: initialTimeFormat),
-    ));
+Future<String?> showTimeFormatPickerDialoge(BuildContext context, String initialTimeFormat, bool bottomAppBars) =>
+  showDialog<String?>(context: context, builder: (context) => Dialog.fullscreen(
+    child: EnterTimeFormatDialoge(initialValue: initialTimeFormat, bottomAppBars: bottomAppBars,),
+  ));

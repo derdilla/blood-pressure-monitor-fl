@@ -1,3 +1,4 @@
+import 'package:blood_pressure_app/components/dialoges/fullscreen_dialoge.dart';
 import 'package:blood_pressure_app/components/measurement_list/measurement_list_entry.dart';
 import 'package:blood_pressure_app/model/blood_pressure/record.dart';
 import 'package:blood_pressure_app/model/export_import/column.dart';
@@ -13,7 +14,10 @@ import 'package:intl/intl.dart';
 /// For further documentation please refer to [showAddExportColumnDialoge].
 class AddExportColumnDialoge extends StatefulWidget {
   /// Create a widget for creating and editing a [UserColumn].
-  const AddExportColumnDialoge({super.key, this.initialColumn, required this.settings});
+  const AddExportColumnDialoge({super.key,
+    this.initialColumn,
+    required this.settings,
+  });
 
   final ExportColumn? initialColumn;
 
@@ -71,39 +75,10 @@ class _AddExportColumnDialogeState extends State<AddExportColumnDialoge> with Si
   @override
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
-    return Scaffold(
-      appBar: AppBar(
-        forceMaterialTransparency: true,
-        leading: IconButton(
-            onPressed: () => Navigator.of(context).pop(null),
-            icon: const Icon(Icons.close)
-        ),
-        actions: [
-          TextButton(
-            onPressed: () {
-              if (formKey.currentState?.validate() ?? false) {
-                formKey.currentState!.save();
-                late ExportColumn column;
-                if (type == _FormatterType.record) {
-                  assert(recordPattern != null, 'validator should check');
-                  column = (widget.initialColumn != null)
-                      ? UserColumn.explicit(widget.initialColumn!.internalIdentifier, csvTitle, recordPattern!)
-                      : UserColumn(csvTitle, csvTitle, recordPattern!);
-                  Navigator.pop(context, column);
-                } else {
-                  assert(type == _FormatterType.time);
-                  assert(timePattern != null, 'validator should check');
-                  column = (widget.initialColumn != null)
-                      ? TimeColumn.explicit(widget.initialColumn!.internalIdentifier, csvTitle, timePattern!)
-                      : TimeColumn(csvTitle, timePattern!);
-                  Navigator.pop(context, column);
-                }
-              }
-            },
-            child: Text(localizations.btnSave)
-          )
-        ],
-      ),
+    return FullscreenDialoge(
+      actionButtonText: localizations.btnSave,
+      onActionButtonPressed: _saveForm,
+      bottomAppBar: widget.settings.bottomAppBars,
       body: Form(
         key: formKey,
         child: ListView(
@@ -197,7 +172,6 @@ class _AddExportColumnDialogeState extends State<AddExportColumnDialoge> with Si
               ),
           ],
         ),
-
       ),
     );
   }
@@ -272,6 +246,28 @@ class _AddExportColumnDialogeState extends State<AddExportColumnDialoge> with Si
       enabledBorder: border,
     );
   }
+
+  void _saveForm() {
+    if (formKey.currentState?.validate() ?? false) {
+      formKey.currentState!.save();
+      late ExportColumn column;
+      if (type == _FormatterType.record) {
+        assert(recordPattern != null, 'validator should check');
+        column = (widget.initialColumn != null)
+            ? UserColumn.explicit(widget.initialColumn!.internalIdentifier, csvTitle, recordPattern!)
+            : UserColumn(csvTitle, csvTitle, recordPattern!);
+        Navigator.pop(context, column);
+      } else {
+        assert(type == _FormatterType.time);
+        assert(timePattern != null, 'validator should check');
+        column = (widget.initialColumn != null)
+            ? TimeColumn.explicit(widget.initialColumn!.internalIdentifier, csvTitle, timePattern!)
+            : TimeColumn(csvTitle, timePattern!);
+        Navigator.pop(context, column);
+      }
+    }
+  }
+
 }
 
 enum _FormatterType {

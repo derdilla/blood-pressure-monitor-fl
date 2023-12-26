@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:blood_pressure_app/components/date_time_picker.dart';
+import 'package:blood_pressure_app/components/dialoges/fullscreen_dialoge.dart';
 import 'package:blood_pressure_app/components/settings/settings_widgets.dart';
 import 'package:blood_pressure_app/model/blood_pressure/needle_pin.dart';
 import 'package:blood_pressure_app/model/blood_pressure/record.dart';
@@ -15,10 +16,10 @@ class AddMeasurementDialoge extends StatefulWidget {
   /// Create a input mask for entering measurements.
   /// 
   /// This is usually created through the [showAddMeasurementDialoge] function.
-  const AddMeasurementDialoge(
-      {super.key,
-      required this.settings,
-      this.initialRecord});
+  const AddMeasurementDialoge({super.key,
+    required this.settings,
+    this.initialRecord,
+  });
 
   /// Settings are followed by the dialoge.
   final Settings settings;
@@ -190,26 +191,16 @@ class _AddMeasurementDialogeState extends State<AddMeasurementDialoge> {
   @override
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
-    return Scaffold(
-      appBar: AppBar(
-        forceMaterialTransparency: true,
-        leading: IconButton(
-            onPressed: () => Navigator.of(context).pop(null),
-            icon: const Icon(Icons.close)
-        ),
-        actions: [
-          TextButton(
-              onPressed: () {
-                if (formKey.currentState?.validate() ?? false) {
-                  formKey.currentState?.save();
-                  final record = BloodPressureRecord(time, systolic, diastolic, pulse, notes ?? '', needlePin: needlePin);
-                  Navigator.of(context).pop(record);
-                }
-              },
-              child: Text(localizations.btnSave)
-          )
-        ],
-      ),
+    return FullscreenDialoge(
+      onActionButtonPressed: () {
+        if (formKey.currentState?.validate() ?? false) {
+          formKey.currentState?.save();
+          final record = BloodPressureRecord(time, systolic, diastolic, pulse, notes ?? '', needlePin: needlePin);
+          Navigator.of(context).pop(record);
+        }
+      },
+      actionButtonText: localizations.btnSave,
+      bottomAppBar: widget.settings.bottomAppBars,
       body: Form(
         key: formKey,
         child: ListView(

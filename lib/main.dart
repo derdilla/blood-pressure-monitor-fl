@@ -80,11 +80,11 @@ class AppRoot extends StatelessWidget {
           return AppLocalizations.of(context)!.title;
         },
         theme: ThemeData(
-            colorScheme: ColorScheme.fromSeed(
-                seedColor: settings.accentColor,
-                brightness: Brightness.light,
-            ),
-            useMaterial3: true
+          colorScheme: ColorScheme.fromSeed(
+            seedColor: settings.accentColor,
+            brightness: Brightness.light,
+          ),
+          useMaterial3: true,
         ),
         darkTheme: ThemeData(
           colorScheme: ColorScheme.fromSeed(

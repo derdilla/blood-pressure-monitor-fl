@@ -486,5 +486,7 @@
   "timeFormat": "Time format",
   "@timeFormat": {},
   "errAccuracyLoss": "There is precision loss expected when exporting with custom time formatters.",
-  "@errAccuracyLoss": {}
+  "@errAccuracyLoss": {},
+  "bottomAppBars": "Bottom dialoge bars",
+  "@bottomAppBars": {}
 }
