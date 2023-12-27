@@ -1,10 +1,8 @@
 import 'package:blood_pressure_app/model/blood_pressure/medicine/intake_history.dart';
-import 'package:blood_pressure_app/model/blood_pressure/medicine/medicine.dart';
-import 'package:blood_pressure_app/model/blood_pressure/medicine/medicine_intake.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'medicine_test.dart';
+import 'medicine_intake_test.dart';
 
 void main() {
   group('IntakeHistory', () { 
@@ -153,17 +151,3 @@ void main() {
     });
   });
 }
-
-/// Create a mock intake.
-/// 
-/// [timeMs] creates the intake timestamp through [DateTime.fromMillisecondsSinceEpoch].
-/// When is null [DateTime.now] is used.
-MedicineIntake mockIntake({
-  double dosis = 0,
-  int? timeMs,
-  Medicine? medicine
-}) => MedicineIntake(
-  medicine: medicine ?? mockMedicine(),
-  dosis: dosis, 
-  timestamp: timeMs == null ? DateTime.now() : DateTime.fromMillisecondsSinceEpoch(timeMs)
-);

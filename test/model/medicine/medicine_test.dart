@@ -17,7 +17,6 @@ void main() {
       expect(med1, isNot(med3));
       const med4 = Medicine(1, designation: 'designation', color: Colors.red, defaultDosis: 11);
       expect(med1, isNot(med4));
-
     });
     test('should restore after encoded to map', () {
       final med1 = mockMedicine();
@@ -52,6 +51,9 @@ void main() {
 
 final List<Medicine> _meds = [];
 
+/// Creates mock intake.
+///
+/// Medicines with the same properties will keep the correct id.
 Medicine mockMedicine({
   Color color = Colors.black,
   String designation = '',
@@ -60,5 +62,6 @@ Medicine mockMedicine({
   final matchingMeds = _meds.where((med) => med.defaultDosis == defaultDosis && med.color == color && med.designation == designation);
   if (matchingMeds.isNotEmpty) return matchingMeds.first;
   final med = Medicine(_meds.length, designation: designation, color: color, defaultDosis: defaultDosis);
+  _meds.add(med);
   return med;
 }

@@ -10,6 +10,22 @@ class MedicineIntake implements Comparable<Object> {
     required this.timestamp
   });
 
+  /// Serialize the object to a deserializable string.
+  ///
+  /// The string consists of the id of the medicine, the unix timestamp and the
+  /// dosis. These values are seperated by a null byte
+  String serialize() =>
+      '${medicine.id}\x00${timestamp.millisecondsSinceEpoch}\x00$dosis';
+
+  factory MedicineIntake.deserialize(String string, List<Medicine> availableMeds) {
+    final elements = string.split('\x00');
+    return MedicineIntake(
+      medicine: availableMeds.firstWhere((e) => e.id == int.parse(elements[0])),
+      timestamp: DateTime.fromMillisecondsSinceEpoch(int.parse(elements[1])),
+      dosis: double.parse(elements[2]),
+    );
+  }
+
   /// Kind of medicine taken.
   final Medicine medicine;
 
@@ -40,5 +56,10 @@ class MedicineIntake implements Comparable<Object> {
     if (timeCompare != 0) return timeCompare;
 
     return dosis.compareTo(other.dosis);
+  }
+
+  @override
+  String toString() {
+    return 'MedicineIntake{medicine: $medicine, dosis: $dosis, timestamp: $timestamp}';
   }
 }

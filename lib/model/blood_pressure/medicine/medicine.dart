@@ -23,10 +23,10 @@ class Medicine {
   String toJson() => jsonEncode(toMap());
 
   factory Medicine.fromMap(Map<String, dynamic> map) => Medicine(
-      map['id'],
-      designation: map['designation'],
-      color: Color(map['color']),
-      defaultDosis: map['defaultDosis']
+    map['id'],
+    designation: map['designation'],
+    color: Color(map['color']),
+    defaultDosis: map['defaultDosis']
   );
 
   factory Medicine.fromJson(String json) => Medicine.fromMap(jsonDecode(json));
