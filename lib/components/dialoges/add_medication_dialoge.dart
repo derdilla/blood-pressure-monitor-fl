@@ -98,6 +98,9 @@ class _AddMedicationDialogeState extends State<AddMedicationDialoge> {
   );
 }
 
+/// Shows a full screen dialoge to input a medicine.
+///
+/// The created medicine gets an index that was never in settings.
 Future<Medicine?> showAddMedicineDialoge(BuildContext context, Settings settings) =>
   showDialog<Medicine?>(context: context, builder: (context) => Dialog.fullscreen(
     child: AddMedicationDialoge(settings: settings),

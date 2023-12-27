@@ -150,6 +150,15 @@ class SettingsPage extends StatelessWidget {
             ]),
 
             TitledColumn(title: Text(localizations.behavior), children: [
+              ListTile(
+                onTap: () {
+                  Navigator.push(context, MaterialPageRoute(builder:
+                      (context) => const MedicineManagerScreen()));
+                },
+                leading: const Icon(Icons.medication),
+                title: Text(localizations.medications),
+                trailing: const Icon(Icons.arrow_forward_ios)
+              ),
               SwitchListTile(
                 key: const Key('allowManualTimeInput'),
                 value: settings.allowManualTimeInput,
@@ -260,24 +269,13 @@ class SettingsPage extends StatelessWidget {
                 }
               ),
               SwitchListTile(
-                  title: Text(localizations.bottomAppBars),
-                  secondary: const Icon(Icons.vertical_align_bottom),
-                  value: settings.bottomAppBars,
-                  onChanged: (value) {
-                    settings.bottomAppBars = value;
-                  }
+                title: Text(localizations.bottomAppBars),
+                secondary: const Icon(Icons.vertical_align_bottom),
+                value: settings.bottomAppBars,
+                onChanged: (value) {
+                  settings.bottomAppBars = value;
+                }
               ),
-              ListTile(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => const MedicineManagerScreen()),
-                  );
-                },
-                leading: const Icon(Icons.medication),
-                title: Text(localizations.medications), // TODO
-                trailing: const Icon(Icons.arrow_forward_ios)
-              )
             ]),
             TitledColumn(
               title: Text(localizations.data),

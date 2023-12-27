@@ -19,43 +19,34 @@ class MedicineManagerScreen extends StatelessWidget {
           builder: (context, settings, child) {
             final medications = settings.medications;
             return ListView.builder(
-                itemCount: medications.length + 2,
+                itemCount: medications.length + 1,
                 itemBuilder: (context, i) {
-                  if(i == 0) { // first row
-                    return Container(
-                      padding: const EdgeInsets.all(10),
-                      child: DefaultTextStyle.merge(
-                        child: Text(localizations.medications),
-                        style: Theme.of(context).textTheme.headlineLarge
-                      ),
-                    );
-                  }
-                  if (i > medications.length) { // last row
+                  if (i == medications.length) { // last row
                     return ListTile(
                       leading: const Icon(Icons.add),
                       title: Text(localizations.addMedication),
                       onTap: () async {
                         final medicine = await showAddMedicineDialoge(context, settings);
-                        if (medicine != null) settings.addMedication(medicine);;
-                        // TODO
+                        if (medicine != null) settings.addMedication(medicine);
                       },
                     );
                   }
                   return ListTile(
-                    leading: medications[i-1].color == Colors.transparent ? null : Container(
+                    leading: medications[i].color == Colors.transparent ? null : Container(
                       width: 40.0,
                       height: 40.0,
                       decoration: BoxDecoration(
-                        color: medications[i-1].color,
+                        color: medications[i].color,
                         shape: BoxShape.circle,
                       ),
                     ),
-                    title: Text(medications[i-1].designation),
-                    subtitle: Text('${localizations.defaultDosis}: ${medications[i-1].defaultDosis?.toString()}'),
+                    title: Text(medications[i].designation),
+                    subtitle: Text('${localizations.defaultDosis}: '
+                        '${medications[i].defaultDosis?.toString()}'),
                     trailing: IconButton(
                       icon: const Icon(Icons.delete),
                       onPressed: () {
-                        settings.removeMedicationAt(i - 1);
+                        settings.removeMedicationAt(i);
                       },
                     ),
                   );

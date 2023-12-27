@@ -274,6 +274,7 @@ class _AddMeasurementDialogeState extends State<AddMeasurementDialoge> {
   }
 }
 
+/// Shows a dialoge to input a blood pressure measurement.
 Future<BloodPressureRecord?> showAddMeasurementDialoge(BuildContext context, Settings settings, [BloodPressureRecord? initialRecord]) =>
   showDialog<BloodPressureRecord?>(context: context, builder: (context) => Dialog.fullscreen(
     child: AddMeasurementDialoge(settings: settings, initialRecord: initialRecord,),
