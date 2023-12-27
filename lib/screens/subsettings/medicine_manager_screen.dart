@@ -1,8 +1,10 @@
+import 'package:blood_pressure_app/components/dialoges/add_medication_dialoge.dart';
 import 'package:blood_pressure_app/model/storage/settings_store.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 
+/// Screen to view and edit medications saved in [Settings].
 class MedicineManagerScreen extends StatelessWidget {
   const MedicineManagerScreen({super.key});
 
@@ -33,12 +35,14 @@ class MedicineManagerScreen extends StatelessWidget {
                       leading: const Icon(Icons.add),
                       title: Text(localizations.addMedication),
                       onTap: () async {
+                        final medicine = await showAddMedicineDialoge(context, settings);
+                        if (medicine != null) settings.addMedication(medicine);;
                         // TODO
                       },
                     );
                   }
                   return ListTile(
-                    leading: Container(
+                    leading: medications[i-1].color == Colors.transparent ? null : Container(
                       width: 40.0,
                       height: 40.0,
                       decoration: BoxDecoration(
@@ -47,7 +51,7 @@ class MedicineManagerScreen extends StatelessWidget {
                       ),
                     ),
                     title: Text(medications[i-1].designation),
-                    subtitle: Text(medications[i-1].defaultDosis.toString()),
+                    subtitle: Text('${localizations.defaultDosis}: ${medications[i-1].defaultDosis?.toString()}'),
                     trailing: IconButton(
                       icon: const Icon(Icons.delete),
                       onPressed: () {

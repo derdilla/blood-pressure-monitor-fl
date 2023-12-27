@@ -39,6 +39,7 @@ class Settings extends ChangeNotifier {
     bool? useLegacyList,
     bool? bottomAppBars,
     List<Medicine>? medications,
+    int? highestMedIndex,
   }) {
     if (accentColor != null) _accentColor = accentColor;
     if (sysColor != null) _sysColor = sysColor;
@@ -62,6 +63,7 @@ class Settings extends ChangeNotifier {
     if (lastVersion != null) _lastVersion = lastVersion;
     if (bottomAppBars != null) _bottomAppBars = bottomAppBars;
     if (medications != null) _medications.addAll(medications);
+    if (highestMedIndex != null) _highestMedIndex = highestMedIndex;
     _language = language; // No check here, as null is the default as well.
   }
 
@@ -92,6 +94,7 @@ class Settings extends ChangeNotifier {
       bottomAppBars: ConvertUtil.parseBool(map['bottomAppBars']),
       medications: ConvertUtil.parseList<String>(map['medications'])?.map((e) =>
           Medicine.fromJson(jsonDecode(e))).toList(),
+      highestMedIndex: ConvertUtil.parseInt(map['highestMedIndex']),
     );
 
     // update
@@ -133,6 +136,7 @@ class Settings extends ChangeNotifier {
       'lastVersion': lastVersion,
       'bottomAppBars': bottomAppBars,
       'medications': medications.map((e) => jsonEncode(e)).toList(),
+      'highestMedIndex': highestMedIndex,
     };
 
   String toJson() => jsonEncode(toMap());
@@ -305,6 +309,7 @@ class Settings extends ChangeNotifier {
       UnmodifiableListView(_medications);
   void addMedication(Medicine medication) {
     _medications.add(medication);
+    _highestMedIndex += 1;
     notifyListeners();
   }
   void removeMedicationAt(int index) {
@@ -312,6 +317,10 @@ class Settings extends ChangeNotifier {
     _medications.removeAt(index);
     notifyListeners();
   }
+
+  int _highestMedIndex = 0;
+  /// Total amount of medicines created.
+  int get highestMedIndex => _highestMedIndex;
   
 // When adding fields notice the checklist at the top.
 }

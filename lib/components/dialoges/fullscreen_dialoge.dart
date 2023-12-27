@@ -7,7 +7,7 @@ class FullscreenDialoge extends StatelessWidget {
     this.body,
     required this.actionButtonText,
     this.onActionButtonPressed,
-    this.bottomAppBar = false,
+    required this.bottomAppBar,
     this.closeIcon = Icons.close,
   });
 

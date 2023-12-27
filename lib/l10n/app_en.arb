@@ -492,5 +492,9 @@
   "medications": "Medications",
   "@medications": {},
   "addMedication": "Add medication",
-  "@addMedication": {}
+  "@addMedication": {},
+  "name": "Name",
+  "@name": {},
+  "defaultDosis": "default dosis",
+  "@defaultDosis": {}
 }
