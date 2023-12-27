@@ -4,6 +4,8 @@ import 'package:blood_pressure_app/model/blood_pressure/medicine/medicine_intake
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import 'medicine_test.dart';
+
 void main() {
   group('IntakeHistory', () { 
     test('should return all matching intakes in range', () {
@@ -157,17 +159,11 @@ void main() {
 /// [timeMs] creates the intake timestamp through [DateTime.fromMillisecondsSinceEpoch].
 /// When is null [DateTime.now] is used.
 MedicineIntake mockIntake({
-  Color medicineColor = Colors.black,
-  String medicineDesignation = '',
-  double? medicineDefaultDosis,
   double dosis = 0,
-  int? timeMs
+  int? timeMs,
+  Medicine? medicine
 }) => MedicineIntake(
-  medicine: Medicine(
-    color: medicineColor, 
-    designation: medicineDesignation,
-    defaultDosis: medicineDefaultDosis
-  ), 
+  medicine: medicine ?? mockMedicine(),
   dosis: dosis, 
   timestamp: timeMs == null ? DateTime.now() : DateTime.fromMillisecondsSinceEpoch(timeMs)
 );

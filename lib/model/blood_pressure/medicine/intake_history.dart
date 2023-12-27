@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 ///
 /// Internally maintains a sorted list of intakes to allow for binary search.
 class IntakeHistory {
-
+  /// Create a intake history from an unsorted list of intakes.
   IntakeHistory(List<MedicineIntake> medicineIntakes):
     _medicineIntakes = medicineIntakes.sorted((p0, p1) => p0.compareTo(p1));
 
