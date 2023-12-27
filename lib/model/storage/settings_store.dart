@@ -307,8 +307,9 @@ class Settings extends ChangeNotifier {
     _medications.add(medication);
     notifyListeners();
   }
-  void removeMedication(Medicine medication) {
-    _medications.remove(medication);
+  void removeMedicationAt(int index) {
+    assert(index >= 0 && index < _medications.length);
+    _medications.removeAt(index);
     notifyListeners();
   }
   
