@@ -1,5 +1,7 @@
+import 'dart:collection';
 import 'dart:convert';
 
+import 'package:blood_pressure_app/model/blood_pressure/medicine/medicine.dart';
 import 'package:blood_pressure_app/model/horizontal_graph_line.dart';
 import 'package:blood_pressure_app/model/storage/convert_util.dart';
 import 'package:flutter/material.dart';
@@ -36,6 +38,7 @@ class Settings extends ChangeNotifier {
     bool? startWithAddMeasurementPage,
     bool? useLegacyList,
     bool? bottomAppBars,
+    List<Medicine>? medications,
   }) {
     if (accentColor != null) _accentColor = accentColor;
     if (sysColor != null) _sysColor = sysColor;
@@ -58,6 +61,7 @@ class Settings extends ChangeNotifier {
     if (horizontalGraphLines != null) _horizontalGraphLines = horizontalGraphLines;
     if (lastVersion != null) _lastVersion = lastVersion;
     if (bottomAppBars != null) _bottomAppBars = bottomAppBars;
+    if (medications != null) _medications.addAll(medications);
     _language = language; // No check here, as null is the default as well.
   }
 
@@ -86,6 +90,8 @@ class Settings extends ChangeNotifier {
       needlePinBarWidth: ConvertUtil.parseDouble(map['needlePinBarWidth']),
       lastVersion: ConvertUtil.parseInt(map['lastVersion']),
       bottomAppBars: ConvertUtil.parseBool(map['bottomAppBars']),
+      medications: ConvertUtil.parseList<String>(map['medications'])?.map((e) =>
+          Medicine.fromJson(jsonDecode(e))).toList(),
     );
 
     // update
@@ -126,6 +132,7 @@ class Settings extends ChangeNotifier {
       'needlePinBarWidth': _needlePinBarWidth,
       'lastVersion': lastVersion,
       'bottomAppBars': bottomAppBars,
+      'medications': medications.map((e) => jsonEncode(e)).toList(),
     };
 
   String toJson() => jsonEncode(toMap());
@@ -170,6 +177,7 @@ class Settings extends ChangeNotifier {
 
   List<HorizontalGraphLine> _horizontalGraphLines = [];
   List<HorizontalGraphLine> get horizontalGraphLines => _horizontalGraphLines;
+  // TODO: change so it is similar to medicine
   set horizontalGraphLines(List<HorizontalGraphLine> value) {
     _horizontalGraphLines = value;
     notifyListeners();
@@ -289,6 +297,18 @@ class Settings extends ChangeNotifier {
   bool get bottomAppBars => _bottomAppBars;
   set bottomAppBars(bool value) {
     _bottomAppBars = value;
+    notifyListeners();
+  }
+  
+  final List<Medicine> _medications = [];
+  UnmodifiableListView<Medicine> get medications => 
+      UnmodifiableListView(_medications);
+  void addMedication(Medicine medication) {
+    _medications.add(medication);
+    notifyListeners();
+  }
+  void removeMedication(Medicine medication) {
+    _medications.remove(medication);
     notifyListeners();
   }
   

@@ -11,6 +11,8 @@ import 'package:blood_pressure_app/model/storage/settings_store.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import 'medicine/medicine_test.dart';
+
 void main() {
   group('IntervallStorage', () {
     test('should create json without error', () {
@@ -92,7 +94,8 @@ void main() {
         startWithAddMeasurementPage: false,
         useLegacyList: false,
         horizontalGraphLines: [HorizontalGraphLine(Colors.blue, 1230)],
-        bottomAppBars: true
+        bottomAppBars: true,
+        medications: [mockMedicine(), mockMedicine(defaultDosis: 42)],
       );
       final fromJson = Settings.fromJson(initial.toJson());
 
