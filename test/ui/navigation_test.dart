@@ -25,7 +25,7 @@ void main() {
       await widgetTester.tap(find.byIcon(Icons.add));
       await widgetTester.pumpAndSettle();
 
-      expect(find.byType(AddMeasurementDialoge), findsOneWidget);
+      expect(find.byType(AddEntryDialoge), findsOneWidget);
     });
     testWidgets('should navigate to settings page', (widgetTester) async {
       await pumpAppRoot(widgetTester);

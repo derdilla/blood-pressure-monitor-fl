@@ -496,5 +496,9 @@
   "name": "Name",
   "@name": {},
   "defaultDosis": "default dosis",
-  "@defaultDosis": {}
+  "@defaultDosis": {},
+  "noMedication": "No medication",
+  "@noMedication": {},
+  "dosis": "Dosis",
+  "@dosis": {}
 }

@@ -28,14 +28,18 @@ class AppHome extends StatelessWidget {
     if (_appStart) {
       if (Provider.of<Settings>(context, listen: false).startWithAddMeasurementPage) {
         SchedulerBinding.instance.addPostFrameCallback((_) async {
-          final future = showAddMeasurementDialoge(context, Provider.of<Settings>(context, listen: false));
           final model = Provider.of<BloodPressureModel>(context, listen: false);
-          final measurement = await future;
+          final measurement = await showAddEntryDialoge(context, Provider.of<Settings>(context, listen: false));
           if (measurement == null) return;
-          if (context.mounted) {
-            model.addAndExport(context, measurement);
-          } else {
-            model.add(measurement);
+          if (measurement.$1 != null) {
+            if (context.mounted) {
+              model.addAndExport(context, measurement.$1!);
+            } else {
+              model.add(measurement.$1!);
+            }
+          }
+          if (measurement.$2 != null) {
+            // TODO: save medicine intake
           }
         });
       }
@@ -94,14 +98,18 @@ class AppHome extends StatelessWidget {
                       tooltip: localizations.addMeasurement,
                       autofocus: true,
                       onPressed: () async {
-                        final future = showAddMeasurementDialoge(context, settings);
                         final model = Provider.of<BloodPressureModel>(context, listen: false);
-                        final measurement = await future;
+                        final measurement = await showAddEntryDialoge(context, Provider.of<Settings>(context, listen: false));
                         if (measurement == null) return;
-                        if (context.mounted) {
-                          model.addAndExport(context, measurement);
-                        } else {
-                          model.add(measurement);
+                        if (measurement.$1 != null) {
+                          if (context.mounted) {
+                            model.addAndExport(context, measurement.$1!);
+                          } else {
+                            model.add(measurement.$1!);
+                          }
+                        }
+                        if (measurement.$2 != null) {
+                          // TODO: save medicine intake
                         }
                       },
                       child: const Icon(Icons.add,),

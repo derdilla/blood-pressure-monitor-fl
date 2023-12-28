@@ -83,14 +83,18 @@ class LegacyMeasurementsList extends StatelessWidget {
                             confirmDismiss: (direction) async {
                               final model = Provider.of<BloodPressureModel>(context, listen: false);
                               if (direction == DismissDirection.startToEnd) { // edit
-                                final future = showAddMeasurementDialoge(context, settings, data[index]);
                                 final model = Provider.of<BloodPressureModel>(context, listen: false);
-                                final measurement = await future;
-                                if (measurement == null) return false;
-                                if (context.mounted) {
-                                  model.addAndExport(context, measurement);
-                                } else {
-                                  model.add(measurement);
+                                final entry = await showAddEntryDialoge(context,
+                                    Provider.of<Settings>(context, listen: false));
+                                if (entry?.$1 != null) {
+                                  if (context.mounted) {
+                                    model.addAndExport(context, entry!.$1!);
+                                  } else {
+                                    model.add(entry!.$1!);
+                                  }
+                                }
+                                if (entry?.$2 != null) {
+                                  // TODO: save medicine intake
                                 }
                                 return false;
                               } else { // delete
