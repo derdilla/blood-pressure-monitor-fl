@@ -1,3 +1,4 @@
+import 'package:blood_pressure_app/model/blood_pressure/medicine/medicine.dart';
 import 'package:blood_pressure_app/model/blood_pressure/medicine/medicine_intake.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
@@ -5,10 +6,29 @@ import 'package:flutter/material.dart';
 /// Model of all medicine intakes that allows fast access of data.
 ///
 /// Internally maintains a sorted list of intakes to allow for binary search.
-class IntakeHistory {
+///
+/// Intake history does not implement database support, as operations performed
+/// are
+class IntakeHistory extends ChangeNotifier {
   /// Create a intake history from an unsorted list of intakes.
   IntakeHistory(List<MedicineIntake> medicineIntakes):
     _medicineIntakes = medicineIntakes.sorted((p0, p1) => p0.compareTo(p1));
+
+  /// Creates a intake history from a sorted list of intakes.
+  IntakeHistory._sorted(this._medicineIntakes);
+
+  /// Restores a intake history from a [serialize] generated string.
+  factory IntakeHistory.deserialize(String serialized, List<Medicine> availableMedicines) =>
+    IntakeHistory._sorted(
+      serialized
+        .split('\n')
+        .map((e) => MedicineIntake.deserialize(e, availableMedicines))
+        .toList()
+    );
+
+  /// Serializes the current state of the object into a string.
+  String serialize() => _medicineIntakes.map((e) => e.serialize()).join('\n');
+  // TODO test serialization
 
   /// List of all medicine intakes sorted in ascending order.
   ///
@@ -30,6 +50,36 @@ class IntakeHistory {
     if (end < 0) end = _medicineIntakes.length;
 
     return UnmodifiableListView(_medicineIntakes.getRange(start, end));
+  }
+
+  /// Save a medicine intake.
+  ///
+  /// Inserts the intake at the upper bound of intakes that are bigger or equal.
+  /// When no smaller bigger intake is available insert to the end of the list.
+  ///
+  /// Uses binary search to determine the bound.
+  void addIntake(MedicineIntake intake) {
+    int index = _findUpperBound(_medicineIntakes, intake.timestamp);
+
+    if (index == -1) {
+      _medicineIntakes.add(intake);
+    } else {
+      _medicineIntakes.insert(index, intake);
+    }
+    notifyListeners();
+  }
+
+  /// Attempts to delete a medicine intake.
+  ///
+  /// When finding multiple intakes with the same timestamp, medicine
+  /// and dosis all instances will get deleted.
+  void deleteIntake(MedicineIntake intake) {
+    int idx = binarySearch(_medicineIntakes, intake);
+    while (idx >= 0) {
+      _medicineIntakes.removeAt(idx);
+      idx = binarySearch(_medicineIntakes, intake);
+    }
+    notifyListeners();
   }
 
   /// Use binary search to determine the first index in [list] before which all
@@ -74,33 +124,5 @@ class IntakeHistory {
     }
 
     return idx + 1;
-  }
-
-  /// Save a medicine intake.
-  ///
-  /// Inserts the intake at the upper bound of intakes that are bigger or equal.
-  /// When no smaller bigger intake is available insert to the end of the list.
-  ///
-  /// Uses binary search to determine the bound.
-  void addIntake(MedicineIntake intake) {
-    int index = _findUpperBound(_medicineIntakes, intake.timestamp);
-
-    if (index == -1) {
-      _medicineIntakes.add(intake);
-    } else {
-      _medicineIntakes.insert(index, intake);
-    }
-  }
-
-  /// Attempts to delete a medicine intake.
-  ///
-  /// When finding multiple intakes with the same timestamp, medicine
-  /// and dosis all instances will get deleted.
-  void deleteIntake(MedicineIntake intake) {
-    int idx = binarySearch(_medicineIntakes, intake);
-    while (idx >= 0) {
-      _medicineIntakes.removeAt(idx);
-      idx = binarySearch(_medicineIntakes, intake);
-    }
   }
 }
