@@ -13,7 +13,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
 
 /// Input mask for entering measurements.
-class AddEntryDialoge extends StatefulWidget {
+class AddEntryDialoge extends StatefulWidget { // TODO block medicine intake on edit
   /// Create a input mask for entering measurements.
   /// 
   /// This is usually created through the [showAddEntryDialoge] function.
@@ -300,7 +300,7 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
                     Expanded(
                       child: ListTile(
                         shape: buildListTileBorder(),
-                        title: DropdownButton( // TODO medicine intake
+                        title: DropdownButton(
                           isExpanded: true,
                           value: widget.settings.medications
                               .where((e) => e.id == medicineId).firstOrNull,
@@ -328,7 +328,6 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
                               }
                               Material.of(context).markNeedsPaint();
                             });
-                            // TODO
                           }
                         ),
                       ),

@@ -1,4 +1,5 @@
 import 'package:blood_pressure_app/components/dialoges/add_measurement_dialoge.dart';
+import 'package:blood_pressure_app/model/blood_pressure/medicine/intake_history.dart';
 import 'package:blood_pressure_app/model/blood_pressure/model.dart';
 import 'package:blood_pressure_app/model/storage/intervall_store.dart';
 import 'package:blood_pressure_app/model/storage/settings_store.dart';
@@ -29,6 +30,7 @@ class AppHome extends StatelessWidget {
       if (Provider.of<Settings>(context, listen: false).startWithAddMeasurementPage) {
         SchedulerBinding.instance.addPostFrameCallback((_) async {
           final model = Provider.of<BloodPressureModel>(context, listen: false);
+          final intakes = Provider.of<IntakeHistory>(context, listen: false);
           final measurement = await showAddEntryDialoge(context, Provider.of<Settings>(context, listen: false));
           if (measurement == null) return;
           if (measurement.$1 != null) {
@@ -39,7 +41,7 @@ class AppHome extends StatelessWidget {
             }
           }
           if (measurement.$2 != null) {
-            // TODO: save medicine intake
+            intakes.addIntake(measurement.$2!);
           }
         });
       }
@@ -99,6 +101,7 @@ class AppHome extends StatelessWidget {
                       autofocus: true,
                       onPressed: () async {
                         final model = Provider.of<BloodPressureModel>(context, listen: false);
+                        final intakes = Provider.of<IntakeHistory>(context, listen: false);
                         final measurement = await showAddEntryDialoge(context, Provider.of<Settings>(context, listen: false));
                         if (measurement == null) return;
                         if (measurement.$1 != null) {
@@ -109,7 +112,7 @@ class AppHome extends StatelessWidget {
                           }
                         }
                         if (measurement.$2 != null) {
-                          // TODO: save medicine intake
+                          intakes.addIntake(measurement.$2!);
                         }
                       },
                       child: const Icon(Icons.add,),
