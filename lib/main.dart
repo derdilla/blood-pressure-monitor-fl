@@ -56,7 +56,7 @@ Future<Widget> _loadApp() async {
       intakeHistory = IntakeHistory([]);
     }
   } catch (e) {
-    assert(false, e.toString());
+    assert(e is PathNotFoundException, e.toString());
     intakeHistory = IntakeHistory([]);
   }
   intakeHistory.addListener(() async {

@@ -8,6 +8,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
+/// Blood pressure measurement to display in a list.
 class MeasurementListRow extends StatelessWidget {
   const MeasurementListRow({super.key, required this.record, required this.settings});
 

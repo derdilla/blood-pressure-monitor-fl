@@ -59,9 +59,10 @@ class AppHome extends StatelessWidget {
         return Center(
           child: Padding(
             padding: const EdgeInsets.only(top: 20),
-            child: Consumer<Settings>(
-              builder: (context, settings, child) {
-                return Column(children: [
+            child: Consumer<IntakeHistory>(builder: (context, intakeHistory, child) =>
+              Consumer<IntervallStoreManager>(builder: (context, intervalls, child) =>
+              Consumer<Settings>(builder: (context, settings, child) =>
+                Column(children: [
                   const MeasurementGraph(),
                   Expanded(
                     child: (settings.useLegacyList) ?
@@ -71,11 +72,12 @@ class AppHome extends StatelessWidget {
                         onData: (context, records) => MeasurementList(
                           settings: settings,
                           records: records,
+                          intakes: intakeHistory.getIntakes(intervalls.mainPage.currentRange),
                         )
                       )
                   )
-                ]);
-              }
+                ])
+              ))
             ),
           ),
         );

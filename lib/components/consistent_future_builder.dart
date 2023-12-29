@@ -50,7 +50,7 @@ class _ConsistentFutureBuilderState<T> extends State<ConsistentFutureBuilder<T>>
       future: _future ?? widget.future,
       builder: (BuildContext context, AsyncSnapshot<T> snapshot) {
         if (snapshot.hasError) {
-          return Text(AppLocalizations.of(context)!.error(snapshot.error.toString()));
+          return Text(AppLocalizations.of(context)?.error(snapshot.error.toString()) ?? snapshot.error.toString());
         }
         switch (snapshot.connectionState) {
           case ConnectionState.none:
