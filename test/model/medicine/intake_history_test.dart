@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'medicine_intake_test.dart';
+import 'medicine_test.dart';
 
 void main() {
   group('IntakeHistory', () { 
@@ -148,6 +149,24 @@ void main() {
           end: DateTime.fromMillisecondsSinceEpoch(20)
       ));
       expect(found.length, 0);
+    });
+    test('should serialize and deserialize', () {
+      final meds = [mockMedicine(defaultDosis: 1), mockMedicine(defaultDosis: 2),mockMedicine(defaultDosis: 3), mockMedicine(defaultDosis: 4)];
+      final history = IntakeHistory([
+        mockIntake(dosis: 123, timeMs: 1235, medicine: meds[0]),
+        mockIntake(dosis: 123, timeMs: 1235, medicine: meds[0]),
+        mockIntake(dosis: 123, timeMs: 1235, medicine: meds[1]),
+        mockIntake(dosis: 123, timeMs: 1235, medicine: meds[2]),
+        mockIntake(dosis: 123, timeMs: 132, medicine: meds[3]),
+        mockIntake(dosis: 1232, timeMs: 132, medicine: meds[3]),
+        mockIntake(dosis: 1232, timeMs: 132, medicine: meds[3]),
+        mockIntake(dosis: 1232, timeMs: 132, medicine: meds[3]),
+        mockIntake(dosis: 123, timeMs: 1235, medicine: meds[3]),
+      ]);
+      final deserializedHistory = IntakeHistory.deserialize(history.serialize(), meds);
+
+      expect(deserializedHistory.serialize(), history.serialize());
+      expect(deserializedHistory, history);
     });
   });
 }

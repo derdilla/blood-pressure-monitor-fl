@@ -28,8 +28,6 @@ class IntakeHistory extends ChangeNotifier {
 
   /// Serializes the current state of the object into a string.
   String serialize() => _medicineIntakes.map((e) => e.serialize()).join('\n');
-  // TODO test serialization
-
   /// List of all medicine intakes sorted in ascending order.
   ///
   /// Can contain multiple medicine intakes at the same time.
@@ -125,4 +123,18 @@ class IntakeHistory extends ChangeNotifier {
 
     return idx + 1;
   }
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is IntakeHistory && runtimeType == other.runtimeType &&
+        (){
+          for (final e in _medicineIntakes) {
+            if (!other._medicineIntakes.contains(e)) return false;
+          }
+          return true;
+        }();
+
+  @override
+  int get hashCode => _medicineIntakes.hashCode;
 }
