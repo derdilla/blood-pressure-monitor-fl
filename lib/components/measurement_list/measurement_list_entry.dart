@@ -1,5 +1,4 @@
 import 'package:blood_pressure_app/components/dialoges/add_measurement_dialoge.dart';
-import 'package:blood_pressure_app/model/blood_pressure/medicine/intake_history.dart';
 import 'package:blood_pressure_app/model/blood_pressure/model.dart';
 import 'package:blood_pressure_app/model/blood_pressure/record.dart';
 import 'package:blood_pressure_app/model/storage/storage.dart';
@@ -35,7 +34,6 @@ class MeasurementListRow extends StatelessWidget {
               IconButton(
                 onPressed: () async {
                   final model = Provider.of<BloodPressureModel>(context, listen: false);
-                  final intakes = Provider.of<IntakeHistory>(context, listen: false);
                   final entry = await showAddEntryDialoge(context,
                       Provider.of<Settings>(context, listen: false));
                   if (entry?.$1 != null) {
@@ -45,9 +43,7 @@ class MeasurementListRow extends StatelessWidget {
                       model.add(entry!.$1!);
                     }
                   }
-                  if (entry?.$2 != null) {
-                    intakes.addIntake(entry!.$2!);
-                  }
+                  assert(entry?.$2 == null);
                 },
                 icon: const Icon(Icons.edit),
                 tooltip: localizations.edit,

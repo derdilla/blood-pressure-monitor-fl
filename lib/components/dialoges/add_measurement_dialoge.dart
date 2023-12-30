@@ -13,7 +13,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
 
 /// Input mask for entering measurements.
-class AddEntryDialoge extends StatefulWidget { // TODO block medicine intake on edit
+class AddEntryDialoge extends StatefulWidget {
   /// Create a input mask for entering measurements.
   /// 
   /// This is usually created through the [showAddEntryDialoge] function.
@@ -27,7 +27,10 @@ class AddEntryDialoge extends StatefulWidget { // TODO block medicine intake on 
 
   /// Values that are prefilled.
   ///
-  /// When this is null the timestamp is [DateTime.now] and the other fields will be empty.
+  /// When this is null the timestamp is [DateTime.now] and the other fields
+  /// will be empty.
+  /// When an initial record is set medicine input is not possible because it is
+  /// saved separately.
   final BloodPressureRecord? initialRecord;
 
   @override
@@ -292,7 +295,7 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
               initialColor: needlePin?.color ?? Colors.transparent,
               shape: buildListTileBorder(needlePin?.color)
             ),
-            if (widget.settings.medications.isNotEmpty)
+            if (widget.settings.medications.isNotEmpty && widget.initialRecord == null)
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 16),
                 child: Row(

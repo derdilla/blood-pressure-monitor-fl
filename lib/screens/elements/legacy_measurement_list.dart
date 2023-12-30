@@ -1,7 +1,6 @@
 import 'dart:collection';
 
 import 'package:blood_pressure_app/components/dialoges/add_measurement_dialoge.dart';
-import 'package:blood_pressure_app/model/blood_pressure/medicine/intake_history.dart';
 import 'package:blood_pressure_app/model/blood_pressure/model.dart';
 import 'package:blood_pressure_app/model/blood_pressure/record.dart';
 import 'package:blood_pressure_app/model/storage/intervall_store.dart';
@@ -83,7 +82,6 @@ class LegacyMeasurementsList extends StatelessWidget {
                             key: Key(data[index].creationTime.toIso8601String()),
                             confirmDismiss: (direction) async {
                               final model = Provider.of<BloodPressureModel>(context, listen: false);
-                              final intakes = Provider.of<IntakeHistory>(context, listen: false);
                               if (direction == DismissDirection.startToEnd) { // edit
                                 final model = Provider.of<BloodPressureModel>(context, listen: false);
                                 final entry = await showAddEntryDialoge(context,
@@ -95,9 +93,7 @@ class LegacyMeasurementsList extends StatelessWidget {
                                     model.add(entry!.$1!);
                                   }
                                 }
-                                if (entry?.$2 != null) {
-                                  intakes.addIntake(entry!.$2!);
-                                }
+                                assert(entry?.$2 == null);
                                 return false;
                               } else { // delete
                                 bool dialogeDeletionConfirmed = false;
