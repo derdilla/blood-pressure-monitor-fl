@@ -1,5 +1,7 @@
 import 'dart:math';
 
+import 'package:blood_pressure_app/model/blood_pressure/medicine/intake_history.dart';
+import 'package:blood_pressure_app/model/blood_pressure/medicine/medicine_intake.dart';
 import 'package:blood_pressure_app/model/blood_pressure/record.dart';
 import 'package:blood_pressure_app/model/horizontal_graph_line.dart';
 import 'package:blood_pressure_app/model/storage/intervall_store.dart';
@@ -27,7 +29,8 @@ class _LineChartState extends State<_LineChart> {
   Widget build(BuildContext context) {
     return SizedBox(
         height: widget.height,
-        child: Consumer<Settings>(
+        child: Consumer<IntakeHistory>(
+          builder: (context, intakeHistory, child) => Consumer<Settings>(
           builder: (context, settings, child) {
             return BloodPressureBuilder(
               rangeType: IntervallStoreManagerLocation.mainPage,
@@ -65,9 +68,8 @@ class _LineChartState extends State<_LineChart> {
                   return Text(AppLocalizations.of(context)!.errNotEnoughDataToGraph);
                 }
 
-
                 return TweenAnimationBuilder<double>(
-                  duration: const Duration(milliseconds: 200), // interacts with LineChart duration property
+                  duration: Duration(milliseconds: settings.animationSpeed), // interacts with LineChart duration property
                   tween: Tween<double>(begin: 0, end: settings.graphLineThickness),
                   builder: (context, animatedThickness, child) {
                     return LineChart(
@@ -82,7 +84,14 @@ class _LineChartState extends State<_LineChart> {
                               touchTooltipData: LineTouchTooltipData(tooltipMargin: -200, tooltipRoundedRadius: 20)
                           ),
                           lineBarsData: buildBars(animatedThickness, settings, sysSpots, diaSpots, pulSpots,
-                              maxValue, minValue, graphBegin, graphEnd, records)
+                              maxValue, minValue, graphBegin, graphEnd, records,
+                              intakeHistory.getIntakes(
+                                  DateTimeRange(
+                                      start: DateTime.fromMillisecondsSinceEpoch(graphBegin!.toInt()),
+                                      end: DateTime.fromMillisecondsSinceEpoch(graphEnd!.toInt())
+                                  )
+                              )
+                          )
                       ),
                     );
                   },
@@ -90,11 +99,26 @@ class _LineChartState extends State<_LineChart> {
               },
             );
           },
-        )
+        ),
+      )
     );
   }
 
-  List<LineChartBarData> buildBars(double animatedThickness, Settings settings, List<FlSpot> sysSpots, List<FlSpot> diaSpots, List<FlSpot> pulSpots, int maxValue, int minValue, double? graphBegin, double? graphEnd, Iterable<BloodPressureRecord> allRecords) {
+  List<LineChartBarData> buildBars(
+      double animatedThickness, 
+      Settings settings, 
+      List<FlSpot> sysSpots, 
+      List<FlSpot> diaSpots,
+      List<FlSpot> pulSpots,
+      int maxValue,
+      int minValue,
+      /// Horizontally earliest value (same as first timestamp).
+      double? graphBegin,
+      /// Horizontally furthest value (same as last timestamp).
+      double? graphEnd, 
+      Iterable<BloodPressureRecord> allRecords,
+      Iterable<MedicineIntake> allIntakes,
+      ) {
     var bars = [
       _buildBarData(animatedThickness, sysSpots, settings.sysColor, true, settings.sysWarn.toDouble()),
       _buildBarData(animatedThickness, diaSpots, settings.diaColor, true, settings.diaWarn.toDouble()),
@@ -111,6 +135,18 @@ class _LineChartState extends State<_LineChart> {
       ]);
     }
     bars.addAll(_buildNeedlePins(allRecords, minValue, maxValue, settings));
+    for (final intake in allIntakes) {
+      bars.add(LineChartBarData(
+        spots: [
+          FlSpot(intake.timestamp.millisecondsSinceEpoch.toDouble(), minValue.toDouble()),
+          FlSpot(intake.timestamp.millisecondsSinceEpoch.toDouble(), maxValue + 5)
+        ],
+        barWidth: settings.needlePinBarWidth,
+        dotData: const FlDotData(show: false),
+        dashArray: [8,7],
+        color: intake.medicine.color,
+      ));
+    }
     return bars;
   }
 

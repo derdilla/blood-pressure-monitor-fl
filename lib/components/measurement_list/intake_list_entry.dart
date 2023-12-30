@@ -47,7 +47,7 @@ class IntakeListEntry extends StatelessWidget {
               if (confirmedDeletion) delete!();
             },
             icon: const Icon(Icons.delete)
-          ), // TODO: show in graph
+          ),
       ],
     ),
     leading: const Icon(Icons.medication),
