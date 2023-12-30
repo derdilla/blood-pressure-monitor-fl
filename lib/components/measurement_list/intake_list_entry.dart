@@ -9,14 +9,17 @@ import 'measurement_list_entry.dart';
 
 /// Medicine intake to display in a list.
 class IntakeListEntry extends StatelessWidget {
+  /// Display a medicine intake on a list tile.
   const IntakeListEntry({super.key,
     required this.settings,
     required this.intake,
     this.delete,
   });
 
+  /// Settings to customize basic behavior.
   final Settings settings;
 
+  /// Intake that provides the data to display.
   final MedicineIntake intake;
 
   /// Function to delete this intake.
