@@ -1,10 +1,12 @@
 import 'package:blood_pressure_app/components/measurement_list/intake_list_entry.dart';
 import 'package:blood_pressure_app/components/measurement_list/measurement_list_entry.dart';
+import 'package:blood_pressure_app/model/blood_pressure/medicine/intake_history.dart';
 import 'package:blood_pressure_app/model/blood_pressure/medicine/medicine_intake.dart';
 import 'package:blood_pressure_app/model/blood_pressure/record.dart';
 import 'package:blood_pressure_app/model/storage/settings_store.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:provider/provider.dart';
 
 class MeasurementList extends StatelessWidget {
   const MeasurementList({super.key,
@@ -94,6 +96,11 @@ class MeasurementList extends StatelessWidget {
                 return IntakeListEntry(
                   intake: entries[idx],
                   settings: settings,
+                  delete: () {
+                    // TODO: move out of model
+                    final history = Provider.of<IntakeHistory>(context, listen: false);
+                    history.deleteIntake(entries[idx]);
+                  },
                 );
               }
 

@@ -88,27 +88,12 @@ class MeasurementListRow extends StatelessWidget {
   void _deleteEntry(Settings settings, BuildContext context, AppLocalizations localizations) async {
     final model = Provider.of<BloodPressureModel>(context, listen: false);
     final messanger = ScaffoldMessenger.of(context);
-    bool confirmedDeletion = false;
+    bool confirmedDeletion = true;
     if (settings.confirmDeletion) {
-      confirmedDeletion = await showDialog<bool>(context: context,
-          builder: (context) => AlertDialog(
-            title: Text(AppLocalizations.of(context)!.confirmDelete),
-            content: Text(AppLocalizations.of(context)!.confirmDeleteDesc),
-            actions: [
-              ElevatedButton(
-                  onPressed: () => Navigator.of(context).pop(false),
-                  child: Text(AppLocalizations.of(context)!.btnCancel)),
-              ElevatedButton(
-                  onPressed: () => Navigator.of(context).pop(true),
-                  child: Text(AppLocalizations.of(context)!.btnConfirm)),
-            ],
-          )
-      ) ?? false;
-    } else {
-      confirmedDeletion = true;
+      confirmedDeletion = await showConfirmDeletionDialoge(context);
     }
 
-    if (confirmedDeletion) {
+    if (confirmedDeletion) { // TODO: move out of model
       model.delete(record.creationTime);
       messanger.removeCurrentSnackBar();
       messanger.showSnackBar(SnackBar(
@@ -121,4 +106,23 @@ class MeasurementListRow extends StatelessWidget {
       ));
     }
   }
+}
+
+Future<bool> showConfirmDeletionDialoge(BuildContext context) async {
+  return await showDialog<bool>(context: context,
+    builder: (context) => AlertDialog(
+      title: Text(AppLocalizations.of(context)!.confirmDelete),
+      content: Text(AppLocalizations.of(context)!.confirmDeleteDesc),
+      actions: [
+        ElevatedButton(
+          onPressed: () => Navigator.of(context).pop(false),
+          child: Text(AppLocalizations.of(context)!.btnCancel)
+        ),
+        ElevatedButton(
+          onPressed: () => Navigator.of(context).pop(true),
+          child: Text(AppLocalizations.of(context)!.btnConfirm)
+        ),
+      ],
+    )
+  ) ?? false;
 }
