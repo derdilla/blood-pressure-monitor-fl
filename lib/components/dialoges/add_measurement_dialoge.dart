@@ -74,6 +74,9 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
   /// Entered dosis of medication.
   double? medicineDosis;
 
+  /// Newlines in the note field.
+  int _noteCurrentNewLineCount = 0;
+
   @override
   void initState() {
     super.initState();
@@ -236,134 +239,142 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
       },
       actionButtonText: localizations.btnSave,
       bottomAppBar: widget.settings.bottomAppBars,
-      body: Form(
-        key: formKey,
-        child: ListView(
-          padding: const EdgeInsets.symmetric(horizontal: 8),
-          children: [
-            if (widget.settings.allowManualTimeInput)
-              buildTimeInput(localizations),
-            const SizedBox(height: 16,),
-            Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                buildValueInput(localizations,
-                  focusNode: sysFocusNode,
-                  hintText: localizations.sysLong,
-                  controller: sysController,
-                  onSaved: (value) => setState(() => systolic = int.tryParse(value ?? '')),
-                ),
-                const SizedBox(width: 16,),
-                buildValueInput(localizations,
-                  hintText: localizations.diaLong,
-                  initialValue: widget.initialRecord?.diastolic,
-                  onSaved: (value) => setState(() => diastolic = int.tryParse(value ?? '')),
-                  focusNode: diaFocusNode,
-                  validator: (value) {
-                    if (widget.settings.validateInputs && (int.tryParse(value ?? '') ?? 0) >= (int.tryParse(sysController.text) ?? 1)) {
-                      return AppLocalizations.of(context)?.errDiaGtSys;
+      body: SizeChangedLayoutNotifier(
+        child: Form(
+          key: formKey,
+          child: ListView(
+            padding: const EdgeInsets.symmetric(horizontal: 8),
+            children: [
+              if (widget.settings.allowManualTimeInput)
+                buildTimeInput(localizations),
+              const SizedBox(height: 16,),
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  buildValueInput(localizations,
+                    focusNode: sysFocusNode,
+                    hintText: localizations.sysLong,
+                    controller: sysController,
+                    onSaved: (value) => setState(() => systolic = int.tryParse(value ?? '')),
+                  ),
+                  const SizedBox(width: 16,),
+                  buildValueInput(localizations,
+                    hintText: localizations.diaLong,
+                    initialValue: widget.initialRecord?.diastolic,
+                    onSaved: (value) => setState(() => diastolic = int.tryParse(value ?? '')),
+                    focusNode: diaFocusNode,
+                    validator: (value) {
+                      if (widget.settings.validateInputs && (int.tryParse(value ?? '') ?? 0) >= (int.tryParse(sysController.text) ?? 1)) {
+                        return AppLocalizations.of(context)?.errDiaGtSys;
+                      }
+                      return null;
                     }
-                    return null;
-                  }
-                ),
-                const SizedBox(width: 16,),
-                buildValueInput(localizations,
-                  hintText: localizations.pulLong,
-                  initialValue: widget.initialRecord?.pulse,
-                  focusNode: pulFocusNode,
-                  onSaved: (value) => setState(() => pulse = int.tryParse(value ?? '')),
-                ),
-              ],
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 16),
-              child: TextFormField(
-                initialValue: widget.initialRecord?.notes,
-                focusNode: noteFocusNode,
-                decoration: getInputDecoration(localizations.addNote),
-                minLines: 1,
-                //maxLines: 4, There is a bug in the flutter framework: https://github.com/flutter/flutter/issues/138219
-                // TODO Material.of(context).markNeedsPaint()
-                onSaved: (value) => setState(() => notes = value),
+                  ),
+                  const SizedBox(width: 16,),
+                  buildValueInput(localizations,
+                    hintText: localizations.pulLong,
+                    initialValue: widget.initialRecord?.pulse,
+                    focusNode: pulFocusNode,
+                    onSaved: (value) => setState(() => pulse = int.tryParse(value ?? '')),
+                  ),
+                ],
               ),
-            ),
-            ColorSelectionListTile(
-              title: Text(localizations.color),
-              onMainColorChanged: (Color value) {
-                setState(() {
-                  needlePin = (value == Colors.transparent) ? null : MeasurementNeedlePin(value);
-                });
-              },
-              initialColor: needlePin?.color ?? Colors.transparent,
-              shape: buildShapeBorder(needlePin?.color)
-            ),
-            if (widget.settings.medications.isNotEmpty && widget.initialRecord == null)
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 16),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: DropdownButtonFormField(
-                        isExpanded: true,
-                        value: widget.settings.medications
-                            .where((e) => e.id == medicineId).firstOrNull,
-                        decoration: getInputDecoration(null),
-                        items: [
-                          for (final e in widget.settings.medications)
-                            DropdownMenuItem(
-                              value: e,
-                              child: Text(e.designation),
-                            ),
-                          DropdownMenuItem(
-                            value: null,
-                            child: Text(localizations.noMedication),
-                          )
-                        ],
-                        onChanged: (v) {
-                          setState(() {
-                            if (v != null) {
-                              _showMedicineDosisInput = true;
-                              medicineId = v.id;
-                              medicineDosis = v.defaultDosis;
-                            } else {
-                              _showMedicineDosisInput = false;
-                              medicineId = null;
-                            }
-                            Material.of(context).markNeedsPaint();
-                          });
-                        }
-                      ),
-                    ),
-                    if (_showMedicineDosisInput)
-                      const SizedBox(width: 16,),
-                    if (_showMedicineDosisInput)
-                      Expanded(
-                        child: TextFormField(
-                          initialValue: medicineDosis?.toString(),
-                          decoration: getInputDecoration(localizations.dosis),
-                          keyboardType: TextInputType.number,
-                          onSaved: (value) => setState(() {
-                            final dosis = int.tryParse(value ?? '')?.toDouble()
-                                ?? double.tryParse(value ?? '');
-                            if(dosis != null && dosis > 0) medicineDosis = dosis;
-                          }),
-                          inputFormatters: [FilteringTextInputFormatter.allow(
-                              RegExp(r'([0-9]+(\.([0-9]*))?)'))],
-                          validator: (String? value) {
-                            if (!_showMedicineDosisInput) return null;
-                            if (((int.tryParse(value ?? '')?.toDouble()
-                                ?? double.tryParse(value ?? '')) ?? 0) <= 0) {
-                              return localizations.errNaN;
-                            }
-                            return null;
-                          },
-                        ),
-                      ),
+                child: TextFormField(
+                  initialValue: widget.initialRecord?.notes,
+                  focusNode: noteFocusNode,
+                  decoration: getInputDecoration(localizations.addNote),
+                  minLines: 1,
+                  maxLines: 4,
+                  onChanged: (value) {
+                    final newLineCount = value.split('\n').length;
+                    if (_noteCurrentNewLineCount != newLineCount) {
+                      _noteCurrentNewLineCount = newLineCount;
+                      Material.of(context).markNeedsPaint();
+                    }
 
-                  ],
+                  },
+                  onSaved: (value) => setState(() => notes = value),
                 ),
               ),
-          ],
+              ColorSelectionListTile(
+                title: Text(localizations.color),
+                onMainColorChanged: (Color value) {
+                  setState(() {
+                    needlePin = (value == Colors.transparent) ? null : MeasurementNeedlePin(value);
+                  });
+                },
+                initialColor: needlePin?.color ?? Colors.transparent,
+                shape: buildShapeBorder(needlePin?.color)
+              ),
+              if (widget.settings.medications.isNotEmpty && widget.initialRecord == null)
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 16),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: DropdownButtonFormField(
+                          isExpanded: true,
+                          value: widget.settings.medications
+                              .where((e) => e.id == medicineId).firstOrNull,
+                          decoration: getInputDecoration(null),
+                          items: [
+                            for (final e in widget.settings.medications)
+                              DropdownMenuItem(
+                                value: e,
+                                child: Text(e.designation),
+                              ),
+                            DropdownMenuItem(
+                              value: null,
+                              child: Text(localizations.noMedication),
+                            )
+                          ],
+                          onChanged: (v) {
+                            setState(() {
+                              if (v != null) {
+                                _showMedicineDosisInput = true;
+                                medicineId = v.id;
+                                medicineDosis = v.defaultDosis;
+                              } else {
+                                _showMedicineDosisInput = false;
+                                medicineId = null;
+                              }
+                            });
+                          }
+                        ),
+                      ),
+                      if (_showMedicineDosisInput)
+                        const SizedBox(width: 16,),
+                      if (_showMedicineDosisInput)
+                        Expanded(
+                          child: TextFormField(
+                            initialValue: medicineDosis?.toString(),
+                            decoration: getInputDecoration(localizations.dosis),
+                            keyboardType: TextInputType.number,
+                            onSaved: (value) => setState(() {
+                              final dosis = int.tryParse(value ?? '')?.toDouble()
+                                  ?? double.tryParse(value ?? '');
+                              if(dosis != null && dosis > 0) medicineDosis = dosis;
+                            }),
+                            inputFormatters: [FilteringTextInputFormatter.allow(
+                                RegExp(r'([0-9]+(\.([0-9]*))?)'))],
+                            validator: (String? value) {
+                              if (!_showMedicineDosisInput) return null;
+                              if (((int.tryParse(value ?? '')?.toDouble()
+                                  ?? double.tryParse(value ?? '')) ?? 0) <= 0) {
+                                return localizations.errNaN;
+                              }
+                              return null;
+                            },
+                          ),
+                        ),
+        
+                    ],
+                  ),
+                ),
+            ],
+          ),
         ),
       ),
     );
