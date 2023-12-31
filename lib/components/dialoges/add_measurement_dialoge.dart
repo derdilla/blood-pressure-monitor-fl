@@ -29,6 +29,7 @@ class AddEntryDialoge extends StatefulWidget {
   ///
   /// When this is null the timestamp is [DateTime.now] and the other fields
   /// will be empty.
+  ///
   /// When an initial record is set medicine input is not possible because it is
   /// saved separately.
   final BloodPressureRecord? initialRecord;
@@ -64,7 +65,7 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
   /// Last [FormState.save]d note.
   String? notes;
   
-  /// Index of the medicine intake that can me entered here.
+  /// Index of the selected medicine in `widget.settings.medications`.
   int? medicineId;
 
   /// Whether to show the medication dosis input
@@ -112,7 +113,7 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
     ListTile(
       title: Text(DateFormat(widget.settings.dateFormatString).format(time)),
       trailing: const Icon(Icons.edit),
-      shape: buildListTileBorder(),
+      shape: buildShapeBorder(),
       onTap: () async {
         final messenger = ScaffoldMessenger.of(context);
         var selectedTime = await showDateTimePicker(
@@ -200,7 +201,8 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
     );
   }
 
-  RoundedRectangleBorder buildListTileBorder([Color? color]) => RoundedRectangleBorder(
+  /// Build the border all fields have.
+  RoundedRectangleBorder buildShapeBorder([Color? color]) => RoundedRectangleBorder(
     side: BorderSide(
       width: 2,
       color: color ?? Theme.of(context).primaryColor
@@ -224,8 +226,8 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
             );
           }
           BloodPressureRecord? record;
-          if (systolic != null && diastolic != null && pulse != null
-              && notes != null && needlePin != null) {
+          if (systolic != null || diastolic != null || pulse != null
+              || notes != null || needlePin != null) {
             record = BloodPressureRecord(time, systolic, diastolic, pulse, notes ?? '', needlePin: needlePin);
           }
 
@@ -293,7 +295,7 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
                 });
               },
               initialColor: needlePin?.color ?? Colors.transparent,
-              shape: buildListTileBorder(needlePin?.color)
+              shape: buildShapeBorder(needlePin?.color)
             ),
             if (widget.settings.medications.isNotEmpty && widget.initialRecord == null)
               Padding(
@@ -301,41 +303,35 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
                 child: Row(
                   children: [
                     Expanded(
-                      child: Ink(
-                        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4),
-                        decoration: ShapeDecoration(
-                          shape: buildListTileBorder()
-                        ),
-                        child: DropdownButton(
-                          isExpanded: true,
-                          value: widget.settings.medications
-                              .where((e) => e.id == medicineId).firstOrNull,
-                          underline: const SizedBox.shrink(),
-                          items: [
-                            for (final e in widget.settings.medications)
-                              DropdownMenuItem(
-                                value: e,
-                                child: Text(e.designation),
-                              ),
+                      child: DropdownButtonFormField(
+                        isExpanded: true,
+                        value: widget.settings.medications
+                            .where((e) => e.id == medicineId).firstOrNull,
+                        decoration: getInputDecoration(null),
+                        items: [
+                          for (final e in widget.settings.medications)
                             DropdownMenuItem(
-                              value: null,
-                              child: Text(localizations.noMedication),
-                            )
-                          ],
-                          onChanged: (v) {
-                            setState(() {
-                              if (v != null) {
-                                _showMedicineDosisInput = true;
-                                medicineId = v.id;
-                                medicineDosis = v.defaultDosis;
-                              } else {
-                                _showMedicineDosisInput = false;
-                                medicineId = null;
-                              }
-                              Material.of(context).markNeedsPaint();
-                            });
-                          }
-                        ),
+                              value: e,
+                              child: Text(e.designation),
+                            ),
+                          DropdownMenuItem(
+                            value: null,
+                            child: Text(localizations.noMedication),
+                          )
+                        ],
+                        onChanged: (v) {
+                          setState(() {
+                            if (v != null) {
+                              _showMedicineDosisInput = true;
+                              medicineId = v.id;
+                              medicineDosis = v.defaultDosis;
+                            } else {
+                              _showMedicineDosisInput = false;
+                              medicineId = null;
+                            }
+                            Material.of(context).markNeedsPaint();
+                          });
+                        }
                       ),
                     ),
                     if (_showMedicineDosisInput)
