@@ -1,0 +1,35 @@
+name: Build and deploy developer docs
+on:
+    push:
+        branches:
+           - "main"
+        paths:
+           - "lib/**"
+           - "README.md"
+    workflow_dispatch:
+jobs:
+    deploy-pages:
+        name: Deploy to GitHub Pages
+        runs-on: ubuntu-latest
+        permissions:
+          contents: write
+        steps:
+        - name: Checkout code
+          uses: actions/checkout@v4
+
+        - name: Setup Dart
+          uses: dart-lang/setup-dart@v1
+
+        - name: Load packages
+          run: dart pub get
+
+        - name: Analyze code
+          run: dart analyze
+
+        - name: Run Dartdoc
+          run: dart doc .
+
+        - name: Deploy API documentation to Github Pages
+          uses: JamesIves/github-pages-deploy-action@v4.5.0
+          with:
+            folder: doc/api/
