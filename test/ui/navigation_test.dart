@@ -1,6 +1,7 @@
 import 'package:blood_pressure_app/components/dialoges/add_measurement_dialoge.dart';
 import 'package:blood_pressure_app/components/dialoges/enter_timeformat_dialoge.dart';
 import 'package:blood_pressure_app/main.dart';
+import 'package:blood_pressure_app/model/blood_pressure/medicine/intake_history.dart';
 import 'package:blood_pressure_app/model/blood_pressure/model.dart';
 import 'package:blood_pressure_app/model/storage/db/config_dao.dart';
 import 'package:blood_pressure_app/model/storage/export_columns_store.dart';
@@ -19,7 +20,7 @@ import '../ram_only_implementations.dart';
 
 void main() {
   group('start page', () {
-    testWidgets('should navigate to add measurements page', (widgetTester) async {
+    testWidgets('should navigate to add entry page', (widgetTester) async {
       await pumpAppRoot(widgetTester);
       expect(find.byIcon(Icons.add), findsOneWidget);
       await widgetTester.tap(find.byIcon(Icons.add));
@@ -70,6 +71,7 @@ Future<void> pumpAppRoot(WidgetTester widgetTester, {
   CsvExportSettings? csvExportSettings,
   PdfExportSettings? pdfExportSettings,
   IntervallStoreManager? intervallStoreManager,
+  IntakeHistory? intakeHistory,
   BloodPressureModel? model
 }) async {
   model ??= RamBloodPressureModel();
@@ -77,6 +79,7 @@ Future<void> pumpAppRoot(WidgetTester widgetTester, {
   exportSettings ??= ExportSettings();
   csvExportSettings ??= CsvExportSettings();
   pdfExportSettings ??= PdfExportSettings();
+  intakeHistory ??= IntakeHistory([]);
   intervallStoreManager ??= IntervallStoreManager(IntervallStorage(), IntervallStorage(), IntervallStorage());
 
   await widgetTester.pumpWidget(MultiProvider(providers: [
@@ -84,6 +87,7 @@ Future<void> pumpAppRoot(WidgetTester widgetTester, {
     ChangeNotifierProvider(create: (_) => exportSettings),
     ChangeNotifierProvider(create: (_) => csvExportSettings),
     ChangeNotifierProvider(create: (_) => pdfExportSettings),
+    ChangeNotifierProvider(create: (_) => intakeHistory),
     ChangeNotifierProvider(create: (_) => intervallStoreManager),
     ChangeNotifierProvider<BloodPressureModel>(create: (_) => model!),
   ], child: const AppRoot()));
