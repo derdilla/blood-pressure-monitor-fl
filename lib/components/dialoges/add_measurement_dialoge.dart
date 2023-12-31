@@ -227,7 +227,7 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
           }
           BloodPressureRecord? record;
           if (systolic != null || diastolic != null || pulse != null
-              || notes != null || needlePin != null) {
+              || (notes ?? '').isNotEmpty || needlePin != null) {
             record = BloodPressureRecord(time, systolic, diastolic, pulse, notes ?? '', needlePin: needlePin);
           }
 
