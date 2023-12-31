@@ -63,7 +63,7 @@ This would all be technically possible, but I don't really see a demand. Open an
 ## Contributing
 Contributions to this project are greatly appreciated and can come in many forms. Please note that when contributing you agree that your work is under the same license as the project.  
 ### Opening bugs and proposing features
-This is probably the simplest to do: Just use the app and find out what's wrong and what can be improved. There is no such thing as a wrong issue. Just make sure there is no existing one about the exact same topic If you are unsure about something just create a new issue, the worst thing to happen is that it gets closed.
+This is probably the simplest to do: Use the app and find out what's wrong and what can be improved. There is no such thing as a wrong issue. Just make sure there is no existing one about the exact same topic If you are unsure about something just create a new issue, the worst thing to happen is that it gets closed.
 
 ### Improving texts and translating
 Another easy way to help is to go through the texts (this one or the ones in the app) and fix grammar/other mistakes or find better (more precise/friendly) ways to put things.
@@ -73,7 +73,9 @@ The easiest way to do this is [weblate](https://hosted.weblate.org/engage/blood-
 
 
 ### Pull requests
-If you can code, you can fix issues or implement features from the issues page. While not a strict requirement, it's still probably best, if you talk about it in an issue first.
+If you can code, you can fix issues or implement features from the issues page. While not a strict requirement, it is recommended to talk about it in an issue first.
+
+[developer docs](https://bpapp.derdilla.com/)
 
 ### Donations
 If you have too much money, I would advise you to donate to either [F-Droid](https://f-droid.org/en/donate/), [Weblate](https://weblate.org/en/donate/), or some other service that has unavoidable maintenance costs.
