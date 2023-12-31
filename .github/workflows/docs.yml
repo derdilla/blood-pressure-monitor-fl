@@ -29,12 +29,6 @@ jobs:
         - name: Load packages
           run: dart pub get
 
-        - name: Generate localizations
-          run: flutter gen-l10n
-
-        - name: Analyze code
-          run: dart analyze
-
         - name: Run Dartdoc
           run: dart doc .
 
