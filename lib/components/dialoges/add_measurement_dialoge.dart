@@ -301,9 +301,12 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
                 child: Row(
                   children: [
                     Expanded(
-                      child: ListTile(
-                        shape: buildListTileBorder(),
-                        title: DropdownButton(
+                      child: Ink(
+                        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4),
+                        decoration: ShapeDecoration(
+                          shape: buildListTileBorder()
+                        ),
+                        child: DropdownButton(
                           isExpanded: true,
                           value: widget.settings.medications
                               .where((e) => e.id == medicineId).firstOrNull,
