@@ -42,7 +42,9 @@ class _LineChartState extends State<_LineChart> {
                 List<FlSpot> pulSpots = [], diaSpots = [], sysSpots = [];
                 int maxValue = 0;
                 int minValue = (settings.validateInputs ? 30 : 0);
+                /// Horizontally first value
                 double? graphBegin;
+                /// Horizontally last value
                 double? graphEnd;
                 for (var e in data) {
                   final x = e.creationTime.millisecondsSinceEpoch.toDouble();
@@ -68,6 +70,11 @@ class _LineChartState extends State<_LineChart> {
                   return Text(AppLocalizations.of(context)!.errNotEnoughDataToGraph);
                 }
 
+                // Add padding to avoid overflowing vertical lines.
+                final len = graphEnd - graphBegin;
+                graphBegin -= len / 40;
+                graphEnd += len / 40;
+
                 return TweenAnimationBuilder<double>(
                   duration: Duration(milliseconds: settings.animationSpeed), // interacts with LineChart duration property
                   tween: Tween<double>(begin: 0, end: settings.graphLineThickness),
@@ -77,6 +84,8 @@ class _LineChartState extends State<_LineChart> {
                       LineChartData(
                           minY: minValue.toDouble(),
                           maxY: maxValue + 5,
+                          minX: graphBegin,
+                          maxX: graphEnd,
                           clipData: const FlClipData.all(),
                           titlesData: _buildFlTitlesData(settings,
                               DateTimeRange(start: data.first.creationTime, end: data.last.creationTime)),
