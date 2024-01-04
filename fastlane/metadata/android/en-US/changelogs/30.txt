@@ -1,0 +1,5 @@
+* Implement bottom app bar
+* Allow saving medicine intakes
+* Implement swipe to change export column form mode
+* Unify application style (#262)
+* [FIX] Disable input validation when missing values are allowed
