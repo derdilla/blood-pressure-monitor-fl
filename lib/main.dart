@@ -110,7 +110,8 @@ class AppRoot extends StatelessWidget {
         darkTheme: _buildTheme(ColorScheme.fromSeed(
           seedColor: settings.accentColor,
           brightness: Brightness.dark,
-          background: Colors.black
+          background: Colors.black,
+          outline: const Color(0xff3f4947) // 3:1 ratio changed because of bg and this looks better.
         )),
         themeMode: settings.themeMode,
         localizationsDelegates: const [
@@ -130,7 +131,7 @@ class AppRoot extends StatelessWidget {
     final inputBorder = OutlineInputBorder(
         borderSide: BorderSide(
           width: 3,
-          color: colorScheme.outlineVariant,
+          color: colorScheme.outline,
         ),
         borderRadius: BorderRadius.circular(20)
     );
