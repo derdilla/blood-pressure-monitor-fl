@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 
-/// A floating banner to display information.
+/// A floating banner to display information and perform actions.
 ///
-/// The banner allows to perform actions.
+/// This custom banner is needed to allow for rounded app bar corners, which
+/// would conflict with the material design banner.
 ///
 /// Example usage:
 /// ```dart
