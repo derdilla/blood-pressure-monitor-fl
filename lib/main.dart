@@ -127,7 +127,29 @@ class AppRoot extends StatelessWidget {
         ],
         supportedLocales: AppLocalizations.supportedLocales,
         locale: settings.language,
-        home: const AppHome(),
+        home: Builder(
+          builder: (context) {
+            final inputBorder = OutlineInputBorder(
+                borderSide: BorderSide(
+                  width: 3,
+                  color: Theme.of(context).primaryColor,
+                ),
+                borderRadius: BorderRadius.circular(20)
+            );
+
+            final theme = Theme.of(context).copyWith(
+              inputDecorationTheme: InputDecorationTheme(
+                errorMaxLines: 5,
+                border: inputBorder,
+                enabledBorder: inputBorder,
+              ),
+            );
+            return Theme(
+              data: theme,
+              child: const AppHome()
+            );
+          }
+        ),
       );
     });
   }

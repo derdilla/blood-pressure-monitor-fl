@@ -95,7 +95,9 @@ class _AddExportColumnDialogeState extends State<AddExportColumnDialoge> with Si
             children: [
               TextFormField(
                 initialValue: csvTitle,
-                decoration: getInputDecoration(localizations.csvTitle),
+                decoration: InputDecoration(
+                  labelText: localizations.csvTitle,
+                ),
                 validator: (value) => (value != null && value.isNotEmpty) ? null : localizations.errNoValue,
                 onSaved: (value) => setState(() {csvTitle = value!;}),
               ),
@@ -181,7 +183,7 @@ class _AddExportColumnDialogeState extends State<AddExportColumnDialoge> with Si
 
   Column _createFormatInput(AppLocalizations localizations,
       BuildContext context,
-      String inputHint,
+      String labelText,
       String inputDocumentation,
       String initialValue,
       void Function(String) onChanged,
@@ -192,7 +194,8 @@ class _AddExportColumnDialogeState extends State<AddExportColumnDialoge> with Si
         TextFormField(
           initialValue: initialValue,
           onChanged: onChanged,
-          decoration: getInputDecoration(inputHint).copyWith(
+          decoration: InputDecoration(
+            labelText: labelText,
             suffixIcon: IconButton(
                 onPressed: () {
                   Navigator.of(context).push(MaterialPageRoute(
@@ -209,15 +212,15 @@ class _AddExportColumnDialogeState extends State<AddExportColumnDialoge> with Si
 
   Column _createRecordFormatInput(AppLocalizations localizations, BuildContext context) =>
       _createFormatInput(localizations,
-          context,
-          localizations.fieldFormat,
-          localizations.exportFieldFormatDocumentation,
-          recordPattern ?? '',
-          (value) => setState(() {
-            recordPattern = value;
-          }),
-          (value) => (type == _FormatterType.time || value != null && value.isNotEmpty) ? null
-              : localizations.errNoValue
+        context,
+        localizations.fieldFormat,
+        localizations.exportFieldFormatDocumentation,
+        recordPattern ?? '',
+        (value) => setState(() {
+          recordPattern = value;
+        }),
+        (value) => (type == _FormatterType.time || value != null && value.isNotEmpty) ? null
+            : localizations.errNoValue
       );
   
   Column _createTimeFormatInput(AppLocalizations localizations, BuildContext context) =>
@@ -232,23 +235,6 @@ class _AddExportColumnDialogeState extends State<AddExportColumnDialoge> with Si
           (value) => (type == _FormatterType.record || (value != null && value.isNotEmpty)) ? null
             : localizations.errNoValue
       );
-
-  InputDecoration getInputDecoration(String? labelText) {
-    final border = OutlineInputBorder(
-        borderSide: BorderSide(
-          width: 3,
-          color: Theme.of(context).primaryColor,
-        ),
-        borderRadius: BorderRadius.circular(20)
-    );
-    return InputDecoration(
-      hintText: labelText,
-      labelText: labelText,
-      errorMaxLines: 5,
-      border: border,
-      enabledBorder: border,
-    );
-  }
 
   void _saveForm() {
     if (formKey.currentState?.validate() ?? false) {
