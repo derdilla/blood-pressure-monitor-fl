@@ -192,7 +192,7 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
 
   /// Build the border all fields have.
   RoundedRectangleBorder buildShapeBorder([Color? color]) => RoundedRectangleBorder(
-    side: Theme.of(context).inputDecorationTheme.border!.borderSide,
+    side: Theme.of(context).inputDecorationTheme.border?.borderSide ?? const BorderSide(width: 3),
     borderRadius: BorderRadius.circular(20)
   );
 
