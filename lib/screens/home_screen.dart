@@ -1,4 +1,5 @@
 import 'package:blood_pressure_app/components/dialoges/add_measurement_dialoge.dart';
+import 'package:blood_pressure_app/model/blood_pressure/medicine/intake_history.dart';
 import 'package:blood_pressure_app/model/blood_pressure/model.dart';
 import 'package:blood_pressure_app/model/storage/intervall_store.dart';
 import 'package:blood_pressure_app/model/storage/settings_store.dart';
@@ -28,14 +29,19 @@ class AppHome extends StatelessWidget {
     if (_appStart) {
       if (Provider.of<Settings>(context, listen: false).startWithAddMeasurementPage) {
         SchedulerBinding.instance.addPostFrameCallback((_) async {
-          final future = showAddMeasurementDialoge(context, Provider.of<Settings>(context, listen: false));
           final model = Provider.of<BloodPressureModel>(context, listen: false);
-          final measurement = await future;
+          final intakes = Provider.of<IntakeHistory>(context, listen: false);
+          final measurement = await showAddEntryDialoge(context, Provider.of<Settings>(context, listen: false));
           if (measurement == null) return;
-          if (context.mounted) {
-            model.addAndExport(context, measurement);
-          } else {
-            model.add(measurement);
+          if (measurement.$1 != null) {
+            if (context.mounted) {
+              model.addAndExport(context, measurement.$1!);
+            } else {
+              model.add(measurement.$1!);
+            }
+          }
+          if (measurement.$2 != null) {
+            intakes.addIntake(measurement.$2!);
           }
         });
       }
@@ -53,9 +59,10 @@ class AppHome extends StatelessWidget {
         return Center(
           child: Padding(
             padding: const EdgeInsets.only(top: 20),
-            child: Consumer<Settings>(
-              builder: (context, settings, child) {
-                return Column(children: [
+            child: Consumer<IntakeHistory>(builder: (context, intakeHistory, child) =>
+              Consumer<IntervallStoreManager>(builder: (context, intervalls, child) =>
+              Consumer<Settings>(builder: (context, settings, child) =>
+                Column(children: [
                   const MeasurementGraph(),
                   Expanded(
                     child: (settings.useLegacyList) ?
@@ -65,11 +72,12 @@ class AppHome extends StatelessWidget {
                         onData: (context, records) => MeasurementList(
                           settings: settings,
                           records: records,
+                          intakes: intakeHistory.getIntakes(intervalls.mainPage.currentRange),
                         )
                       )
                   )
-                ]);
-              }
+                ])
+              ))
             ),
           ),
         );
@@ -94,14 +102,19 @@ class AppHome extends StatelessWidget {
                       tooltip: localizations.addMeasurement,
                       autofocus: true,
                       onPressed: () async {
-                        final future = showAddMeasurementDialoge(context, settings);
                         final model = Provider.of<BloodPressureModel>(context, listen: false);
-                        final measurement = await future;
+                        final intakes = Provider.of<IntakeHistory>(context, listen: false);
+                        final measurement = await showAddEntryDialoge(context, Provider.of<Settings>(context, listen: false));
                         if (measurement == null) return;
-                        if (context.mounted) {
-                          model.addAndExport(context, measurement);
-                        } else {
-                          model.add(measurement);
+                        if (measurement.$1 != null) {
+                          if (context.mounted) {
+                            model.addAndExport(context, measurement.$1!);
+                          } else {
+                            model.add(measurement.$1!);
+                          }
+                        }
+                        if (measurement.$2 != null) {
+                          intakes.addIntake(measurement.$2!);
                         }
                       },
                       child: const Icon(Icons.add,),

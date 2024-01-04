@@ -11,6 +11,7 @@ import 'package:blood_pressure_app/platform_integration/platform_client.dart';
 import 'package:blood_pressure_app/screens/subsettings/delete_data_screen.dart';
 import 'package:blood_pressure_app/screens/subsettings/export_import/export_import_screen.dart';
 import 'package:blood_pressure_app/screens/subsettings/graph_markings_screen.dart';
+import 'package:blood_pressure_app/screens/subsettings/medicine_manager_screen.dart';
 import 'package:blood_pressure_app/screens/subsettings/version_screen.dart';
 import 'package:blood_pressure_app/screens/subsettings/warn_about_screen.dart';
 import 'package:file_picker/file_picker.dart';
@@ -149,6 +150,15 @@ class SettingsPage extends StatelessWidget {
             ]),
 
             TitledColumn(title: Text(localizations.behavior), children: [
+              ListTile(
+                onTap: () {
+                  Navigator.push(context, MaterialPageRoute(builder:
+                      (context) => const MedicineManagerScreen()));
+                },
+                leading: const Icon(Icons.medication),
+                title: Text(localizations.medications),
+                trailing: const Icon(Icons.arrow_forward_ios)
+              ),
               SwitchListTile(
                 key: const Key('allowManualTimeInput'),
                 value: settings.allowManualTimeInput,
@@ -259,12 +269,12 @@ class SettingsPage extends StatelessWidget {
                 }
               ),
               SwitchListTile(
-                  title: Text(localizations.bottomAppBars),
-                  secondary: const Icon(Icons.vertical_align_bottom),
-                  value: settings.bottomAppBars,
-                  onChanged: (value) {
-                    settings.bottomAppBars = value;
-                  }
+                title: Text(localizations.bottomAppBars),
+                secondary: const Icon(Icons.vertical_align_bottom),
+                value: settings.bottomAppBars,
+                onChanged: (value) {
+                  settings.bottomAppBars = value;
+                }
               ),
             ]),
             TitledColumn(

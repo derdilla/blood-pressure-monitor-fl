@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:blood_pressure_app/components/consistent_future_builder.dart';
+import 'package:blood_pressure_app/model/blood_pressure/medicine/intake_history.dart';
 import 'package:blood_pressure_app/model/blood_pressure/model.dart';
 import 'package:blood_pressure_app/model/storage/db/config_dao.dart';
 import 'package:blood_pressure_app/model/storage/db/config_db.dart';
@@ -12,7 +15,9 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:path/path.dart';
 import 'package:provider/provider.dart';
+import 'package:sqflite/sqflite.dart';
 
 late final ConfigDB _database;
 late final BloodPressureModel _bloodPressureModel;
@@ -41,6 +46,23 @@ Future<Widget> _loadApp() async {
   final intervalStorageManager = await IntervallStoreManager.load(configDao, 0);
   final exportColumnsManager = await configDao.loadExportColumnsManager(0);
 
+  // TODO: unify with blood pressure model (#257)
+  late final IntakeHistory intakeHistory;
+  try {
+    if (settings.medications.isNotEmpty) {
+      final intakeString = File(join(await getDatabasesPath(), 'medicine.intakes')).readAsStringSync();
+      intakeHistory = IntakeHistory.deserialize(intakeString, settings.medications);
+    } else {
+      intakeHistory = IntakeHistory([]);
+    }
+  } catch (e) {
+    assert(e is PathNotFoundException, e.toString());
+    intakeHistory = IntakeHistory([]);
+  }
+  intakeHistory.addListener(() async {
+    File(join(await getDatabasesPath(), 'medicine.intakes')).writeAsStringSync(intakeHistory.serialize());
+  });
+
   // update logic
   if (settings.lastVersion == 0) {
     await updateLegacySettings(settings, exportSettings, csvExportSettings, pdfExportSettings, intervalStorageManager);
@@ -66,6 +88,7 @@ Future<Widget> _loadApp() async {
     ChangeNotifierProvider(create: (context) => pdfExportSettings),
     ChangeNotifierProvider(create: (context) => intervalStorageManager),
     ChangeNotifierProvider(create: (context) => exportColumnsManager),
+    ChangeNotifierProvider(create: (context) => intakeHistory),
   ], child: const AppRoot());
 }
 

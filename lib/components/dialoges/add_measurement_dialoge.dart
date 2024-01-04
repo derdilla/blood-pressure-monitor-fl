@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:blood_pressure_app/components/date_time_picker.dart';
 import 'package:blood_pressure_app/components/dialoges/fullscreen_dialoge.dart';
 import 'package:blood_pressure_app/components/settings/settings_widgets.dart';
+import 'package:blood_pressure_app/model/blood_pressure/medicine/medicine_intake.dart';
 import 'package:blood_pressure_app/model/blood_pressure/needle_pin.dart';
 import 'package:blood_pressure_app/model/blood_pressure/record.dart';
 import 'package:blood_pressure_app/model/storage/storage.dart';
@@ -12,11 +13,11 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
 
 /// Input mask for entering measurements.
-class AddMeasurementDialoge extends StatefulWidget {
+class AddEntryDialoge extends StatefulWidget {
   /// Create a input mask for entering measurements.
   /// 
-  /// This is usually created through the [showAddMeasurementDialoge] function.
-  const AddMeasurementDialoge({super.key,
+  /// This is usually created through the [showAddEntryDialoge] function.
+  const AddEntryDialoge({super.key,
     required this.settings,
     this.initialRecord,
   });
@@ -26,14 +27,18 @@ class AddMeasurementDialoge extends StatefulWidget {
 
   /// Values that are prefilled.
   ///
-  /// When this is null the timestamp is [DateTime.now] and the other fields will be empty.
+  /// When this is null the timestamp is [DateTime.now] and the other fields
+  /// will be empty.
+  ///
+  /// When an initial record is set medicine input is not possible because it is
+  /// saved separately.
   final BloodPressureRecord? initialRecord;
 
   @override
-  State<AddMeasurementDialoge> createState() => _AddMeasurementDialogeState();
+  State<AddEntryDialoge> createState() => _AddEntryDialogeState();
 }
 
-class _AddMeasurementDialogeState extends State<AddMeasurementDialoge> {
+class _AddEntryDialogeState extends State<AddEntryDialoge> {
   final formKey = GlobalKey<FormState>();
   final sysFocusNode = FocusNode();
   final diaFocusNode = FocusNode();
@@ -59,6 +64,18 @@ class _AddMeasurementDialogeState extends State<AddMeasurementDialoge> {
 
   /// Last [FormState.save]d note.
   String? notes;
+  
+  /// Index of the selected medicine in `widget.settings.medications`.
+  int? medicineId;
+
+  /// Whether to show the medication dosis input
+  bool _showMedicineDosisInput = false;
+
+  /// Entered dosis of medication.
+  double? medicineDosis;
+
+  /// Newlines in the note field.
+  int _noteCurrentNewLineCount = 0;
 
   @override
   void initState() {
@@ -99,13 +116,7 @@ class _AddMeasurementDialogeState extends State<AddMeasurementDialoge> {
     ListTile(
       title: Text(DateFormat(widget.settings.dateFormatString).format(time)),
       trailing: const Icon(Icons.edit),
-      shape: RoundedRectangleBorder(
-          side: BorderSide(
-              width: 2,
-              color: Theme.of(context).primaryColor
-          ),
-          borderRadius: BorderRadius.circular(20)
-      ),
+      shape: buildShapeBorder(),
       onTap: () async {
         final messenger = ScaffoldMessenger.of(context);
         var selectedTime = await showDateTimePicker(
@@ -156,6 +167,11 @@ class _AddMeasurementDialogeState extends State<AddMeasurementDialoge> {
           }
         },
         validator: (String? value) {
+          // Indicates that only a medicine intake is wanted.
+          if (_showMedicineDosisInput && medicineDosis != null &&
+              medicineId != null && systolic == null && diastolic == null &&
+              pulse == null && notes == null && needlePin == null) return null;
+
           if (!widget.settings.allowMissingValues && (value == null || value.isEmpty || int.tryParse(value) == null)) {
             return localizations.errNaN;
           } else if (widget.settings.validateInputs && (int.tryParse(value ?? '') ?? -1) <= 30) {
@@ -188,6 +204,15 @@ class _AddMeasurementDialogeState extends State<AddMeasurementDialoge> {
     );
   }
 
+  /// Build the border all fields have.
+  RoundedRectangleBorder buildShapeBorder([Color? color]) => RoundedRectangleBorder(
+    side: BorderSide(
+      width: 2,
+      color: color ?? Theme.of(context).primaryColor
+    ),
+    borderRadius: BorderRadius.circular(20)
+  );
+
   @override
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
@@ -195,86 +220,178 @@ class _AddMeasurementDialogeState extends State<AddMeasurementDialoge> {
       onActionButtonPressed: () {
         if (formKey.currentState?.validate() ?? false) {
           formKey.currentState?.save();
-          final record = BloodPressureRecord(time, systolic, diastolic, pulse, notes ?? '', needlePin: needlePin);
-          Navigator.of(context).pop(record);
+          MedicineIntake? intake;
+          if (_showMedicineDosisInput && medicineDosis != null && medicineId != null) {
+            intake = MedicineIntake(
+              timestamp: time,
+              medicine: widget.settings.medications.where((e) => e.id == medicineId).first,
+              dosis: medicineDosis!,
+            );
+          }
+          BloodPressureRecord? record;
+          if (systolic != null || diastolic != null || pulse != null
+              || (notes ?? '').isNotEmpty || needlePin != null) {
+            record = BloodPressureRecord(time, systolic, diastolic, pulse, notes ?? '', needlePin: needlePin);
+          }
+
+          Navigator.of(context).pop((record, intake));
         }
       },
       actionButtonText: localizations.btnSave,
       bottomAppBar: widget.settings.bottomAppBars,
-      body: Form(
-        key: formKey,
-        child: ListView(
-          padding: const EdgeInsets.symmetric(horizontal: 8),
-          children: [
-            if (widget.settings.allowManualTimeInput)
-              buildTimeInput(localizations),
-            const SizedBox(height: 16,),
-            Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                buildValueInput(localizations,
-                  focusNode: sysFocusNode,
-                  hintText: localizations.sysLong,
-                  controller: sysController,
-                  onSaved: (value) => setState(() => systolic = int.tryParse(value ?? '')),
-                ),
-                const SizedBox(width: 16,),
-                buildValueInput(localizations,
-                  hintText: localizations.diaLong,
-                  initialValue: widget.initialRecord?.diastolic,
-                  onSaved: (value) => setState(() => diastolic = int.tryParse(value ?? '')),
-                  focusNode: diaFocusNode,
-                  validator: (value) {
-                    if (widget.settings.validateInputs && (int.tryParse(value ?? '') ?? 0) >= (int.tryParse(sysController.text) ?? 1)) {
-                      return AppLocalizations.of(context)?.errDiaGtSys;
-                    }
-                    return null;
-                  }
-                ),
-                const SizedBox(width: 16,),
-                buildValueInput(localizations,
-                  hintText: localizations.pulLong,
-                  initialValue: widget.initialRecord?.pulse,
-                  focusNode: pulFocusNode,
-                  onSaved: (value) => setState(() => pulse = int.tryParse(value ?? '')),
-                ),
-              ],
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 16),
-              child: TextFormField(
-                initialValue: widget.initialRecord?.notes,
-                focusNode: noteFocusNode,
-                decoration: getInputDecoration(localizations.addNote),
-                minLines: 1,
-                //maxLines: 4, There is a bug in the flutter framework: https://github.com/flutter/flutter/issues/138219
-                onSaved: (value) => setState(() => notes = value),
-              ),
-            ),
-            ColorSelectionListTile(
-              title: Text(localizations.color),
-              onMainColorChanged: (Color value) {
-                setState(() {
-                  needlePin = (value == Colors.transparent) ? null : MeasurementNeedlePin(value);
-                });
-              },
-              initialColor: needlePin?.color ?? Colors.transparent,
-              shape: RoundedRectangleBorder(
-                  side: BorderSide(
-                      width: 2,
-                      color: needlePin?.color ?? Theme.of(context).primaryColor
+      body: SizeChangedLayoutNotifier(
+        child: Form(
+          key: formKey,
+          child: ListView(
+            padding: const EdgeInsets.symmetric(horizontal: 8),
+            children: [
+              if (widget.settings.allowManualTimeInput)
+                buildTimeInput(localizations),
+              const SizedBox(height: 16,),
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  buildValueInput(localizations,
+                    focusNode: sysFocusNode,
+                    hintText: localizations.sysLong,
+                    controller: sysController,
+                    onSaved: (value) => setState(() => systolic = int.tryParse(value ?? '')),
                   ),
-                  borderRadius: BorderRadius.circular(20)
-              )
-            ),
-          ],
+                  const SizedBox(width: 16,),
+                  buildValueInput(localizations,
+                    hintText: localizations.diaLong,
+                    initialValue: widget.initialRecord?.diastolic,
+                    onSaved: (value) => setState(() => diastolic = int.tryParse(value ?? '')),
+                    focusNode: diaFocusNode,
+                    validator: (value) {
+                      if (widget.settings.validateInputs && (int.tryParse(value ?? '') ?? 0) >= (int.tryParse(sysController.text) ?? 1)) {
+                        return AppLocalizations.of(context)?.errDiaGtSys;
+                      }
+                      return null;
+                    }
+                  ),
+                  const SizedBox(width: 16,),
+                  buildValueInput(localizations,
+                    hintText: localizations.pulLong,
+                    initialValue: widget.initialRecord?.pulse,
+                    focusNode: pulFocusNode,
+                    onSaved: (value) => setState(() => pulse = int.tryParse(value ?? '')),
+                  ),
+                ],
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 16),
+                child: TextFormField(
+                  initialValue: widget.initialRecord?.notes,
+                  focusNode: noteFocusNode,
+                  decoration: getInputDecoration(localizations.addNote),
+                  minLines: 1,
+                  maxLines: 4,
+                  onChanged: (value) {
+                    final newLineCount = value.split('\n').length;
+                    if (_noteCurrentNewLineCount != newLineCount) {
+                      _noteCurrentNewLineCount = newLineCount;
+                      Material.of(context).markNeedsPaint();
+                    }
+
+                  },
+                  onSaved: (value) => setState(() => notes = value),
+                ),
+              ),
+              ColorSelectionListTile(
+                title: Text(localizations.color),
+                onMainColorChanged: (Color value) {
+                  setState(() {
+                    needlePin = (value == Colors.transparent) ? null : MeasurementNeedlePin(value);
+                  });
+                },
+                initialColor: needlePin?.color ?? Colors.transparent,
+                shape: buildShapeBorder(needlePin?.color)
+              ),
+              if (widget.settings.medications.isNotEmpty && widget.initialRecord == null)
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 16),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: DropdownButtonFormField(
+                          isExpanded: true,
+                          value: widget.settings.medications
+                              .where((e) => e.id == medicineId).firstOrNull,
+                          decoration: getInputDecoration(null),
+                          items: [
+                            for (final e in widget.settings.medications)
+                              DropdownMenuItem(
+                                value: e,
+                                child: Text(e.designation),
+                              ),
+                            DropdownMenuItem(
+                              value: null,
+                              child: Text(localizations.noMedication),
+                            )
+                          ],
+                          onChanged: (v) {
+                            setState(() {
+                              if (v != null) {
+                                _showMedicineDosisInput = true;
+                                medicineId = v.id;
+                                medicineDosis = v.defaultDosis;
+                              } else {
+                                _showMedicineDosisInput = false;
+                                medicineId = null;
+                              }
+                            });
+                          }
+                        ),
+                      ),
+                      if (_showMedicineDosisInput)
+                        const SizedBox(width: 16,),
+                      if (_showMedicineDosisInput)
+                        Expanded(
+                          child: TextFormField(
+                            initialValue: medicineDosis?.toString(),
+                            decoration: getInputDecoration(localizations.dosis),
+                            keyboardType: TextInputType.number,
+                            onSaved: (value) => setState(() {
+                              final dosis = int.tryParse(value ?? '')?.toDouble()
+                                  ?? double.tryParse(value ?? '');
+                              if(dosis != null && dosis > 0) medicineDosis = dosis;
+                            }),
+                            inputFormatters: [FilteringTextInputFormatter.allow(
+                                RegExp(r'([0-9]+(\.([0-9]*))?)'))],
+                            validator: (String? value) {
+                              if (!_showMedicineDosisInput) return null;
+                              if (((int.tryParse(value ?? '')?.toDouble()
+                                  ?? double.tryParse(value ?? '')) ?? 0) <= 0) {
+                                return localizations.errNaN;
+                              }
+                              return null;
+                            },
+                          ),
+                        ),
+        
+                    ],
+                  ),
+                ),
+            ],
+          ),
         ),
       ),
     );
   }
 }
 
-Future<BloodPressureRecord?> showAddMeasurementDialoge(BuildContext context, Settings settings, [BloodPressureRecord? initialRecord]) =>
-  showDialog<BloodPressureRecord?>(context: context, builder: (context) => Dialog.fullscreen(
-    child: AddMeasurementDialoge(settings: settings, initialRecord: initialRecord,),
-  ));
+/// Shows a dialoge to input a blood pressure measurement.
+Future<(BloodPressureRecord?, MedicineIntake?)?> showAddEntryDialoge(
+    BuildContext context,
+    Settings settings,
+    [BloodPressureRecord? initialRecord]) =>
+  showDialog<(BloodPressureRecord?, MedicineIntake?)>(
+      context: context, builder: (context) =>
+      Dialog.fullscreen(
+        child: AddEntryDialoge(
+          settings: settings,
+          initialRecord: initialRecord
+        ),
+      )
+  );

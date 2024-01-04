@@ -7,6 +7,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
+/// Blood pressure measurement to display in a list.
 class MeasurementListRow extends StatelessWidget {
   const MeasurementListRow({super.key, required this.record, required this.settings});
 
@@ -32,16 +33,17 @@ class MeasurementListRow extends StatelessWidget {
             children: [
               IconButton(
                 onPressed: () async {
-                  final future = showAddMeasurementDialoge(context, settings, record);
                   final model = Provider.of<BloodPressureModel>(context, listen: false);
-                  final measurement = await future;
-                  if (measurement == null) return;
-                  if (context.mounted) {
-                    model.addAndExport(context, measurement);
-                  } else {
-                    model.add(measurement);
-                    assert(false, 'context not mounted');
+                  final entry = await showAddEntryDialoge(context,
+                      Provider.of<Settings>(context, listen: false));
+                  if (entry?.$1 != null) {
+                    if (context.mounted) {
+                      model.addAndExport(context, entry!.$1!);
+                    } else {
+                      model.add(entry!.$1!);
+                    }
                   }
+                  assert(entry?.$2 == null);
                 },
                 icon: const Icon(Icons.edit),
                 tooltip: localizations.edit,
@@ -86,27 +88,12 @@ class MeasurementListRow extends StatelessWidget {
   void _deleteEntry(Settings settings, BuildContext context, AppLocalizations localizations) async {
     final model = Provider.of<BloodPressureModel>(context, listen: false);
     final messanger = ScaffoldMessenger.of(context);
-    bool confirmedDeletion = false;
+    bool confirmedDeletion = true;
     if (settings.confirmDeletion) {
-      confirmedDeletion = await showDialog<bool>(context: context,
-          builder: (context) => AlertDialog(
-            title: Text(AppLocalizations.of(context)!.confirmDelete),
-            content: Text(AppLocalizations.of(context)!.confirmDeleteDesc),
-            actions: [
-              ElevatedButton(
-                  onPressed: () => Navigator.of(context).pop(false),
-                  child: Text(AppLocalizations.of(context)!.btnCancel)),
-              ElevatedButton(
-                  onPressed: () => Navigator.of(context).pop(true),
-                  child: Text(AppLocalizations.of(context)!.btnConfirm)),
-            ],
-          )
-      ) ?? false;
-    } else {
-      confirmedDeletion = true;
+      confirmedDeletion = await showConfirmDeletionDialoge(context);
     }
 
-    if (confirmedDeletion) {
+    if (confirmedDeletion) { // TODO: move out of model
       model.delete(record.creationTime);
       messanger.removeCurrentSnackBar();
       messanger.showSnackBar(SnackBar(
@@ -119,4 +106,23 @@ class MeasurementListRow extends StatelessWidget {
       ));
     }
   }
+}
+
+Future<bool> showConfirmDeletionDialoge(BuildContext context) async {
+  return await showDialog<bool>(context: context,
+    builder: (context) => AlertDialog(
+      title: Text(AppLocalizations.of(context)!.confirmDelete),
+      content: Text(AppLocalizations.of(context)!.confirmDeleteDesc),
+      actions: [
+        ElevatedButton(
+          onPressed: () => Navigator.of(context).pop(false),
+          child: Text(AppLocalizations.of(context)!.btnCancel)
+        ),
+        ElevatedButton(
+          onPressed: () => Navigator.of(context).pop(true),
+          child: Text(AppLocalizations.of(context)!.btnConfirm)
+        ),
+      ],
+    )
+  ) ?? false;
 }

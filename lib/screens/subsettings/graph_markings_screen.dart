@@ -15,8 +15,7 @@ class GraphMarkingsScreen extends StatelessWidget {
      // IMPORTANT: When adding more option, like vertical lines, add navigation bar
     return Scaffold(
       appBar: AppBar(
-        title: Text(AppLocalizations.of(context)!.customGraphMarkings),
-        backgroundColor: Theme.of(context).primaryColor,
+        forceMaterialTransparency: true,
       ),
       body: Center(child: Consumer<Settings>(
         builder: (context, settings, child) {
