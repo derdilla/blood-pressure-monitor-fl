@@ -79,98 +79,101 @@ class _AddExportColumnDialogeState extends State<AddExportColumnDialoge> with Si
       actionButtonText: localizations.btnSave,
       onActionButtonPressed: _saveForm,
       bottomAppBar: widget.settings.bottomAppBars,
-      body: Form(
-        key: formKey,
-        child: ListView(
-          children: [
-            TextFormField(
-              initialValue: csvTitle,
-              decoration: getInputDecoration(localizations.csvTitle),
-              validator: (value) => (value != null && value.isNotEmpty) ? null : localizations.errNoValue,
-              onSaved: (value) => setState(() {csvTitle = value!;}),
-            ),
-            const SizedBox(height: 8,),
-            SegmentedButton(
-              onSelectionChanged: (v) {
-                assert(v.length == 1);
-                setState(() {
-                  type = v.first;
-                  switch (type) {
-                    case _FormatterType.record:
-                      _controller.forward();
-                    case _FormatterType.time:
-                      _controller.reverse();
-                  }
-                });
-              },
-              segments: [
-                ButtonSegment(
-                    value: _FormatterType.record,
-                    label: Text(localizations.recordFormat)
-                ),
-                ButtonSegment(
-                    value: _FormatterType.time,
-                    label: Text(localizations.timeFormat)
-                ),
-              ],
-              selected: { type }
-            ),
-            const SizedBox(height: 8,),
-            Stack(
-              children: [
-                SlideTransition(
-                  position: Tween<Offset>(
-                    begin: Offset.zero,
-                    end: const Offset(1.1, 0.0),
-                  ).animate(CurvedAnimation(
-                    parent: _controller,
-                    curve: Curves.easeIn,
-                  )),
-                  child: _createTimeFormatInput(localizations, context),
-                ),
-                SlideTransition(
-                  position: Tween<Offset>(
-                    begin: const Offset(-1.1, 0.0),
-                    end: Offset.zero,
-                  ).animate(CurvedAnimation(
-                    parent: _controller,
-                    curve: Curves.easeIn,
-                  )),
-                  child: _createRecordFormatInput(localizations, context),
-                ),
-              ],
-            ),
-            const SizedBox(height: 8,),
-            Container(
-              padding: const EdgeInsets.all(24),
-              decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.surface,
-                borderRadius: BorderRadius.circular(20)
+      body: GestureDetector(
+        onHorizontalDragEnd: (details) {
+          if (details.primaryVelocity == null) return;
+          if (details.primaryVelocity! < -500 && type == _FormatterType.record) {
+            _changeMode(_FormatterType.time);
+          }
+          if (details.primaryVelocity! > 500 && type == _FormatterType.time) {
+            _changeMode(_FormatterType.record);
+          }
+        },
+        child: Form(
+          key: formKey,
+          child: ListView(
+            children: [
+              TextFormField(
+                initialValue: csvTitle,
+                decoration: getInputDecoration(localizations.csvTitle),
+                validator: (value) => (value != null && value.isNotEmpty) ? null : localizations.errNoValue,
+                onSaved: (value) => setState(() {csvTitle = value!;}),
               ),
-              child: (){
-                  final record = BloodPressureRecord(DateTime.now(), 123, 78, 65, 'test note');
-                  final formatter = (type == _FormatterType.record) ? ScriptedFormatter(recordPattern ?? '')
-                      : ScriptedTimeFormatter(timePattern ?? '');
-                  final text = formatter.encode(record);
-                  final decoded = formatter.decode(text);
-                  return Column(
-                    children: [
-                      (type == _FormatterType.record) ? MeasurementListRow(record: record, settings: widget.settings,)
-                          : Text(DateFormat('MMM d, y - h:m.s').format(record.creationTime)),
-                      const SizedBox(height: 8,),
-                      const Icon(Icons.arrow_downward),
-                      const SizedBox(height: 8,),
-                      text.isNotEmpty ? Text(text) :
-                        Text(localizations.errNoValue, style: const TextStyle(fontStyle: FontStyle.italic),),
-                      const SizedBox(height: 8,),
-                      const Icon(Icons.arrow_downward),
-                      const SizedBox(height: 8,),
-                      Text(decoded.toString())
-                    ],
-                  );
-                }()
+              const SizedBox(height: 8,),
+              SegmentedButton(
+                onSelectionChanged: (v) {
+                  assert(v.length == 1);
+                  _changeMode(v.first);
+                },
+                segments: [
+                  ButtonSegment(
+                      value: _FormatterType.record,
+                      label: Text(localizations.recordFormat)
+                  ),
+                  ButtonSegment(
+                      value: _FormatterType.time,
+                      label: Text(localizations.timeFormat)
+                  ),
+                ],
+                selected: { type }
               ),
-          ],
+              const SizedBox(height: 8,),
+              Stack(
+                children: [
+                  SlideTransition(
+                    position: Tween<Offset>(
+                      begin: Offset.zero,
+                      end: const Offset(1.1, 0.0),
+                    ).animate(CurvedAnimation(
+                      parent: _controller,
+                      curve: Curves.easeIn,
+                    )),
+                    child: _createTimeFormatInput(localizations, context),
+                  ),
+                  SlideTransition(
+                    position: Tween<Offset>(
+                      begin: const Offset(-1.1, 0.0),
+                      end: Offset.zero,
+                    ).animate(CurvedAnimation(
+                      parent: _controller,
+                      curve: Curves.easeIn,
+                    )),
+                    child: _createRecordFormatInput(localizations, context),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 8,),
+              Container(
+                padding: const EdgeInsets.all(24),
+                decoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.surface,
+                  borderRadius: BorderRadius.circular(20)
+                ),
+                child: (){
+                    final record = BloodPressureRecord(DateTime.now(), 123, 78, 65, 'test note');
+                    final formatter = (type == _FormatterType.record) ? ScriptedFormatter(recordPattern ?? '')
+                        : ScriptedTimeFormatter(timePattern ?? '');
+                    final text = formatter.encode(record);
+                    final decoded = formatter.decode(text);
+                    return Column(
+                      children: [
+                        (type == _FormatterType.record) ? MeasurementListRow(record: record, settings: widget.settings,)
+                            : Text(DateFormat('MMM d, y - h:m.s').format(record.creationTime)),
+                        const SizedBox(height: 8,),
+                        const Icon(Icons.arrow_downward),
+                        const SizedBox(height: 8,),
+                        text.isNotEmpty ? Text(text) :
+                          Text(localizations.errNoValue, style: const TextStyle(fontStyle: FontStyle.italic),),
+                        const SizedBox(height: 8,),
+                        const Icon(Icons.arrow_downward),
+                        const SizedBox(height: 8,),
+                        Text(decoded.toString())
+                      ],
+                    );
+                  }()
+                ),
+            ],
+          ),
         ),
       ),
     );
@@ -266,6 +269,18 @@ class _AddExportColumnDialogeState extends State<AddExportColumnDialoge> with Si
         Navigator.pop(context, column);
       }
     }
+  }
+
+  void _changeMode(_FormatterType type) {
+    setState(() {
+      this.type = type;
+      switch (type) {
+        case _FormatterType.record:
+          _controller.forward();
+        case _FormatterType.time:
+          _controller.reverse();
+      }
+    });
   }
 
 }
