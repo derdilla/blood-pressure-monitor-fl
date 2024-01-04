@@ -199,7 +199,6 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
   @override
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
-    print(Theme.of(context).inputDecorationTheme.border);
     return FullscreenDialoge(
       onActionButtonPressed: () {
         if (formKey.currentState?.validate() ?? false) {

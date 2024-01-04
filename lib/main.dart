@@ -111,7 +111,9 @@ class AppRoot extends StatelessWidget {
           seedColor: settings.accentColor,
           brightness: Brightness.dark,
           background: Colors.black,
-          outline: const Color(0xff3f4947) // 3:1 ratio changed because of bg and this looks better.
+          // 3:1 ratio changed because of background and outlineVariant looks
+          // better.
+          outline: const Color(0xff3f4947)
         )),
         themeMode: settings.themeMode,
         localizationsDelegates: const [
@@ -144,9 +146,6 @@ class AppRoot extends StatelessWidget {
         border: inputBorder,
         enabledBorder: inputBorder,
       ),
-      pageTransitionsTheme: const PageTransitionsTheme(builders: {
-        TargetPlatform.android: ZoomPageTransitionsBuilder()
-      }),
       appBarTheme: const AppBarTheme(
         centerTitle: true,
         shape: RoundedRectangleBorder(

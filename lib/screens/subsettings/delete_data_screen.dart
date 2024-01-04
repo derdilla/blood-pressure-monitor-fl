@@ -1,8 +1,8 @@
 import 'dart:io';
 import 'dart:math';
 
-import 'package:blood_pressure_app/components/CustomBanner.dart';
 import 'package:blood_pressure_app/components/consistent_future_builder.dart';
+import 'package:blood_pressure_app/components/custom_banner.dart';
 import 'package:blood_pressure_app/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';

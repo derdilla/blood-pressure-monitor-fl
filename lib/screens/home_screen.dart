@@ -153,7 +153,7 @@ class AppHome extends StatelessWidget {
   }
 }
 
-// FIXME: pass context on transitions, use instead of Navigator.push
+// TODO: consider removing duration override that only occurs in one on home.
 void _buildTransition(BuildContext context, Widget page, int duration) {
   Navigator.push(context,
     TimedMaterialPageRouter(

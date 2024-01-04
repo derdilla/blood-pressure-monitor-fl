@@ -1,4 +1,4 @@
-import 'package:blood_pressure_app/components/CustomBanner.dart';
+import 'package:blood_pressure_app/components/custom_banner.dart';
 import 'package:blood_pressure_app/model/export_import/column.dart';
 import 'package:blood_pressure_app/model/export_import/export_configuration.dart';
 import 'package:blood_pressure_app/model/export_import/import_field_type.dart';
