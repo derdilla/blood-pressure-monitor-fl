@@ -17,8 +17,8 @@ void main() {
 
       expect(find.text('SAVE'), findsOneWidget);
       expect(find.byIcon(Icons.close), findsOneWidget);
-      expect(find.text('CSV-title'), findsNWidgets(2));
-      expect(find.text('Field format'), findsNWidgets(2));
+      expect(find.text('CSV-title'), findsOneWidget);
+      expect(find.text('Field format'), findsOneWidget);
       expect(find.text('Please enter a value'), findsOneWidget);
       expect(find.text('null'), findsOneWidget);
       expect(find.byType(MeasurementListRow), findsOneWidget);
