@@ -19,6 +19,7 @@ class ConfigDao {
 
   final ConfigDB _configDB;
 
+  final Map<int, Settings> _settingsInstances = {};
   /// Loads the profiles [Settings] object from the database.
   ///
   /// If any errors occur or the object is not present, a default one will be created. Changes in the object
@@ -26,6 +27,7 @@ class ConfigDao {
   ///
   /// Changes to the database will not propagate to the object.
   Future<Settings> loadSettings(int profileID) async {
+    if (_settingsInstances.containsKey(profileID)) return _settingsInstances[profileID]!;
     final dbEntry = await _configDB.database.query(
         ConfigDB.settingsTable,
         columns: ['settings_json'],
@@ -49,6 +51,7 @@ class ConfigDao {
     settings.addListener(() {
       _updateSettings(profileID, settings);
     });
+    _settingsInstances[profileID] = settings;
     return settings;
   }
 
@@ -67,6 +70,7 @@ class ConfigDao {
     );
   }
 
+  final Map<int, ExportSettings> _exportSettingsInstances = {};
   /// Loads the profiles [ExportSettings] object from the database.
   ///
   /// If any errors occur or the object is not present, a default one will be created. Changes in the object
@@ -74,6 +78,7 @@ class ConfigDao {
   ///
   /// Changes to the database will not propagate to the object.
   Future<ExportSettings> loadExportSettings(int profileID) async {
+    if (_exportSettingsInstances.containsKey(profileID)) return _exportSettingsInstances[profileID]!;
     final dbEntry = await _configDB.database.query(
         ConfigDB.exportSettingsTable,
         columns: ['json'],
@@ -97,6 +102,7 @@ class ConfigDao {
     exportSettings.addListener(() {
       _updateExportSettings(profileID, exportSettings);
     });
+    _exportSettingsInstances[profileID] = exportSettings;
     return exportSettings;
   }
 
@@ -115,6 +121,8 @@ class ConfigDao {
     );
   }
 
+  final Map<int, CsvExportSettings> _csvExportSettingsInstances = {};
+
   /// Loads the profiles [CsvExportSettings] object from the database.
   ///
   /// If any errors occur or the object is not present, a default one will be created. Changes in the object
@@ -122,6 +130,7 @@ class ConfigDao {
   ///
   /// Changes to the database will not propagate to the object.
   Future<CsvExportSettings> loadCsvExportSettings(int profileID) async {
+    if (_csvExportSettingsInstances.containsKey(profileID)) return _csvExportSettingsInstances[profileID]!;
     final dbEntry = await _configDB.database.query(
         ConfigDB.exportCsvSettingsTable,
         columns: ['json'],
@@ -145,6 +154,7 @@ class ConfigDao {
     exportSettings.addListener(() {
       _updateCsvExportSettings(profileID, exportSettings);
     });
+    _csvExportSettingsInstances[profileID] = exportSettings;
     return exportSettings;
   }
 
@@ -163,6 +173,8 @@ class ConfigDao {
     );
   }
 
+  final Map<int, PdfExportSettings> _pdfExportSettingsInstances = {};
+
   /// Loads the profiles [PdfExportSettings] object from the database.
   ///
   /// If any errors occur or the object is not present, a default one will be created. Changes in the object
@@ -170,6 +182,7 @@ class ConfigDao {
   ///
   /// Changes to the database will not propagate to the object.
   Future<PdfExportSettings> loadPdfExportSettings(int profileID) async {
+    if (_pdfExportSettingsInstances.containsKey(profileID)) return _pdfExportSettingsInstances[profileID]!;
     final dbEntry = await _configDB.database.query(
         ConfigDB.exportPdfSettingsTable,
         columns: ['json'],
@@ -193,6 +206,7 @@ class ConfigDao {
     exportSettings.addListener(() {
       _updatePdfExportSettings(profileID, exportSettings);
     });
+    _pdfExportSettingsInstances[profileID] = exportSettings;
     return exportSettings;
   }
 
@@ -211,6 +225,8 @@ class ConfigDao {
     );
   }
 
+  final Map<(int, int), IntervallStorage> _intervallStorageInstances = {};
+
   /// Loads a [IntervallStorage] object of a [profileID] from the database.
   ///
   /// The [storageID] allows for associating multiple intervalls with one profile.
@@ -223,6 +239,7 @@ class ConfigDao {
   /// This should not be invoked directly in order to centralise [storageID] allocation. Currently this is done by
   /// the [IntervallStoreManager] class.
   Future<IntervallStorage> loadIntervallStorage(int profileID, int storageID) async {
+    if (_intervallStorageInstances.containsKey((profileID, storageID))) return _intervallStorageInstances[(profileID, storageID)]!;
     final dbEntry = await _configDB.database.query(
         ConfigDB.selectedIntervallStorageTable,
         columns: ['stepSize', 'start', 'end'],
@@ -241,6 +258,7 @@ class ConfigDao {
     intervallStorage.addListener(() {
       _updateIntervallStorage(profileID, storageID, intervallStorage);
     });
+    _intervallStorageInstances[(profileID, storageID)] = intervallStorage;
     return intervallStorage;
   }
 
@@ -261,6 +279,8 @@ class ConfigDao {
     );
   }
 
+  final Map<int, ExportColumnsManager> _exportColumnsManagerInstances = {};
+
   /// Loads the profiles [ExportColumnsManager] object from the database.
   ///
   /// If any errors occur or the object is not present, a default one will be created. Changes in the object
@@ -268,6 +288,7 @@ class ConfigDao {
   ///
   /// Changes to the database will not propagate to the object.
   Future<ExportColumnsManager> loadExportColumnsManager(int profileID) async {
+    if (_exportColumnsManagerInstances.containsKey(profileID)) return _exportColumnsManagerInstances[profileID]!;
     final dbEntry = await _configDB.database.query(
         ConfigDB.exportColumnsTable,
         columns: ['json'],
@@ -291,6 +312,7 @@ class ConfigDao {
     columnsManager.addListener(() {
       _updateExportColumnsManager(profileID, columnsManager);
     });
+    _exportColumnsManagerInstances[profileID] = columnsManager;
     return columnsManager;
   }
 
