@@ -3,7 +3,7 @@
 App release checklist
 - [ ] milestone finished
 - [ ] no remaining breaking issues
-- [ ] add translation from Weblate
+- [ ] add translation from [Weblate](https://hosted.weblate.org/projects/blood-pressure-monitor-fl/#repository)
 - [ ] create changelog
 - [ ] update version in `pubspec.yaml` and `android/app/build.gradle`
 - [ ] verify no tests fail
