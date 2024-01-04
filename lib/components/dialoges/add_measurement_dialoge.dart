@@ -145,7 +145,7 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
 
   Widget buildValueInput(AppLocalizations localizations, {
     int? initialValue,
-    String? hintText,
+    String? labelText,
     void Function(String?)? onSaved,
     FocusNode? focusNode,
     TextEditingController? controller,
@@ -155,7 +155,9 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
     return Expanded(
       child: TextFormField(
         initialValue: initialValue?.toString(),
-        decoration: getInputDecoration(hintText),
+        decoration: InputDecoration(
+          labelText: labelText,
+        ),
         keyboardType: TextInputType.number,
         focusNode: focusNode,
         onSaved: onSaved,
@@ -186,30 +188,11 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
     );
   }
 
-
-  InputDecoration getInputDecoration(String? labelText) {
-    final border = OutlineInputBorder(
-        borderSide: BorderSide(
-          width: 2,
-          color: Theme.of(context).primaryColor,
-        ),
-        borderRadius: BorderRadius.circular(20)
-    );
-    return InputDecoration(
-      hintText: labelText,
-      labelText: labelText,
-      errorMaxLines: 5,
-      border: border,
-      enabledBorder: border,
-    );
-  }
+  
 
   /// Build the border all fields have.
   RoundedRectangleBorder buildShapeBorder([Color? color]) => RoundedRectangleBorder(
-    side: BorderSide(
-      width: 2,
-      color: color ?? Theme.of(context).primaryColor
-    ),
+    side: Theme.of(context).inputDecorationTheme.border!.borderSide,
     borderRadius: BorderRadius.circular(20)
   );
 
@@ -253,13 +236,13 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
                 children: [
                   buildValueInput(localizations,
                     focusNode: sysFocusNode,
-                    hintText: localizations.sysLong,
+                    labelText: localizations.sysLong,
                     controller: sysController,
                     onSaved: (value) => setState(() => systolic = int.tryParse(value ?? '')),
                   ),
                   const SizedBox(width: 16,),
                   buildValueInput(localizations,
-                    hintText: localizations.diaLong,
+                    labelText: localizations.diaLong,
                     initialValue: widget.initialRecord?.diastolic,
                     onSaved: (value) => setState(() => diastolic = int.tryParse(value ?? '')),
                     focusNode: diaFocusNode,
@@ -272,7 +255,7 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
                   ),
                   const SizedBox(width: 16,),
                   buildValueInput(localizations,
-                    hintText: localizations.pulLong,
+                    labelText: localizations.pulLong,
                     initialValue: widget.initialRecord?.pulse,
                     focusNode: pulFocusNode,
                     onSaved: (value) => setState(() => pulse = int.tryParse(value ?? '')),
@@ -284,7 +267,9 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
                 child: TextFormField(
                   initialValue: widget.initialRecord?.notes,
                   focusNode: noteFocusNode,
-                  decoration: getInputDecoration(localizations.addNote),
+                  decoration: InputDecoration(
+                    labelText: localizations.addNote,
+                  ),
                   minLines: 1,
                   maxLines: 4,
                   onChanged: (value) {
@@ -318,7 +303,6 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
                           isExpanded: true,
                           value: widget.settings.medications
                               .where((e) => e.id == medicineId).firstOrNull,
-                          decoration: getInputDecoration(null),
                           items: [
                             for (final e in widget.settings.medications)
                               DropdownMenuItem(
@@ -350,7 +334,9 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
                         Expanded(
                           child: TextFormField(
                             initialValue: medicineDosis?.toString(),
-                            decoration: getInputDecoration(localizations.dosis),
+                            decoration: InputDecoration(
+                              labelText: localizations.dosis,
+                            ),
                             keyboardType: TextInputType.number,
                             onSaved: (value) => setState(() {
                               final dosis = int.tryParse(value ?? '')?.toDouble()

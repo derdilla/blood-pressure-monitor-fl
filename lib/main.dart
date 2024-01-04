@@ -103,21 +103,18 @@ class AppRoot extends StatelessWidget {
         onGenerateTitle: (context) {
           return AppLocalizations.of(context)!.title;
         },
-        theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(
-            seedColor: settings.accentColor,
-            brightness: Brightness.light,
-          ),
-          useMaterial3: true,
-        ),
-        darkTheme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(
-            seedColor: settings.accentColor,
-            brightness: Brightness.dark,
-            background: Colors.black
-          ),
-          useMaterial3: true
-        ),
+        theme: _buildTheme(ColorScheme.fromSeed(
+          seedColor: settings.accentColor,
+          brightness: Brightness.light,
+        )),
+        darkTheme: _buildTheme(ColorScheme.fromSeed(
+          seedColor: settings.accentColor,
+          brightness: Brightness.dark,
+          background: Colors.black,
+          // 3:1 ratio changed because of background and outlineVariant looks
+          // better.
+          outline: const Color(0xff3f4947)
+        )),
         themeMode: settings.themeMode,
         localizationsDelegates: const [
           AppLocalizations.delegate,
@@ -130,6 +127,40 @@ class AppRoot extends StatelessWidget {
         home: const AppHome(),
       );
     });
+  }
+
+  ThemeData _buildTheme(ColorScheme colorScheme) {
+    final inputBorder = OutlineInputBorder(
+        borderSide: BorderSide(
+          width: 3,
+          color: colorScheme.outline,
+        ),
+        borderRadius: BorderRadius.circular(20)
+    );
+
+    return ThemeData(
+      colorScheme: colorScheme,
+      useMaterial3: true,
+      inputDecorationTheme: InputDecorationTheme(
+        errorMaxLines: 5,
+        border: inputBorder,
+        enabledBorder: inputBorder,
+      ),
+      appBarTheme: const AppBarTheme(
+        centerTitle: true,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+            bottomRight: Radius.circular(15),
+            bottomLeft: Radius.circular(15),
+          ),
+        ),
+      ),
+      snackBarTheme: SnackBarThemeData(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(8),
+        ),
+      ),
+    );
   }
 }
 

@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:math';
 
 import 'package:blood_pressure_app/components/consistent_future_builder.dart';
+import 'package:blood_pressure_app/components/custom_banner.dart';
 import 'package:blood_pressure_app/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -42,13 +43,12 @@ class _DeleteDataScreenState extends State<DeleteDataScreen> {
       body: Column(
         children: [
           if (_deletedData)
-            MaterialBanner(
+            CustomBanner(
                 content: Text(localizations.warnNeedsRestartForUsingApp),
-                actions: [
-                  TextButton(onPressed: () {
-                    Restart.restartApp();
-                  }, child: Text(localizations.restartNow))
-                ]
+                action: TextButton(
+                  onPressed: () => Restart.restartApp(),
+                  child: Text(localizations.restartNow),
+                )
             ),
           Expanded(
             child: Container(

@@ -1,3 +1,4 @@
+import 'package:blood_pressure_app/components/custom_banner.dart';
 import 'package:blood_pressure_app/model/export_import/column.dart';
 import 'package:blood_pressure_app/model/export_import/export_configuration.dart';
 import 'package:blood_pressure_app/model/export_import/import_field_type.dart';
@@ -105,20 +106,14 @@ class _ExportWarnBannerState extends State<ExportWarnBanner> {
     ), localizations);
   }
 
-  Widget _banner(String text, AppLocalizations localizations) {
-    return MaterialBanner(
-        padding: const EdgeInsets.all(20),
-        content: Text(text),
-        actions: [
-          TextButton(
-            onPressed: () {
-              setState(() {
-                _hidden = true;
-              });
-            },
-            child: Text(localizations.btnConfirm)
-          )
-        ]
-      );
-  }
+  // TODO: ensure this is used instead of material banner everywhere in the app.
+  Widget _banner(String text, AppLocalizations localizations) => CustomBanner(
+      content: Text(text),
+      action: TextButton(
+        onPressed: () => setState(() {
+          _hidden = true;
+        }),
+        child: Text(localizations.btnConfirm)
+      ),
+    );
 }
