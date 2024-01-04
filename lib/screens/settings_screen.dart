@@ -29,7 +29,6 @@ class SettingsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print(Theme.of(context).inputDecorationTheme.border);
     final localizations = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: AppBar(

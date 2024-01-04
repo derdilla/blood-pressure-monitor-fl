@@ -129,7 +129,7 @@ class AppHome extends StatelessWidget {
                   tooltip: localizations.statistics,
                   backgroundColor: const Color(0xFF6F6F6F),
                   onPressed: () {
-                    Navigator.push(context, _buildTransition(const StatisticsPage(), settings.animationSpeed));
+                    _buildTransition(context, const StatisticsPage(), settings.animationSpeed);
                   },
                   child: const Icon(Icons.insights, color: Colors.black),
                 ),
@@ -142,7 +142,7 @@ class AppHome extends StatelessWidget {
                   backgroundColor: const Color(0xFF6F6F6F),
                   child: const Icon(Icons.settings, color: Colors.black),
                   onPressed: () {
-                    Navigator.push(context, _buildTransition(const SettingsPage(), settings.animationSpeed));
+                    _buildTransition(context, const SettingsPage(), settings.animationSpeed);
                   },
                 ),
               ],
@@ -153,17 +153,21 @@ class AppHome extends StatelessWidget {
   }
 }
 
-PageRoute _buildTransition(Widget page, int duration) {
-  return TimedMaterialPageRouter(duration: Duration(milliseconds: duration), builder: (context) => page);
+// FIXME: pass context on transitions, use instead of Navigator.push
+void _buildTransition(BuildContext context, Widget page, int duration) {
+  Navigator.push(context,
+    TimedMaterialPageRouter(
+      transitionDuration: Duration(milliseconds: duration),
+      builder: (context) => page
+    )
+  );
 }
 
 class TimedMaterialPageRouter extends MaterialPageRoute {
-  Duration _duration = Duration.zero;
-
-  TimedMaterialPageRouter({required WidgetBuilder builder, required Duration duration}) : super(builder: builder) {
-    _duration = duration;
-  }
+  TimedMaterialPageRouter({
+    required super.builder,
+    required this.transitionDuration});
 
   @override
-  Duration get transitionDuration => _duration;
+  final Duration transitionDuration;
 }
