@@ -39,24 +39,24 @@ class _ExportWarnBannerState extends State<ExportWarnBanner> {
       case ExportFormat.db:
         return _buildOK();
       case ExportFormat.pdf:
-        return _buildNotExportable(context);
+        return _buildNotImportable(context);
       case ExportFormat.csv:
         if (widget.csvExportSettings.exportHeadline == false) return _buildNoHeadline(context);
-        if (widget.csvExportSettings.fieldDelimiter != ',' && widget.csvExportSettings.fieldDelimiter != '|') return _buildNotExportable(context);
-        if (widget.csvExportSettings.textDelimiter != '"' && widget.csvExportSettings.textDelimiter != "'") return _buildNotExportable(context);
+        if (widget.csvExportSettings.fieldDelimiter != ',' && widget.csvExportSettings.fieldDelimiter != '|') return _buildNotImportable(context);
+        if (widget.csvExportSettings.textDelimiter != '"' && widget.csvExportSettings.textDelimiter != "'") return _buildNotImportable(context);
         final preset = widget.csvExportSettings.exportFieldsConfiguration.activePreset;
         switch (preset) {
           case ExportImportPreset.bloodPressureApp:
             return _buildOK();
           case ExportImportPreset.myHeart:
-            return _buildNotExportable(context);
+            return _buildNotImportable(context);
           case ExportImportPreset.none:
             final exportedColumns = widget.csvExportSettings.exportFieldsConfiguration
                 .getActiveColumns(widget.availableColumns);
             final exportedTypes = exportedColumns
                 .map((column) => column.restoreAbleType);
 
-            if (!exportedTypes.contains(RowDataFieldType.timestamp)) return _buildNotExportable(context);
+            if (!exportedTypes.contains(RowDataFieldType.timestamp)) return _buildNotImportable(context);
 
             if (exportedColumns.firstWhereOrNull((e) => (e is TimeColumn)) != null) return _buildAccuracyLoss(context);
 
@@ -68,6 +68,8 @@ class _ExportWarnBannerState extends State<ExportWarnBanner> {
             if (missingTypes.isEmpty) return _buildOK();
 
             return _buildIncompleteExport(context, missingTypes);
+          case ExportImportPreset.bloodPressureAppPdf:
+            return _buildNotImportable(context);
         }
     }
   }
@@ -76,7 +78,7 @@ class _ExportWarnBannerState extends State<ExportWarnBanner> {
   Widget _buildOK() => const SizedBox.shrink();
 
   /// Exports made with this configuration are not importable for a variety of reasons.
-  Widget _buildNotExportable(BuildContext context) {
+  Widget _buildNotImportable(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
     return _banner(localizations.exportWarnConfigNotImportable, localizations);
   }
