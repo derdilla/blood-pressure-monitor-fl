@@ -99,6 +99,12 @@ class ActiveExportColumnConfiguration extends ChangeNotifier {
         BuildInColumn.mhWeight,
         BuildInColumn.mhOxygen,
       ],
+      ExportImportPreset.bloodPressureAppPdf => [
+        BuildInColumn.formattedTime,
+        NativeColumn.systolic,
+        NativeColumn.diastolic,
+        NativeColumn.pulse,
+      ]
     });
 }
 
@@ -112,18 +118,26 @@ enum ExportImportPreset {
   ///
   /// All [NativeColumn]s.
   bloodPressureApp,
+
+  /// Default preset for pdf exports.
+  ///
+  /// Includes time, sys, dia, pu
+  bloodPressureAppPdf,
+
   myHeart;
 
   String localize(AppLocalizations localizations) => switch (this) {
     ExportImportPreset.none => localizations.custom,
     ExportImportPreset.bloodPressureApp => localizations.default_,
+    ExportImportPreset.bloodPressureAppPdf => localizations.pdf,
     ExportImportPreset.myHeart => '"My Heart" export'
   };
 
   int encode() => switch (this) {
     ExportImportPreset.none => 0,
     ExportImportPreset.bloodPressureApp => 1,
-    ExportImportPreset.myHeart => 2
+    ExportImportPreset.myHeart => 2,
+    ExportImportPreset.bloodPressureAppPdf => 3,
   };
 
   static ExportImportPreset? decode(dynamic e) {
@@ -131,6 +145,7 @@ enum ExportImportPreset {
       0 => ExportImportPreset.none,
       1 => ExportImportPreset.bloodPressureApp,
       2 => ExportImportPreset.myHeart,
+      3 => ExportImportPreset.bloodPressureAppPdf,
       _ => (){
         assert(e is! int, 'non ints can happen through bad user values, other ints can happen as well, but should developers should be notified.');
         return null;

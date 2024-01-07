@@ -121,8 +121,9 @@ class BuildInColumn extends ExportColumn {
   BuildInColumn._create(this.internalIdentifier, this.csvTitle, String formatString, this._userTitle)
       : _formatter = ScriptedFormatter(formatString);
   
-  static final List<BuildInColumn> allColumns = [
+  static final List<ExportColumn> allColumns = [
     pulsePressure,
+    formattedTime,
     mhDate,
     mhSys,
     mhDia,
@@ -139,9 +140,14 @@ class BuildInColumn extends ExportColumn {
       r'{{$SYS-$DIA}}', 
       (localizations) => localizations.pulsePressure
   );
+  static final formattedTime = TimeColumn.explicit(
+      'buildin.formattedTime',
+      'Time',
+      'dd MMM yyyy, HH:mm'
+  );
 
   // my heart columns
-  static final mhDate = BuildInColumn._create(
+  static final mhDate = BuildInColumn._create( // FIXME
       'buildin.mhDate',
       'DATUM',
       r'$FORMAT{$TIMESTAMP,yyyy-MM-dd HH:mm:ss}',
