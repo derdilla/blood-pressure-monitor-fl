@@ -55,7 +55,7 @@ class PdfConverter {
             _buildPdfTable(records, availableHeight),
         ];
       },
-      maxPages: 100
+      maxPages: 10000
     ));
     return await pdf.save();
   }
@@ -92,8 +92,6 @@ class PdfConverter {
 
   pw.Widget _buildPdfTable(Iterable<BloodPressureRecord> records, double availableHeightOnFirstPage) {
     final columns = pdfSettings.exportFieldsConfiguration.getActiveColumns(availableColumns);
-    int rowCount = (availableHeightOnFirstPage - pdfSettings.headerHeight)
-        ~/ (pdfSettings.cellHeight + 5);
 
     final data = records.map(
       (record) => columns.map(
@@ -101,62 +99,170 @@ class PdfConverter {
       ).toList()
     ).toList();
 
-    final List<pw.Widget> tables = [];
-    for (int offset = 0; offset < data.length; offset += rowCount) {
-      final dataRange = data.getRange(offset, min(offset + rowCount, data.length)).toList();
-      // Correct rowcount after first page (2 tables)
-      if (offset == rowCount) rowCount = (PdfPageFormat.a4.availableHeight - pdfSettings.headerHeight)
-          ~/ (pdfSettings.cellHeight + 5);
-      tables.add(pw.Container(
-        padding: const pw.EdgeInsets.symmetric(horizontal: 5),
-        width: PdfPageFormat.a4.availableWidth ~/2 - 5, // sized box between columns at bottom
-        child: pw.TableHelper.fromTextArray(
-          border: null,
-          cellAlignment: pw.Alignment.centerLeft,
-          headerDecoration: const pw.BoxDecoration(
-              border: pw.Border(bottom: pw.BorderSide(color: PdfColors.black))
-          ),
-          headerHeight: pdfSettings.headerHeight,
-          cellHeight: pdfSettings.cellHeight,
-          cellAlignments: {
-            for (final v in List.generate(columns.length, (idx)=>idx))
-              v : pw.Alignment.centerLeft,
-          },
-          headerStyle: pw.TextStyle(
-            color: PdfColors.black,
-            fontSize: pdfSettings.headerFontSize,
-            fontWeight: pw.FontWeight.bold,
-          ),
-          cellStyle: pw.TextStyle(
-            fontSize: pdfSettings.cellFontSize,
-          ),
-          headerCellDecoration: pw.BoxDecoration(
-            border: pw.Border(
-              bottom: pw.BorderSide(
-                color: settings.accentColor.toPdfColor(),
-                width: 5,
-              ),
-            ),
-          ),
-          rowDecoration: const pw.BoxDecoration(
-            border: pw.Border(
-              bottom: pw.BorderSide(
-                color: PdfColors.blueGrey,
-                width: .5,
-              ),
-            ),
-          ),
-          headers: columns.map((c) => c.userTitle(localizations)).toList(),
-          data: dataRange,
-        )
-      ));
-    }
+    return pw.Builder(builder: (
+      pw.Context context) {
+        // TODO: calculate cell and header height
 
-    return pw.Wrap(
-      children: [
-        for (final table in tables)
-          pw.Expanded(child: table),
-      ]
+        final realCellHeight = () {
+          final cell = pw.TableHelper.fromTextArray(
+            data: data,
+            border: null,
+            cellHeight: pdfSettings.cellHeight,
+            cellStyle: pw.TextStyle(
+              fontSize: pdfSettings.cellFontSize,
+            ),
+            rowDecoration: const pw.BoxDecoration(
+              border: pw.Border(
+                bottom: pw.BorderSide(
+                  color: PdfColors.blueGrey,
+                  width: .5,
+                ),
+              ),
+            ),
+          );
+          cell.layout(context, pw.BoxConstraints(maxWidth: PdfPageFormat.a4.availableWidth ~/2 - 10));
+          return cell.box!.height / data.length;
+        }();
+        final realHeaderHeight = () {
+          final cell = pw.TableHelper.fromTextArray(
+            data: [],
+            border: null,
+            headerDecoration: const pw.BoxDecoration(
+                border: pw.Border(bottom: pw.BorderSide(color: PdfColors.black))
+            ),
+            headerHeight: pdfSettings.headerHeight,
+            headerStyle: pw.TextStyle(
+              color: PdfColors.black,
+              fontSize: pdfSettings.headerFontSize,
+              fontWeight: pw.FontWeight.bold,
+            ),
+            headerCellDecoration: pw.BoxDecoration(
+              border: pw.Border(
+                bottom: pw.BorderSide(
+                  color: settings.accentColor.toPdfColor(),
+                  width: 5,
+                ),
+              ),
+            ),
+            headers: columns.map((c) => c.userTitle(localizations)).toList(),
+          );
+          // subtracting padding during layout
+          cell.layout(context, pw.BoxConstraints(maxWidth: PdfPageFormat.a4.availableWidth ~/2 - 10));
+          return cell.box!.height;
+        }();
+        if (realHeaderHeight > (pdfSettings.headerHeight + 10)
+            || realCellHeight > (pdfSettings.cellHeight + 5)) {
+          return pw.TableHelper.fromTextArray(
+            border: null,
+            cellAlignment: pw.Alignment.centerLeft,
+            headerDecoration: const pw.BoxDecoration(
+                border: pw.Border(bottom: pw.BorderSide(color: PdfColors.black))
+            ),
+            headerHeight: pdfSettings.headerHeight,
+            cellHeight: pdfSettings.cellHeight,
+            cellAlignments: {
+              for (final v in List.generate(columns.length, (idx)=>idx))
+                v : pw.Alignment.centerLeft,
+            },
+            headerStyle: pw.TextStyle(
+              color: PdfColors.black,
+              fontSize: pdfSettings.headerFontSize,
+              fontWeight: pw.FontWeight.bold,
+            ),
+            cellStyle: pw.TextStyle(
+              fontSize: pdfSettings.cellFontSize,
+            ),
+            headerCellDecoration: pw.BoxDecoration(
+              border: pw.Border(
+                bottom: pw.BorderSide(
+                  color: settings.accentColor.toPdfColor(),
+                  width: 5,
+                ),
+              ),
+            ),
+            rowDecoration: const pw.BoxDecoration(
+              border: pw.Border(
+                bottom: pw.BorderSide(
+                  color: PdfColors.blueGrey,
+                  width: .5,
+                ),
+              ),
+            ),
+            headers: columns.map((c) => c.userTitle(localizations)).toList(),
+            data: data,
+          );
+        }
+
+        int rowCount = (availableHeightOnFirstPage - realHeaderHeight)
+            ~/ (realCellHeight);
+        
+        print(rowCount);
+
+        final List<pw.Widget> tables = [];
+        int pageNum = 0;
+        for (int offset = 0; offset < data.length; offset += rowCount) {
+          final dataRange = data.getRange(offset, min(offset + rowCount, data.length)).toList();
+          // Correct rowcount after first page (2 tables)
+          if (pageNum == 1) {
+            rowCount = (PdfPageFormat.a4.availableHeight - realHeaderHeight)
+                ~/ (realCellHeight);
+          }
+          tables.add(pw.Container(
+            padding: const pw.EdgeInsets.symmetric(horizontal: 5),
+            width: PdfPageFormat.a4.availableWidth / 2 - 1,
+            height: ((pageNum < 2) ? availableHeightOnFirstPage : PdfPageFormat.a4.availableHeight) - 20,
+            alignment: pw.Alignment.topCenter,
+            child: pw.TableHelper.fromTextArray(
+              border: null,
+              cellAlignment: pw.Alignment.centerLeft,
+              headerDecoration: const pw.BoxDecoration(
+                border: pw.Border(bottom: pw.BorderSide(color: PdfColors.black))
+              ),
+              headerHeight: pdfSettings.headerHeight,
+              cellHeight: pdfSettings.cellHeight,
+              cellAlignments: {
+                for (final v in List.generate(columns.length, (idx)=>idx))
+                  v : pw.Alignment.centerLeft,
+              },
+              headerStyle: pw.TextStyle(
+                color: PdfColors.black,
+                fontSize: pdfSettings.headerFontSize,
+                fontWeight: pw.FontWeight.bold,
+              ),
+              cellStyle: pw.TextStyle(
+                fontSize: pdfSettings.cellFontSize,
+              ),
+              headerCellDecoration: pw.BoxDecoration(
+                border: pw.Border(
+                  bottom: pw.BorderSide(
+                    color: settings.accentColor.toPdfColor(),
+                    width: 5,
+                  ),
+                ),
+              ),
+              rowDecoration: const pw.BoxDecoration(
+                border: pw.Border(
+                  bottom: pw.BorderSide(
+                    color: PdfColors.blueGrey,
+                    width: .5,
+                  ),
+                ),
+              ),
+              headers: columns.map((c) => c.userTitle(localizations)).toList(),
+              data: dataRange,
+            )
+          ));
+          pageNum++;
+        }
+
+
+        return pw.Wrap(
+            children: [
+              for (final table in tables)
+                pw.Expanded(child: table),
+            ]
+        );
+      }
     );
   }
 }
