@@ -37,24 +37,26 @@ class PdfConverter {
     final analyzer = BloodPressureAnalyser(records.toList());
 
     pdf.addPage(pw.MultiPage(
-        pageFormat: PdfPageFormat.a4,
-        build: (pw.Context context) {
-          final title = (pdfSettings.exportTitle) ? _buildPdfTitle(records, analyzer) : null;
-          title?.layout(context, const pw.BoxConstraints());
-          final statistics = (pdfSettings.exportStatistics) ? _buildPdfStatistics(analyzer) : null;
-          statistics?.layout(context, const pw.BoxConstraints());
-          final availableHeight = PdfPageFormat.a4.availableHeight
-              - (title?.box?.height ?? 0)
-              - (statistics?.box?.height ?? 0);
-          return [
-            if (pdfSettings.exportTitle)
-              title!,
-            if (pdfSettings.exportStatistics)
-              statistics!,
-            if (pdfSettings.exportData)
-              _buildPdfTable(records, availableHeight),
-          ];
-        }));
+      pageFormat: PdfPageFormat.a4,
+      build: (pw.Context context) {
+        final title = (pdfSettings.exportTitle) ? _buildPdfTitle(records, analyzer) : null;
+        title?.layout(context, const pw.BoxConstraints());
+        final statistics = (pdfSettings.exportStatistics) ? _buildPdfStatistics(analyzer) : null;
+        statistics?.layout(context, const pw.BoxConstraints());
+        final availableHeight = PdfPageFormat.a4.availableHeight
+            - (title?.box?.height ?? 0)
+            - (statistics?.box?.height ?? 0);
+        return [
+          if (pdfSettings.exportTitle)
+            title!,
+          if (pdfSettings.exportStatistics)
+            statistics!,
+          if (pdfSettings.exportData)
+            _buildPdfTable(records, availableHeight),
+        ];
+      },
+      maxPages: 100
+    ));
     return await pdf.save();
   }
 
@@ -88,10 +90,9 @@ class PdfConverter {
     );
   }
 
-  pw.Widget _buildPdfTable(Iterable<BloodPressureRecord> records, double availableHeight) {
+  pw.Widget _buildPdfTable(Iterable<BloodPressureRecord> records, double availableHeightOnFirstPage) {
     final columns = pdfSettings.exportFieldsConfiguration.getActiveColumns(availableColumns);
-    final rowCount =
-      (availableHeight - pdfSettings.headerHeight)
+    int rowCount = (availableHeightOnFirstPage - pdfSettings.headerHeight)
         ~/ (pdfSettings.cellHeight + 5);
 
     final data = records.map(
@@ -103,7 +104,11 @@ class PdfConverter {
     final List<pw.Widget> tables = [];
     for (int offset = 0; offset < data.length; offset += rowCount) {
       final dataRange = data.getRange(offset, min(offset + rowCount, data.length)).toList();
-      tables.add(pw.SizedBox(
+      // Correct rowcount after first page (2 tables)
+      if (offset == rowCount) rowCount = (PdfPageFormat.a4.availableHeight - pdfSettings.headerHeight)
+          ~/ (pdfSettings.cellHeight + 5);
+      tables.add(pw.Container(
+        padding: const pw.EdgeInsets.symmetric(horizontal: 5),
         width: PdfPageFormat.a4.availableWidth ~/2 - 5, // sized box between columns at bottom
         child: pw.TableHelper.fromTextArray(
           border: null,
@@ -147,18 +152,10 @@ class PdfConverter {
       ));
     }
 
-    return pw.Column(
+    return pw.Wrap(
       children: [
-        for (int i = 0; i < tables.length; i += 2)
-          pw.Row(
-            crossAxisAlignment: pw.CrossAxisAlignment.start,
-            children: [ // TODO: more generic detection of column count
-              tables[i],
-              pw.SizedBox(width: 10),
-              if (i+1 < tables.length)
-                tables[i+1],
-            ]
-          )
+        for (final table in tables)
+          pw.Expanded(child: table),
       ]
     );
   }
