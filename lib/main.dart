@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:blood_pressure_app/components/consistent_future_builder.dart';
 import 'package:blood_pressure_app/model/blood_pressure/medicine/intake_history.dart';
 import 'package:blood_pressure_app/model/blood_pressure/model.dart';
+import 'package:blood_pressure_app/model/export_import/export_configuration.dart';
 import 'package:blood_pressure_app/model/storage/db/config_dao.dart';
 import 'package:blood_pressure_app/model/storage/db/config_db.dart';
 import 'package:blood_pressure_app/model/storage/intervall_store.dart';
@@ -14,7 +15,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:package_info_plus/package_info_plus.dart';
 import 'package:path/path.dart';
 import 'package:provider/provider.dart';
 import 'package:sqflite/sqflite.dart';
@@ -68,11 +68,16 @@ Future<Widget> _loadApp() async {
     await updateLegacySettings(settings, exportSettings, csvExportSettings, pdfExportSettings, intervalStorageManager);
     await updateLegacyExport(_database, exportColumnsManager);
 
-    settings.lastVersion = int.parse((await PackageInfo.fromPlatform()).buildNumber);
+    settings.lastVersion = 30;
     if (exportSettings.exportAfterEveryEntry) {
       await Fluttertoast.showToast(
         msg: r'Please review your export settings to ensure everything works as expected.',
       );
+    }
+  }
+  if (settings.lastVersion == 30) {
+    if (pdfExportSettings.exportFieldsConfiguration.activePreset == ExportImportPreset.bloodPressureApp) {
+      pdfExportSettings.exportFieldsConfiguration.activePreset = ExportImportPreset.bloodPressureAppPdf;
     }
   }
   if (settings.allowMissingValues && settings.validateInputs) settings.validateInputs = false;
