@@ -147,11 +147,11 @@ class BuildInColumn extends ExportColumn {
   );
 
   // my heart columns
-  static final mhDate = BuildInColumn._create( // FIXME
+  static final mhDate = TimeColumn.explicit(
       'buildin.mhDate',
       'DATUM',
-      r'$FORMAT{$TIMESTAMP,yyyy-MM-dd HH:mm:ss}',
-      (_) => '"My Heart" export time'
+      r'yyyy-MM-dd HH:mm:ss',
+      '"My Heart" export time'
   );
   static final mhSys = BuildInColumn._create(
       'buildin.mhSys',
@@ -228,7 +228,8 @@ class UserColumn extends ExportColumn {
   ///
   /// [formatter] will be created according to [formatPattern].
   ///
-  /// [internalIdentifier] is automatically prefixed with 'userColumn.' during object creation.
+  /// [internalIdentifier] is automatically prefixed with 'userColumn.' during
+  /// object creation.
   UserColumn(String internalIdentifier, this.csvTitle, String formatPattern):
         formatter = ScriptedFormatter(formatPattern),
         internalIdentifier = 'userColumn.$internalIdentifier';
@@ -239,7 +240,8 @@ class UserColumn extends ExportColumn {
 
   /// Unique identifier of userColumn.
   ///
-  /// Is automatically prefixed with `userColumn.` to avoid name collisions with build-ins.
+  /// Is automatically prefixed with `userColumn.` to avoid name collisions with
+  /// build-ins.
   @override
   final String internalIdentifier;
 
@@ -266,19 +268,24 @@ class UserColumn extends ExportColumn {
 }
 
 class TimeColumn extends ExportColumn {
-  /// Create a formatter that converts between [String]s and [DateTime]s through a format pattern
+  /// Create a formatter that converts between [String]s and [DateTime]s
+  /// through a format pattern.
   ///
-  /// [internalIdentifier] is automatically prefixed with 'userColumn.' during object creation.
+  /// [internalIdentifier] is automatically prefixed with 'userColumn.' during
+  /// object creation.
   TimeColumn(this.csvTitle, this.formatPattern):
-        internalIdentifier = 'timeFormatter.$csvTitle';
+      _localization = null,
+      internalIdentifier = 'timeFormatter.$csvTitle';
 
   /// UserColumn constructor that does not change the [internalIdentifier].
-  TimeColumn.explicit(this.internalIdentifier, this.csvTitle, this.formatPattern);
+  TimeColumn.explicit(this.internalIdentifier, this.csvTitle, this.formatPattern, [this._localization]);
 
   ScriptedTimeFormatter? _formatter;
 
   @override
   final String csvTitle;
+
+  final String? _localization;
 
   @override
   (RowDataFieldType, dynamic)? decode(String pattern) {
@@ -297,7 +304,8 @@ class TimeColumn extends ExportColumn {
 
   /// Unique identifier of userColumn.
   ///
-  /// Is automatically prefixed with `timeFormatter.` to avoid name collisions with build-ins.
+  /// Is automatically prefixed with `timeFormatter.` to avoid name collisions
+  /// with build-ins.
   @override
   final String internalIdentifier;
 
@@ -305,7 +313,7 @@ class TimeColumn extends ExportColumn {
   RowDataFieldType? get restoreAbleType => RowDataFieldType.timestamp;
 
   @override
-  String userTitle(AppLocalizations localizations) => csvTitle;
+  String userTitle(AppLocalizations localizations) => _localization ?? csvTitle;
 
 }
 
@@ -313,10 +321,10 @@ class TimeColumn extends ExportColumn {
 sealed class ExportColumn implements Formatter {
   /// Unique internal identifier that is used to identify a column in the app.
   ///
-  /// A identifier can be any string, but is usually structured with a prefix and
-  /// a name. For example `buildin.sys`, `user.fancyvalue` or `convert.myheartsys`.
-  /// These examples are not guaranteed to be the prefixes used in the rest of the
-  /// app.
+  /// A identifier can be any string, but is usually structured with a prefix
+  /// and a name. For example `buildin.sys`, `user.fancyvalue` or
+  /// `convert.myheartsys`. These examples are not guaranteed to be the prefixes
+  /// used in the rest of the app.
   ///
   /// It should not be used instead of [csvTitle].
   String get internalIdentifier;
