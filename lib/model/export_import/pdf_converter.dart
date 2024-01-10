@@ -55,7 +55,7 @@ class PdfConverter {
             _buildPdfTable(records, availableHeight),
         ];
       },
-      maxPages: 10000
+      maxPages: 100
     ));
     return await pdf.save();
   }
