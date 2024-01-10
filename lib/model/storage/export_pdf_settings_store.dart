@@ -113,7 +113,7 @@ class PdfExportSettings extends ChangeNotifier implements CustomFieldsSettings {
   }
 
   ActiveExportColumnConfiguration _exportFieldsConfiguration = ActiveExportColumnConfiguration(
-    activePreset: ExportImportPreset.bloodPressureAppPdf, // TODO: update function
+    activePreset: ExportImportPreset.bloodPressureAppPdf,
   );
   @override
   ActiveExportColumnConfiguration get exportFieldsConfiguration => _exportFieldsConfiguration;

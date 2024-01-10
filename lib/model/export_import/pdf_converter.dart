@@ -101,8 +101,6 @@ class PdfConverter {
 
     return pw.Builder(builder: (
       pw.Context context) {
-        // TODO: calculate cell and header height
-
         final realCellHeight = () {
           final cell = pw.TableHelper.fromTextArray(
             data: data,
