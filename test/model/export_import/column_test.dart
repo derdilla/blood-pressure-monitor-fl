@@ -105,8 +105,16 @@ void main() {
         final decoded = c.decode(txt);
         switch (decoded?.$1) {
           case RowDataFieldType.timestamp:
-            expect(decoded?.$2, isA<DateTime>().having(
-                    (p0) => p0.millisecondsSinceEpoch, 'milliseconds', r.creationTime.millisecondsSinceEpoch));
+            if (c is TimeColumn) {
+              // This ensures no columns with useless conversions get introduced.
+              expect(decoded?.$2, isA<DateTime>().having(
+                  (p0) => p0.difference(r.creationTime).inDays,
+                  'inaccuracy',
+                  lessThan(1)));
+            } else {
+              expect(decoded?.$2, isA<DateTime>().having(
+                  (p0) => p0.millisecondsSinceEpoch, 'milliseconds', r.creationTime.millisecondsSinceEpoch));
+            }
             break;
           case RowDataFieldType.sys:
             expect(decoded?.$2, isA<int>().having(

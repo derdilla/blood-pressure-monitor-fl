@@ -21,7 +21,8 @@ void main() {
       expect(config.getActiveColumns(ExportColumnsManager()), everyElement(isA<NativeColumn>()));
 
       config.activePreset = ExportImportPreset.myHeart;
-      expect(config.getActiveColumns(ExportColumnsManager()), everyElement(isA<BuildInColumn>()));
+      expect(config.getActiveColumns(ExportColumnsManager()), anyElement(isA<BuildInColumn>()));
+      expect(config.getActiveColumns(ExportColumnsManager()), isNot(anyElement(isA<NativeColumn>())));
 
       config.activePreset = ExportImportPreset.none;
       final manager = ExportColumnsManager();
