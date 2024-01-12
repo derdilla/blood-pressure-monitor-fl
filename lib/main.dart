@@ -79,6 +79,7 @@ Future<Widget> _loadApp() async {
     if (pdfExportSettings.exportFieldsConfiguration.activePreset == ExportImportPreset.bloodPressureApp) {
       pdfExportSettings.exportFieldsConfiguration.activePreset = ExportImportPreset.bloodPressureAppPdf;
     }
+    settings.lastVersion = 31;
   }
   if (settings.allowMissingValues && settings.validateInputs) settings.validateInputs = false;
 
