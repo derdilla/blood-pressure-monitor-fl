@@ -3,19 +3,6 @@ import 'package:blood_pressure_app/model/blood_pressure/medicine/medicine.dart';
 
 /// Instance of a medicine intake.
 class MedicineIntake implements Comparable<Object> {
-  /// Create a instance of a medicine intake.
-  const MedicineIntake({
-    required this.medicine,
-    required this.dosis,
-    required this.timestamp
-  });
-
-  /// Serialize the object to a deserializable string.
-  ///
-  /// The string consists of the id of the medicine, the unix timestamp and the
-  /// dosis. These values are seperated by a null byte
-  String serialize() =>
-      '${medicine.id}\x00${timestamp.millisecondsSinceEpoch}\x00$dosis';
 
   factory MedicineIntake.deserialize(String string, List<Medicine> availableMeds) {
     final elements = string.split('\x00');
@@ -25,6 +12,19 @@ class MedicineIntake implements Comparable<Object> {
       dosis: double.parse(elements[2]),
     );
   }
+  /// Create a instance of a medicine intake.
+  const MedicineIntake({
+    required this.medicine,
+    required this.dosis,
+    required this.timestamp,
+  });
+
+  /// Serialize the object to a deserializable string.
+  ///
+  /// The string consists of the id of the medicine, the unix timestamp and the
+  /// dosis. These values are seperated by a null byte
+  String serialize() =>
+      '${medicine.id}\x00${timestamp.millisecondsSinceEpoch}\x00$dosis';
 
   /// Kind of medicine taken.
   final Medicine medicine;
@@ -48,7 +48,7 @@ class MedicineIntake implements Comparable<Object> {
   int get hashCode => medicine.hashCode ^ dosis.hashCode ^ timestamp.hashCode;
 
   @override
-  int compareTo(other) {
+  int compareTo(Object other) {
     assert(other is MedicineIntake);
     if (other is! MedicineIntake) return 0;
 
@@ -59,7 +59,5 @@ class MedicineIntake implements Comparable<Object> {
   }
 
   @override
-  String toString() {
-    return 'MedicineIntake{medicine: $medicine, dosis: $dosis, timestamp: $timestamp}';
-  }
+  String toString() => 'MedicineIntake{medicine: $medicine, dosis: $dosis, timestamp: $timestamp}';
 }

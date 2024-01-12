@@ -8,7 +8,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class AddMedicationDialoge extends StatefulWidget {
   const AddMedicationDialoge({super.key,
-    required this.settings
+    required this.settings,
   });
 
   final Settings settings;
@@ -43,8 +43,8 @@ class _AddMedicationDialogeState extends State<AddMedicationDialoge> {
           widget.settings.highestMedIndex,
           designation: _designation ?? '',
           color: _color,
-          defaultDosis: _defaultDosis
-        ));
+          defaultDosis: _defaultDosis,
+        ),);
       },
       bottomAppBar: widget.settings.bottomAppBars,
       body: Form(
@@ -79,22 +79,20 @@ class _AddMedicationDialogeState extends State<AddMedicationDialoge> {
     );
   }
 
-  InputDecoration _getInputDecoration(BuildContext context, String? labelText) {
-    return InputDecoration(
+  InputDecoration _getInputDecoration(BuildContext context, String? labelText) => InputDecoration(
       hintText: labelText,
       labelText: labelText,
       errorMaxLines: 5,
       border: _getBorder(),
       enabledBorder: _getBorder(),
     );
-  }
 
   OutlineInputBorder _getBorder() => OutlineInputBorder(
       borderSide: BorderSide(
         width: 3,
         color: Theme.of(context).primaryColor,
       ),
-      borderRadius: BorderRadius.circular(20)
+      borderRadius: BorderRadius.circular(20),
   );
 }
 
@@ -104,4 +102,4 @@ class _AddMedicationDialogeState extends State<AddMedicationDialoge> {
 Future<Medicine?> showAddMedicineDialoge(BuildContext context, Settings settings) =>
   showDialog<Medicine?>(context: context, builder: (context) => Dialog.fullscreen(
     child: AddMedicationDialoge(settings: settings),
-  ));
+  ),);

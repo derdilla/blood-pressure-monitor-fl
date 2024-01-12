@@ -70,17 +70,17 @@ class _InputDialogeState extends State<InputDialoge> {
         decoration: InputDecoration(
           hintText: widget.hintText,
           labelText: widget.hintText,
-          errorText: errorText
+          errorText: errorText,
         ),
         onSubmitted: _onSubmit,
       ),
       actions: [
         ElevatedButton(
             onPressed: () => Navigator.of(context).pop(null),
-            child: Text(localizations.btnCancel)),
+            child: Text(localizations.btnCancel),),
         ElevatedButton(
             onPressed: () => _onSubmit(controller.text),
-            child: Text(localizations.btnConfirm)),
+            child: Text(localizations.btnConfirm),),
       ],
     );
   }
@@ -103,7 +103,7 @@ class _InputDialogeState extends State<InputDialoge> {
 /// [initialValue] specifies the initial input field content.
 Future<String?> showInputDialoge(BuildContext context, {String? hintText, String? initialValue}) async =>
   showDialog<String?>(context: context, builder: (context) =>
-      InputDialoge(hintText: hintText, initialValue: initialValue,));
+      InputDialoge(hintText: hintText, initialValue: initialValue,),);
 
 /// Creates a dialoge that only allows int and double inputs.
 ///
@@ -123,7 +123,7 @@ Future<double?> showNumberInputDialoge(BuildContext context, {String? hintText, 
         }
         return null;
       },
-    ));
+    ),);
 
   double? value = double.tryParse(result ?? '');
   value ??= int.tryParse(result ?? '')?.toDouble();

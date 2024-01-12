@@ -55,8 +55,8 @@ class PdfConverter {
             _buildPdfTable(records, availableHeight),
         ];
       },
-      maxPages: 100
-    ));
+      maxPages: 100,
+    ),);
     return await pdf.save();
   }
 
@@ -67,17 +67,16 @@ class PdfConverter {
         child: pw.Text(
             localizations.pdfDocumentTitle(
                 dateFormatter.format(analyzer.firstDay!),
-                dateFormatter.format(analyzer.lastDay!)
+                dateFormatter.format(analyzer.lastDay!),
             ),
             style: const pw.TextStyle(
               fontSize: 16,
-            )
-        )
+            ),
+        ),
     );
   }
 
-  pw.Widget _buildPdfStatistics(BloodPressureAnalyser analyzer) {
-    return pw.Container(
+  pw.Widget _buildPdfStatistics(BloodPressureAnalyser analyzer) => pw.Container(
       margin: const pw.EdgeInsets.all(20),
       child: pw.TableHelper.fromTextArray(
           data: [
@@ -85,22 +84,21 @@ class PdfConverter {
             [localizations.average, analyzer.avgSys, analyzer.avgDia, analyzer.avgPul],
             [localizations.maximum, analyzer.maxSys, analyzer.maxDia, analyzer.maxPul],
             [localizations.minimum, analyzer.minSys, analyzer.minDia, analyzer.minPul],
-          ]
+          ],
       ),
     );
-  }
 
   pw.Widget _buildPdfTable(Iterable<BloodPressureRecord> records, double availableHeightOnFirstPage) {
     final columns = pdfSettings.exportFieldsConfiguration.getActiveColumns(availableColumns);
 
     final data = records.map(
       (record) => columns.map(
-        (column) => column.encode(record)
-      ).toList()
+        (column) => column.encode(record),
+      ).toList(),
     ).toList();
 
     return pw.Builder(builder: (
-      pw.Context context) {
+      pw.Context context,) {
         final realCellHeight = () {
           final cell = pw.TableHelper.fromTextArray(
             data: data,
@@ -126,7 +124,7 @@ class PdfConverter {
             data: [],
             border: null,
             headerDecoration: const pw.BoxDecoration(
-                border: pw.Border(bottom: pw.BorderSide(color: PdfColors.black))
+                border: pw.Border(bottom: pw.BorderSide()),
             ),
             headerHeight: pdfSettings.headerHeight,
             headerStyle: pw.TextStyle(
@@ -154,7 +152,7 @@ class PdfConverter {
             border: null,
             cellAlignment: pw.Alignment.centerLeft,
             headerDecoration: const pw.BoxDecoration(
-                border: pw.Border(bottom: pw.BorderSide(color: PdfColors.black))
+                border: pw.Border(bottom: pw.BorderSide()),
             ),
             headerHeight: pdfSettings.headerHeight,
             cellHeight: pdfSettings.cellHeight,
@@ -214,7 +212,7 @@ class PdfConverter {
               border: null,
               cellAlignment: pw.Alignment.centerLeft,
               headerDecoration: const pw.BoxDecoration(
-                border: pw.Border(bottom: pw.BorderSide(color: PdfColors.black))
+                border: pw.Border(bottom: pw.BorderSide()),
               ),
               headerHeight: pdfSettings.headerHeight,
               cellHeight: pdfSettings.cellHeight,
@@ -248,8 +246,8 @@ class PdfConverter {
               ),
               headers: columns.map((c) => c.userTitle(localizations)).toList(),
               data: dataRange,
-            )
-          ));
+            ),
+          ),);
           pageNum++;
         }
 
@@ -258,9 +256,9 @@ class PdfConverter {
             children: [
               for (final table in tables)
                 pw.Expanded(child: table),
-            ]
+            ],
         );
-      }
+      },
     );
   }
 }

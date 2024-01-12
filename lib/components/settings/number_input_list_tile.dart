@@ -26,8 +26,7 @@ class NumberInputListTile extends StatelessWidget {
   final void Function(double result) onParsableSubmit;
 
   @override
-  Widget build(BuildContext context) {
-    return ListTile(
+  Widget build(BuildContext context) => ListTile(
       title: Text(label),
       subtitle: Text(value.toString()),
       leading: leading,
@@ -35,10 +34,9 @@ class NumberInputListTile extends StatelessWidget {
       onTap: () async {
         final result = await showNumberInputDialoge(context,
           initialValue: value,
-          hintText: label
+          hintText: label,
         );
         if (result != null) onParsableSubmit(result);
       },
     );
-  }
 }

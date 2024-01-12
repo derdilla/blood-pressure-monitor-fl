@@ -1,11 +1,10 @@
 import 'dart:async';
 
+import 'package:blood_pressure_app/components/measurement_list/measurement_list_entry.dart';
 import 'package:blood_pressure_app/model/blood_pressure/medicine/medicine_intake.dart';
 import 'package:blood_pressure_app/model/storage/settings_store.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-
-import 'measurement_list_entry.dart';
 
 /// Medicine intake to display in a list.
 class IntakeListEntry extends StatelessWidget {
@@ -46,7 +45,7 @@ class IntakeListEntry extends StatelessWidget {
               }
               if (confirmedDeletion) delete!();
             },
-            icon: const Icon(Icons.delete)
+            icon: const Icon(Icons.delete),
           ),
       ],
     ),

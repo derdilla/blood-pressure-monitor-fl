@@ -15,8 +15,8 @@ void main() {
           home: InputDialoge(
             hintText: 'test hint',
             initialValue: 'initial text',
-          )
-      ));
+          ),
+      ),);
       expect(widgetTester.takeException(), isNull);
       expect(find.byType(InputDialoge), findsOneWidget);
     });
@@ -24,7 +24,7 @@ void main() {
       await widgetTester.pumpWidget(materialApp(const InputDialoge(
         hintText: 'test hint',
         initialValue: 'initial text',
-      )));
+      ),),);
       expect(find.text('initial text'), findsOneWidget);
       expect(find.text('test hint'), findsNWidgets(2));
     });
@@ -32,7 +32,7 @@ void main() {
       await widgetTester.pumpWidget(materialApp(InputDialoge(
         initialValue: 'initial text',
         validator: (_) => 'test error',
-      )));
+      ),),);
       final localizations = await AppLocalizations.delegate.load(const Locale('en'));
 
       expect(find.text(localizations.btnConfirm), findsOneWidget);
@@ -51,7 +51,7 @@ void main() {
           validatorCalls += 1;
           return null;
         },
-      )));
+      ),),);
       final localizations = await AppLocalizations.delegate.load(const Locale('en'));
 
       expect(validatorCalls, 0);

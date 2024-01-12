@@ -36,25 +36,25 @@ class NativeColumn extends ExportColumn {
       'systolic',
       RowDataFieldType.sys,
       (record) => record.systolic.toString(),
-      (pattern) => int.tryParse(pattern)
+      int.tryParse,
     );
     static final NativeColumn diastolic = NativeColumn._create(
       'diastolic',
       RowDataFieldType.dia,
       (record) => record.diastolic.toString(),
-      (pattern) => int.tryParse(pattern)
+      int.tryParse,
     );
     static final NativeColumn pulse = NativeColumn._create(
       'pulse',
       RowDataFieldType.pul,
       (record) => record.pulse.toString(),
-      (pattern) => int.tryParse(pattern)
+      int.tryParse,
     );
     static final NativeColumn notes = NativeColumn._create(
       'notes',
       RowDataFieldType.notes,
       (record) => record.notes,
-      (pattern) => pattern
+      (pattern) => pattern,
     );
     static final NativeColumn color = NativeColumn._create(
       'color',
@@ -138,12 +138,12 @@ class BuildInColumn extends ExportColumn {
       'buildin.pulsePressure',
       'pulsePressure',
       r'{{$SYS-$DIA}}', 
-      (localizations) => localizations.pulsePressure
+      (localizations) => localizations.pulsePressure,
   );
   static final formattedTime = TimeColumn.explicit(
       'buildin.formattedTime',
       'Time',
-      'dd MMM yyyy, HH:mm'
+      'dd MMM yyyy, HH:mm',
   );
 
   // my heart columns
@@ -151,49 +151,49 @@ class BuildInColumn extends ExportColumn {
       'buildin.mhDate',
       'DATUM',
       r'yyyy-MM-dd HH:mm:ss',
-      '"My Heart" export time'
+      '"My Heart" export time',
   );
   static final mhSys = BuildInColumn._create(
       'buildin.mhSys',
       'SYSTOLE',
       r'$SYS',
-      (_) => '"My Heart" export sys'
+      (_) => '"My Heart" export sys',
   );
   static final mhDia = BuildInColumn._create(
       'buildin.mhDia',
       'DIASTOLE',
       r'$DIA',
-      (_) => '"My Heart" export dia'
+      (_) => '"My Heart" export dia',
   );
   static final mhPul = BuildInColumn._create(
       'buildin.mhPul',
       'PULSE',
       r'$PUL',
-      (_) => '"My Heart" export pul'
+      (_) => '"My Heart" export pul',
   );
   static final mhDesc = BuildInColumn._create(
       'buildin.mhDesc',
       'Beschreibung',
       r'null',
-      (_) => '"My Heart" export description'
+      (_) => '"My Heart" export description',
   );
   static final mhTags = BuildInColumn._create(
       'buildin.mhTags',
       'Tags',
       r'',
-      (_) => '"My Heart" export tags'
+      (_) => '"My Heart" export tags',
   );
   static final mhWeight = BuildInColumn._create(
       'buildin.mhWeight',
       'Gewicht',
       r'0.0',
-      (_) => '"My Heart" export weight'
+      (_) => '"My Heart" export weight',
   );
   static final mhOxygen = BuildInColumn._create(
       'buildin.mhOxygen',
       'Sauerstoffsättigung',
       r'0',
-      (_) => '"My Heart" export oxygen'
+      (_) => '"My Heart" export oxygen',
   );
 
   @override

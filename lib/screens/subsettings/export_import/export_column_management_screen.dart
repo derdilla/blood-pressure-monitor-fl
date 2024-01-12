@@ -28,7 +28,7 @@ class ExportColumnsManagementScreen extends StatelessWidget {
                   ListTile(
                     title: Text(column.userTitle(localizations)),
                     subtitle: column.formatPattern == null ? null : Text(column.formatPattern!),
-                  )
+                  ),
               ],
             ),
             ExpansionTile(
@@ -61,19 +61,19 @@ class ExportColumnsManagementScreen extends StatelessWidget {
                                 actions: [
                                   ElevatedButton(
                                     onPressed: () => Navigator.of(context).pop(false),
-                                    child: Text(AppLocalizations.of(context)!.btnCancel)),
+                                    child: Text(AppLocalizations.of(context)!.btnCancel),),
                                   ElevatedButton(
                                     onPressed: () => Navigator.of(context).pop(true),
-                                    child: Text(AppLocalizations.of(context)!.btnConfirm)),
+                                    child: Text(AppLocalizations.of(context)!.btnConfirm),),
                                 ],
-                              )
+                              ),
                             ) ?? false;
                             if (confirmed) {
                               columnsManager.deleteUserColumn(column.internalIdentifier);
                             }
                           },
-                          icon: const Icon(Icons.delete)
-                        )
+                          icon: const Icon(Icons.delete),
+                        ),
                       ],
                     ),
                   ),
@@ -95,11 +95,11 @@ class ExportColumnsManagementScreen extends StatelessWidget {
                       columnsManager.addOrUpdate(editedColumn);
                     }
                   },
-                )
+                ),
               ],
-            )
+            ),
           ],
-        )
+        ),
       ),
     );
   }

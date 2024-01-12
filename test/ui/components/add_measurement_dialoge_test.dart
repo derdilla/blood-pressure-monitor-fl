@@ -21,8 +21,8 @@ void main() {
       await widgetTester.pumpWidget(materialApp(
         AddEntryDialoge(
           settings: Settings(),
-        )
-      ));
+        ),
+      ),);
       expect(widgetTester.takeException(), isNull);
 
       expect(find.byType(DropdownButton<Medicine?>), findsNothing, reason: 'No medication in settings.');
@@ -39,10 +39,10 @@ void main() {
             settings: Settings(),
             initialRecord: BloodPressureRecord(
               DateTime.now(), 123, 56, 43, 'Test note',
-              needlePin: const MeasurementNeedlePin(Colors.teal)
+              needlePin: const MeasurementNeedlePin(Colors.teal),
             ),
-          )
-      ));
+          ),
+      ),);
       await widgetTester.pumpAndSettle();
       expect(find.byType(DropdownButton<Medicine?>), findsNothing, reason: 'No medication in settings.');
       expect(find.text('SAVE'), findsOneWidget);
@@ -53,16 +53,16 @@ void main() {
       expect(find.text('43'), findsOneWidget);
       expect(find.byType(ColorSelectionListTile), findsOneWidget);
       expect(find.byType(ColorSelectionListTile).evaluate().first.widget, isA<ColorSelectionListTile>().
-      having((p0) => p0.initialColor, 'ColorSelectionListTile should have correct initial color', Colors.teal));
+      having((p0) => p0.initialColor, 'ColorSelectionListTile should have correct initial color', Colors.teal),);
     });
     testWidgets('should show medication picker when medications available', (widgetTester) async {
       await widgetTester.pumpWidget(materialApp(
         AddEntryDialoge(
           settings: Settings(
-            medications: [mockMedicine(designation: 'testmed')]
+            medications: [mockMedicine(designation: 'testmed')],
           ),
-        )
-      ));
+        ),
+      ),);
       await widgetTester.pumpAndSettle();
       final localizations = await AppLocalizations.delegate.load(const Locale('en'));
 
@@ -79,10 +79,10 @@ void main() {
       await widgetTester.pumpWidget(materialApp(
           AddEntryDialoge(
             settings: Settings(
-                medications: [mockMedicine(designation: 'testmed')]
+                medications: [mockMedicine(designation: 'testmed')],
             ),
-          )
-      ));
+          ),
+      ),);
       await widgetTester.pumpAndSettle();
       final localizations = await AppLocalizations.delegate.load(const Locale('en'));
 
@@ -101,7 +101,7 @@ void main() {
       expect(
         find.ancestor(
             of: find.text(localizations.dosis,).first,
-            matching: find.byType(TextFormField)
+            matching: find.byType(TextFormField),
         ),
         findsOneWidget,
       );
@@ -110,10 +110,10 @@ void main() {
       await widgetTester.pumpWidget(materialApp(
           AddEntryDialoge(
             settings: Settings(
-                medications: [mockMedicine(designation: 'testmed', defaultDosis: 3.1415)]
+                medications: [mockMedicine(designation: 'testmed', defaultDosis: 3.1415)],
             ),
-          )
-      ));
+          ),
+      ),);
       await widgetTester.pumpAndSettle();
 
       await widgetTester.tap(find.byType(DropdownButton<Medicine?>));
@@ -130,7 +130,7 @@ void main() {
       dynamic result = 'result before save';
       await loadDialoge(widgetTester, (context) async
         => result = await showAddEntryDialoge(context, Settings(),
-          mockRecord(sys: 123, dia: 56, pul: 43, note: 'Test note', pin: Colors.teal)));
+          mockRecord(sys: 123, dia: 56, pul: 43, note: 'Test note', pin: Colors.teal),),);
       expect(find.byType(DropdownButton<Medicine?>), findsNothing, reason: 'No medication in settings.');
 
       expect(find.byType(AddEntryDialoge), findsOneWidget);
@@ -144,7 +144,7 @@ void main() {
       dynamic result = 'result before save';
       final record = mockRecord(sys: 123, dia: 56, pul: 43, note: 'Test note', pin: Colors.teal);
       await loadDialoge(widgetTester, (context) async
-        => result = await showAddEntryDialoge(context, Settings(), record));
+        => result = await showAddEntryDialoge(context, Settings(), record),);
       expect(find.byType(DropdownButton<Medicine?>), findsNothing, reason: 'No medication in settings.');
 
       expect(find.byType(AddEntryDialoge), findsOneWidget);
@@ -156,12 +156,12 @@ void main() {
       expect(result?.$1, isA<BloodPressureRecord>().having(
               (p0) => (p0.creationTime, p0.systolic, p0.diastolic, p0.pulse, p0.notes, p0.needlePin!.color),
           'should return initial values as they were not modified',
-          (record.creationTime, record.systolic, record.diastolic, record.pulse, record.notes, record.needlePin!.color)));
+          (record.creationTime, record.systolic, record.diastolic, record.pulse, record.notes, record.needlePin!.color),),);
     });
     testWidgets('should be able to input records', (WidgetTester widgetTester) async {
       dynamic result = 'result before save';
       await loadDialoge(widgetTester, (context) async
-        => result = await showAddEntryDialoge(context, Settings()));
+        => result = await showAddEntryDialoge(context, Settings()),);
       expect(find.byType(DropdownButton<Medicine?>), findsNothing, reason: 'No medication in settings.');
 
       await widgetTester.enterText(find.ancestor(of: find.text('Systolic').first, matching: find.byType(TextFormField)), '123');
@@ -184,22 +184,22 @@ void main() {
         .having((p0) => p0.diastolic, 'diastolic', 67)
         .having((p0) => p0.pulse, 'pulse', 89)
         .having((p0) => p0.notes, 'notes', 'Test note')
-        .having((p0) => p0.needlePin?.color, 'needlePin', Colors.red)
+        .having((p0) => p0.needlePin?.color, 'needlePin', Colors.red),
       );
     });
     testWidgets('should allow value only', (WidgetTester widgetTester) async {
       dynamic result = 'result before save';
       await loadDialoge(widgetTester, (context) async
-      => result = await showAddEntryDialoge(context, Settings()));
+      => result = await showAddEntryDialoge(context, Settings()),);
       expect(find.byType(DropdownButton<Medicine?>), findsNothing, reason: 'No medication in settings.');
       final localizations = await AppLocalizations.delegate.load(const Locale('en'));
 
       await widgetTester.enterText(find.ancestor(of: find.text(localizations.sysLong).first,
-          matching: find.byType(TextFormField)), '123');
+          matching: find.byType(TextFormField),), '123',);
       await widgetTester.enterText(find.ancestor(of: find.text(localizations.diaLong).first,
-          matching: find.byType(TextFormField)), '67');
+          matching: find.byType(TextFormField),), '67',);
       await widgetTester.enterText(find.ancestor(of: find.text(localizations.pulLong).first,
-          matching: find.byType(TextFormField)), '89');
+          matching: find.byType(TextFormField),), '89',);
 
       expect(find.text(localizations.btnSave), findsOneWidget);
       await widgetTester.tap(find.text(localizations.btnSave));
@@ -211,7 +211,7 @@ void main() {
           .having((p0) => p0.diastolic, 'diastolic', 67)
           .having((p0) => p0.pulse, 'pulse', 89)
           .having((p0) => p0.notes, 'notes', '')
-          .having((p0) => p0.needlePin?.color, 'needlePin', null)
+          .having((p0) => p0.needlePin?.color, 'needlePin', null),
       );
     });
     testWidgets('should allow note only', (WidgetTester widgetTester) async {
@@ -219,13 +219,13 @@ void main() {
       await loadDialoge(widgetTester, (context) async
       => result = await showAddEntryDialoge(context, Settings(
         allowMissingValues: true,
-        validateInputs: false
-      )));
+        validateInputs: false,
+      ),),);
       expect(find.byType(DropdownButton<Medicine?>), findsNothing, reason: 'No medication in settings.');
 
       final localizations = await AppLocalizations.delegate.load(const Locale('en'));
       await widgetTester.enterText(find.ancestor(of: find.text(localizations.addNote).first,
-          matching: find.byType(TextFormField)), 'test note');
+          matching: find.byType(TextFormField),), 'test note',);
 
       expect(find.text(localizations.btnSave), findsOneWidget);
       await widgetTester.tap(find.text(localizations.btnSave));
@@ -237,7 +237,7 @@ void main() {
           .having((p0) => p0.diastolic, 'diastolic', null)
           .having((p0) => p0.pulse, 'pulse', null)
           .having((p0) => p0.notes, 'notes', 'test note')
-          .having((p0) => p0.needlePin?.color, 'needlePin', null)
+          .having((p0) => p0.needlePin?.color, 'needlePin', null),
       );
     });
     testWidgets('should be able to input medicines', (WidgetTester widgetTester) async {
@@ -249,8 +249,8 @@ void main() {
         medications: [
           mockMedicine(designation: 'medication1'),
           med2,
-        ]
-      )));
+        ],
+      ),),);
       final localizations = await AppLocalizations.delegate.load(const Locale('en'));
 
       await widgetTester.tap(find.byType(DropdownButton<Medicine?>));
@@ -265,9 +265,9 @@ void main() {
       await widgetTester.enterText(
         find.ancestor(
           of: find.text(localizations.dosis).first,
-          matching: find.byType(TextFormField)
+          matching: find.byType(TextFormField),
         ),
-        '123.456'
+        '123.456',
       );
 
       expect(find.text(localizations.btnSave), findsOneWidget);
@@ -278,7 +278,7 @@ void main() {
       expect(result?.$2, isA<MedicineIntake>()
         .having((p0) => p0.timestamp.millisecondsSinceEpoch ~/ 1000, 'timestamp', openDialogeTimeStamp.millisecondsSinceEpoch ~/ 1000)
         .having((p0) => p0.medicine, 'medicine', med2)
-        .having((p0) => p0.dosis, 'dosis', 123.456)
+        .having((p0) => p0.dosis, 'dosis', 123.456),
       );
     });
     testWidgets('should not allow invalid values', (widgetTester) async {
@@ -346,7 +346,7 @@ void main() {
     });
     testWidgets('should allow invalid values when setting is set', (widgetTester) async {
       await loadDialoge(widgetTester, (context) =>
-          showAddEntryDialoge(context, Settings(validateInputs: false, allowMissingValues: true)));
+          showAddEntryDialoge(context, Settings(validateInputs: false, allowMissingValues: true)),);
       expect(find.byType(DropdownButton<Medicine?>), findsNothing, reason: 'No medication in settings.');
 
       await widgetTester.enterText(find.ancestor(of: find.text('Systolic').first, matching: find.byType(TextFormField)), '2');
@@ -357,14 +357,14 @@ void main() {
     });
     testWidgets('should respect settings.allowManualTimeInput', (widgetTester) async {
       await loadDialoge(widgetTester, (context) =>
-          showAddEntryDialoge(context, Settings(allowManualTimeInput: false)));
+          showAddEntryDialoge(context, Settings(allowManualTimeInput: false)),);
       expect(find.byType(DropdownButton<Medicine?>), findsNothing, reason: 'No medication in settings.');
 
       expect(find.byIcon(Icons.edit), findsNothing);
     });
     testWidgets('should start with sys input focused', (widgetTester) async {
       await loadDialoge(widgetTester, (context) =>
-          showAddEntryDialoge(context, Settings(), mockRecord(sys: 12)));
+          showAddEntryDialoge(context, Settings(), mockRecord(sys: 12)),);
       expect(find.byType(DropdownButton<Medicine?>), findsNothing, reason: 'No medication in settings.');
 
       final primaryFocus = FocusManager.instance.primaryFocus;
@@ -375,11 +375,11 @@ void main() {
       );
       expect(focusedTextFormField, findsOneWidget);
       expect(focusedTextFormField.evaluate().first.widget, isA<TextFormField>()
-          .having((p0) => p0.initialValue, 'systolic content', '12'));
+          .having((p0) => p0.initialValue, 'systolic content', '12'),);
     });
     testWidgets('should focus next on input finished', (widgetTester) async {
       await loadDialoge(widgetTester, (context) =>
-          showAddEntryDialoge(context, Settings(), mockRecord(sys: 12, dia: 3, pul: 4, note: 'note')));
+          showAddEntryDialoge(context, Settings(), mockRecord(sys: 12, dia: 3, pul: 4, note: 'note')),);
       expect(find.byType(DropdownButton<Medicine?>), findsNothing, reason: 'No medication in settings.');
 
       await widgetTester.enterText(find.ancestor(of: find.text('Systolic').first, matching: find.byType(TextFormField)), '123');
@@ -392,7 +392,7 @@ void main() {
       );
       expect(focusedTextFormField, findsOneWidget);
       expect(focusedTextFormField.evaluate().first.widget, isA<TextFormField>()
-          .having((p0) => p0.initialValue, 'diastolic content', '3'));
+          .having((p0) => p0.initialValue, 'diastolic content', '3'),);
 
       await widgetTester.enterText(find.ancestor(of: find.text('Diastolic').first, matching: find.byType(TextFormField)), '78');
 
@@ -404,7 +404,7 @@ void main() {
       );
       expect(secondFocusedTextFormField, findsOneWidget);
       expect(secondFocusedTextFormField.evaluate().first.widget, isA<TextFormField>()
-          .having((p0) => p0.initialValue, 'pulse content', '4'));
+          .having((p0) => p0.initialValue, 'pulse content', '4'),);
 
       await widgetTester.enterText(find.ancestor(of: find.text('Pulse').first, matching: find.byType(TextFormField)), '60');
 
@@ -416,12 +416,12 @@ void main() {
       );
       expect(thirdFocusedTextFormField, findsOneWidget);
       expect(thirdFocusedTextFormField.evaluate().first.widget, isA<TextFormField>()
-          .having((p0) => p0.initialValue, 'note input content', 'note'));
+          .having((p0) => p0.initialValue, 'note input content', 'note'),);
     });
 
     testWidgets('should focus last input field on backspace pressed in empty input field', (widgetTester) async {
       await loadDialoge(widgetTester, (context) =>
-          showAddEntryDialoge(context, Settings(), mockRecord(sys: 12, dia: 3, pul: 4, note: 'note')));
+          showAddEntryDialoge(context, Settings(), mockRecord(sys: 12, dia: 3, pul: 4, note: 'note')),);
       expect(find.byType(DropdownButton<Medicine?>), findsNothing, reason: 'No medication in settings.');
 
       await widgetTester.enterText(find.ancestor(of: find.text('note').first, matching: find.byType(TextFormField)), '');

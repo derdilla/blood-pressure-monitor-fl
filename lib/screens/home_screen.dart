@@ -1,4 +1,5 @@
 import 'package:blood_pressure_app/components/dialoges/add_measurement_dialoge.dart';
+import 'package:blood_pressure_app/components/measurement_list/measurement_list.dart';
 import 'package:blood_pressure_app/model/blood_pressure/medicine/intake_history.dart';
 import 'package:blood_pressure_app/model/blood_pressure/model.dart';
 import 'package:blood_pressure_app/model/storage/intervall_store.dart';
@@ -13,8 +14,6 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
-
-import '../components/measurement_list/measurement_list.dart';
 
 /// Is true during the first [AppHome.build] before creating the widget.
 bool _appStart = true;
@@ -73,11 +72,11 @@ class AppHome extends StatelessWidget {
                           settings: settings,
                           records: records,
                           intakes: intakeHistory.getIntakes(intervalls.mainPage.currentRange),
-                        )
-                      )
-                  )
-                ])
-              ))
+                        ),
+                      ),
+                  ),
+                ],),
+              ),),
             ),
           ),
         );
@@ -90,15 +89,14 @@ class AppHome extends StatelessWidget {
             return const SizedBox.shrink();
           }
           SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: SystemUiOverlay.values);
-          return Consumer<Settings>(builder: (context, settings, child) {
-            return Column(
+          return Consumer<Settings>(builder: (context, settings, child) => Column(
               verticalDirection: VerticalDirection.up,
               children: [
                 SizedBox.square(
                   dimension: 75,
                   child: FittedBox(
                     child: FloatingActionButton(
-                      heroTag: "floatingActionAdd",
+                      heroTag: 'floatingActionAdd',
                       tooltip: localizations.addMeasurement,
                       autofocus: true,
                       onPressed: () async {
@@ -125,7 +123,7 @@ class AppHome extends StatelessWidget {
                   height: 10,
                 ),
                 FloatingActionButton(
-                  heroTag: "floatingActionStatistics",
+                  heroTag: 'floatingActionStatistics',
                   tooltip: localizations.statistics,
                   backgroundColor: const Color(0xFF6F6F6F),
                   onPressed: () {
@@ -137,7 +135,7 @@ class AppHome extends StatelessWidget {
                   height: 10,
                 ),
                 FloatingActionButton(
-                  heroTag: "floatingActionSettings",
+                  heroTag: 'floatingActionSettings',
                   tooltip: localizations.settings,
                   backgroundColor: const Color(0xFF6F6F6F),
                   child: const Icon(Icons.settings, color: Colors.black),
@@ -146,9 +144,8 @@ class AppHome extends StatelessWidget {
                   },
                 ),
               ],
-            );
-          });
-        })
+            ),);
+        },),
     );
   }
 }
@@ -158,15 +155,15 @@ void _buildTransition(BuildContext context, Widget page, int duration) {
   Navigator.push(context,
     TimedMaterialPageRouter(
       transitionDuration: Duration(milliseconds: duration),
-      builder: (context) => page
-    )
+      builder: (context) => page,
+    ),
   );
 }
 
 class TimedMaterialPageRouter extends MaterialPageRoute {
   TimedMaterialPageRouter({
     required super.builder,
-    required this.transitionDuration});
+    required this.transitionDuration,});
 
   @override
   final Duration transitionDuration;

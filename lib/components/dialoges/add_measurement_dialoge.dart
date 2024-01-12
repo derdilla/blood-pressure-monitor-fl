@@ -123,7 +123,7 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
             context: context,
             firstDate: DateTime.fromMillisecondsSinceEpoch(1),
             lastDate: DateTime.now(),
-            initialDate: time
+            initialDate: time,
         );
         if (selectedTime == null) {
           return;
@@ -131,10 +131,10 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
         final now = DateTime.now();
         if (widget.settings.validateInputs && selectedTime.isAfter(now)) {
           messenger.showSnackBar(SnackBar(
-              content: Text(localizations.errTimeAfterNow)));
+              content: Text(localizations.errTimeAfterNow),),);
           selectedTime = selectedTime.copyWith(
               hour: max(selectedTime.hour, now.hour),
-              minute: max(selectedTime.minute, now.minute)
+              minute: max(selectedTime.minute, now.minute),
           );
         }
         setState(() {
@@ -193,7 +193,7 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
   /// Build the border all fields have.
   RoundedRectangleBorder buildShapeBorder([Color? color]) => RoundedRectangleBorder(
     side: Theme.of(context).inputDecorationTheme.border?.borderSide ?? const BorderSide(width: 3),
-    borderRadius: BorderRadius.circular(20)
+    borderRadius: BorderRadius.circular(20),
   );
 
   @override
@@ -251,7 +251,7 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
                         return AppLocalizations.of(context)?.errDiaGtSys;
                       }
                       return null;
-                    }
+                    },
                   ),
                   const SizedBox(width: 16,),
                   buildValueInput(localizations,
@@ -291,7 +291,7 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
                   });
                 },
                 initialColor: needlePin?.color ?? Colors.transparent,
-                shape: buildShapeBorder(needlePin?.color)
+                shape: buildShapeBorder(needlePin?.color),
               ),
               if (widget.settings.medications.isNotEmpty && widget.initialRecord == null)
                 Padding(
@@ -310,9 +310,8 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
                                 child: Text(e.designation),
                               ),
                             DropdownMenuItem(
-                              value: null,
                               child: Text(localizations.noMedication),
-                            )
+                            ),
                           ],
                           onChanged: (v) {
                             setState(() {
@@ -325,7 +324,7 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
                                 medicineId = null;
                               }
                             });
-                          }
+                          },
                         ),
                       ),
                       if (_showMedicineDosisInput)
@@ -344,7 +343,7 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
                               if(dosis != null && dosis > 0) medicineDosis = dosis;
                             }),
                             inputFormatters: [FilteringTextInputFormatter.allow(
-                                RegExp(r'([0-9]+(\.([0-9]*))?)'))],
+                                RegExp(r'([0-9]+(\.([0-9]*))?)'),),],
                             validator: (String? value) {
                               if (!_showMedicineDosisInput) return null;
                               if (((int.tryParse(value ?? '')?.toDouble()
@@ -371,13 +370,13 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
 Future<(BloodPressureRecord?, MedicineIntake?)?> showAddEntryDialoge(
     BuildContext context,
     Settings settings,
-    [BloodPressureRecord? initialRecord]) =>
+    [BloodPressureRecord? initialRecord,]) =>
   showDialog<(BloodPressureRecord?, MedicineIntake?)>(
       context: context, builder: (context) =>
       Dialog.fullscreen(
         child: AddEntryDialoge(
           settings: settings,
-          initialRecord: initialRecord
+          initialRecord: initialRecord,
         ),
-      )
+      ),
   );

@@ -8,8 +8,8 @@ void main() {
     test('base constructor should initialize with values', () {
       final storageObject = IntervallStorage(stepSize: TimeStep.month, range: DateTimeRange(
           start: DateTime.fromMillisecondsSinceEpoch(1234),
-          end: DateTime.fromMillisecondsSinceEpoch(5678)
-      ));
+          end: DateTime.fromMillisecondsSinceEpoch(5678),
+      ),);
 
       expect(storageObject.stepSize, TimeStep.month);
       expect(storageObject.currentRange.start.millisecondsSinceEpoch, 1234);
@@ -21,7 +21,7 @@ void main() {
       expect(storageObject.stepSize, TimeStep.last7Days);
       expect(storageObject.currentRange.start.millisecondsSinceEpoch, lessThanOrEqualTo(DateTime
           .now()
-          .millisecondsSinceEpoch));
+          .millisecondsSinceEpoch,),);
     });
 
     test('base constructor should initialize with only incomplete parameters', () {
@@ -29,8 +29,8 @@ void main() {
       IntervallStorage(stepSize: TimeStep.last30Days);
       IntervallStorage(range: DateTimeRange(
           start: DateTime.fromMillisecondsSinceEpoch(1234),
-          end: DateTime.fromMillisecondsSinceEpoch(5678)
-      ));
+          end: DateTime.fromMillisecondsSinceEpoch(5678),
+      ),);
     });
 
 
@@ -59,8 +59,8 @@ void main() {
       final last30DaysIntervall = IntervallStorage(stepSize: TimeStep.last30Days);
       final customIntervall = IntervallStorage(stepSize: TimeStep.custom, range: DateTimeRange(
           start: DateTime.fromMillisecondsSinceEpoch(1234),
-          end: DateTime.fromMillisecondsSinceEpoch(1234 + 24 * 60 * 60 * 1000) // one day
-      ));
+          end: DateTime.fromMillisecondsSinceEpoch(1234 + 24 * 60 * 60 * 1000), // one day
+      ),);
 
       expect(customIntervall.currentRange.duration.inMilliseconds, 24 * 60 * 60 * 1000);
 

@@ -31,19 +31,19 @@ void main() {
       final intake2 = mockIntake(
           timeMs: 543211,
           dosis: 1000231,
-          medicine: mockMedicine(designation: 'tst')
+          medicine: mockMedicine(designation: 'tst'),
       );
       expect(MedicineIntake.deserialize(
           intake2.serialize(),
-          [intake.medicine, intake2.medicine]),
-          intake2);
+          [intake.medicine, intake2.medicine],),
+          intake2,);
     });
     test('should fail to deserialize serialized intake without exising med', () {
       final intake = mockIntake(medicine: mockMedicine(designation: 'tst'));
       expect(() => MedicineIntake.deserialize(
           intake.serialize(),
-          [mockMedicine()]),
-          throwsStateError);
+          [mockMedicine()],),
+          throwsStateError,);
     });
   });
 }
@@ -55,9 +55,9 @@ void main() {
 MedicineIntake mockIntake({
   double dosis = 0,
   int? timeMs,
-  Medicine? medicine
+  Medicine? medicine,
 }) => MedicineIntake(
     medicine: medicine ?? mockMedicine(),
     dosis: dosis,
-    timestamp: timeMs == null ? DateTime.now() : DateTime.fromMillisecondsSinceEpoch(timeMs)
+    timestamp: timeMs == null ? DateTime.now() : DateTime.fromMillisecondsSinceEpoch(timeMs),
 );

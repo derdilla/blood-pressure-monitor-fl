@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ConsistentFutureBuilder<T> extends StatefulWidget {
+
+  const ConsistentFutureBuilder({super.key, required this.future, this.onNotStarted, this.onWaiting, this.onError,
+    required this.onData, this.cacheFuture = false, this.lastChildWhileWaiting = false,});
   /// Future that gets evaluated.
   final Future<T> future;
   final Widget Function(BuildContext context, T result) onData;
@@ -24,9 +27,6 @@ class ConsistentFutureBuilder<T> extends StatefulWidget {
   /// During the first build, [onWaiting] os respected instead.
   final bool lastChildWhileWaiting;
 
-  const ConsistentFutureBuilder({super.key, required this.future, this.onNotStarted, this.onWaiting, this.onError,
-    required this.onData, this.cacheFuture = false, this.lastChildWhileWaiting = false});
-
   @override
   State<ConsistentFutureBuilder<T>> createState() => _ConsistentFutureBuilderState<T>();
 }
@@ -45,8 +45,7 @@ class _ConsistentFutureBuilderState<T> extends State<ConsistentFutureBuilder<T>>
   }
 
   @override
-  Widget build(BuildContext context) {
-    return FutureBuilder<T>(
+  Widget build(BuildContext context) => FutureBuilder<T>(
       future: _future ?? widget.future,
       builder: (BuildContext context, AsyncSnapshot<T> snapshot) {
         if (snapshot.hasError) {
@@ -63,6 +62,5 @@ class _ConsistentFutureBuilderState<T> extends State<ConsistentFutureBuilder<T>>
             _lastChild = widget.onData(context, snapshot.data as T);
             return _lastChild!;
         }
-      });
-  }
+      },);
 }

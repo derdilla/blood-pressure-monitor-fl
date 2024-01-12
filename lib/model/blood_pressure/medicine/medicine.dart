@@ -6,30 +6,30 @@ import 'package:flutter/material.dart';
 
 /// Description of a specific medicine.
 class Medicine {
+
+  factory Medicine.fromMap(Map<String, dynamic> map) => Medicine(
+    map['id'],
+    designation: map['designation'],
+    color: Color(map['color']),
+    defaultDosis: map['defaultDosis'],
+  );
+
+  factory Medicine.fromJson(String json) => Medicine.fromMap(jsonDecode(json));
   /// Create a new medicine.
   const Medicine(this.id, {
     required this.designation,
     required this.color,
-    required this.defaultDosis
+    required this.defaultDosis,
   });
 
   Map<String, dynamic> toMap() => {
     'id': id,
     'designation': designation,
     'color': color.value,
-    'defaultDosis': defaultDosis
+    'defaultDosis': defaultDosis,
   };
 
   String toJson() => jsonEncode(toMap());
-
-  factory Medicine.fromMap(Map<String, dynamic> map) => Medicine(
-    map['id'],
-    designation: map['designation'],
-    color: Color(map['color']),
-    defaultDosis: map['defaultDosis']
-  );
-
-  factory Medicine.fromJson(String json) => Medicine.fromMap(jsonDecode(json));
 
   /// Unique id used to store the medicine in serialized objects.
   final int id;
@@ -58,7 +58,5 @@ class Medicine {
   int get hashCode => id.hashCode ^ designation.hashCode ^ color.hashCode ^ defaultDosis.hashCode;
 
   @override
-  String toString() {
-    return 'Medicine{id: $id, designation: $designation, color: $color, defaultDosis: $defaultDosis}';
-  }
+  String toString() => 'Medicine{id: $id, designation: $designation, color: $color, defaultDosis: $defaultDosis}';
 }

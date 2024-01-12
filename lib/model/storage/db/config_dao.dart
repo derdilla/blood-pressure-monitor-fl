@@ -32,7 +32,7 @@ class ConfigDao {
         ConfigDB.settingsTable,
         columns: ['settings_json'],
         where: 'profile_id = ?',
-        whereArgs: [profileID]
+        whereArgs: [profileID],
     );
 
     late final Settings settings;
@@ -64,9 +64,9 @@ class ConfigDao {
         ConfigDB.settingsTable,
         {
           'profile_id': profileID,
-          'settings_json': settings.toJson()
+          'settings_json': settings.toJson(),
         },
-        conflictAlgorithm: ConflictAlgorithm.replace
+        conflictAlgorithm: ConflictAlgorithm.replace,
     );
   }
 
@@ -83,7 +83,7 @@ class ConfigDao {
         ConfigDB.exportSettingsTable,
         columns: ['json'],
         where: 'profile_id = ?',
-        whereArgs: [profileID]
+        whereArgs: [profileID],
     );
 
     late final ExportSettings exportSettings;
@@ -115,9 +115,9 @@ class ConfigDao {
         ConfigDB.exportSettingsTable,
         {
           'profile_id': profileID,
-          'json': settings.toJson()
+          'json': settings.toJson(),
         },
-        conflictAlgorithm: ConflictAlgorithm.replace
+        conflictAlgorithm: ConflictAlgorithm.replace,
     );
   }
 
@@ -135,7 +135,7 @@ class ConfigDao {
         ConfigDB.exportCsvSettingsTable,
         columns: ['json'],
         where: 'profile_id = ?',
-        whereArgs: [profileID]
+        whereArgs: [profileID],
     );
 
     late final CsvExportSettings exportSettings;
@@ -167,9 +167,9 @@ class ConfigDao {
         ConfigDB.exportCsvSettingsTable,
         {
           'profile_id': profileID,
-          'json': settings.toJson()
+          'json': settings.toJson(),
         },
-        conflictAlgorithm: ConflictAlgorithm.replace
+        conflictAlgorithm: ConflictAlgorithm.replace,
     );
   }
 
@@ -187,7 +187,7 @@ class ConfigDao {
         ConfigDB.exportPdfSettingsTable,
         columns: ['json'],
         where: 'profile_id = ?',
-        whereArgs: [profileID]
+        whereArgs: [profileID],
     );
 
     late final PdfExportSettings exportSettings;
@@ -219,9 +219,9 @@ class ConfigDao {
         ConfigDB.exportPdfSettingsTable,
         {
           'profile_id': profileID,
-          'json': settings.toJson()
+          'json': settings.toJson(),
         },
-        conflictAlgorithm: ConflictAlgorithm.replace
+        conflictAlgorithm: ConflictAlgorithm.replace,
     );
   }
 
@@ -244,7 +244,7 @@ class ConfigDao {
         ConfigDB.selectedIntervallStorageTable,
         columns: ['stepSize', 'start', 'end'],
         where: 'profile_id = ? AND storage_id = ?',
-        whereArgs: [profileID, storageID]
+        whereArgs: [profileID, storageID],
     );
     late final IntervallStorage intervallStorage;
     if (dbEntry.isEmpty) {
@@ -275,7 +275,7 @@ class ConfigDao {
     await _configDB.database.insert(
         ConfigDB.selectedIntervallStorageTable,
         columnValueMap,
-        conflictAlgorithm: ConflictAlgorithm.replace
+        conflictAlgorithm: ConflictAlgorithm.replace,
     );
   }
 
@@ -293,7 +293,7 @@ class ConfigDao {
         ConfigDB.exportColumnsTable,
         columns: ['json'],
         where: 'profile_id = ?',
-        whereArgs: [profileID]
+        whereArgs: [profileID],
     );
 
     late final ExportColumnsManager columnsManager;
@@ -325,9 +325,9 @@ class ConfigDao {
         ConfigDB.exportColumnsTable,
         {
           'profile_id': profileID,
-          'json': manager.toJson()
+          'json': manager.toJson(),
         },
-        conflictAlgorithm: ConflictAlgorithm.replace
+        conflictAlgorithm: ConflictAlgorithm.replace,
     );
   }
 }

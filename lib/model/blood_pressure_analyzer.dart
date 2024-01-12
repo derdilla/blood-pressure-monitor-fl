@@ -4,9 +4,9 @@ import 'package:blood_pressure_app/model/blood_pressure/record.dart';
 import 'package:collection/collection.dart';
 
 class BloodPressureAnalyser {
-  final List<BloodPressureRecord> _records;
 
   BloodPressureAnalyser(this._records);
+  final List<BloodPressureRecord> _records;
 
   int get count => _records.length;
 
@@ -76,9 +76,9 @@ class BloodPressureAnalyser {
   /// inner list index is hour of day ([0] -> 00:00-00:59; [1] -> ...)
   List<List<int>> get allAvgsRelativeToDaytime {
     // setup vars
-    List<List<int>> allDiaValuesRelativeToTime = [];
-    List<List<int>> allSysValuesRelativeToTime = [];
-    List<List<int>> allPulValuesRelativeToTime = [];
+    final List<List<int>> allDiaValuesRelativeToTime = [];
+    final List<List<int>> allSysValuesRelativeToTime = [];
+    final List<List<int>> allPulValuesRelativeToTime = [];
     for (int i = 0; i < 24; i++) {
       allDiaValuesRelativeToTime.add([]);
       allSysValuesRelativeToTime.add([]);
@@ -87,8 +87,8 @@ class BloodPressureAnalyser {
 
     // sort all data
     final dbRes = _records;
-    for (var e in dbRes) {
-      DateTime ts = DateTime.fromMillisecondsSinceEpoch(e.creationTime.millisecondsSinceEpoch);
+    for (final e in dbRes) {
+      final DateTime ts = DateTime.fromMillisecondsSinceEpoch(e.creationTime.millisecondsSinceEpoch);
       if (e.diastolic != null) allDiaValuesRelativeToTime[ts.hour].add(e.diastolic!);
       if (e.systolic != null)allSysValuesRelativeToTime[ts.hour].add(e.systolic!);
       if (e.pulse != null)allPulValuesRelativeToTime[ts.hour].add(e.pulse!);
@@ -106,7 +106,7 @@ class BloodPressureAnalyser {
     }
 
     // make avgs
-    List<List<int>> res = [[], [], []];
+    final List<List<int>> res = [[], [], []];
     for (int i = 0; i < 24; i++) {
       res[0].add(allDiaValuesRelativeToTime[i].average.toInt());
       res[1].add(allSysValuesRelativeToTime[i].average.toInt());

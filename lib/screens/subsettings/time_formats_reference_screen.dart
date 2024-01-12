@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 class TimeFormattingReferenceScreen extends StatelessWidget {
   const TimeFormattingReferenceScreen({super.key});
   // https://pub.dev/documentation/intl/latest/intl/DateFormat-class.html
-  static const _formats = '''DAY                          d
+  static const _formats = '''
+DAY                          d
  ABBR_WEEKDAY                 E
  WEEKDAY                      EEEE
  ABBR_STANDALONE_MONTH        LLL
@@ -42,8 +43,7 @@ class TimeFormattingReferenceScreen extends StatelessWidget {
  SECOND                       s''';
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
+  Widget build(BuildContext context) => Scaffold(
         appBar: AppBar(
           backgroundColor: Theme.of(context).primaryColor,
         ),
@@ -53,19 +53,18 @@ class TimeFormattingReferenceScreen extends StatelessWidget {
             child: Table(
               columnWidths: const {
                 0: FlexColumnWidth(0.71),
-                1: FlexColumnWidth(0.29)
+                1: FlexColumnWidth(0.29),
               },
               children: getRows(),
             ),
           ),
-        ));
-  }
+        ),);
 
   List<TableRow> getRows() {
-    List<TableRow> rowsOut = [];
-    var lines = _formats.trim().split('\n');
+    final List<TableRow> rowsOut = [];
+    final lines = _formats.trim().split('\n');
     for (int i = 1; i < lines.length; i++) {
-      List<String> values = lines[i].trim().split(RegExp(r'\s{2,}'));
+      final List<String> values = lines[i].trim().split(RegExp(r'\s{2,}'));
 
       rowsOut.add(TableRow(children: [Text(values[0]), Text(values[1])]));
     }

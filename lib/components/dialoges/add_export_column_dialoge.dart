@@ -110,14 +110,14 @@ class _AddExportColumnDialogeState extends State<AddExportColumnDialoge> with Si
                 segments: [
                   ButtonSegment(
                       value: _FormatterType.record,
-                      label: Text(localizations.recordFormat)
+                      label: Text(localizations.recordFormat),
                   ),
                   ButtonSegment(
                       value: _FormatterType.time,
-                      label: Text(localizations.timeFormat)
+                      label: Text(localizations.timeFormat),
                   ),
                 ],
-                selected: { type }
+                selected: { type },
               ),
               const SizedBox(height: 8,),
               Stack(
@@ -129,7 +129,7 @@ class _AddExportColumnDialogeState extends State<AddExportColumnDialoge> with Si
                     ).animate(CurvedAnimation(
                       parent: _controller,
                       curve: Curves.easeIn,
-                    )),
+                    ),),
                     child: _createTimeFormatInput(localizations, context),
                   ),
                   SlideTransition(
@@ -139,7 +139,7 @@ class _AddExportColumnDialogeState extends State<AddExportColumnDialoge> with Si
                     ).animate(CurvedAnimation(
                       parent: _controller,
                       curve: Curves.easeIn,
-                    )),
+                    ),),
                     child: _createRecordFormatInput(localizations, context),
                   ),
                 ],
@@ -149,7 +149,7 @@ class _AddExportColumnDialogeState extends State<AddExportColumnDialoge> with Si
                 padding: const EdgeInsets.all(24),
                 decoration: BoxDecoration(
                   color: Theme.of(context).colorScheme.surface,
-                  borderRadius: BorderRadius.circular(20)
+                  borderRadius: BorderRadius.circular(20),
                 ),
                 child: (){
                     final record = BloodPressureRecord(DateTime.now(), 123, 78, 65, 'test note');
@@ -159,20 +159,18 @@ class _AddExportColumnDialogeState extends State<AddExportColumnDialoge> with Si
                     final decoded = formatter.decode(text);
                     return Column(
                       children: [
-                        (type == _FormatterType.record) ? MeasurementListRow(record: record, settings: widget.settings,)
-                            : Text(DateFormat('MMM d, y - h:m.s').format(record.creationTime)),
+                        if (type == _FormatterType.record) MeasurementListRow(record: record, settings: widget.settings,) else Text(DateFormat('MMM d, y - h:m.s').format(record.creationTime)),
                         const SizedBox(height: 8,),
                         const Icon(Icons.arrow_downward),
                         const SizedBox(height: 8,),
-                        text.isNotEmpty ? Text(text) :
-                          Text(localizations.errNoValue, style: const TextStyle(fontStyle: FontStyle.italic),),
+                        if (text.isNotEmpty) Text(text) else Text(localizations.errNoValue, style: const TextStyle(fontStyle: FontStyle.italic),),
                         const SizedBox(height: 8,),
                         const Icon(Icons.arrow_downward),
                         const SizedBox(height: 8,),
-                        Text(decoded.toString())
+                        Text(decoded.toString()),
                       ],
                     );
-                  }()
+                  }(),
                 ),
             ],
           ),
@@ -187,9 +185,8 @@ class _AddExportColumnDialogeState extends State<AddExportColumnDialoge> with Si
       String inputDocumentation,
       String initialValue,
       void Function(String) onChanged,
-      String? Function(String?) validator
-      ) {
-    return Column(
+      String? Function(String?) validator,
+      ) => Column(
       children: [
         TextFormField(
           initialValue: initialValue,
@@ -199,16 +196,15 @@ class _AddExportColumnDialogeState extends State<AddExportColumnDialoge> with Si
             suffixIcon: IconButton(
                 onPressed: () {
                   Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => InformationScreen(text: inputDocumentation)));
+                      builder: (context) => InformationScreen(text: inputDocumentation),),);
                 },
-                icon: const Icon(Icons.info_outline)
+                icon: const Icon(Icons.info_outline),
             ),
           ),
           validator: validator,
-          onSaved: (value) => onChanged),
+          onSaved: (value) => onChanged,),
       ],
     );
-  }
 
   Column _createRecordFormatInput(AppLocalizations localizations, BuildContext context) =>
       _createFormatInput(localizations,
@@ -220,7 +216,7 @@ class _AddExportColumnDialogeState extends State<AddExportColumnDialoge> with Si
           recordPattern = value;
         }),
         (value) => (type == _FormatterType.time || value != null && value.isNotEmpty) ? null
-            : localizations.errNoValue
+            : localizations.errNoValue,
       );
   
   Column _createTimeFormatInput(AppLocalizations localizations, BuildContext context) =>
@@ -233,7 +229,7 @@ class _AddExportColumnDialogeState extends State<AddExportColumnDialoge> with Si
             timePattern = value;
           }),
           (value) => (type == _FormatterType.record || (value != null && value.isNotEmpty)) ? null
-            : localizations.errNoValue
+            : localizations.errNoValue,
       );
 
   void _saveForm() {
@@ -292,4 +288,4 @@ enum _FormatterType {
 Future<ExportColumn?> showAddExportColumnDialoge(BuildContext context, Settings settings, [ExportColumn? initialColumn]) =>
     showDialog<ExportColumn?>(context: context, builder: (context) => Dialog.fullscreen(
       child: AddExportColumnDialoge(initialColumn: initialColumn, settings: settings,),
-    ));
+    ),);

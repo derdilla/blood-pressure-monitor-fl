@@ -7,8 +7,8 @@ import 'package:sqflite/sqflite.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ErrorReporting {
-  static bool isErrorState = false;
   ErrorReporting._create();
+  static bool isErrorState = false;
 
   /// Replaces the application with an ErrorScreen
   /// This method can be used to avoid running any further code in your current function, by awaiting
@@ -19,7 +19,7 @@ class ErrorReporting {
       title: title,
       text: text,
       debugInfo: await _carefullyCollectDebugInfo(),
-    ));
+    ),);
     return Future.delayed(const Duration(days: 30,));
   }
 
@@ -36,15 +36,14 @@ class ErrorReporting {
 }
 
 class ErrorScreen extends StatelessWidget {
+  
+  const ErrorScreen({super.key, required this.title, required this.text, required this.debugInfo});
   final String title;
   final String text;
   final PackageInfo debugInfo;
-  
-  const ErrorScreen({super.key, required this.title, required this.text, required this.debugInfo});
 
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
+  Widget build(BuildContext context) => MaterialApp(
       title: 'Critical error',
       home: Scaffold(
         appBar: AppBar(
@@ -69,12 +68,12 @@ class ErrorScreen extends StatelessWidget {
                   TextButton(
                     onPressed: () {
                       Clipboard.setData(ClipboardData(
-                        text: 'Error:\nBuild number:${debugInfo.buildNumber}\n-----\n$title:\n---\n$text\n'
-                      ));
+                        text: 'Error:\nBuild number:${debugInfo.buildNumber}\n-----\n$title:\n---\n$text\n',
+                      ),);
                       scaffoldMessenger.showSnackBar(const SnackBar(
-                          content: Text('Copied to clipboard')));
+                          content: Text('Copied to clipboard'),),);
                     },
-                    child: const Text('copy error message')
+                    child: const Text('copy error message'),
                   ),
                   TextButton(
                       onPressed: () async {
@@ -84,14 +83,14 @@ class ErrorScreen extends StatelessWidget {
                             await launchUrl(url, mode: LaunchMode.externalApplication);
                           } else {
                             scaffoldMessenger.showSnackBar(const SnackBar(
-                              content: Text('ERR: Please open this website: https://github.com/NobodyForNothing/blood-pressure-monitor-fl/issues')));
+                              content: Text('ERR: Please open this website: https://github.com/NobodyForNothing/blood-pressure-monitor-fl/issues'),),);
                           }
                         } catch (e) {
                           scaffoldMessenger.showSnackBar(SnackBar(
-                              content: Text('ERR: ${e.toString()}')));
+                              content: Text('ERR: $e'),),);
                         }
                       },
-                      child: const Text('open issue reporting website')
+                      child: const Text('open issue reporting website'),
                   ),
                   TextButton(
                       onPressed: () async {
@@ -103,10 +102,10 @@ class ErrorScreen extends StatelessWidget {
                           PlatformClient.shareFile(dbPath, 'application/vnd.sqlite3');
                         } catch(e) {
                           scaffoldMessenger.showSnackBar(SnackBar(
-                              content: Text('ERR: ${e.toString()}')));
+                              content: Text('ERR: $e'),),);
                         }
                       },
-                      child: const Text('rescue measurements')
+                      child: const Text('rescue measurements'),
                   ),
                   TextButton(
                       onPressed: () async {
@@ -118,18 +117,17 @@ class ErrorScreen extends StatelessWidget {
                           PlatformClient.shareFile(dbPath, 'application/vnd.sqlite3');
                         } catch(e) {
                           scaffoldMessenger.showSnackBar(SnackBar(
-                              content: Text('ERR: ${e.toString()}')));
+                              content: Text('ERR: $e'),),);
                         }
                       },
-                      child: const Text('rescue config.db')
+                      child: const Text('rescue config.db'),
                   ),
                 ],
               ),
             );
-          }
+          },
         ),
       ),
     );
-  }
   
 }

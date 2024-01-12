@@ -68,7 +68,7 @@ class Settings extends ChangeNotifier {
   }
 
   factory Settings.fromMap(Map<String, dynamic> map) {
-    var settingsObject = Settings(
+    final settingsObject = Settings(
       accentColor: ConvertUtil.parseColor(map['accentColor']),
       sysColor: ConvertUtil.parseColor(map['sysColor']),
       diaColor: ConvertUtil.parseColor(map['diaColor']),
@@ -88,12 +88,12 @@ class Settings extends ChangeNotifier {
       useLegacyList: ConvertUtil.parseBool(map['useLegacyList']),
       language: ConvertUtil.parseLocale(map['language']),
       horizontalGraphLines: ConvertUtil.parseList<String>(map['horizontalGraphLines'])?.map((e) =>
-          HorizontalGraphLine.fromJson(jsonDecode(e))).toList(),
+          HorizontalGraphLine.fromJson(jsonDecode(e)),).toList(),
       needlePinBarWidth: ConvertUtil.parseDouble(map['needlePinBarWidth']),
       lastVersion: ConvertUtil.parseInt(map['lastVersion']),
       bottomAppBars: ConvertUtil.parseBool(map['bottomAppBars']),
       medications: ConvertUtil.parseList<String>(map['medications'])?.map((e) =>
-          Medicine.fromJson(jsonDecode(e))).toList(),
+          Medicine.fromJson(jsonDecode(e)),).toList(),
       highestMedIndex: ConvertUtil.parseInt(map['highestMedIndex']),
     );
 
@@ -131,11 +131,11 @@ class Settings extends ChangeNotifier {
       'startWithAddMeasurementPage': startWithAddMeasurementPage,
       'useLegacyList': useLegacyList,
       'language': ConvertUtil.serializeLocale(language),
-      'horizontalGraphLines': horizontalGraphLines.map((e) => jsonEncode(e)).toList(),
+      'horizontalGraphLines': horizontalGraphLines.map(jsonEncode).toList(),
       'needlePinBarWidth': _needlePinBarWidth,
       'lastVersion': lastVersion,
       'bottomAppBars': bottomAppBars,
-      'medications': medications.map((e) => jsonEncode(e)).toList(),
+      'medications': medications.map(jsonEncode).toList(),
       'highestMedIndex': highestMedIndex,
     };
 

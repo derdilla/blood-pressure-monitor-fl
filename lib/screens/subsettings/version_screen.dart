@@ -21,12 +21,12 @@ class VersionScreen extends StatelessWidget {
               Clipboard.setData(ClipboardData(
                   text: 'Blood pressure monitor\n'
                       '${packageInfo.packageName}\n'
-                      '${packageInfo.version} - ${packageInfo.buildNumber}'
-              ));
+                      '${packageInfo.version} - ${packageInfo.buildNumber}',
+              ),);
             },
             tooltip: localizations.export,
             icon: const Icon(Icons.copy),
-          )
+          ),
         ],
         backgroundColor: Theme.of(context).primaryColor,
       ),
@@ -35,16 +35,14 @@ class VersionScreen extends StatelessWidget {
         child: Center(
           child: ConsistentFutureBuilder<PackageInfo>(
             future: PackageInfo.fromPlatform(),
-            onData: (context, packageInfo) {
-              return Column(
+            onData: (context, packageInfo) => Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(localizations.packageNameOf(packageInfo.packageName)),
                   Text(localizations.versionOf(packageInfo.version)),
                   Text(localizations.buildNumberOf(packageInfo.buildNumber)),
-                ]
-              );
-            },
+                ],
+              ),
           ),
         ),
       ),

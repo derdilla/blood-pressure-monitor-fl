@@ -27,8 +27,8 @@ void main() {
     });
     testWidgets('should prefill values', (widgetTester) async {
       await widgetTester.pumpWidget(materialApp(
-          AddExportColumnDialoge(initialColumn: UserColumn('id', 'csvTitle', r'formatPattern$SYS'), settings: Settings(),)
-      ));
+          AddExportColumnDialoge(initialColumn: UserColumn('id', 'csvTitle', r'formatPattern$SYS'), settings: Settings(),),
+      ),);
       expect(widgetTester.takeException(), isNull);
 
       expect(find.text('SAVE'), findsOneWidget);
@@ -43,8 +43,8 @@ void main() {
     });
     testWidgets('should show preview', (widgetTester) async {
       await widgetTester.pumpWidget(materialApp(
-          AddExportColumnDialoge(initialColumn: UserColumn('id', 'csvTitle', r'formatPattern$SYS'), settings: Settings(),)
-      ));
+          AddExportColumnDialoge(initialColumn: UserColumn('id', 'csvTitle', r'formatPattern$SYS'), settings: Settings(),),
+      ),);
       await widgetTester.pumpAndSettle();
 
       expect(find.text('Please enter a value'), findsNothing);
@@ -91,16 +91,16 @@ void main() {
       expect(returnedValue, false);
 
       expect(find.ancestor(of: find.text(localizations.csvTitle).first, matching: find.byType(TextFormField)),
-          findsAtLeastNWidgets(1));
+          findsAtLeastNWidgets(1),);
       await widgetTester.enterText(
           find.ancestor(of: find.text(localizations.csvTitle).first, matching: find.byType(TextFormField)),
-          'testCsvTitle');
+          'testCsvTitle',);
 
       expect(find.ancestor(of: find.text(localizations.csvTitle).first, matching: find.byType(TextFormField)),
-          findsAtLeastNWidgets(1));
+          findsAtLeastNWidgets(1),);
       await widgetTester.enterText(
           find.ancestor(of: find.text(localizations.fieldFormat).first, matching: find.byType(TextFormField)),
-          r'test$SYSformat');
+          r'test$SYSformat',);
 
       expect(find.text(localizations.btnSave), findsOneWidget);
       await widgetTester.tap(find.text(localizations.btnSave));
@@ -109,7 +109,7 @@ void main() {
       expect(find.byType(AddExportColumnDialoge), findsNothing);
       expect(returnedValue, isA<UserColumn>()
           .having((p0) => p0.csvTitle, 'csvTitle', 'testCsvTitle')
-          .having((p0) => p0.formatter.formatPattern, 'formatter', r'test$SYSformat'));
+          .having((p0) => p0.formatter.formatPattern, 'formatter', r'test$SYSformat'),);
     });
     testWidgets('should keep internalIdentifier on edit', (widgetTester) async {
       final localizations = await AppLocalizations.delegate.load(const Locale('en'));
@@ -117,16 +117,16 @@ void main() {
       dynamic returnedValue = false;
       await loadDialoge(widgetTester, (context) async => returnedValue =
         await showAddExportColumnDialoge(context, Settings(),
-          UserColumn('initialInternalIdentifier', 'csvTitle', 'formatPattern')
-      ));
+          UserColumn('initialInternalIdentifier', 'csvTitle', 'formatPattern'),
+      ),);
 
       expect(returnedValue, false);
 
       expect(find.ancestor(of: find.text(localizations.csvTitle).first, matching: find.byType(TextFormField)),
-          findsAtLeastNWidgets(1));
+          findsAtLeastNWidgets(1),);
       await widgetTester.enterText(
           find.ancestor(of: find.text(localizations.csvTitle).first, matching: find.byType(TextFormField)),
-          'changedCsvTitle');
+          'changedCsvTitle',);
 
       expect(find.text(localizations.btnSave), findsOneWidget);
       await widgetTester.tap(find.text(localizations.btnSave));
@@ -134,7 +134,7 @@ void main() {
 
       expect(find.byType(AddExportColumnDialoge), findsNothing);
       expect(returnedValue, isA<UserColumn>()
-          .having((p0) => p0.internalIdentifier, 'identifier', 'userColumn.initialInternalIdentifier'));
+          .having((p0) => p0.internalIdentifier, 'identifier', 'userColumn.initialInternalIdentifier'),);
     });
   });
 

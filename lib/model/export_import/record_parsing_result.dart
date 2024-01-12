@@ -3,10 +3,6 @@ import 'package:blood_pressure_app/model/blood_pressure/record.dart';
 
 /// Indicate a possible error during record parsing.
 class RecordParsingResult {
-  RecordParsingResult._create(this._result, this._error);
-
-  final List<BloodPressureRecord>? _result;
-  final RecordParsingError? _error;
 
   /// Pass a valid record list and indicate success.
   factory RecordParsingResult.ok(List<BloodPressureRecord> result)=>
@@ -15,6 +11,10 @@ class RecordParsingResult {
   /// Indicate a parsing failure.
   factory RecordParsingResult.err(RecordParsingError error)=>
       RecordParsingResult._create(null, error);
+  RecordParsingResult._create(this._result, this._error);
+
+  final List<BloodPressureRecord>? _result;
+  final RecordParsingError? _error;
 
   /// Returns if there is an error present.
   ///

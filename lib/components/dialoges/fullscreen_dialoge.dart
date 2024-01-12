@@ -47,7 +47,7 @@ class FullscreenDialoge extends StatelessWidget {
       color: Colors.transparent,
       shadowColor: Colors.transparent,
       surfaceTintColor: Colors.transparent,
-      child: _buildAppBar(context)
+      child: _buildAppBar(context),
     ) : null,
   );
 
@@ -61,9 +61,9 @@ class FullscreenDialoge extends StatelessWidget {
       if (actionButtonText != null)
         TextButton(
           onPressed: onActionButtonPressed,
-          child:  Text(actionButtonText!)
-        )
-    ]
+          child:  Text(actionButtonText!),
+        ),
+    ],
   );
 
 }

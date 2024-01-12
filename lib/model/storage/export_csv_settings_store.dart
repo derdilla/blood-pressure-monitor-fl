@@ -18,7 +18,7 @@ class CsvExportSettings extends ChangeNotifier implements CustomFieldsSettings {
     if (exportHeadline != null) _exportHeadline = exportHeadline;
     if (exportFieldsConfiguration != null) _exportFieldsConfiguration = exportFieldsConfiguration;
 
-    _exportFieldsConfiguration.addListener(() => notifyListeners());
+    _exportFieldsConfiguration.addListener(notifyListeners);
   }
 
   factory CsvExportSettings.fromMap(Map<String, dynamic> map) {
@@ -56,7 +56,7 @@ class CsvExportSettings extends ChangeNotifier implements CustomFieldsSettings {
     'fieldDelimiter': fieldDelimiter,
     'textDelimiter': textDelimiter,
     'exportHeadline': exportHeadline,
-    'exportFieldsConfiguration': exportFieldsConfiguration.toJson()
+    'exportFieldsConfiguration': exportFieldsConfiguration.toJson(),
   };
 
   String toJson() => jsonEncode(toMap());

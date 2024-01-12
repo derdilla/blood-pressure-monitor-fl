@@ -7,7 +7,7 @@ class InputListTile extends StatelessWidget {
   const InputListTile({super.key,
     required this.label,
     required this.value,
-    required this.onSubmit});
+    required this.onSubmit,});
 
   /// Short label describing the required field contents.
   ///
@@ -21,8 +21,7 @@ class InputListTile extends StatelessWidget {
   final void Function(String text) onSubmit;
 
   @override
-  Widget build(BuildContext context) {
-    return ListTile(
+  Widget build(BuildContext context) => ListTile(
       title: Text(label),
       subtitle: Text(value),
       trailing: const Icon(Icons.edit),
@@ -31,6 +30,5 @@ class InputListTile extends StatelessWidget {
         if (input != null) onSubmit(input);
       },
     );
-  }
 
 }

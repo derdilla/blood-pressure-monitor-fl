@@ -10,8 +10,7 @@ class IntervalPicker extends StatelessWidget {
   final IntervallStoreManagerLocation type;
   
   @override
-  Widget build(BuildContext context) {
-    return Consumer<IntervallStoreManager>(builder: (context, intervallStoreManager, child) {
+  Widget build(BuildContext context) => Consumer<IntervallStoreManager>(builder: (context, intervallStoreManager, child) {
       final intervall = intervallStoreManager.get(type);
       final String intervallDisplayText;
       switch (intervall.stepSize) {
@@ -19,7 +18,7 @@ class IntervalPicker extends StatelessWidget {
           intervallDisplayText = DateFormat.yMMMd(AppLocalizations.of(context)!.localeName).format(intervall.currentRange.start);
           break;
         case TimeStep.week:
-          final dayOfYear = int.parse(DateFormat("D").format(intervall.currentRange.start));
+          final dayOfYear = int.parse(DateFormat('D').format(intervall.currentRange.start));
           final weekOfYear = ((dayOfYear - intervall.currentRange.start.weekday + 10) / 7).floor();
           intervallDisplayText = AppLocalizations.of(context)!.weekOfYear(weekOfYear, intervall.currentRange.start.year);
           break;
@@ -68,7 +67,7 @@ class IntervalPicker extends StatelessWidget {
                     final res = await showDateRangePicker(
                         context: context,
                         firstDate: DateTime.fromMillisecondsSinceEpoch(1),
-                        lastDate: DateTime.now());
+                        lastDate: DateTime.now(),);
                     if (res != null) {
                       intervall.changeStepSize(value!);
                       intervall.currentRange = res;
@@ -77,9 +76,7 @@ class IntervalPicker extends StatelessWidget {
                     intervall.changeStepSize(value);
                   }
                 },
-                items: TimeStep.options.map<DropdownMenuItem<TimeStep>>((v) {
-                  return DropdownMenuItem(value: v, child: Text(v.getName(AppLocalizations.of(context)!)));
-                }).toList(),
+                items: TimeStep.options.map<DropdownMenuItem<TimeStep>>((v) => DropdownMenuItem(value: v, child: Text(v.getName(AppLocalizations.of(context)!)))).toList(),
               ),
             ),
             Expanded(
@@ -94,9 +91,8 @@ class IntervalPicker extends StatelessWidget {
                 ),
               ),
             ),
-          ]),
+          ],),
         ],
       );
-    });
-  }
+    },);
 }

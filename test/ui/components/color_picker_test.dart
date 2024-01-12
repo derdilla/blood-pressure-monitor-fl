@@ -12,7 +12,7 @@ void main() {
       await widgetTester.pumpWidget(materialApp(ColorPicker(showTransparentColor: false, onColorSelected: (color) {})));
       await widgetTester.pumpWidget(materialApp(ColorPicker(circleSize: 15, onColorSelected: (color) {})));
       await widgetTester.pumpWidget(
-          materialApp(ColorPicker(availableColors: const [], initialColor: Colors.red, onColorSelected: (color) {})));
+          materialApp(ColorPicker(availableColors: const [], initialColor: Colors.red, onColorSelected: (color) {})),);
       expect(widgetTester.takeException(), isNull);
     });
     testWidgets('should report correct picked color', (widgetTester) async {
@@ -20,7 +20,7 @@ void main() {
       await widgetTester.pumpWidget(materialApp(ColorPicker(onColorSelected: (color) {
         expect(color, Colors.blue);
         onColorSelectedCallCount += 1;
-      })));
+      },),),);
 
       final containers = find.byType(Container).evaluate();
       final blueColor = containers.where((element) { // find widgets with color blue

@@ -7,8 +7,7 @@ class AboutWarnValuesScreen extends StatelessWidget {
   const AboutWarnValuesScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
+  Widget build(BuildContext context) => Scaffold(
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.warnValues),
         backgroundColor: Theme.of(context).primaryColor,
@@ -32,7 +31,7 @@ class AboutWarnValuesScreen extends StatelessWidget {
                   } else if (context.mounted) {
                     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                         content: Text(AppLocalizations.of(context)!
-                            .errCantOpenURL(BloodPressureWarnValues.source))));
+                            .errCantOpenURL(BloodPressureWarnValues.source),),),);
                   }
                 },
                 child: SizedBox(
@@ -54,5 +53,4 @@ class AboutWarnValuesScreen extends StatelessWidget {
         ),
       ),
     );
-  }
 }

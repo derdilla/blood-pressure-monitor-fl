@@ -27,8 +27,8 @@ void main() async {
   runApp(ConsistentFutureBuilder(
       future: _loadApp(),
       onWaiting: const LoadingScreen(),
-      onData: (context, widget) => widget
-  ));
+      onData: (context, widget) => widget,
+  ),);
 }
 
 /// Load the primary app data asynchronously to allow adding load animations.
@@ -98,29 +98,24 @@ Future<Widget> _loadApp() async {
     ChangeNotifierProvider(create: (context) => intervalStorageManager),
     ChangeNotifierProvider(create: (context) => exportColumnsManager),
     ChangeNotifierProvider(create: (context) => intakeHistory),
-  ], child: const AppRoot());
+  ], child: const AppRoot(),);
 }
 
 class AppRoot extends StatelessWidget {
   const AppRoot({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return Consumer<Settings>(builder: (context, settings, child) {
-      return MaterialApp(
+  Widget build(BuildContext context) => Consumer<Settings>(builder: (context, settings, child) => MaterialApp(
         title: 'Blood Pressure App',
-        onGenerateTitle: (context) {
-          return AppLocalizations.of(context)!.title;
-        },
+        onGenerateTitle: (context) => AppLocalizations.of(context)!.title,
         theme: _buildTheme(ColorScheme.fromSeed(
           seedColor: settings.accentColor,
-          brightness: Brightness.light,
-        )),
+        ),),
         darkTheme: _buildTheme(ColorScheme.fromSeed(
           seedColor: settings.accentColor,
           brightness: Brightness.dark,
           background: Colors.black,
-        )),
+        ),),
         themeMode: settings.themeMode,
         localizationsDelegates: const [
           AppLocalizations.delegate,
@@ -131,9 +126,7 @@ class AppRoot extends StatelessWidget {
         supportedLocales: AppLocalizations.supportedLocales,
         locale: settings.language,
         home: const AppHome(),
-      );
-    });
-  }
+      ),);
 
   ThemeData _buildTheme(ColorScheme colorScheme) {
     final inputBorder = OutlineInputBorder(
@@ -144,7 +137,7 @@ class AppRoot extends StatelessWidget {
               ? colorScheme.outlineVariant
               : colorScheme.outline,
         ),
-        borderRadius: BorderRadius.circular(20)
+        borderRadius: BorderRadius.circular(20),
     );
 
     return ThemeData(

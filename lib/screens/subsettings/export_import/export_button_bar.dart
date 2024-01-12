@@ -42,8 +42,8 @@ class ExportButtonBar extends StatelessWidget {
             child: MaterialButton(
               height: 60,
               child: Text(localizations.export),
-              onPressed: () => performExport(context, localizations)
-            )
+              onPressed: () => performExport(context, localizations),
+            ),
           ),
           const VerticalDivider(),
           Expanded(
@@ -55,7 +55,6 @@ class ExportButtonBar extends StatelessWidget {
                 final messenger = ScaffoldMessenger.of(context);
 
                 final file = (await FilePicker.platform.pickFiles(
-                  allowMultiple: false,
                   withData: true,
                 ))?.files.firstOrNull;
                 if (file == null) {
@@ -91,7 +90,7 @@ class ExportButtonBar extends StatelessWidget {
                           break;
                         case RecordParsingErrorUnparsableField():
                           _showError(messenger, localizations.errParseFailedDecodingField(
-                              error.lineNumber, error.fieldContents));
+                              error.lineNumber, error.fieldContents,),);
                           break;
                       }
                       return null;
@@ -102,7 +101,7 @@ class ExportButtonBar extends StatelessWidget {
                       await model.add(record);
                     }
                     messenger.showSnackBar(SnackBar(content: Text(
-                        localizations.importSuccess(importedRecords.length))));
+                        localizations.importSuccess(importedRecords.length),),),);
                     break;
                   case 'db':
                     final model = Provider.of<BloodPressureModel>(context, listen: false);
@@ -115,7 +114,7 @@ class ExportButtonBar extends StatelessWidget {
                     _showError(messenger, localizations.errWrongImportFormat);
                 }
               },
-            )
+            ),
           ),
           ],
         ),
@@ -151,7 +150,7 @@ void performExport(BuildContext context, [AppLocalizations? localizations]) asyn
           Provider.of<PdfExportSettings>(context, listen: false),
           localizations!,
           Provider.of<Settings>(context, listen: false),
-          Provider.of<ExportColumnsManager>(context, listen: false)
+          Provider.of<ExportColumnsManager>(context, listen: false),
       );
       final pdf = await pdfConverter.create(await _getRecords(context));
       if (context.mounted) _exportData(context, pdf, '$filename.pdf', 'text/pdf');
@@ -173,10 +172,10 @@ Future<void> _exportFile(BuildContext context, String path, String fullFileName,
   } else {
     JSaver.instance.save(
         fromPath: path,
-        androidPathOptions: AndroidPathOptions(toDefaultDirectory: true)
+        androidPathOptions: AndroidPathOptions(toDefaultDirectory: true),
     );
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text(AppLocalizations.of(context)!.success(settings.defaultExportDir))));
+        content: Text(AppLocalizations.of(context)!.success(settings.defaultExportDir)),),);
   }
 }
 

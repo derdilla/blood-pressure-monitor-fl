@@ -12,8 +12,6 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class LegacyMeasurementsList extends StatelessWidget {
-  late final List<int> _tableElementsSizes;
-  late final int _sideFlex;
 
   LegacyMeasurementsList(BuildContext context, {super.key}) {
     if (MediaQuery.of(context).size.width < 1000) {
@@ -24,10 +22,11 @@ class LegacyMeasurementsList extends StatelessWidget {
       _sideFlex = 5;
     }
   }
+  late final List<int> _tableElementsSizes;
+  late final int _sideFlex;
 
   @override
-  Widget build(BuildContext context) {
-    return Consumer<Settings>(builder: (context, settings, child) =>
+  Widget build(BuildContext context) => Consumer<Settings>(builder: (context, settings, child) =>
       Column(
       children: [
         Row(
@@ -38,19 +37,19 @@ class LegacyMeasurementsList extends StatelessWidget {
             ),
             Expanded(
                 flex: _tableElementsSizes[0],
-                child: Text(AppLocalizations.of(context)!.time, style: const TextStyle(fontWeight: FontWeight.bold))),
+                child: Text(AppLocalizations.of(context)!.time, style: const TextStyle(fontWeight: FontWeight.bold)),),
             Expanded(
                 flex: _tableElementsSizes[1],
-                child: Text(AppLocalizations.of(context)!.sysShort, style: TextStyle(fontWeight: FontWeight.bold, color: settings.sysColor))),
+                child: Text(AppLocalizations.of(context)!.sysShort, style: TextStyle(fontWeight: FontWeight.bold, color: settings.sysColor)),),
             Expanded(
                 flex: _tableElementsSizes[2],
-                child: Text(AppLocalizations.of(context)!.diaShort, style: TextStyle(fontWeight: FontWeight.bold, color: settings.diaColor))),
+                child: Text(AppLocalizations.of(context)!.diaShort, style: TextStyle(fontWeight: FontWeight.bold, color: settings.diaColor)),),
             Expanded(
                 flex: _tableElementsSizes[3],
-                child: Text(AppLocalizations.of(context)!.pulShort, style: TextStyle(fontWeight: FontWeight.bold, color: settings.pulColor))),
+                child: Text(AppLocalizations.of(context)!.pulShort, style: TextStyle(fontWeight: FontWeight.bold, color: settings.pulColor)),),
             Expanded(
                 flex: _tableElementsSizes[4],
-                child: Text(AppLocalizations.of(context)!.notes, style: const TextStyle(fontWeight: FontWeight.bold))),
+                child: Text(AppLocalizations.of(context)!.notes, style: const TextStyle(fontWeight: FontWeight.bold)),),
             Expanded(
               flex: _sideFlex,
               child: const SizedBox(),
@@ -85,7 +84,7 @@ class LegacyMeasurementsList extends StatelessWidget {
                               if (direction == DismissDirection.startToEnd) { // edit
                                 final model = Provider.of<BloodPressureModel>(context, listen: false);
                                 final entry = await showAddEntryDialoge(context,
-                                    Provider.of<Settings>(context, listen: false));
+                                    Provider.of<Settings>(context, listen: false),);
                                 if (entry?.$1 != null) {
                                   if (context.mounted) {
                                     model.addAndExport(context, entry!.$1!);
@@ -100,14 +99,13 @@ class LegacyMeasurementsList extends StatelessWidget {
                                 if (settings.confirmDeletion) {
                                   await showDialog(
                                       context: context,
-                                      builder: (context) {
-                                        return AlertDialog(
+                                      builder: (context) => AlertDialog(
                                           title: Text(AppLocalizations.of(context)!.confirmDelete),
                                           content: Text(AppLocalizations.of(context)!.confirmDeleteDesc),
                                           actions: [
                                             ElevatedButton(
                                                 onPressed: () => Navigator.of(context).pop(),
-                                                child: Text(AppLocalizations.of(context)!.btnCancel)),
+                                                child: Text(AppLocalizations.of(context)!.btnCancel),),
                                             ElevatedButton(
                                                 onPressed: () {
                                                   model.delete(data[index].creationTime);
@@ -115,10 +113,9 @@ class LegacyMeasurementsList extends StatelessWidget {
                                                   dialogeDeletionConfirmed = true;
                                                   Navigator.of(context).pop();
                                                 },
-                                                child: Text(AppLocalizations.of(context)!.btnConfirm)),
+                                                child: Text(AppLocalizations.of(context)!.btnConfirm),),
                                           ],
-                                        );
-                                      });
+                                        ),);
                                 } else {
                                   model.delete(data[index].creationTime);
                                   dialogeDeletionConfirmed = true;
@@ -138,10 +135,10 @@ class LegacyMeasurementsList extends StatelessWidget {
                                             data[index].systolic,
                                             data[index].diastolic,
                                             data[index].pulse,
-                                            data[index].notes));
+                                            data[index].notes,),);
                                       },
                                     ),
-                                  ));
+                                  ),);
                                 }
                                 return dialogeDeletionConfirmed;
                               }
@@ -168,39 +165,38 @@ class LegacyMeasurementsList extends StatelessWidget {
                                 ),
                                 Expanded(
                                     flex: _tableElementsSizes[0],
-                                    child: Text(formatter.format(data[index].creationTime))),
+                                    child: Text(formatter.format(data[index].creationTime)),),
                                 Expanded(
                                     flex: _tableElementsSizes[1],
-                                    child: Text((data[index].systolic ?? '').toString())),
+                                    child: Text((data[index].systolic ?? '').toString()),),
                                 Expanded(
                                     flex: _tableElementsSizes[2],
-                                    child: Text((data[index].diastolic ?? '').toString())),
+                                    child: Text((data[index].diastolic ?? '').toString()),),
                                 Expanded(
                                     flex: _tableElementsSizes[3],
-                                    child: Text((data[index].pulse ?? '').toString())),
+                                    child: Text((data[index].pulse ?? '').toString()),),
                                 Expanded(
                                     flex: _tableElementsSizes[4],
-                                    child: Text(data[index].notes)),
+                                    child: Text(data[index].notes),),
                                 Expanded(
                                   flex: _sideFlex,
                                   child: const SizedBox(),
                                 ),
-                              ]),
+                              ],),
                             ),
                           ),
                           const Divider(
                             thickness: 1,
                             height: 1,
-                          )
+                          ),
                         ],
                       );
-                    });
+                    },);
               } else {
                 return Text(AppLocalizations.of(context)!.errNoData);
               }
-            }),
-        )
+            },),
+        ),
       ],
-    ));
-  }
+    ),);
 }

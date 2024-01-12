@@ -28,16 +28,16 @@ void main() {
 
       expect(initialData.stepSize, recreatedData.stepSize);
       expect(initialData.currentRange.start.millisecondsSinceEpoch,
-          recreatedData.currentRange.start.millisecondsSinceEpoch);
+          recreatedData.currentRange.start.millisecondsSinceEpoch,);
       expect(initialData.currentRange.end.millisecondsSinceEpoch,
-          recreatedData.currentRange.end.millisecondsSinceEpoch);
+          recreatedData.currentRange.end.millisecondsSinceEpoch,);
     });
 
     test('should load same data from json in edge cases', () {
       final initialData = IntervallStorage(stepSize: TimeStep.month, range: DateTimeRange(
           start: DateTime.fromMillisecondsSinceEpoch(1234),
-          end: DateTime.fromMillisecondsSinceEpoch(5678)
-      ));
+          end: DateTime.fromMillisecondsSinceEpoch(5678),
+      ),);
       final json = initialData.toJson();
       final recreatedData = IntervallStorage.fromJson(json);
 

@@ -10,14 +10,14 @@ import 'package:flutter/material.dart';
 /// automatically and can be just checked with the `is boolean` condition, but the user may also write `"true"` or 1
 /// which are equally valid but would not get converted automatically.
 class ConvertUtil {
-  static bool? parseBool(dynamic value) {
+  static bool? parseBool(value) {
     if (value is bool) return value;
     if (parseString(value)?.toLowerCase() == 'true' || parseInt(value) == 1) return true;
     if (parseString(value)?.toLowerCase() == 'false' || parseInt(value) == 0) return false;
     return null;
   }
 
-  static int? parseInt(dynamic value) {
+  static int? parseInt(value) {
     if (value is int) return value;
     if (value is double) return _isInt(value);
     if (value is String) return int.tryParse(value) ?? _isInt(double.tryParse(value));
@@ -29,14 +29,14 @@ class ConvertUtil {
     return null;
   }
 
-  static double? parseDouble(dynamic value) {
+  static double? parseDouble(value) {
     if (value is double) return value;
     if (value is int) return value.toDouble();
     if (value is String) return double.tryParse(value);
     return null;
   }
 
-  static String? parseString(dynamic value) {
+  static String? parseString(value) {
     if (value is String) return value;
     if (value is int || value is double || value is bool) return value.toString();
     // No check for Object. While this would be convertible to string,
@@ -48,7 +48,7 @@ class ConvertUtil {
     return value.languageCode;
   }
 
-  static Locale? parseLocale(dynamic value) {
+  static Locale? parseLocale(value) {
     if (value is Locale) return value;
     // Should not use parseString, as values that get caught by it can not be locales.
     if (value is String && value.toLowerCase() == 'null') return null;
@@ -56,7 +56,7 @@ class ConvertUtil {
     return null;
   }
 
-  static Color? parseColor(dynamic value) {
+  static Color? parseColor(value) {
     if (value is MaterialColor || value is Color) return value;
     if (value == null) return null;
 
@@ -66,21 +66,21 @@ class ConvertUtil {
     return null;
   }
 
-  static DateTimeRange? parseRange(dynamic start, dynamic end) {
+  static DateTimeRange? parseRange(start, end) {
     final startTimestamp = parseInt(start);
     final endTimestamp = parseInt(end);
     if (startTimestamp == null || endTimestamp == null) return null;
     return DateTimeRange(
         start: DateTime.fromMillisecondsSinceEpoch(startTimestamp),
-        end: DateTime.fromMillisecondsSinceEpoch(endTimestamp)
+        end: DateTime.fromMillisecondsSinceEpoch(endTimestamp),
     );
   }
 
   /// Example usage: `ConvertUtil.parseList<String>(json['columns'])`
-  static List<T>? parseList<T>(dynamic value) {
+  static List<T>? parseList<T>(value) {
     if (value is List<T>) return value;
     if (value is List<dynamic>) {
-      List<T> validValues = [];
+      final List<T> validValues = [];
       for (final v in value) {
         if (v is T) validValues.add(v);
       }
@@ -90,8 +90,8 @@ class ConvertUtil {
     return null;
   }
 
-  static ThemeMode? parseThemeMode(dynamic value) {
-    int? intValue = ConvertUtil.parseInt(value);
+  static ThemeMode? parseThemeMode(value) {
+    final int? intValue = ConvertUtil.parseInt(value);
     switch(intValue) {
       case null:
         return null;

@@ -12,7 +12,7 @@ class ColorSelectionListTile extends StatelessWidget {
         required this.onMainColorChanged,
         required this.initialColor,
         this.subtitle,
-        this.shape});
+        this.shape,});
 
   /// The primary label of the list tile.
   final Widget title;
@@ -30,8 +30,7 @@ class ColorSelectionListTile extends StatelessWidget {
   final ShapeBorder? shape;
 
   @override
-  Widget build(BuildContext context) {
-    return ListTile(
+  Widget build(BuildContext context) => ListTile(
       title: title,
       subtitle: subtitle,
       shape: shape,
@@ -44,5 +43,4 @@ class ColorSelectionListTile extends StatelessWidget {
         if (color != null) onMainColorChanged(color);
       },
     );
-  }
 }
