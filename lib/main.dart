@@ -111,9 +111,6 @@ class AppRoot extends StatelessWidget {
           seedColor: settings.accentColor,
           brightness: Brightness.dark,
           background: Colors.black,
-          // 3:1 ratio changed because of background and outlineVariant looks
-          // better.
-          outline: const Color(0xff3f4947)
         )),
         themeMode: settings.themeMode,
         localizationsDelegates: const [
@@ -133,7 +130,10 @@ class AppRoot extends StatelessWidget {
     final inputBorder = OutlineInputBorder(
         borderSide: BorderSide(
           width: 3,
-          color: colorScheme.outline,
+          // Through black background outlineVariant has enough contrast.
+          color: (colorScheme.background == Colors.black)
+              ? colorScheme.outlineVariant
+              : colorScheme.outline,
         ),
         borderRadius: BorderRadius.circular(20)
     );
