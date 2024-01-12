@@ -13,9 +13,9 @@ import 'package:provider/provider.dart';
 import 'package:sqflite/sqflite.dart';
 
 class BloodPressureModel extends ChangeNotifier {
-  late final Database _database;
 
   BloodPressureModel._create();
+  late final Database _database;
   Future<void> _asyncInit(String? dbPath, bool isFullPath) async {
     dbPath ??= await getDatabasesPath();
 
@@ -44,14 +44,12 @@ class BloodPressureModel extends ChangeNotifier {
     );
   }
 
-  FutureOr<void> _onDBCreate(Database db, int version) {
-    return db.execute('CREATE TABLE bloodPressureModel('
+  FutureOr<void> _onDBCreate(Database db, int version) => db.execute('CREATE TABLE bloodPressureModel('
         'timestamp INTEGER(14) PRIMARY KEY,'
         'systolic INTEGER, diastolic INTEGER,'
         'pulse INTEGER,'
         'notes STRING,'
         'needlePin STRING)');
-  }
 
   FutureOr<void> _onDBUpgrade(Database db, int oldVersion, int newVersion) async {
     // When adding more versions the upgrade procedure proposed in https://stackoverflow.com/a/75153875/21489239
@@ -81,7 +79,7 @@ class BloodPressureModel extends ChangeNotifier {
   Future<void> add(BloodPressureRecord measurement) async {
     if (!_database.isOpen) return;
     final existing = await _database.query('bloodPressureModel',
-        where: 'timestamp = ?', whereArgs: [measurement.creationTime.millisecondsSinceEpoch]);
+        where: 'timestamp = ?', whereArgs: [measurement.creationTime.millisecondsSinceEpoch],);
     if (existing.isNotEmpty) {
       await _database.update(
           'bloodPressureModel',
@@ -90,10 +88,10 @@ class BloodPressureModel extends ChangeNotifier {
             'diastolic': measurement.diastolic,
             'pulse': measurement.pulse,
             'notes': measurement.notes,
-            'needlePin': jsonEncode(measurement.needlePin)
+            'needlePin': jsonEncode(measurement.needlePin),
           },
           where: 'timestamp = ?',
-          whereArgs: [measurement.creationTime.millisecondsSinceEpoch]);
+          whereArgs: [measurement.creationTime.millisecondsSinceEpoch],);
     } else {
       await _database.insert('bloodPressureModel', {
         'timestamp': measurement.creationTime.millisecondsSinceEpoch,
@@ -101,7 +99,7 @@ class BloodPressureModel extends ChangeNotifier {
         'diastolic': measurement.diastolic,
         'pulse': measurement.pulse,
         'notes': measurement.notes,
-        'needlePin': jsonEncode(measurement.needlePin)
+        'needlePin': jsonEncode(measurement.needlePin),
       });
     }
     notifyListeners();
@@ -131,8 +129,8 @@ class BloodPressureModel extends ChangeNotifier {
     final dbEntries = await _database.query('bloodPressureModel',
         orderBy: 'timestamp DESC',
         where: 'timestamp BETWEEN ? AND ?',
-        whereArgs: [from.millisecondsSinceEpoch, to.millisecondsSinceEpoch]); // descending
-    List<BloodPressureRecord> recordsInRange = _convert(dbEntries);
+        whereArgs: [from.millisecondsSinceEpoch, to.millisecondsSinceEpoch],); // descending
+    final List<BloodPressureRecord> recordsInRange = _convert(dbEntries);
     return UnmodifiableListView(recordsInRange);
   }
 
@@ -141,13 +139,11 @@ class BloodPressureModel extends ChangeNotifier {
     return UnmodifiableListView(_convert(await _database.query('bloodPressureModel', columns: ['*'])));
   }
 
-  Future<void> close() {
-    return _database.close();
-  }
+  Future<void> close() => _database.close();
 
   List<BloodPressureRecord> _convert(List<Map<String, Object?>> dbResult) {
-    List<BloodPressureRecord> records = [];
-    for (var e in dbResult) {
+    final List<BloodPressureRecord> records = [];
+    for (final e in dbResult) {
       final needlePinJson = e['needlePin'] as String?;
       final needlePin = (needlePinJson != null) ? jsonDecode(needlePinJson) : null;
       records.add(BloodPressureRecord(
@@ -156,8 +152,8 @@ class BloodPressureModel extends ChangeNotifier {
           e['diastolic'] as int?,
           e['pulse'] as int?,
           e['notes'].toString(),
-          needlePin: (needlePin != null) ? MeasurementNeedlePin.fromJson(needlePin) : null
-      ));
+          needlePin: (needlePin != null) ? MeasurementNeedlePin.fromJson(needlePin) : null,
+      ),);
     }
     return records;
   }

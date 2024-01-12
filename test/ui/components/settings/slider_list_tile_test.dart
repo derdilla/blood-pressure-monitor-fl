@@ -15,7 +15,7 @@ void main() {
         value: 15,
         min: 1,
         max: 20,
-      )));
+      ),),);
       expect(widgetTester.takeException(), isNull);
       await widgetTester.pumpWidget(materialApp(SliderListTile(
         title: const Text('Very long title that could overflow'),
@@ -29,7 +29,7 @@ void main() {
         leading: const Icon(Icons.add),
         trailing: const Icon(Icons.add),
         subtitle: const Text('While sliders support subtitle widgets, they should not interfere with the slider!'),
-      )));
+      ),),);
       expect(widgetTester.takeException(), isNull);
     });
     testWidgets('should report value changes', (widgetTester) async {
@@ -44,7 +44,7 @@ void main() {
         min: 1,
         max: 10,
         subtitle: const Text('While sliders support subtitle widgets, they should not interfere with the slider!'),
-      )));
+      ),),);
 
       final topLeft = widgetTester.getTopLeft(find.byType(Slider));
       final bottomRight = widgetTester.getBottomRight(find.byType(Slider));

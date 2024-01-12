@@ -17,8 +17,7 @@ class LoadingScreen extends StatelessWidget {
         child: TweenAnimationBuilder(
           tween: Tween<double>(begin: 0, end: 1),
           duration: _duration,
-          builder: (BuildContext context, double value, Widget? child) {
-            return Container(
+          builder: (BuildContext context, double value, Widget? child) => Container(
               padding: const EdgeInsets.only(bottom: 100),
               child: SizedBox.square(
                 dimension: dimensions.width - 20,
@@ -26,8 +25,7 @@ class LoadingScreen extends StatelessWidget {
                   painter: _LogoPainter(progress: value),
                 ),
               ),
-            );
-          },
+            ),
         ),
       ),
     );
@@ -43,7 +41,7 @@ class _LogoPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    Paint paint = Paint()
+    final Paint paint = Paint()
       ..color = const Color.fromARGB(255, 0xb0, 0x18, 0x22)
       ..style = PaintingStyle.stroke
       ..strokeWidth = size.shortestSide / 20
@@ -84,19 +82,19 @@ class _LogoPainter extends CustomPainter {
   Path _extractPathUntilLength(Path originalPath, double length,) {
     final path = Path();
 
-    var metricsIterator = originalPath.computeMetrics().iterator;
+    final metricsIterator = originalPath.computeMetrics().iterator;
     var isLastSegment = false;
     var currentLength = 0.0;
 
     while (metricsIterator.moveNext() && !isLastSegment) {
-      var metric = metricsIterator.current;
+      final metric = metricsIterator.current;
 
-      var nextLength = currentLength + metric.length;
+      final nextLength = currentLength + metric.length;
       isLastSegment = (nextLength > length);
 
       assert(length - currentLength >= 0);
       final pathSegment = metric.extractPath(0.0,
-          min(length - currentLength, metric.length));
+          min(length - currentLength, metric.length),);
 
       path.addPath(pathSegment, Offset.zero);
 

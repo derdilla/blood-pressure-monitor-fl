@@ -8,7 +8,7 @@ class ExportSettings extends ChangeNotifier {
   ExportSettings({
     ExportFormat? exportFormat,
     String? defaultExportDir,
-    bool? exportAfterEveryEntry
+    bool? exportAfterEveryEntry,
   }) {
     if (exportFormat != null) _exportFormat = exportFormat;
     if (defaultExportDir != null) _defaultExportDir = defaultExportDir;
@@ -18,7 +18,7 @@ class ExportSettings extends ChangeNotifier {
   factory ExportSettings.fromMap(Map<String, dynamic> map) => ExportSettings(
     exportFormat: ExportFormat.deserialize(map['exportFormat']),
     defaultExportDir: ConvertUtil.parseString(map['defaultExportDir']),
-    exportAfterEveryEntry: ConvertUtil.parseBool(map['exportAfterEveryEntry'])
+    exportAfterEveryEntry: ConvertUtil.parseBool(map['exportAfterEveryEntry']),
   );
 
   factory ExportSettings.fromJson(String json) {
@@ -32,7 +32,7 @@ class ExportSettings extends ChangeNotifier {
   Map<String, dynamic> toMap() => <String, dynamic>{
     'exportFormat': exportFormat.serialize(),
     'defaultExportDir': defaultExportDir,
-    'exportAfterEveryEntry': exportAfterEveryEntry
+    'exportAfterEveryEntry': exportAfterEveryEntry,
   };
 
   String toJson() => jsonEncode(toMap());
@@ -77,8 +77,8 @@ enum ExportFormat {
     }
   }
 
-  factory ExportFormat.deserialize(dynamic value) {
-    int? intValue = ConvertUtil.parseInt(value);
+  factory ExportFormat.deserialize(value) {
+    final int? intValue = ConvertUtil.parseInt(value);
     if (value == null || intValue == null) return ExportFormat.csv;
 
     switch(intValue) {

@@ -17,7 +17,7 @@ class ExportWarnBanner extends StatefulWidget {
   const ExportWarnBanner({super.key,
     required this.exportSettings,
     required this.csvExportSettings,
-    required this.availableColumns});
+    required this.availableColumns,});
 
   final ExportSettings exportSettings;
   final CsvExportSettings csvExportSettings;
@@ -41,7 +41,7 @@ class _ExportWarnBannerState extends State<ExportWarnBanner> {
       case ExportFormat.pdf:
         return _buildNotImportable(context);
       case ExportFormat.csv:
-        if (widget.csvExportSettings.exportHeadline == false) return _buildNoHeadline(context);
+        if (!widget.csvExportSettings.exportHeadline) return _buildNoHeadline(context);
         if (widget.csvExportSettings.fieldDelimiter != ',' && widget.csvExportSettings.fieldDelimiter != '|') return _buildNotImportable(context);
         if (widget.csvExportSettings.textDelimiter != '"' && widget.csvExportSettings.textDelimiter != "'") return _buildNotImportable(context);
         final preset = widget.csvExportSettings.exportFieldsConfiguration.activePreset;
@@ -104,8 +104,8 @@ class _ExportWarnBannerState extends State<ExportWarnBanner> {
       missingTypes
           .whereNotNull()
           .map((e) => e.localize(localizations))
-          .join(', ')
-    ), localizations);
+          .join(', '),
+    ), localizations,);
   }
 
   // TODO: ensure this is used instead of material banner everywhere in the app.
@@ -115,7 +115,7 @@ class _ExportWarnBannerState extends State<ExportWarnBanner> {
         onPressed: () => setState(() {
           _hidden = true;
         }),
-        child: Text(localizations.btnConfirm)
+        child: Text(localizations.btnConfirm),
       ),
     );
 }

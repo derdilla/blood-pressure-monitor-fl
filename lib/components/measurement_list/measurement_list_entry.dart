@@ -35,7 +35,7 @@ class MeasurementListRow extends StatelessWidget {
                 onPressed: () async {
                   final model = Provider.of<BloodPressureModel>(context, listen: false);
                   final entry = await showAddEntryDialoge(context,
-                      Provider.of<Settings>(context, listen: false));
+                      Provider.of<Settings>(context, listen: false),);
                   if (entry?.$1 != null) {
                     if (context.mounted) {
                       model.addAndExport(context, entry!.$1!);
@@ -60,7 +60,7 @@ class MeasurementListRow extends StatelessWidget {
           ListTile(
             title: Text(localizations.note),
             subtitle: Text(record.notes),
-          )
+          ),
       ],
     );
   }
@@ -81,7 +81,7 @@ class MeasurementListRow extends StatelessWidget {
           flex: 3,
           child: Text(formatNum(record.pulse)),
         ),
-      ]
+      ],
     );
   }
 
@@ -103,26 +103,24 @@ class MeasurementListRow extends StatelessWidget {
           label: localizations.btnUndo,
           onPressed: () => model.add(record),
         ),
-      ));
+      ),);
     }
   }
 }
 
-Future<bool> showConfirmDeletionDialoge(BuildContext context) async {
-  return await showDialog<bool>(context: context,
+Future<bool> showConfirmDeletionDialoge(BuildContext context) async => await showDialog<bool>(context: context,
     builder: (context) => AlertDialog(
       title: Text(AppLocalizations.of(context)!.confirmDelete),
       content: Text(AppLocalizations.of(context)!.confirmDeleteDesc),
       actions: [
         ElevatedButton(
           onPressed: () => Navigator.of(context).pop(false),
-          child: Text(AppLocalizations.of(context)!.btnCancel)
+          child: Text(AppLocalizations.of(context)!.btnCancel),
         ),
         ElevatedButton(
           onPressed: () => Navigator.of(context).pop(true),
-          child: Text(AppLocalizations.of(context)!.btnConfirm)
+          child: Text(AppLocalizations.of(context)!.btnConfirm),
         ),
       ],
-    )
+    ),
   ) ?? false;
-}

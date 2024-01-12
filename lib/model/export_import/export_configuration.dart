@@ -24,7 +24,7 @@ class ActiveExportColumnConfiguration extends ChangeNotifier {
       final json = jsonDecode(jsonString);
       return ActiveExportColumnConfiguration(
           activePreset: ExportImportPreset.decode(json['preset']) ?? ExportImportPreset.bloodPressureApp,
-          userSelectedColumnIds: ConvertUtil.parseList<String>(json['columns'])
+          userSelectedColumnIds: ConvertUtil.parseList<String>(json['columns']),
       );
     } on FormatException {
       return ActiveExportColumnConfiguration();
@@ -34,7 +34,7 @@ class ActiveExportColumnConfiguration extends ChangeNotifier {
 
   String toJson() => jsonEncode({
     'columns': _userSelectedColumns,
-    'preset': _activePreset.encode()
+    'preset': _activePreset.encode(),
   });
 
   /// The [UserColumn.internalIdentifier] of columns currently selected by user.
@@ -105,7 +105,7 @@ class ActiveExportColumnConfiguration extends ChangeNotifier {
         NativeColumn.diastolic,
         NativeColumn.pulse,
       ]
-    });
+    },);
 }
 
 
@@ -140,8 +140,7 @@ enum ExportImportPreset {
     ExportImportPreset.bloodPressureAppPdf => 3,
   };
 
-  static ExportImportPreset? decode(dynamic e) {
-    return switch(e) {
+  static ExportImportPreset? decode(e) => switch(e) {
       0 => ExportImportPreset.none,
       1 => ExportImportPreset.bloodPressureApp,
       2 => ExportImportPreset.myHeart,
@@ -151,5 +150,4 @@ enum ExportImportPreset {
         return null;
       }(),
     };
-  }
 }

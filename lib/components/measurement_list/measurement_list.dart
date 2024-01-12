@@ -48,25 +48,25 @@ class MeasurementList extends StatelessWidget {
               children: [
                 const Expanded(
                   flex: 4,
-                  child: SizedBox()),
+                  child: SizedBox(),),
                 Expanded(
                     flex: 30,
                     child: Text(localizations.sysLong,
                         overflow: TextOverflow.ellipsis,
-                        style: TextStyle(fontWeight: FontWeight.bold, color: settings.sysColor))),
+                        style: TextStyle(fontWeight: FontWeight.bold, color: settings.sysColor),),),
                 Expanded(
                     flex: 30,
                     child: Text(localizations.diaLong,
                         overflow: TextOverflow.ellipsis,
-                        style: TextStyle(fontWeight: FontWeight.bold, color: settings.diaColor))),
+                        style: TextStyle(fontWeight: FontWeight.bold, color: settings.diaColor),),),
                 Expanded(
                     flex: 30,
                     child: Text(localizations.pulLong,
                         overflow: TextOverflow.ellipsis,
-                        style: TextStyle(fontWeight: FontWeight.bold, color: settings.pulColor))),
+                        style: TextStyle(fontWeight: FontWeight.bold, color: settings.pulColor),),),
                 const Expanded(
                     flex: 20,
-                    child: SizedBox()),
+                    child: SizedBox(),),
               ],
             ),
             const SizedBox(
@@ -76,8 +76,8 @@ class MeasurementList extends StatelessWidget {
               height: 0,
               thickness: 2,
               color: Theme.of(context).colorScheme.primaryContainer,
-            )
-          ]
+            ),
+          ],
         ),
         Expanded(
           child: ListView.builder(
@@ -106,8 +106,8 @@ class MeasurementList extends StatelessWidget {
 
             },
           ),
-        )
-      ]
+        ),
+      ],
     );
   }
 }

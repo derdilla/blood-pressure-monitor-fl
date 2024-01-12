@@ -28,7 +28,7 @@ class GraphMarkingsScreen extends StatelessWidget {
                   padding: const EdgeInsets.all(10),
                   child: DefaultTextStyle.merge(
                     child: Text(localizations.horizontalLines),
-                    style: Theme.of(context).textTheme.headlineLarge
+                    style: Theme.of(context).textTheme.headlineLarge,
                   ),
                 );
               }
@@ -65,9 +65,9 @@ class GraphMarkingsScreen extends StatelessWidget {
                   },
                 ),
               );
-            }
+            },
           );
-        }),
+        },),
       ),
     );
   }

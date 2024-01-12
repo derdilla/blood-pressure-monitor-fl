@@ -23,7 +23,7 @@ class IntakeHistory extends ChangeNotifier {
       serialized
         .split('\n')
         .map((e) => MedicineIntake.deserialize(e, availableMedicines))
-        .toList()
+        .toList(),
     );
 
   /// Serializes the current state of the object into a string.
@@ -57,7 +57,7 @@ class IntakeHistory extends ChangeNotifier {
   ///
   /// Uses binary search to determine the bound.
   void addIntake(MedicineIntake intake) {
-    int index = _findUpperBound(_medicineIntakes, intake.timestamp);
+    final int index = _findUpperBound(_medicineIntakes, intake.timestamp);
 
     if (index == -1) {
       _medicineIntakes.add(intake);

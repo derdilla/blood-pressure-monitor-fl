@@ -14,7 +14,7 @@ void main() {
         onParsableSubmit: (double newValue) {
           assert(false, 'should not be called');
         },
-      )));
+      ),),);
       expect(widgetTester.takeException(), isNull);
       expect(find.text('test title'), findsOneWidget);
       expect(find.text('15'), findsOneWidget);
@@ -26,7 +26,7 @@ void main() {
         onParsableSubmit: (double newValue) {
           assert(false, 'should not be called');
         },
-      )));
+      ),),);
 
       expect(find.byType(InputDialoge), findsNothing);
       await widgetTester.tap(find.byType(NumberInputListTile));
@@ -45,7 +45,7 @@ void main() {
         onParsableSubmit: (double newValue) {
           assert(false, 'should not be called');
         },
-      )));
+      ),),);
 
       expect(find.text('15'), findsOneWidget);
       await widgetTester.tap(find.byType(NumberInputListTile));
@@ -75,7 +75,7 @@ void main() {
               break;
           }
         },
-      )));
+      ),),);
 
       expect(find.text('15'), findsOneWidget);
       await widgetTester.tap(find.byType(NumberInputListTile));

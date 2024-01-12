@@ -17,7 +17,7 @@ Future<DateTime?> showDateTimePicker({
   lastDate ??= firstDate.add(const Duration(days: 365 * 200));
 
   final DateTime? selectedDate = await showDatePicker(
-      context: context, initialDate: initialDate, firstDate: firstDate, lastDate: lastDate, confirmText: AppLocalizations.of(context)!.btnNext);
+      context: context, initialDate: initialDate, firstDate: firstDate, lastDate: lastDate, confirmText: AppLocalizations.of(context)!.btnNext,);
 
   if (selectedDate == null) return null;
   if (!context.mounted) return null;

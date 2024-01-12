@@ -78,7 +78,7 @@ class ScriptedFormatter implements Formatter {
     fieldContents = fieldContents.replaceAll(r'$SYS', record.systolic.toString());
     fieldContents = fieldContents.replaceAll(r'$DIA', record.diastolic.toString());
     fieldContents = fieldContents.replaceAll(r'$PUL', record.pulse.toString());
-    fieldContents = fieldContents.replaceAll(r'$NOTE', record.notes.toString());
+    fieldContents = fieldContents.replaceAll(r'$NOTE', record.notes);
     fieldContents = fieldContents.replaceAll(r'$COLOR', jsonEncode(record.needlePin?.toJson()));
 
     // math
@@ -92,7 +92,7 @@ class ScriptedFormatter implements Formatter {
     fieldContents = fieldContents.replaceAllMapped(RegExp(r'\$FORMAT\{([^}]*)}'), (m) {
       assert(m.groupCount == 1, 'If a FORMAT block is found a group is expected');
       final bothArgs = m.group(1)!;
-      int separatorPosition = bothArgs.indexOf(",");
+      final int separatorPosition = bothArgs.indexOf(',');
       final timestamp = DateTime.fromMillisecondsSinceEpoch(int.parse(bothArgs.substring(0,separatorPosition)));
       final formatPattern = bothArgs.substring(separatorPosition+1);
       return DateFormat(formatPattern).format(timestamp);
@@ -120,7 +120,7 @@ class ScriptedFormatter implements Formatter {
 
   @override
   RowDataFieldType? get restoreAbleType {
-    if (_hasRestoreableType == false) {
+    if (!_hasRestoreableType) {
       final replaced = pattern.replaceFirst(RegExp(r'[^{},$]*\$(SYS|DIA|PUL)[^{},$]*'), '');
       if (pattern.contains(RegExp(r'[{},]'))) {
         _restoreAbleType = null;

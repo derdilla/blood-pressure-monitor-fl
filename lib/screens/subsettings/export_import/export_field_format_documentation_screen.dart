@@ -13,8 +13,7 @@ class InformationScreen extends StatelessWidget {
   final String text;
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
+  Widget build(BuildContext context) => Scaffold(
         appBar: AppBar(
           forceMaterialTransparency: true,
         ),
@@ -23,11 +22,10 @@ class InformationScreen extends StatelessWidget {
           child: Markdown(
             selectable: true,
             onTapLink: getLinkTapHandler(context),
-            data: text
+            data: text,
           ),
-        )
+        ),
     );
-  }
 }
 
 typedef LinkTapHandler = FutureOr<void> Function(String, String?, String)?;

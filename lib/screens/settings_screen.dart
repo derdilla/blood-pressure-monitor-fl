@@ -35,8 +35,7 @@ class SettingsPage extends StatelessWidget {
         title: Text(localizations.settings),
         backgroundColor: Theme.of(context).primaryColor,
       ),
-      body: Consumer<Settings>(builder: (context, settings, child) {
-        return ListView(
+      body: Consumer<Settings>(builder: (context, settings, child) => ListView(
           children: [
             TitledColumn(title: Text(localizations.layout), children: [
               ListTile(
@@ -48,7 +47,7 @@ class SettingsPage extends StatelessWidget {
                 onTap: () async {
                   final pickedFormat = await showTimeFormatPickerDialoge(context,
                       settings.dateFormatString,
-                      settings.bottomAppBars);
+                      settings.bottomAppBars,);
                   if (pickedFormat != null) {
                     settings.dateFormatString = pickedFormat;
                   }
@@ -62,7 +61,7 @@ class SettingsPage extends StatelessWidget {
                 items: [
                   DropdownMenuItem(value: ThemeMode.system, child: Text(localizations.system)),
                   DropdownMenuItem(value: ThemeMode.dark, child: Text(localizations.dark)),
-                  DropdownMenuItem(value: ThemeMode.light, child: Text(localizations.light))
+                  DropdownMenuItem(value: ThemeMode.light, child: Text(localizations.light)),
                 ],
                 onChanged: (ThemeMode? value) {
                   if (value != null) settings.themeMode = value;
@@ -72,14 +71,14 @@ class SettingsPage extends StatelessWidget {
                 key: const Key('accentColor'),
                 onMainColorChanged: (color) => settings.accentColor = color,
                 initialColor: settings.accentColor,
-                title: Text(localizations.accentColor)),
+                title: Text(localizations.accentColor),),
               DropDownListTile<Locale?>(
                 key: const Key('language'),
                 leading: const Icon(Icons.language),
                 title: Text(localizations.language),
                 value: settings.language,
                 items: [
-                  DropdownMenuItem(value: null, child: Text(localizations.system)),
+                  DropdownMenuItem(child: Text(localizations.system)),
                   for (final l in AppLocalizations.supportedLocales)
                     DropdownMenuItem(value: l, child: Text(getDisplayLanguage(l) ?? l.languageCode)),
                 ],
@@ -97,7 +96,6 @@ class SettingsPage extends StatelessWidget {
                 value: settings.graphLineThickness,
                 min: 1,
                 max: 5,
-                stepSize: 1,
               ),
               SliderListTile(
                 key: const Key('needlePinBarWidth'),
@@ -110,7 +108,6 @@ class SettingsPage extends StatelessWidget {
                 value: settings.needlePinBarWidth,
                 min: 1,
                 max: 20,
-                stepSize: 1,
               ),
               SliderListTile(
                 key: const Key('animationSpeed'),
@@ -128,17 +125,17 @@ class SettingsPage extends StatelessWidget {
                 key: const Key('sysColor'),
                 onMainColorChanged: (color) => settings.sysColor = color,
                 initialColor: settings.sysColor,
-                  title: Text(localizations.sysColor)),
+                  title: Text(localizations.sysColor),),
               ColorSelectionListTile(
                 key: const Key('diaColor'),
                 onMainColorChanged: (color) => settings.diaColor = color,
                 initialColor: settings.diaColor,
-                title: Text(localizations.diaColor)),
+                title: Text(localizations.diaColor),),
               ColorSelectionListTile(
                 key: const Key('pulColor'),
                 onMainColorChanged: (color) => settings.pulColor = color,
                 initialColor: settings.pulColor,
-                title: Text(localizations.pulColor)),
+                title: Text(localizations.pulColor),),
               SwitchListTile(
                 key: const Key('useLegacyList'),
                 value: settings.useLegacyList,
@@ -147,17 +144,17 @@ class SettingsPage extends StatelessWidget {
                 },
                 secondary: const Icon(Icons.list_alt_outlined),
                 title: Text(localizations.useLegacyList),),
-            ]),
+            ],),
 
             TitledColumn(title: Text(localizations.behavior), children: [
               ListTile(
                 onTap: () {
                   Navigator.push(context, MaterialPageRoute(builder:
-                      (context) => const MedicineManagerScreen()));
+                      (context) => const MedicineManagerScreen(),),);
                 },
                 leading: const Icon(Icons.medication),
                 title: Text(localizations.medications),
-                trailing: const Icon(Icons.arrow_forward_ios)
+                trailing: const Icon(Icons.arrow_forward_ios),
               ),
               SwitchListTile(
                 key: const Key('allowManualTimeInput'),
@@ -166,7 +163,7 @@ class SettingsPage extends StatelessWidget {
                   settings.allowManualTimeInput = value;
                 },
                 secondary: const Icon(Icons.details),
-                title: Text(localizations.allowManualTimeInput)),
+                title: Text(localizations.allowManualTimeInput),),
               SwitchListTile(
                 key: const Key('validateInputs'),
                 value: settings.validateInputs,
@@ -175,7 +172,7 @@ class SettingsPage extends StatelessWidget {
                 onChanged: settings.allowMissingValues ? null : (value) {
                   assert(!settings.allowMissingValues);
                   settings.validateInputs = value;
-                }),
+                },),
               SwitchListTile(
                 key: const Key('allowMissingValues'),
                 value: settings.allowMissingValues,
@@ -184,7 +181,7 @@ class SettingsPage extends StatelessWidget {
                 onChanged: (value) {
                   settings.allowMissingValues = value;
                   if (value) settings.validateInputs = false;
-                }),
+                },),
               SwitchListTile(
                 key: const Key('confirmDeletion'),
                 value: settings.confirmDeletion,
@@ -192,7 +189,7 @@ class SettingsPage extends StatelessWidget {
                 secondary: const Icon(Icons.check),
                 onChanged: (value) {
                   settings.confirmDeletion = value;
-                }),
+                },),
               NumberInputListTile(
                 key: const Key('sysWarn'),
                 label: localizations.sysWarn,
@@ -236,7 +233,7 @@ class SettingsPage extends StatelessWidget {
                     context,
                     MaterialPageRoute(builder: (context) => const AboutWarnValuesScreen()),
                   );
-                }
+                },
               ),
               ListTile(
                 key: const Key('GraphMarkingsScreen'),
@@ -248,7 +245,7 @@ class SettingsPage extends StatelessWidget {
                     context,
                     MaterialPageRoute(builder: (context) => const GraphMarkingsScreen()),
                   );
-                }
+                },
               ),
               SwitchListTile(
                 title: Text(localizations.drawRegressionLines),
@@ -257,7 +254,7 @@ class SettingsPage extends StatelessWidget {
                 value: settings.drawRegressionLines,
                 onChanged: (value) {
                   settings.drawRegressionLines = value;
-                }
+                },
               ),
               SwitchListTile(
                 title: Text(localizations.startWithAddMeasurementPage),
@@ -266,7 +263,7 @@ class SettingsPage extends StatelessWidget {
                 value: settings.startWithAddMeasurementPage,
                 onChanged: (value) {
                   settings.startWithAddMeasurementPage = value;
-                }
+                },
               ),
               SwitchListTile(
                 title: Text(localizations.bottomAppBars),
@@ -274,9 +271,9 @@ class SettingsPage extends StatelessWidget {
                 value: settings.bottomAppBars,
                 onChanged: (value) {
                   settings.bottomAppBars = value;
-                }
+                },
               ),
-            ]),
+            ],),
             TitledColumn(
               title: Text(localizations.data),
               children: [
@@ -289,7 +286,7 @@ class SettingsPage extends StatelessWidget {
                         context,
                         MaterialPageRoute(builder: (context) => const ExportImportScreen()),
                       );
-                    }
+                    },
                 ),
                 ListTile(
                     title: Text(localizations.exportSettings),
@@ -300,7 +297,7 @@ class SettingsPage extends StatelessWidget {
                       dbPath = join(dbPath, 'config.db');
                       assert(Platform.isAndroid);
                       PlatformClient.shareFile(dbPath, 'application/vnd.sqlite3');
-                    }
+                    },
                 ),
                 ListTile(
                     title: Text(localizations.importSettings),
@@ -308,15 +305,14 @@ class SettingsPage extends StatelessWidget {
                     leading: const Icon(Icons.settings_backup_restore),
                     onTap: () async {
                       final messenger = ScaffoldMessenger.of(context);
-                      var result = await FilePicker.platform.pickFiles(
-                        allowMultiple: false,
-                        withData: false,
+                      final result = await FilePicker.platform.pickFiles(
+                        
                       );
                       if (result == null) {
                         messenger.showSnackBar(SnackBar(content: Text(localizations.errNoFileOpened)));
                         return;
                       }
-                      var path = result.files.single.path;
+                      final path = result.files.single.path;
                       if (path == null) {
                         messenger.showSnackBar(SnackBar(content: Text(localizations.errCantReadFile)));
                         return;
@@ -330,7 +326,7 @@ class SettingsPage extends StatelessWidget {
                         messenger.showSnackBar(SnackBar(content: Text(localizations.pleaseRestart)));
                         return;
                       }
-                    }
+                    },
                 ),
                 ListTile(
                     title: Text(localizations.delete),
@@ -341,8 +337,8 @@ class SettingsPage extends StatelessWidget {
                         context,
                         MaterialPageRoute(builder: (context) => const DeleteDataScreen()),
                       );
-                    }
-                )
+                    },
+                ),
               ],
             ),
             TitledColumn(title: Text(localizations.aboutWarnValuesScreen), children: [
@@ -354,14 +350,14 @@ class SettingsPage extends StatelessWidget {
                   subtitle: ConsistentFutureBuilder<PackageInfo>(
                     future: PackageInfo.fromPlatform(),
                     cacheFuture: true,
-                    onData: (context, info) => Text(info.version)
+                    onData: (context, info) => Text(info.version),
                   ),
                   onTap: () {
                     Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) => const VersionScreen()),
                     );
-                  }
+                  },
               ),
               ListTile(
                 key: const Key('sourceCode'),
@@ -370,12 +366,12 @@ class SettingsPage extends StatelessWidget {
                 trailing: const Icon(Icons.open_in_new),
                 onTap: () async {
                   final scaffoldMessenger = ScaffoldMessenger.of(context);
-                  var url = Uri.parse('https://github.com/NobodyForNothing/blood-pressure-monitor-fl');
+                  final url = Uri.parse('https://github.com/NobodyForNothing/blood-pressure-monitor-fl');
                   if (await canLaunchUrl(url)) {
                     await launchUrl(url, mode: LaunchMode.externalApplication);
                   } else {
                     scaffoldMessenger.showSnackBar(SnackBar(
-                        content: Text(localizations.errCantOpenURL(url.toString()))));
+                        content: Text(localizations.errCantOpenURL(url.toString())),),);
                   }
                 },
               ),
@@ -388,10 +384,9 @@ class SettingsPage extends StatelessWidget {
                   showLicensePage(context: context);
                 },
               ),
-            ])
+            ],),
           ],
-        );
-      }),
+        ),),
     );
   }
 }

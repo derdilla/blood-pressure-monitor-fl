@@ -19,10 +19,10 @@ import 'package:sqflite/sqflite.dart';
 
 /// Function for upgrading shared preferences from pre 1.5.5 versions.
 Future<void> updateLegacySettings(Settings settings, ExportSettings exportSettings, CsvExportSettings csvExportSettings,
-    PdfExportSettings pdfExportSettings, IntervallStoreManager intervallStoreManager) async {
-  SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    PdfExportSettings pdfExportSettings, IntervallStoreManager intervallStoreManager,) async {
+  final SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
 
-  List<Future> futures = [];
+  final List<Future> futures = [];
 
   final keys = sharedPreferences.getKeys();
   for (final key in keys) { // remove these first
@@ -178,7 +178,7 @@ Future<void> updateLegacySettings(Settings settings, ExportSettings exportSettin
         break;
       case 'horizontalGraphLines':
         settings.horizontalGraphLines = sharedPreferences.getStringList(key)!.map((e) =>
-            HorizontalGraphLine.fromJson(jsonDecode(e))).toList();
+            HorizontalGraphLine.fromJson(jsonDecode(e)),).toList();
         break;
       case 'useLegacyList':
         settings.useLegacyList = sharedPreferences.getBool(key)!;
@@ -203,13 +203,13 @@ Future<void> updateLegacyExport(ConfigDB database, ExportColumnsManager manager)
   if (await _tableExists(database.database, ConfigDB.exportStringsTable)) {
     final existingDbEntries = await database.database.query(
         ConfigDB.exportStringsTable,
-        columns: ['internalColumnName', 'columnTitle', 'formatPattern']
+        columns: ['internalColumnName', 'columnTitle', 'formatPattern'],
     );
     for (final e in existingDbEntries) {
       final column = UserColumn(
           e['internalColumnName'].toString(),
           e['columnTitle'].toString(),
-          e['formatPattern'].toString()
+          e['formatPattern'].toString(),
       );
       if (column.formatPattern?.contains(r'$FORMAT') ?? false) {
         Fluttertoast.showToast(
@@ -219,9 +219,9 @@ Future<void> updateLegacyExport(ConfigDB database, ExportColumnsManager manager)
       manager.addOrUpdate(column);
     }
 
-    await database.database.execute("DROP TABLE IF EXISTS ${ConfigDB.exportStringsTable};");
+    await database.database.execute('DROP TABLE IF EXISTS ${ConfigDB.exportStringsTable};');
   }
 }
 
 Future<bool> _tableExists(Database database, String tableName) async => (await database.rawQuery(
-  "SELECT name FROM sqlite_master WHERE type='table' AND name='$tableName';")).isNotEmpty;
+  "SELECT name FROM sqlite_master WHERE type='table' AND name='$tableName';",)).isNotEmpty;

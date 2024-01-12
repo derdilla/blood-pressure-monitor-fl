@@ -72,7 +72,7 @@ Future<void> pumpAppRoot(WidgetTester widgetTester, {
   PdfExportSettings? pdfExportSettings,
   IntervallStoreManager? intervallStoreManager,
   IntakeHistory? intakeHistory,
-  BloodPressureModel? model
+  BloodPressureModel? model,
 }) async {
   model ??= RamBloodPressureModel();
   settings ??= Settings();
@@ -90,7 +90,7 @@ Future<void> pumpAppRoot(WidgetTester widgetTester, {
     ChangeNotifierProvider(create: (_) => intakeHistory),
     ChangeNotifierProvider(create: (_) => intervallStoreManager),
     ChangeNotifierProvider<BloodPressureModel>(create: (_) => model!),
-  ], child: const AppRoot()));
+  ], child: const AppRoot(),),);
 }
 
 class MockConfigDao implements ConfigDao {

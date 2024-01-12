@@ -14,18 +14,18 @@ import 'package:provider/provider.dart';
 import '../ram_only_implementations.dart';
 
 void main() {
-  group("StatisticsPage", () {
+  group('StatisticsPage', () {
     testWidgets('should load page', (widgetTester) async {
       await _initStatsPage(widgetTester, []);
       expect(widgetTester.takeException(), isNull);
       expect(find.text('Statistics'), findsOneWidget);
     });
-    testWidgets("should report measurement count", (widgetTester) async {
+    testWidgets('should report measurement count', (widgetTester) async {
       await _initStatsPage(widgetTester, [
         for (int i = 1; i<51; i++) // can't safe entries at or before epoch
           BloodPressureRecord(DateTime.fromMillisecondsSinceEpoch(1582991592 + i), 40+i, 60+i, 30+i, 'Test comment $i'),
       ],
-        intervallStoreManager: IntervallStoreManager(IntervallStorage(), IntervallStorage(), IntervallStorage(stepSize: TimeStep.lifetime))
+        intervallStoreManager: IntervallStoreManager(IntervallStorage(), IntervallStorage(), IntervallStorage(stepSize: TimeStep.lifetime)),
       );
       final measurementCountWidget = find.byKey(const Key('measurementCount'));
       expect(measurementCountWidget, findsOneWidget);
@@ -40,14 +40,14 @@ void main() {
         for (int i = 1; i<51; i++) // can't safe entries at or before epoch
           BloodPressureRecord(DateTime.fromMillisecondsSinceEpoch(1582991592 + i), 40+i, 60+i, 30+i, 'Test comment $i'),
       ],
-          intervallStoreManager: IntervallStoreManager(IntervallStorage(), IntervallStorage(), IntervallStorage(stepSize: TimeStep.lifetime))
+          intervallStoreManager: IntervallStoreManager(IntervallStorage(), IntervallStorage(), IntervallStorage(stepSize: TimeStep.lifetime)),
       );
       expect(find.text('null',findRichText: true, skipOffstage: false), findsNothing);
     });
 
     testWidgets("should not display 'null' when empty", (widgetTester) async {
       await _initStatsPage(widgetTester, [],
-          intervallStoreManager: IntervallStoreManager(IntervallStorage(), IntervallStorage(), IntervallStorage(stepSize: TimeStep.lifetime))
+          intervallStoreManager: IntervallStoreManager(IntervallStorage(), IntervallStorage(), IntervallStorage(stepSize: TimeStep.lifetime)),
       );
       expect(find.text('null',findRichText: true, skipOffstage: false), findsNothing);
     });
@@ -68,7 +68,7 @@ Future<void> _initStatsPage(WidgetTester widgetTester, List<BloodPressureRecord>
   pdfExportSettings ??= PdfExportSettings();
   intervallStoreManager ??= IntervallStoreManager(IntervallStorage(), IntervallStorage(), IntervallStorage());
 
-  for (var r in records) {
+  for (final r in records) {
     model.add(r);
   }
 
@@ -85,7 +85,7 @@ Future<void> _initStatsPage(WidgetTester widgetTester, List<BloodPressureRecord>
         delegates: AppLocalizations.localizationsDelegates,
         locale: const Locale('en'),
         child: const StatisticsPage(),
-      )
-  ));
+      ),
+  ),);
   await widgetTester.pumpAndSettle();
 }

@@ -46,9 +46,9 @@ class _DeleteDataScreenState extends State<DeleteDataScreen> {
             CustomBanner(
                 content: Text(localizations.warnNeedsRestartForUsingApp),
                 action: TextButton(
-                  onPressed: () => Restart.restartApp(),
+                  onPressed: Restart.restartApp,
                   child: Text(localizations.restartNow),
-                )
+                ),
             ),
           Expanded(
             child: Container(
@@ -59,7 +59,6 @@ class _DeleteDataScreenState extends State<DeleteDataScreen> {
                 children: [
                   Text(localizations.data, style: Theme.of(context).textTheme.headlineMedium),
                   Expanded(
-                    flex: 1,
                     child: ListView(
                       children: [
                         ListTile(
@@ -81,9 +80,7 @@ class _DeleteDataScreenState extends State<DeleteDataScreen> {
 
                               return _bytesToString(sizeBytes);
                             }),
-                            onData: (context, data) {
-                              return Text(data.toString());
-                            },
+                            onData: (context, data) => Text(data),
                           ),
                           trailing: const Icon(Icons.delete_forever),
                           onTap: () async {
@@ -118,9 +115,7 @@ class _DeleteDataScreenState extends State<DeleteDataScreen> {
                               } on PathNotFoundException {}
                               return _bytesToString(sizeBytes);
                             }),
-                            onData: (context, data) {
-                              return Text(data.toString());
-                            },
+                            onData: (context, data) => Text(data),
                           ),
                           trailing: const Icon(Icons.delete_forever),
                           onTap: () async {
@@ -136,7 +131,7 @@ class _DeleteDataScreenState extends State<DeleteDataScreen> {
                               });
                             }
                           },
-                        )
+                        ),
                       ],
                     ),
                   ),
@@ -181,14 +176,13 @@ class _DeleteDataScreenState extends State<DeleteDataScreen> {
 
   /// Converts file size in bytes to human readable string
   String _bytesToString(int sizeBytes) {
-    if (sizeBytes <= 0) return "0 B";
-    const suffixes = ["B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"];
-    var i = (log(sizeBytes) / log(1024)).floor();
+    if (sizeBytes <= 0) return '0 B';
+    const suffixes = ['B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
+    final i = (log(sizeBytes) / log(1024)).floor();
     return '${(sizeBytes / pow(1024, i)).toStringAsFixed(1)} ${suffixes[i]}';
   }
 
-  Future<bool> showDeleteDialoge(BuildContext context, AppLocalizations localizations) async {
-    return await showDialog<bool>(context: context, builder: (context) =>
+  Future<bool> showDeleteDialoge(BuildContext context, AppLocalizations localizations) async => await showDialog<bool>(context: context, builder: (context) =>
         AlertDialog(
           title: Text(localizations.confirmDelete),
           content: Text(localizations.warnDeletionUnrecoverable),
@@ -196,23 +190,22 @@ class _DeleteDataScreenState extends State<DeleteDataScreen> {
           actions: [
             TextButton(
                 onPressed: () => Navigator.of(context).pop(false),
-                child: Text(AppLocalizations.of(context)!.btnCancel)),
+                child: Text(AppLocalizations.of(context)!.btnCancel),),
             Theme(
               data: ThemeData.from(
                   colorScheme: ColorScheme.fromSeed(seedColor: Colors.red, brightness: Theme.of(context).brightness),
-                  useMaterial3: true
+                  useMaterial3: true,
               ),
               child: ElevatedButton.icon(
                   onPressed: () => Navigator.of(context).pop(true),
                   icon: const Icon(Icons.delete_forever),
-                  label: Text(AppLocalizations.of(context)!.btnConfirm)
+                  label: Text(AppLocalizations.of(context)!.btnConfirm),
               ),
-            )
+            ),
 
           ],
-        )
+        ),
     ) ?? false;
-  }
   
   void tryDeleteFile(String path, ScaffoldMessengerState messanger, AppLocalizations localizations) {
     try {
@@ -220,12 +213,12 @@ class _DeleteDataScreenState extends State<DeleteDataScreen> {
       messanger.showSnackBar(SnackBar(
         duration: const Duration(seconds: 2),
         content: Text(localizations.fileDeleted),
-      ));
+      ),);
     } on PathNotFoundException {
       messanger.showSnackBar(SnackBar(
         duration: const Duration(seconds: 2),
         content: Text(localizations.fileAlreadyDeleted),
-      ));
+      ),);
     }
   }
 }

@@ -16,9 +16,9 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class _LineChart extends StatefulWidget {
-  final double height;
 
   const _LineChart({this.height = 200});
+  final double height;
 
   @override
   State<_LineChart> createState() => _LineChartState();
@@ -26,27 +26,25 @@ class _LineChart extends StatefulWidget {
 
 class _LineChartState extends State<_LineChart> {
   @override
-  Widget build(BuildContext context) {
-    return SizedBox(
+  Widget build(BuildContext context) => SizedBox(
         height: widget.height,
         child: Consumer<IntakeHistory>(
           builder: (context, intakeHistory, child) => Consumer<Settings>(
-          builder: (context, settings, child) {
-            return BloodPressureBuilder(
+          builder: (context, settings, child) => BloodPressureBuilder(
               rangeType: IntervallStoreManagerLocation.mainPage,
               onData: (BuildContext context, UnmodifiableListView<BloodPressureRecord> records) {
-                List<BloodPressureRecord> data = records.toList();
+                final List<BloodPressureRecord> data = records.toList();
                 data.sort((a, b) => a.creationTime.compareTo(b.creationTime));
 
                 // calculate lines for graph
                 List<FlSpot> pulSpots = [], diaSpots = [], sysSpots = [];
                 int maxValue = 0;
-                int minValue = (settings.validateInputs ? 30 : 0);
+                final int minValue = (settings.validateInputs ? 30 : 0);
                 /// Horizontally first value
                 double? graphBegin;
                 /// Horizontally last value
                 double? graphEnd;
-                for (var e in data) {
+                for (final e in data) {
                   final x = e.creationTime.millisecondsSinceEpoch.toDouble();
                   if (e.diastolic != null) {
                     diaSpots.add(FlSpot(x, e.diastolic!.toDouble()));
@@ -78,8 +76,7 @@ class _LineChartState extends State<_LineChart> {
                 return TweenAnimationBuilder<double>(
                   duration: Duration(milliseconds: settings.animationSpeed), // interacts with LineChart duration property
                   tween: Tween<double>(begin: 0, end: settings.graphLineThickness),
-                  builder: (context, animatedThickness, child) {
-                    return LineChart(
+                  builder: (context, animatedThickness, child) => LineChart(
                       duration: const Duration(milliseconds: 200),
                       LineChartData(
                           minY: minValue.toDouble(),
@@ -88,30 +85,27 @@ class _LineChartState extends State<_LineChart> {
                           maxX: graphEnd,
                           clipData: const FlClipData.all(),
                           titlesData: _buildFlTitlesData(settings,
-                              DateTimeRange(start: data.first.creationTime, end: data.last.creationTime)),
+                              DateTimeRange(start: data.first.creationTime, end: data.last.creationTime),),
                           lineTouchData: const LineTouchData(
-                              touchTooltipData: LineTouchTooltipData(tooltipMargin: -200, tooltipRoundedRadius: 20)
+                              touchTooltipData: LineTouchTooltipData(tooltipMargin: -200, tooltipRoundedRadius: 20),
                           ),
                           lineBarsData: buildBars(animatedThickness, settings, sysSpots, diaSpots, pulSpots,
                               maxValue, minValue, graphBegin, graphEnd, records,
                               intakeHistory.getIntakes(
                                   DateTimeRange(
                                       start: DateTime.fromMillisecondsSinceEpoch(graphBegin!.toInt()),
-                                      end: DateTime.fromMillisecondsSinceEpoch(graphEnd!.toInt())
-                                  )
-                              )
-                          )
+                                      end: DateTime.fromMillisecondsSinceEpoch(graphEnd!.toInt()),
+                                  ),
+                              ),
+                          ),
                       ),
-                    );
-                  },
+                    ),
                 );
               },
-            );
-          },
+            ),
         ),
-      )
+      ),
     );
-  }
 
   List<LineChartBarData> buildBars(
       double animatedThickness, 
@@ -128,7 +122,7 @@ class _LineChartState extends State<_LineChart> {
       Iterable<BloodPressureRecord> allRecords,
       Iterable<MedicineIntake> allIntakes,
       ) {
-    var bars = [
+    final bars = [
       _buildBarData(animatedThickness, sysSpots, settings.sysColor, true, settings.sysWarn.toDouble()),
       _buildBarData(animatedThickness, diaSpots, settings.diaColor, true, settings.diaWarn.toDouble()),
       _buildBarData(animatedThickness, pulSpots, settings.pulColor, false),
@@ -148,19 +142,19 @@ class _LineChartState extends State<_LineChart> {
       bars.add(LineChartBarData(
         spots: [
           FlSpot(intake.timestamp.millisecondsSinceEpoch.toDouble(), minValue.toDouble()),
-          FlSpot(intake.timestamp.millisecondsSinceEpoch.toDouble(), maxValue + 5)
+          FlSpot(intake.timestamp.millisecondsSinceEpoch.toDouble(), maxValue + 5),
         ],
         barWidth: settings.needlePinBarWidth,
         dotData: const FlDotData(show: false),
         dashArray: [8,7],
         color: intake.medicine.color,
-      ));
+      ),);
     }
     return bars;
   }
 
   FlTitlesData _buildFlTitlesData(Settings settings, DateTimeRange graphRange) {
-    const noTitels = AxisTitles(sideTitles: SideTitles(reservedSize: 40, showTitles: false));
+    const noTitels = AxisTitles(sideTitles: SideTitles(reservedSize: 40));
     return FlTitlesData(
       topTitles: noTitels,
       rightTitles: noTitels,
@@ -187,9 +181,9 @@ class _LineChartState extends State<_LineChart> {
               formatter = DateFormat.y();
             }
               return Text(
-                formatter.format(DateTime.fromMillisecondsSinceEpoch(pos.toInt()))
+                formatter.format(DateTime.fromMillisecondsSinceEpoch(pos.toInt())),
               );
-          }
+          },
         ),
       ),
     );
@@ -201,18 +195,17 @@ class _LineChartState extends State<_LineChart> {
       pins.add(LineChartBarData(
         spots: [
           FlSpot(r.creationTime.millisecondsSinceEpoch.toDouble(), min.toDouble()),
-          FlSpot(r.creationTime.millisecondsSinceEpoch.toDouble(), max + 5)
+          FlSpot(r.creationTime.millisecondsSinceEpoch.toDouble(), max + 5),
         ],
         barWidth: settings.needlePinBarWidth,
         dotData: const FlDotData(show: false),
         color: r.needlePin!.color.withAlpha(100),
-      ));
+      ),);
     }
     return pins;
   }
 
-  LineChartBarData _buildBarData(double lineThickness, List<FlSpot> spots, Color color, bool hasAreaData, [double? areaDataCutOff]) {
-    return LineChartBarData(
+  LineChartBarData _buildBarData(double lineThickness, List<FlSpot> spots, Color color, bool hasAreaData, [double? areaDataCutOff]) => LineChartBarData(
         spots: spots,
         color: color,
         barWidth: lineThickness,
@@ -223,9 +216,8 @@ class _LineChartState extends State<_LineChart> {
               show: hasAreaData,
               color: Colors.red.shade400.withAlpha(100),
               cutOffY: areaDataCutOff ?? 0,
-              applyCutOffY: true)
+              applyCutOffY: true,),
     );
-  }
 
   // Real world use is limited
   LineChartBarData _buildRegressionLine(List<FlSpot> data) {
@@ -242,56 +234,49 @@ class _LineChartState extends State<_LineChart> {
       color: Colors.grey,
       spots: [
         FlSpot(start, y(start)),
-        FlSpot(end, y(end))
+        FlSpot(end, y(end)),
       ],
-      barWidth: 2,
       dotData: const FlDotData(
         show: false,
       ),
     );
   }
 
-  LineChartBarData _buildHorizontalLine(HorizontalGraphLine line, double start, double end) {
-    return LineChartBarData(
+  LineChartBarData _buildHorizontalLine(HorizontalGraphLine line, double start, double end) => LineChartBarData(
       color: line.color,
       spots: [
         FlSpot(start, line.height.toDouble()),
-        FlSpot(end, line.height.toDouble())
+        FlSpot(end, line.height.toDouble()),
       ],
       barWidth: 1,
       dotData: const FlDotData(
         show: false,
       ),
-      dashArray: [10,5,]
+      dashArray: [10,5,],
     );
-  }
 }
 
 class MeasurementGraph extends StatelessWidget {
-  final double height;
 
   const MeasurementGraph({super.key, this.height = 290});
+  final double height;
 
   @override
-  Widget build(BuildContext context) {
-    return SizedBox(
+  Widget build(BuildContext context) => SizedBox(
       height: height,
       child: Padding(
         padding: const EdgeInsets.only(right: 16, left: 6, top: 22),
         child: Column(
           children: [
             _LineChart(height: height - 100),
-            const IntervalPicker(type: IntervallStoreManagerLocation.mainPage,)
+            const IntervalPicker(type: IntervallStoreManagerLocation.mainPage,),
           ],
         ),
       ),
     );
-  }
 }
 
 extension Sum<T> on List<T> {
-  double sum(num Function(T value) f) {
-    return fold<double>(0, (prev, e) => prev + f(e).toDouble());
-  }
+  double sum(num Function(T value) f) => fold<double>(0, (prev, e) => prev + f(e).toDouble());
 }
 

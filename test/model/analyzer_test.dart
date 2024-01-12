@@ -6,10 +6,10 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   group('BloodPressureAnalyser', () {
     test('should return averages', () async {
-      var m = BloodPressureAnalyser([
+      final m = BloodPressureAnalyser([
         BloodPressureRecord(DateTime.fromMillisecondsSinceEpoch(1), 122, 87, 65, ''),
         BloodPressureRecord(DateTime.fromMillisecondsSinceEpoch(2), 100, 60, 62, ''),
-        BloodPressureRecord(DateTime.fromMillisecondsSinceEpoch(3), 111, 73, 73, '')
+        BloodPressureRecord(DateTime.fromMillisecondsSinceEpoch(3), 111, 73, 73, ''),
       ]);
 
       expect(m.avgSys, 111);
@@ -18,11 +18,11 @@ void main() {
     });
 
     test('should return max', () async {
-      var a = BloodPressureAnalyser([
+      final a = BloodPressureAnalyser([
         BloodPressureRecord(DateTime.fromMillisecondsSinceEpoch(1), 123, 87, 65, ''),
         BloodPressureRecord(DateTime.fromMillisecondsSinceEpoch(2), 100, 60, 62, ''),
         BloodPressureRecord(DateTime.fromMillisecondsSinceEpoch(3), 111, 73, 73, ''),
-        BloodPressureRecord(DateTime.fromMillisecondsSinceEpoch(4), 111, 73, 73, '')
+        BloodPressureRecord(DateTime.fromMillisecondsSinceEpoch(4), 111, 73, 73, ''),
       ]);
 
       expect(a.maxSys, 123);
@@ -31,11 +31,11 @@ void main() {
     });
 
     test('should return min', () async {
-      var a = BloodPressureAnalyser([
+      final a = BloodPressureAnalyser([
         BloodPressureRecord(DateTime.fromMillisecondsSinceEpoch(1), 123, 87, 65, ''),
         BloodPressureRecord(DateTime.fromMillisecondsSinceEpoch(2), 100, 60, 62, ''),
         BloodPressureRecord(DateTime.fromMillisecondsSinceEpoch(3), 111, 73, 73, ''),
-        BloodPressureRecord(DateTime.fromMillisecondsSinceEpoch(4), 100, 60, 62, '')
+        BloodPressureRecord(DateTime.fromMillisecondsSinceEpoch(4), 100, 60, 62, ''),
       ]);
 
       expect(a.minSys, 100);
@@ -44,15 +44,15 @@ void main() {
     });
 
     test('should know count', () async {
-      var m = BloodPressureAnalyser([
+      final m = BloodPressureAnalyser([
         for (int i = 1; i < 101; i++)
-          BloodPressureRecord(DateTime.fromMillisecondsSinceEpoch(i), 0, 0, 0, '')
+          BloodPressureRecord(DateTime.fromMillisecondsSinceEpoch(i), 0, 0, 0, ''),
       ]);
       expect(m.count, 100);
     });
 
     test('should determine special days', () async {
-      var m = BloodPressureAnalyser([BloodPressureRecord(DateTime.fromMillisecondsSinceEpoch(100), 0, 0, 0, ''),
+      final m = BloodPressureAnalyser([BloodPressureRecord(DateTime.fromMillisecondsSinceEpoch(100), 0, 0, 0, ''),
         BloodPressureRecord(DateTime.fromMillisecondsSinceEpoch(20), 0, 0, 0, ''),
         BloodPressureRecord(DateTime.fromMillisecondsSinceEpoch(9000000), 0, 0, 0, ''),
         BloodPressureRecord(DateTime.fromMillisecondsSinceEpoch(3124159), 0, 0, 0, ''),

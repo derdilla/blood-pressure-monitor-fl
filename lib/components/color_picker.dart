@@ -11,7 +11,7 @@ class ColorPicker extends StatefulWidget {
     this.availableColors,
     this.initialColor,
     this.showTransparentColor = true,
-    this.circleSize = 50
+    this.circleSize = 50,
   });
 
   /// Colors to choose from.
@@ -69,7 +69,7 @@ class ColorPicker extends StatefulWidget {
     Colors.deepOrangeAccent,
     Colors.brown,
     Colors.grey,
-    Colors.blueGrey
+    Colors.blueGrey,
   ];
 
   /// Size of the color circles.
@@ -91,8 +91,7 @@ class _ColorPickerState extends State<ColorPicker> {
     availableColors = widget.availableColors ?? ColorPicker.allColors;
   }
   @override
-  Widget build(BuildContext context) {
-    return Wrap(
+  Widget build(BuildContext context) => Wrap(
       children: [
         for (final color in availableColors)
             InkWell(
@@ -136,23 +135,20 @@ class _ColorPickerState extends State<ColorPicker> {
           ),
       ],
     );
-  }
 }
 
 /// Shows a dialog with a ColorPicker and with an cancel button inside.
 ///
 /// Returns the selected color or null when cancel is pressed.
-Future<Color?> showColorPickerDialog(BuildContext context, [Color? initialColor]) async {
-  return await showDialog(
+Future<Color?> showColorPickerDialog(BuildContext context, [Color? initialColor]) async => await showDialog(
     context: context,
-    builder: (_) {
-      return AlertDialog(
+    builder: (_) => AlertDialog(
         contentPadding: const EdgeInsets.all(6.0),
         content: ColorPicker(
           initialColor: initialColor,
           onColorSelected: (color) {
             Navigator.of(context).pop(color);
-          }
+          },
         ),
         actions: [
           TextButton(
@@ -160,7 +156,5 @@ Future<Color?> showColorPickerDialog(BuildContext context, [Color? initialColor]
             child: Text(AppLocalizations.of(context)!.btnCancel),
           ),
         ],
-      );
-    },
+      ),
   );
-}

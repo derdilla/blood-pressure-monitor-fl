@@ -42,7 +42,7 @@ class MedicineManagerScreen extends StatelessWidget {
                     ),
                     title: Text(medications[i].designation),
                     subtitle: Text('${localizations.defaultDosis}: '
-                        '${medications[i].defaultDosis?.toString()}'),
+                        '${medications[i].defaultDosis}'),
                     trailing: IconButton(
                       icon: const Icon(Icons.delete),
                       onPressed: () {
@@ -50,9 +50,9 @@ class MedicineManagerScreen extends StatelessWidget {
                       },
                     ),
                   );
-                }
+                },
             );
-          }),
+          },),
       ),
     );
   }

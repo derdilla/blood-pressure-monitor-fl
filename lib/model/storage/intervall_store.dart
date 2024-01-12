@@ -7,12 +7,6 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 /// Class for storing the current interval, as it is needed in start page, statistics and export.
 class IntervallStorage extends ChangeNotifier {
-  IntervallStorage({TimeStep? stepSize, DateTimeRange? range}) {
-    _stepSize = stepSize ?? TimeStep.last7Days;
-    _currentRange = range ?? _getMostRecentDisplayIntervall();
-  }
-  late TimeStep _stepSize;
-  late DateTimeRange _currentRange;
 
   factory IntervallStorage.fromMap(Map<String, dynamic> map) => IntervallStorage(
     stepSize: TimeStep.deserialize(map['stepSize']),
@@ -26,6 +20,12 @@ class IntervallStorage extends ChangeNotifier {
       return IntervallStorage();
     }
   }
+  IntervallStorage({TimeStep? stepSize, DateTimeRange? range}) {
+    _stepSize = stepSize ?? TimeStep.last7Days;
+    _currentRange = range ?? _getMostRecentDisplayIntervall();
+  }
+  late TimeStep _stepSize;
+  late DateTimeRange _currentRange;
 
   Map<String, dynamic> toMap() => <String, dynamic>{
     'stepSize': stepSize.serialize(),
@@ -44,9 +44,7 @@ class IntervallStorage extends ChangeNotifier {
     setToMostRecentIntervall();
   }
 
-  DateTimeRange get currentRange {
-    return _currentRange;
-  }
+  DateTimeRange get currentRange => _currentRange;
 
   set currentRange(DateTimeRange value) {
     _currentRange = value;
@@ -66,45 +64,45 @@ class IntervallStorage extends ChangeNotifier {
       case TimeStep.day:
         currentRange = DateTimeRange(
           start: oldStart.copyWith(day: oldStart.day + directionalStep),
-          end: oldEnd.copyWith(day: oldEnd.day + directionalStep)
+          end: oldEnd.copyWith(day: oldEnd.day + directionalStep),
         );
         break;
       case TimeStep.week:
       case TimeStep.last7Days:
         currentRange = DateTimeRange(
           start: oldStart.copyWith(day: oldStart.day + directionalStep * 7),
-          end: oldEnd.copyWith(day: oldEnd.day + directionalStep * 7)
+          end: oldEnd.copyWith(day: oldEnd.day + directionalStep * 7),
         );
         break;
       case TimeStep.month:
         currentRange = DateTimeRange(
           start: oldStart.copyWith(month: oldStart.month + directionalStep),
-          end: oldEnd.copyWith(month: oldEnd.month + directionalStep)
+          end: oldEnd.copyWith(month: oldEnd.month + directionalStep),
         );
         break;
       case TimeStep.year:
         currentRange = DateTimeRange(
           start: oldStart.copyWith(year: oldStart.year + directionalStep),
-          end: oldEnd.copyWith(year: oldEnd.year + directionalStep)
+          end: oldEnd.copyWith(year: oldEnd.year + directionalStep),
         );
         break;
       case TimeStep.lifetime:
         currentRange = DateTimeRange(
             start: DateTime.fromMillisecondsSinceEpoch(1),
-            end: DateTime.now().copyWith(hour: 23, minute: 59, second: 59)
+            end: DateTime.now().copyWith(hour: 23, minute: 59, second: 59),
         );
         break;
       case TimeStep.last30Days:
         currentRange = DateTimeRange(
             start: oldStart.copyWith(day: oldStart.day + directionalStep * 30),
-            end: oldEnd.copyWith(day: oldEnd.day + directionalStep * 30)
+            end: oldEnd.copyWith(day: oldEnd.day + directionalStep * 30),
         );
         break;
       case TimeStep.custom:
         final step = oldEnd.difference(oldStart) * directionalStep;
         currentRange = DateTimeRange(
             start: oldStart.add(step),
-            end: oldEnd.add(step)
+            end: oldEnd.add(step),
         );
         break;
     }
@@ -140,7 +138,7 @@ class IntervallStorage extends ChangeNotifier {
       case TimeStep.custom:
         return DateTimeRange(
           start: now.subtract(currentRange.duration),
-          end: now
+          end: now,
         );
     }
   }
@@ -201,8 +199,8 @@ enum TimeStep {
     }
   }
 
-  factory TimeStep.deserialize(dynamic value) {
-    int? intValue = ConvertUtil.parseInt(value);
+  factory TimeStep.deserialize(value) {
+    final int? intValue = ConvertUtil.parseInt(value);
     if (intValue == null) return TimeStep.last7Days;
 
     switch (intValue) {

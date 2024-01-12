@@ -60,5 +60,5 @@ void main() {
 List<BloodPressureRecord> createRecords([int count = 20]) => [
   for (int i = 0; i<count; i++)
     BloodPressureRecord(DateTime.fromMillisecondsSinceEpoch(123456 + i), 
-        i, 100+i, 200+1, 'note $i', needlePin: MeasurementNeedlePin(Color(123+i))),
+        i, 100+i, 200+1, 'note $i', needlePin: MeasurementNeedlePin(Color(123+i)),),
 ];

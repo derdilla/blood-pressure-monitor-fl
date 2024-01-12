@@ -6,6 +6,33 @@ import 'package:flutter/material.dart';
 
 /// Class for managing columns available to the user.
 class ExportColumnsManager extends ChangeNotifier {
+
+  factory ExportColumnsManager.fromMap(Map<String, dynamic> map) {
+    final List<dynamic> jsonUserColumns = map['userColumns'];
+    final manager = ExportColumnsManager();
+    for (final Map<String, dynamic> c in jsonUserColumns) {
+      switch (c['t']) {
+        case 0:
+          manager.addOrUpdate(UserColumn.explicit(c['id'], c['csvTitle'], c['formatString']));
+          break;
+        case 1:
+          manager.addOrUpdate(TimeColumn.explicit(c['id'], c['csvTitle'], c['formatPattern']));
+          break;
+        default:
+          assert(false, 'Unexpected column type ${c['t']}.');
+      }
+    }
+    return manager;
+  }
+
+  factory ExportColumnsManager.fromJson(String jsonString) {
+    try {
+      return ExportColumnsManager.fromMap(jsonDecode(jsonString));
+    } catch (e) {
+      assert(e is FormatException || e is TypeError);
+      return ExportColumnsManager();
+    }
+  }
   /// Create a new manager for export columns.
   ///
   /// It will be filled with the default columns but won't contain initial user columns.
@@ -35,7 +62,7 @@ class ExportColumnsManager extends ChangeNotifier {
   /// Calling this with the [ExportColumnI.internalIdentifier] of build-in columns
   /// or undefined columns will have no effect.
   void deleteUserColumn(String identifier) {
-    assert(_userColumns.containsKey(identifier), 'Don\'t call deleteUserColumn for non-existent or non-user columns');
+    assert(_userColumns.containsKey(identifier), "Don't call deleteUserColumn for non-existent or non-user columns");
     _userColumns.remove(identifier);
     notifyListeners();
   }
@@ -85,7 +112,7 @@ class ExportColumnsManager extends ChangeNotifier {
             't': 0, // class type
             'id': c.internalIdentifier,
             'csvTitle': c.csvTitle,
-            'formatString': c.formatPattern
+            'formatString': c.formatPattern,
           });
           break;
         case BuildInColumn():
@@ -97,7 +124,7 @@ class ExportColumnsManager extends ChangeNotifier {
             't': 1, // class type
             'id': c.internalIdentifier,
             'csvTitle': c.csvTitle,
-            'formatPattern': c.formatPattern
+            'formatPattern': c.formatPattern,
           });
           break;
       }
@@ -108,32 +135,5 @@ class ExportColumnsManager extends ChangeNotifier {
   }
 
   String toJson() => jsonEncode(toMap());
-
-  factory ExportColumnsManager.fromMap(Map<String, dynamic> map) {
-    final List<dynamic> jsonUserColumns = map['userColumns'];
-    final manager = ExportColumnsManager();
-    for (final Map<String, dynamic> c in jsonUserColumns) {
-      switch (c['t']) {
-        case 0:
-          manager.addOrUpdate(UserColumn.explicit(c['id'], c['csvTitle'], c['formatString']));
-          break;
-        case 1:
-          manager.addOrUpdate(TimeColumn.explicit(c['id'], c['csvTitle'], c['formatPattern']));
-          break;
-        default:
-          assert(false, 'Unexpected column type ${c['t']}.');
-      }
-    }
-    return manager;
-  }
-
-  factory ExportColumnsManager.fromJson(String jsonString) {
-    try {
-      return ExportColumnsManager.fromMap(jsonDecode(jsonString));
-    } catch (e) {
-      assert(e is FormatException || e is TypeError);
-      return ExportColumnsManager();
-    }
-  }
 }
 

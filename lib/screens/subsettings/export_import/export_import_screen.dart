@@ -24,8 +24,7 @@ class ExportImportScreen extends StatelessWidget {
         title: Text(localizations.exportImport),
         backgroundColor: Theme.of(context).primaryColor,
       ),
-      body: Consumer<ExportSettings>(builder: (context, settings, child) {
-        return SingleChildScrollView(
+      body: Consumer<ExportSettings>(builder: (context, settings, child) => SingleChildScrollView(
           child: Column(
             children: [
               Consumer<CsvExportSettings>(builder: (context, csvExportSettings, child) =>
@@ -33,7 +32,7 @@ class ExportImportScreen extends StatelessWidget {
                   ExportWarnBanner(
                     exportSettings: settings,
                     csvExportSettings: csvExportSettings,
-                    availableColumns: availableColumns
+                    availableColumns: availableColumns,
                   ),
                 ),
               ),
@@ -55,7 +54,7 @@ class ExportImportScreen extends StatelessWidget {
                   } else {
                     settings.defaultExportDir = '';
                   }
-                }
+                },
               ),
               SwitchListTile(
                 title: Text(localizations.exportAfterEveryInput),
@@ -71,11 +70,11 @@ class ExportImportScreen extends StatelessWidget {
                 value: settings.exportFormat,
                 items: [
                   DropdownMenuItem(
-                      value: ExportFormat.csv, child: Text(localizations.csv)),
+                      value: ExportFormat.csv, child: Text(localizations.csv),),
                   DropdownMenuItem(
-                      value: ExportFormat.pdf, child: Text(localizations.pdf)),
+                      value: ExportFormat.pdf, child: Text(localizations.pdf),),
                   DropdownMenuItem(
-                      value: ExportFormat.db, child: Text(localizations.db)),
+                      value: ExportFormat.db, child: Text(localizations.db),),
                 ],
                 onChanged: (ExportFormat? value) {
                   if (value != null) {
@@ -107,10 +106,10 @@ class ExportImportScreen extends StatelessWidget {
                         value: csvExportSettings.exportHeadline,
                         onChanged: (value) {
                           csvExportSettings.exportHeadline = value;
-                        }
+                        },
                       ),
                     ],
-                  )
+                  ),
                 ),
               if (settings.exportFormat == ExportFormat.pdf)
                 Consumer<PdfExportSettings>(builder: (context, pdfExportSettings, child) =>
@@ -121,19 +120,19 @@ class ExportImportScreen extends StatelessWidget {
                           value: pdfExportSettings.exportTitle,
                           onChanged: (value) {
                             pdfExportSettings.exportTitle = value;
-                          }),
+                          },),
                       SwitchListTile(
                           title: Text(localizations.exportPdfExportStatistics),
                           value: pdfExportSettings.exportStatistics,
                           onChanged: (value) {
                             pdfExportSettings.exportStatistics = value;
-                          }),
+                          },),
                       SwitchListTile(
                           title: Text(localizations.exportPdfExportData),
                           value: pdfExportSettings.exportData,
                           onChanged: (value) {
                             pdfExportSettings.exportData = value;
-                          }),
+                          },),
                       if (pdfExportSettings.exportData)
                         Column(
                           children: [
@@ -167,16 +166,15 @@ class ExportImportScreen extends StatelessWidget {
                             ),
                           ],
                         ),
-                    ]
-                  )
+                    ],
+                  ),
                 ),
               ActiveExportFieldCustomization(
                 format: settings.exportFormat,
               ),
             ],
           ),
-        );
-      }),
+        ),),
       bottomNavigationBar: const ExportButtonBar(),
     );
   }

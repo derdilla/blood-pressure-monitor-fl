@@ -25,15 +25,15 @@ class CsvConverter {
     final columns = settings.exportFieldsConfiguration.getActiveColumns(availableColumns);
     final table = records.map(
       (record) => columns.map(
-        (column) => column.encode(record)
-      ).toList()
+        (column) => column.encode(record),
+      ).toList(),
     ).toList();
 
     if (settings.exportHeadline) table.insert(0, columns.map((c) => c.csvTitle).toList());
 
     final csvCreator = ListToCsvConverter(
         fieldDelimiter: settings.fieldDelimiter,
-        textDelimiter: settings.textDelimiter
+        textDelimiter: settings.textDelimiter,
     );
 
     return csvCreator.convert(table);
@@ -66,7 +66,7 @@ class CsvConverter {
       final formattedTitleText = (titleText as String).trim();
       final column = availableColumns.firstWhere(
               (c) => c.csvTitle == formattedTitleText
-                  && c.restoreAbleType != null);
+                  && c.restoreAbleType != null,);
       if (column == null) return RecordParsingResult.err(RecordParsingErrorUnknownColumn(titleText));
       columns.add(column);
     }
@@ -96,21 +96,21 @@ class CsvConverter {
       }
 
       final DateTime? timestamp = recordPieces.firstWhereOrNull(
-              (piece) => piece.$1 == RowDataFieldType.timestamp)?.$2;
+              (piece) => piece.$1 == RowDataFieldType.timestamp,)?.$2;
       if (timestamp == null) {
         return RecordParsingResult.err(RecordParsingErrorTimeNotRestoreable());
       }
 
       final int? sys = recordPieces.firstWhereOrNull(
-              (piece) => piece.$1 == RowDataFieldType.sys)?.$2;
+              (piece) => piece.$1 == RowDataFieldType.sys,)?.$2;
       final int? dia = recordPieces.firstWhereOrNull(
-              (piece) => piece.$1 == RowDataFieldType.dia)?.$2;
+              (piece) => piece.$1 == RowDataFieldType.dia,)?.$2;
       final int? pul = recordPieces.firstWhereOrNull(
-              (piece) => piece.$1 == RowDataFieldType.pul)?.$2;
+              (piece) => piece.$1 == RowDataFieldType.pul,)?.$2;
       final String note = recordPieces.firstWhereOrNull(
-              (piece) => piece.$1 == RowDataFieldType.notes)?.$2 ?? '';
-      MeasurementNeedlePin? needlePin = recordPieces.firstWhereOrNull(
-              (piece) => piece.$1 == RowDataFieldType.needlePin)?.$2;
+              (piece) => piece.$1 == RowDataFieldType.notes,)?.$2 ?? '';
+      final MeasurementNeedlePin? needlePin = recordPieces.firstWhereOrNull(
+              (piece) => piece.$1 == RowDataFieldType.needlePin,)?.$2;
 
       records.add(BloodPressureRecord(timestamp, sys, dia, pul, note, needlePin: needlePin));
       currentLineNumber++;

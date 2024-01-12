@@ -13,10 +13,10 @@ void main() {
           const ListTile(title: Text('ListTile text 1'),),
           SwitchListTile(
               title: const Text('SwitchListTile text'),
-              value: true, onChanged: (v) {}),
+              value: true, onChanged: (v) {},),
           const ListTile(title: Text('ListTile text 2'),),
         ],
-      )));
+      ),),);
       expect(widgetTester.takeException(), isNull);
 
       expect(find.text('test title'), findsOneWidget);
@@ -31,16 +31,16 @@ void main() {
           const ListTile(title: Text('ListTile text 1'),),
           SwitchListTile(
               title: const Text('SwitchListTile text'),
-              value: true, onChanged: (v) {}),
+              value: true, onChanged: (v) {},),
           const ListTile(title: Text('ListTile text 2'),),
         ],
-      )));
+      ),),);
 
       expect(find.byType(Column), findsOneWidget);
       expect(find.descendant(
           of: find.byType(Column).first,
-          matching: find.text('test title')),
-        findsOneWidget
+          matching: find.text('test title'),),
+        findsOneWidget,
       );
     });
   });

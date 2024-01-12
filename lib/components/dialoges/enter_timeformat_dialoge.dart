@@ -11,7 +11,7 @@ class EnterTimeFormatDialoge extends StatefulWidget {
   const EnterTimeFormatDialoge({super.key,
     required this.initialValue,
     this.previewTime,
-    this.bottomAppBars = false
+    this.bottomAppBars = false,
   });
 
   /// Text that is initially in time format field.
@@ -67,7 +67,7 @@ class _EnterTimeFormatDialogeState extends State<EnterTimeFormatDialoge> {
                 shrinkWrap: true,
                 onTapLink: getLinkTapHandler(context),
                 physics: const NeverScrollableScrollPhysics(),
-                data: localizations.enterTimeFormatDesc
+                data: localizations.enterTimeFormatDesc,
               ),
               Text(DateFormat(timeFormatFieldController.text).format(widget.previewTime ?? DateTime.now())),
               Padding(
@@ -84,7 +84,7 @@ class _EnterTimeFormatDialogeState extends State<EnterTimeFormatDialoge> {
               ),
             ],
           ),
-        )
+        ),
       ),
     );
   }
@@ -96,4 +96,4 @@ class _EnterTimeFormatDialogeState extends State<EnterTimeFormatDialoge> {
 Future<String?> showTimeFormatPickerDialoge(BuildContext context, String initialTimeFormat, bool bottomAppBars) =>
   showDialog<String?>(context: context, builder: (context) => Dialog.fullscreen(
     child: EnterTimeFormatDialoge(initialValue: initialTimeFormat, bottomAppBars: bottomAppBars,),
-  ));
+  ),);

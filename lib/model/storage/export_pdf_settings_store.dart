@@ -26,7 +26,7 @@ class PdfExportSettings extends ChangeNotifier implements CustomFieldsSettings {
     if (cellFontSize != null) _cellFontSize = cellFontSize;
     if (exportFieldsConfiguration != null) _exportFieldsConfiguration = exportFieldsConfiguration;
 
-    _exportFieldsConfiguration.addListener(() => notifyListeners());
+    _exportFieldsConfiguration.addListener(notifyListeners);
   }
 
   factory PdfExportSettings.fromMap(Map<String, dynamic> map) => PdfExportSettings(
@@ -58,7 +58,7 @@ class PdfExportSettings extends ChangeNotifier implements CustomFieldsSettings {
     'cellHeight': cellHeight,
     'headerFontSize': headerFontSize,
     'cellFontSize': cellFontSize,
-    'exportFieldsConfiguration': exportFieldsConfiguration.toJson()
+    'exportFieldsConfiguration': exportFieldsConfiguration.toJson(),
   };
 
   String toJson() => jsonEncode(toMap());

@@ -20,7 +20,7 @@ void main() {
     });
     test('should create correct strings', () {
       final testRecord = BloodPressureRecord(DateTime.fromMillisecondsSinceEpoch(31415926), 123, 45, 67, 'Test',
-          needlePin: const MeasurementNeedlePin(Colors.red));
+          needlePin: const MeasurementNeedlePin(Colors.red),);
 
       expect(ScriptedFormatter(r'constant text',).encode(testRecord), 'constant text');
       expect(ScriptedFormatter(r'$SYS',).encode(testRecord), testRecord.systolic.toString());
@@ -30,18 +30,18 @@ void main() {
       expect(ScriptedFormatter(r'$NOTE',).encode(testRecord), testRecord.notes);
       expect(ScriptedFormatter(r'$TIMESTAMP',).encode(testRecord), testRecord.creationTime.millisecondsSinceEpoch.toString());
       expect(ScriptedFormatter(r'$SYS$DIA$PUL',).encode(testRecord), (testRecord.systolic.toString()
-          + testRecord.diastolic.toString() + testRecord.pulse.toString()));
+          + testRecord.diastolic.toString() + testRecord.pulse.toString()),);
       expect(ScriptedFormatter(r'$SYS$SYS',).encode(testRecord), (testRecord.systolic.toString()
-          + testRecord.systolic.toString()));
+          + testRecord.systolic.toString()),);
       expect(ScriptedFormatter(r'{{$SYS-$DIA}}',).encode(testRecord),
-          (testRecord.systolic! - testRecord.diastolic!).toDouble().toString());
+          (testRecord.systolic! - testRecord.diastolic!).toDouble().toString(),);
       expect(ScriptedFormatter(r'{{$SYS*$DIA-$PUL}}',).encode(testRecord),
-          (testRecord.systolic! * testRecord.diastolic! - testRecord.pulse!).toDouble().toString());
+          (testRecord.systolic! * testRecord.diastolic! - testRecord.pulse!).toDouble().toString(),);
       expect(ScriptedFormatter(r'$SYS-$DIA',).encode(testRecord), ('${testRecord.systolic}-${testRecord.diastolic}'));
 
       final formatter = DateFormat.yMMMMEEEEd();
       expect(ScriptedFormatter('\$FORMAT{\$TIMESTAMP,${formatter.pattern}}',).encode(testRecord),
-          formatter.format(testRecord.creationTime));
+          formatter.format(testRecord.creationTime),);
     });
     test('should report correct reversibility', () {
       expect(ScriptedFormatter(r'$SYS',).restoreAbleType, RowDataFieldType.sys);
@@ -68,10 +68,10 @@ void main() {
       expect(ScriptedFormatter(r'$NOTE',).decode('test note'), (RowDataFieldType.notes, 'test note'));
       final encodedPurple = ScriptedFormatter(r'$COLOR',)
           .encode(BloodPressureRecord(DateTime.now(), null, null, null, '',
-          needlePin: const MeasurementNeedlePin(Colors.purple)));
+          needlePin: const MeasurementNeedlePin(Colors.purple),),);
       expect(ScriptedFormatter(r'$COLOR',).decode(encodedPurple)?.$1, RowDataFieldType.needlePin);
       expect(ScriptedFormatter(r'$COLOR',).decode(encodedPurple)?.$2, isA<MeasurementNeedlePin>()
-          .having((p0) => p0.color.value, 'color', Colors.purple.value));
+          .having((p0) => p0.color.value, 'color', Colors.purple.value),);
       expect(ScriptedFormatter(r'test$SYS',).decode('test567'), (RowDataFieldType.sys, 567));
       expect(ScriptedFormatter(r'test$SYS123',).decode('test567123'), (RowDataFieldType.sys, 567));
       expect(ScriptedFormatter(r'test$DIA123',).decode('test567123'), (RowDataFieldType.dia, 567));
@@ -118,7 +118,7 @@ void main() {
       final r = mockRecord();
       expect(formatter.encode(r), isNotNull);
       expect(formatter.decode(formatter.encode(r))?.$2, isA<DateTime>()
-          .having((p0) => p0.millisecondsSinceEpoch, 'time(up to one second difference)', closeTo(r.creationTime.millisecondsSinceEpoch, 1000)));
+          .having((p0) => p0.millisecondsSinceEpoch, 'time(up to one second difference)', closeTo(r.creationTime.millisecondsSinceEpoch, 1000)),);
     });
   });
 }
@@ -136,4 +136,4 @@ BloodPressureRecord mockRecord({
     dia,
     pul,
     note ?? '',
-    needlePin: pin == null ? null : MeasurementNeedlePin(pin));
+    needlePin: pin == null ? null : MeasurementNeedlePin(pin),);

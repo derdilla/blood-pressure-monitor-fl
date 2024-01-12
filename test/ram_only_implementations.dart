@@ -9,7 +9,7 @@ class RamBloodPressureModel extends ChangeNotifier implements BloodPressureModel
   
   static RamBloodPressureModel fromEntries(List<BloodPressureRecord> records) {
     final m = RamBloodPressureModel();
-    for (var e in records) {
+    for (final e in records) {
       m.add(e);
     }
     return m;
@@ -28,7 +28,7 @@ class RamBloodPressureModel extends ChangeNotifier implements BloodPressureModel
 
   @override
   Future<UnmodifiableListView<BloodPressureRecord>> getInTimeRange(DateTime from, DateTime to) async {
-    List<BloodPressureRecord> recordsInTime = [];
+    final List<BloodPressureRecord> recordsInTime = [];
     for (final e in _records) {
       if (e.creationTime.isAfter(from) && e.creationTime.isBefore(to)) {
         recordsInTime.add(e);

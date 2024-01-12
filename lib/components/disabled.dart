@@ -23,7 +23,7 @@ class Disabled extends StatelessWidget {
         child: IgnorePointer(
           ignoring: ignoring,
           child: child,
-        )
+        ),
       );
     }
     return child;

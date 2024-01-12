@@ -14,10 +14,10 @@ void main() {
         },
         items: [
           for (int i = 0; i < 10; i++)
-            DropdownMenuItem(value: i, child: Text('option $i'))
+            DropdownMenuItem(value: i, child: Text('option $i')),
         ],
         value: 3,
-      )));
+      ),),);
       expect(widgetTester.takeException(), isNull);
       await widgetTester.pumpWidget(materialApp(DropDownListTile<int>(
         title: const Text('This is a very long test title.'),
@@ -28,10 +28,10 @@ void main() {
         },
         items: [
           for (int i = 0; i < 1000; i++)
-            DropdownMenuItem(value: i, child: Text('option $i'))
+            DropdownMenuItem(value: i, child: Text('option $i')),
         ],
         value: 527,
-      )));
+      ),),);
       expect(widgetTester.takeException(), isNull);
     });
     testWidgets('should display selected option', (widgetTester) async {
@@ -42,10 +42,10 @@ void main() {
         },
         items: [
           for (int i = 0; i < 10; i++)
-            DropdownMenuItem(value: i, child: Text('option $i'))
+            DropdownMenuItem(value: i, child: Text('option $i')),
         ],
         value: 3,
-      )));
+      ),),);
       expect(find.text('option 3'), findsOneWidget);
       expect(find.text('option 4'), findsNothing);
     });
@@ -59,10 +59,10 @@ void main() {
         },
         items: [
           for (int i = 0; i < 10; i++)
-            DropdownMenuItem(value: i, child: Text('option $i'))
+            DropdownMenuItem(value: i, child: Text('option $i')),
         ],
         value: 3,
-      )));
+      ),),);
 
       await widgetTester.tap(find.text('option 3'));
       await widgetTester.pumpAndSettle();

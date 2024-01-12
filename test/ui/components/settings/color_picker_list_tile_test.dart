@@ -13,7 +13,7 @@ void main() {
         onMainColorChanged: (Color value) {
           assert(false, 'should not be called');
         },
-        initialColor: Colors.teal,)));
+        initialColor: Colors.teal,),),);
       expect(widgetTester.takeException(), isNull);
     });
     testWidgets('should preview color', (widgetTester) async {
@@ -22,11 +22,11 @@ void main() {
         onMainColorChanged: (Color value) {
           assert(false, 'should not be called');
         },
-        initialColor: Colors.teal,)));
+        initialColor: Colors.teal,),),);
 
       expect(find.byType(CircleAvatar), findsOneWidget);
       expect(widgetTester.widget(find.byType(CircleAvatar)), isA<CircleAvatar>().having(
-              (p0) => p0.backgroundColor, 'display color', Colors.teal));
+              (p0) => p0.backgroundColor, 'display color', Colors.teal,),);
     });
     testWidgets('should show colorPicker on tap', (widgetTester) async {
       await widgetTester.pumpWidget(materialApp(ColorSelectionListTile(
@@ -34,7 +34,7 @@ void main() {
         onMainColorChanged: (Color value) {
           assert(false, 'should not be called');
         },
-        initialColor: Colors.teal,)));
+        initialColor: Colors.teal,),),);
 
       expect(find.byType(ColorPicker), findsNothing);
       await widgetTester.tap(find.byType(ListTile));
@@ -49,7 +49,7 @@ void main() {
           callCount += 1;
           expect(value, Colors.red);
         },
-        initialColor: Colors.teal,)));
+        initialColor: Colors.teal,),),);
 
       expect(find.byType(ColorPicker), findsNothing);
       await widgetTester.tap(find.byType(ListTile));
@@ -68,7 +68,7 @@ void main() {
         onMainColorChanged: (Color value) {
           assert(false, 'should not be called');
         },
-        initialColor: Colors.transparent,)));
+        initialColor: Colors.transparent,),),);
 
       expect(find.byType(CircleAvatar), findsNothing);
     });
@@ -76,9 +76,7 @@ void main() {
 }
 
 /// Finds the widget with a specific color inside a [ColorPicker], when put into a [CommonFinders.byElementPredicate].
-bool Function(Element e) findColored(Color color) {
-  return (e) =>
+bool Function(Element e) findColored(Color color) => (e) =>
     e.widget is Container &&
       (e.widget as Container).decoration is BoxDecoration &&
         ((e.widget as Container).decoration as BoxDecoration).color == color;
-}

@@ -24,8 +24,8 @@ void main() {
       ]);
       final found = history.getIntakes(DateTimeRange(
         start: DateTime.fromMillisecondsSinceEpoch(4), 
-        end: DateTime.fromMillisecondsSinceEpoch(15)
-      ));
+        end: DateTime.fromMillisecondsSinceEpoch(15),
+      ),);
       expect(found.length, 8);
       expect(found.map((e) => e.timestamp.millisecondsSinceEpoch), containsAllInOrder([4,5,6,9,9,12,15,15]));
     });
@@ -36,8 +36,8 @@ void main() {
       ]);
       final found = history.getIntakes(DateTimeRange(
           start: DateTime.fromMillisecondsSinceEpoch(0),
-          end: DateTime.fromMillisecondsSinceEpoch(4)
-      ));
+          end: DateTime.fromMillisecondsSinceEpoch(4),
+      ),);
       expect(found.length, 2);
       expect(found.map((e) => e.timestamp.millisecondsSinceEpoch), containsAllInOrder([2,3]));
     });
@@ -45,8 +45,8 @@ void main() {
       final history = IntakeHistory([]);
       final found = history.getIntakes(DateTimeRange(
           start: DateTime.fromMillisecondsSinceEpoch(0),
-          end: DateTime.fromMillisecondsSinceEpoch(1000)
-      ));
+          end: DateTime.fromMillisecondsSinceEpoch(1000),
+      ),);
       expect(found.length, 0);
     });
     test('should return nothing when intakes are out of range', () {
@@ -56,13 +56,13 @@ void main() {
       ]);
       final found1 = history.getIntakes(DateTimeRange(
           start: DateTime.fromMillisecondsSinceEpoch(4),
-          end: DateTime.fromMillisecondsSinceEpoch(10)
-      ));
+          end: DateTime.fromMillisecondsSinceEpoch(10),
+      ),);
       expect(found1.length, 0);
       final found2 = history.getIntakes(DateTimeRange(
           start: DateTime.fromMillisecondsSinceEpoch(0),
-          end: DateTime.fromMillisecondsSinceEpoch(1)
-      ));
+          end: DateTime.fromMillisecondsSinceEpoch(1),
+      ),);
       expect(found2.length, 0);
     });
     test('should add to the correct position', () {
@@ -74,32 +74,32 @@ void main() {
       history.addIntake(mockIntake(timeMs: 3));
       final found = history.getIntakes(DateTimeRange(
           start: DateTime.fromMillisecondsSinceEpoch(0),
-          end: DateTime.fromMillisecondsSinceEpoch(10)
-      ));
+          end: DateTime.fromMillisecondsSinceEpoch(10),
+      ),);
       expect(found.length, 3);
       expect(found.map((e) => e.timestamp.millisecondsSinceEpoch), containsAllInOrder([2,3,7]));
 
       history.addIntake(mockIntake(timeMs: 3));
       final found2 = history.getIntakes(DateTimeRange(
           start: DateTime.fromMillisecondsSinceEpoch(0),
-          end: DateTime.fromMillisecondsSinceEpoch(10)
-      ));
+          end: DateTime.fromMillisecondsSinceEpoch(10),
+      ),);
       expect(found2.length, 4);
       expect(found2.map((e) => e.timestamp.millisecondsSinceEpoch), containsAllInOrder([2,3,3,7]));
 
       history.addIntake(mockIntake(timeMs: 1));
       final found3 = history.getIntakes(DateTimeRange(
           start: DateTime.fromMillisecondsSinceEpoch(0),
-          end: DateTime.fromMillisecondsSinceEpoch(10)
-      ));
+          end: DateTime.fromMillisecondsSinceEpoch(10),
+      ),);
       expect(found3.length, 5);
       expect(found3.map((e) => e.timestamp.millisecondsSinceEpoch), containsAllInOrder([1,2,3,3,7]));
 
       history.addIntake(mockIntake(timeMs: 10));
       final found4 = history.getIntakes(DateTimeRange(
           start: DateTime.fromMillisecondsSinceEpoch(0),
-          end: DateTime.fromMillisecondsSinceEpoch(10)
-      ));
+          end: DateTime.fromMillisecondsSinceEpoch(10),
+      ),);
       expect(found4.length, 6);
       expect(found4.map((e) => e.timestamp.millisecondsSinceEpoch), containsAllInOrder([1,2,3,3,7,10]));
     });
@@ -117,37 +117,37 @@ void main() {
       history.deleteIntake(mockIntake(timeMs: 5));
       final found = history.getIntakes(DateTimeRange(
           start: DateTime.fromMillisecondsSinceEpoch(0),
-          end: DateTime.fromMillisecondsSinceEpoch(20)
-      ));
+          end: DateTime.fromMillisecondsSinceEpoch(20),
+      ),);
       expect(found.length, 7);
       expect(found.map((e) => e.timestamp.millisecondsSinceEpoch),
-          containsAllInOrder([2,2,4,6,9,9,12]));
+          containsAllInOrder([2,2,4,6,9,9,12]),);
 
       history.deleteIntake(mockIntake(timeMs: 9));
       final found3 = history.getIntakes(DateTimeRange(
           start: DateTime.fromMillisecondsSinceEpoch(0),
-          end: DateTime.fromMillisecondsSinceEpoch(20)
-      ));
+          end: DateTime.fromMillisecondsSinceEpoch(20),
+      ),);
       expect(found3.length, 6);
       expect(found3.map((e) => e.timestamp.millisecondsSinceEpoch),
-          containsAllInOrder([2,2,4,6,9,12]));
+          containsAllInOrder([2,2,4,6,9,12]),);
 
       history.deleteIntake(mockIntake(timeMs: 2));
       final found4 = history.getIntakes(DateTimeRange(
           start: DateTime.fromMillisecondsSinceEpoch(0),
-          end: DateTime.fromMillisecondsSinceEpoch(20)
-      ));
+          end: DateTime.fromMillisecondsSinceEpoch(20),
+      ),);
       expect(found4.length, 4);
       expect(found4.map((e) => e.timestamp.millisecondsSinceEpoch),
-          containsAllInOrder([4,6,9,12]));
+          containsAllInOrder([4,6,9,12]),);
     });
     test('should not fail on deleting non existent intake', () {
       final history = IntakeHistory([]);
       history.deleteIntake(mockIntake(timeMs: 5));
       final found = history.getIntakes(DateTimeRange(
           start: DateTime.fromMillisecondsSinceEpoch(0),
-          end: DateTime.fromMillisecondsSinceEpoch(20)
-      ));
+          end: DateTime.fromMillisecondsSinceEpoch(20),
+      ),);
       expect(found.length, 0);
     });
     test('should serialize and deserialize', () {

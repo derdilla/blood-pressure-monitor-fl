@@ -36,7 +36,7 @@ class ActiveExportFieldCustomization extends StatelessWidget {
               (e) => DropdownMenuItem(
             value: e,
             child: Text(e.localize(localizations)),
-          )
+          ),
       ).toList(),
       onChanged: (selectedPreset) {
         if (selectedPreset != null) {
@@ -66,11 +66,11 @@ class ActiveExportFieldCustomization extends StatelessWidget {
 
   Widget _buildActiveColumnsEditor(BuildContext context,
     AppLocalizations localizations,
-    ActiveExportColumnConfiguration fieldsConfig) =>
+    ActiveExportColumnConfiguration fieldsConfig,) =>
       Container(
         margin: const EdgeInsets.symmetric(
             horizontal: 16,
-            vertical: 5
+            vertical: 5,
         ),
         height: 400,
         decoration: BoxDecoration(
@@ -98,9 +98,9 @@ class ActiveExportFieldCustomization extends StatelessWidget {
                               ListTile(
                                 title: Text(column.userTitle(localizations)),
                                 onTap: () => Navigator.of(context).pop(column),
-                              )
+                              ),
                             ).toList(),
-                          )
+                          ),
                       );
                       if (column != null) fieldsConfig.addUserColumn(column);
                     },
@@ -117,7 +117,7 @@ class ActiveExportFieldCustomization extends StatelessWidget {
                         onPressed: () {
                           fieldsConfig.removeUserColumn(activeColumns[idx].internalIdentifier);
                         },
-                        icon: const Icon(Icons.remove_circle_outline)
+                        icon: const Icon(Icons.remove_circle_outline),
                       ),
                       const Icon(Icons.drag_handle),
                     ],
@@ -125,9 +125,9 @@ class ActiveExportFieldCustomization extends StatelessWidget {
                 );
               },
               itemCount: activeColumns.length + 1,
-              onReorder: fieldsConfig.reorderUserColumns
+              onReorder: fieldsConfig.reorderUserColumns,
             );
-          }
+          },
         ),
       );
 }

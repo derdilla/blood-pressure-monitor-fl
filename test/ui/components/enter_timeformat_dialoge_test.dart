@@ -21,8 +21,8 @@ void main() {
       await widgetTester.pumpWidget(materialApp(EnterTimeFormatDialoge(
           initialValue: 'yyyy-MM-dd HH:mm',
           previewTime: DateTime(2023, 7, 23, 8, 20),
-        )
-      ));
+        ),
+      ),);
       expect(find.text('2023-07-23 08:20'), findsOneWidget);
       
       // other time formats
@@ -57,7 +57,7 @@ void main() {
     testWidgets('should return null on close', (widgetTester) async {
       String? result = 'notnull';
       await loadDialoge(widgetTester,
-              (context) async => result = await showTimeFormatPickerDialoge(context, 'yyyy-MM-dd HH:mm', false));
+              (context) async => result = await showTimeFormatPickerDialoge(context, 'yyyy-MM-dd HH:mm', false),);
 
       expect(find.byIcon(Icons.close), findsOneWidget);
       await widgetTester.tap(find.byIcon(Icons.close));
@@ -68,7 +68,7 @@ void main() {
     testWidgets('should return value on save', (widgetTester) async {
       String? result;
       await loadDialoge(widgetTester,
-              (context) async => result = await showTimeFormatPickerDialoge(context, 'yyyy-MM-dd HH:mm', false));
+              (context) async => result = await showTimeFormatPickerDialoge(context, 'yyyy-MM-dd HH:mm', false),);
 
       expect(find.text('SAVE'), findsOneWidget);
       await widgetTester.tap(find.text('SAVE'));
@@ -79,7 +79,7 @@ void main() {
     testWidgets('should return modified value on save', (widgetTester) async {
       String? result;
       await loadDialoge(widgetTester,
-              (context) async => result = await showTimeFormatPickerDialoge(context, 'yyyy-MM-dd HH:mm', false));
+              (context) async => result = await showTimeFormatPickerDialoge(context, 'yyyy-MM-dd HH:mm', false),);
 
       await widgetTester.enterText(find.byType(TextField), 'test text!');
       await widgetTester.pumpAndSettle();

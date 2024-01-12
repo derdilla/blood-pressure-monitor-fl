@@ -10,10 +10,10 @@ import 'package:flutter/services.dart';
 /// - Add method name and arguments as a condition to the `onMethodCall` in the same class.
 /// - Implement a helper function to this class that calls uses the platform channel (like [shareFile]).
 class PlatformClient {
-  /// Platform channel for sharing files, loading files, saving files and asking for directory permissions.
-  static const _platformChannel = MethodChannel('bloodPressureApp.derdilla.com/storage');
 
   PlatformClient._create();
+  /// Platform channel for sharing files, loading files, saving files and asking for directory permissions.
+  static const _platformChannel = MethodChannel('bloodPressureApp.derdilla.com/storage');
 
   /// Share a file from application storage.
   ///
@@ -32,7 +32,7 @@ class PlatformClient {
       await _platformChannel.invokeMethod('shareFile', {
         'path': path,
         'mimeType': mimeType,
-        'name': name
+        'name': name,
       });
       return true;
     } on PlatformException {
@@ -58,7 +58,7 @@ class PlatformClient {
       await _platformChannel.invokeMethod('shareData', {
         'data': data,
         'mimeType': mimeType,
-        'name': name
+        'name': name,
       });
       return true;
     } on PlatformException {

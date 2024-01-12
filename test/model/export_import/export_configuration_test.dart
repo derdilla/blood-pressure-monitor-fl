@@ -10,7 +10,7 @@ void main() {
       ActiveExportColumnConfiguration();
       ActiveExportColumnConfiguration(activePreset: ExportImportPreset.myHeart);
       ActiveExportColumnConfiguration(activePreset: ExportImportPreset.none, userSelectedColumnIds: ['a','b','c']);
-      ActiveExportColumnConfiguration(activePreset: null, userSelectedColumnIds: ['a','b','c']);
+      ActiveExportColumnConfiguration(userSelectedColumnIds: ['a','b','c']);
     });
 
     test('should return correct columns depending on mode', () {

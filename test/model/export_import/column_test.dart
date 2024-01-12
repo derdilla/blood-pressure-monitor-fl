@@ -19,11 +19,11 @@ void main() {
         NativeColumn.notes,
         NativeColumn.color,
         NativeColumn.needlePin,
-      ]));
+      ]),);
     });
     test('should have internalIdentifier prefixed with "native."', () {
       for (final c in NativeColumn.allColumns) {
-        expect(c.internalIdentifier, startsWith("native."));
+        expect(c.internalIdentifier, startsWith('native.'));
       }
     });
     test('should encode into non-empty string', () {
@@ -47,27 +47,27 @@ void main() {
         switch (decoded!.$1) {
           case RowDataFieldType.timestamp:
             expect(decoded.$2, isA<DateTime>().having(
-                    (p0) => p0.millisecondsSinceEpoch, 'milliseconds', r.creationTime.millisecondsSinceEpoch));
+                    (p0) => p0.millisecondsSinceEpoch, 'milliseconds', r.creationTime.millisecondsSinceEpoch,),);
             break;
           case RowDataFieldType.sys:
             expect(decoded.$2, isA<int>().having(
-                    (p0) => p0, 'systolic', r.systolic));
+                    (p0) => p0, 'systolic', r.systolic,),);
             break;
           case RowDataFieldType.dia:
             expect(decoded.$2, isA<int>().having(
-                    (p0) => p0, 'diastolic', r.diastolic));
+                    (p0) => p0, 'diastolic', r.diastolic,),);
             break;
           case RowDataFieldType.pul:
             expect(decoded.$2, isA<int>().having(
-                    (p0) => p0, 'pulse', r.pulse));
+                    (p0) => p0, 'pulse', r.pulse,),);
             break;
           case RowDataFieldType.notes:
             expect(decoded.$2, isA<String>().having(
-                    (p0) => p0, 'pulse', r.notes));
+                    (p0) => p0, 'pulse', r.notes,),);
             break;
           case RowDataFieldType.needlePin:
             expect(decoded.$2, isA<MeasurementNeedlePin>().having(
-                    (p0) => p0.toJson(), 'pin', r.needlePin?.toJson()));
+                    (p0) => p0.toJson(), 'pin', r.needlePin?.toJson(),),);
             break;
         }
       }
@@ -86,11 +86,11 @@ void main() {
         BuildInColumn.mhTags,
         BuildInColumn.mhWeight,
         BuildInColumn.mhOxygen,
-      ]));
+      ]),);
     });
     test('should have internalIdentifier prefixed with "buildin."', () {
       for (final c in BuildInColumn.allColumns) {
-        expect(c.internalIdentifier, startsWith("buildin."));
+        expect(c.internalIdentifier, startsWith('buildin.'));
       }
     });
     test('should encode without problems', () {
@@ -110,31 +110,31 @@ void main() {
               expect(decoded?.$2, isA<DateTime>().having(
                   (p0) => p0.difference(r.creationTime).inDays,
                   'inaccuracy',
-                  lessThan(1)));
+                  lessThan(1),),);
             } else {
               expect(decoded?.$2, isA<DateTime>().having(
-                  (p0) => p0.millisecondsSinceEpoch, 'milliseconds', r.creationTime.millisecondsSinceEpoch));
+                  (p0) => p0.millisecondsSinceEpoch, 'milliseconds', r.creationTime.millisecondsSinceEpoch,),);
             }
             break;
           case RowDataFieldType.sys:
             expect(decoded?.$2, isA<int>().having(
-                    (p0) => p0, 'systolic', r.systolic));
+                    (p0) => p0, 'systolic', r.systolic,),);
             break;
           case RowDataFieldType.dia:
             expect(decoded?.$2, isA<int>().having(
-                    (p0) => p0, 'diastolic', r.diastolic));
+                    (p0) => p0, 'diastolic', r.diastolic,),);
             break;
           case RowDataFieldType.pul:
             expect(decoded?.$2, isA<int>().having(
-                    (p0) => p0, 'pulse', r.pulse));
+                    (p0) => p0, 'pulse', r.pulse,),);
             break;
           case RowDataFieldType.notes:
             expect(decoded?.$2, isA<String>().having(
-                    (p0) => p0, 'pulse', r.notes));
+                    (p0) => p0, 'pulse', r.notes,),);
             break;
           case RowDataFieldType.needlePin:
             expect(decoded?.$2, isA<MeasurementNeedlePin>().having(
-                    (p0) => p0.toJson(), 'pin', r.needlePin?.toJson()));
+                    (p0) => p0.toJson(), 'pin', r.needlePin?.toJson(),),);
             break;
           case null:
             break;
@@ -181,5 +181,5 @@ BloodPressureRecord _filledRecord() => mockRecord(
   dia: 456,
   pul: 789,
   note: 'test',
-  pin: Colors.pink
+  pin: Colors.pink,
 );

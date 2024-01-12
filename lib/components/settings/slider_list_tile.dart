@@ -13,7 +13,7 @@ class SliderListTile extends StatelessWidget {
     required this.max,
     this.stepSize = 1,
     this.leading,
-    this.trailing});
+    this.trailing,});
 
   /// The primary content of the list tile.
   final Widget title;
@@ -45,8 +45,7 @@ class SliderListTile extends StatelessWidget {
   final void Function(double newValue) onChanged;
 
   @override
-  Widget build(BuildContext context) {
-    return ListTile(
+  Widget build(BuildContext context) => ListTile(
       title: title,
       leading: leading,
       trailing: trailing,
@@ -54,11 +53,10 @@ class SliderListTile extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           subtitle!,
-          _buildSlider()
+          _buildSlider(),
         ],
       ),
     );
-  }
 
   Widget _buildSlider() => SizedBox(
       height: 30,

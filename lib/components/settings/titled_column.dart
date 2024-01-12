@@ -7,7 +7,7 @@ class TitledColumn extends StatelessWidget {
   /// Useful for labeling sub lists.
   const TitledColumn({super.key,
     required this.title,
-    required this.children});
+    required this.children,});
 
   /// Title to display above the [children].
   ///
@@ -23,7 +23,7 @@ class TitledColumn extends StatelessWidget {
       ListTile(
         title: DefaultTextStyle(
             style: Theme.of(context).textTheme.titleLarge!,
-            child: title
+            child: title,
         ),
       ),
     ];

@@ -13,7 +13,7 @@ class DropDownListTile<T> extends StatefulWidget {
     required this.items,
     this.leading,
     this.subtitle,
-    super.key});
+    super.key,});
 
   /// Primary description of the tile.
   final Widget title;
@@ -48,14 +48,11 @@ class _DropDownListTileState<T> extends State<DropDownListTile<T>> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return ListTile(
+  Widget build(BuildContext context) => ListTile(
       title: widget.title,
       subtitle: widget.subtitle,
       leading: widget.leading,
-      onTap: () {
-        focusNode.requestFocus();
-      },
+      onTap: focusNode.requestFocus,
       trailing: DropdownButton<T>(
         focusNode: focusNode,
         value: widget.value,
@@ -63,5 +60,4 @@ class _DropDownListTileState<T> extends State<DropDownListTile<T>> {
         onChanged: widget.onChanged,
       ),
     );
-  }
 }

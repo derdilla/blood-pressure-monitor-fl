@@ -14,7 +14,7 @@ void main() {
         onSubmit: (String newValue) {
           assert(false, 'should not be called');
         },
-      )));
+      ),),);
       expect(widgetTester.takeException(), isNull);
       expect(find.text('test title'), findsOneWidget);
       expect(find.text('initial'), findsOneWidget);
@@ -26,7 +26,7 @@ void main() {
         onSubmit: (String newValue) {
           assert(false, 'should not be called');
         },
-      )));
+      ),),);
 
       expect(find.byType(InputDialoge), findsNothing);
       await widgetTester.tap(find.byType(InputListTile));
@@ -45,7 +45,7 @@ void main() {
         onSubmit: (String newValue) {
           assert(false, 'should not be called');
         },
-      )));
+      ),),);
 
       expect(find.text('initial'), findsOneWidget);
       await widgetTester.tap(find.byType(InputListTile));
@@ -62,7 +62,7 @@ void main() {
           callCount += 1;
           expect(newValue, 'changed');
         },
-      )));
+      ),),);
 
       expect(find.text('initial'), findsOneWidget);
       await widgetTester.tap(find.byType(InputListTile));

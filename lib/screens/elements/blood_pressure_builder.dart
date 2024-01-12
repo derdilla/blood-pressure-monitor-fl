@@ -15,8 +15,7 @@ class BloodPressureBuilder extends StatelessWidget {
   final IntervallStoreManagerLocation rangeType;
   
   @override
-  Widget build(BuildContext context) {
-    return Consumer<BloodPressureModel>(
+  Widget build(BuildContext context) => Consumer<BloodPressureModel>(
       builder: (context, model, child) =>
         Consumer<IntervallStoreManager>(
           builder: (context, intervallManager, child) {
@@ -25,9 +24,8 @@ class BloodPressureBuilder extends StatelessWidget {
               future: model.getInTimeRange(range.start, range.end),
               onData: onData,
             );
-          }
-        )
+          },
+        ),
     );
-  }
   
 }
