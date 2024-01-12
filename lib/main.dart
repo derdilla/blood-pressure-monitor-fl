@@ -15,6 +15,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:path/path.dart';
 import 'package:provider/provider.dart';
 import 'package:sqflite/sqflite.dart';
@@ -82,6 +83,8 @@ Future<Widget> _loadApp() async {
     settings.lastVersion = 31;
   }
   if (settings.allowMissingValues && settings.validateInputs) settings.validateInputs = false;
+
+  settings.lastVersion = int.parse((await PackageInfo.fromPlatform()).buildNumber);
 
   // Reset the step size intervall to current on startup
   intervalStorageManager.mainPage.setToMostRecentIntervall();
