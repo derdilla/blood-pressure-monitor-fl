@@ -121,7 +121,7 @@ enum ExportImportPreset {
 
   /// Default preset for pdf exports.
   ///
-  /// Includes time, sys, dia, pu
+  /// Includes formatted time, sys, dia and pulse.
   bloodPressureAppPdf,
 
   myHeart;
