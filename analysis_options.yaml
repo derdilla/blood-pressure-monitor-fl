@@ -1,29 +1,50 @@
 # This file configures the analyzer, which statically analyzes Dart code to
 # check for errors, warnings, and lints.
-#
-# The issues identified by the analyzer are surfaced in the UI of Dart-enabled
-# IDEs (https://dart.dev/tools#ides-and-editors). The analyzer can also be
-# invoked from the command line by running `flutter analyze`.
-
-# The following line activates a set of recommended lints for Flutter apps,
-# packages, and plugins designed to encourage good coding practices.
 include: package:flutter_lints/flutter.yaml
 
 linter:
-  # The lint rules applied to this project can be customized in the
-  # section below to disable rules from the `package:flutter_lints/flutter.yaml`
-  # included above or to enable additional rules. A list of all available lints
-  # and their documentation is published at
-  # https://dart-lang.github.io/linter/lints/index.html.
-  #
-  # Instead of disabling a lint rule for the entire project in the
-  # section below, it can also be suppressed for a single line of code
-  # or a specific dart file by using the `// ignore: name_of_lint` and
-  # `// ignore_for_file: name_of_lint` syntax on the line or in the file
-  # producing the lint.
   rules:
-    # avoid_print: false  # Uncomment to disable the `avoid_print` rule
-    # prefer_single_quotes: true  # Uncomment to enable the `prefer_single_quotes` rule
+    # Error:
+    - always_use_package_imports
+    - avoid_slow_async_io
+    - comment_references
+    - no_wildcard_variable_uses
+    - prefer_void_to_null
 
-# Additional information about this file can be found at
-# https://dart.dev/guides/language/analysis-options
+    # Style:
+    - always_declare_return_types
+    - avoid_annotating_with_dynamic
+    # consider: https://dart.dev/tools/linter-rules/avoid_bool_literals_in_conditional_expressions
+    - avoid_double_and_int_checks
+    - avoid_escaping_inner_quotes
+    - avoid_redundant_argument_values
+    - directives_ordering
+    - eol_at_end_of_file
+    - leading_newlines_in_multiline_strings
+    - library_annotations
+    - lines_longer_than_80_chars
+    - matching_super_parameters
+    - no_literal_bool_comparisons
+    - noop_primitive_operations
+    - package_api_docs
+    - prefer_asserts_in_initializer_lists
+    - prefer_expression_function_bodies
+    - prefer_final_in_for_each
+    - prefer_final_locals
+    - prefer_if_elements_to_conditional_expressions
+    # consider: https://dart.dev/tools/linter-rules/prefer_mixin
+    - prefer_single_quotes
+    - public_member_api_docs
+    - require_trailing_commas
+    - sort_constructors_first
+    - type_annotate_public_apis
+    - unnecessary_await_in_return
+    - unnecessary_lambdas
+    - unnecessary_null_aware_operator_on_extension_on_nullable
+    - use_colored_box
+    - use_decorated_box
+    - use_if_null_to_convert_nulls_to_bools
+    - use_to_and_as_if_applicable
+
+    # Pub
+    - sort_pub_dependencies
