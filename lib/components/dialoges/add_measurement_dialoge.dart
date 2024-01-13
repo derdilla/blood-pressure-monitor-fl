@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:blood_pressure_app/components/date_time_picker.dart';
 import 'package:blood_pressure_app/components/dialoges/fullscreen_dialoge.dart';
 import 'package:blood_pressure_app/components/settings/settings_widgets.dart';
+import 'package:blood_pressure_app/model/blood_pressure/medicine/medicine.dart';
 import 'package:blood_pressure_app/model/blood_pressure/medicine/medicine_intake.dart';
 import 'package:blood_pressure_app/model/blood_pressure/needle_pin.dart';
 import 'package:blood_pressure_app/model/blood_pressure/record.dart';
@@ -314,7 +315,7 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
                   child: Row(
                     children: [
                       Expanded(
-                        child: DropdownButtonFormField(
+                        child: DropdownButtonFormField<Medicine?>(
                           isExpanded: true,
                           value: widget.settings.medications
                               .where((e) => e.id == medicineId).firstOrNull,

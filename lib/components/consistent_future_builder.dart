@@ -82,20 +82,24 @@ class _ConsistentFutureBuilderState<T>
   Widget build(BuildContext context) => FutureBuilder<T>(
     future: _future ?? widget.future,
     builder: (BuildContext context, AsyncSnapshot<T> snapshot) {
-      final localizations = AppLocalizations.of(context)!;
+      // Might get called before localizations initialize.
+      final localizations = AppLocalizations.of(context);
       if (snapshot.hasError) {
-        return Text(localizations.error(snapshot.error.toString()));
+        return Text(localizations?.error(snapshot.error.toString())
+            ?? snapshot.error.toString(),);
       }
       switch (snapshot.connectionState) {
         case ConnectionState.none:
           assert(false);
-          return widget.onNotStarted ?? Text(localizations.errNotStarted);
+          return widget.onNotStarted ?? Text(localizations?.errNotStarted
+              ?? 'NO_LOC_NO_START: please report this error.',);
         case ConnectionState.waiting:
         case ConnectionState.active:
           if (widget.lastChildWhileWaiting && _lastChild != null) {
             return _lastChild!;
           }
-          return widget.onWaiting ?? Text(localizations.loading);
+          return widget.onWaiting ?? Text(localizations?.loading
+              ?? 'loading...',);
         case ConnectionState.done:
           _lastChild = widget.onData(context, snapshot.data as T);
           return _lastChild!;
