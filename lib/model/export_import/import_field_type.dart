@@ -4,8 +4,6 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 
 /// Type a [Formatter] can uses to indicate the kind of data returned.
-///
-/// The data types returned from the deprecated [LegacyExportColumn] may differ from the guarantees.
 enum RowDataFieldType {
   /// Guarantees [DateTime] is returned.
   timestamp,
@@ -20,6 +18,7 @@ enum RowDataFieldType {
   /// Guarantees that the returned type is of type [MeasurementNeedlePin].
   needlePin;
 
+  /// Selection of a displayable string from [localizations].
   String localize(AppLocalizations localizations) {
     switch(this) {
       case RowDataFieldType.timestamp:

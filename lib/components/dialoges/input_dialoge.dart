@@ -23,6 +23,7 @@ class InputDialoge extends StatefulWidget {
   /// Optional input validation and formatting overrides.
   final List<TextInputFormatter>? inputFormatters;
 
+  /// The type of keyboard to use for editing the text.
   final TextInputType? keyboardType;
 
   /// Validation function called after submit.

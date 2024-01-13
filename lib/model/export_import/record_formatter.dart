@@ -9,7 +9,7 @@ import 'package:intl/intl.dart';
 
 /// Class to serialize and deserialize [BloodPressureRecord] values.
 abstract interface class Formatter {
-  /// Pattern that a user can use to achieve the effect of [convertToCsvValue].
+  /// Pattern that a user can use to achieve the effect of [encode].
   String? get formatPattern;
 
   /// Creates a string representation of the record.
@@ -31,8 +31,9 @@ abstract interface class Formatter {
   (RowDataFieldType, dynamic)? decode(String pattern);
 }
 
-/// Record [Formatter] that is based on a format pattern.
+/// Measurement [Formatter] that is based on a format pattern.
 class ScriptedFormatter implements Formatter {
+  /// Create a [BloodPressureRecord] formatter from a format pattern.
   ScriptedFormatter(this.pattern);
 
   /// Pattern used for formatting values.
@@ -79,7 +80,7 @@ class ScriptedFormatter implements Formatter {
     fieldContents = fieldContents.replaceAll(r'$DIA', record.diastolic.toString());
     fieldContents = fieldContents.replaceAll(r'$PUL', record.pulse.toString());
     fieldContents = fieldContents.replaceAll(r'$NOTE', record.notes);
-    fieldContents = fieldContents.replaceAll(r'$COLOR', jsonEncode(record.needlePin?.toJson()));
+    fieldContents = fieldContents.replaceAll(r'$COLOR', jsonEncode(record.needlePin?.toMap()));
 
     // math
     fieldContents = fieldContents.replaceAllMapped(RegExp(r'\{\{([^}]*)}}'), (m) {
@@ -177,25 +178,25 @@ class ScriptedTimeFormatter implements Formatter {
   ///
   /// The pattern follows the ICU style like [DateFormat].
   ScriptedTimeFormatter(String newPattern):
-    timeFormatter = DateFormat(newPattern);
+    _timeFormatter = DateFormat(newPattern);
 
-  final DateFormat timeFormatter;
+  final DateFormat _timeFormatter;
   
   @override
   (RowDataFieldType, dynamic)? decode(String pattern) {
     if (pattern.isEmpty) return null;
     try {
-      return (RowDataFieldType.timestamp, timeFormatter.parseLoose(pattern));
+      return (RowDataFieldType.timestamp, _timeFormatter.parseLoose(pattern));
     } on FormatException {
       return null;
     }
   }
 
   @override
-  String encode(BloodPressureRecord record) => timeFormatter.format(record.creationTime);
+  String encode(BloodPressureRecord record) => _timeFormatter.format(record.creationTime);
 
   @override
-  String? get formatPattern => timeFormatter.pattern;
+  String? get formatPattern => _timeFormatter.pattern;
 
   @override
   RowDataFieldType? get restoreAbleType => RowDataFieldType.timestamp;

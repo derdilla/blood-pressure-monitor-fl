@@ -6,8 +6,12 @@ import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+/// A static location to report errors to and disrupt the program flow in case
+/// there is the risk of data loss when continuing.
 class ErrorReporting {
   ErrorReporting._create();
+
+  /// Whether there is already an critical error displayed.
   static bool isErrorState = false;
 
   /// Replaces the application with an ErrorScreen
@@ -35,9 +39,12 @@ class ErrorReporting {
   }
 }
 
+/// A full [MaterialApp] that is especially safe against throwing errors and
+/// allows for debugging and data extraction.
 class ErrorScreen extends StatelessWidget {
   
   const ErrorScreen({super.key, required this.title, required this.text, required this.debugInfo});
+
   final String title;
   final String text;
   final PackageInfo debugInfo;

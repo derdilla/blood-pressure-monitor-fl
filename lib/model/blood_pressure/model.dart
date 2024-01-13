@@ -12,10 +12,13 @@ import 'package:path/path.dart';
 import 'package:provider/provider.dart';
 import 'package:sqflite/sqflite.dart';
 
+/// Model to access values in the measurement database.
 class BloodPressureModel extends ChangeNotifier {
 
   BloodPressureModel._create();
+
   late final Database _database;
+
   Future<void> _asyncInit(String? dbPath, bool isFullPath) async {
     dbPath ??= await getDatabasesPath();
 
@@ -117,6 +120,10 @@ class BloodPressureModel extends ChangeNotifier {
     }
   }
 
+  /// Try to remove the measurement at a specific timestamp from the database.
+  ///
+  /// When no measurement at that time exists, the operation won't fail and
+  /// listeners will get notified anyways.
   Future<void> delete(DateTime timestamp) async {
     if (!_database.isOpen) return;
     _database.delete('bloodPressureModel', where: 'timestamp = ?', whereArgs: [timestamp.millisecondsSinceEpoch]);
@@ -134,11 +141,15 @@ class BloodPressureModel extends ChangeNotifier {
     return UnmodifiableListView(recordsInRange);
   }
 
+  /// Querries all measurements saved in the database.
   Future<UnmodifiableListView<BloodPressureRecord>> get all async {
     if (!_database.isOpen) return UnmodifiableListView([]);
     return UnmodifiableListView(_convert(await _database.query('bloodPressureModel', columns: ['*'])));
   }
 
+  /// Close the database.
+  ///
+  /// Cannot be accessed anymore.
   Future<void> close() => _database.close();
 
   List<BloodPressureRecord> _convert(List<Map<String, Object?>> dbResult) {
@@ -158,4 +169,3 @@ class BloodPressureModel extends ChangeNotifier {
     return records;
   }
 }
-

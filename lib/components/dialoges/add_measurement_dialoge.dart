@@ -82,7 +82,9 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
     super.initState();
     time = widget.initialRecord?.creationTime ?? DateTime.now();
     needlePin = widget.initialRecord?.needlePin;
-    sysController = TextEditingController(text: (widget.initialRecord?.systolic ?? '').toString());
+    sysController = TextEditingController(
+      text: (widget.initialRecord?.systolic ?? '').toString(),
+    );
 
     sysFocusNode.requestFocus();
     ServicesBinding.instance.keyboard.addHandler(_onKey);
@@ -162,9 +164,11 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
         focusNode: focusNode,
         onSaved: onSaved,
         controller: controller,
-        inputFormatters: <TextInputFormatter>[FilteringTextInputFormatter.digitsOnly],
+        inputFormatters: [FilteringTextInputFormatter.digitsOnly],
         onChanged: (String? value) {
-          if (value != null && value.isNotEmpty && (int.tryParse(value) ?? -1) > 40) {
+          if (value != null
+              && value.isNotEmpty
+              && (int.tryParse(value) ?? -1) > 40) {
             FocusScope.of(context).nextFocus();
           }
         },
@@ -174,11 +178,16 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
               medicineId != null && systolic == null && diastolic == null &&
               pulse == null && notes == null && needlePin == null) return null;
 
-          if (!widget.settings.allowMissingValues && (value == null || value.isEmpty || int.tryParse(value) == null)) {
+          if (!widget.settings.allowMissingValues
+              && (value == null
+                  || value.isEmpty
+                  || int.tryParse(value) == null)) {
             return localizations.errNaN;
-          } else if (widget.settings.validateInputs && (int.tryParse(value ?? '') ?? -1) <= 30) {
+          } else if (widget.settings.validateInputs
+              && (int.tryParse(value ?? '') ?? -1) <= 30) {
             return localizations.errLt30;
-          } else if (widget.settings.validateInputs && (int.tryParse(value ?? '') ?? 0) >= 400) {
+          } else if (widget.settings.validateInputs
+              && (int.tryParse(value ?? '') ?? 0) >= 400) {
             // https://pubmed.ncbi.nlm.nih.gov/7741618/
             return localizations.errUnrealistic;
           }
@@ -191,8 +200,10 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
   
 
   /// Build the border all fields have.
-  RoundedRectangleBorder buildShapeBorder([Color? color]) => RoundedRectangleBorder(
-    side: Theme.of(context).inputDecorationTheme.border?.borderSide ?? const BorderSide(width: 3),
+  RoundedRectangleBorder buildShapeBorder([Color? color]) =>
+      RoundedRectangleBorder(
+    side: Theme.of(context).inputDecorationTheme.border?.borderSide
+        ?? const BorderSide(width: 3),
     borderRadius: BorderRadius.circular(20),
   );
 
@@ -204,17 +215,21 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
         if (formKey.currentState?.validate() ?? false) {
           formKey.currentState?.save();
           MedicineIntake? intake;
-          if (_showMedicineDosisInput && medicineDosis != null && medicineId != null) {
+          if (_showMedicineDosisInput
+              && medicineDosis != null
+              && medicineId != null) {
             intake = MedicineIntake(
               timestamp: time,
-              medicine: widget.settings.medications.where((e) => e.id == medicineId).first,
+              medicine: widget.settings.medications
+                  .where((e) => e.id == medicineId).first,
               dosis: medicineDosis!,
             );
           }
           BloodPressureRecord? record;
           if (systolic != null || diastolic != null || pulse != null
               || (notes ?? '').isNotEmpty || needlePin != null) {
-            record = BloodPressureRecord(time, systolic, diastolic, pulse, notes ?? '', needlePin: needlePin);
+            record = BloodPressureRecord(time, systolic, diastolic, pulse,
+              notes ?? '', needlePin: needlePin,);
           }
 
           Navigator.of(context).pop((record, intake));

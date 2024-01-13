@@ -6,7 +6,7 @@
 /// List tiles from flutter and this library currently used by the app are:
 /// - [ListTile]
 /// - [SwitchListTile]
-/// - [ColorPickerListTile]
+/// - [ColorSelectionListTile]
 /// - [DropDownListTile]
 /// - [SliderListTile]
 /// - [InputListTile]

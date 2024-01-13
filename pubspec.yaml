@@ -8,24 +8,23 @@ environment:
   sdk: '>=3.0.2 <4.0.0'
 
 dependencies:
+  csv: ^5.0.2
+  collection: ^1.17.1
+  intl: ^0.18.0
   flutter:
     sdk: flutter
   flutter_localizations:
     sdk: flutter
-  provider: ^6.0.0  # MIT
-  sqflite:  # BSD-2-Clause
-  path:  # BSD-3-Clause
-
-  intl: ^0.18.0  # BSD-3-Clause
-  fl_chart: ^0.63.0  # MIT
-  csv: ^5.0.2  # MIT
-  url_launcher: ^6.1.11  # BSD-3-Clause
-  shared_preferences: ^2.1.1  # BSD-3-Clause
+  flutter_markdown: ^0.6.17
+  fl_chart: ^0.63.0
+  function_tree: ^0.9.0
+  provider: ^6.0.0
+  path:
   pdf: ^3.10.4
   package_info_plus: ^4.0.2
-  function_tree: ^0.9.0
-  flutter_markdown: ^0.6.17
-  collection: ^1.17.1
+  sqflite:
+  shared_preferences: ^2.1.1
+  url_launcher: ^6.1.11
 
   # can become one custom dependency
   file_picker: ^5.2.11  # MIT
@@ -34,9 +33,9 @@ dependencies:
   fluttertoast: ^8.2.4
 
 dev_dependencies:
+  file: any
   flutter_test:
     sdk: flutter
-  file: any
   flutter_lints: ^2.0.0
   mockito: ^5.4.1
   sqflite_common_ffi: ^2.3.0

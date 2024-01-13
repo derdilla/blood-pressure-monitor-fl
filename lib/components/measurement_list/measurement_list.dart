@@ -8,13 +8,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 
+/// List that renders measurements and medicine intakes.
+///
+/// Contains a headline with information about the meaning of "columns".
 class MeasurementList extends StatelessWidget {
+  /// Create a list to display measurements and intakes.
   const MeasurementList({super.key,
     required this.settings,
     required this.records,
     required this.intakes,
   });
 
+  /// Settings that determine general behavior.
   final Settings settings;
 
   /// Records to display.

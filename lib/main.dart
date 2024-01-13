@@ -101,43 +101,47 @@ Future<Widget> _loadApp() async {
   ], child: const AppRoot(),);
 }
 
+/// Central [MaterialApp] widget of the app that sets the uniform style options.
 class AppRoot extends StatelessWidget {
+  /// Create the base for the entire app.
   const AppRoot({super.key});
 
   @override
-  Widget build(BuildContext context) => Consumer<Settings>(builder: (context, settings, child) => MaterialApp(
-        title: 'Blood Pressure App',
-        onGenerateTitle: (context) => AppLocalizations.of(context)!.title,
-        theme: _buildTheme(ColorScheme.fromSeed(
-          seedColor: settings.accentColor,
-        ),),
-        darkTheme: _buildTheme(ColorScheme.fromSeed(
-          seedColor: settings.accentColor,
-          brightness: Brightness.dark,
-          background: Colors.black,
-        ),),
-        themeMode: settings.themeMode,
-        localizationsDelegates: const [
-          AppLocalizations.delegate,
-          GlobalMaterialLocalizations.delegate,
-          GlobalCupertinoLocalizations.delegate,
-          GlobalWidgetsLocalizations.delegate,
-        ],
-        supportedLocales: AppLocalizations.supportedLocales,
-        locale: settings.language,
-        home: const AppHome(),
-      ),);
+  Widget build(BuildContext context) =>
+    Consumer<Settings>(builder: (context, settings, child) => MaterialApp(
+      title: 'Blood Pressure App',
+      onGenerateTitle: (context) => AppLocalizations.of(context)!.title,
+      theme: _buildTheme(ColorScheme.fromSeed(
+        seedColor: settings.accentColor,
+      ),),
+      darkTheme: _buildTheme(ColorScheme.fromSeed(
+        seedColor: settings.accentColor,
+        brightness: Brightness.dark,
+        background: Colors.black,
+      ),),
+      themeMode: settings.themeMode,
+      localizationsDelegates: const [
+        AppLocalizations.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+      ],
+      supportedLocales: AppLocalizations.supportedLocales,
+      locale: settings.language,
+      home: const AppHome(),
+    ),
+  );
 
   ThemeData _buildTheme(ColorScheme colorScheme) {
     final inputBorder = OutlineInputBorder(
-        borderSide: BorderSide(
-          width: 3,
-          // Through black background outlineVariant has enough contrast.
-          color: (colorScheme.background == Colors.black)
-              ? colorScheme.outlineVariant
-              : colorScheme.outline,
-        ),
-        borderRadius: BorderRadius.circular(20),
+      borderSide: BorderSide(
+        width: 3,
+        // Through black background outlineVariant has enough contrast.
+        color: (colorScheme.background == Colors.black)
+            ? colorScheme.outlineVariant
+            : colorScheme.outline,
+      ),
+      borderRadius: BorderRadius.circular(20),
     );
 
     return ThemeData(

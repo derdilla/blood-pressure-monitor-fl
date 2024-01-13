@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 
 /// Class for managing columns available to the user.
 class ExportColumnsManager extends ChangeNotifier {
-
+  /// Create a instance from a map created by [toMap].
   factory ExportColumnsManager.fromMap(Map<String, dynamic> map) {
     final List<dynamic> jsonUserColumns = map['userColumns'];
     final manager = ExportColumnsManager();
@@ -25,6 +25,7 @@ class ExportColumnsManager extends ChangeNotifier {
     return manager;
   }
 
+  /// Create a instance from a [String] created by [toJson].
   factory ExportColumnsManager.fromJson(String jsonString) {
     try {
       return ExportColumnsManager.fromMap(jsonDecode(jsonString));
@@ -38,15 +39,19 @@ class ExportColumnsManager extends ChangeNotifier {
   /// It will be filled with the default columns but won't contain initial user columns.
   ExportColumnsManager();
 
+  /// Namespaces that may not lead a user columns internal identifier.
   static const List<String> reservedNamespaces = ['buildIn', 'myHeart'];
 
-  /// Map between all [ExportColumn.internalIdentifier]s and [ExportColumn]s added by a user.
+  /// Map between all [ExportColumn.internalIdentifier]s and [ExportColumn]s
+  /// added by a user.
   final Map<String, ExportColumn> _userColumns = {};
 
-  /// View of map between all [ExportColumn.internalName]s and [ExportColumn]s added by a user.
+  /// View of map between all [ExportColumn.internalIdentifier]s and columns
+  /// added by a user.
   UnmodifiableMapView<String, ExportColumn> get userColumns => UnmodifiableMapView(_userColumns);
 
-  /// Tries to save the column to the map with the [ExportColumn.internalName] key.
+  /// Tries to save the column to the map with the [ExportColumn.internalIdentifier]
+  /// key.
   ///
   /// This method fails and returns false when there is a default [ExportColumn] with the same internal name is
   /// available.
@@ -77,12 +82,11 @@ class ExportColumnsManager extends ChangeNotifier {
   /// 1. userColumns 
   /// 2. NativeColumn 
   /// 3. BuildInColumn
-  ExportColumn? firstWhere(bool Function(ExportColumn) test) {
-    return userColumns.values.where(test).firstOrNull
-        ?? NativeColumn.allColumns.where(test).firstOrNull
-        ?? BuildInColumn.allColumns.where(test).firstOrNull; 
-        // ?? ...
-  }
+  ExportColumn? firstWhere(bool Function(ExportColumn) test) =>
+    userColumns.values.where(test).firstOrNull
+      ?? NativeColumn.allColumns.where(test).firstOrNull
+      ?? BuildInColumn.allColumns.where(test).firstOrNull;
+      // ?? ...
 
   /// Returns a list of all userColumns, NativeColumns and BuildInColumns defined.
   ///
@@ -103,6 +107,7 @@ class ExportColumnsManager extends ChangeNotifier {
     return UnmodifiableListView(columns);
   }
 
+  /// Serialize the object to a restoreable map.
   Map<String, dynamic> toMap() {
     final columns = [];
     for (final c in _userColumns.values) {
@@ -134,6 +139,7 @@ class ExportColumnsManager extends ChangeNotifier {
     };
   }
 
+  /// Serialize the object to a restoreable string.
   String toJson() => jsonEncode(toMap());
 }
 

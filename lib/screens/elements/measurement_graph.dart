@@ -37,7 +37,9 @@ class _LineChartState extends State<_LineChart> {
                 data.sort((a, b) => a.creationTime.compareTo(b.creationTime));
 
                 // calculate lines for graph
-                List<FlSpot> pulSpots = [], diaSpots = [], sysSpots = [];
+                final pulSpots = <FlSpot>[];
+                final diaSpots = <FlSpot>[];
+                final sysSpots = <FlSpot>[];
                 int maxValue = 0;
                 final int minValue = (settings.validateInputs ? 30 : 0);
                 /// Horizontally first value
@@ -256,6 +258,7 @@ class _LineChartState extends State<_LineChart> {
     );
 }
 
+// TODO: document
 class MeasurementGraph extends StatelessWidget {
 
   const MeasurementGraph({super.key, this.height = 290});
@@ -279,4 +282,3 @@ class MeasurementGraph extends StatelessWidget {
 extension Sum<T> on List<T> {
   double sum(num Function(T value) f) => fold<double>(0, (prev, e) => prev + f(e).toDouble());
 }
-

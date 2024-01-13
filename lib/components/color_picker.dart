@@ -21,8 +21,8 @@ class ColorPicker extends StatefulWidget {
 
   /// Color that starts out highlighted.
   ///
-  /// When [initialColor] is null the transparent color is selected. When [showTransparentColor] is false as well no
-  /// color is selected.
+  /// When [initialColor] is null the transparent color is selected. When
+  /// [showTransparentColor] is false as well no color is selected.
   final Color? initialColor;
 
   /// Called after a click on a color.
@@ -103,13 +103,18 @@ class _ColorPickerState extends State<ColorPicker> {
               },
               child: Container(
                 decoration: BoxDecoration(
-                  color: _selected == color ? Theme.of(context).disabledColor : Colors.transparent,
+                  color: _selected == color
+                      ? Theme.of(context).disabledColor
+                      : Colors.transparent,
                   shape: BoxShape.circle,),
                 padding: const EdgeInsets.all(5),
                 child: Container(
                   height: widget.circleSize,
                   width: widget.circleSize,
-                  decoration: BoxDecoration(color: color, shape: BoxShape.circle,),
+                  decoration: BoxDecoration(
+                    color: color,
+                    shape: BoxShape.circle,
+                  ),
                 ),
               ),
             ),
@@ -124,7 +129,9 @@ class _ColorPickerState extends State<ColorPicker> {
             child: Container(
               padding: const EdgeInsets.all(5),
               decoration: BoxDecoration(
-                color: _selected == Colors.transparent ? Theme.of(context).disabledColor : Colors.transparent,
+                color: _selected == Colors.transparent
+                    ? Theme.of(context).disabledColor
+                    : Colors.transparent,
                 shape: BoxShape.circle,),
               child: SizedBox(
                 height: widget.circleSize,
@@ -140,21 +147,24 @@ class _ColorPickerState extends State<ColorPicker> {
 /// Shows a dialog with a ColorPicker and with an cancel button inside.
 ///
 /// Returns the selected color or null when cancel is pressed.
-Future<Color?> showColorPickerDialog(BuildContext context, [Color? initialColor]) async => await showDialog(
-    context: context,
-    builder: (_) => AlertDialog(
-        contentPadding: const EdgeInsets.all(6.0),
-        content: ColorPicker(
-          initialColor: initialColor,
-          onColorSelected: (color) {
-            Navigator.of(context).pop(color);
-          },
-        ),
-        actions: [
-          TextButton(
-            onPressed: Navigator.of(context).pop,
-            child: Text(AppLocalizations.of(context)!.btnCancel),
-          ),
-        ],
+Future<Color?> showColorPickerDialog(
+  BuildContext context, [
+    Color? initialColor,
+]) async => showDialog(
+  context: context,
+  builder: (_) => AlertDialog(
+    contentPadding: const EdgeInsets.all(6.0),
+    content: ColorPicker(
+      initialColor: initialColor,
+      onColorSelected: (color) {
+        Navigator.of(context).pop(color);
+      },
+    ),
+    actions: [
+      TextButton(
+        onPressed: Navigator.of(context).pop,
+        child: Text(AppLocalizations.of(context)!.btnCancel),
       ),
-  );
+    ],
+  ),
+);

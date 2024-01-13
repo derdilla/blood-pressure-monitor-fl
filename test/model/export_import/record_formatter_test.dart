@@ -26,7 +26,7 @@ void main() {
       expect(ScriptedFormatter(r'$SYS',).encode(testRecord), testRecord.systolic.toString());
       expect(ScriptedFormatter(r'$DIA',).encode(testRecord), testRecord.diastolic.toString());
       expect(ScriptedFormatter(r'$PUL',).encode(testRecord), testRecord.pulse.toString());
-      expect(ScriptedFormatter(r'$COLOR',).encode(testRecord), jsonEncode(testRecord.needlePin!.toJson()));
+      expect(ScriptedFormatter(r'$COLOR',).encode(testRecord), jsonEncode(testRecord.needlePin!.toMap()));
       expect(ScriptedFormatter(r'$NOTE',).encode(testRecord), testRecord.notes);
       expect(ScriptedFormatter(r'$TIMESTAMP',).encode(testRecord), testRecord.creationTime.millisecondsSinceEpoch.toString());
       expect(ScriptedFormatter(r'$SYS$DIA$PUL',).encode(testRecord), (testRecord.systolic.toString()

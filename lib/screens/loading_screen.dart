@@ -4,7 +4,10 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 
 /// Loading page that is displayed on app start.
+///
+/// Contains a simplified app logo animation.
 class LoadingScreen extends StatelessWidget {
+  /// Loading page that is displayed on app start.
   const LoadingScreen({super.key});
 
   static const _duration = Duration(milliseconds: 250);

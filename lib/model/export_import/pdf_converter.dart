@@ -57,7 +57,7 @@ class PdfConverter {
       },
       maxPages: 100,
     ),);
-    return await pdf.save();
+    return pdf.save();
   }
 
   pw.Widget _buildPdfTitle(List<BloodPressureRecord> records, BloodPressureAnalyser analyzer) {
@@ -191,8 +191,6 @@ class PdfConverter {
 
         int rowCount = (availableHeightOnFirstPage - realHeaderHeight)
             ~/ (realCellHeight);
-        
-        print(rowCount);
 
         final List<pw.Widget> tables = [];
         int pageNum = 0;
@@ -263,6 +261,6 @@ class PdfConverter {
   }
 }
 
-extension PdfCompatability on Color {
+extension _PdfCompatability on Color {
   PdfColor toPdfColor() => PdfColor(red / 256, green / 256, blue / 256, opacity);
 }

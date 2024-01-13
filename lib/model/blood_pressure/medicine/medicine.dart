@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 
 /// Description of a specific medicine.
 class Medicine {
-
+  /// Create a instance from a map created by [toMap].
   factory Medicine.fromMap(Map<String, dynamic> map) => Medicine(
     map['id'],
     designation: map['designation'],
@@ -14,7 +14,9 @@ class Medicine {
     defaultDosis: map['defaultDosis'],
   );
 
+  /// Create a instance from a [String] created by [toJson].
   factory Medicine.fromJson(String json) => Medicine.fromMap(jsonDecode(json));
+
   /// Create a new medicine.
   const Medicine(this.id, {
     required this.designation,
@@ -22,6 +24,7 @@ class Medicine {
     required this.defaultDosis,
   });
 
+  /// Serialize the object to a restoreable map.
   Map<String, dynamic> toMap() => {
     'id': id,
     'designation': designation,
@@ -29,6 +32,7 @@ class Medicine {
     'defaultDosis': defaultDosis,
   };
 
+  /// Serialize the object to a restoreable string.
   String toJson() => jsonEncode(toMap());
 
   /// Unique id used to store the medicine in serialized objects.

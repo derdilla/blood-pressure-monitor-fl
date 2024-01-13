@@ -19,18 +19,24 @@ class AddExportColumnDialoge extends StatefulWidget {
     required this.settings,
   });
 
+  /// Prefills the form to a submitted state.
+  ///
+  /// When this is null it is assumed creating a new column is intended.
   final ExportColumn? initialColumn;
 
+  /// Settings to determine general behavior.
   final Settings settings;
 
   @override
   State<AddExportColumnDialoge> createState() => _AddExportColumnDialogeState();
 }
 
-class _AddExportColumnDialogeState extends State<AddExportColumnDialoge> with SingleTickerProviderStateMixin {
+class _AddExportColumnDialogeState extends State<AddExportColumnDialoge>
+    with SingleTickerProviderStateMixin {
   final formKey = GlobalKey<FormState>();
 
-  /// Csv column title used to compute internal identifier in case [widget.initialColumn] is null.
+  /// Csv column title used to compute internal identifier in case
+  /// [AddExportColumnDialoge.initialColumn] is null.
   late String csvTitle;
 
   /// Pattern for record formatting preview and for column creation on save.
@@ -82,7 +88,8 @@ class _AddExportColumnDialogeState extends State<AddExportColumnDialoge> with Si
       body: GestureDetector(
         onHorizontalDragEnd: (details) {
           if (details.primaryVelocity == null) return;
-          if (details.primaryVelocity! < -500 && type == _FormatterType.record) {
+          if (details.primaryVelocity! < -500
+              && type == _FormatterType.record) {
             _changeMode(_FormatterType.time);
           }
           if (details.primaryVelocity! > 500 && type == _FormatterType.time) {
@@ -98,7 +105,9 @@ class _AddExportColumnDialogeState extends State<AddExportColumnDialoge> with Si
                 decoration: InputDecoration(
                   labelText: localizations.csvTitle,
                 ),
-                validator: (value) => (value != null && value.isNotEmpty) ? null : localizations.errNoValue,
+                validator: (value) => (value != null && value.isNotEmpty)
+                    ? null
+                    : localizations.errNoValue,
                 onSaved: (value) => setState(() {csvTitle = value!;}),
               ),
               const SizedBox(height: 8,),
@@ -152,18 +161,35 @@ class _AddExportColumnDialogeState extends State<AddExportColumnDialoge> with Si
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child: (){
-                    final record = BloodPressureRecord(DateTime.now(), 123, 78, 65, 'test note');
-                    final formatter = (type == _FormatterType.record) ? ScriptedFormatter(recordPattern ?? '')
+                    final record = BloodPressureRecord(
+                      DateTime.now(),
+                      123, 78, 65,
+                      'test note',
+                    );
+                    final formatter = (type == _FormatterType.record)
+                        ? ScriptedFormatter(recordPattern ?? '')
                         : ScriptedTimeFormatter(timePattern ?? '');
                     final text = formatter.encode(record);
                     final decoded = formatter.decode(text);
                     return Column(
                       children: [
-                        if (type == _FormatterType.record) MeasurementListRow(record: record, settings: widget.settings,) else Text(DateFormat('MMM d, y - h:m.s').format(record.creationTime)),
+                        if (type == _FormatterType.record)
+                          MeasurementListRow(
+                            record: record,
+                            settings: widget.settings,
+                          ) else Text(
+                            DateFormat('MMM d, y - h:m.s')
+                                .format(record.creationTime),
+                        ),
                         const SizedBox(height: 8,),
                         const Icon(Icons.arrow_downward),
                         const SizedBox(height: 8,),
-                        if (text.isNotEmpty) Text(text) else Text(localizations.errNoValue, style: const TextStyle(fontStyle: FontStyle.italic),),
+                        if (text.isNotEmpty)
+                          Text(text)
+                        else
+                          Text(localizations.errNoValue,
+                            style: const TextStyle(fontStyle: FontStyle.italic),
+                          ),
                         const SizedBox(height: 8,),
                         const Icon(Icons.arrow_downward),
                         const SizedBox(height: 8,),
@@ -196,7 +222,10 @@ class _AddExportColumnDialogeState extends State<AddExportColumnDialoge> with Si
             suffixIcon: IconButton(
                 onPressed: () {
                   Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => InformationScreen(text: inputDocumentation),),);
+                    builder: (context) => InformationScreen(
+                        text: inputDocumentation,
+                    ),
+                  ),);
                 },
                 icon: const Icon(Icons.info_outline),
             ),
@@ -206,31 +235,38 @@ class _AddExportColumnDialogeState extends State<AddExportColumnDialoge> with Si
       ],
     );
 
-  Column _createRecordFormatInput(AppLocalizations localizations, BuildContext context) =>
-      _createFormatInput(localizations,
-        context,
-        localizations.fieldFormat,
-        localizations.exportFieldFormatDocumentation,
-        recordPattern ?? '',
-        (value) => setState(() {
-          recordPattern = value;
-        }),
-        (value) => (type == _FormatterType.time || value != null && value.isNotEmpty) ? null
-            : localizations.errNoValue,
-      );
+  Column _createRecordFormatInput(
+    AppLocalizations localizations,
+    BuildContext context,
+  ) => _createFormatInput(localizations,
+    context,
+    localizations.fieldFormat,
+    localizations.exportFieldFormatDocumentation,
+    recordPattern ?? '',
+    (value) => setState(() {
+      recordPattern = value;
+    }),
+    (value) => type == _FormatterType.time || value != null && value.isNotEmpty
+        ? null
+        : localizations.errNoValue,
+  );
   
-  Column _createTimeFormatInput(AppLocalizations localizations, BuildContext context) =>
-      _createFormatInput(localizations,
-          context,
-          localizations.timeFormat,
-          localizations.enterTimeFormatDesc,
-          timePattern ?? '',
-          (value) => setState(() {
-            timePattern = value;
-          }),
-          (value) => (type == _FormatterType.record || (value != null && value.isNotEmpty)) ? null
-            : localizations.errNoValue,
-      );
+  Column _createTimeFormatInput(
+    AppLocalizations localizations,
+    BuildContext context,
+  ) => _createFormatInput(localizations,
+    context,
+    localizations.timeFormat,
+    localizations.enterTimeFormatDesc,
+    timePattern ?? '',
+    (value) => setState(() {
+      timePattern = value;
+    }),
+    (value) => (type == _FormatterType.record
+        || (value != null && value.isNotEmpty))
+        ? null
+        : localizations.errNoValue,
+  );
 
   void _saveForm() {
     if (formKey.currentState?.validate() ?? false) {
@@ -239,14 +275,20 @@ class _AddExportColumnDialogeState extends State<AddExportColumnDialoge> with Si
       if (type == _FormatterType.record) {
         assert(recordPattern != null, 'validator should check');
         column = (widget.initialColumn != null)
-            ? UserColumn.explicit(widget.initialColumn!.internalIdentifier, csvTitle, recordPattern!)
+            ? UserColumn.explicit(
+              widget.initialColumn!.internalIdentifier,
+              csvTitle,
+              recordPattern!,)
             : UserColumn(csvTitle, csvTitle, recordPattern!);
         Navigator.pop(context, column);
       } else {
         assert(type == _FormatterType.time);
         assert(timePattern != null, 'validator should check');
         column = (widget.initialColumn != null)
-            ? TimeColumn.explicit(widget.initialColumn!.internalIdentifier, csvTitle, timePattern!)
+            ? TimeColumn.explicit(
+              widget.initialColumn!.internalIdentifier,
+              csvTitle,
+              timePattern!,)
             : TimeColumn(csvTitle, timePattern!);
         Navigator.pop(context, column);
       }
@@ -272,7 +314,8 @@ enum _FormatterType {
   time,
 }
 
-/// Shows a dialoge containing a export column editor to create a [UserColumn] or [TimeColumn].
+/// Shows a dialoge containing a export column editor to create a [UserColumn]
+/// or [TimeColumn].
 ///
 /// In case [initialColumn] is null fields are initially empty.
 /// When initialColumn is provided, it is ensured that the
@@ -285,7 +328,15 @@ enum _FormatterType {
 /// Internal identifier and display title are generated from
 /// the CSV title. There is no check whether a userColumn
 /// with the generated title exists.
-Future<ExportColumn?> showAddExportColumnDialoge(BuildContext context, Settings settings, [ExportColumn? initialColumn]) =>
-    showDialog<ExportColumn?>(context: context, builder: (context) => Dialog.fullscreen(
-      child: AddExportColumnDialoge(initialColumn: initialColumn, settings: settings,),
-    ),);
+Future<ExportColumn?> showAddExportColumnDialoge(
+  BuildContext context,
+  Settings settings, [
+    ExportColumn? initialColumn,
+]) => showDialog<ExportColumn?>(context: context,
+  builder: (context) => Dialog.fullscreen(
+    child: AddExportColumnDialoge(
+      initialColumn: initialColumn,
+      settings: settings,
+    ),
+  ),
+);
