@@ -1,3 +1,4 @@
+import 'package:blood_pressure_app/components/dialoges/add_measurement_dialoge.dart';
 import 'package:blood_pressure_app/components/measurement_list/measurement_list_entry.dart';
 import 'package:blood_pressure_app/model/blood_pressure/needle_pin.dart';
 import 'package:blood_pressure_app/model/blood_pressure/record.dart';
@@ -60,6 +61,31 @@ void main() {
       await widgetTester.tap(find.byIcon(Icons.expand_more));
       await widgetTester.pumpAndSettle();
       expect(find.text('null'), findsNothing);
+    });
+    testWidgets('should open edit dialoge', (widgetTester) async {
+      await widgetTester.pumpWidget(appBase(MeasurementListRow(
+        settings: Settings(), record: mockRecord(time: DateTime(2023),
+          sys:1, dia: 2, pul: 3, note: 'testTxt',),),),);
+      expect(find.byIcon(Icons.expand_more), findsOneWidget);
+      await widgetTester.tap(find.byIcon(Icons.expand_more));
+      await widgetTester.pumpAndSettle();
+
+      expect(find.byIcon(Icons.edit), findsOneWidget);
+      await widgetTester.tap(find.byIcon(Icons.edit));
+      await widgetTester.pumpAndSettle();
+
+      /// Finder of text widgets that are descendants of the AddEntryDialoge.
+      Finder descTxt(String txt) => find.descendant(
+        of: find.byType(AddEntryDialoge),
+        matching: find.text(txt),
+      );
+
+      expect(find.byType(AddEntryDialoge), findsOneWidget);
+      expect(descTxt('testTxt'), findsOneWidget);
+      expect(descTxt('1'), findsOneWidget);
+      expect(descTxt('2'), findsOneWidget);
+      expect(descTxt('3'), findsOneWidget);
+
     });
   });
 }
