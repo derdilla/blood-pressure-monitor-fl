@@ -10,7 +10,7 @@ environment:
 dependencies:
   csv: ^5.0.2
   collection: ^1.17.1
-  intl: ^0.18.0
+  intl: any
   flutter:
     sdk: flutter
   flutter_localizations:

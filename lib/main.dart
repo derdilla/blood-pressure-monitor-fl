@@ -13,7 +13,6 @@ import 'package:blood_pressure_app/screens/home_screen.dart';
 import 'package:blood_pressure_app/screens/loading_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:path/path.dart';
@@ -89,6 +88,8 @@ Future<Widget> _loadApp() async {
   // Reset the step size intervall to current on startup
   intervalStorageManager.mainPage.setToMostRecentIntervall();
 
+  print(AppLocalizations.delegate);
+
   return MultiProvider(providers: [
     ChangeNotifierProvider(create: (context) => _bloodPressureModel),
     ChangeNotifierProvider(create: (context) => settings),
@@ -120,12 +121,7 @@ class AppRoot extends StatelessWidget {
         background: Colors.black,
       ),),
       themeMode: settings.themeMode,
-      localizationsDelegates: const [
-        AppLocalizations.delegate,
-        GlobalMaterialLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-      ],
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
       locale: settings.language,
       home: const AppHome(),
