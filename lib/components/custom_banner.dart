@@ -47,5 +47,4 @@ class CustomBanner extends StatelessWidget {
       ],
     ),
   );
-
 }

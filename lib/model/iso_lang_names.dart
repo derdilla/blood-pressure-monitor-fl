@@ -185,4 +185,7 @@ final _isoLangs = {
   'za': 'Saɯ cueŋƅ, Saw cuengh',
 };
 
+/// Selects the correct language name for a specific language code.
+///
+/// Does not account for dialects.
 String? getDisplayLanguage(Locale l) => _isoLangs[l.languageCode];

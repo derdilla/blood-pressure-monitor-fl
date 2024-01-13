@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-/// First shows a DatePicker for the day then shows a TimePicker for the time of day.
+/// First shows a DatePicker for the day then shows a TimePicker for the time of
+/// day.
 ///
-/// As per the decision of the material design team a TimePicker isn't able to limit the range
-/// (https://github.com/flutter/flutter/issues/23717#issuecomment-966601311), therefore a manual check for the time of
-/// day will be needed. Refer to the validator on the AddMeasurementPage for an example
+/// As per the decision of the material design team a TimePicker isn't able to
+/// limit the range (https://github.com/flutter/flutter/issues/23717#issuecomment-966601311),
+/// therefore a manual check for the time of day will be needed. Refer to the
+/// validator on the AddMeasurementPage for an example.
 Future<DateTime?> showDateTimePicker({
   required BuildContext context,
   DateTime? initialDate,
@@ -17,7 +19,12 @@ Future<DateTime?> showDateTimePicker({
   lastDate ??= firstDate.add(const Duration(days: 365 * 200));
 
   final DateTime? selectedDate = await showDatePicker(
-      context: context, initialDate: initialDate, firstDate: firstDate, lastDate: lastDate, confirmText: AppLocalizations.of(context)!.btnNext,);
+    context: context,
+    initialDate: initialDate,
+    firstDate: firstDate,
+    lastDate: lastDate,
+    confirmText: AppLocalizations.of(context)!.btnNext,
+  );
 
   if (selectedDate == null) return null;
   if (!context.mounted) return null;

@@ -3,7 +3,7 @@ import 'package:blood_pressure_app/model/blood_pressure/medicine/medicine.dart';
 
 /// Instance of a medicine intake.
 class MedicineIntake implements Comparable<Object> {
-
+  /// Create a intake from a String created by [serialize].
   factory MedicineIntake.deserialize(String string, List<Medicine> availableMeds) {
     final elements = string.split('\x00');
     return MedicineIntake(
@@ -12,6 +12,7 @@ class MedicineIntake implements Comparable<Object> {
       dosis: double.parse(elements[2]),
     );
   }
+
   /// Create a instance of a medicine intake.
   const MedicineIntake({
     required this.medicine,

@@ -72,7 +72,7 @@ class ConfigDB {
       'INTEGER, storage_id INTEGER, stepSize INTEGER, start INTEGER, end INTEGER, '
       'PRIMARY KEY(profile_id, storage_id))';
 
-  /// Name of the exportStrings table. It is used to store formats used in the [ExportConfigurationModel].
+  /// Name of the exportStrings table. It is used to to update old columns.
   ///
   /// Format:
   /// `CREATE TABLE exportStrings(internalColumnName STRING PRIMARY KEY, columnTitle STRING, formatPattern STRING)`

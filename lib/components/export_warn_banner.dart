@@ -11,7 +11,8 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 /// Banner that gives the user information on the importability of their export.
 class ExportWarnBanner extends StatefulWidget {
-  /// Create either a banner that informs the user of import problems or an empty widget.
+  /// Create either a banner that informs the user of import problems or an
+  /// empty widget.
   ///
   /// Whether the config is importable is determined by the passed settings.
   const ExportWarnBanner({super.key,
@@ -19,8 +20,14 @@ class ExportWarnBanner extends StatefulWidget {
     required this.csvExportSettings,
     required this.availableColumns,});
 
+  /// The [ExportSettings] validated for importability.
   final ExportSettings exportSettings;
+
+  /// The [CsvExportSettings] validated for importability if applicable.
   final CsvExportSettings csvExportSettings;
+
+  /// The columns used to validate importability in case custom export is
+  /// enabled.
   final ExportColumnsManager availableColumns;
 
   @override

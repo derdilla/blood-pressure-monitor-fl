@@ -4,9 +4,15 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
+/// A selector for [IntervallStorage] values.
+///
+/// Allows selection [IntervallStorage.currentRange] and moving intervall wise
+/// in both directions.
 class IntervalPicker extends StatelessWidget {
+  /// Create a selector for [IntervallStorage] values.
   const IntervalPicker({super.key, required this.type});
 
+  /// Which range to display and modify.
   final IntervallStoreManagerLocation type;
   
   @override

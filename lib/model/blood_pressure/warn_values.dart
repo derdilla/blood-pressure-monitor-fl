@@ -1,9 +1,13 @@
-// source: https://pressbooks.library.torontomu.ca/vitalsign/chapter/blood-pressure-ranges/ (last access: 14.11.2023)
+/// Static provider of warn values for ages.
+///
+/// source: https://pressbooks.library.torontomu.ca/vitalsign/chapter/blood-pressure-ranges/ (last access: 14.11.2023)
 class BloodPressureWarnValues {
   BloodPressureWarnValues._create();
 
+  /// URL from which the information was taken.
   static String source = 'https://pressbooks.library.torontomu.ca/vitalsign/chapter/blood-pressure-ranges/';
 
+  /// Returns the default highest (safe) diastolic value for a specific age.
   static int getUpperDiaWarnValue(int age) {
     if (age <= 2) {
       return 70;
@@ -20,6 +24,7 @@ class BloodPressureWarnValues {
     }
   }
 
+  /// Returns the default highest (safe) systolic value for a specific age.
   static int getUpperSysWarnValue(int age) {
     if (age <= 2) {
       return 100;

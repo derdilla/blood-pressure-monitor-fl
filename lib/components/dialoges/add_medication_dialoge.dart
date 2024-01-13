@@ -6,11 +6,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+/// Dialoge to enter values for a [Medicine].
 class AddMedicationDialoge extends StatefulWidget {
+  /// Create a dialoge to enter values for a [Medicine].
   const AddMedicationDialoge({super.key,
     required this.settings,
   });
 
+  /// Settings that determine general behavior.
   final Settings settings;
 
   @override

@@ -22,7 +22,7 @@ linter:
     - eol_at_end_of_file
     - leading_newlines_in_multiline_strings
     - library_annotations
-    - lines_longer_than_80_chars
+    # TODO: - lines_longer_than_80_chars
     - matching_super_parameters
     - no_literal_bool_comparisons
     - noop_primitive_operations

@@ -18,7 +18,10 @@ import 'package:provider/provider.dart';
 /// Is true during the first [AppHome.build] before creating the widget.
 bool _appStart = true;
 
+/// Central screen of the app with graph and measurement list that is the center
+/// of navigation.
 class AppHome extends StatelessWidget {
+  /// Create a home screen.
   const AppHome({super.key});
 
   @override

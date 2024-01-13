@@ -7,11 +7,15 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
-/// Blood pressure measurement to display in a list.
+/// Display of a blood pressure measurement data.
 class MeasurementListRow extends StatelessWidget {
+  /// Create a display of a measurements.
   const MeasurementListRow({super.key, required this.record, required this.settings});
 
+  /// The measurement to display.
   final BloodPressureRecord record;
+
+  /// Settings that determine general behavior.
   final Settings settings;
 
   @override
@@ -20,7 +24,7 @@ class MeasurementListRow extends StatelessWidget {
     final formatter = DateFormat(settings.dateFormatString);
     return ExpansionTile(
       // Leading color possible
-      title: buildRow(formatter),
+      title: _buildRow(formatter),
       childrenPadding: const EdgeInsets.only(bottom: 10),
       backgroundColor: record.needlePin?.color.withAlpha(30),
       collapsedShape: record.needlePin != null ? Border(left: BorderSide(color: record.needlePin!.color, width: 8)) : null,
@@ -65,7 +69,7 @@ class MeasurementListRow extends StatelessWidget {
     );
   }
 
-  Row buildRow(DateFormat formatter) {
+  Row _buildRow(DateFormat formatter) {
     String formatNum(int? num) => (num ?? '-').toString();
     return Row(
       children: [
@@ -108,7 +112,9 @@ class MeasurementListRow extends StatelessWidget {
   }
 }
 
-Future<bool> showConfirmDeletionDialoge(BuildContext context) async => await showDialog<bool>(context: context,
+/// Show a dialoge that prompts the user to confirm a deletion.
+Future<bool> showConfirmDeletionDialoge(BuildContext context) async =>
+  await showDialog<bool>(context: context,
     builder: (context) => AlertDialog(
       title: Text(AppLocalizations.of(context)!.confirmDelete),
       content: Text(AppLocalizations.of(context)!.confirmDeleteDesc),

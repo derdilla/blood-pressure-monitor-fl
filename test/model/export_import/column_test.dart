@@ -67,7 +67,7 @@ void main() {
             break;
           case RowDataFieldType.needlePin:
             expect(decoded.$2, isA<MeasurementNeedlePin>().having(
-                    (p0) => p0.toJson(), 'pin', r.needlePin?.toJson(),),);
+                    (p0) => p0.toMap(), 'pin', r.needlePin?.toMap(),),);
             break;
         }
       }
@@ -134,7 +134,7 @@ void main() {
             break;
           case RowDataFieldType.needlePin:
             expect(decoded?.$2, isA<MeasurementNeedlePin>().having(
-                    (p0) => p0.toJson(), 'pin', r.needlePin?.toJson(),),);
+                    (p0) => p0.toMap(), 'pin', r.needlePin?.toMap(),),);
             break;
           case null:
             break;

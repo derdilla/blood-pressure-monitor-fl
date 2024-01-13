@@ -90,7 +90,8 @@ class ConvertUtil {
     return null;
   }
 
-  static ThemeMode? parseThemeMode(value) {
+  /// Try to recreate the theme mode stored as a integer.
+  static ThemeMode? parseThemeMode(dynamic value) {
     final int? intValue = ConvertUtil.parseInt(value);
     switch(intValue) {
       case null:

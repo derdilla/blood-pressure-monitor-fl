@@ -11,8 +11,10 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
+/// A old more compact [BloodPressureRecord] list, that lacks some of the new
+/// features.
 class LegacyMeasurementsList extends StatelessWidget {
-
+  /// Create a more compact measurement list without all new features.
   LegacyMeasurementsList(BuildContext context, {super.key}) {
     if (MediaQuery.of(context).size.width < 1000) {
       _tableElementsSizes = [33, 9, 9, 9, 30];

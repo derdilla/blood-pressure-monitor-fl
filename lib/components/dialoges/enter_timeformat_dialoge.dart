@@ -22,6 +22,8 @@ class EnterTimeFormatDialoge extends StatefulWidget {
   /// When previewTime is null [DateTime.now] will be used.
   final DateTime? previewTime;
 
+  /// Whether to move the app bar for saving and loading to the bottom of the
+  /// screen.
   final bool bottomAppBars;
 
   @override

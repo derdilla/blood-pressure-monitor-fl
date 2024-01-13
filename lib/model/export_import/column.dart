@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:blood_pressure_app/model/blood_pressure/needle_pin.dart';
 import 'package:blood_pressure_app/model/blood_pressure/record.dart';
+import 'package:blood_pressure_app/model/export_import/export_configuration.dart';
 import 'package:blood_pressure_app/model/export_import/import_field_type.dart';
 import 'package:blood_pressure_app/model/export_import/record_formatter.dart';
 import 'package:flutter/material.dart';
@@ -69,7 +70,7 @@ class NativeColumn extends ExportColumn {
     static final NativeColumn needlePin = NativeColumn._create(
       'needlePin',
       RowDataFieldType.needlePin,
-      (record) => jsonEncode(record.needlePin?.toJson()),
+      (record) => jsonEncode(record.needlePin?.toMap()),
       (pattern) {
         final json = jsonDecode(pattern);
         if (json is! Map<String, dynamic>) return null;
@@ -267,6 +268,8 @@ class UserColumn extends ExportColumn {
   RowDataFieldType? get restoreAbleType => formatter.restoreAbleType;
 }
 
+/// A measurement formatters that converts the timestamp to a string using ICU
+/// patterns.
 class TimeColumn extends ExportColumn {
   /// Create a formatter that converts between [String]s and [DateTime]s
   /// through a format pattern.

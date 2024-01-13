@@ -7,12 +7,13 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 /// Class for storing the current interval, as it is needed in start page, statistics and export.
 class IntervallStorage extends ChangeNotifier {
-
+  /// Create a instance from a map created by [toMap].
   factory IntervallStorage.fromMap(Map<String, dynamic> map) => IntervallStorage(
     stepSize: TimeStep.deserialize(map['stepSize']),
     range: ConvertUtil.parseRange(map['start'], map['end']),
   );
 
+  /// Create a instance from a [String] created by [toJson].
   factory IntervallStorage.fromJson(String json) {
     try {
       return IntervallStorage.fromMap(jsonDecode(json));
@@ -20,19 +21,25 @@ class IntervallStorage extends ChangeNotifier {
       return IntervallStorage();
     }
   }
-  IntervallStorage({TimeStep? stepSize, DateTimeRange? range}) {
-    _stepSize = stepSize ?? TimeStep.last7Days;
+
+  /// Create a storage to interact with a display intervall.
+  IntervallStorage({TimeStep? stepSize, DateTimeRange? range}) :
+    _stepSize = stepSize ?? TimeStep.last7Days {
     _currentRange = range ?? _getMostRecentDisplayIntervall();
   }
-  late TimeStep _stepSize;
+
+  TimeStep _stepSize;
+
   late DateTimeRange _currentRange;
 
+  /// Serialize the object to a restoreable map.
   Map<String, dynamic> toMap() => <String, dynamic>{
     'stepSize': stepSize.serialize(),
     'start': currentRange.start.millisecondsSinceEpoch,
     'end': currentRange.end.millisecondsSinceEpoch,
   };
 
+  /// Serialize the object to a restoreable string.
   String toJson() => jsonEncode(toMap());
 
   /// The stepSize gets set through the changeStepSize method.
@@ -155,6 +162,34 @@ enum TimeStep {
   last30Days,
   custom;
 
+  /// Recreate a TimeStep from a number created with [TimeStep.serialize].
+  factory TimeStep.deserialize(value) {
+    final int? intValue = ConvertUtil.parseInt(value);
+    if (intValue == null) return TimeStep.last7Days;
+
+    switch (intValue) {
+      case 0:
+        return TimeStep.day;
+      case 1:
+        return TimeStep.month;
+      case 2:
+        return TimeStep.year;
+      case 3:
+        return TimeStep.lifetime;
+      case 4:
+        return TimeStep.week;
+      case 5:
+        return TimeStep.last7Days;
+      case 6:
+        return TimeStep.last30Days;
+      case 7:
+        return TimeStep.custom;
+      default:
+        assert(false);
+        return TimeStep.last7Days;
+    }
+  }
+
   static const options = [TimeStep.day, TimeStep.week, TimeStep.month, TimeStep.year, TimeStep.lifetime, TimeStep.last7Days, TimeStep.last30Days, TimeStep.custom];
 
   String getName(AppLocalizations localizations) {
@@ -196,33 +231,6 @@ enum TimeStep {
         return 6;
       case TimeStep.custom:
         return 7;
-    }
-  }
-
-  factory TimeStep.deserialize(value) {
-    final int? intValue = ConvertUtil.parseInt(value);
-    if (intValue == null) return TimeStep.last7Days;
-
-    switch (intValue) {
-      case 0:
-        return TimeStep.day;
-      case 1:
-        return TimeStep.month;
-      case 2:
-        return TimeStep.year;
-      case 3:
-        return TimeStep.lifetime;
-      case 4:
-        return TimeStep.week;
-      case 5:
-        return TimeStep.last7Days;
-      case 6:
-        return TimeStep.last30Days;
-      case 7:
-        return TimeStep.custom;
-      default:
-        assert(false);
-        return TimeStep.last7Days;
     }
   }
 }

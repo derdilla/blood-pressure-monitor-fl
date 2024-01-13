@@ -9,12 +9,15 @@ import 'package:sqflite/sqflite.dart';
 
 /// Class for loading data from the database.
 ///
-/// The user of this class needs to pay attention to dispose all old instances of objects created by the instance
-/// methods in order to ensure there are no concurrent writes to the database. Having multiple instances will cause data
+/// The user of this class needs to pay attention to dispose all old instances
+/// of objects created by the instance methods in order to ensure there are no
+/// concurrent writes to the database. Having multiple instances will cause data
 /// loss because states are not synced again after one changes.
 ///
-/// The load... methods have to schedule a initial save to db in case an migration / update of fields occurred.
+/// The load... methods have to schedule a initial save to db in case an
+/// migration / update of fields occurred.
 class ConfigDao {
+  /// Create a serializer to initialize data from a database.
   ConfigDao(this._configDB);
 
   final ConfigDB _configDB;
@@ -22,8 +25,9 @@ class ConfigDao {
   final Map<int, Settings> _settingsInstances = {};
   /// Loads the profiles [Settings] object from the database.
   ///
-  /// If any errors occur or the object is not present, a default one will be created. Changes in the object
-  /// will save to the database automatically (a listener gets attached).
+  /// If any errors occur or the object is not present, a default one will be
+  /// created. Changes in the object will save to the database automatically (a
+  /// listener gets attached).
   ///
   /// Changes to the database will not propagate to the object.
   Future<Settings> loadSettings(int profileID) async {

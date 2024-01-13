@@ -19,6 +19,7 @@ class ActiveExportColumnConfiguration extends ChangeNotifier {
       _activePreset = activePreset ?? ExportImportPreset.bloodPressureApp,
       _userSelectedColumns = userSelectedColumnIds ?? [];
 
+  /// Create a instance from a [String] created by [toJson].
   factory ActiveExportColumnConfiguration.fromJson(String jsonString) {
     try {
       final json = jsonDecode(jsonString);
@@ -32,6 +33,7 @@ class ActiveExportColumnConfiguration extends ChangeNotifier {
 
   }
 
+  /// Serialize the object to a restoreable string.
   String toJson() => jsonEncode({
     'columns': _userSelectedColumns,
     'preset': _activePreset.encode(),
@@ -43,7 +45,10 @@ class ActiveExportColumnConfiguration extends ChangeNotifier {
   final List<String> _userSelectedColumns;
 
   ExportImportPreset _activePreset;
+
+  /// The current selection on what set of values will be exported.
   ExportImportPreset get activePreset => _activePreset;
+
   set activePreset(ExportImportPreset value) {
     _activePreset = value;
     notifyListeners();
@@ -124,8 +129,10 @@ enum ExportImportPreset {
   /// Includes formatted time, sys, dia and pulse.
   bloodPressureAppPdf,
 
+  /// Preset for exporting data to the myHeart app.
   myHeart;
 
+  /// Selection of a displayable string from [localizations].
   String localize(AppLocalizations localizations) => switch (this) {
     ExportImportPreset.none => localizations.custom,
     ExportImportPreset.bloodPressureApp => localizations.default_,
@@ -133,6 +140,7 @@ enum ExportImportPreset {
     ExportImportPreset.myHeart => '"My Heart" export'
   };
 
+  /// Turn the value into a [decode]able integer for serialization purposes.
   int encode() => switch (this) {
     ExportImportPreset.none => 0,
     ExportImportPreset.bloodPressureApp => 1,
@@ -140,7 +148,8 @@ enum ExportImportPreset {
     ExportImportPreset.bloodPressureAppPdf => 3,
   };
 
-  static ExportImportPreset? decode(e) => switch(e) {
+  /// Create a enum value form a number returned by [encode].
+  static ExportImportPreset? decode(Object? e) => switch(e) {
       0 => ExportImportPreset.none,
       1 => ExportImportPreset.bloodPressureApp,
       2 => ExportImportPreset.myHeart,

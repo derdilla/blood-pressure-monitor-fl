@@ -7,11 +7,19 @@ import 'package:blood_pressure_app/model/storage/intervall_store.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-/// Shorthand class for getting the blood pressure values
+/// Shorthand class for getting the blood pressure values.
 class BloodPressureBuilder extends StatelessWidget {
-  const BloodPressureBuilder({required this.onData, required this.rangeType, super.key});
+  /// Create a loader for the measurements in the current range.
+  const BloodPressureBuilder({
+    super.key,
+    required this.onData,
+    required this.rangeType,
+  });
 
+  /// The build strategy once the measurement are loaded.
   final Widget Function(BuildContext context, UnmodifiableListView<BloodPressureRecord> records) onData;
+
+  /// Which measurements to load.
   final IntervallStoreManagerLocation rangeType;
   
   @override
