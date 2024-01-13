@@ -8,6 +8,7 @@ App release checklist
 - [ ] update version in `pubspec.yaml` and `android/app/build.gradle`
 - [ ] verify no tests fail
 - [ ] `flutter clean`
+- [ ] `flutter pub upgrade`
 - [ ] compile apk `flutter build apk --release --flavor github --obfuscate --split-debug-info=./build/debug-info`
 - [ ] compile play-store `flutter build appbundle --release --flavor github --obfuscate --split-debug-info=./build/debug-info`
 - [ ] obtain Playstore debug symbols by running `7z a debug-info.zip ./lib/arm64-v8a/ ./lib/armeabi-v7a/ ./lib/x86_64/
