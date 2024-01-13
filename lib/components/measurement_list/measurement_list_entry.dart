@@ -39,7 +39,9 @@ class MeasurementListRow extends StatelessWidget {
                 onPressed: () async {
                   final model = Provider.of<BloodPressureModel>(context, listen: false);
                   final entry = await showAddEntryDialoge(context,
-                      Provider.of<Settings>(context, listen: false),);
+                    Provider.of<Settings>(context, listen: false),
+                    record,
+                  );
                   if (entry?.$1 != null) {
                     if (context.mounted) {
                       model.addAndExport(context, entry!.$1!);
