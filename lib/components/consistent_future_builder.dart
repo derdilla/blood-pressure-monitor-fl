@@ -85,8 +85,11 @@ class _ConsistentFutureBuilderState<T>
       // Might get called before localizations initialize.
       final localizations = AppLocalizations.of(context);
       if (snapshot.hasError) {
-        return Text(localizations?.error(snapshot.error.toString())
-            ?? snapshot.error.toString(),);
+        return Directionality(
+          textDirection: TextDirection.ltr,
+          child: Text(localizations?.error(snapshot.error.toString())
+              ?? snapshot.error.toString(),),
+        );
       }
       switch (snapshot.connectionState) {
         case ConnectionState.none:
