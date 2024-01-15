@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 
-/// Selects the correct language name for a specific language code.
-///
-/// Does not account for dialects.
+/// Selects the correct display name for a specific language code.
 String getDisplayLanguage(Locale l) => switch(l.toLanguageTag()) {
   'en' => 'English',
   'en-US' => 'English (US)',
