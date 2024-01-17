@@ -23,7 +23,7 @@ class Medicine {
     required this.designation,
     required this.color,
     required this.defaultDosis,
-    required this.hidden,
+    this.hidden = false,
   });
 
   /// Serialize the object to a restoreable map.

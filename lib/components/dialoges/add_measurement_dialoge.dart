@@ -66,7 +66,9 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
   /// Last [FormState.save]d note.
   String? notes;
   
-  /// Index of the selected medicine in `widget.settings.medications`.
+  /// Index of the selected medicine in non hidden medications.
+  ///
+  /// Non hidden medications are obtained at the start of the build method.
   int? medicineId;
 
   /// Whether to show the medication dosis input
@@ -210,6 +212,7 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
 
   @override
   Widget build(BuildContext context) {
+    final medications = widget.settings.medications.where((e) => !e.hidden);
     final localizations = AppLocalizations.of(context)!;
     return FullscreenDialoge(
       onActionButtonPressed: () {
@@ -221,7 +224,7 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
               && medicineId != null) {
             intake = MedicineIntake(
               timestamp: time,
-              medicine: widget.settings.medications
+              medicine: medications
                   .where((e) => e.id == medicineId).first,
               dosis: medicineDosis!,
             );
@@ -309,7 +312,7 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
                 initialColor: needlePin?.color ?? Colors.transparent,
                 shape: buildShapeBorder(needlePin?.color),
               ),
-              if (widget.settings.medications.isNotEmpty && widget.initialRecord == null)
+              if (medications.isNotEmpty && widget.initialRecord == null)
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 16),
                   child: Row(
@@ -317,10 +320,10 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
                       Expanded(
                         child: DropdownButtonFormField<Medicine?>(
                           isExpanded: true,
-                          value: widget.settings.medications
+                          value: medications
                               .where((e) => e.id == medicineId).firstOrNull,
                           items: [
-                            for (final e in widget.settings.medications)
+                            for (final e in medications)
                               DropdownMenuItem(
                                 value: e,
                                 child: Text(e.designation),

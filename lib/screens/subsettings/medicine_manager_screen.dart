@@ -5,7 +5,11 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 
 /// Screen to view and edit medications saved in [Settings].
+///
+/// This screen allows adding and removing medication but not modifying them in
+/// order to keep the code simple and maintainable.
 class MedicineManagerScreen extends StatelessWidget {
+  /// Create a screen to manage medications in settings.
   const MedicineManagerScreen({super.key});
 
   @override
@@ -17,7 +21,8 @@ class MedicineManagerScreen extends StatelessWidget {
       ),
       body: Center(child: Consumer<Settings>(
           builder: (context, settings, child) {
-            final medications = settings.medications;
+            final medications = settings.medications.where((e) => !e.hidden)
+                .toList();
             return ListView.builder(
                 itemCount: medications.length + 1,
                 itemBuilder: (context, i) {
@@ -26,20 +31,22 @@ class MedicineManagerScreen extends StatelessWidget {
                       leading: const Icon(Icons.add),
                       title: Text(localizations.addMedication),
                       onTap: () async {
-                        final medicine = await showAddMedicineDialoge(context, settings);
+                        final medicine = await showAddMedicineDialoge(context,
+                            settings,);
                         if (medicine != null) settings.addMedication(medicine);
                       },
                     );
                   }
                   return ListTile(
-                    leading: medications[i].color == Colors.transparent ? null : Container(
-                      width: 40.0,
-                      height: 40.0,
-                      decoration: BoxDecoration(
-                        color: medications[i].color,
-                        shape: BoxShape.circle,
+                    leading: medications[i].color == Colors.transparent ? null
+                      : Container(
+                        width: 40.0,
+                        height: 40.0,
+                        decoration: BoxDecoration(
+                          color: medications[i].color,
+                          shape: BoxShape.circle,
+                        ),
                       ),
-                    ),
                     title: Text(medications[i].designation),
                     subtitle: Text('${localizations.defaultDosis}: '
                         '${medications[i].defaultDosis}'),

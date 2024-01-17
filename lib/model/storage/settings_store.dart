@@ -307,7 +307,8 @@ class Settings extends ChangeNotifier {
   final List<Medicine> _medications = [];
   /// All medications ever added.
   ///
-  /// This includes medications that got hidden.
+  /// This includes medications that got hidden. To obtain medications for a
+  /// selection, do `settings.medications.where((e) => !e.hidden)`.
   UnmodifiableListView<Medicine> get medications => 
       UnmodifiableListView(_medications);
 
@@ -336,7 +337,7 @@ class Settings extends ChangeNotifier {
 // When adding fields notice the checklist at the top.
 }
 
-extension _Serialization on ThemeMode {
+extension Serialization on ThemeMode {
   /// Turns enum into a restoreable integer.
   int serialize() {
     switch(this) {
