@@ -22,7 +22,7 @@ class HorizontalGraphLine {
   /// Usually on the same scale as [BloodPressureRecord]
   int height;
 
-  /// Serialize the object to a restoreable string.
+  /// Serialize the object to a restoreable map.
   Map<String, dynamic> toJson() => {
     'color': color.value,
     'height': height,
