@@ -43,7 +43,7 @@ void main() {
       expect(() => MedicineIntake.deserialize(
           intake.serialize(),
           [mockMedicine()],),
-          throwsStateError,);
+          throwsArgumentError,);
     });
   });
 }
