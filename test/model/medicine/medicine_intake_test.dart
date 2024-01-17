@@ -8,14 +8,14 @@ import 'medicine_test.dart';
 void main() {
   group('MedicineIntake', () {
     test('should determine equality', () {
-      const med = Medicine(1, designation: 'designation', color: Colors.red, defaultDosis: 123);
+      final med = Medicine(1, designation: 'designation', color: Colors.red, defaultDosis: 123);
       final int1 = MedicineIntake(medicine: med, dosis: 10, timestamp: DateTime.fromMillisecondsSinceEpoch(123));
       final int2 = MedicineIntake(medicine: med, dosis: 10, timestamp: DateTime.fromMillisecondsSinceEpoch(123));
       expect(int1, int2);
     });
     test('should determine inequality', () {
-      const med1 = Medicine(1, designation: 'designation', color: Colors.red, defaultDosis: 123);
-      const med2 = Medicine(2, designation: 'designation', color: Colors.red, defaultDosis: 123);
+      final med1 = Medicine(1, designation: 'designation', color: Colors.red, defaultDosis: 123);
+      final med2 = Medicine(2, designation: 'designation', color: Colors.red, defaultDosis: 123);
       final int1 = MedicineIntake(medicine: med1, dosis: 10, timestamp: DateTime.fromMillisecondsSinceEpoch(123));
       final int2 = MedicineIntake(medicine: med2, dosis: 10, timestamp: DateTime.fromMillisecondsSinceEpoch(123));
       expect(int1, isNot(int2));
