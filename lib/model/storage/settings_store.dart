@@ -6,11 +6,14 @@ import 'package:blood_pressure_app/model/horizontal_graph_line.dart';
 import 'package:blood_pressure_app/model/storage/convert_util.dart';
 import 'package:flutter/material.dart';
 
-/// Stores settings that are directly controllable by the user through the settings screen.
+/// Stores settings that are directly controllable by the user through the
+/// settings screen.
 ///
-/// This class should not be used to save persistent state that the user doesn't know about.
+/// This class should not be used to save persistent state of individual app
+/// components and screens.
 ///
-/// The [storage] library comment has more information on the architecture for adding persistent fields.
+/// The `storage.dart` library comment has more information on the architecture
+/// for adding persistent fields.
 class Settings extends ChangeNotifier {
   /// Creates a settings object with the default values.
   ///
@@ -67,6 +70,7 @@ class Settings extends ChangeNotifier {
     _language = language; // No check here, as null is the default as well.
   }
 
+  /// Create a instance from a map created by [toMap].
   factory Settings.fromMap(Map<String, dynamic> map) {
     final settingsObject = Settings(
       accentColor: ConvertUtil.parseColor(map['accentColor']),
@@ -104,6 +108,7 @@ class Settings extends ChangeNotifier {
     return settingsObject;
   }
 
+  /// Create a instance from a [String] created by [toJson].
   factory Settings.fromJson(String json) {
     try {
       return Settings.fromMap(jsonDecode(json));
@@ -112,6 +117,7 @@ class Settings extends ChangeNotifier {
     }
   }
 
+  /// Serialize the object to a restoreable map.
   Map<String, dynamic> toMap() => <String, dynamic>{
       'accentColor': accentColor.value,
       'sysColor': sysColor.value,
@@ -139,6 +145,7 @@ class Settings extends ChangeNotifier {
       'highestMedIndex': highestMedIndex,
     };
 
+  /// Serialize the object to a restoreable string.
   String toJson() => jsonEncode(toMap());
 
   Locale? _language;
@@ -152,6 +159,7 @@ class Settings extends ChangeNotifier {
   }
 
   Color _accentColor = Colors.teal;
+  /// The primary theme color of the app.
   Color get accentColor => _accentColor;
   set accentColor(Color newColor) {
     _accentColor = newColor;
@@ -159,6 +167,7 @@ class Settings extends ChangeNotifier {
   }
 
   Color _sysColor = Colors.teal;
+  /// The color of the systolic line in graphs and list headlines.
   Color get sysColor => _sysColor;
   set sysColor(Color newColor) {
     _sysColor = newColor;
@@ -166,6 +175,7 @@ class Settings extends ChangeNotifier {
   }
 
   Color _diaColor = Colors.green;
+  /// The color of the diastolic line in graphs and list headlines.
   Color get diaColor => _diaColor;
   set diaColor(Color newColor) {
     _diaColor = newColor;
@@ -173,6 +183,7 @@ class Settings extends ChangeNotifier {
   }
 
   Color _pulColor = Colors.red;
+  /// The color of the pulse line in graphs and list headlines.
   Color get pulColor => _pulColor;
   set pulColor(Color newColor) {
     _pulColor = newColor;
@@ -180,6 +191,7 @@ class Settings extends ChangeNotifier {
   }
 
   List<HorizontalGraphLine> _horizontalGraphLines = [];
+  /// Lines that are drawn horizontally in the graph that indicate height.
   List<HorizontalGraphLine> get horizontalGraphLines => _horizontalGraphLines;
   // TODO: change so it is similar to medicine
   set horizontalGraphLines(List<HorizontalGraphLine> value) {
@@ -188,6 +200,7 @@ class Settings extends ChangeNotifier {
   }
 
   String _dateFormatString = 'yyyy-MM-dd HH:mm';
+  /// The time format to use when a human readable time is required.
   String get dateFormatString => _dateFormatString;
   set dateFormatString(String value) {
     _dateFormatString = value;
@@ -195,6 +208,9 @@ class Settings extends ChangeNotifier {
   }
 
   double _graphLineThickness = 3;
+  /// The width of value lines in the graph.
+  ///
+  /// Does not apply for all markers.
   double get graphLineThickness => _graphLineThickness;
   set graphLineThickness(double value) {
     _graphLineThickness = value;
@@ -202,7 +218,7 @@ class Settings extends ChangeNotifier {
   }
 
   int _animationSpeed = 150;
-  /// Time in which animations run. Higher = slower.
+  /// Time in which animations run. Higher => slower.
   ///
   /// Usually between 0 and 1000.
   int get animationSpeed => _animationSpeed;
@@ -212,6 +228,8 @@ class Settings extends ChangeNotifier {
   }
 
   int _sysWarn = 120;
+  /// The height from which to highlight the area below for the systolic line
+  /// in the graph.
   int get sysWarn => _sysWarn;
   set sysWarn(int value) {
     _sysWarn = value;
@@ -219,6 +237,8 @@ class Settings extends ChangeNotifier {
   }
 
   int _diaWarn = 80;
+  /// The height from which to highlight the area below for the diastolic line
+  /// in the graph.
   int get diaWarn => _diaWarn;
   set diaWarn(int value) {
     _diaWarn = value;
@@ -226,6 +246,9 @@ class Settings extends ChangeNotifier {
   }
 
   int _lastVersion = 0;
+  /// (META) The last version to which settings are upgraded.
+  ///
+  /// Gets to the latest version on app start, after upgrades have run.
   int get lastVersion => _lastVersion;
   set lastVersion(int value) {
     _lastVersion = value;
@@ -233,6 +256,7 @@ class Settings extends ChangeNotifier {
   }
 
   bool _allowManualTimeInput = true;
+  /// Whether to show the time editor on the add entry page.
   bool get allowManualTimeInput => _allowManualTimeInput;
   set allowManualTimeInput(bool value) {
     _allowManualTimeInput = value;
@@ -240,6 +264,8 @@ class Settings extends ChangeNotifier {
   }
 
   bool _confirmDeletion = true;
+  /// Whether to show a dialoge that requires confirmation before deleting
+  /// entries.
   bool get confirmDeletion => _confirmDeletion;
   set confirmDeletion(bool value) {
     _confirmDeletion = value;
@@ -247,6 +273,7 @@ class Settings extends ChangeNotifier {
   }
 
   ThemeMode _themeMode = ThemeMode.system;
+  /// What color theme the whole app should use.
   ThemeMode get themeMode => _themeMode;
   set themeMode(ThemeMode value) {
     _themeMode = value;
@@ -255,6 +282,7 @@ class Settings extends ChangeNotifier {
 
 
   bool _validateInputs = true;
+  /// Whether to run any validators on values inputted on add measurement page.
   bool get validateInputs => _validateInputs;
   set validateInputs(bool value) {
     _validateInputs = value;
@@ -262,6 +290,10 @@ class Settings extends ChangeNotifier {
   }
 
   bool _allowMissingValues = false;
+  /// Whether to allow not filling all fields on the add measurement page.
+  ///
+  /// When this is true [validateInputs] must be set to false in order for this
+  /// to take effect.
   bool get allowMissingValues => _allowMissingValues;
   set allowMissingValues(bool value) {
     _allowMissingValues = value;
@@ -269,6 +301,7 @@ class Settings extends ChangeNotifier {
   }
 
   bool _drawRegressionLines = false;
+  /// Whether to draw trend lines on the graph.
   bool get drawRegressionLines => _drawRegressionLines;
   set drawRegressionLines(bool value) {
     _drawRegressionLines = value;
@@ -276,6 +309,7 @@ class Settings extends ChangeNotifier {
   }
 
   bool _startWithAddMeasurementPage = false;
+  /// Whether to show the add measurement page on app launch.
   bool get startWithAddMeasurementPage => _startWithAddMeasurementPage;
   set startWithAddMeasurementPage(bool value) {
     _startWithAddMeasurementPage = value;
@@ -283,6 +317,7 @@ class Settings extends ChangeNotifier {
   }
 
   bool _useLegacyList = false;
+  /// Whether to use the compact list with swipe deletion.
   bool get useLegacyList => _useLegacyList;
   set useLegacyList(bool value) {
     _useLegacyList = value;
@@ -290,6 +325,7 @@ class Settings extends ChangeNotifier {
   }
 
   double _needlePinBarWidth = 5;
+  /// The width the color of measurements should have on the graph.
   double get needlePinBarWidth => _needlePinBarWidth;
   set needlePinBarWidth(double value) {
     _needlePinBarWidth = value;
@@ -305,16 +341,30 @@ class Settings extends ChangeNotifier {
   }
   
   final List<Medicine> _medications = [];
+  /// All medications ever added.
+  ///
+  /// This includes medications that got hidden. To obtain medications for a
+  /// selection, do `settings.medications.where((e) => !e.hidden)`.
   UnmodifiableListView<Medicine> get medications => 
       UnmodifiableListView(_medications);
+
+  /// Adds a medication to the end of the medication list.
   void addMedication(Medicine medication) {
     _medications.add(medication);
     _highestMedIndex += 1;
     notifyListeners();
   }
+
+  /// Marks a medication as deleted so it stops appearing in selections.
+  ///
+  /// Deleting the medication is not possible because this would invalidate all
+  /// entries that use it. In case the user forces medicine deletion in some way
+  /// intakes will be displayed with a deleted medicine text.
   void removeMedicationAt(int index) {
     assert(index >= 0 && index < _medications.length);
-    _medications.removeAt(index);
+    assert(!_medications[index].hidden, 'Removing a already hidden medication '
+        'indicates a bug.');
+    _medications[index].hidden = true;
     notifyListeners();
   }
 
@@ -325,7 +375,10 @@ class Settings extends ChangeNotifier {
 // When adding fields notice the checklist at the top.
 }
 
+/// Extension to add a serialize method that can be restored by
+/// [ConvertUtil.parseThemeMode].
 extension Serialization on ThemeMode {
+  /// Turns enum into a restoreable integer.
   int serialize() {
     switch(this) {
       case ThemeMode.system:
@@ -337,4 +390,3 @@ extension Serialization on ThemeMode {
     }
   }
 }
-

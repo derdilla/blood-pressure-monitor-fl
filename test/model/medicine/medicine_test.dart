@@ -5,17 +5,17 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   group('Medicine', () {
     test('should determine equality', () {
-      const med1 = Medicine(1, designation: 'designation', color: Colors.red, defaultDosis: 10);
-      const med2 = Medicine(1, designation: 'designation', color: Colors.red, defaultDosis: 10);
+      final med1 = Medicine(1, designation: 'designation', color: Colors.red, defaultDosis: 10);
+      final med2 = Medicine(1, designation: 'designation', color: Colors.red, defaultDosis: 10);
       expect(med1, med2);
     });
     test('should determine inequality', () {
-      const med1 = Medicine(1, designation: 'designation', color: Colors.red, defaultDosis: 10);
-      const med2 = Medicine(1, designation: 'designatio', color: Colors.red, defaultDosis: 10);
+      final med1 = Medicine(1, designation: 'designation', color: Colors.red, defaultDosis: 10);
+      final med2 = Medicine(1, designation: 'designatio', color: Colors.red, defaultDosis: 10);
       expect(med1, isNot(med2));
-      const med3 = Medicine(1, designation: 'designation', color: Colors.blue, defaultDosis: 10);
+      final med3 = Medicine(1, designation: 'designation', color: Colors.blue, defaultDosis: 10);
       expect(med1, isNot(med3));
-      const med4 = Medicine(1, designation: 'designation', color: Colors.red, defaultDosis: 11);
+      final med4 = Medicine(1, designation: 'designation', color: Colors.red, defaultDosis: 11);
       expect(med1, isNot(med4));
     });
     test('should restore after encoded to map', () {

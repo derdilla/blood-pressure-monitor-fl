@@ -66,7 +66,9 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
   /// Last [FormState.save]d note.
   String? notes;
   
-  /// Index of the selected medicine in `widget.settings.medications`.
+  /// Index of the selected medicine in non hidden medications.
+  ///
+  /// Non hidden medications are obtained at the start of the build method.
   int? medicineId;
 
   /// Whether to show the medication dosis input
@@ -115,11 +117,11 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
     return false;
   }
 
-  Widget buildTimeInput(AppLocalizations localizations) =>
+  Widget _buildTimeInput(AppLocalizations localizations) =>
     ListTile(
       title: Text(DateFormat(widget.settings.dateFormatString).format(time)),
       trailing: const Icon(Icons.edit),
-      shape: buildShapeBorder(),
+      shape: _buildShapeBorder(),
       onTap: () async {
         final messenger = ScaffoldMessenger.of(context);
         var selectedTime = await showDateTimePicker(
@@ -146,7 +148,7 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
       },
     );
 
-  Widget buildValueInput(AppLocalizations localizations, {
+  Widget _buildValueInput(AppLocalizations localizations, {
     int? initialValue,
     String? labelText,
     void Function(String?)? onSaved,
@@ -198,10 +200,8 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
     );
   }
 
-  
-
   /// Build the border all fields have.
-  RoundedRectangleBorder buildShapeBorder([Color? color]) =>
+  RoundedRectangleBorder _buildShapeBorder([Color? color]) =>
       RoundedRectangleBorder(
     side: Theme.of(context).inputDecorationTheme.border?.borderSide
         ?? const BorderSide(width: 3),
@@ -210,6 +210,7 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
 
   @override
   Widget build(BuildContext context) {
+    final medications = widget.settings.medications.where((e) => !e.hidden);
     final localizations = AppLocalizations.of(context)!;
     return FullscreenDialoge(
       onActionButtonPressed: () {
@@ -221,7 +222,7 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
               && medicineId != null) {
             intake = MedicineIntake(
               timestamp: time,
-              medicine: widget.settings.medications
+              medicine: medications
                   .where((e) => e.id == medicineId).first,
               dosis: medicineDosis!,
             );
@@ -245,36 +246,42 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
             padding: const EdgeInsets.symmetric(horizontal: 8),
             children: [
               if (widget.settings.allowManualTimeInput)
-                buildTimeInput(localizations),
+                _buildTimeInput(localizations),
               const SizedBox(height: 16,),
               Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  buildValueInput(localizations,
+                  _buildValueInput(localizations,
                     focusNode: sysFocusNode,
                     labelText: localizations.sysLong,
                     controller: sysController,
-                    onSaved: (value) => setState(() => systolic = int.tryParse(value ?? '')),
+                    onSaved: (value) =>
+                        setState(() => systolic = int.tryParse(value ?? '')),
                   ),
                   const SizedBox(width: 16,),
-                  buildValueInput(localizations,
+                  _buildValueInput(localizations,
                     labelText: localizations.diaLong,
                     initialValue: widget.initialRecord?.diastolic,
-                    onSaved: (value) => setState(() => diastolic = int.tryParse(value ?? '')),
+                    onSaved: (value) =>
+                        setState(() => diastolic = int.tryParse(value ?? '')),
                     focusNode: diaFocusNode,
                     validator: (value) {
-                      if (widget.settings.validateInputs && (int.tryParse(value ?? '') ?? 0) >= (int.tryParse(sysController.text) ?? 1)) {
+                      if (widget.settings.validateInputs
+                          && (int.tryParse(value ?? '') ?? 0)
+                              >= (int.tryParse(sysController.text) ?? 1)
+                      ) {
                         return AppLocalizations.of(context)?.errDiaGtSys;
                       }
                       return null;
                     },
                   ),
                   const SizedBox(width: 16,),
-                  buildValueInput(localizations,
+                  _buildValueInput(localizations,
                     labelText: localizations.pulLong,
                     initialValue: widget.initialRecord?.pulse,
                     focusNode: pulFocusNode,
-                    onSaved: (value) => setState(() => pulse = int.tryParse(value ?? '')),
+                    onSaved: (value) =>
+                        setState(() => pulse = int.tryParse(value ?? '')),
                   ),
                 ],
               ),
@@ -303,13 +310,14 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
                 title: Text(localizations.color),
                 onMainColorChanged: (Color value) {
                   setState(() {
-                    needlePin = (value == Colors.transparent) ? null : MeasurementNeedlePin(value);
+                    needlePin = (value == Colors.transparent) ? null
+                        : MeasurementNeedlePin(value);
                   });
                 },
                 initialColor: needlePin?.color ?? Colors.transparent,
-                shape: buildShapeBorder(needlePin?.color),
+                shape: _buildShapeBorder(needlePin?.color),
               ),
-              if (widget.settings.medications.isNotEmpty && widget.initialRecord == null)
+              if (medications.isNotEmpty && widget.initialRecord == null)
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 16),
                   child: Row(
@@ -317,10 +325,10 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
                       Expanded(
                         child: DropdownButtonFormField<Medicine?>(
                           isExpanded: true,
-                          value: widget.settings.medications
+                          value: medications
                               .where((e) => e.id == medicineId).firstOrNull,
                           items: [
-                            for (final e in widget.settings.medications)
+                            for (final e in medications)
                               DropdownMenuItem(
                                 value: e,
                                 child: Text(e.designation),
@@ -382,7 +390,7 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
   }
 }
 
-/// Shows a dialoge to input a blood pressure measurement.
+/// Shows a dialoge to input a blood pressure measurement or a medication.
 Future<(BloodPressureRecord?, MedicineIntake?)?> showAddEntryDialoge(
     BuildContext context,
     Settings settings,

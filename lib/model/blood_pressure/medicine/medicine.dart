@@ -12,16 +12,18 @@ class Medicine {
     designation: map['designation'],
     color: Color(map['color']),
     defaultDosis: map['defaultDosis'],
+    hidden: map.containsKey('hidden') ? map['hidden'] : false,
   );
 
   /// Create a instance from a [String] created by [toJson].
   factory Medicine.fromJson(String json) => Medicine.fromMap(jsonDecode(json));
 
   /// Create a new medicine.
-  const Medicine(this.id, {
+  Medicine(this.id, {
     required this.designation,
     required this.color,
     required this.defaultDosis,
+    this.hidden = false,
   });
 
   /// Serialize the object to a restoreable map.
@@ -30,6 +32,7 @@ class Medicine {
     'designation': designation,
     'color': color.value,
     'defaultDosis': defaultDosis,
+    'hidden': hidden,
   };
 
   /// Serialize the object to a restoreable string.
@@ -47,6 +50,12 @@ class Medicine {
   /// Default dosis used to autofill [MedicineIntake].
   final double? defaultDosis;
 
+  /// Indicates that this medicine should not be shown in selection menus.
+  ///
+  /// This is usually set when the user deletes the medicine in order to avoid
+  /// data inconsistencies with existing intakes that use this medicine.
+  bool hidden;
+
 
   @override
   bool operator ==(Object other) =>
@@ -56,11 +65,14 @@ class Medicine {
           id == other.id &&
           designation == other.designation &&
           color.value == other.color.value &&
-          defaultDosis == other.defaultDosis;
+          defaultDosis == other.defaultDosis &&
+          hidden == other.hidden;
 
   @override
-  int get hashCode => id.hashCode ^ designation.hashCode ^ color.hashCode ^ defaultDosis.hashCode;
+  int get hashCode => id.hashCode ^ designation.hashCode ^ color.hashCode
+      ^ defaultDosis.hashCode ^ hidden.hashCode;
 
   @override
-  String toString() => 'Medicine{id: $id, designation: $designation, color: $color, defaultDosis: $defaultDosis}';
+  String toString() => 'Medicine{id: $id, designation: $designation, '
+      'color: $color, defaultDosis: $defaultDosis, hidden: $hidden}';
 }

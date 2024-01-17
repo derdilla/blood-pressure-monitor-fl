@@ -24,7 +24,9 @@ import 'package:restart_app/restart_app.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+/// Primary settings page to manage basic settings and link to subsettings.
 class SettingsPage extends StatelessWidget {
+  /// Create a primary settings screen.
   const SettingsPage({super.key});
 
   @override
@@ -80,7 +82,7 @@ class SettingsPage extends StatelessWidget {
                 items: [
                   DropdownMenuItem(child: Text(localizations.system)),
                   for (final l in AppLocalizations.supportedLocales)
-                    DropdownMenuItem(value: l, child: Text(getDisplayLanguage(l) ?? l.languageCode)),
+                    DropdownMenuItem(value: l, child: Text(getDisplayLanguage(l))),
                 ],
                 onChanged: (Locale? value) {
                   settings.language = value;

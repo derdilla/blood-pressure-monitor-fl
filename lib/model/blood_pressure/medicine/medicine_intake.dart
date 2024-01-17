@@ -1,13 +1,30 @@
 
 import 'package:blood_pressure_app/model/blood_pressure/medicine/medicine.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 
 /// Instance of a medicine intake.
 class MedicineIntake implements Comparable<Object> {
   /// Create a intake from a String created by [serialize].
-  factory MedicineIntake.deserialize(String string, List<Medicine> availableMeds) {
+  ///
+  /// [availableMeds] must contain the
+  factory MedicineIntake.deserialize(
+    String string,
+    List<Medicine> availableMeds,
+  ) {
     final elements = string.split('\x00');
+    final storedMedicine = availableMeds
+        .where((e) => e.id == int.parse(elements[0]));
+    if (kDebugMode && storedMedicine.isEmpty) {
+      throw ArgumentError('Medicine of intake $string not found.');
+    }
     return MedicineIntake(
-      medicine: availableMeds.firstWhere((e) => e.id == int.parse(elements[0])),
+      medicine: storedMedicine.firstOrNull ?? Medicine(
+        int.parse(elements[0]),
+        designation: 'DELETED MEDICINE',
+        color: Colors.red,
+        defaultDosis: null,
+      ),
       timestamp: DateTime.fromMillisecondsSinceEpoch(int.parse(elements[1])),
       dosis: double.parse(elements[2]),
     );
