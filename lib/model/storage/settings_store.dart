@@ -9,8 +9,8 @@ import 'package:flutter/material.dart';
 /// Stores settings that are directly controllable by the user through the
 /// settings screen.
 ///
-/// This class should not be used to save persistent state that the user doesn't
-/// know about.
+/// This class should not be used to save persistent state of individual app
+/// components and screens.
 ///
 /// The `storage.dart` library comment has more information on the architecture
 /// for adding persistent fields.
@@ -362,6 +362,8 @@ class Settings extends ChangeNotifier {
   /// intakes will be displayed with a deleted medicine text.
   void removeMedicationAt(int index) {
     assert(index >= 0 && index < _medications.length);
+    assert(!_medications[index].hidden, 'Removing a already hidden medication '
+        'indicates a bug.');
     _medications[index].hidden = true;
     notifyListeners();
   }
