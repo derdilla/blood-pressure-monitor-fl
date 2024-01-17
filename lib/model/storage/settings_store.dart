@@ -305,16 +305,27 @@ class Settings extends ChangeNotifier {
   }
   
   final List<Medicine> _medications = [];
+  /// All medications ever added.
+  ///
+  /// This includes medications that got hidden.
   UnmodifiableListView<Medicine> get medications => 
       UnmodifiableListView(_medications);
+
+  /// Adds a medication to the end of the medication list.
   void addMedication(Medicine medication) {
     _medications.add(medication);
     _highestMedIndex += 1;
     notifyListeners();
   }
+
+  /// Marks a medication as deleted so it stops appearing in selections.
+  ///
+  /// Deleting the medication is not possible because this would invalidate all
+  /// entries that use it. In case the user forces medicine deletion in some way
+  /// intakes will be displayed with a deleted medicine text.
   void removeMedicationAt(int index) {
     assert(index >= 0 && index < _medications.length);
-    _medications.removeAt(index);
+    _medications[index].hidden = true;
     notifyListeners();
   }
 
@@ -325,7 +336,8 @@ class Settings extends ChangeNotifier {
 // When adding fields notice the checklist at the top.
 }
 
-extension Serialization on ThemeMode {
+extension _Serialization on ThemeMode {
+  /// Turns enum into a restoreable integer.
   int serialize() {
     switch(this) {
       case ThemeMode.system:
