@@ -1,5 +1,5 @@
+// TODO: test
 
-import 'package:blood_pressure_app/components/settings/settings_widgets.dart';
 import 'package:blood_pressure_app/components/statistics/blood_pressure_distribution.dart';
 import 'package:blood_pressure_app/model/blood_pressure_analyzer.dart';
 import 'package:blood_pressure_app/model/storage/intervall_store.dart';
@@ -12,9 +12,15 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 
 /// A page that shows statistics about stored blood pressure values.
-class StatisticsPage extends StatelessWidget {
-  const StatisticsPage({super.key});
+class StatisticsScreen extends StatefulWidget {
+  /// Create a screen to various display statistics.
+  const StatisticsScreen({super.key});
 
+  @override
+  State<StatisticsScreen> createState() => _StatisticsScreenState();
+}
+
+class _StatisticsScreenState extends State<StatisticsScreen> {
   @override
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
@@ -29,6 +35,7 @@ class StatisticsPage extends StatelessWidget {
             final analyzer = BloodPressureAnalyser(data.toList());
             return ListView(
               children: [
+                _buildSubTitle(localizations.statistics,),
                 ListTile(
                   title: Text(localizations.measurementCount),
                   trailing: Text(
@@ -43,61 +50,72 @@ class StatisticsPage extends StatelessWidget {
                     style: Theme.of(context).textTheme.headlineSmall,
                   ),
                 ),
-                SizedBox(
+                _buildSubTitle(localizations.valueDistribution,),
+                Container(
                   height: 260,
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
                   child: BloodPressureDistribution(
                     records: data,
                     settings: settings,
                   ),
                 ),
-                TitledColumn( // TODO: rewrite this one, maybe another tab bar (layout wise)
-                  title: Text(AppLocalizations.of(context)!.timeResolvedMetrics),
-                  children: [() {
-                    final data = analyzer.allAvgsRelativeToDaytime;
-                    const opacity = 0.5;
-                    return SizedBox(
-                      width: 500,
-                      height: 500,
-                      child: RadarChart(
-                        RadarChartData(
-                          radarShape: RadarShape.circle,
-                          radarBorderData: const BorderSide(color: Colors.transparent),
-                          gridBorderData: BorderSide(color: Theme.of(context).dividerColor, width: 2),
-                          tickBorderData: BorderSide(color: Theme.of(context).dividerColor, width: 2),
-                          ticksTextStyle: const TextStyle(color: Colors.transparent),
-                          tickCount: 5,
-                          titleTextStyle: const TextStyle(fontSize: 25),
-                          getTitle: (pos, value) {
-                            if (pos % 2 == 0) {
-                              return RadarChartTitle(text: '$pos', positionPercentageOffset: 0.05);
-                            }
-                            return const RadarChartTitle(text: '');
-                          },
-                          dataSets: [
-                            RadarDataSet(
-                              dataEntries: _intListToRadarEntry(data[0]),
-                              borderColor: settings.diaColor,
-                              fillColor: settings.diaColor.withOpacity(opacity),
-                              entryRadius: 0,
-                              borderWidth: settings.graphLineThickness,),
-                            RadarDataSet(
-                              dataEntries: _intListToRadarEntry(data[1]),
-                              borderColor: settings.sysColor,
-                              fillColor: settings.sysColor.withOpacity(opacity),
-                              entryRadius: 0,
-                              borderWidth: settings.graphLineThickness,),
-                            RadarDataSet(
-                              dataEntries: _intListToRadarEntry(data[2]),
-                              borderColor: settings.pulColor,
-                              fillColor: settings.pulColor.withOpacity(opacity),
-                              entryRadius: 0,
-                              borderWidth: settings.graphLineThickness,),
-                          ],
+                _buildSubTitle(localizations.timeResolvedMetrics),
+                () {
+                  final data = analyzer.allAvgsRelativeToDaytime;
+                  const opacity = 0.5;
+                  final helperLinesStyle = BorderSide(
+                    color: Theme.of(context).dividerColor,
+                    width: 2,
+                  );
+                  return Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                    height: MediaQuery.of(context).size.width,
+                    child: RadarChart(
+                      RadarChartData(
+                        radarShape: RadarShape.circle,
+                        gridBorderData: helperLinesStyle,
+                        tickBorderData: helperLinesStyle,
+                        ticksTextStyle: const TextStyle(
+                          color: Colors.transparent,
                         ),
+                        tickCount: 5,
+                        titleTextStyle: const TextStyle(fontSize: 25),
+                        getTitle: (pos, value) {
+                          if (pos % 2 == 0) {
+                            return RadarChartTitle(
+                              text: '$pos',
+                              positionPercentageOffset: 0.05,
+                            );
+                          }
+                          return const RadarChartTitle(text: '');
+                        },
+                        dataSets: [
+                          RadarDataSet(
+                            dataEntries: _intListToRadarEntry(data[0]),
+                            borderColor: settings.diaColor,
+                            fillColor: settings.diaColor.withOpacity(opacity),
+                            entryRadius: 0,
+                            borderWidth: settings.graphLineThickness,
+                          ),
+                          RadarDataSet(
+                            dataEntries: _intListToRadarEntry(data[1]),
+                            borderColor: settings.sysColor,
+                            fillColor: settings.sysColor.withOpacity(opacity),
+                            entryRadius: 0,
+                            borderWidth: settings.graphLineThickness,
+                          ),
+                          RadarDataSet(
+                            dataEntries: _intListToRadarEntry(data[2]),
+                            borderColor: settings.pulColor,
+                            fillColor: settings.pulColor.withOpacity(opacity),
+                            entryRadius: 0,
+                            borderWidth: settings.graphLineThickness,
+                          ),
+                        ],
                       ),
-                    );
-                  }()],
-                ),
+                    ),
+                  );
+                }(),
               ],
             );
           },
@@ -118,4 +136,12 @@ class StatisticsPage extends StatelessWidget {
     }
     return res;
   }
+
+  Widget _buildSubTitle(String text) => ListTile(
+    contentPadding: EdgeInsets.zero,
+    title: Text(
+      text,
+      style: Theme.of(context).textTheme.titleLarge!,
+    ),
+  );
 }

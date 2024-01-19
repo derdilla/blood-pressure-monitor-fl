@@ -84,7 +84,7 @@ Future<void> _initStatsPage(WidgetTester widgetTester, List<BloodPressureRecord>
       child: Localizations(
         delegates: AppLocalizations.localizationsDelegates,
         locale: const Locale('en'),
-        child: const StatisticsPage(),
+        child: const StatisticsScreen(),
       ),
   ),);
   await widgetTester.pumpAndSettle();
