@@ -52,7 +52,7 @@ class _BloodPressureDistributionState extends State<BloodPressureDistribution>
       children: [
         DecoratedBox(
           decoration: BoxDecoration(
-            color: Theme.of(context).primaryColor,
+            color: Theme.of(context).cardColor,
             borderRadius: BorderRadius.circular(50),
           ),
           child: TabBar.secondary(

@@ -3,6 +3,8 @@ import 'dart:math';
 import 'package:blood_pressure_app/model/blood_pressure/record.dart';
 import 'package:collection/collection.dart';
 
+// TODO: consider removing avg methods
+
 /// Analysis utils for a list of blood pressure records.
 class BloodPressureAnalyser {
   /// Create a analyzer for a list of records.

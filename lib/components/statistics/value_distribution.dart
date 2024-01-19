@@ -8,9 +8,9 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 ///
 /// Shows in form of a graph that has centered columns of different height and
 /// labels that indicate min, max and average.
-class LinearBarDistribution extends StatelessWidget {
+class ValueDistribution extends StatelessWidget {
   /// Create a statistic to show how often values occur.
-  const LinearBarDistribution({
+  const ValueDistribution({
     super.key,
     required this.values,
     required this.color,
@@ -49,7 +49,7 @@ class LinearBarDistribution extends StatelessWidget {
     assert(distribution[distribution.keys.max]! > 0);
     assert(distribution[distribution.keys.min]! > 0);
     return CustomPaint(
-      painter: _LinearBarDistributionPainter(
+      painter: _ValueDistributionPainter(
         distribution,
         AppLocalizations.of(context)!,
         color,
@@ -60,9 +60,9 @@ class LinearBarDistribution extends StatelessWidget {
 }
 
 /// Painter of a horizontal array vertical bars.
-class _LinearBarDistributionPainter extends CustomPainter {
+class _ValueDistributionPainter extends CustomPainter {
   /// Painter of a horizontal array vertical bars.
-  _LinearBarDistributionPainter(
+  _ValueDistributionPainter(
     this.distribution,
     this.localizations,
     this.barColor,
@@ -134,7 +134,7 @@ class _LinearBarDistributionPainter extends CustomPainter {
       final style = TextStyle(
         color: _kDecorationColor,
         backgroundColor: Colors.black.withOpacity(0.5),
-        fontSize: 12,
+        fontSize: 16,
       );
       final textSpan = TextSpan(
         text: text,
@@ -167,7 +167,9 @@ class _LinearBarDistributionPainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(covariant _LinearBarDistributionPainter oldDelegate) =>
+  bool shouldRepaint(covariant _ValueDistributionPainter oldDelegate) =>
       distribution == oldDelegate.distribution;
   
 }
+
+ // TODO: Consider adding semantics
