@@ -1,15 +1,36 @@
+// TODO: test
+
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+/// A statistic that shows how often values occur in a list of values.
+///
+/// Shows in form of a graph that has centered columns of different height and
+/// labels that indicate min, max and average.
 class LinearBarDistribution extends StatelessWidget {
+  /// Create a statistic to show how often values occur.
   const LinearBarDistribution({
     super.key,
     required this.values,
+    required this.color,
   });
 
-  /// Raw list of all values to extract the distribution from.
+  /// Raw list of all values to calculate the distribution from.
+  ///
+  /// Sample distribution calculation:
+  /// ```
+  /// [1, 9, 9, 9, 3, 4, 4] => {
+  ///   1: 1,
+  ///   9: 3,
+  ///   3: 1,
+  ///   4: 2
+  /// }
+  /// ```
   final Iterable<int> values;
+
+  /// Color of the data bars on the graph.
+  final Color color;
 
   @override
   Widget build(BuildContext context) {
@@ -21,10 +42,17 @@ class LinearBarDistribution extends StatelessWidget {
         distribution[v] = 1.0;
       }
     }
+    // Fill values between
+    for (int x = distribution.keys.min + 1; x < distribution.keys.max -1; x++) {
+      if (!distribution.containsKey(x)) distribution[x] = 0;
+    }
+    assert(distribution[distribution.keys.max]! > 0);
+    assert(distribution[distribution.keys.min]! > 0);
     return CustomPaint(
       painter: _LinearBarDistributionPainter(
         distribution,
         AppLocalizations.of(context)!,
+        color,
       ),
     );
   }
@@ -33,7 +61,12 @@ class LinearBarDistribution extends StatelessWidget {
 
 /// Painter of a horizontal array vertical bars.
 class _LinearBarDistributionPainter extends CustomPainter {
-  _LinearBarDistributionPainter(this.distribution, this.localizations);
+  /// Painter of a horizontal array vertical bars.
+  _LinearBarDistributionPainter(
+    this.distribution,
+    this.localizations,
+    this.barColor,
+  );
 
   /// Positions and height of bars that make up the distribution.
   ///
@@ -42,6 +75,9 @@ class _LinearBarDistributionPainter extends CustomPainter {
   final Map<int, double> distribution;
 
   final AppLocalizations localizations;
+
+  /// Color of the data bars.
+  final Color barColor;
 
   static const double _kDefaultBarGapWidth = 5.0;
   static const Color _kDecorationColor = Colors.white70;
@@ -57,7 +93,7 @@ class _LinearBarDistributionPainter extends CustomPainter {
         / distribution.values.max;
 
     final barPainter = Paint()
-      ..color = const Color.fromARGB(255, 0xb0, 0x18, 0x22)
+      ..color = barColor
       ..style = PaintingStyle.stroke
       ..strokeWidth = barWidth
       ..strokeCap = StrokeCap.round
@@ -97,7 +133,7 @@ class _LinearBarDistributionPainter extends CustomPainter {
     void drawLabel(String text, Alignment alignment) {
       final style = TextStyle(
         color: _kDecorationColor,
-        backgroundColor: Colors.black.withOpacity(0.3),
+        backgroundColor: Colors.black.withOpacity(0.5),
         fontSize: 12,
       );
       final textSpan = TextSpan(
@@ -128,10 +164,6 @@ class _LinearBarDistributionPainter extends CustomPainter {
         Alignment.center,);
     drawLabel(localizations.maxOf(distribution.keys.max.toString()),
         Alignment.centerRight,);
-
-
-    
-    // TODO: implement decorations
   }
 
   @override
