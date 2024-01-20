@@ -8,6 +8,8 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 ///
 /// Shows in form of a graph that has centered columns of different height and
 /// labels that indicate min, max and average.
+///
+/// The widgets takes a width of at least 180 units and a height of at least 50.
 class ValueDistribution extends StatelessWidget {
   /// Create a statistic to show how often values occur.
   const ValueDistribution({
@@ -34,6 +36,13 @@ class ValueDistribution extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final localizations = AppLocalizations.of(context)!;
+    if (values.isEmpty) {
+      return Center(
+        child: Text(localizations.errNoData),
+      );
+    }
+
     final distribution = <int, double>{};
     for (final v in values) {
       if(distribution.containsKey(v)) {
@@ -48,11 +57,17 @@ class ValueDistribution extends StatelessWidget {
     }
     assert(distribution[distribution.keys.max]! > 0);
     assert(distribution[distribution.keys.min]! > 0);
-    return CustomPaint(
-      painter: _ValueDistributionPainter(
-        distribution,
-        AppLocalizations.of(context)!,
-        color,
+    return Container(
+      constraints: const BoxConstraints(
+        minWidth: 180,
+        minHeight: 50
+      ),
+      child: CustomPaint(
+        painter: _ValueDistributionPainter(
+          distribution,
+          localizations,
+          color,
+        ),
       ),
     );
   }
@@ -147,12 +162,12 @@ class _ValueDistributionPainter extends CustomPainter {
       textPainter.layout();
       final posX = switch(alignment) {
         Alignment.centerLeft => 0.0,
-        Alignment.centerRight => size.width - textPainter.width,
-        Alignment.center => (size.width / 2) - (textPainter.width / 2),
-        _ => throw ArgumentError('Invalid '),
+        Alignment.center => (size.width / 2) - (textPainter.width / 2).clamp(0, size.width),
+        Alignment.centerRight => (size.width - textPainter.width).clamp(0, size.width),
+        _ => throw ArgumentError('Unsupported alignment'),
       };
       final position = Offset(
-        posX,
+        posX.toDouble(),
         size.height / 2 - textPainter.height, // above center
       );
       textPainter.paint(canvas, position);
@@ -161,7 +176,7 @@ class _ValueDistributionPainter extends CustomPainter {
     drawLabel(localizations.minOf(distribution.keys.min.toString()),
         Alignment.centerLeft,);
     drawLabel(localizations.avgOf(distribution.keys.average.round().toString()),
-        Alignment.center,);
+        Alignment.center,); // FIXME: Average doesn't depend on count
     drawLabel(localizations.maxOf(distribution.keys.max.toString()),
         Alignment.centerRight,);
   }
