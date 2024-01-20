@@ -2,6 +2,7 @@
 
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 /// A statistic that shows how often values occur in a list of values.
@@ -87,6 +88,8 @@ class _ValueDistributionPainter extends CustomPainter {
   ///
   /// The key is the x order on the bar and it's value indicates it's relative
   /// height.
+  ///
+  /// The height of the bar is how often it occurs in a list of values.
   final Map<int, double> distribution;
 
   final AppLocalizations localizations;
@@ -173,18 +176,68 @@ class _ValueDistributionPainter extends CustomPainter {
       textPainter.paint(canvas, position);
     }
 
-    drawLabel(localizations.minOf(distribution.keys.min.toString()),
+    drawLabel(localizations.minOf(_min),
         Alignment.centerLeft,);
-    drawLabel(localizations.avgOf(distribution.keys.average.round().toString()),
-        Alignment.center,); // FIXME: Average doesn't depend on count
-    drawLabel(localizations.maxOf(distribution.keys.max.toString()),
+    drawLabel(localizations.avgOf(_average),
+        Alignment.center,);
+    drawLabel(localizations.maxOf(_max),
         Alignment.centerRight,);
   }
 
   @override
   bool shouldRepaint(covariant _ValueDistributionPainter oldDelegate) =>
       distribution == oldDelegate.distribution;
-  
-}
 
- // TODO: Consider adding semantics
+  @override
+  bool shouldRebuildSemantics(covariant _ValueDistributionPainter oldDelegate)
+      => distribution == oldDelegate.distribution;
+
+  @override
+  // TODO: test semanticsBuilder
+  SemanticsBuilderCallback? get semanticsBuilder => (Size size) {
+    final oneThird = size.width / 3;
+    return [
+      CustomPainterSemantics(
+        rect: Rect.fromLTRB(0, 0, oneThird, size.height),
+        properties: SemanticsProperties(
+          label: localizations.minOf(_min),
+          textDirection: TextDirection.ltr,
+        ),
+      ),
+      CustomPainterSemantics(
+        rect: Rect.fromLTRB(oneThird, 0, 2 * oneThird, size.height),
+        properties: SemanticsProperties(
+          label: localizations.avgOf(_average),
+          textDirection: TextDirection.ltr,
+        ),
+      ),
+      CustomPainterSemantics(
+        rect: Rect.fromLTRB(2 * oneThird, 0, size.width, size.height),
+        properties: SemanticsProperties(
+          label: localizations.maxOf(_max),
+          textDirection: TextDirection.ltr,
+        ),
+      ),
+    ];
+  };
+
+  /// Max (right end) value in distribution.
+  String get _max => distribution.keys.max.toString();
+
+  /// Min (left end) value in distribution.
+  String get _min => distribution.keys.min.toString();
+
+  /// Average value of distribution.
+  ///
+  ///
+  String get _average {
+    double sum = 0;
+    int count = 0;
+    for (final key in distribution.keys) {
+      sum += key * distribution[key]!;
+      count += distribution[key]!.toInt();
+    }
+    return (sum / count).round().toString();
+  }
+// TODO: test averages
+}

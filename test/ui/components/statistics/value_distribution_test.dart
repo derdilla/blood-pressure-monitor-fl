@@ -1,6 +1,7 @@
 
 import 'package:blood_pressure_app/components/statistics/value_distribution.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -49,7 +50,7 @@ void main() {
       width: 180,
       child: ValueDistribution(
         color: Colors.red,
-        values: [1,2,3,3,4,5], // min 3, max 10, avg 6 + 2/3
+        values: [1,2,3,3,4,5],
       ),
     ),),);
 
@@ -63,4 +64,31 @@ void main() {
       ..line(color: Colors.white70) // start drawing decoration
     ,);
   },);
+  testWidgets('should have semantics labels with correct values', (widgetTester) async {
+    await widgetTester.pumpWidget(materialApp(const SizedBox(
+      height: 50,
+      width: 180,
+      child: ValueDistribution(
+        color: Colors.red,
+        values: [5,6,3,8,8,10], // min 3, max 10, avg 6 + 2/3
+      ),
+    ),),);
+
+    final localizations = await AppLocalizations.delegate.load(const Locale('en'));
+    final labels = _getAllLabels(widgetTester.getSemantics(find.byType(ValueDistribution)));
+
+    expect(labels, contains(localizations.minOf('3')));
+    expect(labels, contains(localizations.maxOf('10')));
+    expect(labels, contains(localizations.avgOf('7')));
+  },);
+}
+
+/// Recursively fetches the labels of the semantics node and all its children.
+List<String> _getAllLabels(SemanticsNode node) {
+  final labels = [node.label];
+  node.visitChildren((node) {
+    labels.addAll(_getAllLabels(node));
+    return true;
+  });
+  return labels;
 }
