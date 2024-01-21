@@ -71,16 +71,16 @@ class BloodPressureAnalyser {
   Iterable<int> get _nonNullPul => _records.map((e) => e.pulse).whereNotNull();
 
   /// Average amount of measurements entered per day.
-  int get measurementsPerDay {
+  int? get measurementsPerDay {
     final c = count;
-    if (c <= 1) return -1;
+    if (c <= 1) return null;
 
     final firstDay = this.firstDay;
     final lastDay = this.lastDay;
     if (firstDay == null || lastDay == null) return -1;
 
     if (firstDay.millisecondsSinceEpoch == -1 || lastDay.millisecondsSinceEpoch == -1) {
-      return -1;
+      return null;
     }
     if (lastDay.difference(firstDay).inDays <= 0) {
       return c;

@@ -79,6 +79,5 @@ void main() {
       ..line(color: Colors.blue.shade500)
       ..line(color: Colors.white70),
     );
-
   });
 }

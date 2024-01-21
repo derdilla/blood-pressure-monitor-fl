@@ -1,5 +1,3 @@
-// TODO: test
-
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -64,7 +62,7 @@ class ValueDistribution extends StatelessWidget {
     return Container(
       constraints: const BoxConstraints(
         minWidth: 180,
-        minHeight: 50
+        minHeight: 50,
       ),
       child: CustomPaint(
         painter: _ValueDistributionPainter(
@@ -196,7 +194,6 @@ class _ValueDistributionPainter extends CustomPainter {
       => distribution == oldDelegate.distribution;
 
   @override
-  // TODO: test semanticsBuilder
   SemanticsBuilderCallback? get semanticsBuilder => (Size size) {
     final oneThird = size.width / 3;
     return [
@@ -242,5 +239,4 @@ class _ValueDistributionPainter extends CustomPainter {
     }
     return (sum / count).round().toString();
   }
-// TODO: test averages
 }

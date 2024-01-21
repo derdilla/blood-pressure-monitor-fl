@@ -11,6 +11,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:provider/provider.dart';
 
+import '../model/export_import/record_formatter_test.dart';
 import '../ram_only_implementations.dart';
 
 void main() {
@@ -18,38 +19,59 @@ void main() {
     testWidgets('should load page', (widgetTester) async {
       await _initStatsPage(widgetTester, []);
       expect(widgetTester.takeException(), isNull);
-      expect(find.text('Statistics'), findsOneWidget);
+
+      final localizations = await AppLocalizations.delegate.load(const Locale('en'));
+      expect(find.text(localizations.statistics), findsAtLeast(1));
+      expect(find.text(localizations.valueDistribution), findsOneWidget);
+      expect(find.text(localizations.timeResolvedMetrics, skipOffstage: false),
+          findsOneWidget,);
     });
     testWidgets('should report measurement count', (widgetTester) async {
       await _initStatsPage(widgetTester, [
         for (int i = 1; i<51; i++) // can't safe entries at or before epoch
-          BloodPressureRecord(DateTime.fromMillisecondsSinceEpoch(1582991592 + i), 40+i, 60+i, 30+i, 'Test comment $i'),
-      ],
-        intervallStoreManager: IntervallStoreManager(IntervallStorage(), IntervallStorage(), IntervallStorage(stepSize: TimeStep.lifetime)),
+          mockRecord(time: DateTime.fromMillisecondsSinceEpoch(1582991592 + i),
+              sys: i, dia: 60+i, pul: 110+i,),
+      ], intervallStoreManager: IntervallStoreManager(IntervallStorage(), 
+          IntervallStorage(), IntervallStorage(stepSize: TimeStep.lifetime,),),);
+      final localizations = await AppLocalizations.delegate.load(const Locale('en'));
+      
+      expect(find.text(localizations.measurementCount), findsOneWidget);
+
+      final measurementCountWidget = find.ancestor(
+        of: find.text(localizations.measurementCount),
+        matching: find.byType(ListTile),
       );
-      final measurementCountWidget = find.byKey(const Key('measurementCount'));
       expect(measurementCountWidget, findsOneWidget);
-      expect(find.descendant(of: measurementCountWidget, matching: find.text('49')), findsNothing);
-      expect(find.descendant(of: measurementCountWidget, matching: find.text('51')), findsNothing);
-      expect(find.descendant(of: measurementCountWidget, matching: find.text('50')), findsOneWidget);
+      expect(find.descendant(
+          of: measurementCountWidget,
+          matching: find.text('49'),
+      ), findsNothing,);
+      expect(find.descendant(
+        of: measurementCountWidget,
+        matching: find.text('51'),
+      ), findsNothing,);
+      expect(find.descendant(
+        of: measurementCountWidget,
+        matching: find.text('50'),
+      ), findsOneWidget,);
     });
-    testWidgets("should not display 'null' when filled", (widgetTester) async {
+    testWidgets("should not display 'null' or -1", (widgetTester) async {
       await _initStatsPage(widgetTester, [
-        BloodPressureRecord(DateTime.fromMillisecondsSinceEpoch(1), 40, 60, null, ''),
-        BloodPressureRecord(DateTime.fromMillisecondsSinceEpoch(2), null, null, null, ''),
-        for (int i = 1; i<51; i++) // can't safe entries at or before epoch
-          BloodPressureRecord(DateTime.fromMillisecondsSinceEpoch(1582991592 + i), 40+i, 60+i, 30+i, 'Test comment $i'),
-      ],
-          intervallStoreManager: IntervallStoreManager(IntervallStorage(), IntervallStorage(), IntervallStorage(stepSize: TimeStep.lifetime)),
-      );
-      expect(find.text('null',findRichText: true, skipOffstage: false), findsNothing);
+        mockRecord(time: DateTime.fromMillisecondsSinceEpoch(1), sys: 40, dia: 60),
+        mockRecord(time: DateTime.fromMillisecondsSinceEpoch(2),),
+      ], intervallStoreManager: IntervallStoreManager(IntervallStorage(), 
+          IntervallStorage(), IntervallStorage(stepSize: TimeStep.lifetime),),);
+      expect(find.textContaining('-1'), findsNothing);
+      expect(find.textContaining('null'), findsNothing);
     });
 
     testWidgets("should not display 'null' when empty", (widgetTester) async {
       await _initStatsPage(widgetTester, [],
-          intervallStoreManager: IntervallStoreManager(IntervallStorage(), IntervallStorage(), IntervallStorage(stepSize: TimeStep.lifetime)),
-      );
-      expect(find.text('null',findRichText: true, skipOffstage: false), findsNothing);
+          intervallStoreManager: IntervallStoreManager(
+              IntervallStorage(), IntervallStorage(), 
+              IntervallStorage(stepSize: TimeStep.lifetime,),),);
+      expect(find.textContaining('-1'), findsNothing);
+      expect(find.textContaining('null'), findsNothing);
     });
   });
 }

@@ -1,5 +1,3 @@
-// TODO: test
-
 import 'package:blood_pressure_app/components/statistics/value_distribution.dart';
 import 'package:blood_pressure_app/model/blood_pressure/record.dart';
 import 'package:blood_pressure_app/model/storage/settings_store.dart';
@@ -92,10 +90,9 @@ class _BloodPressureDistributionState extends State<BloodPressureDistribution>
               ),
             ],
           ),
-        )
-        // TODO: content
+        ),
       ],
     );
   }
-  
+
 }

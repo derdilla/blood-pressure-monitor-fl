@@ -46,7 +46,7 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                 ListTile(
                   title: Text(localizations.measurementsPerDay),
                   trailing: Text(
-                    analyzer.measurementsPerDay.toString(),
+                    analyzer.measurementsPerDay?.toString() ?? '-',
                     style: Theme.of(context).textTheme.headlineSmall,
                   ),
                 ),
