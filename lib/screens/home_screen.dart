@@ -130,7 +130,7 @@ class AppHome extends StatelessWidget {
                   tooltip: localizations.statistics,
                   backgroundColor: const Color(0xFF6F6F6F),
                   onPressed: () {
-                    _buildTransition(context, const StatisticsPage(), settings.animationSpeed);
+                    _buildTransition(context, const StatisticsScreen(), settings.animationSpeed);
                   },
                   child: const Icon(Icons.insights, color: Colors.black),
                 ),

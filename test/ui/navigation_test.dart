@@ -42,7 +42,7 @@ void main() {
       await widgetTester.tap(find.byIcon(Icons.insights));
       await widgetTester.pumpAndSettle();
 
-      expect(find.byType(StatisticsPage), findsOneWidget);
+      expect(find.byType(StatisticsScreen), findsOneWidget);
     });
   });
   group('settings page', () {
