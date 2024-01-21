@@ -1,5 +1,3 @@
-// TODO: test
-
 import 'package:blood_pressure_app/components/statistics/blood_pressure_distribution.dart';
 import 'package:blood_pressure_app/model/blood_pressure_analyzer.dart';
 import 'package:blood_pressure_app/model/storage/intervall_store.dart';

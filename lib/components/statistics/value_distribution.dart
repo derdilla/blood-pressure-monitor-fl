@@ -1,4 +1,7 @@
+import 'dart:math';
+
 import 'package:collection/collection.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -59,7 +62,7 @@ class ValueDistribution extends StatelessWidget {
     }
     assert(distribution[distribution.keys.max]! > 0);
     assert(distribution[distribution.keys.min]! > 0);
-    return Container(
+    return ConstrainedBox(
       constraints: const BoxConstraints(
         minWidth: 180,
         minHeight: 50,
@@ -76,9 +79,9 @@ class ValueDistribution extends StatelessWidget {
   
 }
 
-/// Painter of a horizontal array vertical bars.
+/// Painter of a horizontal array of vertical bars.
 class _ValueDistributionPainter extends CustomPainter {
-  /// Painter of a horizontal array vertical bars.
+  /// Create a painter of a horizontal array of vertical bars.
   _ValueDistributionPainter(
     this.distribution,
     this.localizations,
@@ -93,6 +96,7 @@ class _ValueDistributionPainter extends CustomPainter {
   /// The height of the bar is how often it occurs in a list of values.
   final Map<int, double> distribution;
 
+  /// Text for labels on the graph and for semantics.
   final AppLocalizations localizations;
 
   /// Color of the data bars.
@@ -103,13 +107,28 @@ class _ValueDistributionPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    // Draw the values:
-    final barWidth = ((size.width + _kDefaultBarGapWidth) // no trailing space
-        / distribution.length) - _kDefaultBarGapWidth;
+    assert(size.width >= 180, 'Canvas must be at least 180 pixels high, to avoid overflows.');
+    assert(size.height >= 50, 'Canvas must be at least 50 pixels wide, to avoid overflows.');
+    if (kDebugMode) {
+      distribution.keys.every((e) => e >= 0);
+    }
 
-    // Set height so that the largest element takes up the full height.
-    final double heightUnit = (size.height - barWidth * 2)
+
+    // Adapt gap width in case of lots of gaps.
+    double barGapWidth = _kDefaultBarGapWidth;
+    double barWidth = 0;
+    while(barWidth < barGapWidth && barGapWidth > 1) {
+      barGapWidth -= 1;
+      barWidth = ((size.width + barGapWidth) // fix trailing gap
+          / distribution.length) - barGapWidth;
+    }
+
+    // Set height scale so that the largest element takes up the full height.
+    // Ensures that the width of bars bars doesn't draw as overflow
+    final double heightUnit = max(1, size.height - barWidth * 2)
         / distribution.values.max;
+    assert(heightUnit > 0, '(${size.height} - $barWidth * 2) / '
+        '${distribution.values.max}');
 
     final barPainter = Paint()
       ..color = barColor
@@ -118,17 +137,21 @@ class _ValueDistributionPainter extends CustomPainter {
       ..strokeCap = StrokeCap.round
       ..strokeJoin = StrokeJoin.round;
 
-    double xOffset = barWidth / 2;
+    double barDrawXOffset = barWidth / 2; // don't clip left side of bar
     for (final xPos in distribution.keys) {
       final length = heightUnit * distribution[xPos]!;
-      final startPos = (size.height - length) / 2; // centered
+      /// Offset from top so that the bar of [length] is centered.
+      final startPos = (size.height - length) / 2;
+      assert(barDrawXOffset >= 0 && barDrawXOffset <= size.width);
+      assert(startPos >= 0); assert(startPos <= size.height);
+      assert((startPos + length) >= 0 && (startPos + length) <= size.height);
       canvas.drawLine(
-        Offset(xOffset, startPos),
-        Offset(xOffset, startPos + length),
+        Offset(barDrawXOffset, startPos),
+        Offset(barDrawXOffset, startPos + length),
         barPainter,
       );
 
-      xOffset += barWidth + _kDefaultBarGapWidth;
+      barDrawXOffset += barWidth + barGapWidth;
     }
 
     // Draw decorations on top:
@@ -139,7 +162,7 @@ class _ValueDistributionPainter extends CustomPainter {
     while (centerLineLength < size.width) {
       canvas.drawLine(
         Offset(centerLineLength, size.height / 2),
-        Offset(centerLineLength + 8.0, size.height / 2),
+        Offset(min(centerLineLength + 8.0, size.width), size.height / 2),
         decorationsPainter..color = _kDecorationColor,
       );
       centerLineLength += 8.0 + 7.0;
@@ -166,14 +189,20 @@ class _ValueDistributionPainter extends CustomPainter {
       textPainter.layout();
       final posX = switch(alignment) {
         Alignment.centerLeft => 0.0,
-        Alignment.center => (size.width / 2) - (textPainter.width / 2).clamp(0, size.width),
-        Alignment.centerRight => (size.width - textPainter.width).clamp(0, size.width),
+        Alignment.center => (size.width / 2)
+            - (textPainter.width / 2).clamp(0, size.width),
+        Alignment.centerRight => (size.width - textPainter.width)
+            .clamp(0, size.width),
         _ => throw ArgumentError('Unsupported alignment'),
       };
       final position = Offset(
         posX.toDouble(),
         size.height / 2 - textPainter.height, // above center
       );
+      assert(posX >= 0);
+      assert((posX + textPainter.width) <= size.width);
+      assert(position.dy >= 0);
+      assert((position.dy + textPainter.height) <= size.height);
       textPainter.paint(canvas, position);
     }
 
@@ -228,8 +257,6 @@ class _ValueDistributionPainter extends CustomPainter {
   String get _min => distribution.keys.min.toString();
 
   /// Average value of distribution.
-  ///
-  ///
   String get _average {
     double sum = 0;
     int count = 0;

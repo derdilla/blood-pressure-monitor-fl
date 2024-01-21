@@ -5,9 +5,12 @@ import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-/// Manager of [ValueDistribution]s for multiple [BloodPressureRecord]s.
+/// Viewer for [ValueDistribution]s from [BloodPressureRecord]s.
+///
+/// Displays a tab bar with different value distributions for available sys, dia
+/// and pul values from [BloodPressureRecord]s.
 class BloodPressureDistribution extends StatefulWidget {
-  /// Create a manager for [ValueDistribution] for a records.
+  /// Create a [ValueDistribution] viewer of the data of measurements.
   const BloodPressureDistribution({
     super.key,
     required this.records,
@@ -15,9 +18,13 @@ class BloodPressureDistribution extends StatefulWidget {
   });
 
   /// All records to include in statistics computations.
+  ///
+  /// When a records includes null values, those values are left out for
+  /// computing this statistic. This means that no filtering of passed records
+  /// is required.
   final Iterable<BloodPressureRecord> records;
 
-  /// Settings used to determine colors.
+  /// Settings used to determine colors in the distributions.
   final Settings settings;
 
   @override
@@ -59,7 +66,6 @@ class _BloodPressureDistributionState extends State<BloodPressureDistribution>
               color: Theme.of(context).colorScheme.primaryContainer,
               borderRadius: BorderRadius.circular(50),
             ),
-            indicatorWeight: 0,
             dividerHeight: 0,
             controller: _controller,
             tabs: [
