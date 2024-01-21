@@ -20,7 +20,7 @@ void main() {
 
     final errorCenter = widgetTester.getCenter(find.byType(Text));
     final canvasCenter = widgetTester.getCenter(find.byType(MaterialApp));
-    expect(errorCenter, equals(canvasCenter));;
+    expect(errorCenter, equals(canvasCenter));
   },);
 
   testWidgets('should draw labels at correct positions', (widgetTester) async {

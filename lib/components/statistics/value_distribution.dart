@@ -11,6 +11,9 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 /// labels that indicate min, max and average.
 ///
 /// The widgets takes a width of at least 180 units and a height of at least 50.
+///
+/// First draws the graph lines, then draws the decorations in the color
+/// [Colors.white70].
 class ValueDistribution extends StatelessWidget {
   /// Create a statistic to show how often values occur.
   const ValueDistribution({

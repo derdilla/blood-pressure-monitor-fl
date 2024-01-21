@@ -76,14 +76,17 @@ class _BloodPressureDistributionState extends State<BloodPressureDistribution>
             controller: _controller,
             children: [
               ValueDistribution(
+                key: const Key('sys-dist'),
                 values: widget.records.map((e) => e.systolic).whereNotNull(),
                 color: widget.settings.sysColor,
               ),
               ValueDistribution(
+                key: const Key('dia-dist'),
                 values: widget.records.map((e) => e.diastolic).whereNotNull(),
                 color: widget.settings.diaColor,
               ),
               ValueDistribution(
+                key: const Key('pul-dist'),
                 values: widget.records.map((e) => e.pulse).whereNotNull(),
                 color: widget.settings.pulColor,
               ),
