@@ -10,6 +10,7 @@ import 'package:blood_pressure_app/model/storage/storage.dart';
 import 'package:blood_pressure_app/platform_integration/platform_client.dart';
 import 'package:blood_pressure_app/screens/subsettings/delete_data_screen.dart';
 import 'package:blood_pressure_app/screens/subsettings/export_import/export_import_screen.dart';
+import 'package:blood_pressure_app/screens/subsettings/foreign_db_import_screen.dart';
 import 'package:blood_pressure_app/screens/subsettings/graph_markings_screen.dart';
 import 'package:blood_pressure_app/screens/subsettings/medicine_manager_screen.dart';
 import 'package:blood_pressure_app/screens/subsettings/version_screen.dart';
@@ -307,9 +308,7 @@ class SettingsPage extends StatelessWidget {
                     leading: const Icon(Icons.settings_backup_restore),
                     onTap: () async {
                       final messenger = ScaffoldMessenger.of(context);
-                      final result = await FilePicker.platform.pickFiles(
-                        
-                      );
+                      final result = await FilePicker.platform.pickFiles();
                       if (result == null) {
                         messenger.showSnackBar(SnackBar(content: Text(localizations.errNoFileOpened)));
                         return;
@@ -341,6 +340,31 @@ class SettingsPage extends StatelessWidget {
                       );
                     },
                 ),
+                ListTile(
+                  title: Text('TODO'), // TODO
+                  leading: Icon(Icons.add_circle, color: Colors.red,),
+                  onTap: () async {
+                    final messenger = ScaffoldMessenger.of(context);
+                    final navigator = Navigator.of(context);
+                    final result = await FilePicker.platform.pickFiles();
+
+                    if (result == null) {
+                      messenger.showSnackBar(SnackBar(content: Text(localizations.errNoFileOpened)));
+                      return;
+                    }
+                    final path = result.files.single.path;
+                    if (path == null) {
+                      messenger.showSnackBar(SnackBar(content: Text(localizations.errCantReadFile)));
+                      return;
+                    } // TODO: stop duplicating file selection code
+
+                    final db = await openDatabase(path);
+
+                    navigator.push(MaterialPageRoute(builder: (context) =>
+                          ForeignDBImportScreen(db: db,),),
+                    );
+                  },
+                )
               ],
             ),
             TitledColumn(title: Text(localizations.aboutWarnValuesScreen), children: [
