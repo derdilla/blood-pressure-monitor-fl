@@ -6,8 +6,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 
-/// Page that shows all export columns and allows adding and editing custom ones.
+/// Page that shows all export columns and allows adding and editing custom
+/// ones.
 class ExportColumnsManagementScreen extends StatelessWidget {
+  /// Create a page for listing, editing and adding export columns.
   const ExportColumnsManagementScreen({super.key});
 
   @override
