@@ -220,8 +220,6 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
     final localizations = AppLocalizations.of(context)!;
     return FullscreenDialoge(
       onActionButtonPressed: () {
-        assert(time != null);
-
         BloodPressureRecord? record;
         if (_measurementFormActive && (recordFormKey.currentState?.validate() ?? false)) {
           recordFormKey.currentState?.save();
@@ -413,7 +411,7 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
                   ),
                 ),
               ),
-          ]
+          ],
         ),
       ),
     );
