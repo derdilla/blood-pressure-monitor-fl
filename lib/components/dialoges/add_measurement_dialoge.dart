@@ -98,6 +98,9 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
     sysController = TextEditingController(
       text: (widget.initialRecord?.systolic ?? '').toString(),
     );
+    if (widget.initialRecord != null) {
+      _measurementFormActive = true;
+    }
 
     sysFocusNode.requestFocus();
     ServicesBinding.instance.keyboard.addHandler(_onKey);
