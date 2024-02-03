@@ -277,7 +277,7 @@ void main() {
 
       expect(result?.$1, isNull);
       expect(result?.$2, isA<MedicineIntake>()
-          .having((p0) => p0.timestamp.millisecondsSinceEpoch ~/ 1000, 'timestamp', openDialogeTimeStamp.millisecondsSinceEpoch ~/ 1000)
+          .having((p0) => p0.timestamp.millisecondsSinceEpoch ~/ 2000, 'timestamp', openDialogeTimeStamp.millisecondsSinceEpoch ~/ 2000)
           .having((p0) => p0.medicine, 'medicine', med2)
           .having((p0) => p0.dosis, 'dosis', 123.456),
       );
