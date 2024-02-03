@@ -233,11 +233,11 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
         }
 
         MedicineIntake? intake;
-        if (_showMedicineDosisInput && (medicationFormKey.currentState?.validate() ?? false)) {
+        if (_showMedicineDosisInput
+            && (medicationFormKey.currentState?.validate() ?? false)) {
           medicationFormKey.currentState?.save();
-          if (_showMedicineDosisInput
-              && medicineDosis != null
-              && medicineId != null) { // TODO: check if this extra condition is needed
+          if (medicineDosis != null
+              && medicineId != null) {
             intake = MedicineIntake(
               timestamp: time,
               medicine: medications
