@@ -124,7 +124,37 @@ void main() {
 
       expect(find.text('3.1415'), findsOneWidget);
     });
-    // TODO: add test for not immediatly quitting when measurement form is incorrectly filled and medicine is correclty entered
+    testWidgets('should not quit when the measurement field is incorrectly filled, but a measurement is added', (widgetTester) async {
+      await widgetTester.pumpWidget(materialApp(
+        AddEntryDialoge(
+          settings: Settings(
+            medications: [mockMedicine(designation: 'testmed', defaultDosis: 3.1415)],
+          ),
+        ),
+      ),);
+      await widgetTester.pumpAndSettle();
+
+      await widgetTester.tap(find.byType(DropdownButton<Medicine?>));
+      await widgetTester.pumpAndSettle();
+
+      await widgetTester.tap(find.text('testmed'));
+      await widgetTester.pumpAndSettle();
+
+      await widgetTester.enterText(find.ancestor(of: find.text('Systolic').first, matching: find.byType(TextFormField)), '123');
+      await widgetTester.enterText(find.ancestor(of: find.text('Diastolic').first, matching: find.byType(TextFormField)), '900');
+      await widgetTester.enterText(find.ancestor(of: find.text('Pulse').first, matching: find.byType(TextFormField)), '89');
+      await widgetTester.pumpAndSettle();
+
+      final localizations = await AppLocalizations.delegate.load(const Locale('en'));
+      expect(find.byType(AddEntryDialoge), findsOneWidget);
+      expect(find.text(localizations.errUnrealistic), findsNothing);
+
+      await widgetTester.tap(find.text(localizations.btnSave));
+      await widgetTester.pumpAndSettle();
+
+      expect(find.byType(AddEntryDialoge), findsOneWidget);
+      expect(find.text(localizations.errUnrealistic), findsOneWidget);
+    });
   });
   group('showAddEntryDialoge', () {
     testWidgets('should return null on cancel', (widgetTester) async {
