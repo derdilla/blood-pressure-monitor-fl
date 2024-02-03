@@ -481,7 +481,6 @@ void main() {
       expect(find.descendant(of: fourthFocusedTextFormField, matching: find.text('Systolic')), findsWidgets);
     });
     testWidgets('should allow entering custom dosis', (widgetTester) async {
-      // TODO: add test for saving edited custom dosis
       dynamic result;
       await loadDialoge(widgetTester, (context) async =>
         result = await showAddEntryDialoge(context, Settings(
@@ -515,6 +514,47 @@ void main() {
       expect(result?.$1, isNull);
       expect(result?.$2, isA<MedicineIntake>()
           .having((p0) => p0.dosis, 'dosis', 654.321),
+      );
+    });
+    testWidgets('should allow modifying entered dosis', (widgetTester) async {
+      dynamic result;
+      await loadDialoge(widgetTester, (context) async =>
+        result = await showAddEntryDialoge(context, Settings(
+          medications: [mockMedicine(designation: 'testmed')],
+        ),),
+      );
+      final localizations = await AppLocalizations.delegate.load(const Locale('en'));
+
+      await widgetTester.tap(find.byType(DropdownButton<Medicine?>));
+      await widgetTester.pumpAndSettle();
+
+      await widgetTester.tap(find.text('testmed'));
+      await widgetTester.pumpAndSettle();
+
+      await widgetTester.enterText(
+        find.ancestor(
+          of: find.text(localizations.dosis).first,
+          matching: find.byType(TextFormField),
+        ),
+        '654.321',
+      );
+      await widgetTester.pumpAndSettle();
+      await widgetTester.enterText(
+        find.ancestor(
+          of: find.text(localizations.dosis).first,
+          matching: find.byType(TextFormField),
+        ),
+        '654.322',
+      );
+      await widgetTester.pumpAndSettle();
+
+      await widgetTester.tap(find.text(localizations.btnSave));
+      await widgetTester.pumpAndSettle();
+
+      expect(result, isNotNull);
+      expect(result?.$1, isNull);
+      expect(result?.$2, isA<MedicineIntake>()
+          .having((p0) => p0.dosis, 'dosis', 654.322),
       );
     });
   });
