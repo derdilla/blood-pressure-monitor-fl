@@ -500,5 +500,7 @@
   "noMedication": "Nessun farmaco",
   "@noMedication": {},
   "dosis": "Dose",
-  "@dosis": {}
+  "@dosis": {},
+  "valueDistribution": "Distribuzione dei valori",
+  "@valueDistribution": {}
 }
