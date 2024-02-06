@@ -587,5 +587,26 @@ void main() {
           .having((p0) => p0.dosis, 'dosis', 654.322),
       );
     });
+    testWidgets('should not go back to last field when the current field is still filled', (widgetTester) async {
+      await loadDialoge(widgetTester, (context) =>
+          showAddEntryDialoge(context, Settings(), mockRecord(sys: 12, dia: 3, pul: 4, note: 'note')),);
+      expect(find.byType(DropdownButton<Medicine?>), findsNothing, reason: 'No medication in settings.');
+
+      await widgetTester.enterText(find.ancestor(
+          of: find.text('note').first,
+          matching: find.byType(TextFormField),),
+        'not empty',);
+      await widgetTester.sendKeyEvent(LogicalKeyboardKey.backspace);
+
+      final firstFocused = FocusManager.instance.primaryFocus;
+      expect(firstFocused?.context?.widget, isNotNull);
+      final focusedTextFormField = find.ancestor(
+        of: find.byWidget(firstFocused!.context!.widget),
+        matching: find.byType(TextFormField),
+      );
+      expect(focusedTextFormField, findsOneWidget);
+      expect(find.descendant(of: focusedTextFormField, matching: find.text('Pulse')), findsNothing);
+      expect(find.descendant(of: focusedTextFormField, matching: find.text('Note (optional)')), findsWidgets);
+    });
   });
 }
