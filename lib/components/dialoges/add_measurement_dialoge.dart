@@ -122,6 +122,7 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
     if (event is! KeyDownEvent) return false;
     final isBackspace = event.logicalKey.keyId == 0x00100000008;
     if (!isBackspace) return false;
+    recordFormKey.currentState?.save();
     if (diaFocusNode.hasFocus && diastolic == null 
         || pulFocusNode.hasFocus && pulse == null
         || noteFocusNode.hasFocus && (notes?.isEmpty ?? true)
