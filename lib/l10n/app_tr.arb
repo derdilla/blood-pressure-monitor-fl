@@ -184,7 +184,7 @@
   "@errNoValue": {},
   "other": "diğer",
   "@other": {},
-  "exportWarnConfigNotImportable": "Hey! Sana dostça bir uyarı: Şu anki dışa aktarma ayarlarıyla içe aktarmak mümkün olmayacak. Bunu düzeltmek için dışa aktarma türünün CSV olduğuna emin olun, başlığı etkenliştirin ve uygun zaman biçimlerinden birini dahil edin.",
+  "exportWarnConfigNotImportable": "Merhaba! Size dostça bir uyarı: Şu anki dışa aktarma ayarlarıyla içe aktarmak mümkün olmayacak. Bunu düzeltmek için dışa aktarma türünün CSV olduğuna emin olun ve uygun zaman biçimlerinden birini dahil edin.",
   "@exportWarnConfigNotImportable": {},
   "timestamp": "Zaman damgası",
   "@timestamp": {},
@@ -313,7 +313,7 @@
   "@measurementCount": {},
   "exportAfterEveryInputDesc": "Önerilmez (dosya patlaması)",
   "@exportAfterEveryInputDesc": {},
-  "exportFieldFormatDocumentation": "'## Değişkenler\nDışa aktarma alanı biçimi şu yerler için değer doldurabiliyor:\n- `$TIMESTAMP:` Unix miladından itibaren geçen zamanı milisaniyede gösterir.\n- `$SYS:` Eğer mevcutsa bir değer sağlar; yoksa -1 sağlar.\n- `$DIA:` Eğer mevcutsa bir değer sağlar; yoksa -1 sağlar\n- `$PUL:` Eğer mevcutsa bir değer sağlar; yoksa -1 sağlar\n- `$NOTE:` Eğer mevcutsa bir değer sağlar; yoksa -1 sağlar\n\nBu adı geçen yerlerden herhangi biri kan basıncı kaydında yoksa, -1 ile değiştirilir.\n\n## Matematik\nÇift süslü parantez içinde basit matematiksel işlemler yapabilirsiniz (\"`{{}}`\").\n\nBu matematiksel işlemler desteklenir:\n- İşlemler: +, -, *, /, %, ^\n- Tek-parametreli fonksiyonlar: abs, acos, asin, atan, ceil, cos, cosh, cot, coth, csc, csch, exp, floor, ln, log, round sec, sech, sin, sinh, sqrt, tan, tanh\n- Çift-parametreli fonksiyonlar: log, nrt, pow\n- Sabit değişkenler: e, pi, ln2, ln10, log2e, log10e, sqrt1_2, sqrt2\nMatematik interpretor'unun bütün ayrıntıları için [function_tree](https://pub.dev/documentation/function_tree/latest#interpreter)'e bakabilirsiniz\n\n## İşlem önceliği\n1. Değişken değişimi\n2. Matematik'",
+  "exportFieldFormatDocumentation": "'## Değişkenler\nDışa aktarma alanı biçimi şu yerler için değer doldurabiliyor:\n- `$TIMESTAMP:` Unix miladından itibaren geçen zamanı milisaniyede gösterir.\n- `$SYS:` Eğer mevcutsa bir değer sağlar; yoksa -1 sağlar.\n- `$DIA:` Eğer mevcutsa bir değer sağlar; yoksa -1 sağlar\n- `$PUL:` Eğer mevcutsa bir değer sağlar; yoksa -1 sağlar\n- `$NOTE:` Eğer mevcutsa bir değer sağlar; yoksa -1 sağlar\n- `$COLOR:` Bir ölçümün rengini sayı olarak temsil eder. (örnek değer: `4291681337`)\n\nBu adı geçen yerlerden herhangi biri kan basıncı kaydında yoksa, -1 ile değiştirilir.\n\n## Matematik\nÇift süslü parantez içinde basit matematiksel işlemler yapabilirsiniz (\"`{{}}`\").\n\nAşağıdaki matematiksel işlemler desteklenir:\n- İşlemler: +, -, *, /, %, ^\n- Tek-parametreli fonksiyonlar: abs, acos, asin, atan, ceil, cos, cosh, cot, coth, csc, csch, exp, floor, ln, log, round sec, sech, sin, sinh, sqrt, tan, tanh\n- Çift-parametreli fonksiyonlar: log, nrt, pow\n- Sabit değişkenler: e, pi, ln2, ln10, log2e, log10e, sqrt1_2, sqrt2\n\nMatematik işlemcisinin bütün ayrıntıları için [function_tree](https://pub.dev/documentation/function_tree/latest#interpreter)'e bakabilirsiniz\n\n## İşlem önceliği\n1. Değişken değişimi\n2. Matematik'",
   "@exportFieldFormatDocumentation": {},
   "exportAfterEveryInput": "Her girişten sonra dışa aktar",
   "@exportAfterEveryInput": {},
@@ -439,5 +439,68 @@
   "warnNeedsRestartForUsingApp": "Bu oturumda dosyalar silindi. Uygulamanın diğer bölümlerine dönerek kullanmaya devam etmek için uygulamayı yeniden başlatın!",
   "@warnNeedsRestartForUsingApp": {},
   "needlePinBarWidth": "Renk kalınlığı",
-  "@needlePinBarWidth": {}
+  "@needlePinBarWidth": {},
+  "errParseFailedDecodingField": "{lineNumber}. satırdaki \"{fieldContent}\" alanının çözülmesi başarısız oldu.",
+  "@errParseFailedDecodingField": {
+    "placeholders": {
+      "lineNumber": {
+        "type": "int"
+      },
+      "fieldContent": {
+        "type": "String"
+      }
+    }
+  },
+  "addMedication": "İlaç ekle",
+  "@addMedication": {},
+  "defaultDosis": "öntanımlı doz",
+  "@defaultDosis": {},
+  "exportFieldsPreset": "Alan ön ayarlarını dışa aktar",
+  "@exportFieldsPreset": {},
+  "errParseEmptyCsvFile": "CSV dosyasında kaydı ayrıştırmak için yeterli satır yok.",
+  "@errParseEmptyCsvFile": {},
+  "errParseTimeNotRestoreable": "Zaman damgasını geri yüklemeye izin veren bir sütun yok.",
+  "@errParseTimeNotRestoreable": {},
+  "errParseLineTooShort": "{lineNumber}. satırda ilk satırdan daha az sütun var.",
+  "@errParseLineTooShort": {
+    "placeholders": {
+      "lineNumber": {
+        "type": "int"
+      }
+    }
+  },
+  "remove": "Kaldır",
+  "@remove": {},
+  "manageExportColumns": "Dışa aktarılan sütunları yönet",
+  "@manageExportColumns": {},
+  "buildIn": "Yerleşik",
+  "@buildIn": {},
+  "csvTitle": "CSV-başlığı",
+  "@csvTitle": {},
+  "recordFormat": "Kayıt biçimi",
+  "@recordFormat": {},
+  "timeFormat": "Zaman biçimi",
+  "@timeFormat": {},
+  "bottomAppBars": "Alt iletişim kutusu çubukları",
+  "@bottomAppBars": {},
+  "medications": "İlaçlar",
+  "@medications": {},
+  "name": "Ad",
+  "@name": {},
+  "noMedication": "İlaç yok",
+  "@noMedication": {},
+  "dosis": "Doz",
+  "@dosis": {},
+  "errAccuracyLoss": "Özel zaman biçimlendiricilerle dışa aktarırken hassasiyet kaybı olabilir.",
+  "@errAccuracyLoss": {},
+  "valueDistribution": "Değer dağılımı",
+  "@valueDistribution": {},
+  "errParseUnknownColumn": "\"{title}\" başlığına sahip bir sütun yok.",
+  "@errParseUnknownColumn": {
+    "placeholders": {
+      "title": {
+        "type": "String"
+      }
+    }
+  }
 }
