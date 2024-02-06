@@ -5,6 +5,7 @@ String getDisplayLanguage(Locale l) => switch(l.toLanguageTag()) {
   'en' => 'English',
   'en-US' => 'English (US)',
   'de' => 'Deutsch',
+  'es' => 'Español',
   'fr' => 'Française',
   'it' => 'Italiano',
   'nb' => 'Norsk bokmål',
