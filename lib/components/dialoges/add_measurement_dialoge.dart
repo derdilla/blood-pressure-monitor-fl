@@ -321,8 +321,10 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
                         if (value.isNotEmpty) _measurementFormActive = true;
                         final newLineCount = value.split('\n').length;
                         if (_noteCurrentNewLineCount != newLineCount) {
-                          _noteCurrentNewLineCount = newLineCount;
-                          Material.of(context).markNeedsPaint();
+                          setState(() {
+                            _noteCurrentNewLineCount = newLineCount;
+                            Material.of(context).markNeedsPaint();
+                          });
                         }
                       },
                       onSaved: (value) => setState(() => notes = value),
