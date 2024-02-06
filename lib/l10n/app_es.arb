@@ -1,7 +1,7 @@
 {
   "loading": "cargando",
   "@loading": {},
-  "error": "Error: {mensaje}",
+  "error": "Error: {msg}",
   "@error": {
     "placeholders": {
       "msg": {
@@ -13,7 +13,7 @@
   "@errNaN": {},
   "title": "Presion de Sangre",
   "@title": {},
-  "success": "Exito: {mensaje}",
+  "success": "Exito: {msg}",
   "@success": {
     "placeholders": {
       "msg": {
