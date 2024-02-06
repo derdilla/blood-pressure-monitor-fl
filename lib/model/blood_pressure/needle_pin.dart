@@ -8,7 +8,7 @@ class MeasurementNeedlePin {
   const MeasurementNeedlePin(this.color);
 
   /// Create a instance from a map created by [toMap].
-  MeasurementNeedlePin.fromJson(Map<String, dynamic> json)
+  MeasurementNeedlePin.fromMap(Map<String, dynamic> json)
       : color = Color(json['color']);
   // When updating this, remember to be backwards compatible.
   // (or reimplement the system)

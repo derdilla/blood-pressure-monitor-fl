@@ -91,7 +91,7 @@ class BloodPressureModel extends ChangeNotifier {
             'diastolic': measurement.diastolic,
             'pulse': measurement.pulse,
             'notes': measurement.notes,
-            'needlePin': jsonEncode(measurement.needlePin),
+            'needlePin': jsonEncode(measurement.needlePin?.toMap()),
           },
           where: 'timestamp = ?',
           whereArgs: [measurement.creationTime.millisecondsSinceEpoch],);
@@ -102,7 +102,7 @@ class BloodPressureModel extends ChangeNotifier {
         'diastolic': measurement.diastolic,
         'pulse': measurement.pulse,
         'notes': measurement.notes,
-        'needlePin': jsonEncode(measurement.needlePin),
+        'needlePin': jsonEncode(measurement.needlePin?.toMap()),
       });
     }
     notifyListeners();
@@ -163,7 +163,7 @@ class BloodPressureModel extends ChangeNotifier {
           e['diastolic'] as int?,
           e['pulse'] as int?,
           e['notes'].toString(),
-          needlePin: (needlePin != null) ? MeasurementNeedlePin.fromJson(needlePin) : null,
+          needlePin: (needlePin != null) ? MeasurementNeedlePin.fromMap(needlePin) : null,
       ),);
     }
     return records;

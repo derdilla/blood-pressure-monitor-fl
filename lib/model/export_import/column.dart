@@ -75,7 +75,7 @@ class NativeColumn extends ExportColumn {
         final json = jsonDecode(pattern);
         if (json is! Map<String, dynamic>) return null;
         try {
-          return MeasurementNeedlePin.fromJson(json);
+          return MeasurementNeedlePin.fromMap(json);
         } on FormatException {
           return null;
         }

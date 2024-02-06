@@ -60,7 +60,7 @@ class ScriptedFormatter implements Formatter {
         final num = int.tryParse(text);
         if (num != null) return MeasurementNeedlePin(Color(num));
         try {
-          return MeasurementNeedlePin.fromJson(jsonDecode(text));
+          return MeasurementNeedlePin.fromMap(jsonDecode(text));
         } catch (e) {
           assert(e is FormatException || e is TypeError);
           return null;
