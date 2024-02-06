@@ -1,0 +1,26 @@
+{
+  "loading": "cargando",
+  "@loading": {},
+  "error": "Error: {mensaje}",
+  "@error": {
+    "placeholders": {
+      "msg": {
+        "type": "String"
+      }
+    }
+  },
+  "errNaN": "Por favor ingrese un numero",
+  "@errNaN": {},
+  "title": "Presion de Sangre",
+  "@title": {},
+  "success": "Exito: {mensaje}",
+  "@success": {
+    "placeholders": {
+      "msg": {
+        "type": "String"
+      }
+    }
+  },
+  "errLt30": "Numero <= 30? Apaga validacion en el configuracion!",
+  "@errLt30": {}
+}
