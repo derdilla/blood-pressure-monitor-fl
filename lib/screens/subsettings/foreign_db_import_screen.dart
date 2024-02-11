@@ -1,4 +1,5 @@
 import 'package:blood_pressure_app/components/consistent_future_builder.dart';
+import 'package:blood_pressure_app/components/dialoges/tree_selection_dialoge.dart';
 import 'package:blood_pressure_app/model/export_import/import_field_type.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
@@ -18,90 +19,51 @@ class ForeignDBImportScreen extends StatefulWidget {
 }
 
 class _ForeignDBImportScreenState extends State<ForeignDBImportScreen> {
-
-  /// The name of the table that contains the data.
-  String? _selectedTableName;
-
-  /// The name of the selected column that contains the timestamps.
-  String? _activeTimeColumnName;
-
-  /// The name of the column selected before selecting a datatype.
-  ///
-  /// Once a datatype is selected, this is reset to null.
-  String? _lastSelectedColumnName;
-
   @override
-  Widget build(BuildContext context) => Scaffold(
-    appBar: AppBar(
-      title: (_selectedTableName == null)
-          ? const Text('Table')
-          : const Text('Time column'),
-    ),
-    body: ConsistentFutureBuilder(
-      future: _ColumnImportData.loadFromDB(widget.db),
-      onData: (BuildContext context, _ColumnImportData data) {
-        final localizations = AppLocalizations.of(context)!;
+  Widget build(BuildContext context) => ConsistentFutureBuilder(
+    future: _ColumnImportData.loadFromDB(widget.db),
+    onData: (BuildContext context, _ColumnImportData data) {
+      final localizations = AppLocalizations.of(context)!;
+      return TreeSelectionDialoge(
+        buildOptions: (selections) {
+          if (selections.isEmpty) {
+            return data.tableNames.toList();
+          }
+          if (selections.length == 1) {
+            // TODO: don't show tables without columns
+            return data.columns[selections[0]]!;
+          }
 
-        if (_selectedTableName == null) {
-          return _buildTableSelection(data);
-        }
-        if (_activeTimeColumnName == null) {
-          return _buildColumnSelection(data, (String columnName) => setState(() {
-            _activeTimeColumnName = columnName;
-          }),);
-        }
-
-        if (_lastSelectedColumnName == null) {
-          return _buildColumnSelection(data, (columnName) => setState(() {
-            _lastSelectedColumnName = columnName;
-          }),);
-        }
-        return _buildCardList(
-          RowDataFieldType.values.map((e) => e.localize(localizations)),
-          (columnName) {
-            setState(() {
-              // TODO: add to columns
-              _lastSelectedColumnName = null;
-            });
-          },
-        );
-
-        // TODO: add finalize button
-
-        
-      },
-    ),
-  );
-
-  Widget _buildTableSelection(_ColumnImportData data) =>
-      _buildCardList(data.tableNames, (tableName) => setState(() {
-        _selectedTableName = tableName;
-      }));
-
-  Widget _buildColumnSelection(
-      _ColumnImportData data, 
-      void Function(String columnName) onSelection,
-  ) => _buildCardList(data.columns[_selectedTableName]!, onSelection);
-
-  Widget _buildCardList(
-      Iterable<String> allOptions,
-      void Function(String columnName) onSelection,
-  ) => ListView(
-    children: [
-      for (final option in allOptions)
-        InkWell(
-          onTap: () => onSelection(option),
-          child: Card(
-            child: Padding(
-              padding: const EdgeInsets.all(14),
-              child: Text(option),
-            ),
-          ),
-        ),
-    ],
+          if ((selections.length % 2 == 0)) {
+            final columns = data.columns[selections[0]]!;
+            columns.remove(selections[1]);
+            return columns;
+          } else {
+            return RowDataFieldType.values
+                .whereNot((element) => element == RowDataFieldType.timestamp)
+                .map((e) => e.localize(localizations))
+                .toList();
+          }
+        },
+        validator: (todo) { // TODO
+          return 'The schnibledumps doesn\'t schwibble!';
+        },
+        buildTitle: (selections) {
+          if (selections.isEmpty) return 'Select table';
+          if (selections.length == 1) return 'Select time column';
+          if ((selections.length % 2 == 0)) {
+            return 'Select data column';
+          } else {
+            return 'Select column type';
+          }
+        },
+        bottomAppBars: true, // TODO
+      );
+      // TODO: perform import
+      // TODO: localize everything
+    },
   );
 }
-
 
 class _ColumnImportData {
   _ColumnImportData._create(this.columns);
