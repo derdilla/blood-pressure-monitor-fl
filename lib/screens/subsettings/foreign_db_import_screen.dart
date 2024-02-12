@@ -30,7 +30,6 @@ class _ForeignDBImportScreenState extends State<ForeignDBImportScreen> {
             return data.tableNames.toList();
           }
           if (selections.length == 1) {
-            // TODO: don't show tables without columns
             return data.columns[selections[0]]!;
           }
 
@@ -79,16 +78,24 @@ class _ColumnImportData {
       final creationSql = e['sql']!.toString();
       final colNames = RegExp(r'CREATE\s+TABLE\s+[0-9\w]+\s*\(([\w\s()0-9,]+?)\)+')
           .firstMatch(creationSql)
-          ?.group(0)
+          ?.group(1)
           ?.split(',')
           .map((e) => e
               .split(' ')
+              .where((e) => e.isNotEmpty)
+              .whereNot((e) => ['INTEGER', 'TEXT', 'NOT', 'OR', 'PRIMARY',
+                    'FOREIGN', 'DEFAULT', 'NULL', 'KEY', 'PREFERENCES', 'BLOB',]
+                  .contains(e),
+              )
               .firstWhereOrNull((e) => e.trim().isNotEmpty),
           )
           .whereNotNull()
           .toList();
-      assert(colNames != null);
-      columns[tableName] = colNames;
+      print('$creationSql:\t $colNames');
+      // don't show tables without columns
+      if (colNames?.isNotEmpty ?? false) {
+        columns[tableName] = colNames;
+      }
     } 
     return _ColumnImportData._create(columns);
   }
