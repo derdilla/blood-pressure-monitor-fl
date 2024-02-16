@@ -34,18 +34,18 @@ This application allows you to easily store your records and export all your rec
 ### Android
 
 #### Play Store
-This app is available in the Google [Play Store](https://play.google.com/store/apps/details?id=com.derdilla.bloodPressureApp). 
+This app is available in the [Google Play Store](https://play.google.com/store/apps/details?id=com.derdilla.bloodPressureApp). 
 
 Please note that when switching from another installation source, you first need to uninstall the old app before you can get updates. **Making a manual backup is required to avoid data loss.**
 
-#### Fdroid
+#### F-Droid
 This app is available on [F-Droid](https://f-droid.org/en/packages/com.derdilla.bloodPressureApp/). 
 
 #### GitHub
-You can download and install the APK directly through the Releases page. Keep in mind that you have to regularly check for new versions manually.
+You can download and install the APK directly through the Releases page. Keep in mind that you have to regularly check for new versions manually or use Obtainium for that.
 
-### I-OS
-While building an ios app would be no problem code-wise, apple's restrictive behavior makes this more complicated (and expensive). So I won't take this step unless there is significant demand. 
+### iOS
+While building an iOS app would be no problem code-wise, Apple's restrictive behavior makes this more complicated (and expensive). So I won't take this step unless there is significant demand. 
 
 ### Windows, Linux and MacOS
 This would all be technically possible, but I don't really see a demand. Open an issue if you need them.
@@ -61,7 +61,8 @@ This would all be technically possible, but I don't really see a demand. Open an
 </table>
 
 ## Contributing
-Contributions to this project are greatly appreciated and can come in many forms. Please note that when contributing you agree that your work is under the same license as the project.  
+Contributions to this project are greatly appreciated and can come in many forms. Please note that when contributing you agree that your work is under the same license as the project.
+
 ### Opening bugs and proposing features
 This is probably the simplest to do: Use the app and find out what's wrong and what can be improved. There is no such thing as a wrong issue. Just make sure there is no existing one about the exact same topic If you are unsure about something just create a new issue, the worst thing to happen is that it gets closed.
 
