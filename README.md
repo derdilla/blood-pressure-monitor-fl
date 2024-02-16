@@ -42,7 +42,7 @@ Please note that when switching from another installation source, you first need
 This app is available on [F-Droid](https://f-droid.org/en/packages/com.derdilla.bloodPressureApp/). 
 
 #### GitHub
-You can download and install the APK directly through the Releases page. Keep in mind that you have to regularly check for new versions manually or use Obtainium for that.
+You can download and install the APK directly through the [Releases page](https://github.com/NobodyForNothing/blood-pressure-monitor-fl/releases). Keep in mind that you have to regularly check for new versions manually or use [Obtainium](https://github.com/ImranR98/Obtainium) for that.
 
 ### iOS
 While building an iOS app would be no problem code-wise, Apple's restrictive behavior makes this more complicated (and expensive). So I won't take this step unless there is significant demand. 
