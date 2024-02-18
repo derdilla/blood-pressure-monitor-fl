@@ -5,22 +5,12 @@
 
 <h1 align="center"> blood pressure monitor </h1>
 <div align="center">
-  <a href="[https://github.com/NobodyForNothing/blood-pressure-monitor-fl/actions/workflows/CI.yml">
-    <img src="https://github.com/NobodyForNothing/blood-pressure-monitor-fl/actions/workflows/CI.yml/badge.svg" alt="CI status" />
-  </a>
-  <a href="https://github.com/NobodyForNothing/blood-pressure-monitor-fl/releases/latest">
-    <img alt="GitHub release (latest by date)" src="https://img.shields.io/github/v/release/NobodyForNothing/blood-pressure-monitor-fl">
-  </a>
-  <img alt="GitHub last commit" src="https://img.shields.io/github/last-commit/NobodyForNothing/blood-pressure-monitor-fl">
-  <img alt="GitHub Repo stars" src="https://img.shields.io/github/stars/NobodyForNothing/blood-pressure-monitor-fl">
-  <img alt="GitHub watchers" src="https://img.shields.io/github/watchers/NobodyForNothing/blood-pressure-monitor-fl">
+  <a href="https://github.com/NobodyForNothing/blood-pressure-monitor-fl/actions/workflows/CI.yml">
+    <img src="https://img.shields.io/github/actions/workflow/status/NobodyForNothing/blood-pressure-monitor-fl/.github%2Fworkflows%2FCI.yml?style=flat&logo=github&label=CI" alt="CI status"/></a>
+  <img alt="GitHub Repo stars" src="https://img.shields.io/github/stars/NobodyForNothing/blood-pressure-monitor-fl?style=flat&logo=github">
+  <img alt="GitHub watchers" src="https://img.shields.io/github/watchers/NobodyForNothing/blood-pressure-monitor-fl?style=flat&logo=github">
   <a href="https://hosted.weblate.org/engage/blood-pressure-monitor-fl/">
-    <img src="https://hosted.weblate.org/widgets/blood-pressure-monitor-fl/-/svg-badge.svg" alt="Translation status" />
-  </a>
-</div>
-<div align="center">
-  <a href='https://f-droid.org/en/packages/com.derdilla.bloodPressureApp'><img alt="F-Droid" height=40 src="https://gitlab.com/fdroid/artwork/-/raw/master/fdroid-logo-2015/available-on-fdroid.svg"></a>
-  <a href='https://play.google.com/store/apps/details?id=com.derdilla.bloodPressureApp&pcampaignid=pcampaignidMKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img height=45 alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png'/></a>
+    <img src="https://img.shields.io/weblate/progress/blood-pressure-monitor-fl?logo=weblate" alt="Translation status"/></a>
 </div>
 <p align="center">
   A versatile app for tracking, analyzing, and exporting blood pressure-related data.
@@ -36,28 +26,20 @@
 - Add free
 - Well-documented, open-source code
 
-## Getting Started
+### Installation
 
-### Android
+Currently, the app is only developed for Android, but should be easy to port to other platforms aswell.
 
-#### Play Store
-This app is available in the [Google Play Store](https://play.google.com/store/apps/details?id=com.derdilla.bloodPressureApp). 
+Store    |  Note
+---------|-------
+[![Google Play](https://img.shields.io/github/v/release/NobodyForNothing/blood-pressure-monitor-fl?style=flat&logo=google-play&label=Google%20Play)](https://play.google.com/store/apps/details?id=com.derdilla.bloodPressureApp)  | APK provided by Google but uses the same source code. 
+[![F-Droid](https://img.shields.io/f-droid/v/com.derdilla.bloodPressureApp?style=flat&logo=fdroid&label=F-Droid)](https://f-droid.org/en/packages/com.derdilla.bloodPressureApp/)  | F-Droid can take up to a week to provide updates after release to build updates. The F-Droid version is signed with the F-Droid key, so no switching installation sources, without first uninstalling and deleting all data, is possible. Of course, you can still load backups of your data.
+[![GitHub](https://img.shields.io/github/v/release/NobodyForNothing/blood-pressure-monitor-fl?style=flat&logo=github&label=GitHub)](https://github.com/NobodyForNothing/blood-pressure-monitor-fl/releases)  | The app won't notify you about new updates so you need to check for new versions manually or use [Obtainium](https://github.com/ImranR98/Obtainium) for that.
 
-Please note that when switching from another installation source, you first need to uninstall the old app before you can get updates. **Making a manual backup is required to avoid data loss.**
-
-#### F-Droid
-This app is available on [F-Droid](https://f-droid.org/en/packages/com.derdilla.bloodPressureApp/). 
-
-#### GitHub
-You can download and install the APK directly through the [Releases page](https://github.com/NobodyForNothing/blood-pressure-monitor-fl/releases). Keep in mind that you have to regularly check for new versions manually or use [Obtainium](https://github.com/ImranR98/Obtainium) for that.
-
-### iOS
-While building an iOS app would be no problem code-wise, Apple's restrictive behavior makes this more complicated (and expensive). So I won't take this step unless there is significant demand. 
-
-### Windows, Linux and MacOS
-This would all be technically possible, but I don't really see a demand. Open an issue if you need them.
+As there is no demand Windows, Linux and MacOS builds have been stopped. In case you are interested in them feel free to open an issue to indicate that.IOS builds are currently not available as the platform is more restrictive and hard (expensive) to develop for. So I won't take this step unless there is significant demand.
 
 ## Screenshots
+
 <table style="width: 100%; border-collapse: collapse;">
   <tr>
     <td><img src="https://github.com/NobodyForNothing/blood-pressure-monitor-fl/blob/main/fastlane/metadata/android/en-US/images/phoneScreenshots/01-example_add.png?raw=true" height="100%" alt="Home"></img></td>
@@ -68,9 +50,11 @@ This would all be technically possible, but I don't really see a demand. Open an
 </table>
 
 ## Contributing
+
 Contributions to this project are greatly appreciated and can come in many forms. Please note that when contributing you agree that your work is under the same license as the project.
 
 ### Opening bugs and proposing features
+
 This is probably the simplest to do: Use the app and find out what's wrong and what can be improved. There is no such thing as a wrong issue. Just make sure there is no existing one about the exact same topic If you are unsure about something just create a new issue, the worst thing to happen is that it gets closed.
 
 ### Improving texts and translating
