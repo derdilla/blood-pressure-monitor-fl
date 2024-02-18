@@ -16,6 +16,18 @@
   A versatile app for tracking, analyzing, and exporting blood pressure-related data.
 </p>
 
+## Installation
+
+Currently, the app is only developed for Android, but should be easy to port to other platforms aswell.
+
+Store    |  Note
+---------|-------
+<a href="https://play.google.com/store/apps/details?id=com.derdilla.bloodPressureApp"><img alt="Google Play Store" width="350" src="https://img.shields.io/github/v/release/NobodyForNothing/blood-pressure-monitor-fl?style=flat&logo=google-play&label=Google%20Play"></img></a>  | APK provided by Google but uses the same source code. 
+<a href="https://f-droid.org/en/packages/com.derdilla.bloodPressureApp/"><img alt="F-Droid Store" width="350" src="https://img.shields.io/f-droid/v/com.derdilla.bloodPressureApp?style=flat&logo=fdroid&label=F-Droid"></img></a>  | F-Droid can take up to a week to provide updates after release to build updates. The F-Droid version is signed with the F-Droid key, so no switching installation sources, without first uninstalling and deleting all data, is possible. Of course, you can still load backups of your data.
+<a href="https://github.com/NobodyForNothing/blood-pressure-monitor-fl/releases/latest"><img alt="GitHub" width="350" src="https://img.shields.io/github/v/release/NobodyForNothing/blood-pressure-monitor-fl?style=flat&logo=github&label=GitHub"> | The app won't notify you about new updates so you need to check for new versions manually or use [Obtainium](https://github.com/ImranR98/Obtainium) for that.
+
+As there is no demand Windows, Linux and MacOS builds have been stopped. In case you are interested in them feel free to open an issue to indicate that.IOS builds are currently not available as the platform is more restrictive and hard (expensive) to develop for. So I won't take this step unless there is significant demand.
+
 ## Features
 
 - Stable measurement storage
@@ -26,19 +38,7 @@
 - Add free
 - Well-documented, open-source code
 
-### Installation
-
-Currently, the app is only developed for Android, but should be easy to port to other platforms aswell.
-
-Store    |  Note
----------|-------
-[![Google Play](https://img.shields.io/github/v/release/NobodyForNothing/blood-pressure-monitor-fl?style=flat&logo=google-play&label=Google%20Play)](https://play.google.com/store/apps/details?id=com.derdilla.bloodPressureApp)  | APK provided by Google but uses the same source code. 
-[![F-Droid](https://img.shields.io/f-droid/v/com.derdilla.bloodPressureApp?style=flat&logo=fdroid&label=F-Droid)](https://f-droid.org/en/packages/com.derdilla.bloodPressureApp/)  | F-Droid can take up to a week to provide updates after release to build updates. The F-Droid version is signed with the F-Droid key, so no switching installation sources, without first uninstalling and deleting all data, is possible. Of course, you can still load backups of your data.
-[![GitHub](https://img.shields.io/github/v/release/NobodyForNothing/blood-pressure-monitor-fl?style=flat&logo=github&label=GitHub)](https://github.com/NobodyForNothing/blood-pressure-monitor-fl/releases)  | The app won't notify you about new updates so you need to check for new versions manually or use [Obtainium](https://github.com/ImranR98/Obtainium) for that.
-
-As there is no demand Windows, Linux and MacOS builds have been stopped. In case you are interested in them feel free to open an issue to indicate that.IOS builds are currently not available as the platform is more restrictive and hard (expensive) to develop for. So I won't take this step unless there is significant demand.
-
-## Screenshots
+### Screenshots
 
 <table style="width: 100%; border-collapse: collapse;">
   <tr>
