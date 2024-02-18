@@ -53,7 +53,7 @@ class _ForeignDBImportScreenState extends State<ForeignDBImportScreen> {
           if ((selections.length % 2 == 0)) {
             return 'Select data column';
           } else {
-            return 'Select column type';
+            return 'Select column type (${selections.last})';
           }
         },
         bottomAppBars: true, // TODO

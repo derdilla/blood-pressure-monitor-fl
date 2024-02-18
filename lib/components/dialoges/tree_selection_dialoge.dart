@@ -1,4 +1,6 @@
 
+import 'dart:math';
+
 import 'package:blood_pressure_app/components/dialoges/fullscreen_dialoge.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -44,16 +46,44 @@ class TreeSelectionDialoge extends StatefulWidget {
   State<TreeSelectionDialoge> createState() => _TreeSelectionDialogeState();
 }
 
-class _TreeSelectionDialogeState extends State<TreeSelectionDialoge> {
+class _TreeSelectionDialogeState extends State<TreeSelectionDialoge>
+    with TickerProviderStateMixin {
   /// Selections the user already made.
   final _selections = <String>[];
 
+  /// Error to display.
   String? _error;
+
+  /// Visible elements from last build.
+  List<String>? _lastItems;
+  
+  /// Index of the last selected item
+  int? _lastSelectedIdx;
+
+  late final AnimationController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: Duration(milliseconds: 100)
+    );
+  }
+
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
     final items = widget.buildOptions(_selections);
+    _controller.reset();
+    _controller.forward();
     return PopScope(
       canPop: _selections.isEmpty,
       onPopInvoked: (didPop) {
@@ -75,42 +105,87 @@ class _TreeSelectionDialogeState extends State<TreeSelectionDialoge> {
         },
         actionButtonText: localizations.btnSave,
         bottomAppBar: widget.bottomAppBars,
-        body: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Expanded(
-              child: ListView.builder(
-                shrinkWrap: true,
-                itemCount: items.length + 1,
-                itemBuilder: (context, idx) => (idx == 0)
-                    ? ListTile(
-                      title: Text(widget.buildTitle(_selections)),
-                      titleTextStyle: Theme.of(context).textTheme.headlineSmall,
-                    )
-                    : Padding(
-                        padding: const EdgeInsets.only(top: 10),
-                        child: ListTile(
-                          title: Text(items[idx-1]),
-                          onTap: () => setState(() {
-                            _selections.add(items[idx-1]);
-                          }),
-                          tileColor: Theme.of(context).cardColor,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                        ),
-                      ),
-              ),
-            ),
-            if (_error != null)
-              ListTile(
-                title: Text(_error!,),
-                textColor: Theme.of(context).colorScheme.error,
-                titleTextStyle: Theme.of(context).textTheme.labelLarge,
-              ),
-          ],
-        ),
+        body: _buildOptions(items),
       ),
     );
   }
+  
+  Widget _buildOptions(List<String> items) => Column(
+    mainAxisSize: MainAxisSize.min,
+    children: [
+      Expanded(
+        child: ListView.builder(
+          shrinkWrap: true,
+          itemCount: max(_lastItems?.length ?? 0, items.length) + 1,
+          itemBuilder: (context, idx) => (idx == 0)
+              ? ListTile(
+                title: Text(widget.buildTitle(_selections)),
+                titleTextStyle: Theme.of(context).textTheme.headlineSmall,
+              )
+              : UnconstrainedBox(
+                clipBehavior: Clip.hardEdge,
+                child: TweenAnimationBuilder(
+                  key: UniqueKey(),
+                  duration: Duration(milliseconds: 400 + 100 * idx), // interacts with LineChart duration property
+                  tween: Tween<double>(begin: -1, end: 0),
+                  curve: Curves.easeInOutCirc,
+                  builder: (BuildContext context, double value, child) {
+                    Material.of(context).markNeedsPaint();
+                    return FractionalTranslation(
+                      translation: Offset(value, 0.0),
+                      child: Padding(
+                        padding: const EdgeInsets.only(top: 10),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            // New tiles replace old ones
+                            SizedBox(
+                              width: MediaQuery.of(context).size.width,
+                              child: (idx-1 < items.length)
+                                ? ListTile(
+                                  title: Text(items[idx-1]),
+                                  onTap: () => setState(() {
+                                    _lastItems = items;
+                                    _selections.add(items[idx-1]);
+                                  }),
+                                  tileColor: Theme.of(context).cardColor,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                )
+                                : null,
+                            ),
+                            // Old tiles get moved away
+                            if (value < 0
+                                && _lastItems != null
+                                && _lastItems!.length > idx-1
+                                && (items.length <= idx-1
+                                  || _lastItems![idx-1] != items[idx-1]))
+                              SizedBox(
+                                width: MediaQuery.of(context).size.width - 10,
+                                child: ListTile(
+                                  title: Text(_lastItems![idx-1]),
+                                  tileColor: Theme.of(context).cardColor,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                ),
+                              ), // TODO: fix more tiles on last than on current
+                          ],
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
+        ),
+      ),
+      if (_error != null)
+        ListTile(
+          title: Text(_error!,),
+          textColor: Theme.of(context).colorScheme.error,
+          titleTextStyle: Theme.of(context).textTheme.labelLarge,
+        ),
+    ],
+  );
 }
