@@ -22,7 +22,7 @@ Currently, the app is only developed for Android, but should be easy to port to 
 
 Store    |  Note
 ---------|-------
-<a href="https://play.google.com/store/apps/details?id=com.derdilla.bloodPressureApp"><img alt="Google Play Store" width="350" src="https://img.shields.io/github/v/release/NobodyForNothing/blood-pressure-monitor-fl?style=flat&logo=google-play&label=Google%20Play"></img></a>  | APK provided by Google but uses the same source code. 
+<a href="https://play.google.com/store/apps/details?id=com.derdilla.bloodPressureApp"><img alt="Google Play Store" width="350" src="https://img.shields.io/github/v/release/NobodyForNothing/blood-pressure-monitor-fl?style=flat&logo=google-play&label=Google%20Play"></img></a>  | APK provided by Google but uses the same source code. Download sizes may be smaller.
 <a href="https://f-droid.org/en/packages/com.derdilla.bloodPressureApp/"><img alt="F-Droid Store" width="350" src="https://img.shields.io/f-droid/v/com.derdilla.bloodPressureApp?style=flat&logo=fdroid&label=F-Droid"></img></a>  | F-Droid can take up to a week to provide updates after release to build updates. The F-Droid version is signed with the F-Droid key, so no switching installation sources, without first uninstalling and deleting all data, is possible. Of course, you can still load backups of your data.
 <a href="https://github.com/NobodyForNothing/blood-pressure-monitor-fl/releases/latest"><img alt="GitHub" width="350" src="https://img.shields.io/github/v/release/NobodyForNothing/blood-pressure-monitor-fl?style=flat&logo=github&label=GitHub"> | The app won't notify you about new updates so you need to check for new versions manually or use [Obtainium](https://github.com/ImranR98/Obtainium) for that.
 
