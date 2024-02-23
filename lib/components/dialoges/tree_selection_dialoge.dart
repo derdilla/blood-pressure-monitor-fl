@@ -188,6 +188,9 @@ class _TreeSelectionDialogeState extends State<TreeSelectionDialoge>
           textColor: Theme.of(context).colorScheme.error,
           titleTextStyle: Theme.of(context).textTheme.labelLarge,
         ),
+
+      // TODO: don't rebuild when validation error
+      // TODO: backwards navigation
     ],
   );
 }
