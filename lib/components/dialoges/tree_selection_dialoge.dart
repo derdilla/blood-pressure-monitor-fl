@@ -127,18 +127,19 @@ class _TreeSelectionDialogeState extends State<TreeSelectionDialoge>
                 child: TweenAnimationBuilder(
                   key: UniqueKey(),
                   duration: Duration(milliseconds: 400 + 100 * idx), // interacts with LineChart duration property
-                  tween: Tween<double>(begin: -1, end: 0),
+                  tween: Tween<double>(begin: -0.25, end: 0.25),
                   curve: Curves.easeInOutCirc,
                   builder: (BuildContext context, double value, child) {
                     Material.of(context).markNeedsPaint();
                     return FractionalTranslation(
                       translation: Offset(value, 0.0),
-                      child: Padding(
+                      child: Container(
+                        width: MediaQuery.of(context).size.width * 2,
                         padding: const EdgeInsets.only(top: 10),
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            // New tiles replace old ones
+                            // New tiles replace old ones:
                             SizedBox(
                               width: MediaQuery.of(context).size.width,
                               child: (idx-1 < items.length)
@@ -155,22 +156,23 @@ class _TreeSelectionDialogeState extends State<TreeSelectionDialoge>
                                 )
                                 : null,
                             ),
-                            // Old tiles get moved away
-                            if (value < 0
+                            // Old tiles get moved away:
+                            if (value < 0.25 // remove after animation finished
                                 && _lastItems != null
-                                && _lastItems!.length > idx-1
-                                && (items.length <= idx-1
-                                  || _lastItems![idx-1] != items[idx-1]))
+                                && _lastItems!.length > idx-1) // element available
                               SizedBox(
                                 width: MediaQuery.of(context).size.width - 10,
-                                child: ListTile(
-                                  title: Text(_lastItems![idx-1]),
-                                  tileColor: Theme.of(context).cardColor,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(10),
+                                child: Padding(
+                                  padding: const EdgeInsets.only(left: 10),
+                                  child: ListTile(
+                                    title: Text(_lastItems![idx-1]),
+                                    tileColor: Theme.of(context).cardColor,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
                                   ),
                                 ),
-                              ), // TODO: fix more tiles on last than on current
+                              ),
                           ],
                         ),
                       ),
