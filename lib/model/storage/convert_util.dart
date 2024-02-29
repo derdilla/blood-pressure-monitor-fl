@@ -107,4 +107,21 @@ class ConvertUtil {
         return null;
     }
   }
+
+  /// Does its best attempt at parsing a time in arbitrary format.
+  static DateTime? parseTime(dynamic time) {
+    final intTime = parseInt(time);
+    if (intTime != null) {
+      if (intTime.toString().length == 10) { // seconds
+        return DateTime.fromMillisecondsSinceEpoch(intTime * 1000);
+      } else if (intTime.toString().length == 13) {  // milliseconds
+        return DateTime.fromMillisecondsSinceEpoch(intTime);
+      } else if (intTime.toString().length > 13) {  // nanoseconds
+        return DateTime.fromMicrosecondsSinceEpoch(intTime ~/ 1000);
+      }
+    }
+
+    final timeStr = parseString(time);
+    return DateTime.tryParse(timeStr ?? '');
+  }
 }
