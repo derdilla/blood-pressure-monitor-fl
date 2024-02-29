@@ -1,12 +1,19 @@
+import 'dart:convert';
+
 import 'package:blood_pressure_app/components/consistent_future_builder.dart';
 import 'package:blood_pressure_app/components/dialoges/tree_selection_dialoge.dart';
+import 'package:blood_pressure_app/model/blood_pressure/needle_pin.dart';
+import 'package:blood_pressure_app/model/blood_pressure/record.dart';
 import 'package:blood_pressure_app/model/export_import/import_field_type.dart';
+import 'package:blood_pressure_app/model/storage/convert_util.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:sqflite/sqflite.dart';
 
 /// Screen to select the columns from a database and annotate types.
+///
+/// Parses data table to [BloodPressureRecord] list.
 class ForeignDBImportScreen extends StatefulWidget {
   /// Create a screen to import data from a database with unknown structure.
   const ForeignDBImportScreen({super.key, required this.db});
@@ -44,7 +51,7 @@ class _ForeignDBImportScreenState extends State<ForeignDBImportScreen> {
                 .toList();
           }
         },
-        validator: (elements) {
+        validator: (List<String> elements) {
           const kMetaColumns = 2;
           if (elements.isEmpty) return 'No table selected';
           if (elements.length < kMetaColumns) return 'No time column selected';
@@ -55,7 +62,62 @@ class _ForeignDBImportScreenState extends State<ForeignDBImportScreen> {
 
           return 'The schnibledumps doesn\'t schwibble!'; // TODO
         },
-        buildTitle: (selections) {
+        onSaved: (List<String> madeSelections) async {
+          final tableName = madeSelections.removeAt(0);
+          final timeColumn = madeSelections.removeAt(0);
+          final dataColumns = <(String, RowDataFieldType)>[];
+          while (madeSelections.isNotEmpty) {
+            final column = madeSelections.removeAt(0);
+            final typeStr = madeSelections.removeAt(0);
+            final type = RowDataFieldType.values
+                .firstWhere((t) => t.localize(localizations) == typeStr);
+            dataColumns.add((column, type));
+          }
+
+          final data = await widget.db.query(tableName);
+          final measurements = <BloodPressureRecord>[];
+          for (final row in data) {
+            assert(row.containsKey(timeColumn)
+                && madeSelections.every(row.containsKey),);
+            final timestamp = ConvertUtil.parseTime(row[timeColumn]);
+            if (timestamp == null) throw FormatException('Unable to parse time: ${row[timeColumn]}'); // TODO: error handling
+            var record = BloodPressureRecord(timestamp, null, null, null, '');
+            for (final colType in dataColumns) {
+              switch (colType.$2) {
+                case RowDataFieldType.timestamp:
+                  assert(false, 'Not up for selection');
+                case RowDataFieldType.sys:
+                  record = record.copyWith(
+                    systolic: ConvertUtil.parseInt(row[colType.$1]),
+                  );
+                case RowDataFieldType.dia:
+                  record = record.copyWith(
+                    diastolic: ConvertUtil.parseInt(row[colType.$1]),
+                  );
+                case RowDataFieldType.pul:
+                  record = record.copyWith(
+                    pulse: ConvertUtil.parseInt(row[colType.$1]),
+                  );
+                case RowDataFieldType.notes:
+                  record = record.copyWith(
+                    notes: ConvertUtil.parseString(row[colType.$1]),
+                  );
+                case RowDataFieldType.needlePin:
+                  try {
+                    final pin = MeasurementNeedlePin.fromJson(jsonDecode(row[colType.$1].toString()));
+                    record = record.copyWith(
+                      needlePin: pin,
+                    );
+                  } on FormatException {
+                    // Not parsable: silently ignore for now
+                  }
+              }
+            }
+            measurements.add(record);
+          }
+          if (context.mounted) Navigator.pop(context, measurements);
+        },
+        buildTitle: (List<String> selections) {
           if (selections.isEmpty) return 'Select table';
           if (selections.length == 1) return 'Select time column';
           if ((selections.length % 2 == 0)) {
@@ -66,7 +128,6 @@ class _ForeignDBImportScreenState extends State<ForeignDBImportScreen> {
         },
         bottomAppBars: true, // TODO
       );
-      // TODO: perform import
       // TODO: localize everything
       // TODO: detect when no more selections are possible
     },
@@ -79,7 +140,7 @@ class _ColumnImportData {
   static Future<_ColumnImportData> loadFromDB(Database db) async {
     final masterTable = await db.query('sqlite_master',
       columns: ['name', 'sql'],
-      where: 'type = "table"'
+      where: 'type = "table"',
     );
     final columns = <String, List<String>?>{};
     for (final e in masterTable) {

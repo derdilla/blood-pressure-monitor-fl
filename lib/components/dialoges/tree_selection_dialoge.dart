@@ -6,6 +6,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 /// Generic multilayered fullscreen dialoge for nesting string selections.
+///
+/// Unlike other dialoges this doesn't drop the scope by default and needs users
+/// to implement it in the [onSaved] attribute.
+// TODO: consider making this a abstract class and require implementation.
 class TreeSelectionDialoge extends StatefulWidget {
   /// Create a multilayered string selection dialoge.
   const TreeSelectionDialoge({super.key,
@@ -13,6 +17,7 @@ class TreeSelectionDialoge extends StatefulWidget {
     required this.buildOptions,
     required this.bottomAppBars,
     this.validator,
+    required this.onSaved,
   });
 
   /// Builder for currently visible options.
@@ -33,10 +38,20 @@ class TreeSelectionDialoge extends StatefulWidget {
 
   /// Validates selections and returns errors.
   ///
+  /// Invoked manually by the user.
+  ///
   /// When this function returns a string saving is not possible and the string
   /// will be shown to the user. When this function returns null or is null the
-  /// selections will be returned popped to the underlying scope.
+  /// the [onSaved] callback will be called.
   final String? Function(List<String> madeSelections)? validator;
+
+  /// Stores form state after [validator] pass.
+  ///
+  /// This function is responsible to prepare the form response for further use
+  /// and to pop the scope.
+  final void Function(List<String> madeSelections) onSaved;
+
+  // TODO: check mutability of passed arguments
 
   /// Whether to move the app bar for saving and loading to the bottom of the
   /// screen.
@@ -67,7 +82,7 @@ class _TreeSelectionDialogeState extends State<TreeSelectionDialoge>
     super.initState();
     _controller = AnimationController(
       vsync: this,
-      duration: Duration(milliseconds: 100)
+      duration: const Duration(milliseconds: 100),
     );
   }
 
@@ -99,9 +114,7 @@ class _TreeSelectionDialogeState extends State<TreeSelectionDialoge>
           if (_error != null) {
             return;
           }
-          final selections = _selections.toList();
-          _selections.clear();
-          Navigator.pop(context, selections);
+          widget.onSaved(_selections);
         },
         actionButtonText: localizations.btnSave,
         bottomAppBar: widget.bottomAppBars,

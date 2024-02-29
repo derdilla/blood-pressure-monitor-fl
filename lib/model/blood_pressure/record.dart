@@ -34,6 +34,23 @@ class BloodPressureRecord {
   /// Secondary information about the measurement.
   final MeasurementNeedlePin? needlePin;
 
+  /// Creates a new record from this one by updating individual properties.
+  BloodPressureRecord copyWith({
+    DateTime? creationTime,
+    int? systolic,
+    int? diastolic,
+    int? pulse,
+    String? notes,
+    MeasurementNeedlePin? needlePin,
+  }) => BloodPressureRecord(
+    creationTime ?? this.creationTime,
+    systolic ?? this.systolic,
+    diastolic ?? this.diastolic,
+    pulse ?? this.pulse,
+    notes ?? this.notes,
+    needlePin: needlePin ?? this.needlePin,
+  );
+
   @override
   String toString() => 'BloodPressureRecord($creationTime, $systolic, $diastolic, $pulse, $notes, $needlePin)';
 }
