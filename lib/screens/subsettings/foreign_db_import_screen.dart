@@ -10,6 +10,7 @@ import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:sqlparser/sqlparser.dart';
 
 /// Screen to select the columns from a database and annotate types.
 ///
@@ -114,7 +115,9 @@ class _ForeignDBImportScreenState extends State<ForeignDBImportScreen> {
                   );
                 case RowDataFieldType.needlePin:
                   try {
-                    final pin = MeasurementNeedlePin.fromJson(jsonDecode(row[colType.$1].toString()));
+                    final json = jsonDecode(row[colType.$1].toString());
+                    if (json is! Map<String, dynamic>) continue;
+                    final pin = MeasurementNeedlePin.fromJson(json);
                     record = record.copyWith(
                       needlePin: pin,
                     );
@@ -148,34 +151,23 @@ class _ColumnImportData {
   _ColumnImportData._create(this.columns);
   
   static Future<_ColumnImportData> loadFromDB(Database db) async {
+    final engine = SqlEngine();
+
     final masterTable = await db.query('sqlite_master',
-      columns: ['name', 'sql'],
+      columns: ['sql'],
       where: 'type = "table"',
     );
     final columns = <String, List<String>?>{};
     for (final e in masterTable) {
-      final tableName = e['name']!.toString();
       final creationSql = e['sql']!.toString();
-      final colNames = RegExp(r'CREATE\s+TABLE\s+[0-9\w]+\s*\(([\w\s()0-9,]+?)\)+')
-          .firstMatch(creationSql)
-          ?.group(1)
-          ?.split(RegExp(r'[,()]'))
-          .map((e) => e
-              .split(' ')
-              .where((e) => e.isNotEmpty)
-              .whereNot((e) => ['INTEGER', 'TEXT', 'NOT', 'OR', 'PRIMARY',
-                    'FOREIGN', 'DEFAULT', 'NULL', 'KEY', 'PREFERENCES', 'BLOB',]
-                  .contains(e),
-              )
-              .firstWhereOrNull((e) => e.trim().isNotEmpty),
-          )
-          .whereNotNull()
-          .toSet() // remove duplicates
-          .toList();
-      print('$creationSql:\t $colNames');
-      // don't show tables without columns
-      if (colNames?.isNotEmpty ?? false) {
-        columns[tableName] = colNames;
+      final rootNode = engine.analyze(creationSql).root;
+      if (rootNode is CreateTableStatement) {
+        final colNames = rootNode.columns
+            .map((e) => e.columnName)
+            .toSet()
+            .toList();
+
+        if (colNames.isNotEmpty) columns[rootNode.tableName] = colNames;
       }
     } 
     return _ColumnImportData._create(columns);
