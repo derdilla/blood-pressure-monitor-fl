@@ -117,7 +117,7 @@ class _ForeignDBImportScreenState extends State<ForeignDBImportScreen> {
                   try {
                     final json = jsonDecode(row[colType.$1].toString());
                     if (json is! Map<String, dynamic>) continue;
-                    final pin = MeasurementNeedlePin.fromJson(json);
+                    final pin = MeasurementNeedlePin.fromMap(json);
                     record = record.copyWith(
                       needlePin: pin,
                     );
