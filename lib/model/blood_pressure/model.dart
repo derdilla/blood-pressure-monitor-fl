@@ -77,8 +77,8 @@ class BloodPressureModel extends ChangeNotifier {
 
   /// Adds a new measurement at the correct chronological position in the List.
   ///
-  /// This is not suitable for user inputs, as in this case export is needed as well. Consider using
-  /// [BloodPressureModel.addAndExport] instead.
+  /// This is not suitable for user inputs, as in this case export is needed as
+  /// well. Consider using [BloodPressureModel.addAndExport] instead.
   Future<void> add(BloodPressureRecord measurement) async {
     if (!_database.isOpen) return;
     final existing = await _database.query('bloodPressureModel',
@@ -106,6 +106,26 @@ class BloodPressureModel extends ChangeNotifier {
       });
     }
     notifyListeners();
+  }
+
+  /// Convenience wrapper for [add] that follows best practices.
+  ///
+  /// This ensures no timeout occurs by waiting for operations to finish and
+  /// exports in case the [context] is provided and the option in export
+  /// settings is active.
+  Future<void> addAll(
+    List<BloodPressureRecord> measurements,
+    BuildContext? context,
+  ) async {
+    for (final measurement in measurements) {
+      await add(measurement);
+    }
+
+    if (context == null || !context.mounted) return;
+    final exportSettings = Provider.of<ExportSettings>(context, listen: false);
+    if (exportSettings.exportAfterEveryEntry) {
+      performExport(context);
+    }
   }
 
   /// Adds a measurement to the model and tries to export all measurements, if [ExportSettings.exportAfterEveryEntry] is

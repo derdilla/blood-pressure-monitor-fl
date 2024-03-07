@@ -97,18 +97,14 @@ class ExportButtonBar extends StatelessWidget {
                     });
                     if (result.hasError()) return;
                     final model = Provider.of<BloodPressureModel>(context, listen: false);
-                    for (final record in importedRecords) {
-                      await model.add(record);
-                    }
+                    await model.addAll(importedRecords, null);
                     messenger.showSnackBar(SnackBar(content: Text(
                         localizations.importSuccess(importedRecords.length),),),);
                     break;
                   case 'db':
                     final model = Provider.of<BloodPressureModel>(context, listen: false);
                     final importedModel = await BloodPressureModel.create(dbPath: file.path, isFullPath: true);
-                    for (final record in await importedModel.all) {
-                      await model.add(record);
-                    }
+                    await model.addAll(await importedModel.all, null);
                     break;
                   default:
                     _showError(messenger, localizations.errWrongImportFormat);
