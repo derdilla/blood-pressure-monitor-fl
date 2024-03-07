@@ -4,6 +4,7 @@ import 'package:blood_pressure_app/components/consistent_future_builder.dart';
 import 'package:blood_pressure_app/components/dialoges/enter_timeformat_dialoge.dart';
 import 'package:blood_pressure_app/components/dialoges/input_dialoge.dart';
 import 'package:blood_pressure_app/components/settings/settings_widgets.dart';
+import 'package:blood_pressure_app/model/blood_pressure/model.dart';
 import 'package:blood_pressure_app/model/blood_pressure/warn_values.dart';
 import 'package:blood_pressure_app/model/iso_lang_names.dart';
 import 'package:blood_pressure_app/model/storage/storage.dart';
@@ -341,11 +342,13 @@ class SettingsPage extends StatelessWidget {
                     },
                 ),
                 ListTile(
-                  title: Text('TODO'), // TODO
-                  leading: Icon(Icons.add_circle, color: Colors.red,),
+                  title: Text('Import foreign database (Preview)'), // TODO
+                  subtitle: Text('Unstable feature: Use at your own risk. Please'
+                      ' open issues and give feedback in form of issues on this '
+                      'projects GitHub page (accessible through the source code button).'),
+                  leading: Icon(Icons.add_circle, color: Colors.orange,),
                   onTap: () async {
                     final messenger = ScaffoldMessenger.of(context);
-                    final navigator = Navigator.of(context);
                     final result = await FilePicker.platform.pickFiles();
 
                     if (result == null) {
@@ -360,9 +363,20 @@ class SettingsPage extends StatelessWidget {
 
                     final db = await openDatabase(path);
 
-                    navigator.push(MaterialPageRoute(builder: (context) =>
-                          ForeignDBImportScreen(db: db,),),
-                    );
+                    if (!context.mounted) return;
+                    final data = await showForeignDBImportDialoge(context,
+                        settings.bottomAppBars, db,);
+
+                    if (!context.mounted) return;
+                    if (data == null) {
+                      messenger.showSnackBar(SnackBar(content: Text(localizations.errNotImportable)));
+                      return;
+                    }
+                    // TODO: Show import preview
+                    final model = Provider.of<BloodPressureModel>(context, listen: false);
+                    await model.addAll(data, context);
+                    // TODO: give feedback
+
                   },
                 )
               ],

@@ -16,10 +16,19 @@ import 'package:sqflite/sqflite.dart';
 /// Parses data table to [BloodPressureRecord] list.
 class ForeignDBImportScreen extends StatefulWidget {
   /// Create a screen to import data from a database with unknown structure.
-  const ForeignDBImportScreen({super.key, required this.db});
+  /// 
+  /// Parses selected data to a [BloodPressureRecord] list.
+  const ForeignDBImportScreen({super.key, 
+    required this.db, 
+    required this.bottomAppBars,
+  });
 
   /// Database from which to import data.
   final Database db;
+
+  /// Whether to move the app bar for saving and loading to the bottom of the
+  /// screen.
+  final bool bottomAppBars;
 
   @override
   State<ForeignDBImportScreen> createState() => _ForeignDBImportScreenState();
@@ -60,7 +69,8 @@ class _ForeignDBImportScreenState extends State<ForeignDBImportScreen> {
           }
           if (elements.length < 4) return 'Select at least one data column';
 
-          return 'The schnibledumps doesn\'t schwibble!'; // TODO
+          // return 'The schnibledumps doesn\'t schwibble!'; // TODO check if more tests are required
+          return null;
         },
         onSaved: (List<String> madeSelections) async {
           final tableName = madeSelections.removeAt(0);
@@ -126,7 +136,7 @@ class _ForeignDBImportScreenState extends State<ForeignDBImportScreen> {
             return 'Select column type (${selections.last})';
           }
         },
-        bottomAppBars: true, // TODO
+        bottomAppBars: widget.bottomAppBars, // TODO
       );
       // TODO: localize everything
       // TODO: detect when no more selections are possible
@@ -177,3 +187,18 @@ class _ColumnImportData {
   /// Names of all tables.
   Iterable<String> get tableNames => columns.keys;
 }
+
+/// Shows a dialoge to import arbitrary data from a external database.
+Future<List<BloodPressureRecord>?> showForeignDBImportDialoge(
+    BuildContext context,
+    bool bottomAppBars,
+    Database db) =>
+    showDialog<List<BloodPressureRecord>>(
+      context: context, builder: (context) =>
+        Dialog.fullscreen(
+          child: ForeignDBImportScreen(
+            bottomAppBars: bottomAppBars,
+            db: db,
+          ),
+        ),
+    );
