@@ -31,6 +31,7 @@ dependencies:
   jsaver: ^1.2.0
   restart_app: ^1.2.1
   fluttertoast: ^8.2.4
+  sqlparser: ^0.34.1
 
 dev_dependencies:
   file: any
