@@ -2,9 +2,11 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:blood_pressure_app/components/dialoges/import_preview.dart';
 import 'package:blood_pressure_app/model/blood_pressure/model.dart';
 import 'package:blood_pressure_app/model/blood_pressure/record.dart';
 import 'package:blood_pressure_app/model/export_import/csv_converter.dart';
+import 'package:blood_pressure_app/model/export_import/csv_record_parsing_actor.dart';
 import 'package:blood_pressure_app/model/export_import/pdf_converter.dart';
 import 'package:blood_pressure_app/model/export_import/record_parsing_result.dart';
 import 'package:blood_pressure_app/model/storage/export_columns_store.dart';
@@ -72,6 +74,19 @@ class ExportButtonBar extends StatelessWidget {
                     final converter = CsvConverter(
                       Provider.of<CsvExportSettings>(context, listen: false),
                       Provider.of<ExportColumnsManager>(context, listen: false),
+                    );
+                    // TODO: integrate properly
+                    await showDialog(context: context, builder: (context) =>
+                      Dialog.fullscreen(
+                        child: ImportPreview(
+                          bottomAppBar: true,
+                          initialActor: CsvRecordParsingActor(
+                            converter,
+                            utf8.decode(binaryContent),
+                          ),
+                          columnsManager: Provider.of<ExportColumnsManager>(context, listen: false),
+                        ),
+                      ),
                     );
                     final result = converter.parse(utf8.decode(binaryContent));
                     final importedRecords = result.getOr((error) {
