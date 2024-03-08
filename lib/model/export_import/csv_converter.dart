@@ -47,48 +47,75 @@ class CsvConverter {
   /// A needle pin takes precedent over a color.
   RecordParsingResult parse(String csvString) {
     // Turn csv into lines.
-    final lines = (){
-        final converter = CsvToListConverter(
-          fieldDelimiter: settings.fieldDelimiter,
-          textDelimiter: settings.textDelimiter,
-          shouldParseNumbers: false,
-        );
-        final csvLines = converter.convert(csvString, eol: '\r\n');
-        if (csvLines.length < 2) return converter.convert(csvString, eol: '\n');
-        return csvLines;
-    }();
+    final lines = getCsvLines(csvString);
     if (lines.length < 2) return RecordParsingResult.err(RecordParsingErrorEmptyFile());
 
     // Get and validate columns from csv title.
-    final List<ExportColumn> columns = [];
-    for (final titleText in lines.removeAt(0)) {
-      assert(titleText is String);
-      final formattedTitleText = (titleText as String).trim();
-      final column = availableColumns.firstWhere(
-              (c) => c.csvTitle == formattedTitleText
-                  && c.restoreAbleType != null,);
-      if (column == null) return RecordParsingResult.err(RecordParsingErrorUnknownColumn(titleText));
-      columns.add(column);
-    }
-    if (columns.where((e) => e.restoreAbleType == RowDataFieldType.timestamp).isEmpty) {
+    final List<String> titles = lines.removeAt(0).cast();
+    final Map<String, ExportColumn> columns = getColumns(titles);
+    // TODO: consider returning `RecordParsingResult.err(RecordParsingErrorUnknownColumn(columnTitle))` for unknownColumns
+    
+    if (columns.values.none((e) => e.restoreAbleType == RowDataFieldType.timestamp)) {
       return RecordParsingResult.err(RecordParsingErrorTimeNotRestoreable());
     }
 
     // Convert data to records.
+    return parseRecords(lines.map((e) => e.cast<String>()).toList(), titles, columns);
+  }
+
+  /// Returns
+  List<List<dynamic>> getCsvLines(String csvString) {
+    final converter = CsvToListConverter(
+      fieldDelimiter: settings.fieldDelimiter,
+      textDelimiter: settings.textDelimiter,
+      shouldParseNumbers: false,
+    );
+    final csvLines = converter.convert(csvString, eol: '\r\n');
+    if (csvLines.length < 2) return converter.convert(csvString, eol: '\n');
+    return csvLines;
+  }
+
+  /// Map column names in the first csv-line to matching [ExportColumn].
+  Map<String, ExportColumn> getColumns(List<String> firstLine) {
+    final Map<String, ExportColumn> columns = {};
+    for (final titleText in firstLine) {
+      final formattedTitleText = titleText.trim();
+      final column = availableColumns.firstWhere(
+            (c) => c.csvTitle == formattedTitleText
+            && c.restoreAbleType != null,);
+      if (column != null) columns[titleText] = column;
+    }
+    return columns;
+  }
+
+  /// Parse csv data in [dataLines] using [parsers] according to [orderedColumns].
+  ///
+  /// [dataLines] contains all lines of the csv file without the headline and
+  /// [orderedColumns] must have the same length as every line in [dataLines]
+  /// for parsing to succeed.
+  ///
+  /// [assumeHeadline] controls whether the line number should be offset by one
+  /// in case of error.
+  RecordParsingResult parseRecords(
+      List<List<String>> dataLines,
+      List<String> orderedColumns,
+      Map<String,ExportColumn> parsers, [
+        bool assumeHeadline = true,
+      ]) {
     final List<BloodPressureRecord> records = [];
-    int currentLineNumber = 1;
-    for (final currentLine in lines) {
-      if (currentLine.length < columns.length) {
+    int currentLineNumber = assumeHeadline ? 1 : 0;
+    for (final currentLine in dataLines) {
+      if (currentLine.length < orderedColumns.length) {
         return RecordParsingResult.err(RecordParsingErrorExpectedMoreFields(currentLineNumber));
       }
-      
+
       final List<(RowDataFieldType, dynamic)> recordPieces = [];
-      for (int fieldIndex = 0; fieldIndex < columns.length; fieldIndex++) {
-        assert(currentLine[fieldIndex] is String);
-        final piece = columns[fieldIndex].decode(currentLine[fieldIndex]);
+      for (int fieldIndex = 0; fieldIndex < orderedColumns.length; fieldIndex++) {
+        final parser = parsers[orderedColumns[fieldIndex]];
+        final piece = parser?.decode(currentLine[fieldIndex]);
         // Validate that the column parsed the expected type.
         // Null can be the result of empty fields.
-        if (piece?.$1 != columns[fieldIndex].restoreAbleType
+        if (piece?.$1 != parser?.restoreAbleType
             && piece != null) { // TODO: consider making some RowDataFieldType values nullable and handling this in the parser.
           return RecordParsingResult.err(RecordParsingErrorUnparsableField(currentLineNumber, currentLine[fieldIndex]));
         }
@@ -96,27 +123,27 @@ class CsvConverter {
       }
 
       final DateTime? timestamp = recordPieces.firstWhereOrNull(
-              (piece) => piece.$1 == RowDataFieldType.timestamp,)?.$2;
+            (piece) => piece.$1 == RowDataFieldType.timestamp,)?.$2;
       if (timestamp == null) {
         return RecordParsingResult.err(RecordParsingErrorTimeNotRestoreable());
       }
 
       final int? sys = recordPieces.firstWhereOrNull(
-              (piece) => piece.$1 == RowDataFieldType.sys,)?.$2;
+            (piece) => piece.$1 == RowDataFieldType.sys,)?.$2;
       final int? dia = recordPieces.firstWhereOrNull(
-              (piece) => piece.$1 == RowDataFieldType.dia,)?.$2;
+            (piece) => piece.$1 == RowDataFieldType.dia,)?.$2;
       final int? pul = recordPieces.firstWhereOrNull(
-              (piece) => piece.$1 == RowDataFieldType.pul,)?.$2;
+            (piece) => piece.$1 == RowDataFieldType.pul,)?.$2;
       final String note = recordPieces.firstWhereOrNull(
-              (piece) => piece.$1 == RowDataFieldType.notes,)?.$2 ?? '';
+            (piece) => piece.$1 == RowDataFieldType.notes,)?.$2 ?? '';
       final MeasurementNeedlePin? needlePin = recordPieces.firstWhereOrNull(
-              (piece) => piece.$1 == RowDataFieldType.needlePin,)?.$2;
+            (piece) => piece.$1 == RowDataFieldType.needlePin,)?.$2;
 
       records.add(BloodPressureRecord(timestamp, sys, dia, pul, note, needlePin: needlePin));
       currentLineNumber++;
     }
-    
-    assert(records.length == lines.length, 'every line should have been parse'); // first line got removed
+
+    assert(records.length == dataLines.length, 'every line should have been parse');
     return RecordParsingResult.ok(records);
   }
 }

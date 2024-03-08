@@ -41,6 +41,7 @@ sealed class RecordParsingError {}
 class RecordParsingErrorEmptyFile implements RecordParsingError {}
 
 /// There is no column that allows restoring a timestamp.
+// TODO: return line.
 class RecordParsingErrorTimeNotRestoreable implements RecordParsingError {}
 
 /// There is no column with this csv title that can be reversed.
