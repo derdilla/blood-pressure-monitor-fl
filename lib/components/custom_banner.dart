@@ -15,14 +15,11 @@ import 'package:flutter/material.dart';
 ///   )
 /// )
 /// ```
-class CustomBanner extends StatelessWidget {
+class CustomBanner extends MaterialBanner {
   /// Create a banner that displays information and an action.
-  const CustomBanner({super.key, required this.content, this.action});
-
-  /// The main content of the banner.
-  ///
-  /// Gets displayed on the left side.
-  final Widget content;
+  CustomBanner({super.key, required super.content, this.action}) : super(
+    actions: [const SizedBox.shrink()],
+  );
 
   /// Primary action of the banner.
   ///
@@ -31,6 +28,17 @@ class CustomBanner extends StatelessWidget {
   /// When this is larger than the screen width, overflow occurs.
   final Widget? action;
 
+
+  @override
+  MaterialBanner withAnimation(Animation<double> newAnimation, {Key? fallbackKey})
+    => CustomBanner(content: content, action: action, key: key ?? fallbackKey,);
+  // TODO: animate
+
+  @override
+  State<CustomBanner> createState() => _CustomBannerState();
+}
+
+class _CustomBannerState extends State<CustomBanner> {
   @override
   Widget build(BuildContext context) => Container(
     margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 4),
@@ -41,9 +49,9 @@ class CustomBanner extends StatelessWidget {
     ),
     child: Row(
       children: [
-        Expanded(child: content),
-        if (action != null)
-          action!,
+        Expanded(child: widget.content),
+        if (widget.action != null)
+          widget.action!,
       ],
     ),
   );
