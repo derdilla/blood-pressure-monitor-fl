@@ -1,1 +1,1 @@
-Save, analyze and export your blood pressure!
+A versatile app for tracking, analyzing, and exporting blood pressure-related data.
