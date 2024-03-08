@@ -1,27 +1,50 @@
 
 import 'package:blood_pressure_app/model/export_import/column.dart';
+import 'package:blood_pressure_app/model/export_import/csv_converter.dart';
+import 'package:blood_pressure_app/model/export_import/record_parsing_result.dart';
 
-/// A intermediate class that allows to manage record parsing.
+/// A intermediate class usable by UI components to drive csv parsing.
 class CsvRecordParsingActor {
   /// Create an intermediate object to manage a record parsing process.
-  CsvRecordParsingActor(this.csvString) {
-
+  CsvRecordParsingActor(this._converter, String csvString) {
+    final lines = _converter.getCsvLines(csvString);
+    _headline = lines.removeAt(0);
+    dataLines = lines;
+    _columnNames = _headline ?? [];
+    _columnParsers = _converter.getColumns(_columnNames);
   }
 
-  /// The initial csv String provided to the parser
-  final String csvString;
+  final CsvConverter _converter;
+
+  /// All lines without the first line.
+  late final List<List<String>> dataLines;
+
+  List<String>? _headline;
+
+  /// The first line in the csv file.
+  List<String>? get headline => _headline;
+
+  late List<String> _columnNames;
 
   /// All columns defined in the csv headline.
-  List<String> columnNames;
+  List<String> get columnNames => _columnNames;
+
+  late Map<String, ExportColumn> _columnParsers;
 
   /// The current interpretation of columns in the csv data.
   ///
   /// There is no guarantee that every column in [columnNames] has a parser.
-  Map<String, ExportColumn> columnParsers;
+  Map<String, ExportColumn> get columnParsers => _columnParsers;
 
-  final List<void Function(CsvRecordParsingActor)> _listeners = [];
+  /// Override a columns with a custom one.
+  void changeColumnParser(String columnName, ExportColumn parser) {
+    assert(_columnNames.contains(columnName));
+    _columnParsers[columnName] = parser;
+  }
 
-  /// Register a listener that gets called once a value gets changed.
-  void addListener(void Function(CsvRecordParsingActor state) listener)
-    => _listeners.add(listener);
+  /// Try to parse the data with the current configuration.
+  RecordParsingResult attemptParse() =>
+    _converter.parseRecords(dataLines, columnNames, columnParsers, false);
 }
+
+// TODO: consider joining headline and columnNames OR support no headline.

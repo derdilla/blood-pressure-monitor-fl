@@ -19,8 +19,8 @@ class ForeignDBImportScreen extends StatefulWidget {
   /// Create a screen to import data from a database with unknown structure.
   /// 
   /// Parses selected data to a [BloodPressureRecord] list.
-  const ForeignDBImportScreen({super.key, 
-    required this.db, 
+  const ForeignDBImportScreen({super.key,
+    required this.db,
     required this.bottomAppBars,
   });
 
@@ -56,7 +56,7 @@ class _ForeignDBImportScreenState extends State<ForeignDBImportScreen> {
           } else {
             return RowDataFieldType.values
                 .whereNot((e) => e == RowDataFieldType.timestamp
-                    || selections.contains(e),)
+                || selections.contains(e),)
                 .map((e) => e.localize(localizations))
                 .toList();
           }
@@ -149,7 +149,7 @@ class _ForeignDBImportScreenState extends State<ForeignDBImportScreen> {
 
 class _ColumnImportData {
   _ColumnImportData._create(this.columns);
-  
+
   static Future<_ColumnImportData> loadFromDB(Database db) async {
     final engine = SqlEngine();
 
@@ -169,7 +169,7 @@ class _ColumnImportData {
 
         if (colNames.isNotEmpty) columns[rootNode.tableName] = colNames;
       }
-    } 
+    }
     return _ColumnImportData._create(columns);
   }
 
@@ -184,7 +184,7 @@ class _ColumnImportData {
 Future<List<BloodPressureRecord>?> showForeignDBImportDialoge(
     BuildContext context,
     bool bottomAppBars,
-    Database db) =>
+    Database db,) =>
     showDialog<List<BloodPressureRecord>>(
       context: context, builder: (context) =>
         Dialog.fullscreen(

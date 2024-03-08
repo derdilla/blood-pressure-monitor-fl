@@ -39,7 +39,7 @@ class CsvConverter {
     return csvCreator.convert(table);
   }
 
-  /// Attempts to parse a csv string.
+  /// Attempts to parse a csv string automatically.
   /// 
   /// Validates that the first line of the file contains columns present 
   /// in [availableColumns]. When a column is present multiple times only 
@@ -60,25 +60,27 @@ class CsvConverter {
     }
 
     // Convert data to records.
-    return parseRecords(lines.map((e) => e.cast<String>()).toList(), titles, columns);
+    return parseRecords(lines, titles, columns);
   }
 
-  /// Returns
-  List<List<dynamic>> getCsvLines(String csvString) {
+  /// Parses lines from csv files according to settings.
+  /// 
+  /// Works around different EOL types n
+  List<List<String>> getCsvLines(String csvString) {
     final converter = CsvToListConverter(
       fieldDelimiter: settings.fieldDelimiter,
       textDelimiter: settings.textDelimiter,
       shouldParseNumbers: false,
     );
-    final csvLines = converter.convert(csvString, eol: '\r\n');
-    if (csvLines.length < 2) return converter.convert(csvString, eol: '\n');
+    final csvLines = converter.convert<String>(csvString, eol: '\r\n');
+    if (csvLines.length < 2) return converter.convert<String>(csvString, eol: '\n');
     return csvLines;
   }
 
   /// Map column names in the first csv-line to matching [ExportColumn].
-  Map<String, ExportColumn> getColumns(List<String> firstLine) {
+  Map<String, ExportColumn> getColumns(List<String> headline) {
     final Map<String, ExportColumn> columns = {};
-    for (final titleText in firstLine) {
+    for (final titleText in headline) {
       final formattedTitleText = titleText.trim();
       final column = availableColumns.firstWhere(
             (c) => c.csvTitle == formattedTitleText
