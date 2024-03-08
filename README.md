@@ -30,14 +30,15 @@ Store    |  Note
 As there is no demand Windows, Linux and MacOS builds have been stopped. In case you are interested in them feel free to open an issue to indicate that.IOS builds are currently not available as the platform is more restrictive and hard (expensive) to develop for. So I won't take this step unless there is significant demand.
 
 ## Features
+<i>blood pressure monitor</i> is a reliable blood pressure measurement tracker and analyzer. It has the ambition to allow saving measurements faster than anywhere else and make sharing data with you doctor effortless. It works out of the box but can also be configured for individual use cases.
 
-- Stable measurement storage
-- Fast input through dialogue on launch and automatic form navigation
-- Beautiful insights
-- Versatile export (CSV, PDF, SQLite) with granular control
-- High configurability
-- Add free
-- Well-documented, open-source code
+- 📏 <i>Reliable</i> measurement storing
+- 🚀 Fast input through <i>user-friendly</i> dialogues on launch and automatic form navigation
+- 📊 <i>Beautiful</i> analytics provide insights on trends, distribution, differences over the day and much more
+- 📂 Versatile <i>export and import</i> (CSV, PDF, SQLite) with granular control
+- ⚙️ High configurability
+- Ad free without disturbances
+- Well-documented, <i>open-source</i> code
 
 ### Screenshots
 
