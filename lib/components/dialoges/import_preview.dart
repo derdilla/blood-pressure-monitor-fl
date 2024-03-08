@@ -1,4 +1,6 @@
 
+import 'dart:math';
+
 import 'package:blood_pressure_app/components/dialoges/fullscreen_dialoge.dart';
 import 'package:blood_pressure_app/model/export_import/column.dart';
 import 'package:blood_pressure_app/model/export_import/csv_record_parsing_actor.dart';
@@ -7,7 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ImportPreview extends StatefulWidget {
-
+  /// Create a preview of how the app would import csv with options.
   const ImportPreview({super.key,
     required this.bottomAppBar,
     required this.initialActor, 
@@ -28,6 +30,8 @@ class ImportPreview extends StatefulWidget {
 }
 
 class _ImportPreviewState extends State<ImportPreview> {
+  static const int _kRowLimit = 30;
+
   late CsvRecordParsingActor _actor;
 
   @override
@@ -48,7 +52,7 @@ class _ImportPreviewState extends State<ImportPreview> {
           children: [
             for (int colIdx = 0; colIdx < _actor.columnNames.length; colIdx++)
               Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   DropdownButton(
                     items: [
@@ -84,11 +88,19 @@ class _ImportPreviewState extends State<ImportPreview> {
                     },
                   ),
                   const Divider(),
-                  for (int rowIdx = 0; rowIdx < _actor.dataLines.length; rowIdx++) // TODO rework if needed (parsed?)
+                  for (int rowIdx = 0; rowIdx < min(_actor.dataLines.length, _kRowLimit); rowIdx++) // TODO rework if needed (parsed?)
                     _buildCell(
                       rowIdx,
                       _actor.dataLines[rowIdx][colIdx],
                       _actor.columnParsers[_actor.columnNames[colIdx]],
+                    ),
+                  if (_kRowLimit < _actor.dataLines.length)
+                    const Align(
+                      alignment: AlignmentDirectional.center,
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 10),
+                        child: Text('...')
+                      )
                     ),
                 ],
               ),
@@ -99,6 +111,14 @@ class _ImportPreviewState extends State<ImportPreview> {
   );
 
   Widget _buildCell(int lineNumber, String csvContent, ExportColumn? parser) {
+    Widget buildContent(String txt, [Color? color]) => Padding(
+      padding: const EdgeInsets.symmetric(
+        vertical: 6,
+        horizontal: 4,
+      ),
+      child: Text(txt, style: TextStyle(color: color,),),
+    );
+
     final localizations = AppLocalizations.of(context)!;
     final parsed = parser?.decode(csvContent);
     if (parsed?.$2 == null) {
@@ -107,9 +127,7 @@ class _ImportPreviewState extends State<ImportPreview> {
           lineNumber,
           parsed?.$1.localize(localizations) ?? csvContent,
         ),
-        child: Text(csvContent, style: TextStyle(
-          color: Theme.of(context).colorScheme.error,
-        ),),
+        child: buildContent(csvContent, Theme.of(context).colorScheme.error),
       );
     }
 
@@ -119,7 +137,7 @@ class _ImportPreviewState extends State<ImportPreview> {
     if (text.isEmpty) text = '-';
     return Tooltip(
       message: csvContent,
-      child: Text(text),
+      child: buildContent(text),
     );
   }
 }
