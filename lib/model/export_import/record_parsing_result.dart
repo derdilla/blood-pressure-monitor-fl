@@ -21,7 +21,11 @@ class RecordParsingResult {
   /// Indicates that there is no result.
   bool hasError() => _error != null;
 
-  /// Returns the passed list on success or the result of [errorHandler] in case a error is present.
+  /// The returned error, if present.
+  RecordParsingError? get error => _error;
+
+  /// Returns the passed list on success or the result of [errorHandler] in case
+  /// a error is present.
   ///
   /// When [errorHandler] returns null a empty list is passed.
   List<BloodPressureRecord> getOr(List<BloodPressureRecord>? Function(RecordParsingError error) errorHandler) {
