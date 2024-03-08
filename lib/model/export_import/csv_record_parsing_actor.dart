@@ -37,8 +37,12 @@ class CsvRecordParsingActor {
   Map<String, ExportColumn> get columnParsers => _columnParsers;
 
   /// Override a columns with a custom one.
-  void changeColumnParser(String columnName, ExportColumn parser) {
+  void changeColumnParser(String columnName, ExportColumn? parser) {
     assert(_columnNames.contains(columnName));
+    if (parser == null) {
+      _columnParsers.remove(columnName);
+      return;
+    }
     _columnParsers[columnName] = parser;
   }
 
