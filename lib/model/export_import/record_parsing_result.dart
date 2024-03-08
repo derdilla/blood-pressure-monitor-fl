@@ -1,5 +1,6 @@
 
 import 'package:blood_pressure_app/model/blood_pressure/record.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 /// Indicate a possible error during record parsing.
 class RecordParsingResult {
@@ -39,17 +40,30 @@ class RecordParsingResult {
 }
 
 /// Indicates what type error occurred while trying to decode a csv data.
-sealed class RecordParsingError {}
+sealed class RecordParsingError {
+  /// Create the localized String explaining this error
+  String localize(AppLocalizations localizations) => switch (this) {
+    RecordParsingErrorEmptyFile() => localizations.errParseEmptyCsvFile,
+    RecordParsingErrorTimeNotRestoreable() => localizations.errParseTimeNotRestoreable,
+    RecordParsingErrorUnknownColumn() => localizations.errParseUnknownColumn(
+        (this as RecordParsingErrorUnknownColumn).title,),
+    RecordParsingErrorExpectedMoreFields() => localizations.errParseLineTooShort(
+        (this as RecordParsingErrorExpectedMoreFields).lineNumber,),
+    RecordParsingErrorUnparsableField() => localizations.errParseFailedDecodingField(
+      (this as RecordParsingErrorUnparsableField).lineNumber,
+      (this as RecordParsingErrorUnparsableField).fieldContents,),
+  };
+}
 
 /// There are not enough lines in the csv file to parse the record.
-class RecordParsingErrorEmptyFile implements RecordParsingError {}
+class RecordParsingErrorEmptyFile extends RecordParsingError {}
 
 /// There is no column that allows restoring a timestamp.
 // TODO: return line.
-class RecordParsingErrorTimeNotRestoreable implements RecordParsingError {}
+class RecordParsingErrorTimeNotRestoreable extends RecordParsingError {}
 
 /// There is no column with this csv title that can be reversed.
-class RecordParsingErrorUnknownColumn implements RecordParsingError {
+class RecordParsingErrorUnknownColumn extends RecordParsingError {
   RecordParsingErrorUnknownColumn(this.title);
   
   /// CSV title of the column no equivalent was found for. 
@@ -57,7 +71,7 @@ class RecordParsingErrorUnknownColumn implements RecordParsingError {
 }
 
 /// The current line has less fields than the first line.
-class RecordParsingErrorExpectedMoreFields implements RecordParsingError {
+class RecordParsingErrorExpectedMoreFields extends RecordParsingError {
   RecordParsingErrorExpectedMoreFields(this.lineNumber);
 
   /// Line in which this error occurred. 
@@ -65,7 +79,7 @@ class RecordParsingErrorExpectedMoreFields implements RecordParsingError {
 }
 
 /// The corresponding column couldn't decode a specific field in the csv file.
-class RecordParsingErrorUnparsableField implements RecordParsingError {
+class RecordParsingErrorUnparsableField extends RecordParsingError {
   RecordParsingErrorUnparsableField(this.lineNumber, this.fieldContents);
 
   /// Line in which this error occurred.
