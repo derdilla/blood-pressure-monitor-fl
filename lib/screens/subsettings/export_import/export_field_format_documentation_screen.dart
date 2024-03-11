@@ -5,8 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-/// Screen to show large markdown text.
+/// Screen to show long markdown text.
 class InformationScreen extends StatelessWidget {
+  /// Create a screen to display long markdown text.
   const InformationScreen({super.key, required this.text});
 
   /// text in markdown format
@@ -14,22 +15,29 @@ class InformationScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Scaffold(
-        appBar: AppBar(
-          forceMaterialTransparency: true,
-        ),
-        body: Container(
-          padding: const EdgeInsets.all(10),
-          child: Markdown(
-            selectable: true,
-            onTapLink: getLinkTapHandler(context),
-            data: text,
-          ),
-        ),
-    );
+    appBar: AppBar(
+      forceMaterialTransparency: true,
+    ),
+    body: Container(
+      padding: const EdgeInsets.all(10),
+      child: Markdown(
+        selectable: true,
+        onTapLink: getLinkTapHandler(context),
+        data: text,
+      ),
+    ),
+  );
 }
 
-typedef LinkTapHandler = FutureOr<void> Function(String, String?, String)?;
+/// Definition of a function that resolves lik presses
+typedef LinkTapHandler = FutureOr<void> Function(String text, String? destination, String title)?;
 
+/// Constructs a function that handles link presses to urls and some screens.
+///
+/// Currently supported
+/// - `http://*`
+/// - `https://*`
+/// - `screen://TimeFormattingHelp`
 LinkTapHandler getLinkTapHandler(BuildContext context) => (String text, String? destination, String title) async {
   if (destination == null) {
     return;
@@ -43,7 +51,8 @@ LinkTapHandler getLinkTapHandler(BuildContext context) => (String text, String? 
   } else if (destination.startsWith('screen://')) {
     switch (destination.split('//')[1]) {
       case 'TimeFormattingHelp':
-        Navigator.of(context).push(MaterialPageRoute(builder: (context) => const TimeFormattingReferenceScreen()));
+        Navigator.push(context, MaterialPageRoute(builder:
+            (context) => const TimeFormattingReferenceScreen(),),);
         return;
     }
   }

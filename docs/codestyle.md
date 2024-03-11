@@ -16,5 +16,6 @@ The goal of this style guideline is to make dart code maintainable and to reduce
 - 2 spaces indentation
 - partially extract build to hidden methods where the main build method becomes hard to read
 - Try to create useful documentation for every method / class you create. In case you find yourself looking at a methods source code to figure out a particular aspect of it, add that information to the documentation.
+- Avoid using `Navigator.of` and prefer calling `Navigator.pop` and `Navigator.push` directly  
 
 Refer to [effective dart](https://dart.dev/effective-dart) for inspiration in case you find yourself spending too much time making style decisions.

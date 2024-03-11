@@ -77,7 +77,7 @@ class _InputDialogeState extends State<InputDialoge> {
       ),
       actions: [
         ElevatedButton(
-            onPressed: () => Navigator.of(context).pop(null),
+            onPressed: () => Navigator.pop(context, null),
             child: Text(localizations.btnCancel),),
         ElevatedButton(
             onPressed: () => _onSubmit(controller.text),
@@ -94,7 +94,7 @@ class _InputDialogeState extends State<InputDialoge> {
       });
       return;
     }
-    Navigator.of(context).pop(value);
+    Navigator.pop(context, value);
   }
 }
 

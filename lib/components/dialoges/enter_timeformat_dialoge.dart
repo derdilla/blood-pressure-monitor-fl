@@ -57,7 +57,7 @@ class _EnterTimeFormatDialogeState extends State<EnterTimeFormatDialoge> {
       bottomAppBar: widget.bottomAppBars,
       onActionButtonPressed: () {
         if(timeFormatFieldController.text.isNotEmpty) {
-          Navigator.of(context).pop(timeFormatFieldController.text);
+          Navigator.pop(context, timeFormatFieldController.text);
         }
       },
       body: SingleChildScrollView(

@@ -221,7 +221,7 @@ class _AddExportColumnDialogeState extends State<AddExportColumnDialoge>
             labelText: labelText,
             suffixIcon: IconButton(
                 onPressed: () {
-                  Navigator.of(context).push(MaterialPageRoute(
+                  Navigator.push(context, MaterialPageRoute(
                     builder: (context) => InformationScreen(
                         text: inputDocumentation,
                     ),

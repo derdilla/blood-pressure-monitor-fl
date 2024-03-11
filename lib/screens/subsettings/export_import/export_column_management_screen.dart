@@ -62,10 +62,10 @@ class ExportColumnsManagementScreen extends StatelessWidget {
                                 title: Text(AppLocalizations.of(context)!.confirmDelete),
                                 actions: [
                                   ElevatedButton(
-                                    onPressed: () => Navigator.of(context).pop(false),
+                                    onPressed: () => Navigator.pop(context, false),
                                     child: Text(AppLocalizations.of(context)!.btnCancel),),
                                   ElevatedButton(
-                                    onPressed: () => Navigator.of(context).pop(true),
+                                    onPressed: () => Navigator.pop(context, true),
                                     child: Text(AppLocalizations.of(context)!.btnConfirm),),
                                 ],
                               ),

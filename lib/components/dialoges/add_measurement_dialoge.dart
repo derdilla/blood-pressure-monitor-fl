@@ -249,13 +249,13 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
         }
 
         if (record != null && intake != null) {
-          Navigator.of(context).pop((record, intake));
+          Navigator.pop(context, (record, intake));
         }
         if (record == null && !_measurementFormActive && intake != null) {
-          Navigator.of(context).pop((record, intake));
+          Navigator.pop(context, (record, intake));
         }
         if (record != null && intake == null && medicineId == null) {
-          Navigator.of(context).pop((record, intake));
+          Navigator.pop(context, (record, intake));
         }
       },
       actionButtonText: localizations.btnSave,

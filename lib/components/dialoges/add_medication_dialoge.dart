@@ -42,7 +42,7 @@ class _AddMedicationDialogeState extends State<AddMedicationDialoge> {
       actionButtonText: localizations.btnSave,
       onActionButtonPressed: () {
         formKey.currentState?.save();
-        Navigator.of(context).pop(Medicine(
+        Navigator.pop(context, Medicine(
           widget.settings.highestMedIndex,
           designation: _designation ?? '',
           color: _color,

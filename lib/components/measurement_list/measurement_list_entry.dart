@@ -122,11 +122,11 @@ Future<bool> showConfirmDeletionDialoge(BuildContext context) async =>
       content: Text(AppLocalizations.of(context)!.confirmDeleteDesc),
       actions: [
         ElevatedButton(
-          onPressed: () => Navigator.of(context).pop(false),
+          onPressed: () => Navigator.pop(context, false),
           child: Text(AppLocalizations.of(context)!.btnCancel),
         ),
         ElevatedButton(
-          onPressed: () => Navigator.of(context).pop(true),
+          onPressed: () => Navigator.pop(context, true),
           child: Text(AppLocalizations.of(context)!.btnConfirm),
         ),
       ],

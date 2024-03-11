@@ -35,7 +35,7 @@ class _DeleteDataScreenState extends State<DeleteDataScreen> {
             if (_deletedData) {
               Restart.restartApp();
             } else {
-              Navigator.of(context).pop();
+              Navigator.pop(context, );
             }
           },
         ),
@@ -189,7 +189,7 @@ class _DeleteDataScreenState extends State<DeleteDataScreen> {
           actionsAlignment: MainAxisAlignment.spaceBetween,
           actions: [
             TextButton(
-                onPressed: () => Navigator.of(context).pop(false),
+                onPressed: () => Navigator.pop(context, false),
                 child: Text(AppLocalizations.of(context)!.btnCancel),),
             Theme(
               data: ThemeData.from(
@@ -197,7 +197,7 @@ class _DeleteDataScreenState extends State<DeleteDataScreen> {
                   useMaterial3: true,
               ),
               child: ElevatedButton.icon(
-                  onPressed: () => Navigator.of(context).pop(true),
+                  onPressed: () => Navigator.pop(context, true),
                   icon: const Icon(Icons.delete_forever),
                   label: Text(AppLocalizations.of(context)!.btnConfirm),
               ),
