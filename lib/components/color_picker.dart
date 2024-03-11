@@ -157,7 +157,7 @@ Future<Color?> showColorPickerDialog(
     content: ColorPicker(
       initialColor: initialColor,
       onColorSelected: (color) {
-        Navigator.of(context).pop(color);
+        Navigator.pop(context, color);
       },
     ),
     actions: [

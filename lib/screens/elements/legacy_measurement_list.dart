@@ -108,14 +108,14 @@ class LegacyMeasurementsList extends StatelessWidget {
                                           content: Text(AppLocalizations.of(context)!.confirmDeleteDesc),
                                           actions: [
                                             ElevatedButton(
-                                                onPressed: () => Navigator.of(context).pop(),
+                                                onPressed: () => Navigator.pop(context, ),
                                                 child: Text(AppLocalizations.of(context)!.btnCancel),),
                                             ElevatedButton(
                                                 onPressed: () {
                                                   model.delete(data[index].creationTime);
 
                                                   dialogeDeletionConfirmed = true;
-                                                  Navigator.of(context).pop();
+                                                  Navigator.pop(context, );
                                                 },
                                                 child: Text(AppLocalizations.of(context)!.btnConfirm),),
                                           ],

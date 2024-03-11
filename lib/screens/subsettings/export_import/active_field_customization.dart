@@ -97,7 +97,7 @@ class ActiveExportFieldCustomization extends StatelessWidget {
                             children: availableColumns.getAllColumns().map((column) =>
                               ListTile(
                                 title: Text(column.userTitle(localizations)),
-                                onTap: () => Navigator.of(context).pop(column),
+                                onTap: () => Navigator.pop(context, column),
                               ),
                             ).toList(),
                           ),
