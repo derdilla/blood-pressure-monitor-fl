@@ -8,7 +8,6 @@ import 'package:blood_pressure_app/model/blood_pressure/record.dart';
 import 'package:blood_pressure_app/model/export_import/csv_converter.dart';
 import 'package:blood_pressure_app/model/export_import/csv_record_parsing_actor.dart';
 import 'package:blood_pressure_app/model/export_import/pdf_converter.dart';
-import 'package:blood_pressure_app/model/export_import/record_parsing_result.dart';
 import 'package:blood_pressure_app/model/storage/export_columns_store.dart';
 import 'package:blood_pressure_app/model/storage/export_csv_settings_store.dart';
 import 'package:blood_pressure_app/model/storage/export_pdf_settings_store.dart';
@@ -75,20 +74,18 @@ class ExportButtonBar extends StatelessWidget {
                       Provider.of<CsvExportSettings>(context, listen: false),
                       Provider.of<ExportColumnsManager>(context, listen: false),
                     );
-                    // TODO: integrate properly
-                    await showDialog(context: context, builder: (context) =>
-                      Dialog.fullscreen(
-                        child: ImportPreview(
-                          bottomAppBar: true,
-                          initialActor: CsvRecordParsingActor(
-                            converter,
-                            utf8.decode(binaryContent),
-                          ),
-                          columnsManager: Provider.of<ExportColumnsManager>(context, listen: false),
-                        ),
+                    // TODO: verify that works
+                    final importedRecords = await showImportPreview(
+                      context,
+                      CsvRecordParsingActor(
+                        converter,
+                        utf8.decode(binaryContent),
                       ),
+                      Provider.of<ExportColumnsManager>(context, listen: false),
+                      true, // TODO use settings
                     );
-                    final result = converter.parse(utf8.decode(binaryContent));
+
+                    /*final result = converter.parse(utf8.decode(binaryContent));
                     final importedRecords = result.getOr((error) {
                       switch (error) {
                         case RecordParsingErrorEmptyFile():
@@ -111,6 +108,8 @@ class ExportButtonBar extends StatelessWidget {
                       return null;
                     });
                     if (result.hasError()) return;
+                     */
+                    if (importedRecords == null || !context.mounted) return;
                     final model = Provider.of<BloodPressureModel>(context, listen: false);
                     await model.addAll(importedRecords, null);
                     messenger.showSnackBar(SnackBar(content: Text(
