@@ -72,9 +72,9 @@ class NativeColumn extends ExportColumn {
       RowDataFieldType.needlePin,
       (record) => jsonEncode(record.needlePin?.toMap()),
       (pattern) {
-        final json = jsonDecode(pattern);
-        if (json is! Map<String, dynamic>) return null;
         try {
+          final json = jsonDecode(pattern);
+          if (json is! Map<String, dynamic>) return null;
           return MeasurementNeedlePin.fromMap(json);
         } on FormatException {
           return null;
