@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 
-import 'package:blood_pressure_app/components/dialoges/import_preview.dart';
+import 'package:blood_pressure_app/components/dialoges/import_preview_dialoge.dart';
 import 'package:blood_pressure_app/model/blood_pressure/model.dart';
 import 'package:blood_pressure_app/model/blood_pressure/record.dart';
 import 'package:blood_pressure_app/model/export_import/csv_converter.dart';

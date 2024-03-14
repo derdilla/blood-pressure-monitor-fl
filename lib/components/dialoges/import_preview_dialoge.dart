@@ -14,9 +14,9 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 /// A preview that allows customizing columns used for csv data import.
 ///
 /// Pops the scope with a list of measurements on save ([List<BloodPressureRecord>?]).
-class ImportPreview extends StatefulWidget {
+class ImportPreviewDialoge extends StatefulWidget {
   /// Create a preview of how the app would import csv with options.
-  const ImportPreview({super.key,
+  const ImportPreviewDialoge({super.key,
     required this.bottomAppBar,
     required this.initialActor, 
     required this.columnsManager,
@@ -32,10 +32,10 @@ class ImportPreview extends StatefulWidget {
   final CsvRecordParsingActor initialActor;
 
   @override
-  State<ImportPreview> createState() => _ImportPreviewState();
+  State<ImportPreviewDialoge> createState() => _ImportPreviewDialogeState();
 }
 
-class _ImportPreviewState extends State<ImportPreview> {
+class _ImportPreviewDialogeState extends State<ImportPreviewDialoge> {
   static const int _kRowLimit = 30;
 
   late CsvRecordParsingActor _actor;
@@ -43,6 +43,9 @@ class _ImportPreviewState extends State<ImportPreview> {
   late final ScaffoldMessengerState messenger = ScaffoldMessenger.of(context);
 
   bool _showingError = false;
+
+  /// Whether to limit shown rows to [_kRowLimit] for faster rendering.
+  bool _limitRows = true;
 
   @override
   void initState() {
@@ -131,18 +134,20 @@ class _ImportPreviewState extends State<ImportPreview> {
                     },
                   ),
                   const Divider(),
-                  for (int rowIdx = 0; rowIdx < min(_actor.dataLines.length, _kRowLimit); rowIdx++) // TODO rework if needed (parsed?)
+                  for (int rowIdx = 0; rowIdx < (_limitRows
+                      ? min(_actor.dataLines.length, _kRowLimit)
+                      : _actor.dataLines.length); rowIdx++) // TODO rework if needed (parsed?)
                     _buildCell(
                       rowIdx,
                       _actor.dataLines[rowIdx][colIdx],
                       _actor.columnParsers[_actor.columnNames[colIdx]],
                     ),
-                  if (_kRowLimit < _actor.dataLines.length)
-                    const Align(
+                  if (_limitRows && _kRowLimit < _actor.dataLines.length)
+                    Align(
                       alignment: AlignmentDirectional.center,
-                      child: Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 10),
-                        child: Text('...'),
+                      child: TextButton(
+                        onPressed: () => setState(() {_limitRows = false;}),
+                        child: const Text('…')
                       ),
                     ),
                 ],
@@ -196,7 +201,7 @@ Future<List<BloodPressureRecord>?> showImportPreview(
   showDialog<List<BloodPressureRecord>>(
     context: context, builder: (context) =>
     Dialog.fullscreen(
-      child: ImportPreview(
+      child: ImportPreviewDialoge(
         bottomAppBar: bottomAppBar,
         initialActor: initialActor,
         columnsManager: columnsManager,
