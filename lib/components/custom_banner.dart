@@ -17,7 +17,11 @@ import 'package:flutter/material.dart';
 /// ```
 class CustomBanner extends MaterialBanner {
   /// Create a banner that displays information and an action.
-  CustomBanner({super.key, required super.content, this.action}) : super(
+  CustomBanner({
+    super.key,
+    required super.content,
+    this.action,
+  }) : super(
     actions: [const SizedBox.shrink()],
   );
 
