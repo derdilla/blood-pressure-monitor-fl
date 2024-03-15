@@ -52,15 +52,19 @@ class CsvConverter {
 
     // Get and validate columns from csv title.
     final List<String> titles = lines.removeAt(0).cast();
-    final Map<String, ExportColumn> columns = getColumns(titles);
+    final List<ExportColumn?> columns = [];
+    final assumedColumns = getColumns(titles);
+    for (final csvName in titles) {
+      columns.add(assumedColumns[csvName]);
+    }
     // TODO: consider returning `RecordParsingResult.err(RecordParsingErrorUnknownColumn(columnTitle))` for unknownColumns
     
-    if (columns.values.none((e) => e.restoreAbleType == RowDataFieldType.timestamp)) {
+    if (columns.none((e) => e?.restoreAbleType == RowDataFieldType.timestamp)) {
       return RecordParsingResult.err(RecordParsingErrorTimeNotRestoreable());
     }
 
     // Convert data to records.
-    return parseRecords(lines, titles, columns);
+    return parseRecords(lines, columns);
   }
 
   /// Parses lines from csv files according to settings.
@@ -90,30 +94,29 @@ class CsvConverter {
     return columns;
   }
 
-  /// Parse csv data in [dataLines] using [parsers] according to [orderedColumns].
+  /// Parse csv data in [dataLines] using [parsers].
   ///
   /// [dataLines] contains all lines of the csv file without the headline and
-  /// [orderedColumns] must have the same length as every line in [dataLines]
+  /// [parsers] must have the same length as every line in [dataLines]
   /// for parsing to succeed.
   ///
   /// [assumeHeadline] controls whether the line number should be offset by one
   /// in case of error.
   RecordParsingResult parseRecords(
       List<List<String>> dataLines,
-      List<String> orderedColumns,
-      Map<String,ExportColumn> parsers, [
+      List<ExportColumn?> parsers, [
         bool assumeHeadline = true,
       ]) {
     final List<BloodPressureRecord> records = [];
     int currentLineNumber = assumeHeadline ? 1 : 0;
     for (final currentLine in dataLines) {
-      if (currentLine.length < orderedColumns.length) {
+      if (currentLine.length < parsers.length) {
         return RecordParsingResult.err(RecordParsingErrorExpectedMoreFields(currentLineNumber));
       }
 
       final List<(RowDataFieldType, dynamic)> recordPieces = [];
-      for (int fieldIndex = 0; fieldIndex < orderedColumns.length; fieldIndex++) {
-        final parser = parsers[orderedColumns[fieldIndex]];
+      for (int fieldIndex = 0; fieldIndex < parsers.length; fieldIndex++) {
+        final parser = parsers[fieldIndex];
         final piece = parser?.decode(currentLine[fieldIndex]);
         // Validate that the column parsed the expected type.
         // Null can be the result of empty fields.
