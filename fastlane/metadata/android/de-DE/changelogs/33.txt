@@ -1,0 +1,4 @@
+* Erlaube interaktiven CSV import
+* Importiere externe Datenbanken (preview)
+* Schwedische Übersetzung hinzufügen
+* Spanische und portugiesische Übersetzung verbessern
