@@ -5,7 +5,8 @@
 
 <h1 align="center"> blood pressure monitor </h1>
 <div align="center">
-  <img alt="Play installs" src="https://img.shields.io/endpoint?color=green&logo=google-play&logoColor=green&url=https%3A%2F%2Fplay.cuzi.workers.dev%2Fplay%3Fi%3Dcom.derdilla.bloodPressureApp%26gl%3DUS%26hl%3Den%26l%3DAndroid%26m%3D%24totalinstalls">
+  <img alt="Play installs" src="https://img.shields.io/endpoint?color=green&logo=google-play&logoColor=green&url=https%3A%2F%2Fplay.cuzi.workers.dev%2Fplay%3Fi%3Dcom.derdilla.bloodPressureApp%26gl%3DUS%26hl%3Den%26l%3DPlay%26m%3D%24totalinstalls">
+  <img alt="Play rating" src="https://img.shields.io/endpoint?color=green&logo=google-play&logoColor=green&url=https%3A%2F%2Fplay.cuzi.workers.dev%2Fplay%3Fi%3Dcom.derdilla.bloodPressureApp%26gl%3DDE%26hl%3">
   <a href="https://github.com/NobodyForNothing/blood-pressure-monitor-fl/actions/workflows/CI.yml">
     <img src="https://img.shields.io/github/actions/workflow/status/NobodyForNothing/blood-pressure-monitor-fl/.github%2Fworkflows%2FCI.yml?style=flat&logo=github&label=CI" alt="CI status"/></a>
   <img alt="GitHub Repo stars" src="https://img.shields.io/github/stars/NobodyForNothing/blood-pressure-monitor-fl?style=flat&logo=github">
