@@ -1,5 +1,6 @@
 import 'package:blood_pressure_app/components/custom_banner.dart';
 import 'package:blood_pressure_app/components/dialoges/import_preview_dialoge.dart';
+import 'package:blood_pressure_app/model/blood_pressure/record.dart';
 import 'package:blood_pressure_app/model/export_import/csv_converter.dart';
 import 'package:blood_pressure_app/model/export_import/csv_record_parsing_actor.dart';
 import 'package:blood_pressure_app/model/storage/export_columns_store.dart';
@@ -103,5 +104,42 @@ void main() {
     expect(find.text('line2'), findsOneWidget);
     expect(find.text('line3'), findsOneWidget);
   });
-  // TODO: test imported data
+  testWidgets('should parse data as expected', (tester) async {
+    dynamic data = 1;
+
+    await loadDialoge(tester, (context) async {
+      data = await showImportPreview(
+        context,
+        CsvRecordParsingActor(
+          CsvConverter(
+            CsvExportSettings(),
+            ExportColumnsManager(),
+          ),
+          'timestampUnixMs,systolic,diastolic,pulse,notes,needlePin\n1703175193324'
+              ',123,45,67,note1,"{""color"":4285132974}"\n1703147206000,114,71,56,,null',
+        ),
+        ExportColumnsManager(),
+        false,
+      );
+    },);
+
+    expect(find.byType(ImportPreviewDialoge), findsOneWidget);
+    expect(tester.takeException(), isNull);
+    expect(find.byType(DropdownButton), findsNWidgets(6), reason: '6 columns');
+    expect(find.text('note1'), findsOneWidget);
+    expect(find.byType(CustomBanner), findsNothing, reason: 'no error');
+
+    final localizations = await AppLocalizations.delegate.load(const Locale('en'));
+    expect(find.text(localizations.import), findsOneWidget);
+    await tester.tap(find.text(localizations.import));
+    await tester.pumpAndSettle();
+    expect(find.byType(ImportPreviewDialoge), findsNothing);
+
+    expect(data, isA<List<BloodPressureRecord>>()
+        .having((p0) => p0.length, 'rows', 2)
+        .having((p0) => p0[0].needlePin?.color.value, 'first color', 4285132974)
+        .having((p0) => p0[1].creationTime.millisecondsSinceEpoch, '2nd time', 1703147206000)
+        .having((p0) => p0[1].diastolic, '2nd dia', 71),
+    );
+  });
 }
