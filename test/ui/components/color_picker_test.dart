@@ -5,18 +5,18 @@ import 'package:flutter_test/flutter_test.dart';
 import 'util.dart';
 
 void main() {
-  testWidgets('should initialize without errors', (widgetTester) async {
-    await widgetTester.pumpWidget(materialApp(ColorPicker(onColorSelected: (color) {})));
-    await widgetTester.pumpWidget(materialApp(ColorPicker(availableColors: const [], onColorSelected: (color) {})));
-    await widgetTester.pumpWidget(materialApp(ColorPicker(showTransparentColor: false, onColorSelected: (color) {})));
-    await widgetTester.pumpWidget(materialApp(ColorPicker(circleSize: 15, onColorSelected: (color) {})));
-    await widgetTester.pumpWidget(
+  testWidgets('should initialize without errors', (tester) async {
+    await tester.pumpWidget(materialApp(ColorPicker(onColorSelected: (color) {})));
+    await tester.pumpWidget(materialApp(ColorPicker(availableColors: const [], onColorSelected: (color) {})));
+    await tester.pumpWidget(materialApp(ColorPicker(showTransparentColor: false, onColorSelected: (color) {})));
+    await tester.pumpWidget(materialApp(ColorPicker(circleSize: 15, onColorSelected: (color) {})));
+    await tester.pumpWidget(
         materialApp(ColorPicker(availableColors: const [], initialColor: Colors.red, onColorSelected: (color) {})),);
-    expect(widgetTester.takeException(), isNull);
+    expect(tester.takeException(), isNull);
   });
-  testWidgets('should report correct picked color', (widgetTester) async {
+  testWidgets('should report correct picked color', (tester) async {
     int onColorSelectedCallCount = 0;
-    await widgetTester.pumpWidget(materialApp(ColorPicker(onColorSelected: (color) {
+    await tester.pumpWidget(materialApp(ColorPicker(onColorSelected: (color) {
       expect(color, Colors.blue);
       onColorSelectedCallCount += 1;
     },),),);
@@ -31,7 +31,7 @@ void main() {
       return false;
     });
     expect(blueColor.length, 1);
-    await widgetTester.tap(find.byWidget(blueColor.first.widget));
+    await tester.tap(find.byWidget(blueColor.first.widget));
     expect(onColorSelectedCallCount, 1);
   });
 }

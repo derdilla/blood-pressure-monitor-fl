@@ -5,8 +5,8 @@ import 'package:flutter_test/flutter_test.dart';
 import '../util.dart';
 
 void main() {
-  testWidgets('should not throw errors', (widgetTester) async {
-    await widgetTester.pumpWidget(materialApp(SliderListTile(
+  testWidgets('should not throw errors', (tester) async {
+    await tester.pumpWidget(materialApp(SliderListTile(
       title: const Text('test title'),
       onChanged: (double newValue) {
         assert(false, 'should not be called');
@@ -15,8 +15,8 @@ void main() {
       min: 1,
       max: 20,
     ),),);
-    expect(widgetTester.takeException(), isNull);
-    await widgetTester.pumpWidget(materialApp(SliderListTile(
+    expect(tester.takeException(), isNull);
+    await tester.pumpWidget(materialApp(SliderListTile(
       title: const Text('Very long title that could overflow'),
       onChanged: (double newValue) {
         assert(false, 'should not be called');
@@ -29,11 +29,11 @@ void main() {
       trailing: const Icon(Icons.add),
       subtitle: const Text('While sliders support subtitle widgets, they should not interfere with the slider!'),
     ),),);
-    expect(widgetTester.takeException(), isNull);
+    expect(tester.takeException(), isNull);
   });
-  testWidgets('should report value changes', (widgetTester) async {
+  testWidgets('should report value changes', (tester) async {
     int callCount = 0;
-    await widgetTester.pumpWidget(materialApp(SliderListTile(
+    await tester.pumpWidget(materialApp(SliderListTile(
       title: const Text('title'),
       onChanged: (double newValue) {
         callCount += 1;
@@ -45,12 +45,12 @@ void main() {
       subtitle: const Text('While sliders support subtitle widgets, they should not interfere with the slider!'),
     ),),);
 
-    final topLeft = widgetTester.getTopLeft(find.byType(Slider));
-    final bottomRight = widgetTester.getBottomRight(find.byType(Slider));
+    final topLeft = tester.getTopLeft(find.byType(Slider));
+    final bottomRight = tester.getBottomRight(find.byType(Slider));
 
     final slider8Position = topLeft + ((bottomRight - topLeft) * 8 / 10);
-    await widgetTester.tapAt(slider8Position);
-    await widgetTester.pumpAndSettle();
+    await tester.tapAt(slider8Position);
+    await tester.pumpAndSettle();
     expect(callCount, 1);
   });
 }

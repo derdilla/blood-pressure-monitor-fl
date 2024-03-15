@@ -15,9 +15,9 @@ import '../model/export_import/record_formatter_test.dart';
 import '../ram_only_implementations.dart';
 
 void main() {
-  testWidgets('should load page', (widgetTester) async {
-    await _initStatsPage(widgetTester, []);
-    expect(widgetTester.takeException(), isNull);
+  testWidgets('should load page', (tester) async {
+    await _initStatsPage(tester, []);
+    expect(tester.takeException(), isNull);
 
     final localizations = await AppLocalizations.delegate.load(const Locale('en'));
     expect(find.text(localizations.statistics), findsAtLeast(1));
@@ -25,8 +25,8 @@ void main() {
     expect(find.text(localizations.timeResolvedMetrics, skipOffstage: false),
         findsOneWidget,);
   });
-  testWidgets('should report measurement count', (widgetTester) async {
-    await _initStatsPage(widgetTester, [
+  testWidgets('should report measurement count', (tester) async {
+    await _initStatsPage(tester, [
       for (int i = 1; i<51; i++) // can't safe entries at or before epoch
         mockRecord(time: DateTime.fromMillisecondsSinceEpoch(1582991592 + i),
             sys: i, dia: 60+i, pul: 110+i,),
@@ -54,8 +54,8 @@ void main() {
       matching: find.text('50'),
     ), findsOneWidget,);
   });
-  testWidgets("should not display 'null' or -1", (widgetTester) async {
-    await _initStatsPage(widgetTester, [
+  testWidgets("should not display 'null' or -1", (tester) async {
+    await _initStatsPage(tester, [
       mockRecord(time: DateTime.fromMillisecondsSinceEpoch(1), sys: 40, dia: 60),
       mockRecord(time: DateTime.fromMillisecondsSinceEpoch(2),),
     ], intervallStoreManager: IntervallStoreManager(IntervallStorage(),
@@ -64,8 +64,8 @@ void main() {
     expect(find.textContaining('null'), findsNothing);
   });
 
-  testWidgets("should not display 'null' when empty", (widgetTester) async {
-    await _initStatsPage(widgetTester, [],
+  testWidgets("should not display 'null' when empty", (tester) async {
+    await _initStatsPage(tester, [],
         intervallStoreManager: IntervallStoreManager(
             IntervallStorage(), IntervallStorage(),
             IntervallStorage(stepSize: TimeStep.lifetime,),),);
@@ -74,7 +74,7 @@ void main() {
   });
 }
 
-Future<void> _initStatsPage(WidgetTester widgetTester, List<BloodPressureRecord> records, {
+Future<void> _initStatsPage(WidgetTester tester, List<BloodPressureRecord> records, {
   Settings? settings,
   ExportSettings? exportSettings,
   CsvExportSettings? csvExportSettings,
@@ -92,7 +92,7 @@ Future<void> _initStatsPage(WidgetTester widgetTester, List<BloodPressureRecord>
     model.add(r);
   }
 
-  await widgetTester.pumpWidget(MultiProvider(
+  await tester.pumpWidget(MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => settings),
         ChangeNotifierProvider(create: (_) => exportSettings),
@@ -107,5 +107,5 @@ Future<void> _initStatsPage(WidgetTester widgetTester, List<BloodPressureRecord>
         child: const StatisticsScreen(),
       ),
   ),);
-  await widgetTester.pumpAndSettle();
+  await tester.pumpAndSettle();
 }

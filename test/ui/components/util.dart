@@ -52,7 +52,7 @@ Widget appBase(Widget child, {
 /// Example usage:
 /// ```dart
 /// dynamic returnedValue = false;
-/// await loadDialoge(widgetTester, (context) async => returnedValue =
+/// await loadDialoge(tester, (context) async => returnedValue =
 ///    await showAddExportColumnDialoge(context, Settings(),
 ///      UserColumn('initialInternalIdentifier', 'csvTitle', 'formatPattern')
 /// ));

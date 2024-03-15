@@ -5,8 +5,8 @@ import 'package:flutter_test/flutter_test.dart';
 import '../util.dart';
 
 void main() {
-  testWidgets('should not throw errors', (widgetTester) async {
-    await widgetTester.pumpWidget(materialApp(DropDownListTile<int>(
+  testWidgets('should not throw errors', (tester) async {
+    await tester.pumpWidget(materialApp(DropDownListTile<int>(
       title: const Text('test title'),
       onChanged: (int? newValue) {
         assert(false, 'should not be called');
@@ -17,8 +17,8 @@ void main() {
       ],
       value: 3,
     ),),);
-    expect(widgetTester.takeException(), isNull);
-    await widgetTester.pumpWidget(materialApp(DropDownListTile<int>(
+    expect(tester.takeException(), isNull);
+    await tester.pumpWidget(materialApp(DropDownListTile<int>(
       title: const Text('This is a very long test title.'),
       subtitle: const Text('This is a very long test subtitle that should go over multiple lines.'),
       leading: const Icon(Icons.add),
@@ -31,10 +31,10 @@ void main() {
       ],
       value: 527,
     ),),);
-    expect(widgetTester.takeException(), isNull);
+    expect(tester.takeException(), isNull);
   });
-  testWidgets('should display selected option', (widgetTester) async {
-    await widgetTester.pumpWidget(materialApp(DropDownListTile<int>(
+  testWidgets('should display selected option', (tester) async {
+    await tester.pumpWidget(materialApp(DropDownListTile<int>(
       title: const Text('test title'),
       onChanged: (int? newValue) {
         assert(false, 'should not be called');
@@ -48,9 +48,9 @@ void main() {
     expect(find.text('option 3'), findsOneWidget);
     expect(find.text('option 4'), findsNothing);
   });
-  testWidgets('should call onChanged on option selected', (widgetTester) async {
+  testWidgets('should call onChanged on option selected', (tester) async {
     int callCount = 0;
-    await widgetTester.pumpWidget(materialApp(DropDownListTile<int>(
+    await tester.pumpWidget(materialApp(DropDownListTile<int>(
       title: const Text('test title'),
       onChanged: (int? newValue) {
         callCount += 1;
@@ -63,12 +63,12 @@ void main() {
       value: 3,
     ),),);
 
-    await widgetTester.tap(find.text('option 3'));
-    await widgetTester.pumpAndSettle();
+    await tester.tap(find.text('option 3'));
+    await tester.pumpAndSettle();
 
     expect(find.text('option 5'), findsOneWidget);
-    await widgetTester.tap(find.text('option 5'));
-    await widgetTester.pumpAndSettle();
+    await tester.tap(find.text('option 5'));
+    await tester.pumpAndSettle();
 
     expect(callCount, 1);
   });
