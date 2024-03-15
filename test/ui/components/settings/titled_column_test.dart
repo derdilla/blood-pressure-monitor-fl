@@ -5,8 +5,8 @@ import 'package:flutter_test/flutter_test.dart';
 import '../util.dart';
 
 void main() {
-  testWidgets('should show title and widgets', (widgetTester) async {
-    await widgetTester.pumpWidget(materialApp(TitledColumn(
+  testWidgets('should show title and widgets', (tester) async {
+    await tester.pumpWidget(materialApp(TitledColumn(
       title: const Text('test title'),
       children: [
         const ListTile(title: Text('ListTile text 1'),),
@@ -16,15 +16,15 @@ void main() {
         const ListTile(title: Text('ListTile text 2'),),
       ],
     ),),);
-    expect(widgetTester.takeException(), isNull);
+    expect(tester.takeException(), isNull);
 
     expect(find.text('test title'), findsOneWidget);
     expect(find.text('ListTile text 1'), findsOneWidget);
     expect(find.text('SwitchListTile text'), findsOneWidget);
     expect(find.text('ListTile text 2'), findsOneWidget);
   });
-  testWidgets('should show title first', (widgetTester) async {
-    await widgetTester.pumpWidget(materialApp(TitledColumn(
+  testWidgets('should show title first', (tester) async {
+    await tester.pumpWidget(materialApp(TitledColumn(
       title: const Text('test title'),
       children: [
         const ListTile(title: Text('ListTile text 1'),),

@@ -20,43 +20,43 @@ import '../ram_only_implementations.dart';
 
 void main() {
   group('start page', () {
-    testWidgets('should navigate to add entry page', (widgetTester) async {
-      await pumpAppRoot(widgetTester);
+    testWidgets('should navigate to add entry page', (tester) async {
+      await pumpAppRoot(tester);
       expect(find.byIcon(Icons.add), findsOneWidget);
-      await widgetTester.tap(find.byIcon(Icons.add));
-      await widgetTester.pumpAndSettle();
+      await tester.tap(find.byIcon(Icons.add));
+      await tester.pumpAndSettle();
 
       expect(find.byType(AddEntryDialoge), findsOneWidget);
     });
-    testWidgets('should navigate to settings page', (widgetTester) async {
-      await pumpAppRoot(widgetTester);
+    testWidgets('should navigate to settings page', (tester) async {
+      await pumpAppRoot(tester);
       expect(find.byIcon(Icons.settings), findsOneWidget);
-      await widgetTester.tap(find.byIcon(Icons.settings));
-      await widgetTester.pumpAndSettle();
+      await tester.tap(find.byIcon(Icons.settings));
+      await tester.pumpAndSettle();
 
       expect(find.byType(SettingsPage), findsOneWidget);
     });
-    testWidgets('should navigate to stats page', (widgetTester) async {
-      await pumpAppRoot(widgetTester);
+    testWidgets('should navigate to stats page', (tester) async {
+      await pumpAppRoot(tester);
       expect(find.byIcon(Icons.insights), findsOneWidget);
-      await widgetTester.tap(find.byIcon(Icons.insights));
-      await widgetTester.pumpAndSettle();
+      await tester.tap(find.byIcon(Icons.insights));
+      await tester.pumpAndSettle();
 
       expect(find.byType(StatisticsScreen), findsOneWidget);
     });
   });
   group('settings page', () {
-    testWidgets('open EnterTimeFormatScreen', (widgetTester) async {
-      await pumpAppRoot(widgetTester);
+    testWidgets('open EnterTimeFormatScreen', (tester) async {
+      await pumpAppRoot(tester);
       expect(find.byIcon(Icons.settings), findsOneWidget);
-      await widgetTester.tap(find.byIcon(Icons.settings));
-      await widgetTester.pumpAndSettle();
+      await tester.tap(find.byIcon(Icons.settings));
+      await tester.pumpAndSettle();
 
       expect(find.byType(SettingsPage), findsOneWidget);
       expect(find.byType(EnterTimeFormatDialoge), findsNothing);
       expect(find.byKey(const Key('EnterTimeFormatScreen')), findsOneWidget);
-      await widgetTester.tap(find.byKey(const Key('EnterTimeFormatScreen')));
-      await widgetTester.pumpAndSettle();
+      await tester.tap(find.byKey(const Key('EnterTimeFormatScreen')));
+      await tester.pumpAndSettle();
 
       expect(find.byType(EnterTimeFormatDialoge), findsOneWidget);
     });
@@ -65,7 +65,7 @@ void main() {
 }
 
 /// Creates a the same App as the main method.
-Future<void> pumpAppRoot(WidgetTester widgetTester, {
+Future<void> pumpAppRoot(WidgetTester tester, {
   Settings? settings,
   ExportSettings? exportSettings,
   CsvExportSettings? csvExportSettings,
@@ -82,7 +82,7 @@ Future<void> pumpAppRoot(WidgetTester widgetTester, {
   intakeHistory ??= IntakeHistory([]);
   intervallStoreManager ??= IntervallStoreManager(IntervallStorage(), IntervallStorage(), IntervallStorage());
 
-  await widgetTester.pumpWidget(MultiProvider(providers: [
+  await tester.pumpWidget(MultiProvider(providers: [
     ChangeNotifierProvider(create: (_) => settings),
     ChangeNotifierProvider(create: (_) => exportSettings),
     ChangeNotifierProvider(create: (_) => csvExportSettings),

@@ -8,8 +8,8 @@ import 'package:flutter_test/flutter_test.dart';
 import '../util.dart';
 
 void main() {
-  testWidgets('should show centered info when values are empty', (widgetTester) async {
-    await widgetTester.pumpWidget(materialApp(const ValueDistribution(
+  testWidgets('should show centered info when values are empty', (tester) async {
+    await tester.pumpWidget(materialApp(const ValueDistribution(
       color: Colors.red,
       values: [],
     ),),);
@@ -18,13 +18,13 @@ void main() {
     expect(find.byType(Text), findsOneWidget);
     expect(find.text(localizations.errNoData), findsOneWidget);
 
-    final errorCenter = widgetTester.getCenter(find.byType(Text));
-    final canvasCenter = widgetTester.getCenter(find.byType(MaterialApp));
+    final errorCenter = tester.getCenter(find.byType(Text));
+    final canvasCenter = tester.getCenter(find.byType(MaterialApp));
     expect(errorCenter, equals(canvasCenter));
   },);
 
-  testWidgets('should draw labels at correct positions', (widgetTester) async {
-    await widgetTester.pumpWidget(materialApp(const SizedBox(
+  testWidgets('should draw labels at correct positions', (tester) async {
+    await tester.pumpWidget(materialApp(const SizedBox(
       height: 50,
       width: 180,
       child: ValueDistribution(
@@ -44,8 +44,8 @@ void main() {
     );
   },);
 
-  testWidgets('should correct amount of value bars', (widgetTester) async {
-    await widgetTester.pumpWidget(materialApp(const SizedBox(
+  testWidgets('should correct amount of value bars', (tester) async {
+    await tester.pumpWidget(materialApp(const SizedBox(
       height: 50,
       width: 180,
       child: ValueDistribution(
@@ -64,8 +64,8 @@ void main() {
       ..line(color: Colors.white70) // start drawing decoration
     ,);
   },);
-  testWidgets('should have semantics labels with correct values', (widgetTester) async {
-    await widgetTester.pumpWidget(materialApp(const SizedBox(
+  testWidgets('should have semantics labels with correct values', (tester) async {
+    await tester.pumpWidget(materialApp(const SizedBox(
       height: 50,
       width: 180,
       child: ValueDistribution(
@@ -75,7 +75,7 @@ void main() {
     ),),);
 
     final localizations = await AppLocalizations.delegate.load(const Locale('en'));
-    final labels = _getAllLabels(widgetTester.getSemantics(find.byType(ValueDistribution)));
+    final labels = _getAllLabels(tester.getSemantics(find.byType(ValueDistribution)));
 
     expect(labels, contains(localizations.minOf('3')));
     expect(labels, contains(localizations.maxOf('10')));

@@ -9,8 +9,8 @@ import '../../../model/export_import/record_formatter_test.dart';
 import '../util.dart';
 
 void main() {
-  testWidgets('should show allow navigation to view all widgets', (widgetTester) async {
-    await widgetTester.pumpWidget(materialApp(BloodPressureDistribution(
+  testWidgets('should show allow navigation to view all widgets', (tester) async {
+    await tester.pumpWidget(materialApp(BloodPressureDistribution(
       records: const [],
       settings: Settings(),
     ),),);
@@ -25,20 +25,20 @@ void main() {
     expect(find.byKey(const Key('dia-dist')), findsNothing);
     expect(find.byKey(const Key('pul-dist')), findsNothing);
 
-    await widgetTester.tap(find.text(localizations.diaLong));
-    await widgetTester.pumpAndSettle();
+    await tester.tap(find.text(localizations.diaLong));
+    await tester.pumpAndSettle();
     expect(find.byKey(const Key('sys-dist')), findsNothing);
     expect(find.byKey(const Key('dia-dist')), findsOneWidget);
     expect(find.byKey(const Key('pul-dist')), findsNothing);
     
-    await widgetTester.tap(find.text(localizations.pulLong));
-    await widgetTester.pumpAndSettle();
+    await tester.tap(find.text(localizations.pulLong));
+    await tester.pumpAndSettle();
     expect(find.byKey(const Key('sys-dist')), findsNothing);
     expect(find.byKey(const Key('dia-dist')), findsNothing);
     expect(find.byKey(const Key('pul-dist')), findsOneWidget);
   });
-  testWidgets('should report records to ValueDistribution', (widgetTester) async {
-    await widgetTester.pumpWidget(materialApp(BloodPressureDistribution(
+  testWidgets('should report records to ValueDistribution', (tester) async {
+    await tester.pumpWidget(materialApp(BloodPressureDistribution(
       records: [
         mockRecord(sys: 123),
         mockRecord(dia: 123),
@@ -56,23 +56,23 @@ void main() {
 
     final localizations = await AppLocalizations.delegate.load(const Locale('en'));
 
-    await widgetTester.tap(find.text(localizations.sysLong));
-    await widgetTester.pumpAndSettle();
+    await tester.tap(find.text(localizations.sysLong));
+    await tester.pumpAndSettle();
     expect(find.byType(ValueDistribution), paints
         ..line(color: Colors.red.shade500)
         ..line(color: Colors.white70),
     );
 
-    await widgetTester.tap(find.text(localizations.diaLong));
-    await widgetTester.pumpAndSettle();
+    await tester.tap(find.text(localizations.diaLong));
+    await tester.pumpAndSettle();
     expect(find.byType(ValueDistribution), paints
       ..line(color: Colors.green.shade500)
       ..line(color: Colors.green.shade500)
       ..line(color: Colors.white70),
     );
 
-    await widgetTester.tap(find.text(localizations.pulLong));
-    await widgetTester.pumpAndSettle();
+    await tester.tap(find.text(localizations.pulLong));
+    await tester.pumpAndSettle();
     expect(find.byType(ValueDistribution), paints
       ..line(color: Colors.blue.shade500)
       ..line(color: Colors.blue.shade500)
