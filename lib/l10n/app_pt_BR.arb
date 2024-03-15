@@ -198,7 +198,7 @@
   "@errNoValue": {},
   "other": "outro",
   "@other": {},
-  "exportWarnConfigNotImportable": "Ei! Apenas um aviso amigável: a configuração de exportação atual não será importável. Para corrigir isso, certifique-se de definir o tipo de exportação como CSV, habilitar o título e incluir um dos formatos de hora disponíveis.",
+  "exportWarnConfigNotImportable": "Ei! Apenas um aviso amigável: a configuração de exportação atual não será importável. Para corrigir isso, certifique-se de definir o tipo de exportação como CSV e incluir um dos formatos de hora disponíveis.",
   "@exportWarnConfigNotImportable": {},
   "timestamp": "Carimbo de data e hora",
   "@timestamp": {},
@@ -439,5 +439,68 @@
   "confirmDeleteDesc": "Excluir esta entrada? (Você pode desativar essas confirmações nas configurações.)",
   "@confirmDeleteDesc": {},
   "errNoFileOpened": "nenhum arquivo aberto",
-  "@errNoFileOpened": {}
+  "@errNoFileOpened": {},
+  "valueDistribution": "Distribuição de valor",
+  "@valueDistribution": {},
+  "buildIn": "Integrar",
+  "@buildIn": {},
+  "remove": "Remover",
+  "@remove": {},
+  "errParseTimeNotRestoreable": "Não há nenhuma coluna que permita restaurar um carimbo de data/hora.",
+  "@errParseTimeNotRestoreable": {},
+  "errParseUnknownColumn": "Não há nenhuma coluna com o título \"{title}\".",
+  "@errParseUnknownColumn": {
+    "placeholders": {
+      "title": {
+        "type": "String"
+      }
+    }
+  },
+  "errParseEmptyCsvFile": "Não há linhas suficientes no arquivo CSV para analisar o registro.",
+  "@errParseEmptyCsvFile": {},
+  "errParseLineTooShort": "A linha {lineNumber} possui menos colunas do que a primeira linha.",
+  "@errParseLineTooShort": {
+    "placeholders": {
+      "lineNumber": {
+        "type": "int"
+      }
+    }
+  },
+  "errParseFailedDecodingField": "Falha ao decodificar o campo \"{fieldContent}\" na linha {lineNumber}.",
+  "@errParseFailedDecodingField": {
+    "placeholders": {
+      "lineNumber": {
+        "type": "int"
+      },
+      "fieldContent": {
+        "type": "String"
+      }
+    }
+  },
+  "exportFieldsPreset": "Predefinição de campos de exportação",
+  "@exportFieldsPreset": {},
+  "manageExportColumns": "Gerenciar colunas de exportação",
+  "@manageExportColumns": {},
+  "csvTitle": "CSV-título",
+  "@csvTitle": {},
+  "recordFormat": "Formato de gravação",
+  "@recordFormat": {},
+  "timeFormat": "Formato de hora",
+  "@timeFormat": {},
+  "errAccuracyLoss": "Há perda de precisão esperada ao exportar com formatos de tempo personalizados.",
+  "@errAccuracyLoss": {},
+  "bottomAppBars": "Barras de diálogo inferiores",
+  "@bottomAppBars": {},
+  "medications": "Medicamentos",
+  "@medications": {},
+  "addMedication": "Adicionar medicação",
+  "@addMedication": {},
+  "name": "Nome",
+  "@name": {},
+  "noMedication": "Sem medicação",
+  "@noMedication": {},
+  "defaultDosis": "dose padrão",
+  "@defaultDosis": {},
+  "dosis": "Dose",
+  "@dosis": {}
 }
