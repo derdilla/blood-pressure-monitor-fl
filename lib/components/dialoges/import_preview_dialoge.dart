@@ -47,15 +47,14 @@ class _ImportPreviewDialogeState extends State<ImportPreviewDialoge> {
   /// Whether to limit shown rows to [_kRowLimit] for faster rendering.
   bool _limitRows = true;
 
-  /// Whether the CSV file has a title row that should be ignored.
-  bool _csvHasTitle = true;
-
   @override
   void initState() {
     super.initState();
     _actor = widget.initialActor;
     SchedulerBinding.instance.addPostFrameCallback((_) => _updateBanner());
   }
+
+  // FIXME: multiple columns update type
 
   void _updateBanner() {
     if (_showingError) {
@@ -138,10 +137,10 @@ class _ImportPreviewDialogeState extends State<ImportPreviewDialoge> {
                           ),
                         ),
                     ],
-                    value: _actor.columnParsers[_actor.columnNames[colIdx]],
+                    value: _actor.columnParsers[colIdx],
                     onChanged: (parser) {
                       setState(() {
-                        _actor.changeColumnParser(_actor.columnNames[colIdx], parser);
+                        _actor.changeColumnParser(colIdx, parser);
                       });
                       _updateBanner();
                     },
@@ -153,7 +152,7 @@ class _ImportPreviewDialogeState extends State<ImportPreviewDialoge> {
                     _buildCell(
                       rowIdx,
                       _actor.dataLines[rowIdx][colIdx],
-                      _actor.columnParsers[_actor.columnNames[colIdx]],
+                      _actor.columnParsers[colIdx],
                     ),
                   if (_limitRows && _kRowLimit < _actor.dataLines.length)
                     Align(

@@ -13,7 +13,11 @@ class CsvRecordParsingActor {
     _firstLine = lines.removeAt(0);
     _bodyLines = lines;
     _columnNames = _firstLine ?? [];
-    _columnParsers = _converter.getColumns(_columnNames);
+
+    final assumedColumns = _converter.getColumns(_columnNames);
+    for (final csvName in _columnNames) {
+      _columnParsers.add(assumedColumns[csvName]);
+    }
   }
 
   final CsvConverter _converter;
@@ -36,28 +40,26 @@ class CsvRecordParsingActor {
   /// All columns defined in the csv headline.
   List<String> get columnNames => _columnNames;
 
-  late Map<String, ExportColumn> _columnParsers;
+  late final List<ExportColumn?> _columnParsers = [];
 
   /// The current interpretation of columns in the csv data.
   ///
+  /// These parsers are ordered the same way as [columnNames].
+  ///
   /// There is no guarantee that every column in [columnNames] has a parser.
-  Map<String, ExportColumn> get columnParsers => _columnParsers;
+  UnmodifiableListView<ExportColumn?> get columnParsers
+    => UnmodifiableListView(_columnParsers);
 
   /// Whether the CSV file has a title row (first line) that contains no data.
   bool hasHeadline = true;
   
   /// Override a columns with a custom one.
-  void changeColumnParser(String columnName, ExportColumn? parser) {
-    assert(_columnNames.contains(columnName));
-    if (parser == null) {
-      _columnParsers.remove(columnName);
-      return;
-    }
-    _columnParsers[columnName] = parser;
+  void changeColumnParser(int columnIdx, ExportColumn? parser) {
+    assert(_columnParsers.length > columnIdx);
+    _columnParsers[columnIdx] = parser;
   }
 
   /// Try to parse the data with the current configuration.
-  RecordParsingResult attemptParse() {
-    return _converter.parseRecords(dataLines, columnNames, columnParsers, false);
-  }
+  RecordParsingResult attemptParse() =>
+      _converter.parseRecords(dataLines, columnParsers, false);
 }
