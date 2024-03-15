@@ -73,17 +73,10 @@ class _ImportPreviewDialogeState extends State<ImportPreviewDialoge> {
   }
 
   @override
-  void dispose() {
-    if(_showingError) {
-      SchedulerBinding.instance.addPostFrameCallback(
-        // TODO: add on close hook to dialoge and remove anti-pattern
-          (_) => messenger.removeCurrentMaterialBanner(),);
-    }
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) => FullscreenDialoge(
+    closeCallback: () {
+      if(_showingError) messenger.removeCurrentMaterialBanner();
+    },
     bottomAppBar: widget.bottomAppBar,
     actionButtonText: AppLocalizations.of(context)!.import,
     onActionButtonPressed: (_showingError) ? null : () {
