@@ -57,8 +57,6 @@ class CsvConverter {
     for (final csvName in titles) {
       columns.add(assumedColumns[csvName]);
     }
-    // TODO: consider returning `RecordParsingResult.err(RecordParsingErrorUnknownColumn(columnTitle))` for unknownColumns
-    
     if (columns.none((e) => e?.restoreAbleType == RowDataFieldType.timestamp)) {
       return RecordParsingResult.err(RecordParsingErrorTimeNotRestoreable());
     }
@@ -121,7 +119,7 @@ class CsvConverter {
         // Validate that the column parsed the expected type.
         // Null can be the result of empty fields.
         if (piece?.$1 != parser?.restoreAbleType
-            && piece != null) { // TODO: consider making some RowDataFieldType values nullable and handling this in the parser.
+            && piece != null) {
           return RecordParsingResult.err(RecordParsingErrorUnparsableField(currentLineNumber, currentLine[fieldIndex]));
         }
         if (piece != null) recordPieces.add(piece);
