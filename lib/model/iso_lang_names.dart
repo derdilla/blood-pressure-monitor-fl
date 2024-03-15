@@ -13,6 +13,7 @@ String getDisplayLanguage(Locale l) => switch(l.toLanguageTag()) {
   'pt-BR' => 'Português (Brasil)',
   'ru' => 'Русский',
   'tr' => 'Türkçe',
+  'sv' => 'Svenska',
   'zh' => '中文 (简体)',
   'zh-Hant' => '中文（繁體)',
   // Websites with names for expanding when new languages get added:

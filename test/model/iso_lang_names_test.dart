@@ -29,7 +29,9 @@ void main() {
         if (AppLocalizations.supportedLocales.where(
             (e) => e.toLanguageTag() == '$c1$c2',).isNotEmpty) continue;
         expect(() => getDisplayLanguage(Locale('$c1$c2')),
-            throwsAssertionError,);
+          throwsAssertionError,
+          reason: 'Lang $c1$c2 does not exist'
+        );
         expect(printCounts, greaterThan(1));
         printCounts = 0;
       }
