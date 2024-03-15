@@ -74,7 +74,6 @@ class ExportButtonBar extends StatelessWidget {
                       Provider.of<CsvExportSettings>(context, listen: false),
                       Provider.of<ExportColumnsManager>(context, listen: false),
                     );
-                    // TODO: verify that works
                     final importedRecords = await showImportPreview(
                       context,
                       CsvRecordParsingActor(
@@ -82,33 +81,8 @@ class ExportButtonBar extends StatelessWidget {
                         utf8.decode(binaryContent),
                       ),
                       Provider.of<ExportColumnsManager>(context, listen: false),
-                      true, // TODO use settings
+                      Provider.of<Settings>(context, listen: false).bottomAppBars,
                     );
-
-                    /*final result = converter.parse(utf8.decode(binaryContent));
-                    final importedRecords = result.getOr((error) {
-                      switch (error) {
-                        case RecordParsingErrorEmptyFile():
-                          _showError(messenger, localizations.errParseEmptyCsvFile);
-                          break;
-                        case RecordParsingErrorTimeNotRestoreable():
-                          _showError(messenger, localizations.errParseTimeNotRestoreable);
-                          break;
-                        case RecordParsingErrorUnknownColumn():
-                          _showError(messenger, localizations.errParseUnknownColumn(error.title));
-                          break;
-                        case RecordParsingErrorExpectedMoreFields():
-                          _showError(messenger, localizations.errParseLineTooShort(error.lineNumber));
-                          break;
-                        case RecordParsingErrorUnparsableField():
-                          _showError(messenger, localizations.errParseFailedDecodingField(
-                              error.lineNumber, error.fieldContents,),);
-                          break;
-                      }
-                      return null;
-                    });
-                    if (result.hasError()) return;
-                     */
                     if (importedRecords == null || !context.mounted) return;
                     final model = Provider.of<BloodPressureModel>(context, listen: false);
                     await model.addAll(importedRecords, null);
@@ -136,6 +110,7 @@ class ExportButtonBar extends StatelessWidget {
       messenger.showSnackBar(SnackBar(content: Text(text)));
 }
 
+/// Perform a full export according to the configuration in [context].
 void performExport(BuildContext context, [AppLocalizations? localizations]) async {
   localizations ??= AppLocalizations.of(context);
   final exportSettings = Provider.of<ExportSettings>(context, listen: false);

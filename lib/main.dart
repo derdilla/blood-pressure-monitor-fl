@@ -9,6 +9,7 @@ import 'package:blood_pressure_app/model/storage/db/config_db.dart';
 import 'package:blood_pressure_app/model/storage/intervall_store.dart';
 import 'package:blood_pressure_app/model/storage/settings_store.dart';
 import 'package:blood_pressure_app/model/storage/update_legacy_settings.dart';
+import 'package:blood_pressure_app/screens/home_screen.dart';
 import 'package:blood_pressure_app/screens/loading_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -17,12 +18,6 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:path/path.dart';
 import 'package:provider/provider.dart';
 import 'package:sqflite/sqflite.dart';
-
-import 'components/dialoges/import_preview_dialoge.dart';
-import 'model/export_import/csv_converter.dart';
-import 'model/export_import/csv_record_parsing_actor.dart';
-import 'model/storage/export_columns_store.dart';
-import 'model/storage/export_csv_settings_store.dart';
 
 late final ConfigDB _database;
 late final BloodPressureModel _bloodPressureModel;
@@ -129,19 +124,8 @@ class AppRoot extends StatelessWidget {
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
       locale: settings.language,
-      home: ImportPreviewDialoge(
-        bottomAppBar: false,
-        initialActor: CsvRecordParsingActor(
-          CsvConverter(
-            CsvExportSettings(),
-            ExportColumnsManager(),
-          ),
-          'systolic,diastolic,pulse,notes,needlePin\n123,45,67,note1,'
-              '"{""color"":4285132974}"\n114,71,56,,null',
-        ),
-        columnsManager: ExportColumnsManager(),
-      ),
-    )
+      home: const AppHome(),
+    ),
   );
 
   ThemeData _buildTheme(ColorScheme colorScheme) {
