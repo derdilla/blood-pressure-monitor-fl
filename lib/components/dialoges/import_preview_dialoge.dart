@@ -54,8 +54,6 @@ class _ImportPreviewDialogeState extends State<ImportPreviewDialoge> {
     SchedulerBinding.instance.addPostFrameCallback((_) => _updateBanner());
   }
 
-  // FIXME: multiple columns update type
-
   void _updateBanner() {
     if (_showingError) {
       _showingError = false;
@@ -152,7 +150,7 @@ class _ImportPreviewDialogeState extends State<ImportPreviewDialoge> {
                       alignment: AlignmentDirectional.center,
                       child: TextButton(
                         onPressed: () => setState(() {_limitRows = false;}),
-                        child: const Text('…')
+                        child: const Text('…'),
                       ),
                     ),
                 ],
@@ -183,8 +181,6 @@ class _ImportPreviewDialogeState extends State<ImportPreviewDialoge> {
         child: buildContent(csvContent, Theme.of(context).colorScheme.error),
       );
     }
-
-    // TODO: time formatting, more fitting localizations
 
     var text = parsed!.$2.toString();
     if (text.isEmpty) text = '-';
