@@ -502,5 +502,7 @@
   "dosis": "Dosis",
   "@dosis": {},
   "valueDistribution": "Value distribution",
-  "@valueDistribution": {}
+  "@valueDistribution": {},
+  "titleInCsv": "Title in CSV",
+  "@titleInCsv": {}
 }

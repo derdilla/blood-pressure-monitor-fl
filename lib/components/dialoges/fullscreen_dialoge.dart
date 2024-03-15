@@ -11,6 +11,7 @@ class FullscreenDialoge extends StatelessWidget {
     this.onActionButtonPressed,
     required this.bottomAppBar,
     this.closeIcon = Icons.close,
+    this.actions = const <Widget>[],
   });
 
   /// The primary content of the dialoge.
@@ -41,6 +42,13 @@ class FullscreenDialoge extends StatelessWidget {
   /// Setting this to false will let the app bar stay at the top.
   final bool bottomAppBar;
 
+  /// Secondary actions to display on the app bar.
+  ///
+  /// Positioned somewhere between close and primary action button.
+  ///
+  /// Recommended to be used with [CheckboxMenuButton].
+  final List<Widget> actions;
+
   @override
   Widget build(BuildContext context) => Scaffold(
     body: body,
@@ -58,6 +66,10 @@ class FullscreenDialoge extends StatelessWidget {
     leading: (closeIcon == null) ? null : IconButton(
       onPressed: () => Navigator.pop(context, null),
       icon: Icon(closeIcon),
+    ),
+    title: Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: actions,
     ),
     actions: [
       if (actionButtonText != null)

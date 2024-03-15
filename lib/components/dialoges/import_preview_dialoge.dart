@@ -47,6 +47,9 @@ class _ImportPreviewDialogeState extends State<ImportPreviewDialoge> {
   /// Whether to limit shown rows to [_kRowLimit] for faster rendering.
   bool _limitRows = true;
 
+  /// Whether the CSV file has a title row that should be ignored.
+  bool _csvHasTitle = true;
+
   @override
   void initState() {
     super.initState();
@@ -82,13 +85,23 @@ class _ImportPreviewDialogeState extends State<ImportPreviewDialoge> {
 
   @override
   Widget build(BuildContext context) => FullscreenDialoge(
-    actionButtonText: AppLocalizations.of(context)!.import,
     bottomAppBar: widget.bottomAppBar,
+    actionButtonText: AppLocalizations.of(context)!.import,
     onActionButtonPressed: (_showingError) ? null : () {
       final result = _actor.attemptParse();
       if (result.hasError()) return;
       Navigator.pop<List<BloodPressureRecord>>(context, result.getOr((e) => null));
     },
+    actions: [
+      CheckboxMenuButton(
+        value: _actor.hasHeadline,
+        onChanged: (state) => setState(() {
+          _actor.hasHeadline = state ?? true;
+          _actor.attemptParse();
+        }),
+        child: Text(AppLocalizations.of(context)!.titleInCsv),
+      ),
+    ],
     body: SingleChildScrollView(
       child: SingleChildScrollView(
         scrollDirection: Axis.horizontal,
@@ -99,7 +112,7 @@ class _ImportPreviewDialogeState extends State<ImportPreviewDialoge> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
-                  DropdownButton( // TODO: show original column name
+                  DropdownButton(
                     items: [
                       DropdownMenuItem(
                         child: Text(
@@ -122,7 +135,7 @@ class _ImportPreviewDialogeState extends State<ImportPreviewDialoge> {
                                   Text(parser.formatPattern!, style: Theme.of(context).textTheme.labelSmall,),
                               ],
                             ),
-                          ), // TODO: consider more info
+                          ),
                         ),
                     ],
                     value: _actor.columnParsers[_actor.columnNames[colIdx]],
@@ -136,7 +149,7 @@ class _ImportPreviewDialogeState extends State<ImportPreviewDialoge> {
                   const Divider(),
                   for (int rowIdx = 0; rowIdx < (_limitRows
                       ? min(_actor.dataLines.length, _kRowLimit)
-                      : _actor.dataLines.length); rowIdx++) // TODO rework if needed (parsed?)
+                      : _actor.dataLines.length); rowIdx++)
                     _buildCell(
                       rowIdx,
                       _actor.dataLines[rowIdx][colIdx],
@@ -189,8 +202,6 @@ class _ImportPreviewDialogeState extends State<ImportPreviewDialoge> {
     );
   }
 }
-
-// TODO: add setting for row limiting to make errors actionable
 
 /// Shows a dialoge to preview import of a csv file
 Future<List<BloodPressureRecord>?> showImportPreview(
