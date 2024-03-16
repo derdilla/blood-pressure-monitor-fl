@@ -1,4 +1,3 @@
-
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'blood_pressure_record.freezed.dart';
@@ -18,4 +17,3 @@ class BloodPressureRecord with _$BloodPressureRecord {
     int? pul,
   }) = _BloodPressureRecord;
 }
-// TODO: create class for note and color/pin
