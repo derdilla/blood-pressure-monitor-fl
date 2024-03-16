@@ -27,15 +27,17 @@ jobs:
           uses: dart-lang/setup-dart@v1
 
         - name: Load packages
+          working-directory: ./app
           run: dart pub get
 
         - name: Run Dartdoc
+          working-directory: ./app
           run: dart doc .
 
         - name: Upload API documentation artifact
           uses: actions/upload-pages-artifact@v1
           with:
-            path: './doc/api/'
+            path: './app/doc/api/'
 
     deploy-docs:
         permissions:
