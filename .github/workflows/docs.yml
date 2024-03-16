@@ -27,11 +27,11 @@ jobs:
           uses: dart-lang/setup-dart@v1
 
         - name: Load packages
-					working-directory: ./app
+          working-directory: ./app
           run: dart pub get
 
         - name: Run Dartdoc
-					working-directory: ./app
+          working-directory: ./app
           run: dart doc .
 
         - name: Upload API documentation artifact
