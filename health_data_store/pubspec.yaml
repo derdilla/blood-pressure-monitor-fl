@@ -1,0 +1,19 @@
+name: health_data_store
+description: A package to easily store health related data.
+version: 0.1.0+1
+publish_to: none
+
+environment:
+  sdk: "^3.3.0"
+
+dependencies:
+  freezed_annotation: ^2.4.1
+  sqflite_common: ^2.5.3
+
+dev_dependencies:
+  mocktail: ^1.0.3
+  sqflite_common_ffi: ^2.1.1+1
+  test: ^1.25.2
+  build_runner: ^2.4.8
+  freezed: ^2.4.7
+

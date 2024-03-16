@@ -1,0 +1,46 @@
+# This file configures the analyzer, which statically analyzes Dart code to
+# check for errors, warnings, and lints.
+
+linter:
+  rules:
+    # Error:
+    - always_use_package_imports
+    - avoid_slow_async_io
+    - comment_references
+    - no_wildcard_variable_uses
+    - prefer_void_to_null
+
+    # Style:
+    - always_declare_return_types
+    - avoid_annotating_with_dynamic
+    - avoid_bool_literals_in_conditional_expressions
+    - avoid_double_and_int_checks
+    - avoid_escaping_inner_quotes
+    - avoid_redundant_argument_values
+    - directives_ordering
+    - eol_at_end_of_file
+    - leading_newlines_in_multiline_strings
+    - library_annotations
+    - lines_longer_than_80_chars
+    - matching_super_parameters
+    - no_literal_bool_comparisons
+    - noop_primitive_operations
+    - package_api_docs
+    - prefer_asserts_in_initializer_lists
+    - prefer_expression_function_bodies
+    - prefer_final_in_for_each
+    - prefer_final_locals
+    - prefer_if_elements_to_conditional_expressions
+    - prefer_mixin
+    - prefer_single_quotes
+    - public_member_api_docs
+    - sort_constructors_first
+    - type_annotate_public_apis
+    - unnecessary_await_in_return
+    - unnecessary_lambdas
+    - unnecessary_null_aware_operator_on_extension_on_nullable
+    - use_if_null_to_convert_nulls_to_bools
+    - use_to_and_as_if_applicable
+
+    # Pub
+    - sort_pub_dependencies
