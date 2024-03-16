@@ -5,11 +5,7 @@ on:
     branches:
       - 'main'
     paths:
-      - "lib/**"
-      - "android/**"
-      - "assets/**"
-      - "linux/**"
-      - "windows/**"
+      - "app/**"
       - ".github/workflows/CI.yml"
   workflow_dispatch:
 
@@ -24,7 +20,9 @@ jobs:
         flutter-version: '3.18.0-0.2.pre'
         channel: 'beta'
     - run: flutter pub get
+			working-directory: ./app
     - run: flutter test
+			working-directory: ./app
 
   build-android:
     runs-on: ubuntu-latest
@@ -40,5 +38,7 @@ jobs:
         flutter-version: '3.18.0-0.2.pre'
         channel: 'beta'
     - run: flutter pub get
+			working-directory: ./app
     
     - run: flutter build apk --flavor github --debug
+			working-directory: ./app
