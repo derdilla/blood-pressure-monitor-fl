@@ -15,4 +15,11 @@ void main() {
     final range = DateRange(start: timeA, end: timeB);
     expect(range.duration, equals(Duration(hours: -21, seconds: -42)));
   });
+  test('should determine start and end time in seconds since epoch', () {
+    final timeA = DateTime.fromMillisecondsSinceEpoch(0);
+    final timeB = timeA.add(Duration(seconds: 283497));
+    final range = DateRange(start: timeA, end: timeB);
+    expect(range.startStamp, 0);
+    expect(range.endStamp, 283497);
+  });
 }
