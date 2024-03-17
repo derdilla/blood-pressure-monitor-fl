@@ -5,7 +5,7 @@ import 'package:sqflite_common/sqflite.dart';
 class DBHelper {
   DBHelper._();
 
-  /// Get a entryID from a database.
+  /// Get a entryID from the `Timestamps` table of a database.
   ///
   /// Ensures that the associated timestamp matches [timestampUnixS] and that
   /// it is used in no table with a name in [blockedTables]. Creates a entry
@@ -35,5 +35,22 @@ class DBHelper {
       entryID = existing.first['entryID'] as int;
     }
     return entryID;
+  }
+
+  /// Querries all entryIDs between [startUnixS] and [endUnixS] (inclusive).
+  static Future<List<int>> queryEntryIDs(
+    Transaction txn,
+    int startUnixS,
+    int endUnixS,
+  ) async {
+    final result = await txn.query('Timestamps',
+      columns: ['entryID'],
+      where: 'timestampUnixS BETWEEN ? AND ?',
+      whereArgs: [startUnixS, endUnixS]
+    );
+    return result
+      .map((e) => e['entryID'])
+      .toList()
+      .cast();
   }
 }
