@@ -13,7 +13,8 @@ class DateRange with _$DateRange {
   const DateRange._();
 
   /// Creates a date range for the given start and end [DateTime].
-  const factory DateRange({
+  @Assert('end.isAfter(start)')
+  factory DateRange({
     /// The start of the range of dates.
     required DateTime start,
     /// The end of the range of dates.
