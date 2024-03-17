@@ -24,4 +24,10 @@ class DateRange with _$DateRange {
   ///
   /// See [DateTime.difference] for more details.
   Duration get duration => end.difference(start);
+
+  /// Gets the [start] timestamp in seconds since epoch.
+  int get startStamp => start.millisecondsSinceEpoch ~/ 1000;
+
+  /// Gets the [end] timestamp in seconds since epoch.
+  int get endStamp => end.millisecondsSinceEpoch ~/ 1000;
 }
