@@ -1,5 +1,3 @@
-import 'dart:collection';
-
 import 'package:health_data_store/src/database_manager.dart';
 import 'package:health_data_store/src/types/date_range.dart';
 
@@ -18,5 +16,5 @@ abstract class Repository<T> {
   Future<void> remove(T value);
 
   /// Inclusively returns all values in the specified [range].
-  Future<UnmodifiableListView<T>> get(DateRange range);
+  Future<List<T>> get(DateRange range);
 }

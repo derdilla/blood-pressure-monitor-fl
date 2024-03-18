@@ -39,3 +39,15 @@ void main() {
     ))));
   });
 }
+
+BloodPressureRecord mockRecord({
+  int? time,
+  int? sys,
+  int? dia,
+  int? pul,
+}) => BloodPressureRecord(
+  time: time!=null ? DateTime.fromMillisecondsSinceEpoch(time) : DateTime.now(),
+  sys: sys,
+  dia: dia,
+  pul: pul,
+);

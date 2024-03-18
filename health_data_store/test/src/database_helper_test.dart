@@ -54,7 +54,7 @@ void main() {
       expect(entry1, 1);
       await txn.insert('Systolic', {
         'entryID': entry1,
-        'value': 1,
+        'sys': 1,
       });
       final anotherEntry = await DBHelper.getEntryID(txn, 123, ['Systolic']);
       expect(anotherEntry, 2);

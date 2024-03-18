@@ -14,24 +14,18 @@ void sqfliteTestInit() {
 void main() {
   sqfliteTestInit();
   test('should initialize without issues', () async {
-    final db = await DatabaseManager.load(await openDatabase(
-      inMemoryDatabasePath,
-    ));
+    final db = await mockDBManager();
     addTearDown(db.close);
     expect(db.db.isOpen, isTrue);
   });
   test('should close', () async {
-    final db = await DatabaseManager.load(await openDatabase(
-      inMemoryDatabasePath,
-    ));
+    final db = await mockDBManager();
     expect(db.db.isOpen, isTrue);
     await db.close();
     expect(db.db.isOpen, isFalse);
   });
   test('should setup medicine table', () async {
-    final db = await DatabaseManager.load(await openDatabase(
-      inMemoryDatabasePath,
-    ));
+    final db = await mockDBManager();
     addTearDown(db.close);
 
     final result = await db.db
@@ -93,9 +87,7 @@ void main() {
         throwsException);
   });
   test('should create timestamps table correctly', () async {
-    final db = await DatabaseManager.load(await openDatabase(
-      inMemoryDatabasePath,
-    ));
+    final db = await mockDBManager();
     addTearDown(db.close);
     await db.db.insert('Timestamps', {
       'entryID': 1,
@@ -115,9 +107,7 @@ void main() {
     }), throwsException);
   });
   test('should create intake table correctly', () async {
-    final db = await DatabaseManager.load(await openDatabase(
-      inMemoryDatabasePath,
-    ));
+    final db = await mockDBManager();
     addTearDown(db.close);
 
     await db.db.insert('Intake', {
@@ -130,28 +120,28 @@ void main() {
     expect(data.first.keys, hasLength(3));
   });
   test('should create timestamps sys,dia,pul tables correctly', () async {
-    final db = await DatabaseManager.load(await openDatabase(
-      inMemoryDatabasePath,
-    ));
+    final db = await mockDBManager();
     addTearDown(db.close);
-    for (final t in ['Systolic', 'Diastolic', 'Pulse']) {
-      await db.db.insert(t, {
+    for (final t in [
+      ('Systolic','sys'),
+      ('Diastolic', 'dia'),
+      ('Pulse','pul')
+    ]) {
+      await db.db.insert(t.$1, {
         'entryID': 1,
-        'value': 1,
+        t.$2: 1,
       });
-      await db.db.insert(t, {
+      await db.db.insert(t.$1, {
         'entryID': 2,
-        'value': null,
+        t.$2: null,
       });
-      final data = await db.db.query(t);
+      final data = await db.db.query(t.$1);
       expect(data, hasLength(2));
       expect(data.first.keys, hasLength(2));
     }
   });
   test('should create notes table correctly', () async {
-    final db = await DatabaseManager.load(await openDatabase(
-      inMemoryDatabasePath,
-    ));
+    final db = await mockDBManager();
     addTearDown(db.close);
 
     await db.db.insert('Notes', {
@@ -165,3 +155,6 @@ void main() {
     expect(data.first['color'], equals(0xFF990098));
   });
 }
+
+Future<DatabaseManager> mockDBManager() async => DatabaseManager.load(
+    await openDatabase(inMemoryDatabasePath));
