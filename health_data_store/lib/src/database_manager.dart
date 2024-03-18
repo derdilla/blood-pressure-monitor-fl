@@ -50,10 +50,14 @@ class DatabaseManager {
       'FOREIGN KEY("entryID") REFERENCES "Timestamps"("entryID"),'
       'FOREIGN KEY("medID") REFERENCES "Medicine"("medID")'
     ');');
-    for (final intTable in ['Systolic', 'Diastolic', 'Pulse']) {
-      await _db.execute('CREATE TABLE "$intTable" ('
+    for (final info in [
+      ('Systolic','sys'),
+      ('Diastolic', 'dia'),
+      ('Pulse','pul')
+    ]) {
+      await _db.execute('CREATE TABLE "${info.$1}" ('
         '"entryID"	INTEGER NOT NULL,'
-        '"value"    INTEGER,'
+        '"${info.$2}"    INTEGER,'
         'FOREIGN KEY("entryID") REFERENCES "Timestamps"("entryID"),'
         'PRIMARY KEY("entryID")'
       ');');
