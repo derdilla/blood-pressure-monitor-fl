@@ -79,8 +79,41 @@ class BloodPressureRepository extends Repository<BloodPressureRecord> {
 
   @override
   Future<void> remove(BloodPressureRecord value) async {
-    // TODO: implement remove
-    throw UnimplementedError();
+    await _db.transaction((txn) async {
+      String query = 'SELECT t.entryID FROM Timestamps AS t ';
+      if (value.sys != null)
+        query += 'LEFT JOIN Systolic AS s ON t.entryID = s.entryID ';
+      if (value.dia != null)
+        query += 'LEFT JOIN Diastolic AS d ON t.entryID = d.entryID ';
+      if (value.pul != null)
+        query += 'LEFT JOIN Pulse AS p ON t.entryID = p.entryID ';
+      query += 'WHERE timestampUnixS = ? ';
+      if (value.sys != null)
+        query += 'AND sys = ? ';
+      if (value.dia != null)
+        query += 'AND dia = ? ';
+      if (value.pul != null)
+        query += 'AND pul = ? ';
+
+      final entryResult = await txn.rawQuery(query, [
+        value.time.millisecondsSinceEpoch ~/ 1000,
+        if (value.sys != null)
+          value.sys,
+        if (value.dia != null)
+          value.dia,
+        if (value.pul != null)
+          value.pul,
+      ]);
+      if (entryResult.isEmpty) return;
+      final entryID = entryResult.first['entryID'];
+      if (value.sys != null)
+        await txn.delete('Systolic', where: 'entryID = ?', whereArgs:[entryID]);
+      if (value.dia != null)
+        await txn.delete('Diastolic', where:'entryID = ?', whereArgs:[entryID]);
+      if (value.pul != null)
+        await txn.delete('Pulse', where: 'entryID = ?', whereArgs: [entryID]);
+    });
+    // TODO: implement central cleanup of unused timestamp entries (by no table)
   }
 
 }
