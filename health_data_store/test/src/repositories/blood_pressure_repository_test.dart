@@ -40,4 +40,98 @@ void main() {
     expect(values, hasLength(3));
     expect(values, containsAll([r1,r2,r3]));
   });
+  test('should remove records', () async {
+    final db = await mockDBManager();
+    addTearDown(db.close);
+    final repo = BloodPressureRepository(db.db);
+    final r1 = mockRecord(time: 10000, sys: 456, dia: 457, pul: 458);
+    await repo.add(r1);
+
+    final values1 = await repo.get(DateRange(
+      start: DateTime.fromMillisecondsSinceEpoch(0),
+      end: DateTime.fromMillisecondsSinceEpoch(80000),
+    ));
+    expect(values1, hasLength(1));
+    expect(values1, contains(r1));
+
+    await repo.remove(r1);
+    final values2 = await repo.get(DateRange(
+      start: DateTime.fromMillisecondsSinceEpoch(0),
+      end: DateTime.fromMillisecondsSinceEpoch(80000),
+    ));
+    expect(values2, isEmpty);
+  });
+  test('should remove partial records', () async {
+    final db = await mockDBManager();
+    addTearDown(db.close);
+    final repo = BloodPressureRepository(db.db);
+    final r1 = mockRecord(time: 10000, sys: 456, dia: 457, pul: 458);
+    final r2 = mockRecord(time: 20000, sys: 123);
+    final r3 = mockRecord(time: 30000, sys: 788, pul: 789);
+    await repo.add(r1);
+    await repo.add(r2);
+    await repo.add(r3);
+
+    final values0 = await repo.get(DateRange(
+      start: DateTime.fromMillisecondsSinceEpoch(0),
+      end: DateTime.fromMillisecondsSinceEpoch(80000),
+    ));
+    expect(values0, hasLength(3));
+    expect(values0, containsAll([r1,r2,r3]));
+
+    await repo.remove(r1);
+    final values1 = await repo.get(DateRange(
+      start: DateTime.fromMillisecondsSinceEpoch(0),
+      end: DateTime.fromMillisecondsSinceEpoch(80000),
+    ));
+    print(values1);
+    expect(values1, hasLength(2));
+    expect(values1, containsAll([r2,r3]));
+
+    await repo.remove(r2);
+    final values2 = await repo.get(DateRange(
+      start: DateTime.fromMillisecondsSinceEpoch(0),
+      end: DateTime.fromMillisecondsSinceEpoch(80000),
+    ));
+    print(values2);
+    expect(values2, hasLength(1));
+    expect(values2, containsAll([r3]));
+
+    await repo.remove(r3);
+    final values3 = await repo.get(DateRange(
+      start: DateTime.fromMillisecondsSinceEpoch(0),
+      end: DateTime.fromMillisecondsSinceEpoch(80000),
+    ));
+    expect(values3, isEmpty);
+  });
+  test('should remove correct record when multiple are at same time', () async {
+    final db = await mockDBManager();
+    addTearDown(db.close);
+    final repo = BloodPressureRepository(db.db);
+    final r1 = mockRecord(time: 10000, sys: 456, dia: 457, pul: 458);
+    final r2 = mockRecord(time: 10000, sys: 678, dia: 457, pul: 458);
+    await repo.add(r1);
+    await repo.add(r2);
+
+    await repo.remove(r1);
+    final values2 = await repo.get(DateRange(
+      start: DateTime.fromMillisecondsSinceEpoch(0),
+      end: DateTime.fromMillisecondsSinceEpoch(80000),
+    ));
+    expect(values2, hasLength(1));
+    expect(values2, contains(r2));
+  });
+  test('should not throw when removing non existent record', () async {
+    final db = await mockDBManager();
+    addTearDown(db.close);
+    final repo = BloodPressureRepository(db.db);
+    final r1 = mockRecord(time: 10000, sys: 456, dia: 457, pul: 458);
+
+    await repo.remove(r1);
+    final values = await repo.get(DateRange(
+      start: DateTime.fromMillisecondsSinceEpoch(0),
+      end: DateTime.fromMillisecondsSinceEpoch(80000),
+    ));
+    expect(values, isEmpty);
+  });
 }
