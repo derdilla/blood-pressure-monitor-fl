@@ -42,7 +42,7 @@ class DBHelper {
     Transaction txn,
     int startUnixS,
     int endUnixS,
-  ) async {
+  ) async { // TODO: consider removing, once unused
     final result = await txn.query('Timestamps',
       columns: ['entryID'],
       where: 'timestampUnixS BETWEEN ? AND ?',
