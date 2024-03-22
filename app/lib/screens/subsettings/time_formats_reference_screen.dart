@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
+/// A info screen to show possible time format codes.
 class TimeFormattingReferenceScreen extends StatelessWidget {
+  /// Create a info screen to show possible time format codes.
   const TimeFormattingReferenceScreen({super.key});
   // https://pub.dev/documentation/intl/latest/intl/DateFormat-class.html
   static const _formats = '''
@@ -65,7 +67,6 @@ DAY                          d
     final lines = _formats.trim().split('\n');
     for (int i = 1; i < lines.length; i++) {
       final List<String> values = lines[i].trim().split(RegExp(r'\s{2,}'));
-
       rowsOut.add(TableRow(children: [Text(values[0]), Text(values[1])]));
     }
     return rowsOut;
