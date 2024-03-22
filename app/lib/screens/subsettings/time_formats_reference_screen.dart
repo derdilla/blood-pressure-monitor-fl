@@ -47,20 +47,20 @@ DAY                          d
         appBar: AppBar(
           backgroundColor: Theme.of(context).primaryColor,
         ),
-        body: Container(
-          padding: const EdgeInsets.all(20),
+        body: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
           child: SingleChildScrollView(
             child: Table(
               columnWidths: const {
                 0: FlexColumnWidth(0.71),
                 1: FlexColumnWidth(0.29),
               },
-              children: getRows(),
+              children: _buildRows(),
             ),
           ),
         ),);
 
-  List<TableRow> getRows() {
+  List<TableRow> _buildRows() {
     final List<TableRow> rowsOut = [];
     final lines = _formats.trim().split('\n');
     for (int i = 1; i < lines.length; i++) {
