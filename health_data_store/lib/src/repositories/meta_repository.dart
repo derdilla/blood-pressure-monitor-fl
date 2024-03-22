@@ -21,5 +21,6 @@ class MetaRepository {
   }
 
   // TODO: check what is needed
+  // - Medicine entries / bp records that belong together
 
 }
