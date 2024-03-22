@@ -74,7 +74,7 @@ DAY                          d
       ),
     ];
     final lines = _formats.trim().split('\n');
-    for (int i = 1; i < lines.length; i++) {
+    for (int i = 0; i < lines.length; i++) {
       final List<String> values = lines[i].trim().split(RegExp(r'\s{2,}'));
       rowsOut.add(TableRow(children: [Text(values[0]), Text(values[1])]));
     }
