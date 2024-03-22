@@ -46,24 +46,33 @@ DAY                          d
 
   @override
   Widget build(BuildContext context) => Scaffold(
-        appBar: AppBar(
-          backgroundColor: Theme.of(context).primaryColor,
+    appBar: AppBar(
+      backgroundColor: Theme.of(context).primaryColor,
+    ),
+    body: Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20),
+      child: SingleChildScrollView(
+        child: Table(
+          columnWidths: const {
+            0: FlexColumnWidth(0.71),
+            1: FlexColumnWidth(0.29),
+          },
+          children: _buildRows(context),
         ),
-        body: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: SingleChildScrollView(
-            child: Table(
-              columnWidths: const {
-                0: FlexColumnWidth(0.71),
-                1: FlexColumnWidth(0.29),
-              },
-              children: _buildRows(),
-            ),
-          ),
-        ),);
+      ),
+    ),);
 
-  List<TableRow> _buildRows() {
-    final List<TableRow> rowsOut = [];
+  List<TableRow> _buildRows(BuildContext context) {
+    final List<TableRow> rowsOut = [
+      TableRow(
+        decoration: BoxDecoration(
+          border: Border(bottom: BorderSide(
+            color: Theme.of(context).dividerColor,
+          ),),
+        ),
+        children: const [Text('ICU Name'), Text('Skeleton')],
+      ),
+    ];
     final lines = _formats.trim().split('\n');
     for (int i = 1; i < lines.length; i++) {
       final List<String> values = lines[i].trim().split(RegExp(r'\s{2,}'));
