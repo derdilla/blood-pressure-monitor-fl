@@ -49,9 +49,7 @@ class BleInputBloc extends Bloc<BleInputEvent, BleInputState> {
         return;
       }
       emit(BleInputLoadInProgress());
-
       try {
-        emit(BleInputLoadInProgress());
         await _ble.initialize();
         final deviceStream = _ble.scanForDevices(withServices: _requiredServices,);
         await emit.forEach(deviceStream, onData: (DiscoveredDevice device) {
@@ -60,7 +58,6 @@ class BleInputBloc extends Bloc<BleInputEvent, BleInputState> {
         },);
       } catch (e) {
         // TODO: check its really this type of exception
-        print(e);
         emit(BleInputLoadFailure());
       }
     });
