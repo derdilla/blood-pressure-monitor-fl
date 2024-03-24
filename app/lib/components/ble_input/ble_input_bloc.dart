@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:blood_pressure_app/components/ble_input/ble_input_events.dart';
 import 'package:blood_pressure_app/components/ble_input/ble_input_state.dart';
+import 'package:blood_pressure_app/components/ble_input/measurement_characteristic.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 
@@ -56,8 +57,9 @@ class BleInputBloc extends Bloc<BleInputEvent, BleInputState> {
                 serviceId: Uuid.parse('1810'),
                 deviceId: event.device.id,
               );
-              _ble.subscribeToCharacteristic(characteristic).listen((event) {
-                // TODO: decode byte array and create measurement
+              _ble.subscribeToCharacteristic(characteristic).listen((List<int> data) {
+                final decoded = BPMeasurementCharacteristic.parse(data);
+                // TODO: display gathered information and allow saving gathered measurement.
               });
 
               // TODO: move reading code
