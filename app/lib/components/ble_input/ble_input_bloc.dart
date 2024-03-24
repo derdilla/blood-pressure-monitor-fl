@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:blood_pressure_app/components/ble_input/ble_input_events.dart';
 import 'package:blood_pressure_app/components/ble_input/ble_input_state.dart';
 import 'package:blood_pressure_app/components/ble_input/measurement_characteristic.dart';
+import 'package:blood_pressure_app/model/blood_pressure/record.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 
@@ -58,13 +59,8 @@ class BleInputBloc extends Bloc<BleInputEvent, BleInputState> {
                 deviceId: event.device.id,
               );
               _ble.subscribeToCharacteristic(characteristic).listen((List<int> data) {
-                final decoded = BPMeasurementCharacteristic.parse(data);
-                // TODO: display gathered information and allow saving gathered measurement.
+                add(BleBluetoothMeasurementRecieved(data));
               });
-
-              // TODO: move reading code
-
-
               return BleConnectSuccess();
             } else if (update.connectionState == DeviceConnectionState.connecting) {
               return BleConnectInProgress();
@@ -75,13 +71,41 @@ class BleInputBloc extends Bloc<BleInputEvent, BleInputState> {
       } on TimeoutException {
         emit(BleConnectFailed());
       }
-
     });
-    // TODO: use _ble.statusStream
 
-    // TODO: check if information about measurement start can be obtained
-    // through bluetooth
+    on<BleBluetoothMeasurementRecieved>((event, emit) {
+      emit(BleMeasurementInProgress());
+      final decoded = BPMeasurementCharacteristic.parse(event.data);
+      final record = BloodPressureRecord(
+        decoded.time ?? DateTime.now(),
+        // TODO: unit conversions
+        decoded.sys.toInt(),
+        decoded.dia.toInt(),
+        decoded.pul?.toInt(),
+        '',
+      );
+      emit(BleMeasurementSuccess(record,
+        bodyMoved: decoded.bodyMoved,
+        cuffLoose: decoded.cuffLoose,
+        irregularPulse: decoded.irregularPulse,
+        improperMeasurementPosition: decoded.improperMeasurementPosition,
+        measurementStatus: decoded.measurementStatus,
+      ),);
+    });
+
+    // TODO: use _ble.statusStream ?
+
+    // TODO: show capabilities during testing:
+    // _ble.getDiscoveredServices()
+
+    // Interesting available characteristics:
+    // - Battery Health Information 0x2BEB (and other battery ...)
+    // - Blood Pressure Feature 0x2A49
+    // - Device Name 0x2A00
+    // - Enhanced Blood Pressure Measurement 0x2B34
+    // - Live Health Observations 0x2B8B
 
   }
 
 }
+// TODO: implement UI
