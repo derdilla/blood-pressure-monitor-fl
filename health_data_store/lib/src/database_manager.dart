@@ -5,6 +5,21 @@ import 'package:sqflite_common/sqlite_api.dart';
 /// 
 /// Responsible for setting up the database and performing schema and version 
 /// updates.
+///
+/// ## DB scheme
+///
+/// ![Diagram](https://github.com/NobodyForNothing/blood-pressure-monitor-fl/assets/82763757/62edb58c-c579-4ce1-990c-be7889657fa7)
+///
+/// ## Types
+/// Data in the database tries to always use the most common SI-units.
+/// Exceptions must be documented here.
+/// - Timestamps are in seconds since unix epoch
+/// - Color are integers in format 0xRRGGBB
+/// - Pressure is in *kPa* // TODO: rethink and validate this is used everywhere; possibly encapsulate values in type class
+/// - Pulse is in bpm
+/// - Weight is in kg
+/// - Length is in meter
+/// - Temperature is in kelvin
 class DatabaseManager {
   DatabaseManager._create(this._db);
 
