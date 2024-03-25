@@ -44,7 +44,6 @@ class Settings extends ChangeNotifier {
     bool? bottomAppBars,
     List<Medicine>? medications,
     int? highestMedIndex,
-    PressureUnit? preferredPressureUnit,
   }) {
     if (accentColor != null) _accentColor = accentColor;
     if (sysColor != null) _sysColor = sysColor;
@@ -69,7 +68,6 @@ class Settings extends ChangeNotifier {
     if (bottomAppBars != null) _bottomAppBars = bottomAppBars;
     if (medications != null) _medications.addAll(medications);
     if (highestMedIndex != null) _highestMedIndex = highestMedIndex;
-    if (preferredPressureUnit != null) _preferredPressureUnit = preferredPressureUnit;
     _language = language; // No check here, as null is the default as well.
   }
 
@@ -102,7 +100,6 @@ class Settings extends ChangeNotifier {
       medications: ConvertUtil.parseList<String>(map['medications'])?.map((e) =>
           Medicine.fromJson(jsonDecode(e)),).toList(),
       highestMedIndex: ConvertUtil.parseInt(map['highestMedIndex']),
-      preferredPressureUnit: PressureUnit.decode(ConvertUtil.parseInt(map['preferredPressureUnit'])),
     );
 
     // update
@@ -147,7 +144,6 @@ class Settings extends ChangeNotifier {
       'bottomAppBars': bottomAppBars,
       'medications': medications.map(jsonEncode).toList(),
       'highestMedIndex': highestMedIndex,
-      'preferredPressureUnit': preferredPressureUnit.encode(),
     };
 
   /// Serialize the object to a restoreable string.
@@ -342,14 +338,6 @@ class Settings extends ChangeNotifier {
   bool get bottomAppBars => _bottomAppBars;
   set bottomAppBars(bool value) {
     _bottomAppBars = value;
-    notifyListeners();
-  }
-
-  PressureUnit _preferredPressureUnit = PressureUnit.mmHg;
-  /// Preferred unit to display and enter measurements in.
-  PressureUnit get preferredPressureUnit => _preferredPressureUnit;
-  set preferredPressureUnit(PressureUnit value) {
-    _preferredPressureUnit = value;
     notifyListeners();
   }
   
