@@ -9,6 +9,7 @@ import 'package:sqflite_common/sqlite_api.dart';
 /// ## DB scheme
 ///
 /// ![Diagram](https://github.com/NobodyForNothing/blood-pressure-monitor-fl/assets/82763757/62edb58c-c579-4ce1-990c-be7889657fa7)
+/// // TODO: replace with updating file once merged
 ///
 /// ## Types
 /// Data in the database tries to always use the most common SI-units.
@@ -50,6 +51,8 @@ class DatabaseManager {
       '"medID"       INTEGER NOT NULL UNIQUE,'
       '"designation" TEXT NOT NULL,'
       '"defaultDose" REAL,'
+      '"color" INTEGER,'
+      '"removed" BOOLEAN,'
       'PRIMARY KEY("medID")'
     ');');
     await _db.execute('CREATE TABLE "Timestamps" ('
@@ -88,4 +91,7 @@ class DatabaseManager {
 
   /// Closes the database.
   Future<void> close() => _db.close();
+
+  // TODO: perform cleanup of medicines that are marked as deleted and have no
+  // intakes referencing them.
 }
