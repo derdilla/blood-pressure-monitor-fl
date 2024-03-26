@@ -15,6 +15,6 @@ class Medicine with _$Medicine {
     /// Sample value: `0xFF42A5F5`
     int? color,
     /// Default dosis of medication.
-    int? dosis,
+    double? dosis,
   }) = _Medicine;
 }
