@@ -47,6 +47,7 @@ class DatabaseManager {
   Database get db => _db.database;
   
   Future<void> _setUpTables() async {
+    // TODO: IF NOT EXISTS ?
     await _db.execute('CREATE TABLE "Medicine" ('
       '"medID"       INTEGER NOT NULL UNIQUE,'
       '"designation" TEXT NOT NULL,'
@@ -58,12 +59,12 @@ class DatabaseManager {
     await _db.execute('CREATE TABLE "Timestamps" ('
       '"entryID"	      INTEGER NOT NULL UNIQUE,'
       '"timestampUnixS"	INTEGER NOT NULL,'
-      'PRIMARY KEY("entryID")'
+      'PRIMARY KEY("entryID")' // TODO: add timezone to determine morning, evening
     ');');
     await _db.execute('CREATE TABLE "Intake" ('
       '"entryID" INTEGER NOT NULL,'
       '"medID"	 INTEGER NOT NULL,'
-      '"dosis"	 INTEGER NOT NULL,'
+      '"dosis"	 REAL NOT NULL,'
       'PRIMARY KEY("entryID"),'
       'FOREIGN KEY("entryID") REFERENCES "Timestamps"("entryID"),'
       'FOREIGN KEY("medID") REFERENCES "Medicine"("medID")'

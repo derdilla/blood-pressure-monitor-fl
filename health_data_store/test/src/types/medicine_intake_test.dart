@@ -13,3 +13,12 @@ void main() {
     expect(intake.dosis, equals(42));
   });
 }
+
+MedicineIntake mockIntake(Medicine medicine, {
+  int? time,
+  double? dosis,
+}) => MedicineIntake(
+  time: time!=null ? DateTime.fromMillisecondsSinceEpoch(time) : DateTime.now(),
+  medicine: medicine,
+  dosis: dosis ?? medicine.dosis ?? 42,
+);

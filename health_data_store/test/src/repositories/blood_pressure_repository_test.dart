@@ -1,6 +1,5 @@
 
 import 'package:health_data_store/health_data_store.dart';
-import 'package:health_data_store/src/repositories/blood_pressure_repository.dart';
 import 'package:test/test.dart';
 
 import '../database_manager_test.dart';
@@ -84,7 +83,6 @@ void main() {
       start: DateTime.fromMillisecondsSinceEpoch(0),
       end: DateTime.fromMillisecondsSinceEpoch(80000),
     ));
-    print(values1);
     expect(values1, hasLength(2));
     expect(values1, containsAll([r2,r3]));
 
@@ -93,7 +91,6 @@ void main() {
       start: DateTime.fromMillisecondsSinceEpoch(0),
       end: DateTime.fromMillisecondsSinceEpoch(80000),
     ));
-    print(values2);
     expect(values2, hasLength(1));
     expect(values2, containsAll([r3]));
 
@@ -134,4 +131,6 @@ void main() {
     ));
     expect(values, isEmpty);
   });
+
+  // TODO: not return records out of range
 }
