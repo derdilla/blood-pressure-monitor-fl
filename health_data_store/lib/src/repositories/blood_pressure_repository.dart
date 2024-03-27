@@ -27,7 +27,6 @@ class BloodPressureRepository extends Repository<BloodPressureRecord> {
         timeSec,
         ['Systolic', 'Diastolic', 'Pulse'],
       );
-      print(record);
       if (record.sys != null) {
         await txn.insert('Systolic', {
           'entryID': entryID,
@@ -57,7 +56,7 @@ class BloodPressureRepository extends Repository<BloodPressureRecord> {
         'LEFT JOIN Systolic AS s ON t.entryID = s.entryID '
         'LEFT JOIN Diastolic AS d ON t.entryID = d.entryID '
         'LEFT JOIN Pulse AS p ON t.entryID = p.entryID '
-        'WHERE timestampUnixS BETWEEN ? AND ?;',
+      'WHERE timestampUnixS BETWEEN ? AND ?',
       [range.startStamp, range.endStamp]
     );
     final records = <BloodPressureRecord>[];

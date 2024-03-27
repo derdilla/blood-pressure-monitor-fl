@@ -16,6 +16,6 @@ class MedicineIntake with _$MedicineIntake {
     ///
     /// When the medication has a default value, this must be set to that value,
     /// as it may change.
-    required int dosis,
+    required double dosis,
   }) = _MedicineIntake;
 }
