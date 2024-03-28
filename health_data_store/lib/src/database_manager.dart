@@ -59,7 +59,7 @@ class DatabaseManager {
     await _db.execute('CREATE TABLE "Timestamps" ('
       '"entryID"	      INTEGER NOT NULL UNIQUE,'
       '"timestampUnixS"	INTEGER NOT NULL,'
-      'PRIMARY KEY("entryID")' // TODO: add timezone to determine morning, evening
+      'PRIMARY KEY("entryID")' // TODO: add timezone to determine time of day
     ');');
     await _db.execute('CREATE TABLE "Intake" ('
       '"entryID" INTEGER NOT NULL,'

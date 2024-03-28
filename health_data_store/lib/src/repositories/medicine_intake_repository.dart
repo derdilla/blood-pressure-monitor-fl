@@ -22,7 +22,7 @@ class MedicineIntakeRepository extends Repository<MedicineIntake> {
       columns: ['medID'],
       where: 'designation = ? '
           'AND color ' +((intake.medicine.color != null) ? '= ?' : 'IS NULL')
-          + ' AND defaultDose ' +((intake.medicine.dosis != null) ? '= ?' : 'IS '
+          + ' AND defaultDose ' +((intake.medicine.dosis != null) ? '= ?':'IS '
           'NULL'),
       whereArgs: [
         intake.medicine.designation,
