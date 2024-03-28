@@ -1,17 +1,19 @@
-import 'package:health_data_store/health_data_store.dart';
 import 'package:health_data_store/src/database_helper.dart';
 import 'package:health_data_store/src/database_manager.dart';
 import 'package:health_data_store/src/extensions/datetime_seconds.dart';
-import 'package:health_data_store/src/repositories/repository.dart';
+import 'package:health_data_store/src/repositories/medicine_intake_repository.dart';
+import 'package:health_data_store/src/types/date_range.dart';
+import 'package:health_data_store/src/types/medicine.dart';
+import 'package:health_data_store/src/types/medicine_intake.dart';
 import 'package:sqflite_common/sqflite.dart';
 
-/// Repository for [MedicineIntake]s.
+/// Implementation of a repository for [MedicineIntake]s.
 ///
 /// Provides high level access on intakes saved in a [DatabaseManager] managed
 /// database.
-class MedicineIntakeRepository extends Repository<MedicineIntake> {
+class MedicineIntakeRepositoryImpl extends MedicineIntakeRepository {
   /// Create a repository for medicine intakes.
-  MedicineIntakeRepository(this._db);
+  MedicineIntakeRepositoryImpl(this._db);
 
   /// The [DatabaseManager] managed database.
   final Database _db;

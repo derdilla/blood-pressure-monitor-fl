@@ -1,16 +1,16 @@
-
 import 'package:health_data_store/src/database_helper.dart';
 import 'package:health_data_store/src/database_manager.dart';
 import 'package:health_data_store/src/extensions/datetime_seconds.dart';
-import 'package:health_data_store/src/repositories/repository.dart';
+import 'package:health_data_store/src/repositories/note_repository.dart';
 import 'package:health_data_store/src/types/date_range.dart';
 import 'package:health_data_store/src/types/note.dart';
 import 'package:sqflite_common/sqflite.dart';
 
-/// Repository for accessing [Note]s stored in a [DatabaseManager] managed db.
-class NoteRepository extends Repository<Note> {
+/// Implementation of repository for accessing [Note]s stored in a
+/// [DatabaseManager] managed db.
+class NoteRepositoryImpl extends NoteRepository {
   /// Create a repository for notes.
-  NoteRepository(this._db);
+  NoteRepositoryImpl(this._db);
 
   /// The [DatabaseManager] managed database.
   final Database _db;

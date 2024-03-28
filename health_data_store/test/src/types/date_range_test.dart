@@ -1,4 +1,4 @@
-import 'package:health_data_store/health_data_store.dart';
+import 'package:health_data_store/src/types/date_range.dart';
 import 'package:test/test.dart';
 
 void main() {

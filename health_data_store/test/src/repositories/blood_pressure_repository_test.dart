@@ -1,5 +1,5 @@
-
-import 'package:health_data_store/health_data_store.dart';
+import 'package:health_data_store/src/repositories/blood_pressure_repository_impl.dart';
+import 'package:health_data_store/src/types/date_range.dart';
 import 'package:test/test.dart';
 
 import '../database_manager_test.dart';
@@ -10,12 +10,12 @@ void main() {
   test('should initialize', () async {
     final db = await mockDBManager();
     addTearDown(db.close);
-    BloodPressureRepository(db.db);
+    BloodPressureRepositoryImpl(db.db);
   });
   test('should store records without errors', () async {
     final db = await mockDBManager();
     addTearDown(db.close);
-    final repo = BloodPressureRepository(db.db);
+    final repo = BloodPressureRepositoryImpl(db.db);
     await repo.add(mockRecord(sys: 123, dia: 456, pul: 789));
     await repo.add(mockRecord(sys: 123, pul: 789));
     await repo.add(mockRecord(sys: 123));
@@ -24,7 +24,7 @@ void main() {
   test('should return stored records', () async {
     final db = await mockDBManager();
     addTearDown(db.close);
-    final repo = BloodPressureRepository(db.db);
+    final repo = BloodPressureRepositoryImpl(db.db);
     final r1 = mockRecord(time: 50000, sys: 123);
     final r2 = mockRecord(time: 80000, sys: 456, dia: 457, pul: 458);
     final r3 = mockRecord(time: 20000, sys: 788, pul: 789);
@@ -42,7 +42,7 @@ void main() {
   test('should remove records', () async {
     final db = await mockDBManager();
     addTearDown(db.close);
-    final repo = BloodPressureRepository(db.db);
+    final repo = BloodPressureRepositoryImpl(db.db);
     final r1 = mockRecord(time: 10000, sys: 456, dia: 457, pul: 458);
     await repo.add(r1);
 
@@ -63,7 +63,7 @@ void main() {
   test('should remove partial records', () async {
     final db = await mockDBManager();
     addTearDown(db.close);
-    final repo = BloodPressureRepository(db.db);
+    final repo = BloodPressureRepositoryImpl(db.db);
     final r1 = mockRecord(time: 10000, sys: 456, dia: 457, pul: 458);
     final r2 = mockRecord(time: 20000, sys: 123);
     final r3 = mockRecord(time: 30000, sys: 788, pul: 789);
@@ -104,7 +104,7 @@ void main() {
   test('should remove correct record when multiple are at same time', () async {
     final db = await mockDBManager();
     addTearDown(db.close);
-    final repo = BloodPressureRepository(db.db);
+    final repo = BloodPressureRepositoryImpl(db.db);
     final r1 = mockRecord(time: 10000, sys: 456, dia: 457, pul: 458);
     final r2 = mockRecord(time: 10000, sys: 678, dia: 457, pul: 458);
     await repo.add(r1);
@@ -121,7 +121,7 @@ void main() {
   test('should not throw when removing non existent record', () async {
     final db = await mockDBManager();
     addTearDown(db.close);
-    final repo = BloodPressureRepository(db.db);
+    final repo = BloodPressureRepositoryImpl(db.db);
     final r1 = mockRecord(time: 10000, sys: 456, dia: 457, pul: 458);
 
     await repo.remove(r1);
