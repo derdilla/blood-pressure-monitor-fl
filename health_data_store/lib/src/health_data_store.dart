@@ -1,9 +1,19 @@
-
+import 'package:health_data_store/src/database_manager.dart';
+import 'package:health_data_store/src/repositories/blood_pressure_repository_impl.dart';
+import 'package:health_data_store/src/repositories/medicine_intake_repository_impl.dart';
+import 'package:health_data_store/src/repositories/medicine_repository_impl.dart';
+import 'package:health_data_store/src/repositories/note_repository_impl.dart';
 import 'package:sqflite_common/sqflite.dart';
 
-// TODO: document once finished
-abstract class HealthDataStore {
-  const HealthDataStore._create();
+/// Factory class for objects that provide access to the health database.
+///
+/// Ensures that the classes are instantiated for which the table schemes in the
+/// db fit and creates ensures that the db schema is created and updated where
+/// necessary.
+class HealthDataStore {
+  HealthDataStore._create(this._dbMngr);
+
+  DatabaseManager _dbMngr;
 
   /// Initializes objects from [db].
   ///
@@ -11,11 +21,26 @@ abstract class HealthDataStore {
   /// library maintains the version and is responsible for update operations.
   static Future<HealthDataStore?> load(Database db) async {
     if (!db.isOpen) return null;
-    // TODO
-    throw UnimplementedError();
+    final mngr = await DatabaseManager.load(db);
+    return HealthDataStore._create(mngr);
   }
 
-  // TODO: Future<BloodPressureRepository> getBloodPressureRepository();
-  // ...
+  /// Repository for blood pressure data.
+  BloodPressureRepository get bpRepo =>
+    BloodPressureRepository(_dbMngr.db);
 
+  /// Repository for notes.
+  NoteRepository get noteRepo =>
+    NoteRepository(_dbMngr.db);
+
+  /// Repository for medicines.
+  MedicineRepository get medRepo =>
+    MedicineRepository(_dbMngr.db);
+
+  /// Repository for intakes.
+  MedicineIntakeRepository get intakeRepo =>
+    MedicineIntakeRepository(_dbMngr.db);
+
+  // TODO: hide constructors
+  // TODO: test
 }
