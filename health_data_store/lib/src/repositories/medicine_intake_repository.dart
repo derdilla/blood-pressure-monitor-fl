@@ -53,6 +53,7 @@ class MedicineIntakeRepository extends Repository<MedicineIntake> {
 
   @override
   Future<List<MedicineIntake>> get(DateRange range) async {
+    // TODO: change left join to join
     final results = await _db.rawQuery(
       'SELECT t.timestampUnixS, dosis, defaultDose, designation, color '
         'FROM Timestamps AS t '
