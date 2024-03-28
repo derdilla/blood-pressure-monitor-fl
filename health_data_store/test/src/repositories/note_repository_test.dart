@@ -13,12 +13,12 @@ void main() {
   test('should initialize', () async {
     final db = await mockDBManager();
     addTearDown(db.close);
-    NoteRepository(db.db);
+    NoteRepositoryImpl(db.db);
   });
   test('should store notes', () async {
     final db = await mockDBManager();
     addTearDown(db.close);
-    final repo = NoteRepository(db.db);
+    final repo = NoteRepositoryImpl(db.db);
     await repo.add(mockNote(color: 0x00FF00));
     await repo.add(mockNote(note: 'test'));
     expect(() async => repo.add(mockNote()), throwsA(isA<AssertionError>()));
@@ -26,7 +26,7 @@ void main() {
   test('should return stored notes', () async {
     final db = await mockDBManager();
     addTearDown(db.close);
-    final repo = NoteRepository(db.db);
+    final repo = NoteRepositoryImpl(db.db);
     final note1 = mockNote(time: 100000, color: 0x00FF00);
     await repo.add(note1);
     final note2 = mockNote(time: 700000, note: 'test');
@@ -45,7 +45,7 @@ void main() {
   test('should remove notes', () async {
     final db = await mockDBManager();
     addTearDown(db.close);
-    final repo = NoteRepository(db.db);
+    final repo = NoteRepositoryImpl(db.db);
     final note1 = mockNote(time: 100000, color: 0x00FF00);
     await repo.add(note1);
     final note2 = mockNote(time: 700000, note: 'test');
@@ -67,10 +67,10 @@ void main() {
   test('should not return notes when only other data is present', () async {
     final db = await mockDBManager();
     addTearDown(db.close);
-    final bpRepo = BloodPressureRepository(db.db);
+    final bpRepo = BloodPressureRepositoryImpl(db.db);
     final r1 = mockRecord(time: 200000, sys: 456, dia: 457, pul: 458);
     await bpRepo.add(r1);
-    final repo = NoteRepository(db.db);
+    final repo = NoteRepositoryImpl(db.db);
     final values = await repo.get(DateRange(
       start: DateTime.fromMillisecondsSinceEpoch(100000),
       end: DateTime.fromMillisecondsSinceEpoch(800000),

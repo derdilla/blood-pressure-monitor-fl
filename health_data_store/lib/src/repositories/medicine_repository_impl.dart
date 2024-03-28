@@ -1,18 +1,18 @@
 import 'package:health_data_store/src/database_manager.dart';
 import 'package:health_data_store/src/extensions/castable.dart';
+import 'package:health_data_store/src/repositories/medicine_repository.dart';
 import 'package:health_data_store/src/types/medicine.dart';
-import 'package:health_data_store/src/types/medicine_intake.dart';
 import 'package:sqflite_common/sqflite.dart';
 
-/// Repository for medicines that are taken by the user.
-class MedicineRepository {
+/// Implementation of repository for medicines that are taken by the user.
+class MedicineRepositoryImpl extends MedicineRepository {
   /// Create the medicine repository.
-  MedicineRepository(this._db);
+  MedicineRepositoryImpl(this._db);
 
   /// The [DatabaseManager] managed database.
   final Database _db;
 
-  /// Store a [Medicine] in the repository.
+  @override
   Future<void> add(Medicine medicine) => _db.transaction((txn) async {
     final idRes = await txn.query('Medicine', columns: ['MAX(medID)']);
     final id = (idRes.firstOrNull?['MAX(medID)']?.castOrNull<int>() ?? 0) + 1;
@@ -25,7 +25,7 @@ class MedicineRepository {
     });
   });
 
-  /// Get a list of all stored Medicines that haven't been marked as removed.
+  @override
   Future<List<Medicine>> getAll() async {
     final medData = await _db.query('Medicine',
       columns: ['designation', 'defaultDose', 'color'],
@@ -43,11 +43,7 @@ class MedicineRepository {
     return meds;
   }
 
-  /// Mark a medicine as deleted.
-  ///
-  /// Intakes will be deleted as soon as there is no [MedicineIntake]s
-  /// referencing them. They need to be stored to allow intakes of them to be
-  /// still displayed correctly.
+  @override
   Future<void> remove(Medicine value) => _db.update('Medicine', {
       'removed': 1,
     },

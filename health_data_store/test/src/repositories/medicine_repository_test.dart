@@ -1,4 +1,5 @@
-import 'package:health_data_store/health_data_store.dart';
+import 'package:health_data_store/src/repositories/medicine_repository_impl.dart';
+import 'package:health_data_store/src/types/medicine.dart';
 import 'package:test/expect.dart';
 import 'package:test/scaffolding.dart';
 
@@ -9,19 +10,19 @@ void main() {
   test('should initialize', () async {
     final db = await mockDBManager();
     addTearDown(db.close);
-    MedicineRepository(db.db);
+    MedicineRepositoryImpl(db.db);
   });
   test('should return no medicines when no are added', () async {
     final db = await mockDBManager();
     addTearDown(db.close);
-    final repo = MedicineRepository(db.db);
+    final repo = MedicineRepositoryImpl(db.db);
     final all = await repo.getAll();
     expect(all, isEmpty);
   });
   test('should store all complete medicines', () async {
     final db = await mockDBManager();
     addTearDown(db.close);
-    final repo = MedicineRepository(db.db);
+    final repo = MedicineRepositoryImpl(db.db);
     await repo.add(Medicine(designation: 'med1', color: 0xFF226A, dosis: 42));
     await repo.add(Medicine(designation: 'med2', color: 0xAF226B, dosis: 43));
     final all = await repo.getAll();
@@ -40,7 +41,7 @@ void main() {
   test('should store all incomplete medicines', () async {
     final db = await mockDBManager();
     addTearDown(db.close);
-    final repo = MedicineRepository(db.db);
+    final repo = MedicineRepositoryImpl(db.db);
     await repo.add(Medicine(designation: 'med1', color: 0xFF226A,));
     await repo.add(Medicine(designation: 'med2', dosis: 43));
     await repo.add(Medicine(designation: 'med3',));
@@ -64,7 +65,7 @@ void main() {
   test('should mark medicines as deleted', () async {
     final db = await mockDBManager();
     addTearDown(db.close);
-    final repo = MedicineRepository(db.db);
+    final repo = MedicineRepositoryImpl(db.db);
     final med1= Medicine(designation: 'med1', color: 0xFF226A, dosis: 42);
     await repo.add(med1);
     await repo.add(Medicine(designation: 'med2', color: 0xAF226B, dosis: 43));
