@@ -1,7 +1,11 @@
 import 'package:health_data_store/src/database_manager.dart';
+import 'package:health_data_store/src/repositories/blood_pressure_repository.dart';
 import 'package:health_data_store/src/repositories/blood_pressure_repository_impl.dart';
+import 'package:health_data_store/src/repositories/medicine_intake_repository.dart';
 import 'package:health_data_store/src/repositories/medicine_intake_repository_impl.dart';
+import 'package:health_data_store/src/repositories/medicine_repository.dart';
 import 'package:health_data_store/src/repositories/medicine_repository_impl.dart';
+import 'package:health_data_store/src/repositories/note_repository.dart';
 import 'package:health_data_store/src/repositories/note_repository_impl.dart';
 import 'package:sqflite_common/sqflite.dart';
 
@@ -27,20 +31,19 @@ class HealthDataStore {
 
   /// Repository for blood pressure data.
   BloodPressureRepository get bpRepo =>
-    BloodPressureRepository(_dbMngr.db);
+    BloodPressureRepositoryImpl(_dbMngr.db);
 
   /// Repository for notes.
   NoteRepository get noteRepo =>
-    NoteRepository(_dbMngr.db);
+    NoteRepositoryImpl(_dbMngr.db);
 
   /// Repository for medicines.
   MedicineRepository get medRepo =>
-    MedicineRepository(_dbMngr.db);
+    MedicineRepositoryImpl(_dbMngr.db);
 
   /// Repository for intakes.
   MedicineIntakeRepository get intakeRepo =>
-    MedicineIntakeRepository(_dbMngr.db);
+    MedicineIntakeRepositoryImpl(_dbMngr.db);
 
-  // TODO: hide constructors
   // TODO: test
 }

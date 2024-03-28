@@ -1,17 +1,18 @@
-import 'package:health_data_store/health_data_store.dart';
 import 'package:health_data_store/src/database_helper.dart';
 import 'package:health_data_store/src/database_manager.dart';
 import 'package:health_data_store/src/extensions/datetime_seconds.dart';
-import 'package:health_data_store/src/repositories/repository.dart';
+import 'package:health_data_store/src/repositories/blood_pressure_repository.dart';
+import 'package:health_data_store/src/types/blood_pressure_record.dart';
+import 'package:health_data_store/src/types/date_range.dart';
 import 'package:sqflite_common/sqflite.dart';
 
-/// Repository for [BloodPressureRecord]s.
+/// Implementation of repository for [BloodPressureRecord]s.
 /// 
 /// Provides high level access on [BloodPressureRecord]s saved in a 
 /// [DatabaseManager] managed database. Allows to store and query records.
-class BloodPressureRepository extends Repository<BloodPressureRecord> {
+class BloodPressureRepositoryImpl extends BloodPressureRepository {
   /// Create [BloodPressureRecord] repository.
-  BloodPressureRepository(this._db);
+  BloodPressureRepositoryImpl(this._db);
 
   /// The [DatabaseManager] managed database
   final Database _db;

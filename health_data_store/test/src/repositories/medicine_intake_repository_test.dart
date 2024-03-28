@@ -1,5 +1,6 @@
-
-import 'package:health_data_store/health_data_store.dart';
+import 'package:health_data_store/src/repositories/medicine_intake_repository_impl.dart';
+import 'package:health_data_store/src/repositories/medicine_repository_impl.dart';
+import 'package:health_data_store/src/types/date_range.dart';
 import 'package:test/test.dart';
 
 import '../database_manager_test.dart';
@@ -11,18 +12,18 @@ void main() {
   test('should initialize', () async {
     final db = await mockDBManager();
     addTearDown(db.close);
-    MedicineIntakeRepository(db.db);
+    MedicineIntakeRepositoryImpl(db.db);
   });
   test('should store intakes without errors', () async {
     final db = await mockDBManager();
     addTearDown(db.close);
     final med1 = mockMedicine(designation: 'med1', dosis: 2.4);
     final med2 = mockMedicine(designation: 'med2',);
-    final medRepo = MedicineRepository(db.db);
+    final medRepo = MedicineRepositoryImpl(db.db);
     await medRepo.add(med1);
     await medRepo.add(med2);
 
-    final repo = MedicineIntakeRepository(db.db);
+    final repo = MedicineIntakeRepositoryImpl(db.db);
     await repo.add(mockIntake(med1));
     await repo.add(mockIntake(med2));
     await repo.add(mockIntake(med1, dosis: 123));
@@ -35,11 +36,11 @@ void main() {
     addTearDown(db.close);
     final med1 = mockMedicine(dosis: 2.4);
     final med2 = mockMedicine();
-    final medRepo = MedicineRepository(db.db);
+    final medRepo = MedicineRepositoryImpl(db.db);
     await medRepo.add(med1);
     await medRepo.add(med2);
 
-    final repo = MedicineIntakeRepository(db.db);
+    final repo = MedicineIntakeRepositoryImpl(db.db);
     final t1 = mockIntake(med1, time: 20000);
     final t2 = mockIntake(med2, time: 76000);
     final t3 = mockIntake(med1, dosis: 123, time: 50000,);
@@ -58,10 +59,10 @@ void main() {
   test('should remove intakes', () async {
     final db = await mockDBManager();
     addTearDown(db.close);
-    final medRepo = MedicineRepository(db.db);
+    final medRepo = MedicineRepositoryImpl(db.db);
     final med = mockMedicine();
     await medRepo.add(med);
-    final repo = MedicineIntakeRepository(db.db);
+    final repo = MedicineIntakeRepositoryImpl(db.db);
     final i1 = mockIntake(med, time: 5000);
     await repo.add(i1);
 
@@ -82,8 +83,8 @@ void main() {
   test('should remove correct intake when multiple are at same time', () async {
     final db = await mockDBManager();
     addTearDown(db.close);
-    final repo = MedicineIntakeRepository(db.db);
-    final medRepo = MedicineRepository(db.db);
+    final repo = MedicineIntakeRepositoryImpl(db.db);
+    final medRepo = MedicineRepositoryImpl(db.db);
     final med = mockMedicine();
     await medRepo.add(med);
     final i1 = mockIntake(med, time: 10000);
@@ -102,10 +103,10 @@ void main() {
   test('should not throw when removing non existent record', () async {
     final db = await mockDBManager();
     addTearDown(db.close);
-    final medRepo = MedicineRepository(db.db);
+    final medRepo = MedicineRepositoryImpl(db.db);
     final med = mockMedicine();
     await medRepo.add(med);
-    final repo = MedicineIntakeRepository(db.db);
+    final repo = MedicineIntakeRepositoryImpl(db.db);
     final i1 = mockIntake(med);
 
     await repo.remove(i1);
