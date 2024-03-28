@@ -1,5 +1,6 @@
 import 'package:health_data_store/src/database_manager.dart';
 import 'package:health_data_store/src/types/medicine.dart';
+import 'package:health_data_store/src/types/medicine_intake.dart';
 import 'package:sqflite_common/sqflite.dart';
 
 /// Repository for medicines that are taken by the user.
