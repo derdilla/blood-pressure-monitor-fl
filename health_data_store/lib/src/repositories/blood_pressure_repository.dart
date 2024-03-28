@@ -1,6 +1,7 @@
 import 'package:health_data_store/health_data_store.dart';
 import 'package:health_data_store/src/database_helper.dart';
 import 'package:health_data_store/src/database_manager.dart';
+import 'package:health_data_store/src/extensions/datetime_seconds.dart';
 import 'package:health_data_store/src/repositories/repository.dart';
 import 'package:sqflite_common/sqflite.dart';
 
@@ -20,7 +21,7 @@ class BloodPressureRepository extends Repository<BloodPressureRecord> {
     assert(record.sys != null || record.dia != null || record.pul != null,
      "Adding records that don't contain values(sys,dia,pul) can't be accessed"
      'and should therefore not be added to the repository.');
-    final timeSec = record.time.millisecondsSinceEpoch ~/ 1000;
+    final timeSec = record.time.secondsSinceEpoch;
     await _db.transaction((txn) async {
       final entryID = await DBHelper.getEntryID(
         txn,
@@ -63,7 +64,7 @@ class BloodPressureRepository extends Repository<BloodPressureRecord> {
     for (final r in results) {
       final timeS = r['timestampUnixS'] as int;
       final newRec = BloodPressureRecord(
-        time: DateTime.fromMillisecondsSinceEpoch(timeS * 1000),
+        time: DateTimeS.fromSecondsSinceEpoch(timeS),
         sys: r['sys'] as int?,
         dia: r['dia'] as int?,
         pul: r['pul'] as int?,
@@ -95,7 +96,7 @@ class BloodPressureRepository extends Repository<BloodPressureRecord> {
         query += 'AND pul = ? ';
 
       final entryResult = await txn.rawQuery(query, [
-        value.time.millisecondsSinceEpoch ~/ 1000,
+        value.time.secondsSinceEpoch,
         if (value.sys != null)
           value.sys,
         if (value.dia != null)

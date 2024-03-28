@@ -1,6 +1,7 @@
 import 'package:health_data_store/health_data_store.dart';
 import 'package:health_data_store/src/database_helper.dart';
 import 'package:health_data_store/src/database_manager.dart';
+import 'package:health_data_store/src/extensions/datetime_seconds.dart';
 import 'package:health_data_store/src/repositories/repository.dart';
 import 'package:sqflite_common/sqflite.dart';
 
@@ -12,7 +13,7 @@ class MedicineIntakeRepository extends Repository<MedicineIntake> {
   /// Create a repository for medicine intakes.
   MedicineIntakeRepository(this._db);
 
-  /// The [DatabaseManager] managed database
+  /// The [DatabaseManager] managed database.
   final Database _db;
 
   @override
@@ -38,7 +39,7 @@ class MedicineIntakeRepository extends Repository<MedicineIntake> {
 
     // obtain free entry id
     final id = await DBHelper.getEntryID(
-      txn, intake.time.millisecondsSinceEpoch ~/ 1000,
+      txn, intake.time.secondsSinceEpoch,
       ['Intake'],
     );
 
@@ -65,7 +66,7 @@ class MedicineIntakeRepository extends Repository<MedicineIntake> {
     for (final r in results) {
       final timeS = r['timestampUnixS'] as int;
       intakes.add(MedicineIntake(
-        time: DateTime.fromMillisecondsSinceEpoch(timeS * 1000),
+        time: DateTimeS.fromSecondsSinceEpoch(timeS * 1000),
         dosis: r['dosis'] as double,
         medicine: Medicine(
           designation: r['designation'] as String,
@@ -92,7 +93,7 @@ class MedicineIntakeRepository extends Repository<MedicineIntake> {
         + ((intake.medicine.dosis != null) ? '= ?' : 'IS NULL') +
     ')',
     [
-      intake.time.millisecondsSinceEpoch ~/ 1000,
+      intake.time.secondsSinceEpoch,
       intake.dosis,
       intake.medicine.designation,
       if (intake.medicine.color != null)
