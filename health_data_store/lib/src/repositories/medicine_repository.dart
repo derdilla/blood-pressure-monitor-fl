@@ -1,4 +1,5 @@
 import 'package:health_data_store/src/database_manager.dart';
+import 'package:health_data_store/src/extensions/castable.dart';
 import 'package:health_data_store/src/types/medicine.dart';
 import 'package:health_data_store/src/types/medicine_intake.dart';
 import 'package:sqflite_common/sqflite.dart';
@@ -58,11 +59,4 @@ class MedicineRepository {
     ], // TODO: test for null values
   );
 
-}
-
-extension _Castable on Object {
-  T? castOrNull<T>() {
-    if (this is T) return this as T;
-    return null;
-  }
 }
