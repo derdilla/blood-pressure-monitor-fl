@@ -19,3 +19,13 @@ void main() {
     )));
   });
 }
+
+Note mockNote({
+  int? time,
+  String? note,
+  int? color,
+}) => Note(
+  time: time!=null ? DateTime.fromMillisecondsSinceEpoch(time) : DateTime.now(),
+  note: note,
+  color: color,
+);
