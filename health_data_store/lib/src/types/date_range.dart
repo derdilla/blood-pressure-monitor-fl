@@ -1,4 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:health_data_store/src/extensions/datetime_seconds.dart';
 
 part 'date_range.freezed.dart';
 
@@ -27,8 +28,8 @@ class DateRange with _$DateRange {
   Duration get duration => end.difference(start);
 
   /// Gets the [start] timestamp in seconds since epoch.
-  int get startStamp => start.millisecondsSinceEpoch ~/ 1000;
+  int get startStamp => start.secondsSinceEpoch;
 
   /// Gets the [end] timestamp in seconds since epoch.
-  int get endStamp => end.millisecondsSinceEpoch ~/ 1000;
+  int get endStamp => end.secondsSinceEpoch;
 }
