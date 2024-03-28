@@ -1,6 +1,5 @@
 
 import 'package:health_data_store/health_data_store.dart';
-import 'package:health_data_store/src/repositories/medicine_intake_repository.dart';
 import 'package:test/test.dart';
 
 import '../database_manager_test.dart';

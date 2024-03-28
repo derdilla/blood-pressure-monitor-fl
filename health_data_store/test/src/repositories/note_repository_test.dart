@@ -1,5 +1,7 @@
-import 'package:health_data_store/health_data_store.dart';
-import 'package:health_data_store/src/repositories/note_repository.dart';
+
+import 'package:health_data_store/src/repositories/blood_pressure_repository_impl.dart';
+import 'package:health_data_store/src/repositories/note_repository_impl.dart';
+import 'package:health_data_store/src/types/date_range.dart';
 import 'package:test/test.dart';
 
 import '../database_manager_test.dart';
