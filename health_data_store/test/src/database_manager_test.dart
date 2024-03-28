@@ -1,4 +1,5 @@
 import 'package:health_data_store/src/database_manager.dart';
+import 'package:health_data_store/src/extensions/datetime_seconds.dart';
 import 'package:sqflite_common/sqflite.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:test/test.dart';
@@ -91,7 +92,7 @@ void main() {
     addTearDown(db.close);
     await db.db.insert('Timestamps', {
       'entryID': 1,
-      'timestampUnixS': DateTime.now().millisecondsSinceEpoch ~/ 1000,
+      'timestampUnixS': DateTime.now().secondsSinceEpoch,
     });
     final data = await db.db.query('Timestamps');
     expect(data, hasLength(1));
@@ -99,7 +100,7 @@ void main() {
 
     await expectLater(() async => db.db.insert('Timestamps', {
       'entryID': 1,
-      'timestampUnixS': DateTime.now().millisecondsSinceEpoch ~/ 1000,
+      'timestampUnixS': DateTime.now().secondsSinceEpoch,
     }), throwsException);
     await expectLater(() async => db.db.insert('Timestamps', {
       'entryID': 1,
