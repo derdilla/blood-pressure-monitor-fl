@@ -83,16 +83,36 @@ class DatabaseManager {
     await _db.execute('CREATE TABLE "Notes" ('
       '"entryID"	INTEGER NOT NULL,'
       '"note"     TEXT,'
-      '"color"    INTEGER,'
+      '"color"    INTEGER,' // TODO: add attachments
       'FOREIGN KEY("entryID") REFERENCES "Timestamps"("entryID"),'
       'PRIMARY KEY("entryID")'
     ');');
+    // TODO: make one txn
+  }
+
+  /// Removes unused and deleted entries rows.
+  ///
+  /// Specifically:
+  /// - medicines that are marked as deleted and have no referencing intakes
+  /// - timestamp entries that have no
+  Future<void> performCleanup() async {
+    await _db.transaction((txn) async {
+      await txn.rawDelete('DELETE FROM Medicine '
+        'WHERE removed = true '
+        'AND medID NOT IN (SELECT medID FROM Intake);',
+      );
+      await txn.rawDelete('DELETE FROM Timestamps '
+        'WHERE entryID NOT IN (SELECT entryID FROM Intake)'
+        'AND entryID NOT IN (SELECT entryID FROM Systolic) '
+        'AND entryID NOT IN (SELECT entryID FROM Diastolic) '
+        'AND entryID NOT IN (SELECT entryID FROM Pulse) '
+        'AND entryID NOT IN (SELECT entryID FROM Notes);',
+      );
+    });
+
+    // TODO: test
   }
 
   /// Closes the database.
   Future<void> close() => _db.close();
-
-  // TODO: perform cleanup of:
-  // - medicines that are marked as deleted and have no referencing intakes
-  // - cleanup of timestamp entries used in no table
 }
