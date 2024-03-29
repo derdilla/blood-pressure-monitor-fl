@@ -36,21 +36,4 @@ class DBHelper {
     }
     return entryID;
   }
-
-  /// Querries all entryIDs between [startUnixS] and [endUnixS] (inclusive).
-  static Future<List<int>> queryEntryIDs(
-    Transaction txn,
-    int startUnixS,
-    int endUnixS,
-  ) async { // TODO: consider removing, once unused
-    final result = await txn.query('Timestamps',
-      columns: ['entryID'],
-      where: 'timestampUnixS BETWEEN ? AND ?',
-      whereArgs: [startUnixS, endUnixS]
-    );
-    return result
-      .map((e) => e['entryID'])
-      .toList()
-      .cast();
-  }
 }

@@ -60,19 +60,4 @@ void main() {
       expect(anotherEntry, 2);
     });
   });
-  test('should query entry ids in range', () async {
-    final db = await DatabaseManager.load(await openDatabase(
-      inMemoryDatabasePath,
-    ));
-    addTearDown(db.close);
-    await db.db.transaction((txn) async {
-      await DBHelper.getEntryID(txn, 123, []);
-      await DBHelper.getEntryID(txn, 456, []);
-      await DBHelper.getEntryID(txn, 789, []);
-      expect(await DBHelper.queryEntryIDs(txn, 100, 800), hasLength(3));
-      expect(await DBHelper.queryEntryIDs(txn, 0, 100), hasLength(0));
-      expect(await DBHelper.queryEntryIDs(txn, -800, -100), hasLength(0));
-      expect(await DBHelper.queryEntryIDs(txn, 400, 800), containsAll([2,3]));
-    });
-  });
 }
