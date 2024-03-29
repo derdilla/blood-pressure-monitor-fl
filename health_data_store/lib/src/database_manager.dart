@@ -8,8 +8,7 @@ import 'package:sqflite_common/sqlite_api.dart';
 ///
 /// ## DB scheme
 ///
-/// ![Diagram](https://github.com/NobodyForNothing/blood-pressure-monitor-fl/assets/82763757/62edb58c-c579-4ce1-990c-be7889657fa7)
-/// // TODO: replace with updating file once merged
+/// ![Diagram](https://github.com/NobodyForNothing/blood-pressure-monitor-fl/blob/main/docs/resources/db-scheme.png?raw=true)
 ///
 /// ## Types
 /// Data in the database tries to always use the most common SI-units.
@@ -83,7 +82,9 @@ class DatabaseManager {
     await txn.execute('CREATE TABLE "Notes" ('
       '"entryID"	INTEGER NOT NULL,'
       '"note"     TEXT,'
-      '"color"    INTEGER,' // TODO: add attachments
+      // When implementing attachments instead of updating this scheme note text
+      // can be interpreted as markdown and support formatting as well as files.
+      '"color"    INTEGER,'
       'FOREIGN KEY("entryID") REFERENCES "Timestamps"("entryID"),'
       'PRIMARY KEY("entryID")'
     ');');
