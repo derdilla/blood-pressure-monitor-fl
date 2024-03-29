@@ -47,12 +47,17 @@ class MedicineRepositoryImpl extends MedicineRepository {
   Future<void> remove(Medicine value) => _db.update('Medicine', {
       'removed': 1,
     },
-    where: 'designation = ? AND color = ? AND defaultDose = ?',
+    where: 'designation = ? AND color '
+        + (value.color == null ? 'IS NULL' : '= ?')
+        + ' AND defaultDose '
+        + (value.dosis == null ? 'IS NULL' : '= ?'),
     whereArgs: [
       value.designation,
-      value.color,
-      value.dosis,
-    ], // TODO: test for null values
+      if (value.color != null)
+        value.color,
+      if (value.dosis != null)
+        value.dosis,
+    ],
   );
 
 }

@@ -55,12 +55,11 @@ class MedicineIntakeRepositoryImpl extends MedicineIntakeRepository {
 
   @override
   Future<List<MedicineIntake>> get(DateRange range) async {
-    // TODO: change left join to join
     final results = await _db.rawQuery(
       'SELECT t.timestampUnixS, dosis, defaultDose, designation, color '
         'FROM Timestamps AS t '
-        'LEFT JOIN Intake AS i ON t.entryID = i.entryID '
-        'LEFT JOIN Medicine AS m ON m.medID = i.medID '
+        'JOIN Intake AS i ON t.entryID = i.entryID '
+        'JOIN Medicine AS m ON m.medID = i.medID '
       'WHERE t.timestampUnixS BETWEEN ? AND ?'
       'AND i.dosis IS NOT NULL', // deleted intakes
       [range.startStamp, range.endStamp]

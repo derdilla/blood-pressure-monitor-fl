@@ -114,7 +114,6 @@ class BloodPressureRepositoryImpl extends BloodPressureRepository {
       if (value.pul != null)
         await txn.delete('Pulse', where: 'entryID = ?', whereArgs: [entryID]);
     });
-    // TODO: implement central cleanup of unused timestamp entries (by no table)
   }
 
 }
