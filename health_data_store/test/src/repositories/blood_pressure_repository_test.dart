@@ -131,6 +131,17 @@ void main() {
     ));
     expect(values, isEmpty);
   });
+  test('should not return records out of range', () async {
+    final db = await mockDBManager();
+    addTearDown(db.close);
+    final repo = BloodPressureRepositoryImpl(db.db);
+    final r1 = mockRecord(time: 10000, sys: 456, dia: 457, pul: 458);
+    await repo.add(r1);
 
-  // TODO: not return records out of range
+    final values = await repo.get(DateRange(
+      start: DateTime.fromMillisecondsSinceEpoch(20000),
+      end: DateTime.fromMillisecondsSinceEpoch(80000),
+    ));
+    expect(values, isEmpty);
+  });
 }
