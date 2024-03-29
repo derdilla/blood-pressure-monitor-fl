@@ -22,7 +22,7 @@ void main() {
   expect(() => store!.bpRepo, returnsNormally);
   expect(() => store!.noteRepo, returnsNormally);
  });
- test('constructed repos should wor', () async {
+ test('constructed repos should work', () async {
   final store = await HealthDataStore.load(
       await openDatabase(inMemoryDatabasePath));
   expect(store, isNotNull);

@@ -155,6 +155,70 @@ void main() {
     expect(data.first.keys, hasLength(3));
     expect(data.first['color'], equals(0xFF990098));
   });
+  test('should cleanup unused timestamps', () async {
+    final db = await mockDBManager();
+    addTearDown(db.close);
+
+    await db.db.insert('Timestamps', {
+      'entryID': 1,
+      'timestampUnixS': DateTime.now().secondsSinceEpoch,
+    });
+    expect(await db.db.query('Timestamps'), hasLength(1));
+    await db.performCleanup();
+    expect(await db.db.query('Timestamps'), isEmpty);
+  });
+  test('should cleanup deleted medicines', () async {
+    final db = await mockDBManager();
+    addTearDown(db.close);
+
+    await db.db.insert('Medicine', {
+      'medID': 1,
+      'designation': 'test',
+      'defaultDose': 42,
+      'removed': 1,
+    });
+    await db.db.insert('Medicine', {
+      'medID': 2,
+      'designation': 'test2',
+      'removed': 1,
+    });
+    await db.db.insert('Intake', {
+      'entryID': 2,
+      'medID': 2,
+      'dosis': 1,
+    });
+
+
+    expect(await db.db.query('Medicine'), hasLength(2));
+    await db.performCleanup();
+    final data = await db.db.query('Medicine');
+    expect(data, hasLength(1));
+    expect(data, contains(isA<Map>().having((p0) => p0['medID'], 'medID', 2)));
+  });
+  test('cleanup should keep used timestamps', () async {
+    final db = await mockDBManager();
+    addTearDown(db.close);
+
+    for (int i = 1; i <= 6; i += 1) {
+      await db.db.insert('Timestamps', {
+        'entryID': i,
+        'timestampUnixS': i,
+      });
+    }
+    await db.db.insert('Intake', {
+      'entryID': 1,
+      'medID': 0,
+      'dosis': 0,
+    });
+    await db.db.insert('Systolic', {'entryID': 2,});
+    await db.db.insert('Diastolic', {'entryID': 3,});
+    await db.db.insert('Pulse', {'entryID': 4,});
+    await db.db.insert('Notes', {'entryID': 5,});
+
+    expect(await db.db.query('Timestamps'), hasLength(6));
+    await db.performCleanup();
+    expect(await db.db.query('Timestamps'), hasLength(5)); // remove 6 keep rest
+  });
 }
 
 Future<DatabaseManager> mockDBManager() async => DatabaseManager.load(
