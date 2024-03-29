@@ -69,7 +69,7 @@ class MedicineIntakeRepositoryImpl extends MedicineIntakeRepository {
     for (final r in results) {
       final timeS = r['timestampUnixS'] as int;
       intakes.add(MedicineIntake(
-        time: DateTimeS.fromSecondsSinceEpoch(timeS * 1000),
+        time: DateTimeS.fromSecondsSinceEpoch(timeS),
         dosis: r['dosis'] as double,
         medicine: Medicine(
           designation: r['designation'] as String,
