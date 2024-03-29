@@ -46,8 +46,8 @@ class DatabaseManager {
   /// Get the database.
   Database get db => _db.database;
   
-  Future<void> _setUpTables() async {
-    await _db.execute('CREATE TABLE "Medicine" ('
+  Future<void> _setUpTables() => _db.transaction((txn) async {
+    await txn.execute('CREATE TABLE "Medicine" ('
       '"medID"       INTEGER NOT NULL UNIQUE,'
       '"designation" TEXT NOT NULL,'
       '"defaultDose" REAL,'
@@ -55,12 +55,12 @@ class DatabaseManager {
       '"removed" BOOLEAN,'
       'PRIMARY KEY("medID")'
     ');');
-    await _db.execute('CREATE TABLE "Timestamps" ('
+    await txn.execute('CREATE TABLE "Timestamps" ('
       '"entryID"	      INTEGER NOT NULL UNIQUE,'
       '"timestampUnixS"	INTEGER NOT NULL,'
       'PRIMARY KEY("entryID")'
     ');');
-    await _db.execute('CREATE TABLE "Intake" ('
+    await txn.execute('CREATE TABLE "Intake" ('
       '"entryID" INTEGER NOT NULL,'
       '"medID"	 INTEGER NOT NULL,'
       '"dosis"	 REAL NOT NULL,'
@@ -73,45 +73,40 @@ class DatabaseManager {
       ('Diastolic', 'dia'),
       ('Pulse','pul')
     ]) {
-      await _db.execute('CREATE TABLE "${info.$1}" ('
+      await txn.execute('CREATE TABLE "${info.$1}" ('
         '"entryID"	INTEGER NOT NULL,'
         '"${info.$2}"    INTEGER,'
         'FOREIGN KEY("entryID") REFERENCES "Timestamps"("entryID"),'
         'PRIMARY KEY("entryID")'
       ');');
     }
-    await _db.execute('CREATE TABLE "Notes" ('
+    await txn.execute('CREATE TABLE "Notes" ('
       '"entryID"	INTEGER NOT NULL,'
       '"note"     TEXT,'
       '"color"    INTEGER,' // TODO: add attachments
       'FOREIGN KEY("entryID") REFERENCES "Timestamps"("entryID"),'
       'PRIMARY KEY("entryID")'
     ');');
-    // TODO: make one txn
-  }
+  });
 
   /// Removes unused and deleted entries rows.
   ///
   /// Specifically:
   /// - medicines that are marked as deleted and have no referencing intakes
   /// - timestamp entries that have no
-  Future<void> performCleanup() async {
-    await _db.transaction((txn) async {
-      await txn.rawDelete('DELETE FROM Medicine '
-        'WHERE removed = true '
-        'AND medID NOT IN (SELECT medID FROM Intake);',
-      );
-      await txn.rawDelete('DELETE FROM Timestamps '
-        'WHERE entryID NOT IN (SELECT entryID FROM Intake)'
-        'AND entryID NOT IN (SELECT entryID FROM Systolic) '
-        'AND entryID NOT IN (SELECT entryID FROM Diastolic) '
-        'AND entryID NOT IN (SELECT entryID FROM Pulse) '
-        'AND entryID NOT IN (SELECT entryID FROM Notes);',
-      );
-    });
-
-    // TODO: test
-  }
+  Future<void> performCleanup() => _db.transaction((txn) async {
+    await txn.rawDelete('DELETE FROM Medicine '
+      'WHERE removed = true '
+      'AND medID NOT IN (SELECT medID FROM Intake);',
+    );
+    await txn.rawDelete('DELETE FROM Timestamps '
+      'WHERE entryID NOT IN (SELECT entryID FROM Intake)'
+      'AND entryID NOT IN (SELECT entryID FROM Systolic) '
+      'AND entryID NOT IN (SELECT entryID FROM Diastolic) '
+      'AND entryID NOT IN (SELECT entryID FROM Pulse) '
+      'AND entryID NOT IN (SELECT entryID FROM Notes);',
+    );
+  });
 
   /// Closes the database.
   Future<void> close() => _db.close();
