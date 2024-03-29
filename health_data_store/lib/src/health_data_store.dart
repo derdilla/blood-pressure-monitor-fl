@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:health_data_store/src/database_manager.dart';
 import 'package:health_data_store/src/repositories/blood_pressure_repository.dart';
 import 'package:health_data_store/src/repositories/blood_pressure_repository_impl.dart';
@@ -23,9 +25,15 @@ class HealthDataStore {
   ///
   /// [db] must be exclusive to the package and will be initialized by it. The
   /// library maintains the version and is responsible for update operations.
+  ///
+  /// After loading the database a cleanup of unused data is performed which may
+  /// decrease database performance in the first milliseconds after being
+  /// returned. This is done to improve performance while interacting with the
+  /// database.
   static Future<HealthDataStore?> load(Database db) async {
     if (!db.isOpen) return null;
     final mngr = await DatabaseManager.load(db);
+    unawaited(mngr.performCleanup());
     return HealthDataStore._create(mngr);
   }
 
