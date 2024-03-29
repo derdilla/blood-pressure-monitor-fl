@@ -73,5 +73,21 @@ void main() {
     await repo.remove(med1);
     expect(await repo.getAll(), hasLength(1));
   });
+  test('should mark partial medicines as deleted', () async {
+    final db = await mockDBManager();
+    addTearDown(db.close);
+    final repo = MedicineRepositoryImpl(db.db);
+    final med1 = Medicine(designation: 'med1', color: 0xFF226A,);
+    await repo.add(med1);
+    final med2 = Medicine(designation: 'med2', dosis: 43);
+    await repo.add(med2);
+    final med3 = Medicine(designation: 'med3',);
+    await repo.add(med3);
+    expect(await repo.getAll(), hasLength(3));
+    await repo.remove(med1);
+    await repo.remove(med2);
+    await repo.remove(med3);
+    expect(await repo.getAll(), isEmpty);
+  });
 
 }

@@ -47,7 +47,6 @@ class DatabaseManager {
   Database get db => _db.database;
   
   Future<void> _setUpTables() async {
-    // TODO: IF NOT EXISTS ?
     await _db.execute('CREATE TABLE "Medicine" ('
       '"medID"       INTEGER NOT NULL UNIQUE,'
       '"designation" TEXT NOT NULL,'
@@ -59,7 +58,7 @@ class DatabaseManager {
     await _db.execute('CREATE TABLE "Timestamps" ('
       '"entryID"	      INTEGER NOT NULL UNIQUE,'
       '"timestampUnixS"	INTEGER NOT NULL,'
-      'PRIMARY KEY("entryID")' // TODO: add timezone to determine time of day
+      'PRIMARY KEY("entryID")'
     ');');
     await _db.execute('CREATE TABLE "Intake" ('
       '"entryID" INTEGER NOT NULL,'
@@ -93,6 +92,7 @@ class DatabaseManager {
   /// Closes the database.
   Future<void> close() => _db.close();
 
-  // TODO: perform cleanup of medicines that are marked as deleted and have no
-  // intakes referencing them.
+  // TODO: perform cleanup of:
+  // - medicines that are marked as deleted and have no referencing intakes
+  // - cleanup of timestamp entries used in no table
 }

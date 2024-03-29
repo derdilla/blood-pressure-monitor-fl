@@ -44,6 +44,4 @@ class HealthDataStore {
   /// Repository for intakes.
   MedicineIntakeRepository get intakeRepo =>
     MedicineIntakeRepositoryImpl(_dbMngr.db);
-
-  // TODO: test
 }
