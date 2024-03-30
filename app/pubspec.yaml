@@ -25,13 +25,15 @@ dependencies:
   sqflite:
   shared_preferences: ^2.1.1
   url_launcher: ^6.1.11
+  health_data_store:
+    path: ../health_data_store/
+  sqlparser: ^0.34.1
 
   # can become one custom dependency
   file_picker: ^5.2.11  # MIT
   jsaver: ^1.2.0
   restart_app: ^1.2.1
   fluttertoast: ^8.2.4
-  sqlparser: ^0.34.1
 
 dev_dependencies:
   file: any
