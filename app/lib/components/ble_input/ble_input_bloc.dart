@@ -19,12 +19,7 @@ class BleInputBloc extends Bloc<BleInputEvent, BleInputState> {
   // TODO: use repo
 
   BleInputBloc(): super(BleInputClosed()) {
-    on<CloseBleInput>((event, emit) async {
-      emit(BleInputClosed());
-      // TODO: perform needed cleanup
-    });
-
-    on<OpenBleInput>((event, emit) async {
+    on<BleInputOpened>((event, emit) async {
       /* testing widget
       emit(BleMeasurementSuccess(BloodPressureRecord(DateTime.now(), 123, 456, 578, 'test'),
         bodyMoved: null,
@@ -49,7 +44,9 @@ class BleInputBloc extends Bloc<BleInputEvent, BleInputState> {
         return;
       }
       emit(BleInputLoadInProgress());
+
       try {
+        emit(BleInputLoadInProgress());
         await _ble.initialize();
         final deviceStream = _ble.scanForDevices(withServices: _requiredServices,);
         await emit.forEach(deviceStream, onData: (DiscoveredDevice device) {
@@ -58,6 +55,7 @@ class BleInputBloc extends Bloc<BleInputEvent, BleInputState> {
         },);
       } catch (e) {
         // TODO: check its really this type of exception
+        print(e);
         emit(BleInputLoadFailure());
       }
     });
