@@ -6,6 +6,7 @@ import 'package:blood_pressure_app/components/ble_input/measurement_characterist
 import 'package:blood_pressure_app/model/blood_pressure/record.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 // TODO: docs
 class BleInputBloc extends Bloc<BleInputEvent, BleInputState> {
@@ -19,6 +20,31 @@ class BleInputBloc extends Bloc<BleInputEvent, BleInputState> {
 
   BleInputBloc(): super(BleInputClosed()) {
     on<BleInputOpened>((event, emit) async {
+      /* testing widget
+      emit(BleMeasurementSuccess(BloodPressureRecord(DateTime.now(), 123, 456, 578, 'test'),
+        bodyMoved: null,
+        cuffLoose: false,
+        irregularPulse: true,
+        improperMeasurementPosition: true,
+        measurementStatus: MeasurementStatus.ok,
+      ),);
+      return;
+      */
+
+      emit(BleInputLoadInProgress());
+      if (await Permission.bluetoothConnect.isDenied) {
+        emit(BleInputPermissionFailure());
+        unawaited(Permission.bluetoothConnect.request());
+        return;
+      }
+      emit(BleInputLoadInProgress());
+      if (await Permission.bluetoothScan.isDenied) {
+        emit(BleInputPermissionFailure());
+        unawaited(Permission.bluetoothScan.request());
+        return;
+      }
+      emit(BleInputLoadInProgress());
+
       try {
         emit(BleInputLoadInProgress());
         await _ble.initialize();
@@ -27,8 +53,9 @@ class BleInputBloc extends Bloc<BleInputEvent, BleInputState> {
           _availableDevices.add(device);
           return BleInputLoadSuccess(_availableDevices.toList());
         },);
-      } catch (e) { // TODO: ask for permission
+      } catch (e) {
         // TODO: check its really this type of exception
+        print(e);
         emit(BleInputLoadFailure());
       }
     });
@@ -108,4 +135,3 @@ class BleInputBloc extends Bloc<BleInputEvent, BleInputState> {
   }
 
 }
-// TODO: implement UI
