@@ -4,6 +4,7 @@ import 'package:health_data_store/src/extensions/datetime_seconds.dart';
 import 'package:health_data_store/src/repositories/blood_pressure_repository.dart';
 import 'package:health_data_store/src/types/blood_pressure_record.dart';
 import 'package:health_data_store/src/types/date_range.dart';
+import 'package:health_data_store/src/types/units/pressure.dart';
 import 'package:sqflite_common/sqflite.dart';
 
 /// Implementation of repository for [BloodPressureRecord]s.
@@ -32,19 +33,19 @@ class BloodPressureRepositoryImpl extends BloodPressureRepository {
       if (record.sys != null) {
         await txn.insert('Systolic', {
           'entryID': entryID,
-          'sys': record.sys,
+          'sys': record.sys!.kPa,
         });
       }
       if (record.dia != null) {
         await txn.insert('Diastolic', {
           'entryID': entryID,
-          'dia': record.dia,
+          'dia': record.dia!.kPa,
         });
       }
       if (record.pul != null) {
         await txn.insert('Pulse', {
           'entryID': entryID,
-          'pul': record.pul,
+          'pul': record.pul!.kPa,
         });
       }
     });
@@ -66,9 +67,9 @@ class BloodPressureRepositoryImpl extends BloodPressureRepository {
       final timeS = r['timestampUnixS'] as int;
       final newRec = BloodPressureRecord(
         time: DateTimeS.fromSecondsSinceEpoch(timeS),
-        sys: r['sys'] as int?,
-        dia: r['dia'] as int?,
-        pul: r['pul'] as int?,
+        sys: _decode(r['sys']),
+        dia: _decode(r['dia']),
+        pul: _decode(r['pul']),
       );
       if (newRec.sys !=null || newRec.dia != null || newRec.pul != null) {
         records.add(newRec);
@@ -79,41 +80,44 @@ class BloodPressureRepositoryImpl extends BloodPressureRepository {
   }
 
   @override
-  Future<void> remove(BloodPressureRecord value) async {
-    await _db.transaction((txn) async {
-      String query = 'SELECT t.entryID FROM Timestamps AS t ';
-      if (value.sys != null)
-        query += 'LEFT JOIN Systolic AS s ON t.entryID = s.entryID ';
-      if (value.dia != null)
-        query += 'LEFT JOIN Diastolic AS d ON t.entryID = d.entryID ';
-      if (value.pul != null)
-        query += 'LEFT JOIN Pulse AS p ON t.entryID = p.entryID ';
-      query += 'WHERE timestampUnixS = ? ';
-      if (value.sys != null)
-        query += 'AND sys = ? ';
-      if (value.dia != null)
-        query += 'AND dia = ? ';
-      if (value.pul != null)
-        query += 'AND pul = ? ';
+  Future<void> remove(BloodPressureRecord value) => _db.transaction((txn) async{
+    String query = 'SELECT t.entryID FROM Timestamps AS t ';
+    if (value.sys != null)
+      query += 'LEFT JOIN Systolic AS s ON t.entryID = s.entryID ';
+    if (value.dia != null)
+      query += 'LEFT JOIN Diastolic AS d ON t.entryID = d.entryID ';
+    if (value.pul != null)
+      query += 'LEFT JOIN Pulse AS p ON t.entryID = p.entryID ';
+    query += 'WHERE timestampUnixS = ? ';
+    if (value.sys != null)
+      query += 'AND sys = ? ';
+    if (value.dia != null)
+      query += 'AND dia = ? ';
+    if (value.pul != null)
+      query += 'AND pul = ? ';
 
-      final entryResult = await txn.rawQuery(query, [
-        value.time.secondsSinceEpoch,
-        if (value.sys != null)
-          value.sys,
-        if (value.dia != null)
-          value.dia,
-        if (value.pul != null)
-          value.pul,
-      ]);
-      if (entryResult.isEmpty) return;
-      final entryID = entryResult.first['entryID'];
+    final entryResult = await txn.rawQuery(query, [
+      value.time.secondsSinceEpoch,
       if (value.sys != null)
-        await txn.delete('Systolic', where: 'entryID = ?', whereArgs:[entryID]);
+        value.sys!.kPa,
       if (value.dia != null)
-        await txn.delete('Diastolic', where:'entryID = ?', whereArgs:[entryID]);
+        value.dia!.kPa,
       if (value.pul != null)
-        await txn.delete('Pulse', where: 'entryID = ?', whereArgs: [entryID]);
-    });
+        value.pul!.kPa,
+    ]);
+    if (entryResult.isEmpty) return;
+    final entryID = entryResult.first['entryID'];
+    if (value.sys != null)
+      await txn.delete('Systolic', where: 'entryID = ?', whereArgs:[entryID]);
+    if (value.dia != null)
+      await txn.delete('Diastolic', where:'entryID = ?', whereArgs:[entryID]);
+    if (value.pul != null)
+      await txn.delete('Pulse', where: 'entryID = ?', whereArgs: [entryID]);
+  });
+
+  Pressure? _decode(Object? value) {
+    if (value is! double) return null;
+    return Pressure.kPa(value);
   }
 
 }

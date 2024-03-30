@@ -5,6 +5,7 @@ import 'package:health_data_store/src/repositories/medicine_intake_repository.da
 import 'package:health_data_store/src/types/date_range.dart';
 import 'package:health_data_store/src/types/medicine.dart';
 import 'package:health_data_store/src/types/medicine_intake.dart';
+import 'package:health_data_store/src/types/units/weight.dart';
 import 'package:sqflite_common/sqflite.dart';
 
 /// Implementation of a repository for [MedicineIntake]s.
@@ -32,7 +33,7 @@ class MedicineIntakeRepositoryImpl extends MedicineIntakeRepository {
         if (intake.medicine.color != null)
           intake.medicine.color,
         if (intake.medicine.dosis != null)
-          intake.medicine.dosis,
+          intake.medicine.dosis!.mg,
       ],
     );
     assert(medIDRes.isNotEmpty);
@@ -49,7 +50,7 @@ class MedicineIntakeRepositoryImpl extends MedicineIntakeRepository {
     await txn.insert('Intake', {
       'entryID': id,
       'medID': medID,
-      'dosis': intake.dosis,
+      'dosis': intake.dosis.mg,
     });
   });
 
@@ -69,10 +70,10 @@ class MedicineIntakeRepositoryImpl extends MedicineIntakeRepository {
       final timeS = r['timestampUnixS'] as int;
       intakes.add(MedicineIntake(
         time: DateTimeS.fromSecondsSinceEpoch(timeS),
-        dosis: r['dosis'] as double,
+        dosis: _decode(r['dosis'])!,
         medicine: Medicine(
           designation: r['designation'] as String,
-          dosis: r['defaultDose'] as double?,
+          dosis: _decode(r['defaultDose']),
           color: r['color'] as int?,
         ),
       ));
@@ -96,13 +97,18 @@ class MedicineIntakeRepositoryImpl extends MedicineIntakeRepository {
     ')',
     [
       intake.time.secondsSinceEpoch,
-      intake.dosis,
+      intake.dosis.mg,
       intake.medicine.designation,
       if (intake.medicine.color != null)
         intake.medicine.color,
       if (intake.medicine.dosis != null)
-        intake.medicine.dosis,
+        intake.medicine.dosis?.mg,
     ]
   );
+
+  Weight? _decode(Object? value) {
+    if (value is! double) return null;
+    return Weight.mg(value);
+  }
 
 }

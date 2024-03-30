@@ -2,6 +2,7 @@ import 'package:health_data_store/src/database_manager.dart';
 import 'package:health_data_store/src/extensions/castable.dart';
 import 'package:health_data_store/src/repositories/medicine_repository.dart';
 import 'package:health_data_store/src/types/medicine.dart';
+import 'package:health_data_store/src/types/units/weight.dart';
 import 'package:sqflite_common/sqflite.dart';
 
 /// Implementation of repository for medicines that are taken by the user.
@@ -19,7 +20,7 @@ class MedicineRepositoryImpl extends MedicineRepository {
     await txn.insert('Medicine', {
       'medID': id,
       'designation': medicine.designation,
-      'defaultDose': medicine.dosis,
+      'defaultDose': medicine.dosis?.mg,
       'color': medicine.color,
       'removed': 0,
     });
@@ -35,7 +36,7 @@ class MedicineRepositoryImpl extends MedicineRepository {
     for (final m in medData) {
       meds.add(Medicine(
         designation: m['designation'].toString(),
-        dosis: m['defaultDose'] as double?,
+        dosis: _decode(m['defaultDose']),
         color: m['color'] as int?,
       ));
     }
@@ -56,8 +57,13 @@ class MedicineRepositoryImpl extends MedicineRepository {
       if (value.color != null)
         value.color,
       if (value.dosis != null)
-        value.dosis,
+        value.dosis!.mg,
     ],
   );
+
+  Weight? _decode(Object? value) {
+    if (value is! double) return null;
+    return Weight.mg(value);
+  }
 
 }

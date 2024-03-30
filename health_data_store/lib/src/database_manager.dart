@@ -73,8 +73,8 @@ class DatabaseManager {
       ('Pulse','pul')
     ]) {
       await txn.execute('CREATE TABLE "${info.$1}" ('
-        '"entryID"	INTEGER NOT NULL,'
-        '"${info.$2}"    INTEGER,'
+        '"entryID"	    INTEGER NOT NULL,'
+        '"${info.$2}"   REAL,'
         'FOREIGN KEY("entryID") REFERENCES "Timestamps"("entryID"),'
         'PRIMARY KEY("entryID")'
       ');');
