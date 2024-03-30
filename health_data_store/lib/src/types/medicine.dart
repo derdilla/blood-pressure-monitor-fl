@@ -1,4 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:health_data_store/src/types/units/weight.dart';
 
 part 'medicine.freezed.dart';
 
@@ -15,6 +16,6 @@ class Medicine with _$Medicine {
     /// Sample value: `0xFF42A5F5`
     int? color,
     /// Default dosis of medication.
-    double? dosis,
+    Weight? dosis,
   }) = _Medicine;
 }
