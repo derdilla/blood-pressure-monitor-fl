@@ -1,4 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:health_data_store/src/types/units/pressure.dart';
 
 part 'blood_pressure_record.freezed.dart';
 
@@ -10,10 +11,10 @@ class BloodPressureRecord with _$BloodPressureRecord {
     /// Timestamp when the measurement was taken.
     required DateTime time,
     /// Systolic value of the measurement.
-    int? sys,
+    Pressure? sys,
     /// Diastolic value of the measurement.
-    int? dia,
+    Pressure? dia,
     /// Pulse value of the measurement.
-    int? pul,
+    Pressure? pul,
   }) = _BloodPressureRecord;
 }

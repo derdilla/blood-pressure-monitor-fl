@@ -1,5 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:health_data_store/src/types/medicine.dart';
+import 'package:health_data_store/src/types/units/weight.dart';
 
 part 'medicine_intake.freezed.dart';
 
@@ -16,6 +17,6 @@ class MedicineIntake with _$MedicineIntake {
     ///
     /// When the medication has a default value, this must be set to that value,
     /// as it may change.
-    required double dosis,
+    required Weight dosis,
   }) = _MedicineIntake;
 }
