@@ -70,7 +70,9 @@ The easiest way to do this is [weblate](https://hosted.weblate.org/engage/blood-
 ### Pull requests
 If you can code, you can fix issues or implement features from the issues page. While not a strict requirement, it is recommended to talk about it in an issue first.
 
-[developer docs](https://bpapp.derdilla.com/)
+All parts of the code have extensive documentation and some additional information can be found in the [docs](https://github.com/NobodyForNothing/blood-pressure-monitor-fl/tree/main/docs) folder. 
+
+<!--[developer docs](https://bpapp.derdilla.com/)-->
 
 ### Donations
 If you have too much money, I would advise you to donate to either [F-Droid](https://f-droid.org/en/donate/), [Weblate](https://weblate.org/en/donate/), or some other service that has unavoidable maintenance costs.

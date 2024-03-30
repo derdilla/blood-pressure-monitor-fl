@@ -1,0 +1,36 @@
+name: pkg-CI
+
+on:
+  push:
+    branches:
+      - 'main'
+    paths:
+      - "health_data_store/**"
+      - ".github/workflows/pkg-CI.yml"
+  workflow_dispatch:
+
+jobs:
+  test-health_data_store:
+    runs-on: ubuntu-latest
+ 
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        # ensures there are no unexpected directories needed
+        sparse-checkout: |
+          health_data_store
+    - name: Setup dart
+      uses: dart-lang/setup-dart@v1
+      with:
+        sdk: 'beta'
+
+    - name: Get dependencies
+      run: dart pub get
+      working-directory: ./health_data_store
+    - name: Analyze code
+      run: dart analyze
+      working-directory: ./health_data_store
+    - name: Run tests
+      run: dart test
+      working-directory: ./health_data_store

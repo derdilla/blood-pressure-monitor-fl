@@ -1,11 +1,12 @@
 name: Build and deploy developer docs
+# Disabled until a solution for mono repos is found
 on:
-    push:
-        branches:
-           - "main"
-        paths:
-           - "lib/**"
-           - "README.md"
+    #push:
+    #    branches:
+    #       - "main"
+    #    paths:
+    #       - "lib/**"
+    #       - "README.md"
     workflow_dispatch:
 jobs:
     build-docs:
@@ -16,12 +17,6 @@ jobs:
         steps:       
         - name: Checkout code
           uses: actions/checkout@v4
-
-        - uses: subosito/flutter-action@v2
-          with:
-            flutter-version: '3.x'
-            channel: stable
-            cache: true
 
         - name: Setup Dart
           uses: dart-lang/setup-dart@v1
