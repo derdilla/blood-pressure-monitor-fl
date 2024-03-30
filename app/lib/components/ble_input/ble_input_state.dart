@@ -3,14 +3,24 @@ import 'package:blood_pressure_app/components/ble_input/measurement_characterist
 import 'package:blood_pressure_app/model/blood_pressure/record.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 
+/// State of a component for inputting measurements through ble devices
 sealed class BleInputState {}
 
-/// The ble input field is inactive.
+/// The ble input field is inactive (not opened).
 class BleInputClosed extends BleInputState {}
+
+/// Doesn't have permission for bluetooth access.
+///
+/// The UI should show a warning to allow bluetooth and potentially location
+/// permissions.
+class BleInputPermissionFailure extends BleInputState {}
 
 /// Scanning for devices.
 class BleInputLoadInProgress extends BleInputState {}
-/// No device available.
+/// Could not start bluetooth search.
+///
+/// Most permissions errors should be covered by [BleInputPermissionFailure] so
+/// this might not be actionable by the user.
 class BleInputLoadFailure extends BleInputState {}
 /// Found devices.
 class BleInputLoadSuccess extends BleInputState {
