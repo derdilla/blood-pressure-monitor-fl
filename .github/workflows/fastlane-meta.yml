@@ -1,12 +1,14 @@
 name: Fastlane Metadata
 on:
   push:
-    branches: '**'
+    branches:
+    - '**'
     paths:
       - "fastlane/**"
       - ".github/workflows/fastlane-meta.yml"
   pull_request:
-    branches: '**'
+    branches:
+    - '**'
     paths:
       - "fastlane/**"
       - ".github/workflows/fastlane-meta.yml"
@@ -14,9 +16,10 @@ on:
     
 jobs:
   validate:
-      name: Validate
       runs-on: ubuntu-latest
       steps:
-        - uses: actions/checkout@v3
+        - uses: actions/checkout@v4
+          with:
+            sparse-checkout: |
+              fastlane
         - uses: ashutoshgngwr/validate-fastlane-supply-metadata@v2
-  
