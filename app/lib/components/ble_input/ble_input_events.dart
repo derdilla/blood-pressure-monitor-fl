@@ -3,7 +3,11 @@ import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 
 sealed class BleInputEvent {}
 
-class BleInputOpened extends BleInputEvent {}
+/// Request expanding the input field.
+class OpenBleInput extends BleInputEvent {}
+
+/// Request closing the input field.
+class CloseBleInput extends BleInputEvent {}
 
 class BleInputDeviceSelected extends BleInputEvent {
   BleInputDeviceSelected(this.device);
