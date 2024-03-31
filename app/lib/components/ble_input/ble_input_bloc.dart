@@ -19,7 +19,12 @@ class BleInputBloc extends Bloc<BleInputEvent, BleInputState> {
   // TODO: use repo
 
   BleInputBloc(): super(BleInputClosed()) {
-    on<BleInputOpened>((event, emit) async {
+    on<CloseBleInput>((event, emit) async {
+      emit(BleInputClosed());
+      // TODO: perform needed cleanup
+    });
+
+    on<OpenBleInput>((event, emit) async {
       /* testing widget
       emit(BleMeasurementSuccess(BloodPressureRecord(DateTime.now(), 123, 456, 578, 'test'),
         bodyMoved: null,
