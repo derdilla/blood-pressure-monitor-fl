@@ -8,29 +8,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:permission_handler/permission_handler.dart';
 
-// TODO: docs
+/// Logic for bluetooth measurement input.
 class BleInputBloc extends Bloc<BleInputEvent, BleInputState> {
-  final _ble = FlutterReactiveBle();
-  final Set<DiscoveredDevice> _availableDevices = {};
-
-  final _requiredServices = [
-    Uuid.parse('1810'),
-  ];
-  // TODO: use repo
-
+  /// Create logic component for bluetooth measurement input.
   BleInputBloc(): super(BleInputClosed()) {
-    on<BleInputOpened>((event, emit) async {
-      /* testing widget
-      emit(BleMeasurementSuccess(BloodPressureRecord(DateTime.now(), 123, 456, 578, 'test'),
-        bodyMoved: null,
-        cuffLoose: false,
-        irregularPulse: true,
-        improperMeasurementPosition: true,
-        measurementStatus: MeasurementStatus.ok,
-      ),);
-      return;
-      */
-
+    on<OpenBleInput>((event, emit) async {
       emit(BleInputLoadInProgress());
       if (await Permission.bluetoothConnect.isDenied) {
         emit(BleInputPermissionFailure());
@@ -54,8 +36,6 @@ class BleInputBloc extends Bloc<BleInputEvent, BleInputState> {
           return BleInputLoadSuccess(_availableDevices.toList());
         },);
       } catch (e) {
-        // TODO: check its really this type of exception
-        print(e);
         emit(BleInputLoadFailure());
       }
     });
@@ -120,8 +100,6 @@ class BleInputBloc extends Bloc<BleInputEvent, BleInputState> {
       ),);
     });
 
-    // TODO: use _ble.statusStream ?
-
     // TODO: show capabilities during testing:
     // _ble.getDiscoveredServices()
 
@@ -133,5 +111,13 @@ class BleInputBloc extends Bloc<BleInputEvent, BleInputState> {
     // - Live Health Observations 0x2B8B
 
   }
+
+  final _ble = FlutterReactiveBle();
+
+  final Set<DiscoveredDevice> _availableDevices = {};
+
+  final _requiredServices = [
+    Uuid.parse('1810'),
+  ];
 
 }
