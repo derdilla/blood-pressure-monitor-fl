@@ -86,7 +86,7 @@ class BleInputBloc extends Bloc<BleInputEvent, BleInputState> {
                 deviceId: event.device.id,
               );
               _ble.subscribeToCharacteristic(characteristic).listen((List<int> data) {
-                add(BleBluetoothMeasurementRecieved(data));
+                add(BleBluetoothMeasurementReceived(data));
               });
               return BleConnectSuccess();
             } else if (update.connectionState == DeviceConnectionState.connecting) {
@@ -100,7 +100,7 @@ class BleInputBloc extends Bloc<BleInputEvent, BleInputState> {
       }
     });
 
-    on<BleBluetoothMeasurementRecieved>((event, emit) {
+    on<BleBluetoothMeasurementReceived>((event, emit) {
       emit(BleMeasurementInProgress());
       final decoded = BPMeasurementCharacteristic.parse(event.data);
       final record = BloodPressureRecord(
