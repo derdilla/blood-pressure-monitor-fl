@@ -5,6 +5,7 @@ import 'package:blood_pressure_app/components/dialoges/enter_timeformat_dialoge.
 import 'package:blood_pressure_app/components/dialoges/input_dialoge.dart';
 import 'package:blood_pressure_app/components/settings/settings_widgets.dart';
 import 'package:blood_pressure_app/model/blood_pressure/model.dart';
+import 'package:blood_pressure_app/model/blood_pressure/pressure_unit.dart';
 import 'package:blood_pressure_app/model/blood_pressure/warn_values.dart';
 import 'package:blood_pressure_app/model/iso_lang_names.dart';
 import 'package:blood_pressure_app/model/storage/storage.dart';
@@ -43,7 +44,6 @@ class SettingsPage extends StatelessWidget {
           children: [
             TitledColumn(title: Text(localizations.layout), children: [
               ListTile(
-                key: const Key('EnterTimeFormatScreen'),
                 title: Text(localizations.enterTimeFormatScreen),
                 subtitle: Text(settings.dateFormatString),
                 leading: const Icon(Icons.schedule),
@@ -58,7 +58,6 @@ class SettingsPage extends StatelessWidget {
                 },
               ),
               DropDownListTile<ThemeMode>(
-                key: const Key('theme'),
                 leading: const Icon(Icons.brightness_4),
                 title: Text(localizations.theme),
                 value: settings.themeMode,
@@ -72,12 +71,10 @@ class SettingsPage extends StatelessWidget {
                 },
               ),
               ColorSelectionListTile(
-                key: const Key('accentColor'),
                 onMainColorChanged: (color) => settings.accentColor = color,
                 initialColor: settings.accentColor,
                 title: Text(localizations.accentColor),),
               DropDownListTile<Locale?>(
-                key: const Key('language'),
                 leading: const Icon(Icons.language),
                 title: Text(localizations.language),
                 value: settings.language,
@@ -91,7 +88,6 @@ class SettingsPage extends StatelessWidget {
                 },
               ),
               SliderListTile(
-                key: const Key('graphLineThickness'),
                 title: Text(localizations.graphLineThickness),
                 leading: const Icon(Icons.line_weight),
                 onChanged: (double value) {
@@ -102,7 +98,6 @@ class SettingsPage extends StatelessWidget {
                 max: 5,
               ),
               SliderListTile(
-                key: const Key('needlePinBarWidth'),
                 title: Text(localizations.needlePinBarWidth),
                 subtitle: Text(localizations.needlePinBarWidthDesc),
                 leading: const Icon(Icons.line_weight),
@@ -114,7 +109,6 @@ class SettingsPage extends StatelessWidget {
                 max: 20,
               ),
               SliderListTile(
-                key: const Key('animationSpeed'),
                 title: Text(localizations.animationSpeed),
                 leading: const Icon(Icons.speed),
                 onChanged: (double value) {
@@ -126,22 +120,18 @@ class SettingsPage extends StatelessWidget {
                 stepSize: 50,
               ),
               ColorSelectionListTile(
-                key: const Key('sysColor'),
                 onMainColorChanged: (color) => settings.sysColor = color,
                 initialColor: settings.sysColor,
                   title: Text(localizations.sysColor),),
               ColorSelectionListTile(
-                key: const Key('diaColor'),
                 onMainColorChanged: (color) => settings.diaColor = color,
                 initialColor: settings.diaColor,
                 title: Text(localizations.diaColor),),
               ColorSelectionListTile(
-                key: const Key('pulColor'),
                 onMainColorChanged: (color) => settings.pulColor = color,
                 initialColor: settings.pulColor,
                 title: Text(localizations.pulColor),),
               SwitchListTile(
-                key: const Key('useLegacyList'),
                 value: settings.useLegacyList,
                 onChanged: (value) {
                   settings.useLegacyList = value;
@@ -161,7 +151,6 @@ class SettingsPage extends StatelessWidget {
                 trailing: const Icon(Icons.arrow_forward_ios),
               ),
               SwitchListTile(
-                key: const Key('allowManualTimeInput'),
                 value: settings.allowManualTimeInput,
                 onChanged: (value) {
                   settings.allowManualTimeInput = value;
@@ -169,7 +158,6 @@ class SettingsPage extends StatelessWidget {
                 secondary: const Icon(Icons.details),
                 title: Text(localizations.allowManualTimeInput),),
               SwitchListTile(
-                key: const Key('validateInputs'),
                 value: settings.validateInputs,
                 title: Text(localizations.validateInputs),
                 secondary: const Icon(Icons.edit),
@@ -178,7 +166,6 @@ class SettingsPage extends StatelessWidget {
                   settings.validateInputs = value;
                 },),
               SwitchListTile(
-                key: const Key('allowMissingValues'),
                 value: settings.allowMissingValues,
                 title: Text(localizations.allowMissingValues),
                 secondary: const Icon(Icons.report_off_outlined),
@@ -187,7 +174,6 @@ class SettingsPage extends StatelessWidget {
                   if (value) settings.validateInputs = false;
                 },),
               SwitchListTile(
-                key: const Key('confirmDeletion'),
                 value: settings.confirmDeletion,
                 title: Text(localizations.confirmDeletion),
                 secondary: const Icon(Icons.check),
@@ -195,7 +181,6 @@ class SettingsPage extends StatelessWidget {
                   settings.confirmDeletion = value;
                 },),
               NumberInputListTile(
-                key: const Key('sysWarn'),
                 label: localizations.sysWarn,
                 leading: const Icon(Icons.warning_amber_outlined),
                 value: settings.sysWarn,
@@ -204,7 +189,6 @@ class SettingsPage extends StatelessWidget {
                 },
               ),
               NumberInputListTile(
-                key: const Key('diaWarn'),
                 label: localizations.diaWarn,
                 leading: const Icon(Icons.warning_amber_outlined),
                 value: settings.diaWarn,
@@ -213,7 +197,6 @@ class SettingsPage extends StatelessWidget {
                 },
               ),
               ListTile(
-                key: const Key('determineWarnValues'),
                 leading: const Icon(Icons.settings_applications_outlined),
                 title: Text(localizations.determineWarnValues),
                 onTap: () async {
@@ -227,7 +210,6 @@ class SettingsPage extends StatelessWidget {
                 },
               ),
               ListTile(
-                key: const Key('AboutWarnValuesScreen'),
                 title: Text(localizations.aboutWarnValuesScreen),
                 subtitle: Text(localizations.aboutWarnValuesScreenDesc),
                 leading: const Icon(Icons.info_outline),
@@ -240,7 +222,6 @@ class SettingsPage extends StatelessWidget {
                 },
               ),
               ListTile(
-                key: const Key('GraphMarkingsScreen'),
                 title: Text(localizations.customGraphMarkings),
                 leading: const Icon(Icons.legend_toggle_outlined),
                 trailing: const Icon(Icons.arrow_forward_ios),
@@ -277,69 +258,84 @@ class SettingsPage extends StatelessWidget {
                   settings.bottomAppBars = value;
                 },
               ),
+              DropDownListTile<PressureUnit?>(
+                leading: const Icon(Icons.language),
+                title: Text(localizations.preferredPressureUnit),
+                value: settings.preferredPressureUnit,
+                items: [
+                  for (final u in PressureUnit.values)
+                    DropdownMenuItem(
+                      value: u,
+                      child: Text(u.name),
+                    ),
+                ],
+                onChanged: (PressureUnit? value) {
+                  if (value != null) settings.preferredPressureUnit = value;
+                },
+              ),
             ],),
             TitledColumn(
               title: Text(localizations.data),
               children: [
                 ListTile(
-                    title: Text(localizations.exportImport),
-                    leading: const Icon(Icons.download),
-                    trailing: const Icon(Icons.arrow_forward_ios),
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => const ExportImportScreen()),
-                      );
-                    },
+                  title: Text(localizations.exportImport),
+                  leading: const Icon(Icons.download),
+                  trailing: const Icon(Icons.arrow_forward_ios),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const ExportImportScreen()),
+                    );
+                  },
                 ),
                 ListTile(
-                    title: Text(localizations.exportSettings),
-                    leading: const Icon(Icons.tune),
-                    onTap: () async {
-                      String dbPath = await getDatabasesPath();
-                      assert(dbPath != inMemoryDatabasePath);
-                      dbPath = join(dbPath, 'config.db');
-                      assert(Platform.isAndroid);
-                      PlatformClient.shareFile(dbPath, 'application/vnd.sqlite3');
-                    },
+                  title: Text(localizations.exportSettings),
+                  leading: const Icon(Icons.tune),
+                  onTap: () async {
+                    String dbPath = await getDatabasesPath();
+                    assert(dbPath != inMemoryDatabasePath);
+                    dbPath = join(dbPath, 'config.db');
+                    assert(Platform.isAndroid);
+                    PlatformClient.shareFile(dbPath, 'application/vnd.sqlite3');
+                  },
                 ),
                 ListTile(
-                    title: Text(localizations.importSettings),
-                    subtitle: Text(localizations.requiresAppRestart),
-                    leading: const Icon(Icons.settings_backup_restore),
-                    onTap: () async {
-                      final messenger = ScaffoldMessenger.of(context);
-                      final result = await FilePicker.platform.pickFiles();
-                      if (result == null) {
-                        messenger.showSnackBar(SnackBar(content: Text(localizations.errNoFileOpened)));
-                        return;
-                      }
-                      final path = result.files.single.path;
-                      if (path == null) {
-                        messenger.showSnackBar(SnackBar(content: Text(localizations.errCantReadFile)));
-                        return;
-                      }
+                  title: Text(localizations.importSettings),
+                  subtitle: Text(localizations.requiresAppRestart),
+                  leading: const Icon(Icons.settings_backup_restore),
+                  onTap: () async {
+                    final messenger = ScaffoldMessenger.of(context);
+                    final result = await FilePicker.platform.pickFiles();
+                    if (result == null) {
+                      messenger.showSnackBar(SnackBar(content: Text(localizations.errNoFileOpened)));
+                      return;
+                    }
+                    final path = result.files.single.path;
+                    if (path == null) {
+                      messenger.showSnackBar(SnackBar(content: Text(localizations.errCantReadFile)));
+                      return;
+                    }
 
-                      String dbPath = await getDatabasesPath();
-                      assert(dbPath != inMemoryDatabasePath);
-                      dbPath = join(dbPath, 'config.db');
-                      File(path).copySync(dbPath);
-                      if (!await Restart.restartApp()) {
-                        messenger.showSnackBar(SnackBar(content: Text(localizations.pleaseRestart)));
-                        return;
-                      }
-                    },
+                    String dbPath = await getDatabasesPath();
+                    assert(dbPath != inMemoryDatabasePath);
+                    dbPath = join(dbPath, 'config.db');
+                    File(path).copySync(dbPath);
+                    if (!await Restart.restartApp()) {
+                      messenger.showSnackBar(SnackBar(content: Text(localizations.pleaseRestart)));
+                      return;
+                    }
+                  },
                 ),
                 ListTile(
-                    title: Text(localizations.delete),
-                    leading: const Icon(Icons.delete),
-                    trailing: const Icon(Icons.arrow_forward_ios),
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => const DeleteDataScreen()),
-                      );
-                    },
+                  title: Text(localizations.delete),
+                  leading: const Icon(Icons.delete),
+                  trailing: const Icon(Icons.arrow_forward_ios),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const DeleteDataScreen()),
+                    );
+                  },
                 ),
                 ListTile(
                   title: Text('Import foreign database (Preview)'), // TODO
@@ -383,7 +379,6 @@ class SettingsPage extends StatelessWidget {
             ),
             TitledColumn(title: Text(localizations.aboutWarnValuesScreen), children: [
               ListTile(
-                  key: const Key('version'),
                   title: Text(localizations.version),
                   leading: const Icon(Icons.info_outline),
                   trailing: const Icon(Icons.arrow_forward_ios),
@@ -400,7 +395,6 @@ class SettingsPage extends StatelessWidget {
                   },
               ),
               ListTile(
-                key: const Key('sourceCode'),
                 title: Text(localizations.sourceCode),
                 leading: const Icon(Icons.merge),
                 trailing: const Icon(Icons.open_in_new),
@@ -416,7 +410,6 @@ class SettingsPage extends StatelessWidget {
                 },
               ),
               ListTile(
-                key: const Key('licenses'),
                 title: Text(localizations.licenses),
                 leading: const Icon(Icons.policy_outlined),
                 trailing: const Icon(Icons.arrow_forward_ios),
