@@ -7,22 +7,37 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 
 /// An interactive way to add measurements over bluetooth.
-class BleInput extends StatelessWidget{
+class BleInput extends StatefulWidget {
   /// Create an interactive bluetooth measurement adder.
-  BleInput({super.key});
+  const BleInput({super.key, this.bloc});
 
-  final _bloc = BleInputBloc();
+  /// Logic implementation of this input form.
+  final BleInputBloc? bloc; // Configurable for testing.
+
+  @override
+  State<BleInput> createState() => _BleInputState();
+}
+
+class _BleInputState extends State<BleInput> {
+
+  late final BleInputBloc bloc;
+
+  @override
+  void initState() {
+    super.initState();
+    bloc = widget.bloc ?? BleInputBloc();
+  }
 
   @override
   Widget build(BuildContext context) => SizeChangedLayoutNotifier(
     child: BlocBuilder<BleInputBloc, BleInputState>(
-      bloc: _bloc,
+      bloc: bloc,
       builder: (BuildContext context, BleInputState state) {
         final localizations = AppLocalizations.of(context)!;
         return switch (state) {
           BleInputClosed() => IconButton(
             icon: const Icon(Icons.bluetooth),
-            onPressed: () => _bloc.add(OpenBleInput()),
+            onPressed: () => bloc.add(OpenBleInput()),
           ),
           BleInputLoadInProgress() => _buildTwoElementCard(context,
             const CircularProgressIndicator(),
@@ -31,13 +46,13 @@ class BleInput extends StatelessWidget{
           BleInputLoadFailure() => _buildTwoElementCard(context,
             const Icon(Icons.bluetooth_disabled),
             Text(localizations.errBleCantOpen),
-            onTap: () => _bloc.add(OpenBleInput()),
+            onTap: () => bloc.add(OpenBleInput()),
           ),
           BleInputLoadSuccess() => state.availableDevices.isEmpty
               ? _buildTwoElementCard(context,
             const Icon(Icons.info),
             Text(localizations.errBleNoDev),
-            onTap: () => _bloc.add(OpenBleInput()),
+            onTap: () => bloc.add(OpenBleInput()),
           ) : _buildMainCard(context, ListView.builder(
             itemCount: state.availableDevices.length,
             itemBuilder: (context, idx) => ListTile(
@@ -45,13 +60,13 @@ class BleInput extends StatelessWidget{
               trailing: state.availableDevices[idx].connectable == Connectable.available
                   ? const Icon(Icons.bluetooth_audio)
                   : const Icon(Icons.bluetooth_disabled),
-              onTap: () => _bloc.add(BleInputDeviceSelected(state.availableDevices[idx])),
+              onTap: () => bloc.add(BleInputDeviceSelected(state.availableDevices[idx])),
             ),
           ),),
           BleInputPermissionFailure() => _buildTwoElementCard(context,
             const Icon(Icons.bluetooth_disabled),
             Text(localizations.errBleNoPerms),
-            onTap: () => _bloc.add(OpenBleInput()),
+            onTap: () => bloc.add(OpenBleInput()),
           ),
           BleConnectInProgress() => _buildTwoElementCard(context,
             const CircularProgressIndicator(),
@@ -60,7 +75,7 @@ class BleInput extends StatelessWidget{
           BleConnectFailed() => _buildTwoElementCard(context,
             const Icon(Icons.bluetooth_disabled),
             Text(localizations.errBleCouldNotConnect),
-            onTap: () => _bloc.add(OpenBleInput()),
+            onTap: () => bloc.add(OpenBleInput()),
           ),
           BleConnectSuccess() => _buildTwoElementCard(context,
             const Icon(Icons.bluetooth_connected),
@@ -104,7 +119,7 @@ class BleInput extends StatelessWidget{
           alignment: Alignment.topRight,
           child: IconButton(
             icon: const Icon(Icons.close),
-            onPressed: () => _bloc.add(CloseBleInput()),
+            onPressed: () => bloc.add(CloseBleInput()),
           ),
         ),
       ],
