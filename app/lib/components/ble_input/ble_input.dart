@@ -6,106 +6,124 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 
+/// An interactive way to add measurements over bluetooth.
 class BleInput extends StatelessWidget{
-  final bloc = BleInputBloc();
-
+  /// Create an interactive bluetooth measurement adder.
   BleInput({super.key});
 
+  final _bloc = BleInputBloc();
+
   @override
-  Widget build(BuildContext context) => BlocBuilder<BleInputBloc, BleInputState>(
-    bloc: bloc,
-    builder: (BuildContext context, BleInputState state) {
-      final localizations = AppLocalizations.of(context)!;
-      return switch (state) {
-        BleInputClosed() => IconButton(
-          icon: const Icon(Icons.bluetooth),
-          onPressed: () => bloc.add(BleInputOpened()),
-        ),
-        BleInputLoadInProgress() => _buildTwoElementCard(context,
-          const CircularProgressIndicator(),
-          Text(localizations.scanningDevices),
-        ),
-        BleInputLoadFailure() => _buildTwoElementCard(context,
-          const Icon(Icons.bluetooth_disabled),
-           Text('Failed loading input devices. Ensure the app has all neccessary permissions.'),
-          onTap: () => bloc.add(BleInputOpened()),
-        ),
-        BleInputLoadSuccess() => state.availableDevices.isEmpty // TODO: card
-          ? Text('No compatible BLE GATT devices found.')
-          : ListView.builder(
+  Widget build(BuildContext context) => SizeChangedLayoutNotifier(
+    child: BlocBuilder<BleInputBloc, BleInputState>(
+      bloc: _bloc,
+      builder: (BuildContext context, BleInputState state) {
+        final localizations = AppLocalizations.of(context)!;
+        return switch (state) {
+          BleInputClosed() => IconButton(
+            icon: const Icon(Icons.bluetooth),
+            onPressed: () => _bloc.add(OpenBleInput()),
+          ),
+          BleInputLoadInProgress() => _buildTwoElementCard(context,
+            const CircularProgressIndicator(),
+            Text(localizations.scanningDevices),
+          ),
+          BleInputLoadFailure() => _buildTwoElementCard(context,
+            const Icon(Icons.bluetooth_disabled),
+            Text(localizations.errBleCantOpen),
+            onTap: () => _bloc.add(OpenBleInput()),
+          ),
+          BleInputLoadSuccess() => state.availableDevices.isEmpty
+              ? _buildTwoElementCard(context,
+            const Icon(Icons.info),
+            Text(localizations.errBleNoDev),
+            onTap: () => _bloc.add(OpenBleInput()),
+          ) : _buildMainCard(context, ListView.builder(
             itemCount: state.availableDevices.length,
             itemBuilder: (context, idx) => ListTile(
               title: Text(state.availableDevices[idx].name),
               trailing: state.availableDevices[idx].connectable == Connectable.available
-                ? Icon(Icons.bluetooth_audio)
-                : Icon(Icons.bluetooth_disabled),
-              onTap: () => bloc.add(BleInputDeviceSelected(state.availableDevices[idx])),
+                  ? const Icon(Icons.bluetooth_audio)
+                  : const Icon(Icons.bluetooth_disabled),
+              onTap: () => _bloc.add(BleInputDeviceSelected(state.availableDevices[idx])),
+            ),
+          ),),
+          BleInputPermissionFailure() => _buildTwoElementCard(context,
+            const Icon(Icons.bluetooth_disabled),
+            Text(localizations.errBleNoPerms),
+            onTap: () => _bloc.add(OpenBleInput()),
+          ),
+          BleConnectInProgress() => _buildTwoElementCard(context,
+            const CircularProgressIndicator(),
+            Text(localizations.bleConnecting),
+          ),
+          BleConnectFailed() => _buildTwoElementCard(context,
+            const Icon(Icons.bluetooth_disabled),
+            Text(localizations.errBleCouldNotConnect),
+            onTap: () => _bloc.add(OpenBleInput()),
+          ),
+          BleConnectSuccess() => _buildTwoElementCard(context,
+            const Icon(Icons.bluetooth_connected),
+            Text(localizations.bleConnected),
+          ),
+          BleMeasurementInProgress() => _buildTwoElementCard(context,
+            const CircularProgressIndicator(),
+            Text(localizations.bleProcessing),
+          ),
+          BleMeasurementSuccess() => _buildTwoElementCard(context,
+            const Icon(Icons.done, color: Colors.lightGreen,),
+            Text('Received measurement:' // TODO: rework this process
+                '\n${state.record}'
+                '\nCuff loose: ${state.cuffLoose}'
+                '\nIrregular pulse: ${state.irregularPulse}'
+                '\nBody moved: ${state.bodyMoved}'
+                '\nWrong measurement position: ${state.improperMeasurementPosition}'
+                '\nMeasurement status: ${state.measurementStatus}'
             ),
           ),
-        BleInputPermissionFailure() => _buildTwoElementCard(context,
-          const Icon(Icons.bluetooth_disabled),
-          Text('Permissions error. Please allow all bluetooth permissions.'
-              ' You also need the location permission on pre-Android 12 devices.'),
-          onTap: () => bloc.add(BleInputOpened()),
+        };
+      },
+    ),
+  );
+
+  /// Builds the container used when input is open.
+  Widget _buildMainCard(BuildContext context, Widget child) => Card.outlined(
+    color: Theme.of(context).cardColor,
+    // borderRadius: BorderRadius.circular(24),
+    // width: MediaQuery.of(context).size.width,
+    // height: MediaQuery.of(context).size.width,
+    // padding: const EdgeInsets.all(24),
+    margin: const EdgeInsets.all(8),
+    child: Stack(
+      children: [
+        Padding( // content
+          padding: const EdgeInsets.all(24),
+          child: child,
         ),
-        BleConnectInProgress() => _buildTwoElementCard(context,
-          const CircularProgressIndicator(),
-          Text('Connecting to bluetooth device'),
-        ),
-        BleConnectFailed() => _buildTwoElementCard(context,
-          const Icon(Icons.bluetooth_disabled),
-          Text('Connection to bluetooth device failed :('),
-          onTap: () => bloc.add(BleInputOpened()),
-        ),
-        BleConnectSuccess() => _buildTwoElementCard(context,
-          const Icon(Icons.bluetooth_connected),
-          Text('Connected to device, waiting for measurement'),
-        ),
-        BleMeasurementInProgress() => _buildTwoElementCard(context,
-          const CircularProgressIndicator(),
-          Text('Handeling incomming measurement'),
-        ),
-        BleMeasurementSuccess() => _buildTwoElementCard(context,
-          const Icon(Icons.done, color: Colors.lightGreen,),
-          Text('Recieved measurement:'
-              '\n${state.record}'
-              '\nCuff loose: ${state.cuffLoose}'
-              '\nIrregular pulse: ${state.irregularPulse}'
-              '\nBody moved: ${state.bodyMoved}'
-              '\nWrong measurement position: ${state.improperMeasurementPosition}'
-              '\nMeasurement status: ${state.measurementStatus}'
+        Align(
+          alignment: Alignment.topRight,
+          child: IconButton(
+            icon: const Icon(Icons.close),
+            onPressed: () => _bloc.add(CloseBleInput()),
           ),
         ),
-      };
-    },
-  );
-  // TODO: add method for quitting
-
-  /// Wrap open connection menu in card.
-  Widget _buildMainCard(BuildContext context, Widget child) => Container(
-    decoration: BoxDecoration(
-      color: Theme.of(context).cardColor,
-      borderRadius: BorderRadius.circular(24),
+      ],
     ),
-    width: MediaQuery.of(context).size.width,
-    height: MediaQuery.of(context).size.width,
-    padding: const EdgeInsets.all(24),
-    margin: const EdgeInsets.all(8),
-    child: child,
   );
 
+  /// Builds the full card but with two centered elements.
   Widget _buildTwoElementCard(
-    BuildContext context,
-    Widget top,
-    Widget bottom, {
-    void Function()? onTap,
-  }) => InkWell(
+      BuildContext context,
+      Widget top,
+      Widget bottom, {
+        void Function()? onTap,
+      }) => InkWell(
     onTap: onTap,
     child: _buildMainCard(context, Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [top, const SizedBox(height: 8,), bottom,],
       ),
-    )),
+    ),),
   );
 }
