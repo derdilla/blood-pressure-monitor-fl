@@ -1,4 +1,3 @@
-// TODO: doc
 import 'package:blood_pressure_app/components/ble_input/measurement_characteristic.dart';
 import 'package:blood_pressure_app/model/blood_pressure/record.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
@@ -41,6 +40,7 @@ class BleMeasurementInProgress extends BleInputState {}
 
 /// A measurement was taken through the bluetooth device.
 class BleMeasurementSuccess extends BleInputState {
+  /// A measurement that was taken through the bluetooth device.
   BleMeasurementSuccess(this.record, {
     this.bodyMoved,
     this.cuffLoose,
