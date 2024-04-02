@@ -12,8 +12,10 @@ import 'package:blood_pressure_app/model/storage/update_legacy_settings.dart';
 import 'package:blood_pressure_app/screens/home_screen.dart';
 import 'package:blood_pressure_app/screens/loading_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:health_data_store/health_data_store.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:path/path.dart';
 import 'package:provider/provider.dart';
@@ -24,9 +26,9 @@ late final BloodPressureModel _bloodPressureModel;
 
 void main() async {
   runApp(ConsistentFutureBuilder(
-      future: _loadApp(),
-      onWaiting: const LoadingScreen(),
-      onData: (context, widget) => widget,
+    future: _loadApp(),
+    onWaiting: const LoadingScreen(),
+    onData: (context, widget) => widget,
   ),);
 }
 
@@ -63,6 +65,11 @@ Future<Widget> _loadApp() async {
     File(join(await getDatabasesPath(), 'medicine.intakes')).writeAsStringSync(intakeHistory.serialize());
   });
 
+  final db = await HealthDataStore.load(await openDatabase(
+    join(await getDatabasesPath(), 'bp.db'),
+  ),);
+  // TODO: document
+
   // update logic
   if (settings.lastVersion == 0) {
     await updateLegacySettings(settings, exportSettings, csvExportSettings, pdfExportSettings, intervalStorageManager);
@@ -88,7 +95,8 @@ Future<Widget> _loadApp() async {
   // Reset the step size intervall to current on startup
   intervalStorageManager.mainPage.setToMostRecentIntervall();
 
-  print(AppLocalizations.delegate);
+  // TODO: migrate old data and remove add methods
+  // TODO: fix navigation test failures
 
   return MultiProvider(providers: [
     ChangeNotifierProvider(create: (context) => _bloodPressureModel),
@@ -99,7 +107,15 @@ Future<Widget> _loadApp() async {
     ChangeNotifierProvider(create: (context) => intervalStorageManager),
     ChangeNotifierProvider(create: (context) => exportColumnsManager),
     ChangeNotifierProvider(create: (context) => intakeHistory),
-  ], child: const AppRoot(),);
+  ],
+  child: MultiRepositoryProvider(
+    providers: [
+      RepositoryProvider<BloodPressureRepository>(create: (_) => db.bpRepo),
+      RepositoryProvider<MedicineRepository>(create: (_) => db.medRepo),
+      RepositoryProvider<MedicineIntakeRepository>(create:(_) => db.intakeRepo),
+    ],
+    child: const AppRoot(),
+  ),);
 }
 
 /// Central [MaterialApp] widget of the app that sets the uniform style options.
@@ -109,24 +125,25 @@ class AppRoot extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) =>
-    Consumer<Settings>(builder: (context, settings, child) => MaterialApp(
-      title: 'Blood Pressure App',
-      onGenerateTitle: (context) => AppLocalizations.of(context)!.title,
-      theme: _buildTheme(ColorScheme.fromSeed(
-        seedColor: settings.accentColor,
-      ),),
-      darkTheme: _buildTheme(ColorScheme.fromSeed(
-        seedColor: settings.accentColor,
-        brightness: Brightness.dark,
-        background: Colors.black,
-      ),),
-      themeMode: settings.themeMode,
-      localizationsDelegates: AppLocalizations.localizationsDelegates,
-      supportedLocales: AppLocalizations.supportedLocales,
-      locale: settings.language,
-      home: const AppHome(),
-    ),
-  );
+      Consumer<Settings>(builder: (context, settings, child) =>
+          MaterialApp(
+            title: 'Blood Pressure App',
+            onGenerateTitle: (context) => AppLocalizations.of(context)!.title,
+            theme: _buildTheme(ColorScheme.fromSeed(
+              seedColor: settings.accentColor,
+            ),),
+            darkTheme: _buildTheme(ColorScheme.fromSeed(
+              seedColor: settings.accentColor,
+              brightness: Brightness.dark,
+              background: Colors.black,
+            ),),
+            themeMode: settings.themeMode,
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            supportedLocales: AppLocalizations.supportedLocales,
+            locale: settings.language,
+            home: const AppHome(),
+          ),
+      );
 
   ThemeData _buildTheme(ColorScheme colorScheme) {
     final inputBorder = OutlineInputBorder(
@@ -167,6 +184,7 @@ class AppRoot extends StatelessWidget {
 }
 
 bool _isDatabaseClosed = false;
+
 /// Close all connections to the databases and remove all listeners from provided objects.
 ///
 /// The app will most likely stop working after invoking this.
