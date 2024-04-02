@@ -5,6 +5,7 @@ import 'package:blood_pressure_app/model/blood_pressure/medicine/medicine_intake
 import 'package:flutter/material.dart';
 
 /// Description of a specific medicine.
+@deprecated
 class Medicine {
   /// Create a instance from a map created by [toMap].
   factory Medicine.fromMap(Map<String, dynamic> map) => Medicine(

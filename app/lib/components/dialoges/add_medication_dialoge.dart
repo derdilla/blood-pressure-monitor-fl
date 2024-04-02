@@ -1,10 +1,10 @@
 import 'package:blood_pressure_app/components/dialoges/fullscreen_dialoge.dart';
 import 'package:blood_pressure_app/components/settings/color_picker_list_tile.dart';
-import 'package:blood_pressure_app/model/blood_pressure/medicine/medicine.dart';
 import 'package:blood_pressure_app/model/storage/settings_store.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:health_data_store/health_data_store.dart';
 
 /// Dialoge to enter values for a [Medicine].
 class AddMedicationDialoge extends StatefulWidget {
@@ -43,10 +43,9 @@ class _AddMedicationDialogeState extends State<AddMedicationDialoge> {
       onActionButtonPressed: () {
         formKey.currentState?.save();
         Navigator.pop(context, Medicine(
-          widget.settings.highestMedIndex,
           designation: _designation ?? '',
-          color: _color,
-          defaultDosis: _defaultDosis,
+          color: _color.value,
+          dosis: _defaultDosis == null ? null : Weight.mg(_defaultDosis!),
         ),);
       },
       bottomAppBar: widget.settings.bottomAppBars,

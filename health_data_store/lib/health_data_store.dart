@@ -36,3 +36,5 @@ export 'src/types/date_range.dart';
 export 'src/types/medicine.dart';
 export 'src/types/medicine_intake.dart';
 export 'src/types/note.dart';
+export 'src/types/units/pressure.dart';
+export 'src/types/units/weight.dart';

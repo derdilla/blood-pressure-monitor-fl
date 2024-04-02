@@ -110,9 +110,9 @@ Future<Widget> _loadApp() async {
   ],
   child: MultiRepositoryProvider(
     providers: [
-      RepositoryProvider<BloodPressureRepository>(create: (_) => db.bpRepo),
-      RepositoryProvider<MedicineRepository>(create: (_) => db.medRepo),
-      RepositoryProvider<MedicineIntakeRepository>(create:(_) => db.intakeRepo),
+      RepositoryProvider(create: (context) => db.bpRepo),
+      RepositoryProvider(create: (context) => db.medRepo),
+      RepositoryProvider(create: (context) => db.intakeRepo),
     ],
     child: const AppRoot(),
   ),);
