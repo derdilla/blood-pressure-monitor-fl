@@ -504,5 +504,7 @@
   "valueDistribution": "Value distribution",
   "@valueDistribution": {},
   "titleInCsv": "Title in CSV",
-  "@titleInCsv": {}
+  "@titleInCsv": {},
+  "preferredPressureUnit": "Preferred pressure unit",
+  "@preferredPressureUnit": {}
 }
