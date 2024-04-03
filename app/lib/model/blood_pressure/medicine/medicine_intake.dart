@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 /// Instance of a medicine intake.
+@deprecated
 class MedicineIntake implements Comparable<Object> {
   /// Create a intake from a String created by [serialize].
   ///

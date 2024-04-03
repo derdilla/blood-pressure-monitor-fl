@@ -1,9 +1,9 @@
 import 'dart:async';
 
 import 'package:blood_pressure_app/components/measurement_list/measurement_list_entry.dart';
-import 'package:blood_pressure_app/model/blood_pressure/medicine/medicine_intake.dart';
 import 'package:blood_pressure_app/model/storage/settings_store.dart';
 import 'package:flutter/material.dart';
+import 'package:health_data_store/health_data_store.dart';
 import 'package:intl/intl.dart';
 
 /// Medicine intake to display in a list.
@@ -31,7 +31,7 @@ class IntakeListEntry extends StatelessWidget {
   @override
   Widget build(BuildContext context) => ListTile(
     title: Text(intake.medicine.designation),
-    subtitle: Text(DateFormat(settings.dateFormatString).format(intake.timestamp)),
+    subtitle: Text(DateFormat(settings.dateFormatString).format(intake.time)),
     trailing: Row(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -50,7 +50,7 @@ class IntakeListEntry extends StatelessWidget {
       ],
     ),
     leading: const Icon(Icons.medication),
-    iconColor: intake.medicine.color,
+    iconColor: intake.medicine.color == null ? null : Color(intake.medicine.color!),
   );
 
 

@@ -12,7 +12,9 @@ import 'package:blood_pressure_app/screens/statistics_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:health_data_store/health_data_store.dart' show MedicineIntakeRepository, MedicineRepository;
 import 'package:provider/provider.dart';
 
 /// Is true during the first [AppHome.build] before creating the widget.
@@ -32,7 +34,7 @@ class AppHome extends StatelessWidget {
       if (Provider.of<Settings>(context, listen: false).startWithAddMeasurementPage) {
         SchedulerBinding.instance.addPostFrameCallback((_) async {
           final model = Provider.of<BloodPressureModel>(context, listen: false);
-          final intakes = Provider.of<IntakeHistory>(context, listen: false);
+          final intakes = RepositoryProvider.of<MedicineIntakeRepository>(context);
           final measurement = await showAddEntryDialoge(context, Provider.of<Settings>(context, listen: false));
           if (measurement == null) return;
           if (measurement.$1 != null) {
@@ -43,7 +45,7 @@ class AppHome extends StatelessWidget {
             }
           }
           if (measurement.$2 != null) {
-            intakes.addIntake(measurement.$2!);
+            intakes.add(measurement.$2!);
           }
         });
       }
@@ -61,8 +63,7 @@ class AppHome extends StatelessWidget {
         return Center(
           child: Padding(
             padding: const EdgeInsets.only(top: 20),
-            child: Consumer<IntakeHistory>(builder: (context, intakeHistory, child) =>
-              Consumer<IntervallStoreManager>(builder: (context, intervalls, child) =>
+            child: Consumer<IntervallStoreManager>(builder: (context, intervalls, child) =>
               Consumer<Settings>(builder: (context, settings, child) =>
                 Column(children: [
                   const MeasurementGraph(),
@@ -71,10 +72,15 @@ class AppHome extends StatelessWidget {
                       LegacyMeasurementsList(context) :
                       BloodPressureBuilder(
                         rangeType: IntervallStoreManagerLocation.mainPage,
-                        onData: (context, records) => MeasurementList(
-                          settings: settings,
-                          records: records,
-                          intakes: intakeHistory.getIntakes(intervalls.mainPage.currentRange),
+                        onData: (context, records) => StreamBuilder(
+                          stream: RepositoryProvider.of<MedicineRepository>(context).,
+                          builder: (context, snapshot) {
+                            return MeasurementList(
+                              settings: settings,
+                              records: records,
+                              intakes: intakeHistory.getIntakes(intervalls.mainPage.currentRange),
+                            );
+                          },
                         ),
                       ),
                   ),
@@ -104,7 +110,7 @@ class AppHome extends StatelessWidget {
                       autofocus: true,
                       onPressed: () async {
                         final model = Provider.of<BloodPressureModel>(context, listen: false);
-                        final intakes = Provider.of<IntakeHistory>(context, listen: false);
+                        final intakes = RepositoryProvider.of<MedicineIntakeRepository>(context);
                         final measurement = await showAddEntryDialoge(context, Provider.of<Settings>(context, listen: false));
                         if (measurement == null) return;
                         if (measurement.$1 != null) {
@@ -115,7 +121,7 @@ class AppHome extends StatelessWidget {
                           }
                         }
                         if (measurement.$2 != null) {
-                          intakes.addIntake(measurement.$2!);
+                          intakes.add(measurement.$2!);
                         }
                       },
                       child: const Icon(Icons.add,),
@@ -156,15 +162,15 @@ class AppHome extends StatelessWidget {
 // TODO: consider removing duration override that only occurs in one on home.
 void _buildTransition(BuildContext context, Widget page, int duration) {
   Navigator.push(context,
-    TimedMaterialPageRouter(
+    _TimedMaterialPageRouter(
       transitionDuration: Duration(milliseconds: duration),
       builder: (context) => page,
     ),
   );
 }
 
-class TimedMaterialPageRouter extends MaterialPageRoute {
-  TimedMaterialPageRouter({
+class _TimedMaterialPageRouter extends MaterialPageRoute {
+  _TimedMaterialPageRouter({
     required super.builder,
     required this.transitionDuration,});
 

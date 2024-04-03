@@ -3,14 +3,14 @@ import 'dart:math';
 import 'package:blood_pressure_app/components/date_time_picker.dart';
 import 'package:blood_pressure_app/components/dialoges/fullscreen_dialoge.dart';
 import 'package:blood_pressure_app/components/settings/settings_widgets.dart';
-import 'package:blood_pressure_app/model/blood_pressure/medicine/medicine.dart';
-import 'package:blood_pressure_app/model/blood_pressure/medicine/medicine_intake.dart';
 import 'package:blood_pressure_app/model/blood_pressure/needle_pin.dart';
 import 'package:blood_pressure_app/model/blood_pressure/record.dart';
 import 'package:blood_pressure_app/model/storage/storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:health_data_store/health_data_store.dart' hide BloodPressureRecord;
 import 'package:intl/intl.dart';
 
 /// Input mask for entering measurements.
@@ -49,6 +49,10 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
   final noteFocusNode = FocusNode();
   late final TextEditingController sysController;
 
+  /// List of medicines.
+  ///
+  /// Filled after fetching from repo is complete.
+  List<Medicine> availableMeds = [];
 
   /// Currently selected time.
   late DateTime time;
@@ -68,15 +72,15 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
   /// Last [FormState.save]d note.
   String? notes;
   
-  /// Index of the selected medicine in non hidden medications.
-  ///
-  /// Non hidden medications are obtained at the start of the build method.
-  int? medicineId;
+  /// Medicine to save.
+  Medicine? selectedMed;
 
   /// Whether to show the medication dosis input
   bool _showMedicineDosisInput = false;
 
   /// Entered dosis of medication.
+  ///
+  /// Prefilled with default dosis of selected medicine.
   double? medicineDosis;
 
   /// Newlines in the note field.
@@ -101,6 +105,9 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
     if (widget.initialRecord != null) {
       _measurementFormActive = true;
     }
+
+    RepositoryProvider.of<MedicineRepository>(context).getAll()
+        .then((value) => setState(() => availableMeds.addAll(value)));
 
     sysFocusNode.requestFocus();
     ServicesBinding.instance.keyboard.addHandler(_onKey);
@@ -219,7 +226,6 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
 
   @override
   Widget build(BuildContext context) {
-    final medications = widget.settings.medications.where((e) => !e.hidden);
     final localizations = AppLocalizations.of(context)!;
     return FullscreenDialoge(
       onActionButtonPressed: () {
@@ -238,12 +244,11 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
             && (medicationFormKey.currentState?.validate() ?? false)) {
           medicationFormKey.currentState?.save();
           if (medicineDosis != null
-              && medicineId != null) {
+              && selectedMed != null) {
             intake = MedicineIntake(
-              timestamp: time,
-              medicine: medications
-                  .where((e) => e.id == medicineId).first,
-              dosis: medicineDosis!,
+              time: time,
+              medicine: selectedMed!,
+              dosis: Weight.mg(medicineDosis!),
             );
           }
         }
@@ -254,7 +259,7 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
         if (record == null && !_measurementFormActive && intake != null) {
           Navigator.pop(context, (record, intake));
         }
-        if (record != null && intake == null && medicineId == null) {
+        if (record != null && intake == null && selectedMed == null) {
           Navigator.pop(context, (record, intake));
         }
       },
@@ -346,7 +351,7 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
                 ],
               ),
             ),
-            if (medications.isNotEmpty && widget.initialRecord == null)
+            if (availableMeds.isNotEmpty && widget.initialRecord == null)
               Form(
                 key: medicationFormKey,
                 child: Padding(
@@ -356,10 +361,9 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
                       Expanded(
                         child: DropdownButtonFormField<Medicine?>(
                           isExpanded: true,
-                          value: medications
-                              .where((e) => e.id == medicineId).firstOrNull,
+                          value: selectedMed,
                           items: [
-                            for (final e in medications)
+                            for (final e in availableMeds)
                               DropdownMenuItem(
                                 value: e,
                                 child: Text(e.designation),
@@ -367,16 +371,16 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
                             DropdownMenuItem(
                               child: Text(localizations.noMedication),
                             ),
-                          ], // TODO: auto select dosis on pick
+                          ],
                           onChanged: (v) {
                             setState(() {
                               if (v != null) {
                                 _showMedicineDosisInput = true;
-                                medicineId = v.id;
-                                medicineDosis = v.defaultDosis;
+                                selectedMed = v;
+                                medicineDosis = v.dosis?.mg;
                               } else {
                                 _showMedicineDosisInput = false;
-                                medicineId = null;
+                                selectedMed = null;
                               }
                             });
                           },
