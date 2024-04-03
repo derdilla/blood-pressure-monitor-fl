@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:health_data_store/src/repositories/blood_pressure_repository_impl.dart';
 import 'package:health_data_store/src/types/date_range.dart';
 import 'package:test/test.dart';
@@ -143,5 +145,24 @@ void main() {
       end: DateTime.fromMillisecondsSinceEpoch(80000),
     ));
     expect(values, isEmpty);
+  });
+  test('should emit stream events on changes', () async {
+    final db = await mockDBManager();
+    addTearDown(db.close);
+
+    int notifyCount = 0;
+
+    final repo = BloodPressureRepositoryImpl(db.db);
+    unawaited(repo.subscribe().forEach((_) => notifyCount++));
+    final r = mockRecord(time: 10000, sys: 456, dia: 457, pul: 458);
+    expect(notifyCount, 0);
+    await repo.add(r);
+    expect(notifyCount, 1);
+    await repo.add(mockRecord(time: 20000, sys: 123));
+    expect(notifyCount, 2);
+    await repo.add(mockRecord(time: 30000, sys: 788, pul: 789));
+    expect(notifyCount, 3);
+    await repo.remove(r);
+    expect(notifyCount, 4);
   });
 }

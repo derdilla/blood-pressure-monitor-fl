@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:health_data_store/src/repositories/medicine_intake_repository_impl.dart';
 import 'package:health_data_store/src/repositories/medicine_repository_impl.dart';
 import 'package:health_data_store/src/types/date_range.dart';
@@ -115,5 +117,25 @@ void main() {
       end: DateTime.fromMillisecondsSinceEpoch(80000),
     ));
     expect(values, isEmpty);
+  });
+  test('should emit stream events on changes', () async {
+    final db = await mockDBManager();
+    addTearDown(db.close);
+    final medRepo = MedicineRepositoryImpl(db.db);
+    final med = mockMedicine();
+    await medRepo.add(med);
+
+    int notifyCount = 0;
+
+    final repo = MedicineIntakeRepositoryImpl(db.db);
+    unawaited(repo.subscribe().forEach((_) => notifyCount++));
+    final i = mockIntake(med);
+    expect(notifyCount, 0);
+    await repo.add(i);
+    expect(notifyCount, 1);
+    await repo.add(mockIntake(med, dosis: 12345));
+    expect(notifyCount, 2);
+    await repo.remove(i);
+    expect(notifyCount, 3);
   });
 }

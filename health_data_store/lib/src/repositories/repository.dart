@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:health_data_store/src/database_manager.dart';
 import 'package:health_data_store/src/types/date_range.dart';
 
@@ -20,4 +22,7 @@ abstract class Repository<T> {
 
   /// Inclusively returns all values in the specified [range].
   Future<List<T>> get(DateRange range);
+
+  /// Stream that emits events everytime the data changes.
+  Stream subscribe();
 }
