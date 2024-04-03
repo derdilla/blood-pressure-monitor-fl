@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:health_data_store/src/database_helper.dart';
 import 'package:health_data_store/src/database_manager.dart';
 import 'package:health_data_store/src/extensions/datetime_seconds.dart';
@@ -16,11 +18,14 @@ class MedicineIntakeRepositoryImpl extends MedicineIntakeRepository {
   /// Create a repository for medicine intakes.
   MedicineIntakeRepositoryImpl(this._db);
 
+  final _controller = StreamController.broadcast();
+
   /// The [DatabaseManager] managed database.
   final Database _db;
 
   @override
   Future<void> add(MedicineIntake intake) => _db.transaction((txn) async {
+    _controller.add(null);
     // obtain medicine id
     final medIDRes = await txn.query('Medicine',
       columns: ['medID'],
@@ -82,33 +87,39 @@ class MedicineIntakeRepositoryImpl extends MedicineIntakeRepository {
   }
 
   @override
-  Future<void> remove(MedicineIntake intake) => _db.rawDelete(
-    'DELETE FROM Intake WHERE entryID IN ('
-      'SELECT entryID FROM Timestamps '
-      'WHERE timestampUnixS = ?'
-    ') AND dosis = ? '
-    'AND medID IN ('
-      'SELECT medID FROM Medicine '
-      'WHERE designation = ?'
-      'AND color '
-        + ((intake.medicine.color != null) ? '= ?' : 'IS NULL') +
-      ' AND defaultDose '
-        + ((intake.medicine.dosis != null) ? '= ?' : 'IS NULL') +
-    ')',
-    [
-      intake.time.secondsSinceEpoch,
-      intake.dosis.mg,
-      intake.medicine.designation,
-      if (intake.medicine.color != null)
-        intake.medicine.color,
-      if (intake.medicine.dosis != null)
-        intake.medicine.dosis?.mg,
-    ]
-  );
+  Future<void> remove(MedicineIntake intake) {
+    _controller.add(null);
+    return _db.rawDelete(
+      'DELETE FROM Intake WHERE entryID IN ('
+        'SELECT entryID FROM Timestamps '
+        'WHERE timestampUnixS = ?'
+      ') AND dosis = ? '
+      'AND medID IN ('
+        'SELECT medID FROM Medicine '
+        'WHERE designation = ?'
+        'AND color '
+          + ((intake.medicine.color != null) ? '= ?' : 'IS NULL') +
+        ' AND defaultDose '
+          + ((intake.medicine.dosis != null) ? '= ?' : 'IS NULL') +
+      ')',
+      [
+        intake.time.secondsSinceEpoch,
+        intake.dosis.mg,
+        intake.medicine.designation,
+        if (intake.medicine.color != null)
+          intake.medicine.color,
+        if (intake.medicine.dosis != null)
+          intake.medicine.dosis?.mg,
+      ]
+    );
+  }
 
   Weight? _decode(Object? value) {
     if (value is! double) return null;
     return Weight.mg(value);
   }
+
+  @override
+  Stream subscribe() => _controller.stream;
 
 }

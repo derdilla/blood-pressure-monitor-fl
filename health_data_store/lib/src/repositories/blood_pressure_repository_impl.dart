@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:health_data_store/src/database_helper.dart';
 import 'package:health_data_store/src/database_manager.dart';
 import 'package:health_data_store/src/extensions/datetime_seconds.dart';
@@ -15,11 +17,14 @@ class BloodPressureRepositoryImpl extends BloodPressureRepository {
   /// Create [BloodPressureRecord] repository.
   BloodPressureRepositoryImpl(this._db);
 
+  final _controller = StreamController.broadcast(); // TODO: test all streams
+
   /// The [DatabaseManager] managed database
   final Database _db;
   
   @override
   Future<void> add(BloodPressureRecord record) async{
+    _controller.add(null);
     assert(record.sys != null || record.dia != null || record.pul != null,
      "Adding records that don't contain values(sys,dia,pul) can't be accessed"
      'and should therefore not be added to the repository.');
@@ -81,6 +86,7 @@ class BloodPressureRepositoryImpl extends BloodPressureRepository {
 
   @override
   Future<void> remove(BloodPressureRecord value) => _db.transaction((txn) async{
+    _controller.add(null);
     String query = 'SELECT t.entryID FROM Timestamps AS t ';
     if (value.sys != null)
       query += 'LEFT JOIN Systolic AS s ON t.entryID = s.entryID ';
@@ -119,5 +125,8 @@ class BloodPressureRepositoryImpl extends BloodPressureRepository {
     if (value is! double) return null;
     return Pressure.kPa(value);
   }
+
+  @override
+  Stream subscribe() => _controller.stream;
 
 }

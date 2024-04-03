@@ -1,3 +1,4 @@
+import 'dart:async';
 
 import 'package:health_data_store/src/repositories/blood_pressure_repository_impl.dart';
 import 'package:health_data_store/src/repositories/note_repository_impl.dart';
@@ -76,5 +77,23 @@ void main() {
       end: DateTime.fromMillisecondsSinceEpoch(800000),
     ));
     expect(values, isEmpty);
+  });
+
+  test('should emit stream events on changes', () async {
+    final db = await mockDBManager();
+    addTearDown(db.close);
+
+    int notifyCount = 0;
+
+    final repo = NoteRepositoryImpl(db.db);
+    unawaited(repo.subscribe().forEach((_) => notifyCount++));
+    final n = mockNote(time: 1000, note: 'asd');
+    expect(notifyCount, 0);
+    await repo.add(n);
+    expect(notifyCount, 1);
+    await repo.add(mockNote(time: 50000, color: 0x00FF00));
+    expect(notifyCount, 2);
+    await repo.remove(n);
+    expect(notifyCount, 3);
   });
 }

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:health_data_store/src/database_helper.dart';
 import 'package:health_data_store/src/database_manager.dart';
 import 'package:health_data_store/src/extensions/datetime_seconds.dart';
@@ -12,11 +14,14 @@ class NoteRepositoryImpl extends NoteRepository {
   /// Create a repository for notes.
   NoteRepositoryImpl(this._db);
 
+  final _controller = StreamController.broadcast();
+
   /// The [DatabaseManager] managed database.
   final Database _db;
 
   @override
   Future<void> add(Note note) async {
+    _controller.add(null);
     if (note.note == null && note.color == null) {
       assert(false);
       return;
@@ -60,7 +65,9 @@ class NoteRepositoryImpl extends NoteRepository {
   }
 
   @override
-  Future<void> remove(Note value) => _db.rawDelete(
+  Future<void> remove(Note value) {
+    _controller.add(null);
+    return _db.rawDelete(
     'DELETE FROM Notes WHERE entryID IN ('
       'SELECT entryID FROM Timestamps '
       'WHERE timestampUnixS = ?'
@@ -74,5 +81,8 @@ class NoteRepositoryImpl extends NoteRepository {
    if (value.color != null)
      value.color,
   ]);
+  }
 
+  @override
+  Stream subscribe() => _controller.stream;
 }
