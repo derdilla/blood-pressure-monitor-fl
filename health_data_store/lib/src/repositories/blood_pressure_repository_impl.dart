@@ -17,7 +17,7 @@ class BloodPressureRepositoryImpl extends BloodPressureRepository {
   /// Create [BloodPressureRecord] repository.
   BloodPressureRepositoryImpl(this._db);
 
-  final _controller = StreamController.broadcast(); // TODO: test all streams
+  final _controller = StreamController.broadcast();
 
   /// The [DatabaseManager] managed database
   final Database _db;
