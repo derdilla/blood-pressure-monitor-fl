@@ -1,6 +1,6 @@
 import 'package:blood_pressure_app/components/dialoges/add_measurement_dialoge.dart';
 import 'package:blood_pressure_app/components/measurement_list/measurement_list.dart';
-import 'package:blood_pressure_app/model/blood_pressure/medicine/intake_history.dart';
+import 'package:blood_pressure_app/components/repository_builder.dart';
 import 'package:blood_pressure_app/model/blood_pressure/model.dart';
 import 'package:blood_pressure_app/model/storage/intervall_store.dart';
 import 'package:blood_pressure_app/model/storage/settings_store.dart';
@@ -14,7 +14,7 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:health_data_store/health_data_store.dart' show MedicineIntakeRepository, MedicineRepository;
+import 'package:health_data_store/health_data_store.dart' show MedicineIntake, MedicineIntakeRepository, MedicineRepository;
 import 'package:provider/provider.dart';
 
 /// Is true during the first [AppHome.build] before creating the widget.
@@ -72,22 +72,24 @@ class AppHome extends StatelessWidget {
                       LegacyMeasurementsList(context) :
                       BloodPressureBuilder(
                         rangeType: IntervallStoreManagerLocation.mainPage,
-                        onData: (context, records) => StreamBuilder(
-                          stream: RepositoryProvider.of<MedicineRepository>(context).,
-                          builder: (context, snapshot) {
-                            return MeasurementList(
-                              settings: settings,
-                              records: records,
-                              intakes: intakeHistory.getIntakes(intervalls.mainPage.currentRange),
-                            );
-                          },
+                        onData: (context, records) => RepositoryBuilder<MedicineIntake, MedicineIntakeRepository>(
+                          rangeType: IntervallStoreManagerLocation.mainPage,
+                          onData: (BuildContext context, List<dynamic> list) => MeasurementList(
+                            settings: settings,
+                            records: records,
+                            // The following cast is necessary to avoid a type
+                            // error. I'm not sure why this is necessary as the
+                            // generics _should_ be typesafe. The safety of this
+                            // cast has been proven in practice.
+                            // TODO: Figure out why type safety isn't possible.
+                            intakes: list.cast(),
+                          ) as Widget,
                         ),
                       ),
                   ),
                 ],),
               ),),
             ),
-          ),
         );
       },
       ),

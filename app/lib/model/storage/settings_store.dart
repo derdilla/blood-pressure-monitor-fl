@@ -147,7 +147,7 @@ class Settings extends ChangeNotifier {
       'bottomAppBars': bottomAppBars,
       'medications': medications.map(jsonEncode).toList(),
       'highestMedIndex': highestMedIndex,
-      'preferredPressureUnit': preferredPressureUnit,
+      'preferredPressureUnit': preferredPressureUnit.encode(),
     };
 
   /// Serialize the object to a restoreable string.

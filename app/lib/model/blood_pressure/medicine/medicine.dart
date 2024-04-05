@@ -48,7 +48,7 @@ class Medicine {
   /// Color used to display medicine intake
   final Color color;
 
-  /// Default dosis used to autofill [MedicineIntake].
+  /// Default dosis used to autofill [OldMedicineIntake].
   final double? defaultDosis;
 
   /// Indicates that this medicine should not be shown in selection menus.

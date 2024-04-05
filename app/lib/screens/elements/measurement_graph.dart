@@ -122,7 +122,7 @@ class _LineChartState extends State<_LineChart> {
       /// Horizontally furthest value (same as last timestamp).
       double? graphEnd, 
       Iterable<BloodPressureRecord> allRecords,
-      Iterable<MedicineIntake> allIntakes,
+      Iterable<OldMedicineIntake> allIntakes,
       ) {
     final bars = [
       _buildBarData(animatedThickness, sysSpots, settings.sysColor, true, settings.sysWarn.toDouble()),
