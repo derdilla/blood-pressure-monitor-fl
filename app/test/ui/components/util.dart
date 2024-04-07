@@ -7,7 +7,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:health_data_store/health_data_store.dart';
 import 'package:provider/provider.dart';
-import 'package:sqflite/sqflite.dart';
+import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
 /// Create a root material widget with localizations.
 Widget materialApp(Widget child) => MaterialApp(
@@ -29,7 +29,7 @@ Future<Widget> appBase(Widget child, {
   BloodPressureModel? model,
 }) async {
   // TODO: migrate arguments
-  final db = await HealthDataStore.load(await openDatabase(inMemoryDatabasePath));
+  final db = await _getHealthDateStore();
 
   final meds = settings?.medications.map((e) => Medicine(
     designation: e.designation,
@@ -84,7 +84,7 @@ Future<Widget> newAppBase(Widget child,  {
 
   HealthDataStore? db;
   if  (bpRepo != null || medRepo != null || intakeRepo != null) {
-    db = await HealthDataStore.load(await openDatabase(inMemoryDatabasePath));
+    db = await _getHealthDateStore();
   }
 
   return MultiProvider(providers: [
@@ -123,7 +123,7 @@ Future<void> loadDialoge(WidgetTester tester, void Function(BuildContext context
 
 /// Get empty mock med repo.
 Future<MedicineRepository>  medRepo([List<Medicine>? meds]) async  {
-  final db = await HealthDataStore.load(await openDatabase(inMemoryDatabasePath));
+  final db = await _getHealthDateStore();
   final repo = db.medRepo;
   if (meds != null) {
     for (final med in meds) {
@@ -156,3 +156,11 @@ Medicine mockMedicine({
   _meds.add(med);
   return med;
 }
+
+/// Don't use this, use [_getHealthDateStore] to obtain.
+HealthDataStore? _db;
+Future<HealthDataStore> _getHealthDateStore() async {
+  _db ??= await HealthDataStore.load(await databaseFactoryFfi.openDatabase(inMemoryDatabasePath));
+  return _db!;
+}
+

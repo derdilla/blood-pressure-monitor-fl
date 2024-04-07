@@ -32,7 +32,7 @@ void main() {
       expect(find.text('Diastolic'), findsWidgets);
       expect(find.text('Pulse'), findsWidgets);
       expect(find.byType(ColorSelectionListTile), findsOneWidget);
-    });
+    }, timeout: const Timeout(Duration(seconds: 10)),);
     testWidgets('should prefill initialRecord values', (tester) async {
       await tester.pumpWidget(materialApp(
         AddEntryDialoge(
@@ -608,6 +608,6 @@ void main() {
       expect(focusedTextFormField, findsOneWidget);
       expect(find.descendant(of: focusedTextFormField, matching: find.text('Pulse')), findsNothing);
       expect(find.descendant(of: focusedTextFormField, matching: find.text('Note (optional)')), findsWidgets);
-    });
+    }, timeout: Timeout(Duration(seconds: 30)));
   });
 }
