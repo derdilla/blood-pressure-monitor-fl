@@ -49,7 +49,7 @@ void main() {
 
 final List<Medicine> _meds = [];
 
-/// Creates mock intake.
+/// Creates mock medicine.
 ///
 /// Medicines with the same properties will keep the correct id.
 Medicine mockMedicine({

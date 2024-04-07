@@ -13,11 +13,9 @@ import 'package:blood_pressure_app/model/storage/settings_store.dart';
 import 'package:blood_pressure_app/screens/settings_screen.dart';
 import 'package:blood_pressure_app/screens/statistics_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:health_data_store/health_data_store.dart';
-import 'package:provider/provider.dart';
-import 'package:sqflite/sqflite.dart';
+
+import 'components/util.dart';
 
 void main() {
   group('start page', () {
@@ -66,7 +64,6 @@ void main() {
 }
 
 /// Creates a the same App as the main method.
-@Deprecated('replaced by [newPumpAppRoot]')
 Future<void> pumpAppRoot(WidgetTester tester, {
   Settings? settings,
   ExportSettings? exportSettings,
@@ -76,79 +73,15 @@ Future<void> pumpAppRoot(WidgetTester tester, {
   IntakeHistory? intakeHistory,
   BloodPressureModel? model,
 }) async {
-  // TODO: migrate arguments
-  final db = await HealthDataStore.load(await openDatabase(inMemoryDatabasePath));
-
-  final meds = settings?.medications?.map((e) => Medicine(
-      designation: e.designation,
-      color: e.color.value,
-      dosis: e.defaultDosis != null ? Weight.mg(e.defaultDosis!) : null));
-  final medRepo = db.medRepo;
-  meds?.forEach(medRepo.add);
-
-  final intakeRepo = db.intakeRepo;
-  for (final e in intakeHistory?.getIntakes(DateTimeRange(
-      start: DateTime.fromMillisecondsSinceEpoch(0),
-      end: DateTime.fromMillisecondsSinceEpoch(999999999999))) ?? []) {
-    expect(meds, isNotNull);
-    expect(meds, isNotEmpty);
-    final med = meds!.firstWhere((e2) => e2.designation == e.medicine.designation);
-    intakeRepo.add(MedicineIntake(
-      time: e.timestamp,
-      dosis: Weight.mg(e.dosis),
-      medicine: med,
-    ));
-  }
-
-  // TODO: bpRepo
-
-  await newPumpAppRoot(tester,
+  await tester.pumpWidget(await appBase(const AppRoot(),
     settings: settings,
     exportSettings: exportSettings,
     csvExportSettings: csvExportSettings,
     pdfExportSettings: pdfExportSettings,
     intervallStoreManager: intervallStoreManager,
-    medRepo: medRepo,
-    intakeRepo: intakeRepo,
-  );
-}
-
-/// Creates a the same App as the main method.
-Future<void> newPumpAppRoot(WidgetTester tester, {
-  Settings? settings,
-  ExportSettings? exportSettings,
-  CsvExportSettings? csvExportSettings,
-  PdfExportSettings? pdfExportSettings,
-  IntervallStoreManager? intervallStoreManager,
-  BloodPressureRepository? bpRepo,
-  MedicineRepository? medRepo,
-  MedicineIntakeRepository? intakeRepo,
-}) async {
-  settings ??= Settings();
-  exportSettings ??= ExportSettings();
-  csvExportSettings ??= CsvExportSettings();
-  pdfExportSettings ??= PdfExportSettings();
-  intervallStoreManager ??= IntervallStoreManager(IntervallStorage(), IntervallStorage(), IntervallStorage());
-
-  HealthDataStore? db;
-  if  (bpRepo != null || medRepo != null || intakeRepo != null) {
-    db = await HealthDataStore.load(await openDatabase(inMemoryDatabasePath));
-  }
-
-  await tester.pumpWidget(MultiProvider(providers: [
-    ChangeNotifierProvider(create: (_) => settings),
-    ChangeNotifierProvider(create: (_) => exportSettings),
-    ChangeNotifierProvider(create: (_) => csvExportSettings),
-    ChangeNotifierProvider(create: (_) => pdfExportSettings),
-    ChangeNotifierProvider(create: (_) => intervallStoreManager),
-  ], child: MultiRepositoryProvider(
-    providers: [
-      RepositoryProvider(create: (context) => bpRepo ?? db!.bpRepo),
-      RepositoryProvider(create: (context) => medRepo ?? db!.medRepo),
-      RepositoryProvider(create: (context) => intakeRepo ?? db!.intakeRepo),
-    ],
-    child: const AppRoot(),
-  ),),);
+    intakeHistory: intakeHistory,
+    model: model,
+  ),);
 }
 
 class MockConfigDao implements ConfigDao {

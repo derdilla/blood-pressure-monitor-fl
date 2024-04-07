@@ -35,7 +35,10 @@ class AppHome extends StatelessWidget {
         SchedulerBinding.instance.addPostFrameCallback((_) async {
           final model = Provider.of<BloodPressureModel>(context, listen: false);
           final intakes = RepositoryProvider.of<MedicineIntakeRepository>(context);
-          final measurement = await showAddEntryDialoge(context, Provider.of<Settings>(context, listen: false));
+          final measurement = await showAddEntryDialoge(context,
+            Provider.of<Settings>(context, listen: false),
+            RepositoryProvider.of<MedicineRepository>(context),
+          );
           if (measurement == null) return;
           if (measurement.$1 != null) {
             if (context.mounted) {
@@ -113,7 +116,10 @@ class AppHome extends StatelessWidget {
                       onPressed: () async {
                         final model = Provider.of<BloodPressureModel>(context, listen: false);
                         final intakes = RepositoryProvider.of<MedicineIntakeRepository>(context);
-                        final measurement = await showAddEntryDialoge(context, Provider.of<Settings>(context, listen: false));
+                        final measurement = await showAddEntryDialoge(context,
+                          Provider.of<Settings>(context, listen: false),
+                          RepositoryProvider.of<MedicineRepository>(context),
+                        );
                         if (measurement == null) return;
                         if (measurement.$1 != null) {
                           if (context.mounted) {

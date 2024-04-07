@@ -62,7 +62,7 @@ void main() {
     expect(find.text('null'), findsNothing);
   });
   testWidgets('should open edit dialoge', (tester) async {
-    await tester.pumpWidget(appBase(MeasurementListRow(
+    await tester.pumpWidget(await appBase(MeasurementListRow(
       settings: Settings(), record: mockRecord(time: DateTime(2023),
         sys:1, dia: 2, pul: 3, note: 'testTxt',),),),);
     expect(find.byIcon(Icons.expand_more), findsOneWidget);

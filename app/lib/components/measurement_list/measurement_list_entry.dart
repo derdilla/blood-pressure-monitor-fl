@@ -3,7 +3,9 @@ import 'package:blood_pressure_app/model/blood_pressure/model.dart';
 import 'package:blood_pressure_app/model/blood_pressure/record.dart';
 import 'package:blood_pressure_app/model/storage/storage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:health_data_store/health_data_store.dart' hide BloodPressureRecord;
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
@@ -40,6 +42,7 @@ class MeasurementListRow extends StatelessWidget {
                   final model = Provider.of<BloodPressureModel>(context, listen: false);
                   final entry = await showAddEntryDialoge(context,
                     Provider.of<Settings>(context, listen: false),
+                    RepositoryProvider.of<MedicineRepository>(context),
                     record,
                   );
                   if (entry?.$1 != null) {

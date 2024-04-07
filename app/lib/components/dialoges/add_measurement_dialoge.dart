@@ -8,7 +8,6 @@ import 'package:blood_pressure_app/model/blood_pressure/record.dart';
 import 'package:blood_pressure_app/model/storage/storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:health_data_store/health_data_store.dart' hide BloodPressureRecord;
 import 'package:intl/intl.dart';
@@ -20,6 +19,7 @@ class AddEntryDialoge extends StatefulWidget {
   /// This is usually created through the [showAddEntryDialoge] function.
   const AddEntryDialoge({super.key,
     required this.settings,
+    required this.medRepo,
     this.initialRecord,
   });
 
@@ -34,6 +34,9 @@ class AddEntryDialoge extends StatefulWidget {
   /// When an initial record is set medicine input is not possible because it is
   /// saved separately.
   final BloodPressureRecord? initialRecord;
+
+  /// Repository that contains all selectable medicines.
+  final MedicineRepository medRepo;
 
   @override
   State<AddEntryDialoge> createState() => _AddEntryDialogeState();
@@ -106,7 +109,7 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
       _measurementFormActive = true;
     }
 
-    RepositoryProvider.of<MedicineRepository>(context).getAll()
+    widget.medRepo.getAll()
         .then((value) => setState(() => availableMeds.addAll(value)));
 
     sysFocusNode.requestFocus();
@@ -431,6 +434,7 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
 Future<(BloodPressureRecord?, MedicineIntake?)?> showAddEntryDialoge(
     BuildContext context,
     Settings settings,
+    MedicineRepository medRepo,
     [BloodPressureRecord? initialRecord,]) =>
   showDialog<(BloodPressureRecord?, MedicineIntake?)>(
       context: context, builder: (context) =>
@@ -438,6 +442,7 @@ Future<(BloodPressureRecord?, MedicineIntake?)?> showAddEntryDialoge(
         child: AddEntryDialoge(
           settings: settings,
           initialRecord: initialRecord,
+          medRepo: medRepo,
         ),
       ),
   );
