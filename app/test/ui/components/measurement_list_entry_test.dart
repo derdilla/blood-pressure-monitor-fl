@@ -85,5 +85,5 @@ void main() {
     expect(descTxt('2'), findsOneWidget);
     expect(descTxt('3'), findsOneWidget);
 
-  });
+  }, timeout: const Timeout(Duration(seconds: 10)),);
 }
