@@ -53,15 +53,16 @@ Future<Widget> appBase(Widget child, {
     ));
   }
 
-  return newAppBase(child,
-    settings: settings,
-    exportSettings: exportSettings,
-    csvExportSettings: csvExportSettings,
-    pdfExportSettings: pdfExportSettings,
-    intervallStoreManager: intervallStoreManager,
-    medRepo: medRepo,
-    intakeRepo: intakeRepo,
-  );
+  return Provider(create: (_) => model,
+    child: await newAppBase(child,
+      settings: settings,
+      exportSettings: exportSettings,
+      csvExportSettings: csvExportSettings,
+      pdfExportSettings: pdfExportSettings,
+      intervallStoreManager: intervallStoreManager,
+      medRepo: medRepo,
+      intakeRepo: intakeRepo,
+  ),);
 
   // TODO: bpRepo
 }
@@ -160,6 +161,7 @@ Medicine mockMedicine({
 /// Don't use this, use [_getHealthDateStore] to obtain.
 HealthDataStore? _db;
 Future<HealthDataStore> _getHealthDateStore() async {
+  TestWidgetsFlutterBinding.ensureInitialized();
   _db ??= await HealthDataStore.load(await databaseFactoryFfi.openDatabase(inMemoryDatabasePath));
   return _db!;
 }

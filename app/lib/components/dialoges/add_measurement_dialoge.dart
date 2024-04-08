@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:math';
 
 import 'package:blood_pressure_app/components/date_time_picker.dart';
@@ -109,8 +110,8 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
       _measurementFormActive = true;
     }
 
-    widget.medRepo.getAll()
-        .then((value) => setState(() => availableMeds.addAll(value)));
+    unawaited(widget.medRepo.getAll()
+        .then((value) => setState(() => availableMeds.addAll(value))));
 
     sysFocusNode.requestFocus();
     ServicesBinding.instance.keyboard.addHandler(_onKey);

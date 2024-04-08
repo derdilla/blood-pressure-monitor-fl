@@ -1,7 +1,6 @@
 import 'dart:math';
 
-import 'package:blood_pressure_app/model/blood_pressure/medicine/intake_history.dart';
-import 'package:blood_pressure_app/model/blood_pressure/medicine/medicine_intake.dart';
+import 'package:blood_pressure_app/components/repository_builder.dart';
 import 'package:blood_pressure_app/model/blood_pressure/record.dart';
 import 'package:blood_pressure_app/model/horizontal_graph_line.dart';
 import 'package:blood_pressure_app/model/storage/intervall_store.dart';
@@ -12,6 +11,7 @@ import 'package:collection/collection.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:health_data_store/health_data_store.dart' hide BloodPressureRecord;
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
@@ -28,11 +28,15 @@ class _LineChartState extends State<_LineChart> {
   @override
   Widget build(BuildContext context) => SizedBox(
         height: widget.height,
-        child: Consumer<IntakeHistory>(
-          builder: (context, intakeHistory, child) => Consumer<Settings>(
+        child: RepositoryBuilder<MedicineIntake, MedicineIntakeRepository>(
+          rangeType: IntervallStoreManagerLocation.mainPage,
+          onData: (context, List<dynamic> intakesData) => Consumer<Settings>(
           builder: (context, settings, child) => BloodPressureBuilder(
               rangeType: IntervallStoreManagerLocation.mainPage,
               onData: (BuildContext context, UnmodifiableListView<BloodPressureRecord> records) {
+                // TODO: Figure out why type safety isn't possible. (see home_screen for more info)
+                final List<MedicineIntake> intakes = intakesData.cast();
+
                 final List<BloodPressureRecord> data = records.toList();
                 data.sort((a, b) => a.creationTime.compareTo(b.creationTime));
 
@@ -93,12 +97,7 @@ class _LineChartState extends State<_LineChart> {
                           ),
                           lineBarsData: buildBars(animatedThickness, settings, sysSpots, diaSpots, pulSpots,
                               maxValue, minValue, graphBegin, graphEnd, records,
-                              intakeHistory.getIntakes(
-                                  DateTimeRange(
-                                      start: DateTime.fromMillisecondsSinceEpoch(graphBegin!.toInt()),
-                                      end: DateTime.fromMillisecondsSinceEpoch(graphEnd!.toInt()),
-                                  ),
-                              ),
+                              intakes,
                           ),
                       ),
                     ),
@@ -122,7 +121,7 @@ class _LineChartState extends State<_LineChart> {
       /// Horizontally furthest value (same as last timestamp).
       double? graphEnd, 
       Iterable<BloodPressureRecord> allRecords,
-      Iterable<OldMedicineIntake> allIntakes,
+      Iterable<MedicineIntake> allIntakes,
       ) {
     final bars = [
       _buildBarData(animatedThickness, sysSpots, settings.sysColor, true, settings.sysWarn.toDouble()),
@@ -143,13 +142,13 @@ class _LineChartState extends State<_LineChart> {
     for (final intake in allIntakes) {
       bars.add(LineChartBarData(
         spots: [
-          FlSpot(intake.timestamp.millisecondsSinceEpoch.toDouble(), minValue.toDouble()),
-          FlSpot(intake.timestamp.millisecondsSinceEpoch.toDouble(), maxValue + 5),
+          FlSpot(intake.time.millisecondsSinceEpoch.toDouble(), minValue.toDouble()),
+          FlSpot(intake.time.millisecondsSinceEpoch.toDouble(), maxValue + 5),
         ],
         barWidth: settings.needlePinBarWidth,
         dotData: const FlDotData(show: false),
         dashArray: [8,7],
-        color: intake.medicine.color,
+        color: intake.medicine.color == null ? null : Color(intake.medicine.color!),
       ),);
     }
     return bars;
@@ -279,6 +278,6 @@ class MeasurementGraph extends StatelessWidget {
     );
 }
 
-extension Sum<T> on List<T> {
+extension _Sum<T> on List<T> {
   double sum(num Function(T value) f) => fold<double>(0, (prev, e) => prev + f(e).toDouble());
 }

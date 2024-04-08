@@ -13,6 +13,7 @@ import 'package:blood_pressure_app/model/storage/settings_store.dart';
 import 'package:blood_pressure_app/screens/settings_screen.dart';
 import 'package:blood_pressure_app/screens/statistics_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'components/util.dart';
@@ -26,7 +27,7 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(find.byType(AddEntryDialoge), findsOneWidget);
-    }, timeout: const Timeout(Duration(seconds: 10)),);
+    }, timeout: const Timeout(Duration(seconds: 4)),);
     testWidgets('should navigate to settings page', (tester) async {
       await _pumpAppRoot(tester);
       expect(find.byIcon(Icons.settings), findsOneWidget);
@@ -53,13 +54,14 @@ void main() {
 
       expect(find.byType(SettingsPage), findsOneWidget);
       expect(find.byType(EnterTimeFormatDialoge), findsNothing);
-      expect(find.byKey(const Key('EnterTimeFormatScreen')), findsOneWidget);
-      await tester.tap(find.byKey(const Key('EnterTimeFormatScreen')));
+      final localizations = await AppLocalizations.delegate.load(const Locale('en'));
+      expect(find.text(localizations.enterTimeFormatScreen), findsOneWidget);
+      await tester.tap(find.text(localizations.enterTimeFormatScreen));
       await tester.pumpAndSettle();
 
       expect(find.byType(EnterTimeFormatDialoge), findsOneWidget);
     });
-    // ...
+    // TODO: ...
   });
 }
 
