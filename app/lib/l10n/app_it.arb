@@ -495,12 +495,16 @@
   "@addMedication": {},
   "name": "Nome",
   "@name": {},
-  "defaultDosis": "dosi predefinite",
+  "defaultDosis": "Dose predefinita",
   "@defaultDosis": {},
   "noMedication": "Nessun farmaco",
   "@noMedication": {},
   "dosis": "Dose",
   "@dosis": {},
   "valueDistribution": "Distribuzione dei valori",
-  "@valueDistribution": {}
+  "@valueDistribution": {},
+  "titleInCsv": "Titolo in CSV",
+  "@titleInCsv": {},
+  "preferredPressureUnit": "Unità di pressione preferita",
+  "@preferredPressureUnit": {}
 }
