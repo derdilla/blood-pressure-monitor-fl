@@ -419,5 +419,90 @@
   "color": "Farbe",
   "@color": {},
   "enterTimeFormatDesc": "Das Datumsformat besteht aus einer Mischung vordefinierter ICU-Strings sowie anderer Zeichen deiner Wahl.\n\n[Die vollständige Liste gültiger Formate findest du hier.](screen://TimeFormattingHelp)\n\nBitte beachte, dass kürzere/längere Zeitformat-Strings nicht die Spaltenbreiten ändern. Sie führen eher zu unerwünschten Umbrüchen.\n\nVoreingestellt: \"yy-MM-dd HH:mm\"",
-  "@enterTimeFormatDesc": {}
+  "@enterTimeFormatDesc": {},
+  "valueDistribution": "Werteverteilung",
+  "@valueDistribution": {},
+  "errParseEmptyCsvFile": "Es sind nicht genug Zeilen in der csv-Datei, um den Eintrag wiederherzustellen.",
+  "@errParseEmptyCsvFile": {},
+  "dosis": "Dosis",
+  "@dosis": {},
+  "restartNow": "Jetzt neustarten",
+  "@restartNow": {},
+  "deleteAllMeasurements": "Alle Einträge löschen",
+  "@deleteAllMeasurements": {},
+  "warnDeletionUnrecoverable": "Diese Handlung ist unumkehrbar, wenn sie keine Sicherung gemacht haben. Wollen sie wirklich mit der Löschung fortfahren?",
+  "@warnDeletionUnrecoverable": {},
+  "needlePinBarWidth": "Farblinienstärke",
+  "@needlePinBarWidth": {},
+  "errParseTimeNotRestoreable": "Es ist keine Spalte zum wiederherstellen des Zeitstempels vorhanden.",
+  "@errParseTimeNotRestoreable": {},
+  "needlePinBarWidthDesc": "Die dicke der Linien aus denen der Graph besteht.",
+  "@needlePinBarWidthDesc": {},
+  "errParseUnknownColumn": "Es wurde keine Spalte mit dem Titel \"{title}\" gefunden.",
+  "@errParseUnknownColumn": {
+    "placeholders": {
+      "title": {
+        "type": "String"
+      }
+    }
+  },
+  "errParseLineTooShort": "Zeile {lineNumber} ist kürzer als die erste Zeile.",
+  "@errParseLineTooShort": {
+    "placeholders": {
+      "lineNumber": {
+        "type": "int"
+      }
+    }
+  },
+  "manageExportColumns": "Export-spalten Verwaltung",
+  "@manageExportColumns": {},
+  "buildIn": "Eingebaut",
+  "@buildIn": {},
+  "addMedication": "Medikamentierung hinzufügen",
+  "@addMedication": {},
+  "bottomAppBars": "Dialogschaltflächen am unteren Bildschirmrand",
+  "@bottomAppBars": {},
+  "medications": "Medikamentierungen",
+  "@medications": {},
+  "name": "Bezeichnung",
+  "@name": {},
+  "noMedication": "Keine Medikamentierung",
+  "@noMedication": {},
+  "defaultDosis": "Standarddosis",
+  "@defaultDosis": {},
+  "titleInCsv": "Titel in CSV-Dateien",
+  "@titleInCsv": {},
+  "warnNeedsRestartForUsingApp": "Es wurden Dateien gelöscht. Starten sie die App neu bevor sie mit der Benutzung fortfahren!",
+  "@warnNeedsRestartForUsingApp": {},
+  "fileDeleted": "Datei gelöscht",
+  "@fileDeleted": {},
+  "fileAlreadyDeleted": "Datei bereits gelöscht",
+  "@fileAlreadyDeleted": {},
+  "deleteAllSettings": "Alle Einstellungen löschen",
+  "@deleteAllSettings": {},
+  "errExportColumnWithThisNameAlreadyExists": "Es existiert bereits eine Export-spalte mit diesem Namen.",
+  "@errExportColumnWithThisNameAlreadyExists": {},
+  "errParseFailedDecodingField": "Kann Feld \"{fieldContent}\" in Zeile {lineNumber} nicht entpacken.",
+  "@errParseFailedDecodingField": {
+    "placeholders": {
+      "lineNumber": {
+        "type": "int"
+      },
+      "fieldContent": {
+        "type": "String"
+      }
+    }
+  },
+  "exportFieldsPreset": "Export-spalten Voreinstellung",
+  "@exportFieldsPreset": {},
+  "remove": "Entfernen",
+  "@remove": {},
+  "csvTitle": "CSV-titel",
+  "@csvTitle": {},
+  "recordFormat": "Eintragsformatierung",
+  "@recordFormat": {},
+  "errAccuracyLoss": "Es ist ein Genauigkeitsverlust zu erwarten, wenn eigene Zeitformate verwendet werden.",
+  "@errAccuracyLoss": {},
+  "timeFormat": "Zeitformatierung",
+  "@timeFormat": {}
 }
