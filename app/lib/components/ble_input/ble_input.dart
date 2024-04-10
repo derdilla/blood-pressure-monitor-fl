@@ -48,21 +48,7 @@ class _BleInputState extends State<BleInput> {
             Text(localizations.errBleCantOpen),
             onTap: () => bloc.add(OpenBleInput()),
           ),
-          BleInputLoadSuccess() => state.availableDevices.isEmpty
-              ? _buildTwoElementCard(context,
-            const Icon(Icons.info),
-            Text(localizations.errBleNoDev),
-            onTap: () => bloc.add(OpenBleInput()),
-          ) : _buildMainCard(context, ListView.builder(
-            itemCount: state.availableDevices.length,
-            itemBuilder: (context, idx) => ListTile(
-              title: Text(state.availableDevices[idx].name),
-              trailing: state.availableDevices[idx].connectable == Connectable.available
-                  ? const Icon(Icons.bluetooth_audio)
-                  : const Icon(Icons.bluetooth_disabled),
-              onTap: () => bloc.add(BleInputDeviceSelected(state.availableDevices[idx])),
-            ),
-          ),),
+          BleInputLoadSuccess() => _buildLoadSuccess(state),
           BleInputPermissionFailure() => _buildTwoElementCard(context,
             const Icon(Icons.bluetooth_disabled),
             Text(localizations.errBleNoPerms),
@@ -101,7 +87,30 @@ class _BleInputState extends State<BleInput> {
     ),
   );
 
-  /// Builds the container used when input is open.
+  Widget _buildLoadSuccess(BleInputLoadSuccess state) {
+    final localizations = AppLocalizations.of(context)!;
+    if (state.availableDevices.isEmpty) {
+      return _buildTwoElementCard(context,
+        const Icon(Icons.info),
+        Text(localizations.errBleNoDev),
+        onTap: () => bloc.add(OpenBleInput()),
+      );
+    }
+    return SizedBox(
+      height: 250,
+      child: _buildMainCard(context, ListView.builder(
+        itemCount: state.availableDevices.length,
+        itemBuilder: (context, idx) => ListTile(
+          title: Text(state.availableDevices[idx].name),
+          trailing: state.availableDevices[idx].connectable == Connectable.available
+              ? const Icon(Icons.bluetooth_audio)
+              : const Icon(Icons.bluetooth_disabled),
+          onTap: () => bloc.add(BleInputDeviceSelected(state.availableDevices[idx])),
+        ),
+      ),),
+    );
+  }
+
   Widget _buildMainCard(BuildContext context, Widget child) => Card.outlined(
     color: Theme.of(context).cardColor,
     // borderRadius: BorderRadius.circular(24),
