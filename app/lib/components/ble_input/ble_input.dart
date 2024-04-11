@@ -88,6 +88,7 @@ class _BleInputState extends State<BleInput> {
   );
 
   Widget _buildLoadSuccess(BleInputLoadSuccess state) {
+    // List of available ble devices
     final localizations = AppLocalizations.of(context)!;
     if (state.availableDevices.isEmpty) {
       return _buildTwoElementCard(context,
