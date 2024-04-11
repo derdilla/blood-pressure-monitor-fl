@@ -24,16 +24,16 @@ late final ConfigDB _database;
 late final BloodPressureModel _bloodPressureModel;
 
 // TODO: remove
-final errors = <String>[];
+final debugLog = <String>[];
 
 void main() async {
   // TODO: remove
   FlutterError.onError = (details) {
     FlutterError.presentError(details);
-    errors.add('FLUTTER: {{$details}}');
+    debugLog.add('FLUTTER: {{$details}}');
   };
   PlatformDispatcher.instance.onError = (error, stack) {
-    errors.add('PLATFORM: {{$error||$stack}}');
+    debugLog.add('PLATFORM: {{$error||$stack}}');
     return true;
   };
 
