@@ -100,6 +100,11 @@ class BleInputBloc extends Bloc<BleInputEvent, BleInputState> {
       ),);
     });
 
+    on<CloseBleInput>((event, emit) async {
+      emit(BleInputClosed());
+      // TODO: cleanup
+    });
+
     // TODO: show capabilities during testing:
     // _ble.getDiscoveredServices()
 
