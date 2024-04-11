@@ -26,6 +26,11 @@ class BleInputLoadSuccess extends BleInputState {
   BleInputLoadSuccess(this.availableDevices);
 
   final List<DiscoveredDevice> availableDevices;
+
+  @override
+  String toString() {
+    return 'BleInputLoadSuccess{availableDevices: $availableDevices}';
+  }
 }
 
 /// Connecting to device.
@@ -66,4 +71,9 @@ class BleMeasurementSuccess extends BleInputState {
 
   /// Whether the measurement was taken at an improper position.
   bool? improperMeasurementPosition;
+
+  @override
+  String toString() {
+    return 'BleMeasurementSuccess{record: $record, bodyMoved: $bodyMoved, cuffLoose: $cuffLoose, irregularPulse: $irregularPulse, measurementStatus: $measurementStatus, improperMeasurementPosition: $improperMeasurementPosition}';
+  }
 }
