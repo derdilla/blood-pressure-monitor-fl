@@ -268,7 +268,7 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
           children: [
             BleInput(),
             TextButton(onPressed: () {
-              Clipboard.setData(ClipboardData(text: errors.join('\n')));
+              Clipboard.setData(ClipboardData(text: debugLog.join('\n')));
             }, child: Text('copy debug')),
             if (widget.settings.allowManualTimeInput)
               _buildTimeInput(localizations),
