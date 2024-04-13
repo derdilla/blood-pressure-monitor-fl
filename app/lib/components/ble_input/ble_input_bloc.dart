@@ -12,11 +12,11 @@ import 'package:permission_handler/permission_handler.dart';
 class BleInputBloc extends Bloc<BleInputEvent, BleInputState> {
   /// Create logic component for bluetooth measurement input.
   BleInputBloc(): super(BleInputClosed()) {
-    on<BleInputEvent>((event, emit) => switch (event) {
-      OpenBleInput() => _onOpenBleInput(event, emit),
-      CloseBleInput() => _onCloseBleInput(event, emit),
-      BleInputDeviceSelected() => _onBleInputDeviceSelected(event, emit),
-      BleBluetoothMeasurementReceived() => _onBleBluetoothMeasurementReceived(event, emit),
+    on<BleInputEvent>((event, emit) async => switch (event) {
+      OpenBleInput() => await _onOpenBleInput(event, emit),
+      CloseBleInput() => await _onCloseBleInput(event, emit),
+      BleInputDeviceSelected() => await _onBleInputDeviceSelected(event, emit),
+      BleBluetoothMeasurementReceived() => await _onBleBluetoothMeasurementReceived(event, emit),
     },);
 
     // TODO: show capabilities during testing:
@@ -42,17 +42,17 @@ class BleInputBloc extends Bloc<BleInputEvent, BleInputState> {
   ];
   
   
-  void _onOpenBleInput(OpenBleInput event, Emitter<BleInputState> emit) async {
+  Future<void> _onOpenBleInput(OpenBleInput event, Emitter<BleInputState> emit) async {
     emit(BleInputLoadInProgress());
     if (await Permission.bluetoothConnect.isDenied) {
       emit(BleInputPermissionFailure());
-      unawaited(Permission.bluetoothConnect.request());
+      await Permission.bluetoothConnect.request();
       return;
     }
     emit(BleInputLoadInProgress());
     if (await Permission.bluetoothScan.isDenied) {
       emit(BleInputPermissionFailure());
-      unawaited(Permission.bluetoothScan.request());
+      await Permission.bluetoothScan.request();
       return;
     }
     emit(BleInputLoadInProgress());
@@ -72,15 +72,15 @@ class BleInputBloc extends Bloc<BleInputEvent, BleInputState> {
       emit(BleInputLoadFailure());
     }
   }
-  
-  void _onCloseBleInput(CloseBleInput event, Emitter<BleInputState> emit) async {
+
+  Future<void> _onCloseBleInput(CloseBleInput event, Emitter<BleInputState> emit) async {
     await _deviceStreamSubscribtion?.cancel();
     await _ble.deinitialize();
     emit(BleInputClosed());
     // TODO: cleanup
   }
-  
-  void _onBleInputDeviceSelected(BleInputDeviceSelected event, Emitter<BleInputState> emit) async {
+
+  Future<void> _onBleInputDeviceSelected(BleInputDeviceSelected event, Emitter<BleInputState> emit) async {
     await _deviceStreamSubscribtion?.cancel();
     emit(BleConnectInProgress());
     try {
@@ -122,8 +122,8 @@ class BleInputBloc extends Bloc<BleInputEvent, BleInputState> {
       emit(BleConnectFailed());
     }
   }
-  
-  void _onBleBluetoothMeasurementReceived(BleBluetoothMeasurementReceived event, Emitter<BleInputState> emit) async {
+
+  Future<void> _onBleBluetoothMeasurementReceived(BleBluetoothMeasurementReceived event, Emitter<BleInputState> emit) async {
     await _deviceStreamSubscribtion?.cancel();
     emit(BleMeasurementInProgress());
     final decoded = BPMeasurementCharacteristic.parse(event.data);
