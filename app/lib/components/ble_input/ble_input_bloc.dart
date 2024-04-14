@@ -12,12 +12,11 @@ import 'package:permission_handler/permission_handler.dart';
 class BleInputBloc extends Bloc<BleInputEvent, BleInputState> {
   /// Create logic component for bluetooth measurement input.
   BleInputBloc(): super(BleInputClosed()) {
-    on<BleInputEvent>((event, emit) async => switch (event) {
-      OpenBleInput() => await _onOpenBleInput(event, emit),
-      CloseBleInput() => await _onCloseBleInput(event, emit),
-      BleInputDeviceSelected() => await _onBleInputDeviceSelected(event, emit),
-      BleBluetoothMeasurementReceived() => await _onBleBluetoothMeasurementReceived(event, emit),
-    },);
+    on<OpenBleInput>(_onOpenBleInput);
+    on<CloseBleInput>(_onCloseBleInput);
+    on<BleInputDeviceSelected>(_onBleInputDeviceSelected);
+    on<BleBluetoothMeasurementReceived>(_onBleBluetoothMeasurementReceived);
+    // TODO: figure out exhaustive approach
 
     // TODO: show capabilities during testing:
     // _ble.getDiscoveredServices()
