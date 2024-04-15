@@ -9,6 +9,7 @@ linter:
     - avoid_slow_async_io
     - comment_references
     - no_wildcard_variable_uses
+    - unawaited_futures
 
     # Style:
     - always_declare_return_types
