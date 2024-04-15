@@ -57,7 +57,6 @@ class BleInputBloc extends Bloc<BleInputEvent, BleInputState> {
     emit(BleInputLoadInProgress());
 
     try {
-      emit(BleInputLoadInProgress());
       await _ble.initialize();
       final deviceStream = _ble.scanForDevices(withServices: _requiredServices,);
       await _deviceStreamSubscribtion?.cancel();
@@ -67,6 +66,7 @@ class BleInputBloc extends Bloc<BleInputEvent, BleInputState> {
           emit(BleInputLoadSuccess(_availableDevices.toList()));
         }
       });
+      await _deviceStreamSubscribtion!.asFuture();
     } catch (e) {
       emit(BleInputLoadFailure());
     }
@@ -107,6 +107,7 @@ class BleInputBloc extends Bloc<BleInputEvent, BleInputState> {
               serviceId: Uuid.parse('1810'),
               deviceId: event.device.id,
             );
+            // TODO: extract subscription
             _ble.subscribeToCharacteristic(characteristic).listen((List<int> data) {
               add(BleBluetoothMeasurementReceived(data));
             });
