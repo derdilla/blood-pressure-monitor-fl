@@ -21,16 +21,16 @@ class BleInputLoadInProgress extends BleInputState {}
 /// Most permissions errors should be covered by [BleInputPermissionFailure] so
 /// this might not be actionable by the user.
 class BleInputLoadFailure extends BleInputState {}
-/// Found devices.
+/// Devices have been found and need selecting.
 class BleInputLoadSuccess extends BleInputState {
+  /// Devices have been found and need selecting.
   BleInputLoadSuccess(this.availableDevices);
 
+  /// List of all unique devices reported by the ble lib.
   final List<DiscoveredDevice> availableDevices;
 
   @override
-  String toString() {
-    return 'BleInputLoadSuccess{availableDevices: $availableDevices}';
-  }
+  String toString() => 'BleInputLoadSuccess{availableDevices: $availableDevices}';
 }
 
 /// Connecting to device.
@@ -73,7 +73,5 @@ class BleMeasurementSuccess extends BleInputState {
   bool? improperMeasurementPosition;
 
   @override
-  String toString() {
-    return 'BleMeasurementSuccess{record: $record, bodyMoved: $bodyMoved, cuffLoose: $cuffLoose, irregularPulse: $irregularPulse, measurementStatus: $measurementStatus, improperMeasurementPosition: $improperMeasurementPosition}';
-  }
+  String toString() => 'BleMeasurementSuccess{record: $record, bodyMoved: $bodyMoved, cuffLoose: $cuffLoose, irregularPulse: $irregularPulse, measurementStatus: $measurementStatus, improperMeasurementPosition: $improperMeasurementPosition}';
 }
