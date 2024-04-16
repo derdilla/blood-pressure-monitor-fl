@@ -305,7 +305,7 @@ void main() {
       expect(result?.$2, isA<MedicineIntake>()
           .having((p0) => p0.time.millisecondsSinceEpoch ~/ 2000, 'timestamp', openDialogeTimeStamp.millisecondsSinceEpoch ~/ 2000)
           .having((p0) => p0.medicine, 'medicine', med2)
-          .having((p0) => p0.dosis, 'dosis', 123.456),
+          .having((p0) => p0.dosis.mg, 'dosis', 123.456),
       );
     });
     testWidgets('should not allow invalid values', (tester) async {
@@ -544,7 +544,7 @@ void main() {
       expect(result, isNotNull);
       expect(result?.$1, isNull);
       expect(result?.$2, isA<MedicineIntake>()
-          .having((p0) => p0.dosis, 'dosis', 654.321),
+          .having((p0) => p0.dosis.mg, 'dosis', 654.321),
       );
     });
     testWidgets('should allow modifying entered dosis', (tester) async {
@@ -584,7 +584,7 @@ void main() {
       expect(result, isNotNull);
       expect(result?.$1, isNull);
       expect(result?.$2, isA<MedicineIntake>()
-          .having((p0) => p0.dosis, 'dosis', 654.322),
+          .having((p0) => p0.dosis.mg, 'dosis', 654.322),
       );
     });
     testWidgets('should not go back to last field when the current field is still filled', (tester) async {
