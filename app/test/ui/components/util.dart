@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:blood_pressure_app/model/blood_pressure/medicine/intake_history.dart';
 import 'package:blood_pressure_app/model/blood_pressure/model.dart';
 import 'package:blood_pressure_app/model/storage/storage.dart';
@@ -127,9 +129,13 @@ Future<void> loadDialoge(WidgetTester tester, void Function(BuildContext context
 
 /// Get empty mock med repo.
 // Using a instance of the real repository somehow causes a deadlock in tests.
-MedicineRepository medRepo([List<Medicine>? meds]) => MockMedRepo();
+MedicineRepository medRepo([List<Medicine>? meds]) => MockMedRepo(meds);
 
 class MockMedRepo implements MedicineRepository {
+  MockMedRepo(List<Medicine>? meds) {
+    if (meds != null) _meds.addAll(meds);
+  }
+
   final List<Medicine> _meds = [];
 
   @override
@@ -172,5 +178,23 @@ Future<HealthDataStore> _getHealthDateStore() async {
   TestWidgetsFlutterBinding.ensureInitialized();
   _db ??= await HealthDataStore.load(await databaseFactoryFfi.openDatabase(inMemoryDatabasePath));
   return _db!;
+}
+
+extension PumpUntilFound on WidgetTester {
+  Future<void> pumpUntilFound(
+    Finder finder, {
+    Duration timeout = const Duration(seconds: 5),
+  }) async {
+    bool timerDone = false;
+    final timer = Timer(timeout, () {
+      timerDone = true;
+      fail('Timout without finding widget: $finder');
+    });
+    while (!timerDone) {
+      await pump();
+      if (any(finder)) break;
+    }
+    timer.cancel();
+  }
 }
 
