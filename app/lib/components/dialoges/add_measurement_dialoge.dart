@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:math';
 
+import 'package:blood_pressure_app/components/consistent_future_builder.dart';
 import 'package:blood_pressure_app/components/date_time_picker.dart';
 import 'package:blood_pressure_app/components/dialoges/fullscreen_dialoge.dart';
 import 'package:blood_pressure_app/components/settings/settings_widgets.dart';
@@ -53,11 +54,6 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
   final noteFocusNode = FocusNode();
   late final TextEditingController sysController;
 
-  /// List of medicines.
-  ///
-  /// Filled after fetching from repo is complete.
-  List<Medicine> availableMeds = [];
-
   /// Currently selected time.
   late DateTime time;
 
@@ -109,9 +105,6 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
     if (widget.initialRecord != null) {
       _measurementFormActive = true;
     }
-
-    unawaited(widget.medRepo.getAll()
-        .then((value) => setState(() => availableMeds.addAll(value))));
 
     sysFocusNode.requestFocus();
     ServicesBinding.instance.keyboard.addHandler(_onKey);
@@ -355,72 +348,75 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
                 ],
               ),
             ),
-            if (availableMeds.isNotEmpty && widget.initialRecord == null)
-              Form(
-                key: medicationFormKey,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 16),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: DropdownButtonFormField<Medicine?>(
-                          isExpanded: true,
-                          value: selectedMed,
-                          items: [
-                            for (final e in availableMeds)
-                              DropdownMenuItem(
-                                value: e,
-                                child: Text(e.designation),
-                              ),
-                            DropdownMenuItem(
-                              child: Text(localizations.noMedication),
-                            ),
-                          ],
-                          onChanged: (v) {
-                            setState(() {
-                              if (v != null) {
-                                _showMedicineDosisInput = true;
-                                selectedMed = v;
-                                medicineDosis = v.dosis?.mg;
-                              } else {
-                                _showMedicineDosisInput = false;
-                                selectedMed = null;
-                              }
-                            });
-                          },
-                        ),
-                      ),
-                      if (_showMedicineDosisInput)
-                        const SizedBox(width: 16,),
-                      if (_showMedicineDosisInput)
+            if (widget.initialRecord == null)
+              ConsistentFutureBuilder(
+                future: widget.medRepo.getAll(),
+                onData: (BuildContext context, List<Medicine> availableMeds) => Form(
+                  key: medicationFormKey,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 16),
+                    child: Row(
+                      children: [
                         Expanded(
-                          child: TextFormField(
-                            initialValue: medicineDosis?.toString(),
-                            decoration: InputDecoration(
-                              labelText: localizations.dosis,
-                            ),
-                            keyboardType: TextInputType.number,
-                            onChanged: (value) {
+                          child: DropdownButtonFormField<Medicine?>(
+                            isExpanded: true,
+                            value: selectedMed,
+                            items: [
+                              for (final e in availableMeds)
+                                DropdownMenuItem(
+                                  value: e,
+                                  child: Text(e.designation),
+                                ),
+                              DropdownMenuItem(
+                                child: Text(localizations.noMedication),
+                              ),
+                            ],
+                            onChanged: (v) {
                               setState(() {
-                                final dosis = int.tryParse(value)?.toDouble()
-                                    ?? double.tryParse(value);
-                                if(dosis != null && dosis > 0) medicineDosis = dosis;
+                                if (v != null) {
+                                  _showMedicineDosisInput = true;
+                                  selectedMed = v;
+                                  medicineDosis = v.dosis?.mg;
+                                } else {
+                                  _showMedicineDosisInput = false;
+                                  selectedMed = null;
+                                }
                               });
-                            },
-                            inputFormatters: [FilteringTextInputFormatter.allow(
-                              RegExp(r'([0-9]+(\.([0-9]*))?)'),),],
-                            validator: (String? value) {
-                              if (!_showMedicineDosisInput) return null;
-                              if (((int.tryParse(value ?? '')?.toDouble()
-                                  ?? double.tryParse(value ?? '')) ?? 0) <= 0) {
-                                return localizations.errNaN;
-                              }
-                              return null;
                             },
                           ),
                         ),
+                        if (_showMedicineDosisInput)
+                          const SizedBox(width: 16,),
+                        if (_showMedicineDosisInput)
+                          Expanded(
+                            child: TextFormField(
+                              initialValue: medicineDosis?.toString(),
+                              decoration: InputDecoration(
+                                labelText: localizations.dosis,
+                              ),
+                              keyboardType: TextInputType.number,
+                              onChanged: (value) {
+                                setState(() {
+                                  final dosis = int.tryParse(value)?.toDouble()
+                                      ?? double.tryParse(value);
+                                  if(dosis != null && dosis > 0) medicineDosis = dosis;
+                                });
+                              },
+                              inputFormatters: [FilteringTextInputFormatter.allow(
+                                RegExp(r'([0-9]+(\.([0-9]*))?)'),),],
+                              validator: (String? value) {
+                                if (!_showMedicineDosisInput) return null;
+                                if (((int.tryParse(value ?? '')?.toDouble()
+                                    ?? double.tryParse(value ?? '')) ?? 0) <= 0) {
+                                  return localizations.errNaN;
+                                }
+                                return null;
+                              },
+                            ),
+                          ),
 
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               ),

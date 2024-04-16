@@ -9,6 +9,8 @@ import 'package:health_data_store/health_data_store.dart';
 import 'package:provider/provider.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
+import '../../ram_only_implementations.dart';
+
 /// Create a root material widget with localizations.
 Widget materialApp(Widget child) => MaterialApp(
   localizationsDelegates: AppLocalizations.localizationsDelegates,
@@ -53,7 +55,8 @@ Future<Widget> appBase(Widget child, {
     ));
   }
 
-  return Provider(create: (_) => model,
+  return Provider<BloodPressureModel>(
+    create: (_) => model ?? RamBloodPressureModel(),
     child: await newAppBase(child,
       settings: settings,
       exportSettings: exportSettings,
@@ -123,15 +126,20 @@ Future<void> loadDialoge(WidgetTester tester, void Function(BuildContext context
 }
 
 /// Get empty mock med repo.
-Future<MedicineRepository>  medRepo([List<Medicine>? meds]) async  {
-  final db = await _getHealthDateStore();
-  final repo = db.medRepo;
-  if (meds != null) {
-    for (final med in meds) {
-      await repo.add(med);
-    }
-  }
-  return repo;
+// Using a instance of the real repository somehow causes a deadlock in tests.
+MedicineRepository medRepo([List<Medicine>? meds]) => MockMedRepo();
+
+class MockMedRepo implements MedicineRepository {
+  final List<Medicine> _meds = [];
+
+  @override
+  Future<void> add(Medicine medicine) async => _meds.add(medicine);
+
+  @override
+  Future<List<Medicine>> getAll() async=> _meds;
+
+  @override
+  Future<void> remove(Medicine value) async => _meds.remove(value);
 }
 
 final List<Medicine> _meds = [];
