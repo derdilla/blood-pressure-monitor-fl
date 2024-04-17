@@ -351,7 +351,8 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
             if (widget.initialRecord == null)
               ConsistentFutureBuilder(
                 future: widget.medRepo.getAll(),
-                onData: (BuildContext context, List<Medicine> availableMeds) => Form(
+                onData: (BuildContext context, List<Medicine> availableMeds) =>
+                availableMeds.isEmpty ? const SizedBox.shrink() : Form(
                   key: medicationFormKey,
                   child: Padding(
                     padding: const EdgeInsets.symmetric(vertical: 16),
