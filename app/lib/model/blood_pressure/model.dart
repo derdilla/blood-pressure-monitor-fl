@@ -13,6 +13,7 @@ import 'package:provider/provider.dart';
 import 'package:sqflite/sqflite.dart';
 
 /// Model to access values in the measurement database.
+@Deprecated('use health_data_store')
 class BloodPressureModel extends ChangeNotifier {
 
   BloodPressureModel._create();

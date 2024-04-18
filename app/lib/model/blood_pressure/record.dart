@@ -1,8 +1,9 @@
 import 'package:blood_pressure_app/model/blood_pressure/needle_pin.dart';
 import 'package:flutter/material.dart';
 
-@immutable
 /// Immutable data representation of a saved measurement.
+@immutable
+@Deprecated('use health data store')
 class BloodPressureRecord {
   /// Create a measurement.
   BloodPressureRecord(DateTime creationTime, this.systolic, this.diastolic, this.pulse, this.notes, {
