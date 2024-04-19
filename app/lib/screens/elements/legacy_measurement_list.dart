@@ -1,15 +1,15 @@
+import 'dart:async';
 import 'dart:collection';
 
 import 'package:blood_pressure_app/components/dialoges/add_measurement_dialoge.dart';
 import 'package:blood_pressure_app/model/blood_pressure/model.dart';
-import 'package:blood_pressure_app/model/blood_pressure/record.dart';
 import 'package:blood_pressure_app/model/storage/intervall_store.dart';
 import 'package:blood_pressure_app/model/storage/settings_store.dart';
 import 'package:blood_pressure_app/screens/elements/blood_pressure_builder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:health_data_store/health_data_store.dart' hide BloodPressureRecord;
+import 'package:health_data_store/health_data_store.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
@@ -82,9 +82,9 @@ class LegacyMeasurementsList extends StatelessWidget {
                       return Column(
                         children: [
                           Dismissible(
-                            key: Key(data[index].creationTime.toIso8601String()),
+                            key: Key(data[index].time.toIso8601String()),
                             confirmDismiss: (direction) async {
-                              final model = Provider.of<BloodPressureModel>(context, listen: false);
+                              final repo = RepositoryProvider.of<BloodPressureRepository>(context);
                               if (direction == DismissDirection.startToEnd) { // edit
                                 final model = Provider.of<BloodPressureModel>(context, listen: false);
                                 final entry = await showAddEntryDialoge(context,
@@ -94,9 +94,11 @@ class LegacyMeasurementsList extends StatelessWidget {
                                 );
                                 if (entry?.$1 != null) {
                                   if (context.mounted) {
-                                    model.addAndExport(context, entry!.$1!);
+                                    // TODO: reimplement
+                                    // repo.addAndExport(context, entry!.$1!);
+                                    throw UnimplementedError('addAndExport not supported');
                                   } else {
-                                    model.add(entry!.$1!);
+                                    unawaited(repo.add(entry!.$1!));
                                   }
                                 }
                                 assert(entry?.$2 == null);
@@ -115,7 +117,7 @@ class LegacyMeasurementsList extends StatelessWidget {
                                                 child: Text(AppLocalizations.of(context)!.btnCancel),),
                                             ElevatedButton(
                                                 onPressed: () {
-                                                  model.delete(data[index].creationTime);
+                                                  unawaited(repo.remove(data[index]));
 
                                                   dialogeDeletionConfirmed = true;
                                                   Navigator.pop(context, );
@@ -124,7 +126,7 @@ class LegacyMeasurementsList extends StatelessWidget {
                                           ],
                                         ),);
                                 } else {
-                                  model.delete(data[index].creationTime);
+                                  unawaited(repo.remove(data[index]));
                                   dialogeDeletionConfirmed = true;
                                 }
 
@@ -137,12 +139,16 @@ class LegacyMeasurementsList extends StatelessWidget {
                                     action: SnackBarAction(
                                       label: AppLocalizations.of(context)!.btnUndo,
                                       onPressed: () async {
+                                        // TODO: reimplement
+                                        /*
                                         model.addAndExport(context, BloodPressureRecord(
                                             data[index].creationTime,
                                             data[index].systolic,
                                             data[index].diastolic,
                                             data[index].pulse,
                                             data[index].notes,),);
+                                         */
+                                        throw UnimplementedError('addAndExport not supported');
                                       },
                                     ),
                                   ),);
@@ -172,19 +178,20 @@ class LegacyMeasurementsList extends StatelessWidget {
                                 ),
                                 Expanded(
                                     flex: _tableElementsSizes[0],
-                                    child: Text(formatter.format(data[index].creationTime)),),
+                                    child: Text(formatter.format(data[index].time)),),
                                 Expanded(
                                     flex: _tableElementsSizes[1],
-                                    child: Text((data[index].systolic ?? '').toString()),),
+                                    child: Text((data[index].sys ?? '').toString()),),
                                 Expanded(
                                     flex: _tableElementsSizes[2],
-                                    child: Text((data[index].diastolic ?? '').toString()),),
+                                    child: Text((data[index].dia ?? '').toString()),),
                                 Expanded(
                                     flex: _tableElementsSizes[3],
-                                    child: Text((data[index].pulse ?? '').toString()),),
-                                Expanded(
+                                    child: Text((data[index].pul ?? '').toString()),),
+                                // TODO: reimplement notes
+                                /*Expanded(
                                     flex: _tableElementsSizes[4],
-                                    child: Text(data[index].notes),),
+                                    child: Text(data[index].),),*/
                                 Expanded(
                                   flex: _sideFlex,
                                   child: const SizedBox(),

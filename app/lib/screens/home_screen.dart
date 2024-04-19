@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:blood_pressure_app/components/dialoges/add_measurement_dialoge.dart';
 import 'package:blood_pressure_app/components/measurement_list/measurement_list.dart';
 import 'package:blood_pressure_app/components/repository_builder.dart';
@@ -14,7 +16,7 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:health_data_store/health_data_store.dart' show MedicineIntake, MedicineIntakeRepository, MedicineRepository;
+import 'package:health_data_store/health_data_store.dart' show BloodPressureRepository, MedicineIntake, MedicineIntakeRepository, MedicineRepository;
 import 'package:provider/provider.dart';
 
 /// Is true during the first [AppHome.build] before creating the widget.
@@ -33,7 +35,7 @@ class AppHome extends StatelessWidget {
     if (_appStart) {
       if (Provider.of<Settings>(context, listen: false).startWithAddMeasurementPage) {
         SchedulerBinding.instance.addPostFrameCallback((_) async {
-          final model = Provider.of<BloodPressureModel>(context, listen: false);
+          final repo = RepositoryProvider.of<BloodPressureRepository>(context);
           final intakes = RepositoryProvider.of<MedicineIntakeRepository>(context);
           final measurement = await showAddEntryDialoge(context,
             Provider.of<Settings>(context, listen: false),
@@ -42,13 +44,15 @@ class AppHome extends StatelessWidget {
           if (measurement == null) return;
           if (measurement.$1 != null) {
             if (context.mounted) {
-              model.addAndExport(context, measurement.$1!);
+              // TODO: reimplement
+              // model.addAndExport(context, measurement.$1!);
+              throw UnimplementedError('addAndExport not supported');
             } else {
-              model.add(measurement.$1!);
+              unawaited(repo.add(measurement.$1!));
             }
           }
           if (measurement.$2 != null) {
-            intakes.add(measurement.$2!);
+            unawaited(intakes.add(measurement.$2!));
           }
         });
       }

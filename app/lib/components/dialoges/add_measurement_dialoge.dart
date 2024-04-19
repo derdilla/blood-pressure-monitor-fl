@@ -6,12 +6,11 @@ import 'package:blood_pressure_app/components/date_time_picker.dart';
 import 'package:blood_pressure_app/components/dialoges/fullscreen_dialoge.dart';
 import 'package:blood_pressure_app/components/settings/settings_widgets.dart';
 import 'package:blood_pressure_app/model/blood_pressure/needle_pin.dart';
-import 'package:blood_pressure_app/model/blood_pressure/record.dart';
 import 'package:blood_pressure_app/model/storage/storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:health_data_store/health_data_store.dart' hide BloodPressureRecord;
+import 'package:health_data_store/health_data_store.dart';
 import 'package:intl/intl.dart';
 
 /// Input mask for entering measurements.

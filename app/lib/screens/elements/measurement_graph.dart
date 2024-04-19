@@ -1,7 +1,6 @@
 import 'dart:math';
 
 import 'package:blood_pressure_app/components/repository_builder.dart';
-import 'package:blood_pressure_app/model/blood_pressure/record.dart';
 import 'package:blood_pressure_app/model/horizontal_graph_line.dart';
 import 'package:blood_pressure_app/model/storage/intervall_store.dart';
 import 'package:blood_pressure_app/model/storage/settings_store.dart';
@@ -11,7 +10,7 @@ import 'package:collection/collection.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:health_data_store/health_data_store.dart' hide BloodPressureRecord;
+import 'package:health_data_store/health_data_store.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
@@ -38,7 +37,7 @@ class _LineChartState extends State<_LineChart> {
                 final List<MedicineIntake> intakes = intakesData.cast();
 
                 final List<BloodPressureRecord> data = records.toList();
-                data.sort((a, b) => a.creationTime.compareTo(b.creationTime));
+                data.sort((a, b) => a.time.compareTo(b.time));
 
                 // calculate lines for graph
                 final pulSpots = <FlSpot>[];
@@ -51,18 +50,18 @@ class _LineChartState extends State<_LineChart> {
                 /// Horizontally last value
                 double? graphEnd;
                 for (final e in data) {
-                  final x = e.creationTime.millisecondsSinceEpoch.toDouble();
-                  if (e.diastolic != null) {
-                    diaSpots.add(FlSpot(x, e.diastolic!.toDouble()));
-                    maxValue = max(maxValue, e.diastolic!);
+                  final x = e.time.millisecondsSinceEpoch.toDouble();
+                  if (e.dia != null) {
+                    diaSpots.add(FlSpot(x, e.dia!.mmHg.toDouble()));
+                    maxValue = max(maxValue, e.dia!.mmHg);
                   }
-                  if (e.systolic != null) {
-                    sysSpots.add(FlSpot(x, e.systolic!.toDouble()));
-                    maxValue = max(maxValue, e.systolic!);
+                  if (e.sys != null) {
+                    sysSpots.add(FlSpot(x, e.sys!.mmHg.toDouble()));
+                    maxValue = max(maxValue, e.sys!.mmHg);
                   }
-                  if (e.pulse != null) {
-                    pulSpots.add(FlSpot(x, e.pulse!.toDouble()));
-                    maxValue = max(maxValue, e.pulse!);
+                  if (e.pul != null) {
+                    pulSpots.add(FlSpot(x, e.pul!.mmHg.toDouble()));
+                    maxValue = max(maxValue, e.pul!.mmHg);
                   }
                   graphBegin ??= x;
                   graphEnd ??= x;
@@ -91,7 +90,7 @@ class _LineChartState extends State<_LineChart> {
                           maxX: graphEnd,
                           clipData: const FlClipData.all(),
                           titlesData: _buildFlTitlesData(settings,
-                              DateTimeRange(start: data.first.creationTime, end: data.last.creationTime),),
+                              DateTimeRange(start: data.first.time, end: data.last.time),),
                           lineTouchData: const LineTouchData(
                               touchTooltipData: LineTouchTooltipData(tooltipMargin: -200, tooltipRoundedRadius: 20),
                           ),
@@ -192,17 +191,18 @@ class _LineChartState extends State<_LineChart> {
 
   List<LineChartBarData> _buildNeedlePins(Iterable<BloodPressureRecord> allRecords, int min, int max, Settings settings,) {
     final pins = <LineChartBarData>[];
-    for (final r in allRecords.where((e) => e.needlePin != null)) {
+    // TODO: reimplement with health data store notes type
+    /*for (final r in allRecords.where((e) => e.needlePin != null)) {
       pins.add(LineChartBarData(
         spots: [
-          FlSpot(r.creationTime.millisecondsSinceEpoch.toDouble(), min.toDouble()),
-          FlSpot(r.creationTime.millisecondsSinceEpoch.toDouble(), max + 5),
+          FlSpot(r.time.millisecondsSinceEpoch.toDouble(), min.toDouble()),
+          FlSpot(r.time.millisecondsSinceEpoch.toDouble(), max + 5),
         ],
         barWidth: settings.needlePinBarWidth,
         dotData: const FlDotData(show: false),
         color: r.needlePin!.color.withAlpha(100),
       ),);
-    }
+    }*/
     return pins;
   }
 
@@ -257,7 +257,7 @@ class _LineChartState extends State<_LineChart> {
     );
 }
 
-// TODO: document
+// TODO: rewrite without fl_chart and simpler to maintain
 class MeasurementGraph extends StatelessWidget {
 
   const MeasurementGraph({super.key, this.height = 290});
