@@ -34,7 +34,7 @@ class _BleInputState extends State<BleInput> {
     child: BlocBuilder<BleInputBloc, BleInputState>(
       bloc: bloc,
       builder: (BuildContext context, BleInputState state) {
-        debugLog.add('STATE:${state.runtimeType}');
+        debugLog.add('${DateTime.now()} - STATE:${state.runtimeType}');
         final localizations = AppLocalizations.of(context)!;
         return switch (state) {
           BleInputClosed() => IconButton(
