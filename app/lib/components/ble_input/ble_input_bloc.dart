@@ -17,7 +17,6 @@ class BleInputBloc extends Bloc<BleInputEvent, BleInputState> {
     on<OpenBleInput>(_onOpenBleInput);
     on<CloseBleInput>(_onCloseBleInput);
     on<BleInputDeviceSelected>(_onBleInputDeviceSelected);
-    on<BleBluetoothMeasurementReceived>(_onBleBluetoothMeasurementReceived);
     // TODO: figure out exhaustive approach
 
     // TODO: show capabilities during testing:
@@ -110,10 +109,7 @@ class BleInputBloc extends Bloc<BleInputEvent, BleInputState> {
             deviceId: event.device.id,
           );
           // TODO: extract subscription
-          _ble.subscribeToCharacteristic(characteristic).listen((List<int> data) {
-            debugLog.add('BLE MESSAGE: $data');
-            add(BleBluetoothMeasurementReceived(data));
-          });
+          _ble.subscribeToCharacteristic(characteristic).listen(_onBleBluetoothMeasurementReceived);
           emit(BleConnectSuccess());
         } else if (update.connectionState == DeviceConnectionState.connecting) {
           emit(BleConnectInProgress());
@@ -127,11 +123,12 @@ class BleInputBloc extends Bloc<BleInputEvent, BleInputState> {
     }
   }
 
-  Future<void> _onBleBluetoothMeasurementReceived(BleBluetoothMeasurementReceived event, Emitter<BleInputState> emit) async {
+  void _onBleBluetoothMeasurementReceived(List<int> data, Emitter<BleInputState> emit) async {
     await _deviceStreamSubscribtion?.cancel();
     await _connectionUpdateStreamSubscribtion?.cancel();
     emit(BleMeasurementInProgress());
-    final decoded = BPMeasurementCharacteristic.parse(event.data);
+    debugLog.add('BLE MESSAGE: $data');
+    final decoded = BPMeasurementCharacteristic.parse(data);
     final record = BloodPressureRecord(
       decoded.time ?? DateTime.now(),
       // TODO: unit conversions
