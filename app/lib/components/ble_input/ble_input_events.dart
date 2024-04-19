@@ -17,12 +17,3 @@ class BleInputDeviceSelected extends BleInputEvent {
   /// The device to connect with.
   final DiscoveredDevice device;
 }
-
-/// A measurement was started over bluetooth.
-class BleBluetoothMeasurementReceived extends BleInputEvent {
-  /// Transmit binary data from a bluetooth device.
-  BleBluetoothMeasurementReceived(this.data);
-
-  /// The binary data received.
-  final List<int> data;
-}
