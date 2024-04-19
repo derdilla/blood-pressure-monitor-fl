@@ -109,7 +109,28 @@ class BleInputBloc extends Bloc<BleInputEvent, BleInputState> {
             deviceId: event.device.id,
           );
           // TODO: extract subscription
-          _ble.subscribeToCharacteristic(characteristic).listen(_onBleBluetoothMeasurementReceived);
+          _ble.subscribeToCharacteristic(characteristic).listen((List<int> data) async {
+            await _deviceStreamSubscribtion?.cancel();
+            await _connectionUpdateStreamSubscribtion?.cancel();
+            emit(BleMeasurementInProgress());
+            debugLog.add('BLE MESSAGE: $data');
+            final decoded = BPMeasurementCharacteristic.parse(data);
+            final record = BloodPressureRecord(
+              decoded.time ?? DateTime.now(),
+              // TODO: unit conversions
+              decoded.sys.toInt(),
+              decoded.dia.toInt(),
+              decoded.pul?.toInt(),
+              '',
+            );
+            emit(BleMeasurementSuccess(record,
+              bodyMoved: decoded.bodyMoved,
+              cuffLoose: decoded.cuffLoose,
+              irregularPulse: decoded.irregularPulse,
+              improperMeasurementPosition: decoded.improperMeasurementPosition,
+              measurementStatus: decoded.measurementStatus,
+            ),);
+          });
           emit(BleConnectSuccess());
         } else if (update.connectionState == DeviceConnectionState.connecting) {
           emit(BleConnectInProgress());
@@ -122,28 +143,4 @@ class BleInputBloc extends Bloc<BleInputEvent, BleInputState> {
       emit(BleConnectFailed());
     }
   }
-
-  void _onBleBluetoothMeasurementReceived(List<int> data, Emitter<BleInputState> emit) async {
-    await _deviceStreamSubscribtion?.cancel();
-    await _connectionUpdateStreamSubscribtion?.cancel();
-    emit(BleMeasurementInProgress());
-    debugLog.add('BLE MESSAGE: $data');
-    final decoded = BPMeasurementCharacteristic.parse(data);
-    final record = BloodPressureRecord(
-      decoded.time ?? DateTime.now(),
-      // TODO: unit conversions
-      decoded.sys.toInt(),
-      decoded.dia.toInt(),
-      decoded.pul?.toInt(),
-      '',
-    );
-    emit(BleMeasurementSuccess(record,
-      bodyMoved: decoded.bodyMoved,
-      cuffLoose: decoded.cuffLoose,
-      irregularPulse: decoded.irregularPulse,
-      improperMeasurementPosition: decoded.improperMeasurementPosition,
-      measurementStatus: decoded.measurementStatus,
-    ),);
-  }
-
 }
