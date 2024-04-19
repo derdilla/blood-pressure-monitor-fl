@@ -8,6 +8,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:permission_handler/permission_handler.dart';
 
+import '../../main.dart';
+
 /// Logic for bluetooth measurement input.
 class BleInputBloc extends Bloc<BleInputEvent, BleInputState> {
   /// Create logic component for bluetooth measurement input.
@@ -109,6 +111,7 @@ class BleInputBloc extends Bloc<BleInputEvent, BleInputState> {
             );
             // TODO: extract subscription
             _ble.subscribeToCharacteristic(characteristic).listen((List<int> data) {
+              debugLog.add('BLE MESSAGE: $data');
               add(BleBluetoothMeasurementReceived(data));
             });
             return BleConnectSuccess();
