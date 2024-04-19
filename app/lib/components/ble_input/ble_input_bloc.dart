@@ -37,6 +37,7 @@ class BleInputBloc extends Bloc<BleInputEvent, BleInputState> {
   final Set<DiscoveredDevice> _availableDevices = {};
 
   StreamSubscription<DiscoveredDevice>? _deviceStreamSubscribtion;
+  StreamSubscription<ConnectionStateUpdate>? _connectionUpdateStreamSubscribtion;
 
   final _requiredServices = [
     Uuid.parse('1810'),
@@ -76,6 +77,7 @@ class BleInputBloc extends Bloc<BleInputEvent, BleInputState> {
 
   Future<void> _onCloseBleInput(CloseBleInput event, Emitter<BleInputState> emit) async {
     await _deviceStreamSubscribtion?.cancel();
+    await _connectionUpdateStreamSubscribtion?.cancel();
     await _ble.deinitialize();
     emit(BleInputClosed());
     // TODO: cleanup
@@ -85,42 +87,41 @@ class BleInputBloc extends Bloc<BleInputEvent, BleInputState> {
     await _deviceStreamSubscribtion?.cancel();
     emit(BleConnectInProgress());
     try {
-      // TODO: extract subscription
-      final connectionUpdateStream = _ble.connectToAdvertisingDevice(
+      await _connectionUpdateStreamSubscribtion?.cancel();
+      _connectionUpdateStreamSubscribtion = _ble.connectToAdvertisingDevice(
         id: event.device.id,
         prescanDuration: const Duration(seconds: 5),
         withServices: _requiredServices,
         connectionTimeout: const Duration(minutes: 2),
-      );
-      await emit.forEach(connectionUpdateStream,
-        onData: (ConnectionStateUpdate update) {
-          if (update.failure != null) {
-            return BleConnectFailed();
-          } else if (update.connectionState == DeviceConnectionState.connected) {
-            // characteristics IDs (https://www.bluetooth.com/wp-content/uploads/Files/Specification/HTML/Assigned_Numbers/out/en/Assigned_Numbers.pdf?v=1711151578821):
-            // - Blood Pressure Measurement: 0x2A35 (https://bitbucket.org/bluetooth-SIG/public/src/main/gss/org.bluetooth.characteristic.blood_pressure_measurement.yaml)
-            // - Blood Pressure Records: 0x2A36 (https://bitbucket.org/bluetooth-SIG/public/src/main/gss/org.bluetooth.characteristic.blood_pressure_record.yaml)
-            //
-            // A record represents a stored measurement, so in theory we should
-            // search for a measurement.
-            // Definition: https://www.bluetooth.com/specifications/bls-1-1-1/
-            final characteristic = QualifiedCharacteristic(
-              characteristicId: Uuid.parse('2A35'),
-              serviceId: Uuid.parse('1810'),
-              deviceId: event.device.id,
-            );
-            // TODO: extract subscription
-            _ble.subscribeToCharacteristic(characteristic).listen((List<int> data) {
-              debugLog.add('BLE MESSAGE: $data');
-              add(BleBluetoothMeasurementReceived(data));
-            });
-            return BleConnectSuccess();
-          } else if (update.connectionState == DeviceConnectionState.connecting) {
-            return BleConnectInProgress();
-          }
-          return BleConnectFailed();
-        },
-      );
+      ).listen((update) {
+        if (update.failure != null) {
+          emit(BleConnectFailed());
+        } else if (update.connectionState == DeviceConnectionState.connected) {
+          // characteristics IDs (https://www.bluetooth.com/wp-content/uploads/Files/Specification/HTML/Assigned_Numbers/out/en/Assigned_Numbers.pdf?v=1711151578821):
+          // - Blood Pressure Measurement: 0x2A35 (https://bitbucket.org/bluetooth-SIG/public/src/main/gss/org.bluetooth.characteristic.blood_pressure_measurement.yaml)
+          // - Blood Pressure Records: 0x2A36 (https://bitbucket.org/bluetooth-SIG/public/src/main/gss/org.bluetooth.characteristic.blood_pressure_record.yaml)
+          //
+          // A record represents a stored measurement, so in theory we should
+          // search for a measurement.
+          // Definition: https://www.bluetooth.com/specifications/bls-1-1-1/
+          final characteristic = QualifiedCharacteristic(
+            characteristicId: Uuid.parse('2A35'),
+            serviceId: Uuid.parse('1810'),
+            deviceId: event.device.id,
+          );
+          // TODO: extract subscription
+          _ble.subscribeToCharacteristic(characteristic).listen((List<int> data) {
+            debugLog.add('BLE MESSAGE: $data');
+            add(BleBluetoothMeasurementReceived(data));
+          });
+          emit(BleConnectSuccess());
+        } else if (update.connectionState == DeviceConnectionState.connecting) {
+          emit(BleConnectInProgress());
+        } else {
+          emit(BleConnectFailed());
+        }
+      });
+      await _connectionUpdateStreamSubscribtion!.asFuture();
     } on TimeoutException {
       emit(BleConnectFailed());
     }
@@ -128,6 +129,7 @@ class BleInputBloc extends Bloc<BleInputEvent, BleInputState> {
 
   Future<void> _onBleBluetoothMeasurementReceived(BleBluetoothMeasurementReceived event, Emitter<BleInputState> emit) async {
     await _deviceStreamSubscribtion?.cancel();
+    await _connectionUpdateStreamSubscribtion?.cancel();
     emit(BleMeasurementInProgress());
     final decoded = BPMeasurementCharacteristic.parse(event.data);
     final record = BloodPressureRecord(
