@@ -29,8 +29,9 @@ dependencies:
     path: ../health_data_store/
   sqlparser: ^0.34.1
   flutter_bloc: ^8.1.4
-  flutter_reactive_ble: ^5.3.1
   permission_handler: ^11.3.1
+  convert: ^3.1.1
+  flutter_blue_plus: ^1.32.4
 
   # can become one custom dependency
   file_picker: ^5.2.11  # MIT
@@ -46,6 +47,7 @@ dev_dependencies:
   mockito: ^5.4.1
   sqflite_common_ffi: ^2.3.0
   translations_cleaner: ^0.0.5
+  build_runner: ^2.4.9
 
 flutter:
   uses-material-design: true
