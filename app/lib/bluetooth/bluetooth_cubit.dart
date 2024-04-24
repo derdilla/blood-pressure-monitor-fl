@@ -23,7 +23,7 @@ class BluetoothCubit extends Cubit<BluetoothState> {
     _adapterStateStateSubscription = _flutterBluePlus.adapterState.listen(_onAdapterStateChanged);
   }
 
-  FlutterBluePlusMockable _flutterBluePlus;
+  final FlutterBluePlusMockable _flutterBluePlus;
 
   BluetoothAdapterState _adapterState = BluetoothAdapterState.unknown;
 

@@ -1,6 +1,7 @@
 import 'dart:collection';
 import 'dart:convert';
 
+import 'package:blood_pressure_app/bluetooth/device_scan_cubit.dart';
 import 'package:blood_pressure_app/model/blood_pressure/medicine/medicine.dart';
 import 'package:blood_pressure_app/model/horizontal_graph_line.dart';
 import 'package:blood_pressure_app/model/storage/convert_util.dart';
@@ -42,6 +43,7 @@ class Settings extends ChangeNotifier {
     bool? useLegacyList,
     bool? bottomAppBars,
     List<Medicine>? medications,
+    List<String>? knownBleDev,
     int? highestMedIndex,
   }) {
     if (accentColor != null) _accentColor = accentColor;
@@ -67,6 +69,7 @@ class Settings extends ChangeNotifier {
     if (bottomAppBars != null) _bottomAppBars = bottomAppBars;
     if (medications != null) _medications.addAll(medications);
     if (highestMedIndex != null) _highestMedIndex = highestMedIndex;
+    if (knownBleDev != null) _knownBleDev = knownBleDev;
     _language = language; // No check here, as null is the default as well.
   }
 
@@ -99,6 +102,7 @@ class Settings extends ChangeNotifier {
       medications: ConvertUtil.parseList<String>(map['medications'])?.map((e) =>
           Medicine.fromJson(jsonDecode(e)),).toList(),
       highestMedIndex: ConvertUtil.parseInt(map['highestMedIndex']),
+      knownBleDev: ConvertUtil.parseList<String>(map['knownBleDev']),
     );
 
     // update
@@ -143,6 +147,7 @@ class Settings extends ChangeNotifier {
       'bottomAppBars': bottomAppBars,
       'medications': medications.map(jsonEncode).toList(),
       'highestMedIndex': highestMedIndex,
+      'knownBleDev': knownBleDev,
     };
 
   /// Serialize the object to a restoreable string.
@@ -337,6 +342,17 @@ class Settings extends ChangeNotifier {
   bool get bottomAppBars => _bottomAppBars;
   set bottomAppBars(bool value) {
     _bottomAppBars = value;
+    notifyListeners();
+  }
+
+  List<String> _knownBleDev = [];
+  /// Bluetooth devices that previously connected.
+  ///
+  /// The exact value that is stored here is determined in [DeviceScanCubit].
+  UnmodifiableListView<String> get knownBleDev =>
+      UnmodifiableListView(_knownBleDev);
+  set knownBleDev(List<String> value) {
+    _knownBleDev = value;
     notifyListeners();
   }
   
