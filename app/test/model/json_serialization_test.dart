@@ -96,6 +96,7 @@ void main() {
         horizontalGraphLines: [HorizontalGraphLine(Colors.blue, 1230)],
         bottomAppBars: true,
         medications: [mockMedicine(), mockMedicine(defaultDosis: 42)],
+        knownBleDev: ['a', 'b'],
       );
       final fromJson = Settings.fromJson(initial.toJson());
 
@@ -122,6 +123,7 @@ void main() {
       expect(initial.horizontalGraphLines.first.height, fromJson.horizontalGraphLines.first.height);
       expect(initial.needlePinBarWidth, fromJson.needlePinBarWidth);
       expect(initial.bottomAppBars, fromJson.bottomAppBars);
+      expect(initial.knownBleDev, fromJson.knownBleDev);
 
       expect(initial.toJson(), fromJson.toJson());
     });
