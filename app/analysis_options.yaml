@@ -8,7 +8,7 @@ linter:
     - always_use_package_imports
     - avoid_slow_async_io
     - comment_references
-    # - no_wildcard_variable_uses TODO: add equivalent https://pub.dev/packages/flutter_lints/changelog#300
+    - no_wildcard_variable_uses
 
     # Style:
     - always_declare_return_types
