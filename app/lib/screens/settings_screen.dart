@@ -45,6 +45,7 @@ class SettingsPage extends StatelessWidget {
             TitledColumn(title: Text(localizations.layout), children: [
               ListTile(
                 title: Text(localizations.enterTimeFormatScreen),
+                key: const Key('EnterTimeFormatScreen'),
                 subtitle: Text(settings.dateFormatString),
                 leading: const Icon(Icons.schedule),
                 trailing: const Icon(Icons.arrow_forward_ios),
