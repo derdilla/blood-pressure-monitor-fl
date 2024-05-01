@@ -1,0 +1,5 @@
+* Updated dependencies to new major versions
+* Migrate Flutter build style
+* Fix time formats page
+* Implement setting for the pressure unit (kPa, mmHg)
+* Update localizations (Turkish, German, Portuguese, Spanish, Italian)
