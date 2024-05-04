@@ -1,4 +1,3 @@
-import 'package:dump/dump.dart'; // only used in debug mode
 import 'package:flutter/foundation.dart';
 
 /// Simple class for manually logging in debug builds.
@@ -10,7 +9,7 @@ class Log {
       debugPrintStack();
       debugPrint('ERROR $message:');
       for (final e in dumps ?? []) {
-        dumpJson(e);
+        debugPrint(e);
       }
     }
   }
