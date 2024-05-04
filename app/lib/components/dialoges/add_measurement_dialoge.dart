@@ -1,6 +1,5 @@
 import 'dart:math';
 
-import 'package:blood_pressure_app/components/ble_input/ble_input.dart';
 import 'package:blood_pressure_app/components/date_time_picker.dart';
 import 'package:blood_pressure_app/components/dialoges/fullscreen_dialoge.dart';
 import 'package:blood_pressure_app/components/settings/settings_widgets.dart';
@@ -266,7 +265,7 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
         child: ListView(
           padding: const EdgeInsets.symmetric(horizontal: 8),
           children: [
-            BleInput(),
+            // BleInput(), TODO: replace
             TextButton(onPressed: () {
               Clipboard.setData(ClipboardData(text: debugLog.join('\n')));
             }, child: Text('copy debug')),
