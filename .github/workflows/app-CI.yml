@@ -12,7 +12,7 @@ on:
 
 env:
   FLUTTER_CHANNEL: 'beta'
-  DART_SDK: ${{ env.FLUTTER_CHANNEL }}
+  DART_SDK: 'beta'
   JAVA_VERSION: '21'
 
 jobs:
