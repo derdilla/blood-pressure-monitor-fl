@@ -1,4 +1,4 @@
-name: app-CI
+name: '📱 Application'
 
 on:
   push:
@@ -10,8 +10,14 @@ on:
       - ".github/workflows/app-CI.yml"
   workflow_dispatch:
 
+env:
+  FLUTTER_CHANNEL: 'beta'
+  DART_SDK: ${{ env.FLUTTER_CHANNEL }}
+  JAVA_VERSION: '21'
+
 jobs:
   test:
+    name: "🧪 Run test"
     runs-on: ubuntu-latest
  
     steps:
@@ -25,7 +31,7 @@ jobs:
     - name: Setup dart
       uses: dart-lang/setup-dart@v1
       with:
-        sdk: 'beta'
+        sdk: ${{ env.DART_SDK }}
     - name: Generate code
       run: dart pub get
       working-directory: ./health_data_store
@@ -36,8 +42,7 @@ jobs:
     - name: Setup Flutter
       uses: subosito/flutter-action@v2
       with:
-        # flutter-version: '3.18.0-0.2.pre'
-        channel: 'beta'
+        channel: ${{ env.FLUTTER_CHANNEL }}
     - name: Get dependencies
       run: flutter pub get
       working-directory: ./app
@@ -46,6 +51,7 @@ jobs:
       working-directory: ./app
 
   build-android:
+    name: "🛠️ Build Android"
     runs-on: ubuntu-latest
  
     steps:
@@ -55,11 +61,11 @@ jobs:
       uses: actions/setup-java@v2
       with:
         distribution: 'zulu'
-        java-version: '11'
+        java-version: ${{ env.JAVA_VERSION }}
     - name: Setup dart
       uses: dart-lang/setup-dart@v1
       with:
-        sdk: 'beta'
+        sdk: ${{ env.DART_SDK }}
     - name: Generate code
       run: dart pub get
       working-directory: ./health_data_store
@@ -70,8 +76,7 @@ jobs:
     - name: Setup Flutter
       uses: subosito/flutter-action@v2
       with:
-        # flutter-version: '3.18.0-0.2.pre'
-        channel: 'beta'
+        channel: ${{ env.FLUTTER_CHANNEL }}
     - name: Get dependencies
       run: flutter pub get
       working-directory: ./app
