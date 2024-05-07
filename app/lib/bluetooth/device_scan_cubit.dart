@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:blood_pressure_app/bluetooth/bluetooth_cubit.dart';
 import 'package:blood_pressure_app/bluetooth/flutter_blue_plus_mockable.dart';
+import 'package:blood_pressure_app/bluetooth/logging.dart';
 import 'package:blood_pressure_app/model/storage/settings_store.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
@@ -39,13 +40,10 @@ class DeviceScanCubit extends Cubit<DeviceScanState> {
   final FlutterBluePlusMockable _flutterBluePlus;
 
   late StreamSubscription<List<ScanResult>> _scanResultsSubscription;
-  late StreamSubscription<bool> _isScanningSubscription;
-  bool _isScanning = false;
 
   @override
   Future<void> close() async {
     await _scanResultsSubscription.cancel();
-    await _isScanningSubscription.cancel();
     await super.close();
   }
 
@@ -65,12 +63,12 @@ class DeviceScanCubit extends Cubit<DeviceScanState> {
     } catch (e) {
       _onScanError(e);
     }
-    _isScanningSubscription = _flutterBluePlus.isScanning
-        .listen(_onIsScanningChanged);
   }
 
   void _onScanResult(List<ScanResult> devices) {
-    assert(_isScanning);
+    assert(_flutterBluePlus.isScanningNow);
+    // No need to check whether the devices really support the searched
+    // characteristic as users have to select their device anyways.
     if(state is DeviceSelected) return;
     final preferred = devices.firstWhereOrNull((dev) =>
         settings.knownBleDev.contains(dev.device.advName));
@@ -86,12 +84,7 @@ class DeviceScanCubit extends Cubit<DeviceScanState> {
   }
 
   void _onScanError(Object error) {
-    // TODO
-  }
-
-  void _onIsScanningChanged(bool isScanning) {
-    _isScanning = isScanning;
-    // TODO: consider restarting
+    Log.err('Starting device scan failed');
   }
 
   /// Mark a new device as known and switch to selected device state asap.
@@ -103,16 +96,18 @@ class DeviceScanCubit extends Cubit<DeviceScanState> {
       _onScanError(e);
       return;
     }
-    assert(!_isScanning);
+    assert(!_flutterBluePlus.isScanningNow);
     emit(DeviceSelected(device));
-    settings.knownBleDev.add(device.advName); // TODO: does this work?
+    final List<String> list = settings.knownBleDev.toList();
+    list.add(device.advName);
+    settings.knownBleDev = list;
   }
 
   /// Remove all known devices and start scanning again.
   Future<void> clearKnownDevices() async {
     settings.knownBleDev = [];
     emit(DeviceListLoading());
-    if (!_isScanning) await _startScanning();
+    if (!_flutterBluePlus.isScanningNow) await _startScanning();
   }
 
 }
