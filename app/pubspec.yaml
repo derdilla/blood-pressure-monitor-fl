@@ -3,6 +3,8 @@ description: Track your blood pressure wherever you go
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
 version: 1.6.4+34
+# F-Droid needs the Flutter version used to build releases to be in the repository.
+# f-droid-flutter: 3.22.0-0.2.pre
 
 environment:
   sdk: '>=3.0.2 <4.0.0'
