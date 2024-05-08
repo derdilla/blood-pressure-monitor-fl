@@ -2,16 +2,21 @@ import 'dart:async';
 
 import 'package:blood_pressure_app/bluetooth/bluetooth_cubit.dart';
 import 'package:blood_pressure_app/bluetooth/flutter_blue_plus_mockable.dart';
+import 'package:blood_pressure_app/logging.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 
-@GenerateNiceMocks([MockSpec<FlutterBluePlusMockable>()])
+@GenerateNiceMocks([
+  MockSpec<FlutterBluePlusMockable>(),
+])
 import 'bluetooth_cubit_test.mocks.dart';
 
 void main() {
   test('should translate adapter stream to state', () async {
+    WidgetsFlutterBinding.ensureInitialized();
     final bluePlus = MockFlutterBluePlusMockable();
     when(bluePlus.adapterState).thenAnswer((_) =>
       Stream.fromIterable([
@@ -23,6 +28,7 @@ void main() {
         BluetoothAdapterState.turningOn,
         BluetoothAdapterState.on,
     ]));
+    Log.testExpectError = true;
     final cubit = BluetoothCubit(flutterBluePlus: bluePlus);
     expect(cubit.state, isA<BluetoothInitial>());
 
@@ -35,8 +41,6 @@ void main() {
       isA<BluetoothDisabled>(),
       isA<BluetoothReady>(),
     ]));
+    Log.testExpectError = false;
   });
-  // TODO: integration tests ?
-  test('should request permissions', () async {});
-  test('should enable bluetooth', () async {});
 }

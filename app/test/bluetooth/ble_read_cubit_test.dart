@@ -1,5 +1,5 @@
 import 'package:blood_pressure_app/bluetooth/ble_read_cubit.dart';
-import 'package:blood_pressure_app/bluetooth/logging.dart';
+import 'package:blood_pressure_app/logging.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';

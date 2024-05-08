@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:blood_pressure_app/bluetooth/flutter_blue_plus_mockable.dart';
+import 'package:blood_pressure_app/logging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
@@ -35,44 +36,52 @@ class BluetoothCubit extends Cubit<BluetoothState> {
     await super.close();
   }
 
-  void _onAdapterStateChanged(BluetoothAdapterState state) {
+  void _onAdapterStateChanged(BluetoothAdapterState state) async {
     _adapterState = state;
     switch (_adapterState) {
       case BluetoothAdapterState.unavailable:
         emit(BluetoothUnfeasible());
       case BluetoothAdapterState.unauthorized:
         emit(BluetoothUnauthorized());
+        await requestPermission();
       case BluetoothAdapterState.on:
         emit(BluetoothReady());
       case BluetoothAdapterState.off:
       case BluetoothAdapterState.turningOff:
       case BluetoothAdapterState.turningOn:
         emit(BluetoothDisabled());
+        await enableBluetooth();
       case BluetoothAdapterState.unknown:
         emit(BluetoothInitial());
     }
+  }
 
-    /// Request the permission to connect to bluetooth devices.
-    Future<bool> requestPermission() async {
-      assert(_adapterState == BluetoothAdapterState.unauthorized, 'No need to '
-          'request permission when device unavailable or already authorized.');
-      assert(await Permission.bluetoothConnect.isGranted, 'Permissions handler'
+  /// Request the permission to connect to bluetooth devices.
+  Future<bool> requestPermission() async {
+    assert(_adapterState == BluetoothAdapterState.unauthorized, 'No need to '
+        'request permission when device unavailable or already authorized.');
+    try {
+      assert(!await Permission.bluetoothConnect.isGranted, 'Permissions handler'
           'should report the same as blue_plus');
       final permission = await Permission.bluetoothConnect.request();
       return permission.isGranted;
+    } catch (error) {
+      Log.err('Failed to request bluetooth permissions', [error]);
+      return false;
     }
 
-    /// Request to enable bluetooth on the device
-    Future<bool> enableBluetooth() async {
-      assert(state is BluetoothDisabled, 'No need to enable bluetooth when '
-          'already enabled or not known to be disabled.');
+  }
+
+  /// Request to enable bluetooth on the device
+  Future<bool> enableBluetooth() async {
+    assert(state is BluetoothDisabled, 'No need to enable bluetooth when '
+        'already enabled or not known to be disabled.');
+    try {
       if (!Platform.isAndroid) return false;
-      try {
-        await _flutterBluePlus.turnOn();
-        return true;
-      } on FlutterBluePlusException {
-        return false;
-      }
+      await _flutterBluePlus.turnOn();
+      return true;
+    } on FlutterBluePlusException {
+      return false;
     }
   }
 }
