@@ -45,7 +45,14 @@ class BluetoothCubit extends Cubit<BluetoothState> {
         emit(BluetoothUnauthorized());
         await requestPermission();
       case BluetoothAdapterState.on:
-        emit(BluetoothReady());
+        if (await Permission.bluetoothConnect.isGranted) {
+          emit(BluetoothReady());
+          Permission.bluetoothConnect
+            .onGrantedCallback(() => _onAdapterStateChanged(state));
+        } else {
+          emit(BluetoothUnauthorized());
+        }
+
       case BluetoothAdapterState.off:
       case BluetoothAdapterState.turningOff:
       case BluetoothAdapterState.turningOn:
@@ -83,5 +90,15 @@ class BluetoothCubit extends Cubit<BluetoothState> {
     } on FlutterBluePlusException {
       return false;
     }
+  }
+
+  /// Reevaluate the current state.
+  ///
+  /// When the user is in another app like the device settings, sometimes
+  /// the app won't get notified about permission changes and such. In those
+  /// instances the user should have the option to manually recheck the state to
+  /// avoid getting stuck on a unauthorized state.
+  Future<void> forceRefresh() async {
+    _onAdapterStateChanged(_flutterBluePlus.adapterStateNow);
   }
 }

@@ -1,3 +1,4 @@
+import 'package:blood_pressure_app/components/bluetooth_input.dart';
 import 'package:blood_pressure_app/components/dialoges/add_measurement_dialoge.dart';
 import 'package:blood_pressure_app/components/measurement_list/measurement_list.dart';
 import 'package:blood_pressure_app/model/blood_pressure/medicine/intake_history.dart';
@@ -65,6 +66,7 @@ class AppHome extends StatelessWidget {
               Consumer<IntervallStoreManager>(builder: (context, intervalls, child) =>
               Consumer<Settings>(builder: (context, settings, child) =>
                 Column(children: [
+                  BluetoothInput(settings: Settings(),),
                   const MeasurementGraph(),
                   Expanded(
                     child: (settings.useLegacyList) ?

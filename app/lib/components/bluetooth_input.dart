@@ -14,6 +14,7 @@ class BluetoothInput extends StatefulWidget {
   /// Create a measurement input through bluetooth.
   const BluetoothInput({super.key, required this.settings});
 
+  /// Settings to store known devices.
   final Settings settings;
 
   @override
@@ -24,12 +25,16 @@ class _BluetoothInputState extends State<BluetoothInput> {
   /// Whether the user expanded bluetooth input
   bool _isActive = false;
 
+  // TODO: return values
+
   final BluetoothCubit _bluetoothCubit =  BluetoothCubit();
   StreamSubscription<BluetoothState>? _bluetoothSubscription;
+  DeviceScanCubit? _deviceScanCubit;
 
   void _returnToIdle() {
     _bluetoothSubscription?.cancel();
     _bluetoothSubscription = null;
+    _deviceScanCubit?.close().then((_) => _deviceScanCubit = null);
     if (_isActive) {
       setState(() {
         _isActive = false;
@@ -45,31 +50,28 @@ class _BluetoothInputState extends State<BluetoothInput> {
         child: CircularProgressIndicator(),
       ),
       BluetoothUnfeasible() => const SizedBox.shrink(),
-      BluetoothUnauthorized() => Align(
-        alignment: Alignment.topRight,
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(AppLocalizations.of(context)!.errBleNoPerms),
-            const Icon(Icons.bluetooth_disabled),
-            // TODO: tapable
-          ],
-        ),
+      BluetoothUnauthorized() => ListTile(
+        title: Text(AppLocalizations.of(context)!.errBleNoPerms),
+        leading: const Icon(Icons.bluetooth_disabled),
+        onTap: () async {
+          // TODO: test
+          await _bluetoothCubit.requestPermission();
+          await _bluetoothCubit.forceRefresh();
+        },
+        // TODO: add information icon
       ),
-      BluetoothDisabled() => Align(
-        alignment: Alignment.topRight,
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(AppLocalizations.of(context)!.bluetoothDisabled),
-            const Icon(Icons.bluetooth_disabled),
-            // TODO: tapable
-          ],
-        ),
+      BluetoothDisabled() => ListTile(
+        title: Text(AppLocalizations.of(context)!.bluetoothDisabled),
+        leading: const Icon(Icons.bluetooth_disabled),
+        onTap: () async {
+          await _bluetoothCubit.enableBluetooth();
+          await _bluetoothCubit.forceRefresh();
+        },
       ),
-      BluetoothReady() => IconButton(
-        icon: const Icon(Icons.bluetooth),
-        onPressed: () => setState(() => _isActive = true),
+      BluetoothReady() => ListTile(
+        leading: const Icon(Icons.bluetooth),
+        title: Text(AppLocalizations.of(context)!.bluetoothDisabled),
+        onTap: () => setState(() => _isActive = true),
       ),
     },
   );
@@ -78,12 +80,12 @@ class _BluetoothInputState extends State<BluetoothInput> {
     _bluetoothSubscription = _bluetoothCubit.stream.listen((state) {
       if (state is! BluetoothReady) _returnToIdle();
     });
-    final deviceScanBloc = DeviceScanCubit(
+    _deviceScanCubit = DeviceScanCubit(
       service: Guid('1810'),
       settings: widget.settings,
     );
     return BlocBuilder<DeviceScanCubit, DeviceScanState>(
-      bloc: deviceScanBloc,
+      bloc: _deviceScanCubit,
       builder: (context, DeviceScanState state) => switch(state) {
         DeviceListLoading() => _buildMainCard(context,
           child: const CircularProgressIndicator()),
@@ -93,9 +95,8 @@ class _BluetoothInputState extends State<BluetoothInput> {
             children: [
               for (final d in state.devices)
                 ListTile(
-                  // TODO: consider only passing the string
                   title: Text(d.device.platformName),
-                  onTap: () => deviceScanBloc.acceptDevice(d.device),
+                  onTap: () => _deviceScanCubit!.acceptDevice(d.device),
                 ),
             ],
           ),
@@ -105,13 +106,14 @@ class _BluetoothInputState extends State<BluetoothInput> {
               .connectTo(state.device.device.platformName)),
           child: FilledButton(
             child: Text(AppLocalizations.of(context)!.connect),
-            onPressed: () => deviceScanBloc.acceptDevice(state.device.device),
+            onPressed: () => _deviceScanCubit!.acceptDevice(state.device.device),
           ),
         ),
         DeviceSelected() => BlocBuilder<BleReadCubit, BleReadState>(
           bloc: BleReadCubit(state.device),
           builder: (BuildContext context, BleReadState state) => switch (state) {
-            BleReadInProgress() => _buildMainCard(context, child: CircularProgressIndicator()),
+            BleReadInProgress() => _buildMainCard(context,
+              child: const CircularProgressIndicator()),
             BleReadFailure() => _buildMainCard(context,
               child: Center(
                 child: Column(
@@ -136,7 +138,6 @@ class _BluetoothInputState extends State<BluetoothInput> {
                 ),
               ),
             ),
-
           },
         ),
       },
@@ -153,7 +154,7 @@ class _BluetoothInputState extends State<BluetoothInput> {
   Widget _buildMainCard(BuildContext context, {
     required Widget child,
     Widget? title,
-  }) => Card.outlined(
+  }) => Card(
     color: Theme.of(context).cardColor,
     // borderRadius: BorderRadius.circular(24),
     // width: MediaQuery.of(context).size.width,
@@ -164,7 +165,9 @@ class _BluetoothInputState extends State<BluetoothInput> {
       children: [
         Padding( // content
           padding: const EdgeInsets.all(24),
-          child: child,
+          child: Center(
+            child: child,
+          ),
         ),
         if (title != null)
           Align(
@@ -175,18 +178,10 @@ class _BluetoothInputState extends State<BluetoothInput> {
           alignment: Alignment.topRight,
           child: IconButton(
             icon: const Icon(Icons.close),
-            onPressed: () => null, // TODO
+            onPressed: _returnToIdle,
           ),
         ),
       ],
     ),
   );
-}
-
-enum _State {
-  /// Default state of the widget shown when no interaction happened.
-  idle,
-  /// Scanning and selecting devices.
-  deviceScan,
-  measurementRead,
 }
