@@ -2,7 +2,7 @@ part of 'device_scan_cubit.dart';
 
 /// Search of bluetooth devices that meet some criteria.
 @immutable
-abstract class DeviceScanState {}
+sealed class DeviceScanState {}
 
 /// Searching for devices or a reason they are not available.
 class DeviceListLoading extends DeviceScanState {}

@@ -27,7 +27,7 @@ part 'ble_read_state.dart';
 /// 3. If the searched characteristic is found read its value
 /// 4. If binary data is read decode it to object
 /// 5. Emit decoded object
-class BleReadCubit extends Cubit<BleRead> {
+class BleReadCubit extends Cubit<BleReadState> {
   /// Start reading a characteristic from a device.
   BleReadCubit(this._device)
     : super(BleReadInProgress()) {
