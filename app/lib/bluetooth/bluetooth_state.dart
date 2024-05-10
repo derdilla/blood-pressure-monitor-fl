@@ -2,11 +2,12 @@ part of 'bluetooth_cubit.dart';
 
 /// State of the devices bluetooth module.
 @immutable
-abstract class BluetoothState {}
+sealed class BluetoothState {}
 
 /// No information on whether bluetooth is available.
 ///
-/// Options relating to bluetooth should only be shown where they don't disturb.
+/// Users may show a loading indication but can not assume bluetooth is
+/// available.
 class BluetoothInitial extends BluetoothState {}
 
 /// There is no way bluetooth will work (e.g. no sensor).
