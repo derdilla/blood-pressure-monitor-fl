@@ -27,7 +27,7 @@ class DeviceScanCubit extends Cubit<DeviceScanState> {
     required this.settings,
   }) : _flutterBluePlus = flutterBluePlus ?? FlutterBluePlusMockable(),
         super(DeviceListLoading()) {
-    assert(!_flutterBluePlus.isScanningNow, '');
+    assert(!_flutterBluePlus.isScanningNow);
     _startScanning();
   }
 
@@ -44,6 +44,12 @@ class DeviceScanCubit extends Cubit<DeviceScanState> {
   @override
   Future<void> close() async {
     await _scanResultsSubscription.cancel();
+    try {
+      await _flutterBluePlus.stopScan();
+    } catch (e) {
+      Log.err('Failed to stop scanning', [e]);
+      return;
+    }
     await super.close();
   }
 

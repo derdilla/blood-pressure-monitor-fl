@@ -521,5 +521,7 @@
   "measurementSuccess": "Measurement taken successfully",
   "@measurementSuccess": {},
   "connect": "Connect",
-  "@connect": {}
+  "@connect": {},
+  "bluetoothInput": "Bluetooth input",
+  "@bluetoothInput": {}
 }
