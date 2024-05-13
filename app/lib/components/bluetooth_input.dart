@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:blood_pressure_app/bluetooth/ble_read_cubit.dart';
 import 'package:blood_pressure_app/bluetooth/bluetooth_cubit.dart';
 import 'package:blood_pressure_app/bluetooth/device_scan_cubit.dart';
+import 'package:blood_pressure_app/components/bluetooth_input/input_card.dart';
 import 'package:blood_pressure_app/model/storage/storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -20,6 +21,7 @@ class BluetoothInput extends StatefulWidget {
   @override
   State<BluetoothInput> createState() => _BluetoothInputState();
 }
+// TODO: more info
 
 class _BluetoothInputState extends State<BluetoothInput> {
   /// Whether the user expanded bluetooth input
@@ -154,34 +156,9 @@ class _BluetoothInputState extends State<BluetoothInput> {
   Widget _buildMainCard(BuildContext context, {
     required Widget child,
     Widget? title,
-  }) => Card(
-    color: Theme.of(context).cardColor,
-    // borderRadius: BorderRadius.circular(24),
-    // width: MediaQuery.of(context).size.width,
-    // height: MediaQuery.of(context).size.width,
-    // padding: const EdgeInsets.all(24),
-    margin: const EdgeInsets.all(8),
-    child: Stack(
-      children: [
-        Padding( // content
-          padding: const EdgeInsets.all(24),
-          child: Center(
-            child: child,
-          ),
-        ),
-        if (title != null)
-          Align(
-            alignment: Alignment.topLeft,
-            child: title,
-          ),
-        Align(
-          alignment: Alignment.topRight,
-          child: IconButton(
-            icon: const Icon(Icons.close),
-            onPressed: _returnToIdle,
-          ),
-        ),
-      ],
-    ),
+  }) => InputCard(
+    onClosed: _returnToIdle,
+    title: title,
+    child: child,
   );
 }
