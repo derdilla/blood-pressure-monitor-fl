@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:blood_pressure_app/bluetooth/ble_read_cubit.dart';
 import 'package:blood_pressure_app/bluetooth/bluetooth_cubit.dart';
 import 'package:blood_pressure_app/bluetooth/device_scan_cubit.dart';
+import 'package:blood_pressure_app/components/bluetooth_input/closed_bluetooth_input.dart';
 import 'package:blood_pressure_app/components/bluetooth_input/input_card.dart';
 import 'package:blood_pressure_app/model/storage/storage.dart';
 import 'package:flutter/material.dart';
@@ -22,6 +23,7 @@ class BluetoothInput extends StatefulWidget {
   State<BluetoothInput> createState() => _BluetoothInputState();
 }
 // TODO: more info
+// TODO: make toggleable in settings
 
 class _BluetoothInputState extends State<BluetoothInput> {
   /// Whether the user expanded bluetooth input
@@ -44,39 +46,7 @@ class _BluetoothInputState extends State<BluetoothInput> {
     }
   }
 
-  Widget _buildIdle(BuildContext context) => BlocBuilder<BluetoothCubit, BluetoothState>(
-    bloc: _bluetoothCubit,
-    builder: (context, BluetoothState state) => switch(state) {
-      BluetoothInitial() => const Align(
-        alignment: Alignment.topRight,
-        child: CircularProgressIndicator(),
-      ),
-      BluetoothUnfeasible() => const SizedBox.shrink(),
-      BluetoothUnauthorized() => ListTile(
-        title: Text(AppLocalizations.of(context)!.errBleNoPerms),
-        leading: const Icon(Icons.bluetooth_disabled),
-        onTap: () async {
-          // TODO: test
-          await _bluetoothCubit.requestPermission();
-          await _bluetoothCubit.forceRefresh();
-        },
-        // TODO: add information icon
-      ),
-      BluetoothDisabled() => ListTile(
-        title: Text(AppLocalizations.of(context)!.bluetoothDisabled),
-        leading: const Icon(Icons.bluetooth_disabled),
-        onTap: () async {
-          await _bluetoothCubit.enableBluetooth();
-          await _bluetoothCubit.forceRefresh();
-        },
-      ),
-      BluetoothReady() => ListTile(
-        leading: const Icon(Icons.bluetooth),
-        title: Text(AppLocalizations.of(context)!.bluetoothDisabled),
-        onTap: () => setState(() => _isActive = true),
-      ),
-    },
-  );
+  // TODO: bloc dispose
 
   Widget _buildActive(BuildContext context) {
     _bluetoothSubscription = _bluetoothCubit.stream.listen((state) {
@@ -149,7 +119,20 @@ class _BluetoothInputState extends State<BluetoothInput> {
   @override
   Widget build(BuildContext context) {
     if (_isActive) return _buildActive(context);
-    return _buildIdle(context);
+    return ClosedBluetoothInput(
+      bluetoothCubit: _bluetoothCubit,
+      onStarted: () => setState(() =>_isActive = true),
+      inputInfo: () async {
+        if (context.mounted) {
+          await showDialog(
+            context: context,
+            builder: (BuildContext context) => Text(
+              AppLocalizations.of(context)!.aboutBleInput,
+            )
+          );
+        }
+      },
+    );
   }
 
 
