@@ -532,6 +532,6 @@
   "@connect": {},
   "bluetoothInput": "Bluetooth input",
   "@bluetoothInput": {},
-  "aboutBleInput": "Some measurement devices allow automatically transmitting measurements through the BLE GATT protocol. You can pair your device here or disable this option in the settings.",
+  "aboutBleInput": "Some measurement devices are BLE GATT compatible. You can pair these devices here and automatically transmit measurements or disable this option in the settings.",
   "@aboutBleInput": {}
 }
