@@ -126,9 +126,16 @@ class _BluetoothInputState extends State<BluetoothInput> {
         if (context.mounted) {
           await showDialog(
             context: context,
-            builder: (BuildContext context) => Text(
-              AppLocalizations.of(context)!.aboutBleInput,
-            )
+            builder: (BuildContext context) => AlertDialog(
+              title: Text(AppLocalizations.of(context)!.bluetoothInput),
+              content: Text(AppLocalizations.of(context)!.aboutBleInput),
+                actions: <Widget>[
+                  ElevatedButton(
+                    child: Text((AppLocalizations.of(context)!.btnConfirm)),
+                    onPressed: () => Navigator.of(context).pop(),
+                  ),
+                ],
+            ),
           );
         }
       },
