@@ -60,6 +60,7 @@ class _BluetoothInputState extends State<BluetoothInput> {
       bloc: _deviceScanCubit,
       builder: (context, DeviceScanState state) => switch(state) {
         DeviceListLoading() => _buildMainCard(context,
+          title: Text(AppLocalizations.of(context)!.scanningForDevices),
           child: const CircularProgressIndicator()),
         DeviceListAvailable() => _buildMainCard(context,
           title: Text(AppLocalizations.of(context)!.selectDevice),
@@ -141,6 +142,7 @@ class _BluetoothInputState extends State<BluetoothInput> {
       },
     );
   }
+  // TODO: scanning devices info
 
 
   Widget _buildMainCard(BuildContext context, {

@@ -34,7 +34,7 @@ class InputCard extends StatelessWidget {
         left: 16.0,
       ),
       child: DefaultTextStyle(
-        style: Theme.of(context).textTheme.titleLarge ?? const TextStyle(),
+        style: Theme.of(context).textTheme.titleMedium ?? const TextStyle(),
         child: title!,
       ),
     ),

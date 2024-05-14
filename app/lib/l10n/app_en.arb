@@ -521,8 +521,12 @@
   "@selectDevice": {},
   "connectTo": "Connect to {deviceName}?",
   "@connectTo": {
-    "type": "String",
-    "example": "boso medicus CE6674"
+    "placeholders": {
+      "deviceName": {
+        "type": "String",
+        "example": "boso medicus CE6674"
+      }
+    }
   },
   "errMeasurementRead": "Error reading measurement",
   "@errBluetooth": {},
@@ -533,5 +537,7 @@
   "bluetoothInput": "Bluetooth input",
   "@bluetoothInput": {},
   "aboutBleInput": "Some measurement devices are BLE GATT compatible. You can pair these devices here and automatically transmit measurements or disable this option in the settings.",
-  "@aboutBleInput": {}
+  "@aboutBleInput": {},
+  "scanningForDevices": "Scanning for devices",
+  "@scanningForDevices": {}
 }
