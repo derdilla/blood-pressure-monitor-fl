@@ -63,7 +63,7 @@ class ClosedBluetoothInput extends StatelessWidget {
           },
         ),
         BluetoothReady() => _buildTile(
-          text: localizations.bluetoothDisabled,
+          text: localizations.bluetoothInput,
           icon: Icons.bluetooth,
           onTap: onStarted,
         ),
