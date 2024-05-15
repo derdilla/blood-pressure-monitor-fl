@@ -48,6 +48,7 @@ dev_dependencies:
   sqflite_common_ffi: ^2.3.0
   translations_cleaner: ^0.0.5
   build_runner: ^2.4.9
+  bloc_test: ^9.1.7
 
 flutter:
   uses-material-design: true
