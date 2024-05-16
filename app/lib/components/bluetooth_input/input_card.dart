@@ -41,11 +41,11 @@ class InputCard extends StatelessWidget {
   );
 
   Widget _buildBody() => Padding( // content
-    padding: const EdgeInsets.only(
-      top: 42,
-      bottom: 20,
-      left: 20,
-      right: 20,
+    padding: EdgeInsets.only(
+      top: (title == null) ? 12 : 42,
+      bottom: 12,
+      left: 8,
+      right: 8,
     ),
     child: Center(
       child: child,

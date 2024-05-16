@@ -4,6 +4,7 @@ import 'package:blood_pressure_app/bluetooth/ble_read_cubit.dart';
 import 'package:blood_pressure_app/bluetooth/bluetooth_cubit.dart';
 import 'package:blood_pressure_app/bluetooth/device_scan_cubit.dart';
 import 'package:blood_pressure_app/components/bluetooth_input/closed_bluetooth_input.dart';
+import 'package:blood_pressure_app/components/bluetooth_input/device_selection.dart';
 import 'package:blood_pressure_app/components/bluetooth_input/input_card.dart';
 import 'package:blood_pressure_app/model/storage/storage.dart';
 import 'package:flutter/material.dart';
@@ -62,26 +63,15 @@ class _BluetoothInputState extends State<BluetoothInput> {
         DeviceListLoading() => _buildMainCard(context,
           title: Text(AppLocalizations.of(context)!.scanningForDevices),
           child: const CircularProgressIndicator()),
-        DeviceListAvailable() => _buildMainCard(context,
-          title: Text(AppLocalizations.of(context)!.selectDevice),
-          child: ListView(
-            children: [
-              for (final d in state.devices)
-                ListTile(
-                  title: Text(d.device.platformName),
-                  onTap: () => _deviceScanCubit!.acceptDevice(d.device),
-                ),
-            ],
-          ),
+        DeviceListAvailable() => DeviceSelection(
+          scanResults: state.devices,
+          onAccepted: (dev) => _deviceScanCubit!.acceptDevice(dev),
         ),
-        SingleDeviceAvailable() => _buildMainCard(context,
-          title: Text(AppLocalizations.of(context)!
-              .connectTo(state.device.device.platformName)),
-          child: FilledButton(
-            child: Text(AppLocalizations.of(context)!.connect),
-            onPressed: () => _deviceScanCubit!.acceptDevice(state.device.device),
-          ),
-        ),
+        SingleDeviceAvailable() => DeviceSelection(
+          scanResults: [ state.device ],
+          onAccepted: (dev) => _deviceScanCubit!.acceptDevice(dev),
+        ), // TODO: remove DeviceListAvailable and SingleDeviceAvailable
+          // distinction
         DeviceSelected() => BlocBuilder<BleReadCubit, BleReadState>(
           bloc: BleReadCubit(state.device),
           builder: (BuildContext context, BleReadState state) => switch (state) {
