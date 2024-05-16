@@ -509,17 +509,6 @@
   "@errBleNoPerms": {},
   "bluetoothDisabled": "Bluetooth disabled",
   "@bluetoothDisabled": {},
-  "selectDevice": "Select device",
-  "@selectDevice": {},
-  "connectTo": "Connect to {deviceName}?",
-  "@connectTo": {
-    "placeholders": {
-      "deviceName": {
-        "type": "String",
-        "example": "boso medicus CE6674"
-      }
-    }
-  },
   "errMeasurementRead": "Error reading measurement",
   "@errBluetooth": {},
   "measurementSuccess": "Measurement taken successfully",
