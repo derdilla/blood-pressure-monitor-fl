@@ -8,6 +8,7 @@ import 'package:blood_pressure_app/components/bluetooth_input/device_selection.d
 import 'package:blood_pressure_app/components/bluetooth_input/input_card.dart';
 import 'package:blood_pressure_app/components/bluetooth_input/measurement_failure.dart';
 import 'package:blood_pressure_app/components/bluetooth_input/measurement_success.dart';
+import 'package:blood_pressure_app/model/blood_pressure/record.dart';
 import 'package:blood_pressure_app/model/storage/storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -17,22 +18,24 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 /// Class for inputting measurement through bluetooth.
 class BluetoothInput extends StatefulWidget {
   /// Create a measurement input through bluetooth.
-  const BluetoothInput({super.key, required this.settings});
+  const BluetoothInput({super.key,
+    required this.settings,
+    required this.onMeasurement,
+  });
 
   /// Settings to store known devices.
   final Settings settings;
 
+  /// Called when a measurement was received through bluetooth.
+  final void Function(BloodPressureRecord data) onMeasurement;
+
   @override
   State<BluetoothInput> createState() => _BluetoothInputState();
 }
-// TODO: more info
-// TODO: make toggleable in settings
 
 class _BluetoothInputState extends State<BluetoothInput> {
   /// Whether the user expanded bluetooth input
   bool _isActive = false;
-
-  // TODO: return values
 
   final BluetoothCubit _bluetoothCubit =  BluetoothCubit();
   StreamSubscription<BluetoothState>? _bluetoothSubscription;
