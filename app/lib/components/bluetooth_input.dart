@@ -87,7 +87,7 @@ class _BluetoothInputState extends State<BluetoothInput> {
             ),
             BleReadSuccess() => MeasurementSuccess(
               onTap: () {
-                onMeasurement(state.data);
+                widget.onMeasurement(state.data);
                 return _returnToIdle;
               }(),
             ),
