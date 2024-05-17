@@ -70,7 +70,7 @@ class _BluetoothInputState extends State<BluetoothInput> {
         SingleDeviceAvailable() => DeviceSelection(
           scanResults: [ state.device ],
           onAccepted: (dev) => _deviceScanCubit!.acceptDevice(dev),
-        ), // TODO: remove DeviceListAvailable and SingleDeviceAvailable
+        ),
           // distinction
         DeviceSelected() => BlocBuilder<BleReadCubit, BleReadState>(
           bloc: BleReadCubit(state.device),
