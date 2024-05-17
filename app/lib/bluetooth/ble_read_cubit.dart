@@ -1,6 +1,8 @@
 import 'dart:async';
 
+import 'package:blood_pressure_app/bluetooth/characteristic_decoder.dart';
 import 'package:blood_pressure_app/logging.dart';
+import 'package:blood_pressure_app/model/blood_pressure/record.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
@@ -81,7 +83,9 @@ class BleReadCubit extends Cubit<BleReadState> {
       return;
     }
 
-    // TODO: decode data before emitting success.
-    emit(BleReadSuccess(data));
+    Log.trace('received $data');
+    final record = CharacteristicDecoder.decodeMeasurement(data)
+    Log.trace('decoded $record');
+    emit(BleReadSuccess(record));
   }
 }
