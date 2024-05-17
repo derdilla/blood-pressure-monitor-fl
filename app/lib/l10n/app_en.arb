@@ -517,7 +517,7 @@
   "@errBleNoDev": {},
   "bluetoothDisabled": "Bluetooth disabled",
   "@bluetoothDisabled": {},
-  "errMeasurementRead": "Error reading measurement",
+  "errMeasurementRead": "Error reading measurement!",
   "@errBluetooth": {},
   "measurementSuccess": "Measurement taken successfully",
   "@measurementSuccess": {},
@@ -528,5 +528,7 @@
   "aboutBleInput": "Some measurement devices are BLE GATT compatible. You can pair these devices here and automatically transmit measurements or disable this option in the settings.",
   "@aboutBleInput": {},
   "scanningForDevices": "Scanning for devices",
-  "@scanningForDevices": {}
+  "@scanningForDevices": {},
+  "tapToClose": "Tap to close.",
+  "@tapToClose": {}
 }
