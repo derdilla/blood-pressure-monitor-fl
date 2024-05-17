@@ -84,7 +84,7 @@ class BleReadCubit extends Cubit<BleReadState> {
     }
 
     Log.trace('received $data');
-    final record = CharacteristicDecoder.decodeMeasurement(data)
+    final record = CharacteristicDecoder.decodeMeasurement(data);
     Log.trace('decoded $record');
     emit(BleReadSuccess(record));
   }
