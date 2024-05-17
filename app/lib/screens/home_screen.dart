@@ -53,37 +53,37 @@ class AppHome extends StatelessWidget {
     return Scaffold(
       body: OrientationBuilder(
         builder: (context, orientation) {
-        if (orientation == Orientation.landscape) {
-          return MeasurementGraph(
-            height: MediaQuery.of(context).size.height,
-          );
-        }
-        return Center(
-          child: Padding(
-            padding: const EdgeInsets.only(top: 20),
-            child: Consumer<IntakeHistory>(builder: (context, intakeHistory, child) =>
-              Consumer<IntervallStoreManager>(builder: (context, intervalls, child) =>
-              Consumer<Settings>(builder: (context, settings, child) =>
-                Column(children: [
-                  const MeasurementGraph(),
-                  Expanded(
-                    child: (settings.useLegacyList) ?
-                      LegacyMeasurementsList(context) :
-                      BloodPressureBuilder(
-                        rangeType: IntervallStoreManagerLocation.mainPage,
-                        onData: (context, records) => MeasurementList(
-                          settings: settings,
-                          records: records,
-                          intakes: intakeHistory.getIntakes(intervalls.mainPage.currentRange),
+          if (orientation == Orientation.landscape) {
+            return MeasurementGraph(
+              height: MediaQuery.of(context).size.height,
+            );
+          }
+          return Center(
+            child: Padding(
+              padding: const EdgeInsets.only(top: 20),
+              child: Consumer<IntakeHistory>(builder: (context, intakeHistory, child) =>
+                Consumer<IntervallStoreManager>(builder: (context, intervalls, child) =>
+                Consumer<Settings>(builder: (context, settings, child) =>
+                  Column(children: [
+                    const MeasurementGraph(),
+                    Expanded(
+                      child: (settings.useLegacyList) ?
+                        LegacyMeasurementsList(context) :
+                        BloodPressureBuilder(
+                          rangeType: IntervallStoreManagerLocation.mainPage,
+                          onData: (context, records) => MeasurementList(
+                            settings: settings,
+                            records: records,
+                            intakes: intakeHistory.getIntakes(intervalls.mainPage.currentRange),
+                          ),
                         ),
-                      ),
-                  ),
-                ],),
-              ),),
+                    ),
+                  ],),
+                ),),
+              ),
             ),
-          ),
-        );
-      },
+          );
+        },
       ),
       floatingActionButton: OrientationBuilder(
         builder: (context, orientation) {

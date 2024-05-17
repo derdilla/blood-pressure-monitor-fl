@@ -4,7 +4,6 @@ import 'package:blood_pressure_app/components/bluetooth_input.dart';
 import 'package:blood_pressure_app/components/date_time_picker.dart';
 import 'package:blood_pressure_app/components/dialoges/fullscreen_dialoge.dart';
 import 'package:blood_pressure_app/components/settings/settings_widgets.dart';
-import 'package:blood_pressure_app/main.dart'; // TODO: remove
 import 'package:blood_pressure_app/model/blood_pressure/medicine/medicine.dart';
 import 'package:blood_pressure_app/model/blood_pressure/medicine/medicine_intake.dart';
 import 'package:blood_pressure_app/model/blood_pressure/needle_pin.dart';
@@ -287,9 +286,6 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
               settings: widget.settings,
               onMeasurement: (record) => setState(() => _loadFields(record)),
             ),
-            TextButton(onPressed: () {
-              Clipboard.setData(ClipboardData(text: debugLog.join('\n')));
-            }, child: Text('copy debug')), // TODO: remove
             if (widget.settings.allowManualTimeInput)
               _buildTimeInput(localizations),
             Form(

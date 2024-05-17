@@ -15,6 +15,6 @@ class BleReadSuccess extends BleReadState {
   /// Indicate a successful reading of a ble characteristic.
   BleReadSuccess(this.data);
 
-  /// Raw binary data received from the device.
-  final List<int> data;
+  /// Measurement decoded from the device.
+  final BloodPressureRecord data;
 }

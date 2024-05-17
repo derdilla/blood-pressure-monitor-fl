@@ -16,4 +16,11 @@ class Log {
       }
     }
   }
+
+  /// Log a message in debug more
+  static void trace(String message) {
+    if (kDebugMode && !testExpectError) {
+      debugPrint('TRACE: $message');
+    }
+  }
 }
