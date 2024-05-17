@@ -11,7 +11,6 @@ class ClosedBluetoothInput extends StatelessWidget {
     required this.onStarted,
     this.inputInfo,
   });
-  // TODO: test
 
   /// State update provider and interaction with the device.
   final BluetoothCubit bluetoothCubit;

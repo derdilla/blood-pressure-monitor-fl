@@ -1,0 +1,31 @@
+
+import 'package:blood_pressure_app/components/bluetooth_input/measurement_failure.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_test/flutter_test.dart';
+
+import '../util.dart';
+
+
+void main() {
+  testWidgets('should show states correctly', (WidgetTester tester) async {
+    int tapCount = 0;
+    await tester.pumpWidget(materialApp(MeasurementFailure(
+      onTap: () => tapCount++,
+    )));
+
+    expect(find.byIcon(Icons.error_outline), findsOneWidget);
+    expect(find.byIcon(Icons.close), findsOneWidget);
+    final localizations = await AppLocalizations.delegate.load(const Locale('en'));
+    expect(find.text(localizations.errMeasurementRead), findsOneWidget);
+    expect(find.text(localizations.tapToClose), findsOneWidget);
+
+    expect(tapCount, 0);
+    await tester.tap(find.text(localizations.tapToClose));
+    await tester.pump();
+    expect(tapCount, 1);
+    await tester.tap(find.byIcon(Icons.close));
+    await tester.pump();
+    expect(tapCount, 2);
+  });
+}
