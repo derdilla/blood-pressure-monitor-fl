@@ -7,6 +7,7 @@ import 'package:blood_pressure_app/components/bluetooth_input/closed_bluetooth_i
 import 'package:blood_pressure_app/components/bluetooth_input/device_selection.dart';
 import 'package:blood_pressure_app/components/bluetooth_input/input_card.dart';
 import 'package:blood_pressure_app/components/bluetooth_input/measurement_failure.dart';
+import 'package:blood_pressure_app/components/bluetooth_input/measurement_success.dart';
 import 'package:blood_pressure_app/model/storage/storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -81,17 +82,8 @@ class _BluetoothInputState extends State<BluetoothInput> {
             BleReadFailure() => MeasurementFailure(
               onTap: _returnToIdle,
             ),
-            BleReadSuccess() => _buildMainCard(context,
-              child: Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Icon(Icons.done, color: Colors.green),
-                    const SizedBox(height: 8,),
-                    Text(AppLocalizations.of(context)!.measurementSuccess),
-                  ],
-                ),
-              ),
+            BleReadSuccess() => MeasurementSuccess(
+              onTap: _returnToIdle,
             ),
           },
         ),
