@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:blood_pressure_app/components/bluetooth_input.dart';
 import 'package:blood_pressure_app/components/date_time_picker.dart';
 import 'package:blood_pressure_app/components/dialoges/fullscreen_dialoge.dart';
 import 'package:blood_pressure_app/components/settings/settings_widgets.dart';
@@ -48,7 +49,11 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
   final diaFocusNode = FocusNode();
   final pulFocusNode = FocusNode();
   final noteFocusNode = FocusNode();
+
   late final TextEditingController sysController;
+  late final TextEditingController diaController;
+  late final TextEditingController pulController;
+  late final TextEditingController noteController;
 
 
   /// Currently selected time.
@@ -96,9 +101,12 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
     super.initState();
     time = widget.initialRecord?.creationTime ?? DateTime.now();
     needlePin = widget.initialRecord?.needlePin;
-    sysController = TextEditingController(
-      text: (widget.initialRecord?.systolic ?? '').toString(),
-    );
+    sysController = TextEditingController();
+    diaController = TextEditingController();
+    pulController = TextEditingController();
+    noteController = TextEditingController();
+    _loadFields(widget.initialRecord);
+
     if (widget.initialRecord != null) {
       _measurementFormActive = true;
     }
@@ -106,7 +114,6 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
     sysFocusNode.requestFocus();
     ServicesBinding.instance.keyboard.addHandler(_onKey);
   }
-
 
   @override
   void dispose() {
@@ -117,6 +124,16 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
     noteFocusNode.dispose();
     ServicesBinding.instance.keyboard.removeHandler(_onKey);
     super.dispose();
+  }
+
+  /// Sets fields to values in a [record].
+  void _loadFields(BloodPressureRecord? record) {
+    time = record?.creationTime ?? DateTime.now();
+    if (record?.needlePin != null) needlePin = record?.needlePin;
+    if (record?.systolic != null) sysController.text = record!.systolic!.toString();
+    if (record?.diastolic != null) diaController.text = record!.diastolic!.toString();
+    if (record?.pulse != null) pulController.text = record!.pulse!.toString();
+    if (record?.notes != null) noteController.text = record!.notes;
   }
 
   bool _onKey(KeyEvent event) {
@@ -265,10 +282,14 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
         child: ListView(
           padding: const EdgeInsets.symmetric(horizontal: 8),
           children: [
-            // BleInput(), TODO: replace
+            // TODO: make toggleable in settings
+            BluetoothInput(
+              settings: widget.settings,
+              onMeasurement: (record) => setState(() => _loadFields(record)),
+            ),
             TextButton(onPressed: () {
               Clipboard.setData(ClipboardData(text: debugLog.join('\n')));
-            }, child: Text('copy debug')),
+            }, child: Text('copy debug')), // TODO: remove
             if (widget.settings.allowManualTimeInput)
               _buildTimeInput(localizations),
             Form(
@@ -289,7 +310,7 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
                       const SizedBox(width: 16,),
                       _buildValueInput(localizations,
                         labelText: localizations.diaLong,
-                        initialValue: widget.initialRecord?.diastolic,
+                        controller: diaController,
                         onSaved: (value) =>
                             setState(() => diastolic = int.tryParse(value ?? '')),
                         focusNode: diaFocusNode,
@@ -306,7 +327,7 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
                       const SizedBox(width: 16,),
                       _buildValueInput(localizations,
                         labelText: localizations.pulLong,
-                        initialValue: widget.initialRecord?.pulse,
+                        controller: pulController,
                         focusNode: pulFocusNode,
                         onSaved: (value) =>
                             setState(() => pulse = int.tryParse(value ?? '')),
@@ -316,7 +337,7 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 16),
                     child: TextFormField(
-                      initialValue: widget.initialRecord?.notes,
+                      controller: noteController,
                       focusNode: noteFocusNode,
                       decoration: InputDecoration(
                         labelText: localizations.addNote,
