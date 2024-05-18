@@ -47,6 +47,7 @@ class Settings extends ChangeNotifier {
     PressureUnit? preferredPressureUnit,
     List<String>? knownBleDev,
     int? highestMedIndex,
+    bool? bleInput,
   }) {
     if (accentColor != null) _accentColor = accentColor;
     if (sysColor != null) _sysColor = sysColor;
@@ -73,6 +74,7 @@ class Settings extends ChangeNotifier {
     if (preferredPressureUnit != null) _preferredPressureUnit = preferredPressureUnit;
     if (highestMedIndex != null) _highestMedIndex = highestMedIndex;
     if (knownBleDev != null) _knownBleDev = knownBleDev;
+    if (bleInput != null) _bleInput = bleInput;
     _language = language; // No check here, as null is the default as well.
   }
 
@@ -105,6 +107,8 @@ class Settings extends ChangeNotifier {
       medications: ConvertUtil.parseList<String>(map['medications'])?.map((e) =>
           Medicine.fromJson(jsonDecode(e)),).toList(),
       highestMedIndex: ConvertUtil.parseInt(map['highestMedIndex']),
+      knownBleDev: ConvertUtil.parseList<String>(map['knownBleDev']),
+      bleInput: ConvertUtil.parseBool(map['bleInput']),
     );
 
     // update
@@ -151,6 +155,7 @@ class Settings extends ChangeNotifier {
       'highestMedIndex': highestMedIndex,
       'preferredPressureUnit': preferredPressureUnit.encode(),
       'knownBleDev': knownBleDev,
+      'bleInput': bleInput,
     };
 
   /// Serialize the object to a restoreable string.
@@ -353,6 +358,14 @@ class Settings extends ChangeNotifier {
   PressureUnit get preferredPressureUnit => _preferredPressureUnit;
   set preferredPressureUnit(PressureUnit value) {
     _preferredPressureUnit = value;
+    notifyListeners();
+  }
+
+  bool _bleInput = true;
+  /// Whether to show bluetooth input on add measurement page.
+  bool get bleInput => _bleInput;
+  set bleInput(bool value) {
+    _bleInput = value;
     notifyListeners();
   }
 

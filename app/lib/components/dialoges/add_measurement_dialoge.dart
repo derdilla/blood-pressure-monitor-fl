@@ -281,11 +281,11 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
         child: ListView(
           padding: const EdgeInsets.symmetric(horizontal: 8),
           children: [
-            // TODO: make toggleable in settings
-            BluetoothInput(
-              settings: widget.settings,
-              onMeasurement: (record) => setState(() => _loadFields(record)),
-            ),
+            if (widget.settings.bleInput)
+              BluetoothInput(
+                settings: widget.settings,
+                onMeasurement: (record) => setState(() => _loadFields(record)),
+              ),
             if (widget.settings.allowManualTimeInput)
               _buildTimeInput(localizations),
             Form(
