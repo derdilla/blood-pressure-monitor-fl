@@ -41,6 +41,14 @@ class _BluetoothInputState extends State<BluetoothInput> {
   StreamSubscription<BluetoothState>? _bluetoothSubscription;
   DeviceScanCubit? _deviceScanCubit;
 
+  @override
+  void dispose() {
+    _bluetoothSubscription?.cancel();
+    _bluetoothCubit.close();
+    _deviceScanCubit?.close();
+    super.dispose();
+  }
+
   void _returnToIdle() {
     _bluetoothSubscription?.cancel();
     _bluetoothSubscription = null;
