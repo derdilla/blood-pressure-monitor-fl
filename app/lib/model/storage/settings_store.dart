@@ -45,6 +45,7 @@ class Settings extends ChangeNotifier {
     List<Medicine>? medications,
     List<String>? knownBleDev,
     int? highestMedIndex,
+    bool? bleInput,
   }) {
     if (accentColor != null) _accentColor = accentColor;
     if (sysColor != null) _sysColor = sysColor;
@@ -70,6 +71,7 @@ class Settings extends ChangeNotifier {
     if (medications != null) _medications.addAll(medications);
     if (highestMedIndex != null) _highestMedIndex = highestMedIndex;
     if (knownBleDev != null) _knownBleDev = knownBleDev;
+    if (bleInput != null) _bleInput = bleInput;
     _language = language; // No check here, as null is the default as well.
   }
 
@@ -103,6 +105,7 @@ class Settings extends ChangeNotifier {
           Medicine.fromJson(jsonDecode(e)),).toList(),
       highestMedIndex: ConvertUtil.parseInt(map['highestMedIndex']),
       knownBleDev: ConvertUtil.parseList<String>(map['knownBleDev']),
+      bleInput: ConvertUtil.parseBool(map['bleInput']),
     );
 
     // update
@@ -148,6 +151,7 @@ class Settings extends ChangeNotifier {
       'medications': medications.map(jsonEncode).toList(),
       'highestMedIndex': highestMedIndex,
       'knownBleDev': knownBleDev,
+      'bleInput': bleInput,
     };
 
   /// Serialize the object to a restoreable string.
@@ -342,6 +346,14 @@ class Settings extends ChangeNotifier {
   bool get bottomAppBars => _bottomAppBars;
   set bottomAppBars(bool value) {
     _bottomAppBars = value;
+    notifyListeners();
+  }
+
+  bool _bleInput = true;
+  /// Whether to show bluetooth input on add measurement page.
+  bool get bleInput => _bleInput;
+  set bleInput(bool value) {
+    _bleInput = value;
     notifyListeners();
   }
 

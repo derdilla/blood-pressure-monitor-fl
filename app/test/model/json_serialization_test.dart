@@ -97,6 +97,7 @@ void main() {
         bottomAppBars: true,
         medications: [mockMedicine(), mockMedicine(defaultDosis: 42)],
         knownBleDev: ['a', 'b'],
+        bleInput: false,
       );
       final fromJson = Settings.fromJson(initial.toJson());
 
@@ -124,6 +125,7 @@ void main() {
       expect(initial.needlePinBarWidth, fromJson.needlePinBarWidth);
       expect(initial.bottomAppBars, fromJson.bottomAppBars);
       expect(initial.knownBleDev, fromJson.knownBleDev);
+      expect(initial.bleInput, fromJson.bleInput);
 
       expect(initial.toJson(), fromJson.toJson());
     });

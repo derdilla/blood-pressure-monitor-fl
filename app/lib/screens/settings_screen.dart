@@ -169,6 +169,13 @@ class SettingsPage extends StatelessWidget {
                 secondary: const Icon(Icons.details),
                 title: Text(localizations.allowManualTimeInput),),
               SwitchListTile(
+                value: settings.bleInput,
+                onChanged: (value) {
+                  settings.bleInput = value;
+                },
+                secondary: const Icon(Icons.bluetooth),
+                title: Text(localizations.bluetoothInput),),
+              SwitchListTile(
                 key: const Key('validateInputs'),
                 value: settings.validateInputs,
                 title: Text(localizations.validateInputs),
