@@ -72,6 +72,8 @@ class DeviceScanCubit extends Cubit<DeviceScanState> {
   }
 
   void _onScanResult(List<ScanResult> devices) {
+    Log.trace('_onScanResult devices: $devices');
+
     assert(_flutterBluePlus.isScanningNow);
     // No need to check whether the devices really support the searched
     // characteristic as users have to select their device anyways.
@@ -90,7 +92,7 @@ class DeviceScanCubit extends Cubit<DeviceScanState> {
   }
 
   void _onScanError(Object error) {
-    Log.err('Starting device scan failed');
+    Log.err('Starting device scan failed', [ error ]);
   }
 
   /// Mark a new device as known and switch to selected device state asap.
