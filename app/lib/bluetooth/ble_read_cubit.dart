@@ -48,6 +48,7 @@ class BleReadCubit extends Cubit<BleReadState> {
     late final List<BluetoothService> allServices;
     try {
       allServices = await _device.discoverServices();
+      Log.trace('allServices: $allServices');
     } catch (e) {
       Log.err('service discovery', [_device, e]);
       emit(BleReadFailure());

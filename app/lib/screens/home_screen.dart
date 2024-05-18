@@ -1,5 +1,6 @@
 import 'package:blood_pressure_app/components/dialoges/add_measurement_dialoge.dart';
 import 'package:blood_pressure_app/components/measurement_list/measurement_list.dart';
+import 'package:blood_pressure_app/logging.dart';
 import 'package:blood_pressure_app/model/blood_pressure/medicine/intake_history.dart';
 import 'package:blood_pressure_app/model/blood_pressure/model.dart';
 import 'package:blood_pressure_app/model/storage/intervall_store.dart';
@@ -26,6 +27,7 @@ class AppHome extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Log.trace('AppHome build');
     final localizations = AppLocalizations.of(context)!;
     // direct use of settings possible as no listening is required
     if (_appStart) {
