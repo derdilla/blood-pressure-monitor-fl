@@ -42,25 +42,24 @@ class _BluetoothInputState extends State<BluetoothInput> {
   DeviceScanCubit? _deviceScanCubit;
 
   @override
-  void dispose() {
-    _bluetoothSubscription?.cancel();
-    _bluetoothCubit.close();
-    _deviceScanCubit?.close();
+  void dispose() async {
+    await _bluetoothSubscription?.cancel();
+    await _bluetoothCubit.close();
+    await _deviceScanCubit?.close();
     super.dispose();
   }
 
-  void _returnToIdle() {
-    _bluetoothSubscription?.cancel();
+  void _returnToIdle() async {
+    await  _bluetoothSubscription?.cancel();
     _bluetoothSubscription = null;
-    _deviceScanCubit?.close().then((_) => _deviceScanCubit = null);
+    await _deviceScanCubit?.close();
+    _deviceScanCubit = null;
     if (_isActive) {
       setState(() {
         _isActive = false;
       });
     }
   }
-
-  // TODO: bloc dispose
 
   Widget _buildActive(BuildContext context) {
     _bluetoothSubscription = _bluetoothCubit.stream.listen((state) {
@@ -130,8 +129,6 @@ class _BluetoothInputState extends State<BluetoothInput> {
       },
     );
   }
-  // TODO: scanning devices info
-
 
   Widget _buildMainCard(BuildContext context, {
     required Widget child,
