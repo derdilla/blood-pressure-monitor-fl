@@ -43,6 +43,7 @@ class BleReadCubit extends Cubit<BleReadState> {
   final BluetoothDevice _device;
 
   Future<void> _startRead() async {
+    Log.trace('_startRead');
     // Query actual services supported by the device. While they must be
     // rediscovered when a disconnect happens, this object is also recreated.
     late final List<BluetoothService> allServices;

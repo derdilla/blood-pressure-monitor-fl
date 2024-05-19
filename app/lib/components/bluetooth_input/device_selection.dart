@@ -27,14 +27,18 @@ class DeviceSelection extends StatelessWidget {
   );
 
   @override
-  Widget build(BuildContext context) => InputCard(
-    //title: Text('Available devices:'),
-    child: ListView(
-      children: [
-        for (final dev in scanResults)
-          _buildDeviceTile(context, dev),
-      ]
-    ),
-  );
+  Widget build(BuildContext context) {
+    assert(scanResults.isNotEmpty);
+    return InputCard(
+      //title: Text('Available devices:'), TODO
+      child: ListView(
+        shrinkWrap: true,
+        children: [
+          for (final dev in scanResults)
+            _buildDeviceTile(context, dev),
+        ]
+      ),
+    );
+  }
 
 }

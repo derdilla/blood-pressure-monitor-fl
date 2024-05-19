@@ -8,6 +8,7 @@ import 'package:blood_pressure_app/components/bluetooth_input/device_selection.d
 import 'package:blood_pressure_app/components/bluetooth_input/input_card.dart';
 import 'package:blood_pressure_app/components/bluetooth_input/measurement_failure.dart';
 import 'package:blood_pressure_app/components/bluetooth_input/measurement_success.dart';
+import 'package:blood_pressure_app/logging.dart';
 import 'package:blood_pressure_app/model/blood_pressure/record.dart';
 import 'package:blood_pressure_app/model/storage/storage.dart';
 import 'package:flutter/material.dart';
@@ -71,35 +72,43 @@ class _BluetoothInputState extends State<BluetoothInput> {
     );
     return BlocBuilder<DeviceScanCubit, DeviceScanState>(
       bloc: _deviceScanCubit,
-      builder: (context, DeviceScanState state) => switch(state) {
-        DeviceListLoading() => _buildMainCard(context,
-          title: Text(AppLocalizations.of(context)!.scanningForDevices),
-          child: const CircularProgressIndicator()),
-        DeviceListAvailable() => DeviceSelection(
-          scanResults: state.devices,
-          onAccepted: (dev) => _deviceScanCubit!.acceptDevice(dev),
-        ),
-        SingleDeviceAvailable() => DeviceSelection(
-          scanResults: [ state.device ],
-          onAccepted: (dev) => _deviceScanCubit!.acceptDevice(dev),
-        ),
-          // distinction
-        DeviceSelected() => BlocBuilder<BleReadCubit, BleReadState>(
-          bloc: BleReadCubit(state.device),
-          builder: (BuildContext context, BleReadState state) => switch (state) {
-            BleReadInProgress() => _buildMainCard(context,
-              child: const CircularProgressIndicator()),
-            BleReadFailure() => MeasurementFailure(
-              onTap: _returnToIdle,
-            ),
-            BleReadSuccess() => MeasurementSuccess(
-              onTap: () {
-                widget.onMeasurement(state.data);
-                return _returnToIdle;
-              }(),
-            ),
-          },
-        ),
+      builder: (context, DeviceScanState state) {
+        Log.trace('_BluetoothInputState _deviceScanCubit: $state');
+        return switch(state) {
+          DeviceListLoading() => _buildMainCard(context,
+            title: Text(AppLocalizations.of(context)!.scanningForDevices),
+            child: const CircularProgressIndicator(),
+          ),
+          DeviceListAvailable() => DeviceSelection(
+            scanResults: state.devices,
+            onAccepted: (dev) => _deviceScanCubit!.acceptDevice(dev),
+          ),
+          SingleDeviceAvailable() => DeviceSelection(
+            scanResults: [ state.device ],
+            onAccepted: (dev) => _deviceScanCubit!.acceptDevice(dev),
+          ),
+            // distinction
+          DeviceSelected() => BlocBuilder<BleReadCubit, BleReadState>(
+            bloc: BleReadCubit(state.device),
+            builder: (BuildContext context, BleReadState state) {
+              Log.trace('_BluetoothInputState BleReadCubit: $state');
+              return switch (state) {
+                BleReadInProgress() => _buildMainCard(context,
+                  child: const CircularProgressIndicator(),
+                ),
+                BleReadFailure() => MeasurementFailure(
+                  onTap: _returnToIdle,
+                ),
+                BleReadSuccess() => MeasurementSuccess(
+                  onTap: () {
+                    widget.onMeasurement(state.data);
+                    return _returnToIdle;
+                  }(),
+                ),
+              };
+            },
+          ),
+        };
       },
     );
   }
