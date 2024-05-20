@@ -32,7 +32,7 @@ part 'ble_read_state.dart';
 class BleReadCubit extends Cubit<BleReadState> {
   /// Start reading a characteristic from a device.
   BleReadCubit(this._device)
-    : super(BleReadInProgress()) {
+    : super(BleReadInProgress()){
    unawaited(_startRead());
   }
 
@@ -44,6 +44,19 @@ class BleReadCubit extends Cubit<BleReadState> {
 
   Future<void> _startRead() async {
     Log.trace('_startRead');
+
+    if (_device.isDisconnected) {
+      Log.trace('BleReadCubit _startRead: Attempting to connect with ${_device.advName}');
+      await _device.connect();
+
+      if (_device.isDisconnected) {
+        Log.trace('BleReadCubit _startRead: Device not connected');
+        emit(BleReadFailure());
+        return;
+      }
+    }
+    assert(_device.isConnected);
+
     // Query actual services supported by the device. While they must be
     // rediscovered when a disconnect happens, this object is also recreated.
     late final List<BluetoothService> allServices;
