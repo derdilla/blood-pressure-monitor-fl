@@ -36,11 +36,28 @@ class BleReadCubit extends Cubit<BleReadState> {
    unawaited(_startRead());
   }
 
+  // TODO: consider using Future for this
+
   /// Bluetooth device to connect to.
   ///
   /// Must have an active established connection and support the measurement
   /// characteristic.
   final BluetoothDevice _device;
+
+  @override
+  Future<void> close() async {
+    if (_device.isConnected) {
+      try {
+        Log.trace('BleReadCubit close: Attempting disconnect from ${_device.advName}');
+        await _device.disconnect();
+        assert(_device.isDisconnected);
+      } catch (e) {
+        Log.err('unable to disconnect', [e, _device]);
+      }
+    }
+
+    await super.close();
+  }
 
   Future<void> _startRead() async {
     Log.trace('_startRead');
@@ -53,6 +70,8 @@ class BleReadCubit extends Cubit<BleReadState> {
         Log.trace('BleReadCubit _startRead: Device not connected');
         emit(BleReadFailure());
         return;
+      } else {
+        Log.trace('Connection successful');
       }
     }
     assert(_device.isConnected);

@@ -41,20 +41,24 @@ class _BluetoothInputState extends State<BluetoothInput> {
   final BluetoothCubit _bluetoothCubit =  BluetoothCubit();
   StreamSubscription<BluetoothState>? _bluetoothSubscription;
   DeviceScanCubit? _deviceScanCubit;
+  BleReadCubit? _deviceReadCubit;
 
   @override
   void dispose() async {
     await _bluetoothSubscription?.cancel();
     await _bluetoothCubit.close();
     await _deviceScanCubit?.close();
+    await _deviceReadCubit?.close();
     super.dispose();
   }
 
   void _returnToIdle() async {
-    await  _bluetoothSubscription?.cancel();
+    await _bluetoothSubscription?.cancel();
     _bluetoothSubscription = null;
     await _deviceScanCubit?.close();
     _deviceScanCubit = null;
+    await _deviceReadCubit?.close();
+    _deviceReadCubit = null;
     if (_isActive) {
       setState(() {
         _isActive = false;
@@ -89,12 +93,13 @@ class _BluetoothInputState extends State<BluetoothInput> {
           ),
             // distinction
           DeviceSelected() => BlocBuilder<BleReadCubit, BleReadState>(
-            bloc: BleReadCubit(state.device),
+            bloc: () { _deviceReadCubit = BleReadCubit(state.device); return _deviceReadCubit; }(),
             builder: (BuildContext context, BleReadState state) {
               Log.trace('_BluetoothInputState BleReadCubit: $state');
               return switch (state) {
                 BleReadInProgress() => _buildMainCard(context,
                   child: const CircularProgressIndicator(),
+                  // TODO: onTap to retry
                 ),
                 BleReadFailure() => MeasurementFailure(
                   onTap: _returnToIdle,
