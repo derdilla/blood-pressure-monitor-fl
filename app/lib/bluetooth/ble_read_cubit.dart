@@ -33,7 +33,8 @@ class BleReadCubit extends Cubit<BleReadState> {
   /// Start reading a characteristic from a device.
   BleReadCubit(this._device)
     : super(BleReadInProgress()){
-   unawaited(_startRead());
+    _subscription = _device.connectionState.listen(_onConnectionStateChanged);
+    unawaited(_ensureConnection());
   }
 
   // TODO: consider using Future for this
@@ -43,9 +44,13 @@ class BleReadCubit extends Cubit<BleReadState> {
   /// Must have an active established connection and support the measurement
   /// characteristic.
   final BluetoothDevice _device;
+  
+  late final StreamSubscription<BluetoothConnectionState> _subscription;
 
   @override
   Future<void> close() async {
+    await _subscription.cancel();
+    
     if (_device.isConnected) {
       try {
         Log.trace('BleReadCubit close: Attempting disconnect from ${_device.advName}');
@@ -59,20 +64,32 @@ class BleReadCubit extends Cubit<BleReadState> {
     await super.close();
   }
 
-  Future<void> _startRead() async {
-    Log.trace('_startRead');
-
+  Future<void> _ensureConnection() async {
+    Log.trace('_ensureConnection');
+    
+    if (_device.isAutoConnectEnabled) {
+      Log.trace('Waiting for auto connect...');
+      return;
+    }
+    
     if (_device.isDisconnected) {
-      Log.trace('BleReadCubit _startRead: Attempting to connect with ${_device.advName}');
+      Log.trace('BleReadCubit _ensureConnection: Attempting to connect with ${_device.advName}');
       await _device.connect();
 
       if (_device.isDisconnected) {
-        Log.trace('BleReadCubit _startRead: Device not connected');
+        Log.trace('BleReadCubit _ensureConnection: Device not connected');
         emit(BleReadFailure());
         return;
       } else {
         Log.trace('Connection successful');
       }
+    }
+  }
+
+  Future<void> _onConnectionStateChanged(BluetoothConnectionState state) async {
+    Log.trace('BleReadCubit _onConnectionStateChanged: $state');
+    if (state != BluetoothConnectionState.connected) {
+      return;
     }
     assert(_device.isConnected);
 
