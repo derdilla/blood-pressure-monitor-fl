@@ -34,6 +34,12 @@ class BleReadCubit extends Cubit<BleReadState> {
   BleReadCubit(this._device)
     : super(BleReadInProgress()){
     _subscription = _device.connectionState.listen(_onConnectionStateChanged);
+    // timeout
+    Timer(const Duration(minutes: 2), () {
+      if (super.state is BleReadInProgress) {
+        emit(BleReadFailure());
+      }
+    });
     unawaited(_ensureConnection());
   }
 
