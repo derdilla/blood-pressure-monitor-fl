@@ -51,7 +51,7 @@ class BluetoothCubit extends Cubit<BluetoothState> {
             .onDeniedCallback(() => _onAdapterStateChanged(state));
         } else {
           emit(BluetoothUnauthorized());
-        }sta
+        }
       case BluetoothAdapterState.off:
       case BluetoothAdapterState.turningOff:
       case BluetoothAdapterState.turningOn:
