@@ -33,14 +33,15 @@ class BleReadCubit extends Cubit<BleReadState> {
   /// Start reading a characteristic from a device.
   BleReadCubit(this._device)
     : super(BleReadInProgress()){
-    _subscription = _device.connectionState.listen(_onConnectionStateChanged);
+    _subscription = _device.connectionState
+      .listen(_onConnectionStateChanged);
     // timeout
     Timer(const Duration(minutes: 2), () {
       if (super.state is BleReadInProgress) {
+        Log.trace('BleReadCubit timeout reached');
         emit(BleReadFailure());
       }
     });
-    unawaited(_ensureConnection());
   }
 
   // TODO: consider using Future for this
@@ -94,9 +95,13 @@ class BleReadCubit extends Cubit<BleReadState> {
 
   Future<void> _onConnectionStateChanged(BluetoothConnectionState state) async {
     Log.trace('BleReadCubit _onConnectionStateChanged: $state');
-    if (state != BluetoothConnectionState.connected) {
+    if (state == BluetoothConnectionState.disconnected) {
+      unawaited(_ensureConnection());
       return;
     }
+    assert(state == BluetoothConnectionState.connected, 'state should be '
+      'connected as connecting and disconnecting are not streamed by android');
+
     assert(_device.isConnected);
 
     // Query actual services supported by the device. While they must be
