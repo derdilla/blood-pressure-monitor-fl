@@ -65,7 +65,7 @@ class DeviceScanCubit extends Cubit<DeviceScanState> {
         // Not all devices are found using this configuration (https://pub.dev/packages/flutter_blue_plus#scanning-does-not-find-my-device).
         // As long as no significant issues arise from this these devices are
         // considered unsupported.
-
+        androidUsesFineLocation: true,
       );
     } catch (e) {
       _onScanError(e);
