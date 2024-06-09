@@ -69,7 +69,6 @@ class BluetoothCubit extends Cubit<BluetoothState> {
     try {
       bool connectPermission = await Permission.bluetoothConnect.isGranted;
       bool locationPermission = await Permission.locationWhenInUse.isGranted;
-      bool bluetoothPermission = await Permission.bluetooth.isGranted;
       if (!connectPermission) {
         connectPermission = await Permission.bluetoothConnect.request().isGranted;
         Log.trace('requestPermission: connectPermission = $connectPermission');
@@ -78,12 +77,7 @@ class BluetoothCubit extends Cubit<BluetoothState> {
         locationPermission = await Permission.locationWhenInUse.request().isGranted;
         Log.trace('requestPermission: locationPermission = $locationPermission');
       }
-      if (!bluetoothPermission) {
-        bluetoothPermission = await Permission.bluetooth.request().isGranted;
-        Log.trace('requestPermission: bluetoothPermission = $bluetoothPermission');
-      }
       return connectPermission
-        && bluetoothPermission
         && locationPermission;
     } catch (error) {
       Log.err('Failed to request bluetooth permissions', [error]);
