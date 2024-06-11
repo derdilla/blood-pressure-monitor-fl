@@ -14,7 +14,7 @@ env:
   FLUTTER_CHANNEL: 'beta'
   DART_SDK: 'beta'
   JAVA_VERSION: '17'
-  EMULATOR_VERSION: 'android-34'
+  EMULATOR_VERSION: 'system-images;android-34;aosp_atd;x86_64'
 
 jobs:
   unit-test:
@@ -68,8 +68,8 @@ jobs:
       - name: Download Android emulator image
         run: |
           export ANDROID_TOOLS="$ANDROID_HOME/cmdline-tools/latest/bin"
-          echo "y" | $ANDROID_TOOLS/sdkmanager --install "system-images;${{ env.EMULATOR_VERSION }};aosp_atd;x86"
-          echo "no" | $ANDROID_TOOLS/avdmanager create avd --force --name emu --device "Pixel 3a" -k 'system-images;${{ env.EMULATOR_VERSION }};aosp_atd;x86'
+          echo "y" | $ANDROID_TOOLS/sdkmanager --install "${{ env.EMULATOR_VERSION }}"
+          echo "no" | $ANDROID_TOOLS/avdmanager create avd --force --name emu --device "Pixel 3a" -k '${{ env.EMULATOR_VERSION }}'
           echo "Android emulator installed"
           $ANDROID_HOME/emulator/emulator -list-avds
       - name: Start Android emulator
@@ -77,7 +77,7 @@ jobs:
         run: |
           export ANDROID_TOOLS="$ANDROID_HOME/cmdline-tools/latest/bin"
           echo "Starting emulator"
-          $ANDROID_TOOLS/sdkmanager "platform-tools" "platforms;${{ env.EMULATOR_VERSION }}"
+          $ANDROID_TOOLS/sdkmanager "platform-tools" "${{ env.EMULATOR_VERSION }}"
           nohup $ANDROID_HOME/emulator/emulator -avd emu -no-audio -no-snapshot -no-window &
           $ANDROID_HOME/platform-tools/adb wait-for-device shell 'while [[ -z $(getprop sys.boot_completed | tr -d '\r') ]]; do sleep 1; done; input keyevent 82'
           $ANDROID_HOME/platform-tools/adb devices
