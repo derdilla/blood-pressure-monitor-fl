@@ -63,6 +63,19 @@ class PdfExportSettings extends ChangeNotifier implements CustomFieldsSettings {
 
   String toJson() => jsonEncode(toMap());
 
+  /// Reset all fields to their default values.
+  void reset() {
+    final d = PdfExportSettings();
+    _exportTitle = d._exportTitle;
+    _exportStatistics = d._exportStatistics;
+    _exportData = d._exportData;
+    _headerHeight = d._headerHeight;
+    _cellHeight = d._cellHeight;
+    _headerFontSize = d._headerFontSize;
+    _cellFontSize = d._cellFontSize;
+    _exportFieldsConfiguration = d._exportFieldsConfiguration;
+  }
+
   bool _exportTitle = true;
   bool get exportTitle => _exportTitle;
   set exportTitle(bool value) {
