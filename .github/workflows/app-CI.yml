@@ -69,7 +69,7 @@ jobs:
         run: |
           export ANDROID_TOOLS="$ANDROID_HOME/cmdline-tools/latest/bin"
           echo "y" | $ANDROID_TOOLS/sdkmanager --install "${{ env.EMULATOR_VERSION }}"
-          echo "no" | $ANDROID_TOOLS/avdmanager create avd --force --name emu --device "Pixel 3a" -k '${{ env.EMULATOR_VERSION }}'
+          echo "no" | $ANDROID_TOOLS/avdmanager create avd --force --name emu -k '${{ env.EMULATOR_VERSION }}'
           echo "Android emulator installed"
           $ANDROID_HOME/emulator/emulator -list-avds
       - name: Start Android emulator
