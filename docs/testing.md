@@ -14,6 +14,7 @@ flutter test
 
 To run integration tests an android emulator needs to be running.
 
+Single test: 
 ```bash
 flutter drive \
   --driver=test_driver/integration_test.dart \
@@ -24,3 +25,8 @@ flutter drive \
 
 To ues the emulator `--browser-name android-chrome --android-emulator` is 
 required. `--flavor github` is needed for the driver to find the apk.
+
+All tests:
+```bash
+flutter test integration_test --flavor github
+```
