@@ -39,6 +39,11 @@ class ExportColumnsManager extends ChangeNotifier {
   /// It will be filled with the default columns but won't contain initial user columns.
   ExportColumnsManager();
 
+  /// Reset all fields to their default values.
+  void reset() {
+    _userColumns.clear();
+  }
+
   /// Namespaces that may not lead a user columns internal identifier.
   static const List<String> reservedNamespaces = ['buildIn', 'myHeart'];
 

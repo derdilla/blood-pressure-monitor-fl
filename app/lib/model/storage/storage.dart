@@ -7,6 +7,7 @@
 /// - Add private variable with default value
 /// - Add getter and setter, where setter calls `notifyListeners()`
 /// - Add as nullable to constructor definition and if != null assign it to the private variable in the body
+/// - Reset the value to default in a `reset` method
 /// - Add parsable representation (string, boolean or integer) to the .toMap
 /// - Parse it in the .fromMap factory method
 /// - Make sure edge cases are handled in .fromMap (does not exist (update), not parsable (user))

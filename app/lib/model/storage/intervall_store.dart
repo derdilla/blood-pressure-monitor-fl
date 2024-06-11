@@ -248,11 +248,11 @@ class IntervallStoreManager extends ChangeNotifier {
   }
 
   static Future<IntervallStoreManager> load(ConfigDao configDao, int profileID) async =>
-      IntervallStoreManager(
-          await configDao.loadIntervallStorage(profileID, 0),
-          await configDao.loadIntervallStorage(profileID, 1),
-          await configDao.loadIntervallStorage(profileID, 2),
-      );
+    IntervallStoreManager(
+      await configDao.loadIntervallStorage(profileID, 0),
+      await configDao.loadIntervallStorage(profileID, 1),
+      await configDao.loadIntervallStorage(profileID, 2),
+    );
 
   IntervallStorage get(IntervallStoreManagerLocation type) {
     switch (type) {
@@ -264,9 +264,21 @@ class IntervallStoreManager extends ChangeNotifier {
         return statsPage;
     }
   }
-  
+
+  /// Reset all fields to their default values.
+  void reset() {
+    mainPage = IntervallStorage();
+    exportPage = IntervallStorage();
+    statsPage = IntervallStorage();
+  }
+
+  /// Intervall for the page with graph and list.
   IntervallStorage mainPage;
+
+  /// Intervall for all exports.
   IntervallStorage exportPage;
+
+  /// Intervall to display statistics in.
   IntervallStorage statsPage;
 
   @override
@@ -278,7 +290,7 @@ class IntervallStoreManager extends ChangeNotifier {
   }
 }
 
-/// enum of all locations supported by IntervallStoreManager
+/// Locations supported by [IntervallStoreManager].
 enum IntervallStoreManagerLocation {
   mainPage,
   exportPage,
