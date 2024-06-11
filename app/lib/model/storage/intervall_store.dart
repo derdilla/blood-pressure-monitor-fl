@@ -270,6 +270,7 @@ class IntervallStoreManager extends ChangeNotifier {
     mainPage = IntervallStorage();
     exportPage = IntervallStorage();
     statsPage = IntervallStorage();
+    notifyListeners();
   }
 
   /// Intervall for the page with graph and list.

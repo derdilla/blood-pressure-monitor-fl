@@ -181,6 +181,7 @@ class Settings extends ChangeNotifier {
     _medications.clear();
     _highestMedIndex = d._highestMedIndex;
     _preferredPressureUnit = d._preferredPressureUnit;
+    notifyListeners();
   }
 
   Locale? _language;

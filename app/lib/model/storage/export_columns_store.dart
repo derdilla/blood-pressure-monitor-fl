@@ -42,6 +42,7 @@ class ExportColumnsManager extends ChangeNotifier {
   /// Reset all fields to their default values.
   void reset() {
     _userColumns.clear();
+    notifyListeners();
   }
 
   /// Namespaces that may not lead a user columns internal identifier.

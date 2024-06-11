@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:blood_pressure_app/components/consistent_future_builder.dart';
+import 'package:blood_pressure_app/components/custom_banner.dart';
 import 'package:blood_pressure_app/components/dialoges/enter_timeformat_dialoge.dart';
 import 'package:blood_pressure_app/components/dialoges/input_dialoge.dart';
 import 'package:blood_pressure_app/components/settings/settings_widgets.dart';
@@ -23,7 +24,6 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:path/path.dart';
 import 'package:provider/provider.dart';
-import 'package:restart_app/restart_app.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -318,13 +318,10 @@ class SettingsPage extends StatelessWidget {
                     }
 
                     String dbPath = await getDatabasesPath();
-                    assert(dbPath != inMemoryDatabasePath);
                     dbPath = join(dbPath, 'config.db');
                     File(path).copySync(dbPath);
-                    if (!await Restart.restartApp()) {
-                      messenger.showSnackBar(SnackBar(content: Text(localizations.pleaseRestart)));
-                      return;
-                    }
+                    messenger.showMaterialBanner(CustomBanner(content: Text(localizations.pleaseRestart)));
+                    // TODO: read settings and replace them on running app.
                   },
                 ),
                 ListTile(
@@ -375,7 +372,7 @@ class SettingsPage extends StatelessWidget {
                     // TODO: give feedback
 
                   },
-                )
+                ),
               ],
             ),
             TitledColumn(title: Text(localizations.aboutWarnValuesScreen), children: [

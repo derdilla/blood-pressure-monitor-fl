@@ -506,5 +506,7 @@
   "titleInCsv": "Title in CSV",
   "@titleInCsv": {},
   "preferredPressureUnit": "Preferred pressure unit",
-  "@preferredPressureUnit": {}
+  "@preferredPressureUnit": {},
+  "deleteAllMedicineIntakes": "Delete all medicine intakes",
+  "@deleteAllMedicineIntakes": {}
 }

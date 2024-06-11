@@ -43,6 +43,7 @@ class ExportSettings extends ChangeNotifier {
     _exportFormat = d._exportFormat;
     _defaultExportDir = d._defaultExportDir;
     _exportAfterEveryEntry = d._exportAfterEveryEntry;
+    notifyListeners();
   }
 
   ExportFormat _exportFormat = ExportFormat.csv;
