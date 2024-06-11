@@ -68,6 +68,7 @@ class CsvExportSettings extends ChangeNotifier implements CustomFieldsSettings {
     _textDelimiter = d._textDelimiter;
     _exportHeadline = d._exportHeadline;
     _exportFieldsConfiguration = d._exportFieldsConfiguration;
+    notifyListeners();
   }
 
   String _fieldDelimiter = ',';

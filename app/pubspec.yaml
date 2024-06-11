@@ -34,7 +34,6 @@ dependencies:
   # can become one custom dependency
   file_picker: ^8.0.3  # MIT
   jsaver: ^1.2.0
-  restart_app: ^1.2.1
   fluttertoast: ^8.2.4
 
 dev_dependencies:

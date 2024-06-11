@@ -74,6 +74,7 @@ class PdfExportSettings extends ChangeNotifier implements CustomFieldsSettings {
     _headerFontSize = d._headerFontSize;
     _cellFontSize = d._cellFontSize;
     _exportFieldsConfiguration = d._exportFieldsConfiguration;
+    notifyListeners();
   }
 
   bool _exportTitle = true;
