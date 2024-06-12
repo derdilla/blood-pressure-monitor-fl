@@ -4,13 +4,28 @@ Testing means catching bugs early and automated testing has already prevented
 multiple bugs from getting reintroduced. Therefor the goal is to have the 
 entire codebase covered by extensive tests.
 
-#### Running unit tests
+Integration
+
+### Unit tests
+
+Unit tests are fast and can all be run during development. Some util functions 
+are present in the util file and in specialised ones in their respective widget
+test (e.g. color picker).
 
 ```bash
 flutter test
 ```
 
-#### Running integration tests
+#### Integration test
+
+Integration tests are slow and mainly used for core workflows and things that 
+can't be tested without them. Integration tests should not use the `main` 
+method but should rather pump the App directly to allow tests to be independent
+of each other.
+
+```dart
+tester.pumpWidget(App(forceClearAppDataOnLaunch: true,));
+```
 
 To run integration tests an android emulator needs to be running.
 

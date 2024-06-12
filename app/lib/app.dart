@@ -60,19 +60,19 @@ class _AppState extends State<App> {
     WidgetsFlutterBinding.ensureInitialized();
 
     if (widget.forceClearAppDataOnLaunch) {
+      final dbPath = await getDatabasesPath();
       try {
-        final dbPath = await getDatabasesPath();
-        File(join(await getDatabasesPath(), 'blood_pressure.db')).deleteSync();
-        File(join(await getDatabasesPath(), 'blood_pressure.db-journal')).deleteSync();
+        File(join(dbPath, 'blood_pressure.db')).deleteSync();
+        File(join(dbPath, 'blood_pressure.db-journal')).deleteSync();
       } on FileSystemException {
         // File is likely already deleted or couldn't be created in the first place.
       }
       try {
-        File(join(await getDatabasesPath(), 'config.db')).deleteSync();
-        File(join(await getDatabasesPath(), 'config.db-journal')).deleteSync();
+        File(join(dbPath, 'config.db')).deleteSync();
+        File(join(dbPath, 'config.db-journal')).deleteSync();
       } on FileSystemException { }
       try {
-        File(join(await getDatabasesPath(), 'medicine.intakes')).deleteSync();
+        File(join(dbPath, 'medicine.intakes')).deleteSync();
       } on FileSystemException { }
     }
 

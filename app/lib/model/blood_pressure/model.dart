@@ -21,11 +21,9 @@ class BloodPressureModel extends ChangeNotifier {
 
   Future<void> _asyncInit(String? dbPath, bool isFullPath) async {
     dbPath ??= await getDatabasesPath();
-
     if (dbPath != inMemoryDatabasePath && !isFullPath) {
       dbPath = join(dbPath, 'blood_pressure.db');
     }
-
     // In case safer data loading is needed: finish this.
     /*
     String? backupPath;
@@ -44,6 +42,8 @@ class BloodPressureModel extends ChangeNotifier {
       onUpgrade: _onDBUpgrade,
       // When increasing the version an update procedure from every other possible version is needed
       version: 2,
+      // In integration tests the file may be deleted which causes deadlocks.
+      singleInstance: false,
     );
   }
 
@@ -58,8 +58,8 @@ class BloodPressureModel extends ChangeNotifier {
     // When adding more versions the upgrade procedure proposed in https://stackoverflow.com/a/75153875/21489239
     // might be useful, to avoid duplicated code. Currently this would only lead to complexity, without benefits.
     if (oldVersion == 1 && newVersion == 2) {
-      db.execute('ALTER TABLE bloodPressureModel ADD COLUMN needlePin STRING;');
-      db.database.setVersion(2);
+      await db.execute('ALTER TABLE bloodPressureModel ADD COLUMN needlePin STRING;');
+      await db.database.setVersion(2);
     } else {
       await ErrorReporting.reportCriticalError('Unsupported database upgrade', 'Attempted to upgrade the measurement database from version $oldVersion to version $newVersion, which is not supported. This action failed to avoid data loss. Please contact the app developer by opening an issue with the link below or writing an email to contact@derdilla.com.');
     }
