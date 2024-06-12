@@ -57,7 +57,7 @@ class ValueDistribution extends StatelessWidget {
       }
     }
     // Fill values between
-    for (int x = distribution.keys.min + 1; x < distribution.keys.max -1; x++) {
+    for (int x = distribution.keys.min + 1; x < distribution.keys.max; x++) {
       if (!distribution.containsKey(x)) distribution[x] = 0;
     }
     assert(distribution[distribution.keys.max]! > 0);
@@ -142,6 +142,8 @@ class _ValueDistributionPainter extends CustomPainter {
       final length = heightUnit * distribution[xPos]!;
       /// Offset from top so that the bar of [length] is centered.
       final startPos = (size.height - length) / 2;
+	  final barNumber = xPos - distribution.values.min; // number of bar in graph, from 0
+	  final barDrawXOffset = barWidth / 2 + (barWidth + barGapWidth)*barNumber;
       assert(barDrawXOffset >= 0 && barDrawXOffset <= size.width);
       assert(startPos >= 0); assert(startPos <= size.height);
       assert((startPos + length) >= 0 && (startPos + length) <= size.height);
@@ -150,8 +152,6 @@ class _ValueDistributionPainter extends CustomPainter {
         Offset(barDrawXOffset, startPos + length),
         barPainter,
       );
-
-      barDrawXOffset += barWidth + barGapWidth;
     }
 
     // Draw decorations on top:
