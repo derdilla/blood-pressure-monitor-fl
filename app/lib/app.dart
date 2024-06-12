@@ -25,7 +25,10 @@ import 'package:sqflite/sqflite.dart';
 /// that should be available everywhere in the app.
 class App extends StatefulWidget {
   /// Create the base for the entire app.
-  const App();
+  const App({this.forceClearAppDataOnLaunch = false});
+
+  /// Permanently deletes all files the app uses during state initialization.
+  final bool forceClearAppDataOnLaunch;
 
   @override
   State<App> createState() => _AppState();
@@ -35,6 +38,11 @@ class _AppState extends State<App> {
   /// Database object for app settings.
   ConfigDB? _configDB;
   BloodPressureModel? _bloodPressureModel;
+
+  /// The result of the first [_loadApp] call.
+  ///
+  /// Storing this is necessary to ensure the app is not loaded multiple times.
+  Widget? _loadedChild;
 
   @override
   void dispose() {
@@ -47,7 +55,27 @@ class _AppState extends State<App> {
 
   /// Load the primary app data asynchronously to allow load animations.
   Future<Widget> _loadApp() async {
+    if (_loadedChild != null) return _loadedChild!;
+
     WidgetsFlutterBinding.ensureInitialized();
+
+    if (widget.forceClearAppDataOnLaunch) {
+      try {
+        final dbPath = await getDatabasesPath();
+        File(join(await getDatabasesPath(), 'blood_pressure.db')).deleteSync();
+        File(join(await getDatabasesPath(), 'blood_pressure.db-journal')).deleteSync();
+      } on FileSystemException {
+        // File is likely already deleted or couldn't be created in the first place.
+      }
+      try {
+        File(join(await getDatabasesPath(), 'config.db')).deleteSync();
+        File(join(await getDatabasesPath(), 'config.db-journal')).deleteSync();
+      } on FileSystemException { }
+      try {
+        File(join(await getDatabasesPath(), 'medicine.intakes')).deleteSync();
+      } on FileSystemException { }
+    }
+
     // 2 different db files
     _bloodPressureModel = await BloodPressureModel.create();
     _configDB = await ConfigDB.open();
@@ -103,7 +131,7 @@ class _AppState extends State<App> {
     // Reset the step size intervall to current on startup
     intervalStorageManager.mainPage.setToMostRecentIntervall();
 
-    return MultiProvider(providers: [
+    _loadedChild = MultiProvider(providers: [
       ChangeNotifierProvider(create: (context) => _bloodPressureModel!),
       ChangeNotifierProvider(create: (context) => settings),
       ChangeNotifierProvider(create: (context) => exportSettings),
@@ -113,6 +141,8 @@ class _AppState extends State<App> {
       ChangeNotifierProvider(create: (context) => exportColumnsManager),
       ChangeNotifierProvider(create: (context) => intakeHistory),
     ], child: _buildAppRoot(),);
+
+    return _loadedChild!;
   }
 
   @override
