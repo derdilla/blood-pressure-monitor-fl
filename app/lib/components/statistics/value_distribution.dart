@@ -142,8 +142,8 @@ class _ValueDistributionPainter extends CustomPainter {
       final length = heightUnit * distribution[xPos]!;
       /// Offset from top so that the bar of [length] is centered.
       final startPos = (size.height - length) / 2;
-	  final barNumber = xPos - distribution.values.min; // number of bar in graph, from 0
-	  final barDrawXOffset = barWidth / 2 + (barWidth + barGapWidth)*barNumber;
+      final barNumber = xPos - distribution.values.min; // number of bar in graph, from 0
+      final barDrawXOffset = barWidth / 2 + (barWidth + barGapWidth)*barNumber;
       assert(barDrawXOffset >= 0 && barDrawXOffset <= size.width);
       assert(startPos >= 0); assert(startPos <= size.height);
       assert((startPos + length) >= 0 && (startPos + length) <= size.height);
