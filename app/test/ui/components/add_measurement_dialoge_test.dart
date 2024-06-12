@@ -449,7 +449,6 @@ void main() {
       expect(thirdFocusedTextFormField.evaluate().first.widget, isA<TextFormField>()
           .having((p0) => p0.initialValue, 'note input content', 'note'),);
     });
-
     testWidgets('should focus last input field on backspace pressed in empty input field', (tester) async {
       await loadDialoge(tester, (context) =>
           showAddEntryDialoge(context, Settings(), mockRecord(sys: 12, dia: 3, pul: 4, note: 'note')),);

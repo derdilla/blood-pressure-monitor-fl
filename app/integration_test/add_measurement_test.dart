@@ -1,18 +1,24 @@
+import 'package:blood_pressure_app/app.dart';
 import 'package:blood_pressure_app/components/dialoges/add_measurement_dialoge.dart';
 import 'package:blood_pressure_app/components/measurement_list/measurement_list_entry.dart';
-import 'package:blood_pressure_app/main.dart' as app;
+import 'package:blood_pressure_app/components/settings/color_picker_list_tile.dart';
+import 'package:blood_pressure_app/screens/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 
-void main() {
-  final IntegrationTestWidgetsFlutterBinding binding = IntegrationTestWidgetsFlutterBinding.ensureInitialized();
+import '../test/ui/components/settings/color_picker_list_tile_test.dart';
+import 'util.dart';
 
+void main() {
+  IntegrationTestWidgetsFlutterBinding.ensureInitialized();
   testWidgets('Can enter value only measurements', (WidgetTester tester) async {
+    await tester.pumpWidget(App(forceClearAppDataOnLaunch: true));
     final localizations = await AppLocalizations.delegate.load(const Locale('en'));
-    app.main();
     await tester.pumpAndSettle();
+    await tester.pumpUntil(() => find.byType(AppHome).hasFound);
+    expect(find.byType(AppHome), findsOneWidget);
     expect(find.byType(AddEntryDialoge), findsNothing);
     expect(find.byType(MeasurementListRow), findsNothing);
 
@@ -24,18 +30,13 @@ void main() {
     await tester.enterText(find.byType(TextFormField).at(0), '123'); // sys
     await tester.enterText(find.byType(TextFormField).at(1), '67'); // dia
     await tester.enterText(find.byType(TextFormField).at(2), '56'); // pul
-    
+
     await tester.tap(find.text(localizations.btnSave));
     await tester.pumpAndSettle();
     expect(find.byType(AddEntryDialoge), findsNothing);
 
-    // Gets up to 5s to load from fs.
-    int retries = 10;
-    while(find.text(localizations.loading).hasFound && retries >= 0) {
-      retries--;
-      await tester.pump(Duration(milliseconds: 500));
-    }
-    await tester.pump();
+    await tester.pumpUntil(() => !find.text(localizations.loading).hasFound);
+    expect(find.text(localizations.loading), findsNothing);
 
     expect(find.byType(MeasurementListRow), findsOneWidget);
     expect(find.descendant(
@@ -51,5 +52,46 @@ void main() {
       matching: find.text('56'),
     ), findsOneWidget,);
 
+  });
+
+  testWidgets('Can enter complex measurements', (WidgetTester tester) async {
+    final localizations = await AppLocalizations.delegate.load(const Locale('en'));
+    await tester.pumpWidget(App(forceClearAppDataOnLaunch: true,));
+    await tester.pumpAndSettle();
+    await tester.pumpUntil(() => find.byType(AppHome).hasFound);
+    expect(find.byType(AppHome), findsOneWidget);
+
+    await tester.tap(find.byIcon(Icons.add));
+    await tester.pumpAndSettle();
+    expect(find.byType(AddEntryDialoge), findsOneWidget);
+
+    await tester.enterText(find.byType(TextFormField).at(0), '123'); // sys
+    await tester.enterText(find.byType(TextFormField).at(1), '67'); // dia
+    await tester.enterText(find.byType(TextFormField).at(2), '56'); // pul
+    await tester.enterText(find.byType(TextFormField).at(3), 'some test sample note'); // note
+    await tester.tap(find.byType(ColorSelectionListTile));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byElementPredicate(findColored(Colors.red)));
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.text(localizations.btnSave));
+    await tester.pumpAndSettle();
+    expect(find.byType(AddEntryDialoge), findsNothing);
+
+    await tester.pumpUntil(() => !find.text(localizations.loading).hasFound);
+    expect(find.text(localizations.loading), findsNothing);
+
+    expect(find.byType(MeasurementListRow), findsOneWidget);
+    final submittedRecord = tester.widget<MeasurementListRow>(find.byType(MeasurementListRow)).record;
+    expect(submittedRecord.systolic, 123);
+    expect(submittedRecord.diastolic, 67);
+    expect(submittedRecord.pulse, 56);
+    expect(submittedRecord.needlePin?.color.value, Colors.red.value);
+    expect(submittedRecord.notes, 'some test sample note');
+
+    expect(find.text('some test sample note'), findsNothing);
+    await tester.tap(find.byType(MeasurementListRow));
+    await tester.pumpAndSettle();
+    expect(find.text('some test sample note'), findsOneWidget);
   });
 }
