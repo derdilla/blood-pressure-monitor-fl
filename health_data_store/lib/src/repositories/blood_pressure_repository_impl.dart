@@ -50,7 +50,7 @@ class BloodPressureRepositoryImpl extends BloodPressureRepository {
       if (record.pul != null) {
         await txn.insert('Pulse', {
           'entryID': entryID,
-          'pul': record.pul!.kPa,
+          'pul': record.pul,
         });
       }
     });
@@ -72,9 +72,9 @@ class BloodPressureRepositoryImpl extends BloodPressureRepository {
       final timeS = r['timestampUnixS'] as int;
       final newRec = BloodPressureRecord(
         time: DateTimeS.fromSecondsSinceEpoch(timeS),
-        sys: _decode(r['sys']),
-        dia: _decode(r['dia']),
-        pul: _decode(r['pul']),
+        sys: _decodePressure(r['sys']),
+        dia: _decodePressure(r['dia']),
+        pul: _decodeInt(r['pul']),
       );
       if (newRec.sys !=null || newRec.dia != null || newRec.pul != null) {
         records.add(newRec);
@@ -109,7 +109,7 @@ class BloodPressureRepositoryImpl extends BloodPressureRepository {
       if (value.dia != null)
         value.dia!.kPa,
       if (value.pul != null)
-        value.pul!.kPa,
+        value.pul,
     ]);
     if (entryResult.isEmpty) return;
     final entryID = entryResult.first['entryID'];
@@ -121,9 +121,16 @@ class BloodPressureRepositoryImpl extends BloodPressureRepository {
       await txn.delete('Pulse', where: 'entryID = ?', whereArgs: [entryID]);
   });
 
-  Pressure? _decode(Object? value) {
+  Pressure? _decodePressure(Object? value) {
     if (value is! double) return null;
     return Pressure.kPa(value);
+  }
+
+  int? _decodeInt(Object? value) {
+    if (value is int) return value;
+    if (value is double) return value.toInt();
+    if (value is num) return value.toInt();
+    return null;
   }
 
   @override

@@ -70,7 +70,10 @@ class DatabaseManager {
     for (final info in [
       ('Systolic','sys'),
       ('Diastolic', 'dia'),
-      ('Pulse','pul')
+      // Pulse is stored as a double because bpm could be measured over
+      // non one-minute intervalls which might be necessary to support in the
+      // future.
+      ('Pulse','pul'),
     ]) {
       await txn.execute('CREATE TABLE "${info.$1}" ('
         '"entryID"	    INTEGER NOT NULL,'

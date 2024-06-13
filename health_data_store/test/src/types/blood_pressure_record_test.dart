@@ -9,17 +9,17 @@ void main() {
       time: time,
       sys: Pressure.mmHg(123),
       dia: Pressure.mmHg(56),
-      pul: Pressure.mmHg(78),
+      pul: 78,
     );
     expect(record.time, time);
     expect(record.sys?.mmHg, 123);
     expect(record.dia?.mmHg, 56);
-    expect(record.pul?.mmHg, 78);
+    expect(record.pul, 78);
     expect(record, equals(BloodPressureRecord(
       time: time,
       sys: Pressure.mmHg(123),
       dia: Pressure.mmHg(56),
-      pul: Pressure.mmHg(78),
+      pul: 78,
     )));
   });
   test('should initialize with partial data', () {
@@ -31,12 +31,12 @@ void main() {
     expect(record.time, time);
     expect(record.sys?.mmHg, null);
     expect(record.dia?.mmHg, 56);
-    expect(record.pul?.mmHg, null);
+    expect(record.pul, null);
     expect(record, isNot(equals(BloodPressureRecord(
       time: time,
       sys: Pressure.mmHg(123),
       dia: Pressure.mmHg(56),
-      pul: Pressure.mmHg(78),
+      pul: 78,
     ))));
   });
 }
@@ -50,5 +50,5 @@ BloodPressureRecord mockRecord({
   time: time!=null ? DateTime.fromMillisecondsSinceEpoch(time) : DateTime.now(),
   sys: sys == null ? null : Pressure.mmHg(sys),
   dia: dia == null ? null : Pressure.mmHg(dia),
-  pul: pul == null ? null : Pressure.mmHg(pul),
+  pul: pul,
 );
