@@ -29,7 +29,13 @@ jobs:
         sparse-checkout: |
           app
           health_data_store
-
+    - name: Setup dart
+      uses: dart-lang/setup-dart@v1
+      with:
+        sdk: ${{ env.DART_SDK }}
+    - name: Generate code
+      run: dart run build_runner build
+      working-directory: ./health_data_store
     - name: Setup Flutter
       uses: subosito/flutter-action@v2
       with:
@@ -74,9 +80,6 @@ jobs:
         with:
           sdk: ${{ env.DART_SDK }}
       - name: Generate code
-        run: dart pub get
-        working-directory: ./health_data_store
-      - name: Generate code
         run: dart run build_runner build
         working-directory: ./health_data_store
       - name: Setup Flutter
@@ -115,9 +118,6 @@ jobs:
       uses: dart-lang/setup-dart@v1
       with:
         sdk: ${{ env.DART_SDK }}
-    - name: Generate code
-      run: dart pub get
-      working-directory: ./health_data_store
     - name: Generate code
       run: dart run build_runner build
       working-directory: ./health_data_store
