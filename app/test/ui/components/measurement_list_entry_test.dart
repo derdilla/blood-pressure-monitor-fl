@@ -1,7 +1,5 @@
 import 'package:blood_pressure_app/components/dialoges/add_measurement_dialoge.dart';
 import 'package:blood_pressure_app/components/measurement_list/measurement_list_entry.dart';
-import 'package:blood_pressure_app/model/blood_pressure/needle_pin.dart';
-import 'package:blood_pressure_app/model/blood_pressure/record.dart';
 import 'package:blood_pressure_app/model/storage/settings_store.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -13,21 +11,21 @@ void main() {
   testWidgets('should initialize without errors', (tester) async {
     await tester.pumpWidget(materialApp(MeasurementListRow(
       settings: Settings(),
-      record: BloodPressureRecord(DateTime(2023), 123, 80, 60, 'test'),),),);
+      record: mockRecordPos(DateTime(2023), 123, 80, 60, 'test'),),),);
     expect(tester.takeException(), isNull);
     await tester.pumpWidget(materialApp(MeasurementListRow(
       settings: Settings(),
-      record: BloodPressureRecord(DateTime.fromMillisecondsSinceEpoch(31279811), null, null, null, 'null test'),),),);
+      record: mockRecordPos(DateTime.fromMillisecondsSinceEpoch(31279811), null, null, null, 'null test'),),),);
     expect(tester.takeException(), isNull);
     await tester.pumpWidget(materialApp(MeasurementListRow(
       settings: Settings(),
-      record: BloodPressureRecord(DateTime(2023), 124, 85, 63, 'color', needlePin: const MeasurementNeedlePin(Colors.cyan)),),),);
+      record: mockRecordPos(DateTime(2023), 124, 85, 63, 'color',Colors.cyan))));
     expect(tester.takeException(), isNull);
   });
   testWidgets('should expand correctly', (tester) async {
     await tester.pumpWidget(materialApp(MeasurementListRow(
         settings: Settings(),
-        record: BloodPressureRecord(DateTime(2023), 123, 78, 56, 'Test texts'),),),);
+        record: mockRecordPos(DateTime(2023), 123, 78, 56, 'Test texts'),),),);
     expect(find.byIcon(Icons.expand_more), findsOneWidget);
     await tester.tap(find.byIcon(Icons.expand_more));
     await tester.pumpAndSettle();
@@ -38,7 +36,7 @@ void main() {
   testWidgets('should display correct information', (tester) async {
     await tester.pumpWidget(materialApp(MeasurementListRow(
         settings: Settings(),
-        record: BloodPressureRecord(DateTime(2023), 123, 78, 56, 'Test text'),),),);
+        record: mockRecordPos(DateTime(2023), 123, 78, 56, 'Test text'),),),);
     expect(find.text('123'), findsOneWidget);
     expect(find.text('78'), findsOneWidget);
     expect(find.text('56'), findsOneWidget);

@@ -10,6 +10,7 @@ import 'package:blood_pressure_app/model/storage/intervall_store.dart';
 import 'package:blood_pressure_app/model/storage/settings_store.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:health_data_store/health_data_store.dart';
 
 import 'medicine/medicine_test.dart';
 
@@ -34,7 +35,7 @@ void main() {
     });
 
     test('should load same data from json in edge cases', () {
-      final initialData = IntervallStorage(stepSize: TimeStep.month, range: DateTimeRange(
+      final initialData = IntervallStorage(stepSize: TimeStep.month, range: DateRange(
           start: DateTime.fromMillisecondsSinceEpoch(1234),
           end: DateTime.fromMillisecondsSinceEpoch(5678),
       ),);

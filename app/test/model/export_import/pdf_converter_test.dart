@@ -1,6 +1,4 @@
 
-import 'package:blood_pressure_app/model/blood_pressure/needle_pin.dart';
-import 'package:blood_pressure_app/model/blood_pressure/record.dart';
 import 'package:blood_pressure_app/model/export_import/pdf_converter.dart';
 import 'package:blood_pressure_app/model/storage/export_columns_store.dart';
 import 'package:blood_pressure_app/model/storage/export_pdf_settings_store.dart';
@@ -8,6 +6,9 @@ import 'package:blood_pressure_app/model/storage/settings_store.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:health_data_store/health_data_store.dart';
+
+import 'record_formatter_test.dart';
 
 void main() {
   test('should not return empty data', () async {
@@ -57,6 +58,6 @@ void main() {
 
 List<BloodPressureRecord> createRecords([int count = 20]) => [
   for (int i = 0; i<count; i++)
-    BloodPressureRecord(DateTime.fromMillisecondsSinceEpoch(123456 + i),
-        i, 100+i, 200+1, 'note $i', needlePin: MeasurementNeedlePin(Color(123+i)),),
+    mockRecordPos(DateTime.fromMillisecondsSinceEpoch(123456 + i),
+        i, 100+i, 200+1, 'note $i', Color(123+i)),
 ];

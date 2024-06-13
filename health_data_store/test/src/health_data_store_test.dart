@@ -17,16 +17,16 @@ void main() {
   final store = await HealthDataStore.load(
       await openDatabase(inMemoryDatabasePath));
   expect(store, isNotNull);
-  expect(() => store!.medRepo, returnsNormally);
-  expect(() => store!.intakeRepo, returnsNormally);
-  expect(() => store!.bpRepo, returnsNormally);
-  expect(() => store!.noteRepo, returnsNormally);
+  expect(() => store.medRepo, returnsNormally);
+  expect(() => store.intakeRepo, returnsNormally);
+  expect(() => store.bpRepo, returnsNormally);
+  expect(() => store.noteRepo, returnsNormally);
  });
  test('constructed repos should work', () async {
   final store = await HealthDataStore.load(
       await openDatabase(inMemoryDatabasePath));
   expect(store, isNotNull);
-  final bpRepo = store!.bpRepo;
+  final bpRepo = store.bpRepo;
   final r = mockRecord(time: 10000, sys: 123, dia: 45, pul: 67);
   await bpRepo.add(r);
   final data = await bpRepo.get(DateRange(

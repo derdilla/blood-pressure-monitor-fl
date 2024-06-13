@@ -107,6 +107,36 @@ Future<Widget> newAppBase(Widget child,  {
   ),);
 }
 
+/// Creates a the same App as the main method.
+Future<Widget> appBaseWithData(Widget child,  {
+  Settings? settings,
+  ExportSettings? exportSettings,
+  CsvExportSettings? csvExportSettings,
+  PdfExportSettings? pdfExportSettings,
+  IntervallStoreManager? intervallStoreManager,
+  List<BloodPressureRecord>? records,
+  List<Medicine>? meds,
+  List<MedicineIntake>? intakes,
+}) async {
+  final db = await _getHealthDateStore();
+  final bpRepo = db.bpRepo;
+  await Future.forEach<BloodPressureRecord>(records ?? [], bpRepo.add);
+  final medRepo = db.medRepo;
+  final intakeRepo = db.intakeRepo;
+
+  return newAppBase(
+    child,
+    settings: settings,
+    exportSettings: exportSettings,
+    csvExportSettings: csvExportSettings,
+    pdfExportSettings: pdfExportSettings,
+    intervallStoreManager: intervallStoreManager,
+    bpRepo: bpRepo,
+    medRepo: medRepo,
+    intakeRepo: intakeRepo,
+  );
+}
+
 
 /// Open a dialoge through a button press.
 ///

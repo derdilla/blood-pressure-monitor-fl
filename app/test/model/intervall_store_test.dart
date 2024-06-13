@@ -1,11 +1,11 @@
 
 import 'package:blood_pressure_app/model/storage/intervall_store.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:health_data_store/health_data_store.dart';
 
 void main() {
   test('base constructor should initialize with values', () {
-    final storageObject = IntervallStorage(stepSize: TimeStep.month, range: DateTimeRange(
+    final storageObject = IntervallStorage(stepSize: TimeStep.month, range: DateRange(
         start: DateTime.fromMillisecondsSinceEpoch(1234),
         end: DateTime.fromMillisecondsSinceEpoch(5678),
     ),);
@@ -26,7 +26,7 @@ void main() {
   test('base constructor should initialize with only incomplete parameters', () {
     // only tests for no crashes
     IntervallStorage(stepSize: TimeStep.last30Days);
-    IntervallStorage(range: DateTimeRange(
+    IntervallStorage(range: DateRange(
         start: DateTime.fromMillisecondsSinceEpoch(1234),
         end: DateTime.fromMillisecondsSinceEpoch(5678),
     ),);
@@ -56,7 +56,7 @@ void main() {
     final yearIntervall = IntervallStorage(stepSize: TimeStep.year);
     final last7DaysIntervall = IntervallStorage(stepSize: TimeStep.last7Days);
     final last30DaysIntervall = IntervallStorage(stepSize: TimeStep.last30Days);
-    final customIntervall = IntervallStorage(stepSize: TimeStep.custom, range: DateTimeRange(
+    final customIntervall = IntervallStorage(stepSize: TimeStep.custom, range: DateRange(
         start: DateTime.fromMillisecondsSinceEpoch(1234),
         end: DateTime.fromMillisecondsSinceEpoch(1234 + 24 * 60 * 60 * 1000), // one day
     ),);
