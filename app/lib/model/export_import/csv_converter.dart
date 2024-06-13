@@ -1,6 +1,5 @@
 
 import 'package:blood_pressure_app/model/blood_pressure/needle_pin.dart';
-import 'package:blood_pressure_app/model/blood_pressure/record.dart';
 import 'package:blood_pressure_app/model/export_import/column.dart';
 import 'package:blood_pressure_app/model/export_import/import_field_type.dart' show RowDataFieldType;
 import 'package:blood_pressure_app/model/export_import/record_parsing_result.dart';
@@ -8,6 +7,7 @@ import 'package:blood_pressure_app/model/storage/export_columns_store.dart';
 import 'package:blood_pressure_app/model/storage/export_csv_settings_store.dart';
 import 'package:collection/collection.dart';
 import 'package:csv/csv.dart';
+import 'package:health_data_store/health_data_store.dart';
 
 /// Utility class to convert between csv strings and [BloodPressureRecord]s.
 class CsvConverter {
@@ -142,11 +142,21 @@ class CsvConverter {
       final MeasurementNeedlePin? needlePin = recordPieces.firstWhereOrNull(
             (piece) => piece.$1 == RowDataFieldType.needlePin,)?.$2;
 
-      records.add(BloodPressureRecord(timestamp, sys, dia, pul, note, needlePin: needlePin));
+      records.add(BloodPressureRecord(
+        time: timestamp,
+        sys: sys?.asMMHg,
+        dia: dia?.asMMHg,
+        pul: pul,
+        /*FIXME: note, needlePin: needlePin*/));
       currentLineNumber++;
     }
 
     assert(records.length == dataLines.length, 'every line should have been parse');
     return RecordParsingResult.ok(records);
   }
+}
+
+extension _AsMMHg on int {
+  /// Interprets the value as a Pressure in mmHg.
+  Pressure get asMMHg => Pressure.mmHg(this);
 }

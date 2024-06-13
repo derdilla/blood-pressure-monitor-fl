@@ -1,14 +1,13 @@
-import 'dart:convert';
-
 import 'package:blood_pressure_app/components/consistent_future_builder.dart';
 import 'package:blood_pressure_app/components/dialoges/tree_selection_dialoge.dart';
-import 'package:blood_pressure_app/model/blood_pressure/needle_pin.dart';
-import 'package:blood_pressure_app/model/blood_pressure/record.dart';
 import 'package:blood_pressure_app/model/export_import/import_field_type.dart';
 import 'package:blood_pressure_app/model/storage/convert_util.dart';
+import 'package:blood_pressure_app/model/storage/settings_store.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:health_data_store/health_data_store.dart';
+import 'package:provider/provider.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:sqlparser/sqlparser.dart';
 
@@ -92,29 +91,32 @@ class _ForeignDBImportScreenState extends State<ForeignDBImportScreen> {
                 && madeSelections.every(row.containsKey),);
             final timestamp = ConvertUtil.parseTime(row[timeColumn]);
             if (timestamp == null) throw FormatException('Unable to parse time: ${row[timeColumn]}'); // TODO: error handling
-            var record = BloodPressureRecord(timestamp, null, null, null, '');
+            var record = BloodPressureRecord(time: timestamp);
+            final settings = context.read<Settings>();
             for (final colType in dataColumns) {
               switch (colType.$2) {
                 case RowDataFieldType.timestamp:
                   assert(false, 'Not up for selection');
                 case RowDataFieldType.sys:
+                  final val = ConvertUtil.parseInt(row[colType.$1]);
                   record = record.copyWith(
-                    systolic: ConvertUtil.parseInt(row[colType.$1]),
+                    sys: (val == null) ? null : settings.preferredPressureUnit.wrap(val), // TODO: is this correct?
                   );
                 case RowDataFieldType.dia:
+                  final val = ConvertUtil.parseInt(row[colType.$1]);
                   record = record.copyWith(
-                    diastolic: ConvertUtil.parseInt(row[colType.$1]),
+                    dia: (val == null) ? null : settings.preferredPressureUnit.wrap(val),
                   );
                 case RowDataFieldType.pul:
                   record = record.copyWith(
-                    pulse: ConvertUtil.parseInt(row[colType.$1]),
+                    pul: ConvertUtil.parseInt(row[colType.$1]),
                   );
                 case RowDataFieldType.notes:
-                  record = record.copyWith(
+                  /*re cord = record.copyWith( FIXME
                     notes: ConvertUtil.parseString(row[colType.$1]),
-                  );
+                  );*/
                 case RowDataFieldType.needlePin:
-                  try {
+                  /*try { FIXME
                     final json = jsonDecode(row[colType.$1].toString());
                     if (json is! Map<String, dynamic>) continue;
                     final pin = MeasurementNeedlePin.fromMap(json);
@@ -123,7 +125,7 @@ class _ForeignDBImportScreenState extends State<ForeignDBImportScreen> {
                     );
                   } on FormatException {
                     // Not parsable: silently ignore for now
-                  }
+                  }*/
               }
             }
             measurements.add(record);

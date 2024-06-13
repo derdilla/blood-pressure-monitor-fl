@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:collection';
 
 import 'package:blood_pressure_app/components/dialoges/add_measurement_dialoge.dart';
-import 'package:blood_pressure_app/model/blood_pressure/model.dart';
 import 'package:blood_pressure_app/model/storage/intervall_store.dart';
 import 'package:blood_pressure_app/model/storage/settings_store.dart';
 import 'package:blood_pressure_app/screens/elements/blood_pressure_builder.dart';
@@ -86,7 +85,6 @@ class LegacyMeasurementsList extends StatelessWidget {
                             confirmDismiss: (direction) async {
                               final repo = RepositoryProvider.of<BloodPressureRepository>(context);
                               if (direction == DismissDirection.startToEnd) { // edit
-                                final model = Provider.of<BloodPressureModel>(context, listen: false);
                                 final entry = await showAddEntryDialoge(context,
                                   Provider.of<Settings>(context, listen: false),
                                   RepositoryProvider.of<MedicineRepository>(context),
@@ -94,11 +92,11 @@ class LegacyMeasurementsList extends StatelessWidget {
                                 );
                                 if (entry?.$1 != null) {
                                   if (context.mounted) {
-                                    // TODO: reimplement
+                                    // FIXME
                                     // repo.addAndExport(context, entry!.$1!);
                                     throw UnimplementedError('addAndExport not supported');
                                   } else {
-                                    unawaited(repo.add(entry!.$1!));
+                                    await repo.add(entry!.$1!);
                                   }
                                 }
                                 assert(entry?.$2 == null);
@@ -139,7 +137,7 @@ class LegacyMeasurementsList extends StatelessWidget {
                                     action: SnackBarAction(
                                       label: AppLocalizations.of(context)!.btnUndo,
                                       onPressed: () async {
-                                        // TODO: reimplement
+                                        // FIXME
                                         /*
                                         model.addAndExport(context, BloodPressureRecord(
                                             data[index].creationTime,

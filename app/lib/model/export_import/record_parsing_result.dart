@@ -1,6 +1,7 @@
 
-import 'package:blood_pressure_app/model/blood_pressure/record.dart';
+
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:health_data_store/health_data_store.dart';
 
 /// Indicate a possible error during record parsing.
 class RecordParsingResult {

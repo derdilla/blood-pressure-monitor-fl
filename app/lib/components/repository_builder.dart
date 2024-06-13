@@ -1,5 +1,4 @@
 import 'package:blood_pressure_app/components/consistent_future_builder.dart';
-import 'package:blood_pressure_app/model/datarange_extension.dart';
 import 'package:blood_pressure_app/model/storage/intervall_store.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -40,7 +39,7 @@ class _RepositoryBuilderState<T, R extends Repository<T>> extends State<Reposito
       return StreamBuilder(
         stream: _repo.subscribe(),
         builder: (context, _) => ConsistentFutureBuilder(
-          future: _repo.get(range.dateRange),
+          future: _repo.get(range),
           onData: widget.onData,
         ),
       );

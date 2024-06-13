@@ -4,14 +4,15 @@ import 'dart:math';
 import 'package:blood_pressure_app/components/consistent_future_builder.dart';
 import 'package:blood_pressure_app/components/date_time_picker.dart';
 import 'package:blood_pressure_app/components/dialoges/fullscreen_dialoge.dart';
-import 'package:blood_pressure_app/components/settings/settings_widgets.dart';
 import 'package:blood_pressure_app/model/blood_pressure/needle_pin.dart';
+import 'package:blood_pressure_app/model/blood_pressure/pressure_unit.dart';
 import 'package:blood_pressure_app/model/storage/storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:health_data_store/health_data_store.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 /// Input mask for entering measurements.
 class AddEntryDialoge extends StatefulWidget {
@@ -96,10 +97,10 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
   @override
   void initState() {
     super.initState();
-    time = widget.initialRecord?.creationTime ?? DateTime.now();
-    needlePin = widget.initialRecord?.needlePin;
+    time = widget.initialRecord?.time ?? DateTime.now();
+    // needlePin = widget.initialRecord?.needlePin; TODO
     sysController = TextEditingController(
-      text: (widget.initialRecord?.systolic ?? '').toString(),
+      text: (widget.initialRecord?.sys ?? '').toString(),
     );
     if (widget.initialRecord != null) {
       _measurementFormActive = true;
@@ -230,8 +231,14 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
           recordFormKey.currentState?.save();
           if (systolic != null || diastolic != null || pulse != null
               || (notes ?? '').isNotEmpty || needlePin != null) {
-            record = BloodPressureRecord(time, systolic, diastolic, pulse,
-              notes ?? '', needlePin: needlePin,);
+            final pressureUnit = context.read<Settings>().preferredPressureUnit;
+            // TODO: notes, needle pin
+            record = BloodPressureRecord(
+              time: time,
+              sys: systolic == null ? null : pressureUnit.wrap(systolic!),
+              dia: diastolic == null ? null : pressureUnit.wrap(diastolic!),
+              pul: pulse,
+            );
           }
         }
 
@@ -285,7 +292,11 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
                       const SizedBox(width: 16,),
                       _buildValueInput(localizations,
                         labelText: localizations.diaLong,
-                        initialValue: widget.initialRecord?.diastolic,
+                        // TODO: stop duplicating code like this
+                        initialValue: switch(widget.settings.preferredPressureUnit) {
+                          PressureUnit.mmHg => widget.initialRecord?.dia?.mmHg,
+                          PressureUnit.kPa => widget.initialRecord?.dia?.kPa.round(),
+                        },
                         onSaved: (value) =>
                             setState(() => diastolic = int.tryParse(value ?? '')),
                         focusNode: diaFocusNode,
@@ -302,14 +313,14 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
                       const SizedBox(width: 16,),
                       _buildValueInput(localizations,
                         labelText: localizations.pulLong,
-                        initialValue: widget.initialRecord?.pulse,
+                        initialValue: widget.initialRecord?.pul,
                         focusNode: pulFocusNode,
                         onSaved: (value) =>
                             setState(() => pulse = int.tryParse(value ?? '')),
                       ),
                     ],
                   ),
-                  Padding(
+                  /*Padding( FIXME
                     padding: const EdgeInsets.symmetric(vertical: 16),
                     child: TextFormField(
                       initialValue: widget.initialRecord?.notes,
@@ -343,7 +354,7 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
                     },
                     initialColor: needlePin?.color ?? Colors.transparent,
                     shape: _buildShapeBorder(needlePin?.color),
-                  ),
+                  ),*/
                 ],
               ),
             ),

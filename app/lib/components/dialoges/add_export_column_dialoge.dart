@@ -1,12 +1,12 @@
 import 'package:blood_pressure_app/components/dialoges/fullscreen_dialoge.dart';
 import 'package:blood_pressure_app/components/measurement_list/measurement_list_entry.dart';
-import 'package:blood_pressure_app/model/blood_pressure/record.dart';
 import 'package:blood_pressure_app/model/export_import/column.dart';
 import 'package:blood_pressure_app/model/export_import/record_formatter.dart';
 import 'package:blood_pressure_app/model/storage/settings_store.dart';
 import 'package:blood_pressure_app/screens/subsettings/export_import/export_field_format_documentation_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:health_data_store/health_data_store.dart';
 import 'package:intl/intl.dart';
 
 /// Dialoge widget for creating and editing a [UserColumn].
@@ -162,13 +162,15 @@ class _AddExportColumnDialogeState extends State<AddExportColumnDialoge>
                 ),
                 child: (){
                     final record = BloodPressureRecord(
-                      DateTime.now(),
-                      123, 78, 65,
-                      'test note',
+                      time: DateTime.now(),
+                      sys: widget.settings.preferredPressureUnit.wrap(123),
+                      dia: widget.settings.preferredPressureUnit.wrap(78),
+                      pul: 65,
+                      // FIXME 'test note',
                     );
                     final formatter = (type == _FormatterType.record)
-                        ? ScriptedFormatter(recordPattern ?? '')
-                        : ScriptedTimeFormatter(timePattern ?? '');
+                      ? ScriptedFormatter(recordPattern ?? '')
+                      : ScriptedTimeFormatter(timePattern ?? '');
                     final text = formatter.encode(record);
                     final decoded = formatter.decode(text);
                     return Column(
@@ -179,7 +181,7 @@ class _AddExportColumnDialogeState extends State<AddExportColumnDialoge>
                             settings: widget.settings,
                           ) else Text(
                             DateFormat('MMM d, y - h:m.s')
-                                .format(record.creationTime),
+                              .format(record.time),
                         ),
                         const SizedBox(height: 8,),
                         const Icon(Icons.arrow_downward),

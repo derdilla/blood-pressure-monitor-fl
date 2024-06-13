@@ -31,6 +31,7 @@ class HealthDataStore {
   /// returned. This is done to improve performance while interacting with the
   /// database.
   static Future<HealthDataStore> load(Database db) async {
+    // TODO: loading readOnly dbs
     assert(db.isOpen);
     final mngr = await DatabaseManager.load(db);
     unawaited(mngr.performCleanup());

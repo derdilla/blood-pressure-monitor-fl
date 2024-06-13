@@ -15,8 +15,8 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class _LineChart extends StatefulWidget {
-
   const _LineChart({this.height = 200});
+
   final double height;
 
   @override
@@ -26,86 +26,86 @@ class _LineChart extends StatefulWidget {
 class _LineChartState extends State<_LineChart> {
   @override
   Widget build(BuildContext context) => SizedBox(
-        height: widget.height,
-        child: RepositoryBuilder<MedicineIntake, MedicineIntakeRepository>(
-          rangeType: IntervallStoreManagerLocation.mainPage,
-          onData: (context, List<dynamic> intakesData) => Consumer<Settings>(
-          builder: (context, settings, child) => BloodPressureBuilder(
-              rangeType: IntervallStoreManagerLocation.mainPage,
-              onData: (BuildContext context, UnmodifiableListView<BloodPressureRecord> records) {
-                // TODO: Figure out why type safety isn't possible. (see home_screen for more info)
-                final List<MedicineIntake> intakes = intakesData.cast();
+    height: widget.height,
+    child: RepositoryBuilder<MedicineIntake, MedicineIntakeRepository>(
+      rangeType: IntervallStoreManagerLocation.mainPage,
+      onData: (context, List<dynamic> intakesData) => Consumer<Settings>(
+      builder: (context, settings, child) => BloodPressureBuilder(
+        rangeType: IntervallStoreManagerLocation.mainPage,
+        onData: (BuildContext context, UnmodifiableListView<BloodPressureRecord> records) {
+          // TODO: Figure out why type safety isn't possible. (see home_screen for more info)
+          final List<MedicineIntake> intakes = intakesData.cast();
 
-                final List<BloodPressureRecord> data = records.toList();
-                data.sort((a, b) => a.time.compareTo(b.time));
+          final List<BloodPressureRecord> data = records.toList();
+          data.sort((a, b) => a.time.compareTo(b.time));
 
-                // calculate lines for graph
-                final pulSpots = <FlSpot>[];
-                final diaSpots = <FlSpot>[];
-                final sysSpots = <FlSpot>[];
-                int maxValue = 0;
-                final int minValue = (settings.validateInputs ? 30 : 0);
-                /// Horizontally first value
-                double? graphBegin;
-                /// Horizontally last value
-                double? graphEnd;
-                for (final e in data) {
-                  final x = e.time.millisecondsSinceEpoch.toDouble();
-                  if (e.dia != null) {
-                    diaSpots.add(FlSpot(x, e.dia!.mmHg.toDouble()));
-                    maxValue = max(maxValue, e.dia!.mmHg);
-                  }
-                  if (e.sys != null) {
-                    sysSpots.add(FlSpot(x, e.sys!.mmHg.toDouble()));
-                    maxValue = max(maxValue, e.sys!.mmHg);
-                  }
-                  if (e.pul != null) {
-                    pulSpots.add(FlSpot(x, e.pul!.mmHg.toDouble()));
-                    maxValue = max(maxValue, e.pul!.mmHg);
-                  }
-                  graphBegin ??= x;
-                  graphEnd ??= x;
-                  if (x < graphBegin) graphBegin = x;
-                  if (x > graphEnd) graphEnd = x;
-                }
+          // calculate lines for graph
+          final pulSpots = <FlSpot>[];
+          final diaSpots = <FlSpot>[];
+          final sysSpots = <FlSpot>[];
+          int maxValue = 0;
+          final int minValue = (settings.validateInputs ? 30 : 0);
+          /// Horizontally first value
+          double? graphBegin;
+          /// Horizontally last value
+          double? graphEnd;
+          for (final e in data) {
+            final x = e.time.millisecondsSinceEpoch.toDouble();
+            if (e.dia != null) {
+              diaSpots.add(FlSpot(x, e.dia!.mmHg.toDouble()));
+              maxValue = max(maxValue, e.dia!.mmHg);
+            }
+            if (e.sys != null) {
+              sysSpots.add(FlSpot(x, e.sys!.mmHg.toDouble()));
+              maxValue = max(maxValue, e.sys!.mmHg);
+            }
+            if (e.pul != null) {
+              pulSpots.add(FlSpot(x, e.pul!.toDouble()));
+              maxValue = max(maxValue, e.pul!);
+            }
+            graphBegin ??= x;
+            graphEnd ??= x;
+            if (x < graphBegin) graphBegin = x;
+            if (x > graphEnd) graphEnd = x;
+          }
 
-                if (diaSpots.length < 2 && sysSpots.length < 2 && pulSpots.length < 2 || graphBegin == null || graphEnd == null) {
-                  return Text(AppLocalizations.of(context)!.errNotEnoughDataToGraph);
-                }
+          if (diaSpots.length < 2 && sysSpots.length < 2 && pulSpots.length < 2 || graphBegin == null || graphEnd == null) {
+            return Text(AppLocalizations.of(context)!.errNotEnoughDataToGraph);
+          }
 
-                // Add padding to avoid overflowing vertical lines.
-                final len = graphEnd - graphBegin;
-                graphBegin -= len / 40;
-                graphEnd += len / 40;
+          // Add padding to avoid overflowing vertical lines.
+          final len = graphEnd - graphBegin;
+          graphBegin -= len / 40;
+          graphEnd += len / 40;
 
-                return TweenAnimationBuilder<double>(
-                  duration: Duration(milliseconds: settings.animationSpeed), // interacts with LineChart duration property
-                  tween: Tween<double>(begin: 0, end: settings.graphLineThickness),
-                  builder: (context, animatedThickness, child) => LineChart(
-                      duration: const Duration(milliseconds: 200),
-                      LineChartData(
-                          minY: minValue.toDouble(),
-                          maxY: maxValue + 5,
-                          minX: graphBegin,
-                          maxX: graphEnd,
-                          clipData: const FlClipData.all(),
-                          titlesData: _buildFlTitlesData(settings,
-                              DateTimeRange(start: data.first.time, end: data.last.time),),
-                          lineTouchData: const LineTouchData(
-                              touchTooltipData: LineTouchTooltipData(tooltipMargin: -200, tooltipRoundedRadius: 20),
-                          ),
-                          lineBarsData: buildBars(animatedThickness, settings, sysSpots, diaSpots, pulSpots,
-                              maxValue, minValue, graphBegin, graphEnd, records,
-                              intakes,
-                          ),
-                      ),
-                    ),
-                );
-              },
+          return TweenAnimationBuilder<double>(
+            duration: Duration(milliseconds: settings.animationSpeed), // interacts with LineChart duration property
+            tween: Tween<double>(begin: 0, end: settings.graphLineThickness),
+            builder: (context, animatedThickness, child) => LineChart(
+              duration: const Duration(milliseconds: 200),
+              LineChartData(
+                minY: minValue.toDouble(),
+                maxY: maxValue + 5,
+                minX: graphBegin,
+                maxX: graphEnd,
+                clipData: const FlClipData.all(),
+                titlesData: _buildFlTitlesData(settings,
+                  DateTimeRange(start: data.first.time, end: data.last.time),),
+                lineTouchData: const LineTouchData(
+                  touchTooltipData: LineTouchTooltipData(tooltipMargin: -200, tooltipRoundedRadius: 20),
+                ),
+                lineBarsData: buildBars(animatedThickness, settings, sysSpots, diaSpots, pulSpots,
+                  maxValue, minValue, graphBegin, graphEnd, records,
+                  intakes,
+                ),
+              ),
             ),
-        ),
+          );
+        },
       ),
-    );
+      ),
+    ),
+  );
 
   List<LineChartBarData> buildBars(
       double animatedThickness, 

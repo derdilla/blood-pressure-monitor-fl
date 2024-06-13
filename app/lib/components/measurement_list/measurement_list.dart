@@ -4,7 +4,7 @@ import 'package:blood_pressure_app/model/storage/settings_store.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:health_data_store/health_data_store.dart' show BloodPressureRecord, MedicineIntake, MedicineIntakeRepository;
+import 'package:health_data_store/health_data_store.dart';
 
 /// List that renders measurements and medicine intakes.
 ///
@@ -35,9 +35,9 @@ class MeasurementList extends StatelessWidget {
     entries.addAll(records);
     entries.addAll(intakes);
     entries.sort((e1, e2) {
-      if (e2 is BloodPressureRecord && e1 is BloodPressureRecord) return e2.creationTime.compareTo(e1.creationTime);
-      if (e2 is BloodPressureRecord && e1 is MedicineIntake) return e2.creationTime.compareTo(e1.time);
-      if (e2 is MedicineIntake && e1 is BloodPressureRecord) return e2.time.compareTo(e1.creationTime);
+      if (e2 is BloodPressureRecord && e1 is BloodPressureRecord) return e2.time.compareTo(e1.time);
+      if (e2 is BloodPressureRecord && e1 is MedicineIntake) return e2.time.compareTo(e1.time);
+      if (e2 is MedicineIntake && e1 is BloodPressureRecord) return e2.time.compareTo(e1.time);
       if (e2 is MedicineIntake && e1 is MedicineIntake) return e2.time.compareTo(e1.time);
       assert(false);
       return 0;

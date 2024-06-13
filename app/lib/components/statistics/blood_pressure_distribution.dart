@@ -1,9 +1,9 @@
 import 'package:blood_pressure_app/components/statistics/value_distribution.dart';
-import 'package:blood_pressure_app/model/blood_pressure/record.dart';
 import 'package:blood_pressure_app/model/storage/settings_store.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:health_data_store/health_data_store.dart';
 
 /// Viewer for [ValueDistribution]s from [BloodPressureRecord]s.
 ///
@@ -79,19 +79,20 @@ class _BloodPressureDistributionState extends State<BloodPressureDistribution>
           child: TabBarView(
             controller: _controller,
             children: [
+              // Preferred pressure unit can be ignored as values are relative.
               ValueDistribution(
                 key: const Key('sys-dist'),
-                values: widget.records.map((e) => e.systolic).whereNotNull(),
+                values: widget.records.map((e) => e.sys?.mmHg).whereNotNull(),
                 color: widget.settings.sysColor,
               ),
               ValueDistribution(
                 key: const Key('dia-dist'),
-                values: widget.records.map((e) => e.diastolic).whereNotNull(),
+                values: widget.records.map((e) => e.dia?.mmHg).whereNotNull(),
                 color: widget.settings.diaColor,
               ),
               ValueDistribution(
                 key: const Key('pul-dist'),
-                values: widget.records.map((e) => e.pulse).whereNotNull(),
+                values: widget.records.map((e) => e.pul).whereNotNull(),
                 color: widget.settings.pulColor,
               ),
             ],

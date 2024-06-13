@@ -1,10 +1,9 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:blood_pressure_app/components/dialoges/import_preview_dialoge.dart';
-import 'package:blood_pressure_app/model/blood_pressure/model.dart';
-import 'package:blood_pressure_app/model/blood_pressure/record.dart';
 import 'package:blood_pressure_app/model/export_import/csv_converter.dart';
 import 'package:blood_pressure_app/model/export_import/csv_record_parsing_actor.dart';
 import 'package:blood_pressure_app/model/export_import/pdf_converter.dart';
@@ -17,11 +16,15 @@ import 'package:blood_pressure_app/model/storage/settings_store.dart';
 import 'package:blood_pressure_app/platform_integration/platform_client.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:health_data_store/health_data_store.dart';
 import 'package:jsaver/jSaver.dart';
 import 'package:path/path.dart';
 import 'package:provider/provider.dart';
 import 'package:sqflite/sqflite.dart';
+
+// FIXME: import and export all datatypes (intakes, ...)
 
 /// Button row to export and import the current configuration.
 class ExportButtonBar extends StatelessWidget {
@@ -84,15 +87,19 @@ class ExportButtonBar extends StatelessWidget {
                       Provider.of<Settings>(context, listen: false).bottomAppBars,
                     );
                     if (importedRecords == null || !context.mounted) return;
-                    final model = Provider.of<BloodPressureModel>(context, listen: false);
-                    await model.addAll(importedRecords, null);
+                    final repo = context.read<BloodPressureRepository>();
+                    await Future.forEach<BloodPressureRecord>(importedRecords, repo.add);
                     messenger.showSnackBar(SnackBar(content: Text(
-                        localizations.importSuccess(importedRecords.length),),),);
+                      localizations.importSuccess(importedRecords.length),),),);
                     break;
                   case 'db':
-                    final model = Provider.of<BloodPressureModel>(context, listen: false);
-                    final importedModel = await BloodPressureModel.create(dbPath: file.path, isFullPath: true);
-                    await model.addAll(await importedModel.all, null);
+                    if (file.path == null) return;
+                    final repo = context.read<BloodPressureRepository>();
+                    final importedDB = await HealthDataStore.load(await openReadOnlyDatabase(file.path!));
+                    await Future.forEach(
+                      await importedDB.bpRepo.get(DateRange.all()),
+                      repo.add,
+                    );
                     break;
                   default:
                     _showError(messenger, localizations.errWrongImportFormat);
@@ -119,7 +126,7 @@ void performExport(BuildContext context, [AppLocalizations? localizations]) asyn
     case ExportFormat.db:
       final path = join(await getDatabasesPath(), 'blood_pressure.db');
 
-      if (context.mounted) _exportFile(context, path, '$filename.db', 'text/sqlite');
+      if (context.mounted) await _exportFile(context, path, '$filename.db', 'text/sqlite');
       break;
     case ExportFormat.csv:
       final csvConverter = CsvConverter(
@@ -128,7 +135,7 @@ void performExport(BuildContext context, [AppLocalizations? localizations]) asyn
       );
       final csvString = csvConverter.create(await _getRecords(context));
       final data = Uint8List.fromList(utf8.encode(csvString));
-      if (context.mounted) _exportData(context, data, '$filename.csv', 'text/csv');
+      if (context.mounted) await _exportData(context, data, '$filename.csv', 'text/csv');
       break;
     case ExportFormat.pdf:
       final pdfConverter = PdfConverter(
@@ -138,15 +145,15 @@ void performExport(BuildContext context, [AppLocalizations? localizations]) asyn
           Provider.of<ExportColumnsManager>(context, listen: false),
       );
       final pdf = await pdfConverter.create(await _getRecords(context));
-      if (context.mounted) _exportData(context, pdf, '$filename.pdf', 'text/pdf');
+      if (context.mounted) await _exportData(context, pdf, '$filename.pdf', 'text/pdf');
   }
 }
 
 /// Get the records that should be exported.
 Future<List<BloodPressureRecord>> _getRecords(BuildContext context) {
   final range = Provider.of<IntervallStoreManager>(context, listen: false).exportPage.currentRange;
-  final model = Provider.of<BloodPressureModel>(context, listen: false);
-  return model.getInTimeRange(range.start, range.end);
+  final model = RepositoryProvider.of<BloodPressureRepository>(context);
+  return model.get(range);
 }
 
 /// Save to default export path or share by providing a path.
@@ -155,7 +162,7 @@ Future<void> _exportFile(BuildContext context, String path, String fullFileName,
   if (settings.defaultExportDir.isEmpty) {
     await PlatformClient.shareFile(path, mimeType, fullFileName);
   } else {
-    JSaver.instance.save(
+    await JSaver.instance.save(
         fromPath: path,
         androidPathOptions: AndroidPathOptions(toDefaultDirectory: true),
     );

@@ -1,10 +1,10 @@
 import 'dart:convert';
 
 import 'package:blood_pressure_app/model/blood_pressure/needle_pin.dart';
-import 'package:blood_pressure_app/model/blood_pressure/record.dart';
 import 'package:blood_pressure_app/model/export_import/import_field_type.dart';
 import 'package:flutter/material.dart';
 import 'package:function_tree/function_tree.dart';
+import 'package:health_data_store/health_data_store.dart';
 import 'package:intl/intl.dart';
 
 /// Class to serialize and deserialize [BloodPressureRecord] values.
@@ -75,12 +75,12 @@ class ScriptedFormatter implements Formatter {
     var fieldContents = pattern;
 
     // variables
-    fieldContents = fieldContents.replaceAll(r'$TIMESTAMP', record.creationTime.millisecondsSinceEpoch.toString());
-    fieldContents = fieldContents.replaceAll(r'$SYS', record.systolic.toString());
-    fieldContents = fieldContents.replaceAll(r'$DIA', record.diastolic.toString());
-    fieldContents = fieldContents.replaceAll(r'$PUL', record.pulse.toString());
-    fieldContents = fieldContents.replaceAll(r'$NOTE', record.notes);
-    fieldContents = fieldContents.replaceAll(r'$COLOR', jsonEncode(record.needlePin?.toMap()));
+    fieldContents = fieldContents.replaceAll(r'$TIMESTAMP', record.time.millisecondsSinceEpoch.toString());
+    fieldContents = fieldContents.replaceAll(r'$SYS', (record.sys?.mmHg).toString());
+    fieldContents = fieldContents.replaceAll(r'$DIA', (record.dia?.mmHg).toString());
+    fieldContents = fieldContents.replaceAll(r'$PUL', record.pul.toString());
+    /*fieldContents = fieldContents.replaceAll(r'$NOTE', record.notes); FIXME
+    fieldContents = fieldContents.replaceAll(r'$COLOR', jsonEncode(record.needlePin?.toMap()));*/
 
     // math
     fieldContents = fieldContents.replaceAllMapped(RegExp(r'\{\{([^}]*)}}'), (m) {
@@ -193,7 +193,7 @@ class ScriptedTimeFormatter implements Formatter {
   }
 
   @override
-  String encode(BloodPressureRecord record) => _timeFormatter.format(record.creationTime);
+  String encode(BloodPressureRecord record) => _timeFormatter.format(record.time);
 
   @override
   String? get formatPattern => _timeFormatter.pattern;

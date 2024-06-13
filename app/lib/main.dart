@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:blood_pressure_app/components/consistent_future_builder.dart';
 import 'package:blood_pressure_app/model/blood_pressure/medicine/intake_history.dart';
-import 'package:blood_pressure_app/model/blood_pressure/model.dart';
 import 'package:blood_pressure_app/model/export_import/export_configuration.dart';
 import 'package:blood_pressure_app/model/storage/db/config_dao.dart';
 import 'package:blood_pressure_app/model/storage/db/config_db.dart';
@@ -22,7 +21,6 @@ import 'package:provider/provider.dart';
 import 'package:sqflite/sqflite.dart';
 
 late final ConfigDB _database;
-late final BloodPressureModel _bloodPressureModel;
 
 void main() async {
   runApp(ConsistentFutureBuilder(
@@ -36,9 +34,7 @@ void main() async {
 Future<Widget> _loadApp() async {
   WidgetsFlutterBinding.ensureInitialized();
   // 2 different db files
-  _bloodPressureModel = await BloodPressureModel.create();
-
-  _database = await ConfigDB.open();
+    _database = await ConfigDB.open();
   final configDao = ConfigDao(_database);
 
   final settings = await configDao.loadSettings(0);
@@ -99,7 +95,6 @@ Future<Widget> _loadApp() async {
   // TODO: fix navigation test failures
 
   return MultiProvider(providers: [
-    ChangeNotifierProvider(create: (context) => _bloodPressureModel),
     ChangeNotifierProvider(create: (context) => settings),
     ChangeNotifierProvider(create: (context) => exportSettings),
     ChangeNotifierProvider(create: (context) => csvExportSettings),
@@ -195,5 +190,4 @@ Future<void> closeDatabases() async {
   _isDatabaseClosed = true;
 
   await _database.database.close();
-  await _bloodPressureModel.close();
 }

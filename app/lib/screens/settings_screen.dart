@@ -4,7 +4,6 @@ import 'package:blood_pressure_app/components/consistent_future_builder.dart';
 import 'package:blood_pressure_app/components/dialoges/enter_timeformat_dialoge.dart';
 import 'package:blood_pressure_app/components/dialoges/input_dialoge.dart';
 import 'package:blood_pressure_app/components/settings/settings_widgets.dart';
-import 'package:blood_pressure_app/model/blood_pressure/model.dart';
 import 'package:blood_pressure_app/model/blood_pressure/pressure_unit.dart';
 import 'package:blood_pressure_app/model/blood_pressure/warn_values.dart';
 import 'package:blood_pressure_app/model/iso_lang_names.dart';
@@ -19,7 +18,9 @@ import 'package:blood_pressure_app/screens/subsettings/version_screen.dart';
 import 'package:blood_pressure_app/screens/subsettings/warn_about_screen.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:health_data_store/health_data_store.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:path/path.dart';
 import 'package:provider/provider.dart';
@@ -296,7 +297,7 @@ class SettingsPage extends StatelessWidget {
                     assert(dbPath != inMemoryDatabasePath);
                     dbPath = join(dbPath, 'config.db');
                     assert(Platform.isAndroid);
-                    PlatformClient.shareFile(dbPath, 'application/vnd.sqlite3');
+                    await PlatformClient.shareFile(dbPath, 'application/vnd.sqlite3');
                   },
                 ),
                 ListTile(
@@ -369,12 +370,12 @@ class SettingsPage extends StatelessWidget {
                       return;
                     }
                     // TODO: Show import preview
-                    final model = Provider.of<BloodPressureModel>(context, listen: false);
-                    await model.addAll(data, context);
+                    final repo = RepositoryProvider.of<BloodPressureRepository>(context);
+                    await Future.forEach(data, repo.add);
                     // TODO: give feedback
 
                   },
-                )
+                ),
               ],
             ),
             TitledColumn(title: Text(localizations.aboutWarnValuesScreen), children: [

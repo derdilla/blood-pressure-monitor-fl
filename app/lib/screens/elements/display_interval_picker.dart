@@ -1,3 +1,4 @@
+import 'package:blood_pressure_app/model/datarange_extension.dart';
 import 'package:blood_pressure_app/model/storage/intervall_store.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -71,12 +72,13 @@ class IntervalPicker extends StatelessWidget {
                 onChanged: (TimeStep? value) async {
                   if (value == TimeStep.custom) {
                     final res = await showDateRangePicker(
-                        context: context,
-                        firstDate: DateTime.fromMillisecondsSinceEpoch(1),
-                        lastDate: DateTime.now(),);
+                      context: context,
+                      firstDate: DateTime.fromMillisecondsSinceEpoch(1),
+                      lastDate: DateTime.now(),
+                    );
                     if (res != null) {
                       intervall.changeStepSize(value!);
-                      intervall.currentRange = res;
+                      intervall.currentRange = res.dateRange;
                     }
                   } else if (value != null) {
                     intervall.changeStepSize(value);

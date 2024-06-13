@@ -1,12 +1,10 @@
-import 'dart:convert';
-
-import 'package:blood_pressure_app/model/blood_pressure/needle_pin.dart';
-import 'package:blood_pressure_app/model/blood_pressure/record.dart';
 import 'package:blood_pressure_app/model/export_import/export_configuration.dart';
 import 'package:blood_pressure_app/model/export_import/import_field_type.dart';
 import 'package:blood_pressure_app/model/export_import/record_formatter.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:health_data_store/health_data_store.dart';
+
+// TODO: respect preferred Pressure unit
 
 /// Converters for [BloodPressureRecord] attributes.
 class NativeColumn extends ExportColumn {
@@ -20,14 +18,14 @@ class NativeColumn extends ExportColumn {
     systolic,
     diastolic,
     pulse,
-    notes,
+    /*notes, FIXME
     color,
-    needlePin,
+    needlePin,*/
   ];
   static final NativeColumn timestampUnixMs = NativeColumn._create(
       'timestampUnixMs',
       RowDataFieldType.timestamp,
-          (record) => record.creationTime.millisecondsSinceEpoch.toString(),
+          (record) => record.time.millisecondsSinceEpoch.toString(),
           (pattern) {
         final value = int.tryParse(pattern);
         return (value == null) ? null : DateTime.fromMillisecondsSinceEpoch(value);
@@ -36,21 +34,22 @@ class NativeColumn extends ExportColumn {
     static final NativeColumn systolic = NativeColumn._create(
       'systolic',
       RowDataFieldType.sys,
-      (record) => record.systolic.toString(),
+      (record) => (record.sys?.mmHg).toString(),
       int.tryParse,
     );
     static final NativeColumn diastolic = NativeColumn._create(
       'diastolic',
       RowDataFieldType.dia,
-      (record) => record.diastolic.toString(),
+      (record) => (record.dia?.mmHg).toString(),
       int.tryParse,
     );
     static final NativeColumn pulse = NativeColumn._create(
       'pulse',
       RowDataFieldType.pul,
-      (record) => record.pulse.toString(),
+      (record) => record.pul.toString(),
       int.tryParse,
     );
+    /*
     static final NativeColumn notes = NativeColumn._create(
       'notes',
       RowDataFieldType.notes,
@@ -81,7 +80,7 @@ class NativeColumn extends ExportColumn {
         }
       }
     );
-
+  */
   
   final String _csvTitle;
   final RowDataFieldType _restoreableType;

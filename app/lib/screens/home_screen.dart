@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:blood_pressure_app/components/dialoges/add_measurement_dialoge.dart';
 import 'package:blood_pressure_app/components/measurement_list/measurement_list.dart';
 import 'package:blood_pressure_app/components/repository_builder.dart';
-import 'package:blood_pressure_app/model/blood_pressure/model.dart';
 import 'package:blood_pressure_app/model/storage/intervall_store.dart';
 import 'package:blood_pressure_app/model/storage/settings_store.dart';
 import 'package:blood_pressure_app/screens/elements/blood_pressure_builder.dart';
@@ -118,7 +117,7 @@ class AppHome extends StatelessWidget {
                       tooltip: localizations.addMeasurement,
                       autofocus: true,
                       onPressed: () async {
-                        final model = Provider.of<BloodPressureModel>(context, listen: false);
+                        final model = Provider.of<BloodPressureRepository>(context, listen: false);
                         final intakes = RepositoryProvider.of<MedicineIntakeRepository>(context);
                         final measurement = await showAddEntryDialoge(context,
                           Provider.of<Settings>(context, listen: false),
@@ -127,13 +126,14 @@ class AppHome extends StatelessWidget {
                         if (measurement == null) return;
                         if (measurement.$1 != null) {
                           if (context.mounted) {
-                            model.addAndExport(context, measurement.$1!);
+                            await model.add(measurement.$1!);
+                            // model.addAndExport(context, measurement.$1!); FIXME
                           } else {
-                            model.add(measurement.$1!);
+                            await model.add(measurement.$1!);
                           }
                         }
                         if (measurement.$2 != null) {
-                          intakes.add(measurement.$2!);
+                          await intakes.add(measurement.$2!);
                         }
                       },
                       child: const Icon(Icons.add,),
