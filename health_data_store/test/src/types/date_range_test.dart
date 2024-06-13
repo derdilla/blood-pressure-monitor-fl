@@ -1,3 +1,4 @@
+import 'package:health_data_store/src/extensions/datetime_seconds.dart';
 import 'package:health_data_store/src/types/date_range.dart';
 import 'package:test/test.dart';
 
@@ -28,5 +29,14 @@ void main() {
     final range = DateRange(start: timeA, end: timeB);
     expect(range.startStamp, 0);
     expect(range.endStamp, 283497);
+  });
+  test('creates all range from epoch to now', () {
+    final timeBeforeRangeStart = DateTime.now();
+    final range = DateRange.all();
+    expect(range.startStamp, 0);
+    expect(
+      range.endStamp,
+      greaterThanOrEqualTo(timeBeforeRangeStart.secondsSinceEpoch),
+    );
   });
 }
