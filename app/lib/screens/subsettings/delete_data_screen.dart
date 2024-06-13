@@ -6,8 +6,9 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:health_data_store/health_data_store.dart';
 import 'package:provider/provider.dart';
 
-/// Screen that allows
+/// Screen that allows mass deleting data entered in the app.
 class DeleteDataScreen extends StatefulWidget {
+  /// Create screen that allows mass data deletion.
   const DeleteDataScreen({super.key});
 
   @override
@@ -20,12 +21,10 @@ class _DeleteDataScreenState extends State<DeleteDataScreen> {
     final localizations = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Delete data'),
+        title: Text(localizations.delete),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.pop(context);
-          },
+          onPressed: () => Navigator.pop(context),
         ),
       ),
       body: ListView(
