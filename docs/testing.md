@@ -4,8 +4,6 @@ Testing means catching bugs early and automated testing has already prevented
 multiple bugs from getting reintroduced. Therefor the goal is to have the 
 entire codebase covered by extensive tests.
 
-Integration
-
 ### Unit tests
 
 Unit tests are fast and can all be run during development. Some util functions 
@@ -27,9 +25,8 @@ of each other.
 tester.pumpWidget(App(forceClearAppDataOnLaunch: true,));
 ```
 
-To run integration tests an android emulator needs to be running.
+To run integration tests an android emulator needs to be running. During development running a single test file is sufficient and faster.
 
-Single test: 
 ```bash
 flutter drive \
   --driver=test_driver/integration_test.dart \
@@ -39,9 +36,8 @@ flutter drive \
 ```
 
 To ues the emulator `--browser-name android-chrome --android-emulator` is 
-required. `--flavor github` is needed for the driver to find the apk.
+required. `--flavor github` is needed for the driver to find the apk. All tests are run by the CI and can also be manually run before merge:
 
-All tests:
 ```bash
 flutter test integration_test --flavor github
 ```
