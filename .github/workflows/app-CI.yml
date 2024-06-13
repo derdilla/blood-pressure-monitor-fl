@@ -61,10 +61,7 @@ jobs:
         with:
           distribution: 'zulu'
           java-version: ${{ env.JAVA_VERSION }}
-      - name: Setup Flutter
-        uses: subosito/flutter-action@v2
-        with:
-          channel: ${{ env.FLUTTER_CHANNEL }}
+
       - name: Download Android emulator image
         run: |
           export ANDROID_TOOLS="$ANDROID_HOME/cmdline-tools/latest/bin"
@@ -72,6 +69,20 @@ jobs:
           echo "no" | $ANDROID_TOOLS/avdmanager create avd --force --name emu -k '${{ env.EMULATOR_VERSION }}'
           echo "Android emulator installed"
           $ANDROID_HOME/emulator/emulator -list-avds
+      - name: Setup dart
+        uses: dart-lang/setup-dart@v1
+        with:
+          sdk: ${{ env.DART_SDK }}
+      - name: Generate code
+        run: dart pub get
+        working-directory: ./health_data_store
+      - name: Generate code
+        run: dart run build_runner build
+        working-directory: ./health_data_store
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: ${{ env.FLUTTER_CHANNEL }}
       - name: Start Android emulator
         timeout-minutes: 10
         run: |
@@ -100,6 +111,16 @@ jobs:
         distribution: 'zulu'
         java-version: ${{ env.JAVA_VERSION }}
 
+    - name: Setup dart
+      uses: dart-lang/setup-dart@v1
+      with:
+        sdk: ${{ env.DART_SDK }}
+    - name: Generate code
+      run: dart pub get
+      working-directory: ./health_data_store
+    - name: Generate code
+      run: dart run build_runner build
+      working-directory: ./health_data_store
     - name: Setup Flutter
       uses: subosito/flutter-action@v2
       with:
