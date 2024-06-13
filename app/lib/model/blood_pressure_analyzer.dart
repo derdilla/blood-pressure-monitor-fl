@@ -1,7 +1,7 @@
 import 'dart:math';
 
-import 'package:blood_pressure_app/model/blood_pressure/record.dart';
 import 'package:collection/collection.dart';
+import 'package:health_data_store/health_data_store.dart';
 
 // TODO: ensure calculations work and return null in case of error
 
@@ -16,59 +16,45 @@ class BloodPressureAnalyser {
   int get count => _records.length;
 
   /// The average diastolic values of all records.
-  int get avgDia => _safeResult(() => _nonNullDia.average.toInt(), (r) => r.diastolic);
+  Pressure? get avgDia => _records.map((r) => r.dia?.kPa).tryAverage?.asKPa;
 
   /// The average pulse values of all records.
-  int get avgPul => _safeResult(() => _nonNullPul.average.toInt(), (r) => r.pulse);
+  int? get avgPul => _records.map((r) => r.pul).tryAverage?.toInt();
 
   /// The average systolic values of all records.
-  int get avgSys => _safeResult(() => _nonNullSys.average.toInt(), (r) => r.systolic);
+  Pressure? get avgSys => _records.map((r) => r.sys?.kPa).tryAverage?.asKPa;
 
   /// The maximum diastolic values of all records.
-  int get maxDia => _safeResult(() => _nonNullDia.reduce(max), (r) => r.diastolic);
+  Pressure? get maxDia => _records.map((r) => r.dia?.kPa).tryMax?.asKPa;
 
   /// The maximum pulse values of all records.
-  int get maxPul => _safeResult(() => _nonNullPul.reduce(max), (r) => r.pulse);
+  int? get maxPul => _records.map((r) => r.pul).tryMax?.toInt();
 
   /// The maximum systolic values of all records.
-  int get maxSys => _safeResult(() => _nonNullSys.reduce(max), (r) => r.systolic);
+  Pressure? get maxSys => _records.map((r) => r.sys?.kPa).tryMax?.asKPa;
 
   /// The minimal diastolic values of all records.
-  int get minDia => _safeResult(() => _nonNullDia.reduce(min), (r) => r.diastolic);
+  Pressure? get minDia => _records.map((r) => r.dia?.kPa).tryMin?.asKPa;
 
   /// The minimal pulse values of all records.
-  int get minPul => _safeResult(() =>  _nonNullPul.reduce(min), (r) => r.pulse);
+  int? get minPul => _records.map((r) => r.pul).tryMin?.toInt();
 
   /// The minimal systolic values of all records.
-  int get minSys => _safeResult(() => _nonNullSys.reduce(min), (r) => r.systolic);
+  Pressure? get minSys => _records.map((r) => r.sys?.kPa).tryMax?.asKPa;
 
   /// The earliest timestamp of all records.
   DateTime? get firstDay {
     if (_records.isEmpty) return null;
-    _records.sort((a, b) => a.creationTime.compareTo(b.creationTime));
-    return _records.first.creationTime;
+    _records.sort((a, b) => a.time.compareTo(b.time));
+    return _records.first.time;
   }
 
   /// The latest timestamp of all records.
   DateTime? get lastDay {
     if (_records.isEmpty) return null;
-    _records.sort((a, b) => a.creationTime.compareTo(b.creationTime));
-    return _records.last.creationTime;
+    _records.sort((a, b) => a.time.compareTo(b.time));
+    return _records.last.time;
   }
-
-  int _safeResult(int Function() f, int? Function(BloodPressureRecord) lengthOneResult) {
-    if (_records.isEmpty) return -1;
-    if (_records.length == 1) return lengthOneResult(_records.first) ?? -1;
-    try {
-      return f();
-    } on StateError {
-      return -1;
-    }
-
-  }
-  Iterable<int> get _nonNullDia => _records.map((e) => e.diastolic).whereNotNull();
-  Iterable<int> get _nonNullSys => _records.map((e) => e.systolic).whereNotNull();
-  Iterable<int> get _nonNullPul => _records.map((e) => e.pulse).whereNotNull();
 
   /// Average amount of measurements entered per day.
   int? get measurementsPerDay {
@@ -77,11 +63,10 @@ class BloodPressureAnalyser {
 
     final firstDay = this.firstDay;
     final lastDay = this.lastDay;
-    if (firstDay == null || lastDay == null) return -1;
+    if (firstDay == null || lastDay == null) return null;
 
-    if (firstDay.millisecondsSinceEpoch == -1 || lastDay.millisecondsSinceEpoch == -1) {
-      return null;
-    }
+    assert(firstDay.millisecondsSinceEpoch != -1
+      && lastDay.millisecondsSinceEpoch != -1);
     if (lastDay.difference(firstDay).inDays <= 0) {
       return c;
     }
@@ -92,45 +77,70 @@ class BloodPressureAnalyser {
   /// Relation of average values to the time of the day.
   ///
   /// outer list is type (0 -> diastolic, 1 -> systolic, 2 -> pulse)
-  /// inner list index is hour of day ([0] -> 00:00-00:59; [1] -> ...)
+  /// inner list index is hour of day ([0] -> 23:30-00:29.59; [1] -> ...)
+  @Deprecated("This api can't express kPa and mmHg preferences and is only a "
+      'thin wrapper around the newer [groupAnalysers].')
   List<List<int>> get allAvgsRelativeToDaytime {
-    // setup vars
-    final List<List<int>> allDiaValuesRelativeToTime = [];
-    final List<List<int>> allSysValuesRelativeToTime = [];
-    final List<List<int>> allPulValuesRelativeToTime = [];
-    for (int i = 0; i < 24; i++) {
-      allDiaValuesRelativeToTime.add([]);
-      allSysValuesRelativeToTime.add([]);
-      allPulValuesRelativeToTime.add([]);
-    }
-
-    // sort all data
-    final dbRes = _records;
-    for (final e in dbRes) {
-      final DateTime ts = DateTime.fromMillisecondsSinceEpoch(e.creationTime.millisecondsSinceEpoch);
-      if (e.diastolic != null) allDiaValuesRelativeToTime[ts.hour].add(e.diastolic!);
-      if (e.systolic != null)allSysValuesRelativeToTime[ts.hour].add(e.systolic!);
-      if (e.pulse != null)allPulValuesRelativeToTime[ts.hour].add(e.pulse!);
-    }
-    for (int i = 0; i < 24; i++) {
-      if (allDiaValuesRelativeToTime[i].isEmpty) {
-        allDiaValuesRelativeToTime[i].add(avgDia);
-      }
-      if (allSysValuesRelativeToTime[i].isEmpty) {
-        allSysValuesRelativeToTime[i].add(avgSys);
-      }
-      if (allPulValuesRelativeToTime[i].isEmpty) {
-        allPulValuesRelativeToTime[i].add(avgPul);
-      }
-    }
-
-    // make avgs
-    final List<List<int>> res = [[], [], []];
-    for (int i = 0; i < 24; i++) {
-      res[0].add(allDiaValuesRelativeToTime[i].average.toInt());
-      res[1].add(allSysValuesRelativeToTime[i].average.toInt());
-      res[2].add(allPulValuesRelativeToTime[i].average.toInt());
-    }
-    return res;
+    final groupedAnalyzers = groupAnalysers();
+    return [
+      groupedAnalyzers.map((e) => e.avgDia?.mmHg ?? avgDia?.mmHg ?? 0).toList(),
+      groupedAnalyzers.map((e) => e.avgSys?.mmHg ?? avgSys?.mmHg ?? 0).toList(),
+      groupedAnalyzers.map((e) => e.avgPul ?? avgPul ?? 0).toList(),
+    ];
   }
+
+  /// Creates analyzers for each hour of the day (0-23).
+  ///
+  /// This function groups records by the hour of the day (e.g 23:30-00:29.59)
+  /// and creates an [BloodPressureAnalyser] for each. The analyzers are
+  /// returned ordered by the hour of the day and the index can be used as the
+  /// hour.
+  List<BloodPressureAnalyser> groupAnalysers() { // TODO: test
+    // Group records around the full hour so that there are 24 sublists from 0
+    // to 23. ([0] -> 23:30-00:29.59; [1] -> ...).
+    final Map<int, List<BloodPressureRecord>> grouped = _records.groupListsBy((BloodPressureRecord record) {
+      int hour = record.time.hour;
+      if(record.time.minute >= 30) hour += 1;
+      hour %= 24; // midnight jumps
+      return hour;
+    });
+    final groupedAnalyzers = grouped.map((hour, subList) => MapEntry(
+      hour,
+      BloodPressureAnalyser(subList),
+    ));
+    final sortedAnalyzersList = groupedAnalyzers.entries
+      .sorted((a,b) => a.key.compareTo(b.key));
+    return sortedAnalyzersList
+      .map((e) => e.value)
+      .toList();
+  }
+}
+
+extension _NullableMath on Iterable<num?> {
+  /// Gets the average value or null if the iterable is empty.
+  num? get tryAverage {
+    final nonNull = whereNotNull();
+    if(nonNull.isEmpty) return null;
+    final double result = nonNull.fold(0.0, (last, next) => last + next / length);
+    return result;
+  }
+
+  /// Gets the minimum value or null if the iterable is empty.
+  num? get tryMin {
+    final nonNull = whereNotNull();
+    if(nonNull.isEmpty) return null;
+    return nonNull.reduce(min);
+  }
+
+  /// Gets the maximum value or null if the iterable is empty.
+  num? get tryMax {
+    final nonNull = whereNotNull();
+    if(nonNull.isEmpty) return null;
+    return nonNull.reduce(max);
+  }
+}
+
+extension _Pressure on num {
+  /// Return [Pressure.kPa] of this values
+  Pressure get asKPa => Pressure.kPa(toDouble());
 }
