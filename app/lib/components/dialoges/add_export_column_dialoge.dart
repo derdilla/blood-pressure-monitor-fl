@@ -166,12 +166,16 @@ class _AddExportColumnDialogeState extends State<AddExportColumnDialoge>
                       sys: widget.settings.preferredPressureUnit.wrap(123),
                       dia: widget.settings.preferredPressureUnit.wrap(78),
                       pul: 65,
-                      // FIXME 'test note',
+                    );
+                    final note = Note(
+                      time: record.time,
+                      note: 'test note',
+                      color: Colors.red.value,
                     );
                     final formatter = (type == _FormatterType.record)
                       ? ScriptedFormatter(recordPattern ?? '')
                       : ScriptedTimeFormatter(timePattern ?? '');
-                    final text = formatter.encode(record);
+                    final text = formatter.encode(record, note, []);
                     final decoded = formatter.decode(text);
                     return Column(
                       children: [

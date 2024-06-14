@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:collection';
 import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
@@ -87,18 +88,36 @@ class ExportButtonBar extends StatelessWidget {
                       Provider.of<Settings>(context, listen: false).bottomAppBars,
                     );
                     if (importedRecords == null || !context.mounted) return;
-                    final repo = context.read<BloodPressureRepository>();
-                    await Future.forEach<BloodPressureRecord>(importedRecords, repo.add);
+                    final bpRepo = RepositoryProvider.of<BloodPressureRepository>(context);
+                    final noteRepo = RepositoryProvider.of<NoteRepository>(context);
+                    final intakeRepo = RepositoryProvider.of<MedicineIntakeRepository>(context);
+                    await Future.forEach<FullEntry>(importedRecords, (e) async {
+                      await bpRepo.add(e.$1);
+                      await noteRepo.add(e.$2);
+                      if (e.$3.isNotEmpty) {
+                        await Future.forEach(e.$3, intakeRepo.add);
+                      }
+                    });
                     messenger.showSnackBar(SnackBar(content: Text(
                       localizations.importSuccess(importedRecords.length),),),);
                     break;
                   case 'db':
                     if (file.path == null) return;
-                    final repo = context.read<BloodPressureRepository>();
+                    final bpRepo = RepositoryProvider.of<BloodPressureRepository>(context);
+                    final noteRepo = RepositoryProvider.of<NoteRepository>(context);
+                    final intakeRepo = RepositoryProvider.of<MedicineIntakeRepository>(context);
                     final importedDB = await HealthDataStore.load(await openReadOnlyDatabase(file.path!));
                     await Future.forEach(
                       await importedDB.bpRepo.get(DateRange.all()),
-                      repo.add,
+                      bpRepo.add,
+                    );
+                    await Future.forEach(
+                      await importedDB.noteRepo.get(DateRange.all()),
+                      noteRepo.add,
+                    );
+                    await Future.forEach(
+                      await importedDB.intakeRepo.get(DateRange.all()),
+                      intakeRepo.add,
                     );
                     break;
                   default:
@@ -133,7 +152,7 @@ void performExport(BuildContext context, [AppLocalizations? localizations]) asyn
         Provider.of<CsvExportSettings>(context, listen: false),
         Provider.of<ExportColumnsManager>(context, listen: false),
       );
-      final csvString = csvConverter.create(await _getRecords(context));
+      final csvString = csvConverter.create(await _getEntries(context));
       final data = Uint8List.fromList(utf8.encode(csvString));
       if (context.mounted) await _exportData(context, data, '$filename.csv', 'text/csv');
       break;
@@ -144,16 +163,52 @@ void performExport(BuildContext context, [AppLocalizations? localizations]) asyn
           Provider.of<Settings>(context, listen: false),
           Provider.of<ExportColumnsManager>(context, listen: false),
       );
-      final pdf = await pdfConverter.create(await _getRecords(context));
+      final pdf = await pdfConverter.create(await _getEntries(context));
       if (context.mounted) await _exportData(context, pdf, '$filename.pdf', 'text/pdf');
   }
 }
 
 /// Get the records that should be exported.
-Future<List<BloodPressureRecord>> _getRecords(BuildContext context) {
+Future<List<FullEntry>> _getEntries(BuildContext context) async {
+  // TODO: move function somewhere more practical
   final range = Provider.of<IntervallStoreManager>(context, listen: false).exportPage.currentRange;
-  final model = RepositoryProvider.of<BloodPressureRepository>(context);
-  return model.get(range);
+
+  final bpRepo = RepositoryProvider.of<BloodPressureRepository>(context);
+  final noteRepo = RepositoryProvider.of<NoteRepository>(context);
+  final intakeRepo = RepositoryProvider.of<MedicineIntakeRepository>(context);
+
+  final records = await bpRepo.get(range);
+  final notes = await noteRepo.get(range);
+  final intakes = await intakeRepo.get(range);
+
+  final Map<DateTime, (BloodPressureRecord?, Note?, List<MedicineIntake>)> entryMap = HashMap();
+  for (final r in records) {
+    assert(!entryMap.containsKey(r.time), 'multiple records at same time');
+    entryMap[r.time] = (r, null, []);
+  }
+  for (final n in notes) {
+    if(entryMap.containsKey(n.time)) {
+      assert(entryMap[n.time]!.$2 != null, 'multiple notes at same time');
+      entryMap[n.time] = (entryMap[n.time]!.$1, n, []);
+    } else {
+      entryMap[n.time] = (BloodPressureRecord(time: n.time), n, []);
+    }
+  }
+  for (final i in intakes) {
+    if(entryMap.containsKey(i.time)) {
+      entryMap[i.time]!.$3.add(i);
+    } else {
+      entryMap[i.time] = (null, null, [i]);
+    }
+  }
+  return entryMap
+    .values
+    .map<FullEntry>((e) {
+      // One of the values must exist or else this wouldn't be in the map.
+      final time = e.$1?.time ?? e.$2?.time ?? e.$3.firstOrNull?.time;
+      return (e.$1 ?? BloodPressureRecord(time: time!), e.$2 ?? Note(time: time!), e.$3);
+    })
+    .toList();
 }
 
 /// Save to default export path or share by providing a path.

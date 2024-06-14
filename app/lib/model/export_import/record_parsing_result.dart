@@ -7,16 +7,16 @@ import 'package:health_data_store/health_data_store.dart';
 class RecordParsingResult {
 
   /// Pass a valid record list and indicate success.
-  factory RecordParsingResult.ok(List<BloodPressureRecord> result)=>
+  factory RecordParsingResult.ok(List<FullEntry> result)=>
       RecordParsingResult._create(result, null);
 
   /// Indicate a parsing failure.
-  factory RecordParsingResult.err(RecordParsingError error)=>
+  factory RecordParsingResult.err(EntryParsingError error)=>
       RecordParsingResult._create(null, error);
   RecordParsingResult._create(this._result, this._error);
 
-  final List<BloodPressureRecord>? _result;
-  final RecordParsingError? _error;
+  final List<FullEntry>? _result;
+  final EntryParsingError? _error;
 
   /// Returns if there is an error present.
   ///
@@ -24,13 +24,13 @@ class RecordParsingResult {
   bool hasError() => _error != null;
 
   /// The returned error, if present.
-  RecordParsingError? get error => _error;
+  EntryParsingError? get error => _error;
 
   /// Returns the passed list on success or the result of [errorHandler] in case
   /// a error is present.
   ///
   /// When [errorHandler] returns null a empty list is passed.
-  List<BloodPressureRecord> getOr(List<BloodPressureRecord>? Function(RecordParsingError error) errorHandler) {
+  List<FullEntry> getOr(List<FullEntry>? Function(EntryParsingError error) errorHandler) {
     if (_result != null) {
       assert(_error == null);
       return _result!;
@@ -41,7 +41,7 @@ class RecordParsingResult {
 }
 
 /// Indicates what type error occurred while trying to decode a csv data.
-sealed class RecordParsingError {
+sealed class EntryParsingError {
   /// Create the localized String explaining this error
   String localize(AppLocalizations localizations) => switch (this) {
     RecordParsingErrorEmptyFile() => localizations.errParseEmptyCsvFile,
@@ -57,14 +57,14 @@ sealed class RecordParsingError {
 }
 
 /// There are not enough lines in the csv file to parse the record.
-class RecordParsingErrorEmptyFile extends RecordParsingError {}
+class RecordParsingErrorEmptyFile extends EntryParsingError {}
 
 /// There is no column that allows restoring a timestamp.
 // TODO: return line.
-class RecordParsingErrorTimeNotRestoreable extends RecordParsingError {}
+class RecordParsingErrorTimeNotRestoreable extends EntryParsingError {}
 
 /// There is no column with this csv title that can be reversed.
-class RecordParsingErrorUnknownColumn extends RecordParsingError {
+class RecordParsingErrorUnknownColumn extends EntryParsingError {
   RecordParsingErrorUnknownColumn(this.title);
   
   /// CSV title of the column no equivalent was found for. 
@@ -72,7 +72,7 @@ class RecordParsingErrorUnknownColumn extends RecordParsingError {
 }
 
 /// The current line has less fields than the first line.
-class RecordParsingErrorExpectedMoreFields extends RecordParsingError {
+class RecordParsingErrorExpectedMoreFields extends EntryParsingError {
   RecordParsingErrorExpectedMoreFields(this.lineNumber);
 
   /// Line in which this error occurred. 
@@ -80,7 +80,7 @@ class RecordParsingErrorExpectedMoreFields extends RecordParsingError {
 }
 
 /// The corresponding column couldn't decode a specific field in the csv file.
-class RecordParsingErrorUnparsableField extends RecordParsingError {
+class RecordParsingErrorUnparsableField extends EntryParsingError {
   RecordParsingErrorUnparsableField(this.lineNumber, this.fieldContents);
 
   /// Line in which this error occurred.

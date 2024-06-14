@@ -30,16 +30,16 @@ class PdfConverter {
   final ExportColumnsManager availableColumns;
 
   /// Create a pdf from a record list.
-  Future<Uint8List> create(List<BloodPressureRecord> records) async {
+  Future<Uint8List> create(List<FullEntry> entries) async {
     final pdf = pw.Document(
       creator: 'Blood pressure app',
     );
-    final analyzer = BloodPressureAnalyser(records.toList());
+    final analyzer = BloodPressureAnalyser(entries.records);
 
     pdf.addPage(pw.MultiPage(
       pageFormat: PdfPageFormat.a4,
       build: (pw.Context context) {
-        final title = (pdfSettings.exportTitle) ? _buildPdfTitle(records, analyzer) : null;
+        final title = (pdfSettings.exportTitle) ? _buildPdfTitle(analyzer) : null;
         title?.layout(context, const pw.BoxConstraints());
         final statistics = (pdfSettings.exportStatistics) ? _buildPdfStatistics(analyzer) : null;
         statistics?.layout(context, const pw.BoxConstraints());
@@ -52,7 +52,7 @@ class PdfConverter {
           if (pdfSettings.exportStatistics)
             statistics!,
           if (pdfSettings.exportData)
-            _buildPdfTable(records, availableHeight),
+            _buildPdfTable(entries, availableHeight),
         ];
       },
       maxPages: 100,
@@ -60,19 +60,19 @@ class PdfConverter {
     return pdf.save();
   }
 
-  pw.Widget _buildPdfTitle(List<BloodPressureRecord> records, BloodPressureAnalyser analyzer) {
-    if (records.length < 2) return pw.Text(localizations.errNoData);
+  pw.Widget _buildPdfTitle(BloodPressureAnalyser analyzer) {
+    if (analyzer.count < 2) return pw.Text(localizations.errNoData);
     final dateFormatter = DateFormat(settings.dateFormatString);
     return pw.Container(
-        child: pw.Text(
-            localizations.pdfDocumentTitle(
-                dateFormatter.format(analyzer.firstDay!),
-                dateFormatter.format(analyzer.lastDay!),
-            ),
-            style: const pw.TextStyle(
-              fontSize: 16,
-            ),
+      child: pw.Text(
+        localizations.pdfDocumentTitle(
+          dateFormatter.format(analyzer.firstDay!),
+          dateFormatter.format(analyzer.lastDay!),
         ),
+        style: const pw.TextStyle(
+          fontSize: 16,
+        ),
+      ),
     );
   }
 
@@ -88,12 +88,12 @@ class PdfConverter {
       ),
     );
 
-  pw.Widget _buildPdfTable(Iterable<BloodPressureRecord> records, double availableHeightOnFirstPage) {
+  pw.Widget _buildPdfTable(Iterable<FullEntry> entries, double availableHeightOnFirstPage) {
     final columns = pdfSettings.exportFieldsConfiguration.getActiveColumns(availableColumns);
 
-    final data = records.map(
-      (record) => columns.map(
-        (column) => column.encode(record),
+    final data = entries.map(
+      (entry) => columns.map(
+        (column) => column.encode(entry.$1, entry.$2, entry.$3),
       ).toList(),
     ).toList();
 

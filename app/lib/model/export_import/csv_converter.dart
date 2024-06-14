@@ -21,11 +21,11 @@ class CsvConverter {
   final ExportColumnsManager availableColumns;
 
   /// Create the contents of a csv file from passed records.
-  String create(List<BloodPressureRecord> records) {
+  String create(List<FullEntry> entries) {
     final columns = settings.exportFieldsConfiguration.getActiveColumns(availableColumns);
-    final table = records.map(
-      (record) => columns.map(
-        (column) => column.encode(record),
+    final table = entries.map(
+      (entry) => columns.map(
+        (column) => column.encode(entry.$1, entry.$2, entry.$3),
       ).toList(),
     ).toList();
 
@@ -105,7 +105,7 @@ class CsvConverter {
       List<ExportColumn?> parsers, [
         bool assumeHeadline = true,
       ]) {
-    final List<BloodPressureRecord> records = [];
+    final List<FullEntry> entries = [];
     int currentLineNumber = assumeHeadline ? 1 : 0;
     for (final currentLine in dataLines) {
       if (currentLine.length < parsers.length) {
@@ -137,22 +137,28 @@ class CsvConverter {
             (piece) => piece.$1 == RowDataFieldType.dia,)?.$2;
       final int? pul = recordPieces.firstWhereOrNull(
             (piece) => piece.$1 == RowDataFieldType.pul,)?.$2;
-      final String note = recordPieces.firstWhereOrNull(
+      final String noteText = recordPieces.firstWhereOrNull(
             (piece) => piece.$1 == RowDataFieldType.notes,)?.$2 ?? '';
       final MeasurementNeedlePin? needlePin = recordPieces.firstWhereOrNull(
             (piece) => piece.$1 == RowDataFieldType.needlePin,)?.$2;
 
-      records.add(BloodPressureRecord(
+      final record = BloodPressureRecord(
         time: timestamp,
         sys: sys?.asMMHg,
         dia: dia?.asMMHg,
         pul: pul,
-        /*FIXME: note, needlePin: needlePin*/));
+      );
+      final note = Note(
+        time: timestamp,
+        note: noteText,
+        color: needlePin?.color.value,
+      );
+      entries.add((record, note, []));
       currentLineNumber++;
     }
 
-    assert(records.length == dataLines.length, 'every line should have been parse');
-    return RecordParsingResult.ok(records);
+    assert(entries.length == dataLines.length, 'every line should have been parse');
+    return RecordParsingResult.ok(entries);
   }
 }
 

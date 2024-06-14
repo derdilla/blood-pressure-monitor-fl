@@ -16,7 +16,7 @@ enum RowDataFieldType {
   /// Guarantees [String] is returned.
   notes,
   /// Guarantees that the returned type is of type [MeasurementNeedlePin].
-  needlePin;
+  needlePin; // TODO: replace with color
 
   /// Selection of a displayable string from [localizations].
   String localize(AppLocalizations localizations) {

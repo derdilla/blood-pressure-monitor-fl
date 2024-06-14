@@ -1,3 +1,7 @@
+import 'dart:convert';
+import 'dart:ui';
+
+import 'package:blood_pressure_app/model/blood_pressure/needle_pin.dart';
 import 'package:blood_pressure_app/model/export_import/export_configuration.dart';
 import 'package:blood_pressure_app/model/export_import/import_field_type.dart';
 import 'package:blood_pressure_app/model/export_import/record_formatter.dart';
@@ -18,73 +22,78 @@ class NativeColumn extends ExportColumn {
     systolic,
     diastolic,
     pulse,
-    /*notes, FIXME
+    notes,
     color,
-    needlePin,*/
+    needlePin,
   ];
+
   static final NativeColumn timestampUnixMs = NativeColumn._create(
-      'timestampUnixMs',
-      RowDataFieldType.timestamp,
-          (record) => record.time.millisecondsSinceEpoch.toString(),
-          (pattern) {
-        final value = int.tryParse(pattern);
-        return (value == null) ? null : DateTime.fromMillisecondsSinceEpoch(value);
-      }
-    );
-    static final NativeColumn systolic = NativeColumn._create(
-      'systolic',
-      RowDataFieldType.sys,
-      (record) => (record.sys?.mmHg).toString(),
-      int.tryParse,
-    );
-    static final NativeColumn diastolic = NativeColumn._create(
-      'diastolic',
-      RowDataFieldType.dia,
-      (record) => (record.dia?.mmHg).toString(),
-      int.tryParse,
-    );
-    static final NativeColumn pulse = NativeColumn._create(
-      'pulse',
-      RowDataFieldType.pul,
-      (record) => record.pul.toString(),
-      int.tryParse,
-    );
-    /*
-    static final NativeColumn notes = NativeColumn._create(
-      'notes',
-      RowDataFieldType.notes,
-      (record) => record.notes,
-      (pattern) => pattern,
-    );
-    static final NativeColumn color = NativeColumn._create(
-      'color',
-      RowDataFieldType.needlePin,
-      (record) => record.needlePin?.color.value.toString() ?? '',
-      (pattern) {
-        final value = int.tryParse(pattern);
-        if (value == null) return null;
-        return MeasurementNeedlePin(Color(value));
-      }
-    );
-    static final NativeColumn needlePin = NativeColumn._create(
-      'needlePin',
-      RowDataFieldType.needlePin,
-      (record) => jsonEncode(record.needlePin?.toMap()),
-      (pattern) {
-        try {
-          final json = jsonDecode(pattern);
-          if (json is! Map<String, dynamic>) return null;
-          return MeasurementNeedlePin.fromMap(json);
-        } on FormatException {
-          return null;
+    'timestampUnixMs',
+    RowDataFieldType.timestamp,
+    (record, _, __) => record.time.millisecondsSinceEpoch.toString(),
+    (pattern) {
+      final value = int.tryParse(pattern);
+      return (value == null) ? null : DateTime.fromMillisecondsSinceEpoch(value);
+    }
+  );
+  static final NativeColumn systolic = NativeColumn._create(
+    'systolic',
+    RowDataFieldType.sys,
+    (record, _, __) => (record.sys?.mmHg).toString(),
+    int.tryParse,
+  );
+  static final NativeColumn diastolic = NativeColumn._create(
+    'diastolic',
+    RowDataFieldType.dia,
+    (record, _, __) => (record.dia?.mmHg).toString(),
+    int.tryParse,
+  );
+  static final NativeColumn pulse = NativeColumn._create(
+    'pulse',
+    RowDataFieldType.pul,
+    (record, _, __) => record.pul.toString(),
+    int.tryParse,
+  );
+  static final NativeColumn notes = NativeColumn._create(
+    'notes',
+    RowDataFieldType.notes,
+    (_, note, __) => note.note ?? '',
+    (pattern) => pattern,
+  );
+  static final NativeColumn color = NativeColumn._create(
+    'color',
+    RowDataFieldType.needlePin,
+    (_, note, __) => note.color?.toString() ?? '',
+    (pattern) {
+      final value = int.tryParse(pattern);
+      if (value == null) return null;
+      return MeasurementNeedlePin(Color(value));
+    }
+  );
+  static final NativeColumn needlePin = NativeColumn._create(
+    'needlePin',
+    RowDataFieldType.needlePin,
+    (_, note, __) => '{"color":${note.color}',
+    (pattern) {
+      try {
+        final json = jsonDecode(pattern);
+        if (json is! Map<String, dynamic>) return null;
+        if (json.containsKey('color')) {
+          final value = json['color'];
+          return (value is int)
+            ? MeasurementNeedlePin(Color(value))
+            : null;
         }
+      } on FormatException {
+        // ignore
       }
-    );
-  */
+      return null;
+    }
+  );
   
   final String _csvTitle;
   final RowDataFieldType _restoreableType;
-  final String Function(BloodPressureRecord record) _encode;
+  final String Function(BloodPressureRecord record, Note note, List<MedicineIntake> intakes) _encode;
   final Object? Function(String pattern) _decode;
 
   @override
@@ -98,13 +107,14 @@ class NativeColumn extends ExportColumn {
   }
 
   @override
-  String encode(BloodPressureRecord record) => _encode(record);
+  String encode(BloodPressureRecord record, Note note, List<MedicineIntake> intakes) =>
+    _encode(record, note, intakes);
 
   @override
   String? get formatPattern => null;
 
   @override
-  String get internalIdentifier => 'native.$csvTitle';
+  String get internalIdentifier => 'native.$csvTitle'; // TODO: why is this needed
 
   @override
   RowDataFieldType? get restoreAbleType => _restoreableType;
@@ -213,7 +223,8 @@ class BuildInColumn extends ExportColumn {
   (RowDataFieldType, dynamic)? decode(String pattern) => _formatter.decode(pattern);
 
   @override
-  String encode(BloodPressureRecord record) => _formatter.encode(record);
+  String encode(BloodPressureRecord record, Note note, List<MedicineIntake> intakes) =>
+    _formatter.encode(record, note, intakes);
 
   @override
   String? get formatPattern => _formatter.formatPattern;
@@ -258,7 +269,8 @@ class UserColumn extends ExportColumn {
   (RowDataFieldType, dynamic)? decode(String pattern) => formatter.decode(pattern);
 
   @override
-  String encode(BloodPressureRecord record) => formatter.encode(record);
+  String encode(BloodPressureRecord record, Note note, List<MedicineIntake> intakes) =>
+    formatter.encode(record, note, intakes);
 
   @override
   String? get formatPattern => formatter.formatPattern;
@@ -296,9 +308,9 @@ class TimeColumn extends ExportColumn {
   }
 
   @override
-  String encode(BloodPressureRecord record) {
+  String encode(BloodPressureRecord record, Note note, List<MedicineIntake> intakes) {
     _formatter ??= ScriptedTimeFormatter(formatPattern);
-    return _formatter!.encode(record);
+    return _formatter!.encode(record, note, intakes);
   }
 
   @override

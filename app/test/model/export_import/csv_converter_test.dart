@@ -306,7 +306,7 @@ List<BloodPressureRecord> createRecords([int count = 20]) => [
         i, 100+i, 200+1, 'note $i', Color(123+i),),
 ];
 
-List<BloodPressureRecord>? failParse(RecordParsingError error) {
+List<BloodPressureRecord>? failParse(EntryParsingError error) {
   switch (error) {
     case RecordParsingErrorEmptyFile():
       fail('Parsing failed due to insufficient data.');

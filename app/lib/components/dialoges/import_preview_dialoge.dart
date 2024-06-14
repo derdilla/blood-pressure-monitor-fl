@@ -80,7 +80,7 @@ class _ImportPreviewDialogeState extends State<ImportPreviewDialoge> {
     onActionButtonPressed: (_showingError) ? null : () {
       final result = _actor.attemptParse();
       if (result.hasError()) return;
-      Navigator.pop<List<BloodPressureRecord>>(context, result.getOr((e) => null));
+      Navigator.pop<List<FullEntry>>(context, result.getOr((e) => null));
     },
     actions: [
       CheckboxMenuButton(
@@ -192,12 +192,12 @@ class _ImportPreviewDialogeState extends State<ImportPreviewDialoge> {
 }
 
 /// Shows a dialoge to preview import of a csv file
-Future<List<BloodPressureRecord>?> showImportPreview(
+Future<List<FullEntry>?> showImportPreview(
   BuildContext context,
   CsvRecordParsingActor initialActor,
   ExportColumnsManager columnsManager,
   bool bottomAppBar,) =>
-  showDialog<List<BloodPressureRecord>>(
+  showDialog<List<FullEntry>>(
     context: context, builder: (context) =>
     Dialog.fullscreen(
       child: ImportPreviewDialoge(

@@ -16,7 +16,7 @@ abstract interface class Formatter {
   ///
   /// There is no guarantee that the information in the record can be restored.
   /// If not null this must follow [formatPattern].
-  String encode(BloodPressureRecord record);
+  String encode(BloodPressureRecord record, Note note, List<MedicineIntake> intakes);
 
   /// Type of data that can be restored from a string obtained by [encode].
   RowDataFieldType? get restoreAbleType;
@@ -71,7 +71,7 @@ class ScriptedFormatter implements Formatter {
   }
 
   @override
-  String encode(BloodPressureRecord record) {
+  String encode(BloodPressureRecord record, Note note, List<MedicineIntake> intakes) {
     var fieldContents = pattern;
 
     // variables
@@ -79,8 +79,8 @@ class ScriptedFormatter implements Formatter {
     fieldContents = fieldContents.replaceAll(r'$SYS', (record.sys?.mmHg).toString());
     fieldContents = fieldContents.replaceAll(r'$DIA', (record.dia?.mmHg).toString());
     fieldContents = fieldContents.replaceAll(r'$PUL', record.pul.toString());
-    /*fieldContents = fieldContents.replaceAll(r'$NOTE', record.notes); FIXME
-    fieldContents = fieldContents.replaceAll(r'$COLOR', jsonEncode(record.needlePin?.toMap()));*/
+    fieldContents = fieldContents.replaceAll(r'$NOTE', note.note ?? '');
+    fieldContents = fieldContents.replaceAll(r'$COLOR', note.color?.toString() ?? '');
 
     // math
     fieldContents = fieldContents.replaceAllMapped(RegExp(r'\{\{([^}]*)}}'), (m) {
@@ -193,7 +193,8 @@ class ScriptedTimeFormatter implements Formatter {
   }
 
   @override
-  String encode(BloodPressureRecord record) => _timeFormatter.format(record.time);
+  String encode(BloodPressureRecord record, Note note, List<MedicineIntake> intakes) =>
+    _timeFormatter.format(record.time);
 
   @override
   String? get formatPattern => _timeFormatter.pattern;
