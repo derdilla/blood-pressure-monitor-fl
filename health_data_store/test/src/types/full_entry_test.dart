@@ -29,4 +29,54 @@ void main() {
     expect(entry.$2, note);
     expect(entry.$3, isEmpty);
   });
+  test('extracts records', () {
+    final record1 = mockRecord(time: 1);
+    final record2 = mockRecord(time: 2);
+    final record3 = mockRecord(time: 3);
+    final note = mockNote();
+
+    final List<FullEntry> list = [
+      (record1, note, []),
+      (record2, note, []),
+      (record3, note, []),
+      (record2, note, []),
+    ];
+
+    expect(
+      list.records,
+      containsAllInOrder([record1, record2, record3, record2]),
+    );
+  });
+  test('extracts notes', () {
+    final record = mockRecord();
+    final note1 = mockNote(note: 'a');
+    final note2 = mockNote(note: 'b');
+    final note3 = mockNote(note: 'c');
+
+    final List<FullEntry> list = [
+      (record, note1, []),
+      (record, note2, []),
+      (record, note3, []),
+      (record, note2, []),
+    ];
+
+    expect(list.notes, containsAllInOrder([note1, note2, note3, note2]));
+  });
+  test('detects correct distinct medicines', () {
+    final record = mockRecord();
+    final note = mockNote();
+
+    final med1 = mockMedicine();
+    final med2 = mockMedicine();
+    final med3 = mockMedicine();
+
+    final List<FullEntry> list = [
+      (record, note, [mockIntake(med1),mockIntake(med2)]),
+      (record, note, [mockIntake(med1)]),
+      (record, note, []),
+      (record, note, [mockIntake(med3), mockIntake(med1)]),
+    ];
+
+    expect(list.distinctMedicines, containsAll([med1, med2, med3]));
+  });
 }

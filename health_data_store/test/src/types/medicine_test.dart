@@ -12,6 +12,7 @@ void main() {
   });
 }
 
+/// Creates a new medicine with a random designation if none is specified.
 Medicine mockMedicine({
   String? designation,
   double? dosis,
