@@ -34,19 +34,20 @@ class BleReadCubit extends Cubit<BleReadState> {
     : super(BleReadInProgress()){
     _subscription = _device.connectionState
       .listen(_onConnectionStateChanged);
+    _device.cancelWhenDisconnected(_device.mtu.listen((int mtu) => Log.trace('BleReadCubit mtu: $mtu'))); // TODO: remove
     // timeout
-    Timer(const Duration(minutes: 2), () {
-      if (super.state is BleReadInProgress) {
-        Log.trace('BleReadCubit timeout reached');
+    _timeoutTimer = Timer(const Duration(minutes: 2), () {
+      if (state is BleReadInProgress) {
+        Log.trace('BleReadCubit timeout reached and still running');
         emit(BleReadFailure());
+      } else {
+        Log.trace('BleReadCubit timeout reached with state: $state, ${state is BleReadInProgress}');
       }
     });
   }
   
   static const String _kServiceID = '1810';
   static const String _kCharacteristicID = '2a35';
-
-  // TODO: consider using Future for this
 
   /// Bluetooth device to connect to.
   ///
@@ -55,11 +56,14 @@ class BleReadCubit extends Cubit<BleReadState> {
   final BluetoothDevice _device;
   
   late final StreamSubscription<BluetoothConnectionState> _subscription;
+  late final Timer _timeoutTimer;
 
   @override
   Future<void> close() async {
+    Log.trace('BleReadCubit close');
     await _subscription.cancel();
-    
+    _timeoutTimer.cancel();
+
     if (_device.isConnected) {
       try {
         Log.trace('BleReadCubit close: Attempting disconnect from ${_device.advName}');
@@ -87,27 +91,36 @@ class BleReadCubit extends Cubit<BleReadState> {
     
     if (_device.isDisconnected) {
       Log.trace('BleReadCubit _ensureConnection: Attempting to connect with ${_device.advName}');
-      await _device.connect();
+      try {
+        await _device.connect();
+      } on FlutterBluePlusException catch (e) {
+        Log.err('BleReadCubit _device.connect failed:', [_device, e]);
+      }
+
 
       if (_device.isDisconnected) {
         Log.trace('BleReadCubit _ensureConnection: Device not connected');
         emit(BleReadFailure());
+        if (kDebugMode) _debugEnsureConnectionInProgress = false;
+        return;
       } else {
         Log.trace('BleReadCubit Connection successful');
       }
     }
+    assert(_device.isConnected);
     if (kDebugMode) _debugEnsureConnectionInProgress = false;
   }
 
   Future<void> _onConnectionStateChanged(BluetoothConnectionState state) async {
     Log.trace('BleReadCubit _onConnectionStateChanged: $state');
     if (state == BluetoothConnectionState.disconnected) {
+      Log.trace('BleReadCubit _onConnectionStateChanged disconnected: '
+        '${_device.disconnectReason} Attempting reconnect');
       await _ensureConnection();
       return;
     }
     assert(state == BluetoothConnectionState.connected, 'state should be '
       'connected as connecting and disconnecting are not streamed by android');
-
     assert(_device.isConnected);
 
     // Query actual services supported by the device. While they must be
@@ -122,10 +135,10 @@ class BleReadCubit extends Cubit<BleReadState> {
       return;
     }
 
-
     // [Guid.str] trims standard parts from the uuid. 0x1810 is the blood
     // pressure uuid. https://developer.nordicsemi.com/nRF51_SDK/nRF51_SDK_v4.x.x/doc/html/group___u_u_i_d___s_e_r_v_i_c_e_s.html
-    final service = allServices.firstWhereOrNull((s) => s.uuid.str == _kServiceID);
+    final BluetoothService? service = allServices
+      .firstWhereOrNull((BluetoothService s) => s.uuid.str == _kServiceID);
     if (service == null) {
       Log.err('unsupported service', [_device, allServices]);
       emit(BleReadFailure());
@@ -133,10 +146,10 @@ class BleReadCubit extends Cubit<BleReadState> {
     }
 
     // https://developer.nordicsemi.com/nRF51_SDK/nRF51_SDK_v4.x.x/doc/html/group___u_u_i_d___c_h_a_r_a_c_t_e_r_i_s_t_i_c_s.html#ga95fc99c7a99cf9d991c81027e4866936
-    final allCharacteristics = service.characteristics;
+    final List<BluetoothCharacteristic> allCharacteristics = service.characteristics;
     Log.trace('BleReadCubit allCharacteristics: $allCharacteristics');
-    final characteristic = allCharacteristics.firstWhereOrNull(
-          (c) => c.uuid.str == _kCharacteristicID,);
+    final BluetoothCharacteristic? characteristic = allCharacteristics
+      .firstWhereOrNull((c) => c.uuid.str == _kCharacteristicID,);
     if (characteristic == null) {
       Log.err('no characteristic', [_device, allServices, allCharacteristics]);
       emit(BleReadFailure());

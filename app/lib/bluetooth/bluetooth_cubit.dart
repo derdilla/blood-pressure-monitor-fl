@@ -52,7 +52,6 @@ class BluetoothCubit extends Cubit<BluetoothState> {
         } else {
           emit(BluetoothUnauthorized());
         }
-
       case BluetoothAdapterState.off:
       case BluetoothAdapterState.turningOff:
       case BluetoothAdapterState.turningOn:
@@ -65,6 +64,7 @@ class BluetoothCubit extends Cubit<BluetoothState> {
 
   /// Request the permission to connect to bluetooth devices.
   Future<bool> requestPermission() async { // TODO: can this be removed entirely ?
+    Log.trace('BluetoothCubit requestPermission');
     assert(_adapterState == BluetoothAdapterState.unauthorized, 'No need to '
         'request permission when device unavailable or already authorized.');
     try {

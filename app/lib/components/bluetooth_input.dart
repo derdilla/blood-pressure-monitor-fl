@@ -68,10 +68,13 @@ class _BluetoothInputState extends State<BluetoothInput> {
 
   Widget _buildActive(BuildContext context) {
     _bluetoothSubscription = _bluetoothCubit.stream.listen((state) {
-      if (state is! BluetoothReady) _returnToIdle();
+      if (state is! BluetoothReady) {
+        Log.trace('_BluetoothInputState: _bluetoothSubscription state=$state, calling _returnToIdle');
+        _returnToIdle();
+      }
     });
     _deviceScanCubit = DeviceScanCubit(
-      service: Guid('1810'),
+      service: Guid('1810'), // TODO one source of truth (w read cubit)
       settings: widget.settings,
     );
     return BlocBuilder<DeviceScanCubit, DeviceScanState>(
@@ -107,8 +110,8 @@ class _BluetoothInputState extends State<BluetoothInput> {
                 BleReadSuccess() => MeasurementSuccess(
                   onTap: () {
                     widget.onMeasurement(state.data);
-                    return _returnToIdle;
-                  }(),
+                    return _returnToIdle();
+                  },
                 ),
               };
             },
