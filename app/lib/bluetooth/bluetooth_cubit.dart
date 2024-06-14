@@ -45,13 +45,14 @@ class BluetoothCubit extends Cubit<BluetoothState> {
         emit(BluetoothUnauthorized());
         await requestPermission();
       case BluetoothAdapterState.on:
-        if (await requestPermission()) {
+        if (await Permission.bluetoothConnect.isGranted) {
           emit(BluetoothReady());
           Permission.bluetoothConnect
-            .onDeniedCallback(() => _onAdapterStateChanged(state));
+            .onGrantedCallback(() => _onAdapterStateChanged(state));
         } else {
           emit(BluetoothUnauthorized());
         }
+
       case BluetoothAdapterState.off:
       case BluetoothAdapterState.turningOff:
       case BluetoothAdapterState.turningOn:
@@ -63,27 +64,18 @@ class BluetoothCubit extends Cubit<BluetoothState> {
   }
 
   /// Request the permission to connect to bluetooth devices.
-  Future<bool> requestPermission() async {
-    // Permissions are not only required for connecting, but sometimes also for
-    // reading values.
+  Future<bool> requestPermission() async { // TODO: can this be removed entirely ?
+    assert(_adapterState == BluetoothAdapterState.unauthorized, 'No need to '
+        'request permission when device unavailable or already authorized.');
     try {
-      bool connectPermission = await Permission.bluetoothConnect.isGranted;
-      bool locationPermission = await Permission.locationWhenInUse.isGranted;
-      if (!connectPermission) {
-        connectPermission = await Permission.bluetoothConnect.request().isGranted;
-        Log.trace('requestPermission: connectPermission = $connectPermission');
-      }
-      if (!locationPermission) {
-        locationPermission = await Permission.locationWhenInUse.request().isGranted;
-        Log.trace('requestPermission: locationPermission = $locationPermission');
-      }
-      return connectPermission
-        && locationPermission;
+      assert(!await Permission.bluetoothConnect.isGranted, 'Permissions handler'
+          'should report the same as blue_plus');
+      final permission = await Permission.bluetoothConnect.request();
+      return permission.isGranted;
     } catch (error) {
       Log.err('Failed to request bluetooth permissions', [error]);
       return false;
     }
-
   }
 
   /// Request to enable bluetooth on the device
