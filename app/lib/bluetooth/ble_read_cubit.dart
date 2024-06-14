@@ -4,7 +4,6 @@ import 'package:blood_pressure_app/bluetooth/characteristic_decoder.dart';
 import 'package:blood_pressure_app/logging.dart';
 import 'package:blood_pressure_app/model/blood_pressure/record.dart';
 import 'package:collection/collection.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
@@ -43,6 +42,9 @@ class BleReadCubit extends Cubit<BleReadState> {
       }
     });
   }
+  
+  static const String _kServiceID = '1810';
+  static const String _kCharacteristicID = '2a35';
 
   // TODO: consider using Future for this
 
@@ -71,11 +73,15 @@ class BleReadCubit extends Cubit<BleReadState> {
     await super.close();
   }
 
+  bool _debugEnsureConnectionInProgress = false;
   Future<void> _ensureConnection() async {
-    Log.trace('_ensureConnection');
+    Log.trace('BleReadCubit _ensureConnection');
+    assert(!_debugEnsureConnectionInProgress);
+    if (kDebugMode) _debugEnsureConnectionInProgress = true;
     
     if (_device.isAutoConnectEnabled) {
-      Log.trace('Waiting for auto connect...');
+      Log.trace('BleReadCubit Waiting for auto connect...');
+      if (kDebugMode) _debugEnsureConnectionInProgress = false;
       return;
     }
     
@@ -86,17 +92,17 @@ class BleReadCubit extends Cubit<BleReadState> {
       if (_device.isDisconnected) {
         Log.trace('BleReadCubit _ensureConnection: Device not connected');
         emit(BleReadFailure());
-        return;
       } else {
-        Log.trace('Connection successful');
+        Log.trace('BleReadCubit Connection successful');
       }
     }
+    if (kDebugMode) _debugEnsureConnectionInProgress = false;
   }
 
   Future<void> _onConnectionStateChanged(BluetoothConnectionState state) async {
     Log.trace('BleReadCubit _onConnectionStateChanged: $state');
     if (state == BluetoothConnectionState.disconnected) {
-      unawaited(_ensureConnection());
+      await _ensureConnection();
       return;
     }
     assert(state == BluetoothConnectionState.connected, 'state should be '
@@ -109,7 +115,7 @@ class BleReadCubit extends Cubit<BleReadState> {
     late final List<BluetoothService> allServices;
     try {
       allServices = await _device.discoverServices();
-      Log.trace('allServices: $allServices');
+      Log.trace('BleReadCubit allServices: $allServices');
     } catch (e) {
       Log.err('service discovery', [_device, e]);
       emit(BleReadFailure());
@@ -119,7 +125,7 @@ class BleReadCubit extends Cubit<BleReadState> {
 
     // [Guid.str] trims standard parts from the uuid. 0x1810 is the blood
     // pressure uuid. https://developer.nordicsemi.com/nRF51_SDK/nRF51_SDK_v4.x.x/doc/html/group___u_u_i_d___s_e_r_v_i_c_e_s.html
-    final service = allServices.firstWhereOrNull((s) => s.uuid.str == '1810');
+    final service = allServices.firstWhereOrNull((s) => s.uuid.str == _kServiceID);
     if (service == null) {
       Log.err('unsupported service', [_device, allServices]);
       emit(BleReadFailure());
@@ -128,8 +134,9 @@ class BleReadCubit extends Cubit<BleReadState> {
 
     // https://developer.nordicsemi.com/nRF51_SDK/nRF51_SDK_v4.x.x/doc/html/group___u_u_i_d___c_h_a_r_a_c_t_e_r_i_s_t_i_c_s.html#ga95fc99c7a99cf9d991c81027e4866936
     final allCharacteristics = service.characteristics;
+    Log.trace('BleReadCubit allCharacteristics: $allCharacteristics');
     final characteristic = allCharacteristics.firstWhereOrNull(
-            (c) => c.uuid.str == '2a35');
+          (c) => c.uuid.str == _kCharacteristicID,);
     if (characteristic == null) {
       Log.err('no characteristic', [_device, allServices, allCharacteristics]);
       emit(BleReadFailure());
@@ -145,9 +152,9 @@ class BleReadCubit extends Cubit<BleReadState> {
       return;
     }
 
-    Log.trace('received $data');
+    Log.trace('BleReadCubit received $data');
     final record = CharacteristicDecoder.decodeMeasurement(data);
-    Log.trace('decoded $record');
+    Log.trace('BleReadCubit decoded $record');
     emit(BleReadSuccess(record));
   }
 }
