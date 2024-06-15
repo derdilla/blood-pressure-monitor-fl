@@ -61,7 +61,7 @@ class DeviceScanCubit extends Cubit<DeviceScanState> {
     try {
       await _flutterBluePlus.startScan(
         // no timeout, the user knows best how long scanning is needed
-        withServices: [service],
+        withServices: [ service ],
         // Not all devices are found using this configuration (https://pub.dev/packages/flutter_blue_plus#scanning-does-not-find-my-device).
       );
     } catch (e) {

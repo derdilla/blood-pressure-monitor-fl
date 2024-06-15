@@ -47,7 +47,7 @@ class BleReadCubit extends Cubit<BleReadState> {
   }
   
   static const String _kServiceID = '1810';
-  static const String _kCharacteristicID = '2a35';
+  static const String _kCharacteristicID = '2A35';
 
   /// Bluetooth device to connect to.
   ///
@@ -156,11 +156,21 @@ class BleReadCubit extends Cubit<BleReadState> {
       return;
     }
 
+    characteristic.onValueReceived.listen((data) {
+      Log.trace('BleReadCubit data indicated: $data');
+      final record = CharacteristicDecoder.decodeMeasurement(data);
+      Log.trace('BleReadCubit decoded $record');
+      emit(BleReadSuccess(record));
+    });
+
+    // Support indicate
+    await characteristic.setNotifyValue(true);
+
     late final List<int> data;
     try {
       data = await characteristic.read();
     } catch (e) {
-      Log.err('read error', [_device, allServices, characteristic, e]);
+      Log.err('read error', [e, _device, allServices, allCharacteristics, characteristic,]);
       emit(BleReadFailure());
       return;
     }

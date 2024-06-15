@@ -45,7 +45,18 @@ class CharacteristicDecoder {
       return null;
     }
 
-    final double systolic = _readSFloat(data, offset)!; //TODO
+    final double? systolic = _readSFloat(data, offset);
+    offset += 2;
+    final double? diastolic = _readSFloat(data, offset);
+    offset += 2;
+    final double? pulsePressure = _readSFloat(data, offset);
+    offset += 2;
+
+    if (systolic == null || diastolic == null || pulsePressure == null) {
+      Log.trace('BleMeasurementData decodeMeasurement: Unable to decode required values sys, dia, and pulsePressure, $data.');
+      return null;
+    }
+
   }
 }
 
