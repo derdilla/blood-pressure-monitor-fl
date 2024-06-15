@@ -149,7 +149,7 @@ class BleReadCubit extends Cubit<BleReadState> {
     final List<BluetoothCharacteristic> allCharacteristics = service.characteristics;
     Log.trace('BleReadCubit allCharacteristics: $allCharacteristics');
     final BluetoothCharacteristic? characteristic = allCharacteristics
-      .firstWhereOrNull((c) => c.uuid.str.toLowerCase() == _kCharacteristicID.toLowerCase(),);
+      .firstWhereOrNull((c) => c.uuid == Guid(_kCharacteristicID),);
     if (characteristic == null) {
       Log.err('no characteristic', [_device, allServices, allCharacteristics]);
       emit(BleReadFailure());
