@@ -1,6 +1,5 @@
 import 'dart:math';
 
-import 'package:blood_pressure_app/bluetooth/characteristics/ble_measurement_data.dart';
 import 'package:blood_pressure_app/logging.dart';
 import 'package:blood_pressure_app/model/blood_pressure/record.dart';
 
@@ -14,7 +13,7 @@ class CharacteristicDecoder {
     return BloodPressureRecord(DateTime.now(), data[1], data[3], data[14], '');
   }
 
-  static BleMeasurementData? decodeMeasurementV2(List<int> data) {
+  static BloodPressureRecord? decodeMeasurementV2(List<int> data) {
     // https://github.com/NordicSemiconductor/Kotlin-BLE-Library/blob/6b565e59de21dfa53ef80ff8351ac4a4550e8d58/profile/src/main/java/no/nordicsemi/android/kotlin/ble/profile/bps/BloodPressureMeasurementParser.kt
 
     // Reading specific bits: `(byte & (1 < bitIdx))`
@@ -49,14 +48,24 @@ class CharacteristicDecoder {
     offset += 2;
     final double? diastolic = _readSFloat(data, offset);
     offset += 2;
-    final double? pulsePressure = _readSFloat(data, offset);
+    final double? meanArterialPressure = _readSFloat(data, offset);
     offset += 2;
 
-    if (systolic == null || diastolic == null || pulsePressure == null) {
-      Log.trace('BleMeasurementData decodeMeasurement: Unable to decode required values sys, dia, and pulsePressure, $data.');
+    if (systolic == null || diastolic == null || meanArterialPressure == null) {
+      Log.trace('BleMeasurementData decodeMeasurement: Unable to decode required values sys, dia, and meanArterialPressure, $data.');
       return null;
     }
 
+    return BloodPressureRecord(DateTime.now(), systolic!.toInt(), diastolic!.toInt(), -1, '');
+    /*return BleMeasurementData(
+      systolic: systolic,
+      diastolic: diastolic,
+      meanArterialPressure: meanArterialPressure,
+      isMMHG: isMMHG,
+      pulseRate: -1,
+      userID: -1,
+      status: BleaM
+    );*/
   }
 }
 

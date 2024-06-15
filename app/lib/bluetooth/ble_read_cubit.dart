@@ -160,9 +160,9 @@ class BleReadCubit extends Cubit<BleReadState> {
     final indicationListener = characteristic
       .onValueReceived.listen((data) {
         Log.trace('BleReadCubit data indicated: $data');
-        final record = CharacteristicDecoder.decodeMeasurement(data);
+        final record = CharacteristicDecoder.decodeMeasurementV2(data);
         Log.trace('BleReadCubit decoded $record');
-        emit(BleReadSuccess(record));
+        emit(BleReadSuccess(record!));
       });
     await characteristic.setNotifyValue(true);
 
