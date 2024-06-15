@@ -149,21 +149,21 @@ class BleReadCubit extends Cubit<BleReadState> {
     final List<BluetoothCharacteristic> allCharacteristics = service.characteristics;
     Log.trace('BleReadCubit allCharacteristics: $allCharacteristics');
     final BluetoothCharacteristic? characteristic = allCharacteristics
-      .firstWhereOrNull((c) => c.uuid.str == _kCharacteristicID,);
+      .firstWhereOrNull((c) => c.uuid.str.toLowerCase() == _kCharacteristicID,);
     if (characteristic == null) {
       Log.err('no characteristic', [_device, allServices, allCharacteristics]);
       emit(BleReadFailure());
       return;
     }
 
-    characteristic.onValueReceived.listen((data) {
-      Log.trace('BleReadCubit data indicated: $data');
-      final record = CharacteristicDecoder.decodeMeasurement(data);
-      Log.trace('BleReadCubit decoded $record');
-      emit(BleReadSuccess(record));
-    });
-
-    // Support indicate
+    // This characteristic only supports indication so we need to listen to values.
+    final indicationListener = characteristic
+      .onValueReceived.listen((data) {
+        Log.trace('BleReadCubit data indicated: $data');
+        final record = CharacteristicDecoder.decodeMeasurement(data);
+        Log.trace('BleReadCubit decoded $record');
+        emit(BleReadSuccess(record));
+      });
     await characteristic.setNotifyValue(true);
 
     late final List<int> data;
