@@ -56,7 +56,18 @@ class CharacteristicDecoder {
       return null;
     }
 
-    return BloodPressureRecord(DateTime.now(), systolic!.toInt(), diastolic!.toInt(), -1, '');
+    if (timestampPresent) {
+      // TODO: decode timestamp
+      offset += 7;
+    }
+
+    double? pulse;
+    if (pulseRatePresent) {
+      pulse = _readSFloat(data, offset);
+      offset += 2;
+    }
+
+    return BloodPressureRecord(DateTime.now(), systolic.toInt(), diastolic.toInt(), pulse?.toInt(), '');
     /*return BleMeasurementData(
       systolic: systolic,
       diastolic: diastolic,

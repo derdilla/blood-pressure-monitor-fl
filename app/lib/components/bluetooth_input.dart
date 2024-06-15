@@ -95,11 +95,13 @@ class _BluetoothInputState extends State<BluetoothInput> {
             onAccepted: (dev) => _deviceScanCubit!.acceptDevice(dev),
           ),
             // distinction
-          DeviceSelected() => BlocBuilder<BleReadCubit, BleReadState>(
+          DeviceSelected() => BlocConsumer<BleReadCubit, BleReadState>(
             bloc: () { _deviceReadCubit = BleReadCubit(state.device); return _deviceReadCubit; }(),
+            listener: (BuildContext context, BleReadState state) {
+              if (state is BleReadSuccess) widget.onMeasurement(state.data);
+            },
             builder: (BuildContext context, BleReadState state) {
               Log.trace('_BluetoothInputState BleReadCubit: $state');
-              if (state is BleReadSuccess) widget.onMeasurement(state.data);
               return switch (state) {
                 BleReadInProgress() => _buildMainCard(context,
                   child: const CircularProgressIndicator(),
