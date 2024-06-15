@@ -1,3 +1,7 @@
+import 'dart:math';
+
+import 'package:blood_pressure_app/bluetooth/characteristics/ble_measurement_data.dart';
+import 'package:blood_pressure_app/logging.dart';
 import 'package:blood_pressure_app/model/blood_pressure/record.dart';
 
 /// Decoder for blood pressure values.
@@ -9,4 +13,47 @@ class CharacteristicDecoder {
     print(data);
     return BloodPressureRecord(DateTime.now(), data[1], data[3], data[14], '');
   }
+
+  static BleMeasurementData? decodeMeasurementV2(List<int> data) {
+    // https://github.com/NordicSemiconductor/Kotlin-BLE-Library/blob/6b565e59de21dfa53ef80ff8351ac4a4550e8d58/profile/src/main/java/no/nordicsemi/android/kotlin/ble/profile/bps/BloodPressureMeasurementParser.kt
+
+    // Reading specific bits: `(byte & (1 < bitIdx))`
+
+    if (data.length < 7) {
+      Log.trace('BleMeasurementData decodeMeasurement: Not enough data, $data has less than 7 bytes.');
+      return null;
+    }
+
+    int offset = 0;
+
+    final int flagsByte = data[offset];
+    offset += 1;
+
+    final bool isMMHG = ((flagsByte & (1 << 0)) == 0);
+    final bool timestampPresent = ((flagsByte & (1 << 1)) == 0);
+    final bool pulseRatePresent = ((flagsByte & (1 << 2)) == 0);
+    final bool userIdPresent = ((flagsByte & (1 << 3)) == 0);
+    final bool measurementStatusPresent = ((flagsByte & (1 << 4)) == 0);
+
+    if (data.length < (7
+        + (timestampPresent ? 7 : 0)
+        + (pulseRatePresent ? 2 : 0)
+        + (userIdPresent ? 1 : 0)
+        + (measurementStatusPresent ? 2 : 0)
+    )) {
+      Log.trace("BleMeasurementData decodeMeasurement: Flags don't match, $data has less bytes than expected.");
+      return null;
+    }
+
+    final double systolic = _readSFloat(data, offset)!; //TODO
+  }
+}
+
+/// Attempts to read an IEEE-11073 16bit SFloat starting at data[offset].
+double? _readSFloat(List<int> data, int offset) {
+  if (data.length < offset + 2) return null;
+  // TODO: special values (NaN, Infinity)
+  final mantissa = data[offset] + ((data[offset + 1] & 0x0F) << 8); // TODO: https://github.com/NordicSemiconductor/Kotlin-BLE-Library/blob/6b565e59de21dfa53ef80ff8351ac4a4550e8d58/core/src/main/java/no/nordicsemi/android/kotlin/ble/core/data/util/DataByteArray.kt#L392
+  final exponent = data[offset + 1] >> 4;
+  return (mantissa * (pow(10, exponent))).toDouble();
 }
