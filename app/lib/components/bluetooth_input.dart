@@ -73,7 +73,7 @@ class _BluetoothInputState extends State<BluetoothInput> {
         _returnToIdle();
       }
     });
-    _deviceScanCubit = DeviceScanCubit(
+    _deviceScanCubit ??= DeviceScanCubit(
       service: Guid('1810'), // TODO one source of truth (w read cubit)
       settings: widget.settings,
     );
@@ -96,9 +96,21 @@ class _BluetoothInputState extends State<BluetoothInput> {
           ),
             // distinction
           DeviceSelected() => BlocConsumer<BleReadCubit, BleReadState>(
-            bloc: () { _deviceReadCubit = BleReadCubit(state.device); return _deviceReadCubit; }(),
+            bloc: (){
+              _deviceReadCubit = BleReadCubit(state.device);
+              return _deviceReadCubit;
+            }(),
             listener: (BuildContext context, BleReadState state) {
-              if (state is BleReadSuccess) widget.onMeasurement(state.data);
+              if (state is BleReadSuccess) {
+                final BloodPressureRecord record = BloodPressureRecord(
+                  state.data.timestamp ?? DateTime.now(),
+                  state.data.systolic.toInt(), // TODO: use pressure info in data
+                  state.data.diastolic.toInt(),
+                  state.data.pulse?.toInt(),
+                  'notes',
+                );
+                widget.onMeasurement(record);
+              }
             },
             builder: (BuildContext context, BleReadState state) {
               Log.trace('_BluetoothInputState BleReadCubit: $state');
@@ -112,6 +124,7 @@ class _BluetoothInputState extends State<BluetoothInput> {
                 ),
                 BleReadSuccess() => MeasurementSuccess(
                   onTap: _returnToIdle,
+                  data: state.data,
                 ),
               };
             },

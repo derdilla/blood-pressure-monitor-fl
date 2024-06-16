@@ -1,8 +1,7 @@
 import 'dart:async';
 
-import 'package:blood_pressure_app/bluetooth/characteristic_decoder.dart';
+import 'package:blood_pressure_app/bluetooth/characteristics/ble_measurement_data.dart';
 import 'package:blood_pressure_app/logging.dart';
-import 'package:blood_pressure_app/model/blood_pressure/record.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -57,6 +56,7 @@ class BleReadCubit extends Cubit<BleReadState> {
   
   late final StreamSubscription<BluetoothConnectionState> _subscription;
   late final Timer _timeoutTimer;
+  StreamSubscription<List<int>>? _indicationListener;
 
   @override
   Future<void> close() async {
@@ -157,27 +157,22 @@ class BleReadCubit extends Cubit<BleReadState> {
     }
 
     // This characteristic only supports indication so we need to listen to values.
-    final indicationListener = characteristic
-      .onValueReceived.listen((data) {
-        Log.trace('BleReadCubit data indicated: $data');
-        final record = CharacteristicDecoder.decodeMeasurementV2(data);
-        Log.trace('BleReadCubit decoded $record');
-        emit(BleReadSuccess(record!));
+    _indicationListener = characteristic
+      .onValueReceived.listen((rawData) {
+        Log.trace('BleReadCubit data received: $rawData');
+        final decodedData = BleMeasurementData.decode(rawData, 0);
+        if (decodedData == null) {
+          Log.err('BleReadCubit decoding failed', [ rawData ]);
+          emit(BleReadFailure());
+        } else {
+          Log.trace('BleReadCubit decoded: $decodedData');
+          emit(BleReadSuccess(decodedData));
+        }
+        _indicationListener?.cancel();
+        _indicationListener = null;
       });
-    await characteristic.setNotifyValue(true);
 
-    /*late final List<int> data;
-    try {
-      data = await characteristic.read();
-    } catch (e) {
-      Log.err('read error', [e, _device, allServices, allCharacteristics, characteristic,]);
-      emit(BleReadFailure());
-      return;
-    }
-
-    Log.trace('BleReadCubit received $data');
-    final record = CharacteristicDecoder.decodeMeasurement(data);
-    Log.trace('BleReadCubit decoded $record');
-    emit(BleReadSuccess(record));*/
+    final bool indicationsSet = await characteristic.setNotifyValue(true);
+    Log.trace('BleReadCubit indicationsSet: $indicationsSet');
   }
 }

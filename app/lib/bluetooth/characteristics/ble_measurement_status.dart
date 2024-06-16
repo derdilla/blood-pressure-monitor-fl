@@ -1,6 +1,7 @@
+import 'package:blood_pressure_app/bluetooth/characteristics/decoding_util.dart';
 
 class BleMeasurementStatus {
-  BleMeasurementStatus({
+  BleMeasurementStatus._({
     required this.bodyMovementDetected,
     required this.cuffTooLose,
     required this.irregularPulseDetected,
@@ -10,6 +11,15 @@ class BleMeasurementStatus {
     required this.improperMeasurementPosition,
   });
 
+  factory BleMeasurementStatus.decode(int byte) => BleMeasurementStatus._(
+    bodyMovementDetected: isBitIntByteSet(byte, 1),
+    cuffTooLose: isBitIntByteSet(byte, 2),
+    irregularPulseDetected: isBitIntByteSet(byte, 3),
+    pulseRateInRange: (byte & (1 << 4) >> 3) == 0,
+    pulseRateExceedsUpperLimit: (byte & (1 << 4) >> 3) == 1,
+    pulseRateIsLessThenLowerLimit: (byte & (1 << 4) >> 3) == 2,
+    improperMeasurementPosition: isBitIntByteSet(byte, 5),
+  );
 
   final bool bodyMovementDetected;
   final bool cuffTooLose;
@@ -18,4 +28,7 @@ class BleMeasurementStatus {
   final bool pulseRateExceedsUpperLimit;
   final bool pulseRateIsLessThenLowerLimit;
   final bool improperMeasurementPosition;
+
+  @override
+  String toString() => 'BleMeasurementStatus{bodyMovementDetected: $bodyMovementDetected, cuffTooLose: $cuffTooLose, irregularPulseDetected: $irregularPulseDetected, pulseRateInRange: $pulseRateInRange, pulseRateExceedsUpperLimit: $pulseRateExceedsUpperLimit, pulseRateIsLessThenLowerLimit: $pulseRateIsLessThenLowerLimit, improperMeasurementPosition: $improperMeasurementPosition}';
 }

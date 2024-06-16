@@ -16,5 +16,5 @@ class BleReadSuccess extends BleReadState {
   BleReadSuccess(this.data);
 
   /// Measurement decoded from the device.
-  final BloodPressureRecord data;
+  final BleMeasurementData data;
 }
