@@ -56,10 +56,6 @@ class ValueDistribution extends StatelessWidget {
         distribution[v] = 1.0;
       }
     }
-    // Fill values between
-    for (int x = distribution.keys.min + 1; x < distribution.keys.max; x++) {
-      if (!distribution.containsKey(x)) distribution[x] = 0;
-    }
     assert(distribution[distribution.keys.max]! > 0);
     assert(distribution[distribution.keys.min]! > 0);
     return ConstrainedBox(
@@ -113,7 +109,6 @@ class _ValueDistributionPainter extends CustomPainter {
       distribution.keys.every((e) => e >= 0);
     }
 
-
     // Adapt gap width in case of lots of gaps.
     double barGapWidth = _kDefaultBarGapWidth;
     double barWidth = 0;
@@ -138,12 +133,10 @@ class _ValueDistributionPainter extends CustomPainter {
       ..strokeJoin = StrokeJoin.round;
 
     double barDrawXOffset = barWidth / 2; // don't clip left side of bar
-    for (final xPos in distribution.keys) {
-      final length = heightUnit * distribution[xPos]!;
+    for (int xPos = distribution.keys.min; xPos <= distribution.keys.max; xPos++) {
+      final length = heightUnit * (distribution[xPos] ?? 0);
       /// Offset from top so that the bar of [length] is centered.
       final startPos = (size.height - length) / 2;
-      final barNumber = xPos - distribution.values.min; // number of bar in graph, from 0
-      final barDrawXOffset = barWidth / 2 + (barWidth + barGapWidth)*barNumber;
       assert(barDrawXOffset >= 0 && barDrawXOffset <= size.width);
       assert(startPos >= 0); assert(startPos <= size.height);
       assert((startPos + length) >= 0 && (startPos + length) <= size.height);
