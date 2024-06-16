@@ -103,8 +103,8 @@ class _ValueDistributionPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    assert(size.width >= 180, 'Canvas must be at least 180 pixels high, to avoid overflows.');
-    assert(size.height >= 50, 'Canvas must be at least 50 pixels wide, to avoid overflows.');
+    assert(size.width >= 180, 'Canvas must be at least 180 pixels wide, to avoid overflows.');
+    assert(size.height >= 50, 'Canvas must be at least 50 pixels high, to avoid overflows.');
     if (kDebugMode) {
       distribution.keys.every((e) => e >= 0);
     }
@@ -114,8 +114,9 @@ class _ValueDistributionPainter extends CustomPainter {
     double barWidth = 0;
     while(barWidth < barGapWidth && barGapWidth > 1) {
       barGapWidth -= 1;
+      final length = distribution.keys.max - distribution.keys.min + 1;
       barWidth = ((size.width + barGapWidth) // fix trailing gap
-          / distribution.length) - barGapWidth;
+          / length) - barGapWidth;
     }
 
     // Set height scale so that the largest element takes up the full height.
@@ -137,7 +138,7 @@ class _ValueDistributionPainter extends CustomPainter {
       final length = heightUnit * (distribution[xPos] ?? 0);
       /// Offset from top so that the bar of [length] is centered.
       final startPos = (size.height - length) / 2;
-      assert(barDrawXOffset >= 0 && barDrawXOffset <= size.width);
+      assert(barDrawXOffset >= 0 && barDrawXOffset <= size.width, '0 <= $barDrawXOffset <= ${size.width}');
       assert(startPos >= 0); assert(startPos <= size.height);
       assert((startPos + length) >= 0 && (startPos + length) <= size.height);
       canvas.drawLine(
@@ -145,6 +146,8 @@ class _ValueDistributionPainter extends CustomPainter {
         Offset(barDrawXOffset, startPos + length),
         barPainter,
       );
+
+      barDrawXOffset += barWidth + barGapWidth;
     }
 
     // Draw decorations on top:
