@@ -43,7 +43,6 @@ void main() {
       ..paragraph(offset: const Offset(68.0, posBelowCenter)),
     );
   },);
-
   testWidgets('should correct amount of value bars', (tester) async {
     await tester.pumpWidget(materialApp(const SizedBox(
       height: 50,
@@ -80,6 +79,25 @@ void main() {
     expect(labels, contains(localizations.minOf('3')));
     expect(labels, contains(localizations.maxOf('10')));
     expect(labels, contains(localizations.avgOf('7')));
+  },);
+  testWidgets('draws bars in correct order', (tester) async {
+    await tester.pumpWidget(materialApp(const SizedBox(
+      height: 50,
+      width: 180,
+      child: ValueDistribution(
+        color: Colors.red,
+        values: [1,2,3,3,5],
+        // 1: 1, 2: 1, 3:2, 4:0, 5:1
+      ),
+    ),),);
+
+    expect(find.byType(ValueDistribution), paints
+      ..line(p1: Offset(16.4, 24.75), p2: Offset(16.4, 25.25))
+      ..line(p1: Offset(53.199999999999996, 24.75), p2: Offset(53.199999999999996, 25.25))
+      ..line(p1: Offset(90.0, 24.5), p2: Offset(90.0, 25.5))
+      ..line(p1: Offset(126.8, 25.0), p2: Offset(126.8, 25.0))
+      ..line(p1: Offset(163.6, 24.75), p2: Offset(163.6, 25.25)),
+    );
   },);
 }
 
