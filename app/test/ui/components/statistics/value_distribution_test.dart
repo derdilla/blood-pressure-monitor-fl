@@ -49,7 +49,7 @@ void main() {
       width: 180,
       child: ValueDistribution(
         color: Colors.red,
-        values: [1,2,3,3,4,5],
+        values: [1,2,3,3,5],
       ),
     ),),);
 
