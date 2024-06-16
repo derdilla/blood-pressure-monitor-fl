@@ -48,14 +48,15 @@ class ValueDistribution extends StatelessWidget {
       );
     }
 
-    final distribution = <int, double>{};
+    final distribution = <int, int>{};
     for (final v in values) {
       if(distribution.containsKey(v)) {
-        distribution[v] = distribution[v]! + 1.0;
+        distribution[v] = distribution[v]! + 1;
       } else {
-        distribution[v] = 1.0;
+        distribution[v] = 1;
       }
     }
+
     assert(distribution[distribution.keys.max]! > 0);
     assert(distribution[distribution.keys.min]! > 0);
     return ConstrainedBox(
@@ -90,7 +91,7 @@ class _ValueDistributionPainter extends CustomPainter {
   /// height.
   ///
   /// The height of the bar is how often it occurs in a list of values.
-  final Map<int, double> distribution;
+  final Map<int, int> distribution;
 
   /// Text for labels on the graph and for semantics.
   final AppLocalizations localizations;
@@ -110,14 +111,18 @@ class _ValueDistributionPainter extends CustomPainter {
     }
 
     // Adapt gap width in case of lots of gaps.
+	int barNumber = distribution.keys.max - distribution.keys.min + 1;
     double barGapWidth = _kDefaultBarGapWidth;
     double barWidth = 0;
     while(barWidth < barGapWidth && barGapWidth > 1) {
       barGapWidth -= 1;
-      final length = distribution.keys.max - distribution.keys.min + 1;
       barWidth = ((size.width + barGapWidth) // fix trailing gap
-          / length) - barGapWidth;
+          / barNumber) - barGapWidth;
     }
+
+	assert(barWidth > 0);
+	assert(barGapWidth > 0);
+	assert(barWidth*barNumber + barGapWidth*(barNumber-1) <= size.width);
 
     // Set height scale so that the largest element takes up the full height.
     // Ensures that the width of bars bars doesn't draw as overflow
