@@ -23,42 +23,60 @@ class MeasurementSuccess extends StatelessWidget {
     child: InputCard(
       onClosed: onTap,
       child: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Icon(Icons.done, color: Colors.green),
-            const SizedBox(height: 8,),
-            Text(AppLocalizations.of(context)!.measurementSuccess),
-            const SizedBox(height: 8,),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.baseline,
-              children: [
-                Expanded(child: Text('Mean arterial pressure')), // TODO: localizations and testing
-                Text(data.meanArterialPressure.toString()),
-              ],
-            ),
-            if (data.userID != null)
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.baseline,
-                children: [
-                  Expanded(child: Text('userID')),
-                  Text(data.userID!.toString()),
-                ],
+        child: ListTileTheme(
+          data: ListTileThemeData(
+            iconColor: Colors.orange,
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Icon(Icons.done, color: Colors.green),
+              const SizedBox(height: 8,),
+              Text(AppLocalizations.of(context)!.measurementSuccess,
+                style: Theme.of(context).textTheme.titleMedium,),
+              const SizedBox(height: 8,),
+              ListTile(
+                title: Text('Mean arterial pressure'), // TODO: localizations and testing
+                subtitle: Text(data.meanArterialPressure.toString()),
               ),
-            if (data.status?.bodyMovementDetected ?? false)
-              ListTile(title: Text('bodyMovementDetected')),
-            if (data.status?.cuffTooLose ?? false)
-              ListTile(title: Text('cuffTooLose')),
-            if (data.status?.improperMeasurementPosition ?? false)
-              ListTile(title: Text('improperMeasurementPosition')),
-            if (data.status?.irregularPulseDetected ?? false)
-              ListTile(title: Text('irregularPulseDetected')),
-            if (data.status?.pulseRateExceedsUpperLimit ?? false)
-              ListTile(title: Text('pulseRateExceedsUpperLimit')),
-            if (data.status?.pulseRateIsLessThenLowerLimit ?? false)
-              ListTile(title: Text('pulseRateIsLessThenLowerLimit')),
-            const SizedBox(height: 8,),
-          ],
+              if (data.userID != null)
+                ListTile(
+                  title: Text('User ID'),
+                  subtitle: Text(data.userID!.toString()),
+                ),
+              if (data.status?.bodyMovementDetected ?? false)
+                ListTile(
+                  title: Text('Body movement detected'),
+                  leading: Icon(Icons.directions_walk),
+                ),
+              if (data.status?.cuffTooLose ?? false)
+                ListTile(
+                  title: Text('Cuff too loose'),
+                  leading: Icon(Icons.space_bar),
+                ),
+              if (data.status?.improperMeasurementPosition ?? false)
+                ListTile(
+                  title: Text('Improper measurement position'),
+                  leading: Icon(Icons.emoji_people),
+                ),
+              if (data.status?.irregularPulseDetected ?? false)
+                ListTile(
+                  title: Text('Irregular pulse detected'),
+                  leading: Icon(Icons.heart_broken),
+                ),
+              if (data.status?.pulseRateExceedsUpperLimit ?? false)
+                ListTile(
+                  title: Text('Pulse rate exceeds upper limit'),
+                  leading: Icon(Icons.monitor_heart),
+                ),
+              if (data.status?.pulseRateIsLessThenLowerLimit ?? false)
+                ListTile(
+                  title: Text('Pulse rate is less than lower limit'),
+                  leading: Icon(Icons.monitor_heart),
+                ),
+              const SizedBox(height: 8,),
+            ],
+          ),
         ),
       ),
     ),

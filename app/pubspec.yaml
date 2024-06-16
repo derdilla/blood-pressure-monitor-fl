@@ -29,7 +29,6 @@ dependencies:
     path: ../health_data_store/
   sqlparser: ^0.35.1
   flutter_bloc: ^8.1.4
-  permission_handler: ^11.3.1
   convert: ^3.1.1
   flutter_blue_plus: ^1.32.4
 
@@ -38,6 +37,7 @@ dependencies:
   jsaver: ^1.2.0
   restart_app: ^1.2.1
   fluttertoast: ^8.2.4
+  app_settings: ^5.1.1
 
 dev_dependencies:
   file: any

@@ -1,7 +1,7 @@
 import 'package:blood_pressure_app/bluetooth/characteristics/decoding_util.dart';
 
 class BleMeasurementStatus {
-  BleMeasurementStatus._({
+  BleMeasurementStatus({
     required this.bodyMovementDetected,
     required this.cuffTooLose,
     required this.irregularPulseDetected,
@@ -11,7 +11,7 @@ class BleMeasurementStatus {
     required this.improperMeasurementPosition,
   });
 
-  factory BleMeasurementStatus.decode(int byte) => BleMeasurementStatus._(
+  factory BleMeasurementStatus.decode(int byte) => BleMeasurementStatus(
     bodyMovementDetected: isBitIntByteSet(byte, 1),
     cuffTooLose: isBitIntByteSet(byte, 2),
     irregularPulseDetected: isBitIntByteSet(byte, 3),

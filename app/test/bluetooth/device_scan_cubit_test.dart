@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:blood_pressure_app/bluetooth/device_scan_cubit.dart';
 import 'package:blood_pressure_app/bluetooth/flutter_blue_plus_mockable.dart';
+import 'package:blood_pressure_app/logging.dart';
 import 'package:blood_pressure_app/model/storage/settings_store.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -19,6 +20,7 @@ import 'device_scan_cubit_test.mocks.dart';
 
 void main() {
   test('finds and connects to devices', () async {
+    Log.testExpectError = true;
     final StreamController<List<ScanResult>> mockResults = StreamController.broadcast();
     final settings = Settings();
 
@@ -43,9 +45,9 @@ void main() {
     final wrongDev0 = MockBluetoothDevice();
     final wrongRes1 = MockScanResult();
     final wrongDev1 = MockBluetoothDevice();
-    when(wrongDev0.advName).thenReturn('wrongDev0');
+    when(wrongDev0.platformName).thenReturn('wrongDev0');
     when(wrongRes0.device).thenReturn(wrongDev0);
-    when(wrongDev1.advName).thenReturn('wrongDev1');
+    when(wrongDev1.platformName).thenReturn('wrongDev1');
     when(wrongRes1.device).thenReturn(wrongDev1);
     mockResults.sink.add([wrongRes0]);
     await expectLater(cubit.stream, emits(isA<SingleDeviceAvailable>()));
@@ -54,7 +56,7 @@ void main() {
     await expectLater(cubit.stream, emits(isA<DeviceListAvailable>()));
 
     final dev = MockBluetoothDevice();
-    when(dev.advName).thenReturn('testDev');
+    when(dev.platformName).thenReturn('testDev');
     final res = MockScanResult();
     when(res.device).thenReturn(dev);
 
@@ -67,9 +69,11 @@ void main() {
     expect(settings.knownBleDev, contains('testDev'));
     // state should be set as we await above
     await expectLater(cubit.state, isA<DeviceSelected>()
-        .having((s) => s.device, 'device', dev));
+      .having((s) => s.device, 'device', dev));
+    Log.testExpectError = false;
   });
   test('recognizes devices', () async {
+    Log.testExpectError = true;
     final StreamController<List<ScanResult>> mockResults = StreamController.broadcast();
     final settings = Settings(
       knownBleDev: ['testDev']
@@ -94,17 +98,18 @@ void main() {
 
     final wrongRes0 = MockScanResult();
     final wrongDev0 = MockBluetoothDevice();
-    when(wrongDev0.advName).thenReturn('wrongDev0');
+    when(wrongDev0.platformName).thenReturn('wrongDev0');
     when(wrongRes0.device).thenReturn(wrongDev0);
     mockResults.sink.add([wrongRes0]);
     await expectLater(cubit.stream, emits(isA<SingleDeviceAvailable>()));
 
     final dev = MockBluetoothDevice();
-    when(dev.advName).thenReturn('testDev');
+    when(dev.platformName).thenReturn('testDev');
     final res = MockScanResult();
     when(res.device).thenReturn(dev);
     mockResults.sink.add([wrongRes0, res]);
-    await expectLater(cubit.stream, emits(isA<DeviceSelected>()
-        .having((s) => s.device, 'device', dev)));
+    // No prompt when finding the correct device again
+    await expectLater(cubit.stream, emits(isA<DeviceSelected>()));
+    Log.testExpectError = false;
   });
 }

@@ -281,29 +281,6 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
         child: ListView(
           padding: const EdgeInsets.symmetric(horizontal: 8),
           children: [
-            /* mock device selection
-            DeviceSelection(
-              scanResults: [
-                ScanResult(
-                  device: BluetoothDevice(
-                    remoteId: const DeviceIdentifier('xx:xx:xx:xx:xx:xx'),
-                  ),
-                  advertisementData: AdvertisementData(
-                    advName: 'boso medicus CE6674',
-                    txPowerLevel: 0,
-                    appearance: null,
-                    connectable: true,
-                    manufacturerData: {},
-                    serviceData: {},
-                    serviceUuids: [Guid('1810')]
-                  ),
-                  rssi: -69,
-                  timeStamp: DateTime.now(),
-                )
-              ],
-              onAccepted: (_) {},
-            ),
-            */
             if (widget.settings.bleInput)
               BluetoothInput(
                 settings: widget.settings,

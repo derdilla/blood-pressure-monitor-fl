@@ -1,3 +1,4 @@
+import 'package:app_settings/app_settings.dart';
 import 'package:blood_pressure_app/bluetooth/bluetooth_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -49,7 +50,7 @@ class ClosedBluetoothInput extends StatelessWidget {
           text: localizations.errBleNoPerms,
           icon: Icons.bluetooth_disabled,
           onTap: () async {
-            await bluetoothCubit.requestPermission();
+            await AppSettings.openAppSettings();
             await bluetoothCubit.forceRefresh();
           },
         ),
@@ -57,7 +58,8 @@ class ClosedBluetoothInput extends StatelessWidget {
           text: localizations.bluetoothDisabled,
           icon: Icons.bluetooth_disabled,
           onTap: () async {
-            await bluetoothCubit.enableBluetooth();
+            final bluetoothOn = await bluetoothCubit.enableBluetooth();
+            if (!bluetoothOn) await AppSettings.openAppSettings(type: AppSettingsType.bluetooth);
             await bluetoothCubit.forceRefresh();
           },
         ),

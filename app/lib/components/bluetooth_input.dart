@@ -44,11 +44,11 @@ class _BluetoothInputState extends State<BluetoothInput> {
   BleReadCubit? _deviceReadCubit;
 
   @override
-  void dispose() async {
-    await _bluetoothSubscription?.cancel();
-    await _bluetoothCubit.close();
-    await _deviceScanCubit?.close();
-    await _deviceReadCubit?.close();
+  void dispose() {
+    unawaited(_bluetoothSubscription?.cancel());
+    unawaited(_bluetoothCubit.close());
+    unawaited(_deviceScanCubit?.close());
+    unawaited(_deviceReadCubit?.close());
     super.dispose();
   }
 
