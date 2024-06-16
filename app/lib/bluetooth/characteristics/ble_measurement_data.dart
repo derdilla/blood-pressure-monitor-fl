@@ -88,7 +88,7 @@ class BleMeasurementData {
       systolic: systolic,
       diastolic: diastolic,
       meanArterialPressure: meanArterialPressure,
-      isMMHG: isMMHG, // TODO: use
+      isMMHG: isMMHG,
       pulse: pulse,
       userID: userId,
       status: status,

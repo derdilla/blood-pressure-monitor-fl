@@ -11,7 +11,8 @@ bool isBitIntByteSet(int byte, int offset) =>
 double? readSFloat(List<int> data, int offset) {
   if (data.length < offset + 2) return null;
   // TODO: special values (NaN, Infinity)
-  final mantissa = data[offset] + ((data[offset + 1] & 0x0F) << 8); // TODO: https://github.com/NordicSemiconductor/Kotlin-BLE-Library/blob/6b565e59de21dfa53ef80ff8351ac4a4550e8d58/core/src/main/java/no/nordicsemi/android/kotlin/ble/core/data/util/DataByteArray.kt#L392
+  // If this ever stops working: https://github.com/NordicSemiconductor/Kotlin-BLE-Library/blob/6b565e59de21dfa53ef80ff8351ac4a4550e8d58/core/src/main/java/no/nordicsemi/android/kotlin/ble/core/data/util/DataByteArray.kt#L392
+  final mantissa = data[offset] + ((data[offset + 1] & 0x0F) << 8);
   final exponent = data[offset + 1] >> 4;
   return (mantissa * (pow(10, exponent))).toDouble();
 }

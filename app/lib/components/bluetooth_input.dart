@@ -67,6 +67,8 @@ class _BluetoothInputState extends State<BluetoothInput> {
   }
 
   Widget _buildActive(BuildContext context) {
+    final Guid serviceUUID = Guid('1810');
+    final Guid characteristicUUID = Guid('1810');
     _bluetoothSubscription = _bluetoothCubit.stream.listen((state) {
       if (state is! BluetoothReady) {
         Log.trace('_BluetoothInputState: _bluetoothSubscription state=$state, calling _returnToIdle');
@@ -74,7 +76,7 @@ class _BluetoothInputState extends State<BluetoothInput> {
       }
     });
     _deviceScanCubit ??= DeviceScanCubit(
-      service: Guid('1810'), // TODO one source of truth (w read cubit)
+      service: serviceUUID,
       settings: widget.settings,
     );
     return BlocBuilder<DeviceScanCubit, DeviceScanState>(
@@ -97,7 +99,10 @@ class _BluetoothInputState extends State<BluetoothInput> {
             // distinction
           DeviceSelected() => BlocConsumer<BleReadCubit, BleReadState>(
             bloc: (){
-              _deviceReadCubit = BleReadCubit(state.device);
+              _deviceReadCubit = BleReadCubit(state.device,
+                characteristicUUID: characteristicUUID,
+                serviceUUID: serviceUUID,
+              );
               return _deviceReadCubit;
             }(),
             listener: (BuildContext context, BleReadState state) {
@@ -117,7 +122,6 @@ class _BluetoothInputState extends State<BluetoothInput> {
               return switch (state) {
                 BleReadInProgress() => _buildMainCard(context,
                   child: const CircularProgressIndicator(),
-                  // TODO: onTap to retry
                 ),
                 BleReadFailure() => MeasurementFailure(
                   onTap: _returnToIdle,

@@ -36,42 +36,42 @@ class MeasurementSuccess extends StatelessWidget {
                 style: Theme.of(context).textTheme.titleMedium,),
               const SizedBox(height: 8,),
               ListTile(
-                title: Text('Mean arterial pressure'), // TODO: localizations and testing
-                subtitle: Text(data.meanArterialPressure.toString()),
+                title: Text(AppLocalizations.of(context)!.meanArterialPressure),
+                subtitle: Text(data.meanArterialPressure.round().toString()),
               ),
               if (data.userID != null)
                 ListTile(
-                  title: Text('User ID'),
+                  title: Text(AppLocalizations.of(context)!.userID),
                   subtitle: Text(data.userID!.toString()),
                 ),
               if (data.status?.bodyMovementDetected ?? false)
                 ListTile(
-                  title: Text('Body movement detected'),
+                  title: Text(AppLocalizations.of(context)!.bodyMovementDetected),
                   leading: Icon(Icons.directions_walk),
                 ),
               if (data.status?.cuffTooLose ?? false)
                 ListTile(
-                  title: Text('Cuff too loose'),
+                  title: Text(AppLocalizations.of(context)!.cuffTooLoose),
                   leading: Icon(Icons.space_bar),
                 ),
               if (data.status?.improperMeasurementPosition ?? false)
                 ListTile(
-                  title: Text('Improper measurement position'),
+                  title: Text(AppLocalizations.of(context)!.improperMeasurementPosition),
                   leading: Icon(Icons.emoji_people),
                 ),
               if (data.status?.irregularPulseDetected ?? false)
                 ListTile(
-                  title: Text('Irregular pulse detected'),
+                  title: Text(AppLocalizations.of(context)!.irregularPulseDetected),
                   leading: Icon(Icons.heart_broken),
                 ),
               if (data.status?.pulseRateExceedsUpperLimit ?? false)
                 ListTile(
-                  title: Text('Pulse rate exceeds upper limit'),
+                  title: Text(AppLocalizations.of(context)!.pulseRateExceedsUpperLimit),
                   leading: Icon(Icons.monitor_heart),
                 ),
               if (data.status?.pulseRateIsLessThenLowerLimit ?? false)
                 ListTile(
-                  title: Text('Pulse rate is less than lower limit'),
+                  title: Text(AppLocalizations.of(context)!.pulseRateLessThanLowerLimit),
                   leading: Icon(Icons.monitor_heart),
                 ),
               const SizedBox(height: 8,),

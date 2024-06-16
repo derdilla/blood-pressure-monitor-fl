@@ -11,7 +11,6 @@ import 'package:blood_pressure_app/model/storage/settings_store.dart';
 import 'package:blood_pressure_app/model/storage/update_legacy_settings.dart';
 import 'package:blood_pressure_app/screens/home_screen.dart';
 import 'package:blood_pressure_app/screens/loading_screen.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -23,20 +22,8 @@ import 'package:sqflite/sqflite.dart';
 late final ConfigDB _database;
 late final BloodPressureModel _bloodPressureModel;
 
-// TODO: remove
-final debugLog = <String>[];
 
 void main() async {
-  // TODO: remove
-  FlutterError.onError = (details) {
-    FlutterError.presentError(details);
-    debugLog.add('FLUTTER: {{$details}}');
-  };
-  PlatformDispatcher.instance.onError = (error, stack) {
-    debugLog.add('PLATFORM: {{$error||$stack}}');
-    return true;
-  };
-
   runApp(ConsistentFutureBuilder(
       future: _loadApp(),
       onWaiting: const LoadingScreen(),

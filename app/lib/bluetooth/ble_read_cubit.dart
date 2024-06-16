@@ -9,7 +9,7 @@ import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 
 part 'ble_read_state.dart';
 
-/// Logic for reading a characteristic from a device.
+/// Logic for reading a characteristic from a device through a "indication".
 ///
 /// May only be used on devices that are fully connected.
 ///
@@ -29,11 +29,13 @@ part 'ble_read_state.dart';
 /// 5. Emit decoded object
 class BleReadCubit extends Cubit<BleReadState> {
   /// Start reading a characteristic from a device.
-  BleReadCubit(this._device)
+  BleReadCubit(this._device, {
+    required this.serviceUUID,
+    required this.characteristicUUID,
+  })
     : super(BleReadInProgress()){
     _subscription = _device.connectionState
       .listen(_onConnectionStateChanged);
-    _device.cancelWhenDisconnected(_device.mtu.listen((int mtu) => Log.trace('BleReadCubit mtu: $mtu'))); // TODO: remove
     // timeout
     _timeoutTimer = Timer(const Duration(minutes: 2), () {
       if (state is BleReadInProgress) {
@@ -44,9 +46,12 @@ class BleReadCubit extends Cubit<BleReadState> {
       }
     });
   }
-  
-  static const String _kServiceID = '1810';
-  static const String _kCharacteristicID = '2A35';
+
+  /// UUID of the service to read.
+  final Guid serviceUUID;
+
+  /// UUID of the characteristic to read.
+  final Guid characteristicUUID;
 
   /// Bluetooth device to connect to.
   ///
@@ -138,7 +143,7 @@ class BleReadCubit extends Cubit<BleReadState> {
     // [Guid.str] trims standard parts from the uuid. 0x1810 is the blood
     // pressure uuid. https://developer.nordicsemi.com/nRF51_SDK/nRF51_SDK_v4.x.x/doc/html/group___u_u_i_d___s_e_r_v_i_c_e_s.html
     final BluetoothService? service = allServices
-      .firstWhereOrNull((BluetoothService s) => s.uuid.str == _kServiceID);
+      .firstWhereOrNull((BluetoothService s) => s.uuid == serviceUUID);
     if (service == null) {
       Log.err('unsupported service', [_device, allServices]);
       emit(BleReadFailure());
@@ -149,7 +154,7 @@ class BleReadCubit extends Cubit<BleReadState> {
     final List<BluetoothCharacteristic> allCharacteristics = service.characteristics;
     Log.trace('BleReadCubit allCharacteristics: $allCharacteristics');
     final BluetoothCharacteristic? characteristic = allCharacteristics
-      .firstWhereOrNull((c) => c.uuid == Guid(_kCharacteristicID),);
+      .firstWhereOrNull((c) => c.uuid == characteristicUUID,);
     if (characteristic == null) {
       Log.err('no characteristic', [_device, allServices, allCharacteristics]);
       emit(BleReadFailure());

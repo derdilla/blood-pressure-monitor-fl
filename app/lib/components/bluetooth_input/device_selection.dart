@@ -30,7 +30,7 @@ class DeviceSelection extends StatelessWidget {
   Widget build(BuildContext context) {
     assert(scanResults.isNotEmpty);
     return InputCard(
-      //title: Text('Available devices:'), TODO
+      title: Text(AppLocalizations.of(context)!.availableDevices),
       child: ListView(
         shrinkWrap: true,
         children: [
