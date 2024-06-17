@@ -68,7 +68,7 @@ class _BluetoothInputState extends State<BluetoothInput> {
 
   Widget _buildActive(BuildContext context) {
     final Guid serviceUUID = Guid('1810');
-    final Guid characteristicUUID = Guid('1810');
+    final Guid characteristicUUID = Guid('2A35');
     _bluetoothSubscription = _bluetoothCubit.stream.listen((state) {
       if (state is! BluetoothReady) {
         Log.trace('_BluetoothInputState: _bluetoothSubscription state=$state, calling _returnToIdle');
