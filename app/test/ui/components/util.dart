@@ -1,5 +1,3 @@
-import 'package:blood_pressure_app/model/blood_pressure/medicine/intake_history.dart';
-import 'package:blood_pressure_app/model/blood_pressure/model.dart';
 import 'package:blood_pressure_app/model/storage/storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -9,8 +7,6 @@ import 'package:health_data_store/health_data_store.dart';
 import 'package:provider/provider.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
-import '../../ram_only_implementations.dart';
-
 /// Create a root material widget with localizations.
 Widget materialApp(Widget child) => MaterialApp(
   localizationsDelegates: AppLocalizations.localizationsDelegates,
@@ -18,59 +14,8 @@ Widget materialApp(Widget child) => MaterialApp(
   home: Scaffold(body:child),
 );
 
-/// Create a root material widget with localizations and all providers but
-/// without a app root.
-@Deprecated('replace with newAppBase')
-Future<Widget> appBase(Widget child, {
-  Settings? settings,
-  ExportSettings? exportSettings,
-  CsvExportSettings? csvExportSettings,
-  PdfExportSettings? pdfExportSettings,
-  IntervallStoreManager? intervallStoreManager,
-  IntakeHistory? intakeHistory,
-  BloodPressureModel? model,
-}) async {
-  // TODO: migrate arguments
-  final db = await _getHealthDateStore();
-
-  final meds = settings?.medications.map((e) => Medicine(
-    designation: e.designation,
-    color: e.color.value,
-    dosis: e.defaultDosis != null ? Weight.mg(e.defaultDosis!) : null),
-  );
-  final medRepo = db.medRepo;
-  meds?.forEach(medRepo.add);
-
-  final intakeRepo = db.intakeRepo;
-  for (final e in intakeHistory?.getIntakes(DateTimeRange(
-      start: DateTime.fromMillisecondsSinceEpoch(0),
-      end: DateTime.fromMillisecondsSinceEpoch(999999999999))) ?? []) {
-    expect(meds, isNotNull);
-    expect(meds, isNotEmpty);
-    final med = meds!.firstWhere((e2) => e2.designation == e.medicine.designation);
-    intakeRepo.add(MedicineIntake(
-      time: e.timestamp,
-      dosis: Weight.mg(e.dosis),
-      medicine: med,
-    ));
-  }
-
-  return Provider<BloodPressureModel>(
-    create: (_) => model ?? RamBloodPressureModel(),
-    child: await newAppBase(child,
-      settings: settings,
-      exportSettings: exportSettings,
-      csvExportSettings: csvExportSettings,
-      pdfExportSettings: pdfExportSettings,
-      intervallStoreManager: intervallStoreManager,
-      medRepo: medRepo,
-      intakeRepo: intakeRepo,
-  ),);
-
-  // TODO: bpRepo
-}
 /// Creates a the same App as the main method.
-Future<Widget> newAppBase(Widget child,  {
+Future<Widget> appBase(Widget child,  {
   Settings? settings,
   ExportSettings? exportSettings,
   CsvExportSettings? csvExportSettings,
@@ -124,7 +69,7 @@ Future<Widget> appBaseWithData(Widget child,  {
   final medRepo = db.medRepo;
   final intakeRepo = db.intakeRepo;
 
-  return newAppBase(
+  return appBase(
     child,
     settings: settings,
     exportSettings: exportSettings,

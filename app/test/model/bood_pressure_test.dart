@@ -4,7 +4,6 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:path/path.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
-import '../ram_only_implementations.dart';
 
 void main() {
   group('BloodPressureRecord', () {
@@ -30,123 +29,11 @@ void main() {
       databaseFactory = databaseFactoryFfi;
     });
 
-    test('should initialize', () async {
-      expect(() async {
-        await BloodPressureModel.create(dbPath: join(inMemoryDatabasePath, 'BPMShouldInit.db'));
-      }, returnsNormally,);
+    test("Doesn't create new models", () async {
+      final model = await BloodPressureModel
+        .create(dbPath: join(inMemoryDatabasePath, 'BPMShouldInit.db'));
+      expect(model, isNull);
     });
-    test('should start empty', () async {
-      final m = await BloodPressureModel.create(dbPath: join(inMemoryDatabasePath, 'BPMShouldStartEmpty.db'));
-
-      expect((await m.getInTimeRange(DateTime.fromMillisecondsSinceEpoch(1), DateTime.now())).length, 0);
-    });
-
-    test('should notify when adding entries', () async {
-      final m = await BloodPressureModel.create(dbPath: join(inMemoryDatabasePath, 'BPMShouldNotifyWhenAdding.db'));
-
-      int listenerCalls = 0;
-      m.addListener(() {
-        listenerCalls++;
-      });
-
-      await m.add(BloodPressureRecord(DateTime.fromMillisecondsSinceEpoch(1), 0, 0, 0, ''));
-      await m.add(BloodPressureRecord(DateTime.fromMillisecondsSinceEpoch(1), 0, 0, 0, ''));
-      await m.add(BloodPressureRecord(DateTime.fromMillisecondsSinceEpoch(2), 0, 0, 0, ''));
-
-      expect(listenerCalls, 3);
-    });
-
-    test('should return entries as added', () async {
-      final m = await BloodPressureModel.create(dbPath: join(inMemoryDatabasePath, 'BPMShouldReturnAddedEntries.db'));
-
-      final r = BloodPressureRecord(DateTime.fromMillisecondsSinceEpoch(31415926), -172, 10000, 0,
-          '((V⍳V)=⍳⍴V)/V←,V    ⌷←⍳→⍴∆∇⊃‾⍎⍕⌈๏ แผ่นดินฮั่นเABCDEFGHIJKLMNOPQRSTUVWXYZ /0123456789abcdefghijklmnopqrstuvwxyz £©µÀÆÖÞßéöÿ–—‘“”„†•…‰™œŠŸž€ ΑΒΓΔΩαβγδω АБВГДабвг, \n \t д∀∂∈ℝ∧∪≡∞ ↑↗↨↻⇣ ┐┼╔╘░►☺♀ ﬁ�⑀₂ἠḂӥẄɐː⍎אԱა',);
-      m.addListener(() async {
-        final res = (await m.getInTimeRange(DateTime.fromMillisecondsSinceEpoch(1), DateTime.now())).first;
-        expect(res, isNotNull);
-        expect(res.creationTime, r.creationTime);
-        expect(res.systolic, r.systolic);
-        expect(res.diastolic, r.diastolic);
-        expect(res.pulse, r.pulse);
-        expect(res.notes, r.notes);
-        return;
-      });
-
-      m.add(r);
-    });
-
-    test('should save and load between objects/sessions', () async {
-      final m = await BloodPressureModel.create(dbPath: join(inMemoryDatabasePath, 'BPMShouldPersist.db'));
-      final r = BloodPressureRecord(DateTime.fromMillisecondsSinceEpoch(31415926), -172, 10000, 0,
-          '((V⍳V)=⍳⍴V)/V←,V    ⌷←⍳→⍴∆∇⊃‾⍎⍕⌈๏ แผ่นดินฮั่นเABCDEFGHIJKLMNOPQRSTUVWXYZ /0123456789abcdefghijklmnopqrstuvwxyz £©µÀÆÖÞßéöÿ–—‘“”„†•…‰™œŠŸž€ ΑΒΓΔΩαβγδω АБВГДабвг, \n \t д∀∂∈ℝ∧∪≡∞ ↑↗↨↻⇣ ┐┼╔╘░►☺♀ ﬁ�⑀₂ἠḂӥẄɐː⍎אԱა',);
-      await m.add(r);
-
-      final m2 = await BloodPressureModel.create(dbPath: join(inMemoryDatabasePath, 'BPMShouldPersist.db'));
-      final res = (await m2.getInTimeRange(DateTime.fromMillisecondsSinceEpoch(1), DateTime.now())).first;
-
-      expect(res.creationTime, r.creationTime);
-      expect(res.systolic, r.systolic);
-      expect(res.diastolic, r.diastolic);
-      expect(res.pulse, r.pulse);
-      expect(res.notes, r.notes);
-    });
-
-    test('should delete', () async {
-      final m = await BloodPressureModel.create(dbPath: join(inMemoryDatabasePath, 'BPMShouldDelete.db'));
-
-      await m.add(BloodPressureRecord(DateTime.fromMillisecondsSinceEpoch(758934), 123, 87, 65, ';)'));
-      expect((await m.getInTimeRange(DateTime.fromMillisecondsSinceEpoch(1), DateTime.now())).length, 1);
-      expect((await m.getInTimeRange(DateTime.fromMillisecondsSinceEpoch(1), DateTime.now())).length, 1);
-
-      await m.delete(DateTime.fromMillisecondsSinceEpoch(758934));
-
-      expect((await m.getInTimeRange(DateTime.fromMillisecondsSinceEpoch(1), DateTime.now())).length, 0);
-      expect((await m.getInTimeRange(DateTime.fromMillisecondsSinceEpoch(1), DateTime.now())).length, 0);
-    });
-  });
-
-  group('RamBloodPressureModel should behave like BloodPressureModel', () {
-    test('should initialize', () async {
-      expect(() async => RamBloodPressureModel(), returnsNormally);
-    });
-
-    test('should start empty', () async {
-      final m = RamBloodPressureModel();
-      expect((await m.getInTimeRange(DateTime.fromMillisecondsSinceEpoch(1), DateTime.now())).length, 0);
-    });
-
-    test('should notify when adding entries', () async {
-      final m = RamBloodPressureModel();
-
-      int listenerCalls = 0;
-      m.addListener(() {
-        listenerCalls++;
-      });
-
-      await m.add(BloodPressureRecord(DateTime.fromMillisecondsSinceEpoch(1), 0, 0, 0, ''));
-      await m.add(BloodPressureRecord(DateTime.fromMillisecondsSinceEpoch(1), 0, 0, 0, ''));
-      await m.add(BloodPressureRecord(DateTime.fromMillisecondsSinceEpoch(2), 0, 0, 0, ''));
-
-      expect(listenerCalls, 3);
-    });
-
-    test('should return entries as added', () async {
-      final m = RamBloodPressureModel();
-
-      final r = BloodPressureRecord(DateTime.fromMillisecondsSinceEpoch(31415926), -172, 10000, 0,
-          '((V⍳V)=⍳⍴V)/V←,V    ⌷←⍳→⍴∆∇⊃‾⍎⍕⌈๏ แผ่นดินฮั่นเABCDEFGHIJKLMNOPQRSTUVWXYZ /0123456789abcdefghijklmnopqrstuvwxyz £©µÀÆÖÞßéöÿ–—‘“”„†•…‰™œŠŸž€ ΑΒΓΔΩαβγδω АБВГДабвг, \n \t д∀∂∈ℝ∧∪≡∞ ↑↗↨↻⇣ ┐┼╔╘░►☺♀ ﬁ�⑀₂ἠḂӥẄɐː⍎אԱა',);
-      m.addListener(() async {
-        final res = (await m.getInTimeRange(DateTime.fromMillisecondsSinceEpoch(1), DateTime.now())).first;
-        expect(res, isNotNull);
-        expect(res.creationTime, r.creationTime);
-        expect(res.systolic, r.systolic);
-        expect(res.diastolic, r.diastolic);
-        expect(res.pulse, r.pulse);
-        expect(res.notes, r.notes);
-        return;
-      });
-
-      m.add(r);
-    });
+    // TODO: test loading with db files from older versions
   });
 }

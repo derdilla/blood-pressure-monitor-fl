@@ -1,15 +1,13 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:blood_pressure_app/model/blood_pressure/needle_pin.dart';
 import 'package:blood_pressure_app/model/blood_pressure/record.dart';
-import 'package:blood_pressure_app/model/storage/storage.dart';
 import 'package:blood_pressure_app/screens/error_reporting_screen.dart';
-import 'package:blood_pressure_app/screens/subsettings/export_import/export_button_bar.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:path/path.dart';
-import 'package:provider/provider.dart';
 import 'package:sqflite/sqflite.dart';
 
 /// Model to access values in the measurement database.
@@ -19,34 +17,6 @@ class BloodPressureModel extends ChangeNotifier {
   BloodPressureModel._create();
 
   late final Database _database;
-
-  Future<void> _asyncInit(String? dbPath, bool isFullPath) async {
-    dbPath ??= await getDatabasesPath();
-
-    if (dbPath != inMemoryDatabasePath && !isFullPath) {
-      dbPath = join(dbPath, 'blood_pressure.db');
-    }
-
-    // In case safer data loading is needed: finish this.
-    /*
-    String? backupPath;
-    if (dbPath != inMemoryDatabasePath) {
-      assert(_database.isUndefinedOrNull);
-      backupPath = join(Directory.systemTemp.path, 'blood_pressure_bu_${DateTime.now().millisecondsSinceEpoch}.db');
-      final copiedFile = File(dbPath).copy(backupPath);
-      copiedFile.onError((error, stackTrace) => null)
-    }
-    var preserveBackup = false;
-    */
-
-    _database = await openDatabase(
-      dbPath,
-      onCreate: _onDBCreate,
-      onUpgrade: _onDBUpgrade,
-      // When increasing the version an update procedure from every other possible version is needed
-      version: 2,
-    );
-  }
 
   FutureOr<void> _onDBCreate(Database db, int version) => db.execute('CREATE TABLE bloodPressureModel('
         'timestamp INTEGER(14) PRIMARY KEY,'
@@ -70,85 +40,20 @@ class BloodPressureModel extends ChangeNotifier {
   ///
   /// [dbPath] is the path to the folder the database is in. When [dbPath] is left empty the default database file is
   /// used. The [isFullPath] option tells the constructor not to add the default filename at the end of [dbPath].
-  static Future<BloodPressureModel> create({String? dbPath, bool isFullPath = false}) async {
+  static Future<BloodPressureModel?> create({String? dbPath, bool isFullPath = false}) async {
     final component = BloodPressureModel._create();
-    await component._asyncInit(dbPath, isFullPath);
+    dbPath ??= await getDatabasesPath();
+
+    if (dbPath != inMemoryDatabasePath && !isFullPath) {
+      dbPath = join(dbPath, 'blood_pressure.db');
+    }
+    if (!File(dbPath).existsSync()) return null;
+    component._database = await openDatabase(
+      dbPath,
+      onUpgrade: component._onDBUpgrade,
+      version: 2,
+    );
     return component;
-  }
-
-  /// Adds a new measurement at the correct chronological position in the List.
-  ///
-  /// This is not suitable for user inputs, as in this case export is needed as
-  /// well. Consider using [BloodPressureModel.addAndExport] instead.
-  Future<void> add(BloodPressureRecord measurement) async {
-    if (!_database.isOpen) return;
-    final existing = await _database.query('bloodPressureModel',
-        where: 'timestamp = ?', whereArgs: [measurement.creationTime.millisecondsSinceEpoch],);
-    if (existing.isNotEmpty) {
-      await _database.update(
-          'bloodPressureModel',
-          {
-            'systolic': measurement.systolic,
-            'diastolic': measurement.diastolic,
-            'pulse': measurement.pulse,
-            'notes': measurement.notes,
-            'needlePin': jsonEncode(measurement.needlePin?.toMap()),
-          },
-          where: 'timestamp = ?',
-          whereArgs: [measurement.creationTime.millisecondsSinceEpoch],);
-    } else {
-      await _database.insert('bloodPressureModel', {
-        'timestamp': measurement.creationTime.millisecondsSinceEpoch,
-        'systolic': measurement.systolic,
-        'diastolic': measurement.diastolic,
-        'pulse': measurement.pulse,
-        'notes': measurement.notes,
-        'needlePin': jsonEncode(measurement.needlePin?.toMap()),
-      });
-    }
-    notifyListeners();
-  }
-
-  /// Convenience wrapper for [add] that follows best practices.
-  ///
-  /// This ensures no timeout occurs by waiting for operations to finish and
-  /// exports in case the [context] is provided and the option in export
-  /// settings is active.
-  Future<void> addAll(
-    List<BloodPressureRecord> measurements,
-    BuildContext? context,
-  ) async {
-    for (final measurement in measurements) {
-      await add(measurement);
-    }
-
-    if (context == null || !context.mounted) return;
-    final exportSettings = Provider.of<ExportSettings>(context, listen: false);
-    if (exportSettings.exportAfterEveryEntry) {
-      performExport(context);
-    }
-  }
-
-  /// Adds a measurement to the model and tries to export all measurements, if [ExportSettings.exportAfterEveryEntry] is
-  /// true.
-  Future<void> addAndExport(BuildContext context, BloodPressureRecord record) async {
-    await add(record);
-
-    if (!context.mounted) return;
-    final exportSettings = Provider.of<ExportSettings>(context, listen: false);
-    if (exportSettings.exportAfterEveryEntry) {
-      performExport(context);
-    }
-  }
-
-  /// Try to remove the measurement at a specific timestamp from the database.
-  ///
-  /// When no measurement at that time exists, the operation won't fail and
-  /// listeners will get notified anyways.
-  Future<void> delete(DateTime timestamp) async {
-    if (!_database.isOpen) return;
-    _database.delete('bloodPressureModel', where: 'timestamp = ?', whereArgs: [timestamp.millisecondsSinceEpoch]);
-    notifyListeners();
   }
 
   /// Returns all recordings in saved in a range in ascending order
