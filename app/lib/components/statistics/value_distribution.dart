@@ -111,7 +111,7 @@ class _ValueDistributionPainter extends CustomPainter {
     }
 
     // Adapt gap width in case of lots of gaps.
-	int barNumber = distribution.keys.max - distribution.keys.min + 1;
+	  final int barNumber = distribution.keys.max - distribution.keys.min + 1;
     double barGapWidth = _kDefaultBarGapWidth;
     double barWidth = 0;
     while(barWidth < barGapWidth && barGapWidth > 1) {
@@ -261,9 +261,9 @@ class _ValueDistributionPainter extends CustomPainter {
   String get _average {
     double sum = 0;
     int count = 0;
-    for (final key in distribution.keys) {
-      sum += key * distribution[key]!;
-      count += distribution[key]!.toInt();
+    for (int key = distribution.keys.min; key <= distribution.keys.max; key++) {
+      sum += key * (distribution[key] ?? 0);
+      count += (distribution[key] ?? 0);
     }
     return (sum / count).round().toString();
   }
