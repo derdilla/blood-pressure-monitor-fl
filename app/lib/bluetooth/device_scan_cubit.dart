@@ -72,7 +72,7 @@ class DeviceScanCubit extends Cubit<DeviceScanState> {
   void _onScanResult(List<ScanResult> devices) {
     Log.trace('_onScanResult devices: $devices');
 
-    assert(_flutterBluePlus.isScanningNow);
+    assert(devices.isEmpty || _flutterBluePlus.isScanningNow);
     // No need to check whether the devices really support the searched
     // characteristic as users have to select their device anyways.
     if(state is DeviceSelected) return;
