@@ -11,8 +11,6 @@ part 'ble_read_state.dart';
 
 /// Logic for reading a characteristic from a device through a "indication".
 ///
-/// May only be used on devices that are fully connected.
-///
 /// For using this Cubit the flow is as follows:
 /// 1. Create a instance with the initial [BleReadInProgress] state
 /// 2. Wait for either a [BleReadFailure] or a [BleReadSuccess].
@@ -121,6 +119,7 @@ class BleReadCubit extends Cubit<BleReadState> {
 
   Future<void> _onConnectionStateChanged(BluetoothConnectionState state) async {
     Log.trace('BleReadCubit _onConnectionStateChanged: $state');
+    if (super.state is BleReadSuccess) return;
     if (state == BluetoothConnectionState.disconnected) {
       Log.trace('BleReadCubit _onConnectionStateChanged disconnected: '
         '${_device.disconnectReason} Attempting reconnect');
@@ -165,6 +164,7 @@ class BleReadCubit extends Cubit<BleReadState> {
     }
 
     // This characteristic only supports indication so we need to listen to values.
+    await _indicationListener?.cancel();
     _indicationListener = characteristic
       .onValueReceived.listen((rawData) {
         Log.trace('BleReadCubit data received: $rawData');
