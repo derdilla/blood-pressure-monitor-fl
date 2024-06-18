@@ -82,15 +82,15 @@ class BleReadCubit extends Cubit<BleReadState> {
     await super.close();
   }
 
-  bool _debugEnsureConnectionInProgress = false;
-  Future<void> _ensureConnection() async {
+  bool _ensureConnectionInProgress = false;
+  Future<void> _ensureConnection([int attemptCount = 0]) async {
     Log.trace('BleReadCubit _ensureConnection');
-    assert(!_debugEnsureConnectionInProgress);
-    if (kDebugMode) _debugEnsureConnectionInProgress = true;
+    if (_ensureConnectionInProgress) return;
+    _ensureConnectionInProgress = true;
     
     if (_device.isAutoConnectEnabled) {
       Log.trace('BleReadCubit Waiting for auto connect...');
-      if (kDebugMode) _debugEnsureConnectionInProgress = false;
+      _ensureConnectionInProgress = false;
       return;
     }
     
@@ -101,19 +101,22 @@ class BleReadCubit extends Cubit<BleReadState> {
       } on FlutterBluePlusException catch (e) {
         Log.err('BleReadCubit _device.connect failed:', [_device, e]);
       }
-
-
+      
       if (_device.isDisconnected) {
         Log.trace('BleReadCubit _ensureConnection: Device not connected');
-        emit(BleReadFailure());
-        if (kDebugMode) _debugEnsureConnectionInProgress = false;
-        return;
+        _ensureConnectionInProgress = false;
+        if (attemptCount >= 5) {
+          emit(BleReadFailure());
+          return;
+        } else {
+          return _ensureConnection(attemptCount + 1);
+        }
       } else {
         Log.trace('BleReadCubit Connection successful');
       }
     }
     assert(_device.isConnected);
-    if (kDebugMode) _debugEnsureConnectionInProgress = false;
+    _ensureConnectionInProgress = false;
   }
 
   Future<void> _onConnectionStateChanged(BluetoothConnectionState state) async {
