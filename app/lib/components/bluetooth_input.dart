@@ -22,6 +22,9 @@ class BluetoothInput extends StatefulWidget {
   const BluetoothInput({super.key,
     required this.settings,
     required this.onMeasurement,
+    this.bluetoothCubit,
+    this.deviceScanCubit,
+    this.bleReadCubit,
   });
 
   /// Settings to store known devices.
@@ -29,6 +32,15 @@ class BluetoothInput extends StatefulWidget {
 
   /// Called when a measurement was received through bluetooth.
   final void Function(BloodPressureRecord data) onMeasurement;
+
+  /// Function to customize [BluetoothCubit] creation.
+  final BluetoothCubit Function()? bluetoothCubit;
+
+  /// Function to customize [DeviceScanCubit] creation.
+  final DeviceScanCubit Function()? deviceScanCubit;
+
+  /// Function to customize [BleReadCubit] creation.
+  final BleReadCubit Function()? bleReadCubit;
 
   @override
   State<BluetoothInput> createState() => _BluetoothInputState();
@@ -38,10 +50,17 @@ class _BluetoothInputState extends State<BluetoothInput> {
   /// Whether the user expanded bluetooth input
   bool _isActive = false;
 
-  final BluetoothCubit _bluetoothCubit =  BluetoothCubit();
-  StreamSubscription<BluetoothState>? _bluetoothSubscription;
+  late final BluetoothCubit _bluetoothCubit;
   DeviceScanCubit? _deviceScanCubit;
   BleReadCubit? _deviceReadCubit;
+
+  StreamSubscription<BluetoothState>? _bluetoothSubscription;
+
+  @override
+  void initState() {
+    super.initState();
+    _bluetoothCubit = widget.bluetoothCubit?.call() ?? BluetoothCubit();
+  }
 
   @override
   void dispose() {
@@ -53,17 +72,19 @@ class _BluetoothInputState extends State<BluetoothInput> {
   }
 
   void _returnToIdle() async {
-    await _bluetoothSubscription?.cancel();
-    _bluetoothSubscription = null;
-    await _deviceScanCubit?.close();
-    _deviceScanCubit = null;
-    await _deviceReadCubit?.close();
-    _deviceReadCubit = null;
+    // No need to show wait in the UI.
     if (_isActive) {
       setState(() {
         _isActive = false;
       });
     }
+
+    await _deviceReadCubit?.close();
+    _deviceReadCubit = null;
+    await _deviceScanCubit?.close();
+    _deviceScanCubit = null;
+    await _bluetoothSubscription?.cancel();
+    _bluetoothSubscription = null;
   }
 
   Widget _buildActive(BuildContext context) {
@@ -75,7 +96,7 @@ class _BluetoothInputState extends State<BluetoothInput> {
         _returnToIdle();
       }
     });
-    _deviceScanCubit ??= DeviceScanCubit(
+    _deviceScanCubit ??= widget.deviceScanCubit?.call() ?? DeviceScanCubit(
       service: serviceUUID,
       settings: widget.settings,
     );
@@ -99,7 +120,7 @@ class _BluetoothInputState extends State<BluetoothInput> {
             // distinction
           DeviceSelected() => BlocConsumer<BleReadCubit, BleReadState>(
             bloc: (){
-              _deviceReadCubit = BleReadCubit(state.device,
+              _deviceReadCubit = widget.bleReadCubit?.call() ?? BleReadCubit(state.device,
                 characteristicUUID: characteristicUUID,
                 serviceUUID: serviceUUID,
               );
