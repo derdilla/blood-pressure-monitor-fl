@@ -26,7 +26,7 @@ void main() {
   testWidgets('should report measurement count', (tester) async {
     await _initStatsPage(tester, [
       for (int i = 1; i<51; i++) // can't safe entries at or before epoch
-        mockRecord(time: DateTime.fromMillisecondsSinceEpoch(1582991592 + i),
+        mockEntry(time: DateTime.fromMillisecondsSinceEpoch(1582991592 + i),
           sys: i, dia: 60+i, pul: 110+i,),
     ], intervallStoreManager: IntervallStoreManager(IntervallStorage(),
         IntervallStorage(), IntervallStorage(stepSize: TimeStep.lifetime,),),);
@@ -54,8 +54,8 @@ void main() {
   });
   testWidgets("should not display 'null' or -1", (tester) async {
     await _initStatsPage(tester, [
-      mockRecord(time: DateTime.fromMillisecondsSinceEpoch(1), sys: 40, dia: 60),
-      mockRecord(time: DateTime.fromMillisecondsSinceEpoch(2),),
+      mockEntry(time: DateTime.fromMillisecondsSinceEpoch(1), sys: 40, dia: 60),
+      mockEntry(time: DateTime.fromMillisecondsSinceEpoch(2),),
     ], intervallStoreManager: IntervallStoreManager(IntervallStorage(),
         IntervallStorage(), IntervallStorage(stepSize: TimeStep.lifetime),),);
     expect(find.textContaining('-1'), findsNothing);

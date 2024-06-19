@@ -1,5 +1,6 @@
 import 'package:blood_pressure_app/model/blood_pressure/needle_pin.dart';
 import 'package:blood_pressure_app/model/export_import/record_formatter.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 
@@ -15,8 +16,10 @@ enum RowDataFieldType {
   pul,
   /// Guarantees [String] is returned.
   notes,
-  /// Guarantees that the returned type is of type [MeasurementNeedlePin].
-  needlePin; // TODO: replace with color
+  /// Guarantees that a [int] containing a [Color.value] is returned.
+  ///
+  /// Backwards compatability with [MeasurementNeedlePin] json is maintained.
+  color; // TODO: replace with color
 
   /// Selection of a displayable string from [localizations].
   String localize(AppLocalizations localizations) {
@@ -31,7 +34,7 @@ enum RowDataFieldType {
         return localizations.pulLong;
       case RowDataFieldType.notes:
         return localizations.notes;
-      case RowDataFieldType.needlePin:
+      case RowDataFieldType.color:
         return localizations.color;
     }
   }

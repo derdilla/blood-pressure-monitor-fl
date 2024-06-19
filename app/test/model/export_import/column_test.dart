@@ -15,9 +15,9 @@ void main() {
         NativeColumn.systolic,
         NativeColumn.diastolic,
         NativeColumn.pulse,
-        /*NativeColumn.notes, fixme
+        NativeColumn.notes,
         NativeColumn.color,
-        NativeColumn.needlePin,*/
+        NativeColumn.needlePin,
       ]),);
     });
     test('should have internalIdentifier prefixed with "native."', () {
@@ -28,7 +28,8 @@ void main() {
     test('should encode into non-empty string', () {
       // Use BuildInColumn for utility columns
       for (final c in NativeColumn.allColumns) {
-        expect(c.encode(_filledRecord()), isNotEmpty, reason: '${c.internalIdentifier} is NativeColumn');
+        final r = _filledRecord();
+        expect(c.encode(r.$1, r.$2, r.$3), isNotEmpty, reason: '${c.internalIdentifier} is NativeColumn');
       }
     });
     test('should only contain restoreable types', () {
@@ -40,33 +41,33 @@ void main() {
     test('should decode correctly', () {
       final r = _filledRecord();
       for (final c in NativeColumn.allColumns) {
-        final txt = c.encode(r);
+        final txt = c.encode(r.$1, r.$2, r.$3);
         final decoded = c.decode(txt);
         expect(decoded, isNotNull, reason: 'a real value was encoded: ${c.internalIdentifier}: $r > $txt');
         switch (decoded!.$1) {
           case RowDataFieldType.timestamp:
             expect(decoded.$2, isA<DateTime>().having(
-                    (p0) => p0.millisecondsSinceEpoch, 'milliseconds', r.time.millisecondsSinceEpoch,),);
+              (p0) => p0.millisecondsSinceEpoch, 'milliseconds', r.$1.time.millisecondsSinceEpoch,),);
             break;
           case RowDataFieldType.sys:
             expect(decoded.$2, isA<int>().having(
-                    (p0) => p0, 'systolic', r.sys,),);
+                    (p0) => p0, 'systolic', r.$1.sys?.mmHg,),);
             break;
           case RowDataFieldType.dia:
             expect(decoded.$2, isA<int>().having(
-                    (p0) => p0, 'diastolic', r.dia,),);
+                    (p0) => p0, 'diastolic', r.$1.dia?.mmHg,),);
             break;
           case RowDataFieldType.pul:
             expect(decoded.$2, isA<int>().having(
-                    (p0) => p0, 'pulse', r.pul,),);
+                    (p0) => p0, 'pulse', r.$1.pul,),);
             break;
           case RowDataFieldType.notes:
-            /*expect(decoded.$2, isA<String>().having( fixme
-                    (p0) => p0, 'pulse', r.notes,),);*/
+            expect(decoded.$2, isA<String>().having(
+                    (p0) => p0, 'pulse', r.$2.note,),);
             break;
-          case RowDataFieldType.needlePin:
-            /*expect(decoded.$2, isA<MeasurementNeedlePin>().having( fixme
-                    (p0) => p0.toMap(), 'pin', r.needlePin?.toMap(),),);*/
+          case RowDataFieldType.color:
+            expect(decoded.$2, isA<int>().having(
+                    (p0) => p0, 'color', r.$2.color,),);
             break;
         }
       }
@@ -94,46 +95,47 @@ void main() {
     });
     test('should encode without problems', () {
       for (final c in BuildInColumn.allColumns) {
-        expect(c.encode(_filledRecord()), isNotNull);
+        final r = _filledRecord();
+        expect(c.encode(r.$1, r.$2, r.$3), isNotNull);
       }
     });
     test('should decode correctly', () {
       final r = _filledRecord();
       for (final c in BuildInColumn.allColumns) {
-        final txt = c.encode(r);
+        final txt = c.encode(r.$1, r.$2, r.$3);
         final decoded = c.decode(txt);
         switch (decoded?.$1) {
           case RowDataFieldType.timestamp:
             if (c is TimeColumn) {
               // This ensures no columns with useless conversions get introduced.
               expect(decoded?.$2, isA<DateTime>().having(
-                  (p0) => p0.difference(r.time).inDays,
+                  (p0) => p0.difference(r.$1.time).inDays,
                   'inaccuracy',
                   lessThan(1),),);
             } else {
               expect(decoded?.$2, isA<DateTime>().having(
-                  (p0) => p0.millisecondsSinceEpoch, 'milliseconds', r.time.millisecondsSinceEpoch,),);
+                  (p0) => p0.millisecondsSinceEpoch, 'milliseconds', r.$1.time.millisecondsSinceEpoch,),);
             }
             break;
           case RowDataFieldType.sys:
             expect(decoded?.$2, isA<int>().having(
-                    (p0) => p0, 'systolic', r.sys,),);
+                    (p0) => p0, 'systolic', r.$1.sys?.mmHg,),);
             break;
           case RowDataFieldType.dia:
             expect(decoded?.$2, isA<int>().having(
-                    (p0) => p0, 'diastolic', r.dia,),);
+                    (p0) => p0, 'diastolic', r.$1.dia?.mmHg,),);
             break;
           case RowDataFieldType.pul:
             expect(decoded?.$2, isA<int>().having(
-                    (p0) => p0, 'pulse', r.pul,),);
+                    (p0) => p0, 'pulse', r.$1.pul,),);
             break;
           case RowDataFieldType.notes:
-            /*expect(decoded?.$2, isA<String>().having( fixme
-                    (p0) => p0, 'pulse', r.notes,),);*/
+            expect(decoded?.$2, isA<String>().having(
+                    (p0) => p0, 'note', r.$2.note,),);
             break;
-          case RowDataFieldType.needlePin:
-            /*expect(decoded?.$2, isA<MeasurementNeedlePin>().having( fixme
-                    (p0) => p0.toMap(), 'pin', r.needlePin?.toMap(),),);*/
+          case RowDataFieldType.color:
+            expect(decoded?.$2, isA<int>().having(
+                    (p0) => p0, 'pin', r.$2.color,),);
             break;
           case null:
             break;
@@ -149,11 +151,26 @@ void main() {
     });
     test('should encode like ScriptedFormatter', () {
       final r = _filledRecord();
-      expect(UserColumn('','', 'TEST').encode(r), ScriptedFormatter('TEST').encode(r));
-      expect(UserColumn('','', r'$SYS').encode(r), ScriptedFormatter(r'$SYS').encode(r));
-      expect(UserColumn('','', r'$SYS-$DIA').encode(r), ScriptedFormatter(r'$SYS-$DIA').encode(r));
-      expect(UserColumn('','', r'$TIMESTAMP').encode(r), ScriptedFormatter(r'$TIMESTAMP').encode(r));
-      expect(UserColumn('','', '').encode(r), ScriptedFormatter('').encode(r));
+      expect(
+        UserColumn('','', 'TEST').encode(r.$1, r.$2, r.$3),
+        ScriptedFormatter('TEST').encode(r.$1, r.$2, r.$3),
+      );
+      expect(
+        UserColumn('','', r'$SYS').encode(r.$1, r.$2, r.$3),
+        ScriptedFormatter(r'$SYS').encode(r.$1, r.$2, r.$3),
+      );
+      expect(
+        UserColumn('','', r'$SYS-$DIA').encode(r.$1, r.$2, r.$3),
+        ScriptedFormatter(r'$SYS-$DIA').encode(r.$1, r.$2, r.$3),
+      );
+      expect(
+        UserColumn('','', r'$TIMESTAMP').encode(r.$1, r.$2, r.$3),
+        ScriptedFormatter(r'$TIMESTAMP').encode(r.$1, r.$2, r.$3),
+      );
+      expect(
+        UserColumn('','', '').encode(r.$1, r.$2, r.$3),
+        ScriptedFormatter('').encode(r.$1, r.$2, r.$3),
+      );
     });
     test('should decode like ScriptedFormatter', () {
       final r = _filledRecord();
@@ -162,7 +179,10 @@ void main() {
       for (final pattern in testPatterns) {
         final column = UserColumn('','', pattern);
         final formatter = ScriptedFormatter(pattern);
-        expect(column.decode(column.encode(r)), formatter.decode(formatter.encode(r)));
+        expect(
+          column.decode(column.encode(r.$1, r.$2, r.$3)),
+          formatter.decode(formatter.encode(r.$1, r.$2, r.$3)),
+        );
       }
     });
   });
@@ -175,7 +195,7 @@ void main() {
   });
 }
 
-BloodPressureRecord _filledRecord() => mockRecord(
+FullEntry _filledRecord() => mockEntry(
   sys: 123,
   dia: 456,
   pul: 789,

@@ -1,7 +1,5 @@
 import 'dart:convert';
-import 'dart:ui';
 
-import 'package:blood_pressure_app/model/blood_pressure/needle_pin.dart';
 import 'package:blood_pressure_app/model/export_import/export_configuration.dart';
 import 'package:blood_pressure_app/model/export_import/import_field_type.dart';
 import 'package:blood_pressure_app/model/export_import/record_formatter.dart';
@@ -62,18 +60,18 @@ class NativeColumn extends ExportColumn {
   );
   static final NativeColumn color = NativeColumn._create(
     'color',
-    RowDataFieldType.needlePin,
+    RowDataFieldType.color,
     (_, note, __) => note.color?.toString() ?? '',
     (pattern) {
       final value = int.tryParse(pattern);
       if (value == null) return null;
-      return MeasurementNeedlePin(Color(value));
+      return value;
     }
   );
   static final NativeColumn needlePin = NativeColumn._create(
     'needlePin',
-    RowDataFieldType.needlePin,
-    (_, note, __) => '{"color":${note.color}',
+    RowDataFieldType.color,
+    (_, note, __) => '{"color":${note.color}}',
     (pattern) {
       try {
         final json = jsonDecode(pattern);
@@ -81,7 +79,7 @@ class NativeColumn extends ExportColumn {
         if (json.containsKey('color')) {
           final value = json['color'];
           return (value is int)
-            ? MeasurementNeedlePin(Color(value))
+            ? value
             : null;
         }
       } on FormatException {

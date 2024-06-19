@@ -42,13 +42,13 @@ void main() {
     final parsedRecords = converter.parse(csv).getOr(failParse);
 
     expect(parsedRecords, pairwiseCompare(initialRecords,
-      (p0, BloodPressureRecord p1) =>
-        p0.time == p1.time &&
-        p0.sys == p1.sys &&
-        p0.dia == p1.dia &&
-        p0.pul == p1.pul /*&&
-        p0.notes == p1.notes && fixme
-        p0.needlePin?.color == p1.needlePin?.color,*/,
+      (FullEntry p0, FullEntry p1) =>
+        p0.$1.time == p1.$1.time &&
+        p0.$1.sys == p1.$1.sys &&
+        p0.$1.dia == p1.$1.dia &&
+        p0.$1.pul == p1.$1.pul &&
+        p0.$2.note == p1.$2.note &&
+        p0.$2.color == p1.$2.color,
       'equal to',),);
   });
   test('should allow partial imports', () {
@@ -62,29 +62,29 @@ void main() {
     final records = parsed.getOr(failParse);
     expect(records, isNotNull);
     expect(records.length, 3);
-    expect(records, anyElement(isA<BloodPressureRecord>()
-        .having((p0) => p0.time.millisecondsSinceEpoch, 'timestamp', 1703239921194)
-        .having((p0) => p0.sys, 'systolic', null)
-        .having((p0) => p0.dia, 'diastolic', null)
-        .having((p0) => p0.pul, 'pulse', null)
-      //fixme .having((p0) => p0.notes, 'notes', 'note')
-      //fixme .having((p0) => p0.needlePin, 'pin', null),
+    expect(records, anyElement(isA<FullEntry>()
+      .having((p0) => p0.$1.time.millisecondsSinceEpoch, 'timestamp', 1703239921194)
+      .having((p0) => p0.$1.sys?.mmHg, 'systolic', null)
+      .having((p0) => p0.$1.dia?.mmHg, 'diastolic', null)
+      .having((p0) => p0.$1.pul, 'pulse', null)
+      .having((p0) => p0.$2.note, 'notes', 'note')
+      .having((p0) => p0.$2.color, 'pin', null),
     ),);
-    expect(records, anyElement(isA<BloodPressureRecord>()
-        .having((p0) => p0.time.millisecondsSinceEpoch, 'timestamp', 1703239908244)
-        .having((p0) => p0.sys, 'systolic', null)
-        .having((p0) => p0.dia, 'diastolic', 45)
-        .having((p0) => p0.pul, 'pulse', null)
-      //fixme .having((p0) => p0.notes, 'notes', 'test')
-      //fixme .having((p0) => p0.needlePin, 'pin', null),
+    expect(records, anyElement(isA<FullEntry>()
+      .having((p0) => p0.$1.time.millisecondsSinceEpoch, 'timestamp', 1703239908244)
+      .having((p0) => p0.$1.sys?.mmHg, 'systolic', null)
+      .having((p0) => p0.$1.dia?.mmHg, 'diastolic', 45)
+      .having((p0) => p0.$1.pul, 'pulse', null)
+      .having((p0) => p0.$2.note, 'notes', 'test')
+      .having((p0) => p0.$2.color, 'pin', null),
     ),);
-    expect(records, anyElement(isA<BloodPressureRecord>()
-        .having((p0) => p0.time.millisecondsSinceEpoch, 'timestamp', 1703239905395)
-        .having((p0) => p0.sys, 'systolic', 123)
-        .having((p0) => p0.dia, 'diastolic', null)
-        .having((p0) => p0.pul, 'pulse', null)
-        /*.having((p0) => p0.notes, 'notes', '') fixme
-        .having((p0) => p0.needlePin, 'pin', null)*/,
+    expect(records, anyElement(isA<FullEntry>()
+      .having((p0) => p0.$1.time.millisecondsSinceEpoch, 'timestamp', 1703239905395)
+      .having((p0) => p0.$1.sys?.mmHg, 'systolic', 123)
+      .having((p0) => p0.$1.dia?.mmHg, 'diastolic', null)
+      .having((p0) => p0.$1.pul, 'pulse', null)
+      .having((p0) => p0.$2.note, 'notes', '')
+      .having((p0) => p0.$2.color, 'pin', null),
     ),);
   });
 
@@ -100,20 +100,20 @@ void main() {
     final records = parsed.getOr(failParse);
     expect(records, isNotNull);
     expect(records.length, 2);
-    expect(records, everyElement(isA<BloodPressureRecord>()));
-    expect(records, anyElement(isA<BloodPressureRecord>()
-        .having((p0) => p0.time.millisecondsSinceEpoch, 'timestamp', 1703175660000)
-        .having((p0) => p0.sys, 'systolic', 312)
-        .having((p0) => p0.dia, 'diastolic', 315)
-        .having((p0) => p0.pul, 'pulse', 46)
-      //fixme .having((p0) => p0.notes.trim(), 'notes', 'testfkajkfb'),
+    expect(records, everyElement(isA<FullEntry>()));
+    expect(records, anyElement(isA<FullEntry>()
+      .having((p0) => p0.$1.time.millisecondsSinceEpoch, 'timestamp', 1703175660000)
+      .having((p0) => p0.$1.sys?.mmHg, 'systolic', 312)
+      .having((p0) => p0.$1.dia?.mmHg, 'diastolic', 315)
+      .having((p0) => p0.$1.pul, 'pulse', 46)
+      .having((p0) => p0.$2.note?.trim(), 'notes', 'testfkajkfb'),
     ),);
-    expect(records, anyElement(isA<BloodPressureRecord>()
-        .having((p0) => p0.time.millisecondsSinceEpoch, 'timestamp', 1703175600000)
-        .having((p0) => p0.sys, 'systolic', 123)
-        .having((p0) => p0.dia, 'diastolic', 41)
-        .having((p0) => p0.pul, 'pulse', 43)
-      //fixme .having((p0) => p0.notes.trim(), 'notes', '1214s3'),
+    expect(records, anyElement(isA<FullEntry>()
+      .having((p0) => p0.$1.time.millisecondsSinceEpoch, 'timestamp', 1703175600000)
+      .having((p0) => p0.$1.sys?.mmHg, 'systolic', 123)
+      .having((p0) => p0.$1.dia?.mmHg, 'diastolic', 41)
+      .having((p0) => p0.$1.pul, 'pulse', 43)
+      .having((p0) => p0.$2.note?.trim(), 'notes', '1214s3'),
     ),);
   });
   test('should import v1.1.0 measurements', () {
@@ -127,20 +127,20 @@ void main() {
     final records = parsed.getOr(failParse);
     expect(records, isNotNull);
     expect(records.length, 4);
-    expect(records, everyElement(isA<BloodPressureRecord>()));
-    expect(records, anyElement(isA<BloodPressureRecord>()
-        .having((p0) => p0.time.millisecondsSinceEpoch, 'timestamp', 1703175660000)
-        .having((p0) => p0.sys, 'systolic', 312)
-        .having((p0) => p0.dia, 'diastolic', 315)
-        .having((p0) => p0.pul, 'pulse', 46)
-      //fixme .having((p0) => p0.notes.trim(), 'notes', 'testfkajkfb'),
+    expect(records, everyElement(isA<FullEntry>()));
+    expect(records, anyElement(isA<FullEntry>()
+        .having((p0) => p0.$1.time.millisecondsSinceEpoch, 'timestamp', 1703175660000)
+        .having((p0) => p0.$1.sys?.mmHg, 'systolic', 312)
+        .having((p0) => p0.$1.dia?.mmHg, 'diastolic', 315)
+        .having((p0) => p0.$1.pul, 'pulse', 46)
+        .having((p0) => p0.$2.note?.trim(), 'notes', 'testfkajkfb'),
     ),);
-    expect(records, anyElement(isA<BloodPressureRecord>()
-        .having((p0) => p0.time.millisecondsSinceEpoch, 'timestamp', 1703175600000)
-        .having((p0) => p0.sys, 'systolic', 123)
-        .having((p0) => p0.dia, 'diastolic', 41)
-        .having((p0) => p0.pul, 'pulse', 43)
-      //fixme .having((p0) => p0.notes.trim(), 'notes', '1214s3'),
+    expect(records, anyElement(isA<FullEntry>()
+        .having((p0) => p0.$1.time.millisecondsSinceEpoch, 'timestamp', 1703175600000)
+        .having((p0) => p0.$1.sys?.mmHg, 'systolic', 123)
+        .having((p0) => p0.$1.dia?.mmHg, 'diastolic', 41)
+        .having((p0) => p0.$1.pul, 'pulse', 43)
+        .having((p0) => p0.$2.note?.trim(), 'notes', '1214s3'),
     ),);
   });
   test('should import v1.4.0 measurements', () {
@@ -154,27 +154,27 @@ void main() {
     final records = parsed.getOr(failParse);
     expect(records, isNotNull);
     expect(records.length, 186);
-    expect(records, everyElement(isA<BloodPressureRecord>()));
-    expect(records, anyElement(isA<BloodPressureRecord>()
-        .having((p0) => p0.time.millisecondsSinceEpoch, 'timestamp', 1703175660000)
-        .having((p0) => p0.sys, 'systolic', 312)
-        .having((p0) => p0.dia, 'diastolic', 315)
-        .having((p0) => p0.pul, 'pulse', 46)
-        //fixme .having((p0) => p0.notes, 'notes', 'testfkajkfb'),
+    expect(records, everyElement(isA<FullEntry>()));
+    expect(records, anyElement(isA<FullEntry>()
+      .having((p0) => p0.$1.time.millisecondsSinceEpoch, 'timestamp', 1703175660000)
+      .having((p0) => p0.$1.sys?.mmHg, 'systolic', 312)
+      .having((p0) => p0.$1.dia?.mmHg, 'diastolic', 315)
+      .having((p0) => p0.$1.pul, 'pulse', 46)
+      .having((p0) => p0.$2.note, 'notes', 'testfkajkfb'),
     ),);
-    expect(records, anyElement(isA<BloodPressureRecord>()
-        .having((p0) => p0.time.millisecondsSinceEpoch, 'timestamp', 1703175600000)
-        .having((p0) => p0.sys, 'systolic', 123)
-        .having((p0) => p0.dia, 'diastolic', 41)
-        .having((p0) => p0.pul, 'pulse', 43)
-        //.having((p0) => p0.notes, 'notes', '1214s3'),fixme
+    expect(records, anyElement(isA<FullEntry>()
+      .having((p0) => p0.$1.time.millisecondsSinceEpoch, 'timestamp', 1703175600000)
+      .having((p0) => p0.$1.sys?.mmHg, 'systolic', 123)
+      .having((p0) => p0.$1.dia?.mmHg, 'diastolic', 41)
+      .having((p0) => p0.$1.pul, 'pulse', 43)
+      .having((p0) => p0.$2.note, 'notes', '1214s3'),
     ),);
-    expect(records, anyElement(isA<BloodPressureRecord>()
-        .having((p0) => p0.time.millisecondsSinceEpoch, 'timestamp', 10893142303200)
-        .having((p0) => p0.sys, 'systolic', 106)
-        .having((p0) => p0.dia, 'diastolic', 77)
-        .having((p0) => p0.pul, 'pulse', 53)
-        //.having((p0) => p0.notes, 'notes', ''),fixme
+    expect(records, anyElement(isA<FullEntry>()
+      .having((p0) => p0.$1.time.millisecondsSinceEpoch, 'timestamp', 10893142303200)
+      .having((p0) => p0.$1.sys?.mmHg, 'systolic', 106)
+      .having((p0) => p0.$1.dia?.mmHg, 'diastolic', 77)
+      .having((p0) => p0.$1.pul, 'pulse', 53)
+      .having((p0) => p0.$2.note, 'notes', ''),
     ),);
   });
   test('should import v1.5.1 measurements', () {
@@ -188,30 +188,30 @@ void main() {
     final records = parsed.getOr(failParse);
     expect(records, isNotNull);
     expect(records.length, 185);
-    expect(records, everyElement(isA<BloodPressureRecord>()));
-    expect(records, anyElement(isA<BloodPressureRecord>()
-        .having((p0) => p0.time.millisecondsSinceEpoch, 'timestamp', 1703175660000)
-        .having((p0) => p0.sys, 'systolic', 312)
-        .having((p0) => p0.dia, 'diastolic', 315)
-        .having((p0) => p0.pul, 'pulse', 46)
-        /*.having((p0) => p0.notes, 'notes', 'testfkajkfb')fixme
-        .having((p0) => p0.needlePin, 'pin', null),*/
+    expect(records, everyElement(isA<FullEntry>()));
+    expect(records, anyElement(isA<FullEntry>()
+      .having((p0) => p0.$1.time.millisecondsSinceEpoch, 'timestamp', 1703175660000)
+      .having((p0) => p0.$1.sys?.mmHg, 'systolic', 312)
+      .having((p0) => p0.$1.dia?.mmHg, 'diastolic', 315)
+      .having((p0) => p0.$1.pul, 'pulse', 46)
+      .having((p0) => p0.$2.note, 'notes', 'testfkajkfb')
+      .having((p0) => p0.$2.color, 'pin', null),
     ),);
-    expect(records, anyElement(isA<BloodPressureRecord>()
-        .having((p0) => p0.time.millisecondsSinceEpoch, 'timestamp', 1703175600000)
-        .having((p0) => p0.sys, 'systolic', 123)
-        .having((p0) => p0.dia, 'diastolic', 41)
-        .having((p0) => p0.pul, 'pulse', 43)
-        /*.having((p0) => p0.notes, 'notes', '1214s3')fixme
-        .having((p0) => p0.needlePin, 'pin', null),*/
+    expect(records, anyElement(isA<FullEntry>()
+      .having((p0) => p0.$1.time.millisecondsSinceEpoch, 'timestamp', 1703175600000)
+      .having((p0) => p0.$1.sys?.mmHg, 'systolic', 123)
+      .having((p0) => p0.$1.dia?.mmHg, 'diastolic', 41)
+      .having((p0) => p0.$1.pul, 'pulse', 43)
+      .having((p0) => p0.$2.note, 'notes', '1214s3')
+      .having((p0) => p0.$2.color, 'pin', null),
     ),);
-    expect(records, anyElement(isA<BloodPressureRecord>()
-        .having((p0) => p0.time.millisecondsSinceEpoch, 'timestamp', 1077625200000)
-        .having((p0) => p0.sys, 'systolic', 100)
-        .having((p0) => p0.dia, 'diastolic', 82)
-        .having((p0) => p0.pul, 'pulse', 63)
-        /*.having((p0) => p0.notes, 'notes', '') fixme
-        .having((p0) => p0.needlePin, 'pin', null)*/,
+    expect(records, anyElement(isA<FullEntry>()
+      .having((p0) => p0.$1.time.millisecondsSinceEpoch, 'timestamp', 1077625200000)
+      .having((p0) => p0.$1.sys?.mmHg, 'systolic', 100)
+      .having((p0) => p0.$1.dia?.mmHg, 'diastolic', 82)
+      .having((p0) => p0.$1.pul, 'pulse', 63)
+      .having((p0) => p0.$2.note, 'notes', '')
+      .having((p0) => p0.$2.color, 'pin', null),
     ),);
   });
   test('should import v1.5.7 measurements', () {
@@ -225,30 +225,30 @@ void main() {
     final records = parsed.getOr(failParse);
     expect(records, isNotNull);
     expect(records.length, 185);
-    expect(records, everyElement(isA<BloodPressureRecord>()));
-    expect(records, anyElement(isA<BloodPressureRecord>()
-        .having((p0) => p0.time.millisecondsSinceEpoch, 'timestamp', 1703175660000)
-        .having((p0) => p0.sys, 'systolic', 312)
-        .having((p0) => p0.dia, 'diastolic', 315)
-        .having((p0) => p0.pul, 'pulse', 46)
-        /*.having((p0) => p0.notes, 'notes', 'testfkajkfb') fixme
-        .having((p0) => p0.needlePin, 'pin', null),*/
+    expect(records, everyElement(isA<FullEntry>()));
+    expect(records, anyElement(isA<FullEntry>()
+      .having((p0) => p0.$1.time.millisecondsSinceEpoch, 'timestamp', 1703175660000)
+      .having((p0) => p0.$1.sys?.mmHg, 'systolic', 312)
+      .having((p0) => p0.$1.dia?.mmHg, 'diastolic', 315)
+      .having((p0) => p0.$1.pul, 'pulse', 46)
+      .having((p0) => p0.$2.note, 'notes', 'testfkajkfb')
+      .having((p0) => p0.$2.color, 'pin', null),
     ),);
-    expect(records, anyElement(isA<BloodPressureRecord>()
-        .having((p0) => p0.time.millisecondsSinceEpoch, 'timestamp', 1703175600000)
-        .having((p0) => p0.sys, 'systolic', 123)
-        .having((p0) => p0.dia, 'diastolic', 41)
-        .having((p0) => p0.pul, 'pulse', 43)
-        /*.having((p0) => p0.notes, 'notes', '1214s3')fixme
-        .having((p0) => p0.needlePin, 'pin', null),*/
+    expect(records, anyElement(isA<FullEntry>()
+        .having((p0) => p0.$1.time.millisecondsSinceEpoch, 'timestamp', 1703175600000)
+        .having((p0) => p0.$1.sys?.mmHg, 'systolic', 123)
+        .having((p0) => p0.$1.dia?.mmHg, 'diastolic', 41)
+        .having((p0) => p0.$1.pul, 'pulse', 43)
+        .having((p0) => p0.$2.note, 'notes', '1214s3')
+        .having((p0) => p0.$2.color, 'pin', null),
     ),);
-    expect(records, anyElement(isA<BloodPressureRecord>()
-        .having((p0) => p0.time.millisecondsSinceEpoch, 'timestamp', 1077625200000)
-        .having((p0) => p0.sys, 'systolic', 100)
-        .having((p0) => p0.dia, 'diastolic', 82)
-        .having((p0) => p0.pul, 'pulse', 63)
-        /*.having((p0) => p0.notes, 'notes', '') fixme
-        .having((p0) => p0.needlePin, 'pin', null)*/,
+    expect(records, anyElement(isA<FullEntry>()
+        .having((p0) => p0.$1.time.millisecondsSinceEpoch, 'timestamp', 1077625200000)
+        .having((p0) => p0.$1.sys?.mmHg, 'systolic', 100)
+        .having((p0) => p0.$1.dia?.mmHg, 'diastolic', 82)
+        .having((p0) => p0.$1.pul, 'pulse', 63)
+        .having((p0) => p0.$2.note, 'notes', '')
+        .having((p0) => p0.$2.color, 'pin', null),
     ),);
     // TODO: test color
   });
@@ -256,57 +256,57 @@ void main() {
     final text = File('test/model/export_import/exported_formats/v1.5.8.csv').readAsStringSync();
 
     final converter = CsvConverter(
-        CsvExportSettings(),
-        ExportColumnsManager(),
+      CsvExportSettings(),
+      ExportColumnsManager(),
     );
     final parsed = converter.parse(text);
     final records = parsed.getOr(failParse);
     expect(records, isNotNull);
     expect(records.length, 9478);
-    expect(records, everyElement(isA<BloodPressureRecord>()));
-    expect(records, anyElement(isA<BloodPressureRecord>()
-        .having((p0) => p0.time.millisecondsSinceEpoch, 'timestamp', 1703175193324)
-        .having((p0) => p0.sys, 'systolic', 123)
-        .having((p0) => p0.dia, 'diastolic', 43)
-        .having((p0) => p0.pul, 'pulse', 53)
-        /*.having((p0) => p0.notes, 'notes', 'sdfsdfds')fixme
-        .having((p0) => p0.needlePin?.color, 'pin', const Color(0xff69f0ae)),*/
+    expect(records, everyElement(isA<FullEntry>()));
+    expect(records, anyElement(isA<FullEntry>()
+      .having((p0) => p0.$1.time.millisecondsSinceEpoch, 'timestamp', 1703175193324)
+      .having((p0) => p0.$1.sys?.mmHg, 'systolic', 123)
+      .having((p0) => p0.$1.dia?.mmHg, 'diastolic', 43)
+      .having((p0) => p0.$1.pul, 'pulse', 53)
+      .having((p0) => p0.$2.note, 'notes', 'sdfsdfds')
+      .having((p0) => p0.$2.color, 'color', 0xff69f0ae),
     ),);
-    expect(records, anyElement(isA<BloodPressureRecord>()
-        .having((p0) => p0.time.millisecondsSinceEpoch, 'timestamp', 1702883511000)
-        .having((p0) => p0.sys, 'systolic', 114)
-        .having((p0) => p0.dia, 'diastolic', 71)
-        .having((p0) => p0.pul, 'pulse', 66)
-        /*.having((p0) => p0.notes, 'notes', 'fsaf &_*¢|^✓[=%®©')fixme
-        .having((p0) => p0.needlePin?.color.value, 'pin', Colors.lightGreen.value),*/
+    expect(records, anyElement(isA<FullEntry>()
+      .having((p0) => p0.$1.time.millisecondsSinceEpoch, 'timestamp', 1702883511000)
+      .having((p0) => p0.$1.sys?.mmHg, 'systolic', 114)
+      .having((p0) => p0.$1.dia?.mmHg, 'diastolic', 71)
+      .having((p0) => p0.$1.pul, 'pulse', 66)
+      .having((p0) => p0.$2.note, 'notes', 'fsaf &_*¢|^✓[=%®©')
+      .having((p0) => p0.$2.color, 'color', Colors.lightGreen.value),
     ),);
-    expect(records, anyElement(isA<BloodPressureRecord>()
-        .having((p0) => p0.time.millisecondsSinceEpoch, 'timestamp', 1701034952000)
-        .having((p0) => p0.sys, 'systolic', 125)
-        .having((p0) => p0.dia, 'diastolic', 77)
-        .having((p0) => p0.pul, 'pulse', 60)
-        /*.having((p0) => p0.notes, 'notes', '') fixme
-        .having((p0) => p0.needlePin, 'pin', null)*/,
+    expect(records, anyElement(isA<FullEntry>()
+      .having((p0) => p0.$1.time.millisecondsSinceEpoch, 'timestamp', 1701034952000)
+      .having((p0) => p0.$1.sys?.mmHg, 'systolic', 125)
+      .having((p0) => p0.$1.dia?.mmHg, 'diastolic', 77)
+      .having((p0) => p0.$1.pul, 'pulse', 60)
+      .having((p0) => p0.$2.note, 'notes', '')
+      .having((p0) => p0.$2.color, 'color', null),
     ),);
-    expect(records, anyElement(isA<BloodPressureRecord>()
-        .having((p0) => p0.time.millisecondsSinceEpoch, 'timestamp', 1077625200000)
-        .having((p0) => p0.sys, 'systolic', 100)
-        .having((p0) => p0.dia, 'diastolic', 82)
-        .having((p0) => p0.pul, 'pulse', 63)
-        /*.having((p0) => p0.notes, 'notes', '') fixme
-        .having((p0) => p0.needlePin, 'pin', null)*/,
+    expect(records, anyElement(isA<FullEntry>()
+        .having((p0) => p0.$1.time.millisecondsSinceEpoch, 'timestamp', 1077625200000)
+        .having((p0) => p0.$1.sys?.mmHg, 'systolic', 100)
+        .having((p0) => p0.$1.dia?.mmHg, 'diastolic', 82)
+        .having((p0) => p0.$1.pul, 'pulse', 63)
+        .having((p0) => p0.$2.note, 'notes', '')
+        .having((p0) => p0.$2.color, 'pin', null),
     ),);
     // TODO: test time columns
   });
 }
 
-List<BloodPressureRecord> createRecords([int count = 20]) => [
+List<FullEntry> createRecords([int count = 20]) => [
   for (int i = 0; i<count; i++)
-    mockRecordPos(DateTime.fromMillisecondsSinceEpoch(123456 + i),
+    mockEntryPos(DateTime.fromMillisecondsSinceEpoch(123456 + i),
         i, 100+i, 200+1, 'note $i', Color(123+i),),
 ];
 
-List<BloodPressureRecord>? failParse(EntryParsingError error) {
+List<FullEntry>? failParse(EntryParsingError error) {
   switch (error) {
     case RecordParsingErrorEmptyFile():
       fail('Parsing failed due to insufficient data.');

@@ -40,7 +40,7 @@ class BloodPressureAnalyser {
   int? get minPul => _records.map((r) => r.pul).tryMin?.toInt();
 
   /// The minimal systolic values of all records.
-  Pressure? get minSys => _records.map((r) => r.sys?.kPa).tryMax?.asKPa;
+  Pressure? get minSys => _records.map((r) => r.sys?.kPa).tryMin?.asKPa;
 
   /// The earliest timestamp of all records.
   DateTime? get firstDay {

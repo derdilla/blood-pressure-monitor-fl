@@ -35,7 +35,7 @@ void main() {
       await tester.pumpWidget(materialApp(
         AddEntryDialoge(
           settings: Settings(),
-          initialRecord: mockRecordPos(
+          initialRecord: mockEntryPos(
             DateTime.now(), 123, 56, 43, 'Test note', Colors.teal,
           ),
           medRepo: medRepo(),
@@ -156,7 +156,7 @@ void main() {
       await loadDialoge(tester, (context) async
       => result = await showAddEntryDialoge(context, Settings(),
         medRepo(),
-        mockRecord(sys: 123, dia: 56, pul: 43, note: 'Test note', pin: Colors.teal),),);
+        mockEntry(sys: 123, dia: 56, pul: 43, note: 'Test note', pin: Colors.teal),),);
       expect(find.byType(DropdownButton<Medicine?>), findsNothing, reason: 'No medication in settings.');
 
       expect(find.byType(AddEntryDialoge), findsOneWidget);
@@ -168,7 +168,7 @@ void main() {
     });
     testWidgets('should return values on edit cancel', (tester) async {
       dynamic result = 'result before save';
-      final record = mockRecord(sys: 123, dia: 56, pul: 43, note: 'Test note', pin: Colors.teal);
+      final record = mockEntry(sys: 123, dia: 56, pul: 43, note: 'Test note', pin: Colors.teal);
       await loadDialoge(tester, (context) async
       => result = await showAddEntryDialoge(context, Settings(), medRepo(), record),);
       expect(find.byType(DropdownButton<Medicine?>), findsNothing, reason: 'No medication in settings.');
@@ -392,7 +392,7 @@ void main() {
     testWidgets('should start with sys input focused', (tester) async {
       final mRep = medRepo();
       await loadDialoge(tester, (context) =>
-          showAddEntryDialoge(context, Settings(), mRep, mockRecord(sys: 12)),);
+          showAddEntryDialoge(context, Settings(), mRep, mockEntry(sys: 12)),);
       expect(find.byType(DropdownButton<Medicine?>), findsNothing, reason: 'No medication in settings.');
 
       final primaryFocus = FocusManager.instance.primaryFocus;
@@ -408,7 +408,7 @@ void main() {
     testWidgets('should focus next on input finished', (tester) async {
       final mRep = medRepo();
       await loadDialoge(tester, (context) =>
-          showAddEntryDialoge(context, Settings(), mRep, mockRecord(sys: 12, dia: 3, pul: 4, note: 'note')),);
+          showAddEntryDialoge(context, Settings(), mRep, mockEntry(sys: 12, dia: 3, pul: 4, note: 'note')),);
       expect(find.byType(DropdownButton<Medicine?>), findsNothing, reason: 'No medication in settings.');
 
       await tester.enterText(find.ancestor(of: find.text('Systolic').first, matching: find.byType(TextFormField)), '123');
@@ -451,7 +451,7 @@ void main() {
     testWidgets('should focus last input field on backspace pressed in empty input field', (tester) async {
       final mRep = medRepo();
       await loadDialoge(tester, (context) =>
-          showAddEntryDialoge(context, Settings(), mRep, mockRecord(sys: 12, dia: 3, pul: 4, note: 'note')),);
+          showAddEntryDialoge(context, Settings(), mRep, mockEntry(sys: 12, dia: 3, pul: 4, note: 'note')),);
       expect(find.byType(DropdownButton<Medicine?>), findsNothing, reason: 'No medication in settings.');
 
       await tester.enterText(find.ancestor(of: find.text('note').first, matching: find.byType(TextFormField)), '');
@@ -587,7 +587,7 @@ void main() {
     testWidgets('should not go back to last field when the current field is still filled', (tester) async {
       final mRep = medRepo([mockMedicine(designation: 'testmed')]);
       await loadDialoge(tester, (context) =>
-          showAddEntryDialoge(context, Settings(), mRep, mockRecord(sys: 12, dia: 3, pul: 4, note: 'note')),);
+          showAddEntryDialoge(context, Settings(), mRep, mockEntry(sys: 12, dia: 3, pul: 4, note: 'note')),);
       expect(find.byType(DropdownButton<Medicine?>), findsNothing, reason: 'No medication in settings.');
 
       await tester.enterText(find.ancestor(

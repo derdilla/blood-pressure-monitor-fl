@@ -11,21 +11,21 @@ void main() {
   testWidgets('should initialize without errors', (tester) async {
     await tester.pumpWidget(materialApp(MeasurementListRow(
       settings: Settings(),
-      record: mockRecordPos(DateTime(2023), 123, 80, 60, 'test'),),),);
+      record: mockEntryPos(DateTime(2023), 123, 80, 60, 'test'),),),);
     expect(tester.takeException(), isNull);
     await tester.pumpWidget(materialApp(MeasurementListRow(
       settings: Settings(),
-      record: mockRecordPos(DateTime.fromMillisecondsSinceEpoch(31279811), null, null, null, 'null test'),),),);
+      record: mockEntryPos(DateTime.fromMillisecondsSinceEpoch(31279811), null, null, null, 'null test'),),),);
     expect(tester.takeException(), isNull);
     await tester.pumpWidget(materialApp(MeasurementListRow(
       settings: Settings(),
-      record: mockRecordPos(DateTime(2023), 124, 85, 63, 'color',Colors.cyan))));
+      record: mockEntryPos(DateTime(2023), 124, 85, 63, 'color',Colors.cyan))));
     expect(tester.takeException(), isNull);
   });
   testWidgets('should expand correctly', (tester) async {
     await tester.pumpWidget(materialApp(MeasurementListRow(
         settings: Settings(),
-        record: mockRecordPos(DateTime(2023), 123, 78, 56, 'Test texts'),),),);
+        record: mockEntryPos(DateTime(2023), 123, 78, 56, 'Test texts'),),),);
     expect(find.byIcon(Icons.expand_more), findsOneWidget);
     await tester.tap(find.byIcon(Icons.expand_more));
     await tester.pumpAndSettle();
@@ -36,7 +36,7 @@ void main() {
   testWidgets('should display correct information', (tester) async {
     await tester.pumpWidget(materialApp(MeasurementListRow(
         settings: Settings(),
-        record: mockRecordPos(DateTime(2023), 123, 78, 56, 'Test text'),),),);
+        record: mockEntryPos(DateTime(2023), 123, 78, 56, 'Test text'),),),);
     expect(find.text('123'), findsOneWidget);
     expect(find.text('78'), findsOneWidget);
     expect(find.text('56'), findsOneWidget);
@@ -52,7 +52,7 @@ void main() {
   });
   testWidgets('should not display null values', (tester) async {
     await tester.pumpWidget(materialApp(MeasurementListRow(
-      settings: Settings(), record: mockRecord(time: DateTime(2023)),),),);
+      settings: Settings(), record: mockEntry(time: DateTime(2023)),),),);
     expect(find.text('null'), findsNothing);
     expect(find.byIcon(Icons.expand_more), findsOneWidget);
     await tester.tap(find.byIcon(Icons.expand_more));
@@ -61,7 +61,7 @@ void main() {
   });
   testWidgets('should open edit dialoge', (tester) async {
     await tester.pumpWidget(await appBase(MeasurementListRow(
-      settings: Settings(), record: mockRecord(time: DateTime(2023),
+      settings: Settings(), record: mockEntry(time: DateTime(2023),
         sys:1, dia: 2, pul: 3, note: 'testTxt',),),),);
     expect(find.byIcon(Icons.expand_more), findsOneWidget);
     await tester.tap(find.byIcon(Icons.expand_more));

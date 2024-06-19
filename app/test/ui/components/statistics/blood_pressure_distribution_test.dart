@@ -40,12 +40,12 @@ void main() {
   testWidgets('should report records to ValueDistribution', (tester) async {
     await tester.pumpWidget(materialApp(BloodPressureDistribution(
       records: [
-        mockRecord(sys: 123),
-        mockRecord(dia: 123),
-        mockRecord(dia: 124),
-        mockRecord(pul: 123),
-        mockRecord(pul: 124),
-        mockRecord(pul: 125),
+        mockEntry(sys: 123),
+        mockEntry(dia: 123),
+        mockEntry(dia: 124),
+        mockEntry(pul: 123),
+        mockEntry(pul: 124),
+        mockEntry(pul: 125),
       ],
       settings: Settings(
         sysColor: Colors.red,

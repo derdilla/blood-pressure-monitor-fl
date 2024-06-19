@@ -1,5 +1,3 @@
-
-import 'package:blood_pressure_app/model/blood_pressure/needle_pin.dart';
 import 'package:blood_pressure_app/model/export_import/column.dart';
 import 'package:blood_pressure_app/model/export_import/import_field_type.dart' show RowDataFieldType;
 import 'package:blood_pressure_app/model/export_import/record_parsing_result.dart';
@@ -139,8 +137,8 @@ class CsvConverter {
             (piece) => piece.$1 == RowDataFieldType.pul,)?.$2;
       final String noteText = recordPieces.firstWhereOrNull(
             (piece) => piece.$1 == RowDataFieldType.notes,)?.$2 ?? '';
-      final MeasurementNeedlePin? needlePin = recordPieces.firstWhereOrNull(
-            (piece) => piece.$1 == RowDataFieldType.needlePin,)?.$2;
+      final int? color = recordPieces.firstWhereOrNull(
+            (piece) => piece.$1 == RowDataFieldType.color,)?.$2;
 
       final record = BloodPressureRecord(
         time: timestamp,
@@ -151,7 +149,7 @@ class CsvConverter {
       final note = Note(
         time: timestamp,
         note: noteText,
-        color: needlePin?.color.value,
+        color: color,
       );
       entries.add((record, note, []));
       currentLineNumber++;

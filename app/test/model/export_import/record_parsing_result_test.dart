@@ -10,11 +10,11 @@ void main() {
     expect(result.hasError(), isTrue);
   });
   test('should indicate when no error is present', () async {
-    final result = RecordParsingResult.ok([mockRecord()]);
+    final result = RecordParsingResult.ok([mockEntry()]);
     expect(result.hasError(), isFalse);
   });
   test('should return error through getter', () async {
-    final okResult = RecordParsingResult.ok([mockRecord()]);
+    final okResult = RecordParsingResult.ok([mockEntry()]);
     expect(okResult.error, isNull);
 
     final errResult = RecordParsingResult.err(RecordParsingErrorUnparsableField(42, 'fieldContents'));
@@ -24,7 +24,7 @@ void main() {
       .having((p0) => p0.fieldContents, 'contents', 'fieldContents'),);
   });
   test('should normally return value when no error is present', () async {
-    final record = mockRecord();
+    final record = mockEntry();
 
     final result = RecordParsingResult.ok([record]);
     final value = result.getOr((error) {
@@ -38,10 +38,10 @@ void main() {
     final value = result.getOr((error) {
       expect(error, isA<RecordParsingErrorExpectedMoreFields>()
           .having((p0) => p0.lineNumber, 'line number', 123),);
-      return [mockRecord(sys: 1234567)];
+      return [mockEntry(sys: 1234567)];
     });
     expect(value.length, 1);
-    expect(value.first.sys, 1234567);
+    expect(value.first.$1.sys?.mmHg, 1234567);
   });
   test('should return empty list when error function returns null', () async {
     final result = RecordParsingResult.err(RecordParsingErrorExpectedMoreFields(123));

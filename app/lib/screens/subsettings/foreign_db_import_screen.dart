@@ -115,7 +115,7 @@ class _ForeignDBImportScreenState extends State<ForeignDBImportScreen> {
                   /*re cord = record.copyWith( FIXME
                     notes: ConvertUtil.parseString(row[colType.$1]),
                   );*/
-                case RowDataFieldType.needlePin:
+                case RowDataFieldType.color:
                   /*try { FIXME
                     final json = jsonDecode(row[colType.$1].toString());
                     if (json is! Map<String, dynamic>) continue;
