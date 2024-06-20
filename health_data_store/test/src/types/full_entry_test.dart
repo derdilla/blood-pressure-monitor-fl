@@ -79,4 +79,24 @@ void main() {
 
     expect(list.distinctMedicines, containsAll([med1, med2, med3]));
   });
+  test('fast getters provide correct values', () {
+    final record = mockRecord(
+      sys: 123,
+      dia: 45,
+      pul: 67,
+    );
+    final note = mockNote(
+      note: 'Some test',
+      color: 0xFFEEDD,
+    );
+
+    final FullEntry entry = (record, note, []);
+
+    expect(entry.time, record.time);
+    expect(entry.sys, record.sys);
+    expect(entry.dia, record.dia);
+    expect(entry.pul, record.pul);
+    expect(entry.note, note.note);
+    expect(entry.color, note.color);
+  });
 }
