@@ -181,7 +181,7 @@ class _AddExportColumnDialogeState extends State<AddExportColumnDialoge>
                       children: [
                         if (type == _FormatterType.record)
                           MeasurementListRow(
-                            record: record,
+                            data: (record, Note(time: record.time), []),
                             settings: widget.settings,
                           ) else Text(
                             DateFormat('MMM d, y - h:m.s')

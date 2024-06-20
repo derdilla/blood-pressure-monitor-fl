@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:blood_pressure_app/components/dialoges/add_measurement_dialoge.dart';
 import 'package:blood_pressure_app/components/measurement_list/measurement_list.dart';
 import 'package:blood_pressure_app/components/repository_builder.dart';
@@ -13,9 +11,8 @@ import 'package:blood_pressure_app/screens/statistics_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:health_data_store/health_data_store.dart' show BloodPressureRepository, MedicineIntake, MedicineIntakeRepository, MedicineRepository;
+import 'package:health_data_store/health_data_store.dart';
 import 'package:provider/provider.dart';
 
 /// Is true during the first [AppHome.build] before creating the widget.
@@ -33,27 +30,7 @@ class AppHome extends StatelessWidget {
     // direct use of settings possible as no listening is required
     if (_appStart) {
       if (Provider.of<Settings>(context, listen: false).startWithAddMeasurementPage) {
-        SchedulerBinding.instance.addPostFrameCallback((_) async {
-          final repo = RepositoryProvider.of<BloodPressureRepository>(context);
-          final intakes = RepositoryProvider.of<MedicineIntakeRepository>(context);
-          final measurement = await showAddEntryDialoge(context,
-            Provider.of<Settings>(context, listen: false),
-            RepositoryProvider.of<MedicineRepository>(context),
-          );
-          if (measurement == null) return;
-          if (measurement.$1 != null) {
-            if (context.mounted) {
-              // TODO: reimplement
-              // model.addAndExport(context, measurement.$1!);
-              throw UnimplementedError('addAndExport not supported');
-            } else {
-              unawaited(repo.add(measurement.$1!));
-            }
-          }
-          if (measurement.$2 != null) {
-            unawaited(intakes.add(measurement.$2!));
-          }
-        });
+        SchedulerBinding.instance.addPostFrameCallback((_) => context.createEntry());
       }
     }
     _appStart = false;
@@ -80,16 +57,20 @@ class AppHome extends StatelessWidget {
                         rangeType: IntervallStoreManagerLocation.mainPage,
                         onData: (context, records) => RepositoryBuilder<MedicineIntake, MedicineIntakeRepository>(
                           rangeType: IntervallStoreManagerLocation.mainPage,
-                          onData: (BuildContext context, List<dynamic> list) => MeasurementList(
-                            settings: settings,
-                            records: records,
-                            // The following cast is necessary to avoid a type
-                            // error. I'm not sure why this is necessary as the
-                            // generics _should_ be typesafe. The safety of this
-                            // cast has been proven in practice.
-                            // TODO: Figure out why type safety isn't possible.
-                            intakes: list.cast(),
-                          ) as Widget,
+                          onData: (BuildContext context, List<dynamic> intakes) => RepositoryBuilder<Note, NoteRepository>(
+                            rangeType: IntervallStoreManagerLocation.mainPage,
+                            onData: (BuildContext context, List<dynamic> notes) => MeasurementList(
+                              settings: settings,
+                              records: records,
+                              // The following cast is necessary to avoid a type
+                              // error. I'm not sure why this is necessary as the
+                              // generics _should_ be typesafe. The safety of this
+                              // cast has been proven in practice.
+                              // TODO: Figure out why type safety isn't possible.
+                              notes: notes.cast(),
+                              intakes: intakes.cast(),
+                            ) as Widget,
+                          ),
                         ),
                       ),
                   ),
@@ -116,26 +97,7 @@ class AppHome extends StatelessWidget {
                       heroTag: 'floatingActionAdd',
                       tooltip: localizations.addMeasurement,
                       autofocus: true,
-                      onPressed: () async {
-                        final model = Provider.of<BloodPressureRepository>(context, listen: false);
-                        final intakes = RepositoryProvider.of<MedicineIntakeRepository>(context);
-                        final measurement = await showAddEntryDialoge(context,
-                          Provider.of<Settings>(context, listen: false),
-                          RepositoryProvider.of<MedicineRepository>(context),
-                        );
-                        if (measurement == null) return;
-                        if (measurement.$1 != null) {
-                          if (context.mounted) {
-                            await model.add(measurement.$1!);
-                            // model.addAndExport(context, measurement.$1!); FIXME
-                          } else {
-                            await model.add(measurement.$1!);
-                          }
-                        }
-                        if (measurement.$2 != null) {
-                          await intakes.add(measurement.$2!);
-                        }
-                      },
+                      onPressed: context.createEntry,
                       child: const Icon(Icons.add,),
                     ),
                   ),

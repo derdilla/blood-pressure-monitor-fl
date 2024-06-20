@@ -4,11 +4,12 @@ import 'dart:math';
 import 'package:blood_pressure_app/components/consistent_future_builder.dart';
 import 'package:blood_pressure_app/components/date_time_picker.dart';
 import 'package:blood_pressure_app/components/dialoges/fullscreen_dialoge.dart';
-import 'package:blood_pressure_app/model/blood_pressure/needle_pin.dart';
+import 'package:blood_pressure_app/components/settings/color_picker_list_tile.dart';
 import 'package:blood_pressure_app/model/blood_pressure/pressure_unit.dart';
 import 'package:blood_pressure_app/model/storage/storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:health_data_store/health_data_store.dart';
 import 'package:intl/intl.dart';
@@ -35,7 +36,7 @@ class AddEntryDialoge extends StatefulWidget {
   ///
   /// When an initial record is set medicine input is not possible because it is
   /// saved separately.
-  final BloodPressureRecord? initialRecord;
+  final FullEntry? initialRecord;
 
   /// Repository that contains all selectable medicines.
   final MedicineRepository medRepo;
@@ -57,8 +58,8 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
   /// Currently selected time.
   late DateTime time;
 
-  /// Current selected needlePin.
-  MeasurementNeedlePin? needlePin;
+  /// Current selected note color.
+  Color? color;
 
   /// Last [FormState.save]d systolic value.
   int? systolic;
@@ -98,7 +99,8 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
   void initState() {
     super.initState();
     time = widget.initialRecord?.time ?? DateTime.now();
-    // needlePin = widget.initialRecord?.needlePin; TODO
+    final int? colorVal = widget.initialRecord?.color;
+    color = colorVal == null ? null : Color(colorVal);
     sysController = TextEditingController(
       text: (widget.initialRecord?.sys ?? '').toString(),
     );
@@ -227,10 +229,12 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
     return FullscreenDialoge(
       onActionButtonPressed: () {
         BloodPressureRecord? record;
+        Note? note;
+        final List<MedicineIntake> intakes = [];
         if (_measurementFormActive && (recordFormKey.currentState?.validate() ?? false)) {
           recordFormKey.currentState?.save();
           if (systolic != null || diastolic != null || pulse != null
-              || (notes ?? '').isNotEmpty || needlePin != null) {
+              || (notes ?? '').isNotEmpty || color != null) {
             final pressureUnit = context.read<Settings>().preferredPressureUnit;
             // TODO: notes, needle pin
             record = BloodPressureRecord(
@@ -239,31 +243,33 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
               dia: diastolic == null ? null : pressureUnit.wrap(diastolic!),
               pul: pulse,
             );
+            note = Note(
+              time: time,
+              note: notes,
+              color: color?.value,
+            );
           }
         }
 
-        MedicineIntake? intake;
         if (_showMedicineDosisInput
             && (medicationFormKey.currentState?.validate() ?? false)) {
           medicationFormKey.currentState?.save();
           if (medicineDosis != null
               && selectedMed != null) {
-            intake = MedicineIntake(
+            intakes.add(MedicineIntake(
               time: time,
               medicine: selectedMed!,
               dosis: Weight.mg(medicineDosis!),
-            );
+            ));
           }
         }
 
-        if (record != null && intake != null) {
-          Navigator.pop(context, (record, intake));
-        }
-        if (record == null && !_measurementFormActive && intake != null) {
-          Navigator.pop(context, (record, intake));
-        }
-        if (record != null && intake == null && selectedMed == null) {
-          Navigator.pop(context, (record, intake));
+        if ((record != null && intakes.isNotEmpty)
+            || (record == null && !_measurementFormActive && intakes.isNotEmpty)
+            || (record != null && intakes.isEmpty && selectedMed == null)) {
+          record ??= BloodPressureRecord(time: time);
+          note ??= Note(time: time);
+          Navigator.pop(context, (record, note, intakes));
         }
       },
       actionButtonText: localizations.btnSave,
@@ -320,10 +326,10 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
                       ),
                     ],
                   ),
-                  /*Padding( FIXME
+                  Padding(
                     padding: const EdgeInsets.symmetric(vertical: 16),
                     child: TextFormField(
-                      initialValue: widget.initialRecord?.notes,
+                      initialValue: widget.initialRecord?.note,
                       focusNode: noteFocusNode,
                       decoration: InputDecoration(
                         labelText: localizations.addNote,
@@ -348,13 +354,12 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
                     onMainColorChanged: (Color value) {
                       setState(() {
                         _measurementFormActive = true;
-                        needlePin = (value == Colors.transparent) ? null
-                            : MeasurementNeedlePin(value);
+                        color = (value == Colors.transparent) ? null : value;
                       });
                     },
-                    initialColor: needlePin?.color ?? Colors.transparent,
-                    shape: _buildShapeBorder(needlePin?.color),
-                  ),*/
+                    initialColor: color ?? Colors.transparent,
+                    shape: _buildShapeBorder(color),
+                  ),
                 ],
               ),
             ),
@@ -425,7 +430,6 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
                               },
                             ),
                           ),
-
                       ],
                     ),
                   ),
@@ -439,12 +443,12 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
 }
 
 /// Shows a dialoge to input a blood pressure measurement or a medication.
-Future<(BloodPressureRecord?, MedicineIntake?)?> showAddEntryDialoge(
+Future<FullEntry?> showAddEntryDialoge(
     BuildContext context,
     Settings settings,
     MedicineRepository medRepo,
-    [BloodPressureRecord? initialRecord,]) =>
-  showDialog<(BloodPressureRecord?, MedicineIntake?)>(
+    [FullEntry? initialRecord,]) =>
+  showDialog<FullEntry>(
       context: context, builder: (context) =>
       Dialog.fullscreen(
         child: AddEntryDialoge(
@@ -454,3 +458,38 @@ Future<(BloodPressureRecord?, MedicineIntake?)?> showAddEntryDialoge(
         ),
       ),
   );
+
+/// Allow correctly saving entries in the contexts repositories.
+extension AddEntries on BuildContext {
+  /// Open the [AddEntryDialoge] and save received entries.
+  ///
+  /// Follows [ExportSettings.exportAfterEveryEntry]. When [initial] is not null
+  /// the dialoge will be opened in edit mode.
+  Future<void> createEntry([FullEntry? initial]) async {
+    final recordRepo = RepositoryProvider.of<BloodPressureRepository>(this);
+    final noteRepo = RepositoryProvider.of<NoteRepository>(this);
+    final intakeRepo = RepositoryProvider.of<MedicineIntakeRepository>(this);
+    final settings = Provider.of<Settings>(this, listen: false);
+    final exportSettings = Provider.of<ExportSettings>(this, listen: false);
+
+    final entry = await showAddEntryDialoge(this,
+      settings,
+      RepositoryProvider.of<MedicineRepository>(this),
+      initial,
+    );
+    if (entry != null) {
+      if (entry.sys != null || entry.dia != null || entry.pul != null) {
+        await recordRepo.add(entry.$1);
+      }
+      if (entry.note != null || entry.color != null) {
+        await noteRepo.add(entry.$2);
+      }
+      for (final intake in entry.$3) {
+        await intakeRepo.add(intake);
+      }
+      if (mounted && exportSettings.exportAfterEveryEntry) {
+        // FIXME: export if setting is set
+      }
+    }
+  }
+}

@@ -170,6 +170,7 @@ void performExport(BuildContext context, [AppLocalizations? localizations]) asyn
 
 /// Get the records that should be exported.
 Future<List<FullEntry>> _getEntries(BuildContext context) async {
+  // TODO: unify with measurement list code
   // TODO: move function somewhere more practical
   final range = Provider.of<IntervallStoreManager>(context, listen: false).exportPage.currentRange;
 
@@ -188,6 +189,7 @@ Future<List<FullEntry>> _getEntries(BuildContext context) async {
   }
   for (final n in notes) {
     if(entryMap.containsKey(n.time)) {
+      // FIXME
       assert(entryMap[n.time]!.$2 != null, 'multiple notes at same time');
       entryMap[n.time] = (entryMap[n.time]!.$1, n, []);
     } else {

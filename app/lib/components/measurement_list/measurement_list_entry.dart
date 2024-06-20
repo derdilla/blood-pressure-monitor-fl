@@ -6,18 +6,17 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:health_data_store/health_data_store.dart';
 import 'package:intl/intl.dart';
-import 'package:provider/provider.dart';
 
 /// Display of a blood pressure measurement data.
 class MeasurementListRow extends StatelessWidget {
   /// Create a display of a measurements.
   const MeasurementListRow({super.key,
-    required this.record,
+    required this.data,
     required this.settings,
   });
 
   /// The measurement to display.
-  final BloodPressureRecord record;
+  final FullEntry data;
 
   /// Settings that determine general behavior.
   final Settings settings;
@@ -30,33 +29,19 @@ class MeasurementListRow extends StatelessWidget {
       // Leading color possible
       title: _buildRow(formatter),
       childrenPadding: const EdgeInsets.only(bottom: 10),
-      // backgroundColor: record.needlePin?.color.withAlpha(30), FIXME
-      // collapsedShape: record.needlePin != null ? Border(left: BorderSide(color: record.needlePin!.color, width: 8)) : null,
+      backgroundColor: data.color == null ? null : Color(data.color!).withAlpha(30),
+      collapsedShape: data.color == null ? null : Border(
+        left: BorderSide(color: Color(data.color!), width: 8)
+      ),
       children: [
         ListTile(
-          subtitle: Text(formatter.format(record.time)),
+          subtitle: Text(formatter.format(data.time)),
           title: Text(localizations.timestamp),
           trailing: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
               IconButton(
-                onPressed: () async {
-                  final model = RepositoryProvider.of<BloodPressureRepository>(context);
-                  final entry = await showAddEntryDialoge(context,
-                    Provider.of<Settings>(context, listen: false),
-                    RepositoryProvider.of<MedicineRepository>(context),
-                    record,
-                  );
-                  if (entry?.$1 != null) {
-                    if (context.mounted) {
-                      // model.addAndExport(context, entry!.$1!); FIXME
-                      await model.add(entry!.$1!);
-                    } else {
-                      await model.add(entry!.$1!);
-                    }
-                  }
-                  assert(entry?.$2 == null);
-                },
+                onPressed: () => context.createEntry(data),
                 icon: const Icon(Icons.edit),
                 tooltip: localizations.edit,
               ),
@@ -68,16 +53,35 @@ class MeasurementListRow extends StatelessWidget {
             ],
           ),
         ),
-        /*if (record.notes.isNotEmpty) FIXME
+        if (data.note?.isNotEmpty ?? false)
           ListTile(
             title: Text(localizations.note),
-            subtitle: Text(record.notes),
-          ),*/
+            subtitle: Text(data.note!),
+          ),
+        for (final MedicineIntake intake in data.$3)
+          ListTile(
+            title: Text(intake.medicine.designation),
+            subtitle: Text('${intake.dosis.mg}mg'), // TODO: setting for unit
+            iconColor: intake.medicine.color == null ? null : Color(intake.medicine.color!),
+            leading: Icon(Icons.medication),
+            trailing: IconButton(
+              onPressed: () async {
+                final intakeRepo = RepositoryProvider.of<MedicineIntakeRepository>(context);
+                if (!settings.confirmDeletion || await showConfirmDeletionDialoge(context)) {
+                  await intakeRepo.remove(intake);
+                }
+                // TODO: undo
+              },
+              color: Theme.of(context).listTileTheme.iconColor,
+              icon: const Icon(Icons.delete),
+            ),
+          ), // TODO: test
+        // FIXME: remove other medicine tiles
       ],
     );
   }
 
-  Row _buildRow(DateFormat formatter) {
+  Row _buildRow(DateFormat formatter) { // TODO: is intake present
     String formatNum(num? num) => (num ?? '-').toString();
     String formatPressure(Pressure? num) => switch(settings.preferredPressureUnit) {
       PressureUnit.mmHg => formatNum(num?.mmHg),
@@ -86,23 +90,29 @@ class MeasurementListRow extends StatelessWidget {
     return Row(
       children: [
         Expanded(
-          flex: 3,
-          child: Text(formatPressure(record.sys)),
+          flex: 30,
+          child: Text(formatPressure(data.sys)),
         ),
         Expanded(
-          flex: 3,
-          child: Text(formatPressure(record.dia)),
+          flex: 30,
+          child: Text(formatPressure(data.dia)),
         ),
         Expanded(
-          flex: 3,
-          child: Text(formatNum(record.pul)),
+          flex: 30,
+          child: Text(formatNum(data.pul)),
         ),
+        if (data.$3.isNotEmpty)
+          Expanded(
+            flex: 10,
+            child: Icon(Icons.medication),
+          ),
       ],
     );
   }
 
   void _deleteEntry(Settings settings, BuildContext context, AppLocalizations localizations) async {
-    final model = RepositoryProvider.of<BloodPressureRepository>(context);
+    final bpRepo = RepositoryProvider.of<BloodPressureRepository>(context);
+    final noteRepo = RepositoryProvider.of<NoteRepository>(context);
     final messanger = ScaffoldMessenger.of(context);
     bool confirmedDeletion = true;
     if (settings.confirmDeletion) {
@@ -110,14 +120,17 @@ class MeasurementListRow extends StatelessWidget {
     }
 
     if (confirmedDeletion) { // TODO: move out of model
-      await model.remove(record);
+      await bpRepo.remove(data.$1);
+      await noteRepo.remove(data.$2);
       messanger.removeCurrentSnackBar();
       messanger.showSnackBar(SnackBar(
-        duration: const Duration(seconds: 5),
         content: Text(localizations.deletionConfirmed),
         action: SnackBarAction(
           label: localizations.btnUndo,
-          onPressed: () => model.add(record),
+          onPressed: () async {
+            await bpRepo.add(data.$1);
+            await noteRepo.add(data.$2);
+          },
         ),
       ),);
     }
@@ -125,7 +138,9 @@ class MeasurementListRow extends StatelessWidget {
 }
 
 /// Show a dialoge that prompts the user to confirm a deletion.
-Future<bool> showConfirmDeletionDialoge(BuildContext context) async =>
+///
+/// Returns whether it is ok to proceed with deletion.
+Future<bool> showConfirmDeletionDialoge(BuildContext context) async => // TODO: move to own file
   await showDialog<bool>(context: context,
     builder: (context) => AlertDialog(
       title: Text(AppLocalizations.of(context)!.confirmDelete),
@@ -135,9 +150,16 @@ Future<bool> showConfirmDeletionDialoge(BuildContext context) async =>
           onPressed: () => Navigator.pop(context, false),
           child: Text(AppLocalizations.of(context)!.btnCancel),
         ),
-        ElevatedButton(
-          onPressed: () => Navigator.pop(context, true),
-          child: Text(AppLocalizations.of(context)!.btnConfirm),
+        Theme(
+          data: ThemeData.from(
+            colorScheme: ColorScheme.fromSeed(seedColor: Colors.red, brightness: Theme.of(context).brightness),
+            useMaterial3: true,
+          ),
+          child: ElevatedButton.icon(
+            onPressed: () => Navigator.pop(context, true),
+            icon: const Icon(Icons.delete_forever),
+            label: Text(AppLocalizations.of(context)!.btnConfirm),
+          ),
         ),
       ],
     ),

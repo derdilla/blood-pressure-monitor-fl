@@ -4,6 +4,7 @@ import 'package:health_data_store/health_data_store.dart';
 /// time.
 typedef FullEntry = (BloodPressureRecord, Note, List<MedicineIntake>);
 
+/// Utility getters for nested attributes.
 extension FastFullEntryGetters on FullEntry {
   /// Timestamp when the entry occurred.
   DateTime get time => this.$1.time;

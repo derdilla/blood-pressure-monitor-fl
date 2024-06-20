@@ -67,7 +67,19 @@ BloodPressureRecord mockRecordPos([
   int? sys,
   int? dia,
   int? pul,
-]) => BloodPressureRecord(
+]) => mockRecord(
+  time: time ?? DateTime.now(),
+  sys: sys,
+  dia: dia,
+  pul: pul,
+);
+
+BloodPressureRecord mockRecord({
+  DateTime? time,
+  int? sys,
+  int? dia,
+  int? pul,
+}) => BloodPressureRecord(
   time: time ?? DateTime.now(),
   sys: sys == null ? null : Pressure.mmHg(sys),
   dia: dia == null ? null : Pressure.mmHg(dia),
