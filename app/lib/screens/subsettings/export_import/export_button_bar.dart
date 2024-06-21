@@ -170,10 +170,7 @@ void performExport(BuildContext context, [AppLocalizations? localizations]) asyn
 
 /// Get the records that should be exported.
 Future<List<FullEntry>> _getEntries(BuildContext context) async {
-  // TODO: unify with measurement list code
-  // TODO: move function somewhere more practical
   final range = Provider.of<IntervallStoreManager>(context, listen: false).exportPage.currentRange;
-
   final bpRepo = RepositoryProvider.of<BloodPressureRepository>(context);
   final noteRepo = RepositoryProvider.of<NoteRepository>(context);
   final intakeRepo = RepositoryProvider.of<MedicineIntakeRepository>(context);
@@ -182,35 +179,7 @@ Future<List<FullEntry>> _getEntries(BuildContext context) async {
   final notes = await noteRepo.get(range);
   final intakes = await intakeRepo.get(range);
 
-  final Map<DateTime, (BloodPressureRecord?, Note?, List<MedicineIntake>)> entryMap = HashMap();
-  for (final r in records) {
-    assert(!entryMap.containsKey(r.time), 'multiple records at same time');
-    entryMap[r.time] = (r, null, []);
-  }
-  for (final n in notes) {
-    if(entryMap.containsKey(n.time)) {
-      // FIXME
-      assert(entryMap[n.time]!.$2 != null, 'multiple notes at same time');
-      entryMap[n.time] = (entryMap[n.time]!.$1, n, []);
-    } else {
-      entryMap[n.time] = (BloodPressureRecord(time: n.time), n, []);
-    }
-  }
-  for (final i in intakes) {
-    if(entryMap.containsKey(i.time)) {
-      entryMap[i.time]!.$3.add(i);
-    } else {
-      entryMap[i.time] = (null, null, [i]);
-    }
-  }
-  return entryMap
-    .values
-    .map<FullEntry>((e) {
-      // One of the values must exist or else this wouldn't be in the map.
-      final time = e.$1?.time ?? e.$2?.time ?? e.$3.firstOrNull?.time;
-      return (e.$1 ?? BloodPressureRecord(time: time!), e.$2 ?? Note(time: time!), e.$3);
-    })
-    .toList();
+  return FullEntryList.merged(records, notes, intakes);
 }
 
 /// Save to default export path or share by providing a path.

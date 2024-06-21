@@ -1,6 +1,5 @@
 import 'package:blood_pressure_app/components/measurement_list/measurement_list_entry.dart';
 import 'package:blood_pressure_app/model/storage/settings_store.dart';
-import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:health_data_store/health_data_store.dart';
@@ -32,23 +31,7 @@ class MeasurementList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
-    final List<FullEntry> entries = [];
-    for (final r in records) {
-      final n = notes.where((n) => n.time == r.time).firstOrNull ?? Note(time: r.time);
-      final i = intakes.where((n) => n.time == r.time).toList();
-      entries.add((r, n, i));
-    }
-    Set<DateTime> times = entries.map((e) => e.time).toSet();
-    final remainingNotes = notes.where((n) => !times.contains(n.time));
-    for (final n in remainingNotes) {
-      final i = intakes.where((n) => n.time == n.time).toList();
-      entries.add((BloodPressureRecord(time: n.time), n, i));
-    }
-    times = entries.map((e) => e.time).toSet();
-    final remainingIntakes = intakes.where((i) => !times.contains(i.time));
-    for (final i in groupBy(remainingIntakes, (i) => i.time).values) {
-      entries.add((BloodPressureRecord(time: i.first.time), Note(time: i.first.time), i));
-    }
+    final entries = FullEntryList.merged(records, notes, intakes);
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
