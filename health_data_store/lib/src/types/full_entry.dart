@@ -9,6 +9,15 @@ extension FastFullEntryGetters on FullEntry {
   /// Timestamp when the entry occurred.
   DateTime get time => this.$1.time;
 
+  /// Record stored in this entry.
+  BloodPressureRecord get recordObj => this.$1;
+
+  /// Note stored in this entry.
+  Note get noteObj => this.$2;
+
+  /// Medicine intakes stored in this entry.
+  List<MedicineIntake> get intakes => this.$3;
+
   /// Systolic value of the measurement.
   Pressure? get sys => this.$1.sys;
 

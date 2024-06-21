@@ -89,8 +89,9 @@ void main() {
       note: 'Some test',
       color: 0xFFEEDD,
     );
+    final intake = mockIntake(mockMedicine());
 
-    final FullEntry entry = (record, note, []);
+    final FullEntry entry = (record, note, [intake]);
 
     expect(entry.time, record.time);
     expect(entry.sys, record.sys);
@@ -98,5 +99,9 @@ void main() {
     expect(entry.pul, record.pul);
     expect(entry.note, note.note);
     expect(entry.color, note.color);
+    expect(entry.intakes, hasLength(1));
+    expect(entry.intakes, contains(intake));
+    expect(entry.recordObj, record);
+    expect(entry.noteObj, note);
   });
 }
