@@ -74,7 +74,6 @@ class MeasurementSuccess extends StatelessWidget {
                   title: Text(AppLocalizations.of(context)!.pulseRateLessThanLowerLimit),
                   leading: Icon(Icons.monitor_heart),
                 ),
-              const SizedBox(height: 8,),
             ],
           ),
         ),

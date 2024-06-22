@@ -43,7 +43,7 @@ class InputCard extends StatelessWidget {
   Widget _buildBody() => Padding( // content
     padding: EdgeInsets.only(
       top: (title == null) ? 12.0 : 42.0,
-      bottom: 12.0,
+      bottom: 8.0,
       left: 8.0,
       right: 8.0,
     ),
@@ -55,7 +55,7 @@ class InputCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Card(
     color: Theme.of(context).cardColor,
-    margin: const EdgeInsets.all(8),
+    margin: const EdgeInsets.only(top: 8.0, bottom: 16.0),
     child: Stack(
       children: [
         _buildBody(),
