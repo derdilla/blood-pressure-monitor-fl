@@ -30,8 +30,8 @@ class BleReadCubit extends Cubit<BleReadState> {
   BleReadCubit(this._device, {
     required this.serviceUUID,
     required this.characteristicUUID,
-  })
-    : super(BleReadInProgress()){
+  }) : super(BleReadInProgress())
+  {
     _subscription = _device.connectionState
       .listen(_onConnectionStateChanged);
     // timeout
