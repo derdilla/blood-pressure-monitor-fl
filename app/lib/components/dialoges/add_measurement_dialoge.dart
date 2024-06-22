@@ -127,6 +127,7 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
 
   /// Sets fields to values in a [record].
   void _loadFields(BloodPressureRecord? record) {
+    _measurementFormActive = true;
     time = record?.creationTime ?? DateTime.now();
     if (record?.needlePin != null) needlePin = record?.needlePin;
     if (record?.systolic != null) sysController.text = record!.systolic!.toString();
