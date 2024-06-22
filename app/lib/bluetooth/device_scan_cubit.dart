@@ -108,12 +108,4 @@ class DeviceScanCubit extends Cubit<DeviceScanState> {
     list.add(device.platformName);
     settings.knownBleDev = list;
   }
-
-  /// Remove all known devices and start scanning again.
-  Future<void> clearKnownDevices() async {
-    settings.knownBleDev = [];
-    emit(DeviceListLoading());
-    if (!_flutterBluePlus.isScanningNow) await _startScanning();
-  }
-
 }
