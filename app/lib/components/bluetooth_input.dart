@@ -117,6 +117,7 @@ class _BluetoothInputState extends State<BluetoothInput> {
       bloc: _deviceScanCubit,
       builder: (context, DeviceScanState state) {
         Log.trace('BluetoothInput _BluetoothInputState _deviceScanCubit: $state');
+        SizeChangedLayoutNotification().dispatch(context);
         return switch(state) {
           DeviceListLoading() => _buildMainCard(context,
             title: Text(AppLocalizations.of(context)!.scanningForDevices),
@@ -132,7 +133,7 @@ class _BluetoothInputState extends State<BluetoothInput> {
           ),
             // distinction
           DeviceSelected() => BlocConsumer<BleReadCubit, BleReadState>(
-            bloc: (){
+            bloc: () {
               _deviceReadCubit = widget.bleReadCubit?.call(state.device) ?? BleReadCubit(
                 state.device,
                 characteristicUUID: characteristicUUID,
@@ -157,6 +158,7 @@ class _BluetoothInputState extends State<BluetoothInput> {
             },
             builder: (BuildContext context, BleReadState state) {
               Log.trace('_BluetoothInputState BleReadCubit: $state');
+              SizeChangedLayoutNotification().dispatch(context);
               return switch (state) {
                 BleReadInProgress() => _buildMainCard(context,
                   child: const CircularProgressIndicator(),
