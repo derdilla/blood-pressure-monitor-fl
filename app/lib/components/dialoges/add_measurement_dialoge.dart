@@ -285,6 +285,7 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
             if (widget.settings.bleInput)
               BluetoothInput(
                 settings: widget.settings,
+                /* flutterBluePlus: FakeFlutterBluePlus(), */
                 onMeasurement: (record) => setState(() => _loadFields(record)),
               ),
             if (widget.settings.allowManualTimeInput)
