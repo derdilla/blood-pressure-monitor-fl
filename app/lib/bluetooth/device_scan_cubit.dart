@@ -77,9 +77,10 @@ class DeviceScanCubit extends Cubit<DeviceScanState> {
     // characteristic as users have to select their device anyways.
     if(state is DeviceSelected) return;
     final preferred = devices.firstWhereOrNull((dev) =>
-        settings.knownBleDev.contains(dev.device.platformName));
+      settings.knownBleDev.contains(dev.device.platformName));
     if (preferred != null) {
-      emit(DeviceSelected(preferred.device));
+      _flutterBluePlus.stopScan()
+        .then((_) => emit(DeviceSelected(preferred.device)));
     } else if (devices.isEmpty) {
       emit(DeviceListLoading());
     } else if (devices.length == 1) {
