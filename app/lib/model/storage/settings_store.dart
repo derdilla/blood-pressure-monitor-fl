@@ -145,7 +145,6 @@ class Settings extends ChangeNotifier {
       'needlePinBarWidth': _needlePinBarWidth,
       'lastVersion': lastVersion,
       'bottomAppBars': bottomAppBars,
-      'medications': medications.map(jsonEncode).toList(),
       'highestMedIndex': highestMedIndex,
       'preferredPressureUnit': preferredPressureUnit.encode(),
     };
@@ -358,28 +357,9 @@ class Settings extends ChangeNotifier {
   ///
   /// This includes medications that got hidden. To obtain medications for a
   /// selection, do `settings.medications.where((e) => !e.hidden)`.
-  UnmodifiableListView<Medicine> get medications => 
-      UnmodifiableListView(_medications);
-
-  /// Adds a medication to the end of the medication list.
-  void addMedication(Medicine medication) {
-    _medications.add(medication);
-    _highestMedIndex += 1;
-    notifyListeners();
-  }
-
-  /// Marks a medication as deleted so it stops appearing in selections.
-  ///
-  /// Deleting the medication is not possible because this would invalidate all
-  /// entries that use it. In case the user forces medicine deletion in some way
-  /// intakes will be displayed with a deleted medicine text.
-  void removeMedicationAt(int index) {
-    assert(index >= 0 && index < _medications.length);
-    assert(!_medications[index].hidden, 'Removing a already hidden medication '
-        'indicates a bug.');
-    _medications[index].hidden = true;
-    notifyListeners();
-  }
+  @Deprecated('use health_data_store')
+  UnmodifiableListView<Medicine> get medications =>
+    UnmodifiableListView(_medications);
 
   int _highestMedIndex = 0;
   /// Total amount of medicines created.

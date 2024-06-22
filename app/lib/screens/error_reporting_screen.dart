@@ -14,7 +14,8 @@ class ErrorReporting {
   /// Whether there is already an critical error displayed.
   static bool isErrorState = false;
 
-  /// Replaces the application with an ErrorScreen
+  /// Replaces the application with an ErrorScreen.
+  ///
   /// This method can be used to avoid running any further code in your current function, by awaiting
   static Future<void> reportCriticalError(String title, String text) async {
     if (isErrorState) throw Exception('Tried to report another error:\n title = $title,\n text = $text');
@@ -83,51 +84,81 @@ class ErrorScreen extends StatelessWidget {
                     child: const Text('copy error message'),
                   ),
                   TextButton(
-                      onPressed: () async {
-                        try {
-                          final url = Uri.parse('https://github.com/NobodyForNothing/blood-pressure-monitor-fl/issues');
-                          if (await canLaunchUrl(url)) {
-                            await launchUrl(url, mode: LaunchMode.externalApplication);
-                          } else {
-                            scaffoldMessenger.showSnackBar(const SnackBar(
-                              content: Text('ERR: Please open this website: https://github.com/NobodyForNothing/blood-pressure-monitor-fl/issues'),),);
-                          }
-                        } catch (e) {
-                          scaffoldMessenger.showSnackBar(SnackBar(
-                              content: Text('ERR: $e'),),);
+                    onPressed: () async {
+                      try {
+                        final url = Uri.parse('https://github.com/NobodyForNothing/blood-pressure-monitor-fl/issues');
+                        if (await canLaunchUrl(url)) {
+                          await launchUrl(url, mode: LaunchMode.externalApplication);
+                        } else {
+                          scaffoldMessenger.showSnackBar(const SnackBar(
+                            content: Text('ERR: Please open this website: https://github.com/NobodyForNothing/blood-pressure-monitor-fl/issues'),),);
                         }
-                      },
-                      child: const Text('open issue reporting website'),
+                      } catch (e) {
+                        scaffoldMessenger.showSnackBar(SnackBar(
+                            content: Text('ERR: $e'),),);
+                      }
+                    },
+                    child: const Text('open issue reporting website'),
                   ),
                   TextButton(
-                      onPressed: () async {
-                        try {
-                          String dbPath = await getDatabasesPath();
+                    onPressed: () async {
+                      try {
+                        String dbPath = await getDatabasesPath();
 
-                          assert(dbPath != inMemoryDatabasePath);
-                          dbPath = join(dbPath, 'blood_pressure.db');
-                          PlatformClient.shareFile(dbPath, 'application/vnd.sqlite3');
-                        } catch(e) {
-                          scaffoldMessenger.showSnackBar(SnackBar(
-                              content: Text('ERR: $e'),),);
-                        }
-                      },
-                      child: const Text('rescue measurements'),
+                        assert(dbPath != inMemoryDatabasePath);
+                        dbPath = join(dbPath, 'blood_pressure.db');
+                        await PlatformClient.shareFile(dbPath, 'application/vnd.sqlite3');
+                      } catch(e) {
+                        scaffoldMessenger.showSnackBar(SnackBar(
+                            content: Text('ERR: $e'),),);
+                      }
+                    },
+                    child: const Text('rescue old measurements'),
                   ),
                   TextButton(
-                      onPressed: () async {
-                        try {
-                          String dbPath = await getDatabasesPath();
+                    onPressed: () async {
+                      try {
+                        String dbPath = await getDatabasesPath();
 
-                          assert(dbPath != inMemoryDatabasePath);
-                          dbPath = join(dbPath, 'config.db');
-                          PlatformClient.shareFile(dbPath, 'application/vnd.sqlite3');
-                        } catch(e) {
-                          scaffoldMessenger.showSnackBar(SnackBar(
-                              content: Text('ERR: $e'),),);
-                        }
-                      },
-                      child: const Text('rescue config.db'),
+                        assert(dbPath != inMemoryDatabasePath);
+                        dbPath = join(dbPath, 'config.db');
+                        await PlatformClient.shareFile(dbPath, 'application/vnd.sqlite3');
+                      } catch(e) {
+                        scaffoldMessenger.showSnackBar(SnackBar(
+                            content: Text('ERR: $e'),),);
+                      }
+                    },
+                    child: const Text('rescue config.db'),
+                  ),
+                  TextButton(
+                    onPressed: () async {
+                      try {
+                        String dbPath = await getDatabasesPath();
+
+                        assert(dbPath != inMemoryDatabasePath);
+                        dbPath = join(dbPath, 'medicine.intakes');
+                        await PlatformClient.shareFile(dbPath, 'application/octet-stream');
+                      } catch(e) {
+                        scaffoldMessenger.showSnackBar(SnackBar(
+                          content: Text('ERR: $e'),),);
+                      }
+                    },
+                    child: const Text('rescue old medicine intakes'),
+                  ),
+                  TextButton(
+                    onPressed: () async {
+                      try {
+                        String dbPath = await getDatabasesPath();
+
+                        assert(dbPath != inMemoryDatabasePath);
+                        dbPath = join(dbPath, 'bp.db');
+                        await PlatformClient.shareFile(dbPath, 'application/vnd.sqlite3');
+                      } catch(e) {
+                        scaffoldMessenger.showSnackBar(SnackBar(
+                          content: Text('ERR: $e'),),);
+                      }
+                    },
+                    child: const Text('rescue new db'),
                   ),
                 ],
               ),

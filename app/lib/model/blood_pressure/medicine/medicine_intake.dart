@@ -4,7 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 /// Instance of a medicine intake.
-@deprecated
+@Deprecated('use health_data_store')
 class OldMedicineIntake implements Comparable<Object> {
   /// Create a intake from a String created by [serialize].
   ///
@@ -42,8 +42,8 @@ class OldMedicineIntake implements Comparable<Object> {
   ///
   /// The string consists of the id of the medicine, the unix timestamp and the
   /// dosis. These values are seperated by a null byte
-  String serialize() =>
-      '${medicine.id}\x00${timestamp.millisecondsSinceEpoch}\x00$dosis';
+  /*String serialize() =>
+      '${medicine.id}\x00${timestamp.millisecondsSinceEpoch}\x00$dosis';*/
 
   /// Kind of medicine taken.
   final Medicine medicine;

@@ -36,10 +36,7 @@ class BloodPressureModel extends ChangeNotifier {
     }
   }
 
-  /// Factory method to create a BloodPressureModel for a database file. This is needed to allow an async constructor.
-  ///
-  /// [dbPath] is the path to the folder the database is in. When [dbPath] is left empty the default database file is
-  /// used. The [isFullPath] option tells the constructor not to add the default filename at the end of [dbPath].
+  /// Construct a instance of [BloodPressureModel] if a db file still exists.
   static Future<BloodPressureModel?> create({String? dbPath, bool isFullPath = false}) async {
     final component = BloodPressureModel._create();
     dbPath ??= await getDatabasesPath();

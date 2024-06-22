@@ -12,8 +12,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:health_data_store/health_data_store.dart';
 
-import 'medicine/medicine_test.dart';
-
 void main() {
   group('IntervallStorage', () {
     test('should create json without error', () {
@@ -96,7 +94,6 @@ void main() {
         useLegacyList: false,
         horizontalGraphLines: [HorizontalGraphLine(Colors.blue, 1230)],
         bottomAppBars: true,
-        medications: [mockMedicine(), mockMedicine(defaultDosis: 42)],
       );
       final fromJson = Settings.fromJson(initial.toJson());
 

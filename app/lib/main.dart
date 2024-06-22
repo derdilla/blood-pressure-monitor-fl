@@ -1,7 +1,4 @@
-import 'dart:io';
-
 import 'package:blood_pressure_app/components/consistent_future_builder.dart';
-import 'package:blood_pressure_app/model/blood_pressure/medicine/intake_history.dart';
 import 'package:blood_pressure_app/model/export_import/export_configuration.dart';
 import 'package:blood_pressure_app/model/storage/db/config_dao.dart';
 import 'package:blood_pressure_app/model/storage/db/config_db.dart';
@@ -19,6 +16,8 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:path/path.dart';
 import 'package:provider/provider.dart';
 import 'package:sqflite/sqflite.dart';
+
+import 'model/blood_pressure/update_legacy_entries.dart';
 
 late final ConfigDB _database;
 
@@ -44,27 +43,22 @@ Future<Widget> _loadApp() async {
   final intervalStorageManager = await IntervallStoreManager.load(configDao, 0);
   final exportColumnsManager = await configDao.loadExportColumnsManager(0);
 
-  // TODO: unify with blood pressure model (#257)
-  late final IntakeHistory intakeHistory;
-  try {
-    if (settings.medications.isNotEmpty) {
-      final intakeString = File(join(await getDatabasesPath(), 'medicine.intakes')).readAsStringSync();
-      intakeHistory = IntakeHistory.deserialize(intakeString, settings.medications);
-    } else {
-      intakeHistory = IntakeHistory([]);
-    }
-  } catch (e, stack) {
-    assert(e is PathNotFoundException, '$e\n$stack');
-    intakeHistory = IntakeHistory([]);
-  }
-  intakeHistory.addListener(() async {
-    File(join(await getDatabasesPath(), 'medicine.intakes')).writeAsStringSync(intakeHistory.serialize());
-  });
-
   final db = await HealthDataStore.load(await openDatabase(
     join(await getDatabasesPath(), 'bp.db'),
   ),);
-  // TODO: document
+  final bpRepo = db.bpRepo;
+  final noteRepo = db.noteRepo;
+  final medRepo = db.medRepo;
+  final intakeRepo = db.intakeRepo;
+
+  await updateLegacyEntries(
+    settings,
+    bpRepo,
+    noteRepo,
+    medRepo,
+    intakeRepo,
+  );
+  // TODO: document how data is stored in the app
 
   // update logic
   if (settings.lastVersion == 0) {
@@ -91,9 +85,6 @@ Future<Widget> _loadApp() async {
   // Reset the step size intervall to current on startup
   intervalStorageManager.mainPage.setToMostRecentIntervall();
 
-  // TODO: migrate old data and remove add methods
-  // TODO: fix navigation test failures
-
   return MultiProvider(providers: [
     ChangeNotifierProvider(create: (context) => settings),
     ChangeNotifierProvider(create: (context) => exportSettings),
@@ -101,14 +92,13 @@ Future<Widget> _loadApp() async {
     ChangeNotifierProvider(create: (context) => pdfExportSettings),
     ChangeNotifierProvider(create: (context) => intervalStorageManager),
     ChangeNotifierProvider(create: (context) => exportColumnsManager),
-    ChangeNotifierProvider(create: (context) => intakeHistory),
   ],
   child: MultiRepositoryProvider(
     providers: [
-      RepositoryProvider(create: (context) => db.bpRepo),
-      RepositoryProvider(create: (context) => db.noteRepo),
-      RepositoryProvider(create: (context) => db.medRepo),
-      RepositoryProvider(create: (context) => db.intakeRepo),
+      RepositoryProvider(create: (context) => bpRepo),
+      RepositoryProvider(create: (context) => noteRepo),
+      RepositoryProvider(create: (context) => medRepo),
+      RepositoryProvider(create: (context) => intakeRepo),
     ],
     child: const AppRoot(),
   ),);

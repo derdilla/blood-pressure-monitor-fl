@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 ///
 /// Intake history does not implement database support, as operations performed
 /// are
+@Deprecated('use health_data_store')
 class IntakeHistory extends ChangeNotifier {
   /// Create a intake history from an unsorted list of intakes.
   IntakeHistory(List<OldMedicineIntake> medicineIntakes):
@@ -26,13 +27,10 @@ class IntakeHistory extends ChangeNotifier {
         .toList(),
     );
 
-  /// Serializes the current state of the object into a string.
-  String serialize() => _medicineIntakes.map((e) => e.serialize()).join('\n');
   /// List of all medicine intakes sorted in ascending order.
   ///
   /// Can contain multiple medicine intakes at the same time.
   final List<OldMedicineIntake> _medicineIntakes;
-
 
   /// Returns all intakes in a given range in ascending order.
   ///
@@ -48,36 +46,6 @@ class IntakeHistory extends ChangeNotifier {
     if (end < 0) end = _medicineIntakes.length;
 
     return UnmodifiableListView(_medicineIntakes.getRange(start, end));
-  }
-
-  /// Save a medicine intake.
-  ///
-  /// Inserts the intake at the upper bound of intakes that are bigger or equal.
-  /// When no smaller bigger intake is available insert to the end of the list.
-  ///
-  /// Uses binary search to determine the bound.
-  void addIntake(OldMedicineIntake intake) {
-    final int index = _findUpperBound(_medicineIntakes, intake.timestamp);
-
-    if (index == -1) {
-      _medicineIntakes.add(intake);
-    } else {
-      _medicineIntakes.insert(index, intake);
-    }
-    notifyListeners();
-  }
-
-  /// Attempts to delete a medicine intake.
-  ///
-  /// When finding multiple intakes with the same timestamp, medicine
-  /// and dosis all instances will get deleted.
-  void deleteIntake(OldMedicineIntake intake) {
-    int idx = binarySearch(_medicineIntakes, intake);
-    while (idx >= 0) {
-      _medicineIntakes.removeAt(idx);
-      idx = binarySearch(_medicineIntakes, intake);
-    }
-    notifyListeners();
   }
 
   /// Use binary search to determine the first index in [list] before which all
