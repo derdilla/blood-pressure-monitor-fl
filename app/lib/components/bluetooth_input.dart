@@ -148,7 +148,7 @@ class _BluetoothInputState extends State<BluetoothInput> {
                   state.data.systolic.toInt(), // TODO: use pressure info in data
                   state.data.diastolic.toInt(),
                   state.data.pulse?.toInt(),
-                  'notes',
+                  '',
                 );
                 widget.onMeasurement(record);
                 setState(() {
