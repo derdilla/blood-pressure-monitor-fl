@@ -11,7 +11,6 @@ class ConsistentFutureBuilder<T> extends StatefulWidget {
     required this.future,
     this.onNotStarted,
     this.onWaiting,
-    this.onError,
     required this.onData,
     this.cacheFuture = false,
     this.lastChildWhileWaiting = false,
@@ -35,12 +34,6 @@ class ConsistentFutureBuilder<T> extends StatefulWidget {
   ///
   /// Shown while the element is loading. Defaults to 'loading... text'.
   final Widget? onWaiting;
-
-  /// The build strategy in case the future throws an error.
-  ///
-  /// Shows the error message by default.
-  /// FIXME: Currently ignored
-  final Widget? Function(BuildContext context, String errorMsg)? onError;
 
   /// Internally save the future and avoid rebuilds.
   ///

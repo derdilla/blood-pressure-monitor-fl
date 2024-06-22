@@ -15,7 +15,7 @@ import 'package:sqflite_common/sqlite_api.dart';
 /// Exceptions must be documented here.
 /// - Timestamps are in seconds since unix epoch
 /// - Color are integers in format 0xRRGGBB
-/// - Pressure is in *kPa* // TODO: rethink and validate this is used everywhere; possibly encapsulate values in type class
+/// - Pressure is in *kPa*
 /// - Pulse is in bpm
 /// - Weight is in kg
 /// - Length is in meter

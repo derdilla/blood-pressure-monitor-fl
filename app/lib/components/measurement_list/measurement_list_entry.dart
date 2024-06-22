@@ -1,4 +1,3 @@
-import 'package:blood_pressure_app/components/dialoges/add_measurement_dialoge.dart';
 import 'package:blood_pressure_app/model/blood_pressure/pressure_unit.dart';
 import 'package:blood_pressure_app/model/storage/storage.dart';
 import 'package:flutter/material.dart';
@@ -13,6 +12,7 @@ class MeasurementListRow extends StatelessWidget {
   const MeasurementListRow({super.key,
     required this.data,
     required this.settings,
+    required this.onRequestEdit,
   });
 
   /// The measurement to display.
@@ -20,6 +20,9 @@ class MeasurementListRow extends StatelessWidget {
 
   /// Settings that determine general behavior.
   final Settings settings;
+
+  /// Called when the user taps on the edit icon.
+  final void Function() onRequestEdit;
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +34,7 @@ class MeasurementListRow extends StatelessWidget {
       childrenPadding: const EdgeInsets.only(bottom: 10),
       backgroundColor: data.color == null ? null : Color(data.color!).withAlpha(30),
       collapsedShape: data.color == null ? null : Border(
-        left: BorderSide(color: Color(data.color!), width: 8)
+        left: BorderSide(color: Color(data.color!), width: 8),
       ),
       children: [
         ListTile(
@@ -41,7 +44,7 @@ class MeasurementListRow extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               IconButton(
-                onPressed: () => context.createEntry(data),
+                onPressed: onRequestEdit,
                 icon: const Icon(Icons.edit),
                 tooltip: localizations.edit,
               ),
@@ -62,26 +65,32 @@ class MeasurementListRow extends StatelessWidget {
           ListTile(
             title: Text(intake.medicine.designation),
             subtitle: Text('${intake.dosis.mg}mg'), // TODO: setting for unit
-            iconColor: intake.medicine.color == null ? null : Color(intake.medicine.color!),
-            leading: Icon(Icons.medication),
+            leading: Icon(Icons.medication,
+              color: intake.medicine.color == null ? null : Color(intake.medicine.color!)),
             trailing: IconButton(
               onPressed: () async {
+                final messenger = ScaffoldMessenger.of(context);
                 final intakeRepo = RepositoryProvider.of<MedicineIntakeRepository>(context);
                 if (!settings.confirmDeletion || await showConfirmDeletionDialoge(context)) {
                   await intakeRepo.remove(intake);
                 }
-                // TODO: undo
+                messenger.removeCurrentSnackBar();
+                messenger.showSnackBar(SnackBar(
+                  content: Text(localizations.deletionConfirmed),
+                  action: SnackBarAction(
+                    label: localizations.btnUndo,
+                    onPressed: () => intakeRepo.add(intake),
+                  ),
+                ));
               },
-              color: Theme.of(context).listTileTheme.iconColor,
               icon: const Icon(Icons.delete),
             ),
           ), // TODO: test
-        // FIXME: remove other medicine tiles
       ],
     );
   }
 
-  Row _buildRow(DateFormat formatter) { // TODO: is intake present
+  Row _buildRow(DateFormat formatter) {
     String formatNum(num? num) => (num ?? '-').toString();
     String formatPressure(Pressure? num) => switch(settings.preferredPressureUnit) {
       PressureUnit.mmHg => formatNum(num?.mmHg),
@@ -101,29 +110,28 @@ class MeasurementListRow extends StatelessWidget {
           flex: 30,
           child: Text(formatNum(data.pul)),
         ),
-        if (data.$3.isNotEmpty)
-          Expanded(
-            flex: 10,
-            child: Icon(Icons.medication),
-          ),
+        Expanded( // TODO: test
+          flex: 10,
+          child: data.$3.isNotEmpty ? Icon(Icons.medication) : SizedBox.shrink(),
+        ),
       ],
     );
   }
 
   void _deleteEntry(Settings settings, BuildContext context, AppLocalizations localizations) async {
-    final bpRepo = RepositoryProvider.of<BloodPressureRepository>(context);
+    final bpRepo = RepositoryProvider.of<BloodPressureRepository>(context); // TODO: extract
     final noteRepo = RepositoryProvider.of<NoteRepository>(context);
-    final messanger = ScaffoldMessenger.of(context);
+    final messenger = ScaffoldMessenger.of(context);
     bool confirmedDeletion = true;
     if (settings.confirmDeletion) {
       confirmedDeletion = await showConfirmDeletionDialoge(context);
     }
 
-    if (confirmedDeletion) { // TODO: move out of model
+    if (confirmedDeletion) {
       await bpRepo.remove(data.$1);
       await noteRepo.remove(data.$2);
-      messanger.removeCurrentSnackBar();
-      messanger.showSnackBar(SnackBar(
+      messenger.removeCurrentSnackBar();
+      messenger.showSnackBar(SnackBar(
         content: Text(localizations.deletionConfirmed),
         action: SnackBarAction(
           label: localizations.btnUndo,

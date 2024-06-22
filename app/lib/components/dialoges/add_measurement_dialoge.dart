@@ -101,9 +101,12 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
     time = widget.initialRecord?.time ?? DateTime.now();
     final int? colorVal = widget.initialRecord?.color;
     color = colorVal == null ? null : Color(colorVal);
-    sysController = TextEditingController(
-      text: (widget.initialRecord?.sys ?? '').toString(),
-    );
+    // TODO: stop duplicating code like this
+    final sysValue = switch(widget.settings.preferredPressureUnit) {
+      PressureUnit.mmHg => widget.initialRecord?.sys?.mmHg,
+      PressureUnit.kPa => widget.initialRecord?.sys?.kPa.round(),
+    };
+    sysController = TextEditingController(text: sysValue?.toString() ?? '');
     if (widget.initialRecord != null) {
       _measurementFormActive = true;
     }
@@ -234,9 +237,8 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
         if (_measurementFormActive && (recordFormKey.currentState?.validate() ?? false)) {
           recordFormKey.currentState?.save();
           if (systolic != null || diastolic != null || pulse != null
-              || (notes ?? '').isNotEmpty || color != null) {
-            final pressureUnit = context.read<Settings>().preferredPressureUnit;
-            // TODO: notes, needle pin
+              || (notes?.isNotEmpty ?? false) || color != null) {
+            final pressureUnit = widget.settings.preferredPressureUnit;
             record = BloodPressureRecord(
               time: time,
               sys: systolic == null ? null : pressureUnit.wrap(systolic!),
@@ -245,7 +247,7 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
             );
             note = Note(
               time: time,
-              note: notes,
+              note: (notes?.isEmpty ?? true) ? null: notes,
               color: color?.value,
             );
           }

@@ -183,6 +183,7 @@ class _AddExportColumnDialogeState extends State<AddExportColumnDialoge>
                           MeasurementListRow(
                             data: (record, Note(time: record.time), []),
                             settings: widget.settings,
+                            onRequestEdit: () { }, // ignore
                           ) else Text(
                             DateFormat('MMM d, y - h:m.s')
                               .format(record.time),

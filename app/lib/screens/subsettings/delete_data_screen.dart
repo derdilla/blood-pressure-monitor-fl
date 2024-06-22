@@ -84,13 +84,13 @@ class _DeleteDataScreenState extends State<DeleteDataScreen> {
                           ),
                           trailing: const Icon(Icons.delete_forever),
                           onTap: () async {
-                            final messanger = ScaffoldMessenger.of(context);
+                            final messenger = ScaffoldMessenger.of(context);
                             if (await showDeleteDialoge(context, localizations)) {
                             final String dbPath = join(await getDatabasesPath(), 'blood_pressure.db');
                             final String dbJournalPath = join(await getDatabasesPath(), 'blood_pressure.db-journal');
                             await closeDatabases();
-                            tryDeleteFile(dbPath, messanger, localizations);
-                            tryDeleteFile(dbJournalPath, messanger, localizations);
+                            tryDeleteFile(dbPath, messenger, localizations);
+                            tryDeleteFile(dbJournalPath, messenger, localizations);
                             setState(() {
                             _deletedData = true;
                             });
@@ -119,13 +119,13 @@ class _DeleteDataScreenState extends State<DeleteDataScreen> {
                           ),
                           trailing: const Icon(Icons.delete_forever),
                           onTap: () async {
-                            final messanger = ScaffoldMessenger.of(context);
+                            final messenger = ScaffoldMessenger.of(context);
                             if (await showDeleteDialoge(context, localizations)) {
                               final String dbPath = join(await getDatabasesPath(), 'config.db');
                               final String dbJournalPath = join(await getDatabasesPath(), 'config.db-journal');
                               await closeDatabases();
-                              tryDeleteFile(dbPath, messanger, localizations);
-                              tryDeleteFile(dbJournalPath, messanger, localizations);
+                              tryDeleteFile(dbPath, messenger, localizations);
+                              tryDeleteFile(dbJournalPath, messenger, localizations);
                               setState(() {
                                 _deletedData = true;
                               });
@@ -147,12 +147,12 @@ class _DeleteDataScreenState extends State<DeleteDataScreen> {
                             title: Text(files[idx].path),
                             trailing: const Icon(Icons.delete_forever),
                             onTap: () async {
-                              final messanger = ScaffoldMessenger.of(context);
+                              final messenger = ScaffoldMessenger.of(context);
                               if (await showDeleteDialoge(context, localizations)) {
                                 if (!context.mounted) return;
                                 await unregisterAllProviders(context);
                                 files[idx].deleteSync();
-                                messanger.showSnackBar(SnackBar(
+                                messenger.showSnackBar(SnackBar(
                                   duration: const Duration(seconds: 5),
                                   content: Text('File deleted.'),
                                 ));
@@ -207,15 +207,15 @@ class _DeleteDataScreenState extends State<DeleteDataScreen> {
         ),
     ) ?? false;
   
-  void tryDeleteFile(String path, ScaffoldMessengerState messanger, AppLocalizations localizations) {
+  void tryDeleteFile(String path, ScaffoldMessengerState messenger, AppLocalizations localizations) {
     try {
       File(path).deleteSync();
-      messanger.showSnackBar(SnackBar(
+      messenger.showSnackBar(SnackBar(
         duration: const Duration(seconds: 2),
         content: Text(localizations.fileDeleted),
       ),);
     } on PathNotFoundException {
-      messanger.showSnackBar(SnackBar(
+      messenger.showSnackBar(SnackBar(
         duration: const Duration(seconds: 2),
         content: Text(localizations.fileAlreadyDeleted),
       ),);

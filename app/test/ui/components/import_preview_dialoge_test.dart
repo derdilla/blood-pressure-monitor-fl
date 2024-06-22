@@ -1,6 +1,5 @@
 import 'package:blood_pressure_app/components/custom_banner.dart';
 import 'package:blood_pressure_app/components/dialoges/import_preview_dialoge.dart';
-import 'package:blood_pressure_app/model/blood_pressure/record.dart';
 import 'package:blood_pressure_app/model/export_import/csv_converter.dart';
 import 'package:blood_pressure_app/model/export_import/csv_record_parsing_actor.dart';
 import 'package:blood_pressure_app/model/storage/export_columns_store.dart';
@@ -8,6 +7,7 @@ import 'package:blood_pressure_app/model/storage/export_csv_settings_store.dart'
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:health_data_store/health_data_store.dart';
 
 import 'util.dart';
 
@@ -135,11 +135,11 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.byType(ImportPreviewDialoge), findsNothing);
 
-    expect(data, isA<List<BloodPressureRecord>>()
-        .having((p0) => p0.length, 'rows', 2)
-        .having((p0) => p0[0].needlePin?.color.value, 'first color', 4285132974)
-        .having((p0) => p0[1].creationTime.millisecondsSinceEpoch, '2nd time', 1703147206000)
-        .having((p0) => p0[1].diastolic, '2nd dia', 71),
-    );
+    expect(data, isA<List<FullEntry>>());
+    final List<FullEntry> res = data;
+    expect(res, hasLength(2));
+    expect(res[0].color, 4285132974);
+    expect(res[1].time.millisecondsSinceEpoch, 1703147206000);
+    expect(res[1].dia?.mmHg, 71);
   });
 }

@@ -49,6 +49,9 @@ class AppHome extends StatelessWidget {
             child: Consumer<IntervallStoreManager>(builder: (context, intervalls, child) =>
               Consumer<Settings>(builder: (context, settings, child) =>
                 Column(children: [
+                  /*MeasurementListRow(
+                    settings: Settings(), data: (BloodPressureRecord(time: DateTime(2023),
+                    sys:Pressure.mmHg(1), dia: Pressure.mmHg(2), pul: 3), Note(time: DateTime(2023), note: 'testTxt',), [])),*/
                   const MeasurementGraph(),
                   Expanded(
                     child: (settings.useLegacyList) ?

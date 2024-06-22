@@ -50,8 +50,7 @@ void main() {
       expect(find.text('56'), findsOneWidget);
       expect(find.text('43'), findsOneWidget);
       expect(find.byType(ColorSelectionListTile), findsOneWidget);
-      expect(find.byType(ColorSelectionListTile).evaluate().first.widget, isA<ColorSelectionListTile>().
-      having((p0) => p0.initialColor, 'ColorSelectionListTile should have correct initial color', Colors.teal),);
+      tester.widget<ColorSelectionListTile>(find.byType(ColorSelectionListTile)).initialColor == Colors.teal;
     });
     testWidgets('should show medication picker when medications available', (tester) async {
       await tester.pumpWidget(materialApp(
@@ -119,7 +118,7 @@ void main() {
 
       expect(find.text('3.1415'), findsOneWidget);
     });
-    testWidgets('should not quit when the measurement field is incorrectly filled, but a measurement is added', (tester) async {
+    testWidgets('should not quit when the measurement field is incorrectly filled, but a intake is added', (tester) async {
       await tester.pumpWidget(materialApp(
         AddEntryDialoge(
           settings: Settings(),
@@ -169,25 +168,30 @@ void main() {
     testWidgets('should return values on edit cancel', (tester) async {
       dynamic result = 'result before save';
       final record = mockEntry(sys: 123, dia: 56, pul: 43, note: 'Test note', pin: Colors.teal);
-      await loadDialoge(tester, (context) async
-      => result = await showAddEntryDialoge(context, Settings(), medRepo(), record),);
+      await loadDialoge(tester, (context) async {
+        result = await showAddEntryDialoge(context, Settings(), medRepo(), record);
+      },);
       expect(find.byType(DropdownButton<Medicine?>), findsNothing, reason: 'No medication in settings.');
 
       expect(find.byType(AddEntryDialoge), findsOneWidget);
       await tester.tap(find.text('SAVE'));
       await tester.pumpAndSettle();
       expect(find.byType(AddEntryDialoge), findsNothing);
-
-      expect(result?.$2, isNull);
-      expect(result?.$1, isA<BloodPressureRecord>().having(
-          (p0) => (p0.time, p0.sys, p0.dia, p0.pul,), // FIXME p0.notes, p0.needlePin!.color),
-        'should return initial values as they were not modified',
-        (record.time, record.sys, record.dia, record.pul,),/* record.notes, record.needlePin!.color),fixme*/),);
+      
+      expect(result, isA<FullEntry>());
+      final FullEntry res = result;
+      expect(res.time, record.time);
+      expect(res.sys, record.sys);
+      expect(res.dia, record.dia);
+      expect(res.pul, record.pul);
+      expect(res.note, record.note);
+      expect(res.color, record.color);
     });
     testWidgets('should be able to input records', (WidgetTester tester) async {
       dynamic result = 'result before save';
-      await loadDialoge(tester, (context) async
-      => result = await showAddEntryDialoge(context, Settings(), medRepo(),),);
+      await loadDialoge(tester, (context) async {
+        result = await showAddEntryDialoge(context, Settings(), medRepo(),);
+      });
       expect(find.byType(DropdownButton<Medicine?>), findsNothing, reason: 'No medication in settings.');
 
       await tester.enterText(find.ancestor(of: find.text('Systolic').first, matching: find.byType(TextFormField)), '123');
@@ -204,14 +208,13 @@ void main() {
       await tester.tap(find.text('SAVE'));
       await tester.pumpAndSettle();
 
-      expect(result?.$2, isNull);
-      expect(result?.$1, isA<BloodPressureRecord>()
-        .having((p0) => p0.sys, 'systolic', 123)
-        .having((p0) => p0.dia, 'diastolic', 67)
-        .having((p0) => p0.pul, 'pulse', 89)
-          //fixme.having((p0) => p0.notes, 'notes', 'Test note')
-        //fixme.having((p0) => p0.needlePin?.color, 'needlePin', Colors.red),
-      );
+      expect(result, isA<FullEntry>());
+      final FullEntry res = result;
+      expect(res.sys?.mmHg, 123);
+      expect(res.dia?.mmHg, 67);
+      expect(res.pul, 89);
+      expect(res.note, 'Test note');
+      expect(res.color, Colors.red.value);
     });
     testWidgets('should allow value only', (WidgetTester tester) async {
       dynamic result = 'result before save';
@@ -231,14 +234,13 @@ void main() {
       await tester.tap(find.text(localizations.btnSave));
       await tester.pumpAndSettle();
 
-      expect(result?.$2, isNull);
-      expect(result?.$1, isA<BloodPressureRecord>()
-        .having((p0) => p0.sys, 'systolic', 123)
-        .having((p0) => p0.dia, 'diastolic', 67)
-        .having((p0) => p0.pul, 'pulse', 89)
-      //fixme.having((p0) => p0.notes, 'notes', '')
-        //fixme.having((p0) => p0.needlePin?.color, 'needlePin', null),
-      );
+      expect(result, isA<FullEntry>());
+      final FullEntry res = result;
+      expect(res.sys?.mmHg, 123);
+      expect(res.dia?.mmHg, 67);
+      expect(res.pul, 89);
+      expect(res.note, null);
+      expect(res.color, null);
     });
     testWidgets('should allow note only', (WidgetTester tester) async {
       dynamic result = 'result before save';
@@ -257,13 +259,12 @@ void main() {
       await tester.tap(find.text(localizations.btnSave));
       await tester.pumpAndSettle();
 
-      expect(result?.$2, isNull);
-      expect(result?.$1, isA<BloodPressureRecord>()
-          .having((p0) => p0.sys, 'systolic', null)
-          .having((p0) => p0.dia, 'diastolic', null)
-          .having((p0) => p0.pul, 'pulse', null)
-      //fixme.having((p0) => p0.notes, 'notes', 'test note')
-        //fixme.having((p0) => p0.needlePin?.color, 'needlePin', null),
+      expect(result, isA<FullEntry>()
+        .having((p0) => p0.sys, 'systolic', null)
+        .having((p0) => p0.dia, 'diastolic', null)
+        .having((p0) => p0.pul, 'pulse', null)
+        .having((p0) => p0.note, 'note', 'test note')
+        .having((p0) => p0.color, 'needlePin', null),
       );
     });
     testWidgets('should be able to input medicines', (WidgetTester tester) async {
@@ -298,12 +299,20 @@ void main() {
       await tester.tap(find.text(localizations.btnSave));
       await tester.pumpAndSettle();
 
-      expect(result?.$1, isNull);
-      expect(result?.$2, isA<MedicineIntake>()
-          .having((p0) => p0.time.millisecondsSinceEpoch ~/ 2000, 'timestamp', openDialogeTimeStamp.millisecondsSinceEpoch ~/ 2000)
-          .having((p0) => p0.medicine, 'medicine', med2)
-          .having((p0) => p0.dosis.mg, 'dosis', 123.456),
+      expect(result, isA<FullEntry>());
+      final FullEntry res = result;
+      expect(res.time.millisecondsSinceEpoch, inInclusiveRange(
+        openDialogeTimeStamp.millisecondsSinceEpoch - 2000,
+        openDialogeTimeStamp.millisecondsSinceEpoch + 2000)
       );
+      expect(res.sys, null);
+      expect(res.dia, null);
+      expect(res.pul, null);
+      expect(res.note, null);
+      expect(res.color, null);
+      expect(res.intakes, hasLength(1));
+      expect(res.intakes.first.medicine, med2);
+      expect(res.intakes.first.dosis.mg, 123.456);
     });
     testWidgets('should not allow invalid values', (tester) async {
       final mRep = medRepo();
@@ -402,8 +411,8 @@ void main() {
         matching: find.byType(TextFormField),
       );
       expect(focusedTextFormField, findsOneWidget);
-      expect(focusedTextFormField.evaluate().first.widget, isA<TextFormField>()
-          .having((p0) => p0.initialValue, 'systolic content', '12'),);
+      final field = await tester.widget<TextFormField>(focusedTextFormField);
+      expect(field.initialValue, '12');
     });
     testWidgets('should focus next on input finished', (tester) async {
       final mRep = medRepo();
@@ -447,7 +456,6 @@ void main() {
       expect(thirdFocusedTextFormField.evaluate().first.widget, isA<TextFormField>()
           .having((p0) => p0.initialValue, 'note input content', 'note'),);
     });
-
     testWidgets('should focus last input field on backspace pressed in empty input field', (tester) async {
       final mRep = medRepo();
       await loadDialoge(tester, (context) =>
@@ -537,12 +545,17 @@ void main() {
       );
       await tester.tap(find.text(localizations.btnSave));
       await tester.pumpAndSettle();
-
-      expect(result, isNotNull);
-      expect(result?.$1, isNull);
-      expect(result?.$2, isA<MedicineIntake>()
-          .having((p0) => p0.dosis.mg, 'dosis', 654.321),
-      );
+      
+      expect(result, isA<FullEntry>());
+      final FullEntry res = result; 
+      expect(res.sys, null);
+      expect(res.dia, null);
+      expect(res.pul, null);
+      expect(res.note, null);
+      expect(res.color, null);
+      
+      expect(res.intakes, hasLength(1));
+      expect(res.intakes.first.dosis.mg, 654.321);
     });
     testWidgets('should allow modifying entered dosis', (tester) async {
       final mRep = medRepo([mockMedicine(designation: 'testmed')]);
@@ -578,11 +591,16 @@ void main() {
       await tester.tap(find.text(localizations.btnSave));
       await tester.pumpAndSettle();
 
-      expect(result, isNotNull);
-      expect(result?.$1, isNull);
-      expect(result?.$2, isA<MedicineIntake>()
-          .having((p0) => p0.dosis.mg, 'dosis', 654.322),
-      );
+      expect(result, isA<FullEntry>());
+      final FullEntry res = result;
+      expect(res.sys, null);
+      expect(res.dia, null);
+      expect(res.pul, null);
+      expect(res.note, null);
+      expect(res.color, null);
+
+      expect(res.intakes, hasLength(1));
+      expect(res.intakes.first.dosis.mg, 654.322);
     });
     testWidgets('should not go back to last field when the current field is still filled', (tester) async {
       final mRep = medRepo([mockMedicine(designation: 'testmed')]);

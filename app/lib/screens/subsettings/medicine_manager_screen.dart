@@ -75,11 +75,12 @@ class _MedicineManagerScreenState extends State<MedicineManagerScreen> {
                          '${medicines[i].dosis!.mg} mg'),
               trailing: IconButton(
                 icon: const Icon(Icons.delete),
-                onPressed: () {
+                onPressed: () async {
+                  await RepositoryProvider.of<MedicineRepository>(context)
+                    .remove(medicines[i]);
                   setState(() async {
-                    await RepositoryProvider.of<MedicineRepository>(context)
-                      .remove(medicines[i]);
                     medicines.removeAt(i);
+                    // FIXME: somehow no feedback
                   });
                 },
               ),

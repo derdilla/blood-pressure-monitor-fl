@@ -112,7 +112,7 @@ class NativeColumn extends ExportColumn {
   String? get formatPattern => null;
 
   @override
-  String get internalIdentifier => 'native.$csvTitle'; // TODO: why is this needed
+  String get internalIdentifier => 'native.$csvTitle';
 
   @override
   RowDataFieldType? get restoreAbleType => _restoreableType;
@@ -339,7 +339,7 @@ sealed class ExportColumn implements Formatter {
   /// used in the rest of the app.
   ///
   /// It should not be used instead of [csvTitle].
-  String get internalIdentifier;
+  String get internalIdentifier; // TODO: why is this needed
 
   /// Column title in a csv file.
   ///

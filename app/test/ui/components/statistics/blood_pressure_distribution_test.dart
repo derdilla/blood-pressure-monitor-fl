@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import '../../../model/export_import/record_formatter_test.dart';
+import '../../../model/analyzer_test.dart';
 import '../util.dart';
 
 void main() {
@@ -40,12 +40,12 @@ void main() {
   testWidgets('should report records to ValueDistribution', (tester) async {
     await tester.pumpWidget(materialApp(BloodPressureDistribution(
       records: [
-        mockEntry(sys: 123),
-        mockEntry(dia: 123),
-        mockEntry(dia: 124),
-        mockEntry(pul: 123),
-        mockEntry(pul: 124),
-        mockEntry(pul: 125),
+        mockRecord(sys: 123),
+        mockRecord(dia: 123),
+        mockRecord(dia: 124),
+        mockRecord(pul: 123),
+        mockRecord(pul: 124),
+        mockRecord(pul: 125),
       ],
       settings: Settings(
         sysColor: Colors.red,

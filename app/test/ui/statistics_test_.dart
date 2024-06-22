@@ -14,6 +14,7 @@ import 'components/util.dart';
 
 void main() {
   testWidgets('should load page', (tester) async {
+    // FIXME: doesn't finish
     await _initStatsPage(tester, []);
     expect(tester.takeException(), isNull);
 

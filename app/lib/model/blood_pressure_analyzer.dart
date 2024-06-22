@@ -3,7 +3,7 @@ import 'dart:math';
 import 'package:collection/collection.dart';
 import 'package:health_data_store/health_data_store.dart';
 
-// TODO: ensure calculations work and return null in case of error
+// TODO: test calculations work and return null in case of error
 
 /// Analysis utils for a list of blood pressure records.
 class BloodPressureAnalyser {

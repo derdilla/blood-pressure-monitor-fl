@@ -19,7 +19,7 @@ enum RowDataFieldType {
   /// Guarantees that a [int] containing a [Color.value] is returned.
   ///
   /// Backwards compatability with [MeasurementNeedlePin] json is maintained.
-  color; // TODO: replace with color
+  color;
 
   /// Selection of a displayable string from [localizations].
   String localize(AppLocalizations localizations) {

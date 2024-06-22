@@ -32,7 +32,7 @@ Future<Widget> appBase(Widget child,  {
   intervallStoreManager ??= IntervallStoreManager(IntervallStorage(), IntervallStorage(), IntervallStorage());
 
   HealthDataStore? db;
-  if  (bpRepo != null || medRepo != null || intakeRepo != null) {
+  if (bpRepo == null || medRepo == null || intakeRepo == null) {
     db = await _getHealthDateStore();
   }
 
@@ -48,7 +48,7 @@ Future<Widget> appBase(Widget child,  {
       RepositoryProvider(create: (context) => medRepo ?? db!.medRepo),
       RepositoryProvider(create: (context) => intakeRepo ?? db!.intakeRepo),
     ],
-    child: child,
+    child: materialApp(child),
   ),);
 }
 
@@ -149,6 +149,8 @@ Medicine mockMedicine({
 HealthDataStore? _db;
 Future<HealthDataStore> _getHealthDateStore() async {
   TestWidgetsFlutterBinding.ensureInitialized();
-  _db ??= await HealthDataStore.load(await databaseFactoryFfi.openDatabase(inMemoryDatabasePath));
+  sqfliteFfiInit();
+  final db = await databaseFactoryFfi.openDatabase(inMemoryDatabasePath);
+  _db ??= await HealthDataStore.load(db);
   return _db!;
 }
