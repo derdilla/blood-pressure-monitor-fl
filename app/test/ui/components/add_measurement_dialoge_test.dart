@@ -245,10 +245,7 @@ void main() {
     testWidgets('should allow note only', (WidgetTester tester) async {
       dynamic result = 'result before save';
       await loadDialoge(tester, (context) async
-      => result = await showAddEntryDialoge(context, Settings(
-        allowMissingValues: true,
-        validateInputs: false,
-      ), medRepo(),),);
+      => result = await showAddEntryDialoge(context, Settings(), medRepo(),),);
       expect(find.byType(DropdownButton<Medicine?>), findsNothing, reason: 'No medication in settings.');
 
       final localizations = await AppLocalizations.delegate.load(const Locale('en'));

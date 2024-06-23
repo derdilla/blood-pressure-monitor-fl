@@ -53,7 +53,11 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
   final diaFocusNode = FocusNode();
   final pulFocusNode = FocusNode();
   final noteFocusNode = FocusNode();
+
   late final TextEditingController sysController;
+  late final TextEditingController diaController;
+  late final TextEditingController pulController;
+  late final TextEditingController noteController;
 
   /// Currently selected time.
   late DateTime time;
@@ -98,15 +102,12 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
   @override
   void initState() {
     super.initState();
-    time = widget.initialRecord?.time ?? DateTime.now();
-    final int? colorVal = widget.initialRecord?.color;
-    color = colorVal == null ? null : Color(colorVal);
-    // TODO: stop duplicating code like this
-    final sysValue = switch(widget.settings.preferredPressureUnit) {
-      PressureUnit.mmHg => widget.initialRecord?.sys?.mmHg,
-      PressureUnit.kPa => widget.initialRecord?.sys?.kPa.round(),
-    };
-    sysController = TextEditingController(text: sysValue?.toString() ?? '');
+    sysController = TextEditingController();
+    diaController = TextEditingController();
+    pulController = TextEditingController();
+    noteController = TextEditingController();
+    _loadFields(widget.initialRecord);
+
     if (widget.initialRecord != null) {
       _measurementFormActive = true;
     }
@@ -119,12 +120,36 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
   @override
   void dispose() {
     sysController.dispose();
+    diaController.dispose();
+    pulController.dispose();
+    noteController.dispose();
+
     sysFocusNode.dispose();
     diaFocusNode.dispose();
     pulFocusNode.dispose();
     noteFocusNode.dispose();
     ServicesBinding.instance.keyboard.removeHandler(_onKey);
     super.dispose();
+  }
+
+  /// Sets fields to values in a [record].
+  void _loadFields(FullEntry? entry) {
+    _measurementFormActive = true;
+    time = entry?.time ?? DateTime.now();
+    final int? colorValue = entry?.color;
+    final sysValue = switch(widget.settings.preferredPressureUnit) {
+      PressureUnit.mmHg => entry?.sys?.mmHg,
+      PressureUnit.kPa => entry?.sys?.kPa.round(),
+    };
+    final diaValue = switch(widget.settings.preferredPressureUnit) {
+      PressureUnit.mmHg => entry?.dia?.mmHg,
+      PressureUnit.kPa => entry?.dia?.kPa.round(),
+    };
+    if (colorValue != null) color = Color(colorValue);
+    if (entry?.sys != null) sysController.text = sysValue.toString();
+    if (entry?.dia != null) diaController.text = diaValue.toString();
+    if (entry?.pul != null) pulController.text = entry!.pul!.toString();
+    if (entry?.note != null) noteController.text = entry!.note!;
   }
 
   bool _onKey(KeyEvent event) {
@@ -172,51 +197,53 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
 
   /// Build a input for values in the measurement form (sys, dia, pul).
   Widget _buildValueInput(AppLocalizations localizations, {
-    int? initialValue,
     String? labelText,
     void Function(String?)? onSaved,
     FocusNode? focusNode,
     TextEditingController? controller,
     String? Function(String?)? validator,
-  }) {
-    assert(initialValue == null || controller == null);
-    return Expanded(
-      child: TextFormField(
-        initialValue: initialValue?.toString(),
-        decoration: InputDecoration(
-          labelText: labelText,
-        ),
-        keyboardType: TextInputType.number,
-        focusNode: focusNode,
-        onSaved: onSaved,
-        controller: controller,
-        inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-        onChanged: (String value) {
-          if (value.isNotEmpty) _measurementFormActive = true;
-          if (value.isNotEmpty
-              && (int.tryParse(value) ?? -1) > 40) {
-            FocusScope.of(context).nextFocus();
-          }
-        },
-        validator: (String? value) {
-          if (!widget.settings.allowMissingValues
-              && (value == null
-                  || value.isEmpty
-                  || int.tryParse(value) == null)) {
-            return localizations.errNaN;
-          } else if (widget.settings.validateInputs
-              && (int.tryParse(value ?? '') ?? -1) <= 30) {
-            return localizations.errLt30;
-          } else if (widget.settings.validateInputs
-              && (int.tryParse(value ?? '') ?? 0) >= 400) {
-            // https://pubmed.ncbi.nlm.nih.gov/7741618/
-            return localizations.errUnrealistic;
-          }
-          return validator?.call(value);
-        },
+  }) => Expanded(
+    child: TextFormField(
+      decoration: InputDecoration(
+        labelText: labelText,
       ),
-    );
-  }
+      keyboardType: TextInputType.number,
+      focusNode: focusNode,
+      onSaved: onSaved,
+      controller: controller,
+      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+      onChanged: (String value) {
+        if (value.isNotEmpty) _measurementFormActive = true;
+        if (value.isNotEmpty
+            && (int.tryParse(value) ?? -1) > 40) {
+          FocusScope.of(context).nextFocus();
+        }
+      },
+      validator: (String? value) {
+        if (sysController.text.isEmpty
+          && diaController.text.isEmpty
+          && pulController.text.isEmpty) {
+          // Make note only entries work
+          return null;
+        }
+
+        if (!widget.settings.allowMissingValues
+            && (value == null
+                || value.isEmpty
+                || int.tryParse(value) == null)) {
+          return localizations.errNaN;
+        } else if (widget.settings.validateInputs
+            && (int.tryParse(value ?? '') ?? -1) <= 30) {
+          return localizations.errLt30;
+        } else if (widget.settings.validateInputs
+            && (int.tryParse(value ?? '') ?? 0) >= 400) {
+          // https://pubmed.ncbi.nlm.nih.gov/7741618/
+          return localizations.errUnrealistic;
+        }
+        return validator?.call(value);
+      },
+    ),
+  );
 
   /// Build the border all fields have.
   RoundedRectangleBorder _buildShapeBorder([Color? color]) =>
@@ -236,8 +263,7 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
         final List<MedicineIntake> intakes = [];
         if (_measurementFormActive && (recordFormKey.currentState?.validate() ?? false)) {
           recordFormKey.currentState?.save();
-          if (systolic != null || diastolic != null || pulse != null
-              || (notes?.isNotEmpty ?? false) || color != null) {
+          if (systolic != null || diastolic != null || pulse != null) {
             final pressureUnit = widget.settings.preferredPressureUnit;
             record = BloodPressureRecord(
               time: time,
@@ -245,6 +271,8 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
               dia: diastolic == null ? null : pressureUnit.wrap(diastolic!),
               pul: pulse,
             );
+          }
+          if ((notes?.isNotEmpty ?? false) || color != null) {
             note = Note(
               time: time,
               note: (notes?.isEmpty ?? true) ? null: notes,
@@ -266,9 +294,12 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
           }
         }
 
-        if ((record != null && intakes.isNotEmpty)
-            || (record == null && !_measurementFormActive && intakes.isNotEmpty)
-            || (record != null && intakes.isEmpty && selectedMed == null)) {
+        if (
+          (record != null && intakes.isNotEmpty)
+          || (record == null && note != null)
+          || (record == null && !_measurementFormActive && intakes.isNotEmpty)
+          || (record != null && intakes.isEmpty && selectedMed == null)
+        ) {
           record ??= BloodPressureRecord(time: time);
           note ??= Note(time: time);
           Navigator.pop(context, (record, note, intakes));
@@ -300,11 +331,7 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
                       const SizedBox(width: 16,),
                       _buildValueInput(localizations,
                         labelText: localizations.diaLong,
-                        // TODO: stop duplicating code like this
-                        initialValue: switch(widget.settings.preferredPressureUnit) {
-                          PressureUnit.mmHg => widget.initialRecord?.dia?.mmHg,
-                          PressureUnit.kPa => widget.initialRecord?.dia?.kPa.round(),
-                        },
+                        controller: diaController,
                         onSaved: (value) =>
                             setState(() => diastolic = int.tryParse(value ?? '')),
                         focusNode: diaFocusNode,
@@ -321,7 +348,7 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
                       const SizedBox(width: 16,),
                       _buildValueInput(localizations,
                         labelText: localizations.pulLong,
-                        initialValue: widget.initialRecord?.pul,
+                        controller: pulController,
                         focusNode: pulFocusNode,
                         onSaved: (value) =>
                             setState(() => pulse = int.tryParse(value ?? '')),
@@ -331,7 +358,7 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 16),
                     child: TextFormField(
-                      initialValue: widget.initialRecord?.note,
+                      controller: noteController,
                       focusNode: noteFocusNode,
                       decoration: InputDecoration(
                         labelText: localizations.addNote,
