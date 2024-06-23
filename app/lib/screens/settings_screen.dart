@@ -152,6 +152,13 @@ class SettingsPage extends StatelessWidget {
                 trailing: const Icon(Icons.arrow_forward_ios),
               ),
               SwitchListTile(
+                value: settings.bleInput,
+                onChanged: (value) {
+                  settings.bleInput = value;
+                },
+                secondary: const Icon(Icons.bluetooth),
+                title: Text(localizations.bluetoothInput),),
+              SwitchListTile(
                 value: settings.allowManualTimeInput,
                 onChanged: (value) {
                   settings.allowManualTimeInput = value;

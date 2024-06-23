@@ -1,6 +1,5 @@
 import 'package:blood_pressure_app/components/dialoges/add_measurement_dialoge.dart';
 import 'package:blood_pressure_app/components/measurement_list/measurement_list.dart';
-import 'package:blood_pressure_app/logging.dart';
 import 'package:blood_pressure_app/model/blood_pressure/medicine/intake_history.dart';
 import 'package:blood_pressure_app/model/blood_pressure/model.dart';
 import 'package:blood_pressure_app/model/storage/intervall_store.dart';
@@ -27,7 +26,6 @@ class AppHome extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Log.trace('AppHome build');
     final localizations = AppLocalizations.of(context)!;
     // direct use of settings possible as no listening is required
     if (_appStart) {
@@ -64,24 +62,24 @@ class AppHome extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.only(top: 20),
               child: Consumer<IntakeHistory>(builder: (context, intakeHistory, child) =>
-                Consumer<IntervallStoreManager>(builder: (context, intervalls, child) =>
-                Consumer<Settings>(builder: (context, settings, child) =>
-                  Column(children: [
-                    const MeasurementGraph(),
-                    Expanded(
-                      child: (settings.useLegacyList) ?
-                        LegacyMeasurementsList(context) :
-                        BloodPressureBuilder(
-                          rangeType: IntervallStoreManagerLocation.mainPage,
-                          onData: (context, records) => MeasurementList(
-                            settings: settings,
-                            records: records,
-                            intakes: intakeHistory.getIntakes(intervalls.mainPage.currentRange),
-                          ),
-                        ),
-                    ),
-                  ],),
-                ),),
+                  Consumer<IntervallStoreManager>(builder: (context, intervalls, child) =>
+                      Consumer<Settings>(builder: (context, settings, child) =>
+                          Column(children: [
+                            const MeasurementGraph(),
+                            Expanded(
+                              child: (settings.useLegacyList) ?
+                              LegacyMeasurementsList(context) :
+                              BloodPressureBuilder(
+                                rangeType: IntervallStoreManagerLocation.mainPage,
+                                onData: (context, records) => MeasurementList(
+                                  settings: settings,
+                                  records: records,
+                                  intakes: intakeHistory.getIntakes(intervalls.mainPage.currentRange),
+                                ),
+                              ),
+                            ),
+                          ],),
+                      ),),
               ),
             ),
           );
@@ -95,61 +93,61 @@ class AppHome extends StatelessWidget {
           }
           SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: SystemUiOverlay.values);
           return Consumer<Settings>(builder: (context, settings, child) => Column(
-              verticalDirection: VerticalDirection.up,
-              children: [
-                SizedBox.square(
-                  dimension: 75,
-                  child: FittedBox(
-                    child: FloatingActionButton(
-                      heroTag: 'floatingActionAdd',
-                      tooltip: localizations.addMeasurement,
-                      autofocus: true,
-                      onPressed: () async {
-                        final model = Provider.of<BloodPressureModel>(context, listen: false);
-                        final intakes = Provider.of<IntakeHistory>(context, listen: false);
-                        final measurement = await showAddEntryDialoge(context, Provider.of<Settings>(context, listen: false));
-                        if (measurement == null) return;
-                        if (measurement.$1 != null) {
-                          if (context.mounted) {
-                            model.addAndExport(context, measurement.$1!);
-                          } else {
-                            model.add(measurement.$1!);
-                          }
+            verticalDirection: VerticalDirection.up,
+            children: [
+              SizedBox.square(
+                dimension: 75,
+                child: FittedBox(
+                  child: FloatingActionButton(
+                    heroTag: 'floatingActionAdd',
+                    tooltip: localizations.addMeasurement,
+                    autofocus: true,
+                    onPressed: () async {
+                      final model = Provider.of<BloodPressureModel>(context, listen: false);
+                      final intakes = Provider.of<IntakeHistory>(context, listen: false);
+                      final measurement = await showAddEntryDialoge(context, Provider.of<Settings>(context, listen: false));
+                      if (measurement == null) return;
+                      if (measurement.$1 != null) {
+                        if (context.mounted) {
+                          model.addAndExport(context, measurement.$1!);
+                        } else {
+                          model.add(measurement.$1!);
                         }
-                        if (measurement.$2 != null) {
-                          intakes.addIntake(measurement.$2!);
-                        }
-                      },
-                      child: const Icon(Icons.add,),
-                    ),
+                      }
+                      if (measurement.$2 != null) {
+                        intakes.addIntake(measurement.$2!);
+                      }
+                    },
+                    child: const Icon(Icons.add,),
                   ),
                 ),
-                const SizedBox(
-                  height: 10,
-                ),
-                FloatingActionButton(
-                  heroTag: 'floatingActionStatistics',
-                  tooltip: localizations.statistics,
-                  backgroundColor: const Color(0xFF6F6F6F),
-                  onPressed: () {
-                    _buildTransition(context, const StatisticsScreen(), settings.animationSpeed);
-                  },
-                  child: const Icon(Icons.insights, color: Colors.black),
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                FloatingActionButton(
-                  heroTag: 'floatingActionSettings',
-                  tooltip: localizations.settings,
-                  backgroundColor: const Color(0xFF6F6F6F),
-                  child: const Icon(Icons.settings, color: Colors.black),
-                  onPressed: () {
-                    _buildTransition(context, const SettingsPage(), settings.animationSpeed);
-                  },
-                ),
-              ],
-            ),);
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              FloatingActionButton(
+                heroTag: 'floatingActionStatistics',
+                tooltip: localizations.statistics,
+                backgroundColor: const Color(0xFF6F6F6F),
+                onPressed: () {
+                  _buildTransition(context, const StatisticsScreen(), settings.animationSpeed);
+                },
+                child: const Icon(Icons.insights, color: Colors.black),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              FloatingActionButton(
+                heroTag: 'floatingActionSettings',
+                tooltip: localizations.settings,
+                backgroundColor: const Color(0xFF6F6F6F),
+                child: const Icon(Icons.settings, color: Colors.black),
+                onPressed: () {
+                  _buildTransition(context, const SettingsPage(), settings.animationSpeed);
+                },
+              ),
+            ],
+          ),);
         },),
     );
   }

@@ -22,7 +22,6 @@ import 'package:sqflite/sqflite.dart';
 late final ConfigDB _database;
 late final BloodPressureModel _bloodPressureModel;
 
-
 void main() async {
   runApp(ConsistentFutureBuilder(
       future: _loadApp(),

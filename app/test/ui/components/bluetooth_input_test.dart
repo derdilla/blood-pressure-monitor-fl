@@ -51,7 +51,7 @@ void main() {
       onMeasurement: reads.add,
       bluetoothCubit: () => bluetoothCubit,
       deviceScanCubit: () => deviceScanCubit,
-      bleReadCubit: () => bleReadCubit,
+      bleReadCubit: (device) => bleReadCubit,
     )));
 
     await tester.tap(find.byType(ClosedBluetoothInput));
@@ -95,7 +95,7 @@ void main() {
       onMeasurement: reads.add,
       bluetoothCubit: () => bluetoothCubit,
       deviceScanCubit: () => deviceScanCubit,
-      bleReadCubit: () => bleReadCubit,
+      bleReadCubit: (device) => bleReadCubit,
     )));
 
     await tester.tap(find.byType(ClosedBluetoothInput));
