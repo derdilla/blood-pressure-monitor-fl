@@ -1,16 +1,14 @@
-import 'dart:io';
-import 'dart:math';
-
-import 'package:blood_pressure_app/components/consistent_future_builder.dart';
-import 'package:blood_pressure_app/components/custom_banner.dart';
-import 'package:blood_pressure_app/main.dart';
+import 'package:blood_pressure_app/model/blood_pressure/model.dart';
+import 'package:blood_pressure_app/model/storage/export_columns_store.dart';
+import 'package:blood_pressure_app/model/storage/storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:path/path.dart';
-import 'package:restart_app/restart_app.dart';
-import 'package:sqflite/sqflite.dart';
+import 'package:health_data_store/health_data_store.dart';
+import 'package:provider/provider.dart';
 
+/// Screen that allows mass deleting data entered in the app.
 class DeleteDataScreen extends StatefulWidget {
+  /// Create screen that allows mass data deletion.
   const DeleteDataScreen({super.key});
 
   @override
@@ -18,207 +16,105 @@ class DeleteDataScreen extends StatefulWidget {
 }
 
 class _DeleteDataScreenState extends State<DeleteDataScreen> {
-  /// Whether or not files were deleted while on this page.
-  ///
-  /// Should never be reset to false.
-  bool _deletedData = false;
-
   @override
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Delete data'),
+        title: Text(localizations.delete),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
-          onPressed: () {
-            if (_deletedData) {
-              Restart.restartApp();
-            } else {
-              Navigator.pop(context, );
-            }
-          },
+          onPressed: () => Navigator.pop(context),
         ),
       ),
-      body: Column(
+      body: ListView(
         children: [
-          if (_deletedData)
-            CustomBanner(
-                content: Text(localizations.warnNeedsRestartForUsingApp),
-                action: TextButton(
-                  onPressed: Restart.restartApp,
-                  child: Text(localizations.restartNow),
-                ),
-            ),
-          Expanded(
-            child: Container(
-              padding: const EdgeInsets.all(10),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(localizations.data, style: Theme.of(context).textTheme.headlineMedium),
-                  Expanded(
-                    child: ListView(
-                      children: [
-                        ListTile(
-                          leading: const Icon(Icons.timeline),
-                          title: Text(localizations.deleteAllMeasurements),
-                          subtitle: ConsistentFutureBuilder(
-                            future: Future(() async {
-                              final String dbPath = join(await getDatabasesPath(), 'blood_pressure.db');
-                              final String dbJournalPath = join(await getDatabasesPath(), 'blood_pressure.db-journal');
-                              int sizeBytes;
-                              try {
-                                sizeBytes = File(dbPath).lengthSync();
-                              } on PathNotFoundException {
-                                sizeBytes = 0;
-                              }
-                              try {
-                                sizeBytes += File(dbJournalPath).lengthSync();
-                              } on PathNotFoundException {}
-
-                              return _bytesToString(sizeBytes);
-                            }),
-                            onData: (context, data) => Text(data),
-                          ),
-                          trailing: const Icon(Icons.delete_forever),
-                          onTap: () async {
-                            final messanger = ScaffoldMessenger.of(context);
-                            if (await showDeleteDialoge(context, localizations)) {
-                            final String dbPath = join(await getDatabasesPath(), 'blood_pressure.db');
-                            final String dbJournalPath = join(await getDatabasesPath(), 'blood_pressure.db-journal');
-                            await closeDatabases();
-                            tryDeleteFile(dbPath, messanger, localizations);
-                            tryDeleteFile(dbJournalPath, messanger, localizations);
-                            setState(() {
-                            _deletedData = true;
-                            });
-                            }
-                          },
-                        ),
-                        ListTile(
-                          leading: const Icon(Icons.settings),
-                          title: Text(localizations.deleteAllSettings),
-                          subtitle: ConsistentFutureBuilder(
-                            future: Future(() async {
-                              final String dbPath = join(await getDatabasesPath(), 'config.db');
-                              final String dbJournalPath = join(await getDatabasesPath(), 'config.db-journal');
-                              int sizeBytes;
-                              try {
-                                sizeBytes = File(dbPath).lengthSync();
-                              } on PathNotFoundException {
-                                sizeBytes = 0;
-                              }
-                              try {
-                                sizeBytes += File(dbJournalPath).lengthSync();
-                              } on PathNotFoundException {}
-                              return _bytesToString(sizeBytes);
-                            }),
-                            onData: (context, data) => Text(data),
-                          ),
-                          trailing: const Icon(Icons.delete_forever),
-                          onTap: () async {
-                            final messanger = ScaffoldMessenger.of(context);
-                            if (await showDeleteDialoge(context, localizations)) {
-                              final String dbPath = join(await getDatabasesPath(), 'config.db');
-                              final String dbJournalPath = join(await getDatabasesPath(), 'config.db-journal');
-                              await closeDatabases();
-                              tryDeleteFile(dbPath, messanger, localizations);
-                              tryDeleteFile(dbJournalPath, messanger, localizations);
-                              setState(() {
-                                _deletedData = true;
-                              });
-                            }
-                          },
-                        ),
-                      ],
-                    ),
+          ListTile(
+            leading: const Icon(Icons.timeline),
+            title: Text(localizations.deleteAllMeasurements),
+            trailing: const Icon(Icons.delete_forever),
+            onTap: () async {
+              final messanger = ScaffoldMessenger.of(context);
+              if (await _showDeleteDialoge(context, localizations)) {
+                final model = context.read<BloodPressureModel>();
+                final previousRecords = await model.all;
+                for (final record in previousRecords) {
+                  await model.delete(record.creationTime);
+                }
+                messanger.showSnackBar(SnackBar(
+                  content: Text(localizations.deletionConfirmed),
+                  action: SnackBarAction(
+                    label: localizations.btnUndo,
+                    onPressed: () => model.addAll(previousRecords, context),
                   ),
-                  /* Text('Files', style: Theme.of(context).textTheme.headlineMedium),
-                  Expanded(
-                    flex: 3,
-                    child: ConsistentFutureBuilder(
-                      future: Future(() async => Directory(await getDatabasesPath()).list(recursive: true).toList()),
-                      onData: (context, files) =>
-                        ListView.builder(
-                          itemCount: files.length,
-                          itemBuilder: (context, idx) => ListTile(
-                            title: Text(files[idx].path),
-                            trailing: const Icon(Icons.delete_forever),
-                            onTap: () async {
-                              final messanger = ScaffoldMessenger.of(context);
-                              if (await showDeleteDialoge(context, localizations)) {
-                                if (!context.mounted) return;
-                                await unregisterAllProviders(context);
-                                files[idx].deleteSync();
-                                messanger.showSnackBar(SnackBar(
-                                  duration: const Duration(seconds: 5),
-                                  content: Text('File deleted.'),
-                                ));
-                                setState(() {
-                                  _deletedData = true;
-                                });
-                              }
-                            },
-                          )
-                        )
-                    ),
-                  ), */
-                ],
-              ),
-            ),
+                ));
+              }
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.settings),
+            title: Text(localizations.deleteAllSettings),
+            trailing: const Icon(Icons.delete_forever),
+            onTap: () async {
+              final messanger = ScaffoldMessenger.of(context);
+              if (await _showDeleteDialoge(context, localizations)) {
+                context.read<Settings>().reset();
+                context.read<ExportSettings>().reset();
+                context.read<CsvExportSettings>().reset();
+                context.read<PdfExportSettings>().reset();
+                context.read<IntervallStoreManager>().reset();
+                context.read<ExportColumnsManager>().reset();
+                messanger.showSnackBar(SnackBar(
+                  content: Text(localizations.deletionConfirmed),
+                ));
+              }
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.medication),
+            title: Text(localizations.deleteAllMedicineIntakes),
+            trailing: const Icon(Icons.delete_forever),
+            onTap: () async {
+              if (await _showDeleteDialoge(context, localizations)) {
+                final repo = context.read<MedicineIntakeRepository>();
+                final allIntakes = await repo.get(DateRange(start: DateTime.fromMillisecondsSinceEpoch(0), end: DateTime.now()));
+                for (final intake in allIntakes) {
+                  await repo.remove(intake);
+                }
+                final messanger = ScaffoldMessenger.of(context);
+                messanger.showSnackBar(SnackBar(
+                  content: Text(localizations.deletionConfirmed),
+                ));
+              }
+            },
           ),
         ],
       ),
     );
   }
 
-  /// Converts file size in bytes to human readable string
-  String _bytesToString(int sizeBytes) {
-    if (sizeBytes <= 0) return '0 B';
-    const suffixes = ['B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
-    final i = (log(sizeBytes) / log(1024)).floor();
-    return '${(sizeBytes / pow(1024, i)).toStringAsFixed(1)} ${suffixes[i]}';
-  }
-
-  Future<bool> showDeleteDialoge(BuildContext context, AppLocalizations localizations) async => await showDialog<bool>(context: context, builder: (context) =>
-        AlertDialog(
-          title: Text(localizations.confirmDelete),
-          content: Text(localizations.warnDeletionUnrecoverable),
-          actionsAlignment: MainAxisAlignment.spaceBetween,
-          actions: [
-            TextButton(
-                onPressed: () => Navigator.pop(context, false),
-                child: Text(AppLocalizations.of(context)!.btnCancel),),
-            Theme(
-              data: ThemeData.from(
-                  colorScheme: ColorScheme.fromSeed(seedColor: Colors.red, brightness: Theme.of(context).brightness),
-                  useMaterial3: true,
-              ),
-              child: ElevatedButton.icon(
-                  onPressed: () => Navigator.pop(context, true),
-                  icon: const Icon(Icons.delete_forever),
-                  label: Text(AppLocalizations.of(context)!.btnConfirm),
-              ),
-            ),
-
-          ],
+  /// Show dialoge to confirm irrevocable deletion.
+  Future<bool> _showDeleteDialoge(BuildContext context, AppLocalizations localizations) async => await showDialog<bool>(context: context, builder: (context) =>
+    AlertDialog(
+      title: Text(localizations.confirmDelete),
+      content: Text(localizations.warnDeletionUnrecoverable),
+      actionsAlignment: MainAxisAlignment.spaceBetween,
+      actions: [
+        TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: Text(AppLocalizations.of(context)!.btnCancel),),
+        Theme(
+          data: ThemeData.from(
+              colorScheme: ColorScheme.fromSeed(seedColor: Colors.red, brightness: Theme.of(context).brightness),
+              useMaterial3: true,
+          ),
+          child: ElevatedButton.icon(
+              onPressed: () => Navigator.pop(context, true),
+              icon: const Icon(Icons.delete_forever),
+              label: Text(AppLocalizations.of(context)!.btnConfirm),
+          ),
         ),
-    ) ?? false;
-  
-  void tryDeleteFile(String path, ScaffoldMessengerState messanger, AppLocalizations localizations) {
-    try {
-      File(path).deleteSync();
-      messanger.showSnackBar(SnackBar(
-        duration: const Duration(seconds: 2),
-        content: Text(localizations.fileDeleted),
-      ),);
-    } on PathNotFoundException {
-      messanger.showSnackBar(SnackBar(
-        duration: const Duration(seconds: 2),
-        content: Text(localizations.fileAlreadyDeleted),
-      ),);
-    }
-  }
+      ],
+    ),
+  ) ?? false;
 }

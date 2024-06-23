@@ -548,5 +548,7 @@
   "pulseRateLessThanLowerLimit": "Pulse rate is less than lower limit",
   "@pulseRateLessThanLowerLimit": {},
   "availableDevices": "Available devices",
-  "@availableDevices": {}
+  "@availableDevices": {},
+  "deleteAllMedicineIntakes": "Delete all medicine intakes",
+  "@deleteAllMedicineIntakes": {}
 }

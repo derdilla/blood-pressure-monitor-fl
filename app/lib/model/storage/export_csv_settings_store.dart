@@ -40,7 +40,6 @@ class CsvExportSettings extends ChangeNotifier implements CustomFieldsSettings {
         ),
       );
     }
-
   }
 
   factory CsvExportSettings.fromJson(String json) {
@@ -59,7 +58,18 @@ class CsvExportSettings extends ChangeNotifier implements CustomFieldsSettings {
     'exportFieldsConfiguration': exportFieldsConfiguration.toJson(),
   };
 
+  /// Serializes the object to json string.
   String toJson() => jsonEncode(toMap());
+
+  /// Reset all fields to their default values.
+  void reset() {
+    final d = CsvExportSettings();
+    _fieldDelimiter = d.fieldDelimiter;
+    _textDelimiter = d._textDelimiter;
+    _exportHeadline = d._exportHeadline;
+    _exportFieldsConfiguration = d._exportFieldsConfiguration;
+    notifyListeners();
+  }
 
   String _fieldDelimiter = ',';
   String get fieldDelimiter => _fieldDelimiter;

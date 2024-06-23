@@ -37,6 +37,15 @@ class ExportSettings extends ChangeNotifier {
 
   String toJson() => jsonEncode(toMap());
 
+  /// Reset all fields to their default values.
+  void reset() {
+    final d = ExportSettings();
+    _exportFormat = d._exportFormat;
+    _defaultExportDir = d._defaultExportDir;
+    _exportAfterEveryEntry = d._exportAfterEveryEntry;
+    notifyListeners();
+  }
+
   ExportFormat _exportFormat = ExportFormat.csv;
   ExportFormat get exportFormat => _exportFormat;
   set exportFormat(ExportFormat value) {

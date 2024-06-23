@@ -2,7 +2,9 @@ name: blood_pressure_app
 description: Track your blood pressure wherever you go
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
-version: 1.6.4
+version: 1.6.4+34
+# F-Droid needs the Flutter version used to build releases to be in the repository.
+# f-droid-flutter: 3.22.0-0.2.pre
 
 environment:
   sdk: '>=3.0.2 <4.0.0'
@@ -35,11 +37,12 @@ dependencies:
   # can become one custom dependency
   file_picker: ^8.0.3
   jsaver: ^1.2.0
-  restart_app: ^1.2.1
   fluttertoast: ^8.2.4
   app_settings: ^5.1.1
 
 dev_dependencies:
+  integration_test:
+    sdk: flutter
   file: any
   flutter_test:
     sdk: flutter
