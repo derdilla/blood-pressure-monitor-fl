@@ -1,3 +1,4 @@
+import 'package:blood_pressure_app/components/bluetooth_input.dart';
 import 'package:blood_pressure_app/components/dialoges/add_measurement_dialoge.dart';
 import 'package:blood_pressure_app/components/settings/color_picker_list_tile.dart';
 import 'package:blood_pressure_app/model/blood_pressure/medicine/medicine.dart';
@@ -155,6 +156,22 @@ void main() {
       expect(find.byType(AddEntryDialoge), findsOneWidget);
       expect(find.text(localizations.errUnrealistic), findsOneWidget);
     });
+    testWidgets('respects settings about showing bluetooth input', (tester) async {
+      final settings = Settings(
+        bleInput: true,
+      );
+      await tester.pumpWidget(materialApp(
+        AddEntryDialoge(
+          settings: settings,
+        ),
+      ),);
+      await tester.pumpAndSettle();
+      expect(find.byType(BluetoothInput, skipOffstage: false), findsOneWidget);
+
+      settings.bleInput = false;
+      await tester.pumpAndSettle();
+      expect(find.byType(BluetoothInput), findsNothing);
+    });
   });
   group('showAddEntryDialoge', () {
     testWidgets('should return null on cancel', (tester) async {
@@ -307,9 +324,11 @@ void main() {
 
       expect(result?.$1, isNull);
       expect(result?.$2, isA<MedicineIntake>()
-          .having((p0) => p0.timestamp.millisecondsSinceEpoch ~/ 10000, 'timestamp', openDialogeTimeStamp.millisecondsSinceEpoch ~/ 10000)
-          .having((p0) => p0.medicine, 'medicine', med2)
-          .having((p0) => p0.dosis, 'dosis', 123.456),
+        .having((p0) => p0.timestamp.millisecondsSinceEpoch , 'timestamp',
+          inExclusiveRange(openDialogeTimeStamp.millisecondsSinceEpoch - 1000,
+              openDialogeTimeStamp.millisecondsSinceEpoch + 1000))
+        .having((p0) => p0.medicine, 'medicine', med2)
+        .having((p0) => p0.dosis, 'dosis', 123.456),
       );
     });
     testWidgets('should not allow invalid values', (tester) async {
