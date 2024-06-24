@@ -1,9 +1,7 @@
 import 'dart:async';
-import 'dart:math';
 
-import 'package:blood_pressure_app/components/consistent_future_builder.dart';
-import 'package:blood_pressure_app/components/date_time_picker.dart';
 import 'package:blood_pressure_app/components/dialoges/fullscreen_dialoge.dart';
+import 'package:blood_pressure_app/components/forms/date_time_form.dart';
 import 'package:blood_pressure_app/components/settings/color_picker_list_tile.dart';
 import 'package:blood_pressure_app/model/blood_pressure/pressure_unit.dart';
 import 'package:blood_pressure_app/model/storage/storage.dart';
@@ -12,7 +10,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:health_data_store/health_data_store.dart';
-import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 /// Input mask for entering measurements.
@@ -22,7 +19,7 @@ class AddEntryDialoge extends StatefulWidget {
   /// This is usually created through the [showAddEntryDialoge] function.
   const AddEntryDialoge({super.key,
     required this.settings,
-    required this.medRepo,
+    required this.availableMeds,
     this.initialRecord,
   });
 
@@ -38,8 +35,10 @@ class AddEntryDialoge extends StatefulWidget {
   /// saved separately.
   final FullEntry? initialRecord;
 
-  /// Repository that contains all selectable medicines.
-  final MedicineRepository medRepo;
+  /// All medicines selectable.
+  ///
+  /// Hides med input when this is empty.
+  final List<Medicine> availableMeds;
 
   @override
   State<AddEntryDialoge> createState() => _AddEntryDialogeState();
@@ -53,6 +52,7 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
   final diaFocusNode = FocusNode();
   final pulFocusNode = FocusNode();
   final noteFocusNode = FocusNode();
+  final dosisFocusNote = FocusNode();
 
   late final TextEditingController sysController;
   late final TextEditingController diaController;
@@ -91,14 +91,6 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
   /// Newlines in the note field.
   int _noteCurrentNewLineCount = 0;
 
-  /// Whether any of the measurement fields was once non-empty.
-  ///
-  /// Those fields are:
-  /// - sys, dia, pul
-  /// - note
-  /// - color
-  bool _measurementFormActive = false;
-
   @override
   void initState() {
     super.initState();
@@ -107,10 +99,6 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
     pulController = TextEditingController();
     noteController = TextEditingController();
     _loadFields(widget.initialRecord);
-
-    if (widget.initialRecord != null) {
-      _measurementFormActive = true;
-    }
 
     sysFocusNode.requestFocus();
     ServicesBinding.instance.keyboard.addHandler(_onKey);
@@ -134,7 +122,6 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
 
   /// Sets fields to values in a [record].
   void _loadFields(FullEntry? entry) {
-    _measurementFormActive = true;
     time = entry?.time ?? DateTime.now();
     final int? colorValue = entry?.color;
     final sysValue = switch(widget.settings.preferredPressureUnit) {
@@ -160,40 +147,12 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
     if (diaFocusNode.hasFocus && diastolic == null 
         || pulFocusNode.hasFocus && pulse == null
         || noteFocusNode.hasFocus && (notes?.isEmpty ?? true)
-    ) FocusScope.of(context).previousFocus();
+    ) {
+      FocusScope.of(context).previousFocus();
+      print('backfocus');
+    }
     return false;
   }
-
-  Widget _buildTimeInput(AppLocalizations localizations) =>
-    ListTile(
-      title: Text(DateFormat(widget.settings.dateFormatString).format(time)),
-      trailing: const Icon(Icons.edit),
-      shape: _buildShapeBorder(),
-      onTap: () async {
-        final messenger = ScaffoldMessenger.of(context);
-        var selectedTime = await showDateTimePicker(
-            context: context,
-            firstDate: DateTime.fromMillisecondsSinceEpoch(1),
-            lastDate: DateTime.now(),
-            initialDate: time,
-        );
-        if (selectedTime == null) {
-          return;
-        }
-        final now = DateTime.now();
-        if (widget.settings.validateInputs && selectedTime.isAfter(now)) {
-          messenger.showSnackBar(SnackBar(
-              content: Text(localizations.errTimeAfterNow),),);
-          selectedTime = selectedTime.copyWith(
-              hour: max(selectedTime.hour, now.hour),
-              minute: max(selectedTime.minute, now.minute),
-          );
-        }
-        setState(() {
-          time = selectedTime!;
-        });
-      },
-    );
 
   /// Build a input for values in the measurement form (sys, dia, pul).
   Widget _buildValueInput(AppLocalizations localizations, {
@@ -213,20 +172,13 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
       controller: controller,
       inputFormatters: [FilteringTextInputFormatter.digitsOnly],
       onChanged: (String value) {
-        if (value.isNotEmpty) _measurementFormActive = true;
         if (value.isNotEmpty
             && (int.tryParse(value) ?? -1) > 40) {
+          print('object');
           FocusScope.of(context).nextFocus();
         }
       },
       validator: (String? value) {
-        if (sysController.text.isEmpty
-          && diaController.text.isEmpty
-          && pulController.text.isEmpty) {
-          // Make note only entries work
-          return null;
-        }
-
         if (!widget.settings.allowMissingValues
             && (value == null
                 || value.isEmpty
@@ -261,7 +213,7 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
         BloodPressureRecord? record;
         Note? note;
         final List<MedicineIntake> intakes = [];
-        if (_measurementFormActive && (recordFormKey.currentState?.validate() ?? false)) {
+        if (recordFormKey.currentState?.validate() ?? false) {
           recordFormKey.currentState?.save();
           if (systolic != null || diastolic != null || pulse != null) {
             final pressureUnit = widget.settings.preferredPressureUnit;
@@ -272,15 +224,14 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
               pul: pulse,
             );
           }
-          if ((notes?.isNotEmpty ?? false) || color != null) {
-            note = Note(
-              time: time,
-              note: (notes?.isEmpty ?? true) ? null: notes,
-              color: color?.value,
-            );
-          }
         }
-
+        if ((notes?.isNotEmpty ?? false) || color != null) {
+          note = Note(
+            time: time,
+            note: (notes?.isEmpty ?? true) ? null: notes,
+            color: color?.value,
+          );
+        }
         if (_showMedicineDosisInput
             && (medicationFormKey.currentState?.validate() ?? false)) {
           medicationFormKey.currentState?.save();
@@ -294,12 +245,7 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
           }
         }
 
-        if (
-          (record != null && intakes.isNotEmpty)
-          || (record == null && note != null)
-          || (record == null && !_measurementFormActive && intakes.isNotEmpty)
-          || (record != null && intakes.isEmpty && selectedMed == null)
-        ) {
+        if (record != null || intakes.isNotEmpty || notes != null) {
           record ??= BloodPressureRecord(time: time);
           note ??= Note(time: time);
           Navigator.pop(context, (record, note, intakes));
@@ -312,7 +258,14 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
           padding: const EdgeInsets.symmetric(horizontal: 8),
           children: [
             if (widget.settings.allowManualTimeInput)
-              _buildTimeInput(localizations),
+              DateTimeForm(
+                validate: widget.settings.validateInputs,
+                dateFormatString: widget.settings.dateFormatString,
+                initialTime: time,
+                onTimeSelected: (newTime) => setState(() {
+                  time = newTime;
+                }),
+              ),
             Form(
               key: recordFormKey,
               child: Column(
@@ -366,7 +319,6 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
                       minLines: 1,
                       maxLines: 4,
                       onChanged: (value) {
-                        if (value.isNotEmpty) _measurementFormActive = true;
                         final newLineCount = value.split('\n').length;
                         if (_noteCurrentNewLineCount != newLineCount) {
                           setState(() {
@@ -380,87 +332,82 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
                   ),
                   ColorSelectionListTile(
                     title: Text(localizations.color),
-                    onMainColorChanged: (Color value) {
-                      setState(() {
-                        _measurementFormActive = true;
-                        color = (value == Colors.transparent) ? null : value;
-                      });
-                    },
+                    onMainColorChanged: (Color value) => setState(() {
+                      color = (value == Colors.transparent) ? null : value;
+                    }),
                     initialColor: color ?? Colors.transparent,
                     shape: _buildShapeBorder(color),
                   ),
                 ],
               ),
             ),
-            if (widget.initialRecord == null)
-              ConsistentFutureBuilder(
-                future: widget.medRepo.getAll(),
-                onData: (BuildContext context, List<Medicine> availableMeds) =>
-                availableMeds.isEmpty ? const SizedBox.shrink() : Form(
-                  key: medicationFormKey,
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 16),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: DropdownButtonFormField<Medicine?>(
-                            isExpanded: true,
-                            value: selectedMed,
-                            items: [
-                              for (final e in availableMeds)
-                                DropdownMenuItem(
-                                  value: e,
-                                  child: Text(e.designation),
-                                ),
+            if (widget.initialRecord == null && widget.availableMeds.isNotEmpty)
+              Form(
+                key: medicationFormKey,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 16),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: DropdownButtonFormField<Medicine?>(
+                          isExpanded: true,
+                          value: selectedMed,
+                          items: [
+                            for (final med in widget.availableMeds)
                               DropdownMenuItem(
-                                child: Text(localizations.noMedication),
+                                value: med,
+                                child: Text(med.designation),
                               ),
-                            ],
-                            onChanged: (v) {
+                            DropdownMenuItem(
+                              child: Text(localizations.noMedication),
+                            ),
+                          ],
+                          onChanged: (v) {
+                            setState(() {
+                              if (v != null) {
+                                _showMedicineDosisInput = true;
+                                selectedMed = v;
+                                medicineDosis = v.dosis?.mg;
+                                dosisFocusNote.requestFocus();
+                              } else {
+                                _showMedicineDosisInput = false;
+                                selectedMed = null;
+                              }
+                            });
+                          },
+                        ),
+                      ),
+                      if (_showMedicineDosisInput)
+                        const SizedBox(width: 14,),
+                      if (_showMedicineDosisInput)
+                        Expanded(
+                          child: TextFormField(
+                            initialValue: medicineDosis?.toString(),
+                            decoration: InputDecoration(
+                              labelText: localizations.dosis,
+                            ),
+                            focusNode: dosisFocusNote,
+                            keyboardType: TextInputType.number,
+                            onChanged: (value) {
                               setState(() {
-                                if (v != null) {
-                                  _showMedicineDosisInput = true;
-                                  selectedMed = v;
-                                  medicineDosis = v.dosis?.mg;
-                                } else {
-                                  _showMedicineDosisInput = false;
-                                  selectedMed = null;
-                                }
+                                final dosis = int.tryParse(value)?.toDouble()
+                                    ?? double.tryParse(value);
+                                if(dosis != null && dosis > 0) medicineDosis = dosis;
                               });
+                            },
+                            inputFormatters: [FilteringTextInputFormatter.allow(
+                              RegExp(r'([0-9]+(\.([0-9]*))?)'),),],
+                            validator: (String? value) {
+                              if (!_showMedicineDosisInput) return null;
+                              if (((int.tryParse(value ?? '')?.toDouble()
+                                  ?? double.tryParse(value ?? '')) ?? 0) <= 0) {
+                                return localizations.errNaN;
+                              }
+                              return null;
                             },
                           ),
                         ),
-                        if (_showMedicineDosisInput)
-                          const SizedBox(width: 16,),
-                        if (_showMedicineDosisInput)
-                          Expanded(
-                            child: TextFormField(
-                              initialValue: medicineDosis?.toString(),
-                              decoration: InputDecoration(
-                                labelText: localizations.dosis,
-                              ),
-                              keyboardType: TextInputType.number,
-                              onChanged: (value) {
-                                setState(() {
-                                  final dosis = int.tryParse(value)?.toDouble()
-                                      ?? double.tryParse(value);
-                                  if(dosis != null && dosis > 0) medicineDosis = dosis;
-                                });
-                              },
-                              inputFormatters: [FilteringTextInputFormatter.allow(
-                                RegExp(r'([0-9]+(\.([0-9]*))?)'),),],
-                              validator: (String? value) {
-                                if (!_showMedicineDosisInput) return null;
-                                if (((int.tryParse(value ?? '')?.toDouble()
-                                    ?? double.tryParse(value ?? '')) ?? 0) <= 0) {
-                                  return localizations.errNaN;
-                                }
-                                return null;
-                              },
-                            ),
-                          ),
-                      ],
-                    ),
+                    ],
                   ),
                 ),
               ),
@@ -473,20 +420,23 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
 
 /// Shows a dialoge to input a blood pressure measurement or a medication.
 Future<FullEntry?> showAddEntryDialoge(
-    BuildContext context,
-    Settings settings,
-    MedicineRepository medRepo,
-    [FullEntry? initialRecord,]) =>
-  showDialog<FullEntry>(
+  BuildContext context,
+  Settings settings,
+  MedicineRepository medRepo,
+  [FullEntry? initialRecord,
+]) async {
+  final meds = await medRepo.getAll();
+  return showDialog<FullEntry>(
       context: context, builder: (context) =>
       Dialog.fullscreen(
         child: AddEntryDialoge(
           settings: settings,
           initialRecord: initialRecord,
-          medRepo: medRepo,
+          availableMeds: meds,
         ),
       ),
   );
+}
 
 /// Allow correctly saving entries in the contexts repositories.
 extension AddEntries on BuildContext {
@@ -522,3 +472,5 @@ extension AddEntries on BuildContext {
     }
   }
 }
+
+// FIXME: there is a record validation error when only med is selected and has no dosis
