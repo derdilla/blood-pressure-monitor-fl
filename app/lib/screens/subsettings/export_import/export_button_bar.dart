@@ -179,7 +179,9 @@ Future<List<FullEntry>> _getEntries(BuildContext context) async {
   final notes = await noteRepo.get(range);
   final intakes = await intakeRepo.get(range);
 
-  return FullEntryList.merged(records, notes, intakes);
+  final entries = FullEntryList.merged(records, notes, intakes);
+  entries.sort((a, b) => a.time.compareTo(b.time));
+  return entries;
 }
 
 /// Save to default export path or share by providing a path.
