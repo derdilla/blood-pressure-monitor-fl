@@ -25,9 +25,8 @@ class BloodPressureBuilder extends StatelessWidget {
   Widget build(BuildContext context) =>
     RepositoryBuilder<BloodPressureRecord, BloodPressureRepository>(
       rangeType: rangeType,
-      // TODO: Figure out why type safety isn't possible. (see home_screen for more info)
-      onData: (context, List<dynamic> data) =>
-        onData(context, UnmodifiableListView(data.cast())),
+      onData: (context, List<BloodPressureRecord> data) =>
+        onData(context, UnmodifiableListView(data)),
   );
   
 }

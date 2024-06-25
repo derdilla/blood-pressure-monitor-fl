@@ -97,7 +97,7 @@ class _ConsistentFutureBuilderState<T>
           return widget.onWaiting ?? Text(localizations?.loading
               ?? 'loading...',);
         case ConnectionState.done:
-          _lastChild = widget.onData(context, snapshot.data as T);
+          _lastChild = widget.onData(context, snapshot.data!);
           return _lastChild!;
       }
     },

@@ -60,19 +60,14 @@ class AppHome extends StatelessWidget {
                         rangeType: IntervallStoreManagerLocation.mainPage,
                         onData: (context, records) => RepositoryBuilder<MedicineIntake, MedicineIntakeRepository>(
                           rangeType: IntervallStoreManagerLocation.mainPage,
-                          onData: (BuildContext context, List<dynamic> intakes) => RepositoryBuilder<Note, NoteRepository>(
+                          onData: (BuildContext context, List<MedicineIntake> intakes) => RepositoryBuilder<Note, NoteRepository>(
                             rangeType: IntervallStoreManagerLocation.mainPage,
-                            onData: (BuildContext context, List<dynamic> notes) => MeasurementList(
+                            onData: (BuildContext context, List<Note> notes) => MeasurementList(
                               settings: settings,
                               records: records,
-                              // The following cast is necessary to avoid a type
-                              // error. I'm not sure why this is necessary as the
-                              // generics _should_ be typesafe. The safety of this
-                              // cast has been proven in practice.
-                              // TODO: Figure out why type safety isn't possible.
                               notes: notes.cast(),
                               intakes: intakes.cast(),
-                            ) as Widget,
+                            ),
                           ),
                         ),
                       ),

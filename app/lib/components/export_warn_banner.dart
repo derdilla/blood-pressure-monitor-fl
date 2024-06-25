@@ -115,7 +115,6 @@ class _ExportWarnBannerState extends State<ExportWarnBanner> {
     ), localizations,);
   }
 
-  // TODO: ensure this is used instead of material banner everywhere in the app.
   Widget _banner(String text, AppLocalizations localizations) => CustomBanner(
       content: Text(text),
       action: TextButton(

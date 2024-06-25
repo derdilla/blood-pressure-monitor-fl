@@ -20,10 +20,10 @@ class RepositoryBuilder<T, R extends Repository<T>> extends StatefulWidget {
   final Widget Function(BuildContext, List<T>) onData;
 
   @override
-  State<RepositoryBuilder> createState() => _RepositoryBuilderState<T, R>();
+  State<RepositoryBuilder<T, R>> createState() => _RepositoryBuilderState<T, R>();
 }
 
-class _RepositoryBuilderState<T, R extends Repository<T>> extends State<RepositoryBuilder> {
+class _RepositoryBuilderState<T, R extends Repository<T>> extends State<RepositoryBuilder<T, R>> {
   late final R _repo;
 
   @override
@@ -46,4 +46,3 @@ class _RepositoryBuilderState<T, R extends Repository<T>> extends State<Reposito
     },
   );
 }
-// TODO: test
