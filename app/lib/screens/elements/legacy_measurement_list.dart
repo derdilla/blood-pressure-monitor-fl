@@ -1,7 +1,7 @@
 import 'dart:collection';
 
 import 'package:blood_pressure_app/components/dialoges/add_measurement_dialoge.dart';
-import 'package:blood_pressure_app/components/measurement_list/measurement_list_entry.dart';
+import 'package:blood_pressure_app/components/dialoges/confirm_deletion_dialoge.dart';
 import 'package:blood_pressure_app/model/storage/intervall_store.dart';
 import 'package:blood_pressure_app/model/storage/settings_store.dart';
 import 'package:blood_pressure_app/screens/elements/blood_pressure_builder.dart';
