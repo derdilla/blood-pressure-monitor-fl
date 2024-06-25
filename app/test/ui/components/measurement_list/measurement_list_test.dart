@@ -27,14 +27,14 @@ void main() {
     expect(find.text('2022'), findsOneWidget);
     expect(find.text('2023'), findsOneWidget);
   });
-  testWidgets('entries are ordered in chronological order', (tester) async {
+  testWidgets('entries are ordered in reversed chronological order', (tester) async {
     await tester.pumpWidget(materialApp(
       MeasurementList(
         settings: Settings(),
         records: [
           mockRecord(time: DateTime.fromMillisecondsSinceEpoch(2000), sys: 2),
-          mockRecord(time: DateTime.fromMillisecondsSinceEpoch(1000), sys: 1),
-          mockRecord(time: DateTime.fromMillisecondsSinceEpoch(4000), sys: 3),
+          mockRecord(time: DateTime.fromMillisecondsSinceEpoch(4000), sys: 1),
+          mockRecord(time: DateTime.fromMillisecondsSinceEpoch(1000), sys: 3),
         ],
         notes: [],
         intakes: [],

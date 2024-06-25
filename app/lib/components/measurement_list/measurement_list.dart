@@ -33,7 +33,7 @@ class MeasurementList extends StatelessWidget {
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
     final entries = FullEntryList.merged(records, notes, intakes);
-    entries.sort((a, b) => a.time.compareTo(b.time)); // FIXme everywhere else
+    entries.sort((a, b) => b.time.compareTo(a.time)); // newest first
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [

@@ -150,7 +150,6 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
         || noteFocusNode.hasFocus && (notes?.isEmpty ?? true)
     ) {
       FocusScope.of(context).previousFocus();
-      print('backfocus');
     }
     return false;
   }
@@ -175,7 +174,6 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
       onChanged: (String value) {
         if (value.isNotEmpty
             && (int.tryParse(value) ?? -1) > 40) {
-          print('object');
           FocusScope.of(context).nextFocus();
         }
       },

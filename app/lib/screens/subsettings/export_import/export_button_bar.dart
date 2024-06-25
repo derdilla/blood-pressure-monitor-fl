@@ -168,7 +168,7 @@ void performExport(BuildContext context, [AppLocalizations? localizations]) asyn
   }
 }
 
-/// Get the records that should be exported.
+/// Get the records that should be exported (oldest first).
 Future<List<FullEntry>> _getEntries(BuildContext context) async {
   final range = Provider.of<IntervallStoreManager>(context, listen: false).exportPage.currentRange;
   final bpRepo = RepositoryProvider.of<BloodPressureRepository>(context);

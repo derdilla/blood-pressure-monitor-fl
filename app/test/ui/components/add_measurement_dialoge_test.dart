@@ -14,10 +14,9 @@ import 'util.dart';
 void main() {
   group('AddEntryDialoge', () {
     testWidgets('should show everything on initial page', (tester) async {
-      final repo = medRepo();
       await tester.pumpWidget(materialApp(
         AddEntryDialoge(
-          medRepo: repo,
+          availableMeds: [],
           settings: Settings(),
         ),
       ),);
@@ -38,7 +37,7 @@ void main() {
           initialRecord: mockEntryPos(
             DateTime.now(), 123, 56, 43, 'Test note', Colors.teal,
           ),
-          medRepo: medRepo(),
+          availableMeds: [],
         ),
       ),);
       await tester.pumpAndSettle();
@@ -56,7 +55,7 @@ void main() {
       await tester.pumpWidget(materialApp(
         AddEntryDialoge(
           settings: Settings(),
-          medRepo: medRepo([mockMedicine(designation: 'testmed')]),
+          availableMeds: [ mockMedicine(designation: 'testmed') ],
         ),
       ),);
       await tester.pumpAndSettle();
@@ -75,7 +74,7 @@ void main() {
       await tester.pumpWidget(materialApp(
         AddEntryDialoge(
           settings: Settings(),
-          medRepo: medRepo([mockMedicine(designation: 'testmed')]),
+          availableMeds: [ mockMedicine(designation: 'testmed') ],
         ),
       ),);
       await tester.pumpAndSettle();
@@ -105,7 +104,7 @@ void main() {
       await tester.pumpWidget(materialApp(
         AddEntryDialoge(
           settings: Settings(),
-          medRepo: medRepo([mockMedicine(designation: 'testmed', defaultDosis: 3.1415)]),
+          availableMeds: [ mockMedicine(designation: 'testmed', defaultDosis: 3.1415) ],
         ),
       ),);
       await tester.pumpAndSettle();
@@ -122,7 +121,7 @@ void main() {
       await tester.pumpWidget(materialApp(
         AddEntryDialoge(
           settings: Settings(),
-          medRepo: medRepo([mockMedicine(designation: 'testmed', defaultDosis: 3.1415)]),
+          availableMeds: [ mockMedicine(designation: 'testmed', defaultDosis: 3.1415) ],
         ),
       ),);
       await tester.pumpAndSettle();
