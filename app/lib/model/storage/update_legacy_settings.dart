@@ -181,7 +181,7 @@ Future<void> updateLegacySettings(Settings settings, ExportSettings exportSettin
             HorizontalGraphLine.fromJson(jsonDecode(e)),).toList();
         break;
       case 'useLegacyList':
-        settings.useLegacyList = sharedPreferences.getBool(key)!;
+        settings.compactList = sharedPreferences.getBool(key)!;
         break;
       case 'lastAppVersion':
         break;

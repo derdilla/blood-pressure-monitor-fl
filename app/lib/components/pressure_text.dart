@@ -20,6 +20,6 @@ class PressureText extends StatelessWidget {
     switch (context.watch<Settings>().preferredPressureUnit) {
       PressureUnit.mmHg => pressure?.mmHg,
       PressureUnit.kPa => pressure?.kPa,
-    }.toString(),
+    }?.toString(),
   );
 }

@@ -139,7 +139,7 @@ class Settings extends ChangeNotifier {
       'allowMissingValues': allowMissingValues,
       'drawRegressionLines': drawRegressionLines,
       'startWithAddMeasurementPage': startWithAddMeasurementPage,
-      'useLegacyList': useLegacyList,
+      'useLegacyList': compactList,
       'language': ConvertUtil.serializeLocale(language),
       'horizontalGraphLines': horizontalGraphLines.map(jsonEncode).toList(),
       'needlePinBarWidth': _needlePinBarWidth,
@@ -322,8 +322,8 @@ class Settings extends ChangeNotifier {
 
   bool _useLegacyList = false;
   /// Whether to use the compact list with swipe deletion.
-  bool get useLegacyList => _useLegacyList;
-  set useLegacyList(bool value) {
+  bool get compactList => _useLegacyList;
+  set compactList(bool value) {
     _useLegacyList = value;
     notifyListeners();
   }

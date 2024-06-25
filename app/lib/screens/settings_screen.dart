@@ -133,12 +133,12 @@ class SettingsPage extends StatelessWidget {
                 initialColor: settings.pulColor,
                 title: Text(localizations.pulColor),),
               SwitchListTile(
-                value: settings.useLegacyList,
+                value: settings.compactList,
                 onChanged: (value) {
-                  settings.useLegacyList = value;
+                  settings.compactList = value;
                 },
                 secondary: const Icon(Icons.list_alt_outlined),
-                title: Text(localizations.useLegacyList),),
+                title: Text(localizations.compactList),),
             ],),
 
             TitledColumn(title: Text(localizations.behavior), children: [

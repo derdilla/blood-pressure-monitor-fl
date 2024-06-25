@@ -54,23 +54,29 @@ class AppHome extends StatelessWidget {
                     sys:Pressure.mmHg(1), dia: Pressure.mmHg(2), pul: 3), Note(time: DateTime(2023), note: 'testTxt',), [])),*/
                   const MeasurementGraph(),
                   Expanded(
-                    child: (settings.useLegacyList) ?
-                      LegacyMeasurementsList(context) :
-                      BloodPressureBuilder(
+                    child: BloodPressureBuilder(
+                      rangeType: IntervallStoreManagerLocation.mainPage,
+                      onData: (context, records) => RepositoryBuilder<MedicineIntake, MedicineIntakeRepository>(
                         rangeType: IntervallStoreManagerLocation.mainPage,
-                        onData: (context, records) => RepositoryBuilder<MedicineIntake, MedicineIntakeRepository>(
+                        onData: (BuildContext context, List<MedicineIntake> intakes) => RepositoryBuilder<Note, NoteRepository>(
                           rangeType: IntervallStoreManagerLocation.mainPage,
-                          onData: (BuildContext context, List<MedicineIntake> intakes) => RepositoryBuilder<Note, NoteRepository>(
-                            rangeType: IntervallStoreManagerLocation.mainPage,
-                            onData: (BuildContext context, List<Note> notes) => MeasurementList(
+                          onData: (BuildContext context, List<Note> notes) {
+                            final entries = FullEntryList.merged(records, notes, intakes);
+                            entries.sort((a, b) => b.time.compareTo(a.time)); // newest first
+                            if (settings.compactList) {
+                              return LegacyMeasurementsList(
+                                data: entries,
+                                settings: settings,
+                              );
+                            }
+                            return MeasurementList(
                               settings: settings,
-                              records: records,
-                              notes: notes.cast(),
-                              intakes: intakes.cast(),
-                            ),
-                          ),
+                              entries: entries,
+                            );
+                          },
                         ),
                       ),
+                    ),
                   ),
                 ],),
               ),),

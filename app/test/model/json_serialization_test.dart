@@ -114,7 +114,7 @@ void main() {
       expect(initial.allowMissingValues, fromJson.allowMissingValues);
       expect(initial.drawRegressionLines, fromJson.drawRegressionLines);
       expect(initial.startWithAddMeasurementPage, fromJson.startWithAddMeasurementPage);
-      expect(initial.useLegacyList, fromJson.useLegacyList);
+      expect(initial.compactList, fromJson.compactList);
       expect(initial.horizontalGraphLines.length, fromJson.horizontalGraphLines.length);
       expect(initial.horizontalGraphLines.first.color.value, fromJson.horizontalGraphLines.first.color.value);
       expect(initial.horizontalGraphLines.first.height, fromJson.horizontalGraphLines.first.height);
@@ -140,7 +140,7 @@ void main() {
 
       expect(v1.pulColor.value, Settings().pulColor.value);
       expect(v2.validateInputs, Settings().validateInputs);
-      expect(v3.useLegacyList, Settings().useLegacyList);
+      expect(v3.compactList, Settings().compactList);
     });
   });
 

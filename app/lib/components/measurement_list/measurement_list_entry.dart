@@ -7,6 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:health_data_store/health_data_store.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 /// Display of a blood pressure measurement data.
 class MeasurementListRow extends StatelessWidget {
@@ -24,7 +25,7 @@ class MeasurementListRow extends StatelessWidget {
   final Settings settings;
 
   /// Called when the user taps on the edit icon.
-  final void Function() onRequestEdit;
+  final void Function() onRequestEdit; // TODO: consider removing in favor of context methods
 
   @override
   Widget build(BuildContext context) {
@@ -51,7 +52,7 @@ class MeasurementListRow extends StatelessWidget {
                 tooltip: localizations.edit,
               ),
               IconButton(
-                onPressed: () => _deleteEntry(settings, context, localizations),
+                onPressed: () => context.deleteEntry(data),
                 icon: const Icon(Icons.delete),
                 tooltip: localizations.delete,
               ),
@@ -112,27 +113,33 @@ class MeasurementListRow extends StatelessWidget {
       ),
     ],
   );
+}
 
-  void _deleteEntry(Settings settings, BuildContext context, AppLocalizations localizations) async {
-    final bpRepo = RepositoryProvider.of<BloodPressureRepository>(context); // TODO: extract
-    final noteRepo = RepositoryProvider.of<NoteRepository>(context);
-    final messenger = ScaffoldMessenger.of(context);
+extension DeleteEntry on BuildContext {
+  /// Delete record and note of an entry from the repositories.
+  Future<void> deleteEntry(FullEntry entry) async {
+    final localizations = AppLocalizations.of(this)!;
+    final settings = Provider.of<Settings>(this, listen: false);
+    final bpRepo = RepositoryProvider.of<BloodPressureRepository>(this);
+    final noteRepo = RepositoryProvider.of<NoteRepository>(this);
+    final messenger = ScaffoldMessenger.of(this);
+
     bool confirmedDeletion = true;
     if (settings.confirmDeletion) {
-      confirmedDeletion = await showConfirmDeletionDialoge(context);
+      confirmedDeletion = await showConfirmDeletionDialoge(this);
     }
 
     if (confirmedDeletion) {
-      await bpRepo.remove(data.$1);
-      await noteRepo.remove(data.$2);
+      await bpRepo.remove(entry.$1);
+      await noteRepo.remove(entry.$2);
       messenger.removeCurrentSnackBar();
       messenger.showSnackBar(SnackBar(
         content: Text(localizations.deletionConfirmed),
         action: SnackBarAction(
           label: localizations.btnUndo,
           onPressed: () async {
-            await bpRepo.add(data.$1);
-            await noteRepo.add(data.$2);
+            await bpRepo.add(entry.$1);
+            await noteRepo.add(entry.$2);
           },
         ),
       ),);

@@ -12,28 +12,18 @@ class MeasurementList extends StatelessWidget {
   /// Create a list to display measurements and intakes.
   const MeasurementList({super.key,
     required this.settings,
-    required this.records,
-    required this.notes,
-    required this.intakes,
+    required this.entries,
   });
 
   /// Settings that determine general behavior.
   final Settings settings;
 
-  /// Records to display.
-  final List<BloodPressureRecord> records;
-
-  /// Complementary notes info to show.
-  final List<Note> notes;
-
-  /// Medicine intake info to show.
-  final List<MedicineIntake> intakes;
+  /// Entries sorted with newest comming first.
+  final List<FullEntry> entries;
 
   @override
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
-    final entries = FullEntryList.merged(records, notes, intakes);
-    entries.sort((a, b) => b.time.compareTo(a.time)); // newest first
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
