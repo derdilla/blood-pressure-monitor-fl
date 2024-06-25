@@ -2,9 +2,10 @@ import 'package:blood_pressure_app/components/measurement_list/measurement_list_
 import 'package:blood_pressure_app/model/storage/settings_store.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:health_data_store/health_data_store.dart';
 
-import '../../model/export_import/record_formatter_test.dart';
-import 'util.dart';
+import '../../../model/export_import/record_formatter_test.dart';
+import '../util.dart';
 
 void main() {
   testWidgets('should initialize without errors', (tester) async {
@@ -29,6 +30,7 @@ void main() {
       onRequestEdit: () => fail('should not request edit'),
         settings: Settings(),
         data: mockEntryPos(DateTime(2023), 123, 78, 56),),),);
+    expect(find.byIcon(Icons.medication), findsNothing);
     expect(find.byIcon(Icons.expand_more), findsOneWidget);
     await tester.tap(find.byIcon(Icons.expand_more));
     await tester.pumpAndSettle();
@@ -49,6 +51,7 @@ void main() {
     expect(find.byIcon(Icons.edit), findsNothing);
     expect(find.byIcon(Icons.delete), findsNothing);
 
+    expect(find.byIcon(Icons.medication), findsNothing);
     expect(find.byIcon(Icons.expand_more), findsOneWidget);
     await tester.tap(find.byIcon(Icons.expand_more));
     await tester.pumpAndSettle();
@@ -65,6 +68,7 @@ void main() {
       onRequestEdit: () => fail('should not request edit'),
       settings: Settings(), data: mockEntry(time: DateTime(2023)),),),);
     expect(find.text('null'), findsNothing);
+    expect(find.byIcon(Icons.medication), findsNothing);
     expect(find.byIcon(Icons.expand_more), findsOneWidget);
     await tester.tap(find.byIcon(Icons.expand_more));
     await tester.pumpAndSettle();
@@ -83,6 +87,7 @@ void main() {
       ),
       onRequestEdit: () => requestCount++,
     )));
+    expect(find.byIcon(Icons.medication), findsNothing);
     expect(find.byIcon(Icons.expand_more), findsOneWidget);
     await tester.tap(find.byIcon(Icons.expand_more));
     await tester.pumpAndSettle();
@@ -100,6 +105,35 @@ void main() {
       matching: find.text(txt),
     );*/
 
-
   }, timeout: const Timeout(Duration(seconds: 10)),);
+  testWidgets('should indicate presence of intakes', (tester) async {
+    await tester.pumpWidget(materialApp(MeasurementListRow(
+      onRequestEdit: () => fail('should not request edit'),
+      settings: Settings(),
+      data: mockEntry(
+        time: DateTime(2023),
+        intake: mockIntake(mockMedicine(designation: 'testMed', color: Colors.red), dosis: 12.0),
+      ),
+    ),),);
+    expect(find.byIcon(Icons.medication), findsOneWidget);
+    await tester.tap(find.byIcon(Icons.expand_more));
+    await tester.pumpAndSettle();
+    expect(find.byIcon(Icons.medication), findsNWidgets(2));
+    expect(find.byIcon(Icons.delete), findsNWidgets(2));
+    expect(find.text('testMed'), findsOneWidget);
+    expect(find.text('12.0mg'), findsOneWidget);
+    
+    expect(find.byWidgetPredicate((widget) => widget is Icon
+      && widget.icon == Icons.medication
+      && widget.color?.value == Colors.red.value), findsOneWidget);
+  });
 }
+
+MedicineIntake mockIntake(Medicine medicine, {
+  int? time,
+  double? dosis,
+}) => MedicineIntake(
+  time: time!=null ? DateTime.fromMillisecondsSinceEpoch(time) : DateTime.now(),
+  medicine: medicine,
+  dosis: Weight.mg(dosis ?? medicine.dosis?.mg ?? 42.0),
+);

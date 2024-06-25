@@ -85,7 +85,7 @@ class MeasurementListRow extends StatelessWidget {
               },
               icon: const Icon(Icons.delete),
             ),
-          ), // TODO: test
+          ),
       ],
     );
   }
@@ -110,7 +110,7 @@ class MeasurementListRow extends StatelessWidget {
           flex: 30,
           child: Text(formatNum(data.pul)),
         ),
-        Expanded( // TODO: test
+        Expanded(
           flex: 10,
           child: data.$3.isNotEmpty ? Icon(Icons.medication) : SizedBox.shrink(),
         ),

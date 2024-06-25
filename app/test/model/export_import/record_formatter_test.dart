@@ -150,6 +150,7 @@ FullEntry mockEntry({
   int? pul,
   String? note,
   Color? pin,
+  MedicineIntake? intake,
 }) {
   time ??= DateTime.now();
   return (
@@ -164,6 +165,6 @@ FullEntry mockEntry({
       note: note,
       color: pin?.value,
     ),
-    [],
+    (intake == null ? [] : [ intake ]),
   );
 }

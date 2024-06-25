@@ -468,5 +468,3 @@ extension AddEntries on BuildContext {
     }
   }
 }
-
-// FIXME: there is a record validation error when only med is selected and has no dosis
