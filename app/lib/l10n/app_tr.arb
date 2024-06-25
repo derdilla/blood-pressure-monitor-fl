@@ -453,7 +453,7 @@
   },
   "addMedication": "İlaç ekle",
   "@addMedication": {},
-  "defaultDosis": "öntanımlı doz",
+  "defaultDosis": "Öntanımlı doz",
   "@defaultDosis": {},
   "exportFieldsPreset": "Alan ön ayarlarını dışa aktar",
   "@exportFieldsPreset": {},
@@ -502,5 +502,9 @@
         "type": "String"
       }
     }
-  }
+  },
+  "preferredPressureUnit": "Tercih edilen basınç birimi",
+  "@preferredPressureUnit": {},
+  "titleInCsv": "CSV başlığı",
+  "@titleInCsv": {}
 }

@@ -105,6 +105,8 @@ class ConfigDB {
       onUpgrade: _onDBUpgrade,
       // When increasing the version an update procedure from every other possible version is needed
       version: 3,
+      // In integration tests the file may be deleted which causes deadlocks.
+      singleInstance: false,
     );
   }
 

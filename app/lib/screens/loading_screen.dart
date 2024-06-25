@@ -23,7 +23,7 @@ class LoadingScreen extends StatelessWidget {
           builder: (BuildContext context, double value, Widget? child) => Container(
               padding: const EdgeInsets.only(bottom: 100),
               child: SizedBox.square(
-                dimension: dimensions.width - 20,
+                dimension: max(0, dimensions.width - 20),
                 child: CustomPaint(
                   painter: _LogoPainter(progress: value),
                 ),

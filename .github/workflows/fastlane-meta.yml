@@ -1,4 +1,4 @@
-name: Fastlane Metadata
+name: '📋 Fastlane'
 on:
   push:
     branches:

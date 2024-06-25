@@ -9,6 +9,7 @@ import 'package:provider/provider.dart';
 class GraphMarkingsScreen extends StatelessWidget {
   const GraphMarkingsScreen({super.key});
 
+  // TODO: consider adding fullscreen dialoge for adding markings (like medicine)
   @override
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;

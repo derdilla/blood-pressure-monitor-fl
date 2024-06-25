@@ -1,3 +1,4 @@
+import 'package:blood_pressure_app/components/bluetooth_input.dart';
 import 'package:blood_pressure_app/components/dialoges/add_measurement_dialoge.dart';
 import 'package:blood_pressure_app/components/settings/color_picker_list_tile.dart';
 import 'package:blood_pressure_app/model/storage/settings_store.dart';
@@ -146,6 +147,22 @@ void main() {
 
       expect(find.byType(AddEntryDialoge), findsOneWidget);
       expect(find.text(localizations.errUnrealistic), findsOneWidget);
+    });
+    testWidgets('respects settings about showing bluetooth input', (tester) async {
+      final settings = Settings(
+        bleInput: true,
+      );
+      await tester.pumpWidget(materialApp(
+        AddEntryDialoge(
+          settings: settings,
+        ),
+      ),);
+      await tester.pumpAndSettle();
+      expect(find.byType(BluetoothInput, skipOffstage: false), findsOneWidget);
+
+      settings.bleInput = false;
+      await tester.pumpAndSettle();
+      expect(find.byType(BluetoothInput), findsNothing);
     });
   });
   group('showAddEntryDialoge', () {

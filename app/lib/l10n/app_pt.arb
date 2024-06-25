@@ -427,5 +427,82 @@
   "color": "Cor",
   "@color": {},
   "needlePinBarWidth": "Espessura de cor",
-  "@needlePinBarWidth": {}
+  "@needlePinBarWidth": {},
+  "valueDistribution": "Distribuição de valor",
+  "@valueDistribution": {},
+  "warnNeedsRestartForUsingApp": "Os ficheiros foram eliminados nesta sessão. Reinicie a aplicação para utilizar outras partes da aplicação!",
+  "@warnNeedsRestartForUsingApp": {},
+  "needlePinBarWidthDesc": "A largura das linhas que as entradas coloridas fazem no gráfico.",
+  "@needlePinBarWidthDesc": {},
+  "bottomAppBars": "Barras de diálogo inferiores",
+  "@bottomAppBars": {},
+  "useLegacyList": "Utilizar lista de legado",
+  "@useLegacyList": {},
+  "timestamp": "Registo de data e hora",
+  "@timestamp": {},
+  "deleteAllMeasurements": "Eliminar todas as medições",
+  "@deleteAllMeasurements": {},
+  "errExportColumnWithThisNameAlreadyExists": "Já existe uma coluna com este nome.",
+  "@errExportColumnWithThisNameAlreadyExists": {},
+  "errParseEmptyCsvFile": "Não há linhas suficientes no arquivo CSV para analisar o registo.",
+  "@errParseEmptyCsvFile": {},
+  "errParseTimeNotRestoreable": "Não há uma coluna que permita restaurar o registo de data e hora.",
+  "@errParseTimeNotRestoreable": {},
+  "errParseUnknownColumn": "Não há nenhuma coluna com o título \"{title}\".",
+  "@errParseUnknownColumn": {
+    "placeholders": {
+      "title": {
+        "type": "String"
+      }
+    }
+  },
+  "errParseLineTooShort": "A linha {lineNumber} tem menos colunas do que a primeira linha.",
+  "@errParseLineTooShort": {
+    "placeholders": {
+      "lineNumber": {
+        "type": "int"
+      }
+    }
+  },
+  "errParseFailedDecodingField": "Erro ao descodificar o campo \"{fieldContent}\" na linha {lineNumber}.",
+  "@errParseFailedDecodingField": {
+    "placeholders": {
+      "lineNumber": {
+        "type": "int"
+      },
+      "fieldContent": {
+        "type": "String"
+      }
+    }
+  },
+  "exportFieldsPreset": "Predefinição de campos de exportação",
+  "@exportFieldsPreset": {},
+  "remove": "Remover",
+  "@remove": {},
+  "manageExportColumns": "Gerir colunas de exportação",
+  "@manageExportColumns": {},
+  "buildIn": "Integrar",
+  "@buildIn": {},
+  "csvTitle": "Título CSV",
+  "@csvTitle": {},
+  "recordFormat": "Formato de registo",
+  "@recordFormat": {},
+  "timeFormat": "Formato de hora",
+  "@timeFormat": {},
+  "errAccuracyLoss": "É expectável que perca precisão ao exportar com formatos de tempo personalizados.",
+  "@errAccuracyLoss": {},
+  "medications": "Medicamentos",
+  "@medications": {},
+  "addMedication": "Adicionar medicação",
+  "@addMedication": {},
+  "name": "Nome",
+  "@name": {},
+  "defaultDosis": "dose padrão",
+  "@defaultDosis": {},
+  "noMedication": "Sem medicação",
+  "@noMedication": {},
+  "dosis": "Dose",
+  "@dosis": {},
+  "titleInCsv": "Título em CSV",
+  "@titleInCsv": {}
 }

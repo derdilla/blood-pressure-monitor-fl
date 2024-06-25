@@ -2,50 +2,56 @@ name: blood_pressure_app
 description: Track your blood pressure wherever you go
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
-version: 1.6.3
+version: 1.6.4+34
+# F-Droid needs the Flutter version used to build releases to be in the repository.
+# f-droid-flutter: 3.22.0-0.2.pre
 
 environment:
   sdk: '>=3.0.2 <4.0.0'
 
 dependencies:
-  csv: ^5.0.2
+  csv: ^6.0.0
   collection: ^1.17.1
   intl: any
   flutter:
     sdk: flutter
   flutter_localizations:
     sdk: flutter
-  flutter_markdown: ^0.6.17
-  fl_chart: ^0.63.0
+  flutter_markdown: ^0.7.1
+  fl_chart: ^0.67.0
   function_tree: ^0.9.0
   provider: ^6.0.0
   path:
   pdf: ^3.10.4
-  package_info_plus: ^4.0.2
+  package_info_plus: ^8.0.0
   sqflite:
   shared_preferences: ^2.1.1
   url_launcher: ^6.1.11
   health_data_store:
     path: ../health_data_store/
-  sqlparser: ^0.34.1
+  sqlparser: ^0.35.1
   flutter_bloc: ^8.1.4
-  flutter_reactive_ble: ^5.3.1
-  permission_handler: ^11.3.1
+  convert: ^3.1.1
+  flutter_blue_plus: ^1.32.4
 
   # can become one custom dependency
-  file_picker: ^5.2.11  # MIT
+  file_picker: ^8.0.3
   jsaver: ^1.2.0
-  restart_app: ^1.2.1
   fluttertoast: ^8.2.4
+  app_settings: ^5.1.1
 
 dev_dependencies:
+  integration_test:
+    sdk: flutter
   file: any
   flutter_test:
     sdk: flutter
-  flutter_lints: ^2.0.0
+  flutter_lints: ^3.0.2
   mockito: ^5.4.1
   sqflite_common_ffi: ^2.3.0
   translations_cleaner: ^0.0.5
+  build_runner: ^2.4.9
+  bloc_test: ^9.1.7
 
 flutter:
   uses-material-design: true

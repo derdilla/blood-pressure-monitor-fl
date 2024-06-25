@@ -495,12 +495,16 @@
   "@errAccuracyLoss": {},
   "name": "Nombre",
   "@name": {},
-  "defaultDosis": "dosis predeterminada",
+  "defaultDosis": "Dosis predeterminada",
   "@defaultDosis": {},
   "csv": "CSV",
   "@csv": {},
   "pdf": "PDF",
   "@pdf": {},
   "db": "SQLite DB",
-  "@db": {}
+  "@db": {},
+  "titleInCsv": "Título en CSV",
+  "@titleInCsv": {},
+  "preferredPressureUnit": "Unidad de presión preferida",
+  "@preferredPressureUnit": {}
 }

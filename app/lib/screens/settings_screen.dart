@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:blood_pressure_app/components/consistent_future_builder.dart';
+import 'package:blood_pressure_app/components/custom_banner.dart';
 import 'package:blood_pressure_app/components/dialoges/enter_timeformat_dialoge.dart';
 import 'package:blood_pressure_app/components/dialoges/input_dialoge.dart';
 import 'package:blood_pressure_app/components/settings/settings_widgets.dart';
@@ -24,7 +25,6 @@ import 'package:health_data_store/health_data_store.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:path/path.dart';
 import 'package:provider/provider.dart';
-import 'package:restart_app/restart_app.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -45,6 +45,7 @@ class SettingsPage extends StatelessWidget {
           children: [
             TitledColumn(title: Text(localizations.layout), children: [
               ListTile(
+                key: const Key('EnterTimeFormatScreen'),
                 title: Text(localizations.enterTimeFormatScreen),
                 subtitle: Text(settings.dateFormatString),
                 leading: const Icon(Icons.schedule),
@@ -151,6 +152,13 @@ class SettingsPage extends StatelessWidget {
                 title: Text(localizations.medications),
                 trailing: const Icon(Icons.arrow_forward_ios),
               ),
+              SwitchListTile(
+                value: settings.bleInput,
+                onChanged: (value) {
+                  settings.bleInput = value;
+                },
+                secondary: const Icon(Icons.bluetooth),
+                title: Text(localizations.bluetoothInput),),
               SwitchListTile(
                 value: settings.allowManualTimeInput,
                 onChanged: (value) {
@@ -318,13 +326,10 @@ class SettingsPage extends StatelessWidget {
                     }
 
                     String dbPath = await getDatabasesPath();
-                    assert(dbPath != inMemoryDatabasePath);
                     dbPath = join(dbPath, 'config.db');
                     File(path).copySync(dbPath);
-                    if (!await Restart.restartApp()) {
-                      messenger.showSnackBar(SnackBar(content: Text(localizations.pleaseRestart)));
-                      return;
-                    }
+                    messenger.showMaterialBanner(CustomBanner(content: Text(localizations.pleaseRestart)));
+                    // TODO: read settings and replace them on running app.
                   },
                 ),
                 ListTile(

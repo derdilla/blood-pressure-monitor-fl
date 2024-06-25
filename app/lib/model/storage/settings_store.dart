@@ -43,8 +43,10 @@ class Settings extends ChangeNotifier {
     bool? useLegacyList,
     bool? bottomAppBars,
     List<Medicine>? medications,
-    int? highestMedIndex,
     PressureUnit? preferredPressureUnit,
+    List<String>? knownBleDev,
+    int? highestMedIndex,
+    bool? bleInput,
   }) {
     if (accentColor != null) _accentColor = accentColor;
     if (sysColor != null) _sysColor = sysColor;
@@ -68,8 +70,10 @@ class Settings extends ChangeNotifier {
     if (lastVersion != null) _lastVersion = lastVersion;
     if (bottomAppBars != null) _bottomAppBars = bottomAppBars;
     if (medications != null) _medications.addAll(medications);
-    if (highestMedIndex != null) _highestMedIndex = highestMedIndex;
     if (preferredPressureUnit != null) _preferredPressureUnit = preferredPressureUnit;
+    if (highestMedIndex != null) _highestMedIndex = highestMedIndex;
+    if (knownBleDev != null) _knownBleDev = knownBleDev;
+    if (bleInput != null) _bleInput = bleInput;
     _language = language; // No check here, as null is the default as well.
   }
 
@@ -102,7 +106,8 @@ class Settings extends ChangeNotifier {
       medications: ConvertUtil.parseList<String>(map['medications'])?.map((e) =>
           Medicine.fromJson(jsonDecode(e)),).toList(),
       highestMedIndex: ConvertUtil.parseInt(map['highestMedIndex']),
-      preferredPressureUnit: PressureUnit.decode(ConvertUtil.parseInt(map['preferredPressureUnit'])),
+      knownBleDev: ConvertUtil.parseList<String>(map['knownBleDev']),
+      bleInput: ConvertUtil.parseBool(map['bleInput']),
     );
 
     // update
@@ -123,34 +128,68 @@ class Settings extends ChangeNotifier {
 
   /// Serialize the object to a restoreable map.
   Map<String, dynamic> toMap() => <String, dynamic>{
-      'accentColor': accentColor.value,
-      'sysColor': sysColor.value,
-      'diaColor': diaColor.value,
-      'pulColor': pulColor.value,
-      'dateFormatString': dateFormatString,
-      'graphLineThickness': graphLineThickness,
-      'animationSpeed': animationSpeed,
-      'sysWarn': sysWarn,
-      'diaWarn': diaWarn,
-      'allowManualTimeInput': allowManualTimeInput,
-      'confirmDeletion': confirmDeletion,
-      'themeMode': themeMode.serialize(),
-      'validateInputs': validateInputs,
-      'allowMissingValues': allowMissingValues,
-      'drawRegressionLines': drawRegressionLines,
-      'startWithAddMeasurementPage': startWithAddMeasurementPage,
-      'useLegacyList': compactList,
-      'language': ConvertUtil.serializeLocale(language),
-      'horizontalGraphLines': horizontalGraphLines.map(jsonEncode).toList(),
-      'needlePinBarWidth': _needlePinBarWidth,
-      'lastVersion': lastVersion,
-      'bottomAppBars': bottomAppBars,
-      'highestMedIndex': highestMedIndex,
-      'preferredPressureUnit': preferredPressureUnit.encode(),
-    };
+    'accentColor': accentColor.value,
+    'sysColor': sysColor.value,
+    'diaColor': diaColor.value,
+    'pulColor': pulColor.value,
+    'dateFormatString': dateFormatString,
+    'graphLineThickness': graphLineThickness,
+    'animationSpeed': animationSpeed,
+    'sysWarn': sysWarn,
+    'diaWarn': diaWarn,
+    'allowManualTimeInput': allowManualTimeInput,
+    'confirmDeletion': confirmDeletion,
+    'themeMode': themeMode.serialize(),
+    'validateInputs': validateInputs,
+    'allowMissingValues': allowMissingValues,
+    'drawRegressionLines': drawRegressionLines,
+    'startWithAddMeasurementPage': startWithAddMeasurementPage,
+    'useLegacyList': useLegacyList,
+    'language': ConvertUtil.serializeLocale(language),
+    'horizontalGraphLines': horizontalGraphLines.map(jsonEncode).toList(),
+    'needlePinBarWidth': _needlePinBarWidth,
+    'lastVersion': lastVersion,
+    'bottomAppBars': bottomAppBars,
+    'medications': medications.map(jsonEncode).toList(),
+    'highestMedIndex': highestMedIndex,
+    'preferredPressureUnit': preferredPressureUnit.encode(),
+    'knownBleDev': knownBleDev,
+    'bleInput': bleInput,
+  };
 
   /// Serialize the object to a restoreable string.
   String toJson() => jsonEncode(toMap());
+
+  /// Reset all fields to their default values.
+  void reset() {
+    final d = Settings();
+    _language = d._language;
+    _accentColor = d._accentColor;
+    _sysColor = d._sysColor;
+    _diaColor = d._diaColor;
+    _pulColor = d._pulColor;
+    _horizontalGraphLines = d._horizontalGraphLines;
+    _dateFormatString = d._dateFormatString;
+    _graphLineThickness = d._graphLineThickness;
+    _needlePinBarWidth = d._needlePinBarWidth;
+    _animationSpeed = d._animationSpeed;
+    _sysWarn = d._sysWarn;
+    _diaWarn = d._diaWarn;
+    _lastVersion = d._lastVersion;
+    _allowManualTimeInput = d._allowManualTimeInput;
+    _confirmDeletion = d._confirmDeletion;
+    _themeMode = d._themeMode;
+    _validateInputs = d._validateInputs;
+    _allowMissingValues = d._allowMissingValues;
+    _drawRegressionLines = d._drawRegressionLines;
+    _startWithAddMeasurementPage = d._startWithAddMeasurementPage;
+    _useLegacyList = d._useLegacyList;
+    _bottomAppBars = d._bottomAppBars;
+    _medications.clear();
+    _highestMedIndex = d._highestMedIndex;
+    _preferredPressureUnit = d._preferredPressureUnit;
+    notifyListeners();
+  }
 
   Locale? _language;
   /// Language to use the app in.
@@ -351,7 +390,26 @@ class Settings extends ChangeNotifier {
     _preferredPressureUnit = value;
     notifyListeners();
   }
-  
+
+  bool _bleInput = true;
+  /// Whether to show bluetooth input on add measurement page.
+  bool get bleInput => _bleInput;
+  set bleInput(bool value) {
+    _bleInput = value;
+    notifyListeners();
+  }
+
+  List<String> _knownBleDev = [];
+  /// Bluetooth devices that previously connected.
+  ///
+  /// The exact value that is stored here is determined in [DeviceScanCubit].
+  UnmodifiableListView<String> get knownBleDev =>
+      UnmodifiableListView(_knownBleDev);
+  set knownBleDev(List<String> value) {
+    _knownBleDev = value;
+    notifyListeners();
+  }
+
   final List<Medicine> _medications = [];
   /// All medications ever added.
   ///

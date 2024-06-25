@@ -65,12 +65,12 @@ class ConfigDao {
   Future<void> _updateSettings(int profileID, Settings settings) async {
     if (!_configDB.database.isOpen) return;
     await _configDB.database.insert(
-        ConfigDB.settingsTable,
-        {
-          'profile_id': profileID,
-          'settings_json': settings.toJson(),
-        },
-        conflictAlgorithm: ConflictAlgorithm.replace,
+      ConfigDB.settingsTable,
+      {
+        'profile_id': profileID,
+        'settings_json': settings.toJson(),
+      },
+      conflictAlgorithm: ConflictAlgorithm.replace,
     );
   }
 

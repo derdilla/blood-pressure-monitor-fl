@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:blood_pressure_app/components/bluetooth_input.dart';
 import 'package:blood_pressure_app/components/dialoges/fullscreen_dialoge.dart';
 import 'package:blood_pressure_app/components/forms/date_time_form.dart';
 import 'package:blood_pressure_app/components/settings/color_picker_list_tile.dart';
@@ -260,6 +261,13 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
         child: ListView(
           padding: const EdgeInsets.symmetric(horizontal: 8),
           children: [
+            if (widget.settings.bleInput)
+              BluetoothInput(
+                settings: widget.settings,
+                onMeasurement: (BloodPressureRecord record) => setState(
+                  () => _loadFields((record, Note(time: record.time, note: noteController.text, color: color?.value), [])),
+                ),
+              ),
             if (widget.settings.allowManualTimeInput)
               ListTileTheme(
                 shape: _buildShapeBorder(),

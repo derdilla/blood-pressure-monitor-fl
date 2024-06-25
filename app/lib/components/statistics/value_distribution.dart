@@ -48,18 +48,15 @@ class ValueDistribution extends StatelessWidget {
       );
     }
 
-    final distribution = <int, double>{};
+    final distribution = <int, int>{};
     for (final v in values) {
       if(distribution.containsKey(v)) {
-        distribution[v] = distribution[v]! + 1.0;
+        distribution[v] = distribution[v]! + 1;
       } else {
-        distribution[v] = 1.0;
+        distribution[v] = 1;
       }
     }
-    // Fill values between
-    for (int x = distribution.keys.min + 1; x < distribution.keys.max -1; x++) {
-      if (!distribution.containsKey(x)) distribution[x] = 0;
-    }
+
     assert(distribution[distribution.keys.max]! > 0);
     assert(distribution[distribution.keys.min]! > 0);
     return ConstrainedBox(
@@ -94,7 +91,7 @@ class _ValueDistributionPainter extends CustomPainter {
   /// height.
   ///
   /// The height of the bar is how often it occurs in a list of values.
-  final Map<int, double> distribution;
+  final Map<int, int> distribution;
 
   /// Text for labels on the graph and for semantics.
   final AppLocalizations localizations;
@@ -107,21 +104,25 @@ class _ValueDistributionPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    assert(size.width >= 180, 'Canvas must be at least 180 pixels high, to avoid overflows.');
-    assert(size.height >= 50, 'Canvas must be at least 50 pixels wide, to avoid overflows.');
+    assert(size.width >= 180, 'Canvas must be at least 180 pixels wide, to avoid overflows.');
+    assert(size.height >= 50, 'Canvas must be at least 50 pixels high, to avoid overflows.');
     if (kDebugMode) {
       distribution.keys.every((e) => e >= 0);
     }
 
-
     // Adapt gap width in case of lots of gaps.
+	  final int barNumber = distribution.keys.max - distribution.keys.min + 1;
     double barGapWidth = _kDefaultBarGapWidth;
     double barWidth = 0;
     while(barWidth < barGapWidth && barGapWidth > 1) {
       barGapWidth -= 1;
       barWidth = ((size.width + barGapWidth) // fix trailing gap
-          / distribution.length) - barGapWidth;
+          / barNumber) - barGapWidth;
     }
+
+	assert(barWidth > 0);
+	assert(barGapWidth > 0);
+	assert(barWidth*barNumber + barGapWidth*(barNumber-1) <= size.width);
 
     // Set height scale so that the largest element takes up the full height.
     // Ensures that the width of bars bars doesn't draw as overflow
@@ -138,11 +139,11 @@ class _ValueDistributionPainter extends CustomPainter {
       ..strokeJoin = StrokeJoin.round;
 
     double barDrawXOffset = barWidth / 2; // don't clip left side of bar
-    for (final xPos in distribution.keys) {
-      final length = heightUnit * distribution[xPos]!;
+    for (int xPos = distribution.keys.min; xPos <= distribution.keys.max; xPos++) {
+      final length = heightUnit * (distribution[xPos] ?? 0);
       /// Offset from top so that the bar of [length] is centered.
       final startPos = (size.height - length) / 2;
-      assert(barDrawXOffset >= 0 && barDrawXOffset <= size.width);
+      assert(barDrawXOffset >= 0 && barDrawXOffset <= size.width, '0 <= $barDrawXOffset <= ${size.width}');
       assert(startPos >= 0); assert(startPos <= size.height);
       assert((startPos + length) >= 0 && (startPos + length) <= size.height);
       canvas.drawLine(
@@ -260,9 +261,9 @@ class _ValueDistributionPainter extends CustomPainter {
   String get _average {
     double sum = 0;
     int count = 0;
-    for (final key in distribution.keys) {
-      sum += key * distribution[key]!;
-      count += distribution[key]!.toInt();
+    for (int key = distribution.keys.min; key <= distribution.keys.max; key++) {
+      sum += key * (distribution[key] ?? 0);
+      count += (distribution[key] ?? 0);
     }
     return (sum / count).round().toString();
   }

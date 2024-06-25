@@ -113,7 +113,7 @@ class CsvConverter {
       final List<(RowDataFieldType, dynamic)> recordPieces = [];
       for (int fieldIndex = 0; fieldIndex < parsers.length; fieldIndex++) {
         final parser = parsers[fieldIndex];
-        final piece = parser?.decode(currentLine[fieldIndex]);
+        (RowDataFieldType, dynamic)? piece = parser?.decode(currentLine[fieldIndex]);
         // Validate that the column parsed the expected type.
         // Null can be the result of empty fields.
         if (piece?.$1 != parser?.restoreAbleType
@@ -135,10 +135,19 @@ class CsvConverter {
             (piece) => piece.$1 == RowDataFieldType.dia,)?.$2;
       final int? pul = recordPieces.firstWhereOrNull(
             (piece) => piece.$1 == RowDataFieldType.pul,)?.$2;
-      final String noteText = recordPieces.firstWhereOrNull(
+      String noteText = recordPieces.firstWhereOrNull(
             (piece) => piece.$1 == RowDataFieldType.notes,)?.$2 ?? '';
       final int? color = recordPieces.firstWhereOrNull(
             (piece) => piece.$1 == RowDataFieldType.color,)?.$2;
+      
+      // manually trim quotes after https://pub.dev/packages/csv/changelog#600
+      noteText = noteText.trim();
+      if (note.endsWith('"')) {
+        note = note.substring(0, note.length - 1);
+      }
+      if (note.startsWith('"')) {
+        note = note.substring(1, note.length);
+      }
 
       final record = BloodPressureRecord(
         time: timestamp,

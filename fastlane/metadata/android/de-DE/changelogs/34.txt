@@ -1,0 +1,5 @@
+* Abhängigkeiten auf neue Versionen aktualisieren
+* Flutter build style migrieren
+* Fehler bei der Zeitformats-eingabe beheben
+* Einstellen der Blutdruckeinheit erlauben (kPa, mmHg)
+* Übersetzungen aktualisieren (Türkisch, Deutsch, Portugiesisch, Spanisch, Italienisch)

@@ -1,4 +1,4 @@
-name: pkg-CI
+name: '📦 Packages'
 
 on:
   push:
@@ -9,8 +9,12 @@ on:
       - ".github/workflows/pkg-CI.yml"
   workflow_dispatch:
 
+env:
+  DART_SDK: 'beta'
+
 jobs:
   test-health_data_store:
+    name: '🧪 Test'
     runs-on: ubuntu-latest
  
     steps:
@@ -23,7 +27,7 @@ jobs:
     - name: Setup dart
       uses: dart-lang/setup-dart@v1
       with:
-        sdk: 'beta'
+        sdk: ${{ env.DART_SDK }}
 
     - name: Get dependencies
       run: dart pub get

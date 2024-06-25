@@ -44,6 +44,10 @@ app.*.map.json
 /android/app/release
 /main.dart.incremental.dill
 
+# Generated files
+*.mocks.dart
+
+# Others
 /l10n_errors.txt
 /fastlane/metadata/android/en-US/images/phoneScreenshots/resizeAll.sh
 /tmp6.csv

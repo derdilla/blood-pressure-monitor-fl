@@ -106,32 +106,33 @@ class AppHome extends StatelessWidget {
                     ),
                   ),
                 ),
-                const SizedBox(
-                  height: 10,
-                ),
-                FloatingActionButton(
-                  heroTag: 'floatingActionStatistics',
-                  tooltip: localizations.statistics,
-                  backgroundColor: const Color(0xFF6F6F6F),
-                  onPressed: () {
-                    _buildTransition(context, const StatisticsScreen(), settings.animationSpeed);
-                  },
-                  child: const Icon(Icons.insights, color: Colors.black),
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                FloatingActionButton(
-                  heroTag: 'floatingActionSettings',
-                  tooltip: localizations.settings,
-                  backgroundColor: const Color(0xFF6F6F6F),
-                  child: const Icon(Icons.settings, color: Colors.black),
-                  onPressed: () {
-                    _buildTransition(context, const SettingsPage(), settings.animationSpeed);
-                  },
-                ),
-              ],
-            ),);
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              FloatingActionButton(
+                heroTag: 'floatingActionStatistics',
+                tooltip: localizations.statistics,
+                backgroundColor: const Color(0xFF6F6F6F),
+                onPressed: () {
+                  _buildTransition(context, const StatisticsScreen(), settings.animationSpeed);
+                },
+                child: const Icon(Icons.insights, color: Colors.black),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              FloatingActionButton(
+                heroTag: 'floatingActionSettings',
+                tooltip: localizations.settings,
+                backgroundColor: const Color(0xFF6F6F6F),
+                child: const Icon(Icons.settings, color: Colors.black),
+                onPressed: () {
+                  _buildTransition(context, const SettingsPage(), settings.animationSpeed);
+                },
+              ),
+            ],
+          ),);
         },),
     );
   }
