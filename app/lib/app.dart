@@ -1,8 +1,6 @@
 import 'dart:io';
 
 import 'package:blood_pressure_app/components/consistent_future_builder.dart';
-import 'package:blood_pressure_app/model/blood_pressure/medicine/intake_history.dart';
-import 'package:blood_pressure_app/model/blood_pressure/model.dart';
 import 'package:blood_pressure_app/model/export_import/export_configuration.dart';
 import 'package:blood_pressure_app/model/storage/db/config_dao.dart';
 import 'package:blood_pressure_app/model/storage/db/config_db.dart';
@@ -12,12 +10,16 @@ import 'package:blood_pressure_app/model/storage/update_legacy_settings.dart';
 import 'package:blood_pressure_app/screens/home_screen.dart';
 import 'package:blood_pressure_app/screens/loading_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:health_data_store/health_data_store.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:path/path.dart';
 import 'package:provider/provider.dart';
 import 'package:sqflite/sqflite.dart';
+
+import 'model/blood_pressure/update_legacy_entries.dart';
 
 /// Base class for the entire app.
 ///
@@ -37,7 +39,7 @@ class App extends StatefulWidget {
 class _AppState extends State<App> {
   /// Database object for app settings.
   ConfigDB? _configDB;
-  BloodPressureModel? _bloodPressureModel;
+  Database? _entryDB;
 
   /// The result of the first [_loadApp] call.
   ///
@@ -48,8 +50,8 @@ class _AppState extends State<App> {
   void dispose() {
     _configDB?.database.close();
     _configDB = null;
-    _bloodPressureModel?.close();
-    _bloodPressureModel = null;
+    _entryDB?.close(); // TODO: check this is safe
+    _entryDB = null;
     super.dispose();
   }
 
@@ -76,10 +78,7 @@ class _AppState extends State<App> {
       } on FileSystemException { }
     }
 
-    // 2 different db files
-    _bloodPressureModel = await BloodPressureModel.create();
     _configDB = await ConfigDB.open();
-
     final configDao = ConfigDao(_configDB!);
 
     final settings = await configDao.loadSettings(0);
@@ -89,22 +88,23 @@ class _AppState extends State<App> {
     final intervalStorageManager = await IntervallStoreManager.load(configDao, 0);
     final exportColumnsManager = await configDao.loadExportColumnsManager(0);
 
-    // TODO: unify with blood pressure model (#257)
-    late final IntakeHistory intakeHistory;
-    try {
-      if (settings.medications.isNotEmpty) {
-        final intakeString = File(join(await getDatabasesPath(), 'medicine.intakes')).readAsStringSync();
-        intakeHistory = IntakeHistory.deserialize(intakeString, settings.medications);
-      } else {
-        intakeHistory = IntakeHistory([]);
-      }
-    } catch (e, stack) {
-      assert(e is PathNotFoundException, '$e\n$stack');
-      intakeHistory = IntakeHistory([]);
-    }
-    intakeHistory.addListener(() async {
-      File(join(await getDatabasesPath(), 'medicine.intakes')).writeAsStringSync(intakeHistory.serialize());
-    });
+    _entryDB = await openDatabase(
+      join(await getDatabasesPath(), 'bp.db'),
+    );
+    final db = await HealthDataStore.load(_entryDB!);
+    final bpRepo = db.bpRepo;
+    final noteRepo = db.noteRepo;
+    final medRepo = db.medRepo;
+    final intakeRepo = db.intakeRepo;
+
+    await updateLegacyEntries(
+      settings,
+      bpRepo,
+      noteRepo,
+      medRepo,
+      intakeRepo,
+    );
+    // TODO: document how data is stored in the app
 
     // update logic
     if (settings.lastVersion == 0) {
@@ -131,16 +131,25 @@ class _AppState extends State<App> {
     // Reset the step size intervall to current on startup
     intervalStorageManager.mainPage.setToMostRecentIntervall();
 
-    _loadedChild = MultiProvider(providers: [
-      ChangeNotifierProvider(create: (context) => _bloodPressureModel!),
-      ChangeNotifierProvider(create: (context) => settings),
-      ChangeNotifierProvider(create: (context) => exportSettings),
-      ChangeNotifierProvider(create: (context) => csvExportSettings),
-      ChangeNotifierProvider(create: (context) => pdfExportSettings),
-      ChangeNotifierProvider(create: (context) => intervalStorageManager),
-      ChangeNotifierProvider(create: (context) => exportColumnsManager),
-      ChangeNotifierProvider(create: (context) => intakeHistory),
-    ], child: _buildAppRoot(),);
+    _loadedChild = MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => settings),
+        ChangeNotifierProvider(create: (context) => exportSettings),
+        ChangeNotifierProvider(create: (context) => csvExportSettings),
+        ChangeNotifierProvider(create: (context) => pdfExportSettings),
+        ChangeNotifierProvider(create: (context) => intervalStorageManager),
+        ChangeNotifierProvider(create: (context) => exportColumnsManager),
+      ],
+      child: MultiRepositoryProvider(
+        providers: [
+          RepositoryProvider(create: (context) => bpRepo),
+          RepositoryProvider(create: (context) => noteRepo),
+          RepositoryProvider(create: (context) => medRepo),
+          RepositoryProvider(create: (context) => intakeRepo),
+        ],
+        child: _buildAppRoot(),
+      ),
+    );
 
     return _loadedChild!;
   }

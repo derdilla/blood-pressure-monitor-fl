@@ -92,18 +92,17 @@ class AppHome extends StatelessWidget {
           }
           SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: SystemUiOverlay.values);
           return Consumer<Settings>(builder: (context, settings, child) => Column(
-              verticalDirection: VerticalDirection.up,
-              children: [
-                SizedBox.square(
-                  dimension: 75,
-                  child: FittedBox(
-                    child: FloatingActionButton(
-                      heroTag: 'floatingActionAdd',
-                      tooltip: localizations.addMeasurement,
-                      autofocus: true,
-                      onPressed: context.createEntry,
-                      child: const Icon(Icons.add,),
-                    ),
+            verticalDirection: VerticalDirection.up,
+            children: [
+              SizedBox.square(
+                dimension: 75,
+                child: FittedBox(
+                  child: FloatingActionButton(
+                    heroTag: 'floatingActionAdd',
+                    tooltip: localizations.addMeasurement,
+                    autofocus: true,
+                    onPressed: context.createEntry,
+                    child: const Icon(Icons.add,),
                   ),
                 ),
               ),

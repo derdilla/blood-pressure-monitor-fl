@@ -6,6 +6,7 @@ import 'package:blood_pressure_app/screens/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:health_data_store/health_data_store.dart';
 import 'package:integration_test/integration_test.dart';
 
 import '../test/ui/components/settings/color_picker_list_tile_test.dart';
@@ -82,12 +83,12 @@ void main() {
     expect(find.text(localizations.loading), findsNothing);
 
     expect(find.byType(MeasurementListRow), findsOneWidget);
-    final submittedRecord = tester.widget<MeasurementListRow>(find.byType(MeasurementListRow)).record;
-    expect(submittedRecord.systolic, 123);
-    expect(submittedRecord.diastolic, 67);
-    expect(submittedRecord.pulse, 56);
-    expect(submittedRecord.needlePin?.color.value, Colors.red.value);
-    expect(submittedRecord.notes, 'some test sample note');
+    final submittedRecord = tester.widget<MeasurementListRow>(find.byType(MeasurementListRow)).data;
+    expect(submittedRecord.sys, 123);
+    expect(submittedRecord.dia, 67);
+    expect(submittedRecord.pul, 56);
+    expect(submittedRecord.color, Colors.red.value);
+    expect(submittedRecord.note, 'some test sample note');
 
     expect(find.text('some test sample note'), findsNothing);
     await tester.tap(find.byType(MeasurementListRow));

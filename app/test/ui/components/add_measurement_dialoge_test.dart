@@ -155,6 +155,7 @@ void main() {
       await tester.pumpWidget(materialApp(
         AddEntryDialoge(
           settings: settings,
+          availableMeds: [],
         ),
       ),);
       await tester.pumpAndSettle();

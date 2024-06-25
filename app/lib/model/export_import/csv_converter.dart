@@ -142,11 +142,11 @@ class CsvConverter {
       
       // manually trim quotes after https://pub.dev/packages/csv/changelog#600
       noteText = noteText.trim();
-      if (note.endsWith('"')) {
-        note = note.substring(0, note.length - 1);
+      if (noteText.endsWith('"')) {
+        noteText = noteText.substring(0, noteText.length - 1);
       }
-      if (note.startsWith('"')) {
-        note = note.substring(1, note.length);
+      if (noteText.startsWith('"')) {
+        noteText = noteText.substring(1, noteText.length);
       }
 
       final record = BloodPressureRecord(

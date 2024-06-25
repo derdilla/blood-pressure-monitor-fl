@@ -94,7 +94,6 @@ void main() {
         useLegacyList: false,
         horizontalGraphLines: [HorizontalGraphLine(Colors.blue, 1230)],
         bottomAppBars: true,
-        medications: [mockMedicine(), mockMedicine(defaultDosis: 42)],
         knownBleDev: ['a', 'b'],
         bleInput: false,
       );

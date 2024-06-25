@@ -4,11 +4,13 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 /// Show a dialoge that prompts the user to confirm a deletion.
 ///
 /// Returns whether it is ok to proceed with deletion.
-Future<bool> showConfirmDeletionDialoge(BuildContext context) async =>
+///
+/// When [customDescription] is set it is used instead of confirmDeleteDesc.
+Future<bool> showConfirmDeletionDialoge(BuildContext context, [String? customDescription]) async =>
 await showDialog<bool>(context: context,
   builder: (context) => AlertDialog(
     title: Text(AppLocalizations.of(context)!.confirmDelete),
-    content: Text(AppLocalizations.of(context)!.confirmDeleteDesc),
+    content: Text(customDescription ?? AppLocalizations.of(context)!.confirmDeleteDesc),
     actions: [
       TextButton(
         onPressed: () => Navigator.pop(context, false),

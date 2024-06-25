@@ -3,7 +3,7 @@ import 'package:blood_pressure_app/components/measurement_list/measurement_list_
 import 'package:blood_pressure_app/model/storage/settings_store.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import '../../../model/analyzer_test.dart';
+import '../../../model/export_import/record_formatter_test.dart';
 import '../util.dart';
 
 void main() {
@@ -11,14 +11,12 @@ void main() {
     await tester.pumpWidget(materialApp(
       MeasurementList(
         settings: Settings(),
-        records: [
-          mockRecord(time: DateTime(2020), sys: 2020),
-          mockRecord(time: DateTime(2021), sys: 2021),
-          mockRecord(time: DateTime(2022), sys: 2022),
-          mockRecord(time: DateTime(2023), sys: 2023),
+        entries: [
+          mockEntry(time: DateTime(2020), sys: 2020),
+          mockEntry(time: DateTime(2021), sys: 2021),
+          mockEntry(time: DateTime(2022), sys: 2022),
+          mockEntry(time: DateTime(2023), sys: 2023),
         ],
-        notes: [],
-        intakes: [],
       ),
     ));
     expect(find.byType(MeasurementListRow), findsNWidgets(4));
@@ -31,13 +29,11 @@ void main() {
     await tester.pumpWidget(materialApp(
       MeasurementList(
         settings: Settings(),
-        records: [
-          mockRecord(time: DateTime.fromMillisecondsSinceEpoch(2000), sys: 2),
-          mockRecord(time: DateTime.fromMillisecondsSinceEpoch(4000), sys: 1),
-          mockRecord(time: DateTime.fromMillisecondsSinceEpoch(1000), sys: 3),
+        entries: [
+          mockEntry(time: DateTime.fromMillisecondsSinceEpoch(2000), sys: 2),
+          mockEntry(time: DateTime.fromMillisecondsSinceEpoch(4000), sys: 1),
+          mockEntry(time: DateTime.fromMillisecondsSinceEpoch(1000), sys: 3),
         ],
-        notes: [],
-        intakes: [],
       ),
     ));
     expect(find.byType(MeasurementListRow), findsNWidgets(3));

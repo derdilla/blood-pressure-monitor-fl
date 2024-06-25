@@ -264,7 +264,7 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
             if (widget.settings.bleInput)
               BluetoothInput(
                 settings: widget.settings,
-                onMeasurement: (BloodPressureRecord record) => setState(
+                onMeasurement: (record) => setState(
                   () => _loadFields((record, Note(time: record.time, note: noteController.text, color: color?.value), [])),
                 ),
               ),

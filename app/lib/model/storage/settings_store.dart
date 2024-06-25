@@ -144,7 +144,7 @@ class Settings extends ChangeNotifier {
     'allowMissingValues': allowMissingValues,
     'drawRegressionLines': drawRegressionLines,
     'startWithAddMeasurementPage': startWithAddMeasurementPage,
-    'useLegacyList': useLegacyList,
+    'useLegacyList': compactList,
     'language': ConvertUtil.serializeLocale(language),
     'horizontalGraphLines': horizontalGraphLines.map(jsonEncode).toList(),
     'needlePinBarWidth': _needlePinBarWidth,
