@@ -95,7 +95,7 @@ class BloodPressureAnalyser {
   /// and creates an [BloodPressureAnalyser] for each. The analyzers are
   /// returned ordered by the hour of the day and the index can be used as the
   /// hour.
-  List<BloodPressureAnalyser> groupAnalysers() { // TODO: test
+  List<BloodPressureAnalyser> groupAnalysers() {
     // Group records around the full hour so that there are 24 sublists from 0
     // to 23. ([0] -> 23:30-00:29.59; [1] -> ...).
     final Map<int, List<BloodPressureRecord>> grouped = _records.groupListsBy((BloodPressureRecord record) {
@@ -104,6 +104,9 @@ class BloodPressureAnalyser {
       hour %= 24; // midnight jumps
       return hour;
     });
+    for (int i = 0; i <= 23; i++) {
+      grouped[i] ??= [];
+    }
     final groupedAnalyzers = grouped.map((hour, subList) => MapEntry(
       hour,
       BloodPressureAnalyser(subList),
