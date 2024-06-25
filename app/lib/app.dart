@@ -1,12 +1,11 @@
 import 'dart:io';
 
 import 'package:blood_pressure_app/components/consistent_future_builder.dart';
+import 'package:blood_pressure_app/model/blood_pressure/update_legacy_entries.dart';
 import 'package:blood_pressure_app/model/export_import/export_configuration.dart';
-import 'package:blood_pressure_app/model/storage/db/config_dao.dart';
 import 'package:blood_pressure_app/model/storage/db/config_db.dart';
-import 'package:blood_pressure_app/model/storage/intervall_store.dart';
-import 'package:blood_pressure_app/model/storage/settings_store.dart';
-import 'package:blood_pressure_app/model/storage/update_legacy_settings.dart';
+import 'package:blood_pressure_app/model/storage/export_columns_store.dart';
+import 'package:blood_pressure_app/model/storage/storage.dart';
 import 'package:blood_pressure_app/screens/home_screen.dart';
 import 'package:blood_pressure_app/screens/loading_screen.dart';
 import 'package:flutter/material.dart';
@@ -18,8 +17,6 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:path/path.dart';
 import 'package:provider/provider.dart';
 import 'package:sqflite/sqflite.dart';
-
-import 'model/blood_pressure/update_legacy_entries.dart';
 
 /// Base class for the entire app.
 ///
@@ -45,6 +42,12 @@ class _AppState extends State<App> {
   ///
   /// Storing this is necessary to ensure the app is not loaded multiple times.
   Widget? _loadedChild;
+  Settings? _settings;
+  ExportSettings? _exportSettings;
+  CsvExportSettings? _csvExportSettings;
+  PdfExportSettings? _pdfExportSettings;
+  IntervallStoreManager? _intervallStorageManager;
+  ExportColumnsManager? _exportColumnsManager;
 
   @override
   void dispose() {
@@ -52,14 +55,20 @@ class _AppState extends State<App> {
     _configDB = null;
     _entryDB?.close(); // TODO: check this is safe
     _entryDB = null;
+    _settings?.dispose();
+    _exportSettings?.dispose();
+    _csvExportSettings?.dispose();
+    _pdfExportSettings?.dispose();
+    _intervallStorageManager?.dispose();
+    _exportColumnsManager?.dispose();
     super.dispose();
   }
 
   /// Load the primary app data asynchronously to allow load animations.
   Future<Widget> _loadApp() async {
-    if (_loadedChild != null) return _loadedChild!;
-
     WidgetsFlutterBinding.ensureInitialized();
+
+    if (_loadedChild != null && _configDB != null && _entryDB != null) return _loadedChild!;
 
     if (widget.forceClearAppDataOnLaunch) {
       final dbPath = await getDatabasesPath();
@@ -81,12 +90,13 @@ class _AppState extends State<App> {
     _configDB = await ConfigDB.open();
     final configDao = ConfigDao(_configDB!);
 
-    final settings = await configDao.loadSettings(0);
-    final exportSettings = await configDao.loadExportSettings(0);
-    final csvExportSettings = await configDao.loadCsvExportSettings(0);
-    final pdfExportSettings = await configDao.loadPdfExportSettings(0);
-    final intervalStorageManager = await IntervallStoreManager.load(configDao, 0);
-    final exportColumnsManager = await configDao.loadExportColumnsManager(0);
+    assert(_settings == null);
+    _settings = await configDao.loadSettings(0);
+    _exportSettings = await configDao.loadExportSettings(0);
+    _csvExportSettings = await configDao.loadCsvExportSettings(0);
+    _pdfExportSettings = await configDao.loadPdfExportSettings(0);
+    _intervallStorageManager = await IntervallStoreManager.load(configDao, 0);
+    _exportColumnsManager = await configDao.loadExportColumnsManager(0);
 
     _entryDB = await openDatabase(
       join(await getDatabasesPath(), 'bp.db'),
@@ -98,7 +108,7 @@ class _AppState extends State<App> {
     final intakeRepo = db.intakeRepo;
 
     await updateLegacyEntries(
-      settings,
+      _settings!,
       bpRepo,
       noteRepo,
       medRepo,
@@ -107,48 +117,44 @@ class _AppState extends State<App> {
     // TODO: document how data is stored in the app
 
     // update logic
-    if (settings.lastVersion == 0) {
-      await updateLegacySettings(settings, exportSettings, csvExportSettings, pdfExportSettings, intervalStorageManager);
-      await updateLegacyExport(_configDB!, exportColumnsManager);
+    if (_settings!.lastVersion == 0) {
+      await updateLegacySettings(_settings!, _exportSettings!, _csvExportSettings!, _pdfExportSettings!, _intervallStorageManager!);
+      await updateLegacyExport(_configDB!, _exportColumnsManager!);
 
-      settings.lastVersion = 30;
-      if (exportSettings.exportAfterEveryEntry) {
+      _settings!.lastVersion = 30;
+      if (_exportSettings!.exportAfterEveryEntry) {
         await Fluttertoast.showToast(
           msg: r'Please review your export settings to ensure everything works as expected.',
         );
       }
     }
-    if (settings.lastVersion == 30) {
-      if (pdfExportSettings.exportFieldsConfiguration.activePreset == ExportImportPreset.bloodPressureApp) {
-        pdfExportSettings.exportFieldsConfiguration.activePreset = ExportImportPreset.bloodPressureAppPdf;
+    if (_settings!.lastVersion == 30) {
+      if (_pdfExportSettings!.exportFieldsConfiguration.activePreset == ExportImportPreset.bloodPressureApp) {
+        _pdfExportSettings!.exportFieldsConfiguration.activePreset = ExportImportPreset.bloodPressureAppPdf;
       }
-      settings.lastVersion = 31;
+      _settings!.lastVersion = 31;
     }
-    if (settings.allowMissingValues && settings.validateInputs) settings.validateInputs = false;
+    if (_settings!.allowMissingValues && _settings!.validateInputs) _settings!.validateInputs = false;
 
-    settings.lastVersion = int.parse((await PackageInfo.fromPlatform()).buildNumber);
+    _settings!.lastVersion = int.parse((await PackageInfo.fromPlatform()).buildNumber);
 
     // Reset the step size intervall to current on startup
-    intervalStorageManager.mainPage.setToMostRecentIntervall();
+    _intervallStorageManager!.mainPage.setToMostRecentIntervall();
 
-    _loadedChild = MultiProvider(
+    _loadedChild = MultiRepositoryProvider(
       providers: [
-        ChangeNotifierProvider(create: (context) => settings),
-        ChangeNotifierProvider(create: (context) => exportSettings),
-        ChangeNotifierProvider(create: (context) => csvExportSettings),
-        ChangeNotifierProvider(create: (context) => pdfExportSettings),
-        ChangeNotifierProvider(create: (context) => intervalStorageManager),
-        ChangeNotifierProvider(create: (context) => exportColumnsManager),
+        RepositoryProvider.value(value: bpRepo),
+        RepositoryProvider.value(value: noteRepo),
+        RepositoryProvider.value(value: medRepo),
+        RepositoryProvider.value(value: intakeRepo),
+        ChangeNotifierProvider.value(value: _settings!),
+        ChangeNotifierProvider.value(value: _exportSettings!),
+        ChangeNotifierProvider.value(value: _csvExportSettings!),
+        ChangeNotifierProvider.value(value: _pdfExportSettings!),
+        ChangeNotifierProvider.value(value: _intervallStorageManager!),
+        ChangeNotifierProvider.value(value: _exportColumnsManager!),
       ],
-      child: MultiRepositoryProvider(
-        providers: [
-          RepositoryProvider(create: (context) => bpRepo),
-          RepositoryProvider(create: (context) => noteRepo),
-          RepositoryProvider(create: (context) => medRepo),
-          RepositoryProvider(create: (context) => intakeRepo),
-        ],
-        child: _buildAppRoot(),
-      ),
+      child: _buildAppRoot(),
     );
 
     return _loadedChild!;
