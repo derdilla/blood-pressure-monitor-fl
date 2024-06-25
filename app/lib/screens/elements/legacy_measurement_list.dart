@@ -2,6 +2,7 @@ import 'dart:collection';
 
 import 'package:blood_pressure_app/components/dialoges/add_measurement_dialoge.dart';
 import 'package:blood_pressure_app/components/dialoges/confirm_deletion_dialoge.dart';
+import 'package:blood_pressure_app/components/nullable_text.dart';
 import 'package:blood_pressure_app/model/storage/intervall_store.dart';
 import 'package:blood_pressure_app/model/storage/settings_store.dart';
 import 'package:blood_pressure_app/screens/elements/blood_pressure_builder.dart';
@@ -11,6 +12,8 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:health_data_store/health_data_store.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+
+import '../../components/pressure_text.dart';
 
 /// A old more compact [BloodPressureRecord] list, that lacks some of the new
 /// features.
@@ -132,14 +135,13 @@ class LegacyMeasurementsList extends StatelessWidget {
                               child: Text(formatter.format(records[index].time)),),
                             Expanded(
                               flex: _tableElementsSizes[1],
-                              // FIXME: "Instance of Pressure"
-                              child: Text((records[index].sys ?? '').toString()),),
+                              child: PressureText(records[index].sys)),
                             Expanded(
                               flex: _tableElementsSizes[2],
-                              child: Text((records[index].dia ?? '').toString()),),
+                              child: PressureText(records[index].dia),),
                             Expanded(
                               flex: _tableElementsSizes[3],
-                              child: Text((records[index].pul ?? '').toString()),),
+                              child: NullableText(records[index].pul?.toString()),),
                             // FIXME: reimplement notes
                             /*Expanded(
                                   flex: _tableElementsSizes[4],

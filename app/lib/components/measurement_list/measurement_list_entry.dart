@@ -1,5 +1,6 @@
 import 'package:blood_pressure_app/components/dialoges/confirm_deletion_dialoge.dart';
-import 'package:blood_pressure_app/model/blood_pressure/pressure_unit.dart';
+import 'package:blood_pressure_app/components/nullable_text.dart';
+import 'package:blood_pressure_app/components/pressure_text.dart';
 import 'package:blood_pressure_app/model/storage/storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -91,33 +92,26 @@ class MeasurementListRow extends StatelessWidget {
     );
   }
 
-  Row _buildRow(DateFormat formatter) {
-    String formatNum(num? num) => (num ?? '-').toString();
-    String formatPressure(Pressure? num) => switch(settings.preferredPressureUnit) {
-      PressureUnit.mmHg => formatNum(num?.mmHg),
-      PressureUnit.kPa => formatNum(num?.kPa),
-    };
-    return Row(
-      children: [
-        Expanded(
-          flex: 30,
-          child: Text(formatPressure(data.sys)),
-        ),
-        Expanded(
-          flex: 30,
-          child: Text(formatPressure(data.dia)),
-        ),
-        Expanded(
-          flex: 30,
-          child: Text(formatNum(data.pul)),
-        ),
-        Expanded(
-          flex: 10,
-          child: data.$3.isNotEmpty ? Icon(Icons.medication) : SizedBox.shrink(),
-        ),
-      ],
-    );
-  }
+  Row _buildRow(DateFormat formatter) => Row(
+    children: [
+      Expanded(
+        flex: 30,
+        child: PressureText(data.sys),
+      ),
+      Expanded(
+        flex: 30,
+        child: PressureText(data.dia),
+      ),
+      Expanded(
+        flex: 30,
+        child: NullableText((data.pul?.toString())),
+      ),
+      Expanded(
+        flex: 10,
+        child: data.$3.isNotEmpty ? Icon(Icons.medication) : SizedBox.shrink(),
+      ),
+    ],
+  );
 
   void _deleteEntry(Settings settings, BuildContext context, AppLocalizations localizations) async {
     final bpRepo = RepositoryProvider.of<BloodPressureRepository>(context); // TODO: extract
