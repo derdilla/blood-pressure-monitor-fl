@@ -74,9 +74,6 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
 
   /// Last [FormState.save]d pulse value.
   int? pulse;
-
-  /// Last [FormState.save]d note.
-  String? notes;
   
   /// Medicine to save.
   Medicine? selectedMed;
@@ -89,8 +86,6 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
   /// Prefilled with default dosis of selected medicine.
   double? medicineDosis;
 
-  /// Newlines in the note field.
-  int _noteCurrentNewLineCount = 0;
 
   @override
   void initState() {
@@ -147,7 +142,7 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
     recordFormKey.currentState?.save();
     if (diaFocusNode.hasFocus && diastolic == null 
         || pulFocusNode.hasFocus && pulse == null
-        || noteFocusNode.hasFocus && (notes?.isEmpty ?? true)
+        || noteFocusNode.hasFocus && noteController.text.isEmpty
     ) {
       FocusScope.of(context).previousFocus();
     }
@@ -212,7 +207,12 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
         BloodPressureRecord? record;
         Note? note;
         final List<MedicineIntake> intakes = [];
-        if (recordFormKey.currentState?.validate() ?? false) {
+
+        final bool shouldHaveRecord = (sysController.text.isNotEmpty
+          || diaController.text.isNotEmpty
+          || pulController.text.isNotEmpty);
+
+        if (shouldHaveRecord && (recordFormKey.currentState?.validate() ?? false)) {
           recordFormKey.currentState?.save();
           if (systolic != null || diastolic != null || pulse != null) {
             final pressureUnit = widget.settings.preferredPressureUnit;
@@ -224,10 +224,12 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
             );
           }
         }
-        if ((notes?.isNotEmpty ?? false) || color != null) {
+
+
+        if (noteController.text.isNotEmpty || color != null) {
           note = Note(
             time: time,
-            note: (notes?.isEmpty ?? true) ? null: notes,
+            note: noteController.text.isEmpty ? null : noteController.text,
             color: color?.value,
           );
         }
@@ -244,7 +246,9 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
           }
         }
 
-        if (record != null || intakes.isNotEmpty || notes != null) {
+        if (record != null || intakes.isNotEmpty || note != null) {
+          if (record == null && shouldHaveRecord) return; // Errors are shown
+          if (intakes.isEmpty && _showMedicineDosisInput) return; // Errors are shown
           record ??= BloodPressureRecord(time: time);
           note ??= Note(time: time);
           Navigator.pop(context, (record, note, intakes));
@@ -257,13 +261,16 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
           padding: const EdgeInsets.symmetric(horizontal: 8),
           children: [
             if (widget.settings.allowManualTimeInput)
-              DateTimeForm(
-                validate: widget.settings.validateInputs,
-                dateFormatString: widget.settings.dateFormatString,
-                initialTime: time,
-                onTimeSelected: (newTime) => setState(() {
-                  time = newTime;
-                }),
+              ListTileTheme(
+                shape: _buildShapeBorder(),
+                child: DateTimeForm(
+                  validate: widget.settings.validateInputs,
+                  dateFormatString: widget.settings.dateFormatString,
+                  initialTime: time,
+                  onTimeSelected: (newTime) => setState(() {
+                    time = newTime;
+                  }),
+                ),
               ),
             Form(
               key: recordFormKey,
@@ -307,38 +314,28 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
                       ),
                     ],
                   ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 16),
-                    child: TextFormField(
-                      controller: noteController,
-                      focusNode: noteFocusNode,
-                      decoration: InputDecoration(
-                        labelText: localizations.addNote,
-                      ),
-                      minLines: 1,
-                      maxLines: 4,
-                      onChanged: (value) {
-                        final newLineCount = value.split('\n').length;
-                        if (_noteCurrentNewLineCount != newLineCount) {
-                          setState(() {
-                            _noteCurrentNewLineCount = newLineCount;
-                            Material.of(context).markNeedsPaint();
-                          });
-                        }
-                      },
-                      onSaved: (value) => setState(() => notes = value),
-                    ),
-                  ),
-                  ColorSelectionListTile(
-                    title: Text(localizations.color),
-                    onMainColorChanged: (Color value) => setState(() {
-                      color = (value == Colors.transparent) ? null : value;
-                    }),
-                    initialColor: color ?? Colors.transparent,
-                    shape: _buildShapeBorder(color),
-                  ),
                 ],
               ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 16),
+              child: TextFormField(
+                controller: noteController,
+                focusNode: noteFocusNode,
+                decoration: InputDecoration(
+                  labelText: localizations.addNote,
+                ),
+                minLines: 1,
+                maxLines: 4,
+              ),
+            ),
+            ColorSelectionListTile(
+              title: Text(localizations.color),
+              onMainColorChanged: (Color value) => setState(() {
+                color = (value == Colors.transparent) ? null : value;
+              }),
+              initialColor: color ?? Colors.transparent,
+              shape: _buildShapeBorder(color),
             ),
             if (widget.initialRecord == null && widget.availableMeds.isNotEmpty)
               Form(
