@@ -5,6 +5,7 @@ import 'package:blood_pressure_app/components/forms/date_time_form.dart';
 import 'package:blood_pressure_app/components/settings/color_picker_list_tile.dart';
 import 'package:blood_pressure_app/model/blood_pressure/pressure_unit.dart';
 import 'package:blood_pressure_app/model/storage/storage.dart';
+import 'package:blood_pressure_app/screens/subsettings/export_import/export_button_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -467,7 +468,7 @@ extension AddEntries on BuildContext {
         await intakeRepo.add(intake);
       }
       if (mounted && exportSettings.exportAfterEveryEntry) {
-        // FIXME: export if setting is set
+        performExport(this, AppLocalizations.of(this)!);
       }
     }
   }
