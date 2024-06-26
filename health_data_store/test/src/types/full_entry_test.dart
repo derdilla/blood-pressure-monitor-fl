@@ -199,4 +199,14 @@ void main() {
         .having((e) => e.intakes, 'intakes', isEmpty),
     ]));
   });
+  test('merges lists with entries at same time', () {
+    final list = FullEntryList.merged(
+      [mockRecord(time: 1000, sys: 1), mockRecord(time: 1000, sys: 2)],
+      [mockNote(time: 1000, color: 1)],
+      [],
+    );
+    expect(list, hasLength(2));
+    expect(list, contains(isA<FullEntry>().having((e) => e.color, 'color', 1)));
+    expect(list, contains(isA<FullEntry>().having((e) =>e.color, 'note',null)));
+  });
 }

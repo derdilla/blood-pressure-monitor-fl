@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:health_data_store/health_data_store.dart';
 
 /// Utility collection that containing all types that make sense at one point in
@@ -57,63 +59,39 @@ extension FullEntryList on List<FullEntry> {
   /// Merges values at the same time from passed lists to FullEntries and
   /// creates list of them.
   ///
-  /// In the resulting list every passed value is contained exactly once. This
-  /// requires that passed [records] and [notes] contain only one entry per
-  /// timestamp.
+  /// In the resulting list every passed value is contained exactly once.
   static List<FullEntry> merged(
     List<BloodPressureRecord> records,
     List<Note> notes,
     List<MedicineIntake> intakes,
   ) {
-    // TODO: make these asserts unneccessary
-    assert(!records
-      .any((rOuter) => records
-        .where((rInner) => rOuter.time == rInner.time).length != 1,
-      ),
-      'records should only contain one entry per timestamp',
-    );
-    assert(!notes
-      .any((nOuter) => notes
-        .where((nInner) => nOuter.time == nInner.time).length != 1,
-      ),
-      'notes should only contain one entry per timestamp',
-    );
-
-    // Algorithm:
-    // 1. Create entry for every record and add notes and intakes at the same
-    //    time.
-    // 2. Determine notes that are not already in the list.
-    // 3. Create entry for these notes and add intakes at the same time.
-    // 4. Determine intakes that are not already in the list.
-    // 5. Group intakes by time.
-    // 6. Create entries for intakes at those times.
-
+    final Set<DateTime> allTimes = {
+      ...records.map((r) => r.time),
+      ...notes.map((r) => r.time),
+      ...intakes.map((r) => r.time),
+    };
     final List<FullEntry> entries = [];
-    for (final r in records) {
-      final n = notes.where((n) => n.time == r.time).firstOrNull ?? Note(time: r.time);
-      final i = intakes.where((n) => n.time == r.time).toList();
-      entries.add((r, n, i));
-    }
 
-    Set<DateTime> times = entries.map((e) => e.time).toSet();
-    final remainingNotes = notes.where((n) => !times.contains(n.time));
+    for (final time in allTimes) {
+      final recordsAtTime = records.where((r) => r.time == time);
+      final notesAtTime = notes.where((n) => n.time == time);
+      final intakesAtTime = intakes.where((i) => i.time == time).toList();
+      final int count = max(max(recordsAtTime.length, notesAtTime.length), 1);
 
-    for (final n in remainingNotes) {
-      final i = intakes.where((i) => i.time == n.time).toList();
-      entries.add((BloodPressureRecord(time: n.time), n, i));
-    }
-
-    times = entries.map((e) => e.time).toSet();
-    final remainingIntakes = intakes.where((i) => !times.contains(i.time));
-
-    final groupedIntakes = <DateTime, List<MedicineIntake>>{};
-    for (final intake in remainingIntakes) {
-      final list = (groupedIntakes[intake.time] ??= []);
-      list.add(intake);
-    }
-
-    for (final i in groupedIntakes.values) {
-      entries.add((BloodPressureRecord(time: i.first.time), Note(time: i.first.time), i));
+      final recordsAtTimeIt = recordsAtTime.iterator;
+      final notesAtTimeIt = notesAtTime.iterator;
+      for (int i = 0; i < count; i++) {
+        entries.add((
+          recordsAtTimeIt.moveNext()
+            ? recordsAtTimeIt.current
+            : BloodPressureRecord(time: time),
+          notesAtTimeIt.moveNext()
+            ? notesAtTimeIt.current
+            : Note(time: time),
+          [],
+        ));
+      }
+      entries.last.$3.addAll(intakesAtTime);
     }
 
     return entries;
