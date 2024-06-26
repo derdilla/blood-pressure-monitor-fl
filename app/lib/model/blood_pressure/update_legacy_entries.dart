@@ -61,7 +61,7 @@ Future<void> updateLegacyEntries(
   // Migrating records and notes
   try {
     final oldBpModel = await BloodPressureModel.create();
-    for (final BloodPressureRecord r in await oldBpModel?.all ?? []) {
+    for (final OldBloodPressureRecord r in await oldBpModel?.all ?? []) {
       if (r.diastolic != null || r.systolic != null || r.pulse != null) {
         await bpRepo.add(hds.BloodPressureRecord(
           time: r.creationTime,

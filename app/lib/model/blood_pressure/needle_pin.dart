@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 @immutable
 @Deprecated('only maintained for imports, use health_data_store')
-/// Metadata and secondary information for a [BloodPressureRecord].
+/// Metadata and secondary information for a [OldBloodPressureRecord].
 class MeasurementNeedlePin {
   /// Create a instance from a map created in older versions.
   MeasurementNeedlePin.fromMap(Map<String, dynamic> json)

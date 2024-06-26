@@ -5,6 +5,8 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:blood_pressure_app/components/dialoges/import_preview_dialoge.dart';
+import 'package:blood_pressure_app/model/blood_pressure/model.dart';
+import 'package:blood_pressure_app/model/blood_pressure/record.dart';
 import 'package:blood_pressure_app/model/export_import/csv_converter.dart';
 import 'package:blood_pressure_app/model/export_import/csv_record_parsing_actor.dart';
 import 'package:blood_pressure_app/model/export_import/pdf_converter.dart';
@@ -106,19 +108,51 @@ class ExportButtonBar extends StatelessWidget {
                     final bpRepo = RepositoryProvider.of<BloodPressureRepository>(context);
                     final noteRepo = RepositoryProvider.of<NoteRepository>(context);
                     final intakeRepo = RepositoryProvider.of<MedicineIntakeRepository>(context);
-                    final importedDB = await HealthDataStore.load(await openReadOnlyDatabase(file.path!));
-                    await Future.forEach(
-                      await importedDB.bpRepo.get(DateRange.all()),
-                      bpRepo.add,
-                    );
-                    await Future.forEach(
-                      await importedDB.noteRepo.get(DateRange.all()),
-                      noteRepo.add,
-                    );
-                    await Future.forEach(
-                      await importedDB.intakeRepo.get(DateRange.all()),
-                      intakeRepo.add,
-                    );
+
+                    final List<BloodPressureRecord> records = [];
+                    final List<Note> notes = [];
+                    final List<MedicineIntake> intakes = [];
+                    try {
+                      final db = await openReadOnlyDatabase(file.path!);
+                      final importedDB = await HealthDataStore.load(db);
+                      records.addAll(await importedDB.bpRepo.get(DateRange.all()));
+                      notes.addAll(await importedDB.noteRepo.get(DateRange.all()));
+                      intakes.addAll(await importedDB.intakeRepo.get(DateRange.all()));
+                      await db.close();
+                    } catch (e) {
+                      // DB doesn't conform new format
+                    }
+
+                    try { // Update legacy format
+                      final model = (records.isNotEmpty || notes.isNotEmpty || intakes.isNotEmpty)
+                        ? null
+                        : await BloodPressureModel.create(dbPath: file.path!, isFullPath: true);
+                      for (final OldBloodPressureRecord oldR in (await model?.all) ?? []) {
+                        if (oldR.systolic != null || oldR.diastolic != null || oldR.pulse != null) {
+                          records.add(BloodPressureRecord(
+                            time: oldR.creationTime,
+                            sys: oldR.systolic == null ? null :Pressure.mmHg(oldR.systolic!),
+                            dia: oldR.diastolic == null ? null :Pressure.mmHg(oldR.diastolic!),
+                            pul: oldR.pulse,
+                          ));
+                        }
+                        if (oldR.notes.isNotEmpty || oldR.needlePin != null) {
+                          notes.add(Note(
+                            time: oldR.creationTime,
+                            note: oldR.notes.isEmpty ? null : oldR.notes,
+                            color: oldR.needlePin?.color.value,
+                          ));
+                        }
+                      }
+                    } catch (e) {
+                      // DB not importable
+                    }
+
+                    await Future.forEach(records, bpRepo.add);
+                    await Future.forEach(notes, noteRepo.add);
+                    await Future.forEach(intakes, intakeRepo.add);
+                    // TODO: show success
+
                     break;
                   default:
                     _showError(messenger, localizations.errWrongImportFormat);
@@ -143,15 +177,16 @@ void performExport(BuildContext context, [AppLocalizations? localizations]) asyn
   final filename = 'blood_press_${DateTime.now().toIso8601String()}';
   switch (exportSettings.exportFormat) {
     case ExportFormat.db:
-      final path = join(await getDatabasesPath(), 'blood_pressure.db');
+      final path = join(await getDatabasesPath(), 'bp.db');
 
-      if (context.mounted) await _exportFile(context, path, '$filename.db', 'text/sqlite');
+      if (context.mounted) await _exportFile(context, path, '$filename.db', 'application/vnd.sqlite3');
       break;
     case ExportFormat.csv:
       final csvConverter = CsvConverter(
         Provider.of<CsvExportSettings>(context, listen: false),
         Provider.of<ExportColumnsManager>(context, listen: false),
       );
+      // TODO: update color serialization
       final csvString = csvConverter.create(await _getEntries(context));
       final data = Uint8List.fromList(utf8.encode(csvString));
       if (context.mounted) await _exportData(context, data, '$filename.csv', 'text/csv');

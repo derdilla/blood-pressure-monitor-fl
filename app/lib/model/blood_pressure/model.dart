@@ -56,18 +56,18 @@ class BloodPressureModel extends ChangeNotifier {
   }
 
   /// Returns all recordings in saved in a range in ascending order
-  Future<UnmodifiableListView<BloodPressureRecord>> getInTimeRange(DateTime from, DateTime to) async {
+  Future<UnmodifiableListView<OldBloodPressureRecord>> getInTimeRange(DateTime from, DateTime to) async {
     if (!_database.isOpen) return UnmodifiableListView([]);
     final dbEntries = await _database.query('bloodPressureModel',
         orderBy: 'timestamp DESC',
         where: 'timestamp BETWEEN ? AND ?',
         whereArgs: [from.millisecondsSinceEpoch, to.millisecondsSinceEpoch],); // descending
-    final List<BloodPressureRecord> recordsInRange = _convert(dbEntries);
+    final List<OldBloodPressureRecord> recordsInRange = _convert(dbEntries);
     return UnmodifiableListView(recordsInRange);
   }
 
   /// Querries all measurements saved in the database.
-  Future<UnmodifiableListView<BloodPressureRecord>> get all async {
+  Future<UnmodifiableListView<OldBloodPressureRecord>> get all async {
     if (!_database.isOpen) return UnmodifiableListView([]);
     return UnmodifiableListView(_convert(await _database.query('bloodPressureModel', columns: ['*'])));
   }
@@ -77,12 +77,12 @@ class BloodPressureModel extends ChangeNotifier {
   /// Cannot be accessed anymore.
   Future<void> close() => _database.close();
 
-  List<BloodPressureRecord> _convert(List<Map<String, Object?>> dbResult) {
-    final List<BloodPressureRecord> records = [];
+  List<OldBloodPressureRecord> _convert(List<Map<String, Object?>> dbResult) {
+    final List<OldBloodPressureRecord> records = [];
     for (final e in dbResult) {
       final needlePinJson = e['needlePin'] as String?;
       final needlePin = (needlePinJson != null) ? jsonDecode(needlePinJson) : null;
-      records.add(BloodPressureRecord(
+      records.add(OldBloodPressureRecord(
           DateTime.fromMillisecondsSinceEpoch(e['timestamp'] as int),
           e['systolic'] as int?,
           e['diastolic'] as int?,

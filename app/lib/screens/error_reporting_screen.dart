@@ -113,7 +113,7 @@ class ErrorScreen extends StatelessWidget {
                             content: Text('ERR: $e'),),);
                       }
                     },
-                    child: const Text('rescue old measurements'),
+                    child: const Text('rescue legacy blood_pressure.db'),
                   ),
                   TextButton(
                     onPressed: () async {

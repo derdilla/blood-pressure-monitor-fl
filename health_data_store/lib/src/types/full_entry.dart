@@ -65,6 +65,7 @@ extension FullEntryList on List<FullEntry> {
     List<Note> notes,
     List<MedicineIntake> intakes,
   ) {
+    // TODO: make these asserts unneccessary
     assert(!records
       .any((rOuter) => records
         .where((rInner) => rOuter.time == rInner.time).length != 1,

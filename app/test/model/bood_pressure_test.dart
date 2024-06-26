@@ -8,7 +8,7 @@ import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 void main() {
   group('BloodPressureRecord', () {
     test('should initialize with all values supported by dart', () {
-      final BloodPressureRecord record = BloodPressureRecord(DateTime.fromMicrosecondsSinceEpoch(1582991592), 0, -50, 1000,
+      final OldBloodPressureRecord record = OldBloodPressureRecord(DateTime.fromMicrosecondsSinceEpoch(1582991592), 0, -50, 1000,
           '((V⍳V)=⍳⍴V)/V←,V    ⌷←⍳→⍴∆∇⊃‾⍎⍕⌈๏ แผ่นดินฮั่นเABCDEFGHIJKLMNOPQRSTUVWXYZ /0123456789abcdefghijklmnopqrstuvwxyz £©µÀÆÖÞßéöÿ–—‘“”„†•…‰™œŠŸž€ ΑΒΓΔΩαβγδω АБВГДабвг, \n \t д∀∂∈ℝ∧∪≡∞ ↑↗↨↻⇣ ┐┼╔╘░►☺♀ ﬁ�⑀₂ἠḂӥẄɐː⍎אԱა',);
 
       expect(record.creationTime, DateTime.fromMicrosecondsSinceEpoch(1582991592));
@@ -19,7 +19,7 @@ void main() {
           '((V⍳V)=⍳⍴V)/V←,V    ⌷←⍳→⍴∆∇⊃‾⍎⍕⌈๏ แผ่นดินฮั่นเABCDEFGHIJKLMNOPQRSTUVWXYZ /0123456789abcdefghijklmnopqrstuvwxyz £©µÀÆÖÞßéöÿ–—‘“”„†•…‰™œŠŸž€ ΑΒΓΔΩαβγδω АБВГДабвг, \n \t д∀∂∈ℝ∧∪≡∞ ↑↗↨↻⇣ ┐┼╔╘░►☺♀ ﬁ�⑀₂ἠḂӥẄɐː⍎אԱა',);
     });
     test('should not save times at or before epoch', () {
-      expect(() => BloodPressureRecord(DateTime.fromMillisecondsSinceEpoch(0), 0, 0, 0, ''), throwsAssertionError);
+      expect(() => OldBloodPressureRecord(DateTime.fromMillisecondsSinceEpoch(0), 0, 0, 0, ''), throwsAssertionError);
     });
   });
 
