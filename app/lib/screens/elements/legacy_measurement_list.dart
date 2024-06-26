@@ -1,11 +1,11 @@
 import 'package:blood_pressure_app/components/nullable_text.dart';
+import 'package:blood_pressure_app/components/pressure_text.dart';
 import 'package:blood_pressure_app/model/storage/settings_store.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:health_data_store/health_data_store.dart';
 import 'package:intl/intl.dart';
-
-import '../../components/pressure_text.dart';
+import 'package:provider/provider.dart';
 
 /// A old more compact [BloodPressureRecord] list, that lacks some of the new
 /// features.
@@ -13,14 +13,10 @@ class LegacyMeasurementsList extends StatefulWidget {
   /// Create a more compact measurement list without all new features.
   LegacyMeasurementsList({super.key,
     required this.data,
-    required this.settings,
   });
 
   /// Entries sorted with newest ordered first.
   final List<FullEntry> data;
-
-  /// Settings that determine general behavior.
-  final Settings settings;
 
   @override
   State<LegacyMeasurementsList> createState() => _LegacyMeasurementsListState();
@@ -43,13 +39,16 @@ class _LegacyMeasurementsListState extends State<LegacyMeasurementsList> {
         child: Text(AppLocalizations.of(context)!.time, style: const TextStyle(fontWeight: FontWeight.bold)),),
       Expanded(
         flex: _tableElementsSizes[1],
-        child: Text(AppLocalizations.of(context)!.sysShort, style: TextStyle(fontWeight: FontWeight.bold, color: widget.settings.sysColor)),),
+        child: Text(AppLocalizations.of(context)!.sysShort,
+          style: TextStyle(fontWeight: FontWeight.bold, color: context.select<Settings, Color>((s) => s.sysColor))),),
       Expanded(
         flex: _tableElementsSizes[2],
-        child: Text(AppLocalizations.of(context)!.diaShort, style: TextStyle(fontWeight: FontWeight.bold, color: widget.settings.diaColor)),),
+        child: Text(AppLocalizations.of(context)!.diaShort,
+          style: TextStyle(fontWeight: FontWeight.bold, color: context.select<Settings, Color>((s) => s.diaColor))),),
       Expanded(
         flex: _tableElementsSizes[3],
-        child: Text(AppLocalizations.of(context)!.pulShort, style: TextStyle(fontWeight: FontWeight.bold, color: widget.settings.pulColor)),),
+        child: Text(AppLocalizations.of(context)!.pulShort,
+          style: TextStyle(fontWeight: FontWeight.bold, color: context.select<Settings, Color>((s) => s.pulColor))),),
       Expanded(
         flex: _tableElementsSizes[4],
         child: Text(AppLocalizations.of(context)!.notes, style: const TextStyle(fontWeight: FontWeight.bold)),),
@@ -61,7 +60,7 @@ class _LegacyMeasurementsListState extends State<LegacyMeasurementsList> {
   );
 
   Widget _itemBuilder(context, int index) {
-    final formatter = DateFormat(widget.settings.dateFormatString);
+    final formatter = DateFormat(context.select<Settings, String>((s) => s.dateFormatString));
     return Column(
       children: [
         Dismissible(

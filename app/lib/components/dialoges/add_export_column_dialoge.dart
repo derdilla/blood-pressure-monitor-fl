@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:health_data_store/health_data_store.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 /// Dialoge widget for creating and editing a [UserColumn].
 ///
@@ -16,16 +17,12 @@ class AddExportColumnDialoge extends StatefulWidget {
   /// Create a widget for creating and editing a [UserColumn].
   const AddExportColumnDialoge({super.key,
     this.initialColumn,
-    required this.settings,
   });
 
   /// Prefills the form to a submitted state.
   ///
   /// When this is null it is assumed creating a new column is intended.
   final ExportColumn? initialColumn;
-
-  /// Settings to determine general behavior.
-  final Settings settings;
 
   @override
   State<AddExportColumnDialoge> createState() => _AddExportColumnDialogeState();
@@ -67,7 +64,7 @@ class _AddExportColumnDialogeState extends State<AddExportColumnDialoge>
 
     _controller = AnimationController(
       value: (type == _FormatterType.record) ? 1 : 0,
-      duration: Duration(milliseconds: widget.settings.animationSpeed),
+      duration: Duration(milliseconds: context.watch<Settings>().animationSpeed),
       vsync: this,
     );
   }
@@ -80,11 +77,12 @@ class _AddExportColumnDialogeState extends State<AddExportColumnDialoge>
 
   @override
   Widget build(BuildContext context) {
+    final settings = context.watch<Settings>();
     final localizations = AppLocalizations.of(context)!;
     return FullscreenDialoge(
       actionButtonText: localizations.btnSave,
       onActionButtonPressed: _saveForm,
-      bottomAppBar: widget.settings.bottomAppBars,
+      bottomAppBar: settings.bottomAppBars,
       body: GestureDetector(
         onHorizontalDragEnd: (details) {
           if (details.primaryVelocity == null) return;
@@ -163,8 +161,8 @@ class _AddExportColumnDialogeState extends State<AddExportColumnDialoge>
                 child: (){
                     final record = BloodPressureRecord(
                       time: DateTime.now(),
-                      sys: widget.settings.preferredPressureUnit.wrap(123),
-                      dia: widget.settings.preferredPressureUnit.wrap(78),
+                      sys: settings.preferredPressureUnit.wrap(123),
+                      dia: settings.preferredPressureUnit.wrap(78),
                       pul: 65,
                     );
                     final note = Note(
@@ -182,7 +180,6 @@ class _AddExportColumnDialogeState extends State<AddExportColumnDialoge>
                         if (type == _FormatterType.record)
                           MeasurementListRow(
                             data: (record, Note(time: record.time), []),
-                            settings: widget.settings,
                             onRequestEdit: () { }, // ignore
                           ) else Text(
                             DateFormat('MMM d, y - h:m.s')
@@ -336,14 +333,12 @@ enum _FormatterType {
 /// the CSV title. There is no check whether a userColumn
 /// with the generated title exists.
 Future<ExportColumn?> showAddExportColumnDialoge(
-  BuildContext context,
-  Settings settings, [
+  BuildContext context, [
     ExportColumn? initialColumn,
 ]) => showDialog<ExportColumn?>(context: context,
   builder: (context) => Dialog.fullscreen(
     child: AddExportColumnDialoge(
       initialColumn: initialColumn,
-      settings: settings,
     ),
   ),
 );

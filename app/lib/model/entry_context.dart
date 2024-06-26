@@ -20,11 +20,9 @@ extension EntryUtils on BuildContext {
       final recordRepo = RepositoryProvider.of<BloodPressureRepository>(this);
       final noteRepo = RepositoryProvider.of<NoteRepository>(this);
       final intakeRepo = RepositoryProvider.of<MedicineIntakeRepository>(this);
-      final settings = Provider.of<Settings>(this, listen: false);
       final exportSettings = Provider.of<ExportSettings>(this, listen: false);
 
       final entry = await showAddEntryDialoge(this,
-        settings,
         RepositoryProvider.of<MedicineRepository>(this),
         initial,
       );

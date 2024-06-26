@@ -4,6 +4,7 @@ import 'package:blood_pressure_app/model/storage/settings_store.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:health_data_store/health_data_store.dart';
+import 'package:provider/provider.dart';
 
 /// List that renders measurements and medicine intakes.
 ///
@@ -11,12 +12,8 @@ import 'package:health_data_store/health_data_store.dart';
 class MeasurementList extends StatelessWidget {
   /// Create a list to display measurements and intakes.
   const MeasurementList({super.key,
-    required this.settings,
     required this.entries,
   });
-
-  /// Settings that determine general behavior.
-  final Settings settings;
 
   /// Entries sorted with newest comming first.
   final List<FullEntry> entries;
@@ -24,6 +21,7 @@ class MeasurementList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
+    final settings = context.watch<Settings>();
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -72,7 +70,6 @@ class MeasurementList extends StatelessWidget {
             itemCount: entries.length,
             itemBuilder: (context, idx) => MeasurementListRow(
               data: entries[idx],
-              settings: settings,
               onRequestEdit: () => context.createEntry(entries[idx]),
             ),
           ),

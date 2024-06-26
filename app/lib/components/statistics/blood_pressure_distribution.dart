@@ -4,6 +4,7 @@ import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:health_data_store/health_data_store.dart';
+import 'package:provider/provider.dart';
 
 /// Viewer for [ValueDistribution]s from [BloodPressureRecord]s.
 ///
@@ -14,7 +15,6 @@ class BloodPressureDistribution extends StatefulWidget {
   const BloodPressureDistribution({
     super.key,
     required this.records,
-    required this.settings,
   });
 
   /// All records to include in statistics computations.
@@ -23,9 +23,6 @@ class BloodPressureDistribution extends StatefulWidget {
   /// computing this statistic. This means that no filtering of passed records
   /// is required.
   final Iterable<BloodPressureRecord> records;
-
-  /// Settings used to determine colors in the distributions.
-  final Settings settings;
 
   @override
   State<BloodPressureDistribution> createState() =>
@@ -83,17 +80,17 @@ class _BloodPressureDistributionState extends State<BloodPressureDistribution>
               ValueDistribution(
                 key: const Key('sys-dist'),
                 values: widget.records.map((e) => e.sys?.mmHg).whereNotNull(),
-                color: widget.settings.sysColor,
+                color: context.select<Settings, Color>((s) => s.sysColor),
               ),
               ValueDistribution(
                 key: const Key('dia-dist'),
                 values: widget.records.map((e) => e.dia?.mmHg).whereNotNull(),
-                color: widget.settings.diaColor,
+                color: context.select<Settings, Color>((s) => s.diaColor),
               ),
               ValueDistribution(
                 key: const Key('pul-dist'),
                 values: widget.records.map((e) => e.pul).whereNotNull(),
-                color: widget.settings.pulColor,
+                color: context.select<Settings, Color>((s) => s.pulColor),
               ),
             ],
           ),

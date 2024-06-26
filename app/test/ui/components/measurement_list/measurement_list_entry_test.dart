@@ -1,5 +1,4 @@
 import 'package:blood_pressure_app/components/measurement_list/measurement_list_entry.dart';
-import 'package:blood_pressure_app/model/storage/settings_store.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:health_data_store/health_data_store.dart';
@@ -11,24 +10,20 @@ void main() {
   testWidgets('should initialize without errors', (tester) async {
     await tester.pumpWidget(materialApp(MeasurementListRow(
       onRequestEdit: () => fail('should not request edit'),
-      settings: Settings(),
       data: mockEntryPos(DateTime(2023), 123, 80, 60, 'test'),),),);
     expect(tester.takeException(), isNull);
     await tester.pumpWidget(materialApp(MeasurementListRow(
       onRequestEdit: () => fail('should not request edit'),
-      settings: Settings(),
       data: mockEntryPos(DateTime.fromMillisecondsSinceEpoch(31279811), null, null, null, 'null test'),),),);
     expect(tester.takeException(), isNull);
     await tester.pumpWidget(materialApp(MeasurementListRow(
-        onRequestEdit: () => fail('should not request edit'),
-      settings: Settings(),
+      onRequestEdit: () => fail('should not request edit'),
       data: mockEntryPos(DateTime(2023), 124, 85, 63, 'color',Colors.cyan))));
     expect(tester.takeException(), isNull);
   });
   testWidgets('should expand correctly', (tester) async {
     await tester.pumpWidget(materialApp(MeasurementListRow(
       onRequestEdit: () => fail('should not request edit'),
-        settings: Settings(),
         data: mockEntryPos(DateTime(2023), 123, 78, 56),),),);
     expect(find.byIcon(Icons.medication), findsNothing);
     expect(find.byIcon(Icons.expand_more), findsOneWidget);
@@ -41,7 +36,6 @@ void main() {
   testWidgets('should display correct information', (tester) async {
     await tester.pumpWidget(materialApp(MeasurementListRow(
         onRequestEdit: () => fail('should not request edit'),
-        settings: Settings(),
         data: mockEntryPos(DateTime(2023), 123, 78, 56, 'Test text'),),),);
     expect(find.text('123'), findsOneWidget);
     expect(find.text('78'), findsOneWidget);
@@ -66,7 +60,7 @@ void main() {
   testWidgets('should not display null values', (tester) async {
     await tester.pumpWidget(materialApp(MeasurementListRow(
       onRequestEdit: () => fail('should not request edit'),
-      settings: Settings(), data: mockEntry(time: DateTime(2023)),),),);
+      data: mockEntry(time: DateTime(2023)),),),);
     expect(find.text('null'), findsNothing);
     expect(find.byIcon(Icons.medication), findsNothing);
     expect(find.byIcon(Icons.expand_more), findsOneWidget);
@@ -77,7 +71,6 @@ void main() {
   testWidgets('should propagate edit request', (tester) async {
     int requestCount = 0;
     await tester.pumpWidget(materialApp(MeasurementListRow(
-      settings: Settings(),
       data: mockEntry(
         time: DateTime(2023),
         sys:1,
@@ -109,7 +102,6 @@ void main() {
   testWidgets('should indicate presence of intakes', (tester) async {
     await tester.pumpWidget(materialApp(MeasurementListRow(
       onRequestEdit: () => fail('should not request edit'),
-      settings: Settings(),
       data: mockEntry(
         time: DateTime(2023),
         intake: mockIntake(mockMedicine(designation: 'testMed', color: Colors.red), dosis: 12.0),

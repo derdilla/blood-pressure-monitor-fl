@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:health_data_store/health_data_store.dart';
+import 'package:provider/provider.dart';
 
 /// Input mask for entering measurements.
 class AddEntryDialoge extends StatefulWidget {
@@ -17,13 +18,9 @@ class AddEntryDialoge extends StatefulWidget {
   /// 
   /// This is usually created through the [showAddEntryDialoge] function.
   const AddEntryDialoge({super.key,
-    required this.settings,
     required this.availableMeds,
     this.initialRecord,
   });
-
-  /// Settings are followed by the dialoge.
-  final Settings settings;
 
   /// Values that are prefilled.
   ///
@@ -84,6 +81,7 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
   /// Prefilled with default dosis of selected medicine.
   double? medicineDosis;
 
+  late Settings settings;
 
   @override
   void initState() {
@@ -93,6 +91,8 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
     pulController = TextEditingController();
     noteController = TextEditingController();
     _loadFields(widget.initialRecord);
+
+    settings = context.watch<Settings>();
 
     sysFocusNode.requestFocus();
     ServicesBinding.instance.keyboard.addHandler(_onKey);
@@ -118,11 +118,11 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
   void _loadFields(FullEntry? entry) {
     time = entry?.time ?? DateTime.now();
     final int? colorValue = entry?.color;
-    final sysValue = switch(widget.settings.preferredPressureUnit) {
+    final sysValue = switch(settings.preferredPressureUnit) {
       PressureUnit.mmHg => entry?.sys?.mmHg,
       PressureUnit.kPa => entry?.sys?.kPa.round(),
     };
-    final diaValue = switch(widget.settings.preferredPressureUnit) {
+    final diaValue = switch(settings.preferredPressureUnit) {
       PressureUnit.mmHg => entry?.dia?.mmHg,
       PressureUnit.kPa => entry?.dia?.kPa.round(),
     };
@@ -171,15 +171,15 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
         }
       },
       validator: (String? value) {
-        if (!widget.settings.allowMissingValues
+        if (!settings.allowMissingValues
             && (value == null
                 || value.isEmpty
                 || int.tryParse(value) == null)) {
           return localizations.errNaN;
-        } else if (widget.settings.validateInputs
+        } else if (settings.validateInputs
             && (int.tryParse(value ?? '') ?? -1) <= 30) {
           return localizations.errLt30;
-        } else if (widget.settings.validateInputs
+        } else if (settings.validateInputs
             && (int.tryParse(value ?? '') ?? 0) >= 400) {
           // https://pubmed.ncbi.nlm.nih.gov/7741618/
           return localizations.errUnrealistic;
@@ -213,7 +213,7 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
         if (shouldHaveRecord && (recordFormKey.currentState?.validate() ?? false)) {
           recordFormKey.currentState?.save();
           if (systolic != null || diastolic != null || pulse != null) {
-            final pressureUnit = widget.settings.preferredPressureUnit;
+            final pressureUnit = settings.preferredPressureUnit;
             record = BloodPressureRecord(
               time: time,
               sys: systolic == null ? null : pressureUnit.wrap(systolic!),
@@ -253,24 +253,23 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
         }
       },
       actionButtonText: localizations.btnSave,
-      bottomAppBar: widget.settings.bottomAppBars,
+      bottomAppBar: settings.bottomAppBars,
       body: SizeChangedLayoutNotifier(
         child: ListView(
           padding: const EdgeInsets.symmetric(horizontal: 8),
           children: [
-            if (widget.settings.bleInput)
+            if (settings.bleInput)
               BluetoothInput(
-                settings: widget.settings,
                 onMeasurement: (record) => setState(
                   () => _loadFields((record, Note(time: record.time, note: noteController.text, color: color?.value), [])),
                 ),
               ),
-            if (widget.settings.allowManualTimeInput)
+            if (settings.allowManualTimeInput)
               ListTileTheme(
                 shape: _buildShapeBorder(),
                 child: DateTimeForm(
-                  validate: widget.settings.validateInputs,
-                  dateFormatString: widget.settings.dateFormatString,
+                  validate: settings.validateInputs,
+                  dateFormatString: settings.dateFormatString,
                   initialTime: time,
                   onTimeSelected: (newTime) => setState(() {
                     time = newTime;
@@ -300,7 +299,7 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
                             setState(() => diastolic = int.tryParse(value ?? '')),
                         focusNode: diaFocusNode,
                         validator: (value) {
-                          if (widget.settings.validateInputs
+                          if (settings.validateInputs
                               && (int.tryParse(value ?? '') ?? 0)
                                   >= (int.tryParse(sysController.text) ?? 1)
                           ) {
@@ -422,7 +421,6 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
 /// Shows a dialoge to input a blood pressure measurement or a medication.
 Future<FullEntry?> showAddEntryDialoge(
   BuildContext context,
-  Settings settings,
   MedicineRepository medRepo,
   [FullEntry? initialRecord,
 ]) async {
@@ -431,7 +429,6 @@ Future<FullEntry?> showAddEntryDialoge(
       context: context, builder: (context) =>
       Dialog.fullscreen(
         child: AddEntryDialoge(
-          settings: settings,
           initialRecord: initialRecord,
           availableMeds: meds,
         ),

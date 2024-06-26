@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:health_data_store/health_data_store.dart';
-import 'package:provider/provider.dart';
 
 /// Screen to view and edit medications saved in [Settings].
 ///
@@ -45,8 +44,7 @@ class _MedicineManagerScreenState extends State<MedicineManagerScreen> {
                 title: Text(localizations.addMedication),
                 onTap: () async {
                   final medRepo = RepositoryProvider.of<MedicineRepository>(context);
-                  final settings = Provider.of<Settings>(context, listen: false);
-                  final medicine = await showAddMedicineDialoge(context, settings,);
+                  final medicine = await showAddMedicineDialoge(context);
                   if (medicine != null) {
                     setState(() {
                       medicines.add(medicine);

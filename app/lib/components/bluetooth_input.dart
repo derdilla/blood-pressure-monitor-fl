@@ -22,16 +22,12 @@ import 'package:health_data_store/health_data_store.dart';
 class BluetoothInput extends StatefulWidget {
   /// Create a measurement input through bluetooth.
   const BluetoothInput({super.key,
-    required this.settings,
     required this.onMeasurement,
     this.bluetoothCubit,
     this.deviceScanCubit,
     this.bleReadCubit,
     this.flutterBluePlus,
   });
-
-  /// Settings to store known devices.
-  final Settings settings;
 
   /// Called when a measurement was received through bluetooth.
   final void Function(BloodPressureRecord data) onMeasurement;
@@ -108,9 +104,10 @@ class _BluetoothInputState extends State<BluetoothInput> {
         _returnToIdle();
       }
     });
+    final settings = context.watch<Settings>();
     _deviceScanCubit ??= widget.deviceScanCubit?.call() ?? DeviceScanCubit(
       service: serviceUUID,
-      settings: widget.settings,
+      settings: settings,
       flutterBluePlus: widget.flutterBluePlus,
     );
     return BlocBuilder<DeviceScanCubit, DeviceScanState>(

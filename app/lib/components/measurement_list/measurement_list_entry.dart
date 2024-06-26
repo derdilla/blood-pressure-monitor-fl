@@ -14,15 +14,11 @@ class MeasurementListRow extends StatelessWidget {
   /// Create a display of a measurements.
   const MeasurementListRow({super.key,
     required this.data,
-    required this.settings,
     required this.onRequestEdit,
   });
 
   /// The measurement to display.
   final FullEntry data;
-
-  /// Settings that determine general behavior.
-  final Settings settings;
 
   /// Called when the user taps on the edit icon.
   final void Function() onRequestEdit; // TODO: consider removing in favor of context methods
@@ -30,6 +26,7 @@ class MeasurementListRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
+    final settings = context.watch<Settings>();
     final formatter = DateFormat(settings.dateFormatString);
     return ExpansionTile(
       // Leading color possible

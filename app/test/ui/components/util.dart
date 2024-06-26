@@ -8,11 +8,33 @@ import 'package:provider/provider.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
 /// Create a root material widget with localizations.
-Widget materialApp(Widget child) => MaterialApp(
-  localizationsDelegates: AppLocalizations.localizationsDelegates,
-  locale: const Locale('en'),
-  home: Scaffold(body:child),
-);
+Widget materialApp(Widget child, {
+  Settings? settings,
+  ExportSettings? exportSettings,
+  CsvExportSettings? csvExportSettings,
+  PdfExportSettings? pdfExportSettings,
+  IntervallStoreManager? intervallStoreManager,
+}) {
+  settings ??= Settings();
+  exportSettings ??= ExportSettings();
+  csvExportSettings ??= CsvExportSettings();
+  pdfExportSettings ??= PdfExportSettings();
+  intervallStoreManager ??= IntervallStoreManager(IntervallStorage(), IntervallStorage(), IntervallStorage());
+  return MultiProvider(
+    providers: [
+      ChangeNotifierProvider.value(value: settings),
+      ChangeNotifierProvider.value(value: exportSettings),
+      ChangeNotifierProvider.value(value: csvExportSettings),
+      ChangeNotifierProvider.value(value: pdfExportSettings),
+      ChangeNotifierProvider.value(value: intervallStoreManager),
+    ],
+    child: MaterialApp(
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      locale: const Locale('en'),
+      home: Scaffold(body:child),
+    ),
+  );
+}
 
 /// Creates a the same App as the main method.
 Future<Widget> appBase(Widget child,  {
@@ -25,31 +47,25 @@ Future<Widget> appBase(Widget child,  {
   MedicineRepository? medRepo,
   MedicineIntakeRepository? intakeRepo,
 }) async {
-  settings ??= Settings();
-  exportSettings ??= ExportSettings();
-  csvExportSettings ??= CsvExportSettings();
-  pdfExportSettings ??= PdfExportSettings();
-  intervallStoreManager ??= IntervallStoreManager(IntervallStorage(), IntervallStorage(), IntervallStorage());
-
   HealthDataStore? db;
   if (bpRepo == null || medRepo == null || intakeRepo == null) {
     db = await _getHealthDateStore();
   }
 
-  return MultiProvider(providers: [
-    ChangeNotifierProvider(create: (_) => settings),
-    ChangeNotifierProvider(create: (_) => exportSettings),
-    ChangeNotifierProvider(create: (_) => csvExportSettings),
-    ChangeNotifierProvider(create: (_) => pdfExportSettings),
-    ChangeNotifierProvider(create: (_) => intervallStoreManager),
-  ], child: MultiRepositoryProvider(
+  return MultiRepositoryProvider(
     providers: [
       RepositoryProvider(create: (context) => bpRepo ?? db!.bpRepo),
       RepositoryProvider(create: (context) => medRepo ?? db!.medRepo),
       RepositoryProvider(create: (context) => intakeRepo ?? db!.intakeRepo),
     ],
-    child: materialApp(child),
-  ),);
+    child: materialApp(child,
+      settings: settings,
+      exportSettings: exportSettings,
+      csvExportSettings: csvExportSettings,
+      pdfExportSettings: pdfExportSettings,
+      intervallStoreManager: intervallStoreManager,
+    ),
+  );
 }
 
 /// Creates a the same App as the main method.
@@ -93,9 +109,14 @@ Future<Widget> appBaseWithData(Widget child,  {
 ///      UserColumn('initialInternalIdentifier', 'csvTitle', 'formatPattern')
 /// ));
 /// ```
-Future<void> loadDialoge(WidgetTester tester, void Function(BuildContext context) dialogeStarter, { String dialogeStarterText = 'X' }) async {
-  await tester.pumpWidget(materialApp(Builder(builder: (context) =>
-      TextButton(onPressed: () => dialogeStarter(context), child: Text(dialogeStarterText)),),),);
+Future<void> loadDialoge(WidgetTester tester, void Function(BuildContext context) dialogeStarter, {
+  String dialogeStarterText = 'X',
+  Settings? settings,
+}) async {
+  await tester.pumpWidget(materialApp(
+    Builder(builder: (context) => TextButton(onPressed: () => dialogeStarter(context), child: Text(dialogeStarterText)),),
+    settings: settings,
+  ),);
   await tester.tap(find.text(dialogeStarterText));
   await tester.pumpAndSettle();
 }
