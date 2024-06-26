@@ -1,13 +1,13 @@
 import 'package:blood_pressure_app/components/dialoges/confirm_deletion_dialoge.dart';
 import 'package:blood_pressure_app/components/nullable_text.dart';
 import 'package:blood_pressure_app/components/pressure_text.dart';
+import 'package:blood_pressure_app/model/entry_context.dart';
 import 'package:blood_pressure_app/model/storage/storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:health_data_store/health_data_store.dart';
 import 'package:intl/intl.dart';
-import 'package:provider/provider.dart';
 
 /// Display of a blood pressure measurement data.
 class MeasurementListRow extends StatelessWidget {
@@ -113,36 +113,4 @@ class MeasurementListRow extends StatelessWidget {
       ),
     ],
   );
-}
-
-extension DeleteEntry on BuildContext {
-  /// Delete record and note of an entry from the repositories.
-  Future<void> deleteEntry(FullEntry entry) async {
-    final localizations = AppLocalizations.of(this)!;
-    final settings = Provider.of<Settings>(this, listen: false);
-    final bpRepo = RepositoryProvider.of<BloodPressureRepository>(this);
-    final noteRepo = RepositoryProvider.of<NoteRepository>(this);
-    final messenger = ScaffoldMessenger.of(this);
-
-    bool confirmedDeletion = true;
-    if (settings.confirmDeletion) {
-      confirmedDeletion = await showConfirmDeletionDialoge(this);
-    }
-
-    if (confirmedDeletion) {
-      await bpRepo.remove(entry.$1);
-      await noteRepo.remove(entry.$2);
-      messenger.removeCurrentSnackBar();
-      messenger.showSnackBar(SnackBar(
-        content: Text(localizations.deletionConfirmed),
-        action: SnackBarAction(
-          label: localizations.btnUndo,
-          onPressed: () async {
-            await bpRepo.add(entry.$1);
-            await noteRepo.add(entry.$2);
-          },
-        ),
-      ),);
-    }
-  }
 }

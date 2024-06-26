@@ -6,13 +6,10 @@ import 'package:blood_pressure_app/components/forms/date_time_form.dart';
 import 'package:blood_pressure_app/components/settings/color_picker_list_tile.dart';
 import 'package:blood_pressure_app/model/blood_pressure/pressure_unit.dart';
 import 'package:blood_pressure_app/model/storage/storage.dart';
-import 'package:blood_pressure_app/screens/subsettings/export_import/export_button_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:health_data_store/health_data_store.dart';
-import 'package:provider/provider.dart';
 
 /// Input mask for entering measurements.
 class AddEntryDialoge extends StatefulWidget {
@@ -440,39 +437,4 @@ Future<FullEntry?> showAddEntryDialoge(
         ),
       ),
   );
-}
-
-/// Allow correctly saving entries in the contexts repositories.
-extension AddEntries on BuildContext {
-  /// Open the [AddEntryDialoge] and save received entries.
-  ///
-  /// Follows [ExportSettings.exportAfterEveryEntry]. When [initial] is not null
-  /// the dialoge will be opened in edit mode.
-  Future<void> createEntry([FullEntry? initial]) async {
-    final recordRepo = RepositoryProvider.of<BloodPressureRepository>(this);
-    final noteRepo = RepositoryProvider.of<NoteRepository>(this);
-    final intakeRepo = RepositoryProvider.of<MedicineIntakeRepository>(this);
-    final settings = Provider.of<Settings>(this, listen: false);
-    final exportSettings = Provider.of<ExportSettings>(this, listen: false);
-
-    final entry = await showAddEntryDialoge(this,
-      settings,
-      RepositoryProvider.of<MedicineRepository>(this),
-      initial,
-    );
-    if (entry != null) {
-      if (entry.sys != null || entry.dia != null || entry.pul != null) {
-        await recordRepo.add(entry.$1);
-      }
-      if (entry.note != null || entry.color != null) {
-        await noteRepo.add(entry.$2);
-      }
-      for (final intake in entry.$3) {
-        await intakeRepo.add(intake);
-      }
-      if (mounted && exportSettings.exportAfterEveryEntry) {
-        performExport(this, AppLocalizations.of(this)!);
-      }
-    }
-  }
 }

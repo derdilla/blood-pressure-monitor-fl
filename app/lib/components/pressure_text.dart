@@ -19,7 +19,7 @@ class PressureText extends StatelessWidget {
   Widget build(BuildContext context) => NullableText(
     switch (context.watch<Settings>().preferredPressureUnit) {
       PressureUnit.mmHg => pressure?.mmHg,
-      PressureUnit.kPa => pressure?.kPa,
+      PressureUnit.kPa => pressure?.kPa.toStringAsFixed(1),
     }?.toString(),
   );
 }

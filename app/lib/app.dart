@@ -147,14 +147,18 @@ class _AppState extends State<App> {
         RepositoryProvider.value(value: noteRepo),
         RepositoryProvider.value(value: medRepo),
         RepositoryProvider.value(value: intakeRepo),
-        ChangeNotifierProvider.value(value: _settings!),
-        ChangeNotifierProvider.value(value: _exportSettings!),
-        ChangeNotifierProvider.value(value: _csvExportSettings!),
-        ChangeNotifierProvider.value(value: _pdfExportSettings!),
-        ChangeNotifierProvider.value(value: _intervallStorageManager!),
-        ChangeNotifierProvider.value(value: _exportColumnsManager!),
       ],
-      child: _buildAppRoot(),
+      child: MultiProvider(
+        providers: [
+          ChangeNotifierProvider.value(value: _settings!),
+          ChangeNotifierProvider.value(value: _exportSettings!),
+          ChangeNotifierProvider.value(value: _csvExportSettings!),
+          ChangeNotifierProvider.value(value: _pdfExportSettings!),
+          ChangeNotifierProvider.value(value: _intervallStorageManager!),
+          ChangeNotifierProvider.value(value: _exportColumnsManager!),
+        ],
+        child: _buildAppRoot(),
+      ),
     );
 
     return _loadedChild!;
