@@ -53,7 +53,7 @@ class _AppState extends State<App> {
   void dispose() {
     _configDB?.database.close();
     _configDB = null;
-    _entryDB?.close(); // TODO: check this is safe
+    _entryDB?.close();
     _entryDB = null;
     _settings?.dispose();
     _exportSettings?.dispose();
@@ -73,8 +73,8 @@ class _AppState extends State<App> {
     if (widget.forceClearAppDataOnLaunch) {
       final dbPath = await getDatabasesPath();
       try {
-        File(join(dbPath, 'blood_pressure.db')).deleteSync();
-        File(join(dbPath, 'blood_pressure.db-journal')).deleteSync();
+        File(join(dbPath, 'bp.db')).deleteSync();
+        File(join(dbPath, 'bp.db-journal')).deleteSync();
       } on FileSystemException {
         // File is likely already deleted or couldn't be created in the first place.
       }
@@ -114,7 +114,6 @@ class _AppState extends State<App> {
       medRepo,
       intakeRepo,
     );
-    // TODO: document how data is stored in the app
 
     // update logic
     if (_settings!.lastVersion == 0) {
