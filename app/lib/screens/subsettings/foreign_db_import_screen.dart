@@ -1,5 +1,8 @@
+import 'dart:convert';
+
 import 'package:blood_pressure_app/components/consistent_future_builder.dart';
 import 'package:blood_pressure_app/components/dialoges/tree_selection_dialoge.dart';
+import 'package:blood_pressure_app/model/blood_pressure/needle_pin.dart';
 import 'package:blood_pressure_app/model/export_import/import_field_type.dart';
 import 'package:blood_pressure_app/model/storage/convert_util.dart';
 import 'package:blood_pressure_app/model/storage/settings_store.dart';
@@ -85,13 +88,13 @@ class _ForeignDBImportScreenState extends State<ForeignDBImportScreen> {
           }
 
           final data = await widget.db.query(tableName);
-          final measurements = <BloodPressureRecord>[];
+          final entries = <FullEntry>[];
           for (final row in data) {
             assert(row.containsKey(timeColumn)
                 && madeSelections.every(row.containsKey),);
             final timestamp = ConvertUtil.parseTime(row[timeColumn]);
             if (timestamp == null) throw FormatException('Unable to parse time: ${row[timeColumn]}'); // TODO: error handling
-            var record = BloodPressureRecord(time: timestamp);
+            FullEntry entry = (BloodPressureRecord(time: timestamp), Note(time: timestamp), []);
             final settings = context.read<Settings>();
             for (final colType in dataColumns) {
               switch (colType.$2) {
@@ -99,38 +102,29 @@ class _ForeignDBImportScreenState extends State<ForeignDBImportScreen> {
                   assert(false, 'Not up for selection');
                 case RowDataFieldType.sys:
                   final val = ConvertUtil.parseInt(row[colType.$1]);
-                  record = record.copyWith(
-                    sys: (val == null) ? null : settings.preferredPressureUnit.wrap(val), // TODO: is this correct?
-                  );
+                  entry = (entry.$1.copyWith(sys: (val == null) ? null : settings.preferredPressureUnit.wrap(val),), entry.$2, entry.$3);
                 case RowDataFieldType.dia:
                   final val = ConvertUtil.parseInt(row[colType.$1]);
-                  record = record.copyWith(
-                    dia: (val == null) ? null : settings.preferredPressureUnit.wrap(val),
-                  );
+                  entry = (entry.$1.copyWith(dia: (val == null) ? null : settings.preferredPressureUnit.wrap(val),), entry.$2, entry.$3);
                 case RowDataFieldType.pul:
-                  record = record.copyWith(
-                    pul: ConvertUtil.parseInt(row[colType.$1]),
-                  );
+                  entry = (entry.$1.copyWith(pul: ConvertUtil.parseInt(row[colType.$1]),), entry.$2, entry.$3);
                 case RowDataFieldType.notes:
-                  /*re cord = record.copyWith( FIXME
-                    notes: ConvertUtil.parseString(row[colType.$1]),
-                  );*/
+                  final note = ConvertUtil.parseString(row[colType.$1]);
+                  entry = (entry.$1, entry.$2.copyWith(note: note), entry.$3);
                 case RowDataFieldType.color:
-                  /*try { FIXME
+                  try {
                     final json = jsonDecode(row[colType.$1].toString());
                     if (json is! Map<String, dynamic>) continue;
                     final pin = MeasurementNeedlePin.fromMap(json);
-                    record = record.copyWith(
-                      needlePin: pin,
-                    );
+                    entry = (entry.$1, entry.$2.copyWith(color: pin.color.value), entry.$3);
                   } on FormatException {
                     // Not parsable: silently ignore for now
-                  }*/
+                  }
               }
             }
-            measurements.add(record);
+            entries.add(entry);
           }
-          if (context.mounted) Navigator.pop(context, measurements);
+          if (context.mounted) Navigator.pop(context, entries);
         },
         buildTitle: (List<String> selections) {
           if (selections.isEmpty) return 'Select table';
@@ -183,11 +177,11 @@ class _ColumnImportData {
 }
 
 /// Shows a dialoge to import arbitrary data from a external database.
-Future<List<BloodPressureRecord>?> showForeignDBImportDialoge(
+Future<List<FullEntry>?> showForeignDBImportDialoge(
     BuildContext context,
     bool bottomAppBars,
     Database db,) =>
-    showDialog<List<BloodPressureRecord>>(
+    showDialog<List<FullEntry>>(
       context: context, builder: (context) => ForeignDBImportScreen(
         bottomAppBars: bottomAppBars,
         db: db,

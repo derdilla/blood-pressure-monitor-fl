@@ -374,11 +374,23 @@ class SettingsPage extends StatelessWidget {
                       messenger.showSnackBar(SnackBar(content: Text(localizations.errNotImportable)));
                       return;
                     }
-                    // TODO: Show import preview
-                    final repo = RepositoryProvider.of<BloodPressureRepository>(context);
-                    await Future.forEach(data, repo.add);
-                    // TODO: give feedback
 
+                    final bpRepo = RepositoryProvider.of<BloodPressureRepository>(context);
+                    final noteRepo = RepositoryProvider.of<NoteRepository>(context);
+                    await Future.forEach(data, (e) async {
+                      if (e.sys != null || e.dia != null || e.pul != null) {
+                        await bpRepo.add(e.$1);
+                      }
+                      if (e.note != null || e.color != null) {
+                        await noteRepo.add(e.$2);
+                      }
+                      assert(e.$3.isEmpty);
+                    });
+
+                    // TODO: Show import preview
+
+                    messenger.showSnackBar(SnackBar(content: Text(
+                      localizations.importSuccess(data.length),),),);
                   },
                 ),
               ],
