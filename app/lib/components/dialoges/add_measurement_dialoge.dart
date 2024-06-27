@@ -81,8 +81,6 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
   /// Prefilled with default dosis of selected medicine.
   double? medicineDosis;
 
-  late Settings settings;
-
   @override
   void initState() {
     super.initState();
@@ -91,8 +89,6 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
     pulController = TextEditingController();
     noteController = TextEditingController();
     _loadFields(widget.initialRecord);
-
-    settings = context.watch<Settings>();
 
     sysFocusNode.requestFocus();
     ServicesBinding.instance.keyboard.addHandler(_onKey);
@@ -116,6 +112,7 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
 
   /// Sets fields to values in a [record].
   void _loadFields(FullEntry? entry) {
+    final settings = context.read<Settings>();
     time = entry?.time ?? DateTime.now();
     final int? colorValue = entry?.color;
     final sysValue = switch(settings.preferredPressureUnit) {
@@ -148,7 +145,7 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
   }
 
   /// Build a input for values in the measurement form (sys, dia, pul).
-  Widget _buildValueInput(AppLocalizations localizations, {
+  Widget _buildValueInput(AppLocalizations localizations, Settings settings, {
     String? labelText,
     void Function(String?)? onSaved,
     FocusNode? focusNode,
@@ -200,6 +197,7 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
   @override
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
+    final settings = context.watch<Settings>();
     return FullscreenDialoge(
       onActionButtonPressed: () {
         BloodPressureRecord? record;
@@ -284,7 +282,7 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
                   Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      _buildValueInput(localizations,
+                      _buildValueInput(localizations, settings,
                         focusNode: sysFocusNode,
                         labelText: localizations.sysLong,
                         controller: sysController,
@@ -292,7 +290,7 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
                             setState(() => systolic = int.tryParse(value ?? '')),
                       ),
                       const SizedBox(width: 16,),
-                      _buildValueInput(localizations,
+                      _buildValueInput(localizations, settings,
                         labelText: localizations.diaLong,
                         controller: diaController,
                         onSaved: (value) =>
@@ -309,7 +307,7 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
                         },
                       ),
                       const SizedBox(width: 16,),
-                      _buildValueInput(localizations,
+                      _buildValueInput(localizations, settings,
                         labelText: localizations.pulLong,
                         controller: pulController,
                         focusNode: pulFocusNode,

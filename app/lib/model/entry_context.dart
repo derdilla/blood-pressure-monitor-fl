@@ -27,6 +27,18 @@ extension EntryUtils on BuildContext {
         initial,
       );
       if (entry != null) {
+        if (initial != null) {
+          if ((initial.sys != null || initial.dia != null || initial.pul != null)) {
+            await recordRepo.remove(initial.$1);
+          }
+          if ((initial.note != null || initial.color != null)) {
+            await noteRepo.remove(initial.$2);
+          }
+          for (final intake in initial.$3) {
+            await intakeRepo.remove(intake);
+          }
+        }
+
         if (entry.sys != null || entry.dia != null || entry.pul != null) {
           await recordRepo.add(entry.$1);
         }
