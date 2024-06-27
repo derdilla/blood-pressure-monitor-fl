@@ -552,5 +552,7 @@
   "availableDevices": "Available devices",
   "@availableDevices": {},
   "deleteAllMedicineIntakes": "Delete all medicine intakes",
-  "@deleteAllMedicineIntakes": {}
+  "@deleteAllMedicineIntakes": {},
+  "deleteAllNotes": "Delete all notes",
+  "@deleteAllNotes": {}
 }

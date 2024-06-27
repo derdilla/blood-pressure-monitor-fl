@@ -70,7 +70,28 @@ class _DeleteDataScreenState extends State<DeleteDataScreen> {
               }
             },
           ),
-          // FIXME: delete notes
+          ListTile(
+            leading: const Icon(Icons.notes),
+            title: Text(localizations.deleteAllNotes),
+            trailing: const Icon(Icons.delete_forever),
+            onTap: () async {
+              final messanger = ScaffoldMessenger.of(context);
+              if (await showConfirmDeletionDialoge(context, localizations.warnDeletionUnrecoverable)) {
+                final repo = RepositoryProvider.of<NoteRepository>(context);
+                final previousNotes = await repo.get(DateRange.all());
+                for (final note in previousNotes) {
+                  await repo.remove(note);
+                }
+                messanger.showSnackBar(SnackBar(
+                  content: Text(localizations.deletionConfirmed),
+                  action: SnackBarAction(
+                    label: localizations.btnUndo,
+                    onPressed: () => Future.forEach(previousNotes, repo.add),
+                  ),
+                ));
+              }
+            },
+          ),
           ListTile(
             leading: const Icon(Icons.medication),
             title: Text(localizations.deleteAllMedicineIntakes),
@@ -78,7 +99,7 @@ class _DeleteDataScreenState extends State<DeleteDataScreen> {
             onTap: () async {
               if (await showConfirmDeletionDialoge(context, localizations.warnDeletionUnrecoverable)) {
                 final repo = context.read<MedicineIntakeRepository>();
-                final allIntakes = await repo.get(DateRange(start: DateTime.fromMillisecondsSinceEpoch(0), end: DateTime.now()));
+                final allIntakes = await repo.get(DateRange.all());
                 for (final intake in allIntakes) {
                   await repo.remove(intake);
                 }
