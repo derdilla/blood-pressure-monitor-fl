@@ -27,8 +27,6 @@ import 'package:path/path.dart';
 import 'package:provider/provider.dart';
 import 'package:sqflite/sqflite.dart';
 
-// FIXME: import and export all datatypes (intakes, ...)
-
 /// Button row to export and import the current configuration.
 class ExportButtonBar extends StatelessWidget {
   /// Create buttons for im- and exporting measurements.
@@ -94,8 +92,12 @@ class ExportButtonBar extends StatelessWidget {
                     final noteRepo = RepositoryProvider.of<NoteRepository>(context);
                     final intakeRepo = RepositoryProvider.of<MedicineIntakeRepository>(context);
                     await Future.forEach<FullEntry>(importedRecords, (e) async {
-                      await bpRepo.add(e.$1);
-                      await noteRepo.add(e.$2);
+                      if (e.sys != null || e.dia != null || e.pul != null) {
+                        await bpRepo.add(e.$1);
+                      }
+                      if (e.note != null || e.color != null) {
+                        await noteRepo.add(e.$2);
+                      }
                       if (e.$3.isNotEmpty) {
                         await Future.forEach(e.$3, intakeRepo.add);
                       }
@@ -144,6 +146,7 @@ class ExportButtonBar extends StatelessWidget {
                           ));
                         }
                       }
+                      await model?.close();
                     } catch (e) {
                       // DB not importable
                     }
@@ -151,8 +154,9 @@ class ExportButtonBar extends StatelessWidget {
                     await Future.forEach(records, bpRepo.add);
                     await Future.forEach(notes, noteRepo.add);
                     await Future.forEach(intakes, intakeRepo.add);
-                    // TODO: show success
 
+                    messenger.showSnackBar(SnackBar(content: Text(
+                      localizations.importSuccess(records.length),),),);
                     break;
                   default:
                     _showError(messenger, localizations.errWrongImportFormat);
@@ -186,7 +190,6 @@ void performExport(BuildContext context, [AppLocalizations? localizations]) asyn
         Provider.of<CsvExportSettings>(context, listen: false),
         Provider.of<ExportColumnsManager>(context, listen: false),
       );
-      // TODO: update color serialization
       final csvString = csvConverter.create(await _getEntries(context));
       final data = Uint8List.fromList(utf8.encode(csvString));
       if (context.mounted) await _exportData(context, data, '$filename.csv', 'text/csv');

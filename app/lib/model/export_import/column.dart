@@ -64,7 +64,6 @@ class NativeColumn extends ExportColumn {
     (_, note, __) => note.color?.toString() ?? '',
     (pattern) {
       final value = int.tryParse(pattern);
-      if (value == null) return null;
       return value;
     }
   );
