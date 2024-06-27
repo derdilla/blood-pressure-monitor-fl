@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:blood_pressure_app/model/storage/storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -132,14 +134,29 @@ class MockMedRepo implements MedicineRepository {
 
   final List<Medicine> _meds = [];
 
+  final _controller = StreamController.broadcast();
+
   @override
-  Future<void> add(Medicine medicine) async => _meds.add(medicine);
+  Future<void> add(Medicine medicine) async {
+    _meds.add(medicine);
+    _controller.add(null);
+  }
 
   @override
   Future<List<Medicine>> getAll() async=> _meds;
 
   @override
-  Future<void> remove(Medicine value) async => _meds.remove(value);
+  Future<void> remove(Medicine value) async {
+    _meds.remove(value);
+    _controller.add(null);
+  }
+
+  @override
+  @Deprecated('Medicines have no date. Use getAll directly')
+  Future<List<Medicine>> get(DateRange range) => getAll();
+
+  @override
+  Stream subscribe() => _controller.stream;
 }
 
 final List<Medicine> _meds = [];
