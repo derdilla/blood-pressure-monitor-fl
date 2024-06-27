@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 
 /// Base for fullscreen dialoges that allow value input.
 class FullscreenDialoge extends StatelessWidget {
-  // TODO: directly wrap in dialoge.fullscreen and remove it from code
-
   /// Create a dialoge that has a icon- and a textbutton in the app bar.
   const FullscreenDialoge({super.key,
     this.body,
@@ -55,15 +53,17 @@ class FullscreenDialoge extends StatelessWidget {
   final List<Widget> actions;
 
   @override
-  Widget build(BuildContext context) => Scaffold(
-    body: body,
-    appBar: bottomAppBar ? null : _buildAppBar(context),
-    bottomNavigationBar: bottomAppBar ? BottomAppBar(
-      color: Colors.transparent,
-      shadowColor: Colors.transparent,
-      surfaceTintColor: Colors.transparent,
-      child: _buildAppBar(context),
-    ) : null,
+  Widget build(BuildContext context) => Dialog.fullscreen(
+    child: Scaffold(
+      body: body,
+      appBar: bottomAppBar ? null : _buildAppBar(context),
+      bottomNavigationBar: bottomAppBar ? BottomAppBar(
+        color: Colors.transparent,
+        shadowColor: Colors.transparent,
+        surfaceTintColor: Colors.transparent,
+        child: _buildAppBar(context),
+      ) : null,
+    ),
   );
 
   PreferredSizeWidget _buildAppBar(BuildContext context) => AppBar(

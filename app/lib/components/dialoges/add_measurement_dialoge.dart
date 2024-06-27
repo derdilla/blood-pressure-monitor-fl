@@ -424,12 +424,9 @@ Future<FullEntry?> showAddEntryDialoge(
 ]) async {
   final meds = await medRepo.getAll();
   return showDialog<FullEntry>(
-      context: context, builder: (context) =>
-      Dialog.fullscreen(
-        child: AddEntryDialoge(
-          initialRecord: initialRecord,
-          availableMeds: meds,
-        ),
-      ),
+    context: context, builder: (context) => AddEntryDialoge(
+      initialRecord: initialRecord,
+      availableMeds: meds,
+    ),
   );
 }

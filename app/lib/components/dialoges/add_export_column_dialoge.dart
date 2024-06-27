@@ -64,7 +64,7 @@ class _AddExportColumnDialogeState extends State<AddExportColumnDialoge>
 
     _controller = AnimationController(
       value: (type == _FormatterType.record) ? 1 : 0,
-      duration: Duration(milliseconds: context.watch<Settings>().animationSpeed),
+      duration: Duration(milliseconds: context.read<Settings>().animationSpeed),
       vsync: this,
     );
   }
@@ -336,9 +336,7 @@ Future<ExportColumn?> showAddExportColumnDialoge(
   BuildContext context, [
     ExportColumn? initialColumn,
 ]) => showDialog<ExportColumn?>(context: context,
-  builder: (context) => Dialog.fullscreen(
-    child: AddExportColumnDialoge(
-      initialColumn: initialColumn,
-    ),
+  builder: (context) => AddExportColumnDialoge(
+    initialColumn: initialColumn,
   ),
 );

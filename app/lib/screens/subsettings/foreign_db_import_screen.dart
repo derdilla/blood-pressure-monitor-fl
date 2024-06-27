@@ -188,11 +188,8 @@ Future<List<BloodPressureRecord>?> showForeignDBImportDialoge(
     bool bottomAppBars,
     Database db,) =>
     showDialog<List<BloodPressureRecord>>(
-      context: context, builder: (context) =>
-        Dialog.fullscreen(
-          child: ForeignDBImportScreen(
-            bottomAppBars: bottomAppBars,
-            db: db,
-          ),
-        ),
+      context: context, builder: (context) => ForeignDBImportScreen(
+        bottomAppBars: bottomAppBars,
+        db: db,
+      ),
     );

@@ -99,6 +99,6 @@ class _AddMedicationDialogeState extends State<AddMedicationDialoge> {
 ///
 /// The created medicine gets an index that was never in settings.
 Future<Medicine?> showAddMedicineDialoge(BuildContext context) =>
-  showDialog<Medicine?>(context: context, builder: (context) => Dialog.fullscreen(
-    child: AddMedicationDialoge(),
-  ),);
+  showDialog<Medicine?>(context: context,
+    builder: (context) => AddMedicationDialoge(),
+  );

@@ -96,6 +96,7 @@ class _EnterTimeFormatDialogeState extends State<EnterTimeFormatDialoge> {
 ///
 /// When canceled null is returned.
 Future<String?> showTimeFormatPickerDialoge(BuildContext context, String initialTimeFormat, bool bottomAppBars) =>
-  showDialog<String?>(context: context, builder: (context) => Dialog.fullscreen(
-    child: EnterTimeFormatDialoge(initialValue: initialTimeFormat, bottomAppBars: bottomAppBars,),
-  ),);
+  showDialog<String?>(context: context, builder: (context) => EnterTimeFormatDialoge(
+    initialValue: initialTimeFormat,
+    bottomAppBars: bottomAppBars,),
+  );

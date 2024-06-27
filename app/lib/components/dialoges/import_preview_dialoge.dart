@@ -199,11 +199,9 @@ Future<List<FullEntry>?> showImportPreview(
   bool bottomAppBar,) =>
   showDialog<List<FullEntry>>(
     context: context, builder: (context) =>
-    Dialog.fullscreen(
-      child: ImportPreviewDialoge(
-        bottomAppBar: bottomAppBar,
-        initialActor: initialActor,
-        columnsManager: columnsManager,
-      ),
+    ImportPreviewDialoge(
+      bottomAppBar: bottomAppBar,
+      initialActor: initialActor,
+      columnsManager: columnsManager,
     ),
   );
