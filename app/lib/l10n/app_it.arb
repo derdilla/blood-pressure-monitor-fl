@@ -513,7 +513,7 @@
   "@errBleNoPerms": {},
   "scanningDevices": "Ricerca dispositivi in corso...",
   "@scanningDevices": {},
-  "errBleCantOpen": "Caricamento dei dispositivi di input non riuscito. Assicurati che l'app disponga di tutte le autorizzazioni necessarie e segnala il problema nel caso in cui persista.",
+  "errBleCantOpen": "Caricamento dei dispositivi di input non riuscito. Assicurati che l''app disponga di tutte le autorizzazioni necessarie e segnala il problema nel caso in cui persista.",
   "@errBleCantOpen": {},
   "errBleNoDev": "Nessun dispositivo BLE GATT compatibile trovato. Tocca per aggiornare!",
   "@errBleNoDev": {},
