@@ -1,0 +1,152 @@
+{
+  "success": "Sikeres: {msg}",
+  "@success": {
+    "placeholders": {
+      "msg": {
+        "type": "String"
+      }
+    }
+  },
+  "loading": "Betöltés…",
+  "@loading": {},
+  "error": "Hiba: {msg}",
+  "@error": {
+    "placeholders": {
+      "msg": {
+        "type": "String"
+      }
+    }
+  },
+  "errNaN": "Kérem adjon meg egy számot",
+  "@errNaN": {},
+  "errCantOpenURL": "Nem sikerült megnyitni az URL-t : {url}",
+  "@errCantOpenURL": {
+    "placeholders": {
+      "url": {
+        "type": "String"
+      }
+    }
+  },
+  "errNoFileOpened": "Nincs megnyitható file",
+  "@errNoFileOpened": {},
+  "errNotStarted": "nem indult el",
+  "@errNotStarted": {},
+  "errNoValue": "Kérem adjon meg egy értéket",
+  "@errNoValue": {},
+  "errNotEnoughDataToGraph": "Nincs elég adat az ábra rajzolásához.",
+  "@errNotEnoughDataToGraph": {},
+  "errNoData": "Nincs adat",
+  "@errNoData": {},
+  "errPleaseSelect": "Kérem válasszon",
+  "@errPleaseSelect": {},
+  "btnCancel": "MÉGSE",
+  "@btnCancel": {},
+  "btnConfirm": "OK",
+  "@btnConfirm": {},
+  "btnUndo": "VISSZA",
+  "@btnUndo": {},
+  "sysLong": "Szisztolés",
+  "@sysLong": {},
+  "sysShort": "sys",
+  "@sysShort": {},
+  "diaLong": "Diasztolés",
+  "@diaLong": {},
+  "addNote": "Jegyzet (opcionális)",
+  "@addNote": {},
+  "settings": "Beállítások",
+  "@settings": {},
+  "title": "Vérnyomás alkalmazás",
+  "@title": {},
+  "errLt30": "Érték <= 30? Kapcsolja ki az ellenőrzést a beállításokban!",
+  "@errLt30": {},
+  "errUnrealistic": "Nem valóságos érték? Kapcsolja ki az ellenőrzést a beállításokban!",
+  "@errUnrealistic": {},
+  "errDiaGtSys": "dia > sys? Kapcsolja ki az ellenőrzést a beállításokban!",
+  "@errDiaGtSys": {},
+  "errUnknown": "Ismeretlen hiba",
+  "@errUnknown": {},
+  "btnSave": "MENTÉS",
+  "@btnSave": {},
+  "btnNext": "KÖVETKEZŐ",
+  "@btnNext": {},
+  "pulLong": "Pulzus",
+  "@pulLong": {},
+  "theme": "Téma",
+  "@theme": {},
+  "errWrongImportFormat": "Csak CSV és SQLite formátumok beolvasása lehetséges.",
+  "@errWrongImportFormat": {},
+  "errNeedHeadline": "Csak fejléccel rendelkező fájl olvasható be.",
+  "@errNeedHeadline": {},
+  "errCantReadFile": "A fájl tartalma nem olvasható",
+  "@errCantReadFile": {},
+  "errNotImportable": "A fájlt nem lehet beolvasni",
+  "@errNotImportable": {},
+  "diaShort": "dia",
+  "@diaShort": {},
+  "pulShort": "pul",
+  "@pulShort": {},
+  "layout": "Elrendezés",
+  "@layout": {},
+  "enterTimeFormatScreen": "Idő formátum",
+  "@enterTimeFormatScreen": {},
+  "system": "Rendszer",
+  "@system": {},
+  "light": "Világos",
+  "@light": {},
+  "iconSize": "Icon méret",
+  "@iconSize": {},
+  "graphLineThickness": "Vonal vastagság",
+  "@graphLineThickness": {},
+  "allowManualTimeInput": "Engedje meg az idő kézi megadását",
+  "@allowManualTimeInput": {},
+  "animationSpeed": "Animáció időtartalma",
+  "@animationSpeed": {},
+  "sysColor": "Szisztolé szín",
+  "@sysColor": {},
+  "diaColor": "Diasztolé szín",
+  "@diaColor": {},
+  "confirmDeletion": "Törlés megerősítése",
+  "@confirmDeletion": {},
+  "age": "Életkor",
+  "@age": {},
+  "determineWarnValues": "Figyelmeztetési értékek meghatározása",
+  "@determineWarnValues": {},
+  "packageNameOf": "Csomag neve: {name}",
+  "@packageNameOf": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "dark": "Sötét",
+  "@dark": {},
+  "accentColor": "Téma szín",
+  "@accentColor": {},
+  "pulColor": "Pulzus szín",
+  "@pulColor": {},
+  "aboutWarnValuesScreen": "Rólunk",
+  "@aboutWarnValuesScreen": {},
+  "versionOf": "Verzió: {version}",
+  "@versionOf": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "buildNumberOf": "Verzió szám: {buildNumber}",
+  "@buildNumberOf": {
+    "placeholders": {
+      "buildNumber": {
+        "type": "String"
+      }
+    }
+  },
+  "exportImport": "Export / Import",
+  "@exportImport": {},
+  "data": "Adatok",
+  "@data": {},
+  "version": "Verzió",
+  "@version": {}
+}
