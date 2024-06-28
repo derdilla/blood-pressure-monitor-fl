@@ -40,6 +40,9 @@ jobs:
       uses: subosito/flutter-action@v2
       with:
         channel: ${{ env.FLUTTER_CHANNEL }}
+    - name: Generate mock code
+      run: flutter pub run build_runner build
+      working-directory: ./app
     - name: Run tests
       run: flutter test
       working-directory: ./app

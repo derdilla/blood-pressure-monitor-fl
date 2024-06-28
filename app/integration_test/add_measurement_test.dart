@@ -84,8 +84,8 @@ void main() {
 
     expect(find.byType(MeasurementListRow), findsOneWidget);
     final submittedRecord = tester.widget<MeasurementListRow>(find.byType(MeasurementListRow)).data;
-    expect(submittedRecord.sys, 123);
-    expect(submittedRecord.dia, 67);
+    expect(submittedRecord.sys?.mmHg, 123);
+    expect(submittedRecord.dia?.mmHg, 67);
     expect(submittedRecord.pul, 56);
     expect(submittedRecord.color, Colors.red.value);
     expect(submittedRecord.note, 'some test sample note');
