@@ -35,7 +35,7 @@ jobs:
         sdk: ${{ env.DART_SDK }}
     - name: Generate code
       run: dart run build_runner build
-      working-directory: ./health_data_store
+      working-directory: health_data_store
     - name: Setup Flutter
       uses: subosito/flutter-action@v2
       with:
@@ -46,10 +46,14 @@ jobs:
       run: |
         flutter pub get
         flutter pub run build_runner build
-      working-directory: ./app
+      working-directory: app
     - name: Run tests
-      run: flutter test
-      working-directory: ./app
+      run: flutter test --coverage
+      working-directory: app
+    - uses: actions/upload-artifact@v4
+      with:
+        name: app-coverage
+        path: app/coverage/lcov.info
 
   integration-test:
     name: "🛠️🧪 Run integration tests"
@@ -88,7 +92,7 @@ jobs:
           sdk: ${{ env.DART_SDK }}
       - name: Generate code
         run: dart run build_runner build
-        working-directory: ./health_data_store
+        working-directory: health_data_store
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
@@ -106,7 +110,7 @@ jobs:
 
       - name: Run integration tests
         run: flutter test integration_test --flavor github
-        working-directory: ./app
+        working-directory: app
 
   build-android:
     name: "🛠️ Build Android"
@@ -127,7 +131,7 @@ jobs:
         sdk: ${{ env.DART_SDK }}
     - name: Generate code
       run: dart run build_runner build
-      working-directory: ./health_data_store
+      working-directory: health_data_store
     - name: Setup Flutter
       uses: subosito/flutter-action@v2
       with:
@@ -136,4 +140,4 @@ jobs:
       run: flutter config --no-analytics
     - name: Build apk
       run: flutter build apk --flavor github --debug
-      working-directory: ./app
+      working-directory: app
