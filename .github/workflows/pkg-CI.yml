@@ -30,7 +30,9 @@ jobs:
         sdk: ${{ env.DART_SDK }}
 
     - name: Get dependencies
-      run: dart pub get
+      run: |
+        dart pub get
+        dart pub global activate coverage
       working-directory: ./health_data_store
     - name: Generate code
       run: dart run build_runner build
@@ -39,5 +41,11 @@ jobs:
       run: dart analyze
       working-directory: ./health_data_store
     - name: Run tests
-      run: dart test
+      run: |
+        dart test --coverage=coverage
+        format_coverage --lcov --in=coverage --out=coverage.lcov --report-on=lib
       working-directory: ./health_data_store
+    - uses: actions/upload-artifact@v4
+      with:
+        name: health_data_store-coverage
+        path: health_data_store/coverage.lcov
