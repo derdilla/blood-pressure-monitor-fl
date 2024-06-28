@@ -499,8 +499,12 @@
   "@name": {},
   "noMedication": "Sem medicação",
   "@noMedication": {},
-  "defaultDosis": "dose padrão",
+  "defaultDosis": "Dose padrão",
   "@defaultDosis": {},
   "dosis": "Dose",
-  "@dosis": {}
+  "@dosis": {},
+  "preferredPressureUnit": "Unidade de pressão preferida",
+  "@preferredPressureUnit": {},
+  "titleInCsv": "Título em CSV",
+  "@titleInCsv": {}
 }
