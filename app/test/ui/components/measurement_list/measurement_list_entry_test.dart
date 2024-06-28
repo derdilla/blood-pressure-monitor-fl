@@ -91,13 +91,6 @@ void main() {
 
     expect(requestCount, 1);
 
-    /* TODO: use somewhere else
-    /// Finder of text widgets that are descendants of the AddEntryDialoge.
-    Finder descTxt(String txt) => find.descendant(
-      of: find.byType(AddEntryDialoge),
-      matching: find.text(txt),
-    );*/
-
   }, timeout: const Timeout(Duration(seconds: 10)),);
   testWidgets('should indicate presence of intakes', (tester) async {
     await tester.pumpWidget(materialApp(MeasurementListRow(

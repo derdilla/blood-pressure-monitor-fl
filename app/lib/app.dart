@@ -67,7 +67,6 @@ class _AppState extends State<App> {
   /// Load the primary app data asynchronously to allow load animations.
   Future<Widget> _loadApp() async {
     WidgetsFlutterBinding.ensureInitialized();
-
     if (_loadedChild != null && _configDB != null && _entryDB != null) return _loadedChild!;
 
     if (widget.forceClearAppDataOnLaunch) {
@@ -90,13 +89,12 @@ class _AppState extends State<App> {
     _configDB = await ConfigDB.open();
     final configDao = ConfigDao(_configDB!);
 
-    assert(_settings == null);
-    _settings = await configDao.loadSettings(0);
-    _exportSettings = await configDao.loadExportSettings(0);
-    _csvExportSettings = await configDao.loadCsvExportSettings(0);
-    _pdfExportSettings = await configDao.loadPdfExportSettings(0);
-    _intervallStorageManager = await IntervallStoreManager.load(configDao, 0);
-    _exportColumnsManager = await configDao.loadExportColumnsManager(0);
+    _settings ??= await configDao.loadSettings(0);
+    _exportSettings ??= await configDao.loadExportSettings(0);
+    _csvExportSettings ??= await configDao.loadCsvExportSettings(0);
+    _pdfExportSettings ??= await configDao.loadPdfExportSettings(0);
+    _intervallStorageManager ??= await IntervallStoreManager.load(configDao, 0);
+    _exportColumnsManager ??= await configDao.loadExportColumnsManager(0);
 
     _entryDB = await openDatabase(
       join(await getDatabasesPath(), 'bp.db'),

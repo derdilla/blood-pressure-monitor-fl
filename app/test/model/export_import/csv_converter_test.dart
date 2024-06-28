@@ -1,7 +1,9 @@
 
 import 'dart:io';
 
+import 'package:blood_pressure_app/model/export_import/column.dart';
 import 'package:blood_pressure_app/model/export_import/csv_converter.dart';
+import 'package:blood_pressure_app/model/export_import/export_configuration.dart';
 import 'package:blood_pressure_app/model/export_import/record_parsing_result.dart';
 import 'package:blood_pressure_app/model/storage/export_columns_store.dart';
 import 'package:blood_pressure_app/model/storage/export_csv_settings_store.dart';
@@ -296,7 +298,50 @@ void main() {
         .having((p0) => p0.$2.note, 'notes', '')
         .having((p0) => p0.$2.color, 'pin', null),
     ),);
-    // TODO: test time columns
+  });
+  test('should decode formated times', () {
+    final text = File('test/model/export_import/exported_formats/formatted_times.csv').readAsStringSync();
+
+    final cols = ExportColumnsManager();
+    cols.addOrUpdate(TimeColumn('someTime', 'yyyy-MM-dd HH:mm'));
+    final converter = CsvConverter(
+      CsvExportSettings(
+        exportFieldsConfiguration: ActiveExportColumnConfiguration(
+          activePreset: ExportImportPreset.none,
+          userSelectedColumnIds: [],
+        )
+      ),
+      cols,
+    );
+    final parsed = converter.parse(text);
+
+    final records = parsed.getOr(failParse);
+    expect(records, isNotNull);
+    expect(records.length, 3);
+    expect(records, contains(isA<FullEntry>()
+      .having((c) => c.sys?.mmHg, 'sys', 1)
+      .having((c) => c.time.year, 'year', 2024)
+      .having((c) => c.time.month, 'month', 3)
+      .having((c) => c.time.day, 'day', 12)
+      .having((c) => c.time.hour, 'hour', 15)
+      .having((c) => c.time.minute, 'minute', 45),
+    ));
+    expect(records, contains(isA<FullEntry>()
+      .having((c) => c.sys?.mmHg, 'sys', 2)
+      .having((c) => c.time.year, 'year', 2004)
+      .having((c) => c.time.month, 'month', 12)
+      .having((c) => c.time.day, 'day', 8)
+      .having((c) => c.time.hour, 'hour', 0)
+      .having((c) => c.time.minute, 'minute', 42),
+    ));
+    expect(records, contains(isA<FullEntry>()
+      .having((c) => c.sys?.mmHg, 'sys', 3)
+      .having((c) => c.time.year, 'year', 2012)
+      .having((c) => c.time.month, 'month', 10)
+      .having((c) => c.time.day, 'day', 8)
+      .having((c) => c.time.hour, 'hour', 0)
+      .having((c) => c.time.minute, 'minute', 4),
+    ));
   });
 }
 
