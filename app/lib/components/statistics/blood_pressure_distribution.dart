@@ -1,9 +1,10 @@
 import 'package:blood_pressure_app/components/statistics/value_distribution.dart';
-import 'package:blood_pressure_app/model/blood_pressure/record.dart';
 import 'package:blood_pressure_app/model/storage/settings_store.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:health_data_store/health_data_store.dart';
+import 'package:provider/provider.dart';
 
 /// Viewer for [ValueDistribution]s from [BloodPressureRecord]s.
 ///
@@ -14,7 +15,6 @@ class BloodPressureDistribution extends StatefulWidget {
   const BloodPressureDistribution({
     super.key,
     required this.records,
-    required this.settings,
   });
 
   /// All records to include in statistics computations.
@@ -23,9 +23,6 @@ class BloodPressureDistribution extends StatefulWidget {
   /// computing this statistic. This means that no filtering of passed records
   /// is required.
   final Iterable<BloodPressureRecord> records;
-
-  /// Settings used to determine colors in the distributions.
-  final Settings settings;
 
   @override
   State<BloodPressureDistribution> createState() =>
@@ -79,20 +76,21 @@ class _BloodPressureDistributionState extends State<BloodPressureDistribution>
           child: TabBarView(
             controller: _controller,
             children: [
+              // Preferred pressure unit can be ignored as values are relative.
               ValueDistribution(
                 key: const Key('sys-dist'),
-                values: widget.records.map((e) => e.systolic).whereNotNull(),
-                color: widget.settings.sysColor,
+                values: widget.records.map((e) => e.sys?.mmHg).whereNotNull(),
+                color: context.select<Settings, Color>((s) => s.sysColor),
               ),
               ValueDistribution(
                 key: const Key('dia-dist'),
-                values: widget.records.map((e) => e.diastolic).whereNotNull(),
-                color: widget.settings.diaColor,
+                values: widget.records.map((e) => e.dia?.mmHg).whereNotNull(),
+                color: context.select<Settings, Color>((s) => s.diaColor),
               ),
               ValueDistribution(
                 key: const Key('pul-dist'),
-                values: widget.records.map((e) => e.pulse).whereNotNull(),
-                color: widget.settings.pulColor,
+                values: widget.records.map((e) => e.pul).whereNotNull(),
+                color: context.select<Settings, Color>((s) => s.pulColor),
               ),
             ],
           ),

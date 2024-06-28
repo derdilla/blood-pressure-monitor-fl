@@ -10,8 +10,7 @@ import 'package:blood_pressure_app/model/storage/intervall_store.dart';
 import 'package:blood_pressure_app/model/storage/settings_store.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-
-import 'medicine/medicine_test.dart';
+import 'package:health_data_store/health_data_store.dart';
 
 void main() {
   group('IntervallStorage', () {
@@ -34,7 +33,7 @@ void main() {
     });
 
     test('should load same data from json in edge cases', () {
-      final initialData = IntervallStorage(stepSize: TimeStep.month, range: DateTimeRange(
+      final initialData = IntervallStorage(stepSize: TimeStep.month, range: DateRange(
           start: DateTime.fromMillisecondsSinceEpoch(1234),
           end: DateTime.fromMillisecondsSinceEpoch(5678),
       ),);
@@ -95,7 +94,6 @@ void main() {
         useLegacyList: false,
         horizontalGraphLines: [HorizontalGraphLine(Colors.blue, 1230)],
         bottomAppBars: true,
-        medications: [mockMedicine(), mockMedicine(defaultDosis: 42)],
         knownBleDev: ['a', 'b'],
         bleInput: false,
       );
@@ -118,7 +116,7 @@ void main() {
       expect(initial.allowMissingValues, fromJson.allowMissingValues);
       expect(initial.drawRegressionLines, fromJson.drawRegressionLines);
       expect(initial.startWithAddMeasurementPage, fromJson.startWithAddMeasurementPage);
-      expect(initial.useLegacyList, fromJson.useLegacyList);
+      expect(initial.compactList, fromJson.compactList);
       expect(initial.horizontalGraphLines.length, fromJson.horizontalGraphLines.length);
       expect(initial.horizontalGraphLines.first.color.value, fromJson.horizontalGraphLines.first.color.value);
       expect(initial.horizontalGraphLines.first.height, fromJson.horizontalGraphLines.first.height);
@@ -146,7 +144,7 @@ void main() {
 
       expect(v1.pulColor.value, Settings().pulColor.value);
       expect(v2.validateInputs, Settings().validateInputs);
-      expect(v3.useLegacyList, Settings().useLegacyList);
+      expect(v3.compactList, Settings().compactList);
     });
   });
 

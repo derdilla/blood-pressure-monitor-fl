@@ -1,5 +1,3 @@
-import 'package:blood_pressure_app/model/blood_pressure/model.dart';
-import 'package:blood_pressure_app/model/blood_pressure/record.dart';
 import 'package:blood_pressure_app/model/storage/export_csv_settings_store.dart';
 import 'package:blood_pressure_app/model/storage/export_pdf_settings_store.dart';
 import 'package:blood_pressure_app/model/storage/export_settings_store.dart';
@@ -9,10 +7,10 @@ import 'package:blood_pressure_app/screens/statistics_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:provider/provider.dart';
+import 'package:health_data_store/health_data_store.dart';
 
-import '../model/export_import/record_formatter_test.dart';
-import '../ram_only_implementations.dart';
+import '../model/analyzer_test.dart';
+import 'components/util.dart';
 
 void main() {
   testWidgets('should load page', (tester) async {
@@ -29,7 +27,7 @@ void main() {
     await _initStatsPage(tester, [
       for (int i = 1; i<51; i++) // can't safe entries at or before epoch
         mockRecord(time: DateTime.fromMillisecondsSinceEpoch(1582991592 + i),
-            sys: i, dia: 60+i, pul: 110+i,),
+          sys: i, dia: 60+i, pul: 110+i,),
     ], intervallStoreManager: IntervallStoreManager(IntervallStorage(),
         IntervallStorage(), IntervallStorage(stepSize: TimeStep.lifetime,),),);
     final localizations = await AppLocalizations.delegate.load(const Locale('en'));
@@ -67,8 +65,8 @@ void main() {
   testWidgets("should not display 'null' when empty", (tester) async {
     await _initStatsPage(tester, [],
         intervallStoreManager: IntervallStoreManager(
-            IntervallStorage(), IntervallStorage(),
-            IntervallStorage(stepSize: TimeStep.lifetime,),),);
+          IntervallStorage(), IntervallStorage(),
+          IntervallStorage(stepSize: TimeStep.lifetime,),),);
     expect(find.textContaining('-1'), findsNothing);
     expect(find.textContaining('null'), findsNothing);
   });
@@ -81,31 +79,13 @@ Future<void> _initStatsPage(WidgetTester tester, List<BloodPressureRecord> recor
   PdfExportSettings? pdfExportSettings,
   IntervallStoreManager? intervallStoreManager,
 }) async {
-  final model = RamBloodPressureModel();
-  settings ??= Settings();
-  exportSettings ??= ExportSettings();
-  csvExportSettings ??= CsvExportSettings();
-  pdfExportSettings ??= PdfExportSettings();
-  intervallStoreManager ??= IntervallStoreManager(IntervallStorage(), IntervallStorage(), IntervallStorage());
-
-  for (final r in records) {
-    model.add(r);
-  }
-
-  await tester.pumpWidget(MultiProvider(
-      providers: [
-        ChangeNotifierProvider(create: (_) => settings),
-        ChangeNotifierProvider(create: (_) => exportSettings),
-        ChangeNotifierProvider(create: (_) => csvExportSettings),
-        ChangeNotifierProvider(create: (_) => pdfExportSettings),
-        ChangeNotifierProvider(create: (_) => intervallStoreManager),
-        ChangeNotifierProvider<BloodPressureModel>(create: (_) => model),
-      ],
-      child: Localizations(
-        delegates: AppLocalizations.localizationsDelegates,
-        locale: const Locale('en'),
-        child: const StatisticsScreen(),
-      ),
-  ),);
+  await tester.pumpWidget(await appBaseWithData(const StatisticsScreen(),
+    records: records,
+    settings: settings,
+    exportSettings: exportSettings,
+    csvExportSettings: csvExportSettings,
+    pdfExportSettings: pdfExportSettings,
+    intervallStoreManager: intervallStoreManager,
+  ));
   await tester.pumpAndSettle();
 }

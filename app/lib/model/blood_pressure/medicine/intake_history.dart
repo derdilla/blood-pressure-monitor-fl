@@ -9,9 +9,10 @@ import 'package:flutter/material.dart';
 ///
 /// Intake history does not implement database support, as operations performed
 /// are
+@Deprecated('use health_data_store')
 class IntakeHistory extends ChangeNotifier {
   /// Create a intake history from an unsorted list of intakes.
-  IntakeHistory(List<MedicineIntake> medicineIntakes):
+  IntakeHistory(List<OldMedicineIntake> medicineIntakes):
     _medicineIntakes = medicineIntakes.sorted((p0, p1) => p0.compareTo(p1));
 
   /// Creates a intake history from a sorted list of intakes.
@@ -22,23 +23,20 @@ class IntakeHistory extends ChangeNotifier {
     IntakeHistory._sorted(
       serialized
         .split('\n')
-        .map((e) => MedicineIntake.deserialize(e, availableMedicines))
+        .map((e) => OldMedicineIntake.deserialize(e, availableMedicines))
         .toList(),
     );
 
-  /// Serializes the current state of the object into a string.
-  String serialize() => _medicineIntakes.map((e) => e.serialize()).join('\n');
   /// List of all medicine intakes sorted in ascending order.
   ///
   /// Can contain multiple medicine intakes at the same time.
-  final List<MedicineIntake> _medicineIntakes;
-
+  final List<OldMedicineIntake> _medicineIntakes;
 
   /// Returns all intakes in a given range in ascending order.
   ///
   /// Binary searches the lower and the upper bound of stored intakes to create
   /// the list view.
-  UnmodifiableListView<MedicineIntake> getIntakes(DateTimeRange range) {
+  UnmodifiableListView<OldMedicineIntake> getIntakes(DateTimeRange range) {
     if (_medicineIntakes.isEmpty) return UnmodifiableListView([]);
     int start = _findLowerBound(_medicineIntakes, range.start);
     int end = _findUpperBound(_medicineIntakes, range.end);
@@ -50,39 +48,9 @@ class IntakeHistory extends ChangeNotifier {
     return UnmodifiableListView(_medicineIntakes.getRange(start, end));
   }
 
-  /// Save a medicine intake.
-  ///
-  /// Inserts the intake at the upper bound of intakes that are bigger or equal.
-  /// When no smaller bigger intake is available insert to the end of the list.
-  ///
-  /// Uses binary search to determine the bound.
-  void addIntake(MedicineIntake intake) {
-    final int index = _findUpperBound(_medicineIntakes, intake.timestamp);
-
-    if (index == -1) {
-      _medicineIntakes.add(intake);
-    } else {
-      _medicineIntakes.insert(index, intake);
-    }
-    notifyListeners();
-  }
-
-  /// Attempts to delete a medicine intake.
-  ///
-  /// When finding multiple intakes with the same timestamp, medicine
-  /// and dosis all instances will get deleted.
-  void deleteIntake(MedicineIntake intake) {
-    int idx = binarySearch(_medicineIntakes, intake);
-    while (idx >= 0) {
-      _medicineIntakes.removeAt(idx);
-      idx = binarySearch(_medicineIntakes, intake);
-    }
-    notifyListeners();
-  }
-
   /// Use binary search to determine the first index in [list] before which all
   /// values that are before or at the same time as [t].
-  int _findUpperBound(List<MedicineIntake> list, DateTime t) {
+  int _findUpperBound(List<OldMedicineIntake> list, DateTime t) {
     int low = 0;
     int high = list.length - 1;
 
@@ -104,7 +72,7 @@ class IntakeHistory extends ChangeNotifier {
 
   /// Use binary search to determine the last index in [list] after which before
   /// all values that are after or at the same time as [t].
-  int _findLowerBound(List<MedicineIntake> list, DateTime t) {
+  int _findLowerBound(List<OldMedicineIntake> list, DateTime t) {
     int low = 0;
     int high = list.length - 1;
 

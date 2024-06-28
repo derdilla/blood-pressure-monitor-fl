@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import 'package:health_data_store/health_data_store.dart';
 
 /// Utility class for converting dynamic values to concrete data types.
 ///
@@ -66,13 +67,13 @@ class ConvertUtil {
     return null;
   }
 
-  static DateTimeRange? parseRange(start, end) {
+  static DateRange? parseRange(start, end) {
     final startTimestamp = parseInt(start);
     final endTimestamp = parseInt(end);
     if (startTimestamp == null || endTimestamp == null) return null;
-    return DateTimeRange(
-        start: DateTime.fromMillisecondsSinceEpoch(startTimestamp),
-        end: DateTime.fromMillisecondsSinceEpoch(endTimestamp),
+    return DateRange(
+      start: DateTime.fromMillisecondsSinceEpoch(startTimestamp),
+      end: DateTime.fromMillisecondsSinceEpoch(endTimestamp),
     );
   }
 

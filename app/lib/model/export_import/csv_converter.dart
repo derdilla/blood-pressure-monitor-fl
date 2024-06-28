@@ -1,6 +1,3 @@
-
-import 'package:blood_pressure_app/model/blood_pressure/needle_pin.dart';
-import 'package:blood_pressure_app/model/blood_pressure/record.dart';
 import 'package:blood_pressure_app/model/export_import/column.dart';
 import 'package:blood_pressure_app/model/export_import/import_field_type.dart' show RowDataFieldType;
 import 'package:blood_pressure_app/model/export_import/record_parsing_result.dart';
@@ -8,6 +5,7 @@ import 'package:blood_pressure_app/model/storage/export_columns_store.dart';
 import 'package:blood_pressure_app/model/storage/export_csv_settings_store.dart';
 import 'package:collection/collection.dart';
 import 'package:csv/csv.dart';
+import 'package:health_data_store/health_data_store.dart';
 
 /// Utility class to convert between csv strings and [BloodPressureRecord]s.
 class CsvConverter {
@@ -21,11 +19,11 @@ class CsvConverter {
   final ExportColumnsManager availableColumns;
 
   /// Create the contents of a csv file from passed records.
-  String create(List<BloodPressureRecord> records) {
+  String create(List<FullEntry> entries) {
     final columns = settings.exportFieldsConfiguration.getActiveColumns(availableColumns);
-    final table = records.map(
-      (record) => columns.map(
-        (column) => column.encode(record),
+    final table = entries.map(
+      (entry) => columns.map(
+        (column) => column.encode(entry.$1, entry.$2, entry.$3),
       ).toList(),
     ).toList();
 
@@ -105,7 +103,7 @@ class CsvConverter {
       List<ExportColumn?> parsers, [
         bool assumeHeadline = true,
       ]) {
-    final List<BloodPressureRecord> records = [];
+    final List<FullEntry> entries = [];
     int currentLineNumber = assumeHeadline ? 1 : 0;
     for (final currentLine in dataLines) {
       if (currentLine.length < parsers.length) {
@@ -137,25 +135,41 @@ class CsvConverter {
             (piece) => piece.$1 == RowDataFieldType.dia,)?.$2;
       final int? pul = recordPieces.firstWhereOrNull(
             (piece) => piece.$1 == RowDataFieldType.pul,)?.$2;
-      String note = recordPieces.firstWhereOrNull(
+      String noteText = recordPieces.firstWhereOrNull(
             (piece) => piece.$1 == RowDataFieldType.notes,)?.$2 ?? '';
-      final MeasurementNeedlePin? needlePin = recordPieces.firstWhereOrNull(
-            (piece) => piece.$1 == RowDataFieldType.needlePin,)?.$2;
-
+      final int? color = recordPieces.firstWhereOrNull(
+            (piece) => piece.$1 == RowDataFieldType.color,)?.$2;
+      
       // manually trim quotes after https://pub.dev/packages/csv/changelog#600
-      note = note.trim();
-      if (note.endsWith('"')) {
-        note = note.substring(0, note.length - 1);
+      noteText = noteText.trim();
+      if (noteText.endsWith('"')) {
+        noteText = noteText.substring(0, noteText.length - 1);
       }
-      if (note.startsWith('"')) {
-        note = note.substring(1, note.length);
+      if (noteText.startsWith('"')) {
+        noteText = noteText.substring(1, noteText.length);
       }
 
-      records.add(BloodPressureRecord(timestamp, sys, dia, pul, note, needlePin: needlePin));
+      final record = BloodPressureRecord(
+        time: timestamp,
+        sys: sys?.asMMHg,
+        dia: dia?.asMMHg,
+        pul: pul,
+      );
+      final note = Note(
+        time: timestamp,
+        note: noteText,
+        color: color,
+      );
+      entries.add((record, note, []));
       currentLineNumber++;
     }
 
-    assert(records.length == dataLines.length, 'every line should have been parse');
-    return RecordParsingResult.ok(records);
+    assert(entries.length == dataLines.length, 'every line should have been parse');
+    return RecordParsingResult.ok(entries);
   }
+}
+
+extension _AsMMHg on int {
+  /// Interprets the value as a Pressure in mmHg.
+  Pressure get asMMHg => Pressure.mmHg(this);
 }

@@ -76,12 +76,13 @@ class _InputDialogeState extends State<InputDialoge> {
         onSubmitted: _onSubmit,
       ),
       actions: [
+        TextButton(
+          onPressed: () => Navigator.pop(context),
+          child: Text(localizations.btnCancel),
+        ),
         ElevatedButton(
-            onPressed: () => Navigator.pop(context, null),
-            child: Text(localizations.btnCancel),),
-        ElevatedButton(
-            onPressed: () => _onSubmit(controller.text),
-            child: Text(localizations.btnConfirm),),
+          onPressed: () => _onSubmit(controller.text),
+          child: Text(localizations.btnConfirm),),
       ],
     );
   }

@@ -1,7 +1,6 @@
 import 'package:blood_pressure_app/components/dialoges/add_export_column_dialoge.dart';
 import 'package:blood_pressure_app/components/measurement_list/measurement_list_entry.dart';
 import 'package:blood_pressure_app/model/export_import/column.dart';
-import 'package:blood_pressure_app/model/storage/settings_store.dart';
 import 'package:blood_pressure_app/screens/subsettings/export_import/export_field_format_documentation_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -12,7 +11,7 @@ import 'util.dart';
 void main() {
   group('AddExportColumnDialoge', () {
     testWidgets('should show everything on load', (tester) async {
-      await tester.pumpWidget(materialApp(AddExportColumnDialoge(settings: Settings(),)));
+      await tester.pumpWidget(materialApp(AddExportColumnDialoge()));
       expect(tester.takeException(), isNull);
 
       expect(find.text('SAVE'), findsOneWidget);
@@ -27,7 +26,7 @@ void main() {
     });
     testWidgets('should prefill values', (tester) async {
       await tester.pumpWidget(materialApp(
-          AddExportColumnDialoge(initialColumn: UserColumn('id', 'csvTitle', r'formatPattern$SYS'), settings: Settings(),),
+          AddExportColumnDialoge(initialColumn: UserColumn('id', 'csvTitle', r'formatPattern$SYS'),),
       ),);
       expect(tester.takeException(), isNull);
 
@@ -43,7 +42,7 @@ void main() {
     });
     testWidgets('should show preview', (tester) async {
       await tester.pumpWidget(materialApp(
-          AddExportColumnDialoge(initialColumn: UserColumn('id', 'csvTitle', r'formatPattern$SYS'), settings: Settings(),),
+          AddExportColumnDialoge(initialColumn: UserColumn('id', 'csvTitle', r'formatPattern$SYS'),),
       ),);
       await tester.pumpAndSettle();
 
@@ -53,7 +52,7 @@ void main() {
       expect(find.textContaining('RowDataFieldType.sys'), findsOneWidget);
     });
     testWidgets('should open format Info screen', (tester) async {
-      await tester.pumpWidget(materialApp(AddExportColumnDialoge(settings: Settings(),)));
+      await tester.pumpWidget(materialApp(AddExportColumnDialoge()));
 
       expect(find.byType(InformationScreen), findsNothing);
 
@@ -66,13 +65,13 @@ void main() {
   });
   group('showAddExportColumnDialoge', () {
     testWidgets('should open AddExportColumnDialoge', (tester) async {
-      await loadDialoge(tester, (context) => showAddExportColumnDialoge(context, Settings()));
+      await loadDialoge(tester, (context) => showAddExportColumnDialoge(context));
 
       expect(find.byType(AddExportColumnDialoge), findsOneWidget);
     });
     testWidgets('should return null on cancel', (tester) async {
       dynamic returnedValue = false;
-      await loadDialoge(tester, (context) async => returnedValue = await showAddExportColumnDialoge(context, Settings()));
+      await loadDialoge(tester, (context) async => returnedValue = await showAddExportColumnDialoge(context));
 
       expect(returnedValue, false);
       expect(find.byIcon(Icons.close), findsOneWidget);
@@ -84,7 +83,7 @@ void main() {
     });
     testWidgets('should save entered values', (tester) async {
       dynamic returnedValue = false;
-      await loadDialoge(tester, (context) async => returnedValue = await showAddExportColumnDialoge(context, Settings()));
+      await loadDialoge(tester, (context) async => returnedValue = await showAddExportColumnDialoge(context));
 
       final localizations = await AppLocalizations.delegate.load(const Locale('en'));
 
@@ -116,7 +115,7 @@ void main() {
 
       dynamic returnedValue = false;
       await loadDialoge(tester, (context) async => returnedValue =
-        await showAddExportColumnDialoge(context, Settings(),
+        await showAddExportColumnDialoge(context,
           UserColumn('initialInternalIdentifier', 'csvTitle', 'formatPattern'),
       ),);
 

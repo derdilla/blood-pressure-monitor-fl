@@ -1,134 +1,113 @@
-import 'package:blood_pressure_app/components/dialoges/add_measurement_dialoge.dart';
-import 'package:blood_pressure_app/model/blood_pressure/model.dart';
-import 'package:blood_pressure_app/model/blood_pressure/record.dart';
+import 'package:blood_pressure_app/components/dialoges/confirm_deletion_dialoge.dart';
+import 'package:blood_pressure_app/components/nullable_text.dart';
+import 'package:blood_pressure_app/components/pressure_text.dart';
+import 'package:blood_pressure_app/model/entry_context.dart';
 import 'package:blood_pressure_app/model/storage/storage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:health_data_store/health_data_store.dart';
 import 'package:intl/intl.dart';
-import 'package:provider/provider.dart';
 
 /// Display of a blood pressure measurement data.
 class MeasurementListRow extends StatelessWidget {
   /// Create a display of a measurements.
-  const MeasurementListRow({super.key, required this.record, required this.settings});
+  const MeasurementListRow({super.key,
+    required this.data,
+    required this.onRequestEdit,
+  });
 
   /// The measurement to display.
-  final BloodPressureRecord record;
+  final FullEntry data;
 
-  /// Settings that determine general behavior.
-  final Settings settings;
+  /// Called when the user taps on the edit icon.
+  final void Function() onRequestEdit; // TODO: consider removing in favor of context methods
 
   @override
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
+    final settings = context.watch<Settings>();
     final formatter = DateFormat(settings.dateFormatString);
     return ExpansionTile(
       // Leading color possible
       title: _buildRow(formatter),
       childrenPadding: const EdgeInsets.only(bottom: 10),
-      backgroundColor: record.needlePin?.color.withAlpha(30),
-      collapsedShape: record.needlePin != null ? Border(left: BorderSide(color: record.needlePin!.color, width: 8)) : null,
+      backgroundColor: data.color == null ? null : Color(data.color!).withAlpha(30),
+      collapsedShape: data.color == null ? null : Border(
+        left: BorderSide(color: Color(data.color!), width: 8),
+      ),
       children: [
         ListTile(
-          subtitle: Text(formatter.format(record.creationTime)),
+          subtitle: Text(formatter.format(data.time)),
           title: Text(localizations.timestamp),
           trailing: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
               IconButton(
-                onPressed: () async {
-                  final model = Provider.of<BloodPressureModel>(context, listen: false);
-                  final entry = await showAddEntryDialoge(context,
-                    Provider.of<Settings>(context, listen: false),
-                    record,
-                  );
-                  if (entry?.$1 != null) {
-                    if (context.mounted) {
-                      model.addAndExport(context, entry!.$1!);
-                    } else {
-                      model.add(entry!.$1!);
-                    }
-                  }
-                  assert(entry?.$2 == null);
-                },
+                onPressed: onRequestEdit,
                 icon: const Icon(Icons.edit),
                 tooltip: localizations.edit,
               ),
               IconButton(
-                onPressed: () => _deleteEntry(settings, context, localizations),
+                onPressed: () => context.deleteEntry(data),
                 icon: const Icon(Icons.delete),
                 tooltip: localizations.delete,
               ),
             ],
           ),
         ),
-        if (record.notes.isNotEmpty)
+        if (data.note?.isNotEmpty ?? false)
           ListTile(
             title: Text(localizations.note),
-            subtitle: Text(record.notes),
+            subtitle: Text(data.note!),
+          ),
+        for (final MedicineIntake intake in data.$3)
+          ListTile(
+            title: Text(intake.medicine.designation),
+            subtitle: Text('${intake.dosis.mg}mg'), // TODO: setting for unit
+            leading: Icon(Icons.medication,
+              color: intake.medicine.color == null ? null : Color(intake.medicine.color!)),
+            trailing: IconButton(
+              onPressed: () async {
+                final messenger = ScaffoldMessenger.of(context);
+                final intakeRepo = RepositoryProvider.of<MedicineIntakeRepository>(context);
+                if (!settings.confirmDeletion || await showConfirmDeletionDialoge(context)) {
+                  await intakeRepo.remove(intake);
+                }
+                messenger.removeCurrentSnackBar();
+                messenger.showSnackBar(SnackBar(
+                  content: Text(localizations.deletionConfirmed),
+                  action: SnackBarAction(
+                    label: localizations.btnUndo,
+                    onPressed: () => intakeRepo.add(intake),
+                  ),
+                ));
+              },
+              icon: const Icon(Icons.delete),
+            ),
           ),
       ],
     );
   }
 
-  Row _buildRow(DateFormat formatter) {
-    String formatNum(int? num) => (num ?? '-').toString();
-    return Row(
-      children: [
-        Expanded(
-          flex: 3,
-          child: Text(formatNum(record.systolic)),
-        ),
-        Expanded(
-          flex: 3,
-          child: Text(formatNum(record.diastolic)),
-        ),
-        Expanded(
-          flex: 3,
-          child: Text(formatNum(record.pulse)),
-        ),
-      ],
-    );
-  }
-
-  void _deleteEntry(Settings settings, BuildContext context, AppLocalizations localizations) async {
-    final model = Provider.of<BloodPressureModel>(context, listen: false);
-    final messanger = ScaffoldMessenger.of(context);
-    bool confirmedDeletion = true;
-    if (settings.confirmDeletion) {
-      confirmedDeletion = await showConfirmDeletionDialoge(context);
-    }
-
-    if (confirmedDeletion) { // TODO: move out of model
-      model.delete(record.creationTime);
-      messanger.removeCurrentSnackBar();
-      messanger.showSnackBar(SnackBar(
-        duration: const Duration(seconds: 5),
-        content: Text(localizations.deletionConfirmed),
-        action: SnackBarAction(
-          label: localizations.btnUndo,
-          onPressed: () => model.add(record),
-        ),
-      ),);
-    }
-  }
+  Row _buildRow(DateFormat formatter) => Row(
+    children: [
+      Expanded(
+        flex: 30,
+        child: PressureText(data.sys),
+      ),
+      Expanded(
+        flex: 30,
+        child: PressureText(data.dia),
+      ),
+      Expanded(
+        flex: 30,
+        child: NullableText((data.pul?.toString())),
+      ),
+      Expanded(
+        flex: 10,
+        child: data.$3.isNotEmpty ? Icon(Icons.medication) : SizedBox.shrink(),
+      ),
+    ],
+  );
 }
-
-/// Show a dialoge that prompts the user to confirm a deletion.
-Future<bool> showConfirmDeletionDialoge(BuildContext context) async =>
-  await showDialog<bool>(context: context,
-    builder: (context) => AlertDialog(
-      title: Text(AppLocalizations.of(context)!.confirmDelete),
-      content: Text(AppLocalizations.of(context)!.confirmDeleteDesc),
-      actions: [
-        ElevatedButton(
-          onPressed: () => Navigator.pop(context, false),
-          child: Text(AppLocalizations.of(context)!.btnCancel),
-        ),
-        ElevatedButton(
-          onPressed: () => Navigator.pop(context, true),
-          child: Text(AppLocalizations.of(context)!.btnConfirm),
-        ),
-      ],
-    ),
-  ) ?? false;

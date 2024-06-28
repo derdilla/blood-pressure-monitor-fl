@@ -8,7 +8,7 @@ class BloodPressureWarnValues {
   static String source = 'https://pressbooks.library.torontomu.ca/vitalsign/chapter/blood-pressure-ranges/';
 
   /// Returns the default highest (safe) diastolic value for a specific age.
-  static int getUpperDiaWarnValue(int age) {
+  static int getUpperDiaWarnValue(int age) { // TODO: units
     if (age <= 2) {
       return 70;
     } else if (age <= 13) {

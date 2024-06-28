@@ -15,7 +15,7 @@ import 'package:sqflite_common/sqlite_api.dart';
 /// Exceptions must be documented here.
 /// - Timestamps are in seconds since unix epoch
 /// - Color are integers in format 0xRRGGBB
-/// - Pressure is in *kPa* // TODO: rethink and validate this is used everywhere; possibly encapsulate values in type class
+/// - Pressure is in *kPa*
 /// - Pulse is in bpm
 /// - Weight is in kg
 /// - Length is in meter
@@ -70,7 +70,10 @@ class DatabaseManager {
     for (final info in [
       ('Systolic','sys'),
       ('Diastolic', 'dia'),
-      ('Pulse','pul')
+      // Pulse is stored as a double because bpm could be measured over
+      // non one-minute intervalls which might be necessary to support in the
+      // future.
+      ('Pulse','pul'),
     ]) {
       await txn.execute('CREATE TABLE "${info.$1}" ('
         '"entryID"	    INTEGER NOT NULL,'

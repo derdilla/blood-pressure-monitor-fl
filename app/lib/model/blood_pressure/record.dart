@@ -1,11 +1,12 @@
 import 'package:blood_pressure_app/model/blood_pressure/needle_pin.dart';
 import 'package:flutter/material.dart';
 
-@immutable
 /// Immutable data representation of a saved measurement.
-class BloodPressureRecord {
+@immutable
+@Deprecated('use health data store')
+class OldBloodPressureRecord {
   /// Create a measurement.
-  BloodPressureRecord(DateTime creationTime, this.systolic, this.diastolic, this.pulse, this.notes, {
+  OldBloodPressureRecord(DateTime creationTime, this.systolic, this.diastolic, this.pulse, this.notes, {
     this.needlePin,
   }) {
     if (creationTime.millisecondsSinceEpoch > 0) {
@@ -35,14 +36,14 @@ class BloodPressureRecord {
   final MeasurementNeedlePin? needlePin;
 
   /// Creates a new record from this one by updating individual properties.
-  BloodPressureRecord copyWith({
+  OldBloodPressureRecord copyWith({
     DateTime? creationTime,
     int? systolic,
     int? diastolic,
     int? pulse,
     String? notes,
     MeasurementNeedlePin? needlePin,
-  }) => BloodPressureRecord(
+  }) => OldBloodPressureRecord(
     creationTime ?? this.creationTime,
     systolic ?? this.systolic,
     diastolic ?? this.diastolic,

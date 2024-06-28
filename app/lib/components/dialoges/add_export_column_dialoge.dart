@@ -1,13 +1,14 @@
 import 'package:blood_pressure_app/components/dialoges/fullscreen_dialoge.dart';
 import 'package:blood_pressure_app/components/measurement_list/measurement_list_entry.dart';
-import 'package:blood_pressure_app/model/blood_pressure/record.dart';
 import 'package:blood_pressure_app/model/export_import/column.dart';
 import 'package:blood_pressure_app/model/export_import/record_formatter.dart';
 import 'package:blood_pressure_app/model/storage/settings_store.dart';
 import 'package:blood_pressure_app/screens/subsettings/export_import/export_field_format_documentation_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:health_data_store/health_data_store.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 /// Dialoge widget for creating and editing a [UserColumn].
 ///
@@ -16,16 +17,12 @@ class AddExportColumnDialoge extends StatefulWidget {
   /// Create a widget for creating and editing a [UserColumn].
   const AddExportColumnDialoge({super.key,
     this.initialColumn,
-    required this.settings,
   });
 
   /// Prefills the form to a submitted state.
   ///
   /// When this is null it is assumed creating a new column is intended.
   final ExportColumn? initialColumn;
-
-  /// Settings to determine general behavior.
-  final Settings settings;
 
   @override
   State<AddExportColumnDialoge> createState() => _AddExportColumnDialogeState();
@@ -67,7 +64,7 @@ class _AddExportColumnDialogeState extends State<AddExportColumnDialoge>
 
     _controller = AnimationController(
       value: (type == _FormatterType.record) ? 1 : 0,
-      duration: Duration(milliseconds: widget.settings.animationSpeed),
+      duration: Duration(milliseconds: context.read<Settings>().animationSpeed),
       vsync: this,
     );
   }
@@ -80,11 +77,12 @@ class _AddExportColumnDialogeState extends State<AddExportColumnDialoge>
 
   @override
   Widget build(BuildContext context) {
+    final settings = context.watch<Settings>();
     final localizations = AppLocalizations.of(context)!;
     return FullscreenDialoge(
       actionButtonText: localizations.btnSave,
       onActionButtonPressed: _saveForm,
-      bottomAppBar: widget.settings.bottomAppBars,
+      bottomAppBar: settings.bottomAppBars,
       body: GestureDetector(
         onHorizontalDragEnd: (details) {
           if (details.primaryVelocity == null) return;
@@ -162,24 +160,30 @@ class _AddExportColumnDialogeState extends State<AddExportColumnDialoge>
                 ),
                 child: (){
                     final record = BloodPressureRecord(
-                      DateTime.now(),
-                      123, 78, 65,
-                      'test note',
+                      time: DateTime.now(),
+                      sys: settings.preferredPressureUnit.wrap(123),
+                      dia: settings.preferredPressureUnit.wrap(78),
+                      pul: 65,
+                    );
+                    final note = Note(
+                      time: record.time,
+                      note: 'test note',
+                      color: Colors.red.value,
                     );
                     final formatter = (type == _FormatterType.record)
-                        ? ScriptedFormatter(recordPattern ?? '')
-                        : ScriptedTimeFormatter(timePattern ?? '');
-                    final text = formatter.encode(record);
+                      ? ScriptedFormatter(recordPattern ?? '')
+                      : ScriptedTimeFormatter(timePattern ?? '');
+                    final text = formatter.encode(record, note, []);
                     final decoded = formatter.decode(text);
                     return Column(
                       children: [
                         if (type == _FormatterType.record)
                           MeasurementListRow(
-                            record: record,
-                            settings: widget.settings,
+                            data: (record, Note(time: record.time), []),
+                            onRequestEdit: () { }, // ignore
                           ) else Text(
                             DateFormat('MMM d, y - h:m.s')
-                                .format(record.creationTime),
+                              .format(record.time),
                         ),
                         const SizedBox(height: 8,),
                         const Icon(Icons.arrow_downward),
@@ -329,14 +333,10 @@ enum _FormatterType {
 /// the CSV title. There is no check whether a userColumn
 /// with the generated title exists.
 Future<ExportColumn?> showAddExportColumnDialoge(
-  BuildContext context,
-  Settings settings, [
+  BuildContext context, [
     ExportColumn? initialColumn,
 ]) => showDialog<ExportColumn?>(context: context,
-  builder: (context) => Dialog.fullscreen(
-    child: AddExportColumnDialoge(
-      initialColumn: initialColumn,
-      settings: settings,
-    ),
+  builder: (context) => AddExportColumnDialoge(
+    initialColumn: initialColumn,
   ),
 );

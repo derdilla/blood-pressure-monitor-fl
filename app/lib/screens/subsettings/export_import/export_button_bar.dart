@@ -1,3 +1,5 @@
+import 'dart:async';
+import 'dart:collection';
 import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
@@ -17,7 +19,9 @@ import 'package:blood_pressure_app/model/storage/settings_store.dart';
 import 'package:blood_pressure_app/platform_integration/platform_client.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:health_data_store/health_data_store.dart';
 import 'package:jsaver/jSaver.dart';
 import 'package:path/path.dart';
 import 'package:provider/provider.dart';
@@ -84,15 +88,75 @@ class ExportButtonBar extends StatelessWidget {
                       Provider.of<Settings>(context, listen: false).bottomAppBars,
                     );
                     if (importedRecords == null || !context.mounted) return;
-                    final model = Provider.of<BloodPressureModel>(context, listen: false);
-                    await model.addAll(importedRecords, null);
+                    final bpRepo = RepositoryProvider.of<BloodPressureRepository>(context);
+                    final noteRepo = RepositoryProvider.of<NoteRepository>(context);
+                    final intakeRepo = RepositoryProvider.of<MedicineIntakeRepository>(context);
+                    await Future.forEach<FullEntry>(importedRecords, (e) async {
+                      if (e.sys != null || e.dia != null || e.pul != null) {
+                        await bpRepo.add(e.$1);
+                      }
+                      if (e.note != null || e.color != null) {
+                        await noteRepo.add(e.$2);
+                      }
+                      if (e.$3.isNotEmpty) {
+                        await Future.forEach(e.$3, intakeRepo.add);
+                      }
+                    });
                     messenger.showSnackBar(SnackBar(content: Text(
-                        localizations.importSuccess(importedRecords.length),),),);
+                      localizations.importSuccess(importedRecords.length),),),);
                     break;
                   case 'db':
-                    final model = Provider.of<BloodPressureModel>(context, listen: false);
-                    final importedModel = await BloodPressureModel.create(dbPath: file.path, isFullPath: true);
-                    await model.addAll(await importedModel.all, null);
+                    if (file.path == null) return;
+                    final bpRepo = RepositoryProvider.of<BloodPressureRepository>(context);
+                    final noteRepo = RepositoryProvider.of<NoteRepository>(context);
+                    final intakeRepo = RepositoryProvider.of<MedicineIntakeRepository>(context);
+
+                    final List<BloodPressureRecord> records = [];
+                    final List<Note> notes = [];
+                    final List<MedicineIntake> intakes = [];
+                    try {
+                      final db = await openReadOnlyDatabase(file.path!);
+                      final importedDB = await HealthDataStore.load(db);
+                      records.addAll(await importedDB.bpRepo.get(DateRange.all()));
+                      notes.addAll(await importedDB.noteRepo.get(DateRange.all()));
+                      intakes.addAll(await importedDB.intakeRepo.get(DateRange.all()));
+                      await db.close();
+                    } catch (e) {
+                      // DB doesn't conform new format
+                    }
+
+                    try { // Update legacy format
+                      final model = (records.isNotEmpty || notes.isNotEmpty || intakes.isNotEmpty)
+                        ? null
+                        : await BloodPressureModel.create(dbPath: file.path!, isFullPath: true);
+                      for (final OldBloodPressureRecord oldR in (await model?.all) ?? []) {
+                        if (oldR.systolic != null || oldR.diastolic != null || oldR.pulse != null) {
+                          records.add(BloodPressureRecord(
+                            time: oldR.creationTime,
+                            sys: oldR.systolic == null ? null :Pressure.mmHg(oldR.systolic!),
+                            dia: oldR.diastolic == null ? null :Pressure.mmHg(oldR.diastolic!),
+                            pul: oldR.pulse,
+                          ));
+                        }
+                        if (oldR.notes.isNotEmpty || oldR.needlePin != null) {
+                          notes.add(Note(
+                            time: oldR.creationTime,
+                            note: oldR.notes.isEmpty ? null : oldR.notes,
+                            color: oldR.needlePin?.color.value,
+                          ));
+                        }
+                      }
+                      await model?.close();
+                    } catch (e) {
+                      // DB not importable
+                    }
+
+                    await Future.forEach(records, bpRepo.add);
+                    await Future.forEach(notes, noteRepo.add);
+                    await Future.forEach(intakes, intakeRepo.add);
+
+                    messenger.showSnackBar(SnackBar(content: Text(
+                      localizations.importSuccess(records.length),),),);
                     break;
                   default:
                     _showError(messenger, localizations.errWrongImportFormat);
@@ -111,24 +175,24 @@ class ExportButtonBar extends StatelessWidget {
 }
 
 /// Perform a full export according to the configuration in [context].
-void performExport(BuildContext context, [AppLocalizations? localizations]) async {
+void performExport(BuildContext context, [AppLocalizations? localizations]) async { // TODO: extract
   localizations ??= AppLocalizations.of(context);
   final exportSettings = Provider.of<ExportSettings>(context, listen: false);
   final filename = 'blood_press_${DateTime.now().toIso8601String()}';
   switch (exportSettings.exportFormat) {
     case ExportFormat.db:
-      final path = join(await getDatabasesPath(), 'blood_pressure.db');
+      final path = join(await getDatabasesPath(), 'bp.db');
 
-      if (context.mounted) _exportFile(context, path, '$filename.db', 'text/sqlite');
+      if (context.mounted) await _exportFile(context, path, '$filename.db', 'application/vnd.sqlite3');
       break;
     case ExportFormat.csv:
       final csvConverter = CsvConverter(
         Provider.of<CsvExportSettings>(context, listen: false),
         Provider.of<ExportColumnsManager>(context, listen: false),
       );
-      final csvString = csvConverter.create(await _getRecords(context));
+      final csvString = csvConverter.create(await _getEntries(context));
       final data = Uint8List.fromList(utf8.encode(csvString));
-      if (context.mounted) _exportData(context, data, '$filename.csv', 'text/csv');
+      if (context.mounted) await _exportData(context, data, '$filename.csv', 'text/csv');
       break;
     case ExportFormat.pdf:
       final pdfConverter = PdfConverter(
@@ -137,16 +201,25 @@ void performExport(BuildContext context, [AppLocalizations? localizations]) asyn
           Provider.of<Settings>(context, listen: false),
           Provider.of<ExportColumnsManager>(context, listen: false),
       );
-      final pdf = await pdfConverter.create(await _getRecords(context));
-      if (context.mounted) _exportData(context, pdf, '$filename.pdf', 'text/pdf');
+      final pdf = await pdfConverter.create(await _getEntries(context));
+      if (context.mounted) await _exportData(context, pdf, '$filename.pdf', 'text/pdf');
   }
 }
 
-/// Get the records that should be exported.
-Future<List<BloodPressureRecord>> _getRecords(BuildContext context) {
+/// Get the records that should be exported (oldest first).
+Future<List<FullEntry>> _getEntries(BuildContext context) async {
   final range = Provider.of<IntervallStoreManager>(context, listen: false).exportPage.currentRange;
-  final model = Provider.of<BloodPressureModel>(context, listen: false);
-  return model.getInTimeRange(range.start, range.end);
+  final bpRepo = RepositoryProvider.of<BloodPressureRepository>(context);
+  final noteRepo = RepositoryProvider.of<NoteRepository>(context);
+  final intakeRepo = RepositoryProvider.of<MedicineIntakeRepository>(context);
+
+  final records = await bpRepo.get(range);
+  final notes = await noteRepo.get(range);
+  final intakes = await intakeRepo.get(range);
+
+  final entries = FullEntryList.merged(records, notes, intakes);
+  entries.sort((a, b) => a.time.compareTo(b.time));
+  return entries;
 }
 
 /// Save to default export path or share by providing a path.
@@ -155,7 +228,7 @@ Future<void> _exportFile(BuildContext context, String path, String fullFileName,
   if (settings.defaultExportDir.isEmpty) {
     await PlatformClient.shareFile(path, mimeType, fullFileName);
   } else {
-    JSaver.instance.save(
+    await JSaver.instance.save(
         fromPath: path,
         androidPathOptions: AndroidPathOptions(toDefaultDirectory: true),
     );

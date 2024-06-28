@@ -1,7 +1,6 @@
-import 'package:blood_pressure_app/components/dialoges/add_measurement_dialoge.dart';
 import 'package:blood_pressure_app/components/measurement_list/measurement_list.dart';
-import 'package:blood_pressure_app/model/blood_pressure/medicine/intake_history.dart';
-import 'package:blood_pressure_app/model/blood_pressure/model.dart';
+import 'package:blood_pressure_app/components/repository_builder.dart';
+import 'package:blood_pressure_app/model/entry_context.dart';
 import 'package:blood_pressure_app/model/storage/intervall_store.dart';
 import 'package:blood_pressure_app/model/storage/settings_store.dart';
 import 'package:blood_pressure_app/screens/elements/blood_pressure_builder.dart';
@@ -13,6 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:health_data_store/health_data_store.dart';
 import 'package:provider/provider.dart';
 
 /// Is true during the first [AppHome.build] before creating the widget.
@@ -30,22 +30,7 @@ class AppHome extends StatelessWidget {
     // direct use of settings possible as no listening is required
     if (_appStart) {
       if (Provider.of<Settings>(context, listen: false).startWithAddMeasurementPage) {
-        SchedulerBinding.instance.addPostFrameCallback((_) async {
-          final model = Provider.of<BloodPressureModel>(context, listen: false);
-          final intakes = Provider.of<IntakeHistory>(context, listen: false);
-          final measurement = await showAddEntryDialoge(context, Provider.of<Settings>(context, listen: false));
-          if (measurement == null) return;
-          if (measurement.$1 != null) {
-            if (context.mounted) {
-              model.addAndExport(context, measurement.$1!);
-            } else {
-              model.add(measurement.$1!);
-            }
-          }
-          if (measurement.$2 != null) {
-            intakes.addIntake(measurement.$2!);
-          }
-        });
+        SchedulerBinding.instance.addPostFrameCallback((_) => context.createEntry());
       }
     }
     _appStart = false;
@@ -53,37 +38,47 @@ class AppHome extends StatelessWidget {
     return Scaffold(
       body: OrientationBuilder(
         builder: (context, orientation) {
-          if (orientation == Orientation.landscape) {
-            return MeasurementGraph(
-              height: MediaQuery.of(context).size.height,
-            );
-          }
-          return Center(
-            child: Padding(
-              padding: const EdgeInsets.only(top: 20),
-              child: Consumer<IntakeHistory>(builder: (context, intakeHistory, child) =>
-                  Consumer<IntervallStoreManager>(builder: (context, intervalls, child) =>
-                      Consumer<Settings>(builder: (context, settings, child) =>
-                          Column(children: [
-                            const MeasurementGraph(),
-                            Expanded(
-                              child: (settings.useLegacyList) ?
-                              LegacyMeasurementsList(context) :
-                              BloodPressureBuilder(
-                                rangeType: IntervallStoreManagerLocation.mainPage,
-                                onData: (context, records) => MeasurementList(
-                                  settings: settings,
-                                  records: records,
-                                  intakes: intakeHistory.getIntakes(intervalls.mainPage.currentRange),
-                                ),
-                              ),
-                            ),
-                          ],),
-                      ),),
-              ),
-            ),
+        if (orientation == Orientation.landscape) {
+          return MeasurementGraph(
+            height: MediaQuery.of(context).size.height,
           );
-        },
+        }
+        return Center(
+          child: Padding(
+            padding: const EdgeInsets.only(top: 20),
+            child: Consumer<IntervallStoreManager>(builder: (context, intervalls, child) =>
+              Column(children: [
+                /*MeasurementListRow(
+                  settings: Settings(), data: (BloodPressureRecord(time: DateTime(2023),
+                  sys:Pressure.mmHg(1), dia: Pressure.mmHg(2), pul: 3), Note(time: DateTime(2023), note: 'testTxt',), [])),*/
+                const MeasurementGraph(),
+                Expanded(
+                  child: BloodPressureBuilder(
+                    rangeType: IntervallStoreManagerLocation.mainPage,
+                    onData: (context, records) => RepositoryBuilder<MedicineIntake, MedicineIntakeRepository>(
+                      rangeType: IntervallStoreManagerLocation.mainPage,
+                      onData: (BuildContext context, List<MedicineIntake> intakes) => RepositoryBuilder<Note, NoteRepository>(
+                        rangeType: IntervallStoreManagerLocation.mainPage,
+                        onData: (BuildContext context, List<Note> notes) {
+                          final entries = FullEntryList.merged(records, notes, intakes);
+                          entries.sort((a, b) => b.time.compareTo(a.time)); // newest first
+                          if (context.select<Settings, bool>((s) => s.compactList)) {
+                            return LegacyMeasurementsList(
+                              data: entries,
+                            );
+                          }
+                          return MeasurementList(
+                            entries: entries,
+                          );
+                        },
+                      ),
+                    ),
+                  ),
+                ),
+              ],),),
+            ),
+        );
+      },
       ),
       floatingActionButton: OrientationBuilder(
         builder: (context, orientation) {
@@ -102,22 +97,7 @@ class AppHome extends StatelessWidget {
                     heroTag: 'floatingActionAdd',
                     tooltip: localizations.addMeasurement,
                     autofocus: true,
-                    onPressed: () async {
-                      final model = Provider.of<BloodPressureModel>(context, listen: false);
-                      final intakes = Provider.of<IntakeHistory>(context, listen: false);
-                      final measurement = await showAddEntryDialoge(context, Provider.of<Settings>(context, listen: false));
-                      if (measurement == null) return;
-                      if (measurement.$1 != null) {
-                        if (context.mounted) {
-                          model.addAndExport(context, measurement.$1!);
-                        } else {
-                          model.add(measurement.$1!);
-                        }
-                      }
-                      if (measurement.$2 != null) {
-                        intakes.addIntake(measurement.$2!);
-                      }
-                    },
+                    onPressed: context.createEntry,
                     child: const Icon(Icons.add,),
                   ),
                 ),
@@ -156,15 +136,15 @@ class AppHome extends StatelessWidget {
 // TODO: consider removing duration override that only occurs in one on home.
 void _buildTransition(BuildContext context, Widget page, int duration) {
   Navigator.push(context,
-    TimedMaterialPageRouter(
+    _TimedMaterialPageRouter(
       transitionDuration: Duration(milliseconds: duration),
       builder: (context) => page,
     ),
   );
 }
 
-class TimedMaterialPageRouter extends MaterialPageRoute {
-  TimedMaterialPageRouter({
+class _TimedMaterialPageRouter extends MaterialPageRoute {
+  _TimedMaterialPageRouter({
     required super.builder,
     required this.transitionDuration,});
 

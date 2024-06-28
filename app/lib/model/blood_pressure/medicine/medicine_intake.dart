@@ -4,11 +4,12 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 /// Instance of a medicine intake.
-class MedicineIntake implements Comparable<Object> {
+@Deprecated('use health_data_store')
+class OldMedicineIntake implements Comparable<Object> {
   /// Create a intake from a String created by [serialize].
   ///
   /// [availableMeds] must contain the
-  factory MedicineIntake.deserialize(
+  factory OldMedicineIntake.deserialize(
     String string,
     List<Medicine> availableMeds,
   ) {
@@ -18,7 +19,7 @@ class MedicineIntake implements Comparable<Object> {
     if (kDebugMode && storedMedicine.isEmpty) {
       throw ArgumentError('Medicine of intake $string not found.');
     }
-    return MedicineIntake(
+    return OldMedicineIntake(
       medicine: storedMedicine.firstOrNull ?? Medicine(
         int.parse(elements[0]),
         designation: 'DELETED MEDICINE',
@@ -31,7 +32,7 @@ class MedicineIntake implements Comparable<Object> {
   }
 
   /// Create a instance of a medicine intake.
-  const MedicineIntake({
+  const OldMedicineIntake({
     required this.medicine,
     required this.dosis,
     required this.timestamp,
@@ -41,8 +42,8 @@ class MedicineIntake implements Comparable<Object> {
   ///
   /// The string consists of the id of the medicine, the unix timestamp and the
   /// dosis. These values are seperated by a null byte
-  String serialize() =>
-      '${medicine.id}\x00${timestamp.millisecondsSinceEpoch}\x00$dosis';
+  /*String serialize() =>
+      '${medicine.id}\x00${timestamp.millisecondsSinceEpoch}\x00$dosis';*/
 
   /// Kind of medicine taken.
   final Medicine medicine;
@@ -56,7 +57,7 @@ class MedicineIntake implements Comparable<Object> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is MedicineIntake &&
+      other is OldMedicineIntake &&
           runtimeType == other.runtimeType &&
           medicine == other.medicine &&
           dosis == other.dosis &&
@@ -67,8 +68,8 @@ class MedicineIntake implements Comparable<Object> {
 
   @override
   int compareTo(Object other) {
-    assert(other is MedicineIntake);
-    if (other is! MedicineIntake) return 0;
+    assert(other is OldMedicineIntake);
+    if (other is! OldMedicineIntake) return 0;
 
     final timeCompare = timestamp.compareTo(other.timestamp);
     if (timeCompare != 0) return timeCompare;

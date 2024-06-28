@@ -11,27 +11,23 @@ import 'package:blood_pressure_app/components/bluetooth_input/input_card.dart';
 import 'package:blood_pressure_app/components/bluetooth_input/measurement_failure.dart';
 import 'package:blood_pressure_app/components/bluetooth_input/measurement_success.dart';
 import 'package:blood_pressure_app/logging.dart';
-import 'package:blood_pressure_app/model/blood_pressure/record.dart';
 import 'package:blood_pressure_app/model/storage/storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart' show BluetoothDevice, Guid;
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:health_data_store/health_data_store.dart';
 
 /// Class for inputting measurement through bluetooth.
 class BluetoothInput extends StatefulWidget {
   /// Create a measurement input through bluetooth.
   const BluetoothInput({super.key,
-    required this.settings,
     required this.onMeasurement,
     this.bluetoothCubit,
     this.deviceScanCubit,
     this.bleReadCubit,
     this.flutterBluePlus,
   });
-
-  /// Settings to store known devices.
-  final Settings settings;
 
   /// Called when a measurement was received through bluetooth.
   final void Function(BloodPressureRecord data) onMeasurement;
@@ -108,9 +104,10 @@ class _BluetoothInputState extends State<BluetoothInput> {
         _returnToIdle();
       }
     });
+    final settings = context.watch<Settings>();
     _deviceScanCubit ??= widget.deviceScanCubit?.call() ?? DeviceScanCubit(
       service: serviceUUID,
-      settings: widget.settings,
+      settings: settings,
       flutterBluePlus: widget.flutterBluePlus,
     );
     return BlocBuilder<DeviceScanCubit, DeviceScanState>(
@@ -144,11 +141,14 @@ class _BluetoothInputState extends State<BluetoothInput> {
             listener: (BuildContext context, BleReadState state) {
               if (state is BleReadSuccess) {
                 final BloodPressureRecord record = BloodPressureRecord(
-                  state.data.timestamp ?? DateTime.now(),
-                  state.data.systolic.toInt(), // TODO: use pressure info in data
-                  state.data.diastolic.toInt(),
-                  state.data.pulse?.toInt(),
-                  '',
+                  time: state.data.timestamp ?? DateTime.now(),
+                  sys: state.data.isMMHG
+                    ? Pressure.mmHg(state.data.systolic.toInt())
+                    : Pressure.kPa(state.data.systolic),
+                  dia: state.data.isMMHG
+                    ? Pressure.mmHg(state.data.diastolic.toInt())
+                    : Pressure.kPa(state.data.diastolic),
+                  pul: state.data.pulse?.toInt(),
                 );
                 widget.onMeasurement(record);
                 setState(() {

@@ -5,7 +5,6 @@ import 'package:blood_pressure_app/components/custom_banner.dart';
 import 'package:blood_pressure_app/components/dialoges/enter_timeformat_dialoge.dart';
 import 'package:blood_pressure_app/components/dialoges/input_dialoge.dart';
 import 'package:blood_pressure_app/components/settings/settings_widgets.dart';
-import 'package:blood_pressure_app/model/blood_pressure/model.dart';
 import 'package:blood_pressure_app/model/blood_pressure/pressure_unit.dart';
 import 'package:blood_pressure_app/model/blood_pressure/warn_values.dart';
 import 'package:blood_pressure_app/model/iso_lang_names.dart';
@@ -20,7 +19,9 @@ import 'package:blood_pressure_app/screens/subsettings/version_screen.dart';
 import 'package:blood_pressure_app/screens/subsettings/warn_about_screen.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:health_data_store/health_data_store.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:path/path.dart';
 import 'package:provider/provider.dart';
@@ -133,12 +134,12 @@ class SettingsPage extends StatelessWidget {
                 initialColor: settings.pulColor,
                 title: Text(localizations.pulColor),),
               SwitchListTile(
-                value: settings.useLegacyList,
+                value: settings.compactList,
                 onChanged: (value) {
-                  settings.useLegacyList = value;
+                  settings.compactList = value;
                 },
                 secondary: const Icon(Icons.list_alt_outlined),
-                title: Text(localizations.useLegacyList),),
+                title: Text(localizations.compactList),),
             ],),
 
             TitledColumn(title: Text(localizations.behavior), children: [
@@ -304,7 +305,7 @@ class SettingsPage extends StatelessWidget {
                     assert(dbPath != inMemoryDatabasePath);
                     dbPath = join(dbPath, 'config.db');
                     assert(Platform.isAndroid);
-                    PlatformClient.shareFile(dbPath, 'application/vnd.sqlite3');
+                    await PlatformClient.shareFile(dbPath, 'application/vnd.sqlite3');
                   },
                 ),
                 ListTile(
@@ -373,11 +374,23 @@ class SettingsPage extends StatelessWidget {
                       messenger.showSnackBar(SnackBar(content: Text(localizations.errNotImportable)));
                       return;
                     }
-                    // TODO: Show import preview
-                    final model = Provider.of<BloodPressureModel>(context, listen: false);
-                    await model.addAll(data, context);
-                    // TODO: give feedback
 
+                    final bpRepo = RepositoryProvider.of<BloodPressureRepository>(context);
+                    final noteRepo = RepositoryProvider.of<NoteRepository>(context);
+                    await Future.forEach(data, (e) async {
+                      if (e.sys != null || e.dia != null || e.pul != null) {
+                        await bpRepo.add(e.$1);
+                      }
+                      if (e.note != null || e.color != null) {
+                        await noteRepo.add(e.$2);
+                      }
+                      assert(e.$3.isEmpty);
+                    });
+
+                    // TODO: Show import preview
+
+                    messenger.showSnackBar(SnackBar(content: Text(
+                      localizations.importSuccess(data.length),),),);
                   },
                 ),
               ],

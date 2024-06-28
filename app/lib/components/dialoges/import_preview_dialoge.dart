@@ -3,13 +3,13 @@ import 'dart:math';
 
 import 'package:blood_pressure_app/components/custom_banner.dart';
 import 'package:blood_pressure_app/components/dialoges/fullscreen_dialoge.dart';
-import 'package:blood_pressure_app/model/blood_pressure/record.dart';
 import 'package:blood_pressure_app/model/export_import/column.dart';
 import 'package:blood_pressure_app/model/export_import/csv_record_parsing_actor.dart';
 import 'package:blood_pressure_app/model/storage/export_columns_store.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:health_data_store/health_data_store.dart';
 
 /// A preview that allows customizing columns used for csv data import.
 ///
@@ -80,7 +80,7 @@ class _ImportPreviewDialogeState extends State<ImportPreviewDialoge> {
     onActionButtonPressed: (_showingError) ? null : () {
       final result = _actor.attemptParse();
       if (result.hasError()) return;
-      Navigator.pop<List<BloodPressureRecord>>(context, result.getOr((e) => null));
+      Navigator.pop<List<FullEntry>>(context, result.getOr((e) => null));
     },
     actions: [
       CheckboxMenuButton(
@@ -192,18 +192,16 @@ class _ImportPreviewDialogeState extends State<ImportPreviewDialoge> {
 }
 
 /// Shows a dialoge to preview import of a csv file
-Future<List<BloodPressureRecord>?> showImportPreview(
+Future<List<FullEntry>?> showImportPreview(
   BuildContext context,
   CsvRecordParsingActor initialActor,
   ExportColumnsManager columnsManager,
   bool bottomAppBar,) =>
-  showDialog<List<BloodPressureRecord>>(
+  showDialog<List<FullEntry>>(
     context: context, builder: (context) =>
-    Dialog.fullscreen(
-      child: ImportPreviewDialoge(
-        bottomAppBar: bottomAppBar,
-        initialActor: initialActor,
-        columnsManager: columnsManager,
-      ),
+    ImportPreviewDialoge(
+      bottomAppBar: bottomAppBar,
+      initialActor: initialActor,
+      columnsManager: columnsManager,
     ),
   );

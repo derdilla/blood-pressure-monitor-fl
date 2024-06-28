@@ -1,10 +1,10 @@
-import 'package:blood_pressure_app/model/blood_pressure/model.dart';
+import 'package:blood_pressure_app/components/dialoges/confirm_deletion_dialoge.dart';
 import 'package:blood_pressure_app/model/storage/export_columns_store.dart';
 import 'package:blood_pressure_app/model/storage/storage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:health_data_store/health_data_store.dart';
-import 'package:provider/provider.dart';
 
 /// Screen that allows mass deleting data entered in the app.
 class DeleteDataScreen extends StatefulWidget {
@@ -30,34 +30,12 @@ class _DeleteDataScreenState extends State<DeleteDataScreen> {
       body: ListView(
         children: [
           ListTile(
-            leading: const Icon(Icons.timeline),
-            title: Text(localizations.deleteAllMeasurements),
-            trailing: const Icon(Icons.delete_forever),
-            onTap: () async {
-              final messanger = ScaffoldMessenger.of(context);
-              if (await _showDeleteDialoge(context, localizations)) {
-                final model = context.read<BloodPressureModel>();
-                final previousRecords = await model.all;
-                for (final record in previousRecords) {
-                  await model.delete(record.creationTime);
-                }
-                messanger.showSnackBar(SnackBar(
-                  content: Text(localizations.deletionConfirmed),
-                  action: SnackBarAction(
-                    label: localizations.btnUndo,
-                    onPressed: () => model.addAll(previousRecords, context),
-                  ),
-                ));
-              }
-            },
-          ),
-          ListTile(
             leading: const Icon(Icons.settings),
             title: Text(localizations.deleteAllSettings),
             trailing: const Icon(Icons.delete_forever),
             onTap: () async {
               final messanger = ScaffoldMessenger.of(context);
-              if (await _showDeleteDialoge(context, localizations)) {
+              if (await showConfirmDeletionDialoge(context, localizations.warnDeletionUnrecoverable)) {
                 context.read<Settings>().reset();
                 context.read<ExportSettings>().reset();
                 context.read<CsvExportSettings>().reset();
@@ -71,13 +49,57 @@ class _DeleteDataScreenState extends State<DeleteDataScreen> {
             },
           ),
           ListTile(
+            leading: const Icon(Icons.timeline),
+            title: Text(localizations.deleteAllMeasurements),
+            trailing: const Icon(Icons.delete_forever),
+            onTap: () async {
+              final messanger = ScaffoldMessenger.of(context);
+              if (await showConfirmDeletionDialoge(context, localizations.warnDeletionUnrecoverable)) {
+                final repo = RepositoryProvider.of<BloodPressureRepository>(context);
+                final previousRecords = await repo.get(DateRange.all());
+                for (final record in previousRecords) {
+                  await repo.remove(record);
+                }
+                messanger.showSnackBar(SnackBar(
+                  content: Text(localizations.deletionConfirmed),
+                  action: SnackBarAction(
+                    label: localizations.btnUndo,
+                    onPressed: () => Future.forEach(previousRecords, repo.add),
+                  ),
+                ));
+              }
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.notes),
+            title: Text(localizations.deleteAllNotes),
+            trailing: const Icon(Icons.delete_forever),
+            onTap: () async {
+              final messanger = ScaffoldMessenger.of(context);
+              if (await showConfirmDeletionDialoge(context, localizations.warnDeletionUnrecoverable)) {
+                final repo = RepositoryProvider.of<NoteRepository>(context);
+                final previousNotes = await repo.get(DateRange.all());
+                for (final note in previousNotes) {
+                  await repo.remove(note);
+                }
+                messanger.showSnackBar(SnackBar(
+                  content: Text(localizations.deletionConfirmed),
+                  action: SnackBarAction(
+                    label: localizations.btnUndo,
+                    onPressed: () => Future.forEach(previousNotes, repo.add),
+                  ),
+                ));
+              }
+            },
+          ),
+          ListTile(
             leading: const Icon(Icons.medication),
             title: Text(localizations.deleteAllMedicineIntakes),
             trailing: const Icon(Icons.delete_forever),
             onTap: () async {
-              if (await _showDeleteDialoge(context, localizations)) {
+              if (await showConfirmDeletionDialoge(context, localizations.warnDeletionUnrecoverable)) {
                 final repo = context.read<MedicineIntakeRepository>();
-                final allIntakes = await repo.get(DateRange(start: DateTime.fromMillisecondsSinceEpoch(0), end: DateTime.now()));
+                final allIntakes = await repo.get(DateRange.all());
                 for (final intake in allIntakes) {
                   await repo.remove(intake);
                 }
@@ -92,29 +114,4 @@ class _DeleteDataScreenState extends State<DeleteDataScreen> {
       ),
     );
   }
-
-  /// Show dialoge to confirm irrevocable deletion.
-  Future<bool> _showDeleteDialoge(BuildContext context, AppLocalizations localizations) async => await showDialog<bool>(context: context, builder: (context) =>
-    AlertDialog(
-      title: Text(localizations.confirmDelete),
-      content: Text(localizations.warnDeletionUnrecoverable),
-      actionsAlignment: MainAxisAlignment.spaceBetween,
-      actions: [
-        TextButton(
-            onPressed: () => Navigator.pop(context, false),
-            child: Text(AppLocalizations.of(context)!.btnCancel),),
-        Theme(
-          data: ThemeData.from(
-              colorScheme: ColorScheme.fromSeed(seedColor: Colors.red, brightness: Theme.of(context).brightness),
-              useMaterial3: true,
-          ),
-          child: ElevatedButton.icon(
-              onPressed: () => Navigator.pop(context, true),
-              icon: const Icon(Icons.delete_forever),
-              label: Text(AppLocalizations.of(context)!.btnConfirm),
-          ),
-        ),
-      ],
-    ),
-  ) ?? false;
 }

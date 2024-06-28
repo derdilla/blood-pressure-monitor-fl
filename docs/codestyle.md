@@ -7,7 +7,7 @@ The goal of this style guideline is to make dart code maintainable and to reduce
 ### File structure
 
 - One class per file (exceptions: `StatefulWidget` and `sealed` classes).
-- Widgets in the `components` directory don't require any `Provider` as an ancestor.
+- Widgets in the `components` directory don't require any data repository as an ancestor.
 - Files with widgets that fill the whole screen are suffixed with either `_screen` or `_dialoge`. The corresponding widgets end in `Screen` or `Dialoge`
 - Closely related files are grouped in a subdirectory
 

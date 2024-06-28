@@ -1,7 +1,6 @@
 import 'package:blood_pressure_app/components/dialoges/add_export_column_dialoge.dart';
 import 'package:blood_pressure_app/model/export_import/column.dart';
 import 'package:blood_pressure_app/model/storage/export_columns_store.dart';
-import 'package:blood_pressure_app/model/storage/settings_store.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
@@ -48,8 +47,7 @@ class ExportColumnsManagementScreen extends StatelessWidget {
                         IconButton(
                           icon: const Icon(Icons.edit),
                           onPressed: () async {
-                            final settings = Provider.of<Settings>(context, listen: false);
-                            final editedColumn = await showAddExportColumnDialoge(context, settings, column);
+                            final editedColumn = await showAddExportColumnDialoge(context, column);
                             if (editedColumn != null) {
                               columnsManager.addOrUpdate(editedColumn);
                             }
@@ -83,8 +81,7 @@ class ExportColumnsManagementScreen extends StatelessWidget {
                   leading: const Icon(Icons.add),
                   title: Text(localizations.addExportformat),
                   onTap: () async{
-                    final settings = Provider.of<Settings>(context, listen: false);
-                    ExportColumn? editedColumn = await showAddExportColumnDialoge(context, settings);
+                    ExportColumn? editedColumn = await showAddExportColumnDialoge(context);
                     if (editedColumn != null) {
                       while (columnsManager.userColumns.containsKey(editedColumn!.internalIdentifier)) {
                         if (editedColumn is UserColumn) {
@@ -105,5 +102,4 @@ class ExportColumnsManagementScreen extends StatelessWidget {
       ),
     );
   }
-
 }

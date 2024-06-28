@@ -509,6 +509,8 @@
   "@errBleNoPerms": {},
   "preferredPressureUnit": "Preferred pressure unit",
   "@preferredPressureUnit": {},
+  "compactList": "Compact measurement list",
+  "@compactList": {},
   "scanningDevices": "Scanning for devices...",
   "@scanningDevices": {},
   "errBleCantOpen": "Failed loading input devices. Ensure the app has all necessary permissions and report this issue in case it persists.",
@@ -550,5 +552,7 @@
   "availableDevices": "Available devices",
   "@availableDevices": {},
   "deleteAllMedicineIntakes": "Delete all medicine intakes",
-  "@deleteAllMedicineIntakes": {}
+  "@deleteAllMedicineIntakes": {},
+  "deleteAllNotes": "Delete all notes",
+  "@deleteAllNotes": {}
 }

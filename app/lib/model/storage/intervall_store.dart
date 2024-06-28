@@ -4,6 +4,7 @@ import 'package:blood_pressure_app/model/storage/convert_util.dart';
 import 'package:blood_pressure_app/model/storage/db/config_dao.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:health_data_store/health_data_store.dart';
 
 /// Class for storing the current interval, as it is needed in start page, statistics and export.
 class IntervallStorage extends ChangeNotifier {
@@ -23,14 +24,14 @@ class IntervallStorage extends ChangeNotifier {
   }
 
   /// Create a storage to interact with a display intervall.
-  IntervallStorage({TimeStep? stepSize, DateTimeRange? range}) :
+  IntervallStorage({TimeStep? stepSize, DateRange? range}) :
     _stepSize = stepSize ?? TimeStep.last7Days {
     _currentRange = range ?? _getMostRecentDisplayIntervall();
   }
 
   TimeStep _stepSize;
 
-  late DateTimeRange _currentRange;
+  late DateRange _currentRange;
 
   /// Serialize the object to a restoreable map.
   Map<String, dynamic> toMap() => <String, dynamic>{
@@ -51,9 +52,9 @@ class IntervallStorage extends ChangeNotifier {
     setToMostRecentIntervall();
   }
 
-  DateTimeRange get currentRange => _currentRange;
+  DateRange get currentRange => _currentRange;
 
-  set currentRange(DateTimeRange value) {
+  set currentRange(DateRange value) {
     _currentRange = value;
     notifyListeners();
   }
@@ -69,45 +70,47 @@ class IntervallStorage extends ChangeNotifier {
     final oldEnd = currentRange.end;
     switch (stepSize) {
       case TimeStep.day:
-        currentRange = DateTimeRange(
-          start: oldStart.copyWith(day: oldStart.day + directionalStep),
-          end: oldEnd.copyWith(day: oldEnd.day + directionalStep),
+        currentRange = DateRange(
+          start: oldStart.add(Duration(days: directionalStep)),
+          end: oldEnd.add(Duration(days: directionalStep)),
         );
         break;
       case TimeStep.week:
       case TimeStep.last7Days:
-        currentRange = DateTimeRange(
-          start: oldStart.copyWith(day: oldStart.day + directionalStep * 7),
-          end: oldEnd.copyWith(day: oldEnd.day + directionalStep * 7),
+        currentRange = DateRange(
+          start: oldStart.add(Duration(days: directionalStep * 7)),
+          end: oldEnd.add(Duration(days: directionalStep * 7)),
         );
         break;
       case TimeStep.month:
-        currentRange = DateTimeRange(
+        currentRange = DateRange(
+          // No fitting Duration: wraps correctly according to doc
           start: oldStart.copyWith(month: oldStart.month + directionalStep),
           end: oldEnd.copyWith(month: oldEnd.month + directionalStep),
         );
         break;
       case TimeStep.year:
-        currentRange = DateTimeRange(
+        currentRange = DateRange(
+          // No fitting Duration: wraps correctly according to doc
           start: oldStart.copyWith(year: oldStart.year + directionalStep),
           end: oldEnd.copyWith(year: oldEnd.year + directionalStep),
         );
         break;
       case TimeStep.lifetime:
-        currentRange = DateTimeRange(
+        currentRange = DateRange(
             start: DateTime.fromMillisecondsSinceEpoch(1),
             end: DateTime.now().copyWith(hour: 23, minute: 59, second: 59),
         );
         break;
       case TimeStep.last30Days:
-        currentRange = DateTimeRange(
-            start: oldStart.copyWith(day: oldStart.day + directionalStep * 30),
-            end: oldEnd.copyWith(day: oldEnd.day + directionalStep * 30),
+        currentRange = DateRange(
+            start: oldStart.add(Duration(days: directionalStep * 30)),
+            end: oldEnd.add(Duration(days:  directionalStep * 30)),
         );
         break;
       case TimeStep.custom:
         final step = oldEnd.difference(oldStart) * directionalStep;
-        currentRange = DateTimeRange(
+        currentRange = DateRange(
             start: oldStart.add(step),
             end: oldEnd.add(step),
         );
@@ -115,35 +118,35 @@ class IntervallStorage extends ChangeNotifier {
     }
   }
 
-  DateTimeRange _getMostRecentDisplayIntervall() {
+  DateRange _getMostRecentDisplayIntervall() {
     final now = DateTime.now();
     switch (stepSize) {
       case TimeStep.day:
         final start = DateTime(now.year, now.month, now.day);
-        return DateTimeRange(start: start, end: start.copyWith(day: now.day + 1));
+        return DateRange(start: start, end: start.copyWith(day: now.day + 1));
       case TimeStep.week:
         final start = DateTime(now.year, now.month, now.day - (now.weekday - 1)); // monday
-        return DateTimeRange(start: start, end: start.copyWith(day: start.day + DateTime.sunday)); // end of sunday
+        return DateRange(start: start, end: start.copyWith(day: start.day + DateTime.sunday)); // end of sunday
       case TimeStep.month:
         final start = DateTime(now.year, now.month);
-        return DateTimeRange(start: start, end: start.copyWith(month: now.month + 1));
+        return DateRange(start: start, end: start.copyWith(month: now.month + 1));
       case TimeStep.year:
         final start = DateTime(now.year);
-        return DateTimeRange(start: start, end: start.copyWith(year: now.year + 1));
+        return DateRange(start: start, end: start.copyWith(year: now.year + 1));
       case TimeStep.lifetime:
         final start = DateTime.fromMillisecondsSinceEpoch(1);
         final endOfToday = now.copyWith(hour: 23, minute: 59, second: 59);
-        return DateTimeRange(start: start, end: endOfToday);
+        return DateRange(start: start, end: endOfToday);
       case TimeStep.last7Days:
-        final start = now.copyWith(day: now.day - 7);
+        final start = now.subtract(const Duration(days: 7));
         final endOfToday = now.copyWith(hour: 23, minute: 59, second: 59);
-        return DateTimeRange(start: start, end: endOfToday);
+        return DateRange(start: start, end: endOfToday);
       case TimeStep.last30Days:
-        final start = now.copyWith(day: now.day - 30);
+        final start = now.subtract(const Duration(days: 30));
         final endOfToday = now.copyWith(hour: 23, minute: 59, second: 59);
-        return DateTimeRange(start: start, end: endOfToday);
+        return DateRange(start: start, end: endOfToday);
       case TimeStep.custom:
-        return DateTimeRange(
+        return DateRange(
           start: now.subtract(currentRange.duration),
           end: now,
         );

@@ -1,5 +1,5 @@
-import 'package:blood_pressure_app/model/blood_pressure/record.dart';
 import 'package:flutter/material.dart';
+import 'package:health_data_store/health_data_store.dart';
 
 /// Information about a straight horizontal line through the graph.
 ///

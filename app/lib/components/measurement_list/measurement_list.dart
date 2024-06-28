@@ -1,11 +1,9 @@
-import 'package:blood_pressure_app/components/measurement_list/intake_list_entry.dart';
 import 'package:blood_pressure_app/components/measurement_list/measurement_list_entry.dart';
-import 'package:blood_pressure_app/model/blood_pressure/medicine/intake_history.dart';
-import 'package:blood_pressure_app/model/blood_pressure/medicine/medicine_intake.dart';
-import 'package:blood_pressure_app/model/blood_pressure/record.dart';
+import 'package:blood_pressure_app/model/entry_context.dart';
 import 'package:blood_pressure_app/model/storage/settings_store.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:health_data_store/health_data_store.dart';
 import 'package:provider/provider.dart';
 
 /// List that renders measurements and medicine intakes.
@@ -14,36 +12,16 @@ import 'package:provider/provider.dart';
 class MeasurementList extends StatelessWidget {
   /// Create a list to display measurements and intakes.
   const MeasurementList({super.key,
-    required this.settings,
-    required this.records,
-    required this.intakes,
+    required this.entries,
   });
 
-  /// Settings that determine general behavior.
-  final Settings settings;
-
-  /// Records to display.
-  final List<BloodPressureRecord> records;
-
-  /// Medicine intakes to list.
-  ///
-  /// Will get merged with blood pressure records.
-  final List<MedicineIntake> intakes;
+  /// Entries sorted with newest comming first.
+  final List<FullEntry> entries;
 
   @override
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
-    final entries = [];
-    entries.addAll(records);
-    entries.addAll(intakes);
-    entries.sort((e1, e2) {
-      if (e2 is BloodPressureRecord && e1 is BloodPressureRecord) return e2.creationTime.compareTo(e1.creationTime);
-      if (e2 is BloodPressureRecord && e1 is MedicineIntake) return e2.creationTime.compareTo(e1.timestamp);
-      if (e2 is MedicineIntake && e1 is BloodPressureRecord) return e2.timestamp.compareTo(e1.creationTime);
-      if (e2 is MedicineIntake && e1 is MedicineIntake) return e2.timestamp.compareTo(e1.timestamp);
-      assert(false);
-      return 0;
-    });
+    final settings = context.watch<Settings>();
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -55,23 +33,23 @@ class MeasurementList extends StatelessWidget {
                   flex: 4,
                   child: SizedBox(),),
                 Expanded(
-                    flex: 30,
-                    child: Text(localizations.sysLong,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(fontWeight: FontWeight.bold, color: settings.sysColor),),),
+                  flex: 30,
+                  child: Text(localizations.sysLong,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(fontWeight: FontWeight.bold, color: settings.sysColor),),),
                 Expanded(
-                    flex: 30,
-                    child: Text(localizations.diaLong,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(fontWeight: FontWeight.bold, color: settings.diaColor),),),
+                  flex: 30,
+                  child: Text(localizations.diaLong,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(fontWeight: FontWeight.bold, color: settings.diaColor),),),
                 Expanded(
-                    flex: 30,
-                    child: Text(localizations.pulLong,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(fontWeight: FontWeight.bold, color: settings.pulColor),),),
+                  flex: 30,
+                  child: Text(localizations.pulLong,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(fontWeight: FontWeight.bold, color: settings.pulColor),),),
                 const Expanded(
-                    flex: 20,
-                    child: SizedBox(),),
+                  flex: 20,
+                  child: SizedBox(),),
               ],
             ),
             const SizedBox(
@@ -90,26 +68,10 @@ class MeasurementList extends StatelessWidget {
             // and font sizes by adding empty offset to bottom.
             padding: const EdgeInsets.only(bottom: 300),
             itemCount: entries.length,
-            itemBuilder: (context, idx) {
-              if (entries[idx] is BloodPressureRecord) {
-                return MeasurementListRow(
-                  record: entries[idx],
-                  settings: settings,
-                );
-              } else {
-                assert(entries[idx] is MedicineIntake);
-                return IntakeListEntry(
-                  intake: entries[idx],
-                  settings: settings,
-                  delete: () {
-                    // TODO: move out of model
-                    final history = Provider.of<IntakeHistory>(context, listen: false);
-                    history.deleteIntake(entries[idx]);
-                  },
-                );
-              }
-
-            },
+            itemBuilder: (context, idx) => MeasurementListRow(
+              data: entries[idx],
+              onRequestEdit: () => context.createEntry(entries[idx]),
+            ),
           ),
         ),
       ],

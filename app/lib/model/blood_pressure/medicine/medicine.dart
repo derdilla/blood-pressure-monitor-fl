@@ -5,6 +5,7 @@ import 'package:blood_pressure_app/model/blood_pressure/medicine/medicine_intake
 import 'package:flutter/material.dart';
 
 /// Description of a specific medicine.
+@Deprecated('use health_data_store')
 class Medicine {
   /// Create a instance from a map created by [toMap].
   factory Medicine.fromMap(Map<String, dynamic> map) => Medicine(
@@ -26,18 +27,6 @@ class Medicine {
     this.hidden = false,
   });
 
-  /// Serialize the object to a restoreable map.
-  Map<String, dynamic> toMap() => {
-    'id': id,
-    'designation': designation,
-    'color': color.value,
-    'defaultDosis': defaultDosis,
-    'hidden': hidden,
-  };
-
-  /// Serialize the object to a restoreable string.
-  String toJson() => jsonEncode(toMap());
-
   /// Unique id used to store the medicine in serialized objects.
   final int id;
 
@@ -47,7 +36,7 @@ class Medicine {
   /// Color used to display medicine intake
   final Color color;
 
-  /// Default dosis used to autofill [MedicineIntake].
+  /// Default dosis used to autofill [OldMedicineIntake].
   final double? defaultDosis;
 
   /// Indicates that this medicine should not be shown in selection menus.
@@ -55,7 +44,6 @@ class Medicine {
   /// This is usually set when the user deletes the medicine in order to avoid
   /// data inconsistencies with existing intakes that use this medicine.
   bool hidden;
-
 
   @override
   bool operator ==(Object other) =>

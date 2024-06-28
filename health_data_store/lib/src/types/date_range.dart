@@ -22,6 +22,12 @@ class DateRange with _$DateRange {
     required DateTime end,
   }) = _DateRange;
 
+  /// Creates a date range from unix epoch to now.
+  factory DateRange.all() => DateRange(
+    start: DateTime.fromMillisecondsSinceEpoch(0),
+    end: DateTime.now(),
+  );
+
   /// Returns a [Duration] of the time between [start] and [end].
   ///
   /// See [DateTime.difference] for more details.

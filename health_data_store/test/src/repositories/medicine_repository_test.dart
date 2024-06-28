@@ -90,5 +90,20 @@ void main() {
     await repo.remove(med3);
     expect(await repo.getAll(), isEmpty);
   });
+  test('notifies on changes', () async {
+    final db = await mockDBManager();
+    addTearDown(db.close);
+    final repo = MedicineRepositoryImpl(db.db);
+    int calls = 0;
+    repo.subscribe().listen((_) => calls++);
+    final med1 = Medicine(designation: 'med1', color: 0xFF226A,);
+    await repo.add(med1);
+    expect(calls, 1);
+    await repo.add(mockMedicine(designation: 'med2', dosis: 43));
+    await repo.add(Medicine(designation: 'med3'));
+    expect(calls, 3);
+    await repo.remove(med1);
+    expect(calls, 4);
+  });
 
 }

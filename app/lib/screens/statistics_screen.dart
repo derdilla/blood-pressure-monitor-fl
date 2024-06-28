@@ -26,99 +26,97 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
       appBar: AppBar(
         title: Text(localizations.statistics),
       ),
-      body: Consumer<Settings>(
-        builder: (context, settings, child) => BloodPressureBuilder(
-          rangeType: IntervallStoreManagerLocation.statsPage,
-          onData: (context, data) {
-            final analyzer = BloodPressureAnalyser(data.toList());
-            return ListView(
-              children: [
-                _buildSubTitle(localizations.statistics,),
-                ListTile(
-                  title: Text(localizations.measurementCount),
-                  trailing: Text(
-                    data.length.toString(),
-                    style: Theme.of(context).textTheme.headlineSmall,
-                  ),
+      body: BloodPressureBuilder(
+        rangeType: IntervallStoreManagerLocation.statsPage,
+        onData: (context, data) {
+          final analyzer = BloodPressureAnalyser(data.toList());
+          return ListView(
+            children: [
+              _buildSubTitle(localizations.statistics,),
+              ListTile(
+                title: Text(localizations.measurementCount),
+                trailing: Text(
+                  data.length.toString(),
+                  style: Theme.of(context).textTheme.headlineSmall,
                 ),
-                ListTile(
-                  title: Text(localizations.measurementsPerDay),
-                  trailing: Text(
-                    analyzer.measurementsPerDay?.toString() ?? '-',
-                    style: Theme.of(context).textTheme.headlineSmall,
-                  ),
+              ),
+              ListTile(
+                title: Text(localizations.measurementsPerDay),
+                trailing: Text(
+                  analyzer.measurementsPerDay?.toString() ?? '-',
+                  style: Theme.of(context).textTheme.headlineSmall,
                 ),
-                _buildSubTitle(localizations.valueDistribution,),
-                Container(
-                  height: 260,
+              ),
+              _buildSubTitle(localizations.valueDistribution,),
+              Container(
+                height: 260,
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: BloodPressureDistribution(
+                  records: data,
+                ),
+              ),
+              _buildSubTitle(localizations.timeResolvedMetrics),
+              () {
+                final data = analyzer.allAvgsRelativeToDaytime;
+                const opacity = 0.5;
+                final helperLinesStyle = BorderSide(
+                  color: Theme.of(context).dividerColor,
+                  width: 2,
+                );
+                final settings = context.watch<Settings>();
+                return Container(
                   padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                  child: BloodPressureDistribution(
-                    records: data,
-                    settings: settings,
-                  ),
-                ),
-                _buildSubTitle(localizations.timeResolvedMetrics),
-                () {
-                  final data = analyzer.allAvgsRelativeToDaytime;
-                  const opacity = 0.5;
-                  final helperLinesStyle = BorderSide(
-                    color: Theme.of(context).dividerColor,
-                    width: 2,
-                  );
-                  return Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                    height: MediaQuery.of(context).size.width,
-                    child: RadarChart(
-                      RadarChartData(
-                        radarShape: RadarShape.circle,
-                        gridBorderData: helperLinesStyle,
-                        tickBorderData: helperLinesStyle,
-                        ticksTextStyle: const TextStyle(
-                          color: Colors.transparent,
-                        ),
-                        tickCount: 5,
-                        titleTextStyle: const TextStyle(fontSize: 25),
-                        getTitle: (pos, value) {
-                          if (pos % 2 == 0) {
-                            return RadarChartTitle(
-                              text: '$pos',
-                              positionPercentageOffset: 0.05,
-                            );
-                          }
-                          return const RadarChartTitle(text: '');
-                        },
-                        dataSets: [
-                          RadarDataSet(
-                            dataEntries: _intListToRadarEntry(data[0]),
-                            borderColor: settings.diaColor,
-                            fillColor: settings.diaColor.withOpacity(opacity),
-                            entryRadius: 0,
-                            borderWidth: settings.graphLineThickness,
-                          ),
-                          RadarDataSet(
-                            dataEntries: _intListToRadarEntry(data[1]),
-                            borderColor: settings.sysColor,
-                            fillColor: settings.sysColor.withOpacity(opacity),
-                            entryRadius: 0,
-                            borderWidth: settings.graphLineThickness,
-                          ),
-                          RadarDataSet(
-                            dataEntries: _intListToRadarEntry(data[2]),
-                            borderColor: settings.pulColor,
-                            fillColor: settings.pulColor.withOpacity(opacity),
-                            entryRadius: 0,
-                            borderWidth: settings.graphLineThickness,
-                          ),
-                        ],
+                  height: MediaQuery.of(context).size.width,
+                  child: RadarChart(
+                    RadarChartData(
+                      radarShape: RadarShape.circle,
+                      gridBorderData: helperLinesStyle,
+                      tickBorderData: helperLinesStyle,
+                      ticksTextStyle: const TextStyle(
+                        color: Colors.transparent,
                       ),
+                      tickCount: 5,
+                      titleTextStyle: const TextStyle(fontSize: 25),
+                      getTitle: (pos, value) {
+                        if (pos % 2 == 0) {
+                          return RadarChartTitle(
+                            text: '$pos',
+                            positionPercentageOffset: 0.05,
+                          );
+                        }
+                        return const RadarChartTitle(text: '');
+                      },
+                      dataSets: [
+                        RadarDataSet(
+                          dataEntries: _intListToRadarEntry(data[0]),
+                          borderColor: settings.diaColor,
+                          fillColor: settings.diaColor.withOpacity(opacity),
+                          entryRadius: 0,
+                          borderWidth: settings.graphLineThickness,
+                        ),
+                        RadarDataSet(
+                          dataEntries: _intListToRadarEntry(data[1]),
+                          borderColor: settings.sysColor,
+                          fillColor: settings.sysColor.withOpacity(opacity),
+                          entryRadius: 0,
+                          borderWidth: settings.graphLineThickness,
+                        ),
+                        RadarDataSet(
+                          dataEntries: _intListToRadarEntry(data[2]),
+                          borderColor: settings.pulColor,
+                          fillColor: settings.pulColor.withOpacity(opacity),
+                          entryRadius: 0,
+                          borderWidth: settings.graphLineThickness,
+                        ),
+                      ],
                     ),
-                  );
-                }(),
-              ],
-            );
-          },
-        ),
-            ),
+                  ),
+                );
+              }(),
+            ],
+          );
+        },
+      ),
       bottomNavigationBar: Container(
         height: 70,
         margin: const EdgeInsets.only(top: 15, bottom: 5),

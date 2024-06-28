@@ -14,7 +14,7 @@ class BloodPressureRecord with _$BloodPressureRecord {
     Pressure? sys,
     /// Diastolic value of the measurement.
     Pressure? dia,
-    /// Pulse value of the measurement.
-    Pressure? pul,
+    /// Pulse value of the measurement in bpm.
+    int? pul,
   }) = _BloodPressureRecord;
 }

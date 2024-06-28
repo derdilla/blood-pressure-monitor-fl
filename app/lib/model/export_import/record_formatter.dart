@@ -1,10 +1,9 @@
 import 'dart:convert';
 
 import 'package:blood_pressure_app/model/blood_pressure/needle_pin.dart';
-import 'package:blood_pressure_app/model/blood_pressure/record.dart';
 import 'package:blood_pressure_app/model/export_import/import_field_type.dart';
-import 'package:flutter/material.dart';
 import 'package:function_tree/function_tree.dart';
+import 'package:health_data_store/health_data_store.dart';
 import 'package:intl/intl.dart';
 
 /// Class to serialize and deserialize [BloodPressureRecord] values.
@@ -16,7 +15,7 @@ abstract interface class Formatter {
   ///
   /// There is no guarantee that the information in the record can be restored.
   /// If not null this must follow [formatPattern].
-  String encode(BloodPressureRecord record);
+  String encode(BloodPressureRecord record, Note note, List<MedicineIntake> intakes);
 
   /// Type of data that can be restored from a string obtained by [encode].
   RowDataFieldType? get restoreAbleType;
@@ -56,13 +55,14 @@ class ScriptedFormatter implements Formatter {
         return int.tryParse(text);
       case RowDataFieldType.notes:
         return text;
-      case RowDataFieldType.needlePin:
+      case RowDataFieldType.color:
         final num = int.tryParse(text);
-        if (num != null) return MeasurementNeedlePin(Color(num));
+        if (num != null) return num;
         try {
-          return MeasurementNeedlePin.fromMap(jsonDecode(text));
-        } catch (e) {
-          assert(e is FormatException || e is TypeError);
+          return MeasurementNeedlePin.fromMap(jsonDecode(text)).color.value;
+        } on FormatException {
+          return null;
+        } on TypeError {
           return null;
         }
     }}();
@@ -71,16 +71,16 @@ class ScriptedFormatter implements Formatter {
   }
 
   @override
-  String encode(BloodPressureRecord record) {
+  String encode(BloodPressureRecord record, Note note, List<MedicineIntake> intakes) {
     var fieldContents = pattern;
 
     // variables
-    fieldContents = fieldContents.replaceAll(r'$TIMESTAMP', record.creationTime.millisecondsSinceEpoch.toString());
-    fieldContents = fieldContents.replaceAll(r'$SYS', record.systolic.toString());
-    fieldContents = fieldContents.replaceAll(r'$DIA', record.diastolic.toString());
-    fieldContents = fieldContents.replaceAll(r'$PUL', record.pulse.toString());
-    fieldContents = fieldContents.replaceAll(r'$NOTE', record.notes);
-    fieldContents = fieldContents.replaceAll(r'$COLOR', jsonEncode(record.needlePin?.toMap()));
+    fieldContents = fieldContents.replaceAll(r'$TIMESTAMP', record.time.millisecondsSinceEpoch.toString());
+    fieldContents = fieldContents.replaceAll(r'$SYS', (record.sys?.mmHg).toString());
+    fieldContents = fieldContents.replaceAll(r'$DIA', (record.dia?.mmHg).toString());
+    fieldContents = fieldContents.replaceAll(r'$PUL', record.pul.toString());
+    fieldContents = fieldContents.replaceAll(r'$NOTE', note.note ?? '');
+    fieldContents = fieldContents.replaceAll(r'$COLOR', note.color?.toString() ?? '');
 
     // math
     fieldContents = fieldContents.replaceAllMapped(RegExp(r'\{\{([^}]*)}}'), (m) {
@@ -128,7 +128,7 @@ class ScriptedFormatter implements Formatter {
       } else if (pattern == r'$TIMESTAMP') {
         _restoreAbleType = RowDataFieldType.timestamp;
       } else if (pattern == r'$COLOR') {
-        _restoreAbleType = RowDataFieldType.needlePin;
+        _restoreAbleType = RowDataFieldType.color;
       } else if (pattern == r'$NOTE') {
         _restoreAbleType = RowDataFieldType.notes;
       } else if (replaced.contains(RegExp(r'[^{},$]*\$(PUL|DIA|SYS)[^{},$]*'))) {
@@ -193,7 +193,8 @@ class ScriptedTimeFormatter implements Formatter {
   }
 
   @override
-  String encode(BloodPressureRecord record) => _timeFormatter.format(record.creationTime);
+  String encode(BloodPressureRecord record, Note note, List<MedicineIntake> intakes) =>
+    _timeFormatter.format(record.time);
 
   @override
   String? get formatPattern => _timeFormatter.pattern;

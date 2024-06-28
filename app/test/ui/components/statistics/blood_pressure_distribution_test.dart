@@ -5,15 +5,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import '../../../model/export_import/record_formatter_test.dart';
+import '../../../model/analyzer_test.dart';
 import '../util.dart';
 
 void main() {
   testWidgets('should show allow navigation to view all widgets', (tester) async {
-    await tester.pumpWidget(materialApp(BloodPressureDistribution(
-      records: const [],
-      settings: Settings(),
-    ),),);
+    await tester.pumpWidget(materialApp(BloodPressureDistribution(records: [])));
 
     final localizations = await AppLocalizations.delegate.load(const Locale('en'));
 
@@ -38,21 +35,23 @@ void main() {
     expect(find.byKey(const Key('pul-dist')), findsOneWidget);
   });
   testWidgets('should report records to ValueDistribution', (tester) async {
-    await tester.pumpWidget(materialApp(BloodPressureDistribution(
-      records: [
-        mockRecord(sys: 123),
-        mockRecord(dia: 123),
-        mockRecord(dia: 124),
-        mockRecord(pul: 123),
-        mockRecord(pul: 124),
-        mockRecord(pul: 125),
-      ],
+    await tester.pumpWidget(materialApp(
+      BloodPressureDistribution(
+        records: [
+          mockRecord(sys: 123),
+          mockRecord(dia: 123),
+          mockRecord(dia: 124),
+          mockRecord(pul: 123),
+          mockRecord(pul: 124),
+          mockRecord(pul: 125),
+        ],
+      ),
       settings: Settings(
         sysColor: Colors.red,
         diaColor: Colors.green,
         pulColor: Colors.blue,
       ),
-    ),),);
+    ),);
 
     final localizations = await AppLocalizations.delegate.load(const Locale('en'));
 

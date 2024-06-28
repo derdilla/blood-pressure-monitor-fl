@@ -30,8 +30,9 @@ class HealthDataStore {
   /// decrease database performance in the first milliseconds after being
   /// returned. This is done to improve performance while interacting with the
   /// database.
-  static Future<HealthDataStore?> load(Database db) async {
-    if (!db.isOpen) return null;
+  static Future<HealthDataStore> load(Database db) async {
+    // TODO: loading readOnly dbs
+    assert(db.isOpen);
     final mngr = await DatabaseManager.load(db);
     unawaited(mngr.performCleanup());
     return HealthDataStore._create(mngr);
