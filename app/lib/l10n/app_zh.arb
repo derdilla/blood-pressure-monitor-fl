@@ -548,5 +548,9 @@
   "bluetoothInput": "蓝牙输入",
   "@bluetoothInput": {},
   "irregularPulseDetected": "检测到不规律的心跳",
-  "@irregularPulseDetected": {}
+  "@irregularPulseDetected": {},
+  "deleteAllNotes": "删除所有附注",
+  "@deleteAllNotes": {},
+  "compactList": "紧凑测量列表",
+  "@compactList": {}
 }
