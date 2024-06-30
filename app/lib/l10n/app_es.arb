@@ -550,5 +550,9 @@
   "irregularPulseDetected": "Pulso irregular detectado",
   "@irregularPulseDetected": {},
   "pulseRateLessThanLowerLimit": "Frecuencia cardíaca por debajo del límite inferior",
-  "@pulseRateLessThanLowerLimit": {}
+  "@pulseRateLessThanLowerLimit": {},
+  "compactList": "Lista de medidas compacta",
+  "@compactList": {},
+  "deleteAllNotes": "Eliminar todas las notas",
+  "@deleteAllNotes": {}
 }
