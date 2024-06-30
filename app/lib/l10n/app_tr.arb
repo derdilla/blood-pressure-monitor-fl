@@ -550,5 +550,9 @@
   "cuffTooLoose": "Bileklik çok gevşek",
   "@cuffTooLoose": {},
   "improperMeasurementPosition": "Yanlış ölçüm konumu",
-  "@improperMeasurementPosition": {}
+  "@improperMeasurementPosition": {},
+  "compactList": "Sıkışık ölçüm listesi",
+  "@compactList": {},
+  "deleteAllNotes": "Tüm notları sil",
+  "@deleteAllNotes": {}
 }
