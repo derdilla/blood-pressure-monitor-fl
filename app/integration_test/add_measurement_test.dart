@@ -9,7 +9,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:health_data_store/health_data_store.dart';
 import 'package:integration_test/integration_test.dart';
 
-import '../test/ui/components/settings/color_picker_list_tile_test.dart';
+import '../test/features/settings/tiles/color_picker_list_tile_test.dart';
 import 'util.dart';
 
 void main() {
