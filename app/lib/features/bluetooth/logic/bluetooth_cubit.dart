@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:blood_pressure_app/bluetooth/flutter_blue_plus_mockable.dart';
+import 'package:blood_pressure_app/bluetooth/logic/flutter_blue_plus_mockable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
