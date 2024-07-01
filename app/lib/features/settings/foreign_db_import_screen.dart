@@ -1,7 +1,7 @@
 import 'dart:convert';
 
-import 'package:blood_pressure_app/components/consistent_future_builder.dart';
-import 'package:blood_pressure_app/components/dialoges/tree_selection_dialoge.dart';
+import 'package:blood_pressure_app/components/tree_selection_dialoge.dart';
+import 'package:blood_pressure_app/data_util/consistent_future_builder.dart';
 import 'package:blood_pressure_app/model/blood_pressure/needle_pin.dart';
 import 'package:blood_pressure_app/model/export_import/import_field_type.dart';
 import 'package:blood_pressure_app/model/storage/convert_util.dart';

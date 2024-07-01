@@ -1,7 +1,7 @@
 import 'dart:async';
 
-import 'package:blood_pressure_app/bluetooth/device_scan_cubit.dart';
-import 'package:blood_pressure_app/bluetooth/flutter_blue_plus_mockable.dart';
+import 'package:blood_pressure_app/features/bluetooth/logic/device_scan_cubit.dart';
+import 'package:blood_pressure_app/features/bluetooth/logic/flutter_blue_plus_mockable.dart';
 import 'package:blood_pressure_app/logging.dart';
 import 'package:blood_pressure_app/model/storage/settings_store.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';

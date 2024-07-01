@@ -1,5 +1,5 @@
-import 'package:blood_pressure_app/components/dialoges/fullscreen_dialoge.dart';
-import 'package:blood_pressure_app/components/settings/color_picker_list_tile.dart';
+import 'package:blood_pressure_app/components/fullscreen_dialoge.dart';
+import 'package:blood_pressure_app/features/settings/tiles/color_picker_list_tile.dart';
 import 'package:blood_pressure_app/model/storage/settings_store.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';

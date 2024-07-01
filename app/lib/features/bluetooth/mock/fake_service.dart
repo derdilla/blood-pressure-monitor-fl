@@ -1,4 +1,4 @@
-import 'package:blood_pressure_app/bluetooth/mock/fake_characteristic.dart';
+import 'package:blood_pressure_app/features/bluetooth/mock/fake_characteristic.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 
 class FakeBleBPService implements BluetoothService {

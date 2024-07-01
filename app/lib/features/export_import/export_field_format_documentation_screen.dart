@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:blood_pressure_app/screens/subsettings/time_formats_reference_screen.dart';
+import 'package:blood_pressure_app/features/settings/time_formats_reference_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:url_launcher/url_launcher.dart';

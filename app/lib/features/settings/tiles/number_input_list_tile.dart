@@ -1,4 +1,4 @@
-import 'package:blood_pressure_app/components/dialoges/input_dialoge.dart';
+import 'package:blood_pressure_app/components/input_dialoge.dart';
 import 'package:flutter/material.dart';
 
 /// Widget for editing numbers in a list tile.

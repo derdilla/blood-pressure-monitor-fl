@@ -1,5 +1,5 @@
-import 'package:blood_pressure_app/bluetooth/characteristics/ble_measurement_data.dart';
-import 'package:blood_pressure_app/components/bluetooth_input/input_card.dart';
+import 'package:blood_pressure_app/features/bluetooth/logic/characteristics/ble_measurement_data.dart';
+import 'package:blood_pressure_app/features/bluetooth/ui/input_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 

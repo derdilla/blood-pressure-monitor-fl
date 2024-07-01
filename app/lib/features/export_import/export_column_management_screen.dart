@@ -1,4 +1,4 @@
-import 'package:blood_pressure_app/components/dialoges/add_export_column_dialoge.dart';
+import 'package:blood_pressure_app/features/export_import/add_export_column_dialoge.dart';
 import 'package:blood_pressure_app/model/export_import/column.dart';
 import 'package:blood_pressure_app/model/storage/export_columns_store.dart';
 import 'package:flutter/material.dart';

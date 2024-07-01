@@ -1,4 +1,4 @@
-import 'package:blood_pressure_app/components/statistics/value_distribution.dart';
+import 'package:blood_pressure_app/features/statistics/value_distribution.dart';
 import 'package:blood_pressure_app/model/storage/settings_store.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';

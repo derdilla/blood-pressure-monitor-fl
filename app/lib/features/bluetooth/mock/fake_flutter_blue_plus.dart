@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:blood_pressure_app/bluetooth/logic/flutter_blue_plus_mockable.dart';
+import 'package:blood_pressure_app/features/bluetooth/logic/flutter_blue_plus_mockable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 

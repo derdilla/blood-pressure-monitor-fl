@@ -1,9 +1,9 @@
 import 'dart:async';
 
-import 'package:blood_pressure_app/components/bluetooth_input.dart';
-import 'package:blood_pressure_app/components/dialoges/fullscreen_dialoge.dart';
-import 'package:blood_pressure_app/components/forms/date_time_form.dart';
-import 'package:blood_pressure_app/components/settings/color_picker_list_tile.dart';
+import 'package:blood_pressure_app/components/fullscreen_dialoge.dart';
+import 'package:blood_pressure_app/features/bluetooth/bluetooth_input.dart';
+import 'package:blood_pressure_app/features/input/forms/date_time_form.dart';
+import 'package:blood_pressure_app/features/settings/tiles/color_picker_list_tile.dart';
 import 'package:blood_pressure_app/model/blood_pressure/pressure_unit.dart';
 import 'package:blood_pressure_app/model/storage/storage.dart';
 import 'package:flutter/material.dart';

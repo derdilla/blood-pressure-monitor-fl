@@ -1,11 +1,11 @@
-import 'package:blood_pressure_app/components/measurement_list/measurement_list.dart';
-import 'package:blood_pressure_app/components/repository_builder.dart';
-import 'package:blood_pressure_app/model/entry_context.dart';
+import 'package:blood_pressure_app/data_util/blood_pressure_builder.dart';
+import 'package:blood_pressure_app/data_util/entry_context.dart';
+import 'package:blood_pressure_app/data_util/repository_builder.dart';
+import 'package:blood_pressure_app/features/measurement_list/legacy_measurement_list.dart';
+import 'package:blood_pressure_app/features/measurement_list/measurement_list.dart';
+import 'package:blood_pressure_app/features/statistics/measurement_graph.dart';
 import 'package:blood_pressure_app/model/storage/intervall_store.dart';
 import 'package:blood_pressure_app/model/storage/settings_store.dart';
-import 'package:blood_pressure_app/screens/elements/blood_pressure_builder.dart';
-import 'package:blood_pressure_app/screens/elements/legacy_measurement_list.dart';
-import 'package:blood_pressure_app/screens/elements/measurement_graph.dart';
 import 'package:blood_pressure_app/screens/settings_screen.dart';
 import 'package:blood_pressure_app/screens/statistics_screen.dart';
 import 'package:flutter/material.dart';

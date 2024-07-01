@@ -1,4 +1,4 @@
-import 'package:blood_pressure_app/components/settings/slider_list_tile.dart';
+import 'package:blood_pressure_app/features/settings/tiles/slider_list_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 

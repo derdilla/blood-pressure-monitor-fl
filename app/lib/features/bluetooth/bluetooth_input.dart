@@ -1,15 +1,15 @@
 import 'dart:async';
 
-import 'package:blood_pressure_app/bluetooth/characteristics/ble_measurement_data.dart';
-import 'package:blood_pressure_app/bluetooth/device_scan_cubit.dart';
-import 'package:blood_pressure_app/bluetooth/logic/ble_read_cubit.dart';
-import 'package:blood_pressure_app/bluetooth/logic/bluetooth_cubit.dart';
-import 'package:blood_pressure_app/bluetooth/logic/flutter_blue_plus_mockable.dart';
-import 'package:blood_pressure_app/bluetooth/ui/closed_bluetooth_input.dart';
-import 'package:blood_pressure_app/bluetooth/ui/input_card.dart';
-import 'package:blood_pressure_app/bluetooth/ui/measurement_failure.dart';
-import 'package:blood_pressure_app/bluetooth/ui/measurement_success.dart';
-import 'package:blood_pressure_app/components/bluetooth_input/device_selection.dart';
+import 'package:blood_pressure_app/features/bluetooth/logic/ble_read_cubit.dart';
+import 'package:blood_pressure_app/features/bluetooth/logic/bluetooth_cubit.dart';
+import 'package:blood_pressure_app/features/bluetooth/logic/characteristics/ble_measurement_data.dart';
+import 'package:blood_pressure_app/features/bluetooth/logic/device_scan_cubit.dart';
+import 'package:blood_pressure_app/features/bluetooth/logic/flutter_blue_plus_mockable.dart';
+import 'package:blood_pressure_app/features/bluetooth/ui/closed_bluetooth_input.dart';
+import 'package:blood_pressure_app/features/bluetooth/ui/device_selection.dart';
+import 'package:blood_pressure_app/features/bluetooth/ui/input_card.dart';
+import 'package:blood_pressure_app/features/bluetooth/ui/measurement_failure.dart';
+import 'package:blood_pressure_app/features/bluetooth/ui/measurement_success.dart';
 import 'package:blood_pressure_app/logging.dart';
 import 'package:blood_pressure_app/model/storage/storage.dart';
 import 'package:flutter/material.dart';
