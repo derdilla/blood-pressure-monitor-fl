@@ -2,7 +2,7 @@
 import 'dart:math';
 
 import 'package:blood_pressure_app/components/custom_banner.dart';
-import 'package:blood_pressure_app/components/dialoges/fullscreen_dialoge.dart';
+import 'package:blood_pressure_app/components/fullscreen_dialoge.dart';
 import 'package:blood_pressure_app/model/export_import/column.dart';
 import 'package:blood_pressure_app/model/export_import/csv_record_parsing_actor.dart';
 import 'package:blood_pressure_app/model/storage/export_columns_store.dart';

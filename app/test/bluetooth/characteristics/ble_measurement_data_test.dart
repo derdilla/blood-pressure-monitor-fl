@@ -1,4 +1,4 @@
-import 'package:blood_pressure_app/bluetooth/characteristics/ble_measurement_data.dart';
+import 'package:blood_pressure_app/features/bluetooth/logic/characteristics/ble_measurement_data.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {

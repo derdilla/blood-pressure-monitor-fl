@@ -1,5 +1,5 @@
 import 'package:blood_pressure_app/components/custom_banner.dart';
-import 'package:blood_pressure_app/components/dialoges/import_preview_dialoge.dart';
+import 'package:blood_pressure_app/features/export_import/import_preview_dialoge.dart';
 import 'package:blood_pressure_app/model/export_import/csv_converter.dart';
 import 'package:blood_pressure_app/model/export_import/csv_record_parsing_actor.dart';
 import 'package:blood_pressure_app/model/storage/export_columns_store.dart';

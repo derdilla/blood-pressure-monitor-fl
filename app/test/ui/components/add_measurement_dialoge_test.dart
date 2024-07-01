@@ -1,6 +1,6 @@
-import 'package:blood_pressure_app/components/bluetooth_input.dart';
-import 'package:blood_pressure_app/components/dialoges/add_measurement_dialoge.dart';
-import 'package:blood_pressure_app/components/settings/color_picker_list_tile.dart';
+import 'package:blood_pressure_app/features/bluetooth/bluetooth_input.dart';
+import 'package:blood_pressure_app/features/input/add_measurement_dialoge.dart';
+import 'package:blood_pressure_app/features/settings/tiles/color_picker_list_tile.dart';
 import 'package:blood_pressure_app/model/storage/settings_store.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';

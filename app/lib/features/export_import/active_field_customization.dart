@@ -1,4 +1,5 @@
-import 'package:blood_pressure_app/components/settings/dropdown_list_tile.dart';
+import 'package:blood_pressure_app/features/export_import/export_column_management_screen.dart';
+import 'package:blood_pressure_app/features/settings/tiles/dropdown_list_tile.dart';
 import 'package:blood_pressure_app/model/export_import/column.dart';
 import 'package:blood_pressure_app/model/export_import/export_configuration.dart';
 import 'package:blood_pressure_app/model/storage/common_settings_interfaces.dart';
@@ -6,7 +7,6 @@ import 'package:blood_pressure_app/model/storage/export_columns_store.dart';
 import 'package:blood_pressure_app/model/storage/export_csv_settings_store.dart';
 import 'package:blood_pressure_app/model/storage/export_pdf_settings_store.dart';
 import 'package:blood_pressure_app/model/storage/export_settings_store.dart';
-import 'package:blood_pressure_app/screens/subsettings/export_import/export_column_management_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';

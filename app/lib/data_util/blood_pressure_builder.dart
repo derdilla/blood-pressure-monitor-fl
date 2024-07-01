@@ -1,6 +1,6 @@
 import 'dart:collection';
 
-import 'package:blood_pressure_app/components/repository_builder.dart';
+import 'package:blood_pressure_app/data_util/repository_builder.dart';
 import 'package:blood_pressure_app/model/storage/intervall_store.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';

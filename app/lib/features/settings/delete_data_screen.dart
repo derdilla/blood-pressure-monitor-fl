@@ -1,4 +1,4 @@
-import 'package:blood_pressure_app/components/dialoges/confirm_deletion_dialoge.dart';
+import 'package:blood_pressure_app/components/confirm_deletion_dialoge.dart';
 import 'package:blood_pressure_app/model/storage/export_columns_store.dart';
 import 'package:blood_pressure_app/model/storage/storage.dart';
 import 'package:flutter/material.dart';

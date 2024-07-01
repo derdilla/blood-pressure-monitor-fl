@@ -1,4 +1,4 @@
-import 'package:blood_pressure_app/bluetooth/characteristics/decoding_util.dart';
+import 'package:blood_pressure_app/features/bluetooth/logic/characteristics/decoding_util.dart';
 
 extension BleDateTimeParser on DateTime {
   static DateTime? parseBle(List<int> bytes, int offset) {

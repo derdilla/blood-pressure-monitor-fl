@@ -1,4 +1,4 @@
-import 'package:blood_pressure_app/components/dialoges/enter_timeformat_dialoge.dart';
+import 'package:blood_pressure_app/features/settings/enter_timeformat_dialoge.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 

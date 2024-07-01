@@ -1,4 +1,4 @@
-import 'package:blood_pressure_app/components/measurement_list/measurement_list_entry.dart';
+import 'package:blood_pressure_app/features/measurement_list/measurement_list_entry.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:health_data_store/health_data_store.dart';

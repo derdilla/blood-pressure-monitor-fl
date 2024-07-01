@@ -1,4 +1,4 @@
-import 'package:blood_pressure_app/components/settings/settings_widgets.dart';
+import 'package:blood_pressure_app/features/settings/tiles/titled_column.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 

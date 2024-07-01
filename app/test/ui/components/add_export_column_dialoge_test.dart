@@ -1,7 +1,7 @@
-import 'package:blood_pressure_app/components/dialoges/add_export_column_dialoge.dart';
-import 'package:blood_pressure_app/components/measurement_list/measurement_list_entry.dart';
+import 'package:blood_pressure_app/features/export_import/add_export_column_dialoge.dart';
+import 'package:blood_pressure_app/features/export_import/export_field_format_documentation_screen.dart';
+import 'package:blood_pressure_app/features/measurement_list/measurement_list_entry.dart';
 import 'package:blood_pressure_app/model/export_import/column.dart';
-import 'package:blood_pressure_app/screens/subsettings/export_import/export_field_format_documentation_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';

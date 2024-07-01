@@ -1,7 +1,7 @@
 import 'package:blood_pressure_app/app.dart';
-import 'package:blood_pressure_app/components/dialoges/add_measurement_dialoge.dart';
-import 'package:blood_pressure_app/components/measurement_list/measurement_list_entry.dart';
-import 'package:blood_pressure_app/components/settings/color_picker_list_tile.dart';
+import 'package:blood_pressure_app/features/input/add_measurement_dialoge.dart';
+import 'package:blood_pressure_app/features/measurement_list/measurement_list_entry.dart';
+import 'package:blood_pressure_app/features/settings/tiles/color_picker_list_tile.dart';
 import 'package:blood_pressure_app/screens/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';

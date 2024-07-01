@@ -1,6 +1,6 @@
 import 'dart:ui';
 
-import 'package:blood_pressure_app/components/bluetooth_input/device_selection.dart';
+import 'package:blood_pressure_app/features/bluetooth/ui/device_selection.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';

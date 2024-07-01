@@ -1,4 +1,4 @@
-import 'package:blood_pressure_app/bluetooth/characteristics/decoding_util.dart';
+import 'package:blood_pressure_app/features/bluetooth/logic/characteristics/decoding_util.dart';
 
 class BleMeasurementStatus {
   BleMeasurementStatus({

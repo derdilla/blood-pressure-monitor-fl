@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:blood_pressure_app/components/consistent_future_builder.dart';
+import 'package:blood_pressure_app/data_util/consistent_future_builder.dart';
 import 'package:blood_pressure_app/model/blood_pressure/update_legacy_entries.dart';
 import 'package:blood_pressure_app/model/export_import/export_configuration.dart';
 import 'package:blood_pressure_app/model/storage/db/config_db.dart';

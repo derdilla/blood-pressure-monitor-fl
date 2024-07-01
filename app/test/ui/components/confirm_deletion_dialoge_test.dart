@@ -1,4 +1,4 @@
-import 'package:blood_pressure_app/components/dialoges/confirm_deletion_dialoge.dart';
+import 'package:blood_pressure_app/components/confirm_deletion_dialoge.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
