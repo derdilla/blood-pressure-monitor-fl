@@ -1,510 +1,546 @@
 {
-    "loading": "cargando…",
-    "@loading": {},
-    "error": "Error: {msg}",
-    "@error": {
-        "placeholders": {
-            "msg": {
-                "type": "String"
-            }
-        }
-    },
-    "errNaN": "Por favor, introduzca un número",
-    "@errNaN": {},
-    "title": "Aplicación para la tensión arterial",
-    "@title": {},
-    "success": "Exito: {msg}",
-    "@success": {
-        "placeholders": {
-            "msg": {
-                "type": "String"
-            }
-        }
-    },
-    "errLt30": "¿Número <= 30? ¡Desactive la validación en los ajustes!",
-    "@errLt30": {},
-    "errCantOpenURL": "No se puede abrir la URL: {url}",
-    "@errCantOpenURL": {
-        "placeholders": {
-            "url": {
-                "type": "String"
-            }
-        }
-    },
-    "errNoFileOpened": "ningún archivo abierto",
-    "@errNoFileOpened": {},
-    "errNoValue": "Por favor, introduzca un valor",
-    "@errNoValue": {},
-    "errNoData": "no hay datos",
-    "@errNoData": {},
-    "errNeedHeadline": "Sólo puedes importar archivos con un encabezado.",
-    "@errNeedHeadline": {},
-    "errCantReadFile": "No se puede leer el contenido del archivo",
-    "@errCantReadFile": {},
-    "errNotImportable": "Este archivo no se puede importar",
-    "@errNotImportable": {},
-    "btnConfirm": "DE ACUERDO",
-    "@btnConfirm": {},
-    "btnUndo": "DESHACER",
-    "@btnUndo": {},
-    "btnNext": "SIGUIENTE",
-    "@btnNext": {},
-    "sysLong": "Sistólica",
-    "@sysLong": {},
-    "diaLong": "Diastólica",
-    "@diaLong": {},
-    "pulLong": "Pulso",
-    "@pulLong": {},
-    "addNote": "Nota (opcional)",
-    "@addNote": {},
-    "settings": "Ajustes",
-    "@settings": {},
-    "layout": "Apariencia",
-    "@layout": {},
-    "allowManualTimeInput": "Permitir la introducción manual de la hora",
-    "@allowManualTimeInput": {},
-    "theme": "Tema",
-    "@theme": {},
-    "dark": "Oscuro",
-    "@dark": {},
-    "light": "Claro",
-    "@light": {},
-    "iconSize": "Tamaño del icono",
-    "@iconSize": {},
-    "graphLineThickness": "Grosor de las líneas",
-    "@graphLineThickness": {},
-    "animationSpeed": "Duración de la animación",
-    "@animationSpeed": {},
-    "accentColor": "Color del tema",
-    "@accentColor": {},
-    "diaColor": "Color de la diástole",
-    "@diaColor": {},
-    "pulColor": "Color del pulso",
-    "@pulColor": {},
-    "validateInputs": "Validación de las entradas",
-    "@validateInputs": {},
-    "confirmDeletion": "Confirmar el borrado",
-    "@confirmDeletion": {},
-    "determineWarnValues": "Determinar los valores de aviso",
-    "@determineWarnValues": {},
-    "aboutWarnValuesScreen": "Acerca de",
-    "@aboutWarnValuesScreen": {},
-    "aboutWarnValuesScreenDesc": "Más información sobre los valores de advertencia",
-    "@aboutWarnValuesScreenDesc": {},
-    "sysWarn": "Advertencia de sistólica",
-    "@sysWarn": {},
-    "errUnrealistic": "¿Valor poco realista? ¡Desactiva la validación en los ajustes!",
-    "@errUnrealistic": {},
-    "errDiaGtSys": "¿dia >= sys? ¡Desactive la validación en la configuración!",
-    "@errDiaGtSys": {},
-    "errNotStarted": "no iniciado",
-    "@errNotStarted": {},
-    "errNotEnoughDataToGraph": "No hay datos suficientes para dibujar un gráfico.",
-    "@errNotEnoughDataToGraph": {},
-    "enterTimeFormatScreen": "Formato de la hora",
-    "@enterTimeFormatScreen": {},
-    "errWrongImportFormat": "Sólo se pueden importar archivos en formato CSV y de base de datos SQLite.",
-    "@errWrongImportFormat": {},
-    "btnCancel": "CANCELAR",
-    "@btnCancel": {},
-    "system": "Sistema",
-    "@system": {},
-    "btnSave": "GUARDAR",
-    "@btnSave": {},
-    "sysColor": "Color de la sistólica",
-    "@sysColor": {},
-    "behavior": "Comportamiento",
-    "@behavior": {},
-    "age": "Edad",
-    "@age": {},
-    "sysShort": "sys",
-    "@sysShort": {},
-    "diaShort": "dia",
-    "@diaShort": {},
-    "pulShort": "pul",
-    "@pulShort": {},
-    "diaWarn": "Alerta diastólica",
-    "@diaWarn": {},
-    "data": "Fecha",
-    "@data": {},
-    "version": "Versión",
-    "@version": {},
-    "versionOf": "Versión: {version}",
-    "@versionOf": {
-        "placeholders": {
-            "version": {
-                "type": "String"
-            }
-        }
-    },
-    "buildNumberOf": "Número de la versión: {buildNumber}",
-    "@buildNumberOf": {
-        "placeholders": {
-            "buildNumber": {
-                "type": "String"
-            }
-        }
-    },
-    "packageNameOf": "Nombre del paquete: {name}",
-    "@packageNameOf": {
-        "placeholders": {
-            "name": {
-                "type": "String"
-            }
-        }
-    },
-    "exportImport": "Exportar / Importar",
-    "@exportImport": {},
-    "exportDir": "Exportar el directorio",
-    "@exportDir": {},
-    "exportAfterEveryInput": "Exportar tras cada entrada",
-    "@exportAfterEveryInput": {},
-    "exportAfterEveryInputDesc": "No recomendado (hará que aumente la cantidad de archivos)",
-    "@exportAfterEveryInputDesc": {},
-    "exportCustomEntries": "Personalizar los campos",
-    "@exportCustomEntries": {},
-    "addEntry": "Añadir un campo",
-    "@addEntry": {},
-    "exportMimeType": "Tipo de medio de exportación",
-    "@exportMimeType": {},
-    "exportCsvHeadlineDesc": "Ayuda a determinar los tipos de valores",
-    "@exportCsvHeadlineDesc": {},
-    "exportFormat": "Formato de la exportación",
-    "@exportFormat": {},
-    "exportCsvHeadline": "Encabezado",
-    "@exportCsvHeadline": {},
-    "text": "texto",
-    "@text": {},
-    "other": "otro",
-    "@other": {},
-    "fieldDelimiter": "Delimitador de campo",
-    "@fieldDelimiter": {},
-    "textDelimiter": "Delimitador de texto",
-    "@textDelimiter": {},
-    "export": "EXPORTAR",
-    "@export": {},
-    "shared": "compartido",
-    "@shared": {},
-    "import": "IMPORTAR",
-    "@import": {},
-    "sourceCode": "Código fuente",
-    "@sourceCode": {},
-    "licenses": "Licencias de terceros",
-    "@licenses": {},
-    "importSuccess": "{count} entradas importadas",
-    "@importSuccess": {
-        "placeholders": {
-            "count": {
-                "type": "int"
-            }
-        }
-    },
-    "exportWarnNotEveryFieldExported": "Cuidado, no está exportando todos los campos: {fields}{count, plural, one{is} other{are}} missing.",
-    "@exportWarnNotEveryFieldExported": {
-        "placeholders": {
-            "count": {
-                "type": "int"
-            },
-            "fields": {
-                "type": "String"
-            }
-        }
-    },
-    "measurementsPerDay": "Mediciones por día",
-    "@measurementsPerDay": {},
-    "timeResolvedMetrics": "Métricas en base al tiempo",
-    "@timeResolvedMetrics": {},
-    "minOf": "{txt} min.",
-    "@minOf": {
-        "placeholders": {
-            "txt": {
-                "type": "String"
-            }
-        }
-    },
-    "maxOf": "{txt} máx.",
-    "@maxOf": {
-        "placeholders": {
-            "txt": {
-                "type": "String"
-            }
-        }
-    },
-    "warnValues": "Valores de precaución",
-    "@warnValues": {},
-    "enterTimeFormatString": "formato de tiempo",
-    "@enterTimeFormatString": {},
-    "now": "ahora",
-    "@now": {},
-    "time": "Tiempo",
-    "@time": {},
-    "deletionConfirmed": "Entrada eliminada.",
-    "@deletionConfirmed": {},
-    "week": "Semana",
-    "@week": {},
-    "weekOfYear": "Semana{weekNum},{year}",
-    "@weekOfYear": {
-        "placeholders": {
-            "weekNum": {
-                "type": "int"
-            },
-            "year": {
-                "type": "int"
-            }
-        }
-    },
-    "fieldFormat": "Formato del campo",
-    "@fieldFormat": {},
-    "result": "Resultado:",
-    "@result": {},
-    "pulsePressure": "Presión del pulso",
-    "@pulsePressure": {},
-    "addExportformat": "Agregar formato de exportación",
-    "@addExportformat": {},
-    "delete": "Eliminar",
-    "@delete": {},
-    "default_": "Predeterminado",
-    "@default_": {},
-    "exportPdfHeaderHeight": "Altura de la cabecera",
-    "@exportPdfHeaderHeight": {},
-    "exportPdfCellHeight": "Altura de la fila",
-    "@exportPdfCellHeight": {},
-    "exportPdfHeaderFontSize": "Tamaño de la fuente del cabezal",
-    "@exportPdfHeaderFontSize": {},
-    "exportPdfCellFontSize": "Tamaño de la fuente de la fila",
-    "@exportPdfCellFontSize": {},
-    "minimum": "Mínimo",
-    "@minimum": {},
-    "horizontalLines": "Lineas horizontales",
-    "@horizontalLines": {},
-    "linePositionY": "Posición de la linea (y)",
-    "@linePositionY": {},
-    "customGraphMarkings": "Marcas personalizadas",
-    "@customGraphMarkings": {},
-    "addLine": "Agregar línea",
-    "@addLine": {},
-    "useLegacyList": "Usar la lista de legado",
-    "@useLegacyList": {},
-    "addMeasurement": "Agregar medida",
-    "@addMeasurement": {},
-    "timestamp": "Marca de tiempo",
-    "@timestamp": {},
-    "note": "Nota",
-    "@note": {},
-    "exportSettings": "Configuración de respaldo",
-    "@exportSettings": {},
-    "importSettings": "Restaurar configuración",
-    "@importSettings": {},
-    "requiresAppRestart": "Se requiere reiniciar la aplicación",
-    "@requiresAppRestart": {},
-    "pleaseRestart": "Por favor reinicie la aplicación para aplicar los cambios",
-    "@pleaseRestart": {},
-    "deleteAllMeasurements": "Eliminar todas la mediciones",
-    "@deleteAllMeasurements": {},
-    "deleteAllSettings": "Eliminar todas las configuraciones",
-    "@deleteAllSettings": {},
-    "needlePinBarWidth": "Grosor del color",
-    "@needlePinBarWidth": {},
-    "errParseEmptyCsvFile": "No hay suficientes lineas en el archivo csv para analizar el registro.",
-    "@errParseEmptyCsvFile": {},
-    "errParseUnknownColumn": "No hay una columna con el título \"{title}\".",
-    "@errParseUnknownColumn": {
-        "placeholders": {
-            "title": {
-                "type": "String"
-            }
-        }
-    },
-    "remove": "Remover",
-    "@remove": {},
-    "manageExportColumns": "Administrar la exportación de columnas",
-    "@manageExportColumns": {},
-    "buildIn": "Build-in",
-    "@buildIn": {},
-    "csvTitle": "Título-CSV",
-    "@csvTitle": {},
-    "recordFormat": "Formato de registro",
-    "@recordFormat": {},
-    "bottomAppBars": "Barras de diálogo inferiores",
-    "@bottomAppBars": {},
-    "medications": "Medicinas",
-    "@medications": {},
-    "addMedication": "Agregar medicina",
-    "@addMedication": {},
-    "noMedication": "Sin medicación",
-    "@noMedication": {},
-    "dosis": "Dosis",
-    "@dosis": {},
-    "valueDistribution": "Distribución de valores",
-    "@valueDistribution": {},
-    "exportWarnConfigNotImportable": "¡Hey! Solo un aviso amistoso: la configuración de exportación actual no va a ser importable. Para corregirlo, asegura que elegiste el formato de exportación como CSV e incluye un de los formatos de tiempo disponible.",
-    "@exportWarnConfigNotImportable": {},
-    "warnAboutTxt3": "Dese la libertad de cambiar los valores para que se adapten a sus necesidades y siga las recomendaciones de su doctor.",
-    "@warnAboutTxt3": {},
-    "notes": "Notas",
-    "@notes": {},
-    "measurementCount": "Cuenta de medidas",
-    "@measurementCount": {},
-    "statistics": "Estadísticas",
-    "@statistics": {},
-    "confirmDelete": "Confirmar eliminación",
-    "@confirmDelete": {},
-    "confirmDeleteDesc": "¿Eliminar esta entrada? (Puedes desactivar estas confirmaciones en la configuración.)",
-    "@confirmDeleteDesc": {},
-    "avgOf": "{txt} Ø",
-    "@avgOf": {
-        "placeholders": {
-            "txt": {
-                "type": "String"
-            }
-        }
-    },
-    "day": "Día",
-    "@day": {},
-    "month": "Mes",
-    "@month": {},
-    "year": "Año",
-    "@year": {},
-    "edit": "Editar",
-    "@edit": {},
-    "lifetime": "Vida",
-    "@lifetime": {},
-    "last7Days": "7 días",
-    "@last7Days": {},
-    "last30Days": "30 días",
-    "@last30Days": {},
-    "allowMissingValues": "Permitir valores faltantes",
-    "@allowMissingValues": {},
-    "warnAboutTxt1": "Los valores de precaución son únicamente sugerencias y no consejo médico.",
-    "@warnAboutTxt1": {},
-    "errTimeAfterNow": "El tiempo seleccionado del día fue reiniciado, debido a que se ubica en el futuro. Puede desactivar esta validación el la configuración.",
-    "@errTimeAfterNow": {},
-    "language": "Lenguaje",
-    "@language": {},
-    "warnAboutTxt2": "Los valores dependientes de la edad predeterminada vienen de esta fuente.",
-    "@warnAboutTxt2": {},
-    "custom": "Personalizado",
-    "@custom": {},
-    "drawRegressionLinesDesc": "Trazar líneas de regresión en el gráfico. Sólo es útil para intervalos grandes.",
-    "@drawRegressionLinesDesc": {},
-    "drawRegressionLines": "Mostrar datos de tendencia",
-    "@drawRegressionLines": {},
-    "exportFieldFormatDocumentation": "'## Variables\nEl campo de formato de exportación admite insertar valores de los siguientes marcadores:\n- `$TIMESTAMP:` Representa el tiempo desde el Unix epoch en milisegundos.\n- `$SYS:` Provee un valor si se encuentra disponible; de lo contrario; se predetermina a -1.\n- `$DIA:`  Provee un valor si se encuentra disponible; de lo contrario; se predetermina a -1.\n- `$PUL:`  Provee un valor si se encuentra disponible; de lo contrario; se predetermina a -1.\n- `$NOTE:`  Provee un valor si se encuentra disponible; de lo contrario; se predetermina a -1.\n- `$COLOR:` Representa el color de una medida como un número. (valor de ejemplo: `4291681337`)\n\nSi alguno de estos marcadores no esta presente en el registro de la presión arterial, serán remplazados con `null`.\n\n##Math\nPuede usar matemáticas básicas dentro de un doble paréntesis (\"`{{}}`\").\n\nLas siguientes operaciones matemáticas son compatibles:\n-Operaciones: +, -, *, /, %, ^\n- Funciones de un parámetro: abs, acos, asin, atan, ceil, cos, cosh, cot, coth, csc, csch, exp, floor, ln, log, round sec, sech, sin, sinh, sqrt, tan, tanh \n- Funciones de dos parámetros: log, nrt, pow\n- Constantes: e, pi, ln2, ln10, log2e, log10e, sqrt1_2, sqrt2\n\nPara toda la especificación del intérprete matemático, puedes consultar la [function_tree](https://pub.dev/documentation/function_tree/latest#interpreter) documentación.\n\n## Orden de procesamiento\n1.Reemplazo de variable\n2.Matemática'",
-    "@exportFieldFormatDocumentation": {},
-    "pdfDocumentTitle": "Los valores de la presión arterial desde {start} hasta {end}",
-    "@pdfDocumentTitle": {
-        "placeholders": {
-            "start": {
-                "type": "String"
-            },
-            "end": {
-                "type": "String"
-            }
-        }
-    },
-    "average": "Promedio",
-    "@average": {},
-    "maximum": "Máximo",
-    "@maximum": {},
-    "exportPdfExportData": "Tabla de datos",
-    "@exportPdfExportData": {},
-    "exportPdfExportTitle": "Encabezado",
-    "@exportPdfExportTitle": {},
-    "exportPdfExportStatistics": "Estadísticas",
-    "@exportPdfExportStatistics": {},
-    "startWithAddMeasurementPage": "Medida en el lanzamiento",
-    "@startWithAddMeasurementPage": {},
-    "startWithAddMeasurementPageDescription": "En el lanzamiento de la aplicación, se muestra la pantalla del input de las medidas.",
-    "@startWithAddMeasurementPageDescription": {},
-    "color": "Color",
-    "@color": {},
-    "restartNow": "Reiniciar ahora",
-    "@restartNow": {},
-    "warnNeedsRestartForUsingApp": "Los archivos fueron eliminados en esta sesión. ¡Reinicie la aplicación para seguir usando returning en otras partes de la aplicación!",
-    "@warnNeedsRestartForUsingApp": {},
-    "warnDeletionUnrecoverable": "Este paso no es reversible a no ser que manualmente haya realizado un respaldo. ¿Estás seguro de que deseas eliminar esto?",
-    "@warnDeletionUnrecoverable": {},
-    "enterTimeFormatDesc": "Un string formateador es una mezcla de string ICU/Skeleton predefinidas y cualquier texto adicional que desee incluir.\n\n[Si deseas saber sobre la lista completa de formatos válidos, los puede encontrar aquí.](screen://TimeFormattingHelp)\n\nSolo un recordatorio amistoso, usar string formateadores más largos o cortos no va a mágicamente alterar el ancho de las columnas de la tabla, lo cuál puede resultar en unas interrupciones irregulares en la linea y que el texto no se muestre.\n\npredeterminado: \"aa-MM-dd HH:mm\"",
-    "@enterTimeFormatDesc": {},
-    "needlePinBarWidthDesc": "El ancho de las líneas que forman las entradas coloreadas en el gráfico.",
-    "@needlePinBarWidthDesc": {},
-    "errParseTimeNotRestoreable": "No hay una columna la cual permita restaurar una marca de tiempo.",
-    "@errParseTimeNotRestoreable": {},
-    "errParseLineTooShort": "La línea {lineNumber} tiene menos columnas que la primera línea.",
-    "@errParseLineTooShort": {
-        "placeholders": {
-            "lineNumber": {
-                "type": "int"
-            }
-        }
-    },
-    "errParseFailedDecodingField": "El campo de descodificación \"{fieldContent}\" en la línea {lineNumber} ha fallado.",
-    "@errParseFailedDecodingField": {
-        "placeholders": {
-            "lineNumber": {
-                "type": "int"
-            },
-            "fieldContent": {
-                "type": "String"
-            }
-        }
-    },
-    "exportFieldsPreset": "Exportar campos predeterminados",
-    "@exportFieldsPreset": {},
-    "timeFormat": "Formato del tiempo",
-    "@timeFormat": {},
-    "errAccuracyLoss": "Es esperable la pérdida de precisión al exportar con formatos del tiempo personalizados.",
-    "@errAccuracyLoss": {},
-    "name": "Nombre",
-    "@name": {},
-    "defaultDosis": "Dosis predeterminada",
-    "@defaultDosis": {},
-    "csv": "CSV",
-    "@csv": {},
-    "pdf": "PDF",
-    "@pdf": {},
-    "db": "SQLite DB",
-    "@db": {},
-    "titleInCsv": "Título en CSV",
-    "@titleInCsv": {},
-    "preferredPressureUnit": "Unidad de presión preferida",
-    "@preferredPressureUnit": {},
-    "deleteAllMedicineIntakes": "Eliminar todas las tomas de medicamentos",
-    "@deleteAllMedicineIntakes": {},
-    "errBleNoPerms": "Sin permiso de bluetooth",
-    "@errBleNoPerms": {},
-    "errMeasurementRead": "¡Ocurrió un error al medir!",
-    "@errMeasurementRead": {},
-    "connect": "Conectar",
-    "@connect": {},
-    "bluetoothInput": "Entrada por Bluetooth",
-    "@bluetoothInput": {},
-    "meanArterialPressure": "Presión arterial media",
-    "@meanArterialPressure": {},
-    "userID": "Id del usuario",
-    "@userID": {},
-    "bodyMovementDetected": "Movimiento corporal detectado",
-    "@bodyMovementDetected": {},
-    "cuffTooLoose": "Puño demasiado flojo",
-    "@cuffTooLoose": {},
-    "pulseRateExceedsUpperLimit": "La frecuencia cardíaca excede el límite superior",
-    "@pulseRateExceedsUpperLimit": {},
-    "availableDevices": "Dispositivos disponibles",
-    "@availableDevices": {},
-    "tapToClose": "Toque para cerrar.",
-    "@tapToClose": {},
-    "bluetoothDisabled": "Bluetooth desactivado",
-    "@bluetoothDisabled": {},
-    "measurementSuccess": "¡Medición exitosa!",
-    "@measurementSuccess": {},
-    "aboutBleInput": "Algunos dispositivos de medición son compatibles con BLE GATT. Puede emparejar estos dispositivos aquí y transmitir mediciones automáticamente o desactivar esta opción en la configuración.",
-    "@aboutBleInput": {},
-    "scanningForDevices": "Buscando dispositivos",
-    "@scanningForDevices": {},
-    "improperMeasurementPosition": "Posición de medición incorrecta",
-    "@improperMeasurementPosition": {},
-    "irregularPulseDetected": "Pulso irregular detectado",
-    "@irregularPulseDetected": {},
-    "pulseRateLessThanLowerLimit": "Frecuencia cardíaca por debajo del límite inferior",
-    "@pulseRateLessThanLowerLimit": {}
+  "loading": "cargando…",
+  "@loading": {},
+  "error": "Error: {msg}",
+  "@error": {
+    "placeholders": {
+      "msg": {
+        "type": "String"
+      }
+    }
+  },
+  "errNaN": "Por favor, introduzca un número",
+  "@errNaN": {},
+  "title": "Aplicación para la tensión arterial",
+  "@title": {},
+  "success": "Exito: {msg}",
+  "@success": {
+    "placeholders": {
+      "msg": {
+        "type": "String"
+      }
+    }
+  },
+  "errLt30": "¿Número <= 30? ¡Desactive la validación en los ajustes!",
+  "@errLt30": {},
+  "errCantOpenURL": "No se puede abrir la URL: {url}",
+  "@errCantOpenURL": {
+    "placeholders": {
+      "url": {
+        "type": "String"
+      }
+    }
+  },
+  "errNoFileOpened": "ningún archivo abierto",
+  "@errNoFileOpened": {},
+  "errNoValue": "Por favor, introduzca un valor",
+  "@errNoValue": {},
+  "errNoData": "no hay datos",
+  "@errNoData": {},
+  "errNeedHeadline": "Sólo puedes importar archivos con un encabezado.",
+  "@errNeedHeadline": {},
+  "errCantReadFile": "No se puede leer el contenido del archivo",
+  "@errCantReadFile": {},
+  "errNotImportable": "Este archivo no se puede importar",
+  "@errNotImportable": {},
+  "btnConfirm": "DE ACUERDO",
+  "@btnConfirm": {},
+  "btnUndo": "DESHACER",
+  "@btnUndo": {},
+  "btnNext": "SIGUIENTE",
+  "@btnNext": {},
+  "sysLong": "Sistólica",
+  "@sysLong": {},
+  "diaLong": "Diastólica",
+  "@diaLong": {},
+  "pulLong": "Pulso",
+  "@pulLong": {},
+  "addNote": "Nota (opcional)",
+  "@addNote": {},
+  "settings": "Ajustes",
+  "@settings": {},
+  "layout": "Apariencia",
+  "@layout": {},
+  "allowManualTimeInput": "Permitir la introducción manual de la hora",
+  "@allowManualTimeInput": {},
+  "theme": "Tema",
+  "@theme": {},
+  "dark": "Oscuro",
+  "@dark": {},
+  "light": "Claro",
+  "@light": {},
+  "iconSize": "Tamaño del icono",
+  "@iconSize": {},
+  "graphLineThickness": "Grosor de las líneas",
+  "@graphLineThickness": {},
+  "animationSpeed": "Duración de la animación",
+  "@animationSpeed": {},
+  "accentColor": "Color del tema",
+  "@accentColor": {},
+  "diaColor": "Color de la diástole",
+  "@diaColor": {},
+  "pulColor": "Color del pulso",
+  "@pulColor": {},
+  "validateInputs": "Validación de las entradas",
+  "@validateInputs": {},
+  "confirmDeletion": "Confirmar el borrado",
+  "@confirmDeletion": {},
+  "determineWarnValues": "Determinar los valores de aviso",
+  "@determineWarnValues": {},
+  "aboutWarnValuesScreen": "Acerca de",
+  "@aboutWarnValuesScreen": {},
+  "aboutWarnValuesScreenDesc": "Más información sobre los valores de advertencia",
+  "@aboutWarnValuesScreenDesc": {},
+  "sysWarn": "Advertencia de sistólica",
+  "@sysWarn": {},
+  "errUnrealistic": "¿Valor poco realista? ¡Desactiva la validación en los ajustes!",
+  "@errUnrealistic": {},
+  "errDiaGtSys": "¿dia >= sys? ¡Desactive la validación en la configuración!",
+  "@errDiaGtSys": {},
+  "errNotStarted": "no iniciado",
+  "@errNotStarted": {},
+  "errNotEnoughDataToGraph": "No hay datos suficientes para dibujar un gráfico.",
+  "@errNotEnoughDataToGraph": {},
+  "enterTimeFormatScreen": "Formato de la hora",
+  "@enterTimeFormatScreen": {},
+  "errWrongImportFormat": "Sólo se pueden importar archivos en formato CSV y de base de datos SQLite.",
+  "@errWrongImportFormat": {},
+  "btnCancel": "CANCELAR",
+  "@btnCancel": {},
+  "system": "Sistema",
+  "@system": {},
+  "btnSave": "GUARDAR",
+  "@btnSave": {},
+  "sysColor": "Color de la sistólica",
+  "@sysColor": {},
+  "behavior": "Comportamiento",
+  "@behavior": {},
+  "age": "Edad",
+  "@age": {},
+  "sysShort": "sys",
+  "@sysShort": {},
+  "diaShort": "dia",
+  "@diaShort": {},
+  "pulShort": "pul",
+  "@pulShort": {},
+  "diaWarn": "Alerta diastólica",
+  "@diaWarn": {},
+  "data": "Fecha",
+  "@data": {},
+  "version": "Versión",
+  "@version": {},
+  "versionOf": "Versión: {version}",
+  "@versionOf": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "buildNumberOf": "Número de la versión: {buildNumber}",
+  "@buildNumberOf": {
+    "placeholders": {
+      "buildNumber": {
+        "type": "String"
+      }
+    }
+  },
+  "packageNameOf": "Nombre del paquete: {name}",
+  "@packageNameOf": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "exportImport": "Exportar / Importar",
+  "@exportImport": {},
+  "exportDir": "Exportar el directorio",
+  "@exportDir": {},
+  "exportAfterEveryInput": "Exportar tras cada entrada",
+  "@exportAfterEveryInput": {},
+  "exportAfterEveryInputDesc": "No recomendado (hará que aumente la cantidad de archivos)",
+  "@exportAfterEveryInputDesc": {},
+  "exportCustomEntries": "Personalizar los campos",
+  "@exportCustomEntries": {},
+  "addEntry": "Añadir un campo",
+  "@addEntry": {},
+  "exportMimeType": "Tipo de medio de exportación",
+  "@exportMimeType": {},
+  "exportCsvHeadlineDesc": "Ayuda a determinar los tipos de valores",
+  "@exportCsvHeadlineDesc": {},
+  "exportFormat": "Formato de la exportación",
+  "@exportFormat": {},
+  "exportCsvHeadline": "Encabezado",
+  "@exportCsvHeadline": {},
+  "text": "texto",
+  "@text": {},
+  "other": "otro",
+  "@other": {},
+  "fieldDelimiter": "Delimitador de campo",
+  "@fieldDelimiter": {},
+  "textDelimiter": "Delimitador de texto",
+  "@textDelimiter": {},
+  "export": "EXPORTAR",
+  "@export": {},
+  "exportSuccess": "Exportado a: {path}",
+  "@exportSuccess": {
+    "placeholders": {
+      "path": {
+        "type": "String"
+      }
+    }
+  },
+  "shared": "compartido",
+  "@shared": {},
+  "import": "IMPORTAR",
+  "@import": {},
+  "sourceCode": "Código fuente",
+  "@sourceCode": {},
+  "licenses": "Licencias de terceros",
+  "@licenses": {},
+  "importSuccess": "{count} entradas importadas",
+  "@importSuccess": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "exportWarnNotEveryFieldExported": "Cuidado, no está exportando todos los campos: {fields}{count, plural, one{is} other{are}} missing.",
+  "@exportWarnNotEveryFieldExported": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "fields": {
+        "type": "String"
+      }
+    }
+  },
+  "measurementsPerDay": "Mediciones por día",
+  "@measurementsPerDay": {},
+  "timeResolvedMetrics": "Métricas en base al tiempo",
+  "@timeResolvedMetrics": {},
+  "minOf": "{txt} min.",
+  "@minOf": {
+    "placeholders": {
+      "txt": {
+        "type": "String"
+      }
+    }
+  },
+  "maxOf": "{txt} máx.",
+  "@maxOf": {
+    "placeholders": {
+      "txt": {
+        "type": "String"
+      }
+    }
+  },
+  "warnValues": "Valores de precaución",
+  "@warnValues": {},
+  "enterTimeFormatString": "formato de tiempo",
+  "@enterTimeFormatString": {},
+  "dateFormatting": "Formato de fechas",
+  "@dateFormatting": {},
+  "now": "ahora",
+  "@now": {},
+  "time": "Tiempo",
+  "@time": {},
+  "deletionConfirmed": "Entrada eliminada.",
+  "@deletionConfirmed": {},
+  "week": "Semana",
+  "@week": {},
+  "weekOfYear": "Semana{weekNum},{year}",
+  "@weekOfYear": {
+    "placeholders": {
+      "weekNum": {
+        "type": "int"
+      },
+      "year": {
+        "type": "int"
+      }
+    }
+  },
+  "fieldFormat": "Formato del campo",
+  "@fieldFormat": {},
+  "result": "Resultado:",
+  "@result": {},
+  "pulsePressure": "Presión del pulso",
+  "@pulsePressure": {},
+  "addExportformat": "Agregar formato de exportación",
+  "@addExportformat": {},
+  "delete": "Eliminar",
+  "@delete": {},
+  "presets": "Preajustes",
+  "@presets": {},
+  "default_": "Predeterminado",
+  "@default_": {},
+  "exportPdfHeaderHeight": "Altura de la cabecera",
+  "@exportPdfHeaderHeight": {},
+  "exportPdfCellHeight": "Altura de la fila",
+  "@exportPdfCellHeight": {},
+  "exportPdfHeaderFontSize": "Tamaño de la fuente del cabezal",
+  "@exportPdfHeaderFontSize": {},
+  "exportPdfCellFontSize": "Tamaño de la fuente de la fila",
+  "@exportPdfCellFontSize": {},
+  "minimum": "Mínimo",
+  "@minimum": {},
+  "horizontalLines": "Lineas horizontales",
+  "@horizontalLines": {},
+  "linePositionY": "Posición de la linea (y)",
+  "@linePositionY": {},
+  "customGraphMarkings": "Marcas personalizadas",
+  "@customGraphMarkings": {},
+  "addLine": "Agregar línea",
+  "@addLine": {},
+  "useLegacyList": "Usar la lista de legado",
+  "@useLegacyList": {},
+  "addMeasurement": "Agregar medida",
+  "@addMeasurement": {},
+  "timestamp": "Marca de tiempo",
+  "@timestamp": {},
+  "note": "Nota",
+  "@note": {},
+  "exportSettings": "Configuración de respaldo",
+  "@exportSettings": {},
+  "importSettings": "Restaurar configuración",
+  "@importSettings": {},
+  "requiresAppRestart": "Se requiere reiniciar la aplicación",
+  "@requiresAppRestart": {},
+  "pleaseRestart": "Por favor reinicie la aplicación para aplicar los cambios",
+  "@pleaseRestart": {},
+  "deleteAllMeasurements": "Eliminar todas la mediciones",
+  "@deleteAllMeasurements": {},
+  "deleteAllSettings": "Eliminar todas las configuraciones",
+  "@deleteAllSettings": {},
+  "fileDeleted": "Archivo eliminado",
+  "@fileDeleted": {},
+  "errExportColumnWithThisNameAlreadyExists": "Una columna con este nombre ya existe.",
+  "@errExportColumnWithThisNameAlreadyExists": {},
+  "needlePinBarWidth": "Grosor del color",
+  "@needlePinBarWidth": {},
+  "errParseEmptyCsvFile": "No hay suficientes lineas en el archivo csv para analizar el registro.",
+  "@errParseEmptyCsvFile": {},
+  "errParseUnknownColumn": "No hay una columna con el título \"{title}\".",
+  "@errParseUnknownColumn": {
+    "placeholders": {
+      "title": {
+        "type": "String"
+      }
+    }
+  },
+  "remove": "Remover",
+  "@remove": {},
+  "manageExportColumns": "Administrar la exportación de columnas",
+  "@manageExportColumns": {},
+  "buildIn": "Build-in",
+  "@buildIn": {},
+  "csvTitle": "Título-CSV",
+  "@csvTitle": {},
+  "recordFormat": "Formato de registro",
+  "@recordFormat": {},
+  "bottomAppBars": "Barras de diálogo inferiores",
+  "@bottomAppBars": {},
+  "medications": "Medicinas",
+  "@medications": {},
+  "addMedication": "Agregar medicina",
+  "@addMedication": {},
+  "noMedication": "Sin medicación",
+  "@noMedication": {},
+  "dosis": "Dosis",
+  "@dosis": {},
+  "valueDistribution": "Distribución de valores",
+  "@valueDistribution": {},
+  "exportWarnConfigNotImportable": "¡Hey! Solo un aviso amistoso: la configuración de exportación actual no va a ser importable. Para corregirlo, asegura que elegiste el formato de exportación como CSV e incluye un de los formatos de tiempo disponible.",
+  "@exportWarnConfigNotImportable": {},
+  "warnAboutTxt3": "Dese la libertad de cambiar los valores para que se adapten a sus necesidades y siga las recomendaciones de su doctor.",
+  "@warnAboutTxt3": {},
+  "notes": "Notas",
+  "@notes": {},
+  "measurementCount": "Cuenta de medidas",
+  "@measurementCount": {},
+  "statistics": "Estadísticas",
+  "@statistics": {},
+  "confirmDelete": "Confirmar eliminación",
+  "@confirmDelete": {},
+  "confirmDeleteDesc": "¿Eliminar esta entrada? (Puedes desactivar estas confirmaciones en la configuración.)",
+  "@confirmDeleteDesc": {},
+  "avgOf": "{txt} Ø",
+  "@avgOf": {
+    "placeholders": {
+      "txt": {
+        "type": "String"
+      }
+    }
+  },
+  "day": "Día",
+  "@day": {},
+  "month": "Mes",
+  "@month": {},
+  "unixTimestamp": "Marca de tiempo Unix",
+  "@unixTimestamp": {},
+  "year": "Año",
+  "@year": {},
+  "errCantEditThis": "No puedes editar esto. Dese la libertad de ver los valores para crear una nueva entrada.",
+  "@errCantEditThis": {},
+  "edit": "Editar",
+  "@edit": {},
+  "lifetime": "Vida",
+  "@lifetime": {},
+  "last7Days": "7 días",
+  "@last7Days": {},
+  "last30Days": "30 días",
+  "@last30Days": {},
+  "allowMissingValues": "Permitir valores faltantes",
+  "@allowMissingValues": {},
+  "warnAboutTxt1": "Los valores de precaución son únicamente sugerencias y no consejo médico.",
+  "@warnAboutTxt1": {},
+  "errTimeAfterNow": "El tiempo seleccionado del día fue reiniciado, debido a que se ubica en el futuro. Puede desactivar esta validación el la configuración.",
+  "@errTimeAfterNow": {},
+  "language": "Lenguaje",
+  "@language": {},
+  "warnAboutTxt2": "Los valores dependientes de la edad predeterminada vienen de esta fuente.",
+  "@warnAboutTxt2": {},
+  "custom": "Personalizado",
+  "@custom": {},
+  "drawRegressionLinesDesc": "Trazar líneas de regresión en el gráfico. Sólo es útil para intervalos grandes.",
+  "@drawRegressionLinesDesc": {},
+  "drawRegressionLines": "Mostrar datos de tendencia",
+  "@drawRegressionLines": {},
+  "exportHiddenFields": "campos escondidos",
+  "@exportHiddenFields": {},
+  "displayTitle": "Titulo",
+  "@displayTitle": {},
+  "exportFieldFormatDocumentation": "'## Variables\nEl campo de formato de exportación admite insertar valores de los siguientes marcadores:\n- `$TIMESTAMP:` Representa el tiempo desde el Unix epoch en milisegundos.\n- `$SYS:` Provee un valor si se encuentra disponible; de lo contrario; se predetermina a -1.\n- `$DIA:`  Provee un valor si se encuentra disponible; de lo contrario; se predetermina a -1.\n- `$PUL:`  Provee un valor si se encuentra disponible; de lo contrario; se predetermina a -1.\n- `$NOTE:`  Provee un valor si se encuentra disponible; de lo contrario; se predetermina a -1.\n- `$COLOR:` Representa el color de una medida como un número. (valor de ejemplo: `4291681337`)\n\nSi alguno de estos marcadores no esta presente en el registro de la presión arterial, serán remplazados con `null`.\n\n##Math\nPuede usar matemáticas básicas dentro de un doble paréntesis (\"`{{}}`\").\n\nLas siguientes operaciones matemáticas son compatibles:\n-Operaciones: +, -, *, /, %, ^\n- Funciones de un parámetro: abs, acos, asin, atan, ceil, cos, cosh, cot, coth, csc, csch, exp, floor, ln, log, round sec, sech, sin, sinh, sqrt, tan, tanh \n- Funciones de dos parámetros: log, nrt, pow\n- Constantes: e, pi, ln2, ln10, log2e, log10e, sqrt1_2, sqrt2\n\nPara toda la especificación del intérprete matemático, puedes consultar la [function_tree](https://pub.dev/documentation/function_tree/latest#interpreter) documentación.\n\n## Orden de procesamiento\n1.Reemplazo de variable\n2.Matemática'",
+  "@exportFieldFormatDocumentation": {},
+  "pdfDocumentTitle": "Los valores de la presión arterial desde {start} hasta {end}",
+  "@pdfDocumentTitle": {
+    "placeholders": {
+      "start": {
+        "type": "String"
+      },
+      "end": {
+        "type": "String"
+      }
+    }
+  },
+  "internalName": "Nombre interno",
+  "@internalName": {},
+  "errOnlyLatinCharactersAndArabicNumbers": "Solo se permiten caracteres latinos o números árabes",
+  "@errOnlyLatinCharactersAndArabicNumbers": {},
+  "average": "Promedio",
+  "@average": {},
+  "maximum": "Máximo",
+  "@maximum": {},
+  "exportPdfExportData": "Tabla de datos",
+  "@exportPdfExportData": {},
+  "exportPdfExportTitle": "Encabezado",
+  "@exportPdfExportTitle": {},
+  "exportPdfExportStatistics": "Estadísticas",
+  "@exportPdfExportStatistics": {},
+  "startWithAddMeasurementPage": "Medida en el lanzamiento",
+  "@startWithAddMeasurementPage": {},
+  "startWithAddMeasurementPageDescription": "En el lanzamiento de la aplicación, se muestra la pantalla del input de las medidas.",
+  "@startWithAddMeasurementPageDescription": {},
+  "color": "Color",
+  "@color": {},
+  "restartNow": "Reiniciar ahora",
+  "@restartNow": {},
+  "warnNeedsRestartForUsingApp": "Los archivos fueron eliminados en esta sesión. ¡Reinicie la aplicación para seguir usando returning en otras partes de la aplicación!",
+  "@warnNeedsRestartForUsingApp": {},
+  "warnDeletionUnrecoverable": "Este paso no es reversible a no ser que manualmente haya realizado un respaldo. ¿Estás seguro de que deseas eliminar esto?",
+  "@warnDeletionUnrecoverable": {},
+  "fileAlreadyDeleted": "Este archivo ya ha sido eliminado",
+  "@fileAlreadyDeleted": {},
+  "enterTimeFormatDesc": "Un string formateador es una mezcla de string ICU/Skeleton predefinidas y cualquier texto adicional que desee incluir.\n\n[Si deseas saber sobre la lista completa de formatos válidos, los puede encontrar aquí.](screen://TimeFormattingHelp)\n\nSolo un recordatorio amistoso, usar string formateadores más largos o cortos no va a mágicamente alterar el ancho de las columnas de la tabla, lo cuál puede resultar en unas interrupciones irregulares en la linea y que el texto no se muestre.\n\npredeterminado: \"aa-MM-dd HH:mm\"",
+  "@enterTimeFormatDesc": {},
+  "needlePinBarWidthDesc": "El ancho de las líneas que forman las entradas coloreadas en el gráfico.",
+  "@needlePinBarWidthDesc": {},
+  "errParseTimeNotRestoreable": "No hay una columna la cual permita restaurar una marca de tiempo.",
+  "@errParseTimeNotRestoreable": {},
+  "errParseLineTooShort": "La línea {lineNumber} tiene menos columnas que la primera línea.",
+  "@errParseLineTooShort": {
+    "placeholders": {
+      "lineNumber": {
+        "type": "int"
+      }
+    }
+  },
+  "errParseFailedDecodingField": "El campo de descodificación \"{fieldContent}\" en la línea {lineNumber} ha fallado.",
+  "@errParseFailedDecodingField": {
+    "placeholders": {
+      "lineNumber": {
+        "type": "int"
+      },
+      "fieldContent": {
+        "type": "String"
+      }
+    }
+  },
+  "exportFieldsPreset": "Exportar campos predeterminados",
+  "@exportFieldsPreset": {},
+  "timeFormat": "Formato del tiempo",
+  "@timeFormat": {},
+  "errAccuracyLoss": "Es esperable la pérdida de precisión al exportar con formatos del tiempo personalizados.",
+  "@errAccuracyLoss": {},
+  "name": "Nombre",
+  "@name": {},
+  "defaultDosis": "Dosis predeterminada",
+  "@defaultDosis": {},
+  "csv": "CSV",
+  "@csv": {},
+  "pdf": "PDF",
+  "@pdf": {},
+  "db": "SQLite DB",
+  "@db": {},
+  "titleInCsv": "Título en CSV",
+  "@titleInCsv": {},
+  "preferredPressureUnit": "Unidad de presión preferida",
+  "@preferredPressureUnit": {},
+  "deleteAllMedicineIntakes": "Eliminar todas las tomas de medicamentos",
+  "@deleteAllMedicineIntakes": {},
+  "errBleNoPerms": "Sin permiso de bluetooth",
+  "@errBleNoPerms": {},
+  "errBleCantOpen": "No se pudo cargar el dispositivo de entrada. Asegúrate de que la aplicación tenga todos los permisos necesarios e informe del problema si persiste.",
+  "@errBleCantOpen": {},
+  "errBleNoDev": "No se encontraron dispositivos BLE GATT compatibles. ¡Toca para actualizar!",
+  "@errBleNoDev": {},
+  "errMeasurementRead": "¡Ocurrió un error al medir!",
+  "@errMeasurementRead": {},
+  "connect": "Conectar",
+  "@connect": {},
+  "bluetoothInput": "Entrada por Bluetooth",
+  "@bluetoothInput": {},
+  "meanArterialPressure": "Presión arterial media",
+  "@meanArterialPressure": {},
+  "userID": "Id del usuario",
+  "@userID": {},
+  "bodyMovementDetected": "Movimiento corporal detectado",
+  "@bodyMovementDetected": {},
+  "cuffTooLoose": "Puño demasiado flojo",
+  "@cuffTooLoose": {},
+  "pulseRateExceedsUpperLimit": "La frecuencia cardíaca excede el límite superior",
+  "@pulseRateExceedsUpperLimit": {},
+  "availableDevices": "Dispositivos disponibles",
+  "@availableDevices": {},
+  "tapToClose": "Toque para cerrar.",
+  "@tapToClose": {},
+  "bluetoothDisabled": "Bluetooth desactivado",
+  "@bluetoothDisabled": {},
+  "measurementSuccess": "¡Medición exitosa!",
+  "@measurementSuccess": {},
+  "scanningDevices": "Buscando dispositivos...",
+  "@scanningDevices": {},
+  "aboutBleInput": "Algunos dispositivos de medición son compatibles con BLE GATT. Puede emparejar estos dispositivos aquí y transmitir mediciones automáticamente o desactivar esta opción en la configuración.",
+  "@aboutBleInput": {},
+  "scanningForDevices": "Buscando dispositivos",
+  "@scanningForDevices": {},
+  "improperMeasurementPosition": "Posición de medición incorrecta",
+  "@improperMeasurementPosition": {},
+  "irregularPulseDetected": "Pulso irregular detectado",
+  "@irregularPulseDetected": {},
+  "pulseRateLessThanLowerLimit": "Frecuencia cardíaca por debajo del límite inferior",
+  "@pulseRateLessThanLowerLimit": {}
 }
