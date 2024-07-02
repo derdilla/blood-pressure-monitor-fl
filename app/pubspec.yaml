@@ -29,7 +29,6 @@ dependencies:
   url_launcher: ^6.1.11
   health_data_store:
     path: ../health_data_store/
-  sqlparser: ^0.36.0
   flutter_bloc: ^8.1.4
   flutter_blue_plus: ^1.32.4
 
