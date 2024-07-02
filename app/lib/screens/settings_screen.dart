@@ -23,9 +23,7 @@ import 'package:blood_pressure_app/model/storage/storage.dart';
 import 'package:blood_pressure_app/platform_integration/platform_client.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:health_data_store/health_data_store.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:path/path.dart';
 import 'package:provider/provider.dart';
@@ -345,56 +343,6 @@ class SettingsPage extends StatelessWidget {
                       context,
                       MaterialPageRoute(builder: (context) => const DeleteDataScreen()),
                     );
-                  },
-                ),
-                ListTile(
-                  title: Text('Import foreign database (Preview)'), // TODO
-                  subtitle: Text('Unstable feature: Use at your own risk. Please'
-                      ' open issues and give feedback in form of issues on this '
-                      'projects GitHub page (accessible through the source code button).'),
-                  leading: Icon(Icons.add_circle, color: Colors.orange,),
-                  onTap: () async {
-                    final messenger = ScaffoldMessenger.of(context);
-                    final result = await FilePicker.platform.pickFiles();
-
-                    if (result == null) {
-                      messenger.showSnackBar(SnackBar(content: Text(localizations.errNoFileOpened)));
-                      return;
-                    }
-                    final path = result.files.single.path;
-                    if (path == null) {
-                      messenger.showSnackBar(SnackBar(content: Text(localizations.errCantReadFile)));
-                      return;
-                    } // TODO: stop duplicating file selection code
-
-                    final db = await openDatabase(path);
-
-                    if (!context.mounted) return;
-                    final data = await showForeignDBImportDialoge(context,
-                        settings.bottomAppBars, db,);
-
-                    if (!context.mounted) return;
-                    if (data == null) {
-                      messenger.showSnackBar(SnackBar(content: Text(localizations.errNotImportable)));
-                      return;
-                    }
-
-                    final bpRepo = RepositoryProvider.of<BloodPressureRepository>(context);
-                    final noteRepo = RepositoryProvider.of<NoteRepository>(context);
-                    await Future.forEach(data, (e) async {
-                      if (e.sys != null || e.dia != null || e.pul != null) {
-                        await bpRepo.add(e.$1);
-                      }
-                      if (e.note != null || e.color != null) {
-                        await noteRepo.add(e.$2);
-                      }
-                      assert(e.$3.isEmpty);
-                    });
-
-                    // TODO: Show import preview
-
-                    messenger.showSnackBar(SnackBar(content: Text(
-                      localizations.importSuccess(data.length),),),);
                   },
                 ),
               ],
