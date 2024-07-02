@@ -1,370 +1,340 @@
 {
-  "errOnlyLatinCharactersAndArabicNumbers": "Только латинские буквы и арабские цифры",
-  "@errOnlyLatinCharactersAndArabicNumbers": {},
-  "errCantEditThis": "Вы не можете это редактировать. Не стесняйтесь ознакомиться со значениями для создания новой записи.",
-  "@errCantEditThis": {},
-  "pdfDocumentTitle": "Значения кровяного давления с {start} по {end}",
-  "@pdfDocumentTitle": {
-    "placeholders": {
-      "start": {
-        "type": "String"
-      },
-      "end": {
-        "type": "String"
-      }
-    }
-  },
-  "exportPdfCellFontSize": "Размер шрифта строки",
-  "@exportPdfCellFontSize": {},
-  "maximum": "Максимум",
-  "@maximum": {},
-  "minimum": "Минимум",
-  "@minimum": {},
-  "exportPdfExportTitle": "Заголовок",
-  "@exportPdfExportTitle": {},
-  "exportPdfExportStatistics": "Статистика",
-  "@exportPdfExportStatistics": {},
-  "exportPdfExportData": "Таблица данных",
-  "@exportPdfExportData": {},
-  "errNaN": "Пожалуйста, введите число",
-  "@errNaN": {},
-  "sysShort": "САД",
-  "@sysShort": {},
-  "diaLong": "Диастолическое",
-  "@diaLong": {},
-  "diaShort": "ДАД",
-  "@diaShort": {},
-  "data": "Данные",
-  "@data": {},
-  "version": "Версия",
-  "@version": {},
-  "confirmDeleteDesc": "Удалить эту запись? (Вы можете отключить эти подтверждения в настройках.)",
-  "@confirmDeleteDesc": {},
-  "deletionConfirmed": "Запись удалена.",
-  "@deletionConfirmed": {},
-  "day": "День",
-  "@day": {},
-  "week": "Неделя",
-  "@week": {},
-  "language": "Язык",
-  "@language": {},
-  "internalName": "Внутреннее имя",
-  "@internalName": {},
-  "drawRegressionLines": "Рисовать линии трендов",
-  "@drawRegressionLines": {},
-  "drawRegressionLinesDesc": "Рисовать линии на графике посредством регрессии. Полезно лишь на больших интервалах.",
-  "@drawRegressionLinesDesc": {},
-  "exportHiddenFields": "скрытые поля",
-  "@exportHiddenFields": {},
-  "fieldFormat": "Формат поля",
-  "@fieldFormat": {},
-  "result": "Результат:",
-  "@result": {},
-  "pulsePressure": "Пульсовое давление",
-  "@pulsePressure": {},
-  "unixTimestamp": "Временная метка Unix",
-  "@unixTimestamp": {},
-  "addExportformat": "Добавить формат для экспортирования",
-  "@addExportformat": {},
-  "edit": "Редактировать",
-  "@edit": {},
-  "delete": "Удалить",
-  "@delete": {},
-  "presets": "Предустановки",
-  "@presets": {},
-  "default_": "По умолчанию",
-  "@default_": {},
-  "exportPdfHeaderHeight": "Высота заголовка",
-  "@exportPdfHeaderHeight": {},
-  "exportPdfCellHeight": "Высота строки",
-  "@exportPdfCellHeight": {},
-  "exportPdfHeaderFontSize": "Размер шрифта заголовка",
-  "@exportPdfHeaderFontSize": {},
-  "average": "Среднее",
-  "@average": {},
-  "success": "Успешно: {msg}",
-  "@success": {
-    "placeholders": {
-      "msg": {
-        "type": "String"
-      }
-    }
-  },
-  "loading": "загрузка…",
-  "@loading": {},
-  "error": "Ошибка: {msg}",
-  "@error": {
-    "placeholders": {
-      "msg": {
-        "type": "String"
-      }
-    }
-  },
-  "errLt30": "Число <= 30? Выключите проверку значений в настройках!",
-  "@errLt30": {},
-  "errDiaGtSys": "dia >= sys? Выключите проверку значений в настройках!",
-  "@errDiaGtSys": {},
-  "errNoValue": "Пожалуйста, введите значение",
-  "@errNoValue": {},
-  "errUnrealistic": "Нереалистичное значение? Выключите проверку значений в настройках!",
-  "@errUnrealistic": {},
-  "errUnknown": "Неопознанная ошибка",
-  "@errUnknown": {},
-  "errCantOpenURL": "Невозможно открыть URL: {url}",
-  "@errCantOpenURL": {
-    "placeholders": {
-      "url": {
-        "type": "String"
-      }
-    }
-  },
-  "errNoFileOpened": "файл не был открыт",
-  "@errNoFileOpened": {},
-  "errPleaseSelect": "пожалуйста, выберите",
-  "@errPleaseSelect": {},
-  "errNotStarted": "не начато",
-  "@errNotStarted": {},
-  "errWrongImportFormat": "Вы можете импортировать файлы только в форматах CSV или SQLite.",
-  "@errWrongImportFormat": {},
-  "errCantReadFile": "Содержимое файла не может быть прочитано",
-  "@errCantReadFile": {},
-  "btnSave": "СОХРАНИТЬ",
-  "@btnSave": {},
-  "btnConfirm": "OK",
-  "@btnConfirm": {},
-  "errNotEnoughDataToGraph": "Недостаточно данных, чтобы рисовать график.",
-  "@errNotEnoughDataToGraph": {},
-  "errNeedHeadline": "Вы можете импортировать файлы только с заголовком.",
-  "@errNeedHeadline": {},
-  "errNotImportable": "Файл не может быть импортирован",
-  "@errNotImportable": {},
-  "errNoData": "нет данных",
-  "@errNoData": {},
-  "btnCancel": "ОТМЕНА",
-  "@btnCancel": {},
-  "btnUndo": "ОТМЕНА",
-  "@btnUndo": {},
-  "btnNext": "СЛЕДУЮЩИЙ",
-  "@btnNext": {},
-  "pulLong": "Пульс",
-  "@pulLong": {},
-  "pulShort": "ЧСС",
-  "@pulShort": {},
-  "addNote": "Примечание (необязательно)",
-  "@addNote": {},
-  "allowManualTimeInput": "Разрешить ручной ввод времени",
-  "@allowManualTimeInput": {},
-  "system": "Системная",
-  "@system": {},
-  "sysLong": "Систолическое",
-  "@sysLong": {},
-  "settings": "Настройки",
-  "@settings": {},
-  "enterTimeFormatScreen": "Формат времени",
-  "@enterTimeFormatScreen": {},
-  "dark": "Тёмная",
-  "@dark": {},
-  "light": "Светлая",
-  "@light": {},
-  "layout": "Внешний вид",
-  "@layout": {},
-  "theme": "Тема",
-  "@theme": {},
-  "iconSize": "Размер иконок",
-  "@iconSize": {},
-  "graphLineThickness": "Толщина линий",
-  "@graphLineThickness": {},
-  "diaColor": "Цвет диастолического давления",
-  "@diaColor": {},
-  "aboutWarnValuesScreenDesc": "Подробнее о предупредительных значениях",
-  "@aboutWarnValuesScreenDesc": {},
-  "diaWarn": "Диастолическое предупреждение",
-  "@diaWarn": {},
-  "buildNumberOf": "Номер сборки: {buildNumber}",
-  "@buildNumberOf": {
-    "placeholders": {
-      "buildNumber": {
-        "type": "String"
-      }
-    }
-  },
-  "exportImport": "Экспорт / Импорт",
-  "@exportImport": {},
-  "animationSpeed": "Длительность анимации",
-  "@animationSpeed": {},
-  "pulColor": "Цвет пульса",
-  "@pulColor": {},
-  "sysWarn": "Систолическое предупреждение",
-  "@sysWarn": {},
-  "versionOf": "Версия: {version}",
-  "@versionOf": {
-    "placeholders": {
-      "version": {
-        "type": "String"
-      }
-    }
-  },
-  "packageNameOf": "Имя пакета: {name}",
-  "@packageNameOf": {
-    "placeholders": {
-      "name": {
-        "type": "String"
-      }
-    }
-  },
-  "behavior": "Поведение приложения",
-  "@behavior": {},
-  "exportDir": "Место экспорта",
-  "@exportDir": {},
-  "validateInputs": "Проверять вводимые значения",
-  "@validateInputs": {},
-  "exportAfterEveryInput": "Экспортировать после каждой новой записи",
-  "@exportAfterEveryInput": {},
-  "accentColor": "Цвет темы приложения",
-  "@accentColor": {},
-  "sysColor": "Цвет систолического давления",
-  "@sysColor": {},
-  "confirmDeletion": "Подтверждение удаления",
-  "@confirmDeletion": {},
-  "age": "Возраст",
-  "@age": {},
-  "determineWarnValues": "Определить предупредительные значения",
-  "@determineWarnValues": {},
-  "aboutWarnValuesScreen": "Что это",
-  "@aboutWarnValuesScreen": {},
-  "exportAfterEveryInputDesc": "Не рекомендуется (взрыв файла)",
-  "@exportAfterEveryInputDesc": {},
-  "exportInterval": "Промежуток времени, по датам",
-  "@exportInterval": {},
-  "exportFormat": "Формат экспортируемого файла",
-  "@exportFormat": {},
-  "exportCustomEntries": "Настроить поля",
-  "@exportCustomEntries": {},
-  "addEntry": "Добавить поле",
-  "@addEntry": {},
-  "exportMimeTypeDesc": "Сигнализирует тип другим приложениям",
-  "@exportMimeTypeDesc": {},
-  "exportMimeType": "Тип экспортируемого файла",
-  "@exportMimeType": {},
-  "exportCsvHeadline": "Заголовок",
-  "@exportCsvHeadline": {},
-  "exportCsvHeadlineDesc": "Помогает различать типы",
-  "@exportCsvHeadlineDesc": {},
-  "csv": "CSV",
-  "@csv": {},
-  "other": "другое",
-  "@other": {},
-  "pdf": "PDF",
-  "@pdf": {},
-  "db": "SQLite DB",
-  "@db": {},
-  "text": "текстовый файл",
-  "@text": {},
-  "fieldDelimiter": "Разделитель полей",
-  "@fieldDelimiter": {},
-  "textDelimiter": "Разделитель текста",
-  "@textDelimiter": {},
-  "export": "ЭКСПОРТ",
-  "@export": {},
-  "exportSuccess": "Экспортировано в: {path}",
-  "@exportSuccess": {
-    "placeholders": {
-      "path": {
-        "type": "String"
-      }
-    }
-  },
-  "shared": "общий",
-  "@shared": {},
-  "import": "ИМПОРТ",
-  "@import": {},
-  "sourceCode": "Исходный код",
-  "@sourceCode": {},
-  "licenses": "Лицензии третьих сторон",
-  "@licenses": {},
-  "importSuccess": "Импортировано {count} записей",
-  "@importSuccess": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "exportWarnConfigNotImportable": "Привет! Просто дружеское предупреждение: текущая конфигурация экспорта не будет доступна для импорта. Чтобы исправить это, убедитесь, что вы установили тип экспорта как CSV, включили заголовок и включили один из доступных форматов времени.",
-  "@exportWarnConfigNotImportable": {},
-  "statistics": "Статистика",
-  "@statistics": {},
-  "measurementCount": "Количество измерений",
-  "@measurementCount": {},
-  "measurementsPerDay": "Количество измерений за день",
-  "@measurementsPerDay": {},
-  "timeResolvedMetrics": "Показатели с временным разрешением",
-  "@timeResolvedMetrics": {},
-  "avgOf": "{txt} Ø",
-  "@avgOf": {
-    "placeholders": {
-      "txt": {
-        "type": "String"
-      }
-    }
-  },
-  "minOf": "{txt} мин.",
-  "@minOf": {
-    "placeholders": {
-      "txt": {
-        "type": "String"
-      }
-    }
-  },
-  "warnAboutTxt1": "Значения warn имеют общий рекомендательный характер и не могут восприниматься как медицинские показания.",
-  "@warnAboutTxt1": {},
-  "maxOf": "{txt} макс.",
-  "@maxOf": {
-    "placeholders": {
-      "txt": {
-        "type": "String"
-      }
-    }
-  },
-  "warnAboutTxt2": "Значения, зависящие от возраста по умолчанию, взяты из этого источника.",
-  "@warnAboutTxt2": {},
-  "warnAboutTxt3": "Не стесняйтесь изменять значения в соответствии с вашими потребностями и следуйте рекомендациям вашего врача.",
-  "@warnAboutTxt3": {},
-  "warnValues": "Предупредительные значения",
-  "@warnValues": {},
-  "month": "Месяц",
-  "@month": {},
-  "weekOfYear": "Неделя {weekNum}, {year}",
-  "@weekOfYear": {
-    "placeholders": {
-      "weekNum": {
-        "type": "int"
-      },
-      "year": {
-        "type": "int"
-      }
-    }
-  },
-  "enterTimeFormatString": "формат времени",
-  "@enterTimeFormatString": {},
-  "year": "Год",
-  "@year": {},
-  "last7Days": "7 дней",
-  "@last7Days": {},
-  "last30Days": "30 дней",
-  "@last30Days": {},
-  "dateFormatting": "Форматирование даты",
-  "@dateFormatting": {},
-  "now": "сейчас",
-  "@now": {},
-  "notes": "Заметки",
-  "@notes": {},
-  "time": "Время",
-  "@time": {},
-  "confirmDelete": "Подтвердите удаление",
-  "@confirmDelete": {},
-  "errTimeAfterNow": "Выбранное время было сброшено, так как оно находится в будущем и ещё не наступило. Вы можете отключить эту проверку в настройках.",
-  "@errTimeAfterNow": {},
-  "enterTimeFormatDesc": "Строка форматирования - это смесь предопределенных строк ICU/Skeleton и любого дополнительного текста, который вы хотели бы включить.\n\n[Если вам интересен полный список допустимых форматов, вы можете найти их прямо здесь.](screen://TimeFormattingHelp)\n\nПросто дружеское напоминание: использование более длинных или более коротких строк формата волшебным образом не изменит ширину столбцов таблицы, что может привести к некоторым неудобным разрывам строк и не отображению текста.\n\nпо умолчанию: \"yy-MM-dd HH:mm\"",
-  "@enterTimeFormatDesc": {}
+    "pdfDocumentTitle": "Значения кровяного давления с {start} по {end}",
+    "@pdfDocumentTitle": {
+        "placeholders": {
+            "start": {
+                "type": "String"
+            },
+            "end": {
+                "type": "String"
+            }
+        }
+    },
+    "exportPdfCellFontSize": "Размер шрифта строки",
+    "@exportPdfCellFontSize": {},
+    "maximum": "Максимум",
+    "@maximum": {},
+    "minimum": "Минимум",
+    "@minimum": {},
+    "exportPdfExportTitle": "Заголовок",
+    "@exportPdfExportTitle": {},
+    "exportPdfExportStatistics": "Статистика",
+    "@exportPdfExportStatistics": {},
+    "exportPdfExportData": "Таблица данных",
+    "@exportPdfExportData": {},
+    "errNaN": "Пожалуйста, введите число",
+    "@errNaN": {},
+    "sysShort": "САД",
+    "@sysShort": {},
+    "diaLong": "Диастолическое",
+    "@diaLong": {},
+    "diaShort": "ДАД",
+    "@diaShort": {},
+    "data": "Данные",
+    "@data": {},
+    "version": "Версия",
+    "@version": {},
+    "confirmDeleteDesc": "Удалить эту запись? (Вы можете отключить эти подтверждения в настройках.)",
+    "@confirmDeleteDesc": {},
+    "deletionConfirmed": "Запись удалена.",
+    "@deletionConfirmed": {},
+    "day": "День",
+    "@day": {},
+    "week": "Неделя",
+    "@week": {},
+    "language": "Язык",
+    "@language": {},
+    "drawRegressionLines": "Рисовать линии трендов",
+    "@drawRegressionLines": {},
+    "drawRegressionLinesDesc": "Рисовать линии на графике посредством регрессии. Полезно лишь на больших интервалах.",
+    "@drawRegressionLinesDesc": {},
+    "fieldFormat": "Формат поля",
+    "@fieldFormat": {},
+    "result": "Результат:",
+    "@result": {},
+    "pulsePressure": "Пульсовое давление",
+    "@pulsePressure": {},
+    "addExportformat": "Добавить формат для экспортирования",
+    "@addExportformat": {},
+    "edit": "Редактировать",
+    "@edit": {},
+    "delete": "Удалить",
+    "@delete": {},
+    "default_": "По умолчанию",
+    "@default_": {},
+    "exportPdfHeaderHeight": "Высота заголовка",
+    "@exportPdfHeaderHeight": {},
+    "exportPdfCellHeight": "Высота строки",
+    "@exportPdfCellHeight": {},
+    "exportPdfHeaderFontSize": "Размер шрифта заголовка",
+    "@exportPdfHeaderFontSize": {},
+    "average": "Среднее",
+    "@average": {},
+    "success": "Успешно: {msg}",
+    "@success": {
+        "placeholders": {
+            "msg": {
+                "type": "String"
+            }
+        }
+    },
+    "loading": "загрузка…",
+    "@loading": {},
+    "error": "Ошибка: {msg}",
+    "@error": {
+        "placeholders": {
+            "msg": {
+                "type": "String"
+            }
+        }
+    },
+    "errLt30": "Число <= 30? Выключите проверку значений в настройках!",
+    "@errLt30": {},
+    "errDiaGtSys": "dia >= sys? Выключите проверку значений в настройках!",
+    "@errDiaGtSys": {},
+    "errNoValue": "Пожалуйста, введите значение",
+    "@errNoValue": {},
+    "errUnrealistic": "Нереалистичное значение? Выключите проверку значений в настройках!",
+    "@errUnrealistic": {},
+    "errCantOpenURL": "Невозможно открыть URL: {url}",
+    "@errCantOpenURL": {
+        "placeholders": {
+            "url": {
+                "type": "String"
+            }
+        }
+    },
+    "errNoFileOpened": "файл не был открыт",
+    "@errNoFileOpened": {},
+    "errNotStarted": "не начато",
+    "@errNotStarted": {},
+    "errWrongImportFormat": "Вы можете импортировать файлы только в форматах CSV или SQLite.",
+    "@errWrongImportFormat": {},
+    "errCantReadFile": "Содержимое файла не может быть прочитано",
+    "@errCantReadFile": {},
+    "btnSave": "СОХРАНИТЬ",
+    "@btnSave": {},
+    "btnConfirm": "OK",
+    "@btnConfirm": {},
+    "errNotEnoughDataToGraph": "Недостаточно данных, чтобы рисовать график.",
+    "@errNotEnoughDataToGraph": {},
+    "errNeedHeadline": "Вы можете импортировать файлы только с заголовком.",
+    "@errNeedHeadline": {},
+    "errNotImportable": "Файл не может быть импортирован",
+    "@errNotImportable": {},
+    "errNoData": "нет данных",
+    "@errNoData": {},
+    "btnCancel": "ОТМЕНА",
+    "@btnCancel": {},
+    "btnUndo": "ОТМЕНА",
+    "@btnUndo": {},
+    "btnNext": "СЛЕДУЮЩИЙ",
+    "@btnNext": {},
+    "pulLong": "Пульс",
+    "@pulLong": {},
+    "pulShort": "ЧСС",
+    "@pulShort": {},
+    "addNote": "Примечание (необязательно)",
+    "@addNote": {},
+    "allowManualTimeInput": "Разрешить ручной ввод времени",
+    "@allowManualTimeInput": {},
+    "system": "Системная",
+    "@system": {},
+    "sysLong": "Систолическое",
+    "@sysLong": {},
+    "settings": "Настройки",
+    "@settings": {},
+    "enterTimeFormatScreen": "Формат времени",
+    "@enterTimeFormatScreen": {},
+    "dark": "Тёмная",
+    "@dark": {},
+    "light": "Светлая",
+    "@light": {},
+    "layout": "Внешний вид",
+    "@layout": {},
+    "theme": "Тема",
+    "@theme": {},
+    "iconSize": "Размер иконок",
+    "@iconSize": {},
+    "graphLineThickness": "Толщина линий",
+    "@graphLineThickness": {},
+    "diaColor": "Цвет диастолического давления",
+    "@diaColor": {},
+    "aboutWarnValuesScreenDesc": "Подробнее о предупредительных значениях",
+    "@aboutWarnValuesScreenDesc": {},
+    "diaWarn": "Диастолическое предупреждение",
+    "@diaWarn": {},
+    "buildNumberOf": "Номер сборки: {buildNumber}",
+    "@buildNumberOf": {
+        "placeholders": {
+            "buildNumber": {
+                "type": "String"
+            }
+        }
+    },
+    "exportImport": "Экспорт / Импорт",
+    "@exportImport": {},
+    "animationSpeed": "Длительность анимации",
+    "@animationSpeed": {},
+    "pulColor": "Цвет пульса",
+    "@pulColor": {},
+    "sysWarn": "Систолическое предупреждение",
+    "@sysWarn": {},
+    "versionOf": "Версия: {version}",
+    "@versionOf": {
+        "placeholders": {
+            "version": {
+                "type": "String"
+            }
+        }
+    },
+    "packageNameOf": "Имя пакета: {name}",
+    "@packageNameOf": {
+        "placeholders": {
+            "name": {
+                "type": "String"
+            }
+        }
+    },
+    "behavior": "Поведение приложения",
+    "@behavior": {},
+    "exportDir": "Место экспорта",
+    "@exportDir": {},
+    "validateInputs": "Проверять вводимые значения",
+    "@validateInputs": {},
+    "exportAfterEveryInput": "Экспортировать после каждой новой записи",
+    "@exportAfterEveryInput": {},
+    "accentColor": "Цвет темы приложения",
+    "@accentColor": {},
+    "sysColor": "Цвет систолического давления",
+    "@sysColor": {},
+    "confirmDeletion": "Подтверждение удаления",
+    "@confirmDeletion": {},
+    "age": "Возраст",
+    "@age": {},
+    "determineWarnValues": "Определить предупредительные значения",
+    "@determineWarnValues": {},
+    "aboutWarnValuesScreen": "Что это",
+    "@aboutWarnValuesScreen": {},
+    "exportAfterEveryInputDesc": "Не рекомендуется (взрыв файла)",
+    "@exportAfterEveryInputDesc": {},
+    "exportFormat": "Формат экспортируемого файла",
+    "@exportFormat": {},
+    "exportCustomEntries": "Настроить поля",
+    "@exportCustomEntries": {},
+    "addEntry": "Добавить поле",
+    "@addEntry": {},
+    "exportMimeType": "Тип экспортируемого файла",
+    "@exportMimeType": {},
+    "exportCsvHeadline": "Заголовок",
+    "@exportCsvHeadline": {},
+    "exportCsvHeadlineDesc": "Помогает различать типы",
+    "@exportCsvHeadlineDesc": {},
+    "csv": "CSV",
+    "@csv": {},
+    "other": "другое",
+    "@other": {},
+    "pdf": "PDF",
+    "@pdf": {},
+    "db": "SQLite DB",
+    "@db": {},
+    "text": "текстовый файл",
+    "@text": {},
+    "fieldDelimiter": "Разделитель полей",
+    "@fieldDelimiter": {},
+    "textDelimiter": "Разделитель текста",
+    "@textDelimiter": {},
+    "export": "ЭКСПОРТ",
+    "@export": {},
+    "shared": "общий",
+    "@shared": {},
+    "import": "ИМПОРТ",
+    "@import": {},
+    "sourceCode": "Исходный код",
+    "@sourceCode": {},
+    "licenses": "Лицензии третьих сторон",
+    "@licenses": {},
+    "importSuccess": "Импортировано {count} записей",
+    "@importSuccess": {
+        "placeholders": {
+            "count": {
+                "type": "int"
+            }
+        }
+    },
+    "exportWarnConfigNotImportable": "Привет! Просто дружеское предупреждение: текущая конфигурация экспорта не будет доступна для импорта. Чтобы исправить это, убедитесь, что вы установили тип экспорта как CSV, включили заголовок и включили один из доступных форматов времени.",
+    "@exportWarnConfigNotImportable": {},
+    "statistics": "Статистика",
+    "@statistics": {},
+    "measurementCount": "Количество измерений",
+    "@measurementCount": {},
+    "measurementsPerDay": "Количество измерений за день",
+    "@measurementsPerDay": {},
+    "timeResolvedMetrics": "Показатели с временным разрешением",
+    "@timeResolvedMetrics": {},
+    "avgOf": "{txt} Ø",
+    "@avgOf": {
+        "placeholders": {
+            "txt": {
+                "type": "String"
+            }
+        }
+    },
+    "minOf": "{txt} мин.",
+    "@minOf": {
+        "placeholders": {
+            "txt": {
+                "type": "String"
+            }
+        }
+    },
+    "warnAboutTxt1": "Значения warn имеют общий рекомендательный характер и не могут восприниматься как медицинские показания.",
+    "@warnAboutTxt1": {},
+    "maxOf": "{txt} макс.",
+    "@maxOf": {
+        "placeholders": {
+            "txt": {
+                "type": "String"
+            }
+        }
+    },
+    "warnAboutTxt2": "Значения, зависящие от возраста по умолчанию, взяты из этого источника.",
+    "@warnAboutTxt2": {},
+    "warnAboutTxt3": "Не стесняйтесь изменять значения в соответствии с вашими потребностями и следуйте рекомендациям вашего врача.",
+    "@warnAboutTxt3": {},
+    "warnValues": "Предупредительные значения",
+    "@warnValues": {},
+    "month": "Месяц",
+    "@month": {},
+    "weekOfYear": "Неделя {weekNum}, {year}",
+    "@weekOfYear": {
+        "placeholders": {
+            "weekNum": {
+                "type": "int"
+            },
+            "year": {
+                "type": "int"
+            }
+        }
+    },
+    "enterTimeFormatString": "формат времени",
+    "@enterTimeFormatString": {},
+    "year": "Год",
+    "@year": {},
+    "last7Days": "7 дней",
+    "@last7Days": {},
+    "last30Days": "30 дней",
+    "@last30Days": {},
+    "now": "сейчас",
+    "@now": {},
+    "notes": "Заметки",
+    "@notes": {},
+    "time": "Время",
+    "@time": {},
+    "confirmDelete": "Подтвердите удаление",
+    "@confirmDelete": {},
+    "errTimeAfterNow": "Выбранное время было сброшено, так как оно находится в будущем и ещё не наступило. Вы можете отключить эту проверку в настройках.",
+    "@errTimeAfterNow": {},
+    "enterTimeFormatDesc": "Строка форматирования - это смесь предопределенных строк ICU/Skeleton и любого дополнительного текста, который вы хотели бы включить.\n\n[Если вам интересен полный список допустимых форматов, вы можете найти их прямо здесь.](screen://TimeFormattingHelp)\n\nПросто дружеское напоминание: использование более длинных или более коротких строк формата волшебным образом не изменит ширину столбцов таблицы, что может привести к некоторым неудобным разрывам строк и не отображению текста.\n\nпо умолчанию: \"yy-MM-dd HH:mm\"",
+    "@enterTimeFormatDesc": {}
 }

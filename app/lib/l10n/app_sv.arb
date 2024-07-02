@@ -1,40 +1,36 @@
 {
-  "success": "Lyckades: {msg}",
-  "@success": {
-    "placeholders": {
-      "msg": {
-        "type": "String"
-      }
-    }
-  },
-  "loading": "laddar…",
-  "@loading": {},
-  "error": "Fel: {msg}",
-  "@error": {
-    "placeholders": {
-      "msg": {
-        "type": "String"
-      }
-    }
-  },
-  "errUnrealistic": "Orealistiskt värde? Stäng av validering i inställningarna!",
-  "@errUnrealistic": {},
-  "errUnknown": "Okänt fel",
-  "@errUnknown": {},
-  "errCantOpenURL": "Kan inte öppna URL: {url}",
-  "@errCantOpenURL": {
-    "placeholders": {
-      "url": {
-        "type": "String"
-      }
-    }
-  },
-  "errNotStarted": "ej startad",
-  "@errNotStarted": {},
-  "errNotEnoughDataToGraph": "Inte tillräckligt med data för att rita en graf.",
-  "@errNotEnoughDataToGraph": {},
-  "errNoData": "ingen data",
-  "@errNoData": {},
-  "errPleaseSelect": "vänligen välj",
-  "@errPleaseSelect": {}
+    "success": "Lyckades: {msg}",
+    "@success": {
+        "placeholders": {
+            "msg": {
+                "type": "String"
+            }
+        }
+    },
+    "loading": "laddar…",
+    "@loading": {},
+    "error": "Fel: {msg}",
+    "@error": {
+        "placeholders": {
+            "msg": {
+                "type": "String"
+            }
+        }
+    },
+    "errUnrealistic": "Orealistiskt värde? Stäng av validering i inställningarna!",
+    "@errUnrealistic": {},
+    "errCantOpenURL": "Kan inte öppna URL: {url}",
+    "@errCantOpenURL": {
+        "placeholders": {
+            "url": {
+                "type": "String"
+            }
+        }
+    },
+    "errNotStarted": "ej startad",
+    "@errNotStarted": {},
+    "errNotEnoughDataToGraph": "Inte tillräckligt med data för att rita en graf.",
+    "@errNotEnoughDataToGraph": {},
+    "errNoData": "ingen data",
+    "@errNoData": {}
 }
