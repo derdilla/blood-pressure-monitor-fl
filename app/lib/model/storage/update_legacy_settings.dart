@@ -17,7 +17,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqflite/sqflite.dart';
 
-/// Function for upgrading shared preferences from pre 1.5.5 versions.
+/// Function for upgrading shared preferences from pre 1.5.4 (Oct 23) versions.
 Future<void> updateLegacySettings(Settings settings, ExportSettings exportSettings, CsvExportSettings csvExportSettings,
     PdfExportSettings pdfExportSettings, IntervallStoreManager intervallStoreManager,) async {
   final SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
@@ -212,7 +212,7 @@ Future<void> updateLegacyExport(ConfigDB database, ExportColumnsManager manager)
           e['formatPattern'].toString(),
       );
       if (column.formatPattern?.contains(r'$FORMAT') ?? false) {
-        Fluttertoast.showToast(
+        await Fluttertoast.showToast(
           msg: r'The export $FORMAT pattern got replaced. Your export columns broke.',
         );
       }

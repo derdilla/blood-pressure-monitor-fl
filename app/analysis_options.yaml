@@ -35,7 +35,6 @@ linter:
     # consider: https://dart.dev/tools/linter-rules/prefer_mixin
     - prefer_single_quotes
     - public_member_api_docs
-    - require_trailing_commas
     - sort_constructors_first
     - type_annotate_public_apis
     - unnecessary_await_in_return
