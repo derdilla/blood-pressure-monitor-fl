@@ -6,7 +6,6 @@ import 'package:blood_pressure_app/data_util/consistent_future_builder.dart';
 import 'package:blood_pressure_app/features/settings/delete_data_screen.dart';
 import 'package:blood_pressure_app/features/settings/enter_timeformat_dialoge.dart';
 import 'package:blood_pressure_app/features/settings/export_import_screen.dart';
-import 'package:blood_pressure_app/features/settings/foreign_db_import_screen.dart';
 import 'package:blood_pressure_app/features/settings/graph_markings_screen.dart';
 import 'package:blood_pressure_app/features/settings/medicine_manager_screen.dart';
 import 'package:blood_pressure_app/features/settings/tiles/color_picker_list_tile.dart';
