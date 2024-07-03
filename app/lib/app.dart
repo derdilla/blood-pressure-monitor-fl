@@ -182,11 +182,14 @@ class _AppState extends State<App> {
   }
 
   @override
-  Widget build(BuildContext context) => ConsistentFutureBuilder(
-    future: _loadApp(),
-    onWaiting: const LoadingScreen(),
-    onData: (context, widget) => widget,
-  );
+  Widget build(BuildContext context) {
+    if (_loadedChild != null && _configDB != null && _entryDB != null) return _loadedChild!;
+    return ConsistentFutureBuilder(
+      future: _loadApp(),
+      onWaiting: const LoadingScreen(),
+      onData: (context, widget) => widget,
+    );
+  }
 
   /// Central [MaterialApp] widget of the app that sets the uniform style options.
   Widget _buildAppRoot() => Consumer<Settings>(
