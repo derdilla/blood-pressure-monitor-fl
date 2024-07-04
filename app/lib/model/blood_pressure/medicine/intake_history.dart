@@ -1,3 +1,4 @@
+import 'package:blood_pressure_app/logging.dart';
 import 'package:blood_pressure_app/model/blood_pressure/medicine/medicine.dart';
 import 'package:blood_pressure_app/model/blood_pressure/medicine/medicine_intake.dart';
 import 'package:collection/collection.dart';
@@ -23,7 +24,15 @@ class IntakeHistory extends ChangeNotifier {
     IntakeHistory._sorted(
       serialized
         .split('\n')
-        .map((e) => OldMedicineIntake.deserialize(e, availableMedicines))
+        .map((e) {
+          try {
+            return OldMedicineIntake.deserialize(e, availableMedicines);
+          } on FormatException {
+            Log.err('OldMedicineIntake deserialization problem: "$e"');
+            return null;
+          }
+        })
+        .whereNotNull()
         .toList(),
     );
 
