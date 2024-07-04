@@ -188,6 +188,8 @@ class Settings extends ChangeNotifier {
     _medications.clear();
     _highestMedIndex = d._highestMedIndex;
     _preferredPressureUnit = d._preferredPressureUnit;
+    _knownBleDev = d._knownBleDev;
+    _bleInput = d._bleInput;
     notifyListeners();
   }
 
