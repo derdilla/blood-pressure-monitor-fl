@@ -6,6 +6,7 @@ import 'package:blood_pressure_app/model/export_import/export_configuration.dart
 import 'package:blood_pressure_app/model/storage/db/config_db.dart';
 import 'package:blood_pressure_app/model/storage/export_columns_store.dart';
 import 'package:blood_pressure_app/model/storage/storage.dart';
+import 'package:blood_pressure_app/screens/error_reporting_screen.dart';
 import 'package:blood_pressure_app/screens/home_screen.dart';
 import 'package:blood_pressure_app/screens/loading_screen.dart';
 import 'package:flutter/material.dart';
@@ -86,57 +87,76 @@ class _AppState extends State<App> {
       } on FileSystemException { }
     }
 
-    _configDB = await ConfigDB.open();
-    final configDao = ConfigDao(_configDB!);
+    try {
+      _configDB = await ConfigDB.open();
+      final configDao = ConfigDao(_configDB!);
 
-    _settings ??= await configDao.loadSettings(0);
-    _exportSettings ??= await configDao.loadExportSettings(0);
-    _csvExportSettings ??= await configDao.loadCsvExportSettings(0);
-    _pdfExportSettings ??= await configDao.loadPdfExportSettings(0);
-    _intervallStorageManager ??= await IntervallStoreManager.load(configDao, 0);
-    _exportColumnsManager ??= await configDao.loadExportColumnsManager(0);
-
-    _entryDB = await openDatabase(
-      join(await getDatabasesPath(), 'bp.db'),
-    );
-    final db = await HealthDataStore.load(_entryDB!);
-    final bpRepo = db.bpRepo;
-    final noteRepo = db.noteRepo;
-    final medRepo = db.medRepo;
-    final intakeRepo = db.intakeRepo;
-
-    await updateLegacyEntries(
-      _settings!,
-      bpRepo,
-      noteRepo,
-      medRepo,
-      intakeRepo,
-    );
-
-    // update logic
-    if (_settings!.lastVersion == 0) {
-      await updateLegacySettings(_settings!, _exportSettings!, _csvExportSettings!, _pdfExportSettings!, _intervallStorageManager!);
-      await updateLegacyExport(_configDB!, _exportColumnsManager!);
-
-      _settings!.lastVersion = 30;
-      if (_exportSettings!.exportAfterEveryEntry) {
-        await Fluttertoast.showToast(
-          msg: r'Please review your export settings to ensure everything works as expected.',
-        );
-      }
+      _settings ??= await configDao.loadSettings(0);
+      _exportSettings ??= await configDao.loadExportSettings(0);
+      _csvExportSettings ??= await configDao.loadCsvExportSettings(0);
+      _pdfExportSettings ??= await configDao.loadPdfExportSettings(0);
+      _intervallStorageManager ??= await IntervallStoreManager.load(configDao, 0);
+      _exportColumnsManager ??= await configDao.loadExportColumnsManager(0);
+    } catch (e, stack) {
+      await ErrorReporting.reportCriticalError('Error loading config db', '$e\n$stack',);
     }
-    if (_settings!.lastVersion == 30) {
-      if (_pdfExportSettings!.exportFieldsConfiguration.activePreset == ExportImportPreset.bloodPressureApp) {
-        _pdfExportSettings!.exportFieldsConfiguration.activePreset = ExportImportPreset.bloodPressureAppPdf;
-      }
-      _settings!.lastVersion = 31;
+
+    late BloodPressureRepository bpRepo;
+    late NoteRepository noteRepo;
+    late MedicineRepository medRepo;
+    late MedicineIntakeRepository intakeRepo;
+
+    try {
+      _entryDB = await openDatabase(
+        join(await getDatabasesPath(), 'bp.db'),
+      );
+      final db = await HealthDataStore.load(_entryDB!);
+      bpRepo = db.bpRepo;
+      noteRepo = db.noteRepo;
+      medRepo = db.medRepo;
+      intakeRepo = db.intakeRepo;
+    } catch (e, stack) {
+      await ErrorReporting.reportCriticalError('Error loading entry db', '$e\n$stack',);
     }
-    if (_settings!.allowMissingValues && _settings!.validateInputs) _settings!.validateInputs = false;
 
-    _settings!.lastVersion = int.parse((await PackageInfo.fromPlatform()).buildNumber);
+    try {
+      await updateLegacyEntries(
+        _settings!,
+        bpRepo,
+        noteRepo,
+        medRepo,
+        intakeRepo,
+      );
 
-    // Reset the step size intervall to current on startup
-    _intervallStorageManager!.mainPage.setToMostRecentIntervall();
+      // update logic
+      if (_settings!.lastVersion == 0) {
+        await updateLegacySettings(_settings!, _exportSettings!, _csvExportSettings!, _pdfExportSettings!, _intervallStorageManager!);
+        await updateLegacyExport(_configDB!, _exportColumnsManager!);
+
+        _settings!.lastVersion = 30;
+        if (_exportSettings!.exportAfterEveryEntry) {
+          await Fluttertoast.showToast(
+            msg: r'Please review your export settings to ensure everything works as expected.',
+          );
+        }
+      }
+      if (_settings!.lastVersion == 30) {
+        if (_pdfExportSettings!.exportFieldsConfiguration.activePreset == ExportImportPreset.bloodPressureApp) {
+          _pdfExportSettings!.exportFieldsConfiguration.activePreset = ExportImportPreset.bloodPressureAppPdf;
+        }
+        _settings!.lastVersion = 31;
+      }
+      if (_settings!.allowMissingValues && _settings!.validateInputs){
+        _settings!.validateInputs = false;
+      }
+
+      _settings!.lastVersion = int.parse((await PackageInfo.fromPlatform()).buildNumber);
+
+      // Reset the step size intervall to current on startup
+      _intervallStorageManager!.mainPage.setToMostRecentIntervall();
+    } catch (e, stack) {
+      await ErrorReporting.reportCriticalError('Error performing upgrades:', '$e\n$stack',);
+    }
 
     _loadedChild = MultiRepositoryProvider(
       providers: [
