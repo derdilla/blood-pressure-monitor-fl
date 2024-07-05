@@ -30,6 +30,12 @@ class DatabaseManager {
   static Future<DatabaseManager> load(Database db) async {
     final dbMngr = DatabaseManager._create(db);
 
+    final tables = await dbMngr._db.query('"main".sqlite_master');
+    if (tables.length <= 3) {
+      // DB has just been created, no version yet.
+      await dbMngr._db.setVersion(2);
+    }
+
     if (await dbMngr._db.getVersion() < 3) {
       await dbMngr._setUpTables();
       await dbMngr._db.setVersion(3);
@@ -100,7 +106,7 @@ class DatabaseManager {
   /// - timestamp entries that have no
   Future<void> performCleanup() => _db.transaction((txn) async {
     await txn.rawDelete('DELETE FROM Medicine '
-      'WHERE removed = true '
+      'WHERE removed = 1 '
       'AND medID NOT IN (SELECT medID FROM Intake);',
     );
     await txn.rawDelete('DELETE FROM Timestamps '
