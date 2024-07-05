@@ -20,7 +20,7 @@ Future<void> updateLegacyEntries(
   hds.NoteRepository noteRepo,
   hds.MedicineRepository medRepo,
   hds.MedicineIntakeRepository intakeRepo,
-) async { // TODO: test
+) async {
   // Migrate old meds still in use and old intakes
   try {
     if (settings.medications.isNotEmpty) {

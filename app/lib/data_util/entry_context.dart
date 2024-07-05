@@ -3,6 +3,7 @@ import 'package:blood_pressure_app/features/export_import/export_button_bar.dart
 import 'package:blood_pressure_app/features/input/add_measurement_dialoge.dart';
 import 'package:blood_pressure_app/logging.dart';
 import 'package:blood_pressure_app/model/storage/storage.dart';
+import 'package:blood_pressure_app/screens/error_reporting_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart' hide ProviderNotFoundException;
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -54,6 +55,8 @@ extension EntryUtils on BuildContext {
       }
     } on ProviderNotFoundException {
       Log.err('createEntry($initial) was called from a context without Provider.');
+    } catch (e, stack) {
+      await ErrorReporting.reportCriticalError('Error opening add measurement dialoge', '$e\n$stack',);
     }
   }
 
