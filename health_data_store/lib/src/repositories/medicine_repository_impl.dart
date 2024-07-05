@@ -36,7 +36,7 @@ class MedicineRepositoryImpl extends MedicineRepository {
   Future<List<Medicine>> getAll() async {
     final medData = await _db.query('Medicine',
       columns: ['designation', 'defaultDose', 'color'],
-      where: 'removed = false'
+      where: 'removed = 0'
     );
     final meds = <Medicine>[];
     for (final m in medData) {
