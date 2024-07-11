@@ -1,3 +1,0 @@
-* Aggiunto il supporto per l'esportazione in pdf e un sistema completo di formattazione dei campi CSV
-* Corretta la direzione di spostamento dei passi temporali personalizzati
-* Assicurato l'aggiornamento degli intervalli relativi all'avvio dell'applicazione

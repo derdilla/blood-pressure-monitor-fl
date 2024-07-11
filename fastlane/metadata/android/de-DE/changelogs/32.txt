@@ -1,5 +1,0 @@
-* Ergänze fehlende Dialekt-bezeichnungen bei Sprachauswahl
-* Behebe app-crash beim Laden von medizineinnahmen nach Löschen der Medizin
-* Verbesserung der Statistiken
-* Behebe speichern von Medikamenteneinnahmen ohne standarddosis
-* Übersetzungen aktualisieren (Spanisch, Italienisch, Türkisch)

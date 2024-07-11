@@ -1,5 +1,0 @@
-* Bereichsbegrenzung für Statistiken hinzugefügt
-* Auswahl einer Tageszeit in der Zukunft wird nun korrigiert.
-* In-App-Sprachauswahl hinzugefügt
-* "Benutzerdefiniert" als Zeitspanne hinzugefügt
-* Übersetzungen für Chinesisch, Französisch und Deutsch aktualisiert

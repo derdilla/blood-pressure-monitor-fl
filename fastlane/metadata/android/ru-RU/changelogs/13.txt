@@ -1,5 +1,0 @@
-This release focuses on stability and adds advanced language support
-
-- Add framework for supporting different languages
-- Add german translation
-- Fix various bugs

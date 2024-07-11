@@ -1,5 +1,0 @@
-* Exportieren in ein bestimmtes Verzeichnis ermöglicht
-* Import von Altdaten repariert
-* Behebung von Fehlern im Diagramm
-* Versions- und Debug-Informationen in der App hinzugefügt
-* Englische Texte verbessert

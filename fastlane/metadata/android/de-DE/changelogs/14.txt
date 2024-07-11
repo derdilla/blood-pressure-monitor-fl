@@ -1,5 +1,0 @@
-- Eine Vielzahl von Optionen für den CSV-Export wurde hinzugefügt.
-- Export als SQLite-Datenbank möglich.
-- Probleme mit der Statistikseite behoben.
-- Intervall spezifische Zeitanzeigeformate eingeführt, um Verwirrung zu vermeiden.
-- Die Eingabeüberprüfung wurde verbessert, um noch mehr Fehler zu erkennen.

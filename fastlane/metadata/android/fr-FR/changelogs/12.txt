@@ -1,6 +1,0 @@
-Cette toute nouvelle version inclut plus de sécurité pour les données et une meilleure ergonomie !
-* ajout de mesures de sécurité à la suppression de saisie
-* correction de l'import de caractères en utf8 et de messages ne contenant que des chiffres
-* augmentation de la personnalisation de l'interface
-* afficher plus d'informations lors de l'import
-* correction des pas de temps

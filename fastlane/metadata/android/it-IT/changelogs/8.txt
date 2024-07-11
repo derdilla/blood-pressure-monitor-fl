@@ -1,3 +1,0 @@
-* Aggiunta schermata per le licenze della libreria
-* Aggiunti i simboli mancanti
-* Collegamento al repository nell'app

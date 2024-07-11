@@ -1,4 +1,0 @@
-* Migliorato il design
-* Migliorata l'usabilità del grafico
-* Convalida degli inserimenti
-* Modifica del formato orario predefinito

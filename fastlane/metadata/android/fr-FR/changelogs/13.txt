@@ -1,5 +1,0 @@
-Cette version se concentre sur la stabilité et ajoute la gestion de langue avancée
-
-- Ajout d'un framework pour gérer différentes langues
-- Ajout de la traduction en allemand
-- Correction de diverses anomalies

@@ -1,6 +1,0 @@
-* Nur-Kommentar-Einträge / unvollständige Daten zulassen
-* Zeiträume hinzufügen
-* die Funktionsweise von Warnwerten klarer gestalten; das Alter wird nicht direkt gespeichert
-* Chinesische, französische und norwegische Übersetzungen hinzugefügt (teilweise unvollständig)
-* große Systemschriftgrößen auf kleinen Bildschirmen korrigiert
-* Probleme beim Speichern von Warnwerten behoben

@@ -1,4 +1,0 @@
-* Améliorer l'apparence
-* Améliorer l'ergonomie
-* valider les saisies
-* changement du format d'heure par défaut

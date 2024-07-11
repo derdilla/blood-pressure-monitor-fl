@@ -1,5 +1,0 @@
-* Aggiunta la limitazione dell'intervallo per le statistiche
-* Corretta la selezione di un'ora del giorno successiva all'ora corrente
-* Aggiunta della selezione della lingua in-app
-* Aggiunta dell'intervallo di visualizzazione "Personalizzato"
-* Aggiornamento delle traduzioni per cinese, francese e tedesco

@@ -1,6 +1,0 @@
-* Reso modificabile l'elenco delle registrazioni (clic)
-* Utilizzata l'opzione dell'intervallo di tempo del grafico per l'elenco
-* Aggiunta l'opzione dell'intervallo di settimane
-* Espanso il sistema di indicazione degli avvisi
-* Aggiornamento delle dipendenze
-* Modifica della licenza

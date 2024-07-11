@@ -1,3 +1,0 @@
-* Unterstützung für PDF-Export hinzugefügt sowie ein umfassendes System zur Formatierung von CSV-Feldern
-* Korrektur der Richtung von nutzerdefinierten Zeitschritten
-* Sicherstellen, dass relative Intervalle beim Start der App aktualisiert werden
