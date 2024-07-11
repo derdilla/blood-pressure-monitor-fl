@@ -1,6 +1,0 @@
-* make record list editable (click)
-* use graph time range option for list
-* add week range option
-* expand the system indicating warnings
-* update dependencies
-* change license

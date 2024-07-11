@@ -1,5 +1,0 @@
-* Consentita l'esportazione in una directory specifica
-* Corretta l'importazione legacy
-* Corretti i difetti del grafico
-* Aggiunta di informazioni sulla versione e sul debug nell'applicazione
-* Migliorati i testi in inglese

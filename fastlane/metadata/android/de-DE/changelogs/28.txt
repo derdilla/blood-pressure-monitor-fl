@@ -1,5 +1,0 @@
-* füge configuration für Messwert breite im Graph hinzu
-* Messwerteingabedialog wurde redesigned
-* gehe ins letzte Feld bei Messwerteingabe, wenn backspace in einem leeren Feld gedrückt wird
-* nutze material widgets in den Einstellungen
-* aktualisiere italienische Übersetzung und füge Portugiesisch hinzu

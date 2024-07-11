@@ -1,6 +1,0 @@
-* autoriser les enregistrements ne contenant qu'un commentaire ou des données incomplètes
-* ajout des périodes de temps
-* clarification de la façon dont fonctionnent les alertes relatives aux valeurs ; ne pas stocker l'âge directement
-* ajout des traductions en chinois, français et norvégien (traductions incomplètes)
-* correction de la gestion des grandes tailles de polices de caractères sur les petits écrans
-* correction de problèmes lors de la sauvegarde des valeurs d'avertissement

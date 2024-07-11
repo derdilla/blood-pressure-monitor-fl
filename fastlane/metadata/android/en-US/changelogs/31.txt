@@ -1,4 +1,0 @@
-* save paper on default pdf export configuration
-* Fix switch outline color on dark mode
-* Fix prefill when editing a column
-* update Italian translations

@@ -1,6 +1,0 @@
-* rendre la liste des enregistrements modifiable (clic)
-* utiliser l'option de fenêtrage temporel du graphique pour la liste
-* ajout de l'option de fenêtrage temporel par semaine
-* extension du système d'alertes
-* mise à jour des dépendances
-* modification de la licence

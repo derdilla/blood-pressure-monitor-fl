@@ -1,5 +1,0 @@
-Diese Version konzentriert sich auf die Stabilität und bietet erweiterte Sprachunterstützung
-
-- Framework für die Unterstützung mehrerer Sprachen hinzugefügt
-- Deutsche Übersetzung hinzugefügt
-- Verschiedene Bugs behoben

@@ -1,3 +1,0 @@
-* Aggiornamento delle dipendenze e migrazione a Material 3 (You)
-* Corretta la mancata risposta dell'applicazione quando si passa a un intervallo personalizzato e poi si chiude la selezione dell'intervallo di date nella pagina principale
-* Aggiunte linee di tendenza opzionali al grafico

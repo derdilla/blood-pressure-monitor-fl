@@ -1,5 +1,0 @@
-* Fix dialect in lang name selection
-* Fix crash when loading medicine intakes after deleting the corresponding medicine
-* Redesign statistics screen
-* Fix saving intake dosis of medications without default
-* Update translation (spanish, italian, turkish)

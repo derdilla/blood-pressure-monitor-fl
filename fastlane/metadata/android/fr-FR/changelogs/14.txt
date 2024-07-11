@@ -1,5 +1,0 @@
-- Ajout de nombreuses options pour l'export au format CSV.
-- Activation de l'export sous forme d'une base SQLite.
-- Prise en compte de problèmes dans la page des statistiques.
-- Affichage incorporé des formats de temps spécifiques dans les intervalles afin d'éviter toute confusion.
-- Amélioration de la validation de la saisie pour détecter encore plus d'erreurs.

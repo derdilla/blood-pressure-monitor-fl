@@ -1,6 +1,0 @@
-* Datensatzliste editierbar gemacht (klicken)
-* Verwendet Zeitspanne der Graphen auch für die Liste
-* Option für Wochenbereich hinzugefügt
-* Warnsystem erweitert
-* Abhängigkeiten aktualisiert
-* Lizenz geändert

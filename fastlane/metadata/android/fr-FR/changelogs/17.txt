@@ -1,5 +1,0 @@
-* Ajout du choix d'un intervalle spécifique pour les statistiques
-* Correction du choix d'une heure dans le futur
-* Ajout du choix de la langue directement dans l'application
-* Ajout d'un intervalle paramétrable
-* Mise à jour des traductions en chinois, français, allemand

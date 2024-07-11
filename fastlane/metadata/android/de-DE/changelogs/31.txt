@@ -1,4 +1,0 @@
-* ändere standard PDF export design, so das Papier gespart wird
-* Mache outline Farbe von Schaltern im dark mode wieder sichtbar
-* Behebe bearbeiten von Einträgen
-* Aktualisiere italienische Übersetzungen

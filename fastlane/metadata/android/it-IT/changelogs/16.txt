@@ -1,6 +1,0 @@
-* Consentito l'inserimento di soli commenti o di dati incompleti
-* Aggiunti periodi di tempo
-* Reso più chiaro il funzionamento dei valori di avviso; non memorizzare direttamente l'età
-* Aggiunte traduzioni in cinese, francese e norvegese (parzialmente incomplete)
-* Corrette le dimensioni dei caratteri di sistema su schermi piccoli
-* Risolti i problemi di salvataggio dei valori di avviso
