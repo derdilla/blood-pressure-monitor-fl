@@ -1,1 +1,11 @@
-<p><i>Blood pressure monitor</i> ermöglicht das Speichern und Analysieren von Blutdruckwerten und erlaubt einen einfachen und vielseitigen Datenexport. Diese App ermöglicht die Erstellung von Messungen mit Zeitstempel und zeigt sie in verschiedenen Modi an. Sie ist in hohem Maße konfigurierbar, ohne überladen zu sein, und ermöglicht den Import und Export der Daten im CSV-Format.</p><p>Verfolge Deinen Blutdruck, wo immer Du bist. Offline, werbefrei und quelloffen.</p>
+<p><i>Blutdruck Monitor</i> ist ein zuverlässiges Tagebuch und Analysewerkzeug für Blutdruckmessungen. Er ermöglicht das schnelle Speichern von Messungen und macht das Teilen der Daten mit Ihrem Arzt mühelos. Die App funktioniert sofort nach der Installation, kann aber auch für individuelle Anwendungsfälle konfiguriert werden.</p>
+
+Funktionen:
+- 📏 <b>Zuverlässiges</b> Speichern von Messungen
+- 🚀 Schnelle Eingabe durch <b>benutzerfreundliche</b> Dialoge beim Start und automatische Formularnavigation
+- 📊 <b>Attraktive</b> Analysen bieten Einblicke in Trends, Verteilung, Unterschiede über den Tag und vieles mehr
+- 📂 Vielseitiger <b>Export und Import</b> (CSV, PDF, SQLite) mit detaillierter Kontrolle
+- ⚙️ Hohe Konfigurierbarkeit
+- 🔗 BLE GATT-Eingabe über Bluetooth-Geräte
+- Werbefrei ohne Störungen
+- Gut dokumentierter, <b>offener Quellcode</b>
