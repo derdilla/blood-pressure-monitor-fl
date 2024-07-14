@@ -6,6 +6,6 @@ Features:
 - 📊 <b>Beautiful</b> analytics provide insights on trends, distribution, differences over the day and much more
 - 📂 Versatile <b>export and import</b> (CSV, PDF, SQLite) with granular control
 - ⚙️ High configurability
-- BLE GATT input through bluetooth devices
+- 🔗 BLE GATT input through bluetooth devices
 - Ad free without disturbances
 - Well-documented, <b>open-source</b> code
