@@ -1,7 +1,7 @@
 import 'package:blood_pressure_app/data_util/blood_pressure_builder.dart';
 import 'package:blood_pressure_app/data_util/entry_context.dart';
 import 'package:blood_pressure_app/data_util/repository_builder.dart';
-import 'package:blood_pressure_app/features/measurement_list/legacy_measurement_list.dart';
+import 'package:blood_pressure_app/features/measurement_list/compact_measurement_list.dart';
 import 'package:blood_pressure_app/features/measurement_list/measurement_list.dart';
 import 'package:blood_pressure_app/features/statistics/measurement_graph.dart';
 import 'package:blood_pressure_app/model/storage/intervall_store.dart';
@@ -63,7 +63,7 @@ class AppHome extends StatelessWidget {
                           final entries = FullEntryList.merged(records, notes, intakes);
                           entries.sort((a, b) => b.time.compareTo(a.time)); // newest first
                           if (context.select<Settings, bool>((s) => s.compactList)) {
-                            return LegacyMeasurementsList(
+                            return CompactMeasurementList(
                               data: entries,
                             );
                           }
