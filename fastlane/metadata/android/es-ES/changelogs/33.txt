@@ -1,0 +1,4 @@
+* Importación interactiva de csv agregada
+* Importación de bases de datos extranjeras (vista previa)
+* Añadidas localizaciones suecas
+* Actualización en español y portugués
