@@ -1,6 +1,6 @@
-* Allow input through bluetooth BLE GATT devices
-* Fix ordering value distribution graph
-* Support new features in compact(old) measurement list
-* Add hungarian localization
-* Update localizations (Turkish, Portuguese, Spanish, Italian, Chinese)
-* Internal changes to the data format
+* Permita la entrada vía los dispositivos BLE GATT del bluetooth
+* Fijar gráfico de distribución de valor de orden
+* Apoye las nuevas características en la lista de medición compacta (vieja)
+* Añadir localización húngara
+* Actualizar localizaciones (turco, portugués, español, italiano, chino)
+* Cambios internos en el formato de los datos

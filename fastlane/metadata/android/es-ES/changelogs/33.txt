@@ -1,4 +1,4 @@
-* Interactive csv importing added
-* Foreign DB import (preview)
-* Added Swedish localizations
-* Update Spanish and Portuguese
+* Importación interactiva de csv agregada
+* Importación de bases de datos extranjeras (vista previa)
+* Añadidas localizaciones suecas
+* Actualización en español y portugués
