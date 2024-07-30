@@ -1,4 +1,0 @@
-* Corretto il problema di esportazione di csv e pdf dopo l'aggiornamento
-* Aggiunta di un'impostazione alla schermata di apertura per l'inserimento di misurazioni all'avvio dell'applicazione
-* Corretto il caricamento delle voci a partire da un'epoca o prima di essa
-* Aggiunte traduzioni (russo, italiano)

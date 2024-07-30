@@ -1,5 +1,0 @@
-* Add range limiting for statistics
-* Fix selecting a time of day after the current time
-* Added in-app language selection
-* Add "Custom" display interval
-* Update translations for Chinese, French, German,

@@ -1,5 +1,0 @@
-* redesign measurement list for small displays
-* add the option to save color with entries
-* allow adding custom horizontal lines to the graph
-* make human-readable date default in pdf export
-* update localizations (Turkish, Italian, French, German)

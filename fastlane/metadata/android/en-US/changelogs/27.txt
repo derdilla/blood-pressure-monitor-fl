@@ -1,5 +1,0 @@
-* Add more colors to color picker
-* Reduce app size
-* Add loading animation
-* Protect existing export columns from bein overridden
-* Improve code quality

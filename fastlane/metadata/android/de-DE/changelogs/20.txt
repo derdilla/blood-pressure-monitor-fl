@@ -1,3 +1,0 @@
-* Behebe CSV und PDF exportprobleme nach update
-* Füge Einstellung zum Öffnen der Eintrags maske nach app start hinzu
-* Verhindere Einträge an oder vor unix epoch

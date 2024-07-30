@@ -1,5 +1,0 @@
-* Erlaube mehr Farben auszuwählen
-* Reduziere App-Größe
-* Füge Ladeanimation hinzu
-* Verhindere überschreiben existierender export spalten
-* Verbessere code qualität

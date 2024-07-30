@@ -1,3 +1,0 @@
-* Seite für Lizenzen der Bibliotheken hinzugefügt
-* Fehlende Symbole hinzugefügt
-* Repository in der App verlinkt

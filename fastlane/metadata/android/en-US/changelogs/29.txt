@@ -1,6 +1,0 @@
-* Improve export-import mechanisms
-* made input dialogue more robust
-* [Feature] Themed / Monochrome icon support by @sebastien46
-* Various translations updated
-
-Users might want to check their export configurations as in some cases the interpretation of columns changed.

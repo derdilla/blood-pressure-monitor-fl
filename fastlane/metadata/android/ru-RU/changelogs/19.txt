@@ -1,3 +1,0 @@
-* Add pdf export support and comprehensive CSV-field formatting system
-* Fix custom time step move direction
-* Ensure relative intervals update on app startup

@@ -1,4 +1,0 @@
-* Correction de l'export en CSV et en PDF après mise à jour
-* Ajout d'un paramètre pour ouvrir automatiquement l'écran de saisie d'une mesure à l'ouverture de l'application
-* Correction du chargement des enregistrements situés le jour de l'epoch ou antérieurement
-* Ajout des traductions en russe et en italien
