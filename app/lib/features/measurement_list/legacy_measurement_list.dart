@@ -1,5 +1,6 @@
 import 'package:blood_pressure_app/components/nullable_text.dart';
 import 'package:blood_pressure_app/components/pressure_text.dart';
+import 'package:blood_pressure_app/data_util/entry_context.dart';
 import 'package:blood_pressure_app/model/storage/settings_store.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -11,7 +12,7 @@ import 'package:provider/provider.dart';
 /// features.
 class LegacyMeasurementsList extends StatefulWidget {
   /// Create a more compact measurement list without all new features.
-  LegacyMeasurementsList({super.key,
+  const LegacyMeasurementsList({super.key,
     required this.data,
   });
 
@@ -67,7 +68,7 @@ class _LegacyMeasurementsListState extends State<LegacyMeasurementsList> {
     ],
   );
 
-  Widget _itemBuilder(context, int index) => Column(
+  Widget _itemBuilder(BuildContext context, int index) => Column(
     children: [
       Dismissible(
         key: Key(widget.data[index].time.toIso8601String()),
