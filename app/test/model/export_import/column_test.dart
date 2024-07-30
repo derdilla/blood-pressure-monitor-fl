@@ -43,7 +43,7 @@ void main() {
       for (final c in NativeColumn.allColumns) {
         final txt = c.encode(r.$1, r.$2, r.$3);
         final decoded = c.decode(txt);
-        expect(decoded, isNotNull, reason: 'a real value was encoded: ${c.internalIdentifier}: $r > $txt');
+        expect(decoded, isNotNull, reason: 'a real value was encoded: ${c.internalIdentifier}: ${r.debugToString()} > $txt');
         switch (decoded!.$1) {
           case RowDataFieldType.timestamp:
             expect(decoded.$2, isA<DateTime>().having(

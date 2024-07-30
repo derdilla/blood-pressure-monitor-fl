@@ -16,4 +16,8 @@ void main() {
     expect(Pressure.kPa(15.9987).mmHg, 120);
     expect(Pressure.kPa(10.0).mmHg, 75);
   });
+
+  test('should attempt to avoid printing', () {
+    expect(() => Pressure.mmHg(120).toString(), throwsA(isA<AssertionError>()));
+  });
 }

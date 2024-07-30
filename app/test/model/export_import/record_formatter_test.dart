@@ -168,3 +168,15 @@ FullEntry mockEntry({
     (intake == null ? [] : [ intake ]),
   );
 }
+
+extension DebugFormat on FullEntry {
+  String debugToString() => 'FullEntry('
+    'time: $time, '
+    'sys: ${sys?.mmHg}, '
+    'dia: ${dia?.mmHg}, '
+    'pul: $pul, '
+    'note: $note, '
+    'color: $color, '
+    'intakes: $intakes'
+  ')';
+}
