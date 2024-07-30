@@ -24,4 +24,11 @@ class Pressure {
 
   @override
   int get hashCode => _valPa.hashCode;
+
+  @override
+  String toString() {
+    assert(false, 'Avoid calling toString on Pressure directly as this may not'
+                  'respect the users preferences.');
+    return mmHg.toString();
+  }
 }
