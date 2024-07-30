@@ -8,11 +8,10 @@ import 'package:health_data_store/health_data_store.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
-/// A old more compact [BloodPressureRecord] list, that lacks some of the new
-/// features.
-class LegacyMeasurementsList extends StatefulWidget {
-  /// Create a more compact measurement list without all new features.
-  const LegacyMeasurementsList({super.key,
+/// A more compact [BloodPressureRecord] list that is less verbose.
+class CompactMeasurementList extends StatefulWidget {
+  /// Create a more compact, less verbose measurement list.
+  const CompactMeasurementList({super.key,
     required this.data,
   });
 
@@ -20,10 +19,10 @@ class LegacyMeasurementsList extends StatefulWidget {
   final List<FullEntry> data;
 
   @override
-  State<LegacyMeasurementsList> createState() => _LegacyMeasurementsListState();
+  State<CompactMeasurementList> createState() => _CompactMeasurementListState();
 }
 
-class _LegacyMeasurementsListState extends State<LegacyMeasurementsList> {
+class _CompactMeasurementListState extends State<CompactMeasurementList> {
 
   late final List<int> _tableElementsSizes;
 
