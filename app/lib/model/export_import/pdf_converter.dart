@@ -81,9 +81,9 @@ class PdfConverter {
       child: pw.TableHelper.fromTextArray(
           data: [
             ['',localizations.sysLong, localizations.diaLong, localizations.pulLong],
-            [localizations.average, analyzer.avgSys, analyzer.avgDia, analyzer.avgPul],
-            [localizations.maximum, analyzer.maxSys, analyzer.maxDia, analyzer.maxPul],
-            [localizations.minimum, analyzer.minSys, analyzer.minDia, analyzer.minPul],
+            [localizations.average, analyzer.avgSys?.mmHg, analyzer.avgDia?.mmHg, analyzer.avgPul],
+            [localizations.maximum, analyzer.maxSys?.mmHg, analyzer.maxDia?.mmHg, analyzer.maxPul],
+            [localizations.minimum, analyzer.minSys?.mmHg, analyzer.minDia?.mmHg, analyzer.minPul],
           ],
       ),
     );
