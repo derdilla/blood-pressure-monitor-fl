@@ -1,0 +1,4 @@
+* Interactive csv importing added
+* Foreign DB import (preview)
+* Added Swedish localizations
+* Update Spanish and Portuguese
