@@ -112,8 +112,8 @@ void main() {
     await repo.add(r1);
     await repo.add(r2);
     final values2 = await repo.get(DateRange(
-      start: DateTime.fromMillisecondsSinceEpoch(99999),
-      end: DateTime.fromMillisecondsSinceEpoch(10001),
+      start: DateTime.fromMillisecondsSinceEpoch(0),
+      end: DateTime.fromMillisecondsSinceEpoch(80000),
     ));
     expect(values2, hasLength(1));
     expect(values2, contains(r2));
