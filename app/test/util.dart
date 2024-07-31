@@ -83,7 +83,9 @@ Future<Widget> appBaseWithData(Widget child,  {
 }) async {
   final db = await _getHealthDateStore();
   final bpRepo = db.bpRepo;
-  await Future.forEach<BloodPressureRecord>(records ?? [], bpRepo.add);
+  for (final r in records ?? []) {
+    await bpRepo.add(r);
+  }
   final medRepo = db.medRepo;
   final intakeRepo = db.intakeRepo;
 
