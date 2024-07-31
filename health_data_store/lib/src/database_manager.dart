@@ -105,10 +105,12 @@ class DatabaseManager {
   /// - medicines that are marked as deleted and have no referencing intakes
   /// - timestamp entries that have no
   Future<void> performCleanup() => _db.transaction((txn) async {
+    // Remove medicines marked deleted with no remaining entries
     await txn.rawDelete('DELETE FROM Medicine '
       'WHERE removed = 1 '
       'AND medID NOT IN (SELECT medID FROM Intake);',
     );
+    // Remove unused entry ids
     await txn.rawDelete('DELETE FROM Timestamps '
       'WHERE entryID NOT IN (SELECT entryID FROM Intake)'
       'AND entryID NOT IN (SELECT entryID FROM Systolic) '

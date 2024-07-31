@@ -103,7 +103,7 @@ void main() {
     ));
     expect(values3, isEmpty);
   });
-  test('should remove correct record when multiple are at same time', () async {
+  test('overrides when inserting multiple records are at same time', () async {
     final db = await mockDBManager();
     addTearDown(db.close);
     final repo = BloodPressureRepositoryImpl(db.db);
@@ -111,8 +111,6 @@ void main() {
     final r2 = mockRecord(time: 10000, sys: 678, dia: 457, pul: 458);
     await repo.add(r1);
     await repo.add(r2);
-
-    await repo.remove(r1);
     final values2 = await repo.get(DateRange(
       start: DateTime.fromMillisecondsSinceEpoch(0),
       end: DateTime.fromMillisecondsSinceEpoch(80000),

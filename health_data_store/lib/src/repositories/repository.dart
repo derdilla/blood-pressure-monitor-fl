@@ -12,6 +12,10 @@ import 'package:health_data_store/src/types/date_range.dart';
 /// to avoid exposing the constructor to the public api.
 abstract class Repository<T> {
   /// Adds a new value to the repository.
+  ///
+  /// If there is an existing value of that type at the same time it gets
+  /// overridden. This is to ensure no duplicate entries are inserted and only
+  /// the most up to date value is used.
   Future<void> add(T value);
 
   /// Attempts to remove a value from the repository.

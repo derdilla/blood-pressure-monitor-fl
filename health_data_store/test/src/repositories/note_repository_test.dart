@@ -78,7 +78,6 @@ void main() {
     ));
     expect(values, isEmpty);
   });
-
   test('should emit stream events on changes', () async {
     final db = await mockDBManager();
     addTearDown(db.close);

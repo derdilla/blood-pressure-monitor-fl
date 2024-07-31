@@ -7,19 +7,16 @@ class DBHelper {
 
   /// Get a entryID from the `Timestamps` table of a database.
   ///
-  /// Ensures that the associated timestamp matches [timestampUnixS] and that
-  /// it is used in no table with a name in [blockedTables]. Creates a entry
-  /// when necessary
+  /// Ensures that the associated timestamp matches [timestampUnixS]. Creates a
+  /// new id when necessary.
   static Future<int> getEntryID(
     Transaction txn,
     int timestampUnixS,
-    List<String> blockedTables,
   ) async {
-    var query = 'SELECT entryID FROM Timestamps WHERE timestampUnixS = ?';
-    for (final t in blockedTables) {
-      query += 'AND entryID NOT IN (SELECT entryID FROM $t)';
-    }
-    final existing = await txn.rawQuery(query, [timestampUnixS]);
+    final existing = await txn.rawQuery(
+      'SELECT entryID FROM Timestamps WHERE timestampUnixS = ?',
+      [timestampUnixS],
+    );
     int entryID;
     if (existing.isEmpty) {
       final result = await txn.query('Timestamps',

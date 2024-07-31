@@ -27,9 +27,9 @@ class NoteRepositoryImpl extends NoteRepository {
       return;
     }
     await _db.transaction((txn) async {
-      final id = await DBHelper.getEntryID(
-        txn, note.time.secondsSinceEpoch,
-        ['Notes'],
+      final id = await DBHelper.getEntryID(txn, note.time.secondsSinceEpoch);
+      await txn.delete('Notes', where: 'entryID = ?',
+        whereArgs: [id],
       );
       await txn.insert('Notes', {
         'entryID': id,
