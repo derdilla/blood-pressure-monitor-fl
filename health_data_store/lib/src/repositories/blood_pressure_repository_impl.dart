@@ -33,21 +33,29 @@ class BloodPressureRepositoryImpl extends BloodPressureRepository {
       final entryID = await DBHelper.getEntryID(
         txn,
         timeSec,
-        ['Systolic', 'Diastolic', 'Pulse'],
       );
       if (record.sys != null) {
+        await txn.delete('Systolic', where: 'entryID = ?',
+          whereArgs: [entryID],
+        );
         await txn.insert('Systolic', {
           'entryID': entryID,
           'sys': record.sys!.kPa,
         });
       }
       if (record.dia != null) {
+        await txn.delete('Diastolic', where: 'entryID = ?',
+          whereArgs: [entryID],
+        );
         await txn.insert('Diastolic', {
           'entryID': entryID,
           'dia': record.dia!.kPa,
         });
       }
       if (record.pul != null) {
+        await txn.delete('Pulse', where: 'entryID = ?',
+          whereArgs: [entryID],
+        );
         await txn.insert('Pulse', {
           'entryID': entryID,
           'pul': record.pul,

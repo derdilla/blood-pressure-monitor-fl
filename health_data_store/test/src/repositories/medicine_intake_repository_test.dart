@@ -82,19 +82,18 @@ void main() {
     ));
     expect(values2, isEmpty);
   });
-  test('should remove correct intake when multiple are at same time', () async {
+  test('overrides when inserting multiple intakes are at same time', () async {
     final db = await mockDBManager();
     addTearDown(db.close);
     final repo = MedicineIntakeRepositoryImpl(db.db);
     final medRepo = MedicineRepositoryImpl(db.db);
     final med = mockMedicine();
     await medRepo.add(med);
-    final i1 = mockIntake(med, time: 10000);
+    final i1 = mockIntake(med, time: 10000, dosis: 123);
     final i2 = mockIntake(med, time: 10000, dosis: 458);
     await repo.add(i1);
     await repo.add(i2);
 
-    await repo.remove(i1);
     final values2 = await repo.get(DateRange(
       start: DateTime.fromMillisecondsSinceEpoch(0),
       end: DateTime.fromMillisecondsSinceEpoch(80000),

@@ -30,8 +30,8 @@ class MedicineIntakeRepositoryImpl extends MedicineIntakeRepository {
     final medIDRes = await txn.query('Medicine',
       columns: ['medID'],
       where: 'designation = ? '
-          'AND color ' +((intake.medicine.color != null) ? '= ?' : 'IS NULL')
-          + ' AND defaultDose ' +((intake.medicine.dosis != null) ? '= ?':'IS '
+          'AND color ' + ((intake.medicine.color != null) ? '= ?' : 'IS NULL')
+          + ' AND defaultDose ' + ((intake.medicine.dosis != null) ? '= ?':'IS '
           'NULL'),
       whereArgs: [
         intake.medicine.designation,
@@ -46,10 +46,8 @@ class MedicineIntakeRepositoryImpl extends MedicineIntakeRepository {
     final medID = medIDRes.first['medID'];
 
     // obtain free entry id
-    final id = await DBHelper.getEntryID(
-      txn, intake.time.secondsSinceEpoch,
-      ['Intake'],
-    );
+    final id = await DBHelper.getEntryID(txn, intake.time.secondsSinceEpoch);
+    await txn.delete('Intake', where: 'entryID = ?', whereArgs: [id]);
 
     // store to db
     await txn.insert('Intake', {
