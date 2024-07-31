@@ -10,7 +10,6 @@ class FullscreenDialoge extends StatelessWidget {
     required this.bottomAppBar,
     this.closeIcon = Icons.close,
     this.actions = const <Widget>[],
-    this.closeCallback,
   });
 
   /// The primary content of the dialoge.
@@ -22,10 +21,6 @@ class FullscreenDialoge extends StatelessWidget {
   ///
   /// Setting this icon to null will hide the button entirely.
   final IconData? closeIcon;
-
-  /// Callback that is called after the user pressed the [closeIcon] but before
-  /// popping the scope.
-  final void Function()? closeCallback;
 
   /// Primary content of the text button at the right end of the app bar.
   ///
@@ -55,7 +50,7 @@ class FullscreenDialoge extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Dialog.fullscreen(
     child: Scaffold(
-      body: body,
+      body: _buildBody(),
       appBar: bottomAppBar ? null : _buildAppBar(context),
       bottomNavigationBar: bottomAppBar ? BottomAppBar(
         color: Colors.transparent,
@@ -84,5 +79,14 @@ class FullscreenDialoge extends StatelessWidget {
         ),
     ],
   );
+
+  Widget? _buildBody() {
+    if (body == null) return null;
+    if (!bottomAppBar) return body;
+    return Padding(
+      padding: const EdgeInsets.only(top: 4.0),
+      child: body,
+    );
+  }
 
 }
