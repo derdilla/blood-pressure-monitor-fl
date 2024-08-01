@@ -116,7 +116,7 @@ class ExportButtonBar extends StatelessWidget {
                     final List<MedicineIntake> intakes = [];
                     try {
                       final db = await openReadOnlyDatabase(file.path!);
-                      final importedDB = await HealthDataStore.load(db);
+                      final importedDB = await HealthDataStore.load(db, true);
                       records.addAll(await importedDB.bpRepo.get(DateRange.all()));
                       notes.addAll(await importedDB.noteRepo.get(DateRange.all()));
                       intakes.addAll(await importedDB.intakeRepo.get(DateRange.all()));

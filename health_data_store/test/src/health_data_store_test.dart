@@ -36,4 +36,10 @@ void main() {
   expect(data.length, 1);
   expect(data, contains(r));
  });
+ test('should not modify read-only databases', () async {
+  final db = await openReadOnlyDatabase(inMemoryDatabasePath);
+  await HealthDataStore.load(db, true);
+  await db.close();
+  // Potential unawaited async exceptions would cause the method to fail.
+ });
 }

@@ -1,6 +1,5 @@
 import 'package:health_data_store/src/database_manager.dart';
 import 'package:health_data_store/src/extensions/datetime_seconds.dart';
-import 'package:sqflite_common/sqflite.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:test/test.dart';
 
@@ -222,4 +221,5 @@ void main() {
 }
 
 Future<DatabaseManager> mockDBManager() async => DatabaseManager.load(
-    await openDatabase(inMemoryDatabasePath));
+  await openDatabase(inMemoryDatabasePath),
+);

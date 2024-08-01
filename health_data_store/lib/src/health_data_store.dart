@@ -9,6 +9,7 @@ import 'package:health_data_store/src/repositories/medicine_repository.dart';
 import 'package:health_data_store/src/repositories/medicine_repository_impl.dart';
 import 'package:health_data_store/src/repositories/note_repository.dart';
 import 'package:health_data_store/src/repositories/note_repository_impl.dart';
+import 'package:health_data_store/src/repositories/repository.dart';
 import 'package:sqflite_common/sqflite.dart';
 
 /// Factory class for objects that provide access to the health database.
@@ -30,11 +31,17 @@ class HealthDataStore {
   /// decrease database performance in the first milliseconds after being
   /// returned. This is done to improve performance while interacting with the
   /// database.
-  static Future<HealthDataStore> load(Database db) async {
+  ///
+  /// When loading a database as [isReadOnly] no automatic changes to the
+  /// database are made. It will however not protect you from manually
+  /// attempting to modify the stored contents (e.g. in [Repository] methods).
+  static Future<HealthDataStore> load(Database db, [bool isReadOnly = false]) async {
     // TODO: loading readOnly dbs
     assert(db.isOpen);
     final mngr = await DatabaseManager.load(db);
-    unawaited(mngr.performCleanup());
+    if (!isReadOnly) {
+      unawaited(mngr.performCleanup());
+    }
     return HealthDataStore._create(mngr);
   }
 
