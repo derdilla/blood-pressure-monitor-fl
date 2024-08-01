@@ -50,7 +50,6 @@ class BluetoothCubit extends Cubit<BluetoothState> {
       case BluetoothAdapterState.turningOff:
       case BluetoothAdapterState.turningOn:
         emit(BluetoothDisabled());
-        await enableBluetooth();
       case BluetoothAdapterState.unknown:
         emit(BluetoothInitial());
     }

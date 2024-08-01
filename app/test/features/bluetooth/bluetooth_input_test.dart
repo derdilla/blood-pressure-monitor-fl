@@ -19,6 +19,13 @@ class _MockDeviceScanCubit extends MockCubit<DeviceScanState>
     implements DeviceScanCubit {}
 class _MockBleReadCubit extends MockCubit<BleReadState>
     implements BleReadCubit {}
+class _MockBluetoothCubitFailingEnable extends MockCubit<BluetoothState>
+    implements BluetoothCubit {
+  @override
+  Future<bool> enableBluetooth() async {
+    throw 'enableBluetooth called';
+  }
+}
 
 void main() {
   testWidgets('propagates successful read', (WidgetTester tester) async {
@@ -61,7 +68,6 @@ void main() {
     expect(reads.first.dia?.mmHg, 45);
     expect(reads.first.pul, null);
   });
-
   testWidgets('allows closing after successful read', (WidgetTester tester) async {
     final bluetoothCubit = _MockBluetoothCubit();
     whenListen(bluetoothCubit, Stream<BluetoothState>.fromIterable([BluetoothReady()]),
@@ -101,5 +107,15 @@ void main() {
     await tester.tap(find.byIcon(Icons.close));
     await tester.pumpAndSettle();
     expect(find.byType(ClosedBluetoothInput), findsOneWidget);
+  });
+  testWidgets("doesn't attempt to turn on bluetooth before interaction", (tester) async {
+    final bluetoothCubit = _MockBluetoothCubitFailingEnable();
+    whenListen(bluetoothCubit, Stream<BluetoothState>.fromIterable([BluetoothDisabled()]),
+      initialState: BluetoothReady());
+    await tester.pumpWidget(materialApp(BluetoothInput(
+      onMeasurement: (_) {},
+      bluetoothCubit: () => bluetoothCubit,
+    )));
+    expect(tester.takeException(), isNull);
   });
 }

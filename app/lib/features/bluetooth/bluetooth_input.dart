@@ -4,7 +4,6 @@ import 'package:blood_pressure_app/features/bluetooth/logic/ble_read_cubit.dart'
 import 'package:blood_pressure_app/features/bluetooth/logic/bluetooth_cubit.dart';
 import 'package:blood_pressure_app/features/bluetooth/logic/characteristics/ble_measurement_data.dart';
 import 'package:blood_pressure_app/features/bluetooth/logic/device_scan_cubit.dart';
-import 'package:blood_pressure_app/features/bluetooth/logic/flutter_blue_plus_mockable.dart';
 import 'package:blood_pressure_app/features/bluetooth/ui/closed_bluetooth_input.dart';
 import 'package:blood_pressure_app/features/bluetooth/ui/device_selection.dart';
 import 'package:blood_pressure_app/features/bluetooth/ui/input_card.dart';
@@ -26,7 +25,6 @@ class BluetoothInput extends StatefulWidget {
     this.bluetoothCubit,
     this.deviceScanCubit,
     this.bleReadCubit,
-    this.flutterBluePlus,
   });
 
   /// Called when a measurement was received through bluetooth.
@@ -40,8 +38,6 @@ class BluetoothInput extends StatefulWidget {
 
   /// Function to customize [BleReadCubit] creation.
   final BleReadCubit Function(BluetoothDevice dev)? bleReadCubit;
-
-  final FlutterBluePlusMockable? flutterBluePlus;
 
   @override
   State<BluetoothInput> createState() => _BluetoothInputState();
@@ -65,8 +61,7 @@ class _BluetoothInputState extends State<BluetoothInput> {
   @override
   void initState() {
     super.initState();
-    _bluetoothCubit = widget.bluetoothCubit?.call()
-      ?? BluetoothCubit(flutterBluePlus: widget.flutterBluePlus);
+    _bluetoothCubit = widget.bluetoothCubit?.call() ?? BluetoothCubit();
   }
 
   @override
@@ -108,13 +103,12 @@ class _BluetoothInputState extends State<BluetoothInput> {
     _deviceScanCubit ??= widget.deviceScanCubit?.call() ?? DeviceScanCubit(
       service: serviceUUID,
       settings: settings,
-      flutterBluePlus: widget.flutterBluePlus,
     );
     return BlocBuilder<DeviceScanCubit, DeviceScanState>(
       bloc: _deviceScanCubit,
       builder: (context, DeviceScanState state) {
         Log.trace('BluetoothInput _BluetoothInputState _deviceScanCubit: $state');
-        SizeChangedLayoutNotification().dispatch(context);
+        const SizeChangedLayoutNotification().dispatch(context);
         return switch(state) {
           DeviceListLoading() => _buildMainCard(context,
             title: Text(AppLocalizations.of(context)!.scanningForDevices),
@@ -158,7 +152,7 @@ class _BluetoothInputState extends State<BluetoothInput> {
             },
             builder: (BuildContext context, BleReadState state) {
               Log.trace('_BluetoothInputState BleReadCubit: $state');
-              SizeChangedLayoutNotification().dispatch(context);
+              const SizeChangedLayoutNotification().dispatch(context);
               return switch (state) {
                 BleReadInProgress() => _buildMainCard(context,
                   child: const CircularProgressIndicator(),
@@ -180,7 +174,7 @@ class _BluetoothInputState extends State<BluetoothInput> {
 
   @override
   Widget build(BuildContext context) {
-    SizeChangedLayoutNotification().dispatch(context);
+    const SizeChangedLayoutNotification().dispatch(context);
     if (_finishedData != null) {
       return MeasurementSuccess(
         onTap: _returnToIdle,
@@ -190,7 +184,9 @@ class _BluetoothInputState extends State<BluetoothInput> {
     if (_isActive) return _buildActive(context);
     return ClosedBluetoothInput(
       bluetoothCubit: _bluetoothCubit,
-      onStarted: () => setState(() =>_isActive = true),
+      onStarted: () async {
+        setState(() =>_isActive = true);
+      },
       inputInfo: () async {
         if (context.mounted) {
           await showDialog(
