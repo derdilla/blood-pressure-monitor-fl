@@ -98,7 +98,7 @@ jobs:
         with:
           channel: ${{ env.FLUTTER_CHANNEL }}
       - name: Start Android emulator
-        timeout-minutes: 10
+        timeout-minutes: 15
         run: |
           export ANDROID_TOOLS="$ANDROID_HOME/cmdline-tools/latest/bin"
           echo "Starting emulator"
@@ -107,7 +107,6 @@ jobs:
           $ANDROID_HOME/platform-tools/adb wait-for-device shell 'while [[ -z $(getprop sys.boot_completed | tr -d '\r') ]]; do sleep 1; done; input keyevent 82'
           $ANDROID_HOME/platform-tools/adb devices
           echo "Android emulator started"
-
       - name: Run integration tests
         run: flutter test integration_test --flavor github
         working-directory: app
