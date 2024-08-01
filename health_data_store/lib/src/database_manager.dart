@@ -27,22 +27,22 @@ class DatabaseManager {
   ///
   /// If [db] doesn't contain a scheme or contains an outdated scheme, one will
   /// be created.
-  static Future<DatabaseManager> load(Database db) async {
+  static Future<DatabaseManager> load(Database db, [bool isReadOnly = false]) async {
     final dbMngr = DatabaseManager._create(db);
 
     final tables = await dbMngr._db.query('"main".sqlite_master');
-    if (tables.length <= 3) {
+    if (tables.length <= 3 && !isReadOnly) {
       // DB has just been created, no version yet.
       await dbMngr._db.setVersion(2);
     }
 
-    if (await dbMngr._db.getVersion() < 3) {
+    if (!isReadOnly && await dbMngr._db.getVersion() < 3) {
       await dbMngr._setUpTables();
       await dbMngr._db.setVersion(3);
     }
     // When updating the schema the update steps are maintained for ensured 
     // compatability.
-    
+    // TODO: develop strategy for loading older db versions as read only.
     return dbMngr;
   }
 
