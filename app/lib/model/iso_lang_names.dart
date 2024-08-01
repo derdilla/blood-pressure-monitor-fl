@@ -17,6 +17,7 @@ String getDisplayLanguage(Locale l) => switch(l.toLanguageTag()) {
   'zh' => '中文 (简体)',
   'zh-Hant' => '中文（繁體)',
   'hu' => 'Magyar (Magyarország)',
+  'et' => 'Eesti (Eesti)',
   // Websites with names for expanding when new languages get added:
   // - https://chronoplexsoftware.com/localisation/help/languagecodes.htm
   // - https://localizely.com/locale-code/zh-Hans/
