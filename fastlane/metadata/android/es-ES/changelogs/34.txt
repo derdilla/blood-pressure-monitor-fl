@@ -1,5 +1,0 @@
-* Dependencias actualizadas a las nuevas versiones principales
-* Migración del estilo de construcción de Flutter
-* Arreglar la página de formatos de tiempo
-* Implementar configuración para la unidad de presión (kPa, mmHg)
-* Actualización de las localizaciones (turco, alemán, portugués, español, italiano)
