@@ -202,7 +202,6 @@ class _AppState extends State<App> {
       darkTheme: _buildTheme(ColorScheme.fromSeed(
         seedColor: settings.accentColor,
         brightness: Brightness.dark,
-        background: Colors.black,
       ),),
       themeMode: settings.themeMode,
       localizationsDelegates: AppLocalizations.localizationsDelegates,
@@ -217,9 +216,9 @@ class _AppState extends State<App> {
       borderSide: BorderSide(
         width: 3,
         // Through black background outlineVariant has enough contrast.
-        color: (colorScheme.background == Colors.black)
-            ? colorScheme.outlineVariant
-            : colorScheme.outline,
+        color: (colorScheme.brightness == Brightness.dark)
+          ? colorScheme.outlineVariant
+          : colorScheme.outline,
       ),
       borderRadius: BorderRadius.circular(20),
     );
@@ -232,6 +231,9 @@ class _AppState extends State<App> {
         border: inputBorder,
         enabledBorder: inputBorder,
       ),
+      scaffoldBackgroundColor: colorScheme.brightness == Brightness.dark
+        ? Colors.black
+        : Colors.white,
       appBarTheme: const AppBarTheme(
         centerTitle: true,
         shape: RoundedRectangleBorder(

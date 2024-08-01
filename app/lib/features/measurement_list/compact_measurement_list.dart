@@ -23,11 +23,8 @@ class CompactMeasurementList extends StatefulWidget {
 }
 
 class _CompactMeasurementListState extends State<CompactMeasurementList> {
-
-  late final List<int> _tableElementsSizes;
-
-  late final int _sideFlex;
-
+  List<int> _tableElementsSizes = [33, 9, 9, 9, 30];
+  int _sideFlex = 1;
   late DateFormat formatter;
 
   @override
