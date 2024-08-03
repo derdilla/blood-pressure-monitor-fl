@@ -8,9 +8,21 @@ body:
         Thanks for taking the time to report a bug. The following questions will
         guide you through different aspects of your problems and help us 
         to understand the issue and reproduce it. Of course you can omit details
-        as you see fitting. 
+        as you see fitting.
+        
+        Please check if there is already an issue for your bug. You may need to 
+        look through closed issues as issues get closed as soon as the fix is in
+        the source code.
 
   - type: input
+    id: app-version
+    attributes:
+      label: App version
+      placeholder: v1.7.1
+    validations:
+      required: true
+
+  - type: textarea
     id: description
     attributes:
       label: Bug Description
