@@ -263,17 +263,15 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
                 ),
               ),
             if (settings.allowManualTimeInput)
-              ListTileTheme(
-                shape: _buildShapeBorder(),
-                child: DateTimeForm(
-                  validate: settings.validateInputs,
-                  dateFormatString: settings.dateFormatString,
-                  initialTime: time,
-                  onTimeSelected: (newTime) => setState(() {
-                    time = newTime;
-                  }),
-                ),
+              DateTimeForm(
+                validate: settings.validateInputs,
+                dateFormatString: settings.dateFormatString,
+                initialTime: time,
+                onTimeSelected: (newTime) => setState(() {
+                  time = newTime;
+                }),
               ),
+
             Form(
               key: recordFormKey,
               child: Column(
@@ -289,7 +287,7 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
                         onSaved: (value) =>
                             setState(() => systolic = int.tryParse(value ?? '')),
                       ),
-                      const SizedBox(width: 16,),
+                      const SizedBox(width: 8,),
                       _buildValueInput(localizations, settings,
                         labelText: localizations.diaLong,
                         controller: diaController,
@@ -306,7 +304,7 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
                           return null;
                         },
                       ),
-                      const SizedBox(width: 16,),
+                      const SizedBox(width: 8,),
                       _buildValueInput(localizations, settings,
                         labelText: localizations.pulLong,
                         controller: pulController,
