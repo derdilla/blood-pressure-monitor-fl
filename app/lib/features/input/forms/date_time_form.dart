@@ -84,20 +84,11 @@ class _DateTimeFormState extends State<DateTimeForm> {
   }
 
   Widget _buildInput(String content, void Function() onTap, String label) => Expanded(
-    child: TextField( // use ListTile to get style
-      controller: () {
-        // Hack to make field contents correctly update when changed.
-        // https://github.com/flutter/flutter/issues/152816
-        final controller = TextEditingController(text: content);
-        _tmpControllers.add(controller);
-        return controller;
-      }(),
-      onTap: onTap,
+    child: InputDecorator(
+      child: GestureDetector(onTap: onTap, child: Text(content)),
       decoration: InputDecoration(
         labelText: label,
       ),
-      readOnly: true,
-      canRequestFocus: false,
     ),
   );
 

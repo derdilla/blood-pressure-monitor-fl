@@ -186,14 +186,6 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
     ),
   );
 
-  /// Build the border all fields have.
-  RoundedRectangleBorder _buildShapeBorder([Color? color]) =>
-      RoundedRectangleBorder(
-    side: Theme.of(context).inputDecorationTheme.border?.borderSide
-        ?? const BorderSide(width: 3),
-    borderRadius: BorderRadius.circular(20),
-  );
-
   @override
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
@@ -329,13 +321,17 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
                 maxLines: 4,
               ),
             ),
-            ColorSelectionListTile(
-              title: Text(localizations.color),
-              onMainColorChanged: (Color value) => setState(() {
-                color = (value == Colors.transparent) ? null : value;
-              }),
-              initialColor: color ?? Colors.transparent,
-              shape: _buildShapeBorder(color),
+            InputDecorator(
+              decoration: InputDecoration(
+                contentPadding: EdgeInsets.zero
+              ),
+              child: ColorSelectionListTile(
+                title: Text(localizations.color),
+                onMainColorChanged: (Color value) => setState(() {
+                  color = (value == Colors.transparent) ? null : value;
+                }),
+                initialColor: color ?? Colors.transparent,
+              ),
             ),
             if (widget.initialRecord == null && widget.availableMeds.isNotEmpty)
               Form(
