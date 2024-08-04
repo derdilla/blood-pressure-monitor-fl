@@ -1,55 +1,64 @@
 name: "Bug Report"
-description: Create a new ticket for a bug.
-labels: [
-  "bug"
-]
+description: Use this template to report bugs in the app.
+labels: ["bug"]
 body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to report a bug. The following questions will
+        guide you through different aspects of your problems and help us 
+        understand the issue and reproduce it. Of course you can omit details
+        as you see fit.
+        
+        Please check if there is already an issue for your bug. You may need to
+        look through closed issues, as they are closed as soon as the fix is in
+        the source code.
+
+  - type: input
+    id: app-version
+    attributes:
+      label: App version
+      placeholder: v1.7.1
+    validations:
+      required: true
+
   - type: textarea
     id: description
     attributes:
-      label: "Description"
-      description: Please enter an explicit description of your issue
-      placeholder: Short and explicit description of your incident...
-    validations:
-      required: true
-  - type: markdown
-    attributes:
-      value: "Everything after here is not required, but might be helpful to think about."
-  - type: input
-    id: device_version
-    attributes:
-      label: "Android version"
-      description: Enter your device version
-      placeholder: Android 14
-    validations:
-      required: false
+      label: Bug Description
+      description: A clear and concise description of what the bug is.
+      placeholder: "Describe the issue you're experiencing."
+
   - type: textarea
-    id: reprod
+    id: steps_to_reproduce
     attributes:
-      label: "Reproduction steps"
-      description: If you want to, you can briefly write how to reproduce the issue
+      label: Steps to Reproduce
+      description: "Please list the steps to reproduce the issue."
       placeholder: |
         1. Go to '...'
-        2. Click on '....'
-        3. Scroll down to '....'
+        2. Click on '...'
+        3. Scroll down to '...'
         4. See error
-      render: bash
-    validations:
-      required: false
-  - type: textarea
-    id: screenshot
+
+  - type: markdown
     attributes:
-      label: "Screenshots & Settings backup"
-      description: Some bugs are easier to understand/reproduce when the correct settings are provided. If you want to, you can add screenshots to help explain your problem.
-      render: bash
-    validations:
-      required: false
+      value: |
+        ### Attachments
+        Please upload screenshots that help illustrate what happened, debug
+        info (from the version page in the settings), and any logs the app 
+        produced.
+        
+        With some issues uploading a backup of your app settings is also 
+        helpful. However, please note that some information like entered 
+        medications and age, could be reconstructed from that data.
+
   - type: textarea
-    id: app_debug_info
+    id: logs_and_files
     attributes:
-      label: "App debug info"
-      description: Information about app version and Settings.
-      placeholder: You can copy the information through the version page at the end of the settings list.
-      render: bash
-    validations:
-      required: false
+      label: Details (Screenshots, Debug Info, Configurations)
+      value: |
+        <details><summary>Attachments</summary>
+        
+        
+        
+        </details>
