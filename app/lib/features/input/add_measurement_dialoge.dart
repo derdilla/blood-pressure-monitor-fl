@@ -186,14 +186,6 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
     ),
   );
 
-  /// Build the border all fields have.
-  RoundedRectangleBorder _buildShapeBorder([Color? color]) =>
-      RoundedRectangleBorder(
-    side: Theme.of(context).inputDecorationTheme.border?.borderSide
-        ?? const BorderSide(width: 3),
-    borderRadius: BorderRadius.circular(20),
-  );
-
   @override
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
@@ -263,16 +255,12 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
                 ),
               ),
             if (settings.allowManualTimeInput)
-              ListTileTheme(
-                shape: _buildShapeBorder(),
-                child: DateTimeForm(
-                  validate: settings.validateInputs,
-                  dateFormatString: settings.dateFormatString,
-                  initialTime: time,
-                  onTimeSelected: (newTime) => setState(() {
-                    time = newTime;
-                  }),
-                ),
+              DateTimeForm(
+                validate: settings.validateInputs,
+                initialTime: time,
+                onTimeSelected: (newTime) => setState(() {
+                  time = newTime;
+                }),
               ),
             Form(
               key: recordFormKey,
@@ -289,7 +277,7 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
                         onSaved: (value) =>
                             setState(() => systolic = int.tryParse(value ?? '')),
                       ),
-                      const SizedBox(width: 16,),
+                      const SizedBox(width: 8,),
                       _buildValueInput(localizations, settings,
                         labelText: localizations.diaLong,
                         controller: diaController,
@@ -306,7 +294,7 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
                           return null;
                         },
                       ),
-                      const SizedBox(width: 16,),
+                      const SizedBox(width: 8,),
                       _buildValueInput(localizations, settings,
                         labelText: localizations.pulLong,
                         controller: pulController,
@@ -331,13 +319,17 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
                 maxLines: 4,
               ),
             ),
-            ColorSelectionListTile(
-              title: Text(localizations.color),
-              onMainColorChanged: (Color value) => setState(() {
-                color = (value == Colors.transparent) ? null : value;
-              }),
-              initialColor: color ?? Colors.transparent,
-              shape: _buildShapeBorder(color),
+            InputDecorator(
+              decoration: InputDecoration(
+                contentPadding: EdgeInsets.zero
+              ),
+              child: ColorSelectionListTile(
+                title: Text(localizations.color),
+                onMainColorChanged: (Color value) => setState(() {
+                  color = (value == Colors.transparent) ? null : value;
+                }),
+                initialColor: color ?? Colors.transparent,
+              ),
             ),
             if (widget.initialRecord == null && widget.availableMeds.isNotEmpty)
               Form(

@@ -510,5 +510,7 @@
     "deleteAllMedicineIntakes": "Delete all medicine intakes",
     "@deleteAllMedicineIntakes": {},
     "deleteAllNotes": "Delete all notes",
-    "@deleteAllNotes": {}
+    "@deleteAllNotes": {},
+    "date": "Date",
+    "@date": {}
 }
