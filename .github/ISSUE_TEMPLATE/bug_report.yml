@@ -5,14 +5,9 @@ body:
   - type: markdown
     attributes:
       value: |
-        Thanks for taking the time to report a bug. The following questions will
-        guide you through different aspects of your problems and help us 
-        understand the issue and reproduce it. Of course you can omit details
-        as you see fit.
+        Thanks for taking the time to report a bug. The following questions will guide you through different aspects of your problems and help us understand the issue and reproduce it. Of course you can omit details as you see fit.
         
-        Please check if there is already an issue for your bug. You may need to
-        look through closed issues, as they are closed as soon as the fix is in
-        the source code.
+        Please check if there is already an issue for your bug. You may need to look through closed issues, as they are closed as soon as the fix is in the source code.
 
   - type: input
     id: app-version
@@ -44,13 +39,9 @@ body:
     attributes:
       value: |
         ### Attachments
-        Please upload screenshots that help illustrate what happened, debug
-        info (from the version page in the settings), and any logs the app 
-        produced.
+        Please upload screenshots, debug info (from the version page in the settings), and any logs the app produced to help us understand what you're experiencing.
         
-        With some issues uploading a backup of your app settings is also 
-        helpful. However, please note that some information like entered 
-        medications and age, could be reconstructed from that data.
+        With some issues uploading a backup of your app settings is also helpful. However, please note that some information like entered medications and age, could be reconstructed from that data.
 
   - type: textarea
     id: logs_and_files
