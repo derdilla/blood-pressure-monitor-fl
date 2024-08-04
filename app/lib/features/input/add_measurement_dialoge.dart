@@ -262,7 +262,6 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
                   time = newTime;
                 }),
               ),
-
             Form(
               key: recordFormKey,
               child: Column(
