@@ -10,13 +10,16 @@ import 'package:health_data_store/health_data_store.dart';
 /// Utility class to convert between csv strings and [BloodPressureRecord]s.
 class CsvConverter {
   /// Create converter between csv strings and [BloodPressureRecord] values that respects settings.
-  CsvConverter(this.settings, this.availableColumns);
+  CsvConverter(this.settings, this.availableColumns, this.availableMedicines);
 
   /// Settings that apply for ex- and import.
   final CsvExportSettings settings;
 
   /// Columns manager used for ex- and import.
   final ExportColumnsManager availableColumns;
+
+  /// Medicines to choose from during import.
+  final List<Medicine> availableMedicines;
 
   /// Create the contents of a csv file from passed records.
   String create(List<FullEntry> entries) {
@@ -139,7 +142,9 @@ class CsvConverter {
             (piece) => piece.$1 == RowDataFieldType.notes,)?.$2 ?? '';
       final int? color = recordPieces.firstWhereOrNull(
             (piece) => piece.$1 == RowDataFieldType.color,)?.$2;
-      
+      final List<dynamic>? intakesData = recordPieces.firstWhereOrNull(
+            (piece) => piece.$1 == RowDataFieldType.intakes,)?.$2;
+
       // manually trim quotes after https://pub.dev/packages/csv/changelog#600
       noteText = noteText.trim();
       if (noteText.endsWith('"')) {
@@ -160,7 +165,17 @@ class CsvConverter {
         note: noteText,
         color: color,
       );
-      entries.add((record, note, []));
+      final intakes = intakesData
+        ?.map((s) {
+          if (s is! (String, double)) return null;
+          final (designation, weightMg) = s;
+          final med = availableMedicines.firstWhereOrNull((med) => med.designation == designation);
+          if (med == null) return null;
+          return MedicineIntake(time: timestamp, medicine: med, dosis: Weight.mg(weightMg));
+        })
+        .whereNotNull()
+        .toList();
+      entries.add((record, note, intakes ?? []));
       currentLineNumber++;
     }
 
