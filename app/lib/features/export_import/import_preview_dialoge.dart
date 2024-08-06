@@ -56,7 +56,9 @@ class _ImportPreviewDialogeState extends State<ImportPreviewDialoge> {
 
   void _updateBanner() {
     if (_showingError) {
-      _showingError = false;
+      setState(() {
+        _showingError = false;
+      });
       messenger.removeCurrentMaterialBanner();
     }
     final err = _actor.attemptParse().error;
@@ -66,7 +68,9 @@ class _ImportPreviewDialogeState extends State<ImportPreviewDialoge> {
         content: Text(err.localize(localizations),
           style: TextStyle(color: Theme.of(context).colorScheme.error),),
       ),);
-      _showingError = true;
+      setState(() {
+        _showingError = true;
+      });
     }
   }
 
