@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:blood_pressure_app/model/blood_pressure/needle_pin.dart';
+import 'package:blood_pressure_app/model/export_import/column.dart';
 import 'package:blood_pressure_app/model/export_import/import_field_type.dart';
 import 'package:function_tree/function_tree.dart';
 import 'package:health_data_store/health_data_store.dart';
@@ -65,6 +66,8 @@ class ScriptedFormatter implements Formatter {
         } on TypeError {
           return null;
         }
+      case RowDataFieldType.intakes:
+        return NativeColumn.intakes.decode(text);
     }}();
     if (value != null) return (restoreAbleType!, value);
     return null;

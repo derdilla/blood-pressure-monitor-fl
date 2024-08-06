@@ -19,7 +19,9 @@ enum RowDataFieldType {
   /// Guarantees that a [int] containing a [Color.value] is returned.
   ///
   /// Backwards compatability with [MeasurementNeedlePin] json is maintained.
-  color;
+  color,
+  /// Guarantees [List<(String medicineDesignation, int dosisMg)>] is returned.
+  intakes;
 
   /// Selection of a displayable string from [localizations].
   String localize(AppLocalizations localizations) {
@@ -36,6 +38,8 @@ enum RowDataFieldType {
         return localizations.notes;
       case RowDataFieldType.color:
         return localizations.color;
+      case RowDataFieldType.intakes:
+        return localizations.intakes;
     }
   }
 }
