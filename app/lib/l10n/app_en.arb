@@ -512,5 +512,7 @@
     "deleteAllNotes": "Delete all notes",
     "@deleteAllNotes": {},
     "date": "Date",
-    "@date": {}
+    "@date": {},
+    "intakes": "Medicine intakes",
+    "@intakes": {}
 }
