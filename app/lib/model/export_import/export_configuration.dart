@@ -93,6 +93,7 @@ class ActiveExportColumnConfiguration extends ChangeNotifier {
         NativeColumn.pulse,
         NativeColumn.notes,
         NativeColumn.color,
+        NativeColumn.intakes,
       ],
       ExportImportPreset.myHeart => [
         BuildInColumn.mhDate,
