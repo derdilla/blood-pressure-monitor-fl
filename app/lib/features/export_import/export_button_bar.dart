@@ -77,6 +77,7 @@ class ExportButtonBar extends StatelessWidget {
                     final converter = CsvConverter(
                       Provider.of<CsvExportSettings>(context, listen: false),
                       Provider.of<ExportColumnsManager>(context, listen: false),
+                      await RepositoryProvider.of<MedicineRepository>(context).getAll(),
                     );
                     final importedRecords = await showImportPreview(
                       context,
@@ -189,6 +190,7 @@ void performExport(BuildContext context, [AppLocalizations? localizations]) asyn
       final csvConverter = CsvConverter(
         Provider.of<CsvExportSettings>(context, listen: false),
         Provider.of<ExportColumnsManager>(context, listen: false),
+        await RepositoryProvider.of<MedicineRepository>(context).getAll(),
       );
       final csvString = csvConverter.create(await _getEntries(context));
       final data = Uint8List.fromList(utf8.encode(csvString));
