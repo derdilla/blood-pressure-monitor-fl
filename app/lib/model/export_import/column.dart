@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:blood_pressure_app/model/export_import/export_configuration.dart';
 import 'package:blood_pressure_app/model/export_import/import_field_type.dart';
 import 'package:blood_pressure_app/model/export_import/record_formatter.dart';
-import 'package:blood_pressure_app/model/storage/convert_util.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:health_data_store/health_data_store.dart';
 
@@ -89,28 +88,25 @@ class NativeColumn extends ExportColumn {
       return null;
     }
   );
-  // TODO: add to default export columns, use during importing
   static final NativeColumn intakes = NativeColumn._create(
       'intakes',
       RowDataFieldType.intakes,
-        (_, __, intakes) => intakes
-            .map((i) => '${i.medicine.designation}(${i.dosis.mg})')
-            .join('|'),
-        (String pattern) {
-          if (pattern.isEmpty) return [];
-          final intakes = [];
-          for (final e in pattern.split('|')) {
-            final es = e.split('(');
-            if (es.length < 2) return null;
-            final [med, dosisStr, ...] = es;
-            final dosis = ConvertUtil.parseDouble(dosisStr.replaceAll(')', ''));
-            if (dosis == null) return null;
-            intakes.add((med, dosis));
-            return intakes;
-          }
-          final value = int.tryParse(pattern);
-          return value;
+      (_, __, intakes) => intakes
+        .map((i) => '${i.medicine.designation}(${i.dosis.mg})')
+        .join('|'),
+      (String pattern) {
+        final intakes = [];
+        for (final e in pattern.split('|')) {
+          final es = e.split('(');
+          if (es.length < 2) return null;
+          final [med, dosisStr, ...] = es;
+          final dosis = double.tryParse(dosisStr.replaceAll(')', ''));
+          if (dosis == null) return null;
+          intakes.add((med, dosis));
         }
+        return intakes;
+      }
+
   );
   
   final String _csvTitle;
