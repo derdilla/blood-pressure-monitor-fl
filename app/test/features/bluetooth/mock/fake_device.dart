@@ -70,7 +70,7 @@ class FakeDevice implements BluetoothDevice {
   }
 
   @override
-  Future<void> disconnect({int timeout = 35, bool queue = true}) async {
+  Future<void> disconnect({int timeout = 35, bool queue = true, int androidDelay = 2000,}) async {
     print('CALLED DISCONNECT:');
     debugPrintStack();
     _connected = false;

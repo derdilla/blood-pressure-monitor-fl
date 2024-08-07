@@ -15,13 +15,13 @@ import 'record_formatter_test.dart';
 
 void main() {
   test('should create csv string bigger than 0', () {
-    final converter = CsvConverter(CsvExportSettings(), ExportColumnsManager());
+    final converter = CsvConverter(CsvExportSettings(), ExportColumnsManager(), []);
     final csv = converter.create(createRecords());
     expect(csv.length, isNonZero);
   });
 
   test('should create first line', () {
-    final converter = CsvConverter(CsvExportSettings(), ExportColumnsManager());
+    final converter = CsvConverter(CsvExportSettings(), ExportColumnsManager(), []);
     final csv = converter.create([]);
     final columns = CsvExportSettings().exportFieldsConfiguration.getActiveColumns(ExportColumnsManager());
     expect(csv, stringContainsInOrder(columns.map((e) => e.csvTitle).toList()));
@@ -29,8 +29,9 @@ void main() {
 
   test('should not create first line when setting is off', () {
     final converter = CsvConverter(
-        CsvExportSettings(exportHeadline: false),
-        ExportColumnsManager(),
+      CsvExportSettings(exportHeadline: false),
+      ExportColumnsManager(),
+      [],
     );
     final csv = converter.create([]);
     final columns = CsvExportSettings().exportFieldsConfiguration.getActiveColumns(ExportColumnsManager());
@@ -38,7 +39,7 @@ void main() {
   });
 
   test('should be able to recreate records from csv in default configuration', () {
-    final converter = CsvConverter(CsvExportSettings(), ExportColumnsManager());
+    final converter = CsvConverter(CsvExportSettings(), ExportColumnsManager(), []);
     final initialRecords = createRecords();
     final csv = converter.create(initialRecords);
     final parsedRecords = converter.parse(csv).getOr(failParse);
@@ -57,8 +58,9 @@ void main() {
     final text = File('test/model/export_import/exported_formats/incomplete_export.csv').readAsStringSync();
 
     final converter = CsvConverter(
-        CsvExportSettings(),
-        ExportColumnsManager(),
+      CsvExportSettings(),
+      ExportColumnsManager(),
+      [],
     );
     final parsed = converter.parse(text);
     final records = parsed.getOr(failParse);
@@ -95,8 +97,9 @@ void main() {
     final text = File('test/model/export_import/exported_formats/v1.0.csv').readAsStringSync();
 
     final converter = CsvConverter(
-        CsvExportSettings(),
-        ExportColumnsManager(),
+      CsvExportSettings(),
+      ExportColumnsManager(),
+      [],
     );
     final parsed = converter.parse(text);
     final records = parsed.getOr(failParse);
@@ -122,8 +125,9 @@ void main() {
     final text = File('test/model/export_import/exported_formats/v1.1.0').readAsStringSync();
 
     final converter = CsvConverter(
-        CsvExportSettings(),
-        ExportColumnsManager(),
+      CsvExportSettings(),
+      ExportColumnsManager(),
+      [],
     );
     final parsed = converter.parse(text);
     final records = parsed.getOr(failParse);
@@ -149,8 +153,9 @@ void main() {
     final text = File('test/model/export_import/exported_formats/v1.4.0.CSV').readAsStringSync();
 
     final converter = CsvConverter(
-        CsvExportSettings(),
-        ExportColumnsManager(),
+      CsvExportSettings(),
+      ExportColumnsManager(),
+      [],
     );
     final parsed = converter.parse(text);
     final records = parsed.getOr(failParse);
@@ -183,8 +188,9 @@ void main() {
     final text = File('test/model/export_import/exported_formats/v1.5.1.csv').readAsStringSync();
 
     final converter = CsvConverter(
-        CsvExportSettings(),
-        ExportColumnsManager(),
+      CsvExportSettings(),
+      ExportColumnsManager(),
+      [],
     );
     final parsed = converter.parse(text);
     final records = parsed.getOr(failParse);
@@ -220,8 +226,9 @@ void main() {
     final text = File('test/model/export_import/exported_formats/v1.5.7.csv').readAsStringSync();
 
     final converter = CsvConverter(
-        CsvExportSettings(),
-        ExportColumnsManager(),
+      CsvExportSettings(),
+      ExportColumnsManager(),
+      [],
     );
     final parsed = converter.parse(text);
     final records = parsed.getOr(failParse);
@@ -260,6 +267,7 @@ void main() {
     final converter = CsvConverter(
       CsvExportSettings(),
       ExportColumnsManager(),
+      [],
     );
     final parsed = converter.parse(text);
     final records = parsed.getOr(failParse);
@@ -312,6 +320,7 @@ void main() {
         )
       ),
       cols,
+      [],
     );
     final parsed = converter.parse(text);
 

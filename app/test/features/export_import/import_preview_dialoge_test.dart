@@ -19,6 +19,7 @@ void main() {
         CsvConverter(
           CsvExportSettings(),
           ExportColumnsManager(),
+          [],
         ),
         'timestampUnixMs,systolic,diastolic,pulse,notes,needlePin\n1703175193324'
         ',123,45,67,note1,"{""color"":4285132974}"\n1703147206000,114,71,56,,null',
@@ -44,6 +45,7 @@ void main() {
         CsvConverter(
           CsvExportSettings(),
           ExportColumnsManager(),
+          [],
         ),
         csvTxt,
       ),
@@ -62,6 +64,7 @@ void main() {
         CsvConverter(
           CsvExportSettings(),
           ExportColumnsManager(),
+          [],
         ),
         'systolic,diastolic,pulse,notes,needlePin\n123,45,67,note1,'
             '"{""color"":4285132974}"\n114,71,56,,null',
@@ -81,6 +84,7 @@ void main() {
         CsvConverter(
           CsvExportSettings(),
           ExportColumnsManager(),
+          [],
         ),
         'line1\nline2\nline3',
       ),
@@ -114,6 +118,7 @@ void main() {
           CsvConverter(
             CsvExportSettings(),
             ExportColumnsManager(),
+            [],
           ),
           'timestampUnixMs,systolic,diastolic,pulse,notes,needlePin\n1703175193324'
               ',123,45,67,note1,"{""color"":4285132974}"\n1703147206000,114,71,56,,null',
@@ -141,5 +146,56 @@ void main() {
     expect(res[0].color, 4285132974);
     expect(res[1].time.millisecondsSinceEpoch, 1703147206000);
     expect(res[1].dia?.mmHg, 71);
+  });
+  testWidgets('should parse intakes data', (tester) async {
+    dynamic data = 1;
+
+    await loadDialoge(tester, (context) async {
+      data = await showImportPreview(
+        context,
+        CsvRecordParsingActor(
+          CsvConverter(
+            CsvExportSettings(),
+            ExportColumnsManager(),
+            [Medicine(designation: 'testMed1'), Medicine(designation: 'testMed2')],
+          ),
+          'timestampUnixMs,intakes\n'
+          '1703175193324,testMed1(123.5)\n'
+          '1703147206000,testMed2(12)|testMed1(15.0)\n',
+        ),
+        ExportColumnsManager(),
+        false,
+      );
+    },);
+
+    expect(find.byType(ImportPreviewDialoge), findsOneWidget);
+    expect(tester.takeException(), isNull);
+    expect(find.byType(DropdownButton), findsNWidgets(2), reason: '2 columns');
+    expect(find.textContaining('testMed1'), findsNWidgets(2));
+    expect(find.textContaining('testMed2'), findsOneWidget);
+    expect(find.byType(CustomBanner), findsNothing, reason: 'no error');
+
+    final localizations = await AppLocalizations.delegate.load(const Locale('en'));
+    expect(find.text(localizations.import), findsOneWidget);
+    await tester.tap(find.text(localizations.import));
+    await tester.pumpAndSettle();
+    expect(find.byType(ImportPreviewDialoge), findsNothing);
+
+    expect(data, isA<List<FullEntry>>());
+    final List<FullEntry> res = data;
+    expect(res, hasLength(2));
+    expect(res[0].$3, hasLength(1));
+    expect(res[0].$3[0].medicine.designation, 'testMed1');
+    expect(res[0].$3[0].dosis.mg, 123.5);
+    expect(res[1].time.millisecondsSinceEpoch, 1703147206000);
+    expect(res[1].$3, hasLength(2));
+    expect(res[1].$3, containsAll([
+      isA<MedicineIntake>()
+        .having((i) => i.medicine.designation, 'designation', 'testMed1')
+        .having((i) => i.dosis.mg, 'designation', 15.0),
+      isA<MedicineIntake>()
+        .having((i) => i.medicine.designation, 'designation', 'testMed2')
+        .having((i) => i.dosis.mg, 'designation', 12.0),
+    ]));
   });
 }

@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:health_data_store/health_data_store.dart';
 
+import '../../features/measurement_list/measurement_list_entry_test.dart';
+import '../../util.dart';
 import 'record_formatter_test.dart';
 
 void main() {
@@ -28,7 +30,7 @@ void main() {
     test('should encode into non-empty string', () {
       // Use BuildInColumn for utility columns
       for (final c in NativeColumn.allColumns) {
-        final r = _filledRecord();
+        final r = _filledRecord(true);
         expect(c.encode(r.$1, r.$2, r.$3), isNotEmpty, reason: '${c.internalIdentifier} is NativeColumn');
       }
     });
@@ -39,7 +41,7 @@ void main() {
       }
     });
     test('should decode correctly', () {
-      final r = _filledRecord();
+      final r = _filledRecord(true);
       for (final c in NativeColumn.allColumns) {
         final txt = c.encode(r.$1, r.$2, r.$3);
         final decoded = c.decode(txt);
@@ -49,26 +51,26 @@ void main() {
             expect(decoded.$2, isA<DateTime>().having(
               (p0) => p0.millisecondsSinceEpoch, 'milliseconds', r.$1.time.millisecondsSinceEpoch,),);
             break;
-          case RowDataFieldType.sys:
-            expect(decoded.$2, isA<int>().having(
-                    (p0) => p0, 'systolic', r.$1.sys?.mmHg,),);
-            break;
-          case RowDataFieldType.dia:
-            expect(decoded.$2, isA<int>().having(
-                    (p0) => p0, 'diastolic', r.$1.dia?.mmHg,),);
-            break;
-          case RowDataFieldType.pul:
-            expect(decoded.$2, isA<int>().having(
-                    (p0) => p0, 'pulse', r.$1.pul,),);
-            break;
-          case RowDataFieldType.notes:
-            expect(decoded.$2, isA<String>().having(
-                    (p0) => p0, 'pulse', r.$2.note,),);
-            break;
-          case RowDataFieldType.color:
-            expect(decoded.$2, isA<int>().having(
-                    (p0) => p0, 'color', r.$2.color,),);
-            break;
+        case RowDataFieldType.sys:
+          expect(decoded.$2, isA<int>()
+            .having((p0) => p0, 'systolic', r.$1.sys?.mmHg));
+        case RowDataFieldType.dia:
+          expect(decoded.$2, isA<int>()
+            .having((p0) => p0, 'diastolic', r.$1.dia?.mmHg));
+        case RowDataFieldType.pul:
+          expect(decoded.$2, isA<int>()
+            .having((p0) => p0, 'pulse', r.$1.pul));
+        case RowDataFieldType.notes:
+          expect(decoded.$2, isA<String>()
+            .having((p0) => p0, 'note', r.$2.note));
+        case RowDataFieldType.color:
+          expect(decoded.$2, isA<int>()
+            .having((p0) => p0, 'pin', r.$2.color));
+        case RowDataFieldType.intakes:
+          expect(decoded.$2, isA<List>()
+            .having((p0) => p0.length, 'length', 1,)
+            .having((p0) => p0[0].$1, 'designation', 'mockMed',)
+            .having((p0) => p0[0].$2, 'dosis', 123.4,));
         }
       }
     });
@@ -100,7 +102,7 @@ void main() {
       }
     });
     test('should decode correctly', () {
-      final r = _filledRecord();
+      final r = _filledRecord(true);
       for (final c in BuildInColumn.allColumns) {
         final txt = c.encode(r.$1, r.$2, r.$3);
         final decoded = c.decode(txt);
@@ -116,29 +118,28 @@ void main() {
               expect(decoded?.$2, isA<DateTime>().having(
                   (p0) => p0.millisecondsSinceEpoch, 'milliseconds', r.$1.time.millisecondsSinceEpoch,),);
             }
-            break;
           case RowDataFieldType.sys:
-            expect(decoded?.$2, isA<int>().having(
-                    (p0) => p0, 'systolic', r.$1.sys?.mmHg,),);
-            break;
+            expect(decoded?.$2, isA<int>()
+              .having((p0) => p0, 'systolic', r.$1.sys?.mmHg));
           case RowDataFieldType.dia:
-            expect(decoded?.$2, isA<int>().having(
-                    (p0) => p0, 'diastolic', r.$1.dia?.mmHg,),);
-            break;
+            expect(decoded?.$2, isA<int>()
+              .having((p0) => p0, 'diastolic', r.$1.dia?.mmHg));
           case RowDataFieldType.pul:
-            expect(decoded?.$2, isA<int>().having(
-                    (p0) => p0, 'pulse', r.$1.pul,),);
-            break;
+            expect(decoded?.$2, isA<int>()
+              .having((p0) => p0, 'pulse', r.$1.pul));
           case RowDataFieldType.notes:
-            expect(decoded?.$2, isA<String>().having(
-                    (p0) => p0, 'note', r.$2.note,),);
-            break;
+            expect(decoded?.$2, isA<String>()
+              .having((p0) => p0, 'note', r.$2.note));
           case RowDataFieldType.color:
-            expect(decoded?.$2, isA<int>().having(
-                    (p0) => p0, 'pin', r.$2.color,),);
-            break;
+            expect(decoded?.$2, isA<int>()
+              .having((p0) => p0, 'pin', r.$2.color));
+          case RowDataFieldType.intakes:
+            expect(decoded?.$2, isA<List<(String, double)>>()
+              .having((p0) => p0.length, 'length', 1,)
+              .having((p0) => p0[0].$1, 'designation', 'mockMed',)
+              .having((p0) => p0[0].$2, 'dosis', 123.4,));
           case null:
-            break;
+            // no-op
         }
       }
     });
@@ -195,10 +196,13 @@ void main() {
   });
 }
 
-FullEntry _filledRecord() => mockEntry(
+FullEntry _filledRecord([bool addIntakes = false]) => mockEntry(
   sys: 123,
   dia: 456,
   pul: 789,
   note: 'test',
   pin: Colors.pink,
+  intake: addIntakes
+    ? mockIntake(mockMedicine(designation: 'mockMed'), dosis: 123.4,)
+    : null,
 );
