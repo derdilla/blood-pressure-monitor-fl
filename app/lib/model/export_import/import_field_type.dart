@@ -20,7 +20,7 @@ enum RowDataFieldType {
   ///
   /// Backwards compatability with [MeasurementNeedlePin] json is maintained.
   color,
-  /// Guarantees [List<(String medicineDesignation, int dosisMg)>] is returned.
+  /// Guarantees [List<(String medicineDesignation, double dosisMg)>] is returned.
   intakes;
 
   /// Selection of a displayable string from [localizations].
