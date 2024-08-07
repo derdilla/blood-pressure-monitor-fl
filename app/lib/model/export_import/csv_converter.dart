@@ -167,11 +167,10 @@ class CsvConverter {
       );
       final intakes = intakesData
         ?.map((s) {
-          if (s is! (String, double)) return null;
-          final (designation, weightMg) = s;
-          final med = availableMedicines.firstWhereOrNull((med) => med.designation == designation);
+          assert(s is (String, double));
+          final med = availableMedicines.firstWhereOrNull((med) => med.designation == s.$1);
           if (med == null) return null;
-          return MedicineIntake(time: timestamp, medicine: med, dosis: Weight.mg(weightMg));
+          return MedicineIntake(time: timestamp, medicine: med, dosis: Weight.mg(s.$2));
         })
         .whereNotNull()
         .toList();

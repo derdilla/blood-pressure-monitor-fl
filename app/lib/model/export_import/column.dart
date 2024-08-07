@@ -89,24 +89,23 @@ class NativeColumn extends ExportColumn {
     }
   );
   static final NativeColumn intakes = NativeColumn._create(
-      'intakes',
-      RowDataFieldType.intakes,
-      (_, __, intakes) => intakes
-        .map((i) => '${i.medicine.designation}(${i.dosis.mg})')
-        .join('|'),
-      (String pattern) {
-        final intakes = [];
-        for (final e in pattern.split('|')) {
-          final es = e.split('(');
-          if (es.length < 2) return null;
-          final [med, dosisStr, ...] = es;
-          final dosis = double.tryParse(dosisStr.replaceAll(')', ''));
-          if (dosis == null) return null;
-          intakes.add((med, dosis));
-        }
-        return intakes;
+    'intakes',
+    RowDataFieldType.intakes,
+    (_, __, intakes) => intakes
+      .map((i) => '${i.medicine.designation}(${i.dosis.mg})')
+      .join('|'),
+    (String pattern) {
+      final intakes = [];
+      for (final e in pattern.split('|')) {
+        final es = e.split('(');
+        if (es.length < 2) return null;
+        final [med, dosisStr, ...] = es;
+        final dosis = double.tryParse(dosisStr.replaceAll(')', ''));
+        if (dosis == null) return null;
+        intakes.add((med, dosis));
       }
-
+      return intakes;
+    }
   );
   
   final String _csvTitle;
