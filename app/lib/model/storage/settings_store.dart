@@ -1,5 +1,6 @@
 import 'dart:collection';
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:blood_pressure_app/model/blood_pressure/medicine/medicine.dart';
 import 'package:blood_pressure_app/model/blood_pressure/pressure_unit.dart';
@@ -395,7 +396,7 @@ class Settings extends ChangeNotifier {
 
   bool _bleInput = true;
   /// Whether to show bluetooth input on add measurement page.
-  bool get bleInput => _bleInput;
+  bool get bleInput => (Platform.isAndroid || Platform.isIOS || Platform.isMacOS) && _bleInput;
   set bleInput(bool value) {
     _bleInput = value;
     notifyListeners();
