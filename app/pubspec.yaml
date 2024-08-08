@@ -38,6 +38,9 @@ dependencies:
   fluttertoast: ^8.2.6
   app_settings: ^5.1.1
 
+  # desktop only
+  sqflite_common_ffi: ^2.3.3
+
 dev_dependencies:
   integration_test:
     sdk: flutter
@@ -46,7 +49,6 @@ dev_dependencies:
     sdk: flutter
   flutter_lints: ^4.0.0
   mockito: ^5.4.4
-  sqflite_common_ffi: ^2.3.3
   translations_cleaner: ^0.0.5
   build_runner: ^2.4.12
   bloc_test: ^9.1.7

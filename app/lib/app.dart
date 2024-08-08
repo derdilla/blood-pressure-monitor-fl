@@ -17,7 +17,7 @@ import 'package:health_data_store/health_data_store.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:path/path.dart';
 import 'package:provider/provider.dart';
-import 'package:sqflite/sqflite.dart';
+import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
 /// Base class for the entire app.
 ///
@@ -68,6 +68,10 @@ class _AppState extends State<App> {
   /// Load the primary app data asynchronously to allow load animations.
   Future<Widget> _loadApp() async {
     WidgetsFlutterBinding.ensureInitialized();
+    if (Platform.isLinux || Platform.isMacOS || Platform.isWindows) {
+      databaseFactory = databaseFactoryFfi;
+    }
+
     if (_loadedChild != null && _configDB != null && _entryDB != null) return _loadedChild!;
 
     if (widget.forceClearAppDataOnLaunch) {
