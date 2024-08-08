@@ -514,5 +514,7 @@
     "date": "Date",
     "@date": {},
     "intakes": "Medicine intakes",
-    "@intakes": {}
+    "@intakes": {},
+    "errFeatureNotSupported": "This feature is not available on this platform.",
+    "@errFeatureNotSupported": {}
 }

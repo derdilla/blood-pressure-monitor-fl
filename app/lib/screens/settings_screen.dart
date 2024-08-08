@@ -155,11 +155,15 @@ class SettingsPage extends StatelessWidget {
               ),
               SwitchListTile(
                 value: settings.bleInput,
-                onChanged: (value) {
-                  settings.bleInput = value;
-                },
+                onChanged: (Platform.isAndroid || Platform.isIOS || Platform.isMacOS)
+                  ? (value) { settings.bleInput = value; }
+                  : null,
                 secondary: const Icon(Icons.bluetooth),
-                title: Text(localizations.bluetoothInput),),
+                title: Text(localizations.bluetoothInput),
+                subtitle: (Platform.isAndroid || Platform.isIOS || Platform.isMacOS)
+                  ? null
+                  : Text(localizations.errFeatureNotSupported),
+              ),
               SwitchListTile(
                 value: settings.allowManualTimeInput,
                 onChanged: (value) {
