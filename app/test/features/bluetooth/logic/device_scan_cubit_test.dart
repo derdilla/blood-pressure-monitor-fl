@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:blood_pressure_app/features/bluetooth/logic/device_scan_cubit.dart';
 import 'package:blood_pressure_app/features/bluetooth/logic/flutter_blue_plus_mockable.dart';
-import 'package:blood_pressure_app/logging.dart';
 import 'package:blood_pressure_app/model/storage/settings_store.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -20,7 +19,6 @@ import 'device_scan_cubit_test.mocks.dart';
 
 void main() {
   test('finds and connects to devices', () async {
-    Log.testExpectError = true;
     final StreamController<List<ScanResult>> mockResults = StreamController.broadcast();
     final settings = Settings();
 
@@ -70,10 +68,8 @@ void main() {
     // state should be set as we await above
     await expectLater(cubit.state, isA<DeviceSelected>()
       .having((s) => s.device, 'device', dev));
-    Log.testExpectError = false;
   });
   test('recognizes devices', () async {
-    Log.testExpectError = true;
     final StreamController<List<ScanResult>> mockResults = StreamController.broadcast();
     final settings = Settings(
       knownBleDev: ['testDev']
@@ -110,6 +106,5 @@ void main() {
     mockResults.sink.add([wrongRes0, res]);
     // No prompt when finding the correct device again
     await expectLater(cubit.stream, emits(isA<DeviceSelected>()));
-    Log.testExpectError = false;
   });
 }
