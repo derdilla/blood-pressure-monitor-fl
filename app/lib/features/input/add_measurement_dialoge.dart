@@ -160,6 +160,7 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
       focusNode: focusNode,
       onSaved: onSaved,
       controller: controller,
+      style: Theme.of(context).textTheme.bodyLarge,
       inputFormatters: [FilteringTextInputFormatter.digitsOnly],
       onChanged: (String value) {
         if (value.isNotEmpty
@@ -321,10 +322,10 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
             ),
             InputDecorator(
               decoration: InputDecoration(
-                contentPadding: EdgeInsets.zero
+                contentPadding: EdgeInsets.zero,
               ),
               child: ColorSelectionListTile(
-                title: Text(localizations.color),
+                title: Text(localizations.color, style: Theme.of(context).textTheme.bodyLarge,),
                 onMainColorChanged: (Color value) => setState(() {
                   color = (value == Colors.transparent) ? null : value;
                 }),
@@ -346,10 +347,10 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
                             for (final med in widget.availableMeds)
                               DropdownMenuItem(
                                 value: med,
-                                child: Text(med.designation),
+                                child: Text(med.designation, style: Theme.of(context).textTheme.bodyLarge,),
                               ),
                             DropdownMenuItem(
-                              child: Text(localizations.noMedication),
+                              child: Text(localizations.noMedication, style: Theme.of(context).textTheme.bodyLarge,),
                             ),
                           ],
                           onChanged: (v) {
@@ -376,6 +377,7 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
                             decoration: InputDecoration(
                               labelText: localizations.dosis,
                             ),
+                            style: Theme.of(context).textTheme.bodyLarge,
                             focusNode: dosisFocusNote,
                             keyboardType: TextInputType.number,
                             onChanged: (value) {
