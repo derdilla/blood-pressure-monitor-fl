@@ -64,7 +64,10 @@ class _DateTimeFormState extends State<DateTimeForm> {
 
   Widget _buildInput(String content, void Function() onTap, String label) => Expanded(
     child: InputDecorator(
-      child: GestureDetector(onTap: onTap, child: Text(content)),
+      child: GestureDetector(
+        onTap: onTap,
+        child: Text(content, style: Theme.of(context).textTheme.bodyLarge)
+      ),
       decoration: InputDecoration(
         labelText: label,
       ),
