@@ -98,7 +98,7 @@ jobs:
         with:
           channel: ${{ env.FLUTTER_CHANNEL }}
       - name: Start Android emulator
-        timeout-minutes: 15
+        timeout-minutes: 25
         run: |
           export ANDROID_TOOLS="$ANDROID_HOME/cmdline-tools/latest/bin"
           echo "Starting emulator"
