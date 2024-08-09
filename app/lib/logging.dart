@@ -1,13 +1,12 @@
+import 'dart:io';
+
 import 'package:flutter/foundation.dart';
 
 /// Simple class for manually logging in debug builds.
 class Log {
-  /// Disable error logging during testing.
-  static bool testExpectError = false;
-
   /// Log an error with stack trace in debug builds.
   static void err(String message, [List<Object>? dumps]) {
-    if (kDebugMode && !testExpectError) {
+    if (kDebugMode && !(Platform.environment['FLUTTER_TEST'] == 'true')) {
       debugPrint('-----------------------------');
       debugPrint('ERROR $message:');
       debugPrintStack();
@@ -19,7 +18,7 @@ class Log {
 
   /// Log a message in debug more
   static void trace(String message) {
-    if (kDebugMode && !testExpectError) {
+    if (kDebugMode && !(Platform.environment['FLUTTER_TEST'] == 'true')) {
       debugPrint('TRACE: $message');
     }
   }

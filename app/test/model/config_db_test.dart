@@ -14,7 +14,8 @@ void main() {
   group('ConfigDB', () {
     setUpAll(() {
       sqfliteFfiInit();
-      databaseFactory = databaseFactoryFfi;
+      // Avoid warning in logs by avoiding `databaseFactory` setter
+      databaseFactoryOrNull = databaseFactoryFfi;
     });
 
     test('should initialize database without error', () async {
@@ -46,7 +47,7 @@ void main() {
   group('ConfigDAO', () {
     setUpAll(() {
       sqfliteFfiInit();
-      databaseFactory = databaseFactoryFfi;
+      databaseFactoryOrNull = databaseFactoryFfi;
     });
 
     test('should initialize', () async {
