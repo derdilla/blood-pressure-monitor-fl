@@ -25,10 +25,7 @@ import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 /// that should be available everywhere in the app.
 class App extends StatefulWidget {
   /// Create the base for the entire app.
-  const App({this.forceClearAppDataOnLaunch = false});
-
-  /// Permanently deletes all files the app uses during state initialization.
-  final bool forceClearAppDataOnLaunch;
+  const App();
 
   @override
   State<App> createState() => _AppState();
@@ -67,14 +64,11 @@ class _AppState extends State<App> {
 
   /// Load the primary app data asynchronously to allow load animations.
   Future<Widget> _loadApp() async {
-    WidgetsFlutterBinding.ensureInitialized();
     if (Platform.isLinux || Platform.isMacOS || Platform.isWindows) {
       databaseFactory = databaseFactoryFfi;
     }
 
-    if (_loadedChild != null && _configDB != null && _entryDB != null) return _loadedChild!;
-
-    if (widget.forceClearAppDataOnLaunch) {
+    if (!(const bool.fromEnvironment('testing_mode'))) {
       final dbPath = await getDatabasesPath();
       try {
         File(join(dbPath, 'bp.db')).deleteSync();
@@ -187,7 +181,10 @@ class _AppState extends State<App> {
 
   @override
   Widget build(BuildContext context) {
-    if (_loadedChild != null && _configDB != null && _entryDB != null) return _loadedChild!;
+    if (!(const bool.fromEnvironment('testing_mode'))
+        && _loadedChild != null && _configDB != null && _entryDB != null) {
+      return _loadedChild!;
+    }
     return ConsistentFutureBuilder(
       future: _loadApp(),
       onWaiting: const LoadingScreen(),
@@ -211,6 +208,7 @@ class _AppState extends State<App> {
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
       locale: settings.language,
+      debugShowCheckedModeBanner: false,
       home: const AppHome(),
     ),
   );

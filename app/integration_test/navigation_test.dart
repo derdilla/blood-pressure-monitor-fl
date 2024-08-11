@@ -25,7 +25,7 @@ void main() {
     final localizations = await AppLocalizations.delegate.load(const Locale('en'));
     const double settingsScrollAmount = 200.0;
 
-    await tester.pumpWidget(App(forceClearAppDataOnLaunch: true));
+    await tester.pumpWidget(App());
     await tester.pumpAndSettle();
     await tester.pumpUntil(() => find.byType(AppHome).hasFound);
     // home

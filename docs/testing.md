@@ -31,12 +31,13 @@ To run integration tests an android emulator needs to be running. During develop
 flutter drive \
   --driver=test_driver/integration_test.dart \
   --target=integration_test/<testName>.dart \
+  --dart-define=testing_mode=true \
   --browser-name android-chrome --android-emulator \
   --flavor github
 ```
 
 To ues the emulator `--browser-name android-chrome --android-emulator` is 
-required. `--flavor github` is needed for the driver to find the apk. All tests are run by the CI and can also be manually run before merge:
+required. `--flavor github` is needed for the driver to find the apk. `--dart-define=testing_mode=true` is needed to avoid some caching that messes with tests. 
 
 ```bash
 flutter test integration_test --flavor github
