@@ -16,7 +16,7 @@ void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
   testWidgets('Can enter value only measurements', (WidgetTester tester) async {
     final localizations = await AppLocalizations.delegate.load(const Locale('en'));
-    await tester.pumpWidget(App(forceClearAppDataOnLaunch: true));
+    await tester.pumpWidget(App());
     await tester.pumpAndSettle();
     await tester.pumpUntil(() => find.byType(AppHome).hasFound);
     expect(find.byType(AppHome), findsOneWidget);
@@ -57,7 +57,7 @@ void main() {
 
   testWidgets('Can enter complex measurements', (WidgetTester tester) async {
     final localizations = await AppLocalizations.delegate.load(const Locale('en'));
-    await tester.pumpWidget(App(forceClearAppDataOnLaunch: true,));
+    await tester.pumpWidget(App());
     await tester.pumpAndSettle();
     await tester.pumpUntil(() => find.byType(AppHome).hasFound);
     expect(find.byType(AppHome), findsOneWidget);
