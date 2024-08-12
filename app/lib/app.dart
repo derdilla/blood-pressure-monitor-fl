@@ -9,6 +9,7 @@ import 'package:blood_pressure_app/model/storage/storage.dart';
 import 'package:blood_pressure_app/screens/error_reporting_screen.dart';
 import 'package:blood_pressure_app/screens/home_screen.dart';
 import 'package:blood_pressure_app/screens/loading_screen.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -68,7 +69,7 @@ class _AppState extends State<App> {
       databaseFactory = databaseFactoryFfi;
     }
 
-    if (!(const bool.fromEnvironment('testing_mode'))) {
+    if (kDebugMode && (const bool.fromEnvironment('testing_mode'))) {
       final dbPath = await getDatabasesPath();
       try {
         File(join(dbPath, 'bp.db')).deleteSync();
@@ -181,7 +182,7 @@ class _AppState extends State<App> {
 
   @override
   Widget build(BuildContext context) {
-    if (!(const bool.fromEnvironment('testing_mode'))
+    if (!(kDebugMode && (const bool.fromEnvironment('testing_mode')))
         && _loadedChild != null && _configDB != null && _entryDB != null) {
       return _loadedChild!;
     }

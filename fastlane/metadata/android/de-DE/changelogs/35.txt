@@ -1,6 +1,0 @@
-* Messwerte können nun direkt über bluetooth von BLE GATT geräten übernommen werden
-* Behebe Fehler in der Sortierung der Statistik zur Verteilung
-* Implementiere neue Funktionen in der kompakten (alten) Messwertliste
-* Ungarische Übersetzung hinzugefügt
-* Übersetzungen aktualisieren (Türkisch, Portugiesisch, Spanisch, Italienisch, Chinesisch)
-* Internes Datenformat geändert

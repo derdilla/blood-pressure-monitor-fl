@@ -1,4 +1,0 @@
-* Fix compact measurement list loading
-* Stop crashing when converting invalid medicine intakes
-* Remove foreign db import (please convert using an extern tool)
-* Fix error while getting available medications

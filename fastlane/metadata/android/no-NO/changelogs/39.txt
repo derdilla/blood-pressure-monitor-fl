@@ -1,0 +1,3 @@
+* Del inn felt for dato og klokkeslett
+* Tillat medisininntak eksport og import
+* Unify input dialog tekststil

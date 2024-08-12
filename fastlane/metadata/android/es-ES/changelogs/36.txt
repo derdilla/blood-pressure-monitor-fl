@@ -1,4 +1,0 @@
-* Corrección de la carga de la lista de medidas compactas
-* Detener el bloqueo al convertir ingestas de medicamentos no válidos
-* Eliminar la importación de bases de datos externas (por favor, realice la conversión con una herramienta externa)
-* Corregir error al obtener medicamentos disponibles

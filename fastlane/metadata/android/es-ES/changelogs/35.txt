@@ -1,6 +1,0 @@
-* Permita la entrada vía los dispositivos BLE GATT del bluetooth
-* Fijar gráfico de distribución de valor de orden
-* Apoye las nuevas características en la lista de medición compacta (vieja)
-* Añadir localización húngara
-* Actualizar localizaciones (turco, portugués, español, italiano, chino)
-* Cambios internos en el formato de los datos
