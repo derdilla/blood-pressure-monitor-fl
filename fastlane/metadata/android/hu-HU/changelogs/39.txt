@@ -1,0 +1,3 @@
+* Dátum és idő mezők különválasztása
+* Gyógyszerbevitel exportálásának és importálásának engedélyezése
+* Bemeneti párbeszédablak szövegstílusának egységesítése

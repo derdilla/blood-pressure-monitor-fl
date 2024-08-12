@@ -1,4 +1,0 @@
-* Behebe laden kompakter messwertliste
-* Behebe seltenen fehler, wenn medizineinnahmen hinzugefügt und wider entfernt wurden
-* Entferne feature zum Importieren fremder Datenbanken (a jetzt selber umwandeln)
-* Behebe Fehler beim Abfragen von verfügbaren medikamenten

@@ -1,6 +1,0 @@
-* Allow input through bluetooth BLE GATT devices
-* Fix ordering value distribution graph
-* Support new features in compact(old) measurement list
-* Add hungarian localization
-* Update localizations (Turkish, Portuguese, Spanish, Italian, Chinese)
-* Internal changes to the data format
