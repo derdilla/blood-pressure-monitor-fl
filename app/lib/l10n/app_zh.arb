@@ -508,5 +508,11 @@
   "deleteAllNotes": "删除所有附注",
   "@deleteAllNotes": {},
   "compactList": "紧凑测量列表",
-  "@compactList": {}
+  "@compactList": {},
+  "date": "日期",
+  "@date": {},
+  "intakes": "服药",
+  "@intakes": {},
+  "errFeatureNotSupported": "这个功能在这个平台上不可用。",
+  "@errFeatureNotSupported": {}
 }

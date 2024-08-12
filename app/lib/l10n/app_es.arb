@@ -510,5 +510,11 @@
   "compactList": "Lista de mediciones compacta",
   "@compactList": {},
   "deleteAllNotes": "Borrar todas las notas",
-  "@deleteAllNotes": {}
+  "@deleteAllNotes": {},
+  "date": "Fecha",
+  "@date": {},
+  "intakes": "Toma de medicamentos",
+  "@intakes": {},
+  "errFeatureNotSupported": "Esta función no está disponible en esta plataforma.",
+  "@errFeatureNotSupported": {}
 }

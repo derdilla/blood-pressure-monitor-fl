@@ -510,5 +510,11 @@
   "compactList": "Sıkışık ölçüm listesi",
   "@compactList": {},
   "deleteAllNotes": "Tüm notları sil",
-  "@deleteAllNotes": {}
+  "@deleteAllNotes": {},
+  "date": "Tarih",
+  "@date": {},
+  "intakes": "İlaç alımları",
+  "@intakes": {},
+  "errFeatureNotSupported": "Bu özellik bu platformda kullanılamıyor.",
+  "@errFeatureNotSupported": {}
 }
