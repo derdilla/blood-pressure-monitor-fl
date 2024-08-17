@@ -1,5 +1,6 @@
 import 'dart:ui' as ui;
 
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:health_data_store/health_data_store.dart';
 import 'package:intl/intl.dart';
@@ -21,10 +22,6 @@ class Tmp extends StatelessWidget {
             width: 600,
             child: BloodPressureValueGraph(
               records: [],
-              range: DateTimeRange(
-                start: DateTime.now().subtract(Duration(days: 265*3)),
-                end: DateTime.now(),
-              ),
             ),
           ),
         ),
@@ -35,14 +32,12 @@ class Tmp extends StatelessWidget {
 
 
 class BloodPressureValueGraph extends StatelessWidget {
-  const BloodPressureValueGraph({super.key, required this.records, required this.range});
+  const BloodPressureValueGraph({super.key, required this.records});
 
   /// Data that make up graph lines.
   ///
   /// Data outside [range] will be ignored.
   final List<BloodPressureRecord> records;
-
-  final DateTimeRange range;
 
   @override
   Widget build(BuildContext context) => CustomPaint(
@@ -50,7 +45,6 @@ class BloodPressureValueGraph extends StatelessWidget {
         brightness: Brightness.dark,
         labelStyle: TextStyle(),
         records: records,
-        range: range,
       ),
     );
 }
@@ -60,20 +54,22 @@ class _ValueGraphPainter extends CustomPainter {
     required this.brightness,
     required this.labelStyle,
     required this.records,
-    required this.range,
   });
 
   final Brightness brightness;
 
   final TextStyle labelStyle;
 
+  /// Ordered list of all records to display.
+  ///
+  /// Must be at least 2 records long.
   final List<BloodPressureRecord> records;
-
-  final DateTimeRange range;
 
   void _paintDecorations(Canvas canvas, Size size, DateTimeRange range, double minY, double maxY) {
     const leftLegendWidth = 35.0;
     const bottomLegendHeight = 50.0;
+    assert(size.width > leftLegendWidth && size.height > bottomLegendHeight);
+
     final graphBorderLinesPaint = Paint()
       ..color = brightness == Brightness.dark ? Colors.white : Colors.black
       ..strokeCap = ui.StrokeCap.round;
@@ -81,8 +77,6 @@ class _ValueGraphPainter extends CustomPainter {
       ..color = brightness == Brightness.dark ? Colors.white60 : Colors.black45
       ..strokeCap = ui.StrokeCap.round
       ..strokeJoin = ui.StrokeJoin.round;
-
-    assert(size.width > leftLegendWidth && size.height > bottomLegendHeight);
 
     // draw border
     final bottomLeftOfGraph = Offset(leftLegendWidth, size.height - bottomLegendHeight);
@@ -110,12 +104,12 @@ class _ValueGraphPainter extends CustomPainter {
         Offset(leftLegendWidth - 5.0, h),
         graphBorderLinesPaint,
       );
-      final label = minY + ((maxY - minY) / leftLegendLabelCount) * i;
+      final labelY = minY + ((maxY - minY) / leftLegendLabelCount) * i;
       final paragraphBuilder = ui.ParagraphBuilder(labelStyle.getParagraphStyle(
-          textAlign: ui.TextAlign.end
+          textAlign: ui.TextAlign.end,
       ))
         ..pushStyle(labelStyle.getTextStyle())
-        ..addText(label.round().toString());
+        ..addText(labelY.round().toString());
       final paragraph = paragraphBuilder.build()
         ..layout(ui.ParagraphConstraints(width: leftLegendWidth - 6.0 - 2.0));
       canvas.drawParagraph(paragraph, ui.Offset(2.0, h - (leftLabelHeight / 2)));
@@ -182,7 +176,29 @@ class _ValueGraphPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    _paintDecorations(canvas, size, range, 40, 135);
+    assert(records.length >= 2);
+    assert(records.isSorted((a, b) => a.time.compareTo(b.time)));
+
+    final DateTimeRange range = DateTimeRange(
+      start: records.first.time,
+      end: records.last.time,
+    );
+
+    double min = double.infinity;
+    double max = double.negativeInfinity;
+    for (final r in records) {
+      if (r.sys?.kPa != null && r.sys!.kPa < min) { min = r.sys!.kPa; }
+      if (r.dia?.kPa != null && r.dia!.kPa < min) { min = r.dia!.kPa; }
+      if (r.pul != null && r.pul! < min) { min = r.pul!.toDouble(); }
+      if (r.sys?.kPa != null && r.sys!.kPa > max) { max = r.sys!.kPa; }
+      if (r.dia?.kPa != null && r.dia!.kPa > max) { max = r.dia!.kPa; }
+      if (r.pul != null && r.pul! > max) { max = r.pul!.toDouble(); }
+    }
+    assert(min != double.infinity);
+    assert(max != double.negativeInfinity);
+    // TODO: convert to preferred units
+
+    _paintDecorations(canvas, size, range, min, max);
     // TODO: implement paint
   }
 
