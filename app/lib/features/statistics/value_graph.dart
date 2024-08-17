@@ -21,7 +21,12 @@ class Tmp extends StatelessWidget {
             height: 250,
             width: 600,
             child: BloodPressureValueGraph(
-              records: [],
+              records: [
+                BloodPressureRecord(time: DateTime(2000), sys: Pressure.kPa(123)),
+                BloodPressureRecord(time: DateTime(2001), sys: Pressure.kPa(140)),
+                BloodPressureRecord(time: DateTime(2002), sys: Pressure.kPa(100)),
+                BloodPressureRecord(time: DateTime(2003), sys: Pressure.kPa(123)),
+              ],
             ),
           ),
         ),
@@ -30,13 +35,17 @@ class Tmp extends StatelessWidget {
   }
 }
 
-
+/// A graph of [BloodPressureRecord] values.
 class BloodPressureValueGraph extends StatelessWidget {
-  const BloodPressureValueGraph({super.key, required this.records});
+  /// Create a new graph of [BloodPressureRecord] values.
+  BloodPressureValueGraph({super.key,
+    required this.records,
+  }): assert(records.length >= 2),
+      assert(records.isSorted((a, b) => a.time.compareTo(b.time)));
 
-  /// Data that make up graph lines.
+  /// Data to draw lines and determine decorations from.
   ///
-  /// Data outside [range] will be ignored.
+  /// Must be more than two and sorted.
   final List<BloodPressureRecord> records;
 
   @override
@@ -65,10 +74,11 @@ class _ValueGraphPainter extends CustomPainter {
   /// Must be at least 2 records long.
   final List<BloodPressureRecord> records;
 
+  static const double _kLeftLegendWidth = 35.0;
+  static const double _kBottomLegendHeight = 50.0;
+
   void _paintDecorations(Canvas canvas, Size size, DateTimeRange range, double minY, double maxY) {
-    const leftLegendWidth = 35.0;
-    const bottomLegendHeight = 50.0;
-    assert(size.width > leftLegendWidth && size.height > bottomLegendHeight);
+    assert(size.width > _kLeftLegendWidth && size.height > _kBottomLegendHeight);
 
     final graphBorderLinesPaint = Paint()
       ..color = brightness == Brightness.dark ? Colors.white : Colors.black
@@ -79,29 +89,29 @@ class _ValueGraphPainter extends CustomPainter {
       ..strokeJoin = ui.StrokeJoin.round;
 
     // draw border
-    final bottomLeftOfGraph = Offset(leftLegendWidth, size.height - bottomLegendHeight);
-    canvas.drawLine(bottomLeftOfGraph, Offset(size.width, size.height - bottomLegendHeight), graphBorderLinesPaint);
-    canvas.drawLine(bottomLeftOfGraph, Offset(leftLegendWidth, 0.0), graphBorderLinesPaint);
+    final bottomLeftOfGraph = Offset(_kLeftLegendWidth, size.height - _kBottomLegendHeight);
+    canvas.drawLine(bottomLeftOfGraph, Offset(size.width, size.height - _kBottomLegendHeight), graphBorderLinesPaint);
+    canvas.drawLine(bottomLeftOfGraph, Offset(_kLeftLegendWidth, 0.0), graphBorderLinesPaint);
 
     final labelTextHeight = ((labelStyle.height ?? 1.0) * (labelStyle.fontSize ?? 14.0));
     (){
     // calculate horizontal decoration positions
-    final double drawHeight = size.height - bottomLegendHeight;
+    final double drawHeight = size.height - _kBottomLegendHeight;
 
     final leftLabelHeight = labelTextHeight + 4.0; // padding
     final leftLegendLabelCount = drawHeight / leftLabelHeight;
 
     // draw horizontal decorations
     for (int i = 0; i < leftLegendLabelCount; i += 2) {
-      final h = (size.height - bottomLegendHeight) - i * leftLabelHeight;
+      final h = (size.height - _kBottomLegendHeight) - i * leftLabelHeight;
       canvas.drawLine(
-        Offset(leftLegendWidth, h),
+        Offset(_kLeftLegendWidth, h),
         Offset(size.width, h),
         graphDecoLinesPaint,
       );
       canvas.drawLine(
-        Offset(leftLegendWidth, h),
-        Offset(leftLegendWidth - 5.0, h),
+        Offset(_kLeftLegendWidth, h),
+        Offset(_kLeftLegendWidth - 5.0, h),
         graphBorderLinesPaint,
       );
       final labelY = minY + ((maxY - minY) / leftLegendLabelCount) * i;
@@ -111,13 +121,13 @@ class _ValueGraphPainter extends CustomPainter {
         ..pushStyle(labelStyle.getTextStyle())
         ..addText(labelY.round().toString());
       final paragraph = paragraphBuilder.build()
-        ..layout(ui.ParagraphConstraints(width: leftLegendWidth - 6.0 - 2.0));
+        ..layout(ui.ParagraphConstraints(width: _kLeftLegendWidth - 6.0 - 2.0));
       canvas.drawParagraph(paragraph, ui.Offset(2.0, h - (leftLabelHeight / 2)));
     }
     }();
 
     // calculate vertical decoration positions
-    final double drawWidth = size.width - leftLegendWidth;
+    final double drawWidth = size.width - _kLeftLegendWidth;
     final bottomLabelHeight = labelTextHeight + 4.0;
     int bottomLabelCount = 20;
     Duration? stepDuration;
@@ -158,10 +168,10 @@ class _ValueGraphPainter extends CustomPainter {
 
     // draw vertical decorations
     for (int i = 0; i < bottomLabelCount; i += 2) {
-      final x = leftLegendWidth + i * (drawWidth / bottomLabelCount);
+      final x = _kLeftLegendWidth + i * (drawWidth / bottomLabelCount);
       canvas.drawLine(
         Offset(x, 0),
-        Offset(x, size.height - bottomLegendHeight + 4.0),
+        Offset(x, size.height - _kBottomLegendHeight + 4.0),
         graphDecoLinesPaint,
       );
       final paragraphBuilder = ui.ParagraphBuilder(labelStyle.getParagraphStyle(
@@ -170,7 +180,46 @@ class _ValueGraphPainter extends CustomPainter {
         ..addText(format.format(range.start.add(stepDuration! * i)));
       final paragraph = paragraphBuilder.build()
         ..layout(ui.ParagraphConstraints(width: drawWidth / bottomLabelCount + 8.0));
-      canvas.drawParagraph(paragraph, ui.Offset(x - ((drawWidth / bottomLabelCount + 8.0) / 2), size.height - bottomLegendHeight + (bottomLabelHeight / 2)));
+      canvas.drawParagraph(paragraph, ui.Offset(x - ((drawWidth / bottomLabelCount + 8.0) / 2), size.height - _kBottomLegendHeight + (bottomLabelHeight / 2)));
+    }
+  }
+
+  void _paintLine(
+    Canvas canvas,
+    Size size,
+    Iterable<(DateTime, double)> data,
+    Color color,
+    DateTimeRange range,
+    double minY,
+    double maxY,
+  ) {
+    final paint = Paint()
+      ..color = color
+      ..strokeWidth = 2.0
+      ..strokeCap = ui.StrokeCap.round
+      ..strokeJoin = ui.StrokeJoin.round;
+
+    ui.Offset transformPoint((DateTime, double) p) {
+      final width = size.width - _kLeftLegendWidth;
+      final double factorX = width / range.duration.inMilliseconds;
+      final x = _kLeftLegendWidth + (p.$1.millisecondsSinceEpoch - range.start.millisecondsSinceEpoch) * factorX;
+      
+      final height = size.height - _kBottomLegendHeight;
+      final double factorY = height / (maxY - minY);
+      final yBottom = _kBottomLegendHeight + (p.$2 - minY) * factorY;
+      final y = size.height - yBottom;
+
+      return ui.Offset(x, y);
+    }
+
+    ui.Offset? lastPoint;
+    for (final e in data) {
+      final point = transformPoint(e);
+      if (lastPoint != null) {
+        canvas.drawLine(lastPoint, point, paint);
+      }
+
+      lastPoint = point;
     }
   }
 
@@ -199,7 +248,9 @@ class _ValueGraphPainter extends CustomPainter {
     // TODO: convert to preferred units
 
     _paintDecorations(canvas, size, range, min, max);
-    // TODO: implement paint
+    _paintLine(canvas, size, records.sysGraph(), Colors.blue, range, min, max);
+    _paintLine(canvas, size, records.diaGraph(), Colors.green, range, min, max);
+    _paintLine(canvas, size, records.pulGraph(), Colors.red, range, min, max);
   }
 
   @override
@@ -208,4 +259,23 @@ class _ValueGraphPainter extends CustomPainter {
     return true;
   }
 
+}
+
+/// Create graph data from a list of blood pressure records.
+extension GraphData on List<BloodPressureRecord> {
+  /// Get the timestamps and kPa values of all non-null sys values.
+  Iterable<(DateTime, double)> sysGraph() => this
+    .map((r) => (r.time, r.sys?.kPa))
+    .whereNot(((DateTime, double?) e) => e.$2 == null)
+    .cast<(DateTime, double)>();
+  /// Get the timestamps and kPa values of all non-null dia values.
+  Iterable<(DateTime, double)> diaGraph() => this
+      .map((r) => (r.time, r.dia?.kPa))
+      .whereNot(((DateTime, double?) e) => e.$2 == null)
+      .cast<(DateTime, double)>();
+  /// Get the timestamps and values as doubles of all non-null pul values.
+  Iterable<(DateTime, double)> pulGraph() => this
+      .map((r) => (r.time, r.pul?.toDouble()))
+      .whereNot(((DateTime, double?) e) => e.$2 == null)
+      .cast<(DateTime, double)>();
 }
