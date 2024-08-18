@@ -1,5 +1,6 @@
 import 'dart:ui' as ui;
 
+import 'package:blood_pressure_app/model/storage/storage.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:health_data_store/health_data_store.dart';
@@ -11,34 +12,35 @@ class Tmp extends StatelessWidget {
   const Tmp({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      theme: ThemeData.dark(),
-      home: Scaffold(
-        appBar: AppBar(),
-        body: ClipRect(
-          child: SizedBox(
-            height: 250,
-            width: 600,
-            child: BloodPressureValueGraph(
-              records: [
-                BloodPressureRecord(time: DateTime(2000), sys: Pressure.kPa(123)),
-                BloodPressureRecord(time: DateTime(2001), sys: Pressure.kPa(140)),
-                BloodPressureRecord(time: DateTime(2002), sys: Pressure.kPa(100)),
-                BloodPressureRecord(time: DateTime(2003), sys: Pressure.kPa(123)),
-              ],
+  Widget build(BuildContext context) => MaterialApp(
+    theme: ThemeData.dark(),
+    home: Scaffold(
+      appBar: AppBar(),
+      body: ClipRect(
+        child: SizedBox(
+          height: 256,
+          width: 1000,
+          child: BloodPressureValueGraph(
+            settings: Settings(
             ),
+            records: [
+              BloodPressureRecord(time: DateTime(2000), sys: Pressure.kPa(123)),
+              BloodPressureRecord(time: DateTime(2001), sys: Pressure.kPa(140)),
+              BloodPressureRecord(time: DateTime(2002), sys: Pressure.kPa(100)),
+              BloodPressureRecord(time: DateTime(2003), sys: Pressure.kPa(123)),
+            ],
           ),
         ),
       ),
-    );
-  }
+    ),
+  );
 }
 
 /// A graph of [BloodPressureRecord] values.
 class BloodPressureValueGraph extends StatelessWidget {
   /// Create a new graph of [BloodPressureRecord] values.
   BloodPressureValueGraph({super.key,
+    required this.settings,
     required this.records,
   }): assert(records.length >= 2),
       assert(records.isSorted((a, b) => a.time.compareTo(b.time)));
@@ -48,24 +50,34 @@ class BloodPressureValueGraph extends StatelessWidget {
   /// Must be more than two and sorted.
   final List<BloodPressureRecord> records;
 
+  /// Settings to determine style and behavior.
+  final Settings settings;
+
   @override
-  Widget build(BuildContext context) => CustomPaint(
+  Widget build(BuildContext context) => Padding(
+    padding: const EdgeInsets.only(top: 4.0),
+    child: CustomPaint(
       painter: _ValueGraphPainter(
-        brightness: Brightness.dark,
-        labelStyle: TextStyle(),
+        brightness: Theme.of(context).brightness,
+        settings: settings,
+        labelStyle: Theme.of(context).textTheme.bodySmall ?? TextStyle(),
         records: records,
       ),
-    );
+    ),
+  );
 }
 
 class _ValueGraphPainter extends CustomPainter {
   _ValueGraphPainter({super.repaint,
     required this.brightness,
+    required this.settings,
     required this.labelStyle,
     required this.records,
   });
 
-  final Brightness brightness;
+  final Settings settings;
+
+  final ui.Brightness brightness;
 
   final TextStyle labelStyle;
 
@@ -195,7 +207,7 @@ class _ValueGraphPainter extends CustomPainter {
   ) {
     final paint = Paint()
       ..color = color
-      ..strokeWidth = 2.0
+      ..strokeWidth = settings.graphLineThickness
       ..strokeCap = ui.StrokeCap.round
       ..strokeJoin = ui.StrokeJoin.round;
 
@@ -248,9 +260,9 @@ class _ValueGraphPainter extends CustomPainter {
     // TODO: convert to preferred units
 
     _paintDecorations(canvas, size, range, min, max);
-    _paintLine(canvas, size, records.sysGraph(), Colors.blue, range, min, max);
-    _paintLine(canvas, size, records.diaGraph(), Colors.green, range, min, max);
-    _paintLine(canvas, size, records.pulGraph(), Colors.red, range, min, max);
+    _paintLine(canvas, size, records.sysGraph(), settings.sysColor, range, min, max);
+    _paintLine(canvas, size, records.diaGraph(), settings.diaColor, range, min, max);
+    _paintLine(canvas, size, records.pulGraph(), settings.pulColor, range, min, max);
   }
 
   @override
