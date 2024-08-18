@@ -1,5 +1,6 @@
 import 'dart:ui' as ui;
 
+import 'package:blood_pressure_app/model/blood_pressure/pressure_unit.dart';
 import 'package:blood_pressure_app/model/storage/storage.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
@@ -24,10 +25,10 @@ class Tmp extends StatelessWidget {
             settings: Settings(
             ),
             records: [
-              BloodPressureRecord(time: DateTime(2000), sys: Pressure.kPa(123)),
-              BloodPressureRecord(time: DateTime(2001), sys: Pressure.kPa(140)),
-              BloodPressureRecord(time: DateTime(2002), sys: Pressure.kPa(100)),
-              BloodPressureRecord(time: DateTime(2003), sys: Pressure.kPa(123)),
+              BloodPressureRecord(time: DateTime(2000), sys: Pressure.mmHg(123)),
+              BloodPressureRecord(time: DateTime(2001), sys: Pressure.mmHg(140)),
+              BloodPressureRecord(time: DateTime(2002), sys: Pressure.mmHg(100)),
+              BloodPressureRecord(time: DateTime(2003), sys: Pressure.mmHg(123)),
             ],
           ),
         ),
@@ -131,7 +132,9 @@ class _ValueGraphPainter extends CustomPainter {
           textAlign: ui.TextAlign.end,
       ))
         ..pushStyle(labelStyle.getTextStyle())
-        ..addText(labelY.round().toString());
+        ..addText(settings.preferredPressureUnit == PressureUnit.kPa
+          ? labelY.round().toString()
+          : Pressure.kPa(labelY).mmHg.toString());
       final paragraph = paragraphBuilder.build()
         ..layout(ui.ParagraphConstraints(width: _kLeftLegendWidth - 6.0 - 2.0));
       canvas.drawParagraph(paragraph, ui.Offset(2.0, h - (leftLabelHeight / 2)));
@@ -257,7 +260,6 @@ class _ValueGraphPainter extends CustomPainter {
     }
     assert(min != double.infinity);
     assert(max != double.negativeInfinity);
-    // TODO: convert to preferred units
 
     _paintDecorations(canvas, size, range, min, max);
     _paintLine(canvas, size, records.sysGraph(), settings.sysColor, range, min, max);
