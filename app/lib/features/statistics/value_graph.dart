@@ -268,10 +268,16 @@ class _ValueGraphPainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) {
-    // TODO: implement shouldRepaint
-    return true;
-  }
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => oldDelegate is! _ValueGraphPainter
+    || oldDelegate.brightness != brightness
+    || oldDelegate.settings.preferredPressureUnit != settings.preferredPressureUnit
+    || oldDelegate.settings.sysColor != settings.sysColor
+    || oldDelegate.settings.diaColor != settings.diaColor
+    || oldDelegate.settings.graphLineThickness != settings.graphLineThickness
+    || oldDelegate.settings.pulColor != settings.pulColor
+    || oldDelegate.settings.sysWarn != settings.sysWarn
+    || oldDelegate.settings.diaWarn != settings.diaWarn
+    || oldDelegate.records != records;
 
 }
 
