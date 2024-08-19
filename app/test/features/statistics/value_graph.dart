@@ -1,4 +1,5 @@
 import 'package:blood_pressure_app/features/statistics/value_graph.dart';
+import 'package:blood_pressure_app/model/storage/storage.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -61,7 +62,7 @@ void main() {
   });
   testWidgets('BloodPressureValueGraph throws assertion error without enough values', (tester) async {
     await expectLater(
-      () => tester.pumpWidget(BloodPressureValueGraph(records: [])),
+      () => tester.pumpWidget(BloodPressureValueGraph(records: [], settings: Settings(),)),
       throwsAssertionError,
     );
   });
@@ -71,7 +72,7 @@ void main() {
         mockRecord(time: DateTime(2005), sys: 1),
         mockRecord(time: DateTime(2003), sys: 1),
         mockRecord(time: DateTime(2007), sys: 1),
-      ])),
+      ], settings: Settings())),
       throwsAssertionError,
     );
   });
@@ -81,7 +82,7 @@ void main() {
         mockRecord(time: DateTime(2003), sys: 1),
         mockRecord(time: DateTime(2005), sys: 1),
         mockRecord(time: DateTime(2007), sys: 1),
-      ])),
+      ], settings: Settings())),
       returnsNormally,
     );
   });

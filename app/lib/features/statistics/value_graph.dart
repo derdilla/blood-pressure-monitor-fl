@@ -1,7 +1,7 @@
-import 'dart:math';
+import 'dart:math' as math;
 import 'dart:ui' as ui;
 
-import 'package:blood_pressure_app/model/blood_pressure/pressure_unit.dart';
+import 'package:blood_pressure_app/model/horizontal_graph_line.dart';
 import 'package:blood_pressure_app/model/storage/storage.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
@@ -24,13 +24,20 @@ class Tmp extends StatelessWidget {
           width: 1000,
           child: BloodPressureValueGraph(
             settings: Settings(
+              drawRegressionLines: true,
+              horizontalGraphLines: [
+                HorizontalGraphLine(Colors.blue, 117),
+                HorizontalGraphLine(Colors.red, 12)
+              ],
             ),
             records: [
-              BloodPressureRecord(time: DateTime(2000), sys: Pressure.mmHg(123), dia: Pressure.mmHg(80)),
-              BloodPressureRecord(time: DateTime(2001), sys: Pressure.mmHg(140)),
+              BloodPressureRecord(time: DateTime(2000), sys: Pressure.mmHg(123), dia: Pressure.mmHg(80) , pul: 40),
+              BloodPressureRecord(time: DateTime(2001), sys: Pressure.mmHg(140), pul: 77),
               BloodPressureRecord(time: DateTime(2001, 6), dia: Pressure.mmHg(111)),
               BloodPressureRecord(time: DateTime(2002), sys: Pressure.mmHg(100)),
+              BloodPressureRecord(time: DateTime(2002, 2), pul: 60,),
               BloodPressureRecord(time: DateTime(2003), sys: Pressure.mmHg(123), dia: Pressure.mmHg(93)),
+              BloodPressureRecord(time: DateTime(2003, 2), pul: 140,),
             ],
           ),
         ),
@@ -40,13 +47,24 @@ class Tmp extends StatelessWidget {
 }
 
 /// A graph of [BloodPressureRecord] values.
+///
+/// Note that this can't follow the users preferred unit as this would not allow
+/// to put all data on one graph
 class BloodPressureValueGraph extends StatelessWidget {
   /// Create a new graph of [BloodPressureRecord] values.
   BloodPressureValueGraph({super.key,
     required this.settings,
     required this.records,
-  }): assert(records.length >= 2),
+  }): assert(records.sysGraph().length >= 2
+        || records.diaGraph().length >= 2
+        || records.pulGraph().length >= 2),
       assert(records.isSorted((a, b) => a.time.compareTo(b.time)));
+
+  // TODO Add missing:
+  // - belowBarData
+  // - _buildNeedlePins
+  // New features:
+  // - load lines animation
 
   /// Data to draw lines and determine decorations from.
   ///
@@ -71,7 +89,7 @@ class BloodPressureValueGraph extends StatelessWidget {
 }
 
 class _ValueGraphPainter extends CustomPainter {
-  _ValueGraphPainter({super.repaint,
+  _ValueGraphPainter({
     required this.brightness,
     required this.settings,
     required this.labelStyle,
@@ -134,9 +152,7 @@ class _ValueGraphPainter extends CustomPainter {
           textAlign: ui.TextAlign.end,
       ))
         ..pushStyle(labelStyle.getTextStyle())
-        ..addText(settings.preferredPressureUnit == PressureUnit.kPa
-          ? labelY.round().toString()
-          : Pressure.kPa(labelY).mmHg.toString());
+        ..addText(labelY.round().toString());
       final paragraph = paragraphBuilder.build()
         ..layout(ui.ParagraphConstraints(width: _kLeftLegendWidth - 6.0 - 2.0));
       canvas.drawParagraph(paragraph, ui.Offset(2.0, h - (leftLabelHeight / 2)));
@@ -151,7 +167,6 @@ class _ValueGraphPainter extends CustomPainter {
     late DateFormat format;
     while (stepDuration == null && bottomLabelCount > 4) {
       final duration = range.duration ~/ bottomLabelCount;
-      print(duration);
       format = (){
         switch (duration) {
           case < const Duration(hours: 8):
@@ -264,8 +279,8 @@ class _ValueGraphPainter extends CustomPainter {
     final yIntercept = meanY - slope * meanX;
 
     // Convert data points to canvas coordinates
-    final minX = xValues.reduce(min);
-    final maxX = xValues.reduce(max);
+    final minX = xValues.reduce(math.min);
+    final maxX = xValues.reduce(math.max);
 
     // Scale x and y coordinates to the canvas
     final scaleY = (size.height - _kBottomLegendHeight) / (maxY - minY);
@@ -286,6 +301,37 @@ class _ValueGraphPainter extends CustomPainter {
     canvas.drawLine(start, end, paint);
   }
 
+  void _paintHorizontalLines(Canvas canvas, Size size, List<HorizontalGraphLine> lines, double minY, double maxY) {
+    final height = size.height - _kBottomLegendHeight;
+    final double factorY = height / (maxY - minY);
+    for (final line in lines) {
+      double y = _kBottomLegendHeight + (line.height - minY) * factorY;
+      y = size.height - y;
+      final path = Path();
+      double x = _kLeftLegendWidth;
+      bool drawNext = true;
+      while (x < size.width) { // Dotted
+        if (drawNext) {
+          final newX = x + 10;
+          path.moveTo(x, y);
+          path.lineTo(newX, y);
+          x = newX;
+          drawNext = false;
+        } else {
+          x += 5;
+          drawNext = true;
+        }
+      }
+      canvas.drawPath(
+        path,
+        ui.Paint()
+          ..style = ui.PaintingStyle.stroke
+          ..strokeWidth = 2
+          ..color = line.color,
+      );
+    }
+  }
+
   @override
   void paint(Canvas canvas, Size size) {
     assert(records.length >= 2);
@@ -299,12 +345,16 @@ class _ValueGraphPainter extends CustomPainter {
     double min = double.infinity;
     double max = double.negativeInfinity;
     for (final r in records) {
-      if (r.sys?.kPa != null && r.sys!.kPa < min) { min = r.sys!.kPa; }
-      if (r.dia?.kPa != null && r.dia!.kPa < min) { min = r.dia!.kPa; }
+      if (r.sys != null && r.sys!.mmHg < min) { min = r.sys!.mmHg.toDouble(); }
+      if (r.dia != null && r.dia!.mmHg < min) { min = r.dia!.mmHg.toDouble(); }
       if (r.pul != null && r.pul! < min) { min = r.pul!.toDouble(); }
-      if (r.sys?.kPa != null && r.sys!.kPa > max) { max = r.sys!.kPa; }
-      if (r.dia?.kPa != null && r.dia!.kPa > max) { max = r.dia!.kPa; }
+      if (r.sys != null && r.sys!.mmHg > max) { max = r.sys!.mmHg.toDouble(); }
+      if (r.dia != null && r.dia!.mmHg > max) { max = r.dia!.mmHg.toDouble(); }
       if (r.pul != null && r.pul! > max) { max = r.pul!.toDouble(); }
+    }
+    for (final l in settings.horizontalGraphLines) {
+      max = math.max(l.height.toDouble(), max);
+      min = math.min(l.height.toDouble(), min);
     }
     assert(min != double.infinity);
     assert(max != double.negativeInfinity);
@@ -318,6 +368,8 @@ class _ValueGraphPainter extends CustomPainter {
       _paintRegressionLine(canvas, size, records.sysGraph().toList(), min, max);
       _paintRegressionLine(canvas, size, records.diaGraph().toList(), min, max);
     }
+
+    _paintHorizontalLines(canvas, size, settings.horizontalGraphLines, min, max);
   }
 
   @override
@@ -337,14 +389,14 @@ class _ValueGraphPainter extends CustomPainter {
 
 /// Create graph data from a list of blood pressure records.
 extension GraphData on List<BloodPressureRecord> {
-  /// Get the timestamps and kPa values of all non-null sys values.
+  /// Get the timestamps and mmHg values of all non-null sys values.
   Iterable<(DateTime, double)> sysGraph() => this
-    .map((r) => (r.time, r.sys?.kPa))
+    .map((r) => (r.time, r.sys?.mmHg.toDouble()))
     .whereNot(((DateTime, double?) e) => e.$2 == null)
     .cast<(DateTime, double)>();
-  /// Get the timestamps and kPa values of all non-null dia values.
+  /// Get the timestamps and mmHg values of all non-null dia values.
   Iterable<(DateTime, double)> diaGraph() => this
-    .map((r) => (r.time, r.dia?.kPa))
+    .map((r) => (r.time, r.dia?.mmHg.toDouble()))
     .whereNot(((DateTime, double?) e) => e.$2 == null)
     .cast<(DateTime, double)>();
   /// Get the timestamps and values as doubles of all non-null pul values.
@@ -353,12 +405,3 @@ extension GraphData on List<BloodPressureRecord> {
     .whereNot(((DateTime, double?) e) => e.$2 == null)
     .cast<(DateTime, double)>();
 }
-
-/*/// Collection of methods implementing mathematical Functions for lists.
-extension Math on Iterable<num> {
-  /// Calculates the sum of all numbers in the list.
-  double sum() => fold<double>(0.0, (prev, e) => prev + e.toDouble());
-
-  /// Calculate the sum of all numbers divided by the amount of numbers.
-  double mean() => sum() / length;
-}*/
