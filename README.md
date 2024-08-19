@@ -54,7 +54,15 @@ As there is no demand Windows, Linux and MacOS builds have been stopped. In case
 
 ## Contributing
 
-Contributions to this project are greatly appreciated and can come in many forms. Please note that when contributing you agree that your work is under the same license as the project.
+This repository has become quite large, so contributions are greatly appreciated and can come in many forms.
+
+<div align="center">
+<img src="https://tokei.rs/b1/github/NobodyForNothing/blood-pressure-monitor-fl?style=flat-square">
+<img src="https://tokei.rs/b1/github/NobodyForNothing/blood-pressure-monitor-fl?category=code&style=flat-square">
+<img src="https://tokei.rs/b1/github/NobodyForNothing/blood-pressure-monitor-fl?category=comments&style=flat-square">
+</div>
+
+*Please note that when contributing you agree that your work is under the same license as the project.*
 
 ### Opening bugs and proposing features
 
