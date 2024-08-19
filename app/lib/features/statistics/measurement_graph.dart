@@ -219,7 +219,7 @@ class _LineChartState extends State<_LineChart> {
 
   // Real world use is limited
   LineChartBarData _buildRegressionLine(List<FlSpot> data) {
-    final d = data.length * (data.sum((e) => pow(e.x, 2))) - pow(data.sum((e) => e.x), 2);
+    final d = data.length * data.sum((e) => pow(e.x, 2)) - pow(data.sum((e) => e.x), 2);
     final gradient = (1/d) * (data.length * data.sum((e) => e.x * e.y) - data.sum((e) => e.x) * data.sum((e) => e.y));
     final yIntercept = (1/d) * (data.sum((e) => pow(e.x,2)) * data.sum((e) => e.y) -
                                 data.sum((e) => (e.x * e.y)) * data.sum((e) => e.x));
@@ -227,7 +227,6 @@ class _LineChartState extends State<_LineChart> {
     double y(x) => x * gradient + yIntercept;
     final start = data.map<double>((e) => e.x).min;
     final end = data.map<double>((e) => e.x).max;
-
     return LineChartBarData(
       color: Colors.grey,
       spots: [
