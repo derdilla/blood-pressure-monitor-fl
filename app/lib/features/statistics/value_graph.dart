@@ -39,6 +39,10 @@ class Tmp extends StatelessWidget {
               BloodPressureRecord(time: DateTime(2003), sys: Pressure.mmHg(123), dia: Pressure.mmHg(93)),
               BloodPressureRecord(time: DateTime(2003, 2), pul: 140,),
             ],
+            colors: [
+              Note(time: DateTime(2000), note: 'no color'),
+              Note(time: DateTime(2001), color: Colors.teal.value),
+            ]
           ),
         ),
       ),
@@ -55,14 +59,14 @@ class BloodPressureValueGraph extends StatelessWidget {
   BloodPressureValueGraph({super.key,
     required this.settings,
     required this.records,
+    required this.colors,
   }): assert(records.sysGraph().length >= 2
         || records.diaGraph().length >= 2
         || records.pulGraph().length >= 2),
       assert(records.isSorted((a, b) => a.time.compareTo(b.time)));
 
   // TODO Add missing:
-  // - belowBarData
-  // - _buildNeedlePins
+  // - belowBarData (warn values)
   // New features:
   // - load lines animation
 
@@ -70,6 +74,9 @@ class BloodPressureValueGraph extends StatelessWidget {
   ///
   /// Must be more than two and sorted.
   final List<BloodPressureRecord> records;
+
+  /// Notes that should render as colored lines if present.
+  final List<Note> colors;
 
   /// Settings to determine style and behavior.
   final Settings settings;
@@ -83,6 +90,7 @@ class BloodPressureValueGraph extends StatelessWidget {
         settings: settings,
         labelStyle: Theme.of(context).textTheme.bodySmall ?? TextStyle(),
         records: records,
+        colors: colors,
       ),
     ),
   );
@@ -94,6 +102,7 @@ class _ValueGraphPainter extends CustomPainter {
     required this.settings,
     required this.labelStyle,
     required this.records,
+    required this.colors,
   });
 
   final Settings settings;
@@ -106,6 +115,8 @@ class _ValueGraphPainter extends CustomPainter {
   ///
   /// Must be at least 2 records long.
   final List<BloodPressureRecord> records;
+
+  final List<Note> colors;
 
   static const double _kLeftLegendWidth = 35.0;
   static const double _kBottomLegendHeight = 50.0;
@@ -332,6 +343,23 @@ class _ValueGraphPainter extends CustomPainter {
     }
   }
 
+  void _buildNeedlePins(Canvas canvas, Size size, List<Note> colors, DateTimeRange range, double minY, double maxY) {
+    for (final color in colors.where((n) => n.color != null)) {
+      // TODO: stop duplicating transform code across functions
+      final width = size.width - _kLeftLegendWidth;
+      final double factorX = width / range.duration.inMilliseconds;
+      final x = _kLeftLegendWidth + (color.time.millisecondsSinceEpoch - range.start.millisecondsSinceEpoch) * factorX;
+
+      canvas.drawLine(
+          ui.Offset(x, 0),
+          ui.Offset(x, size.height - _kBottomLegendHeight),
+          ui.Paint()
+            ..strokeWidth = settings.needlePinBarWidth
+            ..color = Color(color.color!).withOpacity(0.4),
+      );
+    }
+  }
+
   @override
   void paint(Canvas canvas, Size size) {
     assert(records.length >= 2);
@@ -360,6 +388,9 @@ class _ValueGraphPainter extends CustomPainter {
     assert(max != double.negativeInfinity);
 
     _paintDecorations(canvas, size, range, min, max);
+
+    _buildNeedlePins(canvas, size, colors, range, min, max);
+
     _paintLine(canvas, size, records.sysGraph(), settings.sysColor, range, min, max);
     _paintLine(canvas, size, records.diaGraph(), settings.diaColor, range, min, max);
     _paintLine(canvas, size, records.pulGraph(), settings.pulColor, range, min, max);
@@ -383,7 +414,9 @@ class _ValueGraphPainter extends CustomPainter {
     || oldDelegate.settings.sysWarn != settings.sysWarn
     || oldDelegate.settings.diaWarn != settings.diaWarn
     || oldDelegate.settings.drawRegressionLines != settings.drawRegressionLines
-    || oldDelegate.records != records;
+    || oldDelegate.settings.needlePinBarWidth != settings.needlePinBarWidth
+    || oldDelegate.records != records
+    || oldDelegate.colors != colors;
 
 }
 
