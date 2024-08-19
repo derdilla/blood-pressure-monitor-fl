@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'dart:ui' as ui;
 
 import 'package:blood_pressure_app/model/blood_pressure/pressure_unit.dart';
@@ -25,10 +26,11 @@ class Tmp extends StatelessWidget {
             settings: Settings(
             ),
             records: [
-              BloodPressureRecord(time: DateTime(2000), sys: Pressure.mmHg(123)),
+              BloodPressureRecord(time: DateTime(2000), sys: Pressure.mmHg(123), dia: Pressure.mmHg(80)),
               BloodPressureRecord(time: DateTime(2001), sys: Pressure.mmHg(140)),
+              BloodPressureRecord(time: DateTime(2001, 6), dia: Pressure.mmHg(111)),
               BloodPressureRecord(time: DateTime(2002), sys: Pressure.mmHg(100)),
-              BloodPressureRecord(time: DateTime(2003), sys: Pressure.mmHg(123)),
+              BloodPressureRecord(time: DateTime(2003), sys: Pressure.mmHg(123), dia: Pressure.mmHg(93)),
             ],
           ),
         ),
@@ -238,6 +240,52 @@ class _ValueGraphPainter extends CustomPainter {
     }
   }
 
+  // https://www.ncl.ac.uk/webtemplate/ask-assets/external/maths-resources/statistics/regression-and-correlation/simple-linear-regression.html
+  void _paintRegressionLine(Canvas canvas, Size size, List<(DateTime, double)> data, double minY, double maxY) {
+    final List<double> xValues = data.map((e) => e.$1.millisecondsSinceEpoch.toDouble()).toList();
+    final List<double> yValues = data.map((e) => e.$2).toList();
+
+    final double meanX = xValues.sum / data.length;
+    final double meanY = yValues.sum / data.length;
+
+    // Calculate slope
+    final slopeTop = data.fold(0.0, (double last, (DateTime, double) e) {
+      final xErr = e.$1.millisecondsSinceEpoch - meanX;
+      final yErr = e.$2 - meanY;
+      return last + xErr * yErr;
+    });
+    final slopeBtm = data.fold(0.0, (double last, (DateTime, double) e) {
+      final xErr = e.$1.millisecondsSinceEpoch - meanX;
+      return last + xErr * xErr;
+    });
+    final slope = slopeTop / slopeBtm;
+
+    // Calculate where the function intercepts the Y axis
+    final yIntercept = meanY - slope * meanX;
+
+    // Convert data points to canvas coordinates
+    final minX = xValues.reduce(min);
+    final maxX = xValues.reduce(max);
+
+    // Scale x and y coordinates to the canvas
+    final scaleY = (size.height - _kBottomLegendHeight) / (maxY - minY);
+
+    // Draw the regression line from the first point to the last point
+    final start = ui.Offset(
+      _kLeftLegendWidth,
+      size.height - _kBottomLegendHeight - ((slope * minX + yIntercept - minY) * scaleY),
+    );
+    final end = ui.Offset(
+      size.width,
+      size.height - _kBottomLegendHeight - ((slope * maxX + yIntercept - minY) * scaleY),
+    );
+
+    final paint = Paint()
+      ..color = Colors.grey
+      ..strokeWidth = 3.0;
+    canvas.drawLine(start, end, paint);
+  }
+
   @override
   void paint(Canvas canvas, Size size) {
     assert(records.length >= 2);
@@ -265,6 +313,11 @@ class _ValueGraphPainter extends CustomPainter {
     _paintLine(canvas, size, records.sysGraph(), settings.sysColor, range, min, max);
     _paintLine(canvas, size, records.diaGraph(), settings.diaColor, range, min, max);
     _paintLine(canvas, size, records.pulGraph(), settings.pulColor, range, min, max);
+
+    if (settings.drawRegressionLines) {
+      _paintRegressionLine(canvas, size, records.sysGraph().toList(), min, max);
+      _paintRegressionLine(canvas, size, records.diaGraph().toList(), min, max);
+    }
   }
 
   @override
@@ -277,6 +330,7 @@ class _ValueGraphPainter extends CustomPainter {
     || oldDelegate.settings.pulColor != settings.pulColor
     || oldDelegate.settings.sysWarn != settings.sysWarn
     || oldDelegate.settings.diaWarn != settings.diaWarn
+    || oldDelegate.settings.drawRegressionLines != settings.drawRegressionLines
     || oldDelegate.records != records;
 
 }
@@ -290,12 +344,21 @@ extension GraphData on List<BloodPressureRecord> {
     .cast<(DateTime, double)>();
   /// Get the timestamps and kPa values of all non-null dia values.
   Iterable<(DateTime, double)> diaGraph() => this
-      .map((r) => (r.time, r.dia?.kPa))
-      .whereNot(((DateTime, double?) e) => e.$2 == null)
-      .cast<(DateTime, double)>();
+    .map((r) => (r.time, r.dia?.kPa))
+    .whereNot(((DateTime, double?) e) => e.$2 == null)
+    .cast<(DateTime, double)>();
   /// Get the timestamps and values as doubles of all non-null pul values.
   Iterable<(DateTime, double)> pulGraph() => this
-      .map((r) => (r.time, r.pul?.toDouble()))
-      .whereNot(((DateTime, double?) e) => e.$2 == null)
-      .cast<(DateTime, double)>();
+    .map((r) => (r.time, r.pul?.toDouble()))
+    .whereNot(((DateTime, double?) e) => e.$2 == null)
+    .cast<(DateTime, double)>();
 }
+
+/*/// Collection of methods implementing mathematical Functions for lists.
+extension Math on Iterable<num> {
+  /// Calculates the sum of all numbers in the list.
+  double sum() => fold<double>(0.0, (prev, e) => prev + e.toDouble());
+
+  /// Calculate the sum of all numbers divided by the amount of numbers.
+  double mean() => sum() / length;
+}*/
