@@ -24,6 +24,7 @@ class _LineChart extends StatefulWidget {
 }
 
 class _LineChartState extends State<_LineChart> {
+  // 🟢
   @override
   Widget build(BuildContext context) => SizedBox(
     height: widget.height,
@@ -107,6 +108,7 @@ class _LineChartState extends State<_LineChart> {
     ),
   );
 
+  // 🟢
   List<LineChartBarData> buildBars(
       double animatedThickness, 
       Settings settings, 
@@ -154,6 +156,7 @@ class _LineChartState extends State<_LineChart> {
     return bars;
   }
 
+  // 🟢
   FlTitlesData _buildFlTitlesData(Settings settings, DateTimeRange graphRange) {
     const noTitels = AxisTitles(sideTitles: SideTitles(reservedSize: 40));
     return FlTitlesData(
@@ -217,7 +220,7 @@ class _LineChartState extends State<_LineChart> {
               applyCutOffY: true,),
     );
 
-  // Real world use is limited
+  // 🟢
   LineChartBarData _buildRegressionLine(List<FlSpot> data) {
     final d = data.length * data.sum((e) => pow(e.x, 2)) - pow(data.sum((e) => e.x), 2);
     final gradient = (1/d) * (data.length * data.sum((e) => e.x * e.y) - data.sum((e) => e.x) * data.sum((e) => e.y));
