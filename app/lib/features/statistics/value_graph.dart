@@ -24,11 +24,11 @@ class Tmp extends StatelessWidget {
           width: 1000,
           child: BloodPressureValueGraph(
             settings: Settings(
-              drawRegressionLines: true,
+              /*drawRegressionLines: true,
               horizontalGraphLines: [
                 HorizontalGraphLine(Colors.blue, 117),
                 HorizontalGraphLine(Colors.red, 12)
-              ],
+              ],*/
             ),
             records: [
               BloodPressureRecord(time: DateTime(2000), sys: Pressure.mmHg(123), dia: Pressure.mmHg(80) , pul: 40),
@@ -40,8 +40,9 @@ class Tmp extends StatelessWidget {
               BloodPressureRecord(time: DateTime(2003, 2), pul: 140,),
             ],
             colors: [
-              Note(time: DateTime(2000), note: 'no color'),
+              /*Note(time: DateTime(2000), note: 'no color'),
               Note(time: DateTime(2001), color: Colors.teal.value),
+              Note(time: DateTime(2003, 2), color: Colors.purple.value),*/
             ]
           ),
         ),
@@ -65,9 +66,7 @@ class BloodPressureValueGraph extends StatelessWidget {
         || records.pulGraph().length >= 2),
       assert(records.isSorted((a, b) => a.time.compareTo(b.time)));
 
-  // TODO Add missing:
-  // - belowBarData (warn values)
-  // New features:
+  // TODO Add new feature:
   // - load lines animation
 
   /// Data to draw lines and determine decorations from.
@@ -235,13 +234,8 @@ class _ValueGraphPainter extends CustomPainter {
     DateTimeRange range,
     double minY,
     double maxY,
+    double? warnValue,
   ) {
-    final paint = Paint()
-      ..color = color
-      ..strokeWidth = settings.graphLineThickness
-      ..strokeCap = ui.StrokeCap.round
-      ..strokeJoin = ui.StrokeJoin.round;
-
     ui.Offset transformPoint((DateTime, double) p) {
       final width = size.width - _kLeftLegendWidth;
       final double factorX = width / range.duration.inMilliseconds;
@@ -255,15 +249,52 @@ class _ValueGraphPainter extends CustomPainter {
       return ui.Offset(x, y);
     }
 
-    ui.Offset? lastPoint;
+    Path? path;
     for (final e in data) {
       final point = transformPoint(e);
-      if (lastPoint != null) {
-        canvas.drawLine(lastPoint, point, paint);
+      if (path != null) {
+        path.lineTo(point.dx, point.dy);
+      } else {
+        path = Path();
+        path.moveTo(point.dx, point.dy);
       }
-
-      lastPoint = point;
     }
+
+    if (path == null) return;
+
+    if (warnValue != null) {
+      final graphPath = Path();
+      // FIXME: technically wont fill area before graph start
+      // (to see have the first value be above warn value and disable maskFilter)
+      graphPath.addPath(path, ui.Offset.zero);
+      graphPath.relativeLineTo(0, size.height);
+
+      // TODO: stop duping transform code
+      final height = size.height - _kBottomLegendHeight;
+      final double factorY = height / (maxY - minY);
+      final yBottom = _kBottomLegendHeight + (warnValue - minY) * factorY;
+      final y = size.height - yBottom;
+
+      final warnRect = Rect.fromLTRB(_kLeftLegendWidth, 0, size.width, y);
+      final clippedPath = Path.combine(
+        PathOperation.intersect,
+        graphPath,
+        Path()..addRect(warnRect),
+      );
+      canvas.drawPath(clippedPath, ui.Paint()
+        ..color = Colors.redAccent
+        ..maskFilter = ui.MaskFilter.blur(ui.BlurStyle.inner, 30.0)
+        ..style = ui.PaintingStyle.fill
+      );
+    }
+
+    final paint = Paint()
+      ..color = color
+      ..strokeWidth = settings.graphLineThickness
+      ..strokeCap = ui.StrokeCap.round
+      ..style = ui.PaintingStyle.stroke
+      ..strokeJoin = ui.StrokeJoin.round;
+    canvas.drawPath(path, paint);
   }
 
   // https://www.ncl.ac.uk/webtemplate/ask-assets/external/maths-resources/statistics/regression-and-correlation/simple-linear-regression.html
@@ -391,9 +422,9 @@ class _ValueGraphPainter extends CustomPainter {
 
     _buildNeedlePins(canvas, size, colors, range, min, max);
 
-    _paintLine(canvas, size, records.sysGraph(), settings.sysColor, range, min, max);
-    _paintLine(canvas, size, records.diaGraph(), settings.diaColor, range, min, max);
-    _paintLine(canvas, size, records.pulGraph(), settings.pulColor, range, min, max);
+    _paintLine(canvas, size, records.sysGraph(), settings.sysColor, range, min, max, settings.sysWarn.toDouble());
+    _paintLine(canvas, size, records.diaGraph(), settings.diaColor, range, min, max, settings.diaWarn.toDouble());
+    _paintLine(canvas, size, records.pulGraph(), settings.pulColor, range, min, max, null);
 
     if (settings.drawRegressionLines) {
       _paintRegressionLine(canvas, size, records.sysGraph().toList(), min, max);

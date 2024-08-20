@@ -193,6 +193,7 @@ class _LineChartState extends State<_LineChart> {
     );
   }
 
+  // 🟢
   List<LineChartBarData> _buildNeedlePins(Iterable<Note> notes, int min, int max, Settings settings,) => [
     for (final n in notes.where((e) => e.color != null))
       LineChartBarData(
@@ -206,6 +207,7 @@ class _LineChartState extends State<_LineChart> {
       ),
   ];
 
+  // 🟢
   LineChartBarData _buildBarData(double lineThickness, List<FlSpot> spots, Color color, bool hasAreaData, [double? areaDataCutOff]) => LineChartBarData(
         spots: spots,
         color: color,
@@ -242,6 +244,7 @@ class _LineChartState extends State<_LineChart> {
     );
   }
 
+  // 🟢
   LineChartBarData _buildHorizontalLine(HorizontalGraphLine line, double start, double end) => LineChartBarData(
       color: line.color,
       spots: [
