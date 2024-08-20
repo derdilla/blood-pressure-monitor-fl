@@ -6,52 +6,11 @@ import 'package:blood_pressure_app/model/storage/storage.dart';
 import 'package:blood_pressure_app/screens/loading_screen.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:health_data_store/health_data_store.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
-void main() => runApp(Tmp());
-
-class Tmp extends StatelessWidget {
-  const Tmp({super.key});
-
-  @override
-  Widget build(BuildContext context) => MaterialApp(
-    theme: ThemeData.dark(),
-    home: Scaffold(
-      appBar: AppBar(),
-      body: ClipRect(
-        child: SizedBox(
-          height: 256,
-          width: 1000,
-          child: BloodPressureValueGraph(
-            settings: Settings(
-              animationSpeed: 1000,
-              drawRegressionLines: true,
-              horizontalGraphLines: [
-                HorizontalGraphLine(Colors.blue, 117),
-                HorizontalGraphLine(Colors.red, 35)
-              ],
-            ),
-            records: [
-              BloodPressureRecord(time: DateTime(2000), sys: Pressure.mmHg(123), dia: Pressure.mmHg(80) , pul: 40),
-              BloodPressureRecord(time: DateTime(2001), sys: Pressure.mmHg(140), pul: 77),
-              BloodPressureRecord(time: DateTime(2001, 6), dia: Pressure.mmHg(111)),
-              BloodPressureRecord(time: DateTime(2002), sys: Pressure.mmHg(100)),
-              BloodPressureRecord(time: DateTime(2002, 2), pul: 60,),
-              BloodPressureRecord(time: DateTime(2003), sys: Pressure.mmHg(123), dia: Pressure.mmHg(93)),
-              BloodPressureRecord(time: DateTime(2003, 2), pul: 140,),
-            ],
-            colors: [
-              /*Note(time: DateTime(2000), note: 'no color'),
-              Note(time: DateTime(2001), color: Colors.teal.value),
-              Note(time: DateTime(2003, 2), color: Colors.purple.value),*/
-            ]
-          ),
-        ),
-      ),
-    ),
-  );
-}
 
 /// A graph of [BloodPressureRecord] values.
 ///
@@ -59,14 +18,10 @@ class Tmp extends StatelessWidget {
 /// to put all data on one graph
 class BloodPressureValueGraph extends StatelessWidget {
   /// Create a new graph of [BloodPressureRecord] values.
-  BloodPressureValueGraph({super.key,
-    required this.settings,
+  const BloodPressureValueGraph({super.key, // TODO: intakes ??
     required this.records,
     required this.colors,
-  }): assert(records.sysGraph().length >= 2
-      || records.diaGraph().length >= 2
-      || records.pulGraph().length >= 2),
-    assert(records.isSorted((a, b) => a.time.compareTo(b.time)));
+  });
 
   /// Data to draw lines and determine decorations from.
   ///
@@ -76,27 +31,37 @@ class BloodPressureValueGraph extends StatelessWidget {
   /// Notes that should render as colored lines if present.
   final List<Note> colors;
 
-  /// Settings to determine style and behavior.
-  final Settings settings;
-
   @override
-  Widget build(BuildContext context) => Padding(
-    padding: const EdgeInsets.only(top: 4.0),
-    child: TweenAnimationBuilder(
-      tween: Tween(begin: 0.0, end: 1.0),
-      duration: Duration(milliseconds: 8 * settings.animationSpeed),
-      builder: (BuildContext context, double value, Widget? child) => CustomPaint(
-        painter: _ValueGraphPainter(
-          brightness: Theme.of(context).brightness,
-          settings: settings,
-          labelStyle: Theme.of(context).textTheme.bodySmall ?? TextStyle(),
-          records: records,
-          colors: colors,
-          progress: value,
+  Widget build(BuildContext context) {
+    if (records.sysGraph().length <= 2
+      || records.diaGraph().length <= 2
+      || records.pulGraph().length <= 2) {
+      return Center(
+        child: Text(AppLocalizations.of(context)!.errNotEnoughDataToGraph),
+      );
+    }
+    final r = records.toList();
+    r.sort((a, b) => a.time.compareTo(b.time));
+    final settings = context.watch<Settings>();
+    return Padding(
+      padding: const EdgeInsets.only(top: 4.0),
+      child: TweenAnimationBuilder(
+        tween: Tween(begin: 0.0, end: 1.0),
+        curve: Curves.slowMiddle,
+        duration: Duration(milliseconds: settings.animationSpeed),
+        builder: (BuildContext context, double value, Widget? child) => CustomPaint(
+          painter: _ValueGraphPainter(
+            brightness: Theme.of(context).brightness,
+            settings: settings,
+            labelStyle: Theme.of(context).textTheme.bodySmall ?? TextStyle(),
+            records: r,
+            colors: colors,
+            progress: value,
+          ),
         ),
       ),
-    ),
-  );
+    );
+  }
 }
 
 class _ValueGraphPainter extends CustomPainter {
@@ -187,8 +152,8 @@ class _ValueGraphPainter extends CustomPainter {
       final duration = range.duration ~/ bottomLabelCount;
       format = (){
         switch (duration) {
-          case < const Duration(hours: 8):
-            return DateFormat('H:m');
+          case < const Duration(hours: 4):
+            return DateFormat('H:m EEE');
           case < const Duration(days: 1):
             return DateFormat('EEE');
           case < const Duration(days: 5):
