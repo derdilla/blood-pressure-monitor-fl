@@ -26,11 +26,11 @@ class Tmp extends StatelessWidget {
           child: BloodPressureValueGraph(
             settings: Settings(
               animationSpeed: 1000,
-              /*drawRegressionLines: true,
+              drawRegressionLines: true,
               horizontalGraphLines: [
                 HorizontalGraphLine(Colors.blue, 117),
-                HorizontalGraphLine(Colors.red, 12)
-              ],*/
+                HorizontalGraphLine(Colors.red, 35)
+              ],
             ),
             records: [
               BloodPressureRecord(time: DateTime(2000), sys: Pressure.mmHg(123), dia: Pressure.mmHg(80) , pul: 40),
@@ -244,22 +244,9 @@ class _ValueGraphPainter extends CustomPainter {
     double maxY,
     double? warnValue,
   ) {
-    ui.Offset transformPoint((DateTime, double) p) {
-      final width = size.width - _kLeftLegendWidth;
-      final double factorX = width / range.duration.inMilliseconds;
-      final x = _kLeftLegendWidth + (p.$1.millisecondsSinceEpoch - range.start.millisecondsSinceEpoch) * factorX;
-      
-      final height = size.height - _kBottomLegendHeight;
-      final double factorY = height / (maxY - minY);
-      final yBottom = _kBottomLegendHeight + (p.$2 - minY) * factorY;
-      final y = size.height - yBottom;
-
-      return ui.Offset(x, y);
-    }
-
     Path? path;
     for (final e in data) {
-      final point = transformPoint(e);
+      final point = ui.Offset(_transformX(size, e.$1, range), _transformY(size, e.$2, minY, maxY));
       if (path != null) {
         path.lineTo(point.dx, point.dy);
       } else {
@@ -278,11 +265,7 @@ class _ValueGraphPainter extends CustomPainter {
       graphPath.addPath(path, ui.Offset.zero);
       graphPath.relativeLineTo(0, size.height);
 
-      // TODO: stop duping transform code
-      final height = size.height - _kBottomLegendHeight;
-      final double factorY = height / (maxY - minY);
-      final yBottom = _kBottomLegendHeight + (warnValue - minY) * factorY;
-      final y = size.height - yBottom;
+      final y = _transformY(size, warnValue, minY, maxY);
 
       final warnRect = Rect.fromLTRB(_kLeftLegendWidth, 0, size.width, y);
       final clippedPath = Path.combine(
@@ -333,17 +316,14 @@ class _ValueGraphPainter extends CustomPainter {
     final minX = xValues.reduce(math.min);
     final maxX = xValues.reduce(math.max);
 
-    // Scale x and y coordinates to the canvas
-    final scaleY = (size.height - _kBottomLegendHeight) / (maxY - minY);
-
     // Draw the regression line from the first point to the last point
     final start = ui.Offset(
       _kLeftLegendWidth,
-      size.height - _kBottomLegendHeight - ((slope * minX + yIntercept - minY) * scaleY),
+      _transformY(size, slope * minX + yIntercept, minY, maxY),
     );
     final end = ui.Offset(
       size.width,
-      size.height - _kBottomLegendHeight - ((slope * maxX + yIntercept - minY) * scaleY),
+      _transformY(size, slope * maxX + yIntercept, minY, maxY),
     );
 
     final paint = Paint()
@@ -353,11 +333,8 @@ class _ValueGraphPainter extends CustomPainter {
   }
 
   void _paintHorizontalLines(Canvas canvas, Size size, List<HorizontalGraphLine> lines, double minY, double maxY) {
-    final height = size.height - _kBottomLegendHeight;
-    final double factorY = height / (maxY - minY);
     for (final line in lines) {
-      double y = _kBottomLegendHeight + (line.height - minY) * factorY;
-      y = size.height - y;
+      final y = _transformY(size, line.height.toDouble(), minY, maxY);
       final path = Path();
       double x = _kLeftLegendWidth;
       bool drawNext = true;
@@ -385,11 +362,7 @@ class _ValueGraphPainter extends CustomPainter {
 
   void _buildNeedlePins(Canvas canvas, Size size, List<Note> colors, DateTimeRange range, double minY, double maxY) {
     for (final color in colors.where((n) => n.color != null)) {
-      // TODO: stop duplicating transform code across functions
-      final width = size.width - _kLeftLegendWidth;
-      final double factorX = width / range.duration.inMilliseconds;
-      final x = _kLeftLegendWidth + (color.time.millisecondsSinceEpoch - range.start.millisecondsSinceEpoch) * factorX;
-
+      final x = _transformX(size, color.time, range);
       canvas.drawLine(
           ui.Offset(x, 0),
           ui.Offset(x, size.height - _kBottomLegendHeight),
@@ -459,6 +432,23 @@ class _ValueGraphPainter extends CustomPainter {
     || oldDelegate.records != records
     || oldDelegate.colors != colors;
 
+  /// Transforms an untransformed [y] graph value to correct y-position on a
+  /// canvas of [size].
+  double _transformY(Size size, double y, double minY, double maxY) {
+    final height = size.height - _kBottomLegendHeight;
+    final double factorY = height / (maxY - minY);
+    final yBottom = _kBottomLegendHeight + (y - minY) * factorY;
+    return size.height - yBottom;
+  }
+
+  /// Transforms an untransformed [x] graph position to correct x-position on a
+  /// canvas of [size].
+  double _transformX(Size size, DateTime x, DateTimeRange range) {
+    final width = size.width - _kLeftLegendWidth;
+    final double factorX = width / range.duration.inMilliseconds;
+    final offset = x.millisecondsSinceEpoch - range.start.millisecondsSinceEpoch;
+    return _kLeftLegendWidth + offset * factorX;
+  }
 }
 
 /// Create graph data from a list of blood pressure records.
