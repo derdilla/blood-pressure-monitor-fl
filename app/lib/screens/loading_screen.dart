@@ -64,46 +64,46 @@ class _LogoPainter extends CustomPainter {
     path.lineTo(size.width * 0.82, size.height * 0.42);
     path.lineTo(size.width * 0.818, size.height * 0.45);
     path.lineTo(size.width * 0.65, size.height * 0.65);
-    canvas.drawPath(_subPath(path, progress), paint);
+    canvas.drawPath(subPath(path, progress), paint);
   }
 
   @override
   bool shouldRepaint(_LogoPainter oldDelegate) =>
       oldDelegate.progress != progress;
+}
 
-  /// Get a percentage of [originalPath].
-  ///
-  /// [animationPercent] is a value from 0 to 1.
-  Path _subPath(Path originalPath, double animationPercent,) {
-    final totalLength = originalPath
-        .computeMetrics()
-        .fold(0.0, (double prev, PathMetric metric) => prev + metric.length);
+/// Get a percentage of [originalPath].
+///
+/// [animationPercent] is a value from 0 to 1.
+Path subPath(Path originalPath, double animationPercent) {
+  final totalLength = originalPath
+      .computeMetrics()
+      .fold(0.0, (double prev, PathMetric metric) => prev + metric.length);
 
-    return _extractPathUntilLength(originalPath, totalLength * animationPercent);
+  return _extractPathUntilLength(originalPath, totalLength * animationPercent);
+}
+
+Path _extractPathUntilLength(Path originalPath, double length,) {
+  final path = Path();
+
+  final metricsIterator = originalPath.computeMetrics().iterator;
+  var isLastSegment = false;
+  var currentLength = 0.0;
+
+  while (metricsIterator.moveNext() && !isLastSegment) {
+    final metric = metricsIterator.current;
+
+    final nextLength = currentLength + metric.length;
+    isLastSegment = (nextLength > length);
+
+    assert(length - currentLength >= 0);
+    final pathSegment = metric.extractPath(0.0,
+      min(length - currentLength, metric.length),);
+
+    path.addPath(pathSegment, Offset.zero);
+
+    currentLength = nextLength;
   }
 
-  Path _extractPathUntilLength(Path originalPath, double length,) {
-    final path = Path();
-
-    final metricsIterator = originalPath.computeMetrics().iterator;
-    var isLastSegment = false;
-    var currentLength = 0.0;
-
-    while (metricsIterator.moveNext() && !isLastSegment) {
-      final metric = metricsIterator.current;
-
-      final nextLength = currentLength + metric.length;
-      isLastSegment = (nextLength > length);
-
-      assert(length - currentLength >= 0);
-      final pathSegment = metric.extractPath(0.0,
-          min(length - currentLength, metric.length),);
-
-      path.addPath(pathSegment, Offset.zero);
-
-      currentLength = nextLength;
-    }
-
-    return path;
-  }
+  return path;
 }

@@ -3,6 +3,7 @@ import 'dart:ui' as ui;
 
 import 'package:blood_pressure_app/model/horizontal_graph_line.dart';
 import 'package:blood_pressure_app/model/storage/storage.dart';
+import 'package:blood_pressure_app/screens/loading_screen.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:health_data_store/health_data_store.dart';
@@ -24,6 +25,7 @@ class Tmp extends StatelessWidget {
           width: 1000,
           child: BloodPressureValueGraph(
             settings: Settings(
+              animationSpeed: 1000,
               /*drawRegressionLines: true,
               horizontalGraphLines: [
                 HorizontalGraphLine(Colors.blue, 117),
@@ -62,12 +64,9 @@ class BloodPressureValueGraph extends StatelessWidget {
     required this.records,
     required this.colors,
   }): assert(records.sysGraph().length >= 2
-        || records.diaGraph().length >= 2
-        || records.pulGraph().length >= 2),
-      assert(records.isSorted((a, b) => a.time.compareTo(b.time)));
-
-  // TODO Add new feature:
-  // - load lines animation
+      || records.diaGraph().length >= 2
+      || records.pulGraph().length >= 2),
+    assert(records.isSorted((a, b) => a.time.compareTo(b.time)));
 
   /// Data to draw lines and determine decorations from.
   ///
@@ -83,13 +82,18 @@ class BloodPressureValueGraph extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Padding(
     padding: const EdgeInsets.only(top: 4.0),
-    child: CustomPaint(
-      painter: _ValueGraphPainter(
-        brightness: Theme.of(context).brightness,
-        settings: settings,
-        labelStyle: Theme.of(context).textTheme.bodySmall ?? TextStyle(),
-        records: records,
-        colors: colors,
+    child: TweenAnimationBuilder(
+      tween: Tween(begin: 0.0, end: 1.0),
+      duration: Duration(milliseconds: 8 * settings.animationSpeed),
+      builder: (BuildContext context, double value, Widget? child) => CustomPaint(
+        painter: _ValueGraphPainter(
+          brightness: Theme.of(context).brightness,
+          settings: settings,
+          labelStyle: Theme.of(context).textTheme.bodySmall ?? TextStyle(),
+          records: records,
+          colors: colors,
+          progress: value,
+        ),
       ),
     ),
   );
@@ -102,7 +106,8 @@ class _ValueGraphPainter extends CustomPainter {
     required this.labelStyle,
     required this.records,
     required this.colors,
-  });
+    required this.progress,
+  }): assert(1.0 >= progress && progress >= 0.0);
 
   final Settings settings;
 
@@ -119,6 +124,9 @@ class _ValueGraphPainter extends CustomPainter {
 
   static const double _kLeftLegendWidth = 35.0;
   static const double _kBottomLegendHeight = 50.0;
+
+  /// Percentage of data line rendering (from 0 to 1).
+  final double progress;
 
   void _paintDecorations(Canvas canvas, Size size, DateTimeRange range, double minY, double maxY) {
     assert(size.width > _kLeftLegendWidth && size.height > _kBottomLegendHeight);
@@ -261,6 +269,7 @@ class _ValueGraphPainter extends CustomPainter {
     }
 
     if (path == null) return;
+    path = subPath(path, progress);
 
     if (warnValue != null) {
       final graphPath = Path();
@@ -436,6 +445,7 @@ class _ValueGraphPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(covariant CustomPainter oldDelegate) => oldDelegate is! _ValueGraphPainter
+    || oldDelegate.progress != progress
     || oldDelegate.brightness != brightness
     || oldDelegate.settings.preferredPressureUnit != settings.preferredPressureUnit
     || oldDelegate.settings.sysColor != settings.sysColor
