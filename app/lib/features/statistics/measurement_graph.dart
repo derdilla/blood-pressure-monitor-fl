@@ -266,17 +266,17 @@ class MeasurementGraph extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => SizedBox(
-      height: height,
-      child: Padding(
-        padding: const EdgeInsets.only(right: 16, left: 6, top: 22),
-        child: Column(
-          children: [
-            _LineChart(height: height - 100),
-            const IntervalPicker(type: IntervallStoreManagerLocation.mainPage,),
-          ],
-        ),
+    height: height,
+    child: Padding(
+      padding: const EdgeInsets.only(right: 16, left: 6, top: 22),
+      child: Column(
+        children: [
+          _LineChart(height: height - 100),
+          const IntervalPicker(type: IntervallStoreManagerLocation.mainPage,),
+        ],
       ),
-    );
+    ),
+  );
 }
 
 extension _Sum<T> on List<T> {

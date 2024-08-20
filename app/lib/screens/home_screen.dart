@@ -1,9 +1,13 @@
+import 'dart:collection';
+
 import 'package:blood_pressure_app/data_util/blood_pressure_builder.dart';
+import 'package:blood_pressure_app/data_util/display_interval_picker.dart';
 import 'package:blood_pressure_app/data_util/entry_context.dart';
 import 'package:blood_pressure_app/data_util/repository_builder.dart';
 import 'package:blood_pressure_app/features/measurement_list/compact_measurement_list.dart';
 import 'package:blood_pressure_app/features/measurement_list/measurement_list.dart';
 import 'package:blood_pressure_app/features/statistics/measurement_graph.dart';
+import 'package:blood_pressure_app/features/statistics/value_graph.dart';
 import 'package:blood_pressure_app/model/storage/intervall_store.dart';
 import 'package:blood_pressure_app/model/storage/settings_store.dart';
 import 'package:blood_pressure_app/screens/settings_screen.dart';
@@ -48,10 +52,33 @@ class AppHome extends StatelessWidget {
             padding: const EdgeInsets.only(top: 20),
             child: Consumer<IntervallStoreManager>(builder: (context, intervalls, child) =>
               Column(children: [
-                /*MeasurementListRow(
-                  settings: Settings(), data: (BloodPressureRecord(time: DateTime(2023),
-                  sys:Pressure.mmHg(1), dia: Pressure.mmHg(2), pul: 3), Note(time: DateTime(2023), note: 'testTxt',), [])),*/
-                const MeasurementGraph(),
+                SizedBox(
+                  height: 290,
+                  child: Padding(
+                    padding: const EdgeInsets.only(right: 16, left: 6, top: 22),
+                    child: Column(
+                      children: [
+                        SizedBox(
+                          height: 190,
+                          width: MediaQuery.of(context).size.width,
+                          child: RepositoryBuilder<Note, NoteRepository>(
+                            rangeType: IntervallStoreManagerLocation.mainPage,
+                            onData: (context, List<Note> notes) => BloodPressureBuilder(
+                              rangeType: IntervallStoreManagerLocation.mainPage,
+                              onData: (BuildContext context, UnmodifiableListView<BloodPressureRecord> records) => BloodPressureValueGraph(
+                                records: records,
+                                colors: notes,
+                              ),
+                            ),
+                          ),
+                        ),
+                        const IntervalPicker(
+                          type: IntervallStoreManagerLocation.mainPage,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
                 Expanded(
                   child: BloodPressureBuilder(
                     rangeType: IntervallStoreManagerLocation.mainPage,
