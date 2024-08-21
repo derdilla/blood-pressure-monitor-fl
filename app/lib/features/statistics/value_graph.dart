@@ -21,6 +21,7 @@ class BloodPressureValueGraph extends StatelessWidget {
   const BloodPressureValueGraph({super.key, // TODO: intakes ??
     required this.records,
     required this.colors,
+    required this.intakes,
   });
 
   /// Data to draw lines and determine decorations from.
@@ -30,6 +31,10 @@ class BloodPressureValueGraph extends StatelessWidget {
 
   /// Notes that should render as colored lines if present.
   final List<Note> colors;
+
+  /// Intake dates get painted as tiny colored medicines at the bottom of the
+  /// graph.
+  final List<MedicineIntake> intakes;
 
   @override
   Widget build(BuildContext context) {
@@ -57,6 +62,7 @@ class BloodPressureValueGraph extends StatelessWidget {
             records: r,
             colors: colors,
             progress: value,
+            intakes: intakes,
           ),
         ),
       ),
@@ -71,6 +77,7 @@ class _ValueGraphPainter extends CustomPainter {
     required this.labelStyle,
     required this.records,
     required this.colors,
+    required this.intakes,
     required this.progress,
   }): assert(1.0 >= progress && progress >= 0.0);
 
@@ -86,6 +93,8 @@ class _ValueGraphPainter extends CustomPainter {
   final List<BloodPressureRecord> records;
 
   final List<Note> colors;
+
+  final List<MedicineIntake> intakes;
 
   static const double _kLeftLegendWidth = 35.0;
   static const double _kBottomLegendHeight = 50.0;
@@ -338,6 +347,27 @@ class _ValueGraphPainter extends CustomPainter {
     }
   }
 
+  void _buildIntakes(Canvas canvas, Size size, List<MedicineIntake> intakes, DateTimeRange range) {
+    for (final iTake in intakes) {
+      final x = _transformX(size, iTake.time, range);
+      final icon = Icons.medication;
+      final textPainter = TextPainter(textDirection: ui.TextDirection.ltr);
+      textPainter.text = TextSpan(
+        text: String.fromCharCode(icon.codePoint),
+        style: TextStyle(
+          fontFamily: icon.fontFamily,
+          fontSize: 18.0,
+          backgroundColor: brightness == ui.Brightness.dark ? Colors.black : Colors.white,
+          color: iTake.medicine.color == null ? null : Color(iTake.medicine.color!),
+        ),
+      );
+      textPainter.layout();
+      //  Paint centered at the bottom line
+      final y = size.height -_kBottomLegendHeight - (textPainter.height / 2);
+      textPainter.paint(canvas, Offset(x, y));
+    }
+  }
+
   @override
   void paint(Canvas canvas, Size size) {
     assert(records.length >= 2);
@@ -345,7 +375,7 @@ class _ValueGraphPainter extends CustomPainter {
 
     final DateTimeRange range = DateTimeRange(
       start: records.first.time,
-      end: records.last.time,
+      end: records.last.time, // TODO: fix intake, ... outside range
     );
 
     double min = double.infinity;
@@ -367,6 +397,7 @@ class _ValueGraphPainter extends CustomPainter {
 
     _paintDecorations(canvas, size, range, min, max);
 
+    _buildIntakes(canvas, size, intakes, range);
     _buildNeedlePins(canvas, size, colors, range, min, max);
 
     _paintLine(canvas, size, records.sysGraph(), settings.sysColor, range, min, max, settings.sysWarn.toDouble());
@@ -395,7 +426,8 @@ class _ValueGraphPainter extends CustomPainter {
     || oldDelegate.settings.drawRegressionLines != settings.drawRegressionLines
     || oldDelegate.settings.needlePinBarWidth != settings.needlePinBarWidth
     || oldDelegate.records != records
-    || oldDelegate.colors != colors;
+    || oldDelegate.colors != colors
+    || oldDelegate.intakes != intakes;
 
   /// Transforms an untransformed [y] graph value to correct y-position on a
   /// canvas of [size].
