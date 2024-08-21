@@ -61,13 +61,17 @@ class AppHome extends StatelessWidget {
                         SizedBox(
                           height: 190,
                           width: MediaQuery.of(context).size.width,
-                          child: RepositoryBuilder<Note, NoteRepository>(
+                          child: RepositoryBuilder<MedicineIntake, MedicineIntakeRepository>(
                             rangeType: IntervallStoreManagerLocation.mainPage,
-                            onData: (context, List<Note> notes) => BloodPressureBuilder(
+                            onData: (context, List<MedicineIntake> intakes) => RepositoryBuilder<Note, NoteRepository>(
                               rangeType: IntervallStoreManagerLocation.mainPage,
-                              onData: (BuildContext context, UnmodifiableListView<BloodPressureRecord> records) => BloodPressureValueGraph(
-                                records: records,
-                                colors: notes,
+                              onData: (context, List<Note> notes) => BloodPressureBuilder(
+                                rangeType: IntervallStoreManagerLocation.mainPage,
+                                onData: (BuildContext context, UnmodifiableListView<BloodPressureRecord> records) => BloodPressureValueGraph(
+                                  records: records,
+                                  colors: notes,
+                                  intakes: intakes,
+                                ),
                               ),
                             ),
                           ),
