@@ -27,37 +27,33 @@ class AppHome extends StatelessWidget {
   /// Create a home screen.
   const AppHome({super.key});
 
-  Widget _buildValueGraph(BuildContext context) => SizedBox(
-     height: 290,
-     child: Padding(
-       padding: const EdgeInsets.only(right: 16, left: 6, top: 22),
-       child: Column(
-         children: [
-           SizedBox(
-             height: 190,
-             width: MediaQuery.of(context).size.width,
-             child: RepositoryBuilder<MedicineIntake, MedicineIntakeRepository>(
-               rangeType: IntervallStoreManagerLocation.mainPage,
-               onData: (context, List<MedicineIntake> intakes) => RepositoryBuilder<Note, NoteRepository>(
-                 rangeType: IntervallStoreManagerLocation.mainPage,
-                 onData: (context, List<Note> notes) => BloodPressureBuilder(
-                   rangeType: IntervallStoreManagerLocation.mainPage,
-                   onData: (BuildContext context, UnmodifiableListView<BloodPressureRecord> records) => BloodPressureValueGraph(
-                     records: records,
-                     colors: notes,
-                     intakes: intakes,
-                   ),
-                 ),
-               ),
-             ),
-           ),
-           const IntervalPicker(
-             type: IntervallStoreManagerLocation.mainPage,
-           ),
-         ],
-       ),
-     ),
-   );
+  Widget _buildValueGraph(BuildContext context) => Padding(
+    padding: const EdgeInsets.only(right: 8, left: 2, top: 16),
+    child: Column(
+      children: [
+        SizedBox(
+          height: 240,
+          width: MediaQuery.of(context).size.width,
+          // TODO: stop duplicating this complex construct
+          child: RepositoryBuilder<MedicineIntake, MedicineIntakeRepository>(
+            rangeType: IntervallStoreManagerLocation.mainPage,
+            onData: (context, List<MedicineIntake> intakes) => RepositoryBuilder<Note, NoteRepository>(
+              rangeType: IntervallStoreManagerLocation.mainPage,
+              onData: (context, List<Note> notes) => BloodPressureBuilder(
+                rangeType: IntervallStoreManagerLocation.mainPage,
+                onData: (BuildContext context, UnmodifiableListView<BloodPressureRecord> records) => BloodPressureValueGraph(
+                  records: records,
+                  colors: notes,
+                  intakes: intakes,
+                ),
+              ),
+            ),
+          ),
+        ),
+        const IntervalPicker(type: IntervallStoreManagerLocation.mainPage),
+      ],
+    ),
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -90,14 +86,9 @@ class AppHome extends StatelessWidget {
                         onData: (BuildContext context, List<Note> notes) {
                           final entries = FullEntryList.merged(records, notes, intakes);
                           entries.sort((a, b) => b.time.compareTo(a.time)); // newest first
-                          if (context.select<Settings, bool>((s) => s.compactList)) {
-                            return CompactMeasurementList(
-                              data: entries,
-                            );
-                          }
-                          return MeasurementList(
-                            entries: entries,
-                          );
+                          return (context.select<Settings, bool>((s) => s.compactList))
+                            ? CompactMeasurementList(data: entries)
+                            : MeasurementList(entries: entries);
                         },
                       ),
                     ),
