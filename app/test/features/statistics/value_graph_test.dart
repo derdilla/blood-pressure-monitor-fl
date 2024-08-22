@@ -100,7 +100,7 @@ void main() {
     final localizations = await AppLocalizations.delegate.load(const Locale('en'));
     expect(find.text(localizations.errNotEnoughDataToGraph), findsNothing);
 
-    expect(find.byType(BloodPressureValueGraph), matchesGoldenFile('full_graph-years.png'));
+    await expectLater(find.byType(BloodPressureValueGraph), matchesGoldenFile('full_graph-years.png'));
   });
 }
 

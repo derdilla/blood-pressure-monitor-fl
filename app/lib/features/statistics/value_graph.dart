@@ -107,6 +107,7 @@ class _ValueGraphPainter extends CustomPainter {
 
     final graphBorderLinesPaint = Paint()
       ..color = brightness == Brightness.dark ? Colors.white : Colors.black
+      ..strokeWidth = 1.0
       ..strokeCap = ui.StrokeCap.round;
     final graphDecoLinesPaint = Paint()
       ..color = brightness == Brightness.dark ? Colors.white60 : Colors.black45
@@ -124,78 +125,53 @@ class _ValueGraphPainter extends CustomPainter {
     final double drawHeight = size.height - _kBottomLegendHeight;
 
     final leftLabelHeight = labelTextHeight + 4.0; // padding
+    final leftLabelWidth = _kLeftLegendWidth - 6.0 - 2.0;
     final leftLegendLabelCount = drawHeight / leftLabelHeight;
 
     // draw horizontal decorations
     for (int i = 0; i < leftLegendLabelCount; i += 2) {
       final h = (size.height - _kBottomLegendHeight) - i * leftLabelHeight;
       canvas.drawLine(
-        Offset(_kLeftLegendWidth, h),
+        Offset(_kLeftLegendWidth - 5.0, h),
         Offset(size.width, h),
         graphDecoLinesPaint,
       );
-      canvas.drawLine(
-        Offset(_kLeftLegendWidth, h),
-        Offset(_kLeftLegendWidth - 5.0, h),
-        graphBorderLinesPaint,
-      );
       final labelY = minY + ((maxY - minY) / leftLegendLabelCount) * i;
-      final paragraphBuilder = ui.ParagraphBuilder(labelStyle.getParagraphStyle(
-          textAlign: ui.TextAlign.end,
-      ))
-        ..pushStyle(labelStyle.getTextStyle())
-        ..addText(labelY.round().toString());
-      final paragraph = paragraphBuilder.build()
-        ..layout(ui.ParagraphConstraints(width: _kLeftLegendWidth - 6.0 - 2.0));
+
+      final paragraph = _paragraph(ui.TextAlign.end, labelY.round().toString(), leftLabelWidth);
       canvas.drawParagraph(paragraph, ui.Offset(2.0, h - (leftLabelHeight / 2)));
     }
     }();
 
-    // calculate vertical decoration positions
+    // calculate horizontal decoration positions
     final double drawWidth = size.width - _kLeftLegendWidth;
-    final bottomLabelHeight = labelTextHeight + 4.0;
     int bottomLabelCount = 20;
     Duration? stepDuration;
     late DateFormat format;
     while (stepDuration == null && bottomLabelCount > 4) {
-      final duration = range.duration ~/ bottomLabelCount;
-      format = (){
-        switch (duration) {
-          case < const Duration(hours: 4):
-            return DateFormat('H:m EEE');
-          case < const Duration(days: 1):
-            return DateFormat('EEE');
-          case < const Duration(days: 5):
-            return DateFormat('dd');
-          case < const Duration(days: 30):
-            return DateFormat('MMM, dd');
-          case < const Duration(days: 30*6):
-            return DateFormat('MMM yyyy');
-          default:
-            return DateFormat('yyyy');
-        }
-      }();
-      final paragraphBuilder = ui.ParagraphBuilder(labelStyle.getParagraphStyle(
-          textAlign: ui.TextAlign.end
-      ))..pushStyle(labelStyle.getTextStyle())
-        ..addText(format.format(range.start));
-      final paragraph = paragraphBuilder.build()
-        ..layout(ui.ParagraphConstraints(width: drawWidth));
-      // Not 100% accurate but avoids expensive text layout
+      stepDuration = range.duration ~/ bottomLabelCount;
+      format = switch(stepDuration) {
+        < const Duration(hours: 4) => DateFormat('H:m EEE'),
+        < const Duration(days: 1) => DateFormat('EEE'),
+        < const Duration(days: 5) => DateFormat('dd'),
+        < const Duration(days: 30) => DateFormat('MMM, dd'),
+        < const Duration(days: 30*6) => DateFormat('MMM yyyy'),
+        _ => DateFormat('yyyy'),
+      };
+      // Approximate total width needed with duration
+      final paragraph = _paragraph(ui.TextAlign.center, format.format(range.start), drawWidth);
       final totalWidthOccupiedByLabels = bottomLabelCount * paragraph.minIntrinsicWidth;
-      if (totalWidthOccupiedByLabels < drawWidth) {
-        stepDuration = duration;
-      } else {
+      if (totalWidthOccupiedByLabels > drawWidth) {
+        stepDuration = null;
         bottomLabelCount--;
       }
     }
 
-    if (stepDuration == null) {
-      // graph to small to draw labels
-      return;
-    }
+    // -> Graph to small to draw labels
+    if (stepDuration == null) return;
 
-    // draw vertical decorations
+    // draw horizontal decorations
+    final labelWidth = drawWidth / bottomLabelCount + 8.0;
     for (int i = 0; i < bottomLabelCount; i += 2) {
       final x = _kLeftLegendWidth + i * (drawWidth / bottomLabelCount);
       canvas.drawLine(
@@ -203,13 +179,12 @@ class _ValueGraphPainter extends CustomPainter {
         Offset(x, size.height - _kBottomLegendHeight + 4.0),
         graphDecoLinesPaint,
       );
-      final paragraphBuilder = ui.ParagraphBuilder(labelStyle.getParagraphStyle(
-          textAlign: ui.TextAlign.center
-      ))..pushStyle(labelStyle.getTextStyle())
-        ..addText(format.format(range.start.add(stepDuration! * i)));
-      final paragraph = paragraphBuilder.build()
-        ..layout(ui.ParagraphConstraints(width: drawWidth / bottomLabelCount + 8.0));
-      canvas.drawParagraph(paragraph, ui.Offset(x - ((drawWidth / bottomLabelCount + 8.0) / 2), size.height - _kBottomLegendHeight + (bottomLabelHeight / 2)));
+      final text = format.format(range.start.add(stepDuration * i));
+      final paragraph = _paragraph(ui.TextAlign.center, text, labelWidth);
+      canvas.drawParagraph(paragraph, ui.Offset(
+        x - (labelWidth / 2),
+        size.height - _kBottomLegendHeight + (labelTextHeight / 2),
+      ));
     }
   }
 
@@ -276,7 +251,6 @@ class _ValueGraphPainter extends CustomPainter {
     final double meanX = xValues.sum / data.length;
     final double meanY = yValues.sum / data.length;
 
-    // Calculate slope
     final slopeTop = data.fold(0.0, (double last, (DateTime, double) e) {
       final xErr = e.$1.millisecondsSinceEpoch - meanX;
       final yErr = e.$2 - meanY;
@@ -287,15 +261,12 @@ class _ValueGraphPainter extends CustomPainter {
       return last + xErr * xErr;
     });
     final slope = slopeTop / slopeBtm;
-
-    // Calculate where the function intercepts the Y axis
     final yIntercept = meanY - slope * meanX;
 
     // Convert data points to canvas coordinates
     final minX = xValues.reduce(math.min);
     final maxX = xValues.reduce(math.max);
 
-    // Draw the regression line from the first point to the last point
     final start = ui.Offset(
       _kLeftLegendWidth,
       _transformY(size, slope * minX + yIntercept, minY, maxY),
@@ -317,7 +288,7 @@ class _ValueGraphPainter extends CustomPainter {
       final path = Path();
       double x = _kLeftLegendWidth;
       bool drawNext = true;
-      while (x < size.width) { // Dotted
+      while (x < size.width) { // Create dotted line
         if (drawNext) {
           final newX = x + 10;
           path.moveTo(x, y);
@@ -450,6 +421,19 @@ class _ValueGraphPainter extends CustomPainter {
     final double factorX = width / range.duration.inMilliseconds;
     final offset = x.millisecondsSinceEpoch - range.start.millisecondsSinceEpoch;
     return _kLeftLegendWidth + offset * factorX;
+  }
+
+  /// Create and align a paragraph builder
+  ui.Paragraph _paragraph(ui.TextAlign textAlign, String text, double width) {
+    final paragraphBuilder = ui.ParagraphBuilder(
+      labelStyle.getParagraphStyle(textAlign: textAlign),
+    )
+      ..pushStyle(labelStyle.getTextStyle())
+      ..addText(text);
+
+    final paragraph = paragraphBuilder.build();
+    paragraph.layout(ui.ParagraphConstraints(width: width));
+    return paragraph;
   }
 }
 

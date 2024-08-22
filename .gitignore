@@ -1,2 +1,3 @@
 /.idea/
 /fastlane/metadata/android/en-US/images/phoneScreenshots/resizeAll.sh
+**/failures/*.png
