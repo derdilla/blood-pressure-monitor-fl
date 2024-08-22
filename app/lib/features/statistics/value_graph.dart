@@ -190,6 +190,11 @@ class _ValueGraphPainter extends CustomPainter {
       }
     }
 
+    if (stepDuration == null) {
+      // graph to small to draw labels
+      return;
+    }
+
     // draw vertical decorations
     for (int i = 0; i < bottomLabelCount; i += 2) {
       final x = _kLeftLegendWidth + i * (drawWidth / bottomLabelCount);
@@ -416,7 +421,6 @@ class _ValueGraphPainter extends CustomPainter {
   bool shouldRepaint(covariant CustomPainter oldDelegate) => oldDelegate is! _ValueGraphPainter
     || oldDelegate.progress != progress
     || oldDelegate.brightness != brightness
-    || oldDelegate.settings.preferredPressureUnit != settings.preferredPressureUnit
     || oldDelegate.settings.sysColor != settings.sysColor
     || oldDelegate.settings.diaColor != settings.diaColor
     || oldDelegate.settings.graphLineThickness != settings.graphLineThickness
@@ -425,6 +429,7 @@ class _ValueGraphPainter extends CustomPainter {
     || oldDelegate.settings.diaWarn != settings.diaWarn
     || oldDelegate.settings.drawRegressionLines != settings.drawRegressionLines
     || oldDelegate.settings.needlePinBarWidth != settings.needlePinBarWidth
+    || oldDelegate.settings.horizontalGraphLines != settings.horizontalGraphLines
     || oldDelegate.records != records
     || oldDelegate.colors != colors
     || oldDelegate.intakes != intakes;
