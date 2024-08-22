@@ -6,7 +6,6 @@ import 'package:blood_pressure_app/data_util/entry_context.dart';
 import 'package:blood_pressure_app/data_util/repository_builder.dart';
 import 'package:blood_pressure_app/features/measurement_list/compact_measurement_list.dart';
 import 'package:blood_pressure_app/features/measurement_list/measurement_list.dart';
-import 'package:blood_pressure_app/features/statistics/measurement_graph.dart';
 import 'package:blood_pressure_app/features/statistics/value_graph.dart';
 import 'package:blood_pressure_app/model/storage/intervall_store.dart';
 import 'package:blood_pressure_app/model/storage/settings_store.dart';
@@ -28,6 +27,38 @@ class AppHome extends StatelessWidget {
   /// Create a home screen.
   const AppHome({super.key});
 
+  Widget _buildValueGraph(BuildContext context) => SizedBox(
+     height: 290,
+     child: Padding(
+       padding: const EdgeInsets.only(right: 16, left: 6, top: 22),
+       child: Column(
+         children: [
+           SizedBox(
+             height: 190,
+             width: MediaQuery.of(context).size.width,
+             child: RepositoryBuilder<MedicineIntake, MedicineIntakeRepository>(
+               rangeType: IntervallStoreManagerLocation.mainPage,
+               onData: (context, List<MedicineIntake> intakes) => RepositoryBuilder<Note, NoteRepository>(
+                 rangeType: IntervallStoreManagerLocation.mainPage,
+                 onData: (context, List<Note> notes) => BloodPressureBuilder(
+                   rangeType: IntervallStoreManagerLocation.mainPage,
+                   onData: (BuildContext context, UnmodifiableListView<BloodPressureRecord> records) => BloodPressureValueGraph(
+                     records: records,
+                     colors: notes,
+                     intakes: intakes,
+                   ),
+                 ),
+               ),
+             ),
+           ),
+           const IntervalPicker(
+             type: IntervallStoreManagerLocation.mainPage,
+           ),
+         ],
+       ),
+     ),
+   );
+
   @override
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
@@ -42,47 +73,13 @@ class AppHome extends StatelessWidget {
     return Scaffold(
       body: OrientationBuilder(
         builder: (context, orientation) {
-        if (orientation == Orientation.landscape) {
-          return MeasurementGraph(
-            height: MediaQuery.of(context).size.height,
-          );
-        }
+        if (orientation == Orientation.landscape) return _buildValueGraph(context);
         return Center(
           child: Padding(
             padding: const EdgeInsets.only(top: 20),
             child: Consumer<IntervallStoreManager>(builder: (context, intervalls, child) =>
               Column(children: [
-                SizedBox(
-                  height: 290,
-                  child: Padding(
-                    padding: const EdgeInsets.only(right: 16, left: 6, top: 22),
-                    child: Column(
-                      children: [
-                        SizedBox(
-                          height: 190,
-                          width: MediaQuery.of(context).size.width,
-                          child: RepositoryBuilder<MedicineIntake, MedicineIntakeRepository>(
-                            rangeType: IntervallStoreManagerLocation.mainPage,
-                            onData: (context, List<MedicineIntake> intakes) => RepositoryBuilder<Note, NoteRepository>(
-                              rangeType: IntervallStoreManagerLocation.mainPage,
-                              onData: (context, List<Note> notes) => BloodPressureBuilder(
-                                rangeType: IntervallStoreManagerLocation.mainPage,
-                                onData: (BuildContext context, UnmodifiableListView<BloodPressureRecord> records) => BloodPressureValueGraph(
-                                  records: records,
-                                  colors: notes,
-                                  intakes: intakes,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                        const IntervalPicker(
-                          type: IntervallStoreManagerLocation.mainPage,
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
+                _buildValueGraph(context),
                 Expanded(
                   child: BloodPressureBuilder(
                     rangeType: IntervallStoreManagerLocation.mainPage,
@@ -159,7 +156,8 @@ class AppHome extends StatelessWidget {
               ),
             ],
           ),);
-        },),
+        },
+      ),
     );
   }
 }
