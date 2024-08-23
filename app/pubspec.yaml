@@ -24,6 +24,7 @@ dependencies:
   path: ^1.9.0
   pdf: ^3.11.0
   package_info_plus: ^8.0.1
+  week_of_year: 2.2.0
   sqflite: ^2.3.3+1
   shared_preferences: ^2.3.0
   url_launcher: ^6.3.0

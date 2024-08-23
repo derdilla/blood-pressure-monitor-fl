@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:week_of_year/date_week_extensions.dart';
 
 /// A selector for [IntervallStorage] values.
 ///
@@ -18,23 +19,19 @@ class IntervalPicker extends StatelessWidget {
   
   @override
   Widget build(BuildContext context) => Consumer<IntervallStoreManager>(
-    builder: (context, intervallStoreManager, child) {
+    builder: (context, intervallStoreManager, _) {
       final intervall = intervallStoreManager.get(type);
       final loc = AppLocalizations.of(context)!;
+      final start = intervall.currentRange.start;
+      final end = intervall.currentRange.end;
       final String intervallDisplayText = switch (intervall.stepSize) {
-        TimeStep.day => DateFormat.yMMMd(loc.localeName).format(intervall.currentRange.start),
-        TimeStep.week => (){
-          final dayOfYear = int.parse(DateFormat('D').format(intervall.currentRange.start));
-          final weekOfYear = ((dayOfYear - intervall.currentRange.start.weekday + 10) / 7).floor();
-          return loc.weekOfYear(weekOfYear, intervall.currentRange.start.year);
-        }(),
-        TimeStep.month => DateFormat.yMMM(loc.localeName).format(intervall.currentRange.start),
-        TimeStep.year => DateFormat.y(loc.localeName).format(intervall.currentRange.start),
+        TimeStep.day => DateFormat.yMMMd().format(start),
+        TimeStep.week => loc.weekOfYear(start.weekOfYear, start.year),
+        TimeStep.month => DateFormat.yMMM().format(intervall.currentRange.start),
+        TimeStep.year => DateFormat.y().format(intervall.currentRange.start),
         TimeStep.lifetime => '-',
-        TimeStep.last7Days || TimeStep.last30Days || TimeStep.custom => (){
-          final f = DateFormat.yMMMd(loc.localeName);
-          return '${f.format(intervall.currentRange.start)} - ${f.format(intervall.currentRange.end)}';
-        }(),
+        TimeStep.last7Days || TimeStep.last30Days || TimeStep.custom =>
+          '${DateFormat.yMMMd().format(start)} - ${DateFormat.yMMMd().format(end)}',
       };
       return Column(
         children: [
@@ -42,15 +39,11 @@ class IntervalPicker extends StatelessWidget {
           const SizedBox(height: 2),
           Row(
             children: [
-              Expanded(
-                flex: 3,
-                child: MaterialButton(
-                  onPressed: () => intervall.moveDataRangeByStep(-1),
-                  child: const Icon(Icons.chevron_left, size: 48),
-                ),
+              IconButton(
+                onPressed: () => intervall.moveDataRangeByStep(-1),
+                icon: const Icon(Icons.chevron_left, size: 48),
               ),
               Expanded(
-                flex: 4,
                 child: DropdownButton<TimeStep>(
                   value: intervall.stepSize,
                   isExpanded: true,
@@ -75,12 +68,9 @@ class IntervalPicker extends StatelessWidget {
                   ]
                 ),
               ),
-              Expanded(
-                flex: 3,
-                child: MaterialButton(
-                  onPressed: () => intervall.moveDataRangeByStep(1),
-                  child: const Icon(Icons.chevron_right, size: 48),
-                ),
+              MaterialButton(
+                onPressed: () => intervall.moveDataRangeByStep(1),
+                child: const Icon(Icons.chevron_right, size: 48),
               ),
             ],
           ),
