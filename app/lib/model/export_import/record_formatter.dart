@@ -45,32 +45,21 @@ class ScriptedFormatter implements Formatter {
     final text = formattedRecord.substring(_padLeft!, formattedRecord.length - _padRight!);
 
     final value = switch(restoreAbleType!) {
-      RowDataFieldType.timestamp => _decodeTimestamp(text),
+      RowDataFieldType.timestamp => (){
+        final num = int.tryParse(text);
+        return (num == null) ? null : DateTime.fromMillisecondsSinceEpoch(num);
+      }(),
       RowDataFieldType.sys || RowDataFieldType.dia || RowDataFieldType.pul => int.tryParse(text),
       RowDataFieldType.notes => text,
-      RowDataFieldType.color => _decodeColor(text),
+      RowDataFieldType.color => (){
+        try {
+          return int.tryParse(text) ?? MeasurementNeedlePin.fromMap(jsonDecode(text)).color.value;
+        } on FormatException { return null; } on TypeError { return null; }
+      }(),
       RowDataFieldType.intakes => NativeColumn.intakes.decode(text),
     };
     if (value != null) return (restoreAbleType!, value);
     return null;
-  }
-
-  DateTime? _decodeTimestamp(String text) {
-    final num = int.tryParse(text);
-    if (num != null) return DateTime.fromMillisecondsSinceEpoch(num);
-    return null;
-  }
-
-  int? _decodeColor(String text) {
-    final num = int.tryParse(text);
-    if (num != null) return num;
-    try {
-      return MeasurementNeedlePin.fromMap(jsonDecode(text)).color.value;
-    } on FormatException {
-      return null;
-    } on TypeError {
-      return null;
-    }
   }
 
   @override
