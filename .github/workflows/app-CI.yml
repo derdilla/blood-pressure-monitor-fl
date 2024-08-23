@@ -54,10 +54,11 @@ jobs:
     - name: Update goldens
       id: gold-upd
       if: failure()
-      run: flutter test --update-goldens --fail-fast || echo "FAILED=true" >> $GITHUB_OUTPUT
+      run: flutter test --update-goldens --fail-fast
       working-directory: app
     - name: PR golden changes
-      if: ${{ failure() && steps.gold-upd.outpus.FAILED == 'true' }}
+      # https://docs.github.com/en/actions/writing-workflows/choosing-what-your-workflow-does/evaluate-expressions-in-workflows-and-actions#example-of-failure-with-conditions
+      if: ${{ failure() && steps.gold-upd.conclusion == 'success' }}
       run: |
         git config user.name "GitHub Action (update goldens)"
         git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
