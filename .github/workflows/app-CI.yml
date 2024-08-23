@@ -20,7 +20,8 @@ jobs:
   unit-test:
     name: "🧩🧪 Run unit tests"
     runs-on: ubuntu-latest
- 
+    permissions:
+      pull-requests: write
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
@@ -50,10 +51,22 @@ jobs:
     - name: Run tests
       run: flutter test --coverage
       working-directory: app
-    - uses: actions/upload-artifact@v4
-      with:
-        name: app-coverage
-        path: app/coverage/lcov.info
+    - name: Update goldens
+      id: gold-upd
+      if: failure()
+      run: flutter test --update-goldens --fail-fast || echo "FAILED=true" >> $GITHUB_OUTPUT
+      working-directory: app
+    - name: PR golden changes
+      if: ${{ failure() && steps.gold-upd.outpus.FAILED == 'true' }}
+      run: |
+        git config user.name "GitHub Action (update goldens)"
+        git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+        git checkout -B action-update-goldens
+        export STATUS=${git status}
+        git commit -am "Update goldens"
+        gh pr create --base main --head action-update-goldens --title "Update goldens" --body $STATUS
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 #  Disabled: Integration tests are disabled as emulator setup fails on
 #  GH-actions. Actions images no longer provide enough disk space to create
