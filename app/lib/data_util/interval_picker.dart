@@ -63,8 +63,8 @@ class IntervalPicker extends StatelessWidget {
                     }
                   },
                   items: [
-                    for (final e in TimeStep.options)
-                      DropdownMenuItem(value: e, child: Text(e.getName(loc))),
+                    for (final TimeStep e in TimeStep.values)
+                      DropdownMenuItem(value: e, child: Text(e.localize(loc))),
                   ]
                 ),
               ),

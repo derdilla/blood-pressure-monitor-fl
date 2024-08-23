@@ -1,8 +1,8 @@
 import 'dart:collection';
 
 import 'package:blood_pressure_app/data_util/blood_pressure_builder.dart';
-import 'package:blood_pressure_app/data_util/display_interval_picker.dart';
 import 'package:blood_pressure_app/data_util/entry_context.dart';
+import 'package:blood_pressure_app/data_util/interval_picker.dart';
 import 'package:blood_pressure_app/data_util/repository_builder.dart';
 import 'package:blood_pressure_app/features/measurement_list/compact_measurement_list.dart';
 import 'package:blood_pressure_app/features/measurement_list/measurement_list.dart';

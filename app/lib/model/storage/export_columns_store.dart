@@ -14,10 +14,8 @@ class ExportColumnsManager extends ChangeNotifier {
       switch (c['t']) {
         case 0:
           manager.addOrUpdate(UserColumn.explicit(c['id'], c['csvTitle'], c['formatString']));
-          break;
         case 1:
           manager.addOrUpdate(TimeColumn.explicit(c['id'], c['csvTitle'], c['formatPattern']));
-          break;
         default:
           assert(false, 'Unexpected column type ${c['t']}.');
       }
