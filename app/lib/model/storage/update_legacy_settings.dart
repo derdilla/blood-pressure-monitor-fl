@@ -10,7 +10,7 @@ import 'package:blood_pressure_app/model/storage/export_columns_store.dart';
 import 'package:blood_pressure_app/model/storage/export_csv_settings_store.dart';
 import 'package:blood_pressure_app/model/storage/export_pdf_settings_store.dart';
 import 'package:blood_pressure_app/model/storage/export_settings_store.dart';
-import 'package:blood_pressure_app/model/storage/intervall_store.dart';
+import 'package:blood_pressure_app/model/storage/interval_store.dart';
 import 'package:blood_pressure_app/model/storage/settings_store.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -19,7 +19,7 @@ import 'package:sqflite/sqflite.dart';
 
 /// Function for upgrading shared preferences from pre 1.5.4 (Oct 23) versions.
 Future<void> updateLegacySettings(Settings settings, ExportSettings exportSettings, CsvExportSettings csvExportSettings,
-    PdfExportSettings pdfExportSettings, IntervallStoreManager intervallStoreManager,) async {
+    PdfExportSettings pdfExportSettings, IntervalStoreManager intervallStoreManager,) async {
   final SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
 
   final List<Future> futures = [];

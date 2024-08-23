@@ -15,13 +15,13 @@ Widget materialApp(Widget child, {
   ExportSettings? exportSettings,
   CsvExportSettings? csvExportSettings,
   PdfExportSettings? pdfExportSettings,
-  IntervallStoreManager? intervallStoreManager,
+  IntervalStoreManager? intervallStoreManager,
 }) {
   settings ??= Settings();
   exportSettings ??= ExportSettings();
   csvExportSettings ??= CsvExportSettings();
   pdfExportSettings ??= PdfExportSettings();
-  intervallStoreManager ??= IntervallStoreManager(IntervallStorage(), IntervallStorage(), IntervallStorage());
+  intervallStoreManager ??= IntervalStoreManager(IntervalStorage(), IntervalStorage(), IntervalStorage());
   return MultiProvider(
     providers: [
       ChangeNotifierProvider.value(value: settings),
@@ -44,7 +44,7 @@ Future<Widget> appBase(Widget child,  {
   ExportSettings? exportSettings,
   CsvExportSettings? csvExportSettings,
   PdfExportSettings? pdfExportSettings,
-  IntervallStoreManager? intervallStoreManager,
+  IntervalStoreManager? intervallStoreManager,
   BloodPressureRepository? bpRepo,
   MedicineRepository? medRepo,
   MedicineIntakeRepository? intakeRepo,
@@ -76,7 +76,7 @@ Future<Widget> appBaseWithData(Widget child,  {
   ExportSettings? exportSettings,
   CsvExportSettings? csvExportSettings,
   PdfExportSettings? pdfExportSettings,
-  IntervallStoreManager? intervallStoreManager,
+  IntervalStoreManager? intervallStoreManager,
   List<BloodPressureRecord>? records,
   List<Medicine>? meds,
   List<MedicineIntake>? intakes,

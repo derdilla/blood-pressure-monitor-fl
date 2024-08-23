@@ -3,7 +3,7 @@ import 'package:blood_pressure_app/model/storage/export_columns_store.dart';
 import 'package:blood_pressure_app/model/storage/export_csv_settings_store.dart';
 import 'package:blood_pressure_app/model/storage/export_pdf_settings_store.dart';
 import 'package:blood_pressure_app/model/storage/export_settings_store.dart';
-import 'package:blood_pressure_app/model/storage/intervall_store.dart';
+import 'package:blood_pressure_app/model/storage/interval_store.dart';
 import 'package:blood_pressure_app/model/storage/settings_store.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -229,9 +229,9 @@ class ConfigDao {
     );
   }
 
-  final Map<(int, int), IntervallStorage> _intervallStorageInstances = {};
+  final Map<(int, int), IntervalStorage> _intervallStorageInstances = {};
 
-  /// Loads a [IntervallStorage] object of a [profileID] from the database.
+  /// Loads a [IntervalStorage] object of a [profileID] from the database.
   ///
   /// The [storageID] allows for associating multiple intervalls with one profile.
   ///
@@ -241,21 +241,21 @@ class ConfigDao {
   /// Changes to the database will not propagate to the object.
   ///
   /// This should not be invoked directly in order to centralise [storageID] allocation. Currently this is done by
-  /// the [IntervallStoreManager] class.
-  Future<IntervallStorage> loadIntervallStorage(int profileID, int storageID) async {
+  /// the [IntervalStoreManager] class.
+  Future<IntervalStorage> loadIntervalStorage(int profileID, int storageID) async {
     if (_intervallStorageInstances.containsKey((profileID, storageID))) return _intervallStorageInstances[(profileID, storageID)]!;
     final dbEntry = await _configDB.database.query(
-        ConfigDB.selectedIntervallStorageTable,
+        ConfigDB.selectedIntervalStorageTable,
         columns: ['stepSize', 'start', 'end'],
         where: 'profile_id = ? AND storage_id = ?',
         whereArgs: [profileID, storageID],
     );
-    late final IntervallStorage intervallStorage;
+    late final IntervalStorage intervallStorage;
     if (dbEntry.isEmpty) {
-      intervallStorage = IntervallStorage();
+      intervallStorage = IntervalStorage();
     } else {
       assert(dbEntry.length == 1, 'Keys should ensure only one entry is possible.');
-      intervallStorage = IntervallStorage.fromMap(dbEntry.first);
+      intervallStorage = IntervalStorage.fromMap(dbEntry.first);
     }
 
     _updateIntervallStorage(profileID, storageID, intervallStorage);
@@ -266,10 +266,10 @@ class ConfigDao {
     return intervallStorage;
   }
 
-  /// Update specific [IntervallStorage] for a profile in the database.
+  /// Update specific [IntervalStorage] for a profile in the database.
   ///
   /// Adds an entry if necessary.
-  Future<void> _updateIntervallStorage(int profileID, int storageID, IntervallStorage intervallStorage) async {
+  Future<void> _updateIntervallStorage(int profileID, int storageID, IntervalStorage intervallStorage) async {
     if (!_configDB.database.isOpen) return;
     final Map<String, dynamic> columnValueMap = {
       'profile_id': profileID,
@@ -277,7 +277,7 @@ class ConfigDao {
     };
     columnValueMap.addAll(intervallStorage.toMap());
     await _configDB.database.insert(
-        ConfigDB.selectedIntervallStorageTable,
+        ConfigDB.selectedIntervalStorageTable,
         columnValueMap,
         conflictAlgorithm: ConflictAlgorithm.replace,
     );

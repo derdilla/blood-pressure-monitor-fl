@@ -7,7 +7,7 @@ import 'package:blood_pressure_app/data_util/repository_builder.dart';
 import 'package:blood_pressure_app/features/measurement_list/compact_measurement_list.dart';
 import 'package:blood_pressure_app/features/measurement_list/measurement_list.dart';
 import 'package:blood_pressure_app/features/statistics/value_graph.dart';
-import 'package:blood_pressure_app/model/storage/intervall_store.dart';
+import 'package:blood_pressure_app/model/storage/interval_store.dart';
 import 'package:blood_pressure_app/model/storage/settings_store.dart';
 import 'package:blood_pressure_app/screens/settings_screen.dart';
 import 'package:blood_pressure_app/screens/statistics_screen.dart';
@@ -36,11 +36,11 @@ class AppHome extends StatelessWidget {
           width: MediaQuery.of(context).size.width,
           // TODO: stop duplicating this complex construct
           child: RepositoryBuilder<MedicineIntake, MedicineIntakeRepository>(
-            rangeType: IntervallStoreManagerLocation.mainPage,
+            rangeType: IntervalStoreManagerLocation.mainPage,
             onData: (context, List<MedicineIntake> intakes) => RepositoryBuilder<Note, NoteRepository>(
-              rangeType: IntervallStoreManagerLocation.mainPage,
+              rangeType: IntervalStoreManagerLocation.mainPage,
               onData: (context, List<Note> notes) => BloodPressureBuilder(
-                rangeType: IntervallStoreManagerLocation.mainPage,
+                rangeType: IntervalStoreManagerLocation.mainPage,
                 onData: (BuildContext context, UnmodifiableListView<BloodPressureRecord> records) => BloodPressureValueGraph(
                   records: records,
                   colors: notes,
@@ -50,7 +50,7 @@ class AppHome extends StatelessWidget {
             ),
           ),
         ),
-        const IntervalPicker(type: IntervallStoreManagerLocation.mainPage),
+        const IntervalPicker(type: IntervalStoreManagerLocation.mainPage),
       ],
     ),
   );
@@ -73,16 +73,16 @@ class AppHome extends StatelessWidget {
         return Center(
           child: Padding(
             padding: const EdgeInsets.only(top: 20),
-            child: Consumer<IntervallStoreManager>(builder: (context, intervalls, child) =>
+            child: Consumer<IntervalStoreManager>(builder: (context, intervalls, child) =>
               Column(children: [
                 _buildValueGraph(context),
                 Expanded(
                   child: BloodPressureBuilder(
-                    rangeType: IntervallStoreManagerLocation.mainPage,
+                    rangeType: IntervalStoreManagerLocation.mainPage,
                     onData: (context, records) => RepositoryBuilder<MedicineIntake, MedicineIntakeRepository>(
-                      rangeType: IntervallStoreManagerLocation.mainPage,
+                      rangeType: IntervalStoreManagerLocation.mainPage,
                       onData: (BuildContext context, List<MedicineIntake> intakes) => RepositoryBuilder<Note, NoteRepository>(
-                        rangeType: IntervallStoreManagerLocation.mainPage,
+                        rangeType: IntervalStoreManagerLocation.mainPage,
                         onData: (BuildContext context, List<Note> notes) {
                           final entries = FullEntryList.merged(records, notes, intakes);
                           entries.sort((a, b) => b.time.compareTo(a.time)); // newest first

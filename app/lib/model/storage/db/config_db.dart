@@ -58,7 +58,7 @@ class ConfigDB {
 
   /// Name of the table for storing time intervals to display.
   ///
-  /// It is used to store json representations of [IntervallStorage] objects. Data is saved as fields, to save space
+  /// It is used to store json representations of [IntervalStorage] objects. Data is saved as fields, to save space
   /// on the disk and because no changes in the data format are expected. The field names are made to match the variable
   /// names in the class.
   ///
@@ -67,8 +67,8 @@ class ConfigDB {
   ///
   /// Format: `CREATE TABLE selectedIntervallStorage(profile_id INTEGER, storage_id INTEGER, stepSize INTEGER,`
   /// ` start INTEGER, end INTEGER, PRIMARY KEY(profile_id, storage_id))`
-  static const String selectedIntervallStorageTable = 'selectedIntervallStorage';
-  static const String _selectedIntervallStorageCreationString = 'CREATE TABLE selectedIntervallStorage(profile_id '
+  static const String selectedIntervalStorageTable = 'selectedIntervallStorage';
+  static const String _selectedIntervalStorageCreationString = 'CREATE TABLE selectedIntervallStorage(profile_id '
       'INTEGER, storage_id INTEGER, stepSize INTEGER, start INTEGER, end INTEGER, '
       'PRIMARY KEY(profile_id, storage_id))';
 
@@ -116,7 +116,7 @@ class ConfigDB {
     await db.execute(_exportSettingsTableCreationString);
     await db.execute(_exportCsvSettingsTableCreationString);
     await db.execute(_exportPdfSettingsTableCreationString);
-    await db.execute(_selectedIntervallStorageCreationString);
+    await db.execute(_selectedIntervalStorageCreationString);
     await db.execute(_exportColumnsTableCreationString);
   }
 
@@ -129,7 +129,7 @@ class ConfigDB {
       await db.execute(_exportSettingsTableCreationString);
       await db.execute(_exportCsvSettingsTableCreationString);
       await db.execute(_exportPdfSettingsTableCreationString);
-      await db.execute(_selectedIntervallStorageCreationString);
+      await db.execute(_selectedIntervalStorageCreationString);
       await db.execute(_exportColumnsTableCreationString);
       await db.database.setVersion(2);
     } else if (oldVersion == 2) {
