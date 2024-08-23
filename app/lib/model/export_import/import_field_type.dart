@@ -23,23 +23,14 @@ enum RowDataFieldType {
   /// Guarantees [List<(String medicineDesignation, double dosisMg)>] is returned.
   intakes;
 
-  /// Selection of a displayable string from [localizations].
-  String localize(AppLocalizations localizations) {
-    switch(this) {
-      case RowDataFieldType.timestamp:
-        return localizations.timestamp;
-      case RowDataFieldType.sys:
-        return localizations.sysLong;
-      case RowDataFieldType.dia:
-        return localizations.diaLong;
-      case pul:
-        return localizations.pulLong;
-      case RowDataFieldType.notes:
-        return localizations.notes;
-      case RowDataFieldType.color:
-        return localizations.color;
-      case RowDataFieldType.intakes:
-        return localizations.intakes;
-    }
-  }
+  /// Select the matching string from [localizations].
+  String localize(AppLocalizations localizations) => switch(this) {
+    timestamp => localizations.timestamp,
+    sys => localizations.sysLong,
+    dia => localizations.diaLong,
+    pul => localizations.pulLong,
+    notes => localizations.notes,
+    color => localizations.color,
+    intakes => localizations.intakes,
+  };
 }

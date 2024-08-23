@@ -68,54 +68,38 @@ class IntervallStorage extends ChangeNotifier {
   void moveDataRangeByStep(int directionalStep) {
     final oldStart = currentRange.start;
     final oldEnd = currentRange.end;
-    switch (stepSize) {
-      case TimeStep.day:
-        currentRange = DateRange(
-          start: oldStart.add(Duration(days: directionalStep)),
-          end: oldEnd.add(Duration(days: directionalStep)),
-        );
-        break;
-      case TimeStep.week:
-      case TimeStep.last7Days:
-        currentRange = DateRange(
-          start: oldStart.add(Duration(days: directionalStep * 7)),
-          end: oldEnd.add(Duration(days: directionalStep * 7)),
-        );
-        break;
-      case TimeStep.month:
-        currentRange = DateRange(
-          // No fitting Duration: wraps correctly according to doc
-          start: oldStart.copyWith(month: oldStart.month + directionalStep),
-          end: oldEnd.copyWith(month: oldEnd.month + directionalStep),
-        );
-        break;
-      case TimeStep.year:
-        currentRange = DateRange(
-          // No fitting Duration: wraps correctly according to doc
-          start: oldStart.copyWith(year: oldStart.year + directionalStep),
-          end: oldEnd.copyWith(year: oldEnd.year + directionalStep),
-        );
-        break;
-      case TimeStep.lifetime:
-        currentRange = DateRange(
-            start: DateTime.fromMillisecondsSinceEpoch(1),
-            end: DateTime.now().copyWith(hour: 23, minute: 59, second: 59),
-        );
-        break;
-      case TimeStep.last30Days:
-        currentRange = DateRange(
-            start: oldStart.add(Duration(days: directionalStep * 30)),
-            end: oldEnd.add(Duration(days:  directionalStep * 30)),
-        );
-        break;
-      case TimeStep.custom:
-        final step = oldEnd.difference(oldStart) * directionalStep;
-        currentRange = DateRange(
-            start: oldStart.add(step),
-            end: oldEnd.add(step),
-        );
-        break;
-    }
+    currentRange = switch (stepSize) {
+      TimeStep.day => DateRange(
+        start: oldStart.add(Duration(days: directionalStep)),
+        end: oldEnd.add(Duration(days: directionalStep)),
+      ),
+      TimeStep.week || TimeStep.last7Days => DateRange(
+        start: oldStart.add(Duration(days: directionalStep * 7)),
+        end: oldEnd.add(Duration(days: directionalStep * 7)),
+      ),
+      TimeStep.month => DateRange(
+        // No fitting Duration: wraps correctly according to doc
+        start: oldStart.copyWith(month: oldStart.month + directionalStep),
+        end: oldEnd.copyWith(month: oldEnd.month + directionalStep),
+      ),
+      TimeStep.year => DateRange(
+        // No fitting Duration: wraps correctly according to doc
+        start: oldStart.copyWith(year: oldStart.year + directionalStep),
+        end: oldEnd.copyWith(year: oldEnd.year + directionalStep),
+      ),
+      TimeStep.lifetime => DateRange(
+        start: DateTime.fromMillisecondsSinceEpoch(1),
+        end: DateTime.now().copyWith(hour: 23, minute: 59, second: 59),
+      ),
+      TimeStep.last30Days => DateRange(
+        start: oldStart.add(Duration(days: directionalStep * 30)),
+        end: oldEnd.add(Duration(days:  directionalStep * 30)),
+      ),
+      TimeStep.custom => DateRange(
+        start: oldStart.add(oldEnd.difference(oldStart) * directionalStep),
+        end: oldEnd.add(oldEnd.difference(oldStart) * directionalStep),
+      ),
+    };
   }
 
   DateRange _getMostRecentDisplayIntervall() {
@@ -168,74 +152,43 @@ enum TimeStep {
   /// Recreate a TimeStep from a number created with [TimeStep.serialize].
   factory TimeStep.deserialize(value) {
     final int? intValue = ConvertUtil.parseInt(value);
-    if (intValue == null) return TimeStep.last7Days;
-
-    switch (intValue) {
-      case 0:
-        return TimeStep.day;
-      case 1:
-        return TimeStep.month;
-      case 2:
-        return TimeStep.year;
-      case 3:
-        return TimeStep.lifetime;
-      case 4:
-        return TimeStep.week;
-      case 5:
-        return TimeStep.last7Days;
-      case 6:
-        return TimeStep.last30Days;
-      case 7:
-        return TimeStep.custom;
-      default:
-        assert(false);
-        return TimeStep.last7Days;
-    }
+    assert(intValue == null || intValue >= 0 && intValue <= 7);
+    return switch (intValue) {
+      null => TimeStep.last7Days,
+      0 => TimeStep.day,
+      1 => TimeStep.month,
+      2 => TimeStep.year,
+      3 => TimeStep.lifetime,
+      4 => TimeStep.week,
+      5 => TimeStep.last7Days,
+      6 => TimeStep.last30Days,
+      7 => TimeStep.custom,
+      _ => TimeStep.last7Days,
+    };
   }
 
-  static const options = [TimeStep.day, TimeStep.week, TimeStep.month, TimeStep.year, TimeStep.lifetime, TimeStep.last7Days, TimeStep.last30Days, TimeStep.custom];
+  /// Select a displayable string from [localizations].
+  String localize(AppLocalizations localizations) => switch (this) {
+    TimeStep.day => localizations.day,
+    TimeStep.month => localizations.month,
+    TimeStep.year => localizations.year,
+    TimeStep.lifetime => localizations.lifetime,
+    TimeStep.week => localizations.week,
+    TimeStep.last7Days => localizations.last7Days,
+    TimeStep.last30Days => localizations.last30Days,
+    TimeStep.custom =>  localizations.custom,
+  };
 
-  String getName(AppLocalizations localizations) {
-    switch (this) {
-      case TimeStep.day:
-        return localizations.day;
-      case TimeStep.month:
-        return localizations.month;
-      case TimeStep.year:
-        return localizations.year;
-      case TimeStep.lifetime:
-        return localizations.lifetime;
-      case TimeStep.week:
-        return localizations.week;
-      case TimeStep.last7Days:
-        return localizations.last7Days;
-      case TimeStep.last30Days:
-        return localizations.last30Days;
-      case TimeStep.custom:
-        return localizations.custom;
-    }
-  }
-
-  int serialize() {
-    switch (this) {
-      case TimeStep.day:
-        return 0;
-      case TimeStep.month:
-        return 1;
-      case TimeStep.year:
-        return 2;
-      case TimeStep.lifetime:
-        return 3;
-      case TimeStep.week:
-        return 4;
-      case TimeStep.last7Days:
-        return 5;
-      case TimeStep.last30Days:
-        return 6;
-      case TimeStep.custom:
-        return 7;
-    }
-  }
+  int serialize() =>switch (this) {
+    TimeStep.day => 0,
+    TimeStep.month => 1,
+    TimeStep.year => 2,
+    TimeStep.lifetime => 3,
+    TimeStep.week => 4,
+    TimeStep.last7Days => 5,
+    TimeStep.last30Days => 6,
+    TimeStep.custom => 7,
+  };
 }
 
 /// Class that stores the interval objects that are needed in the app and provides named access to them. 

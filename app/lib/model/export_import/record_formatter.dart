@@ -42,35 +42,35 @@ class ScriptedFormatter implements Formatter {
   @override
   (RowDataFieldType, dynamic)? decode(String formattedRecord) {
     if (restoreAbleType == null) return null;
-
     final text = formattedRecord.substring(_padLeft!, formattedRecord.length - _padRight!);
 
-    final value = (){switch(restoreAbleType!) {
-      case RowDataFieldType.timestamp:
-        final num = int.tryParse(text);
-        if (num != null) return DateTime.fromMillisecondsSinceEpoch(num);
-        return null;
-      case RowDataFieldType.sys:
-      case RowDataFieldType.dia:
-      case RowDataFieldType.pul:
-        return int.tryParse(text);
-      case RowDataFieldType.notes:
-        return text;
-      case RowDataFieldType.color:
-        final num = int.tryParse(text);
-        if (num != null) return num;
-        try {
-          return MeasurementNeedlePin.fromMap(jsonDecode(text)).color.value;
-        } on FormatException {
-          return null;
-        } on TypeError {
-          return null;
-        }
-      case RowDataFieldType.intakes:
-        return NativeColumn.intakes.decode(text);
-    }}();
+    final value = switch(restoreAbleType!) {
+      RowDataFieldType.timestamp => _decodeTimestamp(text),
+      RowDataFieldType.sys || RowDataFieldType.dia || RowDataFieldType.pul => int.tryParse(text),
+      RowDataFieldType.notes => text,
+      RowDataFieldType.color => _decodeColor(text),
+      RowDataFieldType.intakes => NativeColumn.intakes.decode(text),
+    };
     if (value != null) return (restoreAbleType!, value);
     return null;
+  }
+
+  DateTime? _decodeTimestamp(String text) {
+    final num = int.tryParse(text);
+    if (num != null) return DateTime.fromMillisecondsSinceEpoch(num);
+    return null;
+  }
+
+  int? _decodeColor(String text) {
+    final num = int.tryParse(text);
+    if (num != null) return num;
+    try {
+      return MeasurementNeedlePin.fromMap(jsonDecode(text)).color.value;
+    } on FormatException {
+      return null;
+    } on TypeError {
+      return null;
+    }
   }
 
   @override

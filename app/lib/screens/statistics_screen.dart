@@ -1,5 +1,5 @@
 import 'package:blood_pressure_app/data_util/blood_pressure_builder.dart';
-import 'package:blood_pressure_app/data_util/display_interval_picker.dart';
+import 'package:blood_pressure_app/data_util/interval_picker.dart';
 import 'package:blood_pressure_app/features/statistics/blood_pressure_distribution.dart';
 import 'package:blood_pressure_app/model/blood_pressure_analyzer.dart';
 import 'package:blood_pressure_app/model/storage/intervall_store.dart';

@@ -92,22 +92,12 @@ class ConvertUtil {
   }
 
   /// Try to recreate the theme mode stored as a integer.
-  static ThemeMode? parseThemeMode(dynamic value) {
-    final int? intValue = ConvertUtil.parseInt(value);
-    switch(intValue) {
-      case null:
-        return null;
-      case 0:
-        return ThemeMode.system;
-      case 1:
-        return ThemeMode.dark;
-      case 2:
-        return ThemeMode.light;
-      default:
-        assert(false);
-        return null;
-    }
-  }
+  static ThemeMode? parseThemeMode(value) => switch(ConvertUtil.parseInt(value)) {
+    0 => ThemeMode.system,
+    1 => ThemeMode.dark,
+    2 => ThemeMode.light,
+    _ => null,
+  };
 
   /// Does its best attempt at parsing a time in arbitrary format.
   static DateTime? parseTime(dynamic time) {
