@@ -1,7 +1,7 @@
 import 'package:blood_pressure_app/model/storage/export_csv_settings_store.dart';
 import 'package:blood_pressure_app/model/storage/export_pdf_settings_store.dart';
 import 'package:blood_pressure_app/model/storage/export_settings_store.dart';
-import 'package:blood_pressure_app/model/storage/intervall_store.dart';
+import 'package:blood_pressure_app/model/storage/interval_store.dart';
 import 'package:blood_pressure_app/model/storage/settings_store.dart';
 import 'package:blood_pressure_app/screens/statistics_screen.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -73,7 +73,7 @@ Future<void> _initStatsPage(WidgetTester tester, List<BloodPressureRecord> recor
   ExportSettings? exportSettings,
   CsvExportSettings? csvExportSettings,
   PdfExportSettings? pdfExportSettings,
-  IntervallStoreManager? intervallStoreManager,
+  IntervalStoreManager? intervallStoreManager,
 }) async {
   await tester.pumpWidget(await appBaseWithData(const StatisticsScreen(),
     records: records,

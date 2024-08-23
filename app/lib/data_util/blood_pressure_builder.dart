@@ -1,7 +1,7 @@
 import 'dart:collection';
 
 import 'package:blood_pressure_app/data_util/repository_builder.dart';
-import 'package:blood_pressure_app/model/storage/intervall_store.dart';
+import 'package:blood_pressure_app/model/storage/interval_store.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:health_data_store/health_data_store.dart';
@@ -19,7 +19,7 @@ class BloodPressureBuilder extends StatelessWidget {
   final Widget Function(BuildContext context, UnmodifiableListView<BloodPressureRecord> records) onData;
 
   /// Which measurements to load.
-  final IntervallStoreManagerLocation rangeType;
+  final IntervalStoreManagerLocation rangeType;
   
   @override
   Widget build(BuildContext context) =>

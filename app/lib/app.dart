@@ -45,7 +45,7 @@ class _AppState extends State<App> {
   ExportSettings? _exportSettings;
   CsvExportSettings? _csvExportSettings;
   PdfExportSettings? _pdfExportSettings;
-  IntervallStoreManager? _intervallStorageManager;
+  IntervalStoreManager? _intervalStorageManager;
   ExportColumnsManager? _exportColumnsManager;
 
   @override
@@ -58,7 +58,7 @@ class _AppState extends State<App> {
     _exportSettings?.dispose();
     _csvExportSettings?.dispose();
     _pdfExportSettings?.dispose();
-    _intervallStorageManager?.dispose();
+    _intervalStorageManager?.dispose();
     _exportColumnsManager?.dispose();
     super.dispose();
   }
@@ -94,7 +94,7 @@ class _AppState extends State<App> {
       _exportSettings ??= await configDao.loadExportSettings(0);
       _csvExportSettings ??= await configDao.loadCsvExportSettings(0);
       _pdfExportSettings ??= await configDao.loadPdfExportSettings(0);
-      _intervallStorageManager ??= await IntervallStoreManager.load(configDao, 0);
+      _intervalStorageManager ??= await IntervalStoreManager.load(configDao, 0);
       _exportColumnsManager ??= await configDao.loadExportColumnsManager(0);
     } catch (e, stack) {
       await ErrorReporting.reportCriticalError('Error loading config db', '$e\n$stack',);
@@ -129,7 +129,7 @@ class _AppState extends State<App> {
 
       // update logic
       if (_settings!.lastVersion == 0) {
-        await updateLegacySettings(_settings!, _exportSettings!, _csvExportSettings!, _pdfExportSettings!, _intervallStorageManager!);
+        await updateLegacySettings(_settings!, _exportSettings!, _csvExportSettings!, _pdfExportSettings!, _intervalStorageManager!);
         await updateLegacyExport(_configDB!, _exportColumnsManager!);
 
         _settings!.lastVersion = 30;
@@ -151,8 +151,8 @@ class _AppState extends State<App> {
 
       _settings!.lastVersion = int.parse((await PackageInfo.fromPlatform()).buildNumber);
 
-      // Reset the step size intervall to current on startup
-      _intervallStorageManager!.mainPage.setToMostRecentIntervall();
+      // Reset the step size interval to current on startup
+      _intervalStorageManager!.mainPage.setToMostRecentInterval();
     } catch (e, stack) {
       await ErrorReporting.reportCriticalError('Error performing upgrades:', '$e\n$stack',);
     }
@@ -170,7 +170,7 @@ class _AppState extends State<App> {
           ChangeNotifierProvider.value(value: _exportSettings!),
           ChangeNotifierProvider.value(value: _csvExportSettings!),
           ChangeNotifierProvider.value(value: _pdfExportSettings!),
-          ChangeNotifierProvider.value(value: _intervallStorageManager!),
+          ChangeNotifierProvider.value(value: _intervalStorageManager!),
           ChangeNotifierProvider.value(value: _exportColumnsManager!),
         ],
         child: _buildAppRoot(),

@@ -6,7 +6,7 @@ import 'package:blood_pressure_app/model/storage/export_columns_store.dart';
 import 'package:blood_pressure_app/model/storage/export_csv_settings_store.dart';
 import 'package:blood_pressure_app/model/storage/export_pdf_settings_store.dart';
 import 'package:blood_pressure_app/model/storage/export_settings_store.dart';
-import 'package:blood_pressure_app/model/storage/intervall_store.dart';
+import 'package:blood_pressure_app/model/storage/interval_store.dart';
 import 'package:blood_pressure_app/model/storage/settings_store.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -15,15 +15,15 @@ import 'package:health_data_store/health_data_store.dart';
 void main() {
   group('IntervallStorage', () {
     test('should create json without error', () {
-      final intervall = IntervallStorage(stepSize: TimeStep.year);
+      final intervall = IntervalStorage(stepSize: TimeStep.year);
       final json = intervall.toJson();
       expect(json.length, greaterThan(0));
     });
 
     test('should load same data from json', () {
-      final initialData = IntervallStorage();
+      final initialData = IntervalStorage();
       final json = initialData.toJson();
-      final recreatedData = IntervallStorage.fromJson(json);
+      final recreatedData = IntervalStorage.fromJson(json);
 
       expect(initialData.stepSize, recreatedData.stepSize);
       expect(initialData.currentRange.start.millisecondsSinceEpoch,
@@ -33,12 +33,12 @@ void main() {
     });
 
     test('should load same data from json in edge cases', () {
-      final initialData = IntervallStorage(stepSize: TimeStep.month, range: DateRange(
+      final initialData = IntervalStorage(stepSize: TimeStep.month, range: DateRange(
           start: DateTime.fromMillisecondsSinceEpoch(1234),
           end: DateTime.fromMillisecondsSinceEpoch(5678),
       ),);
       final json = initialData.toJson();
-      final recreatedData = IntervallStorage.fromJson(json);
+      final recreatedData = IntervalStorage.fromJson(json);
 
       expect(initialData.stepSize, TimeStep.month);
       expect(recreatedData.currentRange.start.millisecondsSinceEpoch, 1234);
@@ -46,18 +46,18 @@ void main() {
     });
 
     test('should not crash when parsing incorrect json', () {
-      IntervallStorage.fromJson('banana');
-      IntervallStorage.fromJson('{"stepSize" = 1}');
-      IntervallStorage.fromJson('{"stepSize": 1');
-      IntervallStorage.fromJson('{stepSize: 1}');
-      IntervallStorage.fromJson('green{stepSize: 1}');
+      IntervalStorage.fromJson('banana');
+      IntervalStorage.fromJson('{"stepSize" = 1}');
+      IntervalStorage.fromJson('{"stepSize": 1');
+      IntervalStorage.fromJson('{stepSize: 1}');
+      IntervalStorage.fromJson('green{stepSize: 1}');
     });
 
     test('should not crash when parsing invalid values and ignore them', () {
-      final v1 = IntervallStorage.fromJson('{"stepSize": true}');
-      final v2 = IntervallStorage.fromJson('{"stepSize": "month"}');
-      final v3 = IntervallStorage.fromJson('{"start": "month", "end": 10.5}');
-      final v4 = IntervallStorage.fromJson('{"start": 18.6, "end": 90.65}');
+      final v1 = IntervalStorage.fromJson('{"stepSize": true}');
+      final v2 = IntervalStorage.fromJson('{"stepSize": "month"}');
+      final v3 = IntervalStorage.fromJson('{"start": "month", "end": 10.5}');
+      final v4 = IntervalStorage.fromJson('{"start": 18.6, "end": 90.65}');
 
       expect(v1.stepSize, TimeStep.last7Days);
       expect(v2.stepSize, TimeStep.last7Days);

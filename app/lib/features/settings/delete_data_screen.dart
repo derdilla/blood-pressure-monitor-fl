@@ -40,7 +40,7 @@ class _DeleteDataScreenState extends State<DeleteDataScreen> {
                 context.read<ExportSettings>().reset();
                 context.read<CsvExportSettings>().reset();
                 context.read<PdfExportSettings>().reset();
-                context.read<IntervallStoreManager>().reset();
+                context.read<IntervalStoreManager>().reset();
                 context.read<ExportColumnsManager>().reset();
                 messanger.showSnackBar(SnackBar(
                   content: Text(localizations.deletionConfirmed),

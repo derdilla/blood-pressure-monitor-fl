@@ -1,24 +1,24 @@
 import 'package:blood_pressure_app/model/datarange_extension.dart';
-import 'package:blood_pressure_app/model/storage/intervall_store.dart';
+import 'package:blood_pressure_app/model/storage/interval_store.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:week_of_year/date_week_extensions.dart';
 
-/// A selector for [IntervallStorage] values.
+/// A selector for [IntervalStorage] values.
 ///
-/// Allows selection [IntervallStorage.currentRange] and moving intervall wise
+/// Allows selection [IntervalStorage.currentRange] and moving intervall wise
 /// in both directions.
 class IntervalPicker extends StatelessWidget {
-  /// Create a selector for [IntervallStorage] values.
+  /// Create a selector for [IntervalStorage] values.
   const IntervalPicker({super.key, required this.type});
 
   /// Which range to display and modify.
-  final IntervallStoreManagerLocation type;
+  final IntervalStoreManagerLocation type;
   
   @override
-  Widget build(BuildContext context) => Consumer<IntervallStoreManager>(
+  Widget build(BuildContext context) => Consumer<IntervalStoreManager>(
     builder: (context, intervallStoreManager, _) {
       final intervall = intervallStoreManager.get(type);
       final loc = AppLocalizations.of(context)!;

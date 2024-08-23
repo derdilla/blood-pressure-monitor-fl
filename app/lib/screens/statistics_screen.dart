@@ -2,7 +2,7 @@ import 'package:blood_pressure_app/data_util/blood_pressure_builder.dart';
 import 'package:blood_pressure_app/data_util/interval_picker.dart';
 import 'package:blood_pressure_app/features/statistics/blood_pressure_distribution.dart';
 import 'package:blood_pressure_app/model/blood_pressure_analyzer.dart';
-import 'package:blood_pressure_app/model/storage/intervall_store.dart';
+import 'package:blood_pressure_app/model/storage/interval_store.dart';
 import 'package:blood_pressure_app/model/storage/settings_store.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
@@ -27,7 +27,7 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
         title: Text(localizations.statistics),
       ),
       body: BloodPressureBuilder(
-        rangeType: IntervallStoreManagerLocation.statsPage,
+        rangeType: IntervalStoreManagerLocation.statsPage,
         onData: (context, data) {
           final analyzer = BloodPressureAnalyser(data.toList());
           return ListView(
@@ -120,7 +120,7 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
       bottomNavigationBar: Container(
         height: 70,
         margin: const EdgeInsets.only(top: 15, bottom: 5),
-        child: const IntervalPicker(type: IntervallStoreManagerLocation.statsPage,),
+        child: const IntervalPicker(type: IntervalStoreManagerLocation.statsPage,),
       ),
     );
   }

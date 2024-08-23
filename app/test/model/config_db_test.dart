@@ -4,7 +4,7 @@ import 'package:blood_pressure_app/model/storage/export_columns_store.dart';
 import 'package:blood_pressure_app/model/storage/export_csv_settings_store.dart';
 import 'package:blood_pressure_app/model/storage/export_pdf_settings_store.dart';
 import 'package:blood_pressure_app/model/storage/export_settings_store.dart';
-import 'package:blood_pressure_app/model/storage/intervall_store.dart';
+import 'package:blood_pressure_app/model/storage/interval_store.dart';
 import 'package:blood_pressure_app/model/storage/settings_store.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -31,7 +31,7 @@ void main() {
       expect(tableNames.contains(ConfigDB.exportSettingsTable), true);
       expect(tableNames.contains(ConfigDB.exportCsvSettingsTable), true);
       expect(tableNames.contains(ConfigDB.exportPdfSettingsTable), true);
-      expect(tableNames.contains(ConfigDB.selectedIntervallStorageTable), true);
+      expect(tableNames.contains(ConfigDB.selectedIntervalStorageTable), true);
       expect(tableNames.contains(ConfigDB.exportColumnsTable), true);
     });
     test('should save and load table entries', () async {
@@ -62,7 +62,7 @@ void main() {
       expect((await dao.loadExportSettings(0)).toJson(), ExportSettings().toJson());
       expect((await dao.loadCsvExportSettings(0)).toJson(), CsvExportSettings().toJson());
       expect((await dao.loadPdfExportSettings(0)).toJson(), PdfExportSettings().toJson());
-      expect((await dao.loadIntervallStorage(0,0)).stepSize, IntervallStorage().stepSize);
+      expect((await dao.loadIntervalStorage(0,0)).stepSize, IntervalStorage().stepSize);
       expect((await dao.loadExportColumnsManager(0)).userColumns, ExportColumnsManager().userColumns);
     });
     test('should save changes', () async {

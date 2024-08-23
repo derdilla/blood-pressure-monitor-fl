@@ -7,24 +7,24 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:health_data_store/health_data_store.dart';
 
 /// Class for storing the current interval, as it is needed in start page, statistics and export.
-class IntervallStorage extends ChangeNotifier {
+class IntervalStorage extends ChangeNotifier {
   /// Create a instance from a map created by [toMap].
-  factory IntervallStorage.fromMap(Map<String, dynamic> map) => IntervallStorage(
+  factory IntervalStorage.fromMap(Map<String, dynamic> map) => IntervalStorage(
     stepSize: TimeStep.deserialize(map['stepSize']),
     range: ConvertUtil.parseRange(map['start'], map['end']),
   );
 
   /// Create a instance from a [String] created by [toJson].
-  factory IntervallStorage.fromJson(String json) {
+  factory IntervalStorage.fromJson(String json) {
     try {
-      return IntervallStorage.fromMap(jsonDecode(json));
+      return IntervalStorage.fromMap(jsonDecode(json));
     } catch (exception) {
-      return IntervallStorage();
+      return IntervalStorage();
     }
   }
 
   /// Create a storage to interact with a display intervall.
-  IntervallStorage({TimeStep? stepSize, DateRange? range}) :
+  IntervalStorage({TimeStep? stepSize, DateRange? range}) :
     _stepSize = stepSize ?? TimeStep.last7Days {
     _currentRange = range ?? _getMostRecentDisplayIntervall();
   }
@@ -49,7 +49,7 @@ class IntervallStorage extends ChangeNotifier {
   /// sets the stepSize to the new value and resets the currentRange to the most recent one. 
   void changeStepSize(TimeStep value) {
     _stepSize = value;
-    setToMostRecentIntervall();
+    setToMostRecentInterval();
   }
 
   DateRange get currentRange => _currentRange;
@@ -60,7 +60,7 @@ class IntervallStorage extends ChangeNotifier {
   }
 
   /// Sets internal _currentRange to the most recent intervall and notifies listeners.
-  void setToMostRecentIntervall() {
+  void setToMostRecentInterval() {
     _currentRange = _getMostRecentDisplayIntervall();
     notifyListeners();
   }
@@ -192,51 +192,46 @@ enum TimeStep {
 }
 
 /// Class that stores the interval objects that are needed in the app and provides named access to them. 
-class IntervallStoreManager extends ChangeNotifier {
-  /// Constructor for creating [IntervallStoreManager] from items.
+class IntervalStoreManager extends ChangeNotifier {
+  /// Constructor for creating [IntervalStoreManager] from items.
   ///
-  /// Consider using [IntervallStoreManager.load] for loading [IntervallStorage] objects from the database, as it
+  /// Consider using [IntervalStoreManager.load] for loading [IntervalStorage] objects from the database, as it
   /// automatically uses the correct storage ids.
-  IntervallStoreManager(this.mainPage, this.exportPage, this.statsPage) {
+  IntervalStoreManager(this.mainPage, this.exportPage, this.statsPage) {
     mainPage.addListener(notifyListeners);
     exportPage.addListener(notifyListeners);
     statsPage.addListener(notifyListeners);
   }
 
-  static Future<IntervallStoreManager> load(ConfigDao configDao, int profileID) async =>
-    IntervallStoreManager(
-      await configDao.loadIntervallStorage(profileID, 0),
-      await configDao.loadIntervallStorage(profileID, 1),
-      await configDao.loadIntervallStorage(profileID, 2),
+  static Future<IntervalStoreManager> load(ConfigDao configDao, int profileID) async =>
+    IntervalStoreManager(
+      await configDao.loadIntervalStorage(profileID, 0),
+      await configDao.loadIntervalStorage(profileID, 1),
+      await configDao.loadIntervalStorage(profileID, 2),
     );
 
-  IntervallStorage get(IntervallStoreManagerLocation type) {
-    switch (type) {
-      case IntervallStoreManagerLocation.mainPage:
-        return mainPage;
-      case IntervallStoreManagerLocation.exportPage:
-        return exportPage;
-      case IntervallStoreManagerLocation.statsPage:
-        return statsPage;
-    }
-  }
+  IntervalStorage get(IntervalStoreManagerLocation type) => switch (type) {
+    IntervalStoreManagerLocation.mainPage => mainPage,
+    IntervalStoreManagerLocation.exportPage => exportPage,
+    IntervalStoreManagerLocation.statsPage => statsPage,
+  };
 
   /// Reset all fields to their default values.
   void reset() {
-    mainPage = IntervallStorage();
-    exportPage = IntervallStorage();
-    statsPage = IntervallStorage();
+    mainPage = IntervalStorage();
+    exportPage = IntervalStorage();
+    statsPage = IntervalStorage();
     notifyListeners();
   }
 
   /// Intervall for the page with graph and list.
-  IntervallStorage mainPage;
+  IntervalStorage mainPage;
 
   /// Intervall for all exports.
-  IntervallStorage exportPage;
+  IntervalStorage exportPage;
 
   /// Intervall to display statistics in.
-  IntervallStorage statsPage;
+  IntervalStorage statsPage;
 
   @override
   void dispose() {
@@ -247,8 +242,8 @@ class IntervallStoreManager extends ChangeNotifier {
   }
 }
 
-/// Locations supported by [IntervallStoreManager].
-enum IntervallStoreManagerLocation {
+/// Locations supported by [IntervalStoreManager].
+enum IntervalStoreManagerLocation {
   mainPage,
   exportPage,
   statsPage,

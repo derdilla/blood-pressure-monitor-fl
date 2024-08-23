@@ -43,7 +43,7 @@ class ExportImportScreen extends StatelessWidget {
               ),
               Disabled(
                 disabled: settings.exportFormat == ExportFormat.db,
-                child: const IntervalPicker(type: IntervallStoreManagerLocation.exportPage,),
+                child: const IntervalPicker(type: IntervalStoreManagerLocation.exportPage,),
               ),
               ListTile(
                 title: Text(localizations.exportDir),

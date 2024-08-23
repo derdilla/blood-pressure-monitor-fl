@@ -14,7 +14,7 @@ import 'package:blood_pressure_app/model/storage/export_columns_store.dart';
 import 'package:blood_pressure_app/model/storage/export_csv_settings_store.dart';
 import 'package:blood_pressure_app/model/storage/export_pdf_settings_store.dart';
 import 'package:blood_pressure_app/model/storage/export_settings_store.dart';
-import 'package:blood_pressure_app/model/storage/intervall_store.dart';
+import 'package:blood_pressure_app/model/storage/interval_store.dart';
 import 'package:blood_pressure_app/model/storage/settings_store.dart';
 import 'package:blood_pressure_app/platform_integration/platform_client.dart';
 import 'package:file_picker/file_picker.dart';
@@ -210,7 +210,7 @@ void performExport(BuildContext context, [AppLocalizations? localizations]) asyn
 
 /// Get the records that should be exported (oldest first).
 Future<List<FullEntry>> _getEntries(BuildContext context) async {
-  final range = Provider.of<IntervallStoreManager>(context, listen: false).exportPage.currentRange;
+  final range = Provider.of<IntervalStoreManager>(context, listen: false).exportPage.currentRange;
   final bpRepo = RepositoryProvider.of<BloodPressureRepository>(context);
   final noteRepo = RepositoryProvider.of<NoteRepository>(context);
   final intakeRepo = RepositoryProvider.of<MedicineIntakeRepository>(context);

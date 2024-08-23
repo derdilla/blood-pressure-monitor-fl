@@ -1,11 +1,11 @@
 
-import 'package:blood_pressure_app/model/storage/intervall_store.dart';
+import 'package:blood_pressure_app/model/storage/interval_store.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:health_data_store/health_data_store.dart';
 
 void main() {
   test('base constructor should initialize with values', () {
-    final storageObject = IntervallStorage(stepSize: TimeStep.month, range: DateRange(
+    final storageObject = IntervalStorage(stepSize: TimeStep.month, range: DateRange(
         start: DateTime.fromMillisecondsSinceEpoch(1234),
         end: DateTime.fromMillisecondsSinceEpoch(5678),
     ),);
@@ -16,7 +16,7 @@ void main() {
   });
 
   test('base constructor should initialize to default without values', () {
-    final storageObject = IntervallStorage();
+    final storageObject = IntervalStorage();
     expect(storageObject.stepSize, TimeStep.last7Days);
     expect(storageObject.currentRange.start.millisecondsSinceEpoch, lessThanOrEqualTo(DateTime
         .now()
@@ -25,8 +25,8 @@ void main() {
 
   test('base constructor should initialize with only incomplete parameters', () {
     // only tests for no crashes
-    IntervallStorage(stepSize: TimeStep.last30Days);
-    IntervallStorage(range: DateRange(
+    IntervalStorage(stepSize: TimeStep.last30Days);
+    IntervalStorage(range: DateRange(
         start: DateTime.fromMillisecondsSinceEpoch(1234),
         end: DateTime.fromMillisecondsSinceEpoch(5678),
     ),);
@@ -34,12 +34,12 @@ void main() {
 
 
   test('intervall lengths should match step size', () {
-    final dayIntervall = IntervallStorage(stepSize: TimeStep.day);
-    final weekIntervall = IntervallStorage(stepSize: TimeStep.week);
-    final monthIntervall = IntervallStorage(stepSize: TimeStep.month);
-    final yearIntervall = IntervallStorage(stepSize: TimeStep.year);
-    final last7DaysIntervall = IntervallStorage(stepSize: TimeStep.last7Days);
-    final last30DaysIntervall = IntervallStorage(stepSize: TimeStep.last30Days);
+    final dayIntervall = IntervalStorage(stepSize: TimeStep.day);
+    final weekIntervall = IntervalStorage(stepSize: TimeStep.week);
+    final monthIntervall = IntervalStorage(stepSize: TimeStep.month);
+    final yearIntervall = IntervalStorage(stepSize: TimeStep.year);
+    final last7DaysIntervall = IntervalStorage(stepSize: TimeStep.last7Days);
+    final last30DaysIntervall = IntervalStorage(stepSize: TimeStep.last30Days);
 
     expect(dayIntervall.currentRange.duration.inHours, 24);
     expect(weekIntervall.currentRange.duration.inDays, 7);
@@ -50,13 +50,13 @@ void main() {
   });
 
   test('intervall lengths should still be correct after moving', () {
-    final dayIntervall = IntervallStorage(stepSize: TimeStep.day);
-    final weekIntervall = IntervallStorage(stepSize: TimeStep.week);
-    final monthIntervall = IntervallStorage(stepSize: TimeStep.month);
-    final yearIntervall = IntervallStorage(stepSize: TimeStep.year);
-    final last7DaysIntervall = IntervallStorage(stepSize: TimeStep.last7Days);
-    final last30DaysIntervall = IntervallStorage(stepSize: TimeStep.last30Days);
-    final customIntervall = IntervallStorage(stepSize: TimeStep.custom, range: DateRange(
+    final dayIntervall = IntervalStorage(stepSize: TimeStep.day);
+    final weekIntervall = IntervalStorage(stepSize: TimeStep.week);
+    final monthIntervall = IntervalStorage(stepSize: TimeStep.month);
+    final yearIntervall = IntervalStorage(stepSize: TimeStep.year);
+    final last7DaysIntervall = IntervalStorage(stepSize: TimeStep.last7Days);
+    final last30DaysIntervall = IntervalStorage(stepSize: TimeStep.last30Days);
+    final customIntervall = IntervalStorage(stepSize: TimeStep.custom, range: DateRange(
         start: DateTime.fromMillisecondsSinceEpoch(1234),
         end: DateTime.fromMillisecondsSinceEpoch(1234 + 24 * 60 * 60 * 1000), // one day
     ),);
