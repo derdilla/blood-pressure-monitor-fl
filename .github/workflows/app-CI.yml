@@ -63,7 +63,7 @@ jobs:
         git config user.name "GitHub Action (update goldens)"
         git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
         git checkout -B action-update-goldens
-        export STATUS=${git status}
+        export STATUS=$(git status)
         git commit -am "Update goldens"
         gh pr create --base main --head action-update-goldens --title "Update goldens" --body $STATUS
       env:
