@@ -65,6 +65,7 @@ jobs:
         git checkout -B action-update-goldens
         export STATUS=$(git status)
         git commit -am "Update goldens"
+        git push
         gh pr create --base main --head action-update-goldens --title "Update goldens" --body "${STATUS}"
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
