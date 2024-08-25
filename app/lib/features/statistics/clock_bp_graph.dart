@@ -14,7 +14,7 @@ class ClockBpGraph extends StatelessWidget {
   /// Create a clock shaped graph of average by time.
   const ClockBpGraph({super.key, required this.measurements});
 
-  //
+  /// All measurements used to generate the graph.
   final List<BloodPressureRecord> measurements;
 
   @override
@@ -63,7 +63,7 @@ class _RadarChartPainter extends CustomPainter {
 
   final List<(Color, List<int>)> values;
 
-  /// Highest number in values.
+  /// Highest number in [values].
   late final int _maxValue;
 
   static const double _kPadding = 20.0;
@@ -76,22 +76,24 @@ class _RadarChartPainter extends CustomPainter {
       ..strokeWidth = 3.0
       ..color = (brightness == Brightness.dark ? Colors.white : Colors.black).withOpacity(0.3);
 
+    final maxRadius = size.shortestSide / 2;
+
     // static decorations
-    double l = (size.shortestSide / 2) - _kPadding;
-    while (l > 10.0) {
-      canvas.drawCircle(size.center(Offset.zero), l, decoPaint);
-      l -= _kHelperCircleInterval;
+    double circleRadius = maxRadius - _kPadding;
+    while (circleRadius > 10.0) {
+      canvas.drawCircle(size.center(Offset.zero), circleRadius, decoPaint);
+      circleRadius -= _kHelperCircleInterval;
     }
 
     // compute directions & add remaining decorations
-    const fullCircle = 2 * math.pi;
-    final sectionWidth = fullCircle / labels.length;
+    const fullCircleCircumference = 2 * math.pi;
+    final sectionWidthDeg = fullCircleCircumference / labels.length;
     final List<double> angles = [];
     for (int i = 0; i < labels.length; i++) {
-      angles.add(i * sectionWidth);
+      angles.add(i * sectionWidthDeg);
       canvas.drawLine(
         size.center(Offset.zero),
-        size.center(_offset(i * sectionWidth, size.shortestSide / 2)),
+        size.center(_offset(i * sectionWidthDeg, maxRadius)),
         decoPaint,
       );
     }
@@ -100,7 +102,7 @@ class _RadarChartPainter extends CustomPainter {
     for (final dataRow in values) {
       Path? path;
       for (int i = 0; i < labels.length; i++) {
-        final pos = size.center(_offsetFromValue(angles[i], size.shortestSide / 2, dataRow.$2[i]));
+        final pos = size.center(_offsetFromValue(angles[i], maxRadius, dataRow.$2[i]));
         if (path == null) {
           path = Path();
           path.moveTo(pos.dx, pos.dy);
@@ -108,40 +110,40 @@ class _RadarChartPainter extends CustomPainter {
           path.lineTo(pos.dx, pos.dy);
         }
       }
-      final startPos = size.center(_offsetFromValue(angles[0], size.shortestSide / 2, dataRow.$2[0]));
-      path!.lineTo(startPos.dx, startPos.dy);
+      final startPos = size.center(_offsetFromValue(angles[0], maxRadius, dataRow.$2[0]));
+      path!.lineTo(startPos.dx, startPos.dy); // connect to start
 
-      canvas.drawPath(path, Paint()
+      canvas.drawPath(path, Paint() // fill
         ..color = dataRow.$1.withOpacity(0.4));
-      canvas.drawPath(path, Paint()
+      canvas.drawPath(path, Paint() // stroke around
         ..color = dataRow.$1
         ..strokeWidth = 5.0
         ..strokeJoin = StrokeJoin.round
         ..style = PaintingStyle.stroke);
     }
 
-    // draw labels on top content
-    for (int i = 0; i < labels.length; i += 2) {
-      _drawTextInsideBounds(canvas, i * sectionWidth, size, labels[i]);
-    }
-  }
-
-  /// Draws a given [text] at the end of [angle], but withing [size].
-  void _drawTextInsideBounds(Canvas canvas, double angle, Size size, String text) {
+    // draw labels on top of content
     final textStyle = TextStyle(
       color: brightness == Brightness.dark ? Colors.white : Colors.black,
       backgroundColor: (brightness == Brightness.dark ? Colors.black : Colors.white).withOpacity(0.6),
       fontSize: 24.0
     );
+    for (int i = 0; i < labels.length; i += 2) {
+      _drawTextInsideBounds(canvas, i * sectionWidthDeg, size, labels[i], textStyle);
+    }
+  }
 
-    final builder = ParagraphBuilder(textStyle.getParagraphStyle());
-    builder.pushStyle(textStyle.getTextStyle());
+  /// Draws a given [text] at the end of [angle], but withing [size].
+  void _drawTextInsideBounds(Canvas canvas, double angle, Size size, String text, TextStyle style) {
+    final builder = ParagraphBuilder(style.getParagraphStyle());
+    builder.pushStyle(style.getTextStyle());
     builder.addText(text);
     final paragraph = builder.build();
     paragraph.layout(ParagraphConstraints(width: size.width));
 
     Offset off = _offset(angle, size.shortestSide / 2);
     off = size.center(off);
+    // center at pos
     off = Offset(off.dx - (paragraph.minIntrinsicWidth / 2), off.dy - (paragraph.height / 2));
     if ((off.dy + paragraph.height) > size.height) { // right overflow
       off = Offset(off.dx, off.dy - ((off.dy + paragraph.height) - size.height));
@@ -150,7 +152,6 @@ class _RadarChartPainter extends CustomPainter {
       off = Offset(off.dx - ((off.dx + paragraph.minIntrinsicWidth) - size.width), off.dy);
     }
 
-    //print('${size.height} > ${off.dy + paragraph.height}');
     canvas.drawParagraph(paragraph, off);
   }
 
@@ -167,9 +168,8 @@ class _RadarChartPainter extends CustomPainter {
   );
 
   @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) {
-    // TODO: implement shouldRepaint
-    final a = 0;
-    return true;
-  }
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => oldDelegate is! _RadarChartPainter
+    || oldDelegate.brightness != brightness
+    || oldDelegate.labels != labels
+    || oldDelegate.values != values;
 }
