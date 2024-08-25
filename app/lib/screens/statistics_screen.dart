@@ -4,11 +4,8 @@ import 'package:blood_pressure_app/features/statistics/blood_pressure_distributi
 import 'package:blood_pressure_app/features/statistics/clock_bp_graph.dart';
 import 'package:blood_pressure_app/model/blood_pressure_analyzer.dart';
 import 'package:blood_pressure_app/model/storage/interval_store.dart';
-import 'package:blood_pressure_app/model/storage/settings_store.dart';
-import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:provider/provider.dart';
 
 /// A page that shows statistics about stored blood pressure values.
 class StatisticsScreen extends StatefulWidget {
@@ -58,63 +55,6 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
               ),
               _buildSubTitle(localizations.timeResolvedMetrics),
               ClockBpGraph(measurements: data),
-              () {
-                final data = analyzer.allAvgsRelativeToDaytime;
-                const opacity = 0.5;
-                final helperLinesStyle = BorderSide(
-                  color: Theme.of(context).dividerColor,
-                  width: 2,
-                );
-                final settings = context.watch<Settings>();
-                return Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                  height: MediaQuery.of(context).size.width,
-                  child: RadarChart(
-                    RadarChartData(
-                      radarShape: RadarShape.circle,
-                      gridBorderData: helperLinesStyle,
-                      tickBorderData: helperLinesStyle,
-                      ticksTextStyle: const TextStyle(
-                        color: Colors.transparent,
-                      ),
-                      tickCount: 5,
-                      titleTextStyle: const TextStyle(fontSize: 25),
-                      getTitle: (pos, value) {
-                        if (pos % 2 == 0) {
-                          return RadarChartTitle(
-                            text: '$pos',
-                            positionPercentageOffset: 0.05,
-                          );
-                        }
-                        return const RadarChartTitle(text: '');
-                      },
-                      dataSets: [
-                        RadarDataSet(
-                          dataEntries: _intListToRadarEntry(data[0]),
-                          borderColor: settings.diaColor,
-                          fillColor: settings.diaColor.withOpacity(opacity),
-                          entryRadius: 0,
-                          borderWidth: settings.graphLineThickness,
-                        ),
-                        RadarDataSet(
-                          dataEntries: _intListToRadarEntry(data[1]),
-                          borderColor: settings.sysColor,
-                          fillColor: settings.sysColor.withOpacity(opacity),
-                          entryRadius: 0,
-                          borderWidth: settings.graphLineThickness,
-                        ),
-                        RadarDataSet(
-                          dataEntries: _intListToRadarEntry(data[2]),
-                          borderColor: settings.pulColor,
-                          fillColor: settings.pulColor.withOpacity(opacity),
-                          entryRadius: 0,
-                          borderWidth: settings.graphLineThickness,
-                        ),
-                      ],
-                    ),
-                  ),
-                );
-              }(),
             ],
           );
         },
@@ -125,14 +65,6 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
         child: const IntervalPicker(type: IntervalStoreManagerLocation.statsPage,),
       ),
     );
-  }
-
-  List<RadarEntry> _intListToRadarEntry(List<int> data) {
-    final res = <RadarEntry>[];
-    for (final v in data) {
-      res.add(RadarEntry(value: v.toDouble()));
-    }
-    return res;
   }
 
   Widget _buildSubTitle(String text) => ListTile(
