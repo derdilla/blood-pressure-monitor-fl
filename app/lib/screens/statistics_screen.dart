@@ -1,6 +1,7 @@
 import 'package:blood_pressure_app/data_util/blood_pressure_builder.dart';
 import 'package:blood_pressure_app/data_util/interval_picker.dart';
 import 'package:blood_pressure_app/features/statistics/blood_pressure_distribution.dart';
+import 'package:blood_pressure_app/features/statistics/clock_bp_graph.dart';
 import 'package:blood_pressure_app/model/blood_pressure_analyzer.dart';
 import 'package:blood_pressure_app/model/storage/interval_store.dart';
 import 'package:blood_pressure_app/model/storage/settings_store.dart';
@@ -56,6 +57,7 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                 ),
               ),
               _buildSubTitle(localizations.timeResolvedMetrics),
+              ClockBpGraph(measurements: data),
               () {
                 final data = analyzer.allAvgsRelativeToDaytime;
                 const opacity = 0.5;
