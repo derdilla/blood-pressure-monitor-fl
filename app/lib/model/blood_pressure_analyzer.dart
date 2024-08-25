@@ -74,21 +74,6 @@ class BloodPressureAnalyser {
     return c ~/ lastDay.difference(firstDay).inDays;
   }
 
-  /// Relation of average values to the time of the day.
-  ///
-  /// outer list is type (0 -> diastolic, 1 -> systolic, 2 -> pulse)
-  /// inner list index is hour of day ([0] -> 23:30-00:29.59; [1] -> ...)
-  @Deprecated("This api can't express kPa and mmHg preferences and is only a "
-      'thin wrapper around the newer [groupAnalysers].')
-  List<List<int>> get allAvgsRelativeToDaytime {
-    final groupedAnalyzers = groupAnalysers();
-    return [
-      groupedAnalyzers.map((e) => e.avgDia?.mmHg ?? avgDia?.mmHg ?? 0).toList(),
-      groupedAnalyzers.map((e) => e.avgSys?.mmHg ?? avgSys?.mmHg ?? 0).toList(),
-      groupedAnalyzers.map((e) => e.avgPul ?? avgPul ?? 0).toList(),
-    ];
-  }
-
   /// Creates analyzers for each hour of the day (0-23).
   ///
   /// This function groups records by the hour of the day (e.g 23:30-00:29.59)
