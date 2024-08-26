@@ -4,6 +4,8 @@ import 'package:blood_pressure_app/data_util/consistent_future_builder.dart';
 import 'package:blood_pressure_app/model/blood_pressure/update_legacy_entries.dart';
 import 'package:blood_pressure_app/model/export_import/export_configuration.dart';
 import 'package:blood_pressure_app/model/storage/db/config_db.dart';
+import 'package:blood_pressure_app/model/storage/db/file_settings_loader.dart';
+import 'package:blood_pressure_app/model/storage/db/settings_loader.dart';
 import 'package:blood_pressure_app/model/storage/export_columns_store.dart';
 import 'package:blood_pressure_app/model/storage/storage.dart';
 import 'package:blood_pressure_app/screens/error_reporting_screen.dart';
@@ -33,8 +35,6 @@ class App extends StatefulWidget {
 }
 
 class _AppState extends State<App> {
-  /// Database object for app settings.
-  ConfigDB? _configDB;
   Database? _entryDB;
 
   /// The result of the first [_loadApp] call.
@@ -50,8 +50,6 @@ class _AppState extends State<App> {
 
   @override
   void dispose() {
-    _configDB?.database.close();
-    _configDB = null;
     _entryDB?.close();
     _entryDB = null;
     _settings?.dispose();
@@ -87,18 +85,34 @@ class _AppState extends State<App> {
     }
 
     try {
-      _configDB = await ConfigDB.open();
-      final configDao = ConfigDao(_configDB!);
-
-      _settings ??= await configDao.loadSettings();
-      _exportSettings ??= await configDao.loadExportSettings();
-      _csvExportSettings ??= await configDao.loadCsvExportSettings();
-      _pdfExportSettings ??= await configDao.loadPdfExportSettings();
-      _intervalStorageManager ??= await configDao.loadIntervalStorageManager();
-      _exportColumnsManager ??= await configDao.loadExportColumnsManager();
+      final SettingsLoader settingsLoader = await FileSettingsLoader.load();
+      _settings ??= await settingsLoader.loadSettings();
+      _exportSettings ??= await settingsLoader.loadExportSettings();
+      _csvExportSettings ??= await settingsLoader.loadCsvExportSettings();
+      _pdfExportSettings ??= await settingsLoader.loadPdfExportSettings();
+      _intervalStorageManager ??= await settingsLoader.loadIntervalStorageManager();
+      _exportColumnsManager ??= await settingsLoader.loadExportColumnsManager();
     } catch (e, stack) {
-      await ErrorReporting.reportCriticalError('Error loading config db', '$e\n$stack',);
+      await ErrorReporting.reportCriticalError('Error loading settings from files', '$e\n$stack',);
     }
+
+    // TODO: update old settings
+    if (false) {
+      try {
+        final _configDB = await ConfigDB.open();
+        final configDao = ConfigDao(_configDB!);
+
+        _settings ??= await configDao.loadSettings();
+        _exportSettings ??= await configDao.loadExportSettings();
+        _csvExportSettings ??= await configDao.loadCsvExportSettings();
+        _pdfExportSettings ??= await configDao.loadPdfExportSettings();
+        _intervalStorageManager ??= await configDao.loadIntervalStorageManager();
+        _exportColumnsManager ??= await configDao.loadExportColumnsManager();
+      } catch (e, stack) {
+        await ErrorReporting.reportCriticalError('Error loading config db', '$e\n$stack',);
+      }
+    }
+
 
     late BloodPressureRepository bpRepo;
     late NoteRepository noteRepo;
@@ -130,7 +144,7 @@ class _AppState extends State<App> {
       // update logic
       if (_settings!.lastVersion == 0) {
         await updateLegacySettings(_settings!, _exportSettings!, _csvExportSettings!, _pdfExportSettings!, _intervalStorageManager!);
-        await updateLegacyExport(_configDB!, _exportColumnsManager!);
+        // await updateLegacyExport(_configDB!, _exportColumnsManager!); // TODO
 
         _settings!.lastVersion = 30;
         if (_exportSettings!.exportAfterEveryEntry) {
@@ -183,7 +197,7 @@ class _AppState extends State<App> {
   @override
   Widget build(BuildContext context) {
     if (!(kDebugMode && (const bool.fromEnvironment('testing_mode')))
-        && _loadedChild != null && _configDB != null && _entryDB != null) {
+        && _loadedChild != null && _settings != null && _entryDB != null) {
       return _loadedChild!;
     }
     return ConsistentFutureBuilder(
