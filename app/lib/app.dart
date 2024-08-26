@@ -90,12 +90,12 @@ class _AppState extends State<App> {
       _configDB = await ConfigDB.open();
       final configDao = ConfigDao(_configDB!);
 
-      _settings ??= await configDao.loadSettings(0);
-      _exportSettings ??= await configDao.loadExportSettings(0);
-      _csvExportSettings ??= await configDao.loadCsvExportSettings(0);
-      _pdfExportSettings ??= await configDao.loadPdfExportSettings(0);
-      _intervalStorageManager ??= await IntervalStoreManager.load(configDao, 0);
-      _exportColumnsManager ??= await configDao.loadExportColumnsManager(0);
+      _settings ??= await configDao.loadSettings();
+      _exportSettings ??= await configDao.loadExportSettings();
+      _csvExportSettings ??= await configDao.loadCsvExportSettings();
+      _pdfExportSettings ??= await configDao.loadPdfExportSettings();
+      _intervalStorageManager ??= await configDao.loadIntervalStorageManager();
+      _exportColumnsManager ??= await configDao.loadExportColumnsManager();
     } catch (e, stack) {
       await ErrorReporting.reportCriticalError('Error loading config db', '$e\n$stack',);
     }
