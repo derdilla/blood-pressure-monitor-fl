@@ -16,6 +16,7 @@ import 'package:sqflite/sqflite.dart';
 ///
 /// The load... methods have to schedule a initial save to db in case an
 /// migration / update of fields occurred.
+@deprecated
 class ConfigDao {
   /// Create a serializer to initialize data from a database.
   ConfigDao(this._configDB);
@@ -51,7 +52,7 @@ class ConfigDao {
         settings = Settings.fromJson(settingsJson.toString());
       }
     }
-    _updateSettings(profileID, settings);
+    await _updateSettings(profileID, settings);
     settings.addListener(() {
       _updateSettings(profileID, settings);
     });

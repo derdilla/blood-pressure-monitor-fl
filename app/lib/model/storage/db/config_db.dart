@@ -8,6 +8,7 @@ import 'package:sqflite/sqflite.dart';
 /// Database for storing settings and internal app state.
 ///
 /// The table names ensured by this class are stored as constant public strings ending in Table.
+@deprecated
 class ConfigDB {
   ConfigDB._create();
   
