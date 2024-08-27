@@ -1,5 +1,7 @@
 import 'dart:io';
+import 'dart:typed_data';
 
+import 'package:archive/archive.dart';
 import 'package:blood_pressure_app/components/custom_banner.dart';
 import 'package:blood_pressure_app/components/input_dialoge.dart';
 import 'package:blood_pressure_app/data_util/consistent_future_builder.dart';
@@ -18,6 +20,7 @@ import 'package:blood_pressure_app/features/settings/warn_about_screen.dart';
 import 'package:blood_pressure_app/model/blood_pressure/pressure_unit.dart';
 import 'package:blood_pressure_app/model/blood_pressure/warn_values.dart';
 import 'package:blood_pressure_app/model/iso_lang_names.dart';
+import 'package:blood_pressure_app/model/storage/db/file_settings_loader.dart';
 import 'package:blood_pressure_app/model/storage/storage.dart';
 import 'package:blood_pressure_app/platform_integration/platform_client.dart';
 import 'package:file_picker/file_picker.dart';
@@ -306,11 +309,21 @@ class SettingsPage extends StatelessWidget {
                   title: Text(localizations.exportSettings),
                   leading: const Icon(Icons.tune),
                   onTap: () async {
-                    String dbPath = await getDatabasesPath();
-                    assert(dbPath != inMemoryDatabasePath);
-                    dbPath = join(dbPath, 'config.db');
-                    assert(Platform.isAndroid);
-                    await PlatformClient.shareFile(dbPath, 'application/vnd.sqlite3');
+                    final loader = await FileSettingsLoader.load();
+                    final archive = loader.createArchive();
+                    if (archive == null) {
+                      print(1);
+                      // TODO: err msg
+                      return;
+                    }
+                    final compressedArchive = ZipEncoder().encode(archive);
+                    if (compressedArchive == null) {
+                      print(2);
+                      // TODO: err msg
+                      return;
+                    }
+                    final archiveData = Uint8List.fromList(compressedArchive);
+                    await PlatformClient.shareData(archiveData, 'application/zip', 'bloodPressureSettings.zip');
                   },
                 ),
                 ListTile(

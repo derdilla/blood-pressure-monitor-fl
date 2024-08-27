@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:archive/archive_io.dart';
 import 'package:blood_pressure_app/model/storage/db/settings_loader.dart';
 import 'package:blood_pressure_app/model/storage/export_columns_store.dart';
 import 'package:blood_pressure_app/model/storage/export_csv_settings_store.dart';
@@ -42,6 +43,7 @@ class FileSettingsLoader implements SettingsLoader {
     obj ??= createNew();
 
     obj.addListener(() => f.writeAsStringSync(serialize(obj!)));
+    f.writeAsStringSync(serialize(obj));
     return obj;
   }
 
@@ -66,7 +68,7 @@ class FileSettingsLoader implements SettingsLoader {
     'export',
     ExportSettings.fromJson,
     ExportSettings.new,
-        (e) => e.toJson(),
+    (e) => e.toJson(),
   );
 
   @override
@@ -96,7 +98,7 @@ class FileSettingsLoader implements SettingsLoader {
     'pdf-export',
     PdfExportSettings.fromJson,
     PdfExportSettings.new,
-        (e) => e.toJson(),
+    (e) => e.toJson(),
   );
 
   @override
@@ -106,4 +108,25 @@ class FileSettingsLoader implements SettingsLoader {
     Settings.new,
     (e) => e.toJson(),
   );
+
+  /// Attempt to backup all stored data to archive.
+  Archive? createArchive() {
+    try {
+      final archive = Archive();
+      _backupFile(archive, 'general');
+      _backupFile(archive, 'export');
+      _backupFile(archive, 'csv-export');
+      _backupFile(archive, 'pdf-export');
+      _backupFile(archive, 'export-columns');
+      _backupFile(archive, 'intervall-store');
+      return archive;
+    } on FileSystemException {
+      return null;
+    }
+  }
+
+  void _backupFile(Archive archive, String fileName) {
+    final data = File(join(_path, fileName)).readAsStringSync();
+    archive.addFile(ArchiveFile.string(fileName, data));
+  }
 }
