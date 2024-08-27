@@ -143,8 +143,7 @@ class _AppState extends State<App> {
 
       // update logic
       if (_settings!.lastVersion == 0) {
-        await updateLegacySettings(_settings!, _exportSettings!, _csvExportSettings!, _pdfExportSettings!, _intervalStorageManager!);
-        // await updateLegacyExport(_configDB!, _exportColumnsManager!); // TODO
+        await migrateSharedPreferences(_settings!, _exportSettings!, _csvExportSettings!, _pdfExportSettings!, _intervalStorageManager!);
 
         _settings!.lastVersion = 30;
         if (_exportSettings!.exportAfterEveryEntry) {
@@ -169,6 +168,28 @@ class _AppState extends State<App> {
       _intervalStorageManager!.mainPage.setToMostRecentInterval();
     } catch (e, stack) {
       await ErrorReporting.reportCriticalError('Error performing upgrades:', '$e\n$stack',);
+    }
+
+    final dbPath = await getDatabasesPath();
+    if (File(join(dbPath, 'config.db')).existsSync()) {
+      try {
+        await migrateDatabaseSettings(
+          _settings!,
+          _exportSettings!,
+          _csvExportSettings!,
+          _pdfExportSettings!,
+          _intervalStorageManager!,
+          _exportColumnsManager!,
+          medRepo,
+        );
+        File(join(dbPath, 'config.db')).copySync(join(dbPath, 'v39_config.db.backup'));
+        File(join(dbPath, 'config.db-journal')).copySync(join(dbPath, 'v39_config.db-journal.backup'));
+        File(join(dbPath, 'config.db-journal')).deleteSync();
+        File(join(dbPath, 'config.db')).deleteSync();
+        // TODO: import of old settings
+      } catch (e, stack) {
+        await ErrorReporting.reportCriticalError('Error upgrading to file based settings:', '$e\n$stack',);
+      }
     }
 
     _loadedChild = MultiRepositoryProvider(

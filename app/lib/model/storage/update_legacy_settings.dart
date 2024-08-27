@@ -14,11 +14,14 @@ import 'package:blood_pressure_app/model/storage/interval_store.dart';
 import 'package:blood_pressure_app/model/storage/settings_store.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:health_data_store/health_data_store.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqflite/sqflite.dart';
 
+import 'db/config_dao.dart';
+
 /// Function for upgrading shared preferences from pre 1.5.4 (Oct 23) versions.
-Future<void> updateLegacySettings(Settings settings, ExportSettings exportSettings, CsvExportSettings csvExportSettings,
+Future<void> migrateSharedPreferences(Settings settings, ExportSettings exportSettings, CsvExportSettings csvExportSettings,
     PdfExportSettings pdfExportSettings, IntervalStoreManager intervallStoreManager,) async {
   final SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
 
@@ -199,7 +202,7 @@ Future<void> updateLegacySettings(Settings settings, ExportSettings exportSettin
 /// Function for upgrading pre 1.5.8 columns and settings to new structures.
 /// 
 /// - Adds columns from old db table to [manager].
-Future<void> updateLegacyExport(ConfigDB database, ExportColumnsManager manager) async {
+Future<void> _updateLegacyExport(ConfigDB database, ExportColumnsManager manager) async {
   if (await _tableExists(database.database, ConfigDB.exportStringsTable)) {
     final existingDbEntries = await database.database.query(
         ConfigDB.exportStringsTable,
@@ -225,3 +228,80 @@ Future<void> updateLegacyExport(ConfigDB database, ExportColumnsManager manager)
 
 Future<bool> _tableExists(Database database, String tableName) async => (await database.rawQuery(
   "SELECT name FROM sqlite_master WHERE type='table' AND name='$tableName';",)).isNotEmpty;
+
+/// Migrate to file based settings format from db in pre 1.7.4 (Jul 24).
+Future<void> migrateDatabaseSettings(
+  Settings settings,
+  ExportSettings exportSettings,
+  CsvExportSettings csvExportSettings,
+  PdfExportSettings pdfExportSettings,
+  IntervalStoreManager intervallStoreManager,
+  ExportColumnsManager manager,
+  MedicineRepository medRepo,
+) async {
+  final configDB = await ConfigDB.open();
+  await _updateLegacyExport(configDB, manager);
+  final configDao = ConfigDao(configDB!);
+
+  final oldSettings = await configDao.loadSettings();
+  settings.language = oldSettings.language;
+  settings.accentColor = oldSettings.accentColor;
+  settings.sysColor = oldSettings.sysColor;
+  settings.diaColor = oldSettings.diaColor;
+  settings.pulColor = oldSettings.pulColor;
+  settings.horizontalGraphLines = oldSettings.horizontalGraphLines;
+  settings.dateFormatString = oldSettings.dateFormatString;
+  settings.graphLineThickness = oldSettings.graphLineThickness;
+  settings.needlePinBarWidth = oldSettings.needlePinBarWidth;
+  settings.animationSpeed = oldSettings.animationSpeed;
+  settings.sysWarn = oldSettings.sysWarn;
+  settings.diaWarn = oldSettings.diaWarn;
+  settings.lastVersion = oldSettings.lastVersion;
+  settings.allowManualTimeInput = oldSettings.allowManualTimeInput;
+  settings.confirmDeletion = oldSettings.confirmDeletion;
+  settings.themeMode = oldSettings.themeMode;
+  settings.validateInputs = oldSettings.validateInputs;
+  settings.allowMissingValues = oldSettings.allowMissingValues;
+  settings.drawRegressionLines = oldSettings.drawRegressionLines;
+  settings.startWithAddMeasurementPage = oldSettings.startWithAddMeasurementPage;
+  settings.compactList = oldSettings.compactList;
+  settings.bottomAppBars = oldSettings.bottomAppBars;
+  final oldMeds = settings.medications.map((e) => Medicine(
+    designation: e.designation,
+    color: e.color.value,
+    dosis: e.defaultDosis == null ? null : Weight.mg(e.defaultDosis!),
+  ));
+  await Future.forEach(oldMeds, medRepo.add);
+  settings.preferredPressureUnit = oldSettings.preferredPressureUnit;
+  settings.knownBleDev = oldSettings.knownBleDev;
+  settings.bleInput = oldSettings.bleInput;
+
+  final oldExportSettings = await configDao.loadExportSettings();
+  exportSettings.exportFormat = oldExportSettings.exportFormat;
+  exportSettings.defaultExportDir = oldExportSettings.defaultExportDir;
+  exportSettings.exportAfterEveryEntry = oldExportSettings.exportAfterEveryEntry;
+
+  final oldCsvExportSettings = await configDao.loadCsvExportSettings();
+  csvExportSettings.fieldDelimiter = oldCsvExportSettings.fieldDelimiter;
+  csvExportSettings.textDelimiter = oldCsvExportSettings.textDelimiter;
+  csvExportSettings.exportHeadline = oldCsvExportSettings.exportHeadline;
+  csvExportSettings.exportFieldsConfiguration.activePreset = oldCsvExportSettings.exportFieldsConfiguration.activePreset;
+
+  final oldPdfExportSettings = await configDao.loadPdfExportSettings();
+  pdfExportSettings.exportTitle = oldPdfExportSettings.exportTitle;
+  pdfExportSettings.exportStatistics = oldPdfExportSettings.exportStatistics;
+  pdfExportSettings.exportData = oldPdfExportSettings.exportData;
+  pdfExportSettings.headerHeight = oldPdfExportSettings.headerHeight;
+  pdfExportSettings.cellHeight = oldPdfExportSettings.cellHeight;
+  pdfExportSettings.headerFontSize = oldPdfExportSettings.headerFontSize;
+  pdfExportSettings.cellFontSize = oldPdfExportSettings.cellFontSize;
+  pdfExportSettings.exportFieldsConfiguration.activePreset = oldPdfExportSettings.exportFieldsConfiguration.activePreset;
+
+  final oldIntervalStorageManager = await configDao.loadIntervalStorageManager();
+  intervallStoreManager.mainPage = oldIntervalStorageManager.mainPage;
+  intervallStoreManager.exportPage = oldIntervalStorageManager.exportPage;
+  intervallStoreManager.statsPage = oldIntervalStorageManager.statsPage;
+
+  final oldExportColumnsManager = await configDao.loadExportColumnsManager();
+  await Future.forEach(oldExportColumnsManager.userColumns.values, manager.addOrUpdate);
+}
