@@ -240,6 +240,8 @@ Future<void> migrateDatabaseSettings(
   MedicineRepository medRepo,
 ) async {
   final configDB = await ConfigDB.open();
+  if(configDB == null) return; // not upgradable
+
   await _updateLegacyExport(configDB, manager);
   final configDao = ConfigDao(configDB!);
 
