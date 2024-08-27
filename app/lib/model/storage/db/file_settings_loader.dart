@@ -17,9 +17,10 @@ import 'package:sqflite/sqflite.dart';
 class FileSettingsLoader implements SettingsLoader {
   FileSettingsLoader._create(this._path);
 
-  /// Creates setting loader from relative directory [path].
-  static Future<FileSettingsLoader> load([String path = 'settings']) async {
-    path = join(await getDatabasesPath(), path);
+  /// Creates setting loader from relative directory [path] or the default
+  /// settings path.
+  static Future<FileSettingsLoader> load([String? path]) async {
+    path ??= join(await getDatabasesPath(), 'settings');
     Directory(path).createSync();
     return FileSettingsLoader._create(path);
   }

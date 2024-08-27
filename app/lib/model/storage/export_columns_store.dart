@@ -42,6 +42,11 @@ class ExportColumnsManager extends ChangeNotifier {
     _userColumns.clear();
     notifyListeners();
   }
+  void copyFrom(ExportColumnsManager other) {
+    _userColumns.clear();
+    _userColumns.addAll(other._userColumns);
+    notifyListeners();
+  }
 
   /// Namespaces that may not lead a user columns internal identifier.
   static const List<String> reservedNamespaces = ['buildIn', 'myHeart'];

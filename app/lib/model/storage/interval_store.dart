@@ -216,6 +216,14 @@ class IntervalStoreManager extends ChangeNotifier {
     notifyListeners();
   }
 
+  // Copy all values from another instance.
+  void copyFrom(IntervalStoreManager other) {
+    mainPage = other.mainPage;
+    exportPage = other.exportPage;
+    statsPage = other.statsPage;
+    notifyListeners();
+  }
+
   /// Intervall for the page with graph and list.
   IntervalStorage mainPage;
 

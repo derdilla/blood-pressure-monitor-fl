@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'dart:typed_data';
 
-import 'package:archive/archive.dart';
+import 'package:archive/archive_io.dart';
 import 'package:blood_pressure_app/components/custom_banner.dart';
 import 'package:blood_pressure_app/components/input_dialoge.dart';
 import 'package:blood_pressure_app/data_util/consistent_future_builder.dart';
@@ -21,6 +21,7 @@ import 'package:blood_pressure_app/model/blood_pressure/pressure_unit.dart';
 import 'package:blood_pressure_app/model/blood_pressure/warn_values.dart';
 import 'package:blood_pressure_app/model/iso_lang_names.dart';
 import 'package:blood_pressure_app/model/storage/db/file_settings_loader.dart';
+import 'package:blood_pressure_app/model/storage/export_columns_store.dart';
 import 'package:blood_pressure_app/model/storage/storage.dart';
 import 'package:blood_pressure_app/platform_integration/platform_client.dart';
 import 'package:file_picker/file_picker.dart';
@@ -343,11 +344,27 @@ class SettingsPage extends StatelessWidget {
                       return;
                     }
 
-                    String dbPath = await getDatabasesPath();
-                    dbPath = join(dbPath, 'config.db');
-                    File(path).copySync(dbPath);
-                    messenger.showMaterialBanner(CustomBanner(content: Text(localizations.pleaseRestart)));
-                    // TODO: read settings and replace them on running app.
+                    if (path.endsWith('db')) {
+                      String dbPath = await getDatabasesPath();
+                      dbPath = join(dbPath, 'config.db');
+                      File(path).copySync(dbPath);
+                      messenger.showMaterialBanner(CustomBanner(content: Text(localizations.pleaseRestart)));
+                      // TODO: use same code as update (interface helps)
+                    } else if (path.endsWith('zip')) {
+                      final decoded = ZipDecoder().decodeBytes(result.files.single.bytes ?? []);
+                      final dir = join(Directory.systemTemp.path, 'settingsBackup');
+                      await extractArchiveToDisk(decoded, dir);
+                      final loader = await FileSettingsLoader.load(path);
+                      settings.copyFrom(await loader.loadSettings());
+                      context.read<ExportSettings>().copyFrom(await loader.loadExportSettings());
+                      context.read<CsvExportSettings>().copyFrom(await loader.loadCsvExportSettings());
+                      context.read<PdfExportSettings>().copyFrom(await loader.loadPdfExportSettings());
+                      context.read<IntervalStoreManager>().copyFrom(await loader.loadIntervalStorageManager());
+                      context.read<ExportColumnsManager>().copyFrom(await loader.loadExportColumnsManager());
+                      messenger.showSnackBar(SnackBar(content: Text(localizations.success(localizations.importSettings))));
+                    } else {
+                      messenger.showSnackBar(SnackBar(content: Text(localizations.errNotImportable)));
+                    }
                   },
                 ),
                 ListTile(
