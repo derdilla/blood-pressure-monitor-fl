@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:blood_pressure_app/data_util/consistent_future_builder.dart';
 import 'package:blood_pressure_app/model/blood_pressure/update_legacy_entries.dart';
 import 'package:blood_pressure_app/model/export_import/export_configuration.dart';
-import 'package:blood_pressure_app/model/storage/db/config_db.dart';
 import 'package:blood_pressure_app/model/storage/db/file_settings_loader.dart';
 import 'package:blood_pressure_app/model/storage/db/settings_loader.dart';
 import 'package:blood_pressure_app/model/storage/export_columns_store.dart';
@@ -95,24 +94,6 @@ class _AppState extends State<App> {
     } catch (e, stack) {
       await ErrorReporting.reportCriticalError('Error loading settings from files', '$e\n$stack',);
     }
-
-    // TODO: update old settings
-    if (false) {
-      try {
-        final _configDB = await ConfigDB.open();
-        final configDao = ConfigDao(_configDB!);
-
-        _settings ??= await configDao.loadSettings();
-        _exportSettings ??= await configDao.loadExportSettings();
-        _csvExportSettings ??= await configDao.loadCsvExportSettings();
-        _pdfExportSettings ??= await configDao.loadPdfExportSettings();
-        _intervalStorageManager ??= await configDao.loadIntervalStorageManager();
-        _exportColumnsManager ??= await configDao.loadExportColumnsManager();
-      } catch (e, stack) {
-        await ErrorReporting.reportCriticalError('Error loading config db', '$e\n$stack',);
-      }
-    }
-
 
     late BloodPressureRepository bpRepo;
     late NoteRepository noteRepo;
