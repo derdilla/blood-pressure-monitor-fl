@@ -67,6 +67,7 @@ extension EntryUtils on BuildContext {
       final settings = Provider.of<Settings>(this, listen: false);
       final bpRepo = RepositoryProvider.of<BloodPressureRepository>(this);
       final noteRepo = RepositoryProvider.of<NoteRepository>(this);
+      final intakeRepo = RepositoryProvider.of<MedicineIntakeRepository>(this);
       final messenger = ScaffoldMessenger.of(this);
 
       bool confirmedDeletion = true;
@@ -77,6 +78,7 @@ extension EntryUtils on BuildContext {
       if (confirmedDeletion) {
         await bpRepo.remove(entry.$1);
         await noteRepo.remove(entry.$2);
+        await Future.forEach(entry.$3, intakeRepo.remove);
         messenger.removeCurrentSnackBar();
         messenger.showSnackBar(SnackBar(
           content: Text(localizations.deletionConfirmed),
