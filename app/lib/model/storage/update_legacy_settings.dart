@@ -242,8 +242,8 @@ Future<void> migrateDatabaseSettings(
   final configDB = await ConfigDB.open();
   if(configDB == null) return; // not upgradable
 
-  await _updateLegacyExport(configDB, manager);
-  final configDao = ConfigDao(configDB!);
+  await _updateLegacyExport(configDB, manager); // TODO: test these older migrations
+  final configDao = ConfigDao(configDB);
 
   final oldSettings = await configDao.loadSettings();
   settings.copyFrom(oldSettings);
@@ -254,18 +254,9 @@ Future<void> migrateDatabaseSettings(
   ));
   await Future.forEach(oldMeds, medRepo.add);
 
-  final oldExportSettings = await configDao.loadExportSettings();
-  exportSettings.copyFrom(oldExportSettings);
-
-  final oldCsvExportSettings = await configDao.loadCsvExportSettings();
-  csvExportSettings.copyFrom(oldCsvExportSettings);
-
-  final oldPdfExportSettings = await configDao.loadPdfExportSettings();
-  pdfExportSettings.copyFrom(oldPdfExportSettings);
-
-  final oldIntervalStorageManager = await configDao.loadIntervalStorageManager();
-  intervallStoreManager.copyFrom(oldIntervalStorageManager);
-
-  final oldExportColumnsManager = await configDao.loadExportColumnsManager();
-  manager.copyFrom(oldExportColumnsManager);
+  exportSettings.copyFrom(await configDao.loadExportSettings());
+  csvExportSettings.copyFrom(await configDao.loadCsvExportSettings());
+  pdfExportSettings.copyFrom(await configDao.loadPdfExportSettings());
+  intervallStoreManager.copyFrom(await configDao.loadIntervalStorageManager());
+  manager.copyFrom(await configDao.loadExportColumnsManager());
 }
