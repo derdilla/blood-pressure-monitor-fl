@@ -516,5 +516,7 @@
     "intakes": "Medicine intakes",
     "@intakes": {},
     "errFeatureNotSupported": "This feature is not available on this platform.",
-    "@errFeatureNotSupported": {}
+    "@errFeatureNotSupported": {},
+    "invalidZip": "Invalid zip file.",
+    "@invalidZip": {}
 }

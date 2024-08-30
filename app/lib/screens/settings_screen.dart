@@ -33,6 +33,8 @@ import 'package:path/path.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../logging.dart';
+
 /// Primary settings page to manage basic settings and link to subsettings.
 class SettingsPage extends StatelessWidget {
   /// Create a primary settings screen.
@@ -351,12 +353,14 @@ class SettingsPage extends StatelessWidget {
                       loader = ConfigDao(configDB);
                     } else if (path.endsWith('zip')) {
                       try {
-                        final decoded = ZipDecoder().decodeBytes(result.files.single.bytes ?? []); //FIXME
+                        final decoded = ZipDecoder().decodeBuffer(InputFileStream(result.files.single.path!));
                         final dir = join(Directory.systemTemp.path, 'settingsBackup');
                         await extractArchiveToDisk(decoded, dir);
                         loader = await FileSettingsLoader.load(dir);
-                      } on FormatException {
-                        // TODO
+                      } on FormatException catch (e, stack) {
+                        messenger.showSnackBar(SnackBar(content: Text(localizations.invalidZip)));
+                        Log.err('invalid zip', [e, stack]);
+                        return;
                       }
                     } else {
                       messenger.showSnackBar(SnackBar(content: Text(localizations.errNotImportable)));
