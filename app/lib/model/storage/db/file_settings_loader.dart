@@ -84,7 +84,6 @@ class FileSettingsLoader implements SettingsLoader {
           json['stats'] is! String ? IntervalStorage() : IntervalStorage.fromJson(json['stats']!),
         );
       }
-      print(json.runtimeType);
       return IntervalStoreManager(IntervalStorage(), IntervalStorage(), IntervalStorage());
     },
     () => IntervalStoreManager(IntervalStorage(), IntervalStorage(), IntervalStorage()),
