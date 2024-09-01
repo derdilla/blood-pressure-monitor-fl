@@ -9,9 +9,9 @@ import 'package:blood_pressure_app/model/storage/settings_store.dart';
 
 /// Class for loading data from the database.
 ///
-/// The user of this class needs to pay attention to dispose all old instances
+/// The user of this class needs to pay attention to dispose all old instance
 /// of objects created by the instance methods in order to ensure there are no
-/// concurrent writes to the database. Having multiple instances will cause data
+/// concurrent writes to the database. Having multiple instance will cause data
 /// loss because states are not synced again after one changes.
 ///
 /// The load... methods have to schedule a initial save to db in case an
@@ -23,10 +23,10 @@ class ConfigDao implements SettingsLoader {
 
   final ConfigDB _configDB;
 
-  final Map<int, Settings> _settingsInstances = {};
+  Settings? _settingsInstance = null;
   @override
   Future<Settings> loadSettings() async {
-    if (_settingsInstances.containsKey(0)) return _settingsInstances[0]!;
+    if (_settingsInstance != null) return _settingsInstance!;
     final dbEntry = await _configDB.database.query(
         ConfigDB.settingsTable,
         columns: ['settings_json'],
@@ -46,14 +46,14 @@ class ConfigDao implements SettingsLoader {
         settings = Settings.fromJson(settingsJson.toString());
       }
     }
-    _settingsInstances[0] = settings;
+    _settingsInstance = settings;
     return settings;
   }
 
-  final Map<int, ExportSettings> _exportSettingsInstances = {};
+  ExportSettings? _exportSettingsInstance = null;
   @override
   Future<ExportSettings> loadExportSettings() async {
-    if (_exportSettingsInstances.containsKey(0)) return _exportSettingsInstances[0]!;
+    if (_exportSettingsInstance != null) return _exportSettingsInstance!;
     final dbEntry = await _configDB.database.query(
         ConfigDB.exportSettingsTable,
         columns: ['json'],
@@ -73,14 +73,14 @@ class ConfigDao implements SettingsLoader {
         exportSettings = ExportSettings.fromJson(settingsJson.toString());
       }
     }
-    _exportSettingsInstances[0] = exportSettings;
+    _exportSettingsInstance = exportSettings;
     return exportSettings;
   }
 
-  final Map<int, CsvExportSettings> _csvExportSettingsInstances = {};
+  CsvExportSettings? _csvExportSettingsInstance = null;
   @override
   Future<CsvExportSettings> loadCsvExportSettings() async {
-    if (_csvExportSettingsInstances.containsKey(0)) return _csvExportSettingsInstances[0]!;
+    if (_csvExportSettingsInstance != null) return _csvExportSettingsInstance!;
     final dbEntry = await _configDB.database.query(
         ConfigDB.exportCsvSettingsTable,
         columns: ['json'],
@@ -100,14 +100,14 @@ class ConfigDao implements SettingsLoader {
         exportSettings = CsvExportSettings.fromJson(settingsJson.toString());
       }
     }
-    _csvExportSettingsInstances[0] = exportSettings;
+    _csvExportSettingsInstance = exportSettings;
     return exportSettings;
   }
 
-  final Map<int, PdfExportSettings> _pdfExportSettingsInstances = {};
+  PdfExportSettings? _pdfExportSettingsInstance = null;
   @override
   Future<PdfExportSettings> loadPdfExportSettings() async {
-    if (_pdfExportSettingsInstances.containsKey(0)) return _pdfExportSettingsInstances[0]!;
+    if (_pdfExportSettingsInstance != null) return _pdfExportSettingsInstance!;
     final dbEntry = await _configDB.database.query(
         ConfigDB.exportPdfSettingsTable,
         columns: ['json'],
@@ -127,7 +127,7 @@ class ConfigDao implements SettingsLoader {
         exportSettings = PdfExportSettings.fromJson(settingsJson.toString());
       }
     }
-    _pdfExportSettingsInstances[0] = exportSettings;
+    _pdfExportSettingsInstance = exportSettings;
     return exportSettings;
   }
 
@@ -159,10 +159,10 @@ class ConfigDao implements SettingsLoader {
     return intervallStorage;
   }
 
-  final Map<int, ExportColumnsManager> _exportColumnsManagerInstances = {};
+  ExportColumnsManager? _exportColumnsManagerInstance = null;
   @override
   Future<ExportColumnsManager> loadExportColumnsManager() async {
-    if (_exportColumnsManagerInstances.containsKey(0)) return _exportColumnsManagerInstances[0]!;
+    if (_exportColumnsManagerInstance != null) return _exportColumnsManagerInstance!;
     final dbEntry = await _configDB.database.query(
         ConfigDB.exportColumnsTable,
         columns: ['json'],
@@ -182,7 +182,7 @@ class ConfigDao implements SettingsLoader {
         columnsManager = ExportColumnsManager.fromJson(json.toString());
       }
     }
-    _exportColumnsManagerInstances[0] = columnsManager;
+    _exportColumnsManagerInstance = columnsManager;
     return columnsManager;
   }
 }
