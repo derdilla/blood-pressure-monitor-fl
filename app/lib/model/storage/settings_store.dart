@@ -162,38 +162,41 @@ class Settings extends ChangeNotifier {
   /// Serialize the object to a restoreable string.
   String toJson() => jsonEncode(toMap());
 
-  /// Reset all fields to their default values.
-  void reset() {
-    final d = Settings();
-    _language = d._language;
-    _accentColor = d._accentColor;
-    _sysColor = d._sysColor;
-    _diaColor = d._diaColor;
-    _pulColor = d._pulColor;
-    _horizontalGraphLines = d._horizontalGraphLines;
-    _dateFormatString = d._dateFormatString;
-    _graphLineThickness = d._graphLineThickness;
-    _needlePinBarWidth = d._needlePinBarWidth;
-    _animationSpeed = d._animationSpeed;
-    _sysWarn = d._sysWarn;
-    _diaWarn = d._diaWarn;
-    _lastVersion = d._lastVersion;
-    _allowManualTimeInput = d._allowManualTimeInput;
-    _confirmDeletion = d._confirmDeletion;
-    _themeMode = d._themeMode;
-    _validateInputs = d._validateInputs;
-    _allowMissingValues = d._allowMissingValues;
-    _drawRegressionLines = d._drawRegressionLines;
-    _startWithAddMeasurementPage = d._startWithAddMeasurementPage;
-    _useLegacyList = d._useLegacyList;
-    _bottomAppBars = d._bottomAppBars;
+  /// Copy all values from another instance.
+  void copyFrom(Settings other) {
+    _language = other._language;
+    _accentColor = other._accentColor;
+    _sysColor = other._sysColor;
+    _diaColor = other._diaColor;
+    _pulColor = other._pulColor;
+    _horizontalGraphLines = other._horizontalGraphLines;
+    _dateFormatString = other._dateFormatString;
+    _graphLineThickness = other._graphLineThickness;
+    _needlePinBarWidth = other._needlePinBarWidth;
+    _animationSpeed = other._animationSpeed;
+    _sysWarn = other._sysWarn;
+    _diaWarn = other._diaWarn;
+    _lastVersion = other._lastVersion;
+    _allowManualTimeInput = other._allowManualTimeInput;
+    _confirmDeletion = other._confirmDeletion;
+    _themeMode = other._themeMode;
+    _validateInputs = other._validateInputs;
+    _allowMissingValues = other._allowMissingValues;
+    _drawRegressionLines = other._drawRegressionLines;
+    _startWithAddMeasurementPage = other._startWithAddMeasurementPage;
+    _useLegacyList = other._useLegacyList;
+    _bottomAppBars = other._bottomAppBars;
+    _preferredPressureUnit = other._preferredPressureUnit;
+    _knownBleDev = other._knownBleDev;
+    _bleInput = other._bleInput;
     _medications.clear();
-    _highestMedIndex = d._highestMedIndex;
-    _preferredPressureUnit = d._preferredPressureUnit;
-    _knownBleDev = d._knownBleDev;
-    _bleInput = d._bleInput;
+    _medications.addAll(other._medications);
+    _highestMedIndex = other._highestMedIndex;
     notifyListeners();
   }
+
+  /// Reset all fields to their default values.
+  void reset() => copyFrom(Settings());
 
   Locale? _language;
   /// Language to use the app in.

@@ -1,6 +1,7 @@
 import 'dart:io';
+import 'dart:typed_data';
 
-import 'package:blood_pressure_app/components/custom_banner.dart';
+import 'package:archive/archive_io.dart';
 import 'package:blood_pressure_app/components/input_dialoge.dart';
 import 'package:blood_pressure_app/data_util/consistent_future_builder.dart';
 import 'package:blood_pressure_app/features/settings/delete_data_screen.dart';
@@ -15,9 +16,14 @@ import 'package:blood_pressure_app/features/settings/tiles/slider_list_tile.dart
 import 'package:blood_pressure_app/features/settings/tiles/titled_column.dart';
 import 'package:blood_pressure_app/features/settings/version_screen.dart';
 import 'package:blood_pressure_app/features/settings/warn_about_screen.dart';
+import 'package:blood_pressure_app/logging.dart';
 import 'package:blood_pressure_app/model/blood_pressure/pressure_unit.dart';
 import 'package:blood_pressure_app/model/blood_pressure/warn_values.dart';
 import 'package:blood_pressure_app/model/iso_lang_names.dart';
+import 'package:blood_pressure_app/model/storage/db/config_db.dart';
+import 'package:blood_pressure_app/model/storage/db/file_settings_loader.dart';
+import 'package:blood_pressure_app/model/storage/db/settings_loader.dart';
+import 'package:blood_pressure_app/model/storage/export_columns_store.dart';
 import 'package:blood_pressure_app/model/storage/storage.dart';
 import 'package:blood_pressure_app/platform_integration/platform_client.dart';
 import 'package:file_picker/file_picker.dart';
@@ -26,7 +32,6 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:path/path.dart';
 import 'package:provider/provider.dart';
-import 'package:sqflite/sqflite.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 /// Primary settings page to manage basic settings and link to subsettings.
@@ -306,11 +311,20 @@ class SettingsPage extends StatelessWidget {
                   title: Text(localizations.exportSettings),
                   leading: const Icon(Icons.tune),
                   onTap: () async {
-                    String dbPath = await getDatabasesPath();
-                    assert(dbPath != inMemoryDatabasePath);
-                    dbPath = join(dbPath, 'config.db');
-                    assert(Platform.isAndroid);
-                    await PlatformClient.shareFile(dbPath, 'application/vnd.sqlite3');
+                    final messenger = ScaffoldMessenger.of(context);
+                    final loader = await FileSettingsLoader.load();
+                    final archive = loader.createArchive();
+                    if (archive == null) {
+                      messenger.showSnackBar(SnackBar(content: Text(localizations.errCantCreateArchive)));
+                      return;
+                    }
+                    final compressedArchive = ZipEncoder().encode(archive);
+                    if (compressedArchive == null) {
+                      messenger.showSnackBar(SnackBar(content: Text(localizations.errCantCreateArchive)));
+                      return;
+                    }
+                    final archiveData = Uint8List.fromList(compressedArchive);
+                    await PlatformClient.shareData(archiveData, 'application/zip', 'bloodPressureSettings.zip');
                   },
                 ),
                 ListTile(
@@ -330,11 +344,33 @@ class SettingsPage extends StatelessWidget {
                       return;
                     }
 
-                    String dbPath = await getDatabasesPath();
-                    dbPath = join(dbPath, 'config.db');
-                    File(path).copySync(dbPath);
-                    messenger.showMaterialBanner(CustomBanner(content: Text(localizations.pleaseRestart)));
-                    // TODO: read settings and replace them on running app.
+                    late SettingsLoader loader;
+                    if (path.endsWith('db')) {
+                      final configDB = await ConfigDB.open(dbPath: path, isFullPath: true);
+                      if(configDB == null) return; // too old (doesn't contain settings yet)
+                      loader = ConfigDao(configDB);
+                    } else if (path.endsWith('zip')) {
+                      try {
+                        final decoded = ZipDecoder().decodeBuffer(InputFileStream(result.files.single.path!));
+                        final dir = join(Directory.systemTemp.path, 'settingsBackup');
+                        await extractArchiveToDisk(decoded, dir);
+                        loader = await FileSettingsLoader.load(dir);
+                      } on FormatException catch (e, stack) {
+                        messenger.showSnackBar(SnackBar(content: Text(localizations.invalidZip)));
+                        Log.err('invalid zip', [e, stack]);
+                        return;
+                      }
+                    } else {
+                      messenger.showSnackBar(SnackBar(content: Text(localizations.errNotImportable)));
+                      return;
+                    }
+                    settings.copyFrom(await loader.loadSettings());
+                    context.read<ExportSettings>().copyFrom(await loader.loadExportSettings());
+                    context.read<CsvExportSettings>().copyFrom(await loader.loadCsvExportSettings());
+                    context.read<PdfExportSettings>().copyFrom(await loader.loadPdfExportSettings());
+                    context.read<IntervalStoreManager>().copyFrom(await loader.loadIntervalStorageManager());
+                    context.read<ExportColumnsManager>().copyFrom(await loader.loadExportColumnsManager());
+                    messenger.showSnackBar(SnackBar(content: Text(localizations.success(localizations.importSettings))));
                   },
                 ),
                 ListTile(

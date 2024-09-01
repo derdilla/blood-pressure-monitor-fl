@@ -14,11 +14,14 @@ import 'package:blood_pressure_app/model/storage/interval_store.dart';
 import 'package:blood_pressure_app/model/storage/settings_store.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:health_data_store/health_data_store.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqflite/sqflite.dart';
 
+import 'db/config_dao.dart';
+
 /// Function for upgrading shared preferences from pre 1.5.4 (Oct 23) versions.
-Future<void> updateLegacySettings(Settings settings, ExportSettings exportSettings, CsvExportSettings csvExportSettings,
+Future<void> migrateSharedPreferences(Settings settings, ExportSettings exportSettings, CsvExportSettings csvExportSettings,
     PdfExportSettings pdfExportSettings, IntervalStoreManager intervallStoreManager,) async {
   final SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
 
@@ -199,7 +202,7 @@ Future<void> updateLegacySettings(Settings settings, ExportSettings exportSettin
 /// Function for upgrading pre 1.5.8 columns and settings to new structures.
 /// 
 /// - Adds columns from old db table to [manager].
-Future<void> updateLegacyExport(ConfigDB database, ExportColumnsManager manager) async {
+Future<void> _updateLegacyExport(ConfigDB database, ExportColumnsManager manager) async {
   if (await _tableExists(database.database, ConfigDB.exportStringsTable)) {
     final existingDbEntries = await database.database.query(
         ConfigDB.exportStringsTable,
@@ -225,3 +228,35 @@ Future<void> updateLegacyExport(ConfigDB database, ExportColumnsManager manager)
 
 Future<bool> _tableExists(Database database, String tableName) async => (await database.rawQuery(
   "SELECT name FROM sqlite_master WHERE type='table' AND name='$tableName';",)).isNotEmpty;
+
+/// Migrate to file based settings format from db in pre 1.7.4 (Jul 24).
+Future<void> migrateDatabaseSettings(
+  Settings settings,
+  ExportSettings exportSettings,
+  CsvExportSettings csvExportSettings,
+  PdfExportSettings pdfExportSettings,
+  IntervalStoreManager intervallStoreManager,
+  ExportColumnsManager manager,
+  MedicineRepository medRepo,
+) async {
+  final configDB = await ConfigDB.open();
+  if(configDB == null) return; // not upgradable
+
+  await _updateLegacyExport(configDB, manager); // TODO: test these older migrations
+  final configDao = ConfigDao(configDB);
+
+  final oldSettings = await configDao.loadSettings();
+  settings.copyFrom(oldSettings);
+  final oldMeds = settings.medications.map((e) => Medicine(
+    designation: e.designation,
+    color: e.color.value,
+    dosis: e.defaultDosis == null ? null : Weight.mg(e.defaultDosis!),
+  ));
+  await Future.forEach(oldMeds, medRepo.add);
+
+  exportSettings.copyFrom(await configDao.loadExportSettings());
+  csvExportSettings.copyFrom(await configDao.loadCsvExportSettings());
+  pdfExportSettings.copyFrom(await configDao.loadPdfExportSettings());
+  intervallStoreManager.copyFrom(await configDao.loadIntervalStorageManager());
+  manager.copyFrom(await configDao.loadExportColumnsManager());
+}

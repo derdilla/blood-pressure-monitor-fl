@@ -61,15 +61,17 @@ class CsvExportSettings extends ChangeNotifier implements CustomFieldsSettings {
   /// Serializes the object to json string.
   String toJson() => jsonEncode(toMap());
 
-  /// Reset all fields to their default values.
-  void reset() {
-    final d = CsvExportSettings();
-    _fieldDelimiter = d.fieldDelimiter;
-    _textDelimiter = d._textDelimiter;
-    _exportHeadline = d._exportHeadline;
-    _exportFieldsConfiguration = d._exportFieldsConfiguration;
+  /// Copy all values from another instance.
+  void copyFrom(CsvExportSettings other) {
+    _fieldDelimiter = other._fieldDelimiter;
+    _textDelimiter = other._textDelimiter;
+    _exportHeadline = other._exportHeadline;
+    _exportFieldsConfiguration = other._exportFieldsConfiguration;
     notifyListeners();
   }
+
+  /// Reset all fields to their default values.
+  void reset() => copyFrom(CsvExportSettings());
 
   String _fieldDelimiter = ',';
   String get fieldDelimiter => _fieldDelimiter;

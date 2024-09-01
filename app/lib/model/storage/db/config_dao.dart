@@ -1,42 +1,37 @@
 import 'package:blood_pressure_app/model/storage/db/config_db.dart';
+import 'package:blood_pressure_app/model/storage/db/settings_loader.dart';
 import 'package:blood_pressure_app/model/storage/export_columns_store.dart';
 import 'package:blood_pressure_app/model/storage/export_csv_settings_store.dart';
 import 'package:blood_pressure_app/model/storage/export_pdf_settings_store.dart';
 import 'package:blood_pressure_app/model/storage/export_settings_store.dart';
 import 'package:blood_pressure_app/model/storage/interval_store.dart';
 import 'package:blood_pressure_app/model/storage/settings_store.dart';
-import 'package:sqflite/sqflite.dart';
 
 /// Class for loading data from the database.
 ///
-/// The user of this class needs to pay attention to dispose all old instances
+/// The user of this class needs to pay attention to dispose all old instance
 /// of objects created by the instance methods in order to ensure there are no
-/// concurrent writes to the database. Having multiple instances will cause data
+/// concurrent writes to the database. Having multiple instance will cause data
 /// loss because states are not synced again after one changes.
 ///
 /// The load... methods have to schedule a initial save to db in case an
 /// migration / update of fields occurred.
-class ConfigDao {
+@deprecated
+class ConfigDao implements SettingsLoader {
   /// Create a serializer to initialize data from a database.
   ConfigDao(this._configDB);
 
   final ConfigDB _configDB;
 
-  final Map<int, Settings> _settingsInstances = {};
-  /// Loads the profiles [Settings] object from the database.
-  ///
-  /// If any errors occur or the object is not present, a default one will be
-  /// created. Changes in the object will save to the database automatically (a
-  /// listener gets attached).
-  ///
-  /// Changes to the database will not propagate to the object.
-  Future<Settings> loadSettings(int profileID) async {
-    if (_settingsInstances.containsKey(profileID)) return _settingsInstances[profileID]!;
+  Settings? _settingsInstance = null;
+  @override
+  Future<Settings> loadSettings() async {
+    if (_settingsInstance != null) return _settingsInstance!;
     final dbEntry = await _configDB.database.query(
         ConfigDB.settingsTable,
         columns: ['settings_json'],
         where: 'profile_id = ?',
-        whereArgs: [profileID],
+        whereArgs: [0],
     );
 
     late final Settings settings;
@@ -51,43 +46,19 @@ class ConfigDao {
         settings = Settings.fromJson(settingsJson.toString());
       }
     }
-    _updateSettings(profileID, settings);
-    settings.addListener(() {
-      _updateSettings(profileID, settings);
-    });
-    _settingsInstances[profileID] = settings;
+    _settingsInstance = settings;
     return settings;
   }
 
-  /// Update settings for a profile in the database.
-  ///
-  /// Adds an entry if no settings where saved for this profile.
-  Future<void> _updateSettings(int profileID, Settings settings) async {
-    if (!_configDB.database.isOpen) return;
-    await _configDB.database.insert(
-      ConfigDB.settingsTable,
-      {
-        'profile_id': profileID,
-        'settings_json': settings.toJson(),
-      },
-      conflictAlgorithm: ConflictAlgorithm.replace,
-    );
-  }
-
-  final Map<int, ExportSettings> _exportSettingsInstances = {};
-  /// Loads the profiles [ExportSettings] object from the database.
-  ///
-  /// If any errors occur or the object is not present, a default one will be created. Changes in the object
-  /// will save to the database automatically (a listener gets attached).
-  ///
-  /// Changes to the database will not propagate to the object.
-  Future<ExportSettings> loadExportSettings(int profileID) async {
-    if (_exportSettingsInstances.containsKey(profileID)) return _exportSettingsInstances[profileID]!;
+  ExportSettings? _exportSettingsInstance = null;
+  @override
+  Future<ExportSettings> loadExportSettings() async {
+    if (_exportSettingsInstance != null) return _exportSettingsInstance!;
     final dbEntry = await _configDB.database.query(
         ConfigDB.exportSettingsTable,
         columns: ['json'],
         where: 'profile_id = ?',
-        whereArgs: [profileID],
+        whereArgs: [0],
     );
 
     late final ExportSettings exportSettings;
@@ -102,44 +73,19 @@ class ConfigDao {
         exportSettings = ExportSettings.fromJson(settingsJson.toString());
       }
     }
-    _updateExportSettings(profileID, exportSettings);
-    exportSettings.addListener(() {
-      _updateExportSettings(profileID, exportSettings);
-    });
-    _exportSettingsInstances[profileID] = exportSettings;
+    _exportSettingsInstance = exportSettings;
     return exportSettings;
   }
 
-  /// Update [ExportSettings] for a profile in the database.
-  ///
-  /// Adds an entry if necessary.
-  Future<void> _updateExportSettings(int profileID, ExportSettings settings) async {
-    if (!_configDB.database.isOpen) return;
-    await _configDB.database.insert(
-        ConfigDB.exportSettingsTable,
-        {
-          'profile_id': profileID,
-          'json': settings.toJson(),
-        },
-        conflictAlgorithm: ConflictAlgorithm.replace,
-    );
-  }
-
-  final Map<int, CsvExportSettings> _csvExportSettingsInstances = {};
-
-  /// Loads the profiles [CsvExportSettings] object from the database.
-  ///
-  /// If any errors occur or the object is not present, a default one will be created. Changes in the object
-  /// will save to the database automatically (a listener gets attached).
-  ///
-  /// Changes to the database will not propagate to the object.
-  Future<CsvExportSettings> loadCsvExportSettings(int profileID) async {
-    if (_csvExportSettingsInstances.containsKey(profileID)) return _csvExportSettingsInstances[profileID]!;
+  CsvExportSettings? _csvExportSettingsInstance = null;
+  @override
+  Future<CsvExportSettings> loadCsvExportSettings() async {
+    if (_csvExportSettingsInstance != null) return _csvExportSettingsInstance!;
     final dbEntry = await _configDB.database.query(
         ConfigDB.exportCsvSettingsTable,
         columns: ['json'],
         where: 'profile_id = ?',
-        whereArgs: [profileID],
+        whereArgs: [0],
     );
 
     late final CsvExportSettings exportSettings;
@@ -154,44 +100,19 @@ class ConfigDao {
         exportSettings = CsvExportSettings.fromJson(settingsJson.toString());
       }
     }
-    _updateCsvExportSettings(profileID, exportSettings);
-    exportSettings.addListener(() {
-      _updateCsvExportSettings(profileID, exportSettings);
-    });
-    _csvExportSettingsInstances[profileID] = exportSettings;
+    _csvExportSettingsInstance = exportSettings;
     return exportSettings;
   }
 
-  /// Update [CsvExportSettings] for a profile in the database.
-  ///
-  /// Adds an entry if necessary.
-  Future<void> _updateCsvExportSettings(int profileID, CsvExportSettings settings) async {
-    if (!_configDB.database.isOpen) return;
-    await _configDB.database.insert(
-        ConfigDB.exportCsvSettingsTable,
-        {
-          'profile_id': profileID,
-          'json': settings.toJson(),
-        },
-        conflictAlgorithm: ConflictAlgorithm.replace,
-    );
-  }
-
-  final Map<int, PdfExportSettings> _pdfExportSettingsInstances = {};
-
-  /// Loads the profiles [PdfExportSettings] object from the database.
-  ///
-  /// If any errors occur or the object is not present, a default one will be created. Changes in the object
-  /// will save to the database automatically (a listener gets attached).
-  ///
-  /// Changes to the database will not propagate to the object.
-  Future<PdfExportSettings> loadPdfExportSettings(int profileID) async {
-    if (_pdfExportSettingsInstances.containsKey(profileID)) return _pdfExportSettingsInstances[profileID]!;
+  PdfExportSettings? _pdfExportSettingsInstance = null;
+  @override
+  Future<PdfExportSettings> loadPdfExportSettings() async {
+    if (_pdfExportSettingsInstance != null) return _pdfExportSettingsInstance!;
     final dbEntry = await _configDB.database.query(
         ConfigDB.exportPdfSettingsTable,
         columns: ['json'],
         where: 'profile_id = ?',
-        whereArgs: [profileID],
+        whereArgs: [0],
     );
 
     late final PdfExportSettings exportSettings;
@@ -206,49 +127,27 @@ class ConfigDao {
         exportSettings = PdfExportSettings.fromJson(settingsJson.toString());
       }
     }
-    _updatePdfExportSettings(profileID, exportSettings);
-    exportSettings.addListener(() {
-      _updatePdfExportSettings(profileID, exportSettings);
-    });
-    _pdfExportSettingsInstances[profileID] = exportSettings;
+    _pdfExportSettingsInstance = exportSettings;
     return exportSettings;
   }
 
-  /// Update [PdfExportSettings] for a profile in the database.
-  ///
-  /// Adds an entry if necessary.
-  Future<void> _updatePdfExportSettings(int profileID, PdfExportSettings settings) async {
-    if (!_configDB.database.isOpen) return;
-    await _configDB.database.insert(
-        ConfigDB.exportPdfSettingsTable,
-        {
-          'profile_id': profileID,
-          'json': settings.toJson(),
-        },
-        conflictAlgorithm: ConflictAlgorithm.replace,
+  IntervalStoreManager? _intervallStorageInstance;
+  @override
+  Future<IntervalStoreManager> loadIntervalStorageManager() async {
+    _intervallStorageInstance ??= IntervalStoreManager(
+      await _loadStore(0),
+      await _loadStore(1),
+      await _loadStore(2),
     );
+    return _intervallStorageInstance!;
   }
 
-  final Map<(int, int), IntervalStorage> _intervallStorageInstances = {};
-
-  /// Loads a [IntervalStorage] object of a [profileID] from the database.
-  ///
-  /// The [storageID] allows for associating multiple intervalls with one profile.
-  ///
-  /// If any errors occur or the object is not present, a default one will be created. Changes in the object
-  /// will save to the database automatically (a listener gets attached).
-  ///
-  /// Changes to the database will not propagate to the object.
-  ///
-  /// This should not be invoked directly in order to centralise [storageID] allocation. Currently this is done by
-  /// the [IntervalStoreManager] class.
-  Future<IntervalStorage> loadIntervalStorage(int profileID, int storageID) async {
-    if (_intervallStorageInstances.containsKey((profileID, storageID))) return _intervallStorageInstances[(profileID, storageID)]!;
+  Future<IntervalStorage> _loadStore(int storageID) async {
     final dbEntry = await _configDB.database.query(
-        ConfigDB.selectedIntervalStorageTable,
-        columns: ['stepSize', 'start', 'end'],
-        where: 'profile_id = ? AND storage_id = ?',
-        whereArgs: [profileID, storageID],
+      ConfigDB.selectedIntervalStorageTable,
+      columns: ['stepSize', 'start', 'end'],
+      where: 'profile_id = ? AND storage_id = ?',
+      whereArgs: [0, storageID],
     );
     late final IntervalStorage intervallStorage;
     if (dbEntry.isEmpty) {
@@ -257,47 +156,18 @@ class ConfigDao {
       assert(dbEntry.length == 1, 'Keys should ensure only one entry is possible.');
       intervallStorage = IntervalStorage.fromMap(dbEntry.first);
     }
-
-    _updateIntervallStorage(profileID, storageID, intervallStorage);
-    intervallStorage.addListener(() {
-      _updateIntervallStorage(profileID, storageID, intervallStorage);
-    });
-    _intervallStorageInstances[(profileID, storageID)] = intervallStorage;
     return intervallStorage;
   }
 
-  /// Update specific [IntervalStorage] for a profile in the database.
-  ///
-  /// Adds an entry if necessary.
-  Future<void> _updateIntervallStorage(int profileID, int storageID, IntervalStorage intervallStorage) async {
-    if (!_configDB.database.isOpen) return;
-    final Map<String, dynamic> columnValueMap = {
-      'profile_id': profileID,
-      'storage_id': storageID,
-    };
-    columnValueMap.addAll(intervallStorage.toMap());
-    await _configDB.database.insert(
-        ConfigDB.selectedIntervalStorageTable,
-        columnValueMap,
-        conflictAlgorithm: ConflictAlgorithm.replace,
-    );
-  }
-
-  final Map<int, ExportColumnsManager> _exportColumnsManagerInstances = {};
-
-  /// Loads the profiles [ExportColumnsManager] object from the database.
-  ///
-  /// If any errors occur or the object is not present, a default one will be created. Changes in the object
-  /// will save to the database automatically (a listener gets attached).
-  ///
-  /// Changes to the database will not propagate to the object.
-  Future<ExportColumnsManager> loadExportColumnsManager(int profileID) async {
-    if (_exportColumnsManagerInstances.containsKey(profileID)) return _exportColumnsManagerInstances[profileID]!;
+  ExportColumnsManager? _exportColumnsManagerInstance = null;
+  @override
+  Future<ExportColumnsManager> loadExportColumnsManager() async {
+    if (_exportColumnsManagerInstance != null) return _exportColumnsManagerInstance!;
     final dbEntry = await _configDB.database.query(
         ConfigDB.exportColumnsTable,
         columns: ['json'],
         where: 'profile_id = ?',
-        whereArgs: [profileID],
+        whereArgs: [0],
     );
 
     late final ExportColumnsManager columnsManager;
@@ -312,26 +182,7 @@ class ConfigDao {
         columnsManager = ExportColumnsManager.fromJson(json.toString());
       }
     }
-    _updateExportColumnsManager(profileID, columnsManager);
-    columnsManager.addListener(() {
-      _updateExportColumnsManager(profileID, columnsManager);
-    });
-    _exportColumnsManagerInstances[profileID] = columnsManager;
+    _exportColumnsManagerInstance = columnsManager;
     return columnsManager;
-  }
-
-  /// Update [ExportColumnsManager] for a profile in the database.
-  ///
-  /// Adds an entry if necessary.
-  Future<void> _updateExportColumnsManager(int profileID, ExportColumnsManager manager) async {
-    if (!_configDB.database.isOpen) return;
-    await _configDB.database.insert(
-        ConfigDB.exportColumnsTable,
-        {
-          'profile_id': profileID,
-          'json': manager.toJson(),
-        },
-        conflictAlgorithm: ConflictAlgorithm.replace,
-    );
   }
 }

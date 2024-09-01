@@ -40,6 +40,7 @@ dependencies:
 
   # desktop only
   sqflite_common_ffi: ^2.3.3
+  archive: ^3.6.1
 
 dev_dependencies:
   integration_test:
@@ -56,4 +57,3 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   generate: true
-

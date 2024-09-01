@@ -516,5 +516,9 @@
     "intakes": "Medicine intakes",
     "@intakes": {},
     "errFeatureNotSupported": "This feature is not available on this platform.",
-    "@errFeatureNotSupported": {}
+    "@errFeatureNotSupported": {},
+    "invalidZip": "Invalid zip file.",
+    "@invalidZip": {},
+    "errCantCreateArchive": "Can''t create archive. Please report the bug if possible.",
+    "@errCantCreateArchive": {}
 }

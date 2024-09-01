@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:blood_pressure_app/model/storage/convert_util.dart';
-import 'package:blood_pressure_app/model/storage/db/config_dao.dart';
+import 'package:blood_pressure_app/model/storage/db/settings_loader.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:health_data_store/health_data_store.dart';
@@ -195,20 +195,12 @@ enum TimeStep {
 class IntervalStoreManager extends ChangeNotifier {
   /// Constructor for creating [IntervalStoreManager] from items.
   ///
-  /// Consider using [IntervalStoreManager.load] for loading [IntervalStorage] objects from the database, as it
-  /// automatically uses the correct storage ids.
+  /// You should use [SettingsLoader.loadExportColumnsManager] for most cases.
   IntervalStoreManager(this.mainPage, this.exportPage, this.statsPage) {
     mainPage.addListener(notifyListeners);
     exportPage.addListener(notifyListeners);
     statsPage.addListener(notifyListeners);
   }
-
-  static Future<IntervalStoreManager> load(ConfigDao configDao, int profileID) async =>
-    IntervalStoreManager(
-      await configDao.loadIntervalStorage(profileID, 0),
-      await configDao.loadIntervalStorage(profileID, 1),
-      await configDao.loadIntervalStorage(profileID, 2),
-    );
 
   IntervalStorage get(IntervalStoreManagerLocation type) => switch (type) {
     IntervalStoreManagerLocation.mainPage => mainPage,
@@ -221,6 +213,14 @@ class IntervalStoreManager extends ChangeNotifier {
     mainPage = IntervalStorage();
     exportPage = IntervalStorage();
     statsPage = IntervalStorage();
+    notifyListeners();
+  }
+
+  // Copy all values from another instance.
+  void copyFrom(IntervalStoreManager other) {
+    mainPage = other.mainPage;
+    exportPage = other.exportPage;
+    statsPage = other.statsPage;
     notifyListeners();
   }
 

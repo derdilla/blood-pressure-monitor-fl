@@ -35,16 +35,19 @@ class ExportSettings extends ChangeNotifier {
     'exportAfterEveryEntry': exportAfterEveryEntry,
   };
 
+  /// Serialize the object to a restoreable string.
   String toJson() => jsonEncode(toMap());
 
-  /// Reset all fields to their default values.
-  void reset() {
-    final d = ExportSettings();
-    _exportFormat = d._exportFormat;
-    _defaultExportDir = d._defaultExportDir;
-    _exportAfterEveryEntry = d._exportAfterEveryEntry;
+  /// Copy all values from another instance.
+  void copyFrom(ExportSettings other) {
+    _exportFormat = other._exportFormat;
+    _defaultExportDir = other._defaultExportDir;
+    _exportAfterEveryEntry = other._exportAfterEveryEntry;
     notifyListeners();
   }
+
+  /// Reset all fields to their default values.
+  void reset() => copyFrom(ExportSettings());
 
   ExportFormat _exportFormat = ExportFormat.csv;
   ExportFormat get exportFormat => _exportFormat;

@@ -3,7 +3,8 @@ import 'dart:io';
 import 'package:blood_pressure_app/data_util/consistent_future_builder.dart';
 import 'package:blood_pressure_app/model/blood_pressure/update_legacy_entries.dart';
 import 'package:blood_pressure_app/model/export_import/export_configuration.dart';
-import 'package:blood_pressure_app/model/storage/db/config_db.dart';
+import 'package:blood_pressure_app/model/storage/db/file_settings_loader.dart';
+import 'package:blood_pressure_app/model/storage/db/settings_loader.dart';
 import 'package:blood_pressure_app/model/storage/export_columns_store.dart';
 import 'package:blood_pressure_app/model/storage/storage.dart';
 import 'package:blood_pressure_app/screens/error_reporting_screen.dart';
@@ -33,8 +34,6 @@ class App extends StatefulWidget {
 }
 
 class _AppState extends State<App> {
-  /// Database object for app settings.
-  ConfigDB? _configDB;
   Database? _entryDB;
 
   /// The result of the first [_loadApp] call.
@@ -50,8 +49,6 @@ class _AppState extends State<App> {
 
   @override
   void dispose() {
-    _configDB?.database.close();
-    _configDB = null;
     _entryDB?.close();
     _entryDB = null;
     _settings?.dispose();
@@ -87,17 +84,15 @@ class _AppState extends State<App> {
     }
 
     try {
-      _configDB = await ConfigDB.open();
-      final configDao = ConfigDao(_configDB!);
-
-      _settings ??= await configDao.loadSettings(0);
-      _exportSettings ??= await configDao.loadExportSettings(0);
-      _csvExportSettings ??= await configDao.loadCsvExportSettings(0);
-      _pdfExportSettings ??= await configDao.loadPdfExportSettings(0);
-      _intervalStorageManager ??= await IntervalStoreManager.load(configDao, 0);
-      _exportColumnsManager ??= await configDao.loadExportColumnsManager(0);
+      final SettingsLoader settingsLoader = await FileSettingsLoader.load();
+      _settings ??= await settingsLoader.loadSettings();
+      _exportSettings ??= await settingsLoader.loadExportSettings();
+      _csvExportSettings ??= await settingsLoader.loadCsvExportSettings();
+      _pdfExportSettings ??= await settingsLoader.loadPdfExportSettings();
+      _intervalStorageManager ??= await settingsLoader.loadIntervalStorageManager();
+      _exportColumnsManager ??= await settingsLoader.loadExportColumnsManager();
     } catch (e, stack) {
-      await ErrorReporting.reportCriticalError('Error loading config db', '$e\n$stack',);
+      await ErrorReporting.reportCriticalError('Error loading settings from files', '$e\n$stack',);
     }
 
     late BloodPressureRepository bpRepo;
@@ -129,8 +124,7 @@ class _AppState extends State<App> {
 
       // update logic
       if (_settings!.lastVersion == 0) {
-        await updateLegacySettings(_settings!, _exportSettings!, _csvExportSettings!, _pdfExportSettings!, _intervalStorageManager!);
-        await updateLegacyExport(_configDB!, _exportColumnsManager!);
+        await migrateSharedPreferences(_settings!, _exportSettings!, _csvExportSettings!, _pdfExportSettings!, _intervalStorageManager!);
 
         _settings!.lastVersion = 30;
         if (_exportSettings!.exportAfterEveryEntry) {
@@ -155,6 +149,27 @@ class _AppState extends State<App> {
       _intervalStorageManager!.mainPage.setToMostRecentInterval();
     } catch (e, stack) {
       await ErrorReporting.reportCriticalError('Error performing upgrades:', '$e\n$stack',);
+    }
+
+    final dbPath = await getDatabasesPath();
+    if (File(join(dbPath, 'config.db')).existsSync()) {
+      try {
+        await migrateDatabaseSettings(
+          _settings!,
+          _exportSettings!,
+          _csvExportSettings!,
+          _pdfExportSettings!,
+          _intervalStorageManager!,
+          _exportColumnsManager!,
+          medRepo,
+        );
+        File(join(dbPath, 'config.db')).copySync(join(dbPath, 'v39_config.db.backup'));
+        File(join(dbPath, 'config.db')).deleteSync();
+        File(join(dbPath, 'config.db-journal')).copySync(join(dbPath, 'v39_config.db-journal.backup'));
+        File(join(dbPath, 'config.db-journal')).deleteSync();
+      } catch (e, stack) {
+        await ErrorReporting.reportCriticalError('Error upgrading to file based settings:', '$e\n$stack',);
+      }
     }
 
     _loadedChild = MultiRepositoryProvider(
@@ -183,7 +198,7 @@ class _AppState extends State<App> {
   @override
   Widget build(BuildContext context) {
     if (!(kDebugMode && (const bool.fromEnvironment('testing_mode')))
-        && _loadedChild != null && _configDB != null && _entryDB != null) {
+        && _loadedChild != null && _settings != null && _entryDB != null) {
       return _loadedChild!;
     }
     return ConsistentFutureBuilder(
