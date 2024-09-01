@@ -518,5 +518,7 @@
     "errFeatureNotSupported": "This feature is not available on this platform.",
     "@errFeatureNotSupported": {},
     "invalidZip": "Invalid zip file.",
-    "@invalidZip": {}
+    "@invalidZip": {},
+    "errCantCreateArchive": "Can''t create archive. Please report the bug if possible.",
+    "@errCantCreateArchive": {}
 }

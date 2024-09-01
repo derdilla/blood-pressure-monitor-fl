@@ -15,7 +15,7 @@ abstract class SettingsLoader {
   /// Changes to the disk data will not propagate to the object.
   Future<Settings> loadSettings();
 
-  /// Loads the profiles [Settings] object from disk.
+  /// Loads the profiles [ExportSettings] object from disk.
   ///
   /// If any errors occur or the object is not present, a default one will be
   /// created. Changes in the object will save to the automatically.
@@ -23,7 +23,7 @@ abstract class SettingsLoader {
   /// Changes to the disk data will not propagate to the object.
   Future<ExportSettings> loadExportSettings();
 
-  /// Loads the profiles [Settings] object from disk.
+  /// Loads the profiles [CsvExportSettings] object from disk.
   ///
   /// If any errors occur or the object is not present, a default one will be
   /// created. Changes in the object will save to the automatically.
@@ -31,7 +31,7 @@ abstract class SettingsLoader {
   /// Changes to the disk data will not propagate to the object.
   Future<CsvExportSettings> loadCsvExportSettings();
 
-  /// Loads the profiles [Settings] object from disk.
+  /// Loads the profiles [PdfExportSettings] object from disk.
   ///
   /// If any errors occur or the object is not present, a default one will be
   /// created. Changes in the object will save to the automatically.

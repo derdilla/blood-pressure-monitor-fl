@@ -16,6 +16,7 @@ import 'package:blood_pressure_app/features/settings/tiles/slider_list_tile.dart
 import 'package:blood_pressure_app/features/settings/tiles/titled_column.dart';
 import 'package:blood_pressure_app/features/settings/version_screen.dart';
 import 'package:blood_pressure_app/features/settings/warn_about_screen.dart';
+import 'package:blood_pressure_app/logging.dart';
 import 'package:blood_pressure_app/model/blood_pressure/pressure_unit.dart';
 import 'package:blood_pressure_app/model/blood_pressure/warn_values.dart';
 import 'package:blood_pressure_app/model/iso_lang_names.dart';
@@ -32,8 +33,6 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:path/path.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
-
-import '../logging.dart';
 
 /// Primary settings page to manage basic settings and link to subsettings.
 class SettingsPage extends StatelessWidget {
@@ -312,17 +311,16 @@ class SettingsPage extends StatelessWidget {
                   title: Text(localizations.exportSettings),
                   leading: const Icon(Icons.tune),
                   onTap: () async {
+                    final messenger = ScaffoldMessenger.of(context);
                     final loader = await FileSettingsLoader.load();
                     final archive = loader.createArchive();
                     if (archive == null) {
-                      print(1);
-                      // TODO: err msg
+                      messenger.showSnackBar(SnackBar(content: Text(localizations.errCantCreateArchive)));
                       return;
                     }
                     final compressedArchive = ZipEncoder().encode(archive);
                     if (compressedArchive == null) {
-                      print(2);
-                      // TODO: err msg
+                      messenger.showSnackBar(SnackBar(content: Text(localizations.errCantCreateArchive)));
                       return;
                     }
                     final archiveData = Uint8List.fromList(compressedArchive);
