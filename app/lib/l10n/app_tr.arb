@@ -516,5 +516,9 @@
   "intakes": "İlaç alımları",
   "@intakes": {},
   "errFeatureNotSupported": "Bu özellik bu platformda kullanılamıyor.",
-  "@errFeatureNotSupported": {}
+  "@errFeatureNotSupported": {},
+  "invalidZip": "Geçersiz zip dosyası.",
+  "@invalidZip": {},
+  "errCantCreateArchive": "Arşiv oluşturulamıyor. Lütfen mümkünse hatayı bildirin.",
+  "@errCantCreateArchive": {}
 }
