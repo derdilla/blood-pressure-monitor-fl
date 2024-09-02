@@ -15,6 +15,7 @@ void main() {
       child: IntervalPicker(type: IntervalStoreManagerLocation.mainPage)
     )));
     expect(find.byType(DropdownButton<TimeStep>), findsOneWidget);
+    expect(find.byType(MaterialButton), findsNWidgets(2));
     expect(find.byIcon(Icons.chevron_left), findsOneWidget);
     expect(find.byIcon(Icons.chevron_right), findsOneWidget);
     expect(
@@ -59,6 +60,5 @@ void main() {
     await tester.tap(find.text(localizations.custom));
     await tester.pumpAndSettle();
     expect(find.byType(DateRangePickerDialog), findsOneWidget);
-
   });
 }
