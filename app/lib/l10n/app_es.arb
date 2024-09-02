@@ -516,5 +516,9 @@
   "intakes": "Toma de medicamentos",
   "@intakes": {},
   "errFeatureNotSupported": "Esta función no está disponible en esta plataforma.",
-  "@errFeatureNotSupported": {}
+  "@errFeatureNotSupported": {},
+  "invalidZip": "Archivo zip no válido.",
+  "@invalidZip": {},
+  "errCantCreateArchive": "No se puede crear el archivo. Por favor, informe del error si es posible.",
+  "@errCantCreateArchive": {}
 }
