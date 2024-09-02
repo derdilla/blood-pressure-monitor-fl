@@ -12,7 +12,7 @@ void main() {
   testWidgets('shows controls and dropdown', (tester) async {
     await tester.pumpWidget(materialApp(ChangeNotifierProvider(
       create: (_) => IntervalStoreManager(IntervalStorage(),IntervalStorage(),IntervalStorage()),
-      child: IntervalPicker(type: IntervalStoreManagerLocation.mainPage)
+      child: const IntervalPicker(type: IntervalStoreManagerLocation.mainPage)
     )));
     expect(find.byType(DropdownButton<TimeStep>), findsOneWidget);
     expect(find.byType(MaterialButton), findsNWidgets(2));
@@ -30,7 +30,7 @@ void main() {
 
     await tester.pumpWidget(materialApp(ChangeNotifierProvider.value(
       value: s,
-      child: IntervalPicker(type: IntervalStoreManagerLocation.mainPage)
+      child: const IntervalPicker(type: IntervalStoreManagerLocation.mainPage)
     )));
     final localizations = await AppLocalizations.delegate.load(const Locale('en'));
 
@@ -43,7 +43,7 @@ void main() {
 
     await tester.pumpWidget(materialApp(ChangeNotifierProvider.value(
       value: s,
-      child: IntervalPicker(type: IntervalStoreManagerLocation.mainPage)
+      child: const IntervalPicker(type: IntervalStoreManagerLocation.mainPage),
     )));
     final localizations = await AppLocalizations.delegate.load(const Locale('en'));
 
@@ -60,5 +60,28 @@ void main() {
     await tester.tap(find.text(localizations.custom));
     await tester.pumpAndSettle();
     expect(find.byType(DateRangePickerDialog), findsOneWidget);
+  });
+  testWidgets('steps date stepper by one', (tester) async {
+    final s = IntervalStoreManager(IntervalStorage(),IntervalStorage(),IntervalStorage());
+    s.mainPage.changeStepSize(TimeStep.year);
+    final year = s.mainPage.currentRange.start
+      .add(s.mainPage.currentRange.duration ~/ 2)
+      .year;
+
+    await tester.pumpWidget(materialApp(ChangeNotifierProvider.value(
+      value: s,
+      child: const IntervalPicker(type: IntervalStoreManagerLocation.mainPage),
+    )));
+
+    expect(find.text('$year'), findsOneWidget);
+
+    await tester.tap(find.byIcon(Icons.chevron_left));
+    await tester.pumpAndSettle();
+    expect(find.text('${year - 1}'), findsOneWidget);
+
+    await tester.tap(find.byIcon(Icons.chevron_right));
+    await tester.tap(find.byIcon(Icons.chevron_right));
+    await tester.pumpAndSettle();
+    expect(find.text('${year + 1}'), findsOneWidget);
   });
 }

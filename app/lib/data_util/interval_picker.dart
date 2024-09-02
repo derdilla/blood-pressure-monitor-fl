@@ -40,7 +40,7 @@ class IntervalPicker extends StatelessWidget {
           Row(
             children: [
               MaterialButton(
-                onPressed: () => intervall.moveDataRangeByStep(-11),
+                onPressed: () => intervall.moveDataRangeByStep(-1),
                 child: const Icon(Icons.chevron_left, size: 48),
               ),
               Expanded(
