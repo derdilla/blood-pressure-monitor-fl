@@ -514,5 +514,9 @@
   "intakes": "服药",
   "@intakes": {},
   "errFeatureNotSupported": "这个功能在这个平台上不可用。",
-  "@errFeatureNotSupported": {}
+  "@errFeatureNotSupported": {},
+  "invalidZip": "无效的 ZIP 文件。",
+  "@invalidZip": {},
+  "errCantCreateArchive": "无法创建存档。如果可能请报告 Bug。",
+  "@errCantCreateArchive": {}
 }
