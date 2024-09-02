@@ -6,7 +6,7 @@ if [ -z "$1" ]; then
   exit 1
 fi
 
-export END=$1-3
+export END=$1-2
 
 for ((i = 0; i <= $END; i++)); do
   for file in fastlane/metadata/android/*/changelogs/$i.txt; do
