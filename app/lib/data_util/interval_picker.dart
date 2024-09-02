@@ -39,9 +39,9 @@ class IntervalPicker extends StatelessWidget {
           const SizedBox(height: 2),
           Row(
             children: [
-              IconButton(
-                onPressed: () => intervall.moveDataRangeByStep(-1),
-                icon: const Icon(Icons.chevron_left, size: 48),
+              MaterialButton(
+                onPressed: () => intervall.moveDataRangeByStep(-11),
+                child: const Icon(Icons.chevron_left, size: 48),
               ),
               Expanded(
                 child: DropdownButton<TimeStep>(
