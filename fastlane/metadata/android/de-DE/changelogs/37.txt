@@ -1,5 +1,0 @@
-* Behebe Probleme in PDF Statistiken
-* Behebe bearbeiten und löschen von Einträgen im kompakte Liste Modus
-* Verhindere duplizierte Einträge
-* Behebe interne Probleme
-* Übersetze App ins Estnische
