@@ -165,8 +165,10 @@ class _AppState extends State<App> {
         );
         File(join(dbPath, 'config.db')).copySync(join(dbPath, 'v39_config.db.backup'));
         File(join(dbPath, 'config.db')).deleteSync();
-        File(join(dbPath, 'config.db-journal')).copySync(join(dbPath, 'v39_config.db-journal.backup'));
-        File(join(dbPath, 'config.db-journal')).deleteSync();
+        if (File(join(dbPath, 'config.db-journal')).existsSync()) {
+          File(join(dbPath, 'config.db-journal')).copySync(join(dbPath, 'v39_config.db-journal.backup'));
+          File(join(dbPath, 'config.db-journal')).deleteSync();
+        }
       } catch (e, stack) {
         await ErrorReporting.reportCriticalError('Error upgrading to file based settings:', '$e\n$stack',);
       }
