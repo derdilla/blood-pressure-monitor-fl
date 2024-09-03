@@ -146,7 +146,7 @@
   "@timeResolvedMetrics": {},
   "exportAfterEveryInputDesc": "Non consigliato (sovraccarico file)",
   "@exportAfterEveryInputDesc": {},
-  "exportFieldFormatDocumentation": "'## Variabili\nIl formato del campo di esportazione supporta l''inserimento di valori per le seguenti variabili:\n- `$TIMESTAMP:` Rappresenta il tempo trascorso dall''epoca Unix, espresso in millisecondi.\n- `$SYS:` Fornisce il valore se disponibile, in alternativa il valore predefinito è -1.\n- `$DIA:` Fornisce il valore se disponibile, in alternativa il valore predefinito è -1.\n- `$PUL:` Fornisce il valore se disponibile, in alternativa il valore predefinito è -1.\n- `$NOTE:` Fornisce il valore se disponibile, in alternativa il valore predefinito è -1.\n- `$COLOR:` Rappresenta il colore di una misura come numero, il valore di esempio: `4291681337`.\n\nSe qualcuna delle variabili menzionate sopra non sono presenti nella registrazione della pressione arteriosa, verranno sostituite con `null`.\n\n## Matematica\nPuoi usare operazioni matematiche basiche all''interno di doppie graffe (\"`{{}}`\").\n\nSono supportate le seguenti operazioni matematiche:\n- Operazioni: +, -, *, /, %, ^\n- Equazioni di primo grado: abs, acos, asin, atan, ceil, cos, cosh, cot, coth, csc, csch, exp, floor, ln, log, round sec, sech, sin, sinh, sqrt, tan, tanh \n- Equazioni di secondo grado: log, nrt, pow\n- Costanti: e, pi, ln2, ln10, log2e, log10e, sqrt1_2, sqrt2\n\nPer le specifiche complete dell''interprete matematico, si può fare riferimento all''[albero delle funzioni](https://pub.dev/documentation/function_tree/latest#interpreter)\n\n## Ordine di elaborazione\n1. Sostituzione variabile\n2. Matematica'",
+  "exportFieldFormatDocumentation": "'## Variabili\nIl formato del campo di esportazione supporta l''inserimento di valori per le seguenti variabili:\n- `$TIMESTAMP:` Rappresenta il tempo trascorso dall''epoca Unix, espresso in millisecondi.\n- `$SYS:` Fornisce il valore se disponibile, in alternativa il valore predefinito è -1.\n- `$DIA:` Fornisce il valore se disponibile, in alternativa il valore predefinito è -1.\n- `$PUL:` Fornisce il valore se disponibile, in alternativa il valore predefinito è -1.\n- `$NOTE:` Fornisce il valore se disponibile, in alternativa il valore predefinito è -1.\n- `$COLOR:` Rappresenta il colore di una misura come numero, il valore di esempio: `4291681337`.\n\nSe qualcuna delle variabili menzionate sopra non sono presenti nella registrazione della pressione sanguigna, verranno sostituite con `null`.\n\n## Matematica\nPuoi usare operazioni matematiche basiche all''interno di doppie graffe (\"`{{}}`\").\n\nSono supportate le seguenti operazioni matematiche:\n- Operazioni: +, -, *, /, %, ^\n- Equazioni di primo grado: abs, acos, asin, atan, ceil, cos, cosh, cot, coth, csc, csch, exp, floor, ln, log, round sec, sech, sin, sinh, sqrt, tan, tanh \n- Equazioni di secondo grado: log, nrt, pow\n- Costanti: e, pi, ln2, ln10, log2e, log10e, sqrt1_2, sqrt2\n\nPer le specifiche complete dell''interprete matematico, si può fare riferimento all''[albero delle funzioni](https://pub.dev/documentation/function_tree/latest#interpreter)\n\n## Ordine di elaborazione\n1. Sostituzione variabile\n2. Matematica'",
   "@exportFieldFormatDocumentation": {},
   "startWithAddMeasurementPage": "Misurazione all''avvio",
   "@startWithAddMeasurementPage": {},
@@ -204,7 +204,7 @@
       }
     }
   },
-  "title": "Monitoraggio pressione",
+  "title": "App per la pressione sanguigna",
   "@title": {},
   "diaColor": "Colore diastolica",
   "@diaColor": {},
@@ -337,7 +337,7 @@
   "@language": {},
   "drawRegressionLines": "Disegna linee di tendenza",
   "@drawRegressionLines": {},
-  "pdfDocumentTitle": "Valori pressione arteriosa dal {start} al {end}",
+  "pdfDocumentTitle": "Valori pressione sanguigna dal {start} al {end}",
   "@pdfDocumentTitle": {
     "placeholders": {
       "start": {
@@ -481,7 +481,7 @@
   "@bluetoothInput": {},
   "bodyMovementDetected": "Rilevato movimento del corpo",
   "@bodyMovementDetected": {},
-  "meanArterialPressure": "Pressione arteriosa media",
+  "meanArterialPressure": "Pressione sanguigna media",
   "@meanArterialPressure": {},
   "userID": "ID utente",
   "@userID": {},
@@ -516,5 +516,9 @@
   "errFeatureNotSupported": "Questa funzionalità non è disponibile su questa piattaforma.",
   "@errFeatureNotSupported": {},
   "intakes": "Assunzioni di medicinali",
-  "@intakes": {}
+  "@intakes": {},
+  "invalidZip": "File zip non valido.",
+  "@invalidZip": {},
+  "errCantCreateArchive": "Impossibile creare l''archivio. Segnalare il bug, se possibile.",
+  "@errCantCreateArchive": {}
 }
