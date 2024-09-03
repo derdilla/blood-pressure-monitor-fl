@@ -1,1 +1,1 @@
-Salva, analizza ed esporta i dati sulla prorpia pressione arteriosa.
+Salva, analizza ed esporta la tua pressione sanguigna!

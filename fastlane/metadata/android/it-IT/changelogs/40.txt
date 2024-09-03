@@ -1,5 +1,5 @@
-* Reimplement home and statistics graphs to fix some longstanding bugs and improve general performance
-* Fix medicine intake deletion
-* Simplify settings storage format to fix settings not saving on some devices
-* Fix date switcher clipping in some cases
-* Complete Turkish, Italian, Spanish, French, and Chinese translations (thanks to various people on weblate)
+* Reimplementati i grafici della home page e delle statistiche per correggere alcuni bug di vecchia data e migliorare le prestazioni generali
+* Correzione dell'eliminazione dell'assunzione di medicinali
+* Semplifica il formato di archiviazione delle impostazioni per correggere le impostazioni che non vengono salvate su alcuni dispositivi
+* Risolto il problema con il ritaglio del cambio data in alcuni casi
+* Traduzioni complete in turco, italiano, spagnolo, francese e cinese
