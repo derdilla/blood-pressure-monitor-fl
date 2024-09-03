@@ -21,7 +21,7 @@ class FileSettingsLoader implements SettingsLoader {
   /// settings path.
   static Future<FileSettingsLoader> load([String? path]) async {
     path ??= join(await getDatabasesPath(), 'settings');
-    Directory(path).createSync();
+    Directory(path).createSync(recursive: true);
     return FileSettingsLoader._create(path);
   }
 
