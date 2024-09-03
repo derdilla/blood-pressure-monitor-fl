@@ -1,1 +1,11 @@
-<p><i>blood pressure monitor</i> consente di salvare e analizzare i valori della pressione arteriosa e permette una esportazione dei dati semplice e versatile. Questa applicazione consente la creazione di misurazioni con marca temporale e le mostra in diverse vesti. È estremamente personalizzabile senza troppe complicazioni e pemette l'importazione e l'esportazione dei dati in formato CSV.</p><p>Tieni traccia della tua pressione arteriosa ovunque tu sia. Offline, senza pubblicità e open source.</p>
+<p><i>Blood pressure monitor</i> è un affidabile rilevatore e analizzatore di misurazioni della pressione sanguigna. Ha l'ambizione di consentire il salvataggio delle misurazioni più velocemente che altrove e di semplificare la condivisione dei dati con il medico. Funziona immediatamente ma può anche essere configurato per casi d'uso individuali.</p>
+
+Caratteristiche:
+- 📏 Memorizzazione delle misurazioni <b>affidabile</b>
+- 🚀 Immissione rapida tramite finestre di dialogo <b>intuitive</b> all'avvio e navigazione automatica dei moduli
+- 📊 Le <b>bellissime</b> analisi forniscono approfondimenti su tendenze, distribuzione, differenze nel corso della giornata e molto altro
+- 📂 <b>Esportazione e importazione</b> versatile (CSV, PDF, SQLite) con controllo granulare
+- ⚙️Elevata configurabilità
+- 🔗Ingresso BLE GATT tramite dispositivi bluetooth
+- Senza pubblicità e interruzion
+- Codice <b>open source</b> ben documentato
