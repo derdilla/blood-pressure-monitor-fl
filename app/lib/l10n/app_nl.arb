@@ -1,0 +1,524 @@
+{
+  "title": "Bloeddruk App",
+  "@title": {},
+  "success": "Succes: {msg}",
+  "@success": {
+    "placeholders": {
+      "msg": {
+        "type": "String"
+      }
+    }
+  },
+  "loading": "laden…",
+  "@loading": {},
+  "error": "Fout: {msg}",
+  "@error": {
+    "placeholders": {
+      "msg": {
+        "type": "String"
+      }
+    }
+  },
+  "errNaN": "Voer een nummer in",
+  "@errNaN": {},
+  "errLt30": "Nummer <= 30? Zet validatie uit in instellingen!",
+  "@errLt30": {},
+  "errUnrealistic": "Onrealistische waarde? Zet validatie uit in instellingen!",
+  "@errUnrealistic": {},
+  "errDiaGtSys": "dia >= sys? Zet validatie uit in instellingen!",
+  "@errDiaGtSys": {},
+  "errCantOpenURL": "Kan URL niet openen: {url}",
+  "@errCantOpenURL": {
+    "placeholders": {
+      "url": {
+        "type": "String"
+      }
+    }
+  },
+  "errNoFileOpened": "geen bestand geopend",
+  "@errNoFileOpened": {},
+  "errNotStarted": "niet begonnen",
+  "@errNotStarted": {},
+  "errNoValue": "Voer een waarde in",
+  "@errNoValue": {},
+  "errNotEnoughDataToGraph": "Niet genoeg gegevens om een grafiek te tekenen.",
+  "@errNotEnoughDataToGraph": {},
+  "errNoData": "geen gegevens",
+  "@errNoData": {},
+  "errWrongImportFormat": "Alleen bestanden met CSV of SQLite database formaat kunnen geimporteerd worden.",
+  "@errWrongImportFormat": {},
+  "errNeedHeadline": "Alleen bestanden die beginnen met een veldregel kunnen geimporteerd worden.",
+  "@errNeedHeadline": {},
+  "errCantReadFile": "De inhoud van het bestand kon niet gelezen worden",
+  "@errCantReadFile": {},
+  "errNotImportable": "Dit bestand kan niet geimporteerd worden",
+  "@errNotImportable": {},
+  "btnCancel": "ANNULEREN",
+  "@btnCancel": {},
+  "btnSave": "OPSLAAN",
+  "@btnSave": {},
+  "btnConfirm": "OK",
+  "@btnConfirm": {},
+  "btnUndo": "ONGEDAAN MAKEN",
+  "@btnUndo": {},
+  "btnNext": "VOLGENDE",
+  "@btnNext": {},
+  "sysLong": "Systolisch",
+  "@sysLong": {},
+  "sysShort": "sys",
+  "@sysShort": {},
+  "diaLong": "Diastolisch",
+  "@diaLong": {},
+  "diaShort": "dia",
+  "@diaShort": {},
+  "pulLong": "Hartslag",
+  "@pulLong": {},
+  "pulShort": "slg",
+  "@pulShort": {},
+  "addNote": "Opmerking (optioneel)",
+  "@addNote": {},
+  "settings": "Instellingen",
+  "@settings": {},
+  "layout": "Opmaak",
+  "@layout": {},
+  "allowManualTimeInput": "Sta handmatige tijdsinvoer toe",
+  "@allowManualTimeInput": {},
+  "enterTimeFormatScreen": "Tijdsformaat",
+  "@enterTimeFormatScreen": {},
+  "theme": "Thema",
+  "@theme": {},
+  "system": "Systeem",
+  "@system": {},
+  "dark": "Donker",
+  "@dark": {},
+  "light": "Licht",
+  "@light": {},
+  "iconSize": "Pictogram Grootte",
+  "@iconSize": {},
+  "animationSpeed": "Animatie duur",
+  "@animationSpeed": {},
+  "sysColor": "Systolische kleur",
+  "@sysColor": {},
+  "diaColor": "Diastolische kleur",
+  "@diaColor": {},
+  "pulColor": "Hartslag kleur",
+  "@pulColor": {},
+  "behavior": "Gedrag",
+  "@behavior": {},
+  "validateInputs": "Valideer invoer",
+  "@validateInputs": {},
+  "confirmDeletion": "Bevestig verwijderingen",
+  "@confirmDeletion": {},
+  "age": "Leeftijd",
+  "@age": {},
+  "determineWarnValues": "Waarschuwingswaarden bepalen",
+  "@determineWarnValues": {},
+  "aboutWarnValuesScreenDesc": "Meer info over waarschuwingswaarden",
+  "@aboutWarnValuesScreenDesc": {},
+  "sysWarn": "Systolische waarschuwingswaarde",
+  "@sysWarn": {},
+  "diaWarn": "Diatolische waarschuwingswaarde",
+  "@diaWarn": {},
+  "data": "Gegevens",
+  "@data": {},
+  "version": "Versie",
+  "@version": {},
+  "versionOf": "Versie: {version}",
+  "@versionOf": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "buildNumberOf": "Versienummer: {buildNumber}",
+  "@buildNumberOf": {
+    "placeholders": {
+      "buildNumber": {
+        "type": "String"
+      }
+    }
+  },
+  "packageNameOf": "Pakketnaam: {name}",
+  "@packageNameOf": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "exportImport": "Exporteer / Importeer",
+  "@exportImport": {},
+  "exportDir": "Exportmap",
+  "@exportDir": {},
+  "exportAfterEveryInput": "Exporteer na elke invoer",
+  "@exportAfterEveryInput": {},
+  "exportAfterEveryInputDesc": "Niet aangeraden (bestandsexplosie)",
+  "@exportAfterEveryInputDesc": {},
+  "exportFormat": "Exportformaat",
+  "@exportFormat": {},
+  "exportCustomEntries": "Velden aanpassen",
+  "@exportCustomEntries": {},
+  "addEntry": "Voeg veld toe",
+  "@addEntry": {},
+  "exportMimeType": "Type exportmedia",
+  "@exportMimeType": {},
+  "exportCsvHeadline": "Veldregel",
+  "@exportCsvHeadline": {},
+  "exportCsvHeadlineDesc": "Helpt velden te onderscheiden",
+  "@exportCsvHeadlineDesc": {},
+  "csv": "CSV",
+  "@csv": {},
+  "pdf": "PDF",
+  "@pdf": {},
+  "db": "SQLite DB",
+  "@db": {},
+  "text": "tekst",
+  "@text": {},
+  "other": "andere",
+  "@other": {},
+  "fieldDelimiter": "Veldscheidingsteken",
+  "@fieldDelimiter": {},
+  "textDelimiter": "Tekstscheidingsteken",
+  "@textDelimiter": {},
+  "export": "EXPORTEER",
+  "@export": {},
+  "shared": "gedeeld",
+  "@shared": {},
+  "import": "IMPORTEER",
+  "@import": {},
+  "sourceCode": "Broncode",
+  "@sourceCode": {},
+  "licenses": "Licenties van derden",
+  "@licenses": {},
+  "importSuccess": "{count} items geimporteerd",
+  "@importSuccess": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "exportWarnConfigNotImportable": "Hoi! Een vriendelijke waarschuwing: met de huidige instellingen kan de export niet geimporteerd worden. Los dit op door het export formaat als CSV in te stellen en voeg een van de beschikbare tijdsformaten toe.",
+  "@exportWarnConfigNotImportable": {},
+  "exportWarnNotEveryFieldExported": "Let op dat niet alle velden geëxporteerd worden: {fields} {count, plural, one{mist} other{missen}}.",
+  "@exportWarnNotEveryFieldExported": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "fields": {
+        "type": "String"
+      }
+    }
+  },
+  "statistics": "Statistiek",
+  "@statistics": {},
+  "measurementCount": "Aantal metingen",
+  "@measurementCount": {},
+  "measurementsPerDay": "Metingen per dag",
+  "@measurementsPerDay": {},
+  "timeResolvedMetrics": "Tijds-Gerelateerde Statistiek",
+  "@timeResolvedMetrics": {},
+  "avgOf": "{txt} Ø",
+  "@avgOf": {
+    "placeholders": {
+      "txt": {
+        "type": "String"
+      }
+    }
+  },
+  "minOf": "{txt} min.",
+  "@minOf": {
+    "placeholders": {
+      "txt": {
+        "type": "String"
+      }
+    }
+  },
+  "maxOf": "{txt} max.",
+  "@maxOf": {
+    "placeholders": {
+      "txt": {
+        "type": "String"
+      }
+    }
+  },
+  "warnValues": "Waarschuwingswaarden",
+  "@warnValues": {},
+  "warnAboutTxt1": "Waarschuwingswaarden zijn enkel suggesties en geen medisch advies.",
+  "@warnAboutTxt1": {},
+  "warnAboutTxt2": "De standaard leeftijdsgerelateerde waarden zijn afkomstig van deze bron.",
+  "@warnAboutTxt2": {},
+  "warnAboutTxt3": "Wees vrij om deze waarden aan te passen naar uw behoeftes en volg de aanbevelingen van uw dokter.",
+  "@warnAboutTxt3": {},
+  "enterTimeFormatString": "tijdsformaat",
+  "@enterTimeFormatString": {},
+  "now": "nu",
+  "@now": {},
+  "deletionConfirmed": "Item verwijderd.",
+  "@deletionConfirmed": {},
+  "day": "Dag",
+  "@day": {},
+  "week": "Week",
+  "@week": {},
+  "month": "Maand",
+  "@month": {},
+  "year": "Jaar",
+  "@year": {},
+  "lifetime": "Levensduur",
+  "@lifetime": {},
+  "weekOfYear": "Week {weekNum}, {year}",
+  "@weekOfYear": {
+    "placeholders": {
+      "weekNum": {
+        "type": "int"
+      },
+      "year": {
+        "type": "int"
+      }
+    }
+  },
+  "last7Days": "7 dagen",
+  "@last7Days": {},
+  "last30Days": "30 dagen",
+  "@last30Days": {},
+  "allowMissingValues": "Sta missende waarden toe",
+  "@allowMissingValues": {},
+  "errTimeAfterNow": "De geselecteerde tijd was in de toekomst en is teruggezet naar de huidige tijd. Deze validatie kan uitgezet worden in de instellingen.",
+  "@errTimeAfterNow": {},
+  "language": "Taal",
+  "@language": {},
+  "custom": "Aangepast",
+  "@custom": {},
+  "drawRegressionLines": "Teken trendlijnen",
+  "@drawRegressionLines": {},
+  "drawRegressionLinesDesc": "Tekent regressielijnen in de grafiek. Alleen zinvol voor grote intervallen.",
+  "@drawRegressionLinesDesc": {},
+  "pdfDocumentTitle": "Bloeddrukwaarden van {start} tot {end}",
+  "@pdfDocumentTitle": {
+    "placeholders": {
+      "start": {
+        "type": "String"
+      },
+      "end": {
+        "type": "String"
+      }
+    }
+  },
+  "fieldFormat": "Veldformaat",
+  "@fieldFormat": {},
+  "result": "Resultaat:",
+  "@result": {},
+  "pulsePressure": "Polsdruk",
+  "@pulsePressure": {},
+  "addExportformat": "Voeg export formaat toe",
+  "@addExportformat": {},
+  "edit": "Bewerken",
+  "@edit": {},
+  "delete": "Verwijder",
+  "@delete": {},
+  "default_": "Standaard",
+  "@default_": {},
+  "exportPdfHeaderHeight": "Koptekst hoogte",
+  "@exportPdfHeaderHeight": {},
+  "exportPdfCellHeight": "Regel hoogte",
+  "@exportPdfCellHeight": {},
+  "exportPdfHeaderFontSize": "Koptekst lettergrootte",
+  "@exportPdfHeaderFontSize": {},
+  "exportPdfCellFontSize": "Regel lettergrootte",
+  "@exportPdfCellFontSize": {},
+  "average": "Gemiddeld",
+  "@average": {},
+  "maximum": "Maximaal",
+  "@maximum": {},
+  "minimum": "Minimaal",
+  "@minimum": {},
+  "exportPdfExportTitle": "Koptekst",
+  "@exportPdfExportTitle": {},
+  "exportPdfExportStatistics": "Statistiek",
+  "@exportPdfExportStatistics": {},
+  "exportPdfExportData": "Gegevenstabel",
+  "@exportPdfExportData": {},
+  "startWithAddMeasurementPage": "Meting bij lanceren",
+  "@startWithAddMeasurementPage": {},
+  "startWithAddMeasurementPageDescription": "Meetinvoerscherm weergeven als app gelanceerd wordt.",
+  "@startWithAddMeasurementPageDescription": {},
+  "horizontalLines": "Horizontale lijnen",
+  "@horizontalLines": {},
+  "linePositionY": "Lijnpositie (y)",
+  "@linePositionY": {},
+  "importSettings": "Herstel instellingen",
+  "@importSettings": {},
+  "requiresAppRestart": "App herstart vereist",
+  "@requiresAppRestart": {},
+  "pleaseRestart": "Start de app opnieuw op om de wijzigingen door te voeren",
+  "@pleaseRestart": {},
+  "restartNow": "Nu herstarten",
+  "@restartNow": {},
+  "warnNeedsRestartForUsingApp": "Er zijn bestanden verwijderd tijdens deze sessie. Start de app opnieuw op om door te gaan met terugkeren naar andere delen van de app!",
+  "@warnNeedsRestartForUsingApp": {},
+  "deleteAllMeasurements": "Verwijder alle metingen",
+  "@deleteAllMeasurements": {},
+  "deleteAllSettings": "Verwijder alle instellingen",
+  "@deleteAllSettings": {},
+  "warnDeletionUnrecoverable": "Deze stap is onomkeerbaar tenzij er handmatig een backup is gemaakt. Weet u zeker dat u dit wilt verwijderen?",
+  "@warnDeletionUnrecoverable": {},
+  "needlePinBarWidth": "Kleurdikte",
+  "@needlePinBarWidth": {},
+  "needlePinBarWidthDesc": "De breedte van lijnen van gekleurde items in de grafiek.",
+  "@needlePinBarWidthDesc": {},
+  "errParseEmptyCsvFile": "Het csv bestand bevat niet genoeg regels om een record te parsen.",
+  "@errParseEmptyCsvFile": {},
+  "errParseFailedDecodingField": "Decoderen van veld \"{fieldContent}\" op regel {lineNumber} mislukt.",
+  "@errParseFailedDecodingField": {
+    "placeholders": {
+      "lineNumber": {
+        "type": "int"
+      },
+      "fieldContent": {
+        "type": "String"
+      }
+    }
+  },
+  "exportFieldsPreset": "Exporteer vooringestelde velden",
+  "@exportFieldsPreset": {},
+  "remove": "Verwijder",
+  "@remove": {},
+  "manageExportColumns": "Export kolommen beheren",
+  "@manageExportColumns": {},
+  "buildIn": "Ingebouwd",
+  "@buildIn": {},
+  "csvTitle": "CSV-titel",
+  "@csvTitle": {},
+  "recordFormat": "Record formaat",
+  "@recordFormat": {},
+  "timeFormat": "Tijdsformaat",
+  "@timeFormat": {},
+  "errAccuracyLoss": "Er wordt een nauwkeurigheidsverlies verwacht bij het exporteren met aangepaste tijdsformaten.",
+  "@errAccuracyLoss": {},
+  "bottomAppBars": "Onderste dialoog balk",
+  "@bottomAppBars": {},
+  "medications": "Medicaties",
+  "@medications": {},
+  "addMedication": "Voeg medicatie toe",
+  "@addMedication": {},
+  "name": "Naam",
+  "@name": {},
+  "defaultDosis": "Standaard dosis",
+  "@defaultDosis": {},
+  "noMedication": "Geen medicatie",
+  "@noMedication": {},
+  "dosis": "Dosis",
+  "@dosis": {},
+  "valueDistribution": "Waardeverdeling",
+  "@valueDistribution": {},
+  "titleInCsv": "Titel in CSV",
+  "@titleInCsv": {},
+  "errBleNoPerms": "Geen bluetooth rechten",
+  "@errBleNoPerms": {},
+  "preferredPressureUnit": "Voorkeur drukeenheid",
+  "@preferredPressureUnit": {},
+  "compactList": "Compacte meetlijst",
+  "@compactList": {},
+  "bluetoothDisabled": "Bluetooth uitgeschakeld",
+  "@bluetoothDisabled": {},
+  "errMeasurementRead": "Fout tijdens het maken van de meting!",
+  "@errMeasurementRead": {},
+  "measurementSuccess": "Meting succesvol uitgevoerd!",
+  "@measurementSuccess": {},
+  "connect": "Verbind",
+  "@connect": {},
+  "bluetoothInput": "Bluetooth invoer",
+  "@bluetoothInput": {},
+  "aboutBleInput": "Sommige meetapparaten zijn BLE GATT compatibel. Deze apparaten kunnen hier gekoppeld worden en automatisch metingen verzenden of schakel deze optie uit in instellingen.",
+  "@aboutBleInput": {},
+  "scanningForDevices": "Scannen op apparaten",
+  "@scanningForDevices": {},
+  "meanArterialPressure": "Gemiddelde slagaderlijke druk",
+  "@meanArterialPressure": {},
+  "userID": "Gebruikers ID",
+  "@userID": {},
+  "bodyMovementDetected": "Lichaamsbeweging gedetecteerd",
+  "@bodyMovementDetected": {},
+  "cuffTooLoose": "Manchet zit te los",
+  "@cuffTooLoose": {},
+  "improperMeasurementPosition": "Onjuiste metingspositie",
+  "@improperMeasurementPosition": {},
+  "irregularPulseDetected": "Onregelmatige hartslag gededecteerd",
+  "@irregularPulseDetected": {},
+  "pulseRateExceedsUpperLimit": "Hartslag is hoger dan de bovenste limiet",
+  "@pulseRateExceedsUpperLimit": {},
+  "availableDevices": "Beschikbare apparaten",
+  "@availableDevices": {},
+  "deleteAllMedicineIntakes": "Verwijder alle medicijninnames",
+  "@deleteAllMedicineIntakes": {},
+  "deleteAllNotes": "Verwijder alle opmerkingen",
+  "@deleteAllNotes": {},
+  "date": "Datum",
+  "@date": {},
+  "intakes": "Medicijninname",
+  "@intakes": {},
+  "errFeatureNotSupported": "Deze functie is niet beschikbaar op dit platform.",
+  "@errFeatureNotSupported": {},
+  "invalidZip": "Ongeldig zip bestand.",
+  "@invalidZip": {},
+  "graphLineThickness": "Lijndikte",
+  "@graphLineThickness": {},
+  "accentColor": "Thema kleur",
+  "@accentColor": {},
+  "aboutWarnValuesScreen": "Over",
+  "@aboutWarnValuesScreen": {},
+  "confirmDeleteDesc": "Verwijder dit item? (Deze bevestigingsvragen kunt u uitzetten in de instellingen.)",
+  "@confirmDeleteDesc": {},
+  "notes": "Opmerkingen",
+  "@notes": {},
+  "time": "Tijd",
+  "@time": {},
+  "confirmDelete": "Bevestig verwijderen",
+  "@confirmDelete": {},
+  "exportFieldFormatDocumentation": "'## Variabelen\nHet export veldformaat ondersteund het invoegen van waarden met de volgende aanduidingen:\n- `$TIMESTAMP:` De tijd in milliseconds sinds het Unix tijdsperk.\n- `$SYS:` Systolische waarde indien beschikbaar, anders -1.\n- `$DIA:` Diatolische waarde indien beschikbaar, anders -1.\n- `$PUL:` Polsdruk indien beschikbaar, anders -1.\n- `$NOTE:` Opmerking indien beschikbaar, anders -1.\n- `$COLOR:` De metingskleur als een nummer. (voorbeeld waarde: `4291681337`)\n\nIndien geen van bovenstaande aanduidingen beschikbaar zijn in een bloedsdrukmeting record, dan worden ze vervangen met `null`.\n\n## Wiskunde\nEenvoudige wiskunde kan gebruikt worden binnen dubbele haken (\"`{{}}`\").\n\nDe volgende wiskundige bewerkingen worden ondersteund:\n- Operaties: +, -, *, /, %, ^\n- Eén-parameter functies: abs, acos, asin, atan, ceil, cos, cosh, cot, coth, csc, csch, exp, floor, ln, log, round sec, sech, sin, sinh, sqrt, tan, tanh \n- Twee-parameter functies: log, nrt, pow\n- Constanten: e, pi, ln2, ln10, log2e, log10e, sqrt1_2, sqrt2\n\nVoor de volledige wiskundige vertaler specificaties, zie de [function_tree](https://pub.dev/documentation/function_tree/latest#interpreter) documentatie.\n\n## Bewerkingsvolgorde\n1. aanduidingen vervangen\n2. Wiskunde'",
+  "@exportFieldFormatDocumentation": {},
+  "customGraphMarkings": "Markeringen op maat",
+  "@customGraphMarkings": {},
+  "addLine": "Voeg lijn toe",
+  "@addLine": {},
+  "useLegacyList": "Gebruik legacy lijst",
+  "@useLegacyList": {},
+  "timestamp": "Tijdstip",
+  "@timestamp": {},
+  "note": "Opmerking",
+  "@note": {},
+  "color": "Kleur",
+  "@color": {},
+  "exportSettings": "Backup instellingen",
+  "@exportSettings": {},
+  "addMeasurement": "Voeg meting toe",
+  "@addMeasurement": {},
+  "enterTimeFormatDesc": "Een formatteringstekenreeks is een combinatie van vooraf gedefinieerde ICU/Skeleton tekenreeksen met eventueel extra tekst die u wilt toevoegen.\n\n[Nieuwsgierig naar de volledige lijst met geldige tekenreeksen? U vindt ze hier.](screen://TimeFormattingHelp)\n\nEen vriendelijke herinnering, de breedte van tabelkolommen wordt niet automatisch veranderd met het gebruik van langere of kortere formaten. Dit kan zorgen \nvoor rare regeleindes en/of tekst dat niet zichtbaar is.\n\nstandaard: \"yy-MM-dd HH:mm\"",
+  "@enterTimeFormatDesc": {},
+  "errParseTimeNotRestoreable": "Er is geen kolom waarmee een tijdstip kan worden hersteld.",
+  "@errParseTimeNotRestoreable": {},
+  "errParseUnknownColumn": "Er is geen kolom met titel \"{title}\".",
+  "@errParseUnknownColumn": {
+    "placeholders": {
+      "title": {
+        "type": "String"
+      }
+    }
+  },
+  "errParseLineTooShort": "Regel {lineNumber} heeft minder kolommen dan de eerste regel.",
+  "@errParseLineTooShort": {
+    "placeholders": {
+      "lineNumber": {
+        "type": "int"
+      }
+    }
+  },
+  "tapToClose": "Tik om te sluiten.",
+  "@tapToClose": {},
+  "errCantCreateArchive": "Kan archief niet aanmaken. Rapporteer deze fout indien mogelijk.",
+  "@errCantCreateArchive": {},
+  "pulseRateLessThanLowerLimit": "Hartslag is lager dan de onderste limiet",
+  "@pulseRateLessThanLowerLimit": {}
+}
