@@ -2,4 +2,4 @@
 * Correzione dell'eliminazione dell'assunzione di medicinali
 * Semplifica il formato di archiviazione delle impostazioni per correggere le impostazioni che non vengono salvate su alcuni dispositivi
 * Risolto il problema con il ritaglio del cambio data in alcuni casi
-* Traduzioni complete in turco, italiano, spagnolo, francese e cinese
+* Traduzioni complete in turco, italiano, spagnolo, francese, olandese e cinese
