@@ -50,6 +50,7 @@ extension EntryUtils on BuildContext {
           await intakeRepo.add(intake);
         }
         if (mounted && exportSettings.exportAfterEveryEntry) {
+          read<IntervalStoreManager>().exportPage.setToMostRecentInterval();
           performExport(this, AppLocalizations.of(this)!);
         }
       }
