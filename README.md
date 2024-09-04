@@ -54,4 +54,4 @@ As there is no demand Windows, Linux and MacOS builds have been stopped. In case
 
 ## Contributing
 
-This app works best when everyone does their part! Everyone interested with a bit of domain knowledge can help make this the best blood pressure app. If you want to provide ideas, translate, code or help in another way
+This app works best when everyone does their part! Everyone interested with a bit of domain knowledge can help make this the best blood pressure app. If you want to provide ideas, translate, code or help in another way *please* check out the [contributor docs](CONTRIBUTING.md).
