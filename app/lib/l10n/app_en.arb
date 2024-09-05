@@ -222,7 +222,7 @@
     "@measurementCount": {},
     "measurementsPerDay": "Measurements per day",
     "@measurementsPerDay": {},
-    "timeResolvedMetrics": "Time-Resolved Metrics",
+    "timeResolvedMetrics": "Metrics by time of day",
     "@timeResolvedMetrics": {},
     "avgOf": "{txt} Ø",
     "@avgOf": {
