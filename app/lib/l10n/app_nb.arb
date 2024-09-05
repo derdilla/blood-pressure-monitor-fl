@@ -1,344 +1,344 @@
 {
-    "errNoData": "ingen data",
-    "@errNoData": {},
-    "btnCancel": "Avbryt",
-    "@btnCancel": {},
-    "btnUndo": "Angre",
-    "@btnUndo": {},
-    "settings": "Innstillinger",
-    "@settings": {},
-    "theme": "Drakt",
-    "@theme": {},
-    "system": "System",
-    "@system": {},
-    "dark": "Mørk",
-    "@dark": {},
-    "light": "Lys",
-    "@light": {},
-    "graphLineThickness": "Linjetykkelse",
-    "@graphLineThickness": {},
-    "animationSpeed": "Animasjonsvarighet",
-    "@animationSpeed": {},
-    "accentColor": "Draktfarge",
-    "@accentColor": {},
-    "data": "Data",
-    "@data": {},
-    "buildNumberOf": "Versjonsnummer: {buildNumber}",
-    "@buildNumberOf": {
-        "placeholders": {
-            "buildNumber": {
-                "type": "String"
+  "errNoData": "ingen data",
+  "@errNoData": {},
+  "btnCancel": "Avbryt",
+  "@btnCancel": {},
+  "btnUndo": "Angre",
+  "@btnUndo": {},
+  "settings": "Innstillinger",
+  "@settings": {},
+  "theme": "Drakt",
+  "@theme": {},
+  "system": "System",
+  "@system": {},
+  "dark": "Mørk",
+  "@dark": {},
+  "light": "Lys",
+  "@light": {},
+  "graphLineThickness": "Linjetykkelse",
+  "@graphLineThickness": {},
+  "animationSpeed": "Animasjonsvarighet",
+  "@animationSpeed": {},
+  "accentColor": "Draktfarge",
+  "@accentColor": {},
+  "data": "Data",
+  "@data": {},
+  "buildNumberOf": "Versjonsnummer: {buildNumber}",
+  "@buildNumberOf": {
+      "placeholders": {
+          "buildNumber": {
+              "type": "String"
             }
         }
     },
-    "csv": "CSV",
-    "@csv": {},
-    "pdf": "PDF",
-    "@pdf": {},
-    "text": "tekst",
-    "@text": {},
-    "sourceCode": "Kildekode",
-    "@sourceCode": {},
-    "statistics": "Statistikk",
-    "@statistics": {},
-    "measurementCount": "Målingsantall",
-    "@measurementCount": {},
-    "iconSize": "Ikonstørrelse",
-    "@iconSize": {},
-    "versionOf": "Versjon: {version}",
-    "@versionOf": {
-        "placeholders": {
-            "version": {
-                "type": "String"
+  "csv": "CSV",
+  "@csv": {},
+  "pdf": "PDF",
+  "@pdf": {},
+  "text": "tekst",
+  "@text": {},
+  "sourceCode": "Kildekode",
+  "@sourceCode": {},
+  "statistics": "Statistikk",
+  "@statistics": {},
+  "measurementCount": "Målingsantall",
+  "@measurementCount": {},
+  "iconSize": "Ikonstørrelse",
+  "@iconSize": {},
+  "versionOf": "Versjon: {version}",
+  "@versionOf": {
+      "placeholders": {
+          "version": {
+              "type": "String"
             }
         }
     },
-    "time": "Tid",
-    "@time": {},
-    "confirmDelete": "Bekreft sletting",
-    "@confirmDelete": {},
-    "day": "dag",
-    "@day": {},
-    "week": "uke",
-    "@week": {},
-    "month": "måned",
-    "@month": {},
-    "year": "År",
-    "@year": {},
-    "btnSave": "Lagre",
-    "@btnSave": {},
-    "packageNameOf": "Pakkenavn: {name}",
-    "@packageNameOf": {
-        "placeholders": {
-            "name": {
-                "type": "String"
+  "time": "Tid",
+  "@time": {},
+  "confirmDelete": "Bekreft sletting",
+  "@confirmDelete": {},
+  "day": "dag",
+  "@day": {},
+  "week": "uke",
+  "@week": {},
+  "month": "måned",
+  "@month": {},
+  "year": "År",
+  "@year": {},
+  "btnSave": "Lagre",
+  "@btnSave": {},
+  "packageNameOf": "Pakkenavn: {name}",
+  "@packageNameOf": {
+      "placeholders": {
+          "name": {
+              "type": "String"
             }
         }
     },
-    "btnConfirm": "OK",
-    "@btnConfirm": {},
-    "version": "Versjon",
-    "@version": {},
-    "licenses": "Tredjepartslisenser",
-    "@licenses": {},
-    "errNaN": "Skriv inn et tall",
-    "@errNaN": {},
-    "title": "Blodtrykksprogram",
-    "@title": {},
-    "success": "Vellykket: {msg}",
-    "@success": {
-        "placeholders": {
-            "msg": {
-                "type": "String"
+  "btnConfirm": "OK",
+  "@btnConfirm": {},
+  "version": "Versjon",
+  "@version": {},
+  "licenses": "Tredjepartslisenser",
+  "@licenses": {},
+  "errNaN": "Skriv inn et tall",
+  "@errNaN": {},
+  "title": "Blodtrykksprogram",
+  "@title": {},
+  "success": "Vellykket: {msg}",
+  "@success": {
+      "placeholders": {
+          "msg": {
+              "type": "String"
             }
         }
     },
-    "loading": "laster inn …",
-    "@loading": {},
-    "errLt30": "Nummer <=30? Skru av bekreftelse i innstillingene!",
-    "@errLt30": {},
-    "errCantOpenURL": "Kan ikke åpne nettadresse: {url}",
-    "@errCantOpenURL": {
-        "placeholders": {
-            "url": {
-                "type": "String"
+  "loading": "laster inn …",
+  "@loading": {},
+  "errLt30": "Nummer <=30? Skru av bekreftelse i innstillingene!",
+  "@errLt30": {},
+  "errCantOpenURL": "Kan ikke åpne nettadresse: {url}",
+  "@errCantOpenURL": {
+      "placeholders": {
+          "url": {
+              "type": "String"
             }
         }
     },
-    "errNoFileOpened": "ingen fil åpnet",
-    "@errNoFileOpened": {},
-    "errNotStarted": "ikke startet",
-    "@errNotStarted": {},
-    "errNoValue": "Skriv inn en verdi",
-    "@errNoValue": {},
-    "errNotEnoughDataToGraph": "Ikke nok data til å tegne diagram.",
-    "@errNotEnoughDataToGraph": {},
-    "errNeedHeadline": "Du kan kun importere filer med overskrift.",
-    "@errNeedHeadline": {},
-    "errCantReadFile": "Filinnholdet kan ikke leses",
-    "@errCantReadFile": {},
-    "enterTimeFormatScreen": "Tidsformat",
-    "@enterTimeFormatScreen": {},
-    "behavior": "Adferd",
-    "@behavior": {},
-    "sysLong": "Systolisk",
-    "@sysLong": {},
-    "sysShort": "sys",
-    "@sysShort": {},
-    "diaLong": "Diastolisk",
-    "@diaLong": {},
-    "diaShort": "dia",
-    "@diaShort": {},
-    "addNote": "Notat (valgfritt)",
-    "@addNote": {},
-    "allowManualTimeInput": "Tillat manuell inntasting av tid",
-    "@allowManualTimeInput": {},
-    "sysColor": "Systolisk farge",
-    "@sysColor": {},
-    "diaColor": "Diastolisk farge",
-    "@diaColor": {},
-    "validateInputs": "Bekreft inndata",
-    "@validateInputs": {},
-    "errDiaGtSys": "dia >=sys? Skru av bekreftelse i innstillingene!",
-    "@errDiaGtSys": {},
-    "errWrongImportFormat": "Du kan kun importere filer i CSV og SQLite-databaseformat.",
-    "@errWrongImportFormat": {},
-    "pulLong": "Puls",
-    "@pulLong": {},
-    "pulShort": "pul",
-    "@pulShort": {},
-    "layout": "Utseende",
-    "@layout": {},
-    "pulColor": "Pulsfarge",
-    "@pulColor": {},
-    "confirmDeletion": "Bekreft sletting",
-    "@confirmDeletion": {},
-    "age": "Alder",
-    "@age": {},
-    "aboutWarnValuesScreen": "Om",
-    "@aboutWarnValuesScreen": {},
-    "determineWarnValues": "Fastsett advarselsverdier",
-    "@determineWarnValues": {},
-    "aboutWarnValuesScreenDesc": "Mer info om advarselsverdier",
-    "@aboutWarnValuesScreenDesc": {},
-    "sysWarn": "Systolisk advarsel",
-    "@sysWarn": {},
-    "diaWarn": "Diastolisk advarsel",
-    "@diaWarn": {},
-    "exportImport": "Eksporter/importer",
-    "@exportImport": {},
-    "exportDir": "Eksporter mappe",
-    "@exportDir": {},
-    "exportFormat": "Eksportformat",
-    "@exportFormat": {},
-    "addEntry": "Legg til felt",
-    "@addEntry": {},
-    "exportCsvHeadline": "Overskrift",
-    "@exportCsvHeadline": {},
-    "exportMimeType": "Eksporter mediatype",
-    "@exportMimeType": {},
-    "db": "SQLite-DB",
-    "@db": {},
-    "exportAfterEveryInputDesc": "Ikke anbefalt (dataeksplosjon)",
-    "@exportAfterEveryInputDesc": {},
-    "exportCustomEntries": "Tilpass felter",
-    "@exportCustomEntries": {},
-    "exportAfterEveryInput": "Eksporter etter hver oppføring",
-    "@exportAfterEveryInput": {},
-    "exportCsvHeadlineDesc": "Hjelper til å skille typer",
-    "@exportCsvHeadlineDesc": {},
-    "fieldDelimiter": "Feltinndeler",
-    "@fieldDelimiter": {},
-    "textDelimiter": "Tekstinndeler",
-    "@textDelimiter": {},
-    "minOf": "{txt} min.",
-    "@minOf": {
-        "placeholders": {
-            "txt": {
-                "type": "String"
+  "errNoFileOpened": "ingen fil åpnet",
+  "@errNoFileOpened": {},
+  "errNotStarted": "ikke startet",
+  "@errNotStarted": {},
+  "errNoValue": "Skriv inn en verdi",
+  "@errNoValue": {},
+  "errNotEnoughDataToGraph": "Ikke nok data til å tegne diagram.",
+  "@errNotEnoughDataToGraph": {},
+  "errNeedHeadline": "Du kan kun importere filer med overskrift.",
+  "@errNeedHeadline": {},
+  "errCantReadFile": "Filinnholdet kan ikke leses",
+  "@errCantReadFile": {},
+  "enterTimeFormatScreen": "Tidsformat",
+  "@enterTimeFormatScreen": {},
+  "behavior": "Adferd",
+  "@behavior": {},
+  "sysLong": "Systolisk",
+  "@sysLong": {},
+  "sysShort": "sys",
+  "@sysShort": {},
+  "diaLong": "Diastolisk",
+  "@diaLong": {},
+  "diaShort": "dia",
+  "@diaShort": {},
+  "addNote": "Notat (valgfritt)",
+  "@addNote": {},
+  "allowManualTimeInput": "Tillat manuell inntasting av tid",
+  "@allowManualTimeInput": {},
+  "sysColor": "Systolisk farge",
+  "@sysColor": {},
+  "diaColor": "Diastolisk farge",
+  "@diaColor": {},
+  "validateInputs": "Bekreft inndata",
+  "@validateInputs": {},
+  "errDiaGtSys": "dia >=sys? Skru av bekreftelse i innstillingene!",
+  "@errDiaGtSys": {},
+  "errWrongImportFormat": "Du kan kun importere filer i CSV og SQLite-databaseformat.",
+  "@errWrongImportFormat": {},
+  "pulLong": "Puls",
+  "@pulLong": {},
+  "pulShort": "pul",
+  "@pulShort": {},
+  "layout": "Utseende",
+  "@layout": {},
+  "pulColor": "Pulsfarge",
+  "@pulColor": {},
+  "confirmDeletion": "Bekreft sletting",
+  "@confirmDeletion": {},
+  "age": "Alder",
+  "@age": {},
+  "aboutWarnValuesScreen": "Om",
+  "@aboutWarnValuesScreen": {},
+  "determineWarnValues": "Fastsett advarselsverdier",
+  "@determineWarnValues": {},
+  "aboutWarnValuesScreenDesc": "Mer info om advarselsverdier",
+  "@aboutWarnValuesScreenDesc": {},
+  "sysWarn": "Systolisk advarsel",
+  "@sysWarn": {},
+  "diaWarn": "Diastolisk advarsel",
+  "@diaWarn": {},
+  "exportImport": "Eksporter/importer",
+  "@exportImport": {},
+  "exportDir": "Eksporter mappe",
+  "@exportDir": {},
+  "exportFormat": "Eksportformat",
+  "@exportFormat": {},
+  "addEntry": "Legg til felt",
+  "@addEntry": {},
+  "exportCsvHeadline": "Overskrift",
+  "@exportCsvHeadline": {},
+  "exportMimeType": "Eksporter mediatype",
+  "@exportMimeType": {},
+  "db": "SQLite-DB",
+  "@db": {},
+  "exportAfterEveryInputDesc": "Ikke anbefalt (dataeksplosjon)",
+  "@exportAfterEveryInputDesc": {},
+  "exportCustomEntries": "Tilpass felter",
+  "@exportCustomEntries": {},
+  "exportAfterEveryInput": "Eksporter etter hver oppføring",
+  "@exportAfterEveryInput": {},
+  "exportCsvHeadlineDesc": "Hjelper til å skille typer",
+  "@exportCsvHeadlineDesc": {},
+  "fieldDelimiter": "Feltinndeler",
+  "@fieldDelimiter": {},
+  "textDelimiter": "Tekstinndeler",
+  "@textDelimiter": {},
+  "minOf": "{txt} min.",
+  "@minOf": {
+      "placeholders": {
+          "txt": {
+              "type": "String"
             }
         }
     },
-    "maxOf": "{txt} maks.",
-    "@maxOf": {
-        "placeholders": {
-            "txt": {
-                "type": "String"
+  "maxOf": "{txt} maks.",
+  "@maxOf": {
+      "placeholders": {
+          "txt": {
+              "type": "String"
             }
         }
     },
-    "measurementsPerDay": "Målinger per dag",
-    "@measurementsPerDay": {},
-    "avgOf": "{txt} Ø",
-    "@avgOf": {
-        "placeholders": {
-            "txt": {
-                "type": "String"
+  "measurementsPerDay": "Målinger per dag",
+  "@measurementsPerDay": {},
+  "avgOf": "{txt} Ø",
+  "@avgOf": {
+      "placeholders": {
+          "txt": {
+              "type": "String"
             }
         }
     },
-    "timeResolvedMetrics": "Tidsutledet data",
-    "@timeResolvedMetrics": {},
-    "warnValues": "Advarselsverdier",
-    "@warnValues": {},
-    "warnAboutTxt1": "Advarselsverdiene er kun forslag, og ikke medisinske råd.",
-    "@warnAboutTxt1": {},
-    "warnAboutTxt2": "Forvalgt aldersavhengig verdi kommer fra denne kilden.",
-    "@warnAboutTxt2": {},
-    "warnAboutTxt3": "Endre gjerne verdiene, og følg anbefalingene din doktor gir deg.",
-    "@warnAboutTxt3": {},
-    "confirmDeleteDesc": "Slett oppføringen? (Du kan skru av disse bekreftelsene i innstillingene.)",
-    "@confirmDeleteDesc": {},
-    "weekOfYear": "Uke {weekNum}, {year}",
-    "@weekOfYear": {
-        "placeholders": {
-            "weekNum": {
-                "type": "int"
+  "timeResolvedMetrics": "Tidsutledet data",
+  "@timeResolvedMetrics": {},
+  "warnValues": "Advarselsverdier",
+  "@warnValues": {},
+  "warnAboutTxt1": "Advarselsverdiene er kun forslag, og ikke medisinske råd.",
+  "@warnAboutTxt1": {},
+  "warnAboutTxt2": "Forvalgt aldersavhengig verdi kommer fra denne kilden.",
+  "@warnAboutTxt2": {},
+  "warnAboutTxt3": "Endre gjerne verdiene, og følg anbefalingene din doktor gir deg.",
+  "@warnAboutTxt3": {},
+  "confirmDeleteDesc": "Slett oppføringen? (Du kan skru av disse bekreftelsene i innstillingene.)",
+  "@confirmDeleteDesc": {},
+  "weekOfYear": "Uke {weekNum}, {year}",
+  "@weekOfYear": {
+      "placeholders": {
+          "weekNum": {
+              "type": "int"
             },
-            "year": {
-                "type": "int"
+          "year": {
+              "type": "int"
             }
         }
     },
-    "deletionConfirmed": "Oppføring slettet.",
-    "@deletionConfirmed": {},
-    "enterTimeFormatString": "tidsformat",
-    "@enterTimeFormatString": {},
-    "now": "nå",
-    "@now": {},
-    "notes": "Notater",
-    "@notes": {},
-    "lifetime": "Levetid",
-    "@lifetime": {},
-    "last7Days": "7 dager",
-    "@last7Days": {},
-    "last30Days": "30 dager",
-    "@last30Days": {},
-    "errNotImportable": "Filen kan ikke importeres",
-    "@errNotImportable": {},
-    "error": "Feil: {msg}",
-    "@error": {
-        "placeholders": {
-            "msg": {
-                "type": "String"
+  "deletionConfirmed": "Oppføring slettet.",
+  "@deletionConfirmed": {},
+  "enterTimeFormatString": "tidsformat",
+  "@enterTimeFormatString": {},
+  "now": "nå",
+  "@now": {},
+  "notes": "Notater",
+  "@notes": {},
+  "lifetime": "Levetid",
+  "@lifetime": {},
+  "last7Days": "7 dager",
+  "@last7Days": {},
+  "last30Days": "30 dager",
+  "@last30Days": {},
+  "errNotImportable": "Filen kan ikke importeres",
+  "@errNotImportable": {},
+  "error": "Feil: {msg}",
+  "@error": {
+      "placeholders": {
+          "msg": {
+              "type": "String"
             }
         }
     },
-    "errUnrealistic": "Urealistisk verdi? Skru av bekreftelse i innstillingene!",
-    "@errUnrealistic": {},
-    "other": "annet",
-    "@other": {},
-    "import": "Importer",
-    "@import": {},
-    "export": "Eksporter",
-    "@export": {},
-    "shared": "delt",
-    "@shared": {},
-    "importSuccess": "Importerte {count} oppføringer",
-    "@importSuccess": {
-        "placeholders": {
-            "count": {
-                "type": "int"
+  "errUnrealistic": "Urealistisk verdi? Skru av bekreftelse i innstillingene!",
+  "@errUnrealistic": {},
+  "other": "annet",
+  "@other": {},
+  "import": "Importer",
+  "@import": {},
+  "export": "Eksporter",
+  "@export": {},
+  "shared": "delt",
+  "@shared": {},
+  "importSuccess": "Importerte {count} oppføringer",
+  "@importSuccess": {
+      "placeholders": {
+          "count": {
+              "type": "int"
             }
         }
     },
-    "exportWarnConfigNotImportable": "Gjør eksportoppsettet importerbart ved å sette eksporttypen til \\\"CSV\\\", skru på overskrift, inkluder feltene ''diastolic'', ''systolic'', ''pulse'', ''notes'', sammen med ett av de tilgjengelige tidsformatene.",
-    "@exportWarnConfigNotImportable": {},
-    "allowMissingValues": "Tillat manglende verdier",
-    "@allowMissingValues": {},
-    "custom": "Egendefinert",
-    "@custom": {},
-    "language": "Språk",
-    "@language": {},
-    "errTimeAfterNow": "Valgt tid på dagen er etter dette tidspunktet. Automatisk tilbakestilt til nåværende tid. Du kan skru av denne bekreftelsen i innstillingene.",
-    "@errTimeAfterNow": {},
-    "exportWarnNotEveryFieldExported": "Husk at du ikke eksporterer alle feltene: {fields} {count, plural, one{} other{}} mangler",
-    "@exportWarnNotEveryFieldExported": {
-        "placeholders": {
-            "count": {
-                "type": "int"
+  "exportWarnConfigNotImportable": "Gjør eksportoppsettet importerbart ved å sette eksporttypen til \\\"CSV\\\", skru på overskrift, inkluder feltene ''diastolic'', ''systolic'', ''pulse'', ''notes'', sammen med ett av de tilgjengelige tidsformatene.",
+  "@exportWarnConfigNotImportable": {},
+  "allowMissingValues": "Tillat manglende verdier",
+  "@allowMissingValues": {},
+  "custom": "Egendefinert",
+  "@custom": {},
+  "language": "Språk",
+  "@language": {},
+  "errTimeAfterNow": "Valgt tid på dagen er etter dette tidspunktet. Automatisk tilbakestilt til nåværende tid. Du kan skru av denne bekreftelsen i innstillingene.",
+  "@errTimeAfterNow": {},
+  "exportWarnNotEveryFieldExported": "Husk at du ikke eksporterer alle feltene: {fields} {count, plural, one{} other{}} mangler",
+  "@exportWarnNotEveryFieldExported": {
+      "placeholders": {
+          "count": {
+              "type": "int"
             },
-            "fields": {
-                "type": "String"
+          "fields": {
+              "type": "String"
             }
         }
     },
-    "drawRegressionLines": "Tegn trendlinjer",
-    "@drawRegressionLines": {},
-    "drawRegressionLinesDesc": "Tegner regresjonslinjer i diagram. Kun nyttig for store intervaller.",
-    "@drawRegressionLinesDesc": {},
-    "default_": "Forvalg",
-    "@default_": {},
-    "addMeasurement": "Legg til måling",
-    "@addMeasurement": {},
-    "exportPdfExportData": "Datatabell",
-    "@exportPdfExportData": {},
-    "horizontalLines": "Vannrette linjer",
-    "@horizontalLines": {},
-    "edit": "Rediger",
-    "@edit": {},
-    "customGraphMarkings": "Egendefinerte markeringer",
-    "@customGraphMarkings": {},
-    "delete": "Slett",
-    "@delete": {},
-    "timestamp": "Tidsstempel",
-    "@timestamp": {},
-    "addLine": "Legg til linje",
-    "@addLine": {},
-    "startWithAddMeasurementPage": "Måling ved oppstart",
-    "@startWithAddMeasurementPage": {},
-    "exportPdfExportStatistics": "Statistikk",
-    "@exportPdfExportStatistics": {},
-    "average": "Gjennomsnitt",
-    "@average": {},
-    "result": "Resultat:",
-    "@result": {},
-    "fieldFormat": "Feltformat",
-    "@fieldFormat": {},
-    "note": "Notat",
-    "@note": {},
-    "color": "Farge",
-    "@color": {},
-    "enterTimeFormatDesc": "En formateringsstreng er en miks av predefinert ICU/Skeleton -strenger og all annen tekst du vil inkludere.\n\n[En fullstendig liste over gyldige formater er å finne her.](screen://TimeFormattingHelp)\n\nBruk av lengre eller kortere formatstrenger endrer ikke også bredden på tabellkolonnene, noe som fører til linjeskift og tekst som ikke vises.\n\nforvalg: \"yy-MM-dd HH:mm\"",
-    "@enterTimeFormatDesc": {}
+  "drawRegressionLines": "Tegn trendlinjer",
+  "@drawRegressionLines": {},
+  "drawRegressionLinesDesc": "Tegner regresjonslinjer i diagram. Kun nyttig for store intervaller.",
+  "@drawRegressionLinesDesc": {},
+  "default_": "Forvalg",
+  "@default_": {},
+  "addMeasurement": "Legg til måling",
+  "@addMeasurement": {},
+  "exportPdfExportData": "Datatabell",
+  "@exportPdfExportData": {},
+  "horizontalLines": "Vannrette linjer",
+  "@horizontalLines": {},
+  "edit": "Rediger",
+  "@edit": {},
+  "customGraphMarkings": "Egendefinerte markeringer",
+  "@customGraphMarkings": {},
+  "delete": "Slett",
+  "@delete": {},
+  "timestamp": "Tidsstempel",
+  "@timestamp": {},
+  "addLine": "Legg til linje",
+  "@addLine": {},
+  "startWithAddMeasurementPage": "Måling ved oppstart",
+  "@startWithAddMeasurementPage": {},
+  "exportPdfExportStatistics": "Statistikk",
+  "@exportPdfExportStatistics": {},
+  "average": "Gjennomsnitt",
+  "@average": {},
+  "result": "Resultat:",
+  "@result": {},
+  "fieldFormat": "Feltformat",
+  "@fieldFormat": {},
+  "note": "Notat",
+  "@note": {},
+  "color": "Farge",
+  "@color": {},
+  "enterTimeFormatDesc": "En formateringsstreng er en miks av predefinert ICU/Skeleton -strenger og all annen tekst du vil inkludere.\n\n[En fullstendig liste over gyldige formater er å finne her.](screen://TimeFormattingHelp)\n\nBruk av lengre eller kortere formatstrenger endrer ikke også bredden på tabellkolonnene, noe som fører til linjeskift og tekst som ikke vises.\n\nforvalg: \"yy-MM-dd HH:mm\"",
+  "@enterTimeFormatDesc": {}
 }

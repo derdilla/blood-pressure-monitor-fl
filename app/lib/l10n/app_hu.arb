@@ -1,271 +1,271 @@
 {
-    "success": "Sikeres: {msg}",
-    "@success": {
-        "placeholders": {
-            "msg": {
-                "type": "String"
+  "success": "Sikeres: {msg}",
+  "@success": {
+      "placeholders": {
+          "msg": {
+              "type": "String"
             }
         }
     },
-    "loading": "Betöltés…",
-    "@loading": {},
-    "error": "Hiba: {msg}",
-    "@error": {
-        "placeholders": {
-            "msg": {
-                "type": "String"
+  "loading": "Betöltés…",
+  "@loading": {},
+  "error": "Hiba: {msg}",
+  "@error": {
+      "placeholders": {
+          "msg": {
+              "type": "String"
             }
         }
     },
-    "errNaN": "Kérem adjon meg egy számot",
-    "@errNaN": {},
-    "errCantOpenURL": "Nem sikerült megnyitni az URL-t : {url}",
-    "@errCantOpenURL": {
-        "placeholders": {
-            "url": {
-                "type": "String"
+  "errNaN": "Kérem adjon meg egy számot",
+  "@errNaN": {},
+  "errCantOpenURL": "Nem sikerült megnyitni az URL-t : {url}",
+  "@errCantOpenURL": {
+      "placeholders": {
+          "url": {
+              "type": "String"
             }
         }
     },
-    "errNoFileOpened": "Nincs megnyitható file",
-    "@errNoFileOpened": {},
-    "errNotStarted": "nem indult el",
-    "@errNotStarted": {},
-    "errNoValue": "Kérem adjon meg egy értéket",
-    "@errNoValue": {},
-    "errNotEnoughDataToGraph": "Nincs elég adat az ábra rajzolásához.",
-    "@errNotEnoughDataToGraph": {},
-    "errNoData": "Nincs adat",
-    "@errNoData": {},
-    "btnCancel": "MÉGSE",
-    "@btnCancel": {},
-    "btnConfirm": "OK",
-    "@btnConfirm": {},
-    "btnUndo": "VISSZA",
-    "@btnUndo": {},
-    "sysLong": "Szisztolés",
-    "@sysLong": {},
-    "sysShort": "sys",
-    "@sysShort": {},
-    "diaLong": "Diasztolés",
-    "@diaLong": {},
-    "addNote": "Jegyzet (opcionális)",
-    "@addNote": {},
-    "settings": "Beállítások",
-    "@settings": {},
-    "title": "Vérnyomás alkalmazás",
-    "@title": {},
-    "errLt30": "Érték <= 30? Kapcsolja ki az ellenőrzést a beállításokban!",
-    "@errLt30": {},
-    "errUnrealistic": "Nem valóságos érték? Kapcsolja ki az ellenőrzést a beállításokban!",
-    "@errUnrealistic": {},
-    "errDiaGtSys": "dia > sys? Kapcsolja ki az ellenőrzést a beállításokban!",
-    "@errDiaGtSys": {},
-    "btnSave": "MENTÉS",
-    "@btnSave": {},
-    "pulLong": "Pulzus",
-    "@pulLong": {},
-    "theme": "Téma",
-    "@theme": {},
-    "errWrongImportFormat": "Csak CSV és SQLite formátumok beolvasása lehetséges.",
-    "@errWrongImportFormat": {},
-    "errNeedHeadline": "Csak fejléccel rendelkező fájl olvasható be.",
-    "@errNeedHeadline": {},
-    "errCantReadFile": "A fájl tartalma nem olvasható",
-    "@errCantReadFile": {},
-    "errNotImportable": "A fájlt nem lehet beolvasni",
-    "@errNotImportable": {},
-    "diaShort": "dia",
-    "@diaShort": {},
-    "pulShort": "pul",
-    "@pulShort": {},
-    "layout": "Elrendezés",
-    "@layout": {},
-    "enterTimeFormatScreen": "Idő formátum",
-    "@enterTimeFormatScreen": {},
-    "system": "Rendszer",
-    "@system": {},
-    "light": "Világos",
-    "@light": {},
-    "iconSize": "Icon méret",
-    "@iconSize": {},
-    "graphLineThickness": "Vonal vastagság",
-    "@graphLineThickness": {},
-    "allowManualTimeInput": "Engedje meg az idő kézi megadását",
-    "@allowManualTimeInput": {},
-    "animationSpeed": "Animáció időtartalma",
-    "@animationSpeed": {},
-    "sysColor": "Szisztolé szín",
-    "@sysColor": {},
-    "diaColor": "Diasztolé szín",
-    "@diaColor": {},
-    "confirmDeletion": "Törlés megerősítése",
-    "@confirmDeletion": {},
-    "age": "Életkor",
-    "@age": {},
-    "determineWarnValues": "Figyelmeztetési értékek meghatározása",
-    "@determineWarnValues": {},
-    "packageNameOf": "Csomag neve: {name}",
-    "@packageNameOf": {
-        "placeholders": {
-            "name": {
-                "type": "String"
+  "errNoFileOpened": "Nincs megnyitható file",
+  "@errNoFileOpened": {},
+  "errNotStarted": "nem indult el",
+  "@errNotStarted": {},
+  "errNoValue": "Kérem adjon meg egy értéket",
+  "@errNoValue": {},
+  "errNotEnoughDataToGraph": "Nincs elég adat az ábra rajzolásához.",
+  "@errNotEnoughDataToGraph": {},
+  "errNoData": "Nincs adat",
+  "@errNoData": {},
+  "btnCancel": "MÉGSE",
+  "@btnCancel": {},
+  "btnConfirm": "OK",
+  "@btnConfirm": {},
+  "btnUndo": "VISSZA",
+  "@btnUndo": {},
+  "sysLong": "Szisztolés",
+  "@sysLong": {},
+  "sysShort": "sys",
+  "@sysShort": {},
+  "diaLong": "Diasztolés",
+  "@diaLong": {},
+  "addNote": "Jegyzet (opcionális)",
+  "@addNote": {},
+  "settings": "Beállítások",
+  "@settings": {},
+  "title": "Vérnyomás alkalmazás",
+  "@title": {},
+  "errLt30": "Érték <= 30? Kapcsolja ki az ellenőrzést a beállításokban!",
+  "@errLt30": {},
+  "errUnrealistic": "Nem valóságos érték? Kapcsolja ki az ellenőrzést a beállításokban!",
+  "@errUnrealistic": {},
+  "errDiaGtSys": "dia > sys? Kapcsolja ki az ellenőrzést a beállításokban!",
+  "@errDiaGtSys": {},
+  "btnSave": "MENTÉS",
+  "@btnSave": {},
+  "pulLong": "Pulzus",
+  "@pulLong": {},
+  "theme": "Téma",
+  "@theme": {},
+  "errWrongImportFormat": "Csak CSV és SQLite formátumok beolvasása lehetséges.",
+  "@errWrongImportFormat": {},
+  "errNeedHeadline": "Csak fejléccel rendelkező fájl olvasható be.",
+  "@errNeedHeadline": {},
+  "errCantReadFile": "A fájl tartalma nem olvasható",
+  "@errCantReadFile": {},
+  "errNotImportable": "A fájlt nem lehet beolvasni",
+  "@errNotImportable": {},
+  "diaShort": "dia",
+  "@diaShort": {},
+  "pulShort": "pul",
+  "@pulShort": {},
+  "layout": "Elrendezés",
+  "@layout": {},
+  "enterTimeFormatScreen": "Idő formátum",
+  "@enterTimeFormatScreen": {},
+  "system": "Rendszer",
+  "@system": {},
+  "light": "Világos",
+  "@light": {},
+  "iconSize": "Icon méret",
+  "@iconSize": {},
+  "graphLineThickness": "Vonal vastagság",
+  "@graphLineThickness": {},
+  "allowManualTimeInput": "Engedje meg az idő kézi megadását",
+  "@allowManualTimeInput": {},
+  "animationSpeed": "Animáció időtartalma",
+  "@animationSpeed": {},
+  "sysColor": "Szisztolé szín",
+  "@sysColor": {},
+  "diaColor": "Diasztolé szín",
+  "@diaColor": {},
+  "confirmDeletion": "Törlés megerősítése",
+  "@confirmDeletion": {},
+  "age": "Életkor",
+  "@age": {},
+  "determineWarnValues": "Figyelmeztetési értékek meghatározása",
+  "@determineWarnValues": {},
+  "packageNameOf": "Csomag neve: {name}",
+  "@packageNameOf": {
+      "placeholders": {
+          "name": {
+              "type": "String"
             }
         }
     },
-    "dark": "Sötét",
-    "@dark": {},
-    "accentColor": "Téma szín",
-    "@accentColor": {},
-    "pulColor": "Pulzus szín",
-    "@pulColor": {},
-    "aboutWarnValuesScreen": "Rólunk",
-    "@aboutWarnValuesScreen": {},
-    "versionOf": "Verzió: {version}",
-    "@versionOf": {
-        "placeholders": {
-            "version": {
-                "type": "String"
+  "dark": "Sötét",
+  "@dark": {},
+  "accentColor": "Téma szín",
+  "@accentColor": {},
+  "pulColor": "Pulzus szín",
+  "@pulColor": {},
+  "aboutWarnValuesScreen": "Rólunk",
+  "@aboutWarnValuesScreen": {},
+  "versionOf": "Verzió: {version}",
+  "@versionOf": {
+      "placeholders": {
+          "version": {
+              "type": "String"
             }
         }
     },
-    "buildNumberOf": "Verzió szám: {buildNumber}",
-    "@buildNumberOf": {
-        "placeholders": {
-            "buildNumber": {
-                "type": "String"
+  "buildNumberOf": "Verzió szám: {buildNumber}",
+  "@buildNumberOf": {
+      "placeholders": {
+          "buildNumber": {
+              "type": "String"
             }
         }
     },
-    "exportImport": "Export / Import",
-    "@exportImport": {},
-    "data": "Adatok",
-    "@data": {},
-    "version": "Verzió",
-    "@version": {},
-    "sysWarn": "Figyelmeztetés (szisztolés)",
-    "@sysWarn": {},
-    "exportAfterEveryInputDesc": "Nem ajánlott (túl sok fájl keletkezik)",
-    "@exportAfterEveryInputDesc": {},
-    "exportCustomEntries": "Mezők testreszabása",
-    "@exportCustomEntries": {},
-    "csv": "CSV",
-    "@csv": {},
-    "pdf": "PDF",
-    "@pdf": {},
-    "textDelimiter": "Szövegelválasztó",
-    "@textDelimiter": {},
-    "exportCsvHeadline": "Fejléc",
-    "@exportCsvHeadline": {},
-    "export": "EXPORT",
-    "@export": {},
-    "licenses": "3rd party licensz",
-    "@licenses": {},
-    "importSuccess": "Importált bejegyzések: {count}",
-    "@importSuccess": {
-        "placeholders": {
-            "count": {
-                "type": "int"
+  "exportImport": "Export / Import",
+  "@exportImport": {},
+  "data": "Adatok",
+  "@data": {},
+  "version": "Verzió",
+  "@version": {},
+  "sysWarn": "Figyelmeztetés (szisztolés)",
+  "@sysWarn": {},
+  "exportAfterEveryInputDesc": "Nem ajánlott (túl sok fájl keletkezik)",
+  "@exportAfterEveryInputDesc": {},
+  "exportCustomEntries": "Mezők testreszabása",
+  "@exportCustomEntries": {},
+  "csv": "CSV",
+  "@csv": {},
+  "pdf": "PDF",
+  "@pdf": {},
+  "textDelimiter": "Szövegelválasztó",
+  "@textDelimiter": {},
+  "exportCsvHeadline": "Fejléc",
+  "@exportCsvHeadline": {},
+  "export": "EXPORT",
+  "@export": {},
+  "licenses": "3rd party licensz",
+  "@licenses": {},
+  "importSuccess": "Importált bejegyzések: {count}",
+  "@importSuccess": {
+      "placeholders": {
+          "count": {
+              "type": "int"
             }
         }
     },
-    "statistics": "Statisztika",
-    "@statistics": {},
-    "measurementCount": "Mérések száma",
-    "@measurementCount": {},
-    "measurementsPerDay": "Mérések naponta",
-    "@measurementsPerDay": {},
-    "avgOf": "{txt} Ø",
-    "@avgOf": {
-        "placeholders": {
-            "txt": {
-                "type": "String"
+  "statistics": "Statisztika",
+  "@statistics": {},
+  "measurementCount": "Mérések száma",
+  "@measurementCount": {},
+  "measurementsPerDay": "Mérések naponta",
+  "@measurementsPerDay": {},
+  "avgOf": "{txt} Ø",
+  "@avgOf": {
+      "placeholders": {
+          "txt": {
+              "type": "String"
             }
         }
     },
-    "enterTimeFormatString": "időformátum",
-    "@enterTimeFormatString": {},
-    "notes": "Jegyzetek",
-    "@notes": {},
-    "time": "Idő",
-    "@time": {},
-    "confirmDelete": "Törlés megerősítése",
-    "@confirmDelete": {},
-    "deletionConfirmed": "Bejegyzés törölve.",
-    "@deletionConfirmed": {},
-    "week": "Hét",
-    "@week": {},
-    "month": "Hónap",
-    "@month": {},
-    "year": "Év",
-    "@year": {},
-    "weekOfYear": "Hét {weekNum}, {year}",
-    "@weekOfYear": {
-        "placeholders": {
-            "weekNum": {
-                "type": "int"
+  "enterTimeFormatString": "időformátum",
+  "@enterTimeFormatString": {},
+  "notes": "Jegyzetek",
+  "@notes": {},
+  "time": "Idő",
+  "@time": {},
+  "confirmDelete": "Törlés megerősítése",
+  "@confirmDelete": {},
+  "deletionConfirmed": "Bejegyzés törölve.",
+  "@deletionConfirmed": {},
+  "week": "Hét",
+  "@week": {},
+  "month": "Hónap",
+  "@month": {},
+  "year": "Év",
+  "@year": {},
+  "weekOfYear": "Hét {weekNum}, {year}",
+  "@weekOfYear": {
+      "placeholders": {
+          "weekNum": {
+              "type": "int"
             },
-            "year": {
-                "type": "int"
+          "year": {
+              "type": "int"
             }
         }
     },
-    "lifetime": "Élettartam",
-    "@lifetime": {},
-    "diaWarn": "Figyelmeztetés (diasztolés)",
-    "@diaWarn": {},
-    "exportAfterEveryInput": "Export minden bevitel után",
-    "@exportAfterEveryInput": {},
-    "exportDir": "Export helye",
-    "@exportDir": {},
-    "exportFormat": "Export formátum",
-    "@exportFormat": {},
-    "fieldDelimiter": "Mezőelválasztó",
-    "@fieldDelimiter": {},
-    "db": "SQLite DB",
-    "@db": {},
-    "text": "szöveg",
-    "@text": {},
-    "other": "egyéb",
-    "@other": {},
-    "shared": "megosztott",
-    "@shared": {},
-    "import": "IMPORT",
-    "@import": {},
-    "sourceCode": "Forráskód",
-    "@sourceCode": {},
-    "maxOf": "{txt} max.",
-    "@maxOf": {
-        "placeholders": {
-            "txt": {
-                "type": "String"
+  "lifetime": "Élettartam",
+  "@lifetime": {},
+  "diaWarn": "Figyelmeztetés (diasztolés)",
+  "@diaWarn": {},
+  "exportAfterEveryInput": "Export minden bevitel után",
+  "@exportAfterEveryInput": {},
+  "exportDir": "Export helye",
+  "@exportDir": {},
+  "exportFormat": "Export formátum",
+  "@exportFormat": {},
+  "fieldDelimiter": "Mezőelválasztó",
+  "@fieldDelimiter": {},
+  "db": "SQLite DB",
+  "@db": {},
+  "text": "szöveg",
+  "@text": {},
+  "other": "egyéb",
+  "@other": {},
+  "shared": "megosztott",
+  "@shared": {},
+  "import": "IMPORT",
+  "@import": {},
+  "sourceCode": "Forráskód",
+  "@sourceCode": {},
+  "maxOf": "{txt} max.",
+  "@maxOf": {
+      "placeholders": {
+          "txt": {
+              "type": "String"
             }
         }
     },
-    "day": "Nap",
-    "@day": {},
-    "last7Days": "7 nap",
-    "@last7Days": {},
-    "last30Days": "30 nap",
-    "@last30Days": {},
-    "aboutWarnValuesScreenDesc": "Több infó a figyelmeztetésekről",
-    "@aboutWarnValuesScreenDesc": {},
-    "minOf": "{txt} min.",
-    "@minOf": {
-        "placeholders": {
-            "txt": {
-                "type": "String"
+  "day": "Nap",
+  "@day": {},
+  "last7Days": "7 nap",
+  "@last7Days": {},
+  "last30Days": "30 nap",
+  "@last30Days": {},
+  "aboutWarnValuesScreenDesc": "Több infó a figyelmeztetésekről",
+  "@aboutWarnValuesScreenDesc": {},
+  "minOf": "{txt} min.",
+  "@minOf": {
+      "placeholders": {
+          "txt": {
+              "type": "String"
             }
         }
     },
-    "now": "most",
-    "@now": {},
-    "exportWarnConfigNotImportable": "Hello! Csak egy baráti figyelmeztetés: a jelenlegi exportkonfiguráció nem lesz importálható. A javításhoz győződjön meg róla, hogy az export típusát CSV-re állította be, és tartalmazza a rendelkezésre álló időformátumok egyikét.",
-    "@exportWarnConfigNotImportable": {},
-    "behavior": "Viselkedés",
-    "@behavior": {},
-    "validateInputs": "Értékek validálása",
-    "@validateInputs": {},
-    "addEntry": "Mező hozzáadása",
-    "@addEntry": {}
+  "now": "most",
+  "@now": {},
+  "exportWarnConfigNotImportable": "Hello! Csak egy baráti figyelmeztetés: a jelenlegi exportkonfiguráció nem lesz importálható. A javításhoz győződjön meg róla, hogy az export típusát CSV-re állította be, és tartalmazza a rendelkezésre álló időformátumok egyikét.",
+  "@exportWarnConfigNotImportable": {},
+  "behavior": "Viselkedés",
+  "@behavior": {},
+  "validateInputs": "Értékek validálása",
+  "@validateInputs": {},
+  "addEntry": "Mező hozzáadása",
+  "@addEntry": {}
 }

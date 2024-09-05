@@ -1,162 +1,162 @@
 {
-    "error": "Viga: {msg}",
-    "@error": {
-        "placeholders": {
-            "msg": {
-                "type": "String"
+  "error": "Viga: {msg}",
+  "@error": {
+      "placeholders": {
+          "msg": {
+              "type": "String"
             }
         }
     },
-    "title": "Vererõhu andmete arhiiv",
-    "@title": {},
-    "success": "Õnnestus: {msg}",
-    "@success": {
-        "placeholders": {
-            "msg": {
-                "type": "String"
+  "title": "Vererõhu andmete arhiiv",
+  "@title": {},
+  "success": "Õnnestus: {msg}",
+  "@success": {
+      "placeholders": {
+          "msg": {
+              "type": "String"
             }
         }
     },
-    "loading": "laadime…",
-    "@loading": {},
-    "errLt30": "Number on väiksem või võrdne kui 30? Vajadusel saad seadistustest valideerimise välja lülitada!",
-    "@errLt30": {},
-    "errUnrealistic": "Ebaloogiline number? Vajadusel saad seadistustest valideerimise välja lülitada!",
-    "@errUnrealistic": {},
-    "errDiaGtSys": "Diastoolne vererõhk on süstoolsest suurem või sellega võrdne? Vajadusel saad seadistustest valideerimise välja lülitada!",
-    "@errDiaGtSys": {},
-    "errNoFileOpened": "ühtegi faili pole avatud",
-    "@errNoFileOpened": {},
-    "errNotStarted": "pole käivitatud",
-    "@errNotStarted": {},
-    "errNotEnoughDataToGraph": "Graafiku joonistamiseks pole piisavalt andmeid.",
-    "@errNotEnoughDataToGraph": {},
-    "errNoData": "andmeid pole",
-    "@errNoData": {},
-    "errNotImportable": "Seda faili ei saa importida",
-    "@errNotImportable": {},
-    "btnSave": "SALVESTA",
-    "@btnSave": {},
-    "errNaN": "Palun sisesta number",
-    "@errNaN": {},
-    "errCantOpenURL": "Võrguaadressi avamine ei õnnestu: {url}",
-    "@errCantOpenURL": {
-        "placeholders": {
-            "url": {
-                "type": "String"
+  "loading": "laadime…",
+  "@loading": {},
+  "errLt30": "Number on väiksem või võrdne kui 30? Vajadusel saad seadistustest valideerimise välja lülitada!",
+  "@errLt30": {},
+  "errUnrealistic": "Ebaloogiline number? Vajadusel saad seadistustest valideerimise välja lülitada!",
+  "@errUnrealistic": {},
+  "errDiaGtSys": "Diastoolne vererõhk on süstoolsest suurem või sellega võrdne? Vajadusel saad seadistustest valideerimise välja lülitada!",
+  "@errDiaGtSys": {},
+  "errNoFileOpened": "ühtegi faili pole avatud",
+  "@errNoFileOpened": {},
+  "errNotStarted": "pole käivitatud",
+  "@errNotStarted": {},
+  "errNotEnoughDataToGraph": "Graafiku joonistamiseks pole piisavalt andmeid.",
+  "@errNotEnoughDataToGraph": {},
+  "errNoData": "andmeid pole",
+  "@errNoData": {},
+  "errNotImportable": "Seda faili ei saa importida",
+  "@errNotImportable": {},
+  "btnSave": "SALVESTA",
+  "@btnSave": {},
+  "errNaN": "Palun sisesta number",
+  "@errNaN": {},
+  "errCantOpenURL": "Võrguaadressi avamine ei õnnestu: {url}",
+  "@errCantOpenURL": {
+      "placeholders": {
+          "url": {
+              "type": "String"
             }
         }
     },
-    "btnConfirm": "SOBIB",
-    "@btnConfirm": {},
-    "errNoValue": "Palun sisesta väärtus",
-    "@errNoValue": {},
-    "errWrongImportFormat": "Sa saad importida andmeid vaid csv ja SQLite andmebaasi vormingutes.",
-    "@errWrongImportFormat": {},
-    "errNeedHeadline": "Sa saad importida vaid andmeid, millel on päiserida.",
-    "@errNeedHeadline": {},
-    "errCantReadFile": "Faili sisu lugemine ei õnnestu",
-    "@errCantReadFile": {},
-    "btnCancel": "KATKESTA",
-    "@btnCancel": {},
-    "btnUndo": "VÕTA TAGASI",
-    "@btnUndo": {},
-    "addNote": "Märkus (kui pead vajalikuks)",
-    "@addNote": {},
-    "sysLong": "Ülemine vererõhk",
-    "@sysLong": {},
-    "sysShort": "sys",
-    "@sysShort": {},
-    "diaLong": "Alumine vererõhk",
-    "@diaLong": {},
-    "diaShort": "dia",
-    "@diaShort": {},
-    "pulLong": "Pulss",
-    "@pulLong": {},
-    "settings": "Seadistused",
-    "@settings": {},
-    "layout": "Paigutus",
-    "@layout": {},
-    "allowManualTimeInput": "Luba kellaaja sisestamist käsitsi",
-    "@allowManualTimeInput": {},
-    "enterTimeFormatScreen": "Kellaja vorming",
-    "@enterTimeFormatScreen": {},
-    "theme": "Kujundus",
-    "@theme": {},
-    "system": "Süsteemi kujundus",
-    "@system": {},
-    "dark": "Tume kujundus",
-    "@dark": {},
-    "light": "Hele kujundus",
-    "@light": {},
-    "iconSize": "Ikooni suurus",
-    "@iconSize": {},
-    "graphLineThickness": "Joone jämedus",
-    "@graphLineThickness": {},
-    "accentColor": "Kujunduse värv",
-    "@accentColor": {},
-    "animationSpeed": "Arvutianimatsiooni kestus",
-    "@animationSpeed": {},
-    "sysColor": "Ülemise ehk süstoolne vererõhu värv",
-    "@sysColor": {},
-    "diaColor": "Alumise ehk diastoolse vererõhu värv",
-    "@diaColor": {},
-    "pulColor": "Pulsi värv",
-    "@pulColor": {},
-    "behavior": "Käitumine",
-    "@behavior": {},
-    "confirmDeletion": "Kustutamisel küsi kinnitust",
-    "@confirmDeletion": {},
-    "age": "Vanus",
-    "@age": {},
-    "data": "Andmed",
-    "@data": {},
-    "versionOf": "Versioon: {version}",
-    "@versionOf": {
-        "placeholders": {
-            "version": {
-                "type": "String"
+  "btnConfirm": "SOBIB",
+  "@btnConfirm": {},
+  "errNoValue": "Palun sisesta väärtus",
+  "@errNoValue": {},
+  "errWrongImportFormat": "Sa saad importida andmeid vaid csv ja SQLite andmebaasi vormingutes.",
+  "@errWrongImportFormat": {},
+  "errNeedHeadline": "Sa saad importida vaid andmeid, millel on päiserida.",
+  "@errNeedHeadline": {},
+  "errCantReadFile": "Faili sisu lugemine ei õnnestu",
+  "@errCantReadFile": {},
+  "btnCancel": "KATKESTA",
+  "@btnCancel": {},
+  "btnUndo": "VÕTA TAGASI",
+  "@btnUndo": {},
+  "addNote": "Märkus (kui pead vajalikuks)",
+  "@addNote": {},
+  "sysLong": "Ülemine vererõhk",
+  "@sysLong": {},
+  "sysShort": "sys",
+  "@sysShort": {},
+  "diaLong": "Alumine vererõhk",
+  "@diaLong": {},
+  "diaShort": "dia",
+  "@diaShort": {},
+  "pulLong": "Pulss",
+  "@pulLong": {},
+  "settings": "Seadistused",
+  "@settings": {},
+  "layout": "Paigutus",
+  "@layout": {},
+  "allowManualTimeInput": "Luba kellaaja sisestamist käsitsi",
+  "@allowManualTimeInput": {},
+  "enterTimeFormatScreen": "Kellaja vorming",
+  "@enterTimeFormatScreen": {},
+  "theme": "Kujundus",
+  "@theme": {},
+  "system": "Süsteemi kujundus",
+  "@system": {},
+  "dark": "Tume kujundus",
+  "@dark": {},
+  "light": "Hele kujundus",
+  "@light": {},
+  "iconSize": "Ikooni suurus",
+  "@iconSize": {},
+  "graphLineThickness": "Joone jämedus",
+  "@graphLineThickness": {},
+  "accentColor": "Kujunduse värv",
+  "@accentColor": {},
+  "animationSpeed": "Arvutianimatsiooni kestus",
+  "@animationSpeed": {},
+  "sysColor": "Ülemise ehk süstoolne vererõhu värv",
+  "@sysColor": {},
+  "diaColor": "Alumise ehk diastoolse vererõhu värv",
+  "@diaColor": {},
+  "pulColor": "Pulsi värv",
+  "@pulColor": {},
+  "behavior": "Käitumine",
+  "@behavior": {},
+  "confirmDeletion": "Kustutamisel küsi kinnitust",
+  "@confirmDeletion": {},
+  "age": "Vanus",
+  "@age": {},
+  "data": "Andmed",
+  "@data": {},
+  "versionOf": "Versioon: {version}",
+  "@versionOf": {
+      "placeholders": {
+          "version": {
+              "type": "String"
             }
         }
     },
-    "version": "Versioon",
-    "@version": {},
-    "buildNumberOf": "Versiooni number: {buildNumber}",
-    "@buildNumberOf": {
-        "placeholders": {
-            "buildNumber": {
-                "type": "String"
+  "version": "Versioon",
+  "@version": {},
+  "buildNumberOf": "Versiooni number: {buildNumber}",
+  "@buildNumberOf": {
+      "placeholders": {
+          "buildNumber": {
+              "type": "String"
             }
         }
     },
-    "packageNameOf": "Paketi nimi: {name}",
-    "@packageNameOf": {
-        "placeholders": {
-            "name": {
-                "type": "String"
+  "packageNameOf": "Paketi nimi: {name}",
+  "@packageNameOf": {
+      "placeholders": {
+          "name": {
+              "type": "String"
             }
         }
     },
-    "pulShort": "pul",
-    "@pulShort": {},
-    "validateInputs": "Kontrolli, kas sisendid on loogilised",
-    "@validateInputs": {},
-    "exportImport": "Eksport ja import",
-    "@exportImport": {},
-    "exportDir": "Kaust andmete ekportimiseks",
-    "@exportDir": {},
-    "exportAfterEveryInput": "Ekspordi peale iga kirje sisestust",
-    "@exportAfterEveryInput": {},
-    "exportAfterEveryInputDesc": "Pole soovitatav (tekib andmeuputus)",
-    "@exportAfterEveryInputDesc": {},
-    "exportCustomEntries": "Kohanda välju",
-    "@exportCustomEntries": {},
-    "addEntry": "Lisa väli",
-    "@addEntry": {},
-    "exportFormat": "Ekspordivorming",
-    "@exportFormat": {},
-    "exportMimeType": "Eksporditav failitüüp",
-    "@exportMimeType": {},
-    "exportCsvHeadline": "Päiseväli",
-    "@exportCsvHeadline": {}
+  "pulShort": "pul",
+  "@pulShort": {},
+  "validateInputs": "Kontrolli, kas sisendid on loogilised",
+  "@validateInputs": {},
+  "exportImport": "Eksport ja import",
+  "@exportImport": {},
+  "exportDir": "Kaust andmete ekportimiseks",
+  "@exportDir": {},
+  "exportAfterEveryInput": "Ekspordi peale iga kirje sisestust",
+  "@exportAfterEveryInput": {},
+  "exportAfterEveryInputDesc": "Pole soovitatav (tekib andmeuputus)",
+  "@exportAfterEveryInputDesc": {},
+  "exportCustomEntries": "Kohanda välju",
+  "@exportCustomEntries": {},
+  "addEntry": "Lisa väli",
+  "@addEntry": {},
+  "exportFormat": "Ekspordivorming",
+  "@exportFormat": {},
+  "exportMimeType": "Eksporditav failitüüp",
+  "@exportMimeType": {},
+  "exportCsvHeadline": "Päiseväli",
+  "@exportCsvHeadline": {}
 }
