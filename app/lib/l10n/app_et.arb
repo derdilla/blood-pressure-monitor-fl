@@ -37,8 +37,6 @@
   "@errNotImportable": {},
   "btnSave": "SALVESTA",
   "@btnSave": {},
-  "btnNext": "EDASI",
-  "@btnNext": {},
   "errNaN": "Palun sisesta number",
   "@errNaN": {},
   "errCantOpenURL": "Võrguaadressi avamine ei õnnestu: {url}",
