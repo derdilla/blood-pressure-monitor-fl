@@ -1,6 +1,6 @@
 # Code of conduct
 
-As a basis for working together every community member, sponsor, maintainer has to agree to following the following basic principles in all interaction related to this project or its users.
+As a basis for working together every community member, sponsor, or maintainer has to agree to following these following basic principles in all interaction related to this project or its users.
 
 1. Respect each other as human beings
 2. Don't participate in unrelated discussions like politics or personal differences
