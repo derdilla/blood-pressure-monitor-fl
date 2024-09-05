@@ -54,33 +54,4 @@ As there is no demand Windows, Linux and MacOS builds have been stopped. In case
 
 ## Contributing
 
-This repository has become quite large, so contributions are greatly appreciated and can come in many forms.
-
-<div align="center">
-<img src="https://tokei.rs/b1/github/NobodyForNothing/blood-pressure-monitor-fl?style=flat-square">
-<img src="https://tokei.rs/b1/github/NobodyForNothing/blood-pressure-monitor-fl?category=code&style=flat-square">
-<img src="https://tokei.rs/b1/github/NobodyForNothing/blood-pressure-monitor-fl?category=comments&style=flat-square">
-</div>
-
-*Please note that when contributing you agree that your work is under the same license as the project.*
-
-### Opening bugs and proposing features
-
-This is probably the simplest to do: Use the app and find out what's wrong and what can be improved. There is no such thing as a wrong issue. Just make sure there is no existing one about the exact same topic If you are unsure about something just create a new issue, the worst thing to happen is that it gets closed.
-
-### Improving texts and translating
-Another easy way to help is to go through the texts (this one or the ones in the app) and fix grammar/other mistakes or find better (more precise/friendly) ways to put things.
-The easiest way to do this is [weblate](https://hosted.weblate.org/engage/blood-pressure-monitor-fl/).
-
-[![Translation status](https://hosted.weblate.org/widgets/blood-pressure-monitor-fl/-/multi-auto.svg)](https://hosted.weblate.org/engage/blood-pressure-monitor-fl/)
-
-
-### Pull requests
-If you can code, you can fix issues or implement features from the issues page. While not a strict requirement, it is recommended to talk about it in an issue first.
-
-All parts of the code have extensive documentation and some additional information can be found in the [docs](https://github.com/NobodyForNothing/blood-pressure-monitor-fl/tree/main/docs) folder. 
-
-<!--[developer docs](https://bpapp.derdilla.com/)-->
-
-### Donations
-If you have too much money, I would advise you to donate to either [F-Droid](https://f-droid.org/en/donate/), [Weblate](https://weblate.org/en/donate/), or some other service that has unavoidable maintenance costs.
+This app works best when everyone does their part! Anyone interested with a bit of domain knowledge can help make this the best blood pressure app. If you want to provide ideas, translate, code or help in another way *please* check out the [contributor docs](CONTRIBUTING.md).
