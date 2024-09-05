@@ -1,15 +1,15 @@
 {
   "pdfDocumentTitle": "Значения кровяного давления с {start} по {end}",
   "@pdfDocumentTitle": {
-      "placeholders": {
-          "start": {
-              "type": "String"
-            },
-          "end": {
-              "type": "String"
-            }
-        }
-    },
+    "placeholders": {
+      "start": {
+        "type": "String"
+      },
+      "end": {
+        "type": "String"
+      }
+    }
+  },
   "exportPdfCellFontSize": "Размер шрифта строки",
   "@exportPdfCellFontSize": {},
   "maximum": "Максимум",
@@ -72,22 +72,22 @@
   "@average": {},
   "success": "Успешно: {msg}",
   "@success": {
-      "placeholders": {
-          "msg": {
-              "type": "String"
-            }
-        }
-    },
+    "placeholders": {
+      "msg": {
+        "type": "String"
+      }
+    }
+  },
   "loading": "загрузка…",
   "@loading": {},
   "error": "Ошибка: {msg}",
   "@error": {
-      "placeholders": {
-          "msg": {
-              "type": "String"
-            }
-        }
-    },
+    "placeholders": {
+      "msg": {
+        "type": "String"
+      }
+    }
+  },
   "errLt30": "Число <= 30? Выключите проверку значений в настройках!",
   "@errLt30": {},
   "errDiaGtSys": "dia >= sys? Выключите проверку значений в настройках!",
@@ -98,12 +98,12 @@
   "@errUnrealistic": {},
   "errCantOpenURL": "Невозможно открыть URL: {url}",
   "@errCantOpenURL": {
-      "placeholders": {
-          "url": {
-              "type": "String"
-            }
-        }
-    },
+    "placeholders": {
+      "url": {
+        "type": "String"
+      }
+    }
+  },
   "errNoFileOpened": "файл не был открыт",
   "@errNoFileOpened": {},
   "errNotStarted": "не начато",
@@ -164,12 +164,12 @@
   "@diaWarn": {},
   "buildNumberOf": "Номер сборки: {buildNumber}",
   "@buildNumberOf": {
-      "placeholders": {
-          "buildNumber": {
-              "type": "String"
-            }
-        }
-    },
+    "placeholders": {
+      "buildNumber": {
+        "type": "String"
+      }
+    }
+  },
   "exportImport": "Экспорт / Импорт",
   "@exportImport": {},
   "animationSpeed": "Длительность анимации",
@@ -180,20 +180,20 @@
   "@sysWarn": {},
   "versionOf": "Версия: {version}",
   "@versionOf": {
-      "placeholders": {
-          "version": {
-              "type": "String"
-            }
-        }
-    },
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
   "packageNameOf": "Имя пакета: {name}",
   "@packageNameOf": {
-      "placeholders": {
-          "name": {
-              "type": "String"
-            }
-        }
-    },
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "behavior": "Поведение приложения",
   "@behavior": {},
   "exportDir": "Место экспорта",
@@ -254,12 +254,12 @@
   "@licenses": {},
   "importSuccess": "Импортировано {count} записей",
   "@importSuccess": {
-      "placeholders": {
-          "count": {
-              "type": "int"
-            }
-        }
-    },
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "exportWarnConfigNotImportable": "Привет! Просто дружеское предупреждение: текущая конфигурация экспорта не будет доступна для импорта. Чтобы исправить это, убедитесь, что вы установили тип экспорта как CSV, включили заголовок и включили один из доступных форматов времени.",
   "@exportWarnConfigNotImportable": {},
   "statistics": "Статистика",
@@ -272,30 +272,30 @@
   "@timeResolvedMetrics": {},
   "avgOf": "{txt} Ø",
   "@avgOf": {
-      "placeholders": {
-          "txt": {
-              "type": "String"
-            }
-        }
-    },
+    "placeholders": {
+      "txt": {
+        "type": "String"
+      }
+    }
+  },
   "minOf": "{txt} мин.",
   "@minOf": {
-      "placeholders": {
-          "txt": {
-              "type": "String"
-            }
-        }
-    },
+    "placeholders": {
+      "txt": {
+        "type": "String"
+      }
+    }
+  },
   "warnAboutTxt1": "Значения warn имеют общий рекомендательный характер и не могут восприниматься как медицинские показания.",
   "@warnAboutTxt1": {},
   "maxOf": "{txt} макс.",
   "@maxOf": {
-      "placeholders": {
-          "txt": {
-              "type": "String"
-            }
-        }
-    },
+    "placeholders": {
+      "txt": {
+        "type": "String"
+      }
+    }
+  },
   "warnAboutTxt2": "Значения, зависящие от возраста по умолчанию, взяты из этого источника.",
   "@warnAboutTxt2": {},
   "warnAboutTxt3": "Не стесняйтесь изменять значения в соответствии с вашими потребностями и следуйте рекомендациям вашего врача.",
@@ -306,15 +306,15 @@
   "@month": {},
   "weekOfYear": "Неделя {weekNum}, {year}",
   "@weekOfYear": {
-      "placeholders": {
-          "weekNum": {
-              "type": "int"
-            },
-          "year": {
-              "type": "int"
-            }
-        }
-    },
+    "placeholders": {
+      "weekNum": {
+        "type": "int"
+      },
+      "year": {
+        "type": "int"
+      }
+    }
+  },
   "enterTimeFormatString": "формат времени",
   "@enterTimeFormatString": {},
   "year": "Год",

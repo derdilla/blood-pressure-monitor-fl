@@ -1,22 +1,22 @@
 {
   "error": "Viga: {msg}",
   "@error": {
-      "placeholders": {
-          "msg": {
-              "type": "String"
-            }
-        }
-    },
+    "placeholders": {
+      "msg": {
+        "type": "String"
+      }
+    }
+  },
   "title": "Vererõhu andmete arhiiv",
   "@title": {},
   "success": "Õnnestus: {msg}",
   "@success": {
-      "placeholders": {
-          "msg": {
-              "type": "String"
-            }
-        }
-    },
+    "placeholders": {
+      "msg": {
+        "type": "String"
+      }
+    }
+  },
   "loading": "laadime…",
   "@loading": {},
   "errLt30": "Number on väiksem või võrdne kui 30? Vajadusel saad seadistustest valideerimise välja lülitada!",
@@ -41,12 +41,12 @@
   "@errNaN": {},
   "errCantOpenURL": "Võrguaadressi avamine ei õnnestu: {url}",
   "@errCantOpenURL": {
-      "placeholders": {
-          "url": {
-              "type": "String"
-            }
-        }
-    },
+    "placeholders": {
+      "url": {
+        "type": "String"
+      }
+    }
+  },
   "btnConfirm": "SOBIB",
   "@btnConfirm": {},
   "errNoValue": "Palun sisesta väärtus",
@@ -113,30 +113,30 @@
   "@data": {},
   "versionOf": "Versioon: {version}",
   "@versionOf": {
-      "placeholders": {
-          "version": {
-              "type": "String"
-            }
-        }
-    },
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
   "version": "Versioon",
   "@version": {},
   "buildNumberOf": "Versiooni number: {buildNumber}",
   "@buildNumberOf": {
-      "placeholders": {
-          "buildNumber": {
-              "type": "String"
-            }
-        }
-    },
+    "placeholders": {
+      "buildNumber": {
+        "type": "String"
+      }
+    }
+  },
   "packageNameOf": "Paketi nimi: {name}",
   "@packageNameOf": {
-      "placeholders": {
-          "name": {
-              "type": "String"
-            }
-        }
-    },
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "pulShort": "pul",
   "@pulShort": {},
   "validateInputs": "Kontrolli, kas sisendid on loogilised",

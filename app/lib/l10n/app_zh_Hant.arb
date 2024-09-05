@@ -3,15 +3,15 @@
   "@behavior": {},
   "weekOfYear": "週 {weekNum}, {year}",
   "@weekOfYear": {
-      "placeholders": {
-          "weekNum": {
-              "type": "int"
-            },
-          "year": {
-              "type": "int"
-            }
-        }
-    },
+    "placeholders": {
+      "weekNum": {
+        "type": "int"
+      },
+      "year": {
+        "type": "int"
+      }
+    }
+  },
   "aboutWarnValuesScreenDesc": "警告數值的更多資訊",
   "@aboutWarnValuesScreenDesc": {},
   "warnAboutTxt2": "預設的年齡參考值由此而來。",
@@ -32,12 +32,12 @@
   "@errTimeAfterNow": {},
   "versionOf": "版本: {version}",
   "@versionOf": {
-      "placeholders": {
-          "version": {
-              "type": "String"
-            }
-        }
-    },
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
   "btnConfirm": "確定",
   "@btnConfirm": {},
   "animationSpeed": "動畫持續時間",
@@ -64,12 +64,12 @@
   "@sysLong": {},
   "success": "成功: {msg}",
   "@success": {
-      "placeholders": {
-          "msg": {
-              "type": "String"
-            }
-        }
-    },
+    "placeholders": {
+      "msg": {
+        "type": "String"
+      }
+    }
+  },
   "exportCustomEntries": "自訂欄位",
   "@exportCustomEntries": {},
   "exportImport": "匯出 / 匯入",
@@ -106,12 +106,12 @@
   "@errNotStarted": {},
   "errCantOpenURL": "無法打開 URL: {url}",
   "@errCantOpenURL": {
-      "placeholders": {
-          "url": {
-              "type": "String"
-            }
-        }
-    },
+    "placeholders": {
+      "url": {
+        "type": "String"
+      }
+    }
+  },
   "lifetime": "終身",
   "@lifetime": {},
   "exportMimeType": "匯出媒體類型",
@@ -122,12 +122,12 @@
   "@notes": {},
   "importSuccess": "已成功匯入 {count} 筆記錄",
   "@importSuccess": {
-      "placeholders": {
-          "count": {
-              "type": "int"
-            }
-        }
-    },
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "errDiaGtSys": "舒張壓 >= 收縮壓？ 請在設定中關閉輸入驗證！",
   "@errDiaGtSys": {},
   "graphLineThickness": "線條粗細",
@@ -150,12 +150,12 @@
   "@addNote": {},
   "packageNameOf": "套件名稱: {name}",
   "@packageNameOf": {
-      "placeholders": {
-          "name": {
-              "type": "String"
-            }
-        }
-    },
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "drawRegressionLinesDesc": "在圖表中繪製迴歸線。僅適用於大的區間。",
   "@drawRegressionLinesDesc": {},
   "pulColor": "脈搏顏色",
@@ -170,12 +170,12 @@
   "@sysColor": {},
   "maxOf": "{txt} 最高.",
   "@maxOf": {
-      "placeholders": {
-          "txt": {
-              "type": "String"
-            }
-        }
-    },
+    "placeholders": {
+      "txt": {
+        "type": "String"
+      }
+    }
+  },
   "pulsePressure": "血壓",
   "@pulsePressure": {},
   "errNotImportable": "這個檔案無法匯入",
@@ -216,27 +216,27 @@
   "@language": {},
   "exportWarnNotEveryFieldExported": "請注意，您並沒有匯出所有欄位: {fields} {count, plural, one{is} other{are}} 遺失。",
   "@exportWarnNotEveryFieldExported": {
-      "placeholders": {
-          "count": {
-              "type": "int"
-            },
-          "fields": {
-              "type": "String"
-            }
-        }
-    },
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "fields": {
+        "type": "String"
+      }
+    }
+  },
   "addEntry": "增加欄位",
   "@addEntry": {},
   "sourceCode": "原始碼",
   "@sourceCode": {},
   "error": "發生錯誤: {msg}",
   "@error": {
-      "placeholders": {
-          "msg": {
-              "type": "String"
-            }
-        }
-    },
+    "placeholders": {
+      "msg": {
+        "type": "String"
+      }
+    }
+  },
   "measurementCount": "測量次數",
   "@measurementCount": {},
   "exportAfterEveryInputDesc": "不建議 (檔案會過大)",
@@ -257,24 +257,24 @@
   "@text": {},
   "avgOf": "{txt} Ø",
   "@avgOf": {
-      "placeholders": {
-          "txt": {
-              "type": "String"
-            }
-        }
-    },
+    "placeholders": {
+      "txt": {
+        "type": "String"
+      }
+    }
+  },
   "confirmDelete": "確認刪除",
   "@confirmDelete": {},
   "errWrongImportFormat": "您只能匯入 CSV 和 SQLite 資料庫格式的檔案。",
   "@errWrongImportFormat": {},
   "minOf": "{txt} 最低.",
   "@minOf": {
-      "placeholders": {
-          "txt": {
-              "type": "String"
-            }
-        }
-    },
+    "placeholders": {
+      "txt": {
+        "type": "String"
+      }
+    }
+  },
   "timeResolvedMetrics": "時間解析圖表",
   "@timeResolvedMetrics": {},
   "enterTimeFormatScreen": "時間格式",
@@ -303,23 +303,23 @@
   "@last7Days": {},
   "buildNumberOf": "版本號碼: {buildNumber}",
   "@buildNumberOf": {
-      "placeholders": {
-          "buildNumber": {
-              "type": "String"
-            }
-        }
-    },
+    "placeholders": {
+      "buildNumber": {
+        "type": "String"
+      }
+    }
+  },
   "pdfDocumentTitle": "血壓數值從 {start} 到 {end}",
   "@pdfDocumentTitle": {
-      "placeholders": {
-          "start": {
-              "type": "String"
-            },
-          "end": {
-              "type": "String"
-            }
-        }
-    },
+    "placeholders": {
+      "start": {
+        "type": "String"
+      },
+      "end": {
+        "type": "String"
+      }
+    }
+  },
   "confirmDeleteDesc": "刪除這筆記錄嗎? (您可以從設定把這個通知關掉。)",
   "@confirmDeleteDesc": {},
   "errNoFileOpened": "沒有打開任何檔案",

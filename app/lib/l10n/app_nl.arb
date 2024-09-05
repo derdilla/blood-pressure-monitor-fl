@@ -3,22 +3,22 @@
   "@title": {},
   "success": "Succes: {msg}",
   "@success": {
-      "placeholders": {
-          "msg": {
-              "type": "String"
-            }
-        }
-    },
+    "placeholders": {
+      "msg": {
+        "type": "String"
+      }
+    }
+  },
   "loading": "laden…",
   "@loading": {},
   "error": "Fout: {msg}",
   "@error": {
-      "placeholders": {
-          "msg": {
-              "type": "String"
-            }
-        }
-    },
+    "placeholders": {
+      "msg": {
+        "type": "String"
+      }
+    }
+  },
   "errNaN": "Voer een nummer in",
   "@errNaN": {},
   "errLt30": "Nummer <= 30? Zet validatie uit in instellingen!",
@@ -29,12 +29,12 @@
   "@errDiaGtSys": {},
   "errCantOpenURL": "Kan URL niet openen: {url}",
   "@errCantOpenURL": {
-      "placeholders": {
-          "url": {
-              "type": "String"
-            }
-        }
-    },
+    "placeholders": {
+      "url": {
+        "type": "String"
+      }
+    }
+  },
   "errNoFileOpened": "geen bestand geopend",
   "@errNoFileOpened": {},
   "errNotStarted": "niet begonnen",
@@ -123,28 +123,28 @@
   "@version": {},
   "versionOf": "Versie: {version}",
   "@versionOf": {
-      "placeholders": {
-          "version": {
-              "type": "String"
-            }
-        }
-    },
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
   "buildNumberOf": "Versienummer: {buildNumber}",
   "@buildNumberOf": {
-      "placeholders": {
-          "buildNumber": {
-              "type": "String"
-            }
-        }
-    },
+    "placeholders": {
+      "buildNumber": {
+        "type": "String"
+      }
+    }
+  },
   "packageNameOf": "Pakketnaam: {name}",
   "@packageNameOf": {
-      "placeholders": {
-          "name": {
-              "type": "String"
-            }
-        }
-    },
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "exportImport": "Exporteer / Importeer",
   "@exportImport": {},
   "exportDir": "Exportmap",
@@ -191,25 +191,25 @@
   "@licenses": {},
   "importSuccess": "{count} items geimporteerd",
   "@importSuccess": {
-      "placeholders": {
-          "count": {
-              "type": "int"
-            }
-        }
-    },
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "exportWarnConfigNotImportable": "Hoi! Een vriendelijke waarschuwing: met de huidige instellingen kan de export niet geimporteerd worden. Los dit op door het export formaat als CSV in te stellen en voeg een van de beschikbare tijdsformaten toe.",
   "@exportWarnConfigNotImportable": {},
   "exportWarnNotEveryFieldExported": "Let op dat niet alle velden geëxporteerd worden: {fields} {count, plural, one{mist} other{missen}}.",
   "@exportWarnNotEveryFieldExported": {
-      "placeholders": {
-          "count": {
-              "type": "int"
-            },
-          "fields": {
-              "type": "String"
-            }
-        }
-    },
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "fields": {
+        "type": "String"
+      }
+    }
+  },
   "statistics": "Statistiek",
   "@statistics": {},
   "measurementCount": "Aantal metingen",
@@ -220,28 +220,28 @@
   "@timeResolvedMetrics": {},
   "avgOf": "{txt} Ø",
   "@avgOf": {
-      "placeholders": {
-          "txt": {
-              "type": "String"
-            }
-        }
-    },
+    "placeholders": {
+      "txt": {
+        "type": "String"
+      }
+    }
+  },
   "minOf": "{txt} min.",
   "@minOf": {
-      "placeholders": {
-          "txt": {
-              "type": "String"
-            }
-        }
-    },
+    "placeholders": {
+      "txt": {
+        "type": "String"
+      }
+    }
+  },
   "maxOf": "{txt} max.",
   "@maxOf": {
-      "placeholders": {
-          "txt": {
-              "type": "String"
-            }
-        }
-    },
+    "placeholders": {
+      "txt": {
+        "type": "String"
+      }
+    }
+  },
   "warnValues": "Waarschuwingswaarden",
   "@warnValues": {},
   "warnAboutTxt1": "Waarschuwingswaarden zijn enkel suggesties en geen medisch advies.",
@@ -268,15 +268,15 @@
   "@lifetime": {},
   "weekOfYear": "Week {weekNum}, {year}",
   "@weekOfYear": {
-      "placeholders": {
-          "weekNum": {
-              "type": "int"
-            },
-          "year": {
-              "type": "int"
-            }
-        }
-    },
+    "placeholders": {
+      "weekNum": {
+        "type": "int"
+      },
+      "year": {
+        "type": "int"
+      }
+    }
+  },
   "last7Days": "7 dagen",
   "@last7Days": {},
   "last30Days": "30 dagen",
@@ -295,15 +295,15 @@
   "@drawRegressionLinesDesc": {},
   "pdfDocumentTitle": "Bloeddrukwaarden van {start} tot {end}",
   "@pdfDocumentTitle": {
-      "placeholders": {
-          "start": {
-              "type": "String"
-            },
-          "end": {
-              "type": "String"
-            }
-        }
-    },
+    "placeholders": {
+      "start": {
+        "type": "String"
+      },
+      "end": {
+        "type": "String"
+      }
+    }
+  },
   "fieldFormat": "Veldformaat",
   "@fieldFormat": {},
   "result": "Resultaat:",
@@ -368,15 +368,15 @@
   "@errParseEmptyCsvFile": {},
   "errParseFailedDecodingField": "Decoderen van veld \"{fieldContent}\" op regel {lineNumber} mislukt.",
   "@errParseFailedDecodingField": {
-      "placeholders": {
-          "lineNumber": {
-              "type": "int"
-            },
-          "fieldContent": {
-              "type": "String"
-            }
-        }
-    },
+    "placeholders": {
+      "lineNumber": {
+        "type": "int"
+      },
+      "fieldContent": {
+        "type": "String"
+      }
+    }
+  },
   "exportFieldsPreset": "Exporteer vooringestelde velden",
   "@exportFieldsPreset": {},
   "remove": "Verwijder",
@@ -497,20 +497,20 @@
   "@errParseTimeNotRestoreable": {},
   "errParseUnknownColumn": "Er is geen kolom met titel \"{title}\".",
   "@errParseUnknownColumn": {
-      "placeholders": {
-          "title": {
-              "type": "String"
-            }
-        }
-    },
+    "placeholders": {
+      "title": {
+        "type": "String"
+      }
+    }
+  },
   "errParseLineTooShort": "Regel {lineNumber} heeft minder kolommen dan de eerste regel.",
   "@errParseLineTooShort": {
-      "placeholders": {
-          "lineNumber": {
-              "type": "int"
-            }
-        }
-    },
+    "placeholders": {
+      "lineNumber": {
+        "type": "int"
+      }
+    }
+  },
   "tapToClose": "Tik om te sluiten.",
   "@tapToClose": {},
   "errCantCreateArchive": "Kan archief niet aanmaken. Rapporteer deze fout indien mogelijk.",

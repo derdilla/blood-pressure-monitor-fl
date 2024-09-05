@@ -25,12 +25,12 @@
   "@data": {},
   "buildNumberOf": "Versjonsnummer: {buildNumber}",
   "@buildNumberOf": {
-      "placeholders": {
-          "buildNumber": {
-              "type": "String"
-            }
-        }
-    },
+    "placeholders": {
+      "buildNumber": {
+        "type": "String"
+      }
+    }
+  },
   "csv": "CSV",
   "@csv": {},
   "pdf": "PDF",
@@ -47,12 +47,12 @@
   "@iconSize": {},
   "versionOf": "Versjon: {version}",
   "@versionOf": {
-      "placeholders": {
-          "version": {
-              "type": "String"
-            }
-        }
-    },
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
   "time": "Tid",
   "@time": {},
   "confirmDelete": "Bekreft sletting",
@@ -69,12 +69,12 @@
   "@btnSave": {},
   "packageNameOf": "Pakkenavn: {name}",
   "@packageNameOf": {
-      "placeholders": {
-          "name": {
-              "type": "String"
-            }
-        }
-    },
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "btnConfirm": "OK",
   "@btnConfirm": {},
   "version": "Versjon",
@@ -87,24 +87,24 @@
   "@title": {},
   "success": "Vellykket: {msg}",
   "@success": {
-      "placeholders": {
-          "msg": {
-              "type": "String"
-            }
-        }
-    },
+    "placeholders": {
+      "msg": {
+        "type": "String"
+      }
+    }
+  },
   "loading": "laster inn …",
   "@loading": {},
   "errLt30": "Nummer <=30? Skru av bekreftelse i innstillingene!",
   "@errLt30": {},
   "errCantOpenURL": "Kan ikke åpne nettadresse: {url}",
   "@errCantOpenURL": {
-      "placeholders": {
-          "url": {
-              "type": "String"
-            }
-        }
-    },
+    "placeholders": {
+      "url": {
+        "type": "String"
+      }
+    }
+  },
   "errNoFileOpened": "ingen fil åpnet",
   "@errNoFileOpened": {},
   "errNotStarted": "ikke startet",
@@ -193,30 +193,30 @@
   "@textDelimiter": {},
   "minOf": "{txt} min.",
   "@minOf": {
-      "placeholders": {
-          "txt": {
-              "type": "String"
-            }
-        }
-    },
+    "placeholders": {
+      "txt": {
+        "type": "String"
+      }
+    }
+  },
   "maxOf": "{txt} maks.",
   "@maxOf": {
-      "placeholders": {
-          "txt": {
-              "type": "String"
-            }
-        }
-    },
+    "placeholders": {
+      "txt": {
+        "type": "String"
+      }
+    }
+  },
   "measurementsPerDay": "Målinger per dag",
   "@measurementsPerDay": {},
   "avgOf": "{txt} Ø",
   "@avgOf": {
-      "placeholders": {
-          "txt": {
-              "type": "String"
-            }
-        }
-    },
+    "placeholders": {
+      "txt": {
+        "type": "String"
+      }
+    }
+  },
   "timeResolvedMetrics": "Tidsutledet data",
   "@timeResolvedMetrics": {},
   "warnValues": "Advarselsverdier",
@@ -231,15 +231,15 @@
   "@confirmDeleteDesc": {},
   "weekOfYear": "Uke {weekNum}, {year}",
   "@weekOfYear": {
-      "placeholders": {
-          "weekNum": {
-              "type": "int"
-            },
-          "year": {
-              "type": "int"
-            }
-        }
-    },
+    "placeholders": {
+      "weekNum": {
+        "type": "int"
+      },
+      "year": {
+        "type": "int"
+      }
+    }
+  },
   "deletionConfirmed": "Oppføring slettet.",
   "@deletionConfirmed": {},
   "enterTimeFormatString": "tidsformat",
@@ -258,12 +258,12 @@
   "@errNotImportable": {},
   "error": "Feil: {msg}",
   "@error": {
-      "placeholders": {
-          "msg": {
-              "type": "String"
-            }
-        }
-    },
+    "placeholders": {
+      "msg": {
+        "type": "String"
+      }
+    }
+  },
   "errUnrealistic": "Urealistisk verdi? Skru av bekreftelse i innstillingene!",
   "@errUnrealistic": {},
   "other": "annet",
@@ -276,12 +276,12 @@
   "@shared": {},
   "importSuccess": "Importerte {count} oppføringer",
   "@importSuccess": {
-      "placeholders": {
-          "count": {
-              "type": "int"
-            }
-        }
-    },
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "exportWarnConfigNotImportable": "Gjør eksportoppsettet importerbart ved å sette eksporttypen til \\\"CSV\\\", skru på overskrift, inkluder feltene ''diastolic'', ''systolic'', ''pulse'', ''notes'', sammen med ett av de tilgjengelige tidsformatene.",
   "@exportWarnConfigNotImportable": {},
   "allowMissingValues": "Tillat manglende verdier",
@@ -294,15 +294,15 @@
   "@errTimeAfterNow": {},
   "exportWarnNotEveryFieldExported": "Husk at du ikke eksporterer alle feltene: {fields} {count, plural, one{} other{}} mangler",
   "@exportWarnNotEveryFieldExported": {
-      "placeholders": {
-          "count": {
-              "type": "int"
-            },
-          "fields": {
-              "type": "String"
-            }
-        }
-    },
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "fields": {
+        "type": "String"
+      }
+    }
+  },
   "drawRegressionLines": "Tegn trendlinjer",
   "@drawRegressionLines": {},
   "drawRegressionLinesDesc": "Tegner regresjonslinjer i diagram. Kun nyttig for store intervaller.",

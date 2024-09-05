@@ -3,22 +3,22 @@
   "@title": {},
   "success": "成功：{msg}",
   "@success": {
-      "placeholders": {
-          "msg": {
-              "type": "String"
-            }
-        }
-    },
+    "placeholders": {
+      "msg": {
+        "type": "String"
+      }
+    }
+  },
   "loading": "正在载入…",
   "@loading": {},
   "error": "错误：{msg}",
   "@error": {
-      "placeholders": {
-          "msg": {
-              "type": "String"
-            }
-        }
-    },
+    "placeholders": {
+      "msg": {
+        "type": "String"
+      }
+    }
+  },
   "errNaN": "请输入数字",
   "@errNaN": {},
   "errLt30": "数字<=30？请在设置中关闭验证！",
@@ -29,12 +29,12 @@
   "@errDiaGtSys": {},
   "errCantOpenURL": "无法打开网址：{url}",
   "@errCantOpenURL": {
-      "placeholders": {
-          "url": {
-              "type": "String"
-            }
-        }
-    },
+    "placeholders": {
+      "url": {
+        "type": "String"
+      }
+    }
+  },
   "errNoFileOpened": "没有打开的文件",
   "@errNoFileOpened": {},
   "errNotStarted": "没有启动",
@@ -127,28 +127,28 @@
   "@version": {},
   "versionOf": "版本：{version}",
   "@versionOf": {
-      "placeholders": {
-          "version": {
-              "type": "String"
-            }
-        }
-    },
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
   "buildNumberOf": "版本号：{buildNumber}",
   "@buildNumberOf": {
-      "placeholders": {
-          "buildNumber": {
-              "type": "String"
-            }
-        }
-    },
+    "placeholders": {
+      "buildNumber": {
+        "type": "String"
+      }
+    }
+  },
   "packageNameOf": "软件包名称：{name}",
   "@packageNameOf": {
-      "placeholders": {
-          "name": {
-              "type": "String"
-            }
-        }
-    },
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "exportImport": "导出/导入",
   "@exportImport": {},
   "exportDir": "导出目录",
@@ -195,12 +195,12 @@
   "@licenses": {},
   "importSuccess": "已成功导入{count}条记录",
   "@importSuccess": {
-      "placeholders": {
-          "count": {
-              "type": "int"
-            }
-        }
-    },
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "exportWarnConfigNotImportable": "友情提示：当前的导出配置将导致无法导入。要修复此问题，请确定将导出类型设置为CSV——带有标题行，标题行中包含“diastolic”、“systolic”、“pulse”、“notes”，以及有效的时间格式。",
   "@exportWarnConfigNotImportable": {},
   "statistics": "统计",
@@ -213,28 +213,28 @@
   "@timeResolvedMetrics": {},
   "avgOf": "{txt} Ø",
   "@avgOf": {
-      "placeholders": {
-          "txt": {
-              "type": "String"
-            }
-        }
-    },
+    "placeholders": {
+      "txt": {
+        "type": "String"
+      }
+    }
+  },
   "minOf": "{txt}最低",
   "@minOf": {
-      "placeholders": {
-          "txt": {
-              "type": "String"
-            }
-        }
-    },
+    "placeholders": {
+      "txt": {
+        "type": "String"
+      }
+    }
+  },
   "maxOf": "{txt}最高",
   "@maxOf": {
-      "placeholders": {
-          "txt": {
-              "type": "String"
-            }
-        }
-    },
+    "placeholders": {
+      "txt": {
+        "type": "String"
+      }
+    }
+  },
   "warnValues": "警告值",
   "@warnValues": {},
   "warnAboutTxt1": "警告值仅供参考，并非医学建议。",
@@ -269,15 +269,15 @@
   "@lifetime": {},
   "weekOfYear": "{year}年第{weekNum}周",
   "@weekOfYear": {
-      "placeholders": {
-          "weekNum": {
-              "type": "int"
-            },
-          "year": {
-              "type": "int"
-            }
-        }
-    },
+    "placeholders": {
+      "weekNum": {
+        "type": "int"
+      },
+      "year": {
+        "type": "int"
+      }
+    }
+  },
   "enterTimeFormatDesc": "格式化字符串是一个预定义的ICU/Skeleton字符串和您想要包含的其他文字的混合体。\n\n[点击即可查看可用的格式化字符串的完整列表。](screen://TimeFormattingHelp)\n\n友情提示：使用更长或更短的格式字符串不会改变表的列宽，还可能导致意外的换行和文字显示不全。\n\n默认：\"yy-MM-dd HH:mm\"",
   "@enterTimeFormatDesc": {},
   "last30Days": "最近三十天",
@@ -310,26 +310,26 @@
   "@maximum": {},
   "exportWarnNotEveryFieldExported": "请注意你没有导出所有字段：缺少 {fields} 个字段。",
   "@exportWarnNotEveryFieldExported": {
-      "placeholders": {
-          "count": {
-              "type": "int"
-            },
-          "fields": {
-              "type": "String"
-            }
-        }
-    },
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "fields": {
+        "type": "String"
+      }
+    }
+  },
   "pdfDocumentTitle": "{start} 到 {end} 之间的血压",
   "@pdfDocumentTitle": {
-      "placeholders": {
-          "start": {
-              "type": "String"
-            },
-          "end": {
-              "type": "String"
-            }
-        }
-    },
+    "placeholders": {
+      "start": {
+        "type": "String"
+      },
+      "end": {
+        "type": "String"
+      }
+    }
+  },
   "exportPdfHeaderFontSize": "页眉字体大小",
   "@exportPdfHeaderFontSize": {},
   "preferredPressureUnit": "首选的血压单位",
@@ -386,31 +386,31 @@
   "@errParseTimeNotRestoreable": {},
   "errParseUnknownColumn": "没有名为 \"{title}\"的列。",
   "@errParseUnknownColumn": {
-      "placeholders": {
-          "title": {
-              "type": "String"
-            }
-        }
-    },
+    "placeholders": {
+      "title": {
+        "type": "String"
+      }
+    }
+  },
   "errParseLineTooShort": "行 {lineNumber} 的列数少于第一行。",
   "@errParseLineTooShort": {
-      "placeholders": {
-          "lineNumber": {
-              "type": "int"
-            }
-        }
-    },
+    "placeholders": {
+      "lineNumber": {
+        "type": "int"
+      }
+    }
+  },
   "errParseFailedDecodingField": "解码行 {lineNumber} 中的 \"{fieldContent}\"字段失败了。",
   "@errParseFailedDecodingField": {
-      "placeholders": {
-          "lineNumber": {
-              "type": "int"
-            },
-          "fieldContent": {
-              "type": "String"
-            }
-        }
-    },
+    "placeholders": {
+      "lineNumber": {
+        "type": "int"
+      },
+      "fieldContent": {
+        "type": "String"
+      }
+    }
+  },
   "exportFieldsPreset": "导出字段预设",
   "@exportFieldsPreset": {},
   "remove": "删除",

@@ -3,15 +3,15 @@
   "@behavior": {},
   "weekOfYear": "Semana {weekNum}, {year}",
   "@weekOfYear": {
-      "placeholders": {
-          "weekNum": {
-              "type": "int"
-            },
-          "year": {
-              "type": "int"
-            }
-        }
-    },
+    "placeholders": {
+      "weekNum": {
+        "type": "int"
+      },
+      "year": {
+        "type": "int"
+      }
+    }
+  },
   "aboutWarnValuesScreenDesc": "Mais informações sobre valores de alerta",
   "@aboutWarnValuesScreenDesc": {},
   "warnAboutTxt2": "Os valores padrão dependentes da idade vêm desta fonte.",
@@ -36,12 +36,12 @@
   "@errTimeAfterNow": {},
   "versionOf": "Versão: {version}",
   "@versionOf": {
-      "placeholders": {
-          "version": {
-              "type": "String"
-            }
-        }
-    },
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
   "btnConfirm": "OK",
   "@btnConfirm": {},
   "addMeasurement": "Adicionar medição",
@@ -86,12 +86,12 @@
   "@exportPdfCellHeight": {},
   "success": "Sucesso: {msg}",
   "@success": {
-      "placeholders": {
-          "msg": {
-              "type": "String"
-            }
-        }
-    },
+    "placeholders": {
+      "msg": {
+        "type": "String"
+      }
+    }
+  },
   "exportCustomEntries": "Personalizar campos",
   "@exportCustomEntries": {},
   "exportImport": "Exportar / Importar",
@@ -136,12 +136,12 @@
   "@errNotStarted": {},
   "errCantOpenURL": "Não foi possível abrir o URL: {url}",
   "@errCantOpenURL": {
-      "placeholders": {
-          "url": {
-              "type": "String"
-            }
-        }
-    },
+    "placeholders": {
+      "url": {
+        "type": "String"
+      }
+    }
+  },
   "lifetime": "Vida",
   "@lifetime": {},
   "exportMimeType": "Tipo de mídia de exportação",
@@ -156,12 +156,12 @@
   "@restartNow": {},
   "importSuccess": "Importadas {count} entradas",
   "@importSuccess": {
-      "placeholders": {
-          "count": {
-              "type": "int"
-            }
-        }
-    },
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "errDiaGtSys": "dia >= sys? Desative a validação nas configurações!",
   "@errDiaGtSys": {},
   "graphLineThickness": "Espessura da linha",
@@ -186,12 +186,12 @@
   "@addNote": {},
   "packageNameOf": "Nome do pacote: {name}",
   "@packageNameOf": {
-      "placeholders": {
-          "name": {
-              "type": "String"
-            }
-        }
-    },
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "drawRegressionLinesDesc": "Desenha linhas de regressão no gráfico. Útil apenas para intervalos grandes.",
   "@drawRegressionLinesDesc": {},
   "pulColor": "Cor do pulso",
@@ -208,12 +208,12 @@
   "@sysColor": {},
   "maxOf": "{txt} máx.",
   "@maxOf": {
-      "placeholders": {
-          "txt": {
-              "type": "String"
-            }
-        }
-    },
+    "placeholders": {
+      "txt": {
+        "type": "String"
+      }
+    }
+  },
   "startWithAddMeasurementPage": "Medição no lançamento",
   "@startWithAddMeasurementPage": {},
   "pulsePressure": "Pressão de pulso",
@@ -270,15 +270,15 @@
   "@language": {},
   "exportWarnNotEveryFieldExported": "Atente-se que você não está exportando todos os campos: {fields} {count, plural, one{está} other{estão}} faltando.",
   "@exportWarnNotEveryFieldExported": {
-      "placeholders": {
-          "count": {
-              "type": "int"
-            },
-          "fields": {
-              "type": "String"
-            }
-        }
-    },
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "fields": {
+        "type": "String"
+      }
+    }
+  },
   "average": "Média",
   "@average": {},
   "addEntry": "Adicionar campo",
@@ -287,12 +287,12 @@
   "@sourceCode": {},
   "error": "Erro: {msg}",
   "@error": {
-      "placeholders": {
-          "msg": {
-              "type": "String"
-            }
-        }
-    },
+    "placeholders": {
+      "msg": {
+        "type": "String"
+      }
+    }
+  },
   "useLegacyList": "Usar lista legada",
   "@useLegacyList": {},
   "measurementCount": "Contagem de medições",
@@ -319,12 +319,12 @@
   "@text": {},
   "avgOf": "{txt} Ø",
   "@avgOf": {
-      "placeholders": {
-          "txt": {
-              "type": "String"
-            }
-        }
-    },
+    "placeholders": {
+      "txt": {
+        "type": "String"
+      }
+    }
+  },
   "enterTimeFormatDesc": "Uma string de formatador é uma mistura de strings ICU/Skeleton predefinidas e qualquer texto adicional que você gostaria de incluir.\n\n[Se estiver curioso para saber a lista completa de formatos válidos, você pode encontrá-los aqui.](screen://TimeFormattingHelp)\n\nApenas um lembrete amigável: usar Strings de formato mais longo ou mais curto não alterará magicamente a largura das colunas da tabela, o que pode levar a algumas quebras de linha estranhas e à não exibição do texto.\n\npadrão: \"yy-MM-dd HH:mm\"",
   "@enterTimeFormatDesc": {},
   "confirmDelete": "Confirmar exclusão",
@@ -333,12 +333,12 @@
   "@errWrongImportFormat": {},
   "minOf": "{txt} min.",
   "@minOf": {
-      "placeholders": {
-          "txt": {
-              "type": "String"
-            }
-        }
-    },
+    "placeholders": {
+      "txt": {
+        "type": "String"
+      }
+    }
+  },
   "timeResolvedMetrics": "Métricas de Resolução por Tempo",
   "@timeResolvedMetrics": {},
   "enterTimeFormatScreen": "Formato de hora",
@@ -377,23 +377,23 @@
   "@needlePinBarWidth": {},
   "buildNumberOf": "Número da versão: {buildNumber}",
   "@buildNumberOf": {
-      "placeholders": {
-          "buildNumber": {
-              "type": "String"
-            }
-        }
-    },
+    "placeholders": {
+      "buildNumber": {
+        "type": "String"
+      }
+    }
+  },
   "pdfDocumentTitle": "Valores de pressão arterial de {start} até {end}",
   "@pdfDocumentTitle": {
-      "placeholders": {
-          "start": {
-              "type": "String"
-            },
-          "end": {
-              "type": "String"
-            }
-        }
-    },
+    "placeholders": {
+      "start": {
+        "type": "String"
+      },
+      "end": {
+        "type": "String"
+      }
+    }
+  },
   "confirmDeleteDesc": "Excluir esta entrada? (Você pode desativar essas confirmações nas configurações.)",
   "@confirmDeleteDesc": {},
   "errNoFileOpened": "nenhum arquivo aberto",
@@ -408,33 +408,33 @@
   "@errParseTimeNotRestoreable": {},
   "errParseUnknownColumn": "Não há nenhuma coluna com o título \"{title}\".",
   "@errParseUnknownColumn": {
-      "placeholders": {
-          "title": {
-              "type": "String"
-            }
-        }
-    },
+    "placeholders": {
+      "title": {
+        "type": "String"
+      }
+    }
+  },
   "errParseEmptyCsvFile": "Não há linhas suficientes no arquivo CSV para analisar o registro.",
   "@errParseEmptyCsvFile": {},
   "errParseLineTooShort": "A linha {lineNumber} possui menos colunas do que a primeira linha.",
   "@errParseLineTooShort": {
-      "placeholders": {
-          "lineNumber": {
-              "type": "int"
-            }
-        }
-    },
+    "placeholders": {
+      "lineNumber": {
+        "type": "int"
+      }
+    }
+  },
   "errParseFailedDecodingField": "Falha ao decodificar o campo \"{fieldContent}\" na linha {lineNumber}.",
   "@errParseFailedDecodingField": {
-      "placeholders": {
-          "lineNumber": {
-              "type": "int"
-            },
-          "fieldContent": {
-              "type": "String"
-            }
-        }
-    },
+    "placeholders": {
+      "lineNumber": {
+        "type": "int"
+      },
+      "fieldContent": {
+        "type": "String"
+      }
+    }
+  },
   "exportFieldsPreset": "Predefinição de campos de exportação",
   "@exportFieldsPreset": {},
   "manageExportColumns": "Gerenciar colunas de exportação",

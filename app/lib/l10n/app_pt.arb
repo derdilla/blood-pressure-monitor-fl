@@ -3,37 +3,37 @@
   "@title": {},
   "success": "Sucesso: {msg}",
   "@success": {
-      "placeholders": {
-          "msg": {
-              "type": "String"
-            }
-        }
-    },
+    "placeholders": {
+      "msg": {
+        "type": "String"
+      }
+    }
+  },
   "errNaN": "Por favor digite um número",
   "@errNaN": {},
   "error": "Erro: {msg}",
   "@error": {
-      "placeholders": {
-          "msg": {
-              "type": "String"
-            }
-        }
-    },
+    "placeholders": {
+      "msg": {
+        "type": "String"
+      }
+    }
+  },
   "loading": "Carregando…",
   "@loading": {},
   "behavior": "Comportamento",
   "@behavior": {},
   "weekOfYear": "Semana {weekNum}, {year}",
   "@weekOfYear": {
-      "placeholders": {
-          "weekNum": {
-              "type": "int"
-            },
-          "year": {
-              "type": "int"
-            }
-        }
-    },
+    "placeholders": {
+      "weekNum": {
+        "type": "int"
+      },
+      "year": {
+        "type": "int"
+      }
+    }
+  },
   "aboutWarnValuesScreenDesc": "Mais informções sobre valores de aviso",
   "@aboutWarnValuesScreenDesc": {},
   "warnAboutTxt2": "Os valores padrões dependentes da idade vieram desta fonte.",
@@ -54,12 +54,12 @@
   "@errTimeAfterNow": {},
   "versionOf": "Versão: {version}",
   "@versionOf": {
-      "placeholders": {
-          "version": {
-              "type": "String"
-            }
-        }
-    },
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
   "btnConfirm": "OK",
   "@btnConfirm": {},
   "animationSpeed": "Duração da animação",
@@ -122,12 +122,12 @@
   "@errNotStarted": {},
   "errCantOpenURL": "Não foi possível abrir a URL: {url}",
   "@errCantOpenURL": {
-      "placeholders": {
-          "url": {
-              "type": "String"
-            }
-        }
-    },
+    "placeholders": {
+      "url": {
+        "type": "String"
+      }
+    }
+  },
   "lifetime": "Vitalícia",
   "@lifetime": {},
   "exportMimeType": "Tipo da mídia para exportação",
@@ -140,12 +140,12 @@
   "@notes": {},
   "importSuccess": "{count} registros foram importados",
   "@importSuccess": {
-      "placeholders": {
-          "count": {
-              "type": "int"
-            }
-        }
-    },
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "errDiaGtSys": "dia >= sys? Desligue a validação nas configurações!",
   "@errDiaGtSys": {},
   "graphLineThickness": "Grossura da Linha",
@@ -168,12 +168,12 @@
   "@addNote": {},
   "packageNameOf": "Nome do pacote: {name}",
   "@packageNameOf": {
-      "placeholders": {
-          "name": {
-              "type": "String"
-            }
-        }
-    },
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "drawRegressionLinesDesc": "Desenha linhas de regressão no gráfico. Útil para intervalos grandes.",
   "@drawRegressionLinesDesc": {},
   "pulColor": "Cor do pulso",
@@ -188,12 +188,12 @@
   "@sysColor": {},
   "maxOf": "{txt} máx.",
   "@maxOf": {
-      "placeholders": {
-          "txt": {
-              "type": "String"
-            }
-        }
-    },
+    "placeholders": {
+      "txt": {
+        "type": "String"
+      }
+    }
+  },
   "pulsePressure": "Pressão da pulsação",
   "@pulsePressure": {},
   "errNotImportable": "Não foi possível importar este arquivo",
@@ -232,15 +232,15 @@
   "@language": {},
   "exportWarnNotEveryFieldExported": "Atenção você não exportando todos os campos: {fields} {count, plural, one{está} other{estão}} faltando.",
   "@exportWarnNotEveryFieldExported": {
-      "placeholders": {
-          "count": {
-              "type": "int"
-            },
-          "fields": {
-              "type": "String"
-            }
-        }
-    },
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "fields": {
+        "type": "String"
+      }
+    }
+  },
   "addEntry": "Adicionar campo",
   "@addEntry": {},
   "sourceCode": "Código fonte",
@@ -263,24 +263,24 @@
   "@text": {},
   "avgOf": "{txt} Ø",
   "@avgOf": {
-      "placeholders": {
-          "txt": {
-              "type": "String"
-            }
-        }
-    },
+    "placeholders": {
+      "txt": {
+        "type": "String"
+      }
+    }
+  },
   "confirmDelete": "Confirmar deleção",
   "@confirmDelete": {},
   "errWrongImportFormat": "Você só pode importar arquivos nos formatos CSV e banco de dados do SQLite.",
   "@errWrongImportFormat": {},
   "minOf": "{txt} mín.",
   "@minOf": {
-      "placeholders": {
-          "txt": {
-              "type": "String"
-            }
-        }
-    },
+    "placeholders": {
+      "txt": {
+        "type": "String"
+      }
+    }
+  },
   "timeResolvedMetrics": "Métricas relacionadas ao tempo",
   "@timeResolvedMetrics": {},
   "enterTimeFormatScreen": "Forma da hora",
@@ -309,23 +309,23 @@
   "@last7Days": {},
   "buildNumberOf": "Número da versão: {buildNumber}",
   "@buildNumberOf": {
-      "placeholders": {
-          "buildNumber": {
-              "type": "String"
-            }
-        }
-    },
+    "placeholders": {
+      "buildNumber": {
+        "type": "String"
+      }
+    }
+  },
   "pdfDocumentTitle": "Valores de pressão sanguínea de {start} até {end}",
   "@pdfDocumentTitle": {
-      "placeholders": {
-          "start": {
-              "type": "String"
-            },
-          "end": {
-              "type": "String"
-            }
-        }
-    },
+    "placeholders": {
+      "start": {
+        "type": "String"
+      },
+      "end": {
+        "type": "String"
+      }
+    }
+  },
   "confirmDeleteDesc": "Apagar esse registro? (Você pode desligar essa confirmações nas configurações)",
   "@confirmDeleteDesc": {},
   "errNoFileOpened": "nenhum arquivo aberto",
@@ -408,31 +408,31 @@
   "@errParseTimeNotRestoreable": {},
   "errParseUnknownColumn": "Não há nenhuma coluna com o título \"{title}\".",
   "@errParseUnknownColumn": {
-      "placeholders": {
-          "title": {
-              "type": "String"
-            }
-        }
-    },
+    "placeholders": {
+      "title": {
+        "type": "String"
+      }
+    }
+  },
   "errParseLineTooShort": "A linha {lineNumber} tem menos colunas do que a primeira linha.",
   "@errParseLineTooShort": {
-      "placeholders": {
-          "lineNumber": {
-              "type": "int"
-            }
-        }
-    },
+    "placeholders": {
+      "lineNumber": {
+        "type": "int"
+      }
+    }
+  },
   "errParseFailedDecodingField": "Erro ao descodificar o campo \"{fieldContent}\" na linha {lineNumber}.",
   "@errParseFailedDecodingField": {
-      "placeholders": {
-          "lineNumber": {
-              "type": "int"
-            },
-          "fieldContent": {
-              "type": "String"
-            }
-        }
-    },
+    "placeholders": {
+      "lineNumber": {
+        "type": "int"
+      },
+      "fieldContent": {
+        "type": "String"
+      }
+    }
+  },
   "exportFieldsPreset": "Predefinição de campos de exportação",
   "@exportFieldsPreset": {},
   "remove": "Remover",

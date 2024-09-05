@@ -53,12 +53,12 @@
   "@diaWarn": {},
   "buildNumberOf": "Numéro de version : {buildNumber}",
   "@buildNumberOf": {
-      "placeholders": {
-          "buildNumber": {
-              "type": "String"
-            }
-        }
-    },
+    "placeholders": {
+      "buildNumber": {
+        "type": "String"
+      }
+    }
+  },
   "exportFormat": "Format d''exportation",
   "@exportFormat": {},
   "export": "EXPORTER",
@@ -69,22 +69,22 @@
   "@textDelimiter": {},
   "success": "Réussite : {msg}",
   "@success": {
-      "placeholders": {
-          "msg": {
-              "type": "String"
-            }
-        }
-    },
+    "placeholders": {
+      "msg": {
+        "type": "String"
+      }
+    }
+  },
   "loading": "chargement…",
   "@loading": {},
   "error": "Erreur : {msg}",
   "@error": {
-      "placeholders": {
-          "msg": {
-              "type": "String"
-            }
-        }
-    },
+    "placeholders": {
+      "msg": {
+        "type": "String"
+      }
+    }
+  },
   "errNaN": "Veuillez entrer un Nombre",
   "@errNaN": {},
   "errLt30": "Nombre <= 30 ? Désactivez la validation dans les paramètres !",
@@ -95,12 +95,12 @@
   "@errDiaGtSys": {},
   "errCantOpenURL": "Impossible d''ouvrir l''adresse {url}",
   "@errCantOpenURL": {
-      "placeholders": {
-          "url": {
-              "type": "String"
-            }
-        }
-    },
+    "placeholders": {
+      "url": {
+        "type": "String"
+      }
+    }
+  },
   "errNoFileOpened": "aucun fichier ouvert",
   "@errNoFileOpened": {},
   "errNotStarted": "non démarré",
@@ -143,20 +143,20 @@
   "@version": {},
   "versionOf": "Version : {version}",
   "@versionOf": {
-      "placeholders": {
-          "version": {
-              "type": "String"
-            }
-        }
-    },
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
   "packageNameOf": "Nom du package : {name}",
   "@packageNameOf": {
-      "placeholders": {
-          "name": {
-              "type": "String"
-            }
-        }
-    },
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "exportDir": "Répertoire d''export",
   "@exportDir": {},
   "exportAfterEveryInput": "Exporter après chaque saisie",
@@ -195,27 +195,27 @@
   "@licenses": {},
   "importSuccess": "{count} lignes importées",
   "@importSuccess": {
-      "placeholders": {
-          "count": {
-              "type": "int"
-            }
-        }
-    },
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "statistics": "Statistiques",
   "@statistics": {},
   "exportWarnConfigNotImportable": "Coucou ! Ceci est juste un avertissement amical : les options d''export choisies ne seront pas importables. Pour corriger cela, choisissez un export en CSV, activez la ligne d''entête et sélectionnez un des formats d''heure disponibles.",
   "@exportWarnConfigNotImportable": {},
   "exportWarnNotEveryFieldExported": "Attention, vous n''exportez pas tous les champs : {fields} {count, plural, one{est manquant} other{sont manquants}}.",
   "@exportWarnNotEveryFieldExported": {
-      "placeholders": {
-          "count": {
-              "type": "int"
-            },
-          "fields": {
-              "type": "String"
-            }
-        }
-    },
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "fields": {
+        "type": "String"
+      }
+    }
+  },
   "measurementCount": "Compteur de mesures",
   "@measurementCount": {},
   "measurementsPerDay": "Mesures par jour",
@@ -224,28 +224,28 @@
   "@timeResolvedMetrics": {},
   "avgOf": "{txt} Ø",
   "@avgOf": {
-      "placeholders": {
-          "txt": {
-              "type": "String"
-            }
-        }
-    },
+    "placeholders": {
+      "txt": {
+        "type": "String"
+      }
+    }
+  },
   "minOf": "{txt} min.",
   "@minOf": {
-      "placeholders": {
-          "txt": {
-              "type": "String"
-            }
-        }
-    },
+    "placeholders": {
+      "txt": {
+        "type": "String"
+      }
+    }
+  },
   "maxOf": "{txt} max.",
   "@maxOf": {
-      "placeholders": {
-          "txt": {
-              "type": "String"
-            }
-        }
-    },
+    "placeholders": {
+      "txt": {
+        "type": "String"
+      }
+    }
+  },
   "warnValues": "Valeurs d''alerte",
   "@warnValues": {},
   "warnAboutTxt1": "Les valeurs d''alerte ne sont que des suggestions et n''ont pas valeur d''avis médical.",
@@ -280,15 +280,15 @@
   "@lifetime": {},
   "weekOfYear": "Semaine {weekNum}, {year}",
   "@weekOfYear": {
-      "placeholders": {
-          "weekNum": {
-              "type": "int"
-            },
-          "year": {
-              "type": "int"
-            }
-        }
-    },
+    "placeholders": {
+      "weekNum": {
+        "type": "int"
+      },
+      "year": {
+        "type": "int"
+      }
+    }
+  },
   "last7Days": "7 jours",
   "@last7Days": {},
   "last30Days": "30 jours",
@@ -321,15 +321,15 @@
   "@fieldFormat": {},
   "pdfDocumentTitle": "Mesures de pression artérielle du {start} au {end}",
   "@pdfDocumentTitle": {
-      "placeholders": {
-          "start": {
-              "type": "String"
-            },
-          "end": {
-              "type": "String"
-            }
-        }
-    },
+    "placeholders": {
+      "start": {
+        "type": "String"
+      },
+      "end": {
+        "type": "String"
+      }
+    }
+  },
   "default_": "Défaut",
   "@default_": {},
   "addMeasurement": "Ajouter une mesure",
@@ -406,27 +406,27 @@
   "@errParseTimeNotRestoreable": {},
   "errParseUnknownColumn": "Il n’y a pas de colonne avec le titre \"{title}\".",
   "@errParseUnknownColumn": {
-      "placeholders": {
-          "title": {
-              "type": "String"
-            }
-        }
-    },
+    "placeholders": {
+      "title": {
+        "type": "String"
+      }
+    }
+  },
   "exportFieldsPreset": "Préréglage des champs d’exportation",
   "@exportFieldsPreset": {},
   "manageExportColumns": "Gérer les colonnes d’exportation",
   "@manageExportColumns": {},
   "errParseFailedDecodingField": "Le décodage du champ \"{fieldContent}\" dans la ligne {lineNumber} a échoué.",
   "@errParseFailedDecodingField": {
-      "placeholders": {
-          "lineNumber": {
-              "type": "int"
-            },
-          "fieldContent": {
-              "type": "String"
-            }
-        }
-    },
+    "placeholders": {
+      "lineNumber": {
+        "type": "int"
+      },
+      "fieldContent": {
+        "type": "String"
+      }
+    }
+  },
   "name": "Nom",
   "@name": {},
   "noMedication": "Pas de médicament",
@@ -499,12 +499,12 @@
   "@date": {},
   "errParseLineTooShort": "La ligne {lineNumber} a moins de colonnes que la première ligne.",
   "@errParseLineTooShort": {
-      "placeholders": {
-          "lineNumber": {
-              "type": "int"
-            }
-        }
-    },
+    "placeholders": {
+      "lineNumber": {
+        "type": "int"
+      }
+    }
+  },
   "aboutBleInput": "Certains appareils de mesure sont compatibles BLE GATT. Vous pouvez jumeler ces appareils ici et transmettre automatiquement les mesures ou désactiver cette option dans les paramètres.",
   "@aboutBleInput": {},
   "deleteAllMedicineIntakes": "Supprimer toutes les prises de médicaments",

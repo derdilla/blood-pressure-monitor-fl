@@ -3,15 +3,15 @@
   "@behavior": {},
   "weekOfYear": "Hafta {weekNum}, {year}",
   "@weekOfYear": {
-      "placeholders": {
-          "weekNum": {
-              "type": "int"
-            },
-          "year": {
-              "type": "int"
-            }
-        }
-    },
+    "placeholders": {
+      "weekNum": {
+        "type": "int"
+      },
+      "year": {
+        "type": "int"
+      }
+    }
+  },
   "aboutWarnValuesScreenDesc": "Uyarı değerleri hakkında daha çok bilgi",
   "@aboutWarnValuesScreenDesc": {},
   "warnAboutTxt2": "Varsayılan yaşa bağlı değerler bu kaynaktan alındı.",
@@ -36,12 +36,12 @@
   "@errTimeAfterNow": {},
   "versionOf": "Sürüm: {version}",
   "@versionOf": {
-      "placeholders": {
-          "version": {
-              "type": "String"
-            }
-        }
-    },
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
   "btnConfirm": "TAMAM",
   "@btnConfirm": {},
   "addMeasurement": "Ölçüm ekle",
@@ -80,12 +80,12 @@
   "@exportPdfCellHeight": {},
   "success": "Başarılı: {msg}",
   "@success": {
-      "placeholders": {
-          "msg": {
-              "type": "String"
-            }
-        }
-    },
+    "placeholders": {
+      "msg": {
+        "type": "String"
+      }
+    }
+  },
   "exportCustomEntries": "Alanları kişileştir",
   "@exportCustomEntries": {},
   "exportImport": "Dışa aktar / İçe aktar",
@@ -128,12 +128,12 @@
   "@errNotStarted": {},
   "errCantOpenURL": "URL açılamadı: {url}",
   "@errCantOpenURL": {
-      "placeholders": {
-          "url": {
-              "type": "String"
-            }
-        }
-    },
+    "placeholders": {
+      "url": {
+        "type": "String"
+      }
+    }
+  },
   "lifetime": "Ömür boyu",
   "@lifetime": {},
   "exportMimeType": "Dışa aktarılan medya türü",
@@ -146,12 +146,12 @@
   "@notes": {},
   "importSuccess": "{count} giriş içe aktarıldı",
   "@importSuccess": {
-      "placeholders": {
-          "count": {
-              "type": "int"
-            }
-        }
-    },
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "errDiaGtSys": "dia >= sys? Ayarlardan doğrulamayı kapatın!",
   "@errDiaGtSys": {},
   "graphLineThickness": "Çizgi kalınlığı",
@@ -176,12 +176,12 @@
   "@addNote": {},
   "packageNameOf": "Paket adı: {name}",
   "@packageNameOf": {
-      "placeholders": {
-          "name": {
-              "type": "String"
-            }
-        }
-    },
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "drawRegressionLinesDesc": "Grafikte regresyon çizgilerini çiz. Yalnızca geniş zaman aralıklarında kullanışlı.",
   "@drawRegressionLinesDesc": {},
   "pulColor": "Nabız rengi",
@@ -198,12 +198,12 @@
   "@sysColor": {},
   "maxOf": "{txt} azm.",
   "@maxOf": {
-      "placeholders": {
-          "txt": {
-              "type": "String"
-            }
-        }
-    },
+    "placeholders": {
+      "txt": {
+        "type": "String"
+      }
+    }
+  },
   "startWithAddMeasurementPage": "Başlangıçta ölçüm",
   "@startWithAddMeasurementPage": {},
   "pulsePressure": "Nabız basıncı",
@@ -254,15 +254,15 @@
   "@language": {},
   "exportWarnNotEveryFieldExported": "Bütün alanları dışa aktarmıyorsunuz: {fields} {count, plural, one{is} other{are}} kayıp.",
   "@exportWarnNotEveryFieldExported": {
-      "placeholders": {
-          "count": {
-              "type": "int"
-            },
-          "fields": {
-              "type": "String"
-            }
-        }
-    },
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "fields": {
+        "type": "String"
+      }
+    }
+  },
   "average": "Ortalama",
   "@average": {},
   "addEntry": "Alan ekle",
@@ -271,12 +271,12 @@
   "@sourceCode": {},
   "error": "Hata: {msg}",
   "@error": {
-      "placeholders": {
-          "msg": {
-              "type": "String"
-            }
-        }
-    },
+    "placeholders": {
+      "msg": {
+        "type": "String"
+      }
+    }
+  },
   "useLegacyList": "Eski tip liste kullan",
   "@useLegacyList": {},
   "measurementCount": "Ölçüm sayısı",
@@ -303,24 +303,24 @@
   "@text": {},
   "avgOf": "{txt} Ø",
   "@avgOf": {
-      "placeholders": {
-          "txt": {
-              "type": "String"
-            }
-        }
-    },
+    "placeholders": {
+      "txt": {
+        "type": "String"
+      }
+    }
+  },
   "confirmDelete": "Silmeyi onayla",
   "@confirmDelete": {},
   "errWrongImportFormat": "Sadece CSV ve SQLite veritabanı biçiminde dosya aktarabilirsiniz.",
   "@errWrongImportFormat": {},
   "minOf": "{txt} asg.",
   "@minOf": {
-      "placeholders": {
-          "txt": {
-              "type": "String"
-            }
-        }
-    },
+    "placeholders": {
+      "txt": {
+        "type": "String"
+      }
+    }
+  },
   "timeResolvedMetrics": "Saatlik Belirlenen Metrikler",
   "@timeResolvedMetrics": {},
   "enterTimeFormatScreen": "Zaman biçimi",
@@ -353,23 +353,23 @@
   "@last7Days": {},
   "buildNumberOf": "Sürüm numarası: {buildNumber}",
   "@buildNumberOf": {
-      "placeholders": {
-          "buildNumber": {
-              "type": "String"
-            }
-        }
-    },
+    "placeholders": {
+      "buildNumber": {
+        "type": "String"
+      }
+    }
+  },
   "pdfDocumentTitle": "{start}'den {end}'e kan basıncı değerleri",
   "@pdfDocumentTitle": {
-      "placeholders": {
-          "start": {
-              "type": "String"
-            },
-          "end": {
-              "type": "String"
-            }
-        }
-    },
+    "placeholders": {
+      "start": {
+        "type": "String"
+      },
+      "end": {
+        "type": "String"
+      }
+    }
+  },
   "confirmDeleteDesc": "Bu girişi sil? (Bu onaylama mesajını ayarlardan kapatabilirsiniz.)",
   "@confirmDeleteDesc": {},
   "errNoFileOpened": "herhangi bir dosya açılmadı",
@@ -400,15 +400,15 @@
   "@needlePinBarWidth": {},
   "errParseFailedDecodingField": "{lineNumber}. satırdaki \"{fieldContent}\" alanının çözülmesi başarısız oldu.",
   "@errParseFailedDecodingField": {
-      "placeholders": {
-          "lineNumber": {
-              "type": "int"
-            },
-          "fieldContent": {
-              "type": "String"
-            }
-        }
-    },
+    "placeholders": {
+      "lineNumber": {
+        "type": "int"
+      },
+      "fieldContent": {
+        "type": "String"
+      }
+    }
+  },
   "addMedication": "İlaç ekle",
   "@addMedication": {},
   "defaultDosis": "Öntanımlı doz",
@@ -421,12 +421,12 @@
   "@errParseTimeNotRestoreable": {},
   "errParseLineTooShort": "{lineNumber}. satırda ilk satırdan daha az sütun var.",
   "@errParseLineTooShort": {
-      "placeholders": {
-          "lineNumber": {
-              "type": "int"
-            }
-        }
-    },
+    "placeholders": {
+      "lineNumber": {
+        "type": "int"
+      }
+    }
+  },
   "remove": "Kaldır",
   "@remove": {},
   "manageExportColumns": "Dışa aktarılan sütunları yönet",
@@ -455,12 +455,12 @@
   "@valueDistribution": {},
   "errParseUnknownColumn": "\"{title}\" başlığına sahip bir sütun yok.",
   "@errParseUnknownColumn": {
-      "placeholders": {
-          "title": {
-              "type": "String"
-            }
-        }
-    },
+    "placeholders": {
+      "title": {
+        "type": "String"
+      }
+    }
+  },
   "preferredPressureUnit": "Tercih edilen basınç birimi",
   "@preferredPressureUnit": {},
   "titleInCsv": "CSV başlığı",

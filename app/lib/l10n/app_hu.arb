@@ -1,32 +1,32 @@
 {
   "success": "Sikeres: {msg}",
   "@success": {
-      "placeholders": {
-          "msg": {
-              "type": "String"
-            }
-        }
-    },
+    "placeholders": {
+      "msg": {
+        "type": "String"
+      }
+    }
+  },
   "loading": "Betöltés…",
   "@loading": {},
   "error": "Hiba: {msg}",
   "@error": {
-      "placeholders": {
-          "msg": {
-              "type": "String"
-            }
-        }
-    },
+    "placeholders": {
+      "msg": {
+        "type": "String"
+      }
+    }
+  },
   "errNaN": "Kérem adjon meg egy számot",
   "@errNaN": {},
   "errCantOpenURL": "Nem sikerült megnyitni az URL-t : {url}",
   "@errCantOpenURL": {
-      "placeholders": {
-          "url": {
-              "type": "String"
-            }
-        }
-    },
+    "placeholders": {
+      "url": {
+        "type": "String"
+      }
+    }
+  },
   "errNoFileOpened": "Nincs megnyitható file",
   "@errNoFileOpened": {},
   "errNotStarted": "nem indult el",
@@ -107,12 +107,12 @@
   "@determineWarnValues": {},
   "packageNameOf": "Csomag neve: {name}",
   "@packageNameOf": {
-      "placeholders": {
-          "name": {
-              "type": "String"
-            }
-        }
-    },
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "dark": "Sötét",
   "@dark": {},
   "accentColor": "Téma szín",
@@ -123,20 +123,20 @@
   "@aboutWarnValuesScreen": {},
   "versionOf": "Verzió: {version}",
   "@versionOf": {
-      "placeholders": {
-          "version": {
-              "type": "String"
-            }
-        }
-    },
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
   "buildNumberOf": "Verzió szám: {buildNumber}",
   "@buildNumberOf": {
-      "placeholders": {
-          "buildNumber": {
-              "type": "String"
-            }
-        }
-    },
+    "placeholders": {
+      "buildNumber": {
+        "type": "String"
+      }
+    }
+  },
   "exportImport": "Export / Import",
   "@exportImport": {},
   "data": "Adatok",
@@ -163,12 +163,12 @@
   "@licenses": {},
   "importSuccess": "Importált bejegyzések: {count}",
   "@importSuccess": {
-      "placeholders": {
-          "count": {
-              "type": "int"
-            }
-        }
-    },
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "statistics": "Statisztika",
   "@statistics": {},
   "measurementCount": "Mérések száma",
@@ -177,12 +177,12 @@
   "@measurementsPerDay": {},
   "avgOf": "{txt} Ø",
   "@avgOf": {
-      "placeholders": {
-          "txt": {
-              "type": "String"
-            }
-        }
-    },
+    "placeholders": {
+      "txt": {
+        "type": "String"
+      }
+    }
+  },
   "enterTimeFormatString": "időformátum",
   "@enterTimeFormatString": {},
   "notes": "Jegyzetek",
@@ -201,15 +201,15 @@
   "@year": {},
   "weekOfYear": "Hét {weekNum}, {year}",
   "@weekOfYear": {
-      "placeholders": {
-          "weekNum": {
-              "type": "int"
-            },
-          "year": {
-              "type": "int"
-            }
-        }
-    },
+    "placeholders": {
+      "weekNum": {
+        "type": "int"
+      },
+      "year": {
+        "type": "int"
+      }
+    }
+  },
   "lifetime": "Élettartam",
   "@lifetime": {},
   "diaWarn": "Figyelmeztetés (diasztolés)",
@@ -236,12 +236,12 @@
   "@sourceCode": {},
   "maxOf": "{txt} max.",
   "@maxOf": {
-      "placeholders": {
-          "txt": {
-              "type": "String"
-            }
-        }
-    },
+    "placeholders": {
+      "txt": {
+        "type": "String"
+      }
+    }
+  },
   "day": "Nap",
   "@day": {},
   "last7Days": "7 nap",
@@ -252,12 +252,12 @@
   "@aboutWarnValuesScreenDesc": {},
   "minOf": "{txt} min.",
   "@minOf": {
-      "placeholders": {
-          "txt": {
-              "type": "String"
-            }
-        }
-    },
+    "placeholders": {
+      "txt": {
+        "type": "String"
+      }
+    }
+  },
   "now": "most",
   "@now": {},
   "exportWarnConfigNotImportable": "Hello! Csak egy baráti figyelmeztetés: a jelenlegi exportkonfiguráció nem lesz importálható. A javításhoz győződjön meg róla, hogy az export típusát CSV-re állította be, és tartalmazza a rendelkezésre álló időformátumok egyikét.",

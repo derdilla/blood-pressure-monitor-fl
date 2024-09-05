@@ -27,24 +27,24 @@
   "@btnSave": {},
   "error": "Errore: {msg}",
   "@error": {
-      "placeholders": {
-          "msg": {
-              "type": "String"
-            }
-        }
-    },
+    "placeholders": {
+      "msg": {
+        "type": "String"
+      }
+    }
+  },
   "btnConfirm": "OK",
   "@btnConfirm": {},
   "errNaN": "Inserisci un numero",
   "@errNaN": {},
   "errCantOpenURL": "Impossibile aprire l''URL: {url}",
   "@errCantOpenURL": {
-      "placeholders": {
-          "url": {
-              "type": "String"
-            }
-        }
-    },
+    "placeholders": {
+      "url": {
+        "type": "String"
+      }
+    }
+  },
   "sysColor": "Colore sistolica",
   "@sysColor": {},
   "determineWarnValues": "Determina valori di avviso",
@@ -69,37 +69,37 @@
   "@licenses": {},
   "minOf": "{txt} min",
   "@minOf": {
-      "placeholders": {
-          "txt": {
-              "type": "String"
-            }
-        }
-    },
+    "placeholders": {
+      "txt": {
+        "type": "String"
+      }
+    }
+  },
   "warnValues": "Valori di avviso",
   "@warnValues": {},
   "maxOf": "{txt} max",
   "@maxOf": {
-      "placeholders": {
-          "txt": {
-              "type": "String"
-            }
-        }
-    },
+    "placeholders": {
+      "txt": {
+        "type": "String"
+      }
+    }
+  },
   "now": "Adesso",
   "@now": {},
   "notes": "Note",
   "@notes": {},
   "weekOfYear": "Settimana {weekNum}, {year}",
   "@weekOfYear": {
-      "placeholders": {
-          "weekNum": {
-              "type": "int"
-            },
-          "year": {
-              "type": "int"
-            }
-        }
-    },
+    "placeholders": {
+      "weekNum": {
+        "type": "int"
+      },
+      "year": {
+        "type": "int"
+      }
+    }
+  },
   "exportPdfHeaderHeight": "Altezza intestazione",
   "@exportPdfHeaderHeight": {},
   "exportPdfCellHeight": "Altezza riga",
@@ -196,12 +196,12 @@
   "@enterTimeFormatScreen": {},
   "success": "Completato: {msg}",
   "@success": {
-      "placeholders": {
-          "msg": {
-              "type": "String"
-            }
-        }
-    },
+    "placeholders": {
+      "msg": {
+        "type": "String"
+      }
+    }
+  },
   "title": "App per la pressione sanguigna",
   "@title": {},
   "diaColor": "Colore diastolica",
@@ -224,28 +224,28 @@
   "@version": {},
   "versionOf": "Versione: {version}",
   "@versionOf": {
-      "placeholders": {
-          "version": {
-              "type": "String"
-            }
-        }
-    },
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
   "buildNumberOf": "Numero versione: {buildNumber}",
   "@buildNumberOf": {
-      "placeholders": {
-          "buildNumber": {
-              "type": "String"
-            }
-        }
-    },
+    "placeholders": {
+      "buildNumber": {
+        "type": "String"
+      }
+    }
+  },
   "packageNameOf": "Nome pacchetto: {name}",
   "@packageNameOf": {
-      "placeholders": {
-          "name": {
-              "type": "String"
-            }
-        }
-    },
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "exportImport": "Esporta e importa",
   "@exportImport": {},
   "exportDir": "Cartella di esportazione",
@@ -284,37 +284,37 @@
   "@measurementsPerDay": {},
   "avgOf": "{txt} Ø",
   "@avgOf": {
-      "placeholders": {
-          "txt": {
-              "type": "String"
-            }
-        }
-    },
+    "placeholders": {
+      "txt": {
+        "type": "String"
+      }
+    }
+  },
   "warnAboutTxt2": "Fonte dei valori predefiniti in base all''età.",
   "@warnAboutTxt2": {},
   "warnAboutTxt3": "Sentiti libero di modificare i valori in base alle tue esigenze e segui le raccomandazioni del medico.",
   "@warnAboutTxt3": {},
   "importSuccess": "{count} voci importate",
   "@importSuccess": {
-      "placeholders": {
-          "count": {
-              "type": "int"
-            }
-        }
-    },
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "exportWarnConfigNotImportable": "Avviso: l''attuale configurazione di esportazione non potrà essere importata nuovamente. Per risolvere il problema, assicurati di impostare il tipo di esportazione come CSV e includi uno dei formati data e ora disponibili.",
   "@exportWarnConfigNotImportable": {},
   "exportWarnNotEveryFieldExported": "Attenzione, non stai esportando tutti i campi. Mancano: {fields} {count, plural, one{is} other{are}}.",
   "@exportWarnNotEveryFieldExported": {
-      "placeholders": {
-          "count": {
-              "type": "int"
-            },
-          "fields": {
-              "type": "String"
-            }
-        }
-    },
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "fields": {
+        "type": "String"
+      }
+    }
+  },
   "confirmDelete": "Conferma eliminazione",
   "@confirmDelete": {},
   "day": "Giorno",
@@ -337,15 +337,15 @@
   "@drawRegressionLines": {},
   "pdfDocumentTitle": "Valori pressione sanguigna dal {start} al {end}",
   "@pdfDocumentTitle": {
-      "placeholders": {
-          "start": {
-              "type": "String"
-            },
-          "end": {
-              "type": "String"
-            }
-        }
-    },
+    "placeholders": {
+      "start": {
+        "type": "String"
+      },
+      "end": {
+        "type": "String"
+      }
+    }
+  },
   "deletionConfirmed": "Voce eliminata.",
   "@deletionConfirmed": {},
   "fieldFormat": "Formato campo",
@@ -402,33 +402,33 @@
   "@errParseTimeNotRestoreable": {},
   "errParseUnknownColumn": "Non esiste alcuna colonna con il titolo \"{title}\".",
   "@errParseUnknownColumn": {
-      "placeholders": {
-          "title": {
-              "type": "String"
-            }
-        }
-    },
+    "placeholders": {
+      "title": {
+        "type": "String"
+      }
+    }
+  },
   "errParseEmptyCsvFile": "Non sono presenti righe sufficienti nel file CSV per analizzare la registrazione.",
   "@errParseEmptyCsvFile": {},
   "errParseLineTooShort": "La riga {lineNumber} ha meno colonne della prima riga.",
   "@errParseLineTooShort": {
-      "placeholders": {
-          "lineNumber": {
-              "type": "int"
-            }
-        }
-    },
+    "placeholders": {
+      "lineNumber": {
+        "type": "int"
+      }
+    }
+  },
   "errParseFailedDecodingField": "La decodifica del campo \"{fieldContent}\" nella riga {lineNumber} non è riuscita.",
   "@errParseFailedDecodingField": {
-      "placeholders": {
-          "lineNumber": {
-              "type": "int"
-            },
-          "fieldContent": {
-              "type": "String"
-            }
-        }
-    },
+    "placeholders": {
+      "lineNumber": {
+        "type": "int"
+      },
+      "fieldContent": {
+        "type": "String"
+      }
+    }
+  },
   "exportFieldsPreset": "Campi di esportazione preimpostati",
   "@exportFieldsPreset": {},
   "remove": "Rimuovi",

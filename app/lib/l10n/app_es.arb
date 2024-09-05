@@ -3,34 +3,34 @@
   "@loading": {},
   "error": "Error: {msg}",
   "@error": {
-      "placeholders": {
-          "msg": {
-              "type": "String"
-            }
-        }
-    },
+    "placeholders": {
+      "msg": {
+        "type": "String"
+      }
+    }
+  },
   "errNaN": "Por favor, introduzca un número",
   "@errNaN": {},
   "title": "Aplicación para la tensión arterial",
   "@title": {},
   "success": "Exito: {msg}",
   "@success": {
-      "placeholders": {
-          "msg": {
-              "type": "String"
-            }
-        }
-    },
+    "placeholders": {
+      "msg": {
+        "type": "String"
+      }
+    }
+  },
   "errLt30": "¿Número <= 30? ¡Desactive la validación en los ajustes!",
   "@errLt30": {},
   "errCantOpenURL": "No se puede abrir la URL: {url}",
   "@errCantOpenURL": {
-      "placeholders": {
-          "url": {
-              "type": "String"
-            }
-        }
-    },
+    "placeholders": {
+      "url": {
+        "type": "String"
+      }
+    }
+  },
   "errNoFileOpened": "ningún archivo abierto",
   "@errNoFileOpened": {},
   "errNoValue": "Por favor, introduzca un valor",
@@ -129,28 +129,28 @@
   "@version": {},
   "versionOf": "Versión: {version}",
   "@versionOf": {
-      "placeholders": {
-          "version": {
-              "type": "String"
-            }
-        }
-    },
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
   "buildNumberOf": "Número de la versión: {buildNumber}",
   "@buildNumberOf": {
-      "placeholders": {
-          "buildNumber": {
-              "type": "String"
-            }
-        }
-    },
+    "placeholders": {
+      "buildNumber": {
+        "type": "String"
+      }
+    }
+  },
   "packageNameOf": "Nombre del paquete: {name}",
   "@packageNameOf": {
-      "placeholders": {
-          "name": {
-              "type": "String"
-            }
-        }
-    },
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "exportImport": "Exportar / Importar",
   "@exportImport": {},
   "exportDir": "Exportar el directorio",
@@ -191,43 +191,43 @@
   "@licenses": {},
   "importSuccess": "{count} entradas importadas",
   "@importSuccess": {
-      "placeholders": {
-          "count": {
-              "type": "int"
-            }
-        }
-    },
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "exportWarnNotEveryFieldExported": "Cuidado, no está exportando todos los campos: {fields}{count, plural, one{is} other{are}} missing.",
   "@exportWarnNotEveryFieldExported": {
-      "placeholders": {
-          "count": {
-              "type": "int"
-            },
-          "fields": {
-              "type": "String"
-            }
-        }
-    },
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "fields": {
+        "type": "String"
+      }
+    }
+  },
   "measurementsPerDay": "Mediciones por día",
   "@measurementsPerDay": {},
   "timeResolvedMetrics": "Métricas en base al tiempo",
   "@timeResolvedMetrics": {},
   "minOf": "{txt} min.",
   "@minOf": {
-      "placeholders": {
-          "txt": {
-              "type": "String"
-            }
-        }
-    },
+    "placeholders": {
+      "txt": {
+        "type": "String"
+      }
+    }
+  },
   "maxOf": "{txt} máx.",
   "@maxOf": {
-      "placeholders": {
-          "txt": {
-              "type": "String"
-            }
-        }
-    },
+    "placeholders": {
+      "txt": {
+        "type": "String"
+      }
+    }
+  },
   "warnValues": "Valores de precaución",
   "@warnValues": {},
   "enterTimeFormatString": "formato de tiempo",
@@ -242,15 +242,15 @@
   "@week": {},
   "weekOfYear": "Semana{weekNum},{year}",
   "@weekOfYear": {
-      "placeholders": {
-          "weekNum": {
-              "type": "int"
-            },
-          "year": {
-              "type": "int"
-            }
-        }
-    },
+    "placeholders": {
+      "weekNum": {
+        "type": "int"
+      },
+      "year": {
+        "type": "int"
+      }
+    }
+  },
   "fieldFormat": "Formato del campo",
   "@fieldFormat": {},
   "result": "Resultado:",
@@ -305,12 +305,12 @@
   "@errParseEmptyCsvFile": {},
   "errParseUnknownColumn": "No hay una columna con el título \"{title}\".",
   "@errParseUnknownColumn": {
-      "placeholders": {
-          "title": {
-              "type": "String"
-            }
-        }
-    },
+    "placeholders": {
+      "title": {
+        "type": "String"
+      }
+    }
+  },
   "remove": "Remover",
   "@remove": {},
   "manageExportColumns": "Administrar la exportación de columnas",
@@ -349,12 +349,12 @@
   "@confirmDeleteDesc": {},
   "avgOf": "{txt} Ø",
   "@avgOf": {
-      "placeholders": {
-          "txt": {
-              "type": "String"
-            }
-        }
-    },
+    "placeholders": {
+      "txt": {
+        "type": "String"
+      }
+    }
+  },
   "day": "Día",
   "@day": {},
   "month": "Mes",
@@ -389,15 +389,15 @@
   "@exportFieldFormatDocumentation": {},
   "pdfDocumentTitle": "Los valores de la presión arterial desde {start} hasta {end}",
   "@pdfDocumentTitle": {
-      "placeholders": {
-          "start": {
-              "type": "String"
-            },
-          "end": {
-              "type": "String"
-            }
-        }
-    },
+    "placeholders": {
+      "start": {
+        "type": "String"
+      },
+      "end": {
+        "type": "String"
+      }
+    }
+  },
   "average": "Promedio",
   "@average": {},
   "maximum": "Máximo",
@@ -428,23 +428,23 @@
   "@errParseTimeNotRestoreable": {},
   "errParseLineTooShort": "La línea {lineNumber} tiene menos columnas que la primera línea.",
   "@errParseLineTooShort": {
-      "placeholders": {
-          "lineNumber": {
-              "type": "int"
-            }
-        }
-    },
+    "placeholders": {
+      "lineNumber": {
+        "type": "int"
+      }
+    }
+  },
   "errParseFailedDecodingField": "El campo de descodificación \"{fieldContent}\" en la línea {lineNumber} ha fallado.",
   "@errParseFailedDecodingField": {
-      "placeholders": {
-          "lineNumber": {
-              "type": "int"
-            },
-          "fieldContent": {
-              "type": "String"
-            }
-        }
-    },
+    "placeholders": {
+      "lineNumber": {
+        "type": "int"
+      },
+      "fieldContent": {
+        "type": "String"
+      }
+    }
+  },
   "exportFieldsPreset": "Exportar campos predeterminados",
   "@exportFieldsPreset": {},
   "timeFormat": "Formato del tiempo",
