@@ -198,8 +198,6 @@
     "@db": {},
     "dark": "暗色",
     "@dark": {},
-    "btnNext": "繼續",
-    "@btnNext": {},
     "exportCsvHeadline": "標題列",
     "@exportCsvHeadline": {},
     "errNeedHeadline": "您只能匯入有標題列的檔案。",

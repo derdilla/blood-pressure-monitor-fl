@@ -128,8 +128,6 @@
     "@btnCancel": {},
     "btnUndo": "ОТМЕНА",
     "@btnUndo": {},
-    "btnNext": "СЛЕДУЮЩИЙ",
-    "@btnNext": {},
     "pulLong": "Пульс",
     "@pulLong": {},
     "pulShort": "ЧСС",
