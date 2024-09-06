@@ -39,7 +39,7 @@ class DatabaseManager {
     if (!isReadOnly && await dbMngr._db.getVersion() < 3) {
       await dbMngr._setUpTables();
       await dbMngr._db.setVersion(4);
-    } else {
+    } else if (!isReadOnly && await dbMngr._db.getVersion() == 3) {
       await dbMngr._setupWeightTable(dbMngr._db);
       await dbMngr._db.setVersion(4);
     }
@@ -129,6 +129,7 @@ class DatabaseManager {
       'AND entryID NOT IN (SELECT entryID FROM Systolic) '
       'AND entryID NOT IN (SELECT entryID FROM Diastolic) '
       'AND entryID NOT IN (SELECT entryID FROM Pulse) '
+      'AND entryID NOT IN (SELECT entryID FROM Weight) '
       'AND entryID NOT IN (SELECT entryID FROM Notes);',
     );
   });

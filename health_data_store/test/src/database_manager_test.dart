@@ -211,7 +211,7 @@ void main() {
     final db = await mockDBManager();
     addTearDown(db.close);
 
-    for (int i = 1; i <= 6; i += 1) {
+    for (int i = 1; i <= 7; i += 1) {
       await db.db.insert('Timestamps', {
         'entryID': i,
         'timestampUnixS': i,
@@ -226,10 +226,11 @@ void main() {
     await db.db.insert('Diastolic', {'entryID': 3,});
     await db.db.insert('Pulse', {'entryID': 4,});
     await db.db.insert('Notes', {'entryID': 5,});
+    await db.db.insert('Weight', {'entryID': 6, 'weightKg': 1.0});
 
-    expect(await db.db.query('Timestamps'), hasLength(6));
+    expect(await db.db.query('Timestamps'), hasLength(7));
     await db.performCleanup();
-    expect(await db.db.query('Timestamps'), hasLength(5)); // remove 6 keep rest
+    expect(await db.db.query('Timestamps'), hasLength(6)); // remove 6 keep rest
   });
 }
 
