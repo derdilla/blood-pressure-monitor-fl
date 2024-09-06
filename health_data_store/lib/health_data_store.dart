@@ -27,12 +27,14 @@ library;
 export 'src/health_data_store.dart';
 // repositories
 export 'src/repositories/blood_pressure_repository.dart';
+export 'src/repositories/bodyweight_repository.dart';
 export 'src/repositories/medicine_intake_repository.dart';
 export 'src/repositories/medicine_repository.dart';
 export 'src/repositories/note_repository.dart';
 export 'src/repositories/repository.dart';
 // types
 export 'src/types/blood_pressure_record.dart';
+export 'src/types/bodyweight_record.dart';
 export 'src/types/date_range.dart';
 export 'src/types/full_entry.dart';
 export 'src/types/medicine.dart';

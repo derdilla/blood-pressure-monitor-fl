@@ -86,7 +86,7 @@ void main() {
     await expectLater(() async => db.db.insert('medicine', item4),
         throwsException);
   });
-  test('should create timestamps table correctly', () async {
+  test('creates timestamps table correctly', () async {
     final db = await mockDBManager();
     addTearDown(db.close);
     await db.db.insert('Timestamps', {
@@ -106,7 +106,7 @@ void main() {
       'timestampUnixS': null,
     }), throwsException);
   });
-  test('should create intake table correctly', () async {
+  test('creates intake table correctly', () async {
     final db = await mockDBManager();
     addTearDown(db.close);
 
@@ -119,7 +119,7 @@ void main() {
     expect(data, hasLength(1));
     expect(data.first.keys, hasLength(3));
   });
-  test('should create timestamps sys,dia,pul tables correctly', () async {
+  test('creates timestamps sys,dia,pul tables correctly', () async {
     final db = await mockDBManager();
     addTearDown(db.close);
     for (final t in [
@@ -140,7 +140,7 @@ void main() {
       expect(data.first.keys, hasLength(2));
     }
   });
-  test('should create notes table correctly', () async {
+  test('creates notes table correctly', () async {
     final db = await mockDBManager();
     addTearDown(db.close);
 
@@ -153,6 +153,19 @@ void main() {
     expect(data, hasLength(1));
     expect(data.first.keys, hasLength(3));
     expect(data.first['color'], equals(0xFF990098));
+  });
+  test('creates weight table correctly', () async {
+    final db = await mockDBManager();
+    addTearDown(db.close);
+
+    await db.db.insert('Weight', {
+      'entryID': 2,
+      'weightKg': 123.45,
+    });
+    final data = await db.db.query('Weight');
+    expect(data, hasLength(1));
+    expect(data.first.keys, hasLength(2));
+    expect(data.first['weightKg'], equals(123.45));
   });
   test('should cleanup unused timestamps', () async {
     final db = await mockDBManager();
@@ -198,7 +211,7 @@ void main() {
     final db = await mockDBManager();
     addTearDown(db.close);
 
-    for (int i = 1; i <= 6; i += 1) {
+    for (int i = 1; i <= 7; i += 1) {
       await db.db.insert('Timestamps', {
         'entryID': i,
         'timestampUnixS': i,
@@ -213,10 +226,12 @@ void main() {
     await db.db.insert('Diastolic', {'entryID': 3,});
     await db.db.insert('Pulse', {'entryID': 4,});
     await db.db.insert('Notes', {'entryID': 5,});
+    await db.db.insert('Weight', {'entryID': 6, 'weightKg': 1.0});
 
-    expect(await db.db.query('Timestamps'), hasLength(6));
+    expect(await db.db.query('Timestamps'), hasLength(7));
     await db.performCleanup();
-    expect(await db.db.query('Timestamps'), hasLength(5)); // remove 6 keep rest
+    expect(await db.db.query('Timestamps'), hasLength(6));
+    // only one isn't used
   });
 }
 

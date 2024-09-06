@@ -3,6 +3,8 @@ import 'dart:async';
 import 'package:health_data_store/src/database_manager.dart';
 import 'package:health_data_store/src/repositories/blood_pressure_repository.dart';
 import 'package:health_data_store/src/repositories/blood_pressure_repository_impl.dart';
+import 'package:health_data_store/src/repositories/bodyweight_repository.dart';
+import 'package:health_data_store/src/repositories/bodyweight_repository_impl.dart';
 import 'package:health_data_store/src/repositories/medicine_intake_repository.dart';
 import 'package:health_data_store/src/repositories/medicine_intake_repository_impl.dart';
 import 'package:health_data_store/src/repositories/medicine_repository.dart';
@@ -60,4 +62,8 @@ class HealthDataStore {
   /// Repository for intakes.
   MedicineIntakeRepository get intakeRepo =>
     MedicineIntakeRepositoryImpl(_dbMngr.db);
+
+  /// Repository for weight data.
+  BodyweightRepository get weightRepo =>
+    BodyweightRepositoryImpl(_dbMngr.db);
 }

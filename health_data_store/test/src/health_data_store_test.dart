@@ -21,6 +21,7 @@ void main() {
   expect(() => store.intakeRepo, returnsNormally);
   expect(() => store.bpRepo, returnsNormally);
   expect(() => store.noteRepo, returnsNormally);
+  expect(() => store.weightRepo, returnsNormally);
  });
  test('constructed repos should work', () async {
   final store = await HealthDataStore.load(
