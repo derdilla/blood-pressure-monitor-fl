@@ -230,7 +230,8 @@ void main() {
 
     expect(await db.db.query('Timestamps'), hasLength(7));
     await db.performCleanup();
-    expect(await db.db.query('Timestamps'), hasLength(6)); // remove 6 keep rest
+    expect(await db.db.query('Timestamps'), hasLength(6));
+    // only one isn't used
   });
 }
 

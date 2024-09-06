@@ -3,14 +3,14 @@ import 'package:health_data_store/src/types/units/weight.dart';
 
 part 'bodyweight_record.freezed.dart';
 
-/// Instance of entered body weight.
+/// Body weight at a specific time.
 @freezed
 class BodyweightRecord with _$BodyweightRecord {
-  /// Create a instance of a body weight record.
+  /// Create a body weight measurement.
   const factory BodyweightRecord({
     /// Timestamp when the weight was measured.
     required DateTime time,
-    /// Current weight.
+    /// Weight at [time].
     required Weight weight,
   }) = _BodyweightRecord;
 }

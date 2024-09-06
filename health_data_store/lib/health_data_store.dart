@@ -27,6 +27,7 @@ library;
 export 'src/health_data_store.dart';
 // repositories
 export 'src/repositories/blood_pressure_repository.dart';
+export 'src/repositories/bodyweight_repository.dart';
 export 'src/repositories/medicine_intake_repository.dart';
 export 'src/repositories/medicine_repository.dart';
 export 'src/repositories/note_repository.dart';
