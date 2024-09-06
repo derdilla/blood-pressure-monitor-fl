@@ -106,7 +106,7 @@ class DatabaseManager {
   Future<void> _setupWeightTable(DatabaseExecutor executor) async {
     await executor.execute('CREATE TABLE "Weight" ('
       '"entryID"	    INTEGER NOT NULL,'
-      '"weightMg"     REAL NOT NULL,'
+      '"weightKg"     REAL NOT NULL,'
       'FOREIGN KEY("entryID") REFERENCES "Timestamps"("entryID"),'
       'PRIMARY KEY("entryID")'
     ');');

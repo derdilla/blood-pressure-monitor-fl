@@ -160,12 +160,12 @@ void main() {
 
     await db.db.insert('Weight', {
       'entryID': 2,
-      'weightMg': 123.45,
+      'weightKg': 123.45,
     });
     final data = await db.db.query('Weight');
     expect(data, hasLength(1));
     expect(data.first.keys, hasLength(2));
-    expect(data.first['weightMg'], equals(123.45));
+    expect(data.first['weightKg'], equals(123.45));
   });
   test('should cleanup unused timestamps', () async {
     final db = await mockDBManager();
