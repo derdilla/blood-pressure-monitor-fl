@@ -38,7 +38,10 @@ class DatabaseManager {
 
     if (!isReadOnly && await dbMngr._db.getVersion() < 3) {
       await dbMngr._setUpTables();
-      await dbMngr._db.setVersion(3);
+      await dbMngr._db.setVersion(4);
+    } else {
+      await dbMngr._setupWeightTable(dbMngr._db);
+      await dbMngr._db.setVersion(4);
     }
     // When updating the schema the update steps are maintained for ensured 
     // compatability.
@@ -97,7 +100,17 @@ class DatabaseManager {
       'FOREIGN KEY("entryID") REFERENCES "Timestamps"("entryID"),'
       'PRIMARY KEY("entryID")'
     ');');
+    await _setupWeightTable(txn);
   });
+
+  Future<void> _setupWeightTable(DatabaseExecutor executor) async {
+    await executor.execute('CREATE TABLE "Weight" ('
+      '"entryID"	    INTEGER NOT NULL,'
+      '"weightMg"     REAL NOT NULL,'
+      'FOREIGN KEY("entryID") REFERENCES "Timestamps"("entryID"),'
+      'PRIMARY KEY("entryID")'
+    ');');
+  }
 
   /// Removes unused and deleted entries rows.
   ///
