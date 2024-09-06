@@ -38,7 +38,6 @@ class _BloodPressureDistributionState extends State<BloodPressureDistribution>
   void initState() {
     super.initState();
     _controller = TabController(length: 3, vsync: this);
-    _controller.addListener(() => setState((){}));
   }
 
   @override
@@ -61,12 +60,7 @@ class _BloodPressureDistributionState extends State<BloodPressureDistribution>
           child: TabBar.secondary(
             labelPadding: const EdgeInsets.symmetric(vertical: 16),
             indicator: BoxDecoration(
-              color: switch(_controller.index) {
-                0 => context.watch<Settings>().sysColor,
-                1 => context.watch<Settings>().diaColor,
-                2 => context.watch<Settings>().pulColor,
-                _ => Theme.of(context).colorScheme.primaryContainer,
-              },
+              color: Theme.of(context).colorScheme.primaryContainer,
               borderRadius: BorderRadius.circular(50),
             ),
             dividerHeight: 0,
