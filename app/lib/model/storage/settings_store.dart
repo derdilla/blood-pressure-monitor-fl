@@ -49,6 +49,7 @@ class Settings extends ChangeNotifier {
     List<String>? knownBleDev,
     int? highestMedIndex,
     bool? bleInput,
+    bool? weightInput,
   }) {
     if (accentColor != null) _accentColor = accentColor;
     if (sysColor != null) _sysColor = sysColor;
@@ -76,6 +77,7 @@ class Settings extends ChangeNotifier {
     if (highestMedIndex != null) _highestMedIndex = highestMedIndex;
     if (knownBleDev != null) _knownBleDev = knownBleDev;
     if (bleInput != null) _bleInput = bleInput;
+    if (weightInput != null) _weightInput = weightInput;
     _language = language; // No check here, as null is the default as well.
   }
 
@@ -110,6 +112,7 @@ class Settings extends ChangeNotifier {
       highestMedIndex: ConvertUtil.parseInt(map['highestMedIndex']),
       knownBleDev: ConvertUtil.parseList<String>(map['knownBleDev']),
       bleInput: ConvertUtil.parseBool(map['bleInput']),
+      weightInput: ConvertUtil.parseBool(map['weightInput']),
     );
 
     // update
@@ -157,6 +160,7 @@ class Settings extends ChangeNotifier {
     'preferredPressureUnit': preferredPressureUnit.encode(),
     'knownBleDev': knownBleDev,
     'bleInput': bleInput,
+    'weightInput': weightInput,
   };
 
   /// Serialize the object to a restoreable string.
@@ -192,6 +196,7 @@ class Settings extends ChangeNotifier {
     _medications.clear();
     _medications.addAll(other._medications);
     _highestMedIndex = other._highestMedIndex;
+    _weightInput = other._weightInput;
     notifyListeners();
   }
 
@@ -405,6 +410,14 @@ class Settings extends ChangeNotifier {
       && _bleInput;
   set bleInput(bool value) {
     _bleInput = value;
+    notifyListeners();
+  }
+
+  bool _weightInput = false;
+  /// Whether to show weight related features.
+  bool get weightInput => _weightInput;
+  set weightInput(bool value) {
+    _weightInput = value;
     notifyListeners();
   }
 

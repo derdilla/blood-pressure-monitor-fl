@@ -292,6 +292,13 @@ class SettingsPage extends StatelessWidget {
                   if (value != null) settings.preferredPressureUnit = value;
                 },
               ),
+              SwitchListTile(
+                value: settings.weightInput,
+                title: Text(localizations.activateWeightFeatures),
+                secondary: const Icon(Icons.scale),
+                onChanged: (value) {
+                  settings.weightInput = value;
+                },),
             ],),
             TitledColumn(
               title: Text(localizations.data),
