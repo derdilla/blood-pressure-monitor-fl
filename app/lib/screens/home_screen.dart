@@ -7,10 +7,9 @@ import 'package:blood_pressure_app/data_util/repository_builder.dart';
 import 'package:blood_pressure_app/features/measurement_list/compact_measurement_list.dart';
 import 'package:blood_pressure_app/features/measurement_list/measurement_list.dart';
 import 'package:blood_pressure_app/features/statistics/value_graph.dart';
+import 'package:blood_pressure_app/home/navigation_action_buttons.dart';
 import 'package:blood_pressure_app/model/storage/interval_store.dart';
 import 'package:blood_pressure_app/model/storage/settings_store.dart';
-import 'package:blood_pressure_app/screens/settings_screen.dart';
-import 'package:blood_pressure_app/screens/statistics_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
@@ -106,47 +105,7 @@ class AppHome extends StatelessWidget {
             return const SizedBox.shrink();
           }
           SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: SystemUiOverlay.values);
-          return Consumer<Settings>(builder: (context, settings, child) => Column(
-            verticalDirection: VerticalDirection.up,
-            children: [
-              SizedBox.square(
-                dimension: 75,
-                child: FittedBox(
-                  child: FloatingActionButton(
-                    heroTag: 'floatingActionAdd',
-                    tooltip: localizations.addMeasurement,
-                    autofocus: true,
-                    onPressed: context.createEntry,
-                    child: const Icon(Icons.add,),
-                  ),
-                ),
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              FloatingActionButton(
-                heroTag: 'floatingActionStatistics',
-                tooltip: localizations.statistics,
-                backgroundColor: const Color(0xFF6F6F6F),
-                onPressed: () {
-                  _buildTransition(context, const StatisticsScreen(), settings.animationSpeed);
-                },
-                child: const Icon(Icons.insights, color: Colors.black),
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              FloatingActionButton(
-                heroTag: 'floatingActionSettings',
-                tooltip: localizations.settings,
-                backgroundColor: const Color(0xFF6F6F6F),
-                child: const Icon(Icons.settings, color: Colors.black),
-                onPressed: () {
-                  _buildTransition(context, const SettingsPage(), settings.animationSpeed);
-                },
-              ),
-            ],
-          ),);
+          return const NavigationActionButtons();
         },
       ),
     );
