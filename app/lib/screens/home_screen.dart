@@ -1,9 +1,6 @@
-import 'dart:collection';
-
-import 'package:blood_pressure_app/data_util/blood_pressure_builder.dart';
 import 'package:blood_pressure_app/data_util/entry_context.dart';
+import 'package:blood_pressure_app/data_util/full_entry_builder.dart';
 import 'package:blood_pressure_app/data_util/interval_picker.dart';
-import 'package:blood_pressure_app/data_util/repository_builder.dart';
 import 'package:blood_pressure_app/features/measurement_list/compact_measurement_list.dart';
 import 'package:blood_pressure_app/features/measurement_list/measurement_list.dart';
 import 'package:blood_pressure_app/features/statistics/value_graph.dart';
@@ -14,7 +11,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:health_data_store/health_data_store.dart';
 import 'package:provider/provider.dart';
 
 /// Is true during the first [AppHome.build] before creating the widget.
@@ -33,19 +29,12 @@ class AppHome extends StatelessWidget {
         SizedBox(
           height: 240,
           width: MediaQuery.of(context).size.width,
-          // TODO: stop duplicating this complex construct
-          child: RepositoryBuilder<MedicineIntake, MedicineIntakeRepository>(
+          child: FullEntryBuilder(
             rangeType: IntervalStoreManagerLocation.mainPage,
-            onData: (context, List<MedicineIntake> intakes) => RepositoryBuilder<Note, NoteRepository>(
-              rangeType: IntervalStoreManagerLocation.mainPage,
-              onData: (context, List<Note> notes) => BloodPressureBuilder(
-                rangeType: IntervalStoreManagerLocation.mainPage,
-                onData: (BuildContext context, UnmodifiableListView<BloodPressureRecord> records) => BloodPressureValueGraph(
-                  records: records,
-                  colors: notes,
-                  intakes: intakes,
-                ),
-              ),
+            onData: (context, records, intakes, notes) => BloodPressureValueGraph(
+              records: records,
+              colors: notes,
+              intakes: intakes,
             ),
           ),
         ),
@@ -76,21 +65,11 @@ class AppHome extends StatelessWidget {
               Column(children: [
                 _buildValueGraph(context),
                 Expanded(
-                  child: BloodPressureBuilder(
+                  child: FullEntryBuilder(
                     rangeType: IntervalStoreManagerLocation.mainPage,
-                    onData: (context, records) => RepositoryBuilder<MedicineIntake, MedicineIntakeRepository>(
-                      rangeType: IntervalStoreManagerLocation.mainPage,
-                      onData: (BuildContext context, List<MedicineIntake> intakes) => RepositoryBuilder<Note, NoteRepository>(
-                        rangeType: IntervalStoreManagerLocation.mainPage,
-                        onData: (BuildContext context, List<Note> notes) {
-                          final entries = FullEntryList.merged(records, notes, intakes);
-                          entries.sort((a, b) => b.time.compareTo(a.time)); // newest first
-                          return (context.select<Settings, bool>((s) => s.compactList))
-                            ? CompactMeasurementList(data: entries)
-                            : MeasurementList(entries: entries);
-                        },
-                      ),
-                    ),
+                    onEntries: (context, entries) => (context.select<Settings, bool>((s) => s.compactList))
+                      ? CompactMeasurementList(data: entries)
+                      : MeasurementList(entries: entries),
                   ),
                 ),
               ],),),
