@@ -1,10 +1,11 @@
 import 'package:blood_pressure_app/data_util/entry_context.dart';
 import 'package:blood_pressure_app/data_util/full_entry_builder.dart';
 import 'package:blood_pressure_app/data_util/interval_picker.dart';
+import 'package:blood_pressure_app/features/home/navigation_action_buttons.dart';
 import 'package:blood_pressure_app/features/measurement_list/compact_measurement_list.dart';
 import 'package:blood_pressure_app/features/measurement_list/measurement_list.dart';
+import 'package:blood_pressure_app/features/measurement_list/weight_list.dart';
 import 'package:blood_pressure_app/features/statistics/value_graph.dart';
-import 'package:blood_pressure_app/home/navigation_action_buttons.dart';
 import 'package:blood_pressure_app/model/storage/interval_store.dart';
 import 'package:blood_pressure_app/model/storage/settings_store.dart';
 import 'package:flutter/material.dart';
@@ -88,7 +89,7 @@ class AppHome extends StatelessWidget {
                   child: TabBarView(
                       children: [
                         _buildMeasurementList(context),
-                        Text('data2'), // TODO
+                        const BodyweightList(rangeType: IntervalStoreManagerLocation.mainPage),
                       ]
                   ),
                 )

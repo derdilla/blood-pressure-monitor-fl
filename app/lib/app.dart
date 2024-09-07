@@ -99,6 +99,7 @@ class _AppState extends State<App> {
     late NoteRepository noteRepo;
     late MedicineRepository medRepo;
     late MedicineIntakeRepository intakeRepo;
+    late BodyweightRepository weightRepo;
 
     try {
       _entryDB = await openDatabase(
@@ -109,6 +110,10 @@ class _AppState extends State<App> {
       noteRepo = db.noteRepo;
       medRepo = db.medRepo;
       intakeRepo = db.intakeRepo;
+      weightRepo = db.weightRepo;
+      await weightRepo.add(BodyweightRecord(time: DateTime.now(), weight: Weight.kg(123.0))); // TODO: remove
+      await weightRepo.add(BodyweightRecord(time: DateTime.now(), weight: Weight.kg(123.12334))); // TODO: remove
+      await weightRepo.add(BodyweightRecord(time: DateTime.now(), weight: Weight.kg(1.0))); // TODO: remove
     } catch (e, stack) {
       await ErrorReporting.reportCriticalError('Error loading entry db', '$e\n$stack',);
     }
@@ -180,6 +185,7 @@ class _AppState extends State<App> {
         RepositoryProvider.value(value: noteRepo),
         RepositoryProvider.value(value: medRepo),
         RepositoryProvider.value(value: intakeRepo),
+        RepositoryProvider.value(value: weightRepo),
       ],
       child: MultiProvider(
         providers: [
