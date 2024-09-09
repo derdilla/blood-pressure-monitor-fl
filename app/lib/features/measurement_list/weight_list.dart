@@ -6,10 +6,11 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 /// List of weights recorded in the contexts [BodyweightRepository].
-class BodyweightList extends StatelessWidget {
+class WeightList extends StatelessWidget {
   /// Create a list of weights
-  const BodyweightList({super.key, required this.rangeType});
+  const WeightList({super.key, required this.rangeType});
 
+  /// The location from which the displayed interval is taken.
   final IntervalStoreManagerLocation rangeType;
 
   @override
@@ -17,13 +18,26 @@ class BodyweightList extends StatelessWidget {
     final format = DateFormat(context.select<Settings, String>((s) => s.dateFormatString));
     return RepositoryBuilder<BodyweightRecord, BodyweightRepository>(
       rangeType: rangeType,
-      onData: (context, records) => ListView.builder(
-        itemCount: records.length,
-        itemBuilder: (context, idx) => ListTile(
-          title: Text('${records[idx].weight.kg.toStringAsFixed(2)} kg'), // TODO: prefered unit
-          subtitle: Text(format.format(records[idx].time))
-        ),
-      ),
+      onData: (context, records) {
+        records.sort((a, b) => b.time.compareTo(a.time));
+        return ListView.builder(
+          itemCount: records.length,
+          itemBuilder: (context, idx) => ListTile(
+            title: Text(_buildWeightText(records[idx].weight)),
+            subtitle: Text(format.format(records[idx].time))
+          ),
+        );
+      },
     );
+  }
+
+  String _buildWeightText(Weight w) {
+    String weightStr = w.kg.toStringAsFixed(2);
+    if (weightStr.endsWith('0')) weightStr = weightStr.substring(0, weightStr.length - 1);
+    if (weightStr.endsWith('0')) weightStr = weightStr.substring(0, weightStr.length - 1);
+    if (weightStr.endsWith('.')) weightStr = weightStr.substring(0, weightStr.length - 1);
+    print(weightStr);
+    // TODO: preferred weight unit
+    return '$weightStr kg';
   }
 }

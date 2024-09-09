@@ -89,7 +89,7 @@ class AppHome extends StatelessWidget {
                   child: TabBarView(
                       children: [
                         _buildMeasurementList(context),
-                        const BodyweightList(rangeType: IntervalStoreManagerLocation.mainPage),
+                        const WeightList(rangeType: IntervalStoreManagerLocation.mainPage),
                       ]
                   ),
                 )
