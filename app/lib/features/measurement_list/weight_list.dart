@@ -36,7 +36,6 @@ class WeightList extends StatelessWidget {
     if (weightStr.endsWith('0')) weightStr = weightStr.substring(0, weightStr.length - 1);
     if (weightStr.endsWith('0')) weightStr = weightStr.substring(0, weightStr.length - 1);
     if (weightStr.endsWith('.')) weightStr = weightStr.substring(0, weightStr.length - 1);
-    print(weightStr);
     // TODO: preferred weight unit
     return '$weightStr kg';
   }
