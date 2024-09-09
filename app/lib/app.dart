@@ -111,9 +111,6 @@ class _AppState extends State<App> {
       medRepo = db.medRepo;
       intakeRepo = db.intakeRepo;
       weightRepo = db.weightRepo;
-      await weightRepo.add(BodyweightRecord(time: DateTime.now(), weight: Weight.kg(123.0))); // TODO: remove
-      await weightRepo.add(BodyweightRecord(time: DateTime.now(), weight: Weight.kg(123.12334))); // TODO: remove
-      await weightRepo.add(BodyweightRecord(time: DateTime.now(), weight: Weight.kg(1.0))); // TODO: remove
     } catch (e, stack) {
       await ErrorReporting.reportCriticalError('Error loading entry db', '$e\n$stack',);
     }

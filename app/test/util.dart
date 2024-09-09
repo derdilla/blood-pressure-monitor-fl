@@ -7,7 +7,6 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:health_data_store/health_data_store.dart';
 import 'package:provider/provider.dart';
-import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
 /// Create a root material widget with localizations.
 Widget materialApp(Widget child, {
@@ -39,7 +38,7 @@ Widget materialApp(Widget child, {
 }
 
 /// Creates a the same App as the main method.
-Future<Widget> appBase(Widget child,  {
+Widget appBase(Widget child,  {
   Settings? settings,
   ExportSettings? exportSettings,
   CsvExportSettings? csvExportSettings,
@@ -47,11 +46,18 @@ Future<Widget> appBase(Widget child,  {
   IntervalStoreManager? intervallStoreManager,
   BloodPressureRepository? bpRepo,
   MedicineRepository? medRepo,
+  NoteRepository? noteRepo,
   MedicineIntakeRepository? intakeRepo,
-}) async {
+  BodyweightRepository? weightRepo,
+}) {
   HealthDataStore? db;
-  if (bpRepo == null || medRepo == null || intakeRepo == null) {
-    db = await _getHealthDateStore();
+  if (bpRepo == null
+    || medRepo == null
+    || intakeRepo == null
+    || noteRepo == null
+    || weightRepo == null
+  ) {
+    db = MockHealthDataSore();
   }
 
   return MultiRepositoryProvider(
@@ -59,6 +65,8 @@ Future<Widget> appBase(Widget child,  {
       RepositoryProvider(create: (context) => bpRepo ?? db!.bpRepo),
       RepositoryProvider(create: (context) => medRepo ?? db!.medRepo),
       RepositoryProvider(create: (context) => intakeRepo ?? db!.intakeRepo),
+      RepositoryProvider(create: (context) => noteRepo ?? db!.noteRepo),
+      RepositoryProvider(create: (context) => weightRepo ?? db!.weightRepo),
     ],
     child: materialApp(child,
       settings: settings,
@@ -79,15 +87,31 @@ Future<Widget> appBaseWithData(Widget child,  {
   IntervalStoreManager? intervallStoreManager,
   List<BloodPressureRecord>? records,
   List<Medicine>? meds,
+  List<Note>? notes,
   List<MedicineIntake>? intakes,
+  List<BodyweightRecord>? weights,
 }) async {
-  final db = await _getHealthDateStore();
+  final db = MockHealthDataSore();
   final bpRepo = db.bpRepo;
   for (final r in records ?? []) {
     await bpRepo.add(r);
   }
   final medRepo = db.medRepo;
+  for (final m in meds ?? []) {
+    await medRepo.add(m);
+  }
   final intakeRepo = db.intakeRepo;
+  for (final i in intakes ?? []) {
+    await intakeRepo.add(i);
+  }
+  final noteRepo = db.noteRepo;
+  for (final n in notes ?? []) {
+    await noteRepo.add(n);
+  }
+  final weightRepo = db.weightRepo;
+  for (final w in weights ?? []) {
+    await weightRepo.add(w);
+  }
 
   return appBase(
     child,
@@ -98,7 +122,9 @@ Future<Widget> appBaseWithData(Widget child,  {
     intervallStoreManager: intervallStoreManager,
     bpRepo: bpRepo,
     medRepo: medRepo,
+    noteRepo: noteRepo,
     intakeRepo: intakeRepo,
+    weightRepo: weightRepo,
   );
 }
 
@@ -185,12 +211,44 @@ Medicine mockMedicine({
   return med;
 }
 
-/// Don't use this, use [_getHealthDateStore] to obtain.
-HealthDataStore? _db;
-Future<HealthDataStore> _getHealthDateStore() async {
-  TestWidgetsFlutterBinding.ensureInitialized();
-  sqfliteFfiInit();
-  final db = await databaseFactoryFfi.openDatabase(inMemoryDatabasePath);
-  _db ??= await HealthDataStore.load(db);
-  return _db!;
+class MockHealthDataSore implements HealthDataStore {
+  @override
+  BloodPressureRepository bpRepo = MockBloodPressureRepository();
+
+  @override
+  MedicineIntakeRepository intakeRepo = MockMedicineIntakeRepository();
+
+  @override
+  MedicineRepository medRepo = MockMedicineRepository();
+
+  @override
+  NoteRepository noteRepo = MockNoteRepository();
+
+  @override
+  BodyweightRepository weightRepo = MockBodyweightRepository();
 }
+
+class _MockRepo<T> extends Repository<T> {
+  List<T> data = [];
+
+  @override
+  Future<void> add(T value) async => data.add(value);
+
+  @override
+  Future<List<T>> get(DateRange range) async => data;
+
+  @override
+  Future<void> remove(T value) async => data.remove(value);
+
+  @override
+  Stream subscribe() => const Stream.empty(); // FIXME
+
+  @override
+  dynamic noSuchMethod(Invocation invocation) => throw Exception('unexpected call: $invocation');
+}
+
+class MockBloodPressureRepository extends _MockRepo<BloodPressureRecord> implements BloodPressureRepository {}
+class MockMedicineIntakeRepository extends _MockRepo<MedicineIntake> implements MedicineIntakeRepository {}
+class MockMedicineRepository extends _MockRepo<Medicine> implements MedicineRepository {}
+class MockNoteRepository extends _MockRepo<Note> implements NoteRepository {}
+class MockBodyweightRepository extends _MockRepo<BodyweightRecord> implements BodyweightRepository {}
