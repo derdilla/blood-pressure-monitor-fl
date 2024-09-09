@@ -96,6 +96,7 @@ void main() {
         bottomAppBars: true,
         knownBleDev: ['a', 'b'],
         bleInput: false,
+        weightInput: true,
       );
       final fromJson = Settings.fromJson(initial.toJson());
 
@@ -124,6 +125,7 @@ void main() {
       expect(initial.bottomAppBars, fromJson.bottomAppBars);
       expect(initial.knownBleDev, fromJson.knownBleDev);
       expect(initial.bleInput, fromJson.bleInput);
+      expect(initial.weightInput, fromJson.weightInput);
 
       expect(initial.toJson(), fromJson.toJson());
     });

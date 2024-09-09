@@ -1,11 +1,12 @@
-import 'package:blood_pressure_app/data_util/blood_pressure_builder.dart';
 import 'package:blood_pressure_app/data_util/interval_picker.dart';
+import 'package:blood_pressure_app/data_util/repository_builder.dart';
 import 'package:blood_pressure_app/features/statistics/blood_pressure_distribution.dart';
 import 'package:blood_pressure_app/features/statistics/clock_bp_graph.dart';
 import 'package:blood_pressure_app/model/blood_pressure_analyzer.dart';
 import 'package:blood_pressure_app/model/storage/interval_store.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:health_data_store/health_data_store.dart';
 
 /// A page that shows statistics about stored blood pressure values.
 class StatisticsScreen extends StatefulWidget {
@@ -24,7 +25,7 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
       appBar: AppBar(
         title: Text(localizations.statistics),
       ),
-      body: BloodPressureBuilder(
+      body: RepositoryBuilder<BloodPressureRecord, BloodPressureRepository>(
         rangeType: IntervalStoreManagerLocation.statsPage,
         onData: (context, data) {
           final analyzer = BloodPressureAnalyser(data.toList());

@@ -516,5 +516,7 @@
   "invalidZip": "Invalid zip file.",
   "@invalidZip": {},
   "errCantCreateArchive": "Can''t create archive. Please report the bug if possible.",
-  "@errCantCreateArchive": {}
+  "@errCantCreateArchive": {},
+  "activateWeightFeatures": "Activate weight related features",
+  "@weightInput": {}
 }
