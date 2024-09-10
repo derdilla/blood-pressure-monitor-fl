@@ -518,5 +518,9 @@
   "errCantCreateArchive": "Can''t create archive. Please report the bug if possible.",
   "@errCantCreateArchive": {},
   "activateWeightFeatures": "Activate weight related features",
-  "@weightInput": {}
+  "@weightInput": {},
+  "weight": "Weight",
+  "@weight": {},
+  "enterWeight": "Enter weight",
+  "@enterWeight": {}
 }
