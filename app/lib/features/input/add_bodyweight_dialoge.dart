@@ -13,7 +13,7 @@ class AddBodyweightDialoge extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Dialog(
     child: Padding(
-      padding: EdgeInsets.symmetric(vertical: 6.0, horizontal: 2.0),
+      padding: const EdgeInsets.symmetric(vertical: 6.0, horizontal: 2.0),
       child: TextFormField(
         autofocus: true,
         decoration: InputDecoration(
