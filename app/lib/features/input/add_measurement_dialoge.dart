@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:blood_pressure_app/components/fullscreen_dialoge.dart';
 import 'package:blood_pressure_app/features/bluetooth/bluetooth_input.dart';
+import 'package:blood_pressure_app/features/input/add_bodyweight_dialoge.dart';
 import 'package:blood_pressure_app/features/input/forms/date_time_form.dart';
 import 'package:blood_pressure_app/features/settings/tiles/color_picker_list_tile.dart';
 import 'package:blood_pressure_app/model/blood_pressure/pressure_unit.dart';
@@ -402,6 +403,21 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
                     ],
                   ),
                 ),
+              ),
+
+            if (settings.weightInput)
+              ListTile(
+                title: Text(localizations.enterWeight),
+                leading: const Icon(Icons.scale),
+                trailing: const Icon(Icons.arrow_forward_ios),
+                onTap: () async {
+                  final repo = context.read<BodyweightRepository>();
+                  final weight = await showDialog<Weight>(context: context, builder: (_) => const AddBodyweightDialoge());
+                  if (weight != null) {
+                    await repo.add(BodyweightRecord(time: time, weight: weight));
+                    if (context.mounted) Navigator.pop(context);
+                  }
+                },
               ),
           ],
         ),

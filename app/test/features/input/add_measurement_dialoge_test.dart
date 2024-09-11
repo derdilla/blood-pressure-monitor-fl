@@ -1,4 +1,5 @@
 import 'package:blood_pressure_app/features/bluetooth/bluetooth_input.dart';
+import 'package:blood_pressure_app/features/input/add_bodyweight_dialoge.dart';
 import 'package:blood_pressure_app/features/input/add_measurement_dialoge.dart';
 import 'package:blood_pressure_app/features/settings/tiles/color_picker_list_tile.dart';
 import 'package:blood_pressure_app/model/storage/settings_store.dart';
@@ -633,6 +634,30 @@ void main() {
       expect(focusedTextFormField, findsOneWidget);
       expect(find.descendant(of: focusedTextFormField, matching: find.text('Pulse')), findsNothing);
       expect(find.descendant(of: focusedTextFormField, matching: find.text('Note (optional)')), findsWidgets);
+    });
+    testWidgets('opens weight input if necessary', (tester) async {
+      final repo = MockBodyweightRepository();
+      await tester.pumpWidget(appBase(Builder(
+        builder: (context) => TextButton(onPressed: () => showAddEntryDialoge(context, MockMedRepo([])), child: const Text('X'))
+      ), settings: Settings(weightInput: true), weightRepo: repo));
+      final localizations = await AppLocalizations.delegate.load(const Locale('en'));
+      await tester.tap(find.text('X'));
+      await tester.pumpAndSettle();
+
+      expect(find.text(localizations.enterWeight), findsOneWidget);
+      expect(find.byIcon(Icons.scale), findsOneWidget);
+      await tester.tap(find.text(localizations.enterWeight));
+      await tester.pumpAndSettle();
+      
+      expect(repo.data, isEmpty);
+      await tester.enterText(find.descendant(
+        of: find.byType(AddBodyweightDialoge),
+        matching: find.byType(TextFormField)
+      ), '123.45');
+      await tester.testTextInput.receiveAction(TextInputAction.done);
+      await tester.pumpAndSettle();
+      expect(repo.data, hasLength(1));
+      expect(repo.data[0].weight, Weight.kg(123.45));
     });
   });
 }

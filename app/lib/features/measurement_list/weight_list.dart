@@ -29,7 +29,7 @@ class WeightList extends StatelessWidget {
         );
       },
     );
-  }
+  }// TODO: delete
 
   String _buildWeightText(Weight w) {
     String weightStr = w.kg.toStringAsFixed(2);
