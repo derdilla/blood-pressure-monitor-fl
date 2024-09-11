@@ -12,24 +12,31 @@ class AddBodyweightDialoge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Dialog(
-    child: TextFormField(
-      autofocus: true,
-      decoration: InputDecoration(
-        labelText: AppLocalizations.of(context)!.weight,
-        suffix: const Text('kg'),
+    child: Padding(
+      padding: EdgeInsets.symmetric(vertical: 6.0, horizontal: 2.0),
+      child: TextFormField(
+        autofocus: true,
+        decoration: InputDecoration(
+          labelText: AppLocalizations.of(context)!.weight,
+          suffix: const Text('kg'),
+        ),
+        inputFormatters: [FilteringTextInputFormatter.allow(RegExp('[0-9,.]'))],
+        keyboardType: const TextInputType.numberWithOptions(decimal: true),
+        autovalidateMode: AutovalidateMode.onUnfocus,
+        validator: (value) {
+          if (value == null
+            || value.isEmpty
+            || double.tryParse(value) == null
+          ) {
+            return AppLocalizations.of(context)!.errNaN;
+          }
+          return null;
+        },
+        onFieldSubmitted: (text) {
+          final value = double.tryParse(text);
+          if (value != null) Navigator.of(context).pop(Weight.kg(value));
+        },
       ),
-      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-      keyboardType: const TextInputType.numberWithOptions(decimal: true),
-      validator: (value) {
-        if (value == null
-          || value.isEmpty
-          || double.tryParse(value) == null
-        ) {
-          return AppLocalizations.of(context)!.errNaN;
-        }
-        return null;
-      },
-      onFieldSubmitted: (text) => Navigator.of(context).pop(Weight.kg(double.parse(text))),
     ),
   );
 }
