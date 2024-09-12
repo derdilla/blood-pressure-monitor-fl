@@ -12,6 +12,7 @@ void main() {
     int tapCount = 0;
     await tester.pumpWidget(materialApp(MeasurementFailure(
       onTap: () => tapCount++,
+      reason: '',
     )));
 
     expect(find.byIcon(Icons.error_outline), findsOneWidget);
