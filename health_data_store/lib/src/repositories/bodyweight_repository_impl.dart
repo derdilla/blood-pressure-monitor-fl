@@ -4,7 +4,6 @@ import 'package:health_data_store/health_data_store.dart';
 import 'package:health_data_store/src/database_helper.dart';
 import 'package:health_data_store/src/database_manager.dart';
 import 'package:health_data_store/src/extensions/datetime_seconds.dart';
-import 'package:health_data_store/src/repositories/bodyweight_repository.dart';
 import 'package:sqflite_common/sqflite.dart';
 
 /// Implementation of repository for [BodyweightRecord]s.
@@ -40,7 +39,7 @@ class BodyweightRepositoryImpl extends BodyweightRepository {
     final results = await _db.rawQuery(
       'SELECT timestampUnixS, weightKg '
         'FROM Timestamps AS t '
-        'RIGHT JOIN Weight AS w ON t.entryID = w.entryID '
+        'INNER JOIN Weight AS w ON t.entryID = w.entryID '
       'WHERE timestampUnixS BETWEEN ? AND ?',
       [range.startStamp, range.endStamp]
     );
