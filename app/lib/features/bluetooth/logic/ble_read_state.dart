@@ -8,7 +8,22 @@ sealed class BleReadState {}
 class BleReadInProgress extends BleReadState {}
 
 /// The reading failed unrecoverable for some reason.
-class BleReadFailure extends BleReadState {}
+class BleReadFailure extends BleReadState {
+  /// The reading failed unrecoverable for some reason.
+  BleReadFailure(this.reason);
+
+  /// The reason why the read failed
+  final String reason;
+}
+
+/// Data has been successfully read.
+class BleReadMultiple extends BleReadState {
+  /// Indicate a successful reading of a ble characteristic.
+  BleReadMultiple(this.data);
+
+  /// Measurement decoded from the device.
+  final List<BleMeasurementData> data;
+}
 
 /// Data has been successfully read.
 class BleReadSuccess extends BleReadState {

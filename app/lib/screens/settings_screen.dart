@@ -3,6 +3,7 @@ import 'dart:typed_data';
 
 import 'package:archive/archive_io.dart';
 import 'package:blood_pressure_app/components/input_dialoge.dart';
+import 'package:blood_pressure_app/config.dart';
 import 'package:blood_pressure_app/data_util/consistent_future_builder.dart';
 import 'package:blood_pressure_app/features/settings/delete_data_screen.dart';
 import 'package:blood_pressure_app/features/settings/enter_timeformat_dialoge.dart';
@@ -33,6 +34,7 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:path/path.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
+
 
 /// Primary settings page to manage basic settings and link to subsettings.
 class SettingsPage extends StatelessWidget {
@@ -160,14 +162,10 @@ class SettingsPage extends StatelessWidget {
               ),
               SwitchListTile(
                 value: settings.bleInput,
-                onChanged: (Platform.isAndroid || Platform.isIOS || Platform.isMacOS)
-                  ? (value) { settings.bleInput = value; }
-                  : null,
+                onChanged: isPlatformSupportedBluetooth ? (value) { settings.bleInput = value; } : null,
                 secondary: const Icon(Icons.bluetooth),
                 title: Text(localizations.bluetoothInput),
-                subtitle: (Platform.isAndroid || Platform.isIOS || Platform.isMacOS)
-                  ? null
-                  : Text(localizations.errFeatureNotSupported),
+                subtitle: isPlatformSupportedBluetooth ? null : Text(localizations.errFeatureNotSupported),
               ),
               SwitchListTile(
                 value: settings.allowManualTimeInput,

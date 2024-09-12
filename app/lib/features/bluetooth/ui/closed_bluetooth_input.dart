@@ -1,11 +1,12 @@
 import 'package:app_settings/app_settings.dart';
 import 'package:blood_pressure_app/features/bluetooth/logic/bluetooth_cubit.dart';
+import 'package:blood_pressure_app/logging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 /// A closed ble input that shows the adapter state and allows to start the input.
-class ClosedBluetoothInput extends StatelessWidget {
+class ClosedBluetoothInput extends StatelessWidget with TypeLogger {
   /// Show adapter state and allow starting inputs
   const ClosedBluetoothInput({super.key,
     required this.bluetoothCubit,
@@ -43,31 +44,34 @@ class ClosedBluetoothInput extends StatelessWidget {
     final localizations = AppLocalizations.of(context)!;
     return BlocBuilder<BluetoothCubit, BluetoothState>(
       bloc: bluetoothCubit,
-      builder: (context, BluetoothState state) => switch(state) {
-        BluetoothInitial() => const SizedBox.shrink(),
-        BluetoothUnfeasible() => const SizedBox.shrink(),
-        BluetoothUnauthorized() => _buildTile(
-          text: localizations.errBleNoPerms,
-          icon: Icons.bluetooth_disabled,
-          onTap: () async {
-            await AppSettings.openAppSettings();
-            await bluetoothCubit.forceRefresh();
-          },
-        ),
-        BluetoothDisabled() => _buildTile(
-          text: localizations.bluetoothDisabled,
-          icon: Icons.bluetooth_disabled,
-          onTap: () async {
-            final bluetoothOn = await bluetoothCubit.enableBluetooth();
-            if (!bluetoothOn) await AppSettings.openAppSettings(type: AppSettingsType.bluetooth);
-            await bluetoothCubit.forceRefresh();
-          },
-        ),
-        BluetoothReady() => _buildTile(
-          text: localizations.bluetoothInput,
-          icon: Icons.bluetooth,
-          onTap: onStarted,
-        ),
+      builder: (context, BluetoothState state) {
+        logger.finer('Called with state: $state');
+        return switch(state) {
+          BluetoothStateInitial() => const SizedBox.shrink(),
+          BluetoothStateUnfeasible() => const SizedBox.shrink(),
+          BluetoothStateUnauthorized() => _buildTile(
+            text: localizations.errBleNoPerms,
+            icon: Icons.bluetooth_disabled,
+            onTap: () async {
+              await AppSettings.openAppSettings();
+              await bluetoothCubit.forceRefresh();
+            },
+          ),
+          BluetoothStateDisabled() => _buildTile(
+            text: localizations.bluetoothDisabled,
+            icon: Icons.bluetooth_disabled,
+            onTap: () async {
+              final bluetoothOn = await bluetoothCubit.enableBluetooth();
+              if (!bluetoothOn) await AppSettings.openAppSettings(type: AppSettingsType.bluetooth);
+              await bluetoothCubit.forceRefresh();
+            },
+          ),
+          BluetoothStateReady() => _buildTile(
+            text: localizations.bluetoothInput,
+            icon: Icons.bluetooth,
+            onTap: onStarted,
+          )
+        };
       },
     );
   }

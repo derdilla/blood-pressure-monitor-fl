@@ -31,6 +31,7 @@ dependencies:
     path: ../health_data_store/
   flutter_bloc: ^8.1.6
   flutter_blue_plus: ^1.32.12
+  bluetooth_low_energy: ^6.0.2
 
   # can become one custom dependency
   file_picker: ^8.1.2
@@ -41,6 +42,7 @@ dependencies:
   # desktop only
   sqflite_common_ffi: ^2.3.3
   archive: ^3.6.1
+  logging: ^1.2.0
 
 dev_dependencies:
   integration_test:

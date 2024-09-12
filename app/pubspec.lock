@@ -86,6 +86,62 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "9.1.7"
+  bluetooth_low_energy:
+    dependency: "direct main"
+    description:
+      name: bluetooth_low_energy
+      sha256: "057c146c3d5378f6a048b6a792cee7029bb185c7b3392dfb1605228325a5e336"
+      url: "https://pub.dev"
+    source: hosted
+    version: "6.0.2"
+  bluetooth_low_energy_android:
+    dependency: transitive
+    description:
+      name: bluetooth_low_energy_android
+      sha256: f8cbef16b980f96c09df5d1d46b61be9f05683866151440e9987796607a4e7d8
+      url: "https://pub.dev"
+    source: hosted
+    version: "6.0.3"
+  bluetooth_low_energy_darwin:
+    dependency: transitive
+    description:
+      name: bluetooth_low_energy_darwin
+      sha256: "849ba53f7d34845ad7491cd9cdb3784301aa54fe682c91cab804ed55cfd259d5"
+      url: "https://pub.dev"
+    source: hosted
+    version: "6.0.0"
+  bluetooth_low_energy_linux:
+    dependency: transitive
+    description:
+      name: bluetooth_low_energy_linux
+      sha256: "4d1aaaede517f95320dcf9ad271091ab42c4ad8ba5bfa0e822744d850dcf0048"
+      url: "https://pub.dev"
+    source: hosted
+    version: "6.0.0"
+  bluetooth_low_energy_platform_interface:
+    dependency: transitive
+    description:
+      name: bluetooth_low_energy_platform_interface
+      sha256: bc2e8d97c141653e5747bcb3cdc9fe956541b6ecc6e5f158b99a2f3abc2d946a
+      url: "https://pub.dev"
+    source: hosted
+    version: "6.0.0"
+  bluetooth_low_energy_windows:
+    dependency: transitive
+    description:
+      name: bluetooth_low_energy_windows
+      sha256: "4904530cb3e7e1dd7a66919b4c926f8a03ed9924c3c2ce068aef7e0e10ced555"
+      url: "https://pub.dev"
+    source: hosted
+    version: "6.0.0"
+  bluez:
+    dependency: transitive
+    description:
+      name: bluez
+      sha256: "203a1924e818a9dd74af2b2c7a8f375ab8e5edf0e486bba8f90a0d8a17ed9fce"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.8.2"
   boolean_selector:
     dependency: transitive
     description:
@@ -246,6 +302,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.3.6"
+  dbus:
+    dependency: transitive
+    description:
+      name: dbus
+      sha256: "365c771ac3b0e58845f39ec6deebc76e3276aa9922b0cc60840712094d9047ac"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.7.10"
   diff_match_patch:
     dependency: transitive
     description:
@@ -443,6 +507,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.1.0"
+  hybrid_logging:
+    dependency: transitive
+    description:
+      name: hybrid_logging
+      sha256: "54248d52ce68c14702a42fbc4083bac5c6be30f6afad8a41be4bbadd197b8af5"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.0"
   image:
     dependency: transitive
     description:
@@ -529,7 +601,7 @@ packages:
     source: hosted
     version: "4.0.0"
   logging:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: logging
       sha256: "623a88c9594aa774443aa3eb2d41807a48486b5613e67599fb4c41c0ad47c340"

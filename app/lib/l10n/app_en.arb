@@ -522,5 +522,21 @@
   "weight": "Weight",
   "@weight": {},
   "enterWeight": "Enter weight",
-  "@enterWeight": {}
+  "@enterWeight": {},
+  "selectMeasurementTitle": "Select the measurement to use",
+  "@selectMeasurementTitle": {},
+  "measurementIndex": "Measurement #{number}",
+  "@measurementIndex": {
+      "placeholders": {
+          "number": {
+              "type": "int"
+          }
+      }
+  },
+  "select": "Select",
+  "@select": {
+      "description": "Used when f.e. selecting a single measurement when the bluetooth device returned multiple"
+  },
+  "bloodPressure": "Blood pressure",
+  "@bloodPressure": {}
 }

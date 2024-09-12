@@ -1,6 +1,8 @@
 import 'dart:async';
 
 import 'package:blood_pressure_app/components/fullscreen_dialoge.dart';
+import 'package:blood_pressure_app/config.dart';
+import 'package:blood_pressure_app/features/bluetooth/backend/bluetooth_backend.dart';
 import 'package:blood_pressure_app/features/bluetooth/bluetooth_input.dart';
 import 'package:blood_pressure_app/features/input/add_bodyweight_dialoge.dart';
 import 'package:blood_pressure_app/features/input/forms/date_time_form.dart';
@@ -252,6 +254,7 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
           children: [
             if (settings.bleInput)
               BluetoothInput(
+                manager: (isTestingEnvironment ? BluetoothBackend.mock : BluetoothBackend.bluetoothLowEnergy).create(),
                 onMeasurement: (record) => setState(
                   () => _loadFields((record, Note(time: record.time, note: noteController.text, color: color?.value), [])),
                 ),
@@ -322,7 +325,7 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
               ),
             ),
             InputDecorator(
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 contentPadding: EdgeInsets.zero,
               ),
               child: ColorSelectionListTile(

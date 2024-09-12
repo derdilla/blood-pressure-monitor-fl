@@ -9,6 +9,7 @@ String getDisplayLanguage(Locale l) => switch(l.toLanguageTag()) {
   'fr' => 'Française',
   'it' => 'Italiano',
   'nb' => 'Norsk bokmål',
+  'nl' => 'Nederlands',
   'pt' => 'Português',
   'pt-BR' => 'Português (Brasil)',
   'ru' => 'Русский',
