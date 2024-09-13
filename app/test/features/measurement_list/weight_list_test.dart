@@ -1,5 +1,6 @@
 import 'package:blood_pressure_app/features/measurement_list/weight_list.dart';
 import 'package:blood_pressure_app/model/storage/interval_store.dart';
+import 'package:blood_pressure_app/model/storage/settings_store.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -76,5 +77,29 @@ void main() {
 
     expect(find.text('123 kg'), findsNothing);
     expect(repo.data, isEmpty);
+  });
+  testWidgets('respects confirm deletion setting', (tester) async {
+    final interval = IntervalStorage();
+    interval.changeStepSize(TimeStep.lifetime);
+    final repo = MockBodyweightRepository();
+    await repo.add(BodyweightRecord(time: DateTime(2001), weight: Weight.kg(123.0)));
+
+    await tester.pumpWidget(appBase(
+      weightRepo: repo,
+      intervallStoreManager: IntervalStoreManager(interval, IntervalStorage(), IntervalStorage()),
+      settings: Settings(confirmDeletion: false),
+      const WeightList(rangeType: IntervalStoreManagerLocation.mainPage),
+    ));
+    final localizations = await AppLocalizations.delegate.load(const Locale('en'))!;
+    await tester.pumpAndSettle();
+
+    expect(find.text('123 kg'), findsOneWidget);
+    expect(find.text(localizations.confirmDelete), findsNothing);
+
+    await tester.tap(find.byIcon(Icons.delete));
+    await tester.pumpAndSettle();
+
+    expect(find.text(localizations.confirmDelete), findsNothing);
+    expect(find.text('123 kg'), findsNothing);
   });
 }
