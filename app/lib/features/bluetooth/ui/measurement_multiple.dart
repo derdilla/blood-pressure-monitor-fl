@@ -3,7 +3,8 @@ import 'package:blood_pressure_app/features/bluetooth/ui/input_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-/// Indication of a successful bluetooth measurement.
+/// Indication of a successful bluetooth read that returned multiple measurements.
+///
 /// TODO: Some devices can store up to 100 measurements which could cause a very long ListView. Maybe optimize UI for that?
 class MeasurementMultiple extends StatelessWidget {
   /// Indicate a successful while taking a bluetooth measurement.
