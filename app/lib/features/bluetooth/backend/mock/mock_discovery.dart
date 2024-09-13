@@ -1,12 +1,12 @@
 part of 'mock_manager.dart';
 
-/// BluetoothDeviceDiscovery implementation for the 'flutter_blue_plus' package
+/// Placeholder [BluetoothDeviceDiscovery] implementation that can f.e. be used for testing
 final class MockBluetoothDiscovery extends BluetoothDeviceDiscovery<MockBluetoothManager> {
   /// constructor
   MockBluetoothDiscovery(super._manager);
   
   @override
-  Future<void> backendStart(String serviceUUID) {
+  Future<void> backendStart(String serviceUuid) {
     throw UnimplementedError();
   }
   

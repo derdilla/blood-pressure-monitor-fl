@@ -5,7 +5,7 @@ part 'mock_device.dart';
 part 'mock_discovery.dart';
 part 'mock_service.dart';
 
-/// Bluetooth manager for the 'bluetooth_low_energy' package
+/// Placeholder [BluetoothManager] implementation that can f.e. be used for testing
 final class MockBluetoothManager extends BluetoothManager<String, String, MockedService, MockedCharacteristic> {
   @override
   BluetoothDeviceDiscovery<BluetoothManager> get discovery => throw UnimplementedError();

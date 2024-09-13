@@ -2,19 +2,20 @@ part of 'fbp_manager.dart';
 
 /// UUID wrapper for FlutterBluePlus
 final class FlutterBluePlusUUID extends BluetoothUuid<Guid> {
-  /// Create a BluetoothUuid from a Guid
+  /// Create a [FlutterBluePlusUUID] from a [Guid]
   FlutterBluePlusUUID(Guid uuid): super(uuid: uuid);
-  /// Create a BluetoothUuid from a string
+  /// Create a [FlutterBluePlusUUID] from a [String]
   FlutterBluePlusUUID.fromString(String uuid): super(uuid: Guid(uuid));
 }
 
-/// Wrapper class with generic interface for a fbp.BluetoothService
+/// Wrapper class with generic interface for a [fbp.BluetoothService]
 final class FlutterBluePlusService extends BluetoothService<fbp.BluetoothService, FlutterBluePlusCharacteristic> {
   /// constructor
-  /// @see BluetoothService
+  ///
+  /// @see [BluetoothService]
   FlutterBluePlusService({ required super.uuid, required super.source });
 
-  /// Create a FlutterBlueService from a fbp.BluetoothService
+  /// Create a [FlutterBluePlusService] from a [fbp.BluetoothService]
   factory FlutterBluePlusService.fromSource(fbp.BluetoothService service) {
     final uuid = FlutterBluePlusUUID(service.serviceUuid);
     return FlutterBluePlusService(uuid: uuid, source: service);
@@ -24,9 +25,9 @@ final class FlutterBluePlusService extends BluetoothService<fbp.BluetoothService
   List<FlutterBluePlusCharacteristic> get characteristics => source.characteristics.map(FlutterBluePlusCharacteristic.fromSource).toList();
 }
 
-/// Wrapper class with generic interface for a fbp.BluetoothCharacteristic
+/// Wrapper class with generic interface for a [fbp.BluetoothCharacteristic]
 final class FlutterBluePlusCharacteristic extends BluetoothCharacteristic<fbp.BluetoothCharacteristic> {
-  /// Create a BluetoothCharacteristic from the backend specific source
+  /// Create a [FlutterBluePlusCharacteristic] from the backend specific source
   FlutterBluePlusCharacteristic.fromSource(fbp.BluetoothCharacteristic source): super(uuid: FlutterBluePlusUUID(source.serviceUuid), source: source);
   
   @override

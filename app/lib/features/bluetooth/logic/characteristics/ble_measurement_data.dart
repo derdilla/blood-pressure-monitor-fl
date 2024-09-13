@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:blood_pressure_app/features/bluetooth/logic/characteristics/ble_date_time.dart';
 import 'package:blood_pressure_app/features/bluetooth/logic/characteristics/ble_measurement_status.dart';
 import 'package:blood_pressure_app/features/bluetooth/logic/characteristics/decoding_util.dart';
@@ -7,15 +9,16 @@ import 'package:health_data_store/health_data_store.dart';
 /// https://developer.nordicsemi.com/nRF51_SDK/nRF51_SDK_v4.x.x/doc/html/structble__bps__meas__s.html
 /// https://github.com/NordicSemiconductor/Kotlin-BLE-Library/blob/6b565e59de21dfa53ef80ff8351ac4a4550e8d58/profile/src/main/java/no/nordicsemi/android/kotlin/ble/profile/bps/BloodPressureMeasurementParser.kt
 class BleMeasurementData {
+  /// constructor
   BleMeasurementData({
     required this.systolic,
     required this.diastolic,
     required this.meanArterialPressure,
     required this.isMMHG,
-    required this.pulse,
-    required this.userID,
-    required this.status,
-    required this.timestamp,
+    this.pulse,
+    this.userID,
+    this.status,
+    this.timestamp,
   });
 
   /// Return BleMeasurementData as a BloodPressureRecord
@@ -31,7 +34,8 @@ class BleMeasurementData {
       pul: pulse?.toInt(),
     );
 
-  static BleMeasurementData? decode(List<int> data, int offset) {
+  /// Decode bytes read from the characteristic into a [BleMeasurementData]
+  static BleMeasurementData? decode(Uint8List data, int offset) {
     // https://github.com/NordicSemiconductor/Kotlin-BLE-Library/blob/6b565e59de21dfa53ef80ff8351ac4a4550e8d58/profile/src/main/java/no/nordicsemi/android/kotlin/ble/profile/bps/BloodPressureMeasurementParser.kt
 
     // Reading specific bits: `(byte & (1 << bitIdx))`
@@ -109,13 +113,21 @@ class BleMeasurementData {
     );
   }
 
+  /// Systolic pressure
   final double systolic;
+  /// Diatolic pressure
   final double diastolic;
+  /// Mean arterial pressure
   final double meanArterialPressure;
+  /// True if pressure values are in mmHg, False if in kPa
   final bool isMMHG; // mmhg or kpa
+  /// Pulse rate (of heart)
   final double? pulse;
+  /// User id
   final int? userID;
+  /// [BleMeasurementStatus] status
   final BleMeasurementStatus? status;
+  /// Timestamp of measurement
   final DateTime? timestamp;
 
   @override

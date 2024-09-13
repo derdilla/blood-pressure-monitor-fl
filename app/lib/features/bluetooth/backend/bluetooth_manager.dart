@@ -8,7 +8,7 @@ abstract class BluetoothManager<BackendDevice, BackendUuid, BackendService, Back
 
   /// Last known adapter state
   ///
-  /// For convenience [BluetoothStateParser] instances already track the last known state,
+  /// For convenience [BluetoothAdapterStateParser] instances already track the last known state,
   /// so that state only needs to be returned in a backend's manager implementation
   BluetoothAdapterState get lastKnownAdapterState;
 

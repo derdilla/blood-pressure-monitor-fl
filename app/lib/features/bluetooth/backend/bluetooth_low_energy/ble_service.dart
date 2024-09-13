@@ -2,24 +2,24 @@ part of 'ble_manager.dart';
 
 /// UUID wrapper for BluetoothLowEnergy
 final class BluetoothLowEnergyUUID extends BluetoothUuid<UUID> {
-  /// Create a BluetoothUuid from a UUID
+  /// Create a [BluetoothLowEnergyUUID] from a [UUID]
   BluetoothLowEnergyUUID(UUID uuid): super(uuid: uuid);
-  /// Create a BluetoothUuid from a string
+  /// Create a [BluetoothLowEnergyUUID] from a [String]
   BluetoothLowEnergyUUID.fromString(String uuid): super(uuid: UUID.fromString(uuid));
 }
 
-/// Wrapper class with generic interface for a GATTService
+/// Wrapper class with generic interface for a [GATTService]
 final class BluetoothLowEnergyService extends BluetoothService<GATTService, BluetoothLowEnergyCharacteristic> {
-   /// Create a FlutterBlueService from a GATTService
+   /// Create a [BluetoothLowEnergyService] from a [GATTService]
   BluetoothLowEnergyService.fromSource(GATTService service): super(uuid: BluetoothLowEnergyUUID(service.uuid), source: service);
 
   @override
   List<BluetoothLowEnergyCharacteristic> get characteristics => source.characteristics.map(BluetoothLowEnergyCharacteristic.fromSource).toList();
 }
 
-/// Wrapper class with generic interface for a GATTCharacteristic
+/// Wrapper class with generic interface for a [GATTCharacteristic]
 final class BluetoothLowEnergyCharacteristic extends BluetoothCharacteristic<GATTCharacteristic> {
-  /// Create a BluetoothCharacteristic from the backend specific source
+  /// Create a [BluetoothLowEnergyCharacteristic] from the backend specific source
   BluetoothLowEnergyCharacteristic.fromSource(GATTCharacteristic source): super(uuid: BluetoothLowEnergyUUID(source.uuid), source: source);
 
   @override

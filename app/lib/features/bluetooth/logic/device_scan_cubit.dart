@@ -71,7 +71,9 @@ class DeviceScanCubit extends Cubit<DeviceScanState> with TypeLogger {
 
     // No need to check whether the devices really support the searched
     // characteristic as users have to select their device anyways.
-    if(state is DeviceSelected) return;
+    if(state is DeviceSelected) {
+      return;
+    }
 
     final preferred = devices.firstWhereOrNull((dev) =>
     settings.knownBleDev.contains(dev.name));

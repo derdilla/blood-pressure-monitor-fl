@@ -28,7 +28,7 @@ enum BluetoothBackend {
   /// custom [FlutterBluePlusMockable] instance
   mock;
 
-  /// Create the bluetooth backend instance for the current enum value
+  /// Create a bluetooth backend instance for the current enum value
   BluetoothManager create() {
     switch(this) {
       case BluetoothBackend.bluetoothLowEnergy:

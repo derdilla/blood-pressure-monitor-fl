@@ -6,7 +6,7 @@ sealed class BluetoothState {
   /// constructor
   const BluetoothState();
 
-  /// Returns the BluetoothState instance for current enum state
+  /// Returns the [BluetoothState] instance for given [BluetoothAdapterState] enum state
   factory BluetoothState.fromAdapterState(BluetoothAdapterState state) {
     switch(state) {
       case BluetoothAdapterState.unauthorized:

@@ -39,16 +39,16 @@ final class MockBluetoothString extends BluetoothUuid<String> {
   MockBluetoothString.fromString(String uuid): super(uuid: uuid);
 }
 
-/// Wrapper class with generic interface for a GATTService
+/// Wrapper class with generic interface for a [MockedService]
 final class MockBluetoothService extends BluetoothService<MockedService, BluetoothCharacteristic> {
-   /// Create a FlutterBlueService from a GATTService
+   /// Create a FlutterBlueService from a [MockedService]
   MockBluetoothService.fromSource(MockedService service): super(uuid: MockBluetoothString(service.uuid), source: service);
 
   @override
   List<BluetoothCharacteristic> get characteristics => source.characteristics.map(MockBluetoothCharacteristic.fromSource).toList();
 }
 
-/// Wrapper class with generic interface for a GATTCharacteristic
+/// Wrapper class with generic interface for a [MockedCharacteristic]
 final class MockBluetoothCharacteristic extends BluetoothCharacteristic<MockedCharacteristic> {
   /// Create a BluetoothCharacteristic from the backend specific source
   MockBluetoothCharacteristic.fromSource(MockedCharacteristic source): super(uuid: MockBluetoothString(source.uuid), source: source);

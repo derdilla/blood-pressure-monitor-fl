@@ -16,12 +16,12 @@ class BleReadFailure extends BleReadState {
   final String reason;
 }
 
-/// Data has been successfully read.
+/// Data has been successfully read and returned multiple measurements
 class BleReadMultiple extends BleReadState {
-  /// Indicate a successful reading of a ble characteristic.
+  /// Indicate a successful reading of a ble characteristic with multiple measurements.
   BleReadMultiple(this.data);
 
-  /// Measurement decoded from the device.
+  /// List of measurements decoded from the device.
   final List<BleMeasurementData> data;
 }
 

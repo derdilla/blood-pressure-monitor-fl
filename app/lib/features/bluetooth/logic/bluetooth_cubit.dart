@@ -13,12 +13,12 @@ part 'bluetooth_state.dart';
 class BluetoothCubit extends Cubit<BluetoothState> with TypeLogger {
   /// Create a cubit connecting to the bluetooth module for availability.
   ///
-  /// [manager] may be provided for testing purposes.
+  /// [manager] manager to check availabilty of.
   BluetoothCubit({ required BluetoothManager manager }): super(BluetoothState.fromAdapterState(manager.lastKnownAdapterState)) {
     _manager = manager;
     _adapterStateSubscription = _manager.stateStream.listen(_onAdapterStateChanged);
-    _lastKnownState = _manager.lastKnownAdapterState;
 
+    _lastKnownState = _manager.lastKnownAdapterState;
     logger.finer('lastKnownState: $_lastKnownState');
   }
 
@@ -34,18 +34,18 @@ class BluetoothCubit extends Cubit<BluetoothState> with TypeLogger {
 
   void _onAdapterStateChanged(BluetoothAdapterState state) {
     _lastKnownState = state;
-    logger.finer('_onAdapterStateChanged($state)');
+    logger.finer('_onAdapterStateChanged(state: $state)');
     emit(BluetoothState.fromAdapterState(state));
   }
 
   /// Request to enable bluetooth on the device
-  Future<bool> enableBluetooth() {
+  Future<bool> enableBluetooth() async {
     assert(state is BluetoothStateDisabled, 'No need to enable bluetooth when '
         'already enabled or not known to be disabled.');
     try {
       return _manager.enable();
     } on Exception {
-      return Future.value(false);
+      return false;
     }
   }
 

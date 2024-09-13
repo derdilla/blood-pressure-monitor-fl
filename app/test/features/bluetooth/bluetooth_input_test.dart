@@ -8,7 +8,6 @@ import 'package:blood_pressure_app/features/bluetooth/logic/device_scan_cubit.da
 import 'package:blood_pressure_app/features/bluetooth/ui/closed_bluetooth_input.dart';
 import 'package:blood_pressure_app/features/bluetooth/ui/measurement_success.dart';
 import 'package:flutter/material.dart';
-//import 'package:flutter_blue_plus/flutter_blue_plus.dart' hide BluetoothState;
 import 'package:flutter_test/flutter_test.dart';
 import 'package:health_data_store/health_data_store.dart';
 
@@ -43,10 +42,6 @@ void main() {
       diastolic: 45,
       meanArterialPressure: 67,
       isMMHG: true,
-      pulse: null,
-      userID: null,
-      status: null,
-      timestamp: null,
     ));
     whenListen(bleReadCubit, Stream<BleReadState>.fromIterable([bleReadOk]),
       initialState: bleReadOk,
@@ -84,10 +79,6 @@ void main() {
       diastolic: 45,
       meanArterialPressure: 67,
       isMMHG: true,
-      pulse: null,
-      userID: null,
-      status: null,
-      timestamp: null,
     ));
     whenListen(bleReadCubit, Stream<BleReadState>.fromIterable([bleReadOk]),
       initialState: bleReadOk,

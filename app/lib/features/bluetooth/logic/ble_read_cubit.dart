@@ -32,7 +32,8 @@ class BleReadCubit extends Cubit<BleReadState> with TypeLogger {
   }) : super(BleReadInProgress())
   {
     takeMeasurement();
-    // timeout
+
+    // start read timeout
     _timeoutTimer = Timer(const Duration(minutes: 2), () {
       if (state is BleReadInProgress) {
         logger.finer('BleReadCubit timeout reached and still running');
@@ -45,8 +46,7 @@ class BleReadCubit extends Cubit<BleReadState> with TypeLogger {
 
   /// Bluetooth device to connect to.
   ///
-  /// Must have an active established connection and support the measurement
-  /// characteristic.
+  /// Must have an active established connection and support the measurement characteristic.
   final BluetoothDevice _device;
 
   /// UUID of the service to read.
@@ -130,7 +130,7 @@ class BleReadCubit extends Cubit<BleReadState> with TypeLogger {
     await super.close();
   }
 
-  /// Mark a new device as known and switch to selected device state asap.
+  /// Called after reading from a device returned multiple measurements and the user chose which measurement they wanted to add.
   Future<void> useMeasurement(BleMeasurementData data) async {
     assert(state is! BleReadSuccess);
     emit(BleReadSuccess(data));

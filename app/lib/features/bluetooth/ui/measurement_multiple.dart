@@ -7,14 +7,14 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 ///
 /// TODO: Some devices can store up to 100 measurements which could cause a very long ListView. Maybe optimize UI for that?
 class MeasurementMultiple extends StatelessWidget {
-  /// Indicate a successful while taking a bluetooth measurement.
+  /// Indicate a successful read while taking a bluetooth measurement.
   const MeasurementMultiple({super.key,
     required this.onTap,
     required this.onSelect,
     required this.measurements,
   });
 
-  /// Data decoded from bluetooth.
+  /// All measurements decoded from bluetooth.
   final List<BleMeasurementData> measurements;
 
   /// Called when the user requests closing.

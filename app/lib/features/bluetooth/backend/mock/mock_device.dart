@@ -1,6 +1,6 @@
 part of 'mock_manager.dart';
 
-/// BluetoothDevice implementation for the 'bluetooth_low_energy' package
+/// Placeholder [BluetoothDevice] implementation that can f.e. be used for testing
 final class MockBluetoothDevice extends BluetoothDevice<BluetoothManager, BluetoothService, BluetoothCharacteristic, String> {
   /// constructor
   MockBluetoothDevice(super._manager, super._source);
@@ -27,8 +27,5 @@ final class MockBluetoothDevice extends BluetoothDevice<BluetoothManager, Blueto
   }
 
   @override
-  // ignore: prefer_expression_function_bodies
-  Future<bool> getCharacteristicValueByUuid(BluetoothCharacteristic characteristic, List<Uint8List> value) {
-    return Future.value(true);
-  }
+  Future<bool> getCharacteristicValueByUuid(BluetoothCharacteristic characteristic, List<Uint8List> value) async => true;
 }

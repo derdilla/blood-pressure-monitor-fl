@@ -55,7 +55,7 @@ class BluetoothInput extends StatefulWidget {
 /// - _buildReadDevice is called, waits for ble_read_state.BleReadSuccess
 /// - onMeasurement callback triggered
 class _BluetoothInputState extends State<BluetoothInput> with TypeLogger {
-  /// Whether the user intiated reading bluetooth input
+  /// Whether the user initiated reading bluetooth input
   bool _isActive = false;
 
   late final BluetoothCubit _bluetoothCubit;
@@ -154,7 +154,7 @@ class _BluetoothInputState extends State<BluetoothInput> with TypeLogger {
 
     _bluetoothSubscription = _bluetoothCubit.stream.listen((state) {
       if (state is BluetoothStateReady) {
-        logger.finer('_bluetoothSubscription.listen: state=$state');
+        logger.finest('_bluetoothSubscription.listen: state=$state');
       } else {
         logger.finer('_bluetoothSubscription.listen: state=$state, calling _returnToIdle');
         _returnToIdle();

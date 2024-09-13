@@ -16,11 +16,11 @@ abstract class BluetoothConnectionStateParser<BackendConnectionState> extends St
 
 /// Transforms the backend's bluetooth adapter state stream to emit [BluetoothAdapterState]'s
 ///
-/// Can normally be used directly, backends should only inject a customized BluetoothStateParser
+/// Can normally be used directly, backends should only inject a customized [BluetoothAdapterStateParser]
 class BluetoothConnectionStateStreamTransformer<BackendConnectionState, BASP extends BluetoothConnectionStateParser<BackendConnectionState>>
   extends StreamDataParserTransformer<BackendConnectionState, BluetoothConnectionState, BASP> {
-  /// Create a BluetoothConnectionStateStreamTransformer
+  /// Create a [BluetoothConnectionStateStreamTransformer] instance
   ///
-  /// [stateParser] The [BluetoothConnectionStateParser] that provides the backend logic to convert [BackendConnectionState] to [BluetoothConnectionState]
+  /// [stateParser] The [BluetoothConnectionStateParser] that provides the backend specific logic to convert [BackendConnectionState] to [BluetoothConnectionState]
   BluetoothConnectionStateStreamTransformer({ required super.stateParser, super.sync, super.cancelOnError });
 }

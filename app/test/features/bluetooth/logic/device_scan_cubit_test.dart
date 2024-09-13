@@ -17,8 +17,8 @@ import 'package:mockito/mockito.dart';
 ])
 import 'device_scan_cubit_test.mocks.dart';
 
-/// Helper util to create a scanResult & device
-(MockScanResult, MockBluetoothDevice) createScanResult(String name) {
+/// Helper util to create a [MockScanResult] & [MockBluetoothDevice]
+(MockScanResult, MockBluetoothDevice) createScanResultMock(String name) {
   final scanResult = MockScanResult();
   final btDevice = MockBluetoothDevice();
   when(btDevice.platformName).thenReturn(name);
@@ -50,8 +50,8 @@ void main() {
     );
     expect(cubit.state, isA<DeviceListLoading>());
 
-    final (wrongRes0, wrongDev0) = createScanResult('wrongDev0');
-    final (wrongRes1, wrongDev1) = createScanResult('wrongDev1');
+    final (wrongRes0, wrongDev0) = createScanResultMock('wrongDev0');
+    final (wrongRes1, wrongDev1) = createScanResultMock('wrongDev1');
     
     mockResults.sink.add([wrongRes0]);
     await expectLater(cubit.stream, emits(isA<SingleDeviceAvailable>()));
@@ -60,7 +60,7 @@ void main() {
     await expectLater(cubit.stream, emits(isA<DeviceListAvailable>()));
 
 
-    final (res, dev) = createScanResult('testDev');
+    final (res, dev) = createScanResultMock('testDev');
     mockResults.sink.add([res]);
     await expectLater(cubit.stream, emits(isA<DeviceListAvailable>()
         .having((r) => r.devices.last.source, 'device', res)));
@@ -97,12 +97,12 @@ void main() {
     );
     expect(cubit.state, isA<DeviceListLoading>());
 
-    final (wrongRes0, wrongDev0) = createScanResult('wrongDev0');
+    final (wrongRes0, wrongDev0) = createScanResultMock('wrongDev0');
     mockResults.sink.add([wrongRes0]);
 
     await expectLater(cubit.stream, emits(isA<SingleDeviceAvailable>()));
 
-    final (res, dev) = createScanResult('testDev');
+    final (res, dev) = createScanResultMock('testDev');
     mockResults.sink.add([wrongRes0, res]);
 
     // No prompt when finding the correct device again
