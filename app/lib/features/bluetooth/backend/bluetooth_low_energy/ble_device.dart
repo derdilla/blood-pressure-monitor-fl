@@ -111,7 +111,7 @@ final class BluetoothLowEnergyDevice
         unawaited(listener.cancel());
 
         // Remove disconnect callback in case the connection was not automatically disconnected
-        if (!disconnectCallbacks.remove(disconnectCallback)) {
+        if (disconnectCallbacks.remove(disconnectCallback)) {
           logger.finer('getCharacteristicValueByUuid: device was not automatically disconnected after completer finished, removing disconnect callback');
         }
 
