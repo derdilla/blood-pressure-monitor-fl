@@ -30,7 +30,7 @@ class WeightList extends StatelessWidget {
               icon: const Icon(Icons.delete),
               onPressed: () async {
                 final repo = context.read<BodyweightRepository>();
-                if (await showConfirmDeletionDialoge(context)) {
+                if ((!context.read<Settings>().confirmDeletion) || await showConfirmDeletionDialoge(context)) {
                   await repo.remove(records[idx]);
                 }
               }
