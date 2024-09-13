@@ -22,14 +22,14 @@ Most devices provide 2 ways to retrieve measurements over bluetooth, but there a
 > If your device is not listed please edit this page and add it! :bow:
 
 |Device|Bluetooth name|Read after measurement|Download mode|Automatically disconnects after reading|
-|---|---| --- | --- | --- |
+|---|---| :---: | :---: | :---: |
 |HealthForYou by Silvercrest (Type SBM 69)|SBM69| :1234: | :white_check_mark: | :white_check_mark: |
 |Omron X4 Smart|X4 Smart| :one: | :white_check_mark::wastebasket: | :white_check_mark: |
 
 #### Legenda
 
 |icons|description|
-| --- | --- |
+| :---: | --- |
 | :no_entry_sign: |Not supported / No|
 | :white_check_mark: |Supported / Yes|
 | :one: | Returns latest measurement|
