@@ -10,10 +10,10 @@ Most devices provide 2 ways to retrieve measurements over bluetooth, but there a
 
 1. Immediately after taking a measurement
     1. and returns all measurements stored in memory
-    2. or only returns the latest measurement
+    2. and only returns the latest measurement
 2. As a download mode
     1. and automatically remove all locally stored measurements after a succesful download
-    2. or leave measurements untouched, i.e. the user needs to remove the stored measurements themselves
+    2. and leave measurements untouched, i.e. the user needs to remove the stored measurements themselves
 
 > :warning: At the moment situation 2.i is not well supported. Do not use this unless you are ok with loosing previously stored measurements
 
@@ -28,7 +28,7 @@ Most devices provide 2 ways to retrieve measurements over bluetooth, but there a
 
 #### Legenda
 
-|icons|description|
+|Icon|Description|
 | :---: | --- |
 | :no_entry_sign: |Not supported / No|
 | :white_check_mark: |Supported / Yes|
