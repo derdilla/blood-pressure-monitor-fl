@@ -1,6 +1,6 @@
 # Supported Bluetooth devices
 
-In general any device that supports [`BLE_UUID_BLOOD_PRESSURE_SERVICE`](https://developer.nordicsemi.com/nRF51_SDK/nRF51_SDK_v4.x.x/doc/html/group___u_u_i_d___s_e_r_v_i_c_e_s.html) could be used. The measurement values are stored in the characteristic [`BLE_UUID_BLOOD_PRESSURE_MEASUREMENT_CHAR`](https://developer.nordicsemi.com/nRF51_SDK/nRF51_SDK_v4.x.x/doc/html/group___u_u_i_d___c_h_a_r_a_c_t_e_r_i_s_t_i_c_s.html#ga95fc99c7a99cf9d991c81027e4866936)
+In general any device that supports [`Blood Pressure Service (0x1810)`](https://bitbucket.org/bluetooth-SIG/public/src/main/assigned_numbers/uuids/service_uuids.yaml#lines-77:79) could be used. The blood pressure measurement values are stored in the characteristic [`Blood Pressure Measurement (0x2A35)`](https://bitbucket.org/bluetooth-SIG/public/src/main/assigned_numbers/uuids/characteristic_uuids.yaml#lines-161:163)
 
 ## Reading caveats
 
@@ -35,3 +35,9 @@ Most devices provide 2 ways to retrieve measurements over bluetooth, but there a
 | :one: | Returns latest measurement|
 | :1234: | Returns all measurements|
 | :white_check_mark::wastebasket: |Supported and removes all locally stored measurements|
+
+## Specifications
+
+- Assigned Numbers (f.e. service & characteristic UUID's): https://www.bluetooth.com/specifications/assigned-numbers/
+- GATT Specification Supplement (f.e. data structures): https://www.bluetooth.com/specifications/gss/
+- Current Time Service: https://www.bluetooth.com/specifications/specs/current-time-service-1-1/
