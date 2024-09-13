@@ -11,11 +11,11 @@ final class BluetoothLowEnergyDiscovery extends BluetoothDeviceDiscovery<Bluetoo
   );
 
   @override
-  Future<void> backendStart(String serviceUUID) async {
+  Future<void> backendStart(String serviceUuid) async {
     try {
       await manager.backend.startDiscovery(
         // no timeout, the user knows best how long scanning is needed
-        serviceUUIDs: [UUID.fromString(serviceUUID)],
+        serviceUUIDs: [UUID.fromString(serviceUuid)],
         // Not all devices are found using this configuration (https://pub.dev/packages/flutter_blue_plus#scanning-does-not-find-my-device).
       );
     } catch (e) {

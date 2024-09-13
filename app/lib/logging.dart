@@ -8,12 +8,20 @@ import 'package:logging/logging.dart';
 final log = Logger(defaultLoggerName);
 
 /// Mixin to provide logging instances within classes
+///
+/// Usage: extend your class with this mixin by adding 'with TypeLogger'
+/// to be able to call the logger property anywhere in your class. Log
+/// statements will be printed with the given class name, ie given a
+/// loggerRecordPrefix of 'PREF' and class name MyClass then
+/// calling MyClass.logger will include the text 'PREF[MyClass]:'
 mixin TypeLogger {
-  /// log interface
+  /// log interface, returns a [Logger] instance from https://pub.dev/packages/logging
   Logger get logger => Logger('$loggerRecordPrefix[${Log.withoutTypes('$runtimeType')}]');
 }
 
 /// Simple class for manually logging in debug builds.
+///
+/// Also contains some logging configuration logic
 class Log {
   /// Whether logging is enabled
   static final enabled = kDebugMode && !(Platform.environment['FLUTTER_TEST'] == 'true');
@@ -31,9 +39,15 @@ class Log {
   /// Strip types from definition, i.e. MyClass<SomeType> -> MyClass
   static String withoutTypes(String type) => type.replaceAll(RegExp(r'<[^>]+>'), '');
 
-  /// Find callee of log call from [stacktrace]
+  /// Find callee of log call from [stacktrace], uses [StackTrace.current] if none provided
+  /// 
+  /// [skipCount] defines which line from the stracktrace should be used. With the default value of 2,
+  /// then the 3rd line will be used. Lines in the stracktrace refer to each step in the call tree,
+  /// the default value of 2 is to skip the calls to the [findRuntimeType] method itself and to skip
+  /// the calls to f.e. the [err] or [trace] methods.
+  /// Note: references to anonymous closures (ie '.<anonymous closure>') are always stripped
   static String findRuntimeType([StackTrace? stacktrace, int skipCount = 2]) {
-    // logSource examples:
+    // logSource parse examples:
     // #1      new BluetoothCubit (package:blood_pressure_app/features/bluetooth/logic/bluetooth_cubit.dart:18:9)
     // #1      ClosedBluetoothInput.build.<anonymous closure> (package:blood_pressure_app/features/bluetooth/ui/closed_bluetooth_input.dart:49:13)
     final logSource = (stacktrace ?? StackTrace.current)
@@ -41,12 +55,13 @@ class Log {
       .split('\n')
       .skip(skipCount) // skip 2 by default, one for call to this method and one for call to Log.(err|trace)
       .first;
-    final words = logSource.split(RegExp(r'\s+'));
+    final words = logSource
+      .replaceAll('.<anonymous closure>', '') // Remove info about anonymous closures
+      .split(RegExp(r'\s+')); // split into words
 
     for (final word in words) {
       if (word != 'new' && !word.startsWith('#')) {
-        // Remove info about closures
-        return Log.withoutTypes(word.replaceAll('.<anonymous', ''));
+        return Log.withoutTypes(word);
       }
     }
 
@@ -54,7 +69,7 @@ class Log {
   }
 
   /// Log an error with stack trace in debug builds.
-  @Deprecated('Use logger.(severe|shout) instead')
+  @Deprecated('Use log.(severe|shout) or the TypeLogger mixin instead')
   static void err(String message, [List<Object>? dumps]) {
     if (!Log.enabled) {
       return;
@@ -71,7 +86,7 @@ class Log {
   }
 
   /// Log a message in debug more
-  @Deprecated('Use logger.fine(r|st)? instead')
+  @Deprecated('Use log.fine(r|st)? or the TypeLogger mixin instead')
   static void trace(String message) {
     if (Log.enabled) {
       final runtimeType = Log.findRuntimeType();

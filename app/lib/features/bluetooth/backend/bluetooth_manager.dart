@@ -2,12 +2,13 @@
 part of 'bluetooth_backend.dart';
 
 /// Base class for a bluetooth manager
-abstract class BluetoothManager<BackendDevice,BackendUuid, BackendService, BackendCharacteristic> with TypeLogger {
+abstract class BluetoothManager<BackendDevice, BackendUuid, BackendService, BackendCharacteristic> with TypeLogger {
   /// Request to enable bluetooth on the device
   Future<bool> enable();
 
-  /// The last known adapter state
-  /// For convenience BluetoothStateParser instances already track the last known state,
+  /// Last known adapter state
+  ///
+  /// For convenience [BluetoothStateParser] instances already track the last known state,
   /// so that state only needs to be returned in a backend's manager implementation
   BluetoothAdapterState get lastKnownAdapterState;
 
@@ -17,18 +18,18 @@ abstract class BluetoothManager<BackendDevice,BackendUuid, BackendService, Backe
   /// Device discovery implementation
   BluetoothDeviceDiscovery get discovery;
 
-  /// Method to create a wrapped device
+  /// Convert a BackendDevice into a BluetoothDevice
   BluetoothDevice createDevice(BackendDevice device);
 
-  /// Method to create a wrapped uuid
+  /// Convert a BackendUuid into a BluetoothUuid
   BluetoothUuid createUuid(BackendUuid uuid);
 
-  /// Method to create a wrapped uuid
+  /// Create a BluetoothUuid from a String
   BluetoothUuid createUuidFromString(String uuid);
 
-  /// Method to create a wrapped device
+  /// Convert a BackendService into a BluetoothService
   BluetoothService createService(BackendService service);
 
-  /// Method to create a wrapped device
+  /// Convert a BackendCharacteristic into a BluetoothCharacteristic
   BluetoothCharacteristic createCharacteristic(BackendCharacteristic characteristic);
 }

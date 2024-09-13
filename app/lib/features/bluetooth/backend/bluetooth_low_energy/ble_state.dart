@@ -1,7 +1,7 @@
 part of 'ble_manager.dart';
 
 /// Bluetooth adapter state parser for the bluetooth_low_energy package
-final class BluetoothLowEnergyStateParser extends BluetoothStateParser<BluetoothLowEnergyStateChangedEventArgs> {
+final class BluetoothLowEnergyStateParser extends BluetoothAdapterStateParser<BluetoothLowEnergyStateChangedEventArgs> {
   @override
   BluetoothAdapterState parse(BluetoothLowEnergyStateChangedEventArgs rawState) {
     switch (rawState.state) {

@@ -1,7 +1,8 @@
 part of 'ble_manager.dart';
 
 /// BluetoothDevice implementation for the 'bluetooth_low_energy' package
-final class BluetoothLowEnergyDevice extends BluetoothDevice<BluetoothLowEnergyManager, BluetoothLowEnergyService, BluetoothLowEnergyCharacteristic, DiscoveredEventArgs> {
+final class BluetoothLowEnergyDevice
+  extends BluetoothDevice<BluetoothLowEnergyManager, BluetoothLowEnergyService, BluetoothLowEnergyCharacteristic, DiscoveredEventArgs> {
   /// constructor
   BluetoothLowEnergyDevice(super._manager, super._source);
 
@@ -11,80 +12,18 @@ final class BluetoothLowEnergyDevice extends BluetoothDevice<BluetoothLowEnergyM
   @override
   String get name => source.advertisement.name ?? deviceId;
 
-  StreamSubscription<PeripheralConnectionStateChangedEventArgs>? _connectionListener;
-  bool _isConnected = false;
-
-  @override
-  bool get isConnected => _isConnected;
-
   CentralManager get _cm => manager.backend;
 
-  /// Array of disconnect callbacks
-  /// 
-  /// Disconnect callbacks are processed in reverse order, i.e. the latest added callback is executed as first. Callbacks
-  /// can return true to indicate they have fully handled the disconnect. This will then also stop executing any remaining
-  /// callbacks.
-  final List<bool Function(bool wasConnected)> _disconnectCallbacks = [];
+  @override
+  Stream<BluetoothConnectionState> get connectionStream => _cm.connectionStateChanged.transform(
+    BluetoothConnectionStateStreamTransformer(stateParser: BluetoothLowEnergyConnectionStateParser())
+  );
 
   @override
-  Future<bool> connect({ VoidCallback? onConnect, bool Function(bool wasConnected)? onDisconnect, ValueSetter<Object>? onError, int maxTries = 5 }) {
-    final completer = Completer<bool>();
-    int connectTry = 1;
-
-    logger.finer('connect: Init');
-
-    if (onDisconnect != null) {
-      _disconnectCallbacks.add(onDisconnect);
-    }
-
-    /// Local helper util to only complete the completer when it's not completed yet
-    void doComplete(bool res) => !completer.isCompleted ? completer.complete(res) : null;
-
-    _connectionListener = _cm.connectionStateChanged.listen((PeripheralConnectionStateChangedEventArgs eventArgs) {
-      logger.finer('connectionStateChanged.listen[isConnected: $_isConnected]: ${eventArgs.state}, connectTry: $connectTry');
-      switch (eventArgs.state) {
-        case ConnectionState.connected:
-          connectTry = 0; // reset try count
-
-          onConnect??();
-          doComplete(true);
-          _isConnected = true;
-          return;
-        case ConnectionState.disconnected:
-          final wasConnected = _isConnected;
-          // TODO: does this make even sense?
-          if (!wasConnected && connectTry < maxTries) {
-            connectTry++;
-            _cm.connect(source.peripheral);
-            return;
-          }
-
-          for (final fn in _disconnectCallbacks.reversed) {
-            if (fn(wasConnected)) {
-              // ignore other disconnect callbacks
-              break;
-            }
-          }
-
-          _disconnectCallbacks.clear();
-          doComplete(false);
-          _isConnected = false;
-      }
-    }, onError: onError);
-
-    _cm.connect(source.peripheral);
-    return completer.future.then((res) {
-      logger.finer('connect: Completer.resolved($res)');
-      return res;
-    });
-  }
+  Future<void> backendConnect() => _cm.connect(source.peripheral);
 
   @override
-  Future<bool> disconnect() async {
-    await _connectionListener!.cancel();
-    await _cm.disconnect(source.peripheral);
-    return true;
-  }
+  Future<void> backendDisconnect() => _cm.disconnect(source.peripheral);
 
   @override
   Future<List<BluetoothLowEnergyService>?> discoverServices() async {
@@ -108,7 +47,7 @@ final class BluetoothLowEnergyDevice extends BluetoothDevice<BluetoothLowEnergyM
   
   @override
   Future<bool> getCharacteristicValueByUuid(BluetoothLowEnergyCharacteristic characteristic, List<Uint8List> value) async {
-    if (!_isConnected) {
+    if (!isConnected) {
       logger.finer('getCharacteristicValueByUuid: device not connect. Call device.connect() first');
       return false;
     }
@@ -141,7 +80,7 @@ final class BluetoothLowEnergyDevice extends BluetoothDevice<BluetoothLowEnergyM
         return true;
       }
 
-      _disconnectCallbacks.add(disconnectCallback);
+      disconnectCallbacks.add(disconnectCallback);
 
       listener = _cm.characteristicNotified.listen((eventArgs) {
         logger.finer('getCharacteristicValueByUuid[${eventArgs.value.length}] ${eventArgs.value}');
@@ -172,7 +111,7 @@ final class BluetoothLowEnergyDevice extends BluetoothDevice<BluetoothLowEnergyM
         unawaited(listener.cancel());
 
         // Remove disconnect callback in case the connection was not automatically disconnected
-        if (!_disconnectCallbacks.remove(disconnectCallback)) {
+        if (!disconnectCallbacks.remove(disconnectCallback)) {
           logger.finer('getCharacteristicValueByUuid: device was not automatically disconnected after completer finished, removing disconnect callback');
         }
 
@@ -182,5 +121,18 @@ final class BluetoothLowEnergyDevice extends BluetoothDevice<BluetoothLowEnergyM
 
     logger.severe("Can't read or indicate characteristic: $characteristic");
     return false;
+  }
+}
+
+/// Implementation to transform [PeripheralConnectionStateChangedEventArgs] to [BluetoothConnectionState]
+class BluetoothLowEnergyConnectionStateParser extends BluetoothConnectionStateParser<PeripheralConnectionStateChangedEventArgs> {
+  @override
+  BluetoothConnectionState parse(PeripheralConnectionStateChangedEventArgs rawState) {
+    switch (rawState.state) {
+      case ConnectionState.connected:
+        return BluetoothConnectionState.connected;
+      case ConnectionState.disconnected:
+        return BluetoothConnectionState.disconnected;
+    }
   }
 }

@@ -1,19 +1,19 @@
 part of 'bluetooth_backend.dart';
 
-/// BluetoothUuid representation
-abstract class BluetoothUuid<T> {
+/// Generic BluetoothUuid representation
+abstract class BluetoothUuid<BackendUuid> {
   /// constructor
-  BluetoothUuid({ required T uuid}) {
+  BluetoothUuid({ required BackendUuid uuid}) {
     _uuid = uuid;
   }
 
   /// Create a BluetoothUuid from a string
   BluetoothUuid.fromString(String uuid);
 
-  late T _uuid;
+  late BackendUuid _uuid;
 
   /// The backend specific uuid
-  T get uuid => _uuid;
+  BackendUuid get uuid => _uuid;
 
   @override
   String toString() => _uuid.toString();
@@ -24,6 +24,14 @@ abstract class BluetoothUuid<T> {
       return toString() == other.toString();
     }
 
+    if (other is BluetoothService) {
+      return toString() == other.uuid.toString();
+    }
+
+    if (other is BluetoothCharacteristic) {
+      return toString() == other.uuid.toString();
+    }
+
     return false;
   }
 
@@ -31,7 +39,7 @@ abstract class BluetoothUuid<T> {
   int get hashCode => super.hashCode * 17;
 }
 
-/// Service representation
+/// Generic BluetoothService representation
 abstract class BluetoothService<BackendService, BC extends BluetoothCharacteristic> {
   /// constructor
   BluetoothService({ required BluetoothUuid uuid, required BackendService source }) {
@@ -51,14 +59,9 @@ abstract class BluetoothService<BackendService, BC extends BluetoothCharacterist
   /// Get all characteristics for this service
   List<BC> get characteristics;
 
-  /// Returns the characteristic with requested uuid
-  Future<BC?> getCharacteristicByUuid(BluetoothUuid uuid) async {
-    try {
-      return characteristics.firstWhere((service) => service.uuid == uuid);
-    } on StateError {
-      return null;
-    }
-  }
+  /// Returns the characteristic with requested [uuid], returns null if
+  /// requested [uuid] was not found
+  Future<BC?> getCharacteristicByUuid(BluetoothUuid uuid) async => characteristics.firstWhereOrNull((service) => service.uuid == uuid);
 
   @override
   String toString() => 'BluetoothService{uuid: $uuid, source: $source}';
@@ -131,5 +134,5 @@ abstract class BluetoothCharacteristic<BackendCharacteristic> {
   }
 
   @override
-  int get hashCode => super.hashCode * 19;
+  int get hashCode => super.hashCode * 17;
 }

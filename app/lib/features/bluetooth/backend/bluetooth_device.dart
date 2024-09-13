@@ -1,14 +1,15 @@
 part of 'bluetooth_backend.dart';
 
-/// Wrapper class for bluetooth implementations to expose any props we need
-/// in a generic way
+/// Wrapper class for bluetooth implementations to generically expose needed props
+///
+/// This class can't be used directly, it should be implemented by a backend
 abstract class BluetoothDevice<BM extends BluetoothManager, BS extends BluetoothService, BC extends BluetoothCharacteristic, BackendDevice> with TypeLogger {
   /// constructor
   BluetoothDevice(this._manager, this._source) {
-    logger.finer('[BTBackend] Init device $this');
+    logger.finer('init device: $this');
   }
 
-  /// Corresponding BluetoothManager
+  /// BluetoothManager this device belongs to
   late final BM _manager;
 
   /// Corresponding BluetoothManager
@@ -26,32 +27,113 @@ abstract class BluetoothDevice<BM extends BluetoothManager, BS extends Bluetooth
   /// Name of the device
   String get name;
 
-  /// Whether the device is connected
-  bool get isConnected;
-
+  /// Memoized service list for the device
   List<BS>? _services;
 
-  /// Take a measurement from the device
+  bool _isConnected = false;
+  StreamSubscription<BluetoothConnectionState>? _connectionListener;
+
+  /// Whether the device is connected
+  bool get isConnected => _isConnected;
+
+  /// Stream to listen to for connection state changes after connecting to a device
+  Stream<BluetoothConnectionState> get connectionStream;
+
+  /// Backend implementation to connect to the device
+  Future<void> backendConnect();
+  /// Backend implementation to disconnect to the device
+  Future<void> backendDisconnect();
+
+  /// Array of disconnect callbacks
+  ///
+  /// Disconnect callbacks are processed in reverse order, i.e. the latest added callback is executed as first. Callbacks
+  /// can return true to indicate they have fully handled the disconnect. This will then also stop executing any remaining
+  /// callbacks.
+  @protected
+  final List<bool Function(bool wasConnected)> disconnectCallbacks = [];
+
+  /// Connect to the device
+  ///
   /// Always call disconnect when ready after calling connect
-  Future<bool> connect({ VoidCallback? onConnect, bool Function(bool wasConnected)? onDisconnect, ValueSetter<Object>? onError, int maxTries = 5 });
+  Future<bool> connect({ VoidCallback? onConnect, bool Function(bool wasConnected)? onDisconnect, ValueSetter<Object>? onError, int maxTries = 5 }) {
+    final completer = Completer<bool>();
+    int connectTry = 1;
+
+    logger.finer('connect: Init');
+
+    if (onDisconnect != null) {
+      disconnectCallbacks.add(onDisconnect);
+    }
+
+    /// Local helper util to only complete the completer when it's not completed yet
+    void doComplete(bool res) => !completer.isCompleted ? completer.complete(res) : null;
+
+    _connectionListener = connectionStream.listen((BluetoothConnectionState state) {
+      logger.finest('connectionStream.listen[isConnected: $_isConnected]: $state, connectTry: $connectTry');
+
+      switch (state) {
+        case BluetoothConnectionState.connected:
+          connectTry = 0; // reset try count
+
+          onConnect??();
+          doComplete(true);
+          _isConnected = true;
+          return;
+        case BluetoothConnectionState.disconnected:
+          final wasConnected = _isConnected;
+          // TODO: does this make even sense? I.e. can this listener be called with successive disconnected states?
+          if (!wasConnected && connectTry < maxTries) {
+            connectTry++;
+            backendConnect();
+            return;
+          }
+
+          for (final fn in disconnectCallbacks.reversed) {
+            if (fn(wasConnected)) {
+              // ignore other disconnect callbacks
+              break;
+            }
+          }
+
+          disconnectCallbacks.clear();
+          doComplete(false);
+          _isConnected = false;
+      }
+    }, onError: onError);
+
+    backendConnect();
+    return completer.future.then((res) {
+      logger.finer('connect: completer.resolved($res)');
+      return res;
+    });
+  }
 
   /// Disconnect & dispose the device
-  Future<bool> disconnect();
+  ///
+  /// Always call [disconnect] after calling [connect] to ensure all resources are disposed
+  Future<bool> disconnect() async {
+    await _connectionListener?.cancel();
+    await backendDisconnect();
+    return true;
+  }
 
   /// Discover all available services on the device
+  ///
+  /// It's recommended to use [getServices] instead
   Future<List<BS>?> discoverServices();
 
   /// Return all available services for this device
-  /// Difference with discoverServices is that getService memoizes the services
+  ///
+  /// Difference with [discoverServices] is that [getServices] memoizes the results
   Future<List<BS>?> getServices() async {
     _services ??= await discoverServices();
     if (_services == null) {
-      logger.finer('[BTBackend] Failed to discoverServices on device: $name');
+      logger.finer('Failed to discoverServices on: $this');
     }
     return _services;
   }
 
-  /// Returns the service with requested uuid
+  /// Returns the service with requested [uuid] or null if requested service is not available
   Future<BS?> getServiceByUuid(BluetoothUuid uuid) async {
     final services = await getServices();
     try {
@@ -75,8 +157,10 @@ abstract class BluetoothDevice<BM extends BluetoothManager, BS extends Bluetooth
 }
 
 /// Bluetooth device parser base class
-/// This is a separate class as factory methods cannot be abstract
+///
+/// This is a separate helper class as factory or static methods cannot be abstract,
+/// so even though this class only has one method it's useful to enforce the types
 abstract class BluetoothDeviceParser<T> {
-  /// Method that converts the raw bluetooth device data to our BluetoothDevice
+  /// Method that converts the raw bluetooth device data to a [BluetoothDevice] instance
   BluetoothDevice parse(T rawDevice, BluetoothManager manager);
 }

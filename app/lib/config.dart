@@ -1,6 +1,7 @@
 import 'dart:io';
+import 'package:blood_pressure_app/logging.dart';
 
-/// Default name for global logger instance (not used when printing messages atm)
+/// Default name for global [log] instance (not used when printing messages atm)
 const defaultLoggerName = 'BloodPressureMonitor';
 
 /// Prefix used when printing log messages

@@ -1,7 +1,7 @@
 part of 'fbp_manager.dart';
 
 /// Bluetooth adapter state parser fo rthe bluetooth_low_energy package
-final class FlutterBluePlusStateParser extends BluetoothStateParser<fbp.BluetoothAdapterState> {
+final class FlutterBluePlusStateParser extends BluetoothAdapterStateParser<fbp.BluetoothAdapterState> {
   @override
   BluetoothAdapterState parse(fbp.BluetoothAdapterState rawState) {
     switch (rawState) {

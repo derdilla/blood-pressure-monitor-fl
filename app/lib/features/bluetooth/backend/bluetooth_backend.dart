@@ -4,8 +4,10 @@ import 'package:blood_pressure_app/features/bluetooth/backend/flutter_blue_plus/
 import 'package:blood_pressure_app/features/bluetooth/backend/flutter_blue_plus/flutter_blue_plus_mockable.dart';
 import 'package:blood_pressure_app/features/bluetooth/backend/mock/mock_manager.dart';
 import 'package:blood_pressure_app/logging.dart';
+import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
 
+part 'bluetooth_connection.dart';
 part 'bluetooth_device.dart';
 part 'bluetooth_discovery.dart';
 part 'bluetooth_manager.dart';

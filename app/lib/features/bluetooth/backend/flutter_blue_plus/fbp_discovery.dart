@@ -11,11 +11,11 @@ final class FlutterBluePlusDiscovery extends BluetoothDeviceDiscovery<FlutterBlu
   );
 
   @override
-  Future<void> backendStart(String serviceUUID) async {
+  Future<void> backendStart(String serviceUuid) async {
     try {
       await manager.backend.startScan(
         // no timeout, the user knows best how long scanning is needed
-        withServices: [ Guid(serviceUUID) ],
+        withServices: [ Guid(serviceUuid) ],
         // Not all devices are found using this configuration (https://pub.dev/packages/flutter_blue_plus#scanning-does-not-find-my-device).
       );
     } catch (e) {
