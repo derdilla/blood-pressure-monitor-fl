@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:blood_pressure_app/config.dart';
 import 'package:blood_pressure_app/data_util/entry_context.dart';
 import 'package:blood_pressure_app/data_util/full_entry_builder.dart';
 import 'package:blood_pressure_app/data_util/interval_picker.dart';
@@ -68,7 +69,7 @@ class AppHome extends StatelessWidget {
         _appStart++;
       }
 
-      if (!Platform.isLinux && orientation == Orientation.landscape) {
+      if (showValueGraphAsHomeScreenInLandscapeMode && orientation == Orientation.landscape) {
         return _buildValueGraph(context);
       }
 

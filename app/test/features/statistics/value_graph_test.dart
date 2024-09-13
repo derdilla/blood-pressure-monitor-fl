@@ -17,6 +17,7 @@ void main() {
     final records = [
       mockRecord(time: DateTime(2000), sys: 123),
       mockRecord(time: DateTime(2001), sys: 120),
+      // ignore: avoid_redundant_argument_values
       mockRecord(time: DateTime(2002), sys: null),
       mockRecord(time: DateTime(2003), sys: 123),
       mockRecord(time: DateTime(2004), sys: 200),
@@ -35,6 +36,7 @@ void main() {
     final records = [
       mockRecord(time: DateTime(2000), dia: 123),
       mockRecord(time: DateTime(2001), dia: 120),
+      // ignore: avoid_redundant_argument_values
       mockRecord(time: DateTime(2002), dia: null),
       mockRecord(time: DateTime(2003), dia: 123),
       mockRecord(time: DateTime(2004), dia: 200),
@@ -53,6 +55,7 @@ void main() {
     final records = [
       mockRecord(time: DateTime(2000), pul: 123),
       mockRecord(time: DateTime(2001), pul: 120),
+      // ignore: avoid_redundant_argument_values
       mockRecord(time: DateTime(2002), pul: null),
       mockRecord(time: DateTime(2003), pul: 123),
       mockRecord(time: DateTime(2004), pul: 200),
