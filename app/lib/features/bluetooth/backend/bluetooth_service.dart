@@ -1,14 +1,14 @@
 part of 'bluetooth_backend.dart';
 
-/// BluetoothUUID representation
-abstract class BluetoothUUID<T> {
+/// BluetoothUuid representation
+abstract class BluetoothUuid<T> {
   /// constructor
-  BluetoothUUID({ required T uuid}) {
+  BluetoothUuid({ required T uuid}) {
     _uuid = uuid;
   }
 
-  /// Create a BluetoothUUID from a string
-  BluetoothUUID.fromString(String uuid);
+  /// Create a BluetoothUuid from a string
+  BluetoothUuid.fromString(String uuid);
 
   late T _uuid;
 
@@ -20,7 +20,7 @@ abstract class BluetoothUUID<T> {
 
   @override
   bool operator == (Object other) {
-    if (other is BluetoothUUID) {
+    if (other is BluetoothUuid) {
       return toString() == other.toString();
     }
 
@@ -34,16 +34,16 @@ abstract class BluetoothUUID<T> {
 /// Service representation
 abstract class BluetoothService<BackendService, BC extends BluetoothCharacteristic> {
   /// constructor
-  BluetoothService({ required BluetoothUUID uuid, required BackendService source }) {
+  BluetoothService({ required BluetoothUuid uuid, required BackendService source }) {
     _uuid = uuid;
     _source = source;
   }
 
-  late BluetoothUUID _uuid;
+  late BluetoothUuid _uuid;
   late BackendService _source;
 
   /// UUID of the service
-  BluetoothUUID get uuid => _uuid;
+  BluetoothUuid get uuid => _uuid;
 
   /// Backend source for the service
   BackendService get source => _source;
@@ -52,7 +52,7 @@ abstract class BluetoothService<BackendService, BC extends BluetoothCharacterist
   List<BC> get characteristics;
 
   /// Returns the characteristic with requested uuid
-  Future<BC?> getCharacteristicByUuid(BluetoothUUID uuid) async {
+  Future<BC?> getCharacteristicByUuid(BluetoothUuid uuid) async {
     try {
       return characteristics.firstWhere((service) => service.uuid == uuid);
     } on StateError {
@@ -69,7 +69,7 @@ abstract class BluetoothService<BackendService, BC extends BluetoothCharacterist
       return toString() == other.toString();
     }
 
-    if (other is BluetoothUUID) {
+    if (other is BluetoothUuid) {
       return _uuid.toString() == other.toString();
     }
 
@@ -83,16 +83,16 @@ abstract class BluetoothService<BackendService, BC extends BluetoothCharacterist
 /// Characteristic representation
 abstract class BluetoothCharacteristic<BackendCharacteristic> {
   /// constructor
-  BluetoothCharacteristic({ required BluetoothUUID uuid, required BackendCharacteristic source }) {
+  BluetoothCharacteristic({ required BluetoothUuid uuid, required BackendCharacteristic source }) {
     _uuid = uuid;
     _source = source;
   }
 
-  late BluetoothUUID _uuid;
+  late BluetoothUuid _uuid;
   late BackendCharacteristic _source;
 
   /// UUID of the characteristic
-  BluetoothUUID get uuid => _uuid;
+  BluetoothUuid get uuid => _uuid;
 
   /// Backend source for the characteristic
   BackendCharacteristic get source => _source;
@@ -123,7 +123,7 @@ abstract class BluetoothCharacteristic<BackendCharacteristic> {
       return toString() == other.toString();
     }
 
-    if (other is BluetoothUUID) {
+    if (other is BluetoothUuid) {
       return _uuid.toString() == other.toString();
     }
 

@@ -52,7 +52,7 @@ abstract class BluetoothDevice<BM extends BluetoothManager, BS extends Bluetooth
   }
 
   /// Returns the service with requested uuid
-  Future<BS?> getServiceByUuid(BluetoothUUID uuid) async {
+  Future<BS?> getServiceByUuid(BluetoothUuid uuid) async {
     final services = await getServices();
     try {
       return services?.firstWhere((service) => service.uuid == uuid);

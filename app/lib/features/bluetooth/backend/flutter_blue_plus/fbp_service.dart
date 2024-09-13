@@ -1,10 +1,10 @@
 part of 'fbp_manager.dart';
 
 /// UUID wrapper for FlutterBluePlus
-final class FlutterBluePlusUUID extends BluetoothUUID<Guid> {
-  /// Create a BluetoothUUID from a Guid
+final class FlutterBluePlusUUID extends BluetoothUuid<Guid> {
+  /// Create a BluetoothUuid from a Guid
   FlutterBluePlusUUID(Guid uuid): super(uuid: uuid);
-  /// Create a BluetoothUUID from a string
+  /// Create a BluetoothUuid from a string
   FlutterBluePlusUUID.fromString(String uuid): super(uuid: Guid(uuid));
 }
 

@@ -1,10 +1,10 @@
 part of 'ble_manager.dart';
 
 /// UUID wrapper for BluetoothLowEnergy
-final class BluetoothLowEnergyUUID extends BluetoothUUID<UUID> {
-  /// Create a BluetoothUUID from a UUID
+final class BluetoothLowEnergyUUID extends BluetoothUuid<UUID> {
+  /// Create a BluetoothUuid from a UUID
   BluetoothLowEnergyUUID(UUID uuid): super(uuid: uuid);
-  /// Create a BluetoothUUID from a string
+  /// Create a BluetoothUuid from a string
   BluetoothLowEnergyUUID.fromString(String uuid): super(uuid: UUID.fromString(uuid));
 }
 

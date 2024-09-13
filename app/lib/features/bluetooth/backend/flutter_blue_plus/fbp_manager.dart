@@ -23,6 +23,7 @@ class FlutterBluePlusManager extends BluetoothManager<ScanResult, Guid, fbp.Blue
   /// backend implementation
   late FlutterBluePlusMockable _backend;
   /// backend implementation
+  @protected
   FlutterBluePlusMockable get backend => _backend;
 
   @override

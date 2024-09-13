@@ -21,9 +21,10 @@ abstract class BluetoothManager<BackendDevice,BackendUuid, BackendService, Backe
   BluetoothDevice createDevice(BackendDevice device);
 
   /// Method to create a wrapped uuid
-  BluetoothUUID createUuid(BackendUuid uuid);
+  BluetoothUuid createUuid(BackendUuid uuid);
+
   /// Method to create a wrapped uuid
-  BluetoothUUID createUuidFromString(String uuid);
+  BluetoothUuid createUuidFromString(String uuid);
 
   /// Method to create a wrapped device
   BluetoothService createService(BackendService service);

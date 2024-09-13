@@ -20,12 +20,12 @@ final class MockBluetoothManager extends BluetoothManager<String, String, Mocked
   Stream<BluetoothAdapterState> get stateStream => const Stream.empty();
 
   @override
-  BluetoothUUID createUuid(String uuid) {
+  BluetoothUuid createUuid(String uuid) {
     throw UnimplementedError();
   }
 
   @override
-  BluetoothUUID createUuidFromString(String uuid) {
+  BluetoothUuid createUuidFromString(String uuid) {
     throw UnimplementedError();
   }
 
