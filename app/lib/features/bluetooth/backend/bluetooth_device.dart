@@ -78,7 +78,7 @@ abstract class BluetoothDevice<BM extends BluetoothManager, BS extends Bluetooth
         case BluetoothConnectionState.connected:
           connectTry = 0; // reset try count
 
-          onConnect??();
+          onConnect?.call();
           doComplete(true);
           _isConnected = true;
           return;
