@@ -31,11 +31,20 @@ jobs:
         sparse-checkout: |
           app
           health_data_store
+    - name: Cache generated files
+      id: cache-generated
+      uses: actions/cache@v4
+      with:
+        path: |
+          health_data_store/lib
+          key: builder-${{ hashFiles('health_data_store/pubspec.yaml', 'health_data_store/lib/*', 'health_data_store/lib/**/*dart') }}
     - name: Setup dart
+      if: steps.cache-generated.outputs.cache-hit != 'true'
       uses: dart-lang/setup-dart@v1
       with:
         sdk: ${{ env.DART_SDK }}
     - name: Generate code
+      if: steps.cache-generated.outputs.cache-hit != 'true'
       run: dart run build_runner build
       working-directory: health_data_store
     - name: Setup Flutter
