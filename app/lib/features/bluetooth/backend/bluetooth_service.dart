@@ -41,20 +41,13 @@ abstract class BluetoothUuid<BackendUuid> {
 
 /// Generic BluetoothService representation
 abstract class BluetoothService<BackendService, BC extends BluetoothCharacteristic> {
-  /// constructor
-  BluetoothService({ required BluetoothUuid uuid, required BackendService source }) {
-    _uuid = uuid;
-    _source = source;
-  }
-
-  late BluetoothUuid _uuid;
-  late BackendService _source;
+  /// Initialize bluetooth service wrapper class
+  BluetoothService({ required this.uuid, required this.source });
 
   /// UUID of the service
-  BluetoothUuid get uuid => _uuid;
-
+  final BluetoothUuid uuid;
   /// Backend source for the service
-  BackendService get source => _source;
+  final BackendService source;
 
   /// Get all characteristics for this service
   List<BC> get characteristics;
@@ -73,7 +66,7 @@ abstract class BluetoothService<BackendService, BC extends BluetoothCharacterist
     }
 
     if (other is BluetoothUuid) {
-      return _uuid.toString() == other.toString();
+      return uuid.toString() == other.toString();
     }
 
     return false;
@@ -85,20 +78,13 @@ abstract class BluetoothService<BackendService, BC extends BluetoothCharacterist
 
 /// Characteristic representation
 abstract class BluetoothCharacteristic<BackendCharacteristic> {
-  /// constructor
-  BluetoothCharacteristic({ required BluetoothUuid uuid, required BackendCharacteristic source }) {
-    _uuid = uuid;
-    _source = source;
-  }
-
-  late BluetoothUuid _uuid;
-  late BackendCharacteristic _source;
+  /// Initialize bluetooth characteristic wrapper class
+  BluetoothCharacteristic({ required this.uuid, required this.source });
 
   /// UUID of the characteristic
-  BluetoothUuid get uuid => _uuid;
-
+  final BluetoothUuid uuid;
   /// Backend source for the characteristic
-  BackendCharacteristic get source => _source;
+  final BackendCharacteristic source;
 
   /// Whether the characteristic can be read
   bool get canRead;
@@ -127,7 +113,7 @@ abstract class BluetoothCharacteristic<BackendCharacteristic> {
     }
 
     if (other is BluetoothUuid) {
-      return _uuid.toString() == other.toString();
+      return uuid.toString() == other.toString();
     }
 
     return false;

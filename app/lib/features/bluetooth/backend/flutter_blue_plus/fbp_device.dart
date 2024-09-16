@@ -3,7 +3,7 @@ part of 'fbp_manager.dart';
 /// BluetoothDevice implementation for the 'flutter_blue_plus' package
 final class FlutterBluePlusDevice extends BluetoothDevice<FlutterBluePlusManager, FlutterBluePlusService, FlutterBluePlusCharacteristic, fbp.ScanResult> {
   /// constructor
-  FlutterBluePlusDevice(super._manager, super._source);
+  FlutterBluePlusDevice(super.manager, super.source);
 
   @override
   String get deviceId => source.device.remoteId.str;

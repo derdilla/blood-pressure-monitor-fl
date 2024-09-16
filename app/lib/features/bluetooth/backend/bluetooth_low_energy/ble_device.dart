@@ -4,7 +4,7 @@ part of 'ble_manager.dart';
 final class BluetoothLowEnergyDevice
   extends BluetoothDevice<BluetoothLowEnergyManager, BluetoothLowEnergyService, BluetoothLowEnergyCharacteristic, DiscoveredEventArgs> {
   /// constructor
-  BluetoothLowEnergyDevice(super._manager, super._source);
+  BluetoothLowEnergyDevice(super.manager, super.source);
 
   @override
   String get deviceId => source.peripheral.uuid.toString();

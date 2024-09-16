@@ -107,17 +107,15 @@ abstract class BluetoothDeviceDiscovery<BM extends BluetoothManager> with TypeLo
 class BluetoothDiscoveryStreamTransformer<BackendDevice> extends StreamDataTransformer<BackendDevice, List<BluetoothDevice>> {
   /// Create new transformer instance
   ///
-  /// [manager] The bluetooth manager the transformer is used for. Is required because the transformer 
+  /// [_manager] The bluetooth manager the transformer is used for. Is required because the transformer 
   ///   uses [BluetoothManager.createDevice] to transform the BackendDevice into a BluetoothDevice
-    BluetoothDiscoveryStreamTransformer({
+  BluetoothDiscoveryStreamTransformer({
     required BluetoothManager manager,
     super.sync,
     super.cancelOnError
-  }) {
-    _manager = manager;
-  }
+  }): _manager = manager;
 
-  late BluetoothManager _manager;
+  final BluetoothManager _manager;
 
   @override
   void onData(BackendDevice streamData) {

@@ -4,23 +4,17 @@ part of 'bluetooth_backend.dart';
 abstract class BluetoothDevice<BM extends BluetoothManager, BS extends BluetoothService, BC extends BluetoothCharacteristic, BackendDevice> with TypeLogger {
   /// Create a new BluetoothLowEnergyDevice
   ///
-  /// [_manager] Manager the device belongs to
-  /// [_source] Device implementation of the current backend
-  BluetoothDevice(this._manager, this._source) {
+  /// [manager] Manager the device belongs to
+  /// [source] Device implementation of the current backend
+  BluetoothDevice(this.manager, this.source) {
     logger.finer('init device: $this');
   }
 
   /// BluetoothManager this device belongs to
-  late final BM _manager;
-
-  /// Corresponding BluetoothManager
-  BM get manager => _manager;
+  final BM manager;
 
   /// Original source device as returned by the backend
-  late final BackendDevice _source;
-
-  /// Original source device as returned by the backend
-  BackendDevice get source => _source;
+  final BackendDevice source;
 
   /// (Unique?) id of the device
   String get deviceId;

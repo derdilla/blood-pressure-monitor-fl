@@ -15,16 +15,12 @@ part 'fbp_state.dart';
 /// Bluetooth manager for the 'flutter_blue_plus' package
 class FlutterBluePlusManager extends BluetoothManager<ScanResult, Guid, fbp.BluetoothService, fbp.BluetoothCharacteristic> {
   /// constructor
-  FlutterBluePlusManager([FlutterBluePlusMockable? backend]) {
+  FlutterBluePlusManager([FlutterBluePlusMockable? backend]): backend = backend ?? FlutterBluePlusMockable() {
     logger.finer('init');
-    _backend = backend ?? FlutterBluePlusMockable();
   }
 
   /// backend implementation
-  late FlutterBluePlusMockable _backend;
-  /// backend implementation
-  @protected
-  FlutterBluePlusMockable get backend => _backend;
+  final FlutterBluePlusMockable backend;
 
   @override
   Future<bool> enable() async {
