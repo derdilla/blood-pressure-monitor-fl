@@ -3,7 +3,7 @@ part of 'ble_manager.dart';
 /// BluetoothDeviceDiscovery implementation for the 'bluetooth_low_energy' package
 final class BluetoothLowEnergyDiscovery extends BluetoothDeviceDiscovery<BluetoothLowEnergyManager> {
   /// constructor
-  BluetoothLowEnergyDiscovery(super._manager);
+  BluetoothLowEnergyDiscovery(super.manager);
 
   @override
   Stream<List<BluetoothDevice>> get discoverStream => manager.backend.discovered.transform(

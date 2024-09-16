@@ -3,7 +3,7 @@ part of 'fbp_manager.dart';
 /// BluetoothDeviceDiscovery implementation for the 'flutter_blue_plus' package
 final class FlutterBluePlusDiscovery extends BluetoothDeviceDiscovery<FlutterBluePlusManager> {
   /// constructor
-  FlutterBluePlusDiscovery(super._manager);
+  FlutterBluePlusDiscovery(super.manager);
 
   @override
   Stream<List<BluetoothDevice>> get discoverStream => manager.backend.scanResults.transform(

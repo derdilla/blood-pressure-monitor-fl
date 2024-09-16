@@ -75,7 +75,6 @@ abstract class BluetoothDeviceDiscovery<BM extends BluetoothManager> with TypeLo
   }
 
   /// Called when an error occurs during discovery
-  @protected
   void onDiscoveryError(Object error) {
     logger.severe('Starting device scan failed', error);
     _discovering = false;
