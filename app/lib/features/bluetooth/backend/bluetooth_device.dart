@@ -69,6 +69,7 @@ abstract class BluetoothDevice<BM extends BluetoothManager, BS extends Bluetooth
     /// Local helper util to only complete the completer when it's not completed yet
     void doComplete(bool res) => !completer.isCompleted ? completer.complete(res) : null;
 
+    _connectionListener?.cancel();
     _connectionListener = connectionStream.listen((BluetoothConnectionState state) {
       logger.finest('connectionStream.listen[isConnected: $_isConnected]: $state, connectTry: $connectTry');
 
