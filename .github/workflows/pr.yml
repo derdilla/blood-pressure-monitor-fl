@@ -1,0 +1,59 @@
+name: PRs
+
+on:
+  pull_request:
+    types: [ labeled ]
+
+env:
+  FLUTTER_CHANNEL: 'beta'
+  DART_SDK: 'beta'
+
+permissions:
+  pull-requests: write
+
+jobs:
+  build:
+    if: ${{ github.event.label.name == 'build-apk' }}
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        sparse-checkout: |
+          app
+          health_data_store
+    - name: Cache generated health data store
+      id: cache-generated
+      uses: actions/cache@v4
+      with:
+        path: |
+          health_data_store/lib
+          key: builder-${{ hashFiles('health_data_store/pubspec.yaml', 'health_data_store/lib/*', 'health_data_store/lib/**/*dart') }}
+    - name: Setup dart
+      if: steps.cache-generated.outputs.cache-hit != 'true'
+      uses: dart-lang/setup-dart@v1
+      with:
+        sdk: ${{ env.DART_SDK }}
+    - name: Generate code
+      if: steps.cache-generated.outputs.cache-hit != 'true'
+      run: dart run build_runner build
+      working-directory: health_data_store
+    - name: Setup Flutter
+      uses: subosito/flutter-action@v2
+      with:
+        channel: ${{ env.FLUTTER_CHANNEL }}
+        cache: true
+    - name: Disable analytics
+      run: flutter config --no-analytics
+    - name: Build apk
+      run: flutter build apk --flavor github --debug
+      working-directory: app
+    - uses: actions/upload-artifact@v4
+      with:
+        name: build-results
+        path: app/build/app/outputs/flutter-apk
+    - uses: mondeja/remove-labels-gh-action@v2
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        labels: build-apk
