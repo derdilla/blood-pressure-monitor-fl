@@ -14,5 +14,4 @@ final isPlatformSupportedBluetooth = Platform.isAndroid || Platform.isIOS || Pla
 final isTestingEnvironment = Platform.environment['FLUTTER_TEST'] == 'true';
 
 /// Whether the value graph should be shown as home screen in landscape mode
-/// TODO: This functionality basically blocks the UI until the device is back into portrait mode, maybe best to implement this differently
 final showValueGraphAsHomeScreenInLandscapeMode = isTestingEnvironment || !Platform.isLinux;
