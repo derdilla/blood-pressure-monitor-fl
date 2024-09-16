@@ -61,11 +61,9 @@ class BleReadCubit extends Cubit<BleReadState> with TypeLogger {
   /// TODO: make this generic by accepting a data decoder argument?
   Future<void> takeMeasurement() async {
     final success = await _device.connect(
-      onDisconnect: (wasConnected) {
-        logger.finer('BleReadCubit: device.onDisconnect called: wasConnected: $wasConnected');
-        if (wasConnected) {
-          emit(BleReadFailure('Device unexpectedly disconnected'));
-        }
+      onDisconnect: () {
+        logger.finer('BleReadCubit: device.onDisconnect called');
+        emit(BleReadFailure('Device unexpectedly disconnected'));
         return true;
       },
       onError: (Object err) => emit(BleReadFailure(err.toString()))

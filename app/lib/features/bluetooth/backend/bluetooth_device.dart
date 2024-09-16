@@ -51,15 +51,13 @@ abstract class BluetoothDevice<BM extends BluetoothManager, BS extends Bluetooth
   /// can return true to indicate they have fully handled the disconnect. This will then also stop executing any remaining
   /// callbacks.
   @protected
-  final List<bool Function(bool wasConnected)> disconnectCallbacks = [];
+  final List<bool Function()> disconnectCallbacks = [];
 
   /// Connect to the device
   ///
   /// Always call disconnect when ready after calling connect
-  Future<bool> connect({ VoidCallback? onConnect, bool Function(bool wasConnected)? onDisconnect, ValueSetter<Object>? onError, int maxTries = 5 }) {
+  Future<bool> connect({ VoidCallback? onConnect, bool Function()? onDisconnect, ValueSetter<Object>? onError, int maxTries = 5 }) {
     final completer = Completer<bool>();
-    int connectTry = 1;
-
     logger.finer('connect: Init');
 
     if (onDisconnect != null) {
@@ -68,27 +66,17 @@ abstract class BluetoothDevice<BM extends BluetoothManager, BS extends Bluetooth
 
     _connectionListener?.cancel();
     _connectionListener = connectionStream.listen((BluetoothConnectionState state) {
-      logger.finest('connectionStream.listen[isConnected: $_isConnected]: $state, connectTry: $connectTry');
+      logger.finest('connectionStream.listen[isConnected: $_isConnected]: $state');
 
       switch (state) {
         case BluetoothConnectionState.connected:
-          connectTry = 0; // reset try count
-
           onConnect?.call();
           if (!completer.isCompleted) completer.complete(true);
           _isConnected = true;
           return;
         case BluetoothConnectionState.disconnected:
-          final wasConnected = _isConnected;
-          // TODO: does this make even sense? I.e. can this listener be called with successive disconnected states?
-          if (!wasConnected && connectTry < maxTries) {
-            connectTry++;
-            backendConnect();
-            return;
-          }
-
           for (final fn in disconnectCallbacks.reversed) {
-            if (fn(wasConnected)) {
+            if (fn()) {
               // ignore other disconnect callbacks
               break;
             }

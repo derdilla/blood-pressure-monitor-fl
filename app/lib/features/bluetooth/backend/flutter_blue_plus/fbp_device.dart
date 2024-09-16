@@ -63,7 +63,7 @@ final class FlutterBluePlusDevice extends BluetoothDevice<FlutterBluePlusManager
       final completer = Completer<bool>();
       late StreamSubscription listener;
       
-      bool disconnectCallback(bool wasConnected) {
+      bool disconnectCallback() {
         logger.finer('getCharacteristicValueByUuid(data.isEmpty: ${value.isEmpty}): onDisconnect called');
         if (value.isEmpty) {
           return false;
