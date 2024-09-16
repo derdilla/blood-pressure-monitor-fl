@@ -2,7 +2,7 @@ part of 'bluetooth_backend.dart';
 
 /// Base class for backend device discovery implementations
 abstract class BluetoothDeviceDiscovery<BM extends BluetoothManager> with TypeLogger {
-  /// constructor
+  /// Initialize base class for device discovery implementations.
   BluetoothDeviceDiscovery(this._manager) {
     logger.finer('init device discovery: $this');
   }
