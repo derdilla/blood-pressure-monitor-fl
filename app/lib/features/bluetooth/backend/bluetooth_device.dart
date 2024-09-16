@@ -66,9 +66,6 @@ abstract class BluetoothDevice<BM extends BluetoothManager, BS extends Bluetooth
       disconnectCallbacks.add(onDisconnect);
     }
 
-    /// Local helper util to only complete the completer when it's not completed yet
-    void doComplete(bool res) => !completer.isCompleted ? completer.complete(res) : null;
-
     _connectionListener?.cancel();
     _connectionListener = connectionStream.listen((BluetoothConnectionState state) {
       logger.finest('connectionStream.listen[isConnected: $_isConnected]: $state, connectTry: $connectTry');
@@ -78,7 +75,7 @@ abstract class BluetoothDevice<BM extends BluetoothManager, BS extends Bluetooth
           connectTry = 0; // reset try count
 
           onConnect?.call();
-          doComplete(true);
+          if (!completer.isCompleted) completer.complete(true);
           _isConnected = true;
           return;
         case BluetoothConnectionState.disconnected:
@@ -98,7 +95,7 @@ abstract class BluetoothDevice<BM extends BluetoothManager, BS extends Bluetooth
           }
 
           disconnectCallbacks.clear();
-          doComplete(false);
+          if (!completer.isCompleted) completer.complete(false);
           _isConnected = false;
       }
     }, onError: onError);
