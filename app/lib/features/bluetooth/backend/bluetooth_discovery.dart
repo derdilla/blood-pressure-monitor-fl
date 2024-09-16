@@ -96,7 +96,7 @@ abstract class BluetoothDeviceDiscovery<BM extends BluetoothManager> with TypeLo
   }
 }
 
-/// Should be extended by a backend bluetooth adapter to transform it's state stream into a normalized stream
+/// Transforms a backend device discovery stream into a normalized device stream
 ///
 /// Calls [BluetoothManager.createDevice] for each device in the stream to convert from a single [BackendDevice]
 /// device to the corresponding [BluetoothDevice] for the current backend. Some backends discover devices
