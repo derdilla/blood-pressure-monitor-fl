@@ -48,7 +48,8 @@ final class BluetoothLowEnergyDevice
   @override
   Future<bool> getCharacteristicValueByUuid(BluetoothLowEnergyCharacteristic characteristic, List<Uint8List> value) async {
     if (!isConnected) {
-      logger.finer('getCharacteristicValueByUuid: device not connect. Call device.connect() first');
+      assert(false, 'getCharacteristicValueByUuid: device not connected. Call device.connect() first');
+      logger.finer('getCharacteristicValueByUuid: device not connected.');
       return false;
     }
 
