@@ -38,6 +38,7 @@ Most devices provide 2 ways to retrieve measurements over bluetooth, but there a
 
 ## Specifications
 
+- Blood Pressure Service: https://www.bluetooth.com/specifications/specs/blood-pressure-service-1-1-1/
 - Assigned Numbers (f.e. service & characteristic UUID's): https://www.bluetooth.com/specifications/assigned-numbers/
 - GATT Specification Supplement (f.e. data structures): https://www.bluetooth.com/specifications/gss/
 - Current Time Service: https://www.bluetooth.com/specifications/specs/current-time-service-1-1/
