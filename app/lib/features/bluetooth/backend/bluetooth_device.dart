@@ -138,11 +138,7 @@ abstract class BluetoothDevice<BM extends BluetoothManager, BS extends Bluetooth
   /// Returns the service with requested [uuid] or null if requested service is not available
   Future<BS?> getServiceByUuid(BluetoothUuid uuid) async {
     final services = await getServices();
-    try {
-      return services?.firstWhere((service) => service.uuid == uuid);
-    } on StateError {
-      return null;
-    }
+    return services?.firstWhereOrNull((service) => service.uuid == uuid);
   }
 
   /// Retrieves the value of [characteristic] from the device, the value is added to [value]
