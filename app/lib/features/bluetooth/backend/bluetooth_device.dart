@@ -1,8 +1,6 @@
 part of 'bluetooth_backend.dart';
 
 /// Wrapper class for bluetooth implementations to generically expose required functionality
-///
-/// This class can't be used directly, it should be implemented by a backend
 abstract class BluetoothDevice<BM extends BluetoothManager, BS extends BluetoothService, BC extends BluetoothCharacteristic, BackendDevice> with TypeLogger {
   /// Create a new BluetoothLowEnergyDevice
   ///
