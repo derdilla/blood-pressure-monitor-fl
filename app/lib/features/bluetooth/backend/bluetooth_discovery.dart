@@ -3,15 +3,12 @@ part of 'bluetooth_backend.dart';
 /// Base class for backend device discovery implementations
 abstract class BluetoothDeviceDiscovery<BM extends BluetoothManager> with TypeLogger {
   /// Initialize base class for device discovery implementations.
-  BluetoothDeviceDiscovery(this._manager) {
+  BluetoothDeviceDiscovery(this.manager) {
     logger.finer('init device discovery: $this');
   }
 
   /// Corresponding BluetoothManager
-  late final BM _manager;
-
-  /// Corresponding BluetoothManager
-  BM get manager => _manager;
+  final BM manager;
 
   /// List of discovered devices
   final List<BluetoothDevice> _devices = [];
@@ -122,11 +119,11 @@ class BluetoothDiscoveryStreamTransformer<BackendDevice> extends StreamDataTrans
   late BluetoothManager _manager;
 
   @override
-  void onData(BackendDevice data) {
-    if (data is List) {
-      sendData(data.map(_manager.createDevice).toList());
+  void onData(BackendDevice streamData) {
+    if (streamData is List) {
+      sendData(streamData.map(_manager.createDevice).toList());
     } else {
-      sendData([_manager.createDevice(data)]);
+      sendData([_manager.createDevice(streamData)]);
     }
   }
 }
