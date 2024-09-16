@@ -48,6 +48,8 @@ abstract class BluetoothDeviceDiscovery<BM extends BluetoothManager> with TypeLo
       return;
     }
 
+    await _discoverSubscription?.cancel();
+
     _discovering = true;
     _devices.clear();
 
