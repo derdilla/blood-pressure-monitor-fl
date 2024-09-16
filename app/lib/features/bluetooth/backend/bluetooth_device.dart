@@ -138,12 +138,3 @@ abstract class BluetoothDevice<BM extends BluetoothManager, BS extends Bluetooth
   @override
   String toString() => 'BluetoothDevice{name: $name, deviceId: $deviceId}';
 }
-
-/// Bluetooth device parser base class
-///
-/// This is a separate helper class as factory or static methods cannot be abstract,
-/// so even though this class only has one method it's useful to enforce the types
-abstract class BluetoothDeviceParser<T> {
-  /// Method that converts the raw bluetooth device data to a [BluetoothDevice] instance
-  BluetoothDevice parse(T rawDevice, BluetoothManager manager);
-}
