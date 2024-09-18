@@ -362,7 +362,7 @@ class SettingsPage extends StatelessWidget {
                         loader = await FileSettingsLoader.load(dir);
                       } on FormatException catch (e, stack) {
                         messenger.showSnackBar(SnackBar(content: Text(localizations.invalidZip)));
-                        Log.err('invalid zip', [e, stack]);
+                        log.severe('invalid zip', e, stack);
                         return;
                       }
                     } else {
