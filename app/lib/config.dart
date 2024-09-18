@@ -1,11 +1,4 @@
 import 'dart:io';
-import 'package:blood_pressure_app/logging.dart';
-
-/// Default name for global [log] instance (not used when printing messages atm)
-const defaultLoggerName = 'BloodPressureMonitor';
-
-/// Prefix used when printing log messages
-const loggerRecordPrefix = 'BPM';
 
 /// Whether bluetooth is supported on this platform by this app
 final isPlatformSupportedBluetooth = Platform.isAndroid || Platform.isIOS || Platform.isMacOS || Platform.isLinux;

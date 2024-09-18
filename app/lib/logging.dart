@@ -1,22 +1,18 @@
 import 'dart:io';
 
-import 'package:blood_pressure_app/config.dart';
 import 'package:flutter/foundation.dart';
 import 'package:logging/logging.dart';
 
 /// Logger instance
-final log = Logger(defaultLoggerName);
+final log = Logger('BloodPressureMonitor');
 
 /// Mixin to provide logging instances within classes
 ///
 /// Usage: extend your class with this mixin by adding 'with TypeLogger'
-/// to be able to call the logger property anywhere in your class. Log
-/// statements will be printed with the given class name, ie given a
-/// loggerRecordPrefix of 'PREF' and class name MyClass then
-/// calling MyClass.logger will include the text 'PREF[MyClass]:'
+/// to be able to call the logger property anywhere in your class.
 mixin TypeLogger {
   /// log interface, returns a [Logger] instance from https://pub.dev/packages/logging
-  Logger get logger => Logger('$loggerRecordPrefix[${Log.withoutTypes('$runtimeType')}]');
+  Logger get logger => Logger('BPM[${Log.withoutTypes('$runtimeType')}]');
 }
 
 /// Simple class for manually logging in debug builds.
@@ -28,7 +24,7 @@ class Log {
 
   /// Format a log record
   static String format(LogRecord record) {
-    final loggerName = record.loggerName == defaultLoggerName ? null : record.loggerName;
+    final loggerName = record.loggerName == 'BloodPressureMonitor' ? null : record.loggerName;
     return '${record.level.name}: ${record.time}: ${loggerName != null ? '$loggerName: ' : ''}${record.message}';
   }
 
