@@ -1,4 +1,8 @@
-part of 'bluetooth_backend.dart';
+
+import 'dart:async';
+
+import 'package:blood_pressure_app/features/bluetooth/backend/bluetooth_state.dart';
+import 'package:blood_pressure_app/logging.dart';
 
 /// Generic stream data parser base class
 abstract class StreamDataParser<StreamData, ParsedData> {

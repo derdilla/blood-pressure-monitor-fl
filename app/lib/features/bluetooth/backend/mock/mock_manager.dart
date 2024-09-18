@@ -1,9 +1,10 @@
-import 'package:blood_pressure_app/features/bluetooth/backend/bluetooth_backend.dart';
-import 'package:flutter/foundation.dart';
 
-part 'mock_device.dart';
-part 'mock_discovery.dart';
-part 'mock_service.dart';
+import 'package:blood_pressure_app/features/bluetooth/backend/bluetooth_device.dart';
+import 'package:blood_pressure_app/features/bluetooth/backend/bluetooth_discovery.dart';
+import 'package:blood_pressure_app/features/bluetooth/backend/bluetooth_manager.dart';
+import 'package:blood_pressure_app/features/bluetooth/backend/bluetooth_service.dart';
+import 'package:blood_pressure_app/features/bluetooth/backend/bluetooth_state.dart';
+import 'package:blood_pressure_app/features/bluetooth/backend/mock/mock_service.dart';
 
 /// Placeholder [BluetoothManager] implementation that can f.e. be used for testing
 final class MockBluetoothManager extends BluetoothManager<String, String, MockedService, MockedCharacteristic> {

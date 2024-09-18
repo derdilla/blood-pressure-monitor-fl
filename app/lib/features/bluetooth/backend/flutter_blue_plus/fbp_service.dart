@@ -1,4 +1,7 @@
-part of 'fbp_manager.dart';
+
+import 'package:blood_pressure_app/features/bluetooth/backend/bluetooth_service.dart';
+import 'package:flutter_blue_plus/flutter_blue_plus.dart' as fbp;
+import 'package:flutter_blue_plus/flutter_blue_plus.dart' show Guid;
 
 /// UUID wrapper for FlutterBluePlus
 final class FlutterBluePlusUUID extends BluetoothUuid<Guid> {

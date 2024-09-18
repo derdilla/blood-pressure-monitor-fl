@@ -1,4 +1,10 @@
-part of 'bluetooth_backend.dart';
+
+import 'dart:async';
+
+import 'package:blood_pressure_app/features/bluetooth/backend/bluetooth_device.dart';
+import 'package:blood_pressure_app/features/bluetooth/backend/bluetooth_manager.dart';
+import 'package:blood_pressure_app/logging.dart';
+import 'package:flutter/foundation.dart';
 
 /// Base class for backend device discovery implementations
 abstract class BluetoothDeviceDiscovery<BM extends BluetoothManager> with TypeLogger {
@@ -48,7 +54,14 @@ abstract class BluetoothDeviceDiscovery<BM extends BluetoothManager> with TypeLo
       return;
     }
 
-    await _discoverSubscription?.cancel();
+    // Do not remove this if, otherwise the device_scan_cubit_test will 'hang'
+    // Not sure why, it seems during testing this would close the mocked stream
+    // immediately so when adding devices throu mock.sink.add they never reach
+    // the device_scan_cubit component
+    // TODO: figure out why test fails without this if
+    if (_discoverSubscription != null) {
+      await _discoverSubscription?.cancel();
+    }
 
     _discovering = true;
     _devices.clear();
@@ -93,36 +106,5 @@ abstract class BluetoothDeviceDiscovery<BM extends BluetoothManager> with TypeLo
     await backendStop();
     _devices.clear();
     _discovering = false;
-  }
-}
-
-/// Transforms a backend device discovery stream into a normalized device stream
-///
-/// Calls [BluetoothManager.createDevice] for each device in the stream to convert from a single [BackendDevice]
-/// device to the corresponding [BluetoothDevice] for the current backend. Some backends discover devices
-/// one-by-one, while others batch them into groups themselves. Therefore the [BackendDevice] type can both
-/// be a device type as a list.
-///
-/// Backends can use this class directly, as all backend specific logic should be contained within [BluetoothManager.createDevice]
-class BluetoothDiscoveryStreamTransformer<BackendDevice> extends StreamDataTransformer<BackendDevice, List<BluetoothDevice>> {
-  /// Create new transformer instance
-  ///
-  /// [_manager] The bluetooth manager the transformer is used for. Is required because the transformer 
-  ///   uses [BluetoothManager.createDevice] to transform the BackendDevice into a BluetoothDevice
-  BluetoothDiscoveryStreamTransformer({
-    required BluetoothManager manager,
-    super.sync,
-    super.cancelOnError
-  }): _manager = manager;
-
-  final BluetoothManager _manager;
-
-  @override
-  void onData(BackendDevice streamData) {
-    if (streamData is List) {
-      sendData(streamData.map(_manager.createDevice).toList());
-    } else {
-      sendData([_manager.createDevice(streamData)]);
-    }
   }
 }

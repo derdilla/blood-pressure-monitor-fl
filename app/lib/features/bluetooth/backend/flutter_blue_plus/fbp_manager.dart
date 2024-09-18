@@ -1,21 +1,21 @@
-import 'dart:async';
+
+
 import 'dart:io';
 
-import 'package:blood_pressure_app/features/bluetooth/backend/bluetooth_backend.dart';
+import 'package:blood_pressure_app/features/bluetooth/backend/bluetooth_manager.dart';
+import 'package:blood_pressure_app/features/bluetooth/backend/bluetooth_state.dart';
+import 'package:blood_pressure_app/features/bluetooth/backend/flutter_blue_plus/fbp_device.dart';
+import 'package:blood_pressure_app/features/bluetooth/backend/flutter_blue_plus/fbp_discovery.dart';
+import 'package:blood_pressure_app/features/bluetooth/backend/flutter_blue_plus/fbp_service.dart';
+import 'package:blood_pressure_app/features/bluetooth/backend/flutter_blue_plus/fbp_state.dart';
 import 'package:blood_pressure_app/features/bluetooth/backend/flutter_blue_plus/flutter_blue_plus_mockable.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter_blue_plus/flutter_blue_plus.dart' show Guid, ScanResult;
 import 'package:flutter_blue_plus/flutter_blue_plus.dart' as fbp;
-
-part 'fbp_device.dart';
-part 'fbp_discovery.dart';
-part 'fbp_service.dart';
-part 'fbp_state.dart';
+import 'package:flutter_blue_plus/flutter_blue_plus.dart' show Guid, ScanResult;
 
 /// Bluetooth manager for the 'flutter_blue_plus' package
 class FlutterBluePlusManager extends BluetoothManager<ScanResult, Guid, fbp.BluetoothService, fbp.BluetoothCharacteristic> {
   /// constructor
-  FlutterBluePlusManager([FlutterBluePlusMockable? backend]): backend = backend ?? FlutterBluePlusMockable() {
+  FlutterBluePlusManager([FlutterBluePlusMockable? backend]): backend = (backend ?? FlutterBluePlusMockable()) {
     logger.finer('init');
   }
 
@@ -32,8 +32,6 @@ class FlutterBluePlusManager extends BluetoothManager<ScanResult, Guid, fbp.Blue
     return false;
   }
 
-  final FlutterBluePlusStateParser _adapterStateParser = FlutterBluePlusStateParser();
-
   @override
   BluetoothAdapterState get lastKnownAdapterState {
     // Check whether our lastKnownState is the same as FlutterBluePlus's
@@ -41,10 +39,10 @@ class FlutterBluePlusManager extends BluetoothManager<ScanResult, Guid, fbp.Blue
     return _adapterStateParser.lastKnownState;
   }
 
+  final FlutterBluePlusStateParser _adapterStateParser = FlutterBluePlusStateParser();
+
   @override
-  Stream<BluetoothAdapterState> get stateStream => backend.adapterState.transform(
-    BluetoothAdapterStateStreamTransformer(stateParser: _adapterStateParser)
-  );
+  Stream<BluetoothAdapterState> get stateStream => backend.adapterState.map(_adapterStateParser.parse);
 
   FlutterBluePlusDiscovery? _discovery;
 

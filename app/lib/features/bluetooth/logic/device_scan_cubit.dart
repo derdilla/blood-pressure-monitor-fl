@@ -76,7 +76,7 @@ class DeviceScanCubit extends Cubit<DeviceScanState> with TypeLogger {
     }
 
     final preferred = devices.firstWhereOrNull((dev) =>
-    settings.knownBleDev.contains(dev.name));
+      settings.knownBleDev.contains(dev.name));
 
     if (preferred != null) {
       _stopScanning()

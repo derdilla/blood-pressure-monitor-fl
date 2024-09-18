@@ -1,4 +1,7 @@
-part of 'fbp_manager.dart';
+import 'package:blood_pressure_app/features/bluetooth/backend/bluetooth_device.dart';
+import 'package:blood_pressure_app/features/bluetooth/backend/bluetooth_discovery.dart';
+import 'package:blood_pressure_app/features/bluetooth/backend/flutter_blue_plus/fbp_manager.dart';
+import 'package:flutter_blue_plus/flutter_blue_plus.dart' show Guid, ScanResult;
 
 /// BluetoothDeviceDiscovery implementation for the 'flutter_blue_plus' package
 final class FlutterBluePlusDiscovery extends BluetoothDeviceDiscovery<FlutterBluePlusManager> {
@@ -6,8 +9,8 @@ final class FlutterBluePlusDiscovery extends BluetoothDeviceDiscovery<FlutterBlu
   FlutterBluePlusDiscovery(super.manager);
 
   @override
-  Stream<List<BluetoothDevice>> get discoverStream => manager.backend.scanResults.transform(
-    BluetoothDiscoveryStreamTransformer<List<ScanResult>>(manager: manager)
+  Stream<List<BluetoothDevice>> get discoverStream => manager.backend.scanResults.map(
+    (devices) => devices.map(manager.createDevice).toList()
   );
 
   @override

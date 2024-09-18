@@ -1,5 +1,10 @@
 
-part of 'bluetooth_backend.dart';
+
+import 'package:blood_pressure_app/features/bluetooth/backend/bluetooth_device.dart';
+import 'package:blood_pressure_app/features/bluetooth/backend/bluetooth_discovery.dart';
+import 'package:blood_pressure_app/features/bluetooth/backend/bluetooth_service.dart';
+import 'package:blood_pressure_app/features/bluetooth/backend/bluetooth_state.dart';
+import 'package:blood_pressure_app/logging.dart';
 
 /// Base class for a bluetooth manager
 abstract class BluetoothManager<BackendDevice, BackendUuid, BackendService, BackendCharacteristic> with TypeLogger {

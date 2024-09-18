@@ -2,14 +2,13 @@
 
 import 'dart:async';
 
-import 'package:blood_pressure_app/features/bluetooth/backend/bluetooth_backend.dart';
+import 'package:blood_pressure_app/features/bluetooth/backend/bluetooth_low_energy/ble_device.dart';
+import 'package:blood_pressure_app/features/bluetooth/backend/bluetooth_low_energy/ble_discovery.dart';
+import 'package:blood_pressure_app/features/bluetooth/backend/bluetooth_low_energy/ble_service.dart';
+import 'package:blood_pressure_app/features/bluetooth/backend/bluetooth_low_energy/ble_state.dart';
+import 'package:blood_pressure_app/features/bluetooth/backend/bluetooth_manager.dart';
+import 'package:blood_pressure_app/features/bluetooth/backend/bluetooth_state.dart';
 import 'package:bluetooth_low_energy/bluetooth_low_energy.dart';
-import 'package:flutter/foundation.dart';
-
-part 'ble_device.dart';
-part 'ble_discovery.dart';
-part 'ble_service.dart';
-part 'ble_state.dart';
 
 /// Bluetooth manager for the 'bluetooth_low_energy' package
 final class BluetoothLowEnergyManager extends BluetoothManager<DiscoveredEventArgs, UUID, GATTService, GATTCharacteristic> {
@@ -29,15 +28,13 @@ final class BluetoothLowEnergyManager extends BluetoothManager<DiscoveredEventAr
   /// The actual backend implementation
   CentralManager get backend => _backend;
 
-  final BluetoothLowEnergyStateParser _adapterStateParser = BluetoothLowEnergyStateParser();
-
   @override
   BluetoothAdapterState get lastKnownAdapterState => _adapterStateParser.lastKnownState;
 
+  final BluetoothLowEnergyStateParser _adapterStateParser = BluetoothLowEnergyStateParser();
+
   @override
-  Stream<BluetoothAdapterState> get stateStream => _backend.stateChanged.transform(
-    BluetoothAdapterStateStreamTransformer(stateParser: _adapterStateParser)
-  );
+  Stream<BluetoothAdapterState> get stateStream => _backend.stateChanged.map(_adapterStateParser.parse);
 
   BluetoothLowEnergyDiscovery? _discovery;
 

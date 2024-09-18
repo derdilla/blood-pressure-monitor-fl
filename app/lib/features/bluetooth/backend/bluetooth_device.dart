@@ -1,4 +1,12 @@
-part of 'bluetooth_backend.dart';
+
+import 'dart:async';
+
+import 'package:blood_pressure_app/features/bluetooth/backend/bluetooth_connection.dart';
+import 'package:blood_pressure_app/features/bluetooth/backend/bluetooth_manager.dart';
+import 'package:blood_pressure_app/features/bluetooth/backend/bluetooth_service.dart';
+import 'package:blood_pressure_app/logging.dart';
+import 'package:collection/collection.dart';
+import 'package:flutter/foundation.dart';
 
 /// Wrapper class for bluetooth implementations to generically expose required functionality
 abstract class BluetoothDevice<BM extends BluetoothManager, BS extends BluetoothService, BC extends BluetoothCharacteristic, BackendDevice> with TypeLogger {
@@ -44,7 +52,6 @@ abstract class BluetoothDevice<BM extends BluetoothManager, BS extends Bluetooth
   /// Disconnect callbacks are processed in reverse order, i.e. the latest added callback is executed as first. Callbacks
   /// can return true to indicate they have fully handled the disconnect. This will then also stop executing any remaining
   /// callbacks.
-  @protected
   final List<bool Function()> disconnectCallbacks = [];
 
   /// Connect to the device

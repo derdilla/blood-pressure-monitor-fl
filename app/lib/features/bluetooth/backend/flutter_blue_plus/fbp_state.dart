@@ -1,4 +1,5 @@
-part of 'fbp_manager.dart';
+import 'package:blood_pressure_app/features/bluetooth/backend/bluetooth_state.dart';
+import 'package:flutter_blue_plus/flutter_blue_plus.dart' as fbp;
 
 /// Bluetooth adapter state parser for the 'flutter_blue_plus' package
 final class FlutterBluePlusStateParser extends BluetoothAdapterStateParser<fbp.BluetoothAdapterState> {

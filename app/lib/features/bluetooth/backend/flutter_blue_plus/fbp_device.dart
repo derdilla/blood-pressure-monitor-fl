@@ -1,4 +1,11 @@
-part of 'fbp_manager.dart';
+import 'dart:async';
+
+import 'package:blood_pressure_app/features/bluetooth/backend/bluetooth_connection.dart';
+import 'package:blood_pressure_app/features/bluetooth/backend/bluetooth_device.dart';
+import 'package:blood_pressure_app/features/bluetooth/backend/flutter_blue_plus/fbp_manager.dart';
+import 'package:blood_pressure_app/features/bluetooth/backend/flutter_blue_plus/fbp_service.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter_blue_plus/flutter_blue_plus.dart' as fbp;
 
 /// BluetoothDevice implementation for the 'flutter_blue_plus' package
 final class FlutterBluePlusDevice extends BluetoothDevice<FlutterBluePlusManager, FlutterBluePlusService, FlutterBluePlusCharacteristic, fbp.ScanResult> {

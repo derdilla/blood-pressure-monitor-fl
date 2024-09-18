@@ -1,4 +1,9 @@
-part of 'ble_manager.dart';
+
+
+import 'package:blood_pressure_app/features/bluetooth/backend/bluetooth_device.dart';
+import 'package:blood_pressure_app/features/bluetooth/backend/bluetooth_discovery.dart';
+import 'package:blood_pressure_app/features/bluetooth/backend/bluetooth_low_energy/ble_manager.dart';
+import 'package:bluetooth_low_energy/bluetooth_low_energy.dart' show UUID;
 
 /// BluetoothDeviceDiscovery implementation for the 'bluetooth_low_energy' package
 final class BluetoothLowEnergyDiscovery extends BluetoothDeviceDiscovery<BluetoothLowEnergyManager> {
@@ -6,8 +11,8 @@ final class BluetoothLowEnergyDiscovery extends BluetoothDeviceDiscovery<Bluetoo
   BluetoothLowEnergyDiscovery(super.manager);
 
   @override
-  Stream<List<BluetoothDevice>> get discoverStream => manager.backend.discovered.transform(
-    BluetoothDiscoveryStreamTransformer(manager: manager)
+  Stream<List<BluetoothDevice>> get discoverStream => manager.backend.discovered.map(
+    (device) => [manager.createDevice(device)]
   );
 
   @override

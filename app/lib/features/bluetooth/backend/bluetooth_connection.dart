@@ -1,4 +1,6 @@
-part of 'bluetooth_backend.dart';
+
+import 'package:blood_pressure_app/features/bluetooth/backend/bluetooth_state.dart';
+import 'package:blood_pressure_app/features/bluetooth/backend/bluetooth_utils.dart';
 
 /// State of the bluetooth connection of a device
 enum BluetoothConnectionState {

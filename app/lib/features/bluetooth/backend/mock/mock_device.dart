@@ -1,4 +1,10 @@
-part of 'mock_manager.dart';
+
+import 'dart:typed_data';
+
+import 'package:blood_pressure_app/features/bluetooth/backend/bluetooth_connection.dart';
+import 'package:blood_pressure_app/features/bluetooth/backend/bluetooth_device.dart';
+import 'package:blood_pressure_app/features/bluetooth/backend/bluetooth_manager.dart';
+import 'package:blood_pressure_app/features/bluetooth/backend/bluetooth_service.dart';
 
 /// Placeholder [BluetoothDevice] implementation that can f.e. be used for testing
 final class MockBluetoothDevice extends BluetoothDevice<BluetoothManager, BluetoothService, BluetoothCharacteristic, String> {

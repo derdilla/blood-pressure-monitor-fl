@@ -1,4 +1,4 @@
-part of 'bluetooth_backend.dart';
+import 'package:blood_pressure_app/features/bluetooth/backend/bluetooth_utils.dart';
 
 /// Current state of bluetooth adapter/sensor
 enum BluetoothAdapterState {
@@ -18,15 +18,4 @@ enum BluetoothAdapterState {
 abstract class BluetoothAdapterStateParser<BackendState> extends StreamDataParserCached<BackendState, BluetoothAdapterState> {
   @override
   BluetoothAdapterState get initialState => BluetoothAdapterState.initial;
-}
-
-/// Transforms the backend's bluetooth adapter state stream to emit [BluetoothAdapterState]'s
-///
-/// Can normally be used directly, backends should only inject a customized BluetoothStateParser
-class BluetoothAdapterStateStreamTransformer<BackendState, BASP extends BluetoothAdapterStateParser<BackendState>>
-  extends StreamDataParserTransformer<BackendState, BluetoothAdapterState, BASP> {
-  /// Create a BluetoothAdapterStateStreamTransformer
-  ///
-  /// [stateParser] The BluetoothStateParser that provides the backend logic to convert BackendState to BluetoothAdapterState
-  BluetoothAdapterStateStreamTransformer({ required super.stateParser, super.sync, super.cancelOnError });
 }

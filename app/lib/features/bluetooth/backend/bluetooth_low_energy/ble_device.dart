@@ -1,4 +1,17 @@
-part of 'ble_manager.dart';
+
+
+import 'dart:async';
+import 'dart:typed_data';
+
+import 'package:blood_pressure_app/features/bluetooth/backend/bluetooth_connection.dart';
+import 'package:blood_pressure_app/features/bluetooth/backend/bluetooth_device.dart';
+import 'package:blood_pressure_app/features/bluetooth/backend/bluetooth_low_energy/ble_manager.dart';
+import 'package:blood_pressure_app/features/bluetooth/backend/bluetooth_low_energy/ble_service.dart';
+import 'package:bluetooth_low_energy/bluetooth_low_energy.dart' show
+  CentralManager,
+  ConnectionState,
+  DiscoveredEventArgs,
+  PeripheralConnectionStateChangedEventArgs;
 
 /// BluetoothDevice implementation for the 'bluetooth_low_energy' package
 final class BluetoothLowEnergyDevice

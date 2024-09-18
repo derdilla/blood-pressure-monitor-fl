@@ -1,6 +1,4 @@
-// ignore_for_file: public_member_api_docs
-
-part of 'mock_manager.dart';
+import 'package:blood_pressure_app/features/bluetooth/backend/bluetooth_service.dart';
 
 /// Backend implementation for MockBluetoothService
 final class MockedService {

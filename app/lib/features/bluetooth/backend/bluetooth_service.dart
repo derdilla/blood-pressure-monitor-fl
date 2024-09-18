@@ -1,4 +1,5 @@
-part of 'bluetooth_backend.dart';
+
+import 'package:collection/collection.dart';
 
 /// Generic BluetoothUuid representation
 abstract class BluetoothUuid<BackendUuid> {

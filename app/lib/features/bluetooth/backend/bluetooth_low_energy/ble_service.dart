@@ -1,4 +1,5 @@
-part of 'ble_manager.dart';
+import 'package:blood_pressure_app/features/bluetooth/backend/bluetooth_service.dart';
+import 'package:bluetooth_low_energy/bluetooth_low_energy.dart';
 
 /// UUID wrapper for BluetoothLowEnergy
 final class BluetoothLowEnergyUUID extends BluetoothUuid<UUID> {

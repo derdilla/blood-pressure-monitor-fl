@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:blood_pressure_app/features/bluetooth/backend/bluetooth_backend.dart';
+import 'package:blood_pressure_app/features/bluetooth/backend/mock/mock_device.dart';
 import 'package:blood_pressure_app/features/bluetooth/backend/mock/mock_manager.dart';
 import 'package:blood_pressure_app/features/bluetooth/ui/device_selection.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';

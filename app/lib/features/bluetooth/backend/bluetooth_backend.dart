@@ -1,19 +1,14 @@
-import 'dart:async';
+
+
 import 'package:blood_pressure_app/features/bluetooth/backend/bluetooth_low_energy/ble_manager.dart';
+import 'package:blood_pressure_app/features/bluetooth/backend/bluetooth_manager.dart';
 import 'package:blood_pressure_app/features/bluetooth/backend/flutter_blue_plus/fbp_manager.dart';
 import 'package:blood_pressure_app/features/bluetooth/backend/flutter_blue_plus/flutter_blue_plus_mockable.dart';
 import 'package:blood_pressure_app/features/bluetooth/backend/mock/mock_manager.dart';
-import 'package:blood_pressure_app/logging.dart';
-import 'package:collection/collection.dart';
-import 'package:flutter/foundation.dart';
 
-part 'bluetooth_connection.dart';
-part 'bluetooth_device.dart';
-part 'bluetooth_discovery.dart';
-part 'bluetooth_manager.dart';
-part 'bluetooth_service.dart';
-part 'bluetooth_state.dart';
-part 'bluetooth_utils.dart';
+export 'package:blood_pressure_app/features/bluetooth/backend/bluetooth_device.dart' show BluetoothDevice;
+export 'package:blood_pressure_app/features/bluetooth/backend/bluetooth_manager.dart' show BluetoothManager;
+export 'package:blood_pressure_app/features/bluetooth/backend/bluetooth_state.dart' show BluetoothAdapterState;
 
 /// Supported bluetooth backend implementations
 ///
