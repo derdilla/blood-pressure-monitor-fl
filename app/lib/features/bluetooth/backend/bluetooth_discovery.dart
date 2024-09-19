@@ -17,7 +17,7 @@ abstract class BluetoothDeviceDiscovery<BM extends BluetoothManager> with TypeLo
   final BM manager;
 
   /// List of discovered devices
-  final List<BluetoothDevice> _devices = [];
+  final Set<BluetoothDevice> _devices = {};
 
   /// A stream that returns the discovered devices when discovering
   Stream<List<BluetoothDevice>> get discoverStream;
@@ -74,15 +74,10 @@ abstract class BluetoothDeviceDiscovery<BM extends BluetoothManager> with TypeLo
       // the same device in successive listen callbacks. So make sure we are not adding
       // duplicate devices
       for (final device in newDevices) {
-        final index = _devices.indexWhere((dev) => dev.deviceId == device.deviceId);
-        if (index < 0) {
-          _devices.add(device);
-        } else {
-          _devices[index] = device;
-        }
+        _devices.add(device);
       }
 
-      onDevices(_devices);
+      onDevices(_devices.toList());
     }, onError: onDiscoveryError);
 
     logger.fine('Starting discovery for devices with service: $serviceUuid');

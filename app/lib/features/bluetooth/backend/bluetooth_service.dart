@@ -66,10 +66,6 @@ abstract class BluetoothService<BackendService, BC extends BluetoothCharacterist
       return toString() == other.toString();
     }
 
-    if (other is BluetoothUuid) {
-      return uuid.toString() == other.toString();
-    }
-
     return false;
   }
 
@@ -111,10 +107,6 @@ abstract class BluetoothCharacteristic<BackendCharacteristic> {
   bool operator == (Object other) {
     if (other is BluetoothCharacteristic) {
       return toString() == other.toString();
-    }
-
-    if (other is BluetoothUuid) {
-      return uuid.toString() == other.toString();
     }
 
     return false;

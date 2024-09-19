@@ -138,4 +138,16 @@ abstract class BluetoothDevice<BM extends BluetoothManager, BS extends Bluetooth
 
   @override
   String toString() => 'BluetoothDevice{name: $name, deviceId: $deviceId}';
+
+  @override
+  bool operator == (Object other) {
+    if (other is BluetoothDevice) {
+      return hashCode == other.hashCode;
+    }
+
+    return false;
+  }
+
+  @override
+  int get hashCode => Object.hash(deviceId, name);
 }
