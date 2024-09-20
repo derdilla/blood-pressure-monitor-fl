@@ -9,7 +9,12 @@ import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
 
 /// Wrapper class for bluetooth implementations to generically expose required functionality
-abstract class BluetoothDevice<BM extends BluetoothManager, BS extends BluetoothService, BC extends BluetoothCharacteristic, BackendDevice> with TypeLogger {
+abstract class BluetoothDevice<
+  BM extends BluetoothManager,
+  BS extends BluetoothService,
+  BC extends BluetoothCharacteristic,
+  BackendDevice
+> with TypeLogger {
   /// Create a new BluetoothLowEnergyDevice
   ///
   /// [manager] Manager the device belongs to
@@ -46,6 +51,9 @@ abstract class BluetoothDevice<BM extends BluetoothManager, BS extends Bluetooth
   Future<void> backendConnect();
   /// Backend implementation to disconnect to the device
   Future<void> backendDisconnect();
+
+  /// Require backends to implement a dispose method to cleanup any resources
+  Future<void> dispose();
 
   /// Array of disconnect callbacks
   ///
@@ -102,6 +110,7 @@ abstract class BluetoothDevice<BM extends BluetoothManager, BS extends Bluetooth
   Future<bool> disconnect() async {
     await _connectionListener?.cancel();
     await backendDisconnect();
+    await dispose();
     return true;
   }
 
@@ -114,10 +123,25 @@ abstract class BluetoothDevice<BM extends BluetoothManager, BS extends Bluetooth
   ///
   /// Difference with [discoverServices] is that [getServices] memoizes the results
   Future<List<BS>?> getServices() async {
+    final logServices = _services == null; // only log services on the first call
     _services ??= await discoverServices();
     if (_services == null) {
       logger.finer('Failed to discoverServices on: $this');
     }
+
+    if (logServices) {
+      final services = _services ?? [];
+      for (final service in services) {
+        logger.finest('$service');
+        if (service.characteristics.isEmpty) {
+            logger.finest('  [no characteristics]');
+        }
+        for (final characteristic in service.characteristics) {
+            logger.finest('  $characteristic');
+        }
+      }
+    }
+
     return _services;
   }
 
@@ -127,14 +151,16 @@ abstract class BluetoothDevice<BM extends BluetoothManager, BS extends Bluetooth
     return services?.firstWhereOrNull((service) => service.uuid == uuid);
   }
 
-  /// Retrieves the value of [characteristic] from the device, the value is added to [value]
+  /// Retrieves the value of [characteristic] from the device and calls [onValue] for all received values
   /// 
-  /// Note that a [characteristic] could have multiple values, hency why [value] is a list of a list.
-  /// Also note that [value] is a function arg as the return value is an indication if the read was
-  /// succesful or not. This function could convert a listener to a Future and reading a characteristic
-  /// could return muliple value items. So value could contain data even though the read gave an error
-  /// indicating not all data had been read from the device.
-  Future<bool> getCharacteristicValueByUuid(BC characteristic, List<Uint8List> value);
+  /// This method provides a generic implementation for async reading of data, regardless whether the
+  /// characteristic can be read directly or through a notification or indication. In case the value
+  /// is being read using an indication, then the [onValue] callback receives a second argument [complete] with
+  /// which you can stop reading the data.
+  ///
+  /// Note that a [characteristic] could have multiple values, so [onValue] can be called more then once.
+  /// TODO: implement reading values for characteristics with [canNotify]
+  Future<bool> getCharacteristicValue(BC characteristic, void Function(Uint8List value, [void Function(bool success)? complete]) onValue);
 
   @override
   String toString() => 'BluetoothDevice{name: $name, deviceId: $deviceId}';
@@ -150,4 +176,112 @@ abstract class BluetoothDevice<BM extends BluetoothManager, BS extends Bluetooth
 
   @override
   int get hashCode => Object.hash(deviceId, name);
+}
+
+/// Generic logic to implement an indication stream to read characteristic values
+mixin CharacteristicValueListener<
+  BM extends BluetoothManager,
+  BS extends BluetoothService,
+  BC extends BluetoothCharacteristic,
+  BackendDevice
+> on BluetoothDevice<BM, BS, BC, BackendDevice> {
+  /// List of read characteristic completers, used for cleanup on device disconnect
+  final List<Completer<bool>> _readCharacteristicCompleters = [];
+  /// List of read characteristic subscriptions, used for cleanup on device disconnect
+  final List<StreamSubscription<Uint8List?>> _readCharacteristicListeners = [];
+
+  /// Dispose of all resources used to read characteristics
+  ///
+  /// Internal method, should not be used by users
+  @protected
+  Future<void> disposeCharacteristics() async {
+    for (final completer in _readCharacteristicCompleters) {
+      // completing the completer also cancels the listener
+      completer.complete(false);
+    }
+
+    _readCharacteristicCompleters.clear();
+    _readCharacteristicListeners.clear();
+  }
+
+  /// Trigger notifications or indications for the [characteristic]
+  @protected
+  Future<bool> triggerCharacteristicValue(BC characteristic, [bool state = true]);
+
+  /// Read characteristic values from a stream
+  ///
+  /// It's not recommended to use this method directly, use [BluetoothDevice.getCharacteristicValue] instead
+  @protected
+  Future<bool> listenCharacteristicValue(
+    BC characteristic,
+    Stream<Uint8List?> characteristicValueStream,
+    void Function(Uint8List value, [void Function(bool success)? complete]) onValue
+  ) async {
+    if (!characteristic.canIndicate) {
+      return false;
+    }
+
+    final completer = Completer<bool>();
+    bool receivedSomeData = false;
+
+    bool disconnectCallback() {
+      logger.finer('listenCharacteristicValue(receivedSomeData: $receivedSomeData): onDisconnect called');
+      if (!receivedSomeData) {
+        return false;
+      }
+
+      completer.complete(true);
+      return true;
+    }
+
+    disconnectCallbacks.add(disconnectCallback);
+
+    final listener = characteristicValueStream.listen((value) {
+      if (value == null) {
+        // ignore null values
+        return;
+      }
+
+      logger.finer('listenCharacteristicValue[${value.length}] $value');
+
+      receivedSomeData = true;
+      onValue(value, completer.complete);
+    },
+      cancelOnError: true,
+      onDone: () {
+        logger.finer('listenCharacteristicValue: onDone called');
+        completer.complete(receivedSomeData);
+      },
+      onError: (Object err) {
+        logger.shout('listenCharacteristicValue: Error while reading characteristic', err);
+        completer.complete(false);
+      }
+    );
+
+    // track completer & listener so we can clean them up
+    // when the device unexpectedly disconnects (ie before
+    // any data has been received yet)
+    _readCharacteristicCompleters.add(completer);
+    _readCharacteristicListeners.add(listener);
+
+    final bool triggerSuccess = await triggerCharacteristicValue(characteristic);
+    if (!triggerSuccess) {
+      logger.warning('listenCharacteristicValue: triggerCharacteristicValue returned $triggerSuccess');
+    }
+
+    return completer.future.then((res) {
+      // Ensure listener is always cancelled when completer resolves
+      listener.cancel().then((_) => _readCharacteristicListeners.remove(listener));
+
+      // Remove stored completer reference
+      _readCharacteristicCompleters.remove(completer);
+
+      // Remove disconnect callback in case the connection was not automatically disconnected
+      if (disconnectCallbacks.remove(disconnectCallback)) {
+        logger.finer('listenCharacteristicValue: device was not automatically disconnected after completer finished, removing disconnect callback');
+      }
+
+      return res;
+    });
+  }
 }

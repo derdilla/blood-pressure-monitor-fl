@@ -8,7 +8,20 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart' as fbp;
 
 /// BluetoothDevice implementation for the 'flutter_blue_plus' package
-final class FlutterBluePlusDevice extends BluetoothDevice<FlutterBluePlusManager, FlutterBluePlusService, FlutterBluePlusCharacteristic, fbp.ScanResult> {
+final class FlutterBluePlusDevice
+  extends BluetoothDevice<
+    FlutterBluePlusManager,
+    FlutterBluePlusService,
+    FlutterBluePlusCharacteristic,
+    fbp.ScanResult
+  >
+  with CharacteristicValueListener<
+    FlutterBluePlusManager,
+    FlutterBluePlusService,
+    FlutterBluePlusCharacteristic,
+    fbp.ScanResult
+  >
+{
   /// constructor
   FlutterBluePlusDevice(super.manager, super.source);
 
@@ -30,6 +43,11 @@ final class FlutterBluePlusDevice extends BluetoothDevice<FlutterBluePlusManager
   Future<void> backendDisconnect() => source.device.disconnect();
 
   @override
+  Future<void> dispose() async {
+    await disposeCharacteristics();
+  }
+
+  @override
   Future<List<FlutterBluePlusService>?> discoverServices() async {
     if (!isConnected) {
       logger.finer('Device not connected, cannot discover services');
@@ -48,68 +66,38 @@ final class FlutterBluePlusDevice extends BluetoothDevice<FlutterBluePlusManager
       return null;
     }
   }
-  
+
   @override
-  Future<bool> getCharacteristicValueByUuid(FlutterBluePlusCharacteristic characteristic, List<Uint8List> value) async {
+  Future<bool> triggerCharacteristicValue(FlutterBluePlusCharacteristic characteristic, [bool state = true]) => characteristic.source.setNotifyValue(state);
+
+  @override
+  Future<bool> getCharacteristicValue(
+    FlutterBluePlusCharacteristic characteristic,
+    void Function(Uint8List value, [void Function(bool success)? complete]) onValue
+  ) async {
     if (!isConnected) {
-      logger.finer('getCharacteristicValueByUuid: device not connect. Call device.connect() first');
+      assert(false, 'getCharacteristicValue: device not connected. Call device.connect() first');
+      logger.finer('getCharacteristicValue: device not connected.');
       return false;
     }
 
     if (characteristic.canRead) { // Read characteristic value if supported
       try {
         final data = await characteristic.source.read();
-        value.add(Uint8List.fromList(data));
+        onValue(Uint8List.fromList(data));
         return true;
       } catch (err) {
+        logger.severe('getCharacteristicValue(read error)', err);
         return false;
       }
     }
 
     if (characteristic.canIndicate) { // Listen for characteristic value and trigger the device to send it
-      final completer = Completer<bool>();
-      late StreamSubscription listener;
-      
-      bool disconnectCallback() {
-        logger.finer('getCharacteristicValueByUuid(data.isEmpty: ${value.isEmpty}): onDisconnect called');
-        if (value.isEmpty) {
-          return false;
-        }
-
-        completer.complete(true);
-        return true;
-      }
-
-      disconnectCallbacks.add(disconnectCallback);
-
-      listener = characteristic.source.onValueReceived.listen((rawData) {
-        logger.finer('getCharacteristicValueByUuid[${rawData.length}] $rawData');
-        value.add(Uint8List.fromList(rawData));
-      },
-        cancelOnError: true,
-        onDone: () {
-          logger.finer('getCharacteristicValueByUuid: onDone called');
-          completer.complete(true);
-        },
-        onError: (Object err) {
-          logger.shout('getCharacteristicValueByUuid: Error while reading characteristic', err);
-          completer.complete(false);
-        }
+      return listenCharacteristicValue(
+        characteristic,
+        characteristic.source.onValueReceived.map(Uint8List.fromList),
+        onValue
       );
-
-      final bool indicationsSet = await characteristic.source.setNotifyValue(true);
-      logger.finer('BleReadCubit indicationsSet: $indicationsSet');
-      return completer.future.then((res) {
-        // Ensure listener is always cancelled when completer resolves
-        unawaited(listener.cancel());
-
-        // Remove disconnect callback in case the connection was not automatically disconnected
-        if (disconnectCallbacks.remove(disconnectCallback)) {
-          logger.finer('getCharacteristicValueByUuid: device was not automatically disconnected after completer finished, removing disconnect callback');
-        }
-
-        return res;
-      });
     }
 
     logger.severe("Can't read or indicate characteristic: $characteristic");

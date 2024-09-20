@@ -73,6 +73,7 @@ class BleReadCubit extends Cubit<BleReadState> with TypeLogger {
       final service = await _device.getServiceByUuid(uuidService);
       logger.finer('BleReadCubit: Found service: $service');
       if (service == null) {
+        // TODO: add a BleReadUnsupported state
         emit(BleReadFailure('Device does not provide the expected service with uuid $serviceUUID'));
         return;
       }
@@ -86,7 +87,8 @@ class BleReadCubit extends Cubit<BleReadState> with TypeLogger {
       }
 
       final List<Uint8List> data = [];
-      final success = await _device.getCharacteristicValueByUuid(characteristic, data);
+      final success = await _device.getCharacteristicValue(characteristic, (Uint8List value, [_]) => data.add(value));
+
       logger.finer('BleReadCubit(success: $success): Got data: $data');
       if (!success) {
         emit(BleReadFailure('Could not retrieve characteristic value'));

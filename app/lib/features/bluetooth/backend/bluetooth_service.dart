@@ -1,23 +1,50 @@
 
 import 'package:collection/collection.dart';
 
+/// Bluetooth Base UUID from Bluetooth Core Spec
+///
+/// The full 128-bit value of a 16-bit or 32-bit UUID may be computed by a simple arithmetic
+/// operation.
+/// 128_bit_value = 16_bit_value × 296 + Bluetooth_Base_UUID
+/// 128_bit_value = 32_bit_value × 296 + Bluetooth_Base_UUID
+const bluetoothBaseUuid = '00000000-0000-1000-8000-00805F9B34FB';
+
 /// Generic BluetoothUuid representation
 abstract class BluetoothUuid<BackendUuid> {
   /// constructor
-  BluetoothUuid({ required BackendUuid uuid}) {
-    _uuid = uuid;
-  }
+  BluetoothUuid({ required this.uuid}): assert(uuid.toString().length == 36);
 
   /// Create a BluetoothUuid from a string
-  BluetoothUuid.fromString(String uuid);
-
-  late BackendUuid _uuid;
+  BluetoothUuid.fromString(String uuid):
+    assert(uuid.isNotEmpty, 'This static method is abstract'),
+    uuid = bluetoothBaseUuid as BackendUuid // satisfy linter
+    {
+      throw AssertionError('This static method is abstract');
+    }
 
   /// The backend specific uuid
-  BackendUuid get uuid => _uuid;
+  final BackendUuid uuid;
+
+  /// Whether this uuid is an official bluetooth core spec uuid
+  bool get isBluetoothUuid => uuid.toString().toUpperCase().endsWith(bluetoothBaseUuid.substring(8));
 
   @override
-  String toString() => _uuid.toString();
+  String toString() => uuid.toString();
+
+  /// Returns the 16 bit value of the UUID if uuid is from bluetooth core spec, otherwise full id
+  ///
+  /// The 16-bit Attribute UUID replaces the x’s in the following:
+  ///   0000xxxx-0000-1000-8000-00805F9B34FB
+  String get shortId {
+    final uuid = toString();
+    assert(uuid.length == 36);
+
+    if (isBluetoothUuid) {
+      return '0x${uuid.substring(4, 8)}';
+    }
+
+    return uuid;
+  }
 
   @override
   bool operator == (Object other) {
@@ -58,7 +85,7 @@ abstract class BluetoothService<BackendService, BC extends BluetoothCharacterist
   Future<BC?> getCharacteristicByUuid(BluetoothUuid uuid) async => characteristics.firstWhereOrNull((service) => service.uuid == uuid);
 
   @override
-  String toString() => 'BluetoothService{uuid: $uuid, source: $source}';
+  String toString() => 'BluetoothService{uuid: 0x${uuid.shortId}, source: ${source.runtimeType}}';
 
   @override
   bool operator == (Object other) {
@@ -99,7 +126,7 @@ abstract class BluetoothCharacteristic<BackendCharacteristic> {
   bool get canIndicate;
 
   @override
-  String toString() => 'BluetoothCharacteristic{uuid: $uuid, source: $source, '
+  String toString() => 'BluetoothCharacteristic{uuid: ${uuid.shortId}, source: ${source.runtimeType}, '
     'canRead: $canRead, canWrite: $canWrite, canWriteWithoutResponse: $canWriteWithoutResponse, '
     'canNotify: $canNotify, canIndicate: $canIndicate}';
 
