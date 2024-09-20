@@ -44,7 +44,13 @@ jobs:
         channel: ${{ env.FLUTTER_CHANNEL }}
         cache: true
     - name: Disable analytics
-      run: flutter config --no-analytics
+      run: flutter config --no-analytics --suppress-analytics
+    - name: Setup java
+      uses: actions/setup-java@v2
+      with:
+        java-version: "17"
+        distribution: "temurin"
+        cache: 'gradle'
     - name: Build apk
       run: flutter build apk --flavor github --debug
       working-directory: app
