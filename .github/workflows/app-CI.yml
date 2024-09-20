@@ -31,17 +31,26 @@ jobs:
         sparse-checkout: |
           app
           health_data_store
+    - name: Cache generated health data store
+      id: cache-generated
+      uses: actions/cache@v4
+      with:
+        path: health_data_store/lib
+        key: builder-${{ hashFiles('health_data_store/pubspec.yaml', 'health_data_store/lib/*', 'health_data_store/lib/**/*dart') }}
     - name: Setup dart
+      if: steps.cache-generated.outputs.cache-hit != 'true'
       uses: dart-lang/setup-dart@v1
       with:
         sdk: ${{ env.DART_SDK }}
     - name: Generate code
+      if: steps.cache-generated.outputs.cache-hit != 'true'
       run: dart run build_runner build
       working-directory: health_data_store
     - name: Setup Flutter
       uses: subosito/flutter-action@v2
       with:
         channel: ${{ env.FLUTTER_CHANNEL }}
+        cache: true
     - name: Disable analytics
       run: flutter config --no-analytics
     - name: Generate mock code
@@ -144,23 +153,31 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
-    - name: Setup Java
-      uses: actions/setup-java@v3
       with:
-        distribution: 'zulu'
-        java-version: ${{ env.JAVA_VERSION }}
-
+        # ensures there are no unexpected directories needed
+        sparse-checkout: |
+          app
+          health_data_store
+    - name: Cache generated health data store
+      id: cache-generated
+      uses: actions/cache@v4
+      with:
+        path: health_data_store/lib
+        key: builder-${{ hashFiles('health_data_store/pubspec.yaml', 'health_data_store/lib/*', 'health_data_store/lib/**/*dart') }}
     - name: Setup dart
+      if: steps.cache-generated.outputs.cache-hit != 'true'
       uses: dart-lang/setup-dart@v1
       with:
         sdk: ${{ env.DART_SDK }}
     - name: Generate code
+      if: steps.cache-generated.outputs.cache-hit != 'true'
       run: dart run build_runner build
       working-directory: health_data_store
     - name: Setup Flutter
       uses: subosito/flutter-action@v2
       with:
         channel: ${{ env.FLUTTER_CHANNEL }}
+        cache: true
     - name: Disable analytics
       run: flutter config --no-analytics
     - name: Build apk

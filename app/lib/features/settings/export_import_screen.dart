@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:blood_pressure_app/components/disabled.dart';
 import 'package:blood_pressure_app/data_util/interval_picker.dart';
 import 'package:blood_pressure_app/features/export_import/active_field_customization.dart';
@@ -10,7 +12,7 @@ import 'package:blood_pressure_app/model/storage/export_columns_store.dart';
 import 'package:blood_pressure_app/model/storage/storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:jsaver/jSaver.dart';
+import 'package:persistent_user_dir_access_android/persistent_user_dir_access_android.dart';
 import 'package:provider/provider.dart';
 
 /// Screen to configure and perform exports and imports of blood pressure values.
@@ -45,19 +47,20 @@ class ExportImportScreen extends StatelessWidget {
                 disabled: settings.exportFormat == ExportFormat.db,
                 child: const IntervalPicker(type: IntervalStoreManagerLocation.exportPage,),
               ),
-              ListTile(
-                title: Text(localizations.exportDir),
-                subtitle: settings.defaultExportDir.isNotEmpty ? Text(settings.defaultExportDir) : null,
-                trailing: settings.defaultExportDir.isEmpty ? const Icon(Icons.folder_open) : const Icon(Icons.delete),
-                onTap: () async {
-                  if (settings.defaultExportDir.isEmpty) {
-                    final appDir = await JSaver.instance.setDefaultSavingDirectory();
-                    settings.defaultExportDir = appDir.value;
-                  } else {
-                    settings.defaultExportDir = '';
-                  }
-                },
-              ),
+              if (Platform.isAndroid) // only supported on android
+                ListTile(
+                  title: Text(localizations.exportDir),
+                  subtitle: settings.defaultExportDir.isNotEmpty ? Text(settings.defaultExportDir) : null,
+                  trailing: settings.defaultExportDir.isEmpty ? const Icon(Icons.folder_open) : const Icon(Icons.delete),
+                  onTap: () async {
+                    if (settings.defaultExportDir.isEmpty) {
+                      final uri = await const PersistentUserDirAccessAndroid().requestDirectoryUri();
+                      settings.defaultExportDir = uri ?? '';
+                    } else {
+                      settings.defaultExportDir = '';
+                    }
+                  },
+                ),
               SwitchListTile(
                 title: Text(localizations.exportAfterEveryInput),
                 subtitle: Text(localizations.exportAfterEveryInputDesc),
