@@ -7,7 +7,7 @@ import 'package:blood_pressure_app/features/bluetooth/backend/bluetooth_connecti
 import 'package:blood_pressure_app/features/bluetooth/backend/bluetooth_device.dart';
 import 'package:blood_pressure_app/features/bluetooth/backend/bluetooth_low_energy/ble_manager.dart';
 import 'package:blood_pressure_app/features/bluetooth/backend/bluetooth_low_energy/ble_service.dart';
-import 'package:bluetooth_low_energy/bluetooth_low_energy.dart' show CentralManager, ConnectionState, DiscoveredEventArgs, GATTCharacteristicNotifiedEventArgs, PeripheralConnectionStateChangedEventArgs;
+import 'package:bluetooth_low_energy/bluetooth_low_energy.dart' show CentralManager, ConnectionState, DiscoveredEventArgs, PeripheralConnectionStateChangedEventArgs;
 
 /// BluetoothDevice implementation for the 'bluetooth_low_energy' package
 final class BluetoothLowEnergyDevice
@@ -35,9 +35,11 @@ final class BluetoothLowEnergyDevice
   CentralManager get _cm => manager.backend;
 
   @override
-  Stream<BluetoothConnectionState> get connectionStream => _cm.connectionStateChanged.transform(
-    BluetoothConnectionStateStreamTransformer(stateParser: BluetoothLowEnergyConnectionStateParser())
-  );
+  Stream<BluetoothConnectionState> get connectionStream => _cm.connectionStateChanged
+    .map((PeripheralConnectionStateChangedEventArgs rawState) => switch (rawState.state) {
+      ConnectionState.connected => BluetoothConnectionState.connected,
+      ConnectionState.disconnected => BluetoothConnectionState.disconnected,
+    });
 
   @override
   Future<void> backendConnect() => _cm.connect(source.peripheral);
@@ -122,18 +124,5 @@ final class BluetoothLowEnergyDevice
 
     logger.severe("Can't read or indicate characteristic: $characteristic");
     return false;
-  }
-}
-
-/// Implementation to transform [PeripheralConnectionStateChangedEventArgs] to [BluetoothConnectionState]
-class BluetoothLowEnergyConnectionStateParser extends BluetoothConnectionStateParser<PeripheralConnectionStateChangedEventArgs> {
-  @override
-  BluetoothConnectionState parse(PeripheralConnectionStateChangedEventArgs rawState) {
-    switch (rawState.state) {
-      case ConnectionState.connected:
-        return BluetoothConnectionState.connected;
-      case ConnectionState.disconnected:
-        return BluetoothConnectionState.disconnected;
-    }
   }
 }

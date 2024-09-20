@@ -32,9 +32,14 @@ final class FlutterBluePlusDevice
   String get name => source.device.platformName;
 
   @override
-  Stream<BluetoothConnectionState> get connectionStream => source.device.connectionState.transform(
-    BluetoothConnectionStateStreamTransformer(stateParser: FlutterBluePlusConnectionStateParser())
-  );
+  Stream<BluetoothConnectionState> get connectionStream => source.device.connectionState
+    .map((fbp.BluetoothConnectionState rawState) => switch (rawState) {
+      fbp.BluetoothConnectionState.connected => BluetoothConnectionState.connected,
+      fbp.BluetoothConnectionState.disconnected => BluetoothConnectionState.disconnected,
+      // code should never reach here
+      fbp.BluetoothConnectionState.connecting || fbp.BluetoothConnectionState.disconnecting
+        => throw ErrorDescription('Unsupported connection state: $rawState'),
+    });
 
   @override
   Future<void> backendConnect() => source.device.connect();
@@ -102,22 +107,5 @@ final class FlutterBluePlusDevice
 
     logger.severe("Can't read or indicate characteristic: $characteristic");
     return false;
-  }
-}
-
-/// Implementation to transform [fbp.BluetoothConnectionState] to [BluetoothConnectionState]
-class FlutterBluePlusConnectionStateParser extends BluetoothConnectionStateParser<fbp.BluetoothConnectionState> {
-  @override
-  BluetoothConnectionState parse(fbp.BluetoothConnectionState rawState) {
-    switch (rawState) {
-      case fbp.BluetoothConnectionState.connected:
-        return BluetoothConnectionState.connected;
-      case fbp.BluetoothConnectionState.disconnected:
-        return BluetoothConnectionState.disconnected;
-      case fbp.BluetoothConnectionState.connecting:
-      case fbp.BluetoothConnectionState.disconnecting:
-        // code should never reach here
-        throw ErrorDescription('Unsupported connection state: $rawState');
-    }
   }
 }
