@@ -1,4 +1,3 @@
-
 import 'dart:async';
 
 import 'package:blood_pressure_app/features/bluetooth/backend/bluetooth_device.dart';
@@ -42,12 +41,8 @@ abstract class BluetoothDeviceDiscovery<BM extends BluetoothManager> with TypeLo
   ///
   /// - [serviceUuid] The service uuid to filter on when discovering devices
   /// - [onDevices] Callback for when devices have been discovered. The
-  /// [onDevices] callback can be called multiple times, it is also always
-  /// called with the list of all discovered devices from the start of discovering
-  ///
-  /// Note that there are major differences in how backends return discovered devices,
-  /// f.e. FlutterBluePlus batches results itself while BluetoothLowEnergy will always
-  /// return one device per listen callback
+  ///   [onDevices] callback can be called multiple times, it is also always
+  ///   called with the list of all discovered devices from the start of discovering
   Future<void> start(String serviceUuid, ValueSetter<List<BluetoothDevice>> onDevices) async {
     if (_discovering) {
       logger.warning('Already discovering, not starting discovery again');
@@ -56,7 +51,7 @@ abstract class BluetoothDeviceDiscovery<BM extends BluetoothManager> with TypeLo
 
     // Do not remove this if, otherwise the device_scan_cubit_test will 'hang'
     // Not sure why, it seems during testing this would close the mocked stream
-    // immediately so when adding devices throu mock.sink.add they never reach
+    // immediately so when adding devices through mock.sink.add they never reach
     // the device_scan_cubit component
     // TODO: figure out why test fails without this if
     if (_discoverSubscription != null) {
@@ -70,12 +65,11 @@ abstract class BluetoothDeviceDiscovery<BM extends BluetoothManager> with TypeLo
       logger.finest('New devices discovered: $newDevices');
       assert(_discovering);
 
-      // See above note, some backends batch discovered devices themselves and could return
-      // the same device in successive listen callbacks. So make sure we are not adding
-      // duplicate devices
-      for (final device in newDevices) {
-        _devices.add(device);
-      }
+      // Note that there are major differences in how backends return discovered devices,
+      // f.e. FlutterBluePlus batches results itself while BluetoothLowEnergy will always
+      // return one device per listen callback.
+      // The _devices type [Set] makes sure sure we are not adding duplicate devices.
+      _devices.addAll(newDevices);
 
       onDevices(_devices.toList());
     }, onError: onDiscoveryError);

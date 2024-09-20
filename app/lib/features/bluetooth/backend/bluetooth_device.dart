@@ -1,4 +1,3 @@
-
 import 'dart:async';
 
 import 'package:blood_pressure_app/features/bluetooth/backend/bluetooth_connection.dart';
@@ -15,15 +14,15 @@ abstract class BluetoothDevice<
   BC extends BluetoothCharacteristic,
   BackendDevice
 > with TypeLogger {
-  /// Create a new BluetoothLowEnergyDevice
+  /// Create a new BluetoothDevice.
   ///
-  /// [manager] Manager the device belongs to
-  /// [source] Device implementation of the current backend
+  /// * [manager] Manager the device belongs to
+  /// * [source] Device implementation of the current backend
   BluetoothDevice(this.manager, this.source) {
     logger.finer('init device: $this');
   }
 
-  /// BluetoothManager this device belongs to
+  /// [BluetoothManager] this device belongs to
   final BM manager;
 
   /// Original source device as returned by the backend
@@ -65,7 +64,7 @@ abstract class BluetoothDevice<
   /// Connect to the device
   ///
   /// Always call disconnect when ready after calling connect
-  Future<bool> connect({ VoidCallback? onConnect, bool Function()? onDisconnect, ValueSetter<Object>? onError, int maxTries = 5 }) {
+  Future<bool> connect({ VoidCallback? onConnect, bool Function()? onDisconnect, ValueSetter<Object>? onError }) async {
     final completer = Completer<bool>();
     logger.finer('connect: Init');
 
@@ -73,7 +72,7 @@ abstract class BluetoothDevice<
       disconnectCallbacks.add(onDisconnect);
     }
 
-    _connectionListener?.cancel();
+    await _connectionListener?.cancel();
     _connectionListener = connectionStream.listen((BluetoothConnectionState state) {
       logger.finest('connectionStream.listen[isConnected: $_isConnected]: $state');
 
@@ -97,7 +96,7 @@ abstract class BluetoothDevice<
       }
     }, onError: onError);
 
-    backendConnect();
+    await backendConnect();
     return completer.future.then((res) {
       logger.finer('connect: completer.resolved($res)');
       return res;
@@ -130,16 +129,9 @@ abstract class BluetoothDevice<
     }
 
     if (logServices) {
-      final services = _services ?? [];
-      for (final service in services) {
-        logger.finest('$service');
-        if (service.characteristics.isEmpty) {
-            logger.finest('  [no characteristics]');
-        }
-        for (final characteristic in service.characteristics) {
-            logger.finest('  $characteristic');
-        }
-      }
+      logger.finest(_services
+        ?.map((s) => '$s:\n Characteristic: [${s.characteristics.join(',')}]')
+        .join('\n'));
     }
 
     return _services;
@@ -166,16 +158,11 @@ abstract class BluetoothDevice<
   String toString() => 'BluetoothDevice{name: $name, deviceId: $deviceId}';
 
   @override
-  bool operator == (Object other) {
-    if (other is BluetoothDevice) {
-      return hashCode == other.hashCode;
-    }
-
-    return false;
-  }
+  bool operator == (Object other) => other is BluetoothDevice
+    && hashCode == other.hashCode;
 
   @override
-  int get hashCode => Object.hash(deviceId, name);
+  int get hashCode => deviceId.hashCode ^ name.hashCode;
 }
 
 /// Generic logic to implement an indication stream to read characteristic values

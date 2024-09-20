@@ -1,4 +1,3 @@
-
 import 'package:blood_pressure_app/features/bluetooth/backend/bluetooth_device.dart';
 import 'package:blood_pressure_app/features/bluetooth/backend/bluetooth_discovery.dart';
 import 'package:blood_pressure_app/features/bluetooth/backend/bluetooth_manager.dart';

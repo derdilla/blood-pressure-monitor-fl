@@ -1,5 +1,3 @@
-
-
 import 'dart:async';
 
 import 'package:blood_pressure_app/features/bluetooth/backend/bluetooth_low_energy/ble_device.dart';
@@ -28,10 +26,10 @@ final class BluetoothLowEnergyManager extends BluetoothManager<DiscoveredEventAr
   /// The actual backend implementation
   CentralManager get backend => _backend;
 
+  final BluetoothLowEnergyStateParser _adapterStateParser = BluetoothLowEnergyStateParser();
+
   @override
   BluetoothAdapterState get lastKnownAdapterState => _adapterStateParser.lastKnownState;
-
-  final BluetoothLowEnergyStateParser _adapterStateParser = BluetoothLowEnergyStateParser();
 
   @override
   Stream<BluetoothAdapterState> get stateStream => _backend.stateChanged.map(_adapterStateParser.parse);
@@ -41,7 +39,7 @@ final class BluetoothLowEnergyManager extends BluetoothManager<DiscoveredEventAr
   @override
   BluetoothLowEnergyDiscovery get discovery {
     _discovery ??= BluetoothLowEnergyDiscovery(this);
-    return _discovery as BluetoothLowEnergyDiscovery;
+    return _discovery!;
   }
 
   @override

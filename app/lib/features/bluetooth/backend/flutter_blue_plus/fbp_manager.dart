@@ -35,7 +35,7 @@ class FlutterBluePlusManager extends BluetoothManager<ScanResult, Guid, fbp.Blue
   @override
   BluetoothAdapterState get lastKnownAdapterState {
     // Check whether our lastKnownState is the same as FlutterBluePlus's
-    assert(_adapterStateParser.parse(backend.adapterStateNow) ==_adapterStateParser.lastKnownState);
+    assert(_adapterStateParser.parse(backend.adapterStateNow) == _adapterStateParser.lastKnownState);
     return _adapterStateParser.lastKnownState;
   }
 
@@ -49,7 +49,7 @@ class FlutterBluePlusManager extends BluetoothManager<ScanResult, Guid, fbp.Blue
   @override
   FlutterBluePlusDiscovery get discovery {
     _discovery ??= FlutterBluePlusDiscovery(this);
-    return _discovery as FlutterBluePlusDiscovery; // cast to prevent null lint error
+    return _discovery!;
   }
 
   @override

@@ -1,4 +1,3 @@
-
 import 'package:collection/collection.dart';
 
 /// Bluetooth Base UUID from Bluetooth Core Spec
@@ -47,21 +46,12 @@ abstract class BluetoothUuid<BackendUuid> {
   }
 
   @override
-  bool operator == (Object other) {
-    if (other is BluetoothUuid) {
-      return toString() == other.toString();
-    }
-
-    if (other is BluetoothService) {
-      return toString() == other.uuid.toString();
-    }
-
-    if (other is BluetoothCharacteristic) {
-      return toString() == other.uuid.toString();
-    }
-
-    return false;
-  }
+  bool operator ==(Object other) => switch (other.runtimeType) {
+    final BluetoothUuid other => toString() == other.toString(),
+    final BluetoothService other => toString() == other.uuid.toString(),
+    final BluetoothCharacteristic other => toString() == other.uuid.toString(),
+    _ => false,
+  };
 
   @override
   int get hashCode => super.hashCode * 17;
@@ -88,13 +78,8 @@ abstract class BluetoothService<BackendService, BC extends BluetoothCharacterist
   String toString() => 'BluetoothService{uuid: 0x${uuid.shortId}, source: ${source.runtimeType}}';
 
   @override
-  bool operator == (Object other) {
-    if (other is BluetoothService) {
-      return toString() == other.toString();
-    }
-
-    return false;
-  }
+  bool operator ==(Object other) => (other is BluetoothService)
+    && toString() == other.toString();
 
   @override
   int get hashCode => super.hashCode * 17;
@@ -131,13 +116,8 @@ abstract class BluetoothCharacteristic<BackendCharacteristic> {
     'canNotify: $canNotify, canIndicate: $canIndicate}';
 
   @override
-  bool operator == (Object other) {
-    if (other is BluetoothCharacteristic) {
-      return toString() == other.toString();
-    }
-
-    return false;
-  }
+  bool operator ==(Object other) => (other is BluetoothCharacteristic)
+    && toString() == other.toString();
 
   @override
   int get hashCode => super.hashCode * 17;

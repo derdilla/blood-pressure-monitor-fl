@@ -22,7 +22,7 @@ final class FlutterBluePlusDevice
     fbp.ScanResult
   >
 {
-  /// constructor
+  /// Initialize BluetoothDevice implementation for the 'flutter_blue_plus' package
   FlutterBluePlusDevice(super.manager, super.source);
 
   @override
@@ -48,9 +48,7 @@ final class FlutterBluePlusDevice
   Future<void> backendDisconnect() => source.device.disconnect();
 
   @override
-  Future<void> dispose() async {
-    await disposeCharacteristics();
-  }
+  Future<void> dispose() => disposeCharacteristics();
 
   @override
   Future<List<FlutterBluePlusService>?> discoverServices() async {

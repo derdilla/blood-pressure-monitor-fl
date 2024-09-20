@@ -5,14 +5,18 @@ import 'package:bluetooth_low_energy/bluetooth_low_energy.dart';
 final class BluetoothLowEnergyUUID extends BluetoothUuid<UUID> {
   /// Create a [BluetoothLowEnergyUUID] from a [UUID]
   BluetoothLowEnergyUUID(UUID uuid): super(uuid: uuid);
+
   /// Create a [BluetoothLowEnergyUUID] from a [String]
   BluetoothLowEnergyUUID.fromString(String uuid): super(uuid: UUID.fromString(uuid));
 }
 
 /// Wrapper class with generic interface for a [GATTService]
-final class BluetoothLowEnergyService extends BluetoothService<GATTService, BluetoothLowEnergyCharacteristic> {
+final class BluetoothLowEnergyService
+    extends BluetoothService<GATTService, BluetoothLowEnergyCharacteristic> {
+
    /// Create a [BluetoothLowEnergyService] from a [GATTService]
-  BluetoothLowEnergyService.fromSource(GATTService service): super(uuid: BluetoothLowEnergyUUID(service.uuid), source: service);
+  BluetoothLowEnergyService.fromSource(GATTService service):
+    super(uuid: BluetoothLowEnergyUUID(service.uuid), source: service);
 
   @override
   List<BluetoothLowEnergyCharacteristic> get characteristics => source.characteristics.map(BluetoothLowEnergyCharacteristic.fromSource).toList();
@@ -21,7 +25,8 @@ final class BluetoothLowEnergyService extends BluetoothService<GATTService, Blue
 /// Wrapper class with generic interface for a [GATTCharacteristic]
 final class BluetoothLowEnergyCharacteristic extends BluetoothCharacteristic<GATTCharacteristic> {
   /// Create a [BluetoothLowEnergyCharacteristic] from the backend specific source
-  BluetoothLowEnergyCharacteristic.fromSource(GATTCharacteristic source): super(uuid: BluetoothLowEnergyUUID(source.uuid), source: source);
+  BluetoothLowEnergyCharacteristic.fromSource(GATTCharacteristic source):
+    super(uuid: BluetoothLowEnergyUUID(source.uuid), source: source);
 
   @override
   bool get canRead => source.properties.contains(GATTCharacteristicProperty.read);

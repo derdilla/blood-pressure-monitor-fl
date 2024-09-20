@@ -1,4 +1,3 @@
-
 import 'package:blood_pressure_app/features/bluetooth/backend/bluetooth_service.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart' as fbp;
 import 'package:flutter_blue_plus/flutter_blue_plus.dart' show Guid;
@@ -7,15 +6,14 @@ import 'package:flutter_blue_plus/flutter_blue_plus.dart' show Guid;
 final class FlutterBluePlusUUID extends BluetoothUuid<Guid> {
   /// Create a [FlutterBluePlusUUID] from a [Guid]
   FlutterBluePlusUUID(Guid uuid): super(uuid: uuid);
+
   /// Create a [FlutterBluePlusUUID] from a [String]
   FlutterBluePlusUUID.fromString(String uuid): super(uuid: Guid(uuid));
 }
 
-/// Wrapper class with generic interface for a [fbp.BluetoothService]
+/// [BluetoothService] implementation wrapping [fbp.BluetoothService]
 final class FlutterBluePlusService extends BluetoothService<fbp.BluetoothService, FlutterBluePlusCharacteristic> {
-  /// constructor
-  ///
-  /// @see [BluetoothService]
+  /// Create [BluetoothService] implementation wrapping [fbp.BluetoothService]
   FlutterBluePlusService({ required super.uuid, required super.source });
 
   /// Create a [FlutterBluePlusService] from a [fbp.BluetoothService]
@@ -25,13 +23,15 @@ final class FlutterBluePlusService extends BluetoothService<fbp.BluetoothService
   }
 
   @override
-  List<FlutterBluePlusCharacteristic> get characteristics => source.characteristics.map(FlutterBluePlusCharacteristic.fromSource).toList();
+  List<FlutterBluePlusCharacteristic> get characteristics => source.characteristics
+    .map(FlutterBluePlusCharacteristic.fromSource).toList();
 }
 
 /// Wrapper class with generic interface for a [fbp.BluetoothCharacteristic]
 final class FlutterBluePlusCharacteristic extends BluetoothCharacteristic<fbp.BluetoothCharacteristic> {
-  /// Create a [FlutterBluePlusCharacteristic] from the backend specific source
-  FlutterBluePlusCharacteristic.fromSource(fbp.BluetoothCharacteristic source): super(uuid: FlutterBluePlusUUID(source.serviceUuid), source: source);
+  /// Initialize a [FlutterBluePlusCharacteristic] from the backend specific source
+  FlutterBluePlusCharacteristic.fromSource(fbp.BluetoothCharacteristic source):
+    super(uuid: FlutterBluePlusUUID(source.serviceUuid), source: source);
   
   @override
   bool get canRead => source.properties.read;

@@ -1,5 +1,3 @@
-
-
 import 'package:blood_pressure_app/features/bluetooth/backend/bluetooth_device.dart';
 import 'package:blood_pressure_app/features/bluetooth/backend/bluetooth_discovery.dart';
 import 'package:blood_pressure_app/features/bluetooth/backend/bluetooth_low_energy/ble_manager.dart';
@@ -7,7 +5,7 @@ import 'package:bluetooth_low_energy/bluetooth_low_energy.dart' show UUID;
 
 /// BluetoothDeviceDiscovery implementation for the 'bluetooth_low_energy' package
 final class BluetoothLowEnergyDiscovery extends BluetoothDeviceDiscovery<BluetoothLowEnergyManager> {
-  /// constructor
+  /// Construct BluetoothDeviceDiscovery implementation for the 'bluetooth_low_energy' package
   BluetoothLowEnergyDiscovery(super.manager);
 
   @override

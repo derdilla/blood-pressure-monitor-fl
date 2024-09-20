@@ -1,5 +1,3 @@
-
-
 import 'dart:async';
 import 'dart:typed_data';
 
@@ -23,7 +21,7 @@ final class BluetoothLowEnergyDevice
     DiscoveredEventArgs
   >
 {
-  /// constructor
+  /// Init BluetoothDevice implementation for the 'bluetooth_low_energy' package
   BluetoothLowEnergyDevice(super.manager, super.source);
 
   @override
@@ -48,9 +46,7 @@ final class BluetoothLowEnergyDevice
   Future<void> backendDisconnect() => _cm.disconnect(source.peripheral);
 
   @override
-  Future<void> dispose() async {
-    await disposeCharacteristics();
-  }
+  Future<void> dispose() => disposeCharacteristics();
 
   @override
   Future<List<BluetoothLowEnergyService>?> discoverServices() async {
@@ -64,7 +60,6 @@ final class BluetoothLowEnergyDevice
     try {
       final rawServices = await _cm.discoverGATT(source.peripheral);
       logger.finer('discoverServices: $rawServices');
-
       return rawServices.map(BluetoothLowEnergyService.fromSource).toList();
     } catch (e) {
       logger.shout('discoverServices: error:', [source.peripheral, e]);
@@ -81,7 +76,7 @@ final class BluetoothLowEnergyDevice
   @override
   Future<bool> getCharacteristicValue(
     BluetoothLowEnergyCharacteristic characteristic,
-    void Function(Uint8List value, [void Function(bool success)? complete]) onValue
+    void Function(Uint8List value, [void Function(bool success)? complete]) onValue,
   ) async {
     if (!isConnected) {
       assert(false, 'getCharacteristicValue: device not connected. Call device.connect() first');
