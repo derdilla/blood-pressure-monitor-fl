@@ -35,9 +35,8 @@ jobs:
       id: cache-generated
       uses: actions/cache@v4
       with:
-        path: |
-          health_data_store/lib
-          key: builder-${{ hashFiles('health_data_store/pubspec.yaml', 'health_data_store/lib/*', 'health_data_store/lib/**/*dart') }}
+        path: health_data_store/lib
+        key: builder-${{ hashFiles('health_data_store/pubspec.yaml', 'health_data_store/lib/*', 'health_data_store/lib/**/*dart') }}
     - name: Setup dart
       if: steps.cache-generated.outputs.cache-hit != 'true'
       uses: dart-lang/setup-dart@v1
@@ -163,9 +162,8 @@ jobs:
       id: cache-generated
       uses: actions/cache@v4
       with:
-        path: |
-          health_data_store/lib
-          key: builder-${{ hashFiles('health_data_store/pubspec.yaml', 'health_data_store/lib/*', 'health_data_store/lib/**/*dart') }}
+        path: health_data_store/lib
+        key: builder-${{ hashFiles('health_data_store/pubspec.yaml', 'health_data_store/lib/*', 'health_data_store/lib/**/*dart') }}
     - name: Setup dart
       if: steps.cache-generated.outputs.cache-hit != 'true'
       uses: dart-lang/setup-dart@v1
