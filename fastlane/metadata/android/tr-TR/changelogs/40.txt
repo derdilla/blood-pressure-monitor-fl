@@ -1,5 +1,5 @@
-* Reimplement home and statistics graphs to fix some longstanding bugs and improve general performance
-* Fix medicine intake deletion
-* Simplify settings storage format to fix settings not saving on some devices
-* Fix date switcher clipping in some cases
-* Complete Turkish, Italian, Spanish, French, and Chinese translations (thanks to various people on weblate)
+* Uzun süredir devam eden bazı hataları düzeltmek ve genel performansı iyileştirmek için ana sayfa ve istatistik grafikleri yeniden düzenlendi
+* İlaç alımı silme işlemi düzeltildi
+* Bazı aygıtlarda ayarların kaydedilmemesini düzeltmek için ayar depolama biçimi basitleştirildi
+* Bazı durumlarda tarih değiştiricinin kırpılması düzeltildi
+* Türkçe, İtalyanca, İspanyolca, Fransızca, Felemenkçe ve Çince çeviriler (weblate'teki çeşitli kişilere teşekkürler) tamamlandı
