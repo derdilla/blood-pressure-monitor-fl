@@ -1,5 +1,4 @@
-import 'dart:io';
-
+import 'package:blood_pressure_app/config.dart';
 import 'package:flutter/foundation.dart';
 import 'package:logging/logging.dart';
 
@@ -20,7 +19,7 @@ mixin TypeLogger {
 /// Also contains some logging configuration logic
 class Log {
   /// Whether logging is enabled
-  static final enabled = kDebugMode && !(Platform.environment['FLUTTER_TEST'] == 'true');
+  static final enabled = kDebugMode && !isTestingEnvironment;
 
   /// Format a log record
   static String format(LogRecord record) {
@@ -30,4 +29,12 @@ class Log {
 
   /// Strip types from definition, i.e. MyClass<SomeType> -> MyClass
   static String withoutTypes(String type) => type.replaceAll(RegExp(r'<[^>]+>'), '');
+
+  /// Register the apps logging config with [Logger].
+  static void setup() {
+    if (Log.enabled) {
+      Logger.root.level = Level.ALL;
+      Logger.root.onRecord.listen((record) => debugPrint(Log.format(record)));
+    }
+  }
 }
