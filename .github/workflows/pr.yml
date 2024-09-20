@@ -1,8 +1,6 @@
 name: PRs
 
 on:
-  pull_request:
-    types: [ labeled ]
   issue_comment:                                     
     types: [ created ]
 
@@ -15,7 +13,7 @@ permissions:
 
 jobs:
   build:
-    if: ${{ (github.event.label && github.event.label.name == 'build-apk') || (github.event.comment && contains(github.event.comment.body, '/build')) }}
+    if: ${{ contains(github.event.comment.html_url, '/pull/') && contains(github.event.comment.body, '/build') }}
     runs-on: ubuntu-latest
 
     steps:
