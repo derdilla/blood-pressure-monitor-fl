@@ -22,8 +22,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:health_data_store/health_data_store.dart';
-import 'package:jsaver/jSaver.dart';
 import 'package:path/path.dart';
+import 'package:persistent_user_dir_access_android/persistent_user_dir_access_android.dart';
 import 'package:provider/provider.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -74,11 +74,13 @@ class ExportButtonBar extends StatelessWidget {
                       _showError(messenger, localizations.errCantReadFile);
                       return;
                     }
+                    if (!context.mounted) return;
                     final converter = CsvConverter(
                       Provider.of<CsvExportSettings>(context, listen: false),
                       Provider.of<ExportColumnsManager>(context, listen: false),
                       await RepositoryProvider.of<MedicineRepository>(context).getAll(),
                     );
+                    if (!context.mounted) return;
                     final importedRecords = await showImportPreview(
                       context,
                       CsvRecordParsingActor(
@@ -183,8 +185,9 @@ void performExport(BuildContext context, [AppLocalizations? localizations]) asyn
   switch (exportSettings.exportFormat) {
     case ExportFormat.db:
       final path = join(await getDatabasesPath(), 'bp.db');
+      final data = await File(path).readAsBytes();
 
-      if (context.mounted) await _exportFile(context, path, '$filename.db', 'application/vnd.sqlite3');
+      if (context.mounted) await _exportData(context, data, '$filename.db', 'application/vnd.sqlite3');
       break;
     case ExportFormat.csv:
       final csvConverter = CsvConverter(
@@ -224,29 +227,13 @@ Future<List<FullEntry>> _getEntries(BuildContext context) async {
   return entries;
 }
 
-/// Save to default export path or share by providing a path.
-Future<void> _exportFile(BuildContext context, String path, String fullFileName, String mimeType) async {
-  final settings = Provider.of<ExportSettings>(context, listen: false);
-  if (settings.defaultExportDir.isEmpty) {
-    await PlatformClient.shareFile(path, mimeType, fullFileName);
-  } else {
-    await JSaver.instance.save(
-        fromPath: path,
-        androidPathOptions: AndroidPathOptions(toDefaultDirectory: true),
-    );
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text(AppLocalizations.of(context)!.success(settings.defaultExportDir)),),);
-  }
-}
-
 /// Save to default export path or share by providing binary data.
 Future<void> _exportData(BuildContext context, Uint8List data, String fullFileName, String mimeType) async {
   final settings = Provider.of<ExportSettings>(context, listen: false);
-  if (settings.defaultExportDir.isEmpty) {
+  if (settings.defaultExportDir.isEmpty || !Platform.isAndroid) {
     await PlatformClient.shareData(data, mimeType, fullFileName);
   } else {
-    final file = File(joinPath(Directory.systemTemp.path, fullFileName));
-    file.writeAsBytesSync(data);
-    await _exportFile(context, file.path, fullFileName, mimeType);
+    const userDir = PersistentUserDirAccessAndroid();
+    await userDir.writeFile(settings.defaultExportDir, fullFileName, mimeType, data);
   }
 }
