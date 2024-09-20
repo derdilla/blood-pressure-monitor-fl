@@ -230,7 +230,7 @@ Future<List<FullEntry>> _getEntries(BuildContext context) async {
 /// Save to default export path or share by providing binary data.
 Future<void> _exportData(BuildContext context, Uint8List data, String fullFileName, String mimeType) async {
   final settings = Provider.of<ExportSettings>(context, listen: false);
-  if (settings.defaultExportDir.isEmpty) {
+  if (settings.defaultExportDir.isEmpty || !Platform.isAndroid) {
     await PlatformClient.shareData(data, mimeType, fullFileName);
   } else {
     const userDir = PersistentUserDirAccessAndroid();
