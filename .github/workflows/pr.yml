@@ -59,6 +59,7 @@ jobs:
         name: build-results
         path: app/build/app/outputs/flutter-apk
     - uses: mondeja/remove-labels-gh-action@v2
+      if: always()
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
         labels: build-apk
