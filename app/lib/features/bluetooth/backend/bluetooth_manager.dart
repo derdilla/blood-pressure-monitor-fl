@@ -18,7 +18,7 @@ abstract class BluetoothManager<BackendDevice, BackendUuid, BackendService, Back
   }
 
   /// Request to enable bluetooth on the device
-  Future<bool> enable();
+  Future<bool> enable(); // TODO: use task specific plugin/native code
 
   /// Last known adapter state
   ///

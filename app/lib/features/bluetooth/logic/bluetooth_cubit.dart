@@ -14,7 +14,8 @@ class BluetoothCubit extends Cubit<BluetoothState> with TypeLogger {
   /// Create a cubit connecting to the bluetooth module for availability.
   ///
   /// [manager] manager to check availabilty of.
-  BluetoothCubit({ required BluetoothManager manager }): super(BluetoothState.fromAdapterState(manager.lastKnownAdapterState)) {
+  BluetoothCubit({ required BluetoothManager manager }):
+        super(BluetoothState.fromAdapterState(manager.lastKnownAdapterState)) {
     _manager = manager;
     _adapterStateSubscription = _manager.stateStream.listen(_onAdapterStateChanged);
 
@@ -55,7 +56,5 @@ class BluetoothCubit extends Cubit<BluetoothState> with TypeLogger {
   /// the app won't get notified about permission changes and such. In those
   /// instances the user should have the option to manually recheck the state to
   /// avoid getting stuck on a unauthorized state.
-  Future<void> forceRefresh() async {
-    _onAdapterStateChanged(_lastKnownState);
-  }
+  void forceRefresh() => _onAdapterStateChanged(_lastKnownState);
 }

@@ -3,27 +3,20 @@ part of 'bluetooth_cubit.dart';
 /// State of the devices bluetooth module.
 @immutable
 sealed class BluetoothState {
-  /// constructor
+  /// Initialize state of the devices bluetooth module.
   const BluetoothState();
 
   /// Returns the [BluetoothState] instance for given [BluetoothAdapterState] enum state
-  factory BluetoothState.fromAdapterState(BluetoothAdapterState state) {
-    switch(state) {
-      case BluetoothAdapterState.unauthorized:
-        // Bluetooth permissions should always be granted on normal android
-        // devices. Users on non-standard android devices will know how to
-        // enable them. If this is not the case there will be bug reports.
-        return BluetoothStateUnauthorized();
-      case BluetoothAdapterState.unfeasible:
-        return BluetoothStateUnfeasible();
-      case BluetoothAdapterState.disabled:
-        return BluetoothStateDisabled();
-      case BluetoothAdapterState.initial:
-        return BluetoothStateInitial();
-      case BluetoothAdapterState.ready:
-        return BluetoothStateReady();
-    }
-  }
+  factory BluetoothState.fromAdapterState(BluetoothAdapterState state) => switch(state) {
+    // Bluetooth permissions should always be granted on normal android
+    // devices. Users on non-standard android devices will know how to
+    // enable them. If this is not the case there will be bug reports.
+    BluetoothAdapterState.unauthorized => BluetoothStateUnauthorized(),
+    BluetoothAdapterState.unfeasible => BluetoothStateUnfeasible(),
+    BluetoothAdapterState.disabled => BluetoothStateDisabled(),
+    BluetoothAdapterState.initial => BluetoothStateInitial(),
+    BluetoothAdapterState.ready => BluetoothStateReady(),
+  };
 }
 
 /// No information on whether bluetooth is available.

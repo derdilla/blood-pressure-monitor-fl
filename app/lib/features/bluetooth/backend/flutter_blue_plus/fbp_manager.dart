@@ -28,7 +28,6 @@ class FlutterBluePlusManager extends BluetoothManager<ScanResult, Guid, fbp.Blue
       await backend.turnOn();
       return true;
     }
-
     return false;
   }
 

@@ -6,10 +6,12 @@ import 'package:blood_pressure_app/features/bluetooth/logic/characteristics/deco
 import 'package:blood_pressure_app/logging.dart';
 import 'package:health_data_store/health_data_store.dart';
 
+/// Result of a single bp measurement as by ble spec.
+///
 /// https://developer.nordicsemi.com/nRF51_SDK/nRF51_SDK_v4.x.x/doc/html/structble__bps__meas__s.html
 /// https://github.com/NordicSemiconductor/Kotlin-BLE-Library/blob/6b565e59de21dfa53ef80ff8351ac4a4550e8d58/profile/src/main/java/no/nordicsemi/android/kotlin/ble/profile/bps/BloodPressureMeasurementParser.kt
 class BleMeasurementData {
-  /// constructor
+  /// Initialize result of a single bp measurement.
   BleMeasurementData({
     required this.systolic,
     required this.diastolic,

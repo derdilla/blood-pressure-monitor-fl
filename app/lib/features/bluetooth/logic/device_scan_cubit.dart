@@ -62,7 +62,6 @@ class DeviceScanCubit extends Cubit<DeviceScanState> with TypeLogger {
       logger.severe('Failed to stop scanning', err);
       return false;
     }
-
     return true;
   }
 

@@ -35,7 +35,6 @@ import 'package:path/path.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-
 /// Primary settings page to manage basic settings and link to subsettings.
 class SettingsPage extends StatelessWidget {
   /// Create a primary settings screen.

@@ -130,7 +130,8 @@ class BleReadCubit extends Cubit<BleReadState> with TypeLogger {
     await super.close();
   }
 
-  /// Called after reading from a device returned multiple measurements and the user chose which measurement they wanted to add.
+  /// Called after reading from a device returned multiple measurements and the
+  /// user chose which measurement they wanted to add.
   Future<void> useMeasurement(BleMeasurementData data) async {
     assert(state is! BleReadSuccess);
     emit(BleReadSuccess(data));
