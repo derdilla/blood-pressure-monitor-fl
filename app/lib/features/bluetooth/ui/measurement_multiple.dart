@@ -24,17 +24,23 @@ class MeasurementMultiple extends StatelessWidget {
   final void Function(BleMeasurementData data) onSelect;
   
   Widget _buildMeasurementTile(BuildContext context, int index, BleMeasurementData data) {
-    final l18n = AppLocalizations.of(context);
+    final localizations = AppLocalizations.of(context)!;
     return ListTile(
-      title: Text(data.timestamp?.toIso8601String() ?? l18n!.measurementIndex(index + 1)),
-      subtitle: Text(
-        '${data.userID == null ? '' : '${l18n!.userID}: ${data.userID}, '}'
-        '${l18n!.bloodPressure}: ${data.systolic.round()}/${data.diastolic.round()}'
-        '${data.pulse == null ? '' : ', ${l18n!.pulLong}: ${data.pulse?.round()}'}'
-      ),
+      title: Text(data.timestamp?.toIso8601String() ?? localizations.measurementIndex(index + 1)),
+      subtitle: Text(() {
+        String str = '';
+        if (data.userID != null) {
+          str += '${localizations.userID}: ${data.userID}, ';
+        }
+        str += '${localizations.bloodPressure}: ${data.systolic.round()}/${data.diastolic.round()}';
+        if (data.pulse != null) {
+          str += ', ${localizations.pulLong}: ${data.pulse?.round()}';
+        }
+        return str;
+      }()),
       trailing: FilledButton(
         onPressed: () => onSelect(data),
-        child: Text(l18n!.select),
+        child: Text(localizations.select),
       ),
       onTap: () => onSelect(data),
     );
