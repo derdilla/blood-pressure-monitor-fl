@@ -1,5 +1,5 @@
-* Reimplement home and statistics graphs to fix some longstanding bugs and improve general performance
-* Fix medicine intake deletion
-* Simplify settings storage format to fix settings not saving on some devices
-* Fix date switcher clipping in some cases
-* Complete Turkish, Italian, Spanish, French, and Chinese translations (thanks to various people on weblate)
+*重新实现主页和统计图，以修复一些长期存在的错误并提高总体性能
+*修复药物摄入删除
+*简化设置存储格式，以修复某些设备上无法保存的设置
+*修复某些情况下的日期切换器剪切问题
+*完整的土耳其语、意大利语、西班牙语、法语和中文翻译（感谢网友）
