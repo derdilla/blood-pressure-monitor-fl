@@ -1,11 +1,11 @@
-<p><i>blood pressure monitor</i> is a reliable blood pressure measurement tracker and analyzer. It has the ambition to allow saving measurements faster than anywhere else and make sharing data with you doctor effortless. It works out of the box but can also be configured for individual use cases.</p>
+<p><i>blood pressure monitor</i> é um rastreador e analisador confiável de medição de pressão arterial. Tem a ambição de permitir salvar medições mais rápido do que em qualquer outro lugar e tornar o compartilhamento de dados com seu médico sem esforço. Ele funciona imediatamente, mas também pode ser configurado para casos de uso individuais.</p>
 
 Features:
-- 📏 <b>Reliable</b> measurement storing
-- 🚀 Fast input through <b>user-friendly</b> dialogues on launch and automatic form navigation
-- 📊 <b>Beautiful</b> analytics provide insights on trends, distribution, differences over the day and much more
-- 📂 Versatile <b>export and import</b> (CSV, PDF, SQLite) with granular control
-- ⚙️ High configurability
-- 🔗 BLE GATT input through bluetooth devices
-- Ad free without disturbances
-- Well-documented, <b>open-source</b> code
+- 📏 <b>Confiável</b> armazenamento de medições
+- 🚀 Entrada rápida através de <b>amigáveis</b> diálogos ao lançar e navegação automática de formulários
+- 📊 <b>Belas</b> análises fornecem insights sobre tendências, distribuição, diferenças ao longo do dia e muito mais
+- 📂 Versátil <b>exportação e importação</b> (CSV, PDF, SQLite) com controle granular
+- ⚙️ Alta configurabilidade
+- 🔗 Entrada BLE GATT através de dispositivos bluetooth
+- Sem anúncios e sem perturbações
+- Bem documentado, com <b>código fonte aberto</b>
