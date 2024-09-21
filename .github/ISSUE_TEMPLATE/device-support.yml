@@ -1,0 +1,59 @@
+name: "Bluetooth device support"
+description: Tell us how your blootooth blood-pressure device works.
+title: "Device compatability info"
+labels: ["bluetooth", "device-support"]
+body:
+  - type: input
+    id: device
+    attributes:
+      label: Device
+      placeholder: Omron X4 Smart
+    validations:
+      required: true
+  - type: input
+    id: ble-name
+    attributes:
+      label: Bluetooth name
+      description: The device name as it shows up in connection dialoge
+      placeholder: SBM69
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: supported
+    attributes:
+      label: Does the device work?
+      options:
+        - label: Can you transmit a measurement using the latest app version?
+    validations:
+      required: true
+  
+  - type: dropdown
+    id: measurement-mode
+    attributes:
+      label: What happens after connecting? 
+      options:
+        - Transmits a single measurement
+        - Transmits multiple measurements
+        - "Transmits a 'random' measurement"
+  
+  - type: checkboxes
+    id: device-bahvior
+    attributes:
+      label: Device behavior
+      options:
+        - label: Transmitted timestamp is correct
+        - label: Transmitted timestamp increments each measurement
+        - label: Deletes measurements from device after transmitting
+        - label: Automatically disconnects/powers-off after transmitting
+
+  - type: textarea
+    id: gatt-suport-list
+    attributes:
+      label: Supported BLE-GATT services and characterisic
+      description: "If you have a list of GATT features your device support, please provide it so we are prepared for new features!"
+      
+  - type: textarea
+    attributes:
+      label: Notes
+      description: "Here you can note things that don't fit in the schema / request support for your devices specific behavior."
