@@ -98,7 +98,7 @@ final class BluetoothLowEnergyDevice
       }
     }
 
-    if (characteristic.canIndicate) { // Listen for characteristic value and trigger the device to send it
+    else if (characteristic.canIndicate) { // Listen for characteristic value and trigger the device to send it
       return listenCharacteristicValue(
         characteristic,
         _cm.characteristicNotified.map((eventArgs) {
