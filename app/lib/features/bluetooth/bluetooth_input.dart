@@ -223,7 +223,7 @@ class _BluetoothInputState extends State<BluetoothInput> with TypeLogger {
             reason: state.reason,
           ),
           BleReadMultiple() => MeasurementMultiple(
-            onTap: _returnToIdle,
+            onClosed: _returnToIdle,
             onSelect: (data) => _deviceReadCubit!.useMeasurement(data),
             measurements: state.data,
           ),

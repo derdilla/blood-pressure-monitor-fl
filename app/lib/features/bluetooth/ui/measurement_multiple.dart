@@ -9,7 +9,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 class MeasurementMultiple extends StatelessWidget {
   /// Indicate a successful read while taking a bluetooth measurement.
   const MeasurementMultiple({super.key,
-    required this.onTap,
+    required this.onClosed,
     required this.onSelect,
     required this.measurements,
   });
@@ -18,7 +18,7 @@ class MeasurementMultiple extends StatelessWidget {
   final List<BleMeasurementData> measurements;
 
   /// Called when the user requests closing.
-  final void Function() onTap;
+  final void Function() onClosed;
 
   /// Called when user selects a measurement
   final void Function(BleMeasurementData data) onSelect;
@@ -69,18 +69,16 @@ class MeasurementMultiple extends StatelessWidget {
       return aTimestamp > bTimestamp ? -1 : 1;
     });
 
-    return GestureDetector(
-      onTap: onTap,
-      child: InputCard(
-        title: Text(AppLocalizations.of(context)!.selectMeasurementTitle),
-        child: ListView(
-          shrinkWrap: true,
-          children: [
-            for (final (index, data) in measurements.indexed)
-              _buildMeasurementTile(context, index, data),
-          ]
-        ),
-      )
+  return InputCard(
+      onClosed: onClosed,
+      title: Text(AppLocalizations.of(context)!.selectMeasurementTitle),
+      child: ListView(
+        shrinkWrap: true,
+        children: [
+          for (final (index, data) in measurements.indexed)
+            _buildMeasurementTile(context, index, data),
+        ]
+      ),
     );
   }
 }
