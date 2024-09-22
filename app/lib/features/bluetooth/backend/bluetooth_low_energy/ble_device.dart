@@ -69,7 +69,7 @@ final class BluetoothLowEnergyDevice
   
   @override
   Future<bool> triggerCharacteristicValue(BluetoothLowEnergyCharacteristic characteristic, [bool state = true]) async {
-    await _cm.setCharacteristicNotifyState(source.peripheral, characteristic.source, state: true);
+    await _cm.setCharacteristicNotifyState(source.peripheral, characteristic.source, state: state);
     return true;
   }
 
