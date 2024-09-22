@@ -54,7 +54,7 @@ class ClosedBluetoothInput extends StatelessWidget with TypeLogger {
             icon: Icons.bluetooth_disabled,
             onTap: () async {
               await AppSettings.openAppSettings();
-              await bluetoothCubit.forceRefresh();
+              bluetoothCubit.forceRefresh();
             },
           ),
           BluetoothStateDisabled() => _buildTile(
@@ -63,7 +63,7 @@ class ClosedBluetoothInput extends StatelessWidget with TypeLogger {
             onTap: () async {
               final bluetoothOn = await bluetoothCubit.enableBluetooth();
               if (!bluetoothOn) await AppSettings.openAppSettings(type: AppSettingsType.bluetooth);
-              await bluetoothCubit.forceRefresh();
+              bluetoothCubit.forceRefresh();
             },
           ),
           BluetoothStateReady() => _buildTile(
