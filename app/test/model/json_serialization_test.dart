@@ -1,4 +1,5 @@
 
+import 'package:blood_pressure_app/model/blood_pressure/pressure_unit.dart';
 import 'package:blood_pressure_app/model/export_import/column.dart';
 import 'package:blood_pressure_app/model/export_import/export_configuration.dart';
 import 'package:blood_pressure_app/model/horizontal_graph_line.dart';
@@ -8,6 +9,7 @@ import 'package:blood_pressure_app/model/storage/export_pdf_settings_store.dart'
 import 'package:blood_pressure_app/model/storage/export_settings_store.dart';
 import 'package:blood_pressure_app/model/storage/interval_store.dart';
 import 'package:blood_pressure_app/model/storage/settings_store.dart';
+import 'package:blood_pressure_app/model/weight_unit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:health_data_store/health_data_store.dart';
@@ -97,6 +99,8 @@ void main() {
         knownBleDev: ['a', 'b'],
         bleInput: false,
         weightInput: true,
+        weightUnit: WeightUnit.st,
+        preferredPressureUnit: PressureUnit.kPa,
       );
       final fromJson = Settings.fromJson(initial.toJson());
 
@@ -126,6 +130,8 @@ void main() {
       expect(initial.knownBleDev, fromJson.knownBleDev);
       expect(initial.bleInput, fromJson.bleInput);
       expect(initial.weightInput, fromJson.weightInput);
+      expect(initial.preferredPressureUnit, fromJson.preferredPressureUnit);
+      expect(initial.weightUnit, fromJson.weightUnit);
 
       expect(initial.toJson(), fromJson.toJson());
     });
