@@ -1,5 +1,7 @@
+import 'package:blood_pressure_app/model/storage/settings_store.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:health_data_store/health_data_store.dart';
 
@@ -18,7 +20,7 @@ class AddBodyweightDialoge extends StatelessWidget {
         autofocus: true,
         decoration: InputDecoration(
           labelText: AppLocalizations.of(context)!.weight,
-          suffix: const Text('kg'),
+          suffix: Text(context.select((Settings s) => s.weightUnit).name),
         ),
         inputFormatters: [FilteringTextInputFormatter.allow(RegExp('[0-9,.]'))],
         keyboardType: const TextInputType.numberWithOptions(decimal: true),
@@ -32,9 +34,12 @@ class AddBodyweightDialoge extends StatelessWidget {
           }
           return null;
         },
-        onFieldSubmitted: (text) {
+        onFieldSubmitted: (String text) {
           final value = double.tryParse(text);
-          if (value != null) Navigator.of(context).pop(Weight.kg(value));
+          if (value != null) {
+            final weight = context.read<Settings>().weightUnit.store(value);
+            Navigator.of(context).pop(weight);
+          }
         },
       ),
     ),
