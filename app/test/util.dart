@@ -230,18 +230,25 @@ class MockHealthDataSore implements HealthDataStore {
 
 class _MockRepo<T> extends Repository<T> {
   List<T> data = [];
+  final contr = StreamController.broadcast();
 
   @override
-  Future<void> add(T value) async => data.add(value);
+  Future<void> add(T value) async {
+    data.add(value);
+    contr.sink.add(null);
+  }
 
   @override
   Future<List<T>> get(DateRange range) async => data;
 
   @override
-  Future<void> remove(T value) async => data.remove(value);
+  Future<void> remove(T value) async {
+    data.remove(value);
+    contr.sink.add(null);
+  }
 
   @override
-  Stream subscribe() => const Stream.empty(); // FIXME
+  Stream subscribe() => contr.stream;
 
   @override
   dynamic noSuchMethod(Invocation invocation) => throw Exception('unexpected call: $invocation');
