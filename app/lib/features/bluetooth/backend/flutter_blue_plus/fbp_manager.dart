@@ -43,6 +43,12 @@ class FlutterBluePlusManager extends BluetoothManager<ScanResult, Guid, fbp.Blue
   @override
   Stream<BluetoothAdapterState> get stateStream => backend.adapterState.map(_adapterStateParser.parse);
 
+  @override
+  Future<bool> requestPermissions() async {
+    if (Platform.isAndroid) await backend.turnOn();
+    return true;
+  }
+
   FlutterBluePlusDiscovery? _discovery;
 
   @override

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:blood_pressure_app/features/bluetooth/backend/bluetooth_low_energy/ble_device.dart';
 import 'package:blood_pressure_app/features/bluetooth/backend/bluetooth_low_energy/ble_discovery.dart';
@@ -15,16 +16,14 @@ final class BluetoothLowEnergyManager extends BluetoothManager<DiscoveredEventAr
     logger.fine('init');
 
     // Sync current adapter state
-    _adapterStateParser.parseAndCache(BluetoothLowEnergyStateChangedEventArgs(_backend.state));
+    _adapterStateParser.parseAndCache(BluetoothLowEnergyStateChangedEventArgs(backend.state));
   }
 
   @override
   Future<bool> enable() => Future.value(false);
 
-  final CentralManager _backend = CentralManager();
-
   /// The actual backend implementation
-  CentralManager get backend => _backend;
+  final CentralManager backend = CentralManager();
 
   final BluetoothLowEnergyStateParser _adapterStateParser = BluetoothLowEnergyStateParser();
 
@@ -32,7 +31,10 @@ final class BluetoothLowEnergyManager extends BluetoothManager<DiscoveredEventAr
   BluetoothAdapterState get lastKnownAdapterState => _adapterStateParser.lastKnownState;
 
   @override
-  Stream<BluetoothAdapterState> get stateStream => _backend.stateChanged.map(_adapterStateParser.parse);
+  Stream<BluetoothAdapterState> get stateStream => backend.stateChanged.map(_adapterStateParser.parse);
+
+  @override
+  Future<bool> requestPermissions() async => Platform.isAndroid && await backend.authorize();
 
   BluetoothLowEnergyDiscovery? _discovery;
 

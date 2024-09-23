@@ -130,7 +130,7 @@ abstract class BluetoothDevice<
 
     if (logServices) {
       logger.finest(_services
-        ?.map((s) => '$s:\n Characteristic: [${s.characteristics.join(',')}]')
+        ?.map((s) => 'Found services\n$s:\n  - ${s.characteristics.join('\n  - ')}]')
         .join('\n'));
     }
 

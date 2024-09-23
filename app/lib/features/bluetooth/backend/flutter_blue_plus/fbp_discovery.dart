@@ -1,7 +1,7 @@
 import 'package:blood_pressure_app/features/bluetooth/backend/bluetooth_device.dart';
 import 'package:blood_pressure_app/features/bluetooth/backend/bluetooth_discovery.dart';
 import 'package:blood_pressure_app/features/bluetooth/backend/flutter_blue_plus/fbp_manager.dart';
-import 'package:flutter_blue_plus/flutter_blue_plus.dart' show Guid, ScanResult;
+import 'package:flutter_blue_plus/flutter_blue_plus.dart' show Guid;
 
 /// BluetoothDeviceDiscovery implementation for the 'flutter_blue_plus' package
 final class FlutterBluePlusDiscovery extends BluetoothDeviceDiscovery<FlutterBluePlusManager> {
