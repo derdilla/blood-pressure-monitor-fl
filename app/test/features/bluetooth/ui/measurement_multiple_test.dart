@@ -53,7 +53,7 @@ void main() {
     ];
 
     await tester.pumpWidget(materialApp(MeasurementMultiple(
-      onTap: () => tapCount++,
+      onClosed: () => tapCount++,
       onSelect: selected.add,
       measurements: measurements,
     )));
