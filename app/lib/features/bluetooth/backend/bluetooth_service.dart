@@ -1,3 +1,4 @@
+import 'package:blood_pressure_app/logging.dart';
 import 'package:collection/collection.dart';
 
 /// Bluetooth Base UUID from Bluetooth Core Spec
@@ -46,12 +47,21 @@ abstract class BluetoothUuid<BackendUuid> {
   }
 
   @override
-  bool operator ==(Object other) => switch (other.runtimeType) {
-    final BluetoothUuid other => toString() == other.toString(),
-    final BluetoothService other => toString() == other.uuid.toString(),
-    final BluetoothCharacteristic other => toString() == other.uuid.toString(),
-    _ => false,
-  };
+  bool operator == (Object other) {
+    if (other is BluetoothUuid) {
+      return toString() == other.toString();
+    }
+
+    if (other is BluetoothService) {
+      return toString() == other.uuid.toString();
+    }
+
+    if (other is BluetoothCharacteristic) {
+      return toString() == other.uuid.toString();
+    }
+
+    return false;
+  }
 
   @override
   int get hashCode => super.hashCode * 17;
@@ -75,7 +85,7 @@ abstract class BluetoothService<BackendService, BC extends BluetoothCharacterist
   Future<BC?> getCharacteristicByUuid(BluetoothUuid uuid) async => characteristics.firstWhereOrNull((service) => service.uuid == uuid);
 
   @override
-  String toString() => 'BluetoothService{uuid: 0x${uuid.shortId}, source: ${source.runtimeType}}';
+  String toString() => 'BluetoothService{uuid: ${uuid.shortId}, source: ${source.runtimeType}}';
 
   @override
   bool operator ==(Object other) => (other is BluetoothService)
