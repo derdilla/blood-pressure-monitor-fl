@@ -1,6 +1,7 @@
 import 'package:blood_pressure_app/components/confirm_deletion_dialoge.dart';
 import 'package:blood_pressure_app/data_util/repository_builder.dart';
 import 'package:blood_pressure_app/model/storage/storage.dart';
+import 'package:blood_pressure_app/model/weight_unit.dart';
 import 'package:flutter/material.dart';
 import 'package:health_data_store/health_data_store.dart';
 import 'package:intl/intl.dart';
@@ -17,6 +18,7 @@ class WeightList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final format = DateFormat(context.select<Settings, String>((s) => s.dateFormatString));
+    final weightUnit = context.select((Settings s) => s.weightUnit);
     return RepositoryBuilder<BodyweightRecord, BodyweightRepository>(
       rangeType: rangeType,
       onData: (context, records) {
@@ -24,7 +26,7 @@ class WeightList extends StatelessWidget {
         return ListView.builder(
           itemCount: records.length,
           itemBuilder: (context, idx) => ListTile(
-            title: Text(_buildWeightText(records[idx].weight)),
+            title: Text(_buildWeightText(weightUnit, records[idx].weight)),
             subtitle: Text(format.format(records[idx].time)),
             trailing: IconButton(
               icon: const Icon(Icons.delete),
@@ -41,12 +43,12 @@ class WeightList extends StatelessWidget {
     );
   }
 
-  String _buildWeightText(Weight w) {
-    String weightStr = w.kg.toStringAsFixed(2);
+  String _buildWeightText(WeightUnit u, Weight w) {
+    String weightStr = u.extract(w).toStringAsFixed(2);
     if (weightStr.endsWith('0')) weightStr = weightStr.substring(0, weightStr.length - 1);
     if (weightStr.endsWith('0')) weightStr = weightStr.substring(0, weightStr.length - 1);
     if (weightStr.endsWith('.')) weightStr = weightStr.substring(0, weightStr.length - 1);
-    // TODO: preferred weight unit
-    return '$weightStr kg';
+
+    return '$weightStr ${u.name}';
   }
 }

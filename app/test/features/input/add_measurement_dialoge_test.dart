@@ -16,11 +16,7 @@ import '../settings/tiles/color_picker_list_tile_test.dart';
 void main() {
   group('AddEntryDialoge', () {
     testWidgets('should show everything on initial page', (tester) async {
-      await tester.pumpWidget(materialApp(
-        AddEntryDialoge(
-          availableMeds: [],
-        ),
-      ),);
+      await tester.pumpWidget(materialApp(const AddEntryDialoge(availableMeds: [])));
       expect(tester.takeException(), isNull);
 
       expect(find.byType(DropdownButton<Medicine?>), findsNothing, reason: 'No medication in settings.');
@@ -37,7 +33,7 @@ void main() {
           initialRecord: mockEntryPos(
             DateTime.now(), 123, 56, 43, 'Test note', Colors.teal,
           ),
-          availableMeds: [],
+          availableMeds: const [],
         ),
       ),);
       await tester.pumpAndSettle();
@@ -149,7 +145,7 @@ void main() {
       );
       await tester.pumpWidget(materialApp(
         AddEntryDialoge(
-          availableMeds: [],
+          availableMeds: const [],
         ),
         settings: settings,
       ),);

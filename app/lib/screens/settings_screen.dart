@@ -25,6 +25,7 @@ import 'package:blood_pressure_app/model/storage/db/file_settings_loader.dart';
 import 'package:blood_pressure_app/model/storage/db/settings_loader.dart';
 import 'package:blood_pressure_app/model/storage/export_columns_store.dart';
 import 'package:blood_pressure_app/model/storage/storage.dart';
+import 'package:blood_pressure_app/model/weight_unit.dart';
 import 'package:blood_pressure_app/platform_integration/platform_client.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
@@ -299,6 +300,22 @@ class SettingsPage extends StatelessWidget {
                 onChanged: (value) {
                   settings.weightInput = value;
                 },),
+              if (settings.weightInput)
+                DropDownListTile<WeightUnit?>(
+                  leading: const Icon(Icons.language),
+                  title: Text(localizations.preferredWeightUnit),
+                  value: settings.weightUnit,
+                  items: [
+                    for (final u in WeightUnit.values)
+                      DropdownMenuItem(
+                        value: u,
+                        child: Text(u.name),
+                      ),
+                  ],
+                  onChanged: (WeightUnit? value) {
+                    if (value != null) settings.weightUnit = value;
+                  },
+                ),
             ],),
             TitledColumn(
               title: Text(localizations.data),

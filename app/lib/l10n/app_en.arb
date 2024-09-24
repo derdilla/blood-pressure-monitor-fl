@@ -522,5 +522,9 @@
   "weight": "Weight",
   "@weight": {},
   "enterWeight": "Enter weight",
-  "@enterWeight": {}
+  "@enterWeight": {},
+  "preferredWeightUnit": "Preferred weight unit",
+  "@preferredWeightUnit": {
+    "description": "Setting for the unit the app will use for displaying weight"
+  }
 }

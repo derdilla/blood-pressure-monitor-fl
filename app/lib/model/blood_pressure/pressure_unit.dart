@@ -1,4 +1,3 @@
-
 import 'package:health_data_store/health_data_store.dart';
 
 /// A unit blood pressure can be in.
@@ -19,11 +18,7 @@ enum PressureUnit {
   static PressureUnit? decode(int? encoded) => switch(encoded) {
     0 => PressureUnit.mmHg,
     1 => PressureUnit.kPa,
-    null => null,
-    _ => (){
-      assert(false);
-      return null;
-    }(),
+    _ => null,
   };
 
   /// Converts a value to a [Pressure] of this [PressureUnit].

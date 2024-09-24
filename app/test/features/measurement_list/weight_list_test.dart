@@ -1,6 +1,7 @@
 import 'package:blood_pressure_app/features/measurement_list/weight_list.dart';
 import 'package:blood_pressure_app/model/storage/interval_store.dart';
 import 'package:blood_pressure_app/model/storage/settings_store.dart';
+import 'package:blood_pressure_app/model/weight_unit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -101,5 +102,22 @@ void main() {
 
     expect(find.text(localizations.confirmDelete), findsNothing);
     expect(find.text('123 kg'), findsNothing);
+  });
+  testWidgets('respects confirm weight unit setting', (tester) async {
+    final interval = IntervalStorage();
+    interval.changeStepSize(TimeStep.lifetime);
+    final repo = MockBodyweightRepository();
+    await repo.add(BodyweightRecord(time: DateTime(2001), weight: Weight.kg(123.0)));
+
+    await tester.pumpWidget(appBase(
+      weightRepo: repo,
+      intervallStoreManager: IntervalStoreManager(interval, IntervalStorage(), IntervalStorage()),
+      settings: Settings(weightUnit: WeightUnit.lbs),
+      const WeightList(rangeType: IntervalStoreManagerLocation.mainPage),
+    ));
+    await tester.pumpAndSettle();
+
+    expect(find.text('123 kg'), findsNothing);
+    expect(find.text('55.79 lbs'), findsOneWidget);
   });
 }
