@@ -433,7 +433,7 @@ class SettingsPage extends StatelessWidget {
                 trailing: const Icon(Icons.open_in_new),
                 onTap: () async {
                   final scaffoldMessenger = ScaffoldMessenger.of(context);
-                  final url = Uri.parse('https://github.com/NobodyForNothing/blood-pressure-monitor-fl');
+                  final url = Uri.parse('https://github.com/derdilla/blood-pressure-monitor-fl');
                   if (await canLaunchUrl(url)) {
                     await launchUrl(url, mode: LaunchMode.externalApplication);
                   } else {
