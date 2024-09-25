@@ -86,12 +86,12 @@ class ErrorScreen extends StatelessWidget {
                   TextButton(
                     onPressed: () async {
                       try {
-                        final url = Uri.parse('https://github.com/NobodyForNothing/blood-pressure-monitor-fl/issues');
+                        final url = Uri.parse('https://github.com/derdilla/blood-pressure-monitor-fl/issues');
                         if (await canLaunchUrl(url)) {
                           await launchUrl(url, mode: LaunchMode.externalApplication);
                         } else {
                           scaffoldMessenger.showSnackBar(const SnackBar(
-                            content: Text('ERR: Please open this website: https://github.com/NobodyForNothing/blood-pressure-monitor-fl/issues'),),);
+                            content: Text('ERR: Please open this website: https://github.com/derdilla/blood-pressure-monitor-fl/issues'),),);
                         }
                       } catch (e) {
                         scaffoldMessenger.showSnackBar(SnackBar(
