@@ -22,7 +22,10 @@ abstract class BluetoothManager<BackendDevice, BackendUuid, BackendService, Back
     }
   }
 
-  /// Request to enable bluetooth on the device
+  /// Trigger the device to request the user for bluetooth ermissions
+  ///
+  /// Returns null if no permissions were requested (ie because its not needed on a platform)
+  /// or true/false to indicate whether requesting permissions succeeded (not if it was granted)
   Future<bool> enable(); // TODO: use task specific plugin/native code
 
   /// Last known adapter state
@@ -33,12 +36,6 @@ abstract class BluetoothManager<BackendDevice, BackendUuid, BackendService, Back
 
   /// Getter for the state stream
   Stream<BluetoothAdapterState> get stateStream;
-
-  /// Trigger the device to request the user for bluetooth ermissions
-  ///
-  /// Returns null if no permissions were requested (ie because its not needed on a platform)
-  /// or true/false to indicate whether requesting permissions succeeded (not if it was granted)
-  Future<bool?> requestPermissions() async => null;
 
   /// Device discovery implementation
   BluetoothDeviceDiscovery get discovery;

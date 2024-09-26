@@ -20,7 +20,7 @@ final class BluetoothLowEnergyManager extends BluetoothManager<DiscoveredEventAr
   }
 
   @override
-  Future<bool> enable() => Future.value(false);
+  Future<bool> enable() async => Platform.isAndroid && await backend.authorize();
 
   /// The actual backend implementation
   final CentralManager backend = CentralManager();
@@ -32,9 +32,6 @@ final class BluetoothLowEnergyManager extends BluetoothManager<DiscoveredEventAr
 
   @override
   Stream<BluetoothAdapterState> get stateStream => backend.stateChanged.map(_adapterStateParser.parse);
-
-  @override
-  Future<bool> requestPermissions() async => Platform.isAndroid && await backend.authorize();
 
   BluetoothLowEnergyDiscovery? _discovery;
 

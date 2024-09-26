@@ -35,9 +35,9 @@ class BluetoothCubit extends Cubit<BluetoothState> with TypeLogger {
 
   void _onAdapterStateChanged(BluetoothAdapterState state) async {
     if (state == BluetoothAdapterState.unauthorized) {
-      final success = await _manager.requestPermissions();
-      if (success == false) {
-        logger.warning('Requesting permissions failed');
+      final success = await _manager.enable();
+      if (!success) {
+        logger.warning('Enabling bluetooth failed');
       }
     }
 
