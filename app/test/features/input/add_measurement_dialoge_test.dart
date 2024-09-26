@@ -16,11 +16,7 @@ import '../settings/tiles/color_picker_list_tile_test.dart';
 void main() {
   group('AddEntryDialoge', () {
     testWidgets('should show everything on initial page', (tester) async {
-      await tester.pumpWidget(materialApp(
-        const AddEntryDialoge(
-          availableMeds: [],
-        ),
-      ),);
+      await tester.pumpWidget(materialApp(const AddEntryDialoge(availableMeds: [])));
       expect(tester.takeException(), isNull);
 
       expect(find.byType(DropdownButton<Medicine?>), findsNothing, reason: 'No medication in settings.');
@@ -148,7 +144,7 @@ void main() {
         bleInput: true,
       );
       await tester.pumpWidget(materialApp(
-        AddEntryDialoge(
+        const AddEntryDialoge(
           availableMeds: [],
         ),
         settings: settings,
@@ -422,7 +418,7 @@ void main() {
         matching: find.byType(TextFormField),
       );
       expect(focusedTextFormField, findsOneWidget);
-      final field = await tester.widget<TextFormField>(focusedTextFormField);
+      final field = tester.widget<TextFormField>(focusedTextFormField);
       expect(field.initialValue, '12');
     });
     testWidgets('should focus next on input finished', (tester) async {

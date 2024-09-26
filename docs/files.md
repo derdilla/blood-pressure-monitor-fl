@@ -16,12 +16,12 @@ When exporting the data as CSV, the file will use standard platform newlines (`\
 
 ## Legacy data
 
-### Until [#189](https://github.com/NobodyForNothing/blood-pressure-monitor-fl/pull/189) and [#195](https://github.com/NobodyForNothing/blood-pressure-monitor-fl/pull/195) ([v1.5.5](https://github.com/NobodyForNothing/blood-pressure-monitor-fl/tree/v1.5.5))
+### Until [#189](https://github.com/derdilla/blood-pressure-monitor-fl/pull/189) and [#195](https://github.com/derdilla/blood-pressure-monitor-fl/pull/195) ([v1.5.5](https://github.com/derdilla/blood-pressure-monitor-fl/tree/v1.5.5))
 
-Settings were stored in androids shared preferences storage. It consisted of a lot of individual keys and update code can be found in the [update_legacy_settings.dart](https://github.com/NobodyForNothing/blood-pressure-monitor-fl/blob/main/app/lib/model/storage/update_legacy_settings.dart) file. Support will be dropped in october 2024 (a year after migration started).
+Settings were stored in androids shared preferences storage. It consisted of a lot of individual keys and update code can be found in the [update_legacy_settings.dart](https://github.com/derdilla/blood-pressure-monitor-fl/blob/main/app/lib/model/storage/update_legacy_settings.dart) file. Support will be dropped in october 2024 (a year after migration started).
 
-### Until [#332](https://github.com/NobodyForNothing/blood-pressure-monitor-fl/pull/332/)
+### Until [#332](https://github.com/derdilla/blood-pressure-monitor-fl/pull/332/)
 
 In a `dbPath`/`blood_pressure.db` SQLite3 database a `bloodPressureModel` table contains entries with the blood pressure records and notes including a json representation of the color in the ("needlePin") column.
 
-The `await getDatabasesPath()`/`medicine.intakes` File consists of a plain text csv like representation of medicine intakes. The format of this file was rather experimental and gets replaced as part of [#257](https://github.com/NobodyForNothing/blood-pressure-monitor-fl/issues/257). For an exact description look at the `deserialize` factory method of the `IntakeHistory` class, but in general every line (including the first) contains a medicine intake with fields seperated by `\x00`. The first field is the medicine id, the second is the time the medicine was taken in milliseconds since epoch and the third is the dosis of the medicine.
+The `await getDatabasesPath()`/`medicine.intakes` File consists of a plain text csv like representation of medicine intakes. The format of this file was rather experimental and gets replaced as part of [#257](https://github.com/derdilla/blood-pressure-monitor-fl/issues/257). For an exact description look at the `deserialize` factory method of the `IntakeHistory` class, but in general every line (including the first) contains a medicine intake with fields seperated by `\x00`. The first field is the medicine id, the second is the time the medicine was taken in milliseconds since epoch and the third is the dosis of the medicine.

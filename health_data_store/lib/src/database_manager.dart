@@ -1,4 +1,3 @@
-
 import 'package:sqflite_common/sqlite_api.dart';
 
 /// Manager for the database.
@@ -8,7 +7,7 @@ import 'package:sqflite_common/sqlite_api.dart';
 ///
 /// ## DB scheme
 ///
-/// ![Diagram](https://github.com/NobodyForNothing/blood-pressure-monitor-fl/blob/main/docs/resources/db-scheme.png?raw=true)
+/// ![Diagram](https://github.com/derdilla/blood-pressure-monitor-fl/blob/main/docs/resources/db-scheme.png?raw=true)
 ///
 /// ## Types
 /// Data in the database tries to always use the most common SI-units.

@@ -3,9 +3,9 @@
 This repository has become quite large, so contributions are greatly appreciated and can come in many forms.
 
 <div align="center">
-<img src="https://tokei.rs/b1/github/NobodyForNothing/blood-pressure-monitor-fl?style=flat-square">
-<img src="https://tokei.rs/b1/github/NobodyForNothing/blood-pressure-monitor-fl?category=code&style=flat-square">
-<img src="https://tokei.rs/b1/github/NobodyForNothing/blood-pressure-monitor-fl?category=comments&style=flat-square">
+<img src="https://tokei.rs/b1/github/derdilla/blood-pressure-monitor-fl?style=flat-square">
+<img src="https://tokei.rs/b1/github/derdilla/blood-pressure-monitor-fl?category=code&style=flat-square">
+<img src="https://tokei.rs/b1/github/derdilla/blood-pressure-monitor-fl?category=comments&style=flat-square">
 </div>
 
 *Please note that when contributing you agree that your work is under the same license as the project.*
@@ -26,11 +26,11 @@ The easiest way to do this is [weblate](https://hosted.weblate.org/engage/blood-
 
 Since this is *FOSS*, you can compile the app yourself and adjust it for you own needs and give back those changes so everyone can profit.
 
-We try to keep the code as documented, simple and maintainable as possible, so you won't need to learn the entire codebase. Additional information about data formats and code style suggestions can be found in the [docs](https://github.com/NobodyForNothing/blood-pressure-monitor-fl/tree/main/docs) folder.
+We try to keep the code as documented, simple and maintainable as possible, so you won't need to learn the entire codebase. Additional information about data formats and code style suggestions can be found in the [docs](https://github.com/derdilla/blood-pressure-monitor-fl/tree/main/docs) folder.
 
 To build the app locally you have to:
 1. [set up](https://docs.flutter.dev/get-started/install) flutter
-2. `git clone https://github.com/NobodyForNothing/blood-pressure-monitor-fl.git`
+2. `git clone https://github.com/derdilla/blood-pressure-monitor-fl.git`
 3. run `dart run build_runner build` in the `health_data_store` directory
 
 After this initial setup you can:

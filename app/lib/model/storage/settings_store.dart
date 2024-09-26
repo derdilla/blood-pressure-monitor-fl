@@ -6,6 +6,7 @@ import 'package:blood_pressure_app/model/blood_pressure/medicine/medicine.dart';
 import 'package:blood_pressure_app/model/blood_pressure/pressure_unit.dart';
 import 'package:blood_pressure_app/model/horizontal_graph_line.dart';
 import 'package:blood_pressure_app/model/storage/convert_util.dart';
+import 'package:blood_pressure_app/model/weight_unit.dart';
 import 'package:flutter/material.dart';
 
 /// Stores settings that are directly controllable by the user through the
@@ -49,6 +50,7 @@ class Settings extends ChangeNotifier {
     int? highestMedIndex,
     bool? bleInput,
     bool? weightInput,
+    WeightUnit? weightUnit,
   }) {
     if (accentColor != null) _accentColor = accentColor;
     if (sysColor != null) _sysColor = sysColor;
@@ -77,6 +79,7 @@ class Settings extends ChangeNotifier {
     if (knownBleDev != null) _knownBleDev = knownBleDev;
     if (bleInput != null) _bleInput = bleInput;
     if (weightInput != null) _weightInput = weightInput;
+    if (weightUnit != null) _weightUnit = weightUnit;
     _language = language; // No check here, as null is the default as well.
   }
 
@@ -112,6 +115,8 @@ class Settings extends ChangeNotifier {
       knownBleDev: ConvertUtil.parseList<String>(map['knownBleDev']),
       bleInput: ConvertUtil.parseBool(map['bleInput']),
       weightInput: ConvertUtil.parseBool(map['weightInput']),
+      preferredPressureUnit: PressureUnit.decode(ConvertUtil.parseInt(map['preferredPressureUnit'])),
+      weightUnit: WeightUnit.deserialize(ConvertUtil.parseInt(map['weightUnit'])),
     );
 
     // update
@@ -160,6 +165,7 @@ class Settings extends ChangeNotifier {
     'knownBleDev': knownBleDev,
     'bleInput': bleInput,
     'weightInput': weightInput,
+    'weightUnit': weightUnit.serialized,
   };
 
   /// Serialize the object to a restoreable string.
@@ -196,6 +202,7 @@ class Settings extends ChangeNotifier {
     _medications.addAll(other._medications);
     _highestMedIndex = other._highestMedIndex;
     _weightInput = other._weightInput;
+    _weightUnit = other._weightUnit;
     notifyListeners();
   }
 
@@ -441,6 +448,14 @@ class Settings extends ChangeNotifier {
   int _highestMedIndex = 0;
   /// Total amount of medicines created.
   int get highestMedIndex => _highestMedIndex;
+
+  WeightUnit _weightUnit = WeightUnit.kg;
+  /// Preferred unit for bodyweight.
+  WeightUnit get weightUnit => _weightUnit;
+  set weightUnit(WeightUnit value) {
+    _weightUnit = value;
+    notifyListeners();
+  }
   
 // When adding fields notice the checklist at the top.
 }
@@ -449,14 +464,9 @@ class Settings extends ChangeNotifier {
 /// [ConvertUtil.parseThemeMode].
 extension Serialization on ThemeMode {
   /// Turns enum into a restoreable integer.
-  int serialize() {
-    switch(this) {
-      case ThemeMode.system:
-        return 0;
-      case ThemeMode.dark:
-        return 1;
-      case ThemeMode.light:
-        return 2;
-    }
-  }
+  int serialize() => switch(this) {
+    ThemeMode.system =>  0,
+    ThemeMode.dark => 1,
+    ThemeMode.light => 2,
+  };
 }
