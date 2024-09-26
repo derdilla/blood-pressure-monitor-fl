@@ -1,5 +1,4 @@
-import 'package:blood_pressure_app/config.dart';
-import 'package:blood_pressure_app/features/bluetooth/backend/bluetooth_device.dart';
+import 'package:blood_pressure_app/features/bluetooth/backend/bluetooth_backend.dart';
 import 'package:blood_pressure_app/features/bluetooth/backend/bluetooth_discovery.dart';
 import 'package:blood_pressure_app/features/bluetooth/backend/bluetooth_low_energy/ble_manager.dart';
 import 'package:blood_pressure_app/features/bluetooth/backend/bluetooth_service.dart';
@@ -11,10 +10,16 @@ import 'package:blood_pressure_app/logging.dart';
 /// Base class for a bluetooth manager
 abstract class BluetoothManager<BackendDevice, BackendUuid, BackendService, BackendCharacteristic> with TypeLogger {
   /// Instantiate the correct [BluetoothManager] implementation.
-  static BluetoothManager create([bool legacyMode = false]) {
-    if (isTestingEnvironment) return MockBluetoothManager();
-    if (legacyMode) return FlutterBluePlusManager();
-    return BluetoothLowEnergyManager();
+  static BluetoothManager create([BluetoothBackend? backend]) {
+    switch (backend) {
+      case BluetoothBackend.mock:
+        return MockBluetoothManager();
+      case BluetoothBackend.flutterBluePlus:
+        return FlutterBluePlusManager();
+      case BluetoothBackend.bluetoothLowEnergy:
+      default:
+        return BluetoothLowEnergyManager();
+    }
   }
 
   /// Request to enable bluetooth on the device
