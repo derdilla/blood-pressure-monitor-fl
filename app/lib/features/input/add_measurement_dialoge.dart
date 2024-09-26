@@ -254,7 +254,7 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
           children: [
             if (settings.bleInput)
               BluetoothInput(
-                manager: BluetoothManager.create(isTestingEnvironment ? BluetoothBackend.mock : BluetoothBackend.bluetoothLowEnergy),
+                manager: BluetoothManager.create(isTestingEnvironment ? BluetoothBackend.mock : BluetoothBackend.flutterBluePlus),
                 onMeasurement: (record) => setState(
                   () => _loadFields((record, Note(time: record.time, note: noteController.text, color: color?.value), [])),
                 ),
