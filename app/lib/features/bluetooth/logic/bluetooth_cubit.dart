@@ -18,16 +18,11 @@ class BluetoothCubit extends Cubit<BluetoothState> with TypeLogger {
         super(BluetoothState.fromAdapterState(manager.lastKnownAdapterState)) {
     _adapterStateSubscription = manager.stateStream.listen(_onAdapterStateChanged);
 
-    manager.enable().then((success) {
-      if (!success) {
-        logger.warning('Enabling bluetooth failed');
-      }
-    });
-
     _lastKnownState = manager.lastKnownAdapterState;
     logger.finer('lastKnownState: $_lastKnownState');
   }
 
+  /// Bluetooth manager
   late final BluetoothManager manager;
   late BluetoothAdapterState _lastKnownState;
   late StreamSubscription<BluetoothAdapterState> _adapterStateSubscription;
@@ -39,6 +34,13 @@ class BluetoothCubit extends Cubit<BluetoothState> with TypeLogger {
   }
 
   void _onAdapterStateChanged(BluetoothAdapterState state) async {
+    if (state == BluetoothAdapterState.unauthorized) {
+      final success = await manager.enable();
+      if (!success) {
+        logger.warning('Enabling bluetooth failed or not needed on this platform');
+      }
+    }
+
     _lastKnownState = state;
     logger.finer('_onAdapterStateChanged(state: $state)');
     emit(BluetoothState.fromAdapterState(state));
