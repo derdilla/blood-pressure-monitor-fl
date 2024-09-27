@@ -12,7 +12,7 @@ const bluetoothBaseUuid = '00000000-0000-1000-8000-00805F9B34FB';
 /// Generic BluetoothUuid representation
 abstract class BluetoothUuid<BackendUuid> {
   /// constructor
-  BluetoothUuid({ required this.uuid}): assert(uuid.toString().length == 36);
+  BluetoothUuid({ required this.uuid}): assert(uuid.toString().length == 36, 'Expected uuid to have a length of 36, got uuid=$uuid');
 
   /// Create a BluetoothUuid from a string
   BluetoothUuid.fromString(String uuid):
