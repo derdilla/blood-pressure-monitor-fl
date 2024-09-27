@@ -78,11 +78,21 @@ abstract class BluetoothDevice<
 
       switch (state) {
         case BluetoothConnectionState.connected:
+          if (_isConnected) {
+            // Ignore status update if the updated state did not change
+            return;
+          }
+
           onConnect?.call();
           if (!completer.isCompleted) completer.complete(true);
           _isConnected = true;
           return;
         case BluetoothConnectionState.disconnected:
+          if (!_isConnected) {
+            // Ignore status update if the updated state did not change
+            return;
+          }
+
           for (final fn in disconnectCallbacks.reversed) {
             if (fn()) {
               // ignore other disconnect callbacks
