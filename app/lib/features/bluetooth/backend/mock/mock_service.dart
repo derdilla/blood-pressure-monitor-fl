@@ -32,9 +32,9 @@ final class MockedCharacteristic {
 /// String wrapper for Bluetooth
 final class MockBluetoothString extends BluetoothUuid<String> {
   /// Create a BluetoothString from a String
-  MockBluetoothString(String uuid): super(uuid: uuid);
+  MockBluetoothString(String uuid): super(uuid: uuid, source: uuid);
   /// Create a BluetoothString from a string
-  MockBluetoothString.fromString(String uuid): super(uuid: uuid);
+  MockBluetoothString.fromString(String uuid): super(uuid: uuid, source: uuid);
 }
 
 /// Wrapper class with generic interface for a [MockedService]

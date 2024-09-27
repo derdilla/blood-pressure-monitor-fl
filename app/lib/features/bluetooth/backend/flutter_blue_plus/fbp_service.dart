@@ -5,10 +5,10 @@ import 'package:flutter_blue_plus/flutter_blue_plus.dart' show Guid;
 /// UUID wrapper for FlutterBluePlus
 final class FlutterBluePlusUUID extends BluetoothUuid<Guid> {
   /// Create a [FlutterBluePlusUUID] from a [Guid]
-  FlutterBluePlusUUID(Guid uuid): super(uuid: uuid);
+  FlutterBluePlusUUID(Guid uuid): super(uuid: uuid.str128, source: uuid);
 
   /// Create a [FlutterBluePlusUUID] from a [String]
-  FlutterBluePlusUUID.fromString(String uuid): super(uuid: Guid(uuid));
+  factory FlutterBluePlusUUID.fromString(String uuid) => FlutterBluePlusUUID(Guid(uuid));
 }
 
 /// [BluetoothService] implementation wrapping [fbp.BluetoothService]

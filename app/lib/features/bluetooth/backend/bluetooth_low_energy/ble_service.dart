@@ -4,10 +4,10 @@ import 'package:bluetooth_low_energy/bluetooth_low_energy.dart';
 /// UUID wrapper for BluetoothLowEnergy
 final class BluetoothLowEnergyUUID extends BluetoothUuid<UUID> {
   /// Create a [BluetoothLowEnergyUUID] from a [UUID]
-  BluetoothLowEnergyUUID(UUID uuid): super(uuid: uuid);
+  BluetoothLowEnergyUUID(UUID uuid): super(uuid: uuid.toString(), source: uuid);
 
   /// Create a [BluetoothLowEnergyUUID] from a [String]
-  BluetoothLowEnergyUUID.fromString(String uuid): super(uuid: UUID.fromString(uuid));
+  factory BluetoothLowEnergyUUID.fromString(String uuid) => BluetoothLowEnergyUUID(UUID.fromString(uuid));
 }
 
 /// Wrapper class with generic interface for a [GATTService]

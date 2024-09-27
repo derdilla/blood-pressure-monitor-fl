@@ -12,24 +12,27 @@ const bluetoothBaseUuid = '00000000-0000-1000-8000-00805F9B34FB';
 /// Generic BluetoothUuid representation
 abstract class BluetoothUuid<BackendUuid> {
   /// constructor
-  BluetoothUuid({ required this.uuid}): assert(uuid.toString().length == 36, 'Expected uuid to have a length of 36, got uuid=$uuid');
+  BluetoothUuid({ required this.uuid, required this.source }): assert(uuid.length == 36, 'Expected uuid to have a length of 36, got uuid=$uuid');
 
   /// Create a BluetoothUuid from a string
-  BluetoothUuid.fromString(String uuid):
+  BluetoothUuid.fromString(this.uuid):
     assert(uuid.isNotEmpty, 'This static method is abstract'),
-    uuid = bluetoothBaseUuid as BackendUuid // satisfy linter
+    source = bluetoothBaseUuid as BackendUuid // satisfy linter
     {
       throw AssertionError('This static method is abstract');
     }
 
+  /// 128-bit string representation of uuid
+  final String uuid;
+
   /// The backend specific uuid
-  final BackendUuid uuid;
+  final BackendUuid source;
 
   /// Whether this uuid is an official bluetooth core spec uuid
-  bool get isBluetoothUuid => uuid.toString().toUpperCase().endsWith(bluetoothBaseUuid.substring(8));
+  bool get isBluetoothUuid => uuid.toUpperCase().endsWith(bluetoothBaseUuid.substring(8));
 
   @override
-  String toString() => uuid.toString();
+  String toString() => uuid;
 
   /// Returns the 16 bit value of the UUID if uuid is from bluetooth core spec, otherwise full id
   ///

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:blood_pressure_app/components/fullscreen_dialoge.dart';
 import 'package:blood_pressure_app/config.dart';
@@ -254,7 +255,13 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
           children: [
             if (settings.bleInput)
               BluetoothInput(
-                manager: BluetoothManager.create(isTestingEnvironment ? BluetoothBackend.mock : BluetoothBackend.flutterBluePlus),
+                manager: BluetoothManager.create(
+                  isTestingEnvironment
+                    ? BluetoothBackend.mock
+                    : Platform.isAndroid
+                    ? BluetoothBackend.flutterBluePlus
+                    : BluetoothBackend.bluetoothLowEnergy
+                ),
                 onMeasurement: (record) => setState(
                   () => _loadFields((record, Note(time: record.time, note: noteController.text, color: color?.value), [])),
                 ),
