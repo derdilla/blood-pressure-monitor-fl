@@ -57,11 +57,22 @@ class BleReadCubit extends Cubit<BleReadState> with TypeLogger {
   
   late final Timer _timeoutTimer;
 
+  int _retryCount = 0;
+  final int _maxReTries = 1;
+
   /// Take a 'measurement', i.e. read the blood pressure values from the given characteristicUUID
   /// TODO: make this generic by accepting a data decoder argument?
   Future<void> takeMeasurement() async {
     final success = await _device.connect(
       onDisconnect: () {
+        if (_retryCount < _maxReTries) {
+          _retryCount++;
+          takeMeasurement();
+
+          logger.finer('BleReadCubit: retrying after device.onDisconnect called');
+          return true;
+        }
+
         logger.finer('BleReadCubit: device.onDisconnect called');
         emit(BleReadFailure('Device unexpectedly disconnected'));
         return true;

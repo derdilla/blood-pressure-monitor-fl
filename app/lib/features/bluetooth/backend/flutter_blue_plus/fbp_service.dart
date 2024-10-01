@@ -32,7 +32,7 @@ final class FlutterBluePlusCharacteristic extends BluetoothCharacteristic<fbp.Bl
   /// Initialize a [FlutterBluePlusCharacteristic] from the backend specific source
   FlutterBluePlusCharacteristic.fromSource(fbp.BluetoothCharacteristic source):
     super(uuid: FlutterBluePlusUUID(source.characteristicUuid), source: source);
-  
+
   @override
   bool get canRead => source.properties.read;
   

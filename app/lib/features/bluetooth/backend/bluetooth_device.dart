@@ -7,6 +7,18 @@ import 'package:blood_pressure_app/logging.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
 
+/// Current state of the bluetooth device
+enum BluetoothDeviceState {
+  /// Started connecting to the device
+  connecting,
+  /// Started disconnecting the device
+  disconnecting,
+  /// Device is connected (f.e. it send a connected event)
+  connected,
+  /// Device is disconnected (f.e. it send a disconnected event)
+  disconnected;
+}
+
 /// Wrapper class for bluetooth implementations to generically expose required functionality
 abstract class BluetoothDevice<
   BM extends BluetoothManager,
@@ -28,6 +40,8 @@ abstract class BluetoothDevice<
   /// Original source device as returned by the backend
   final BackendDevice source;
 
+  BluetoothDeviceState _state = BluetoothDeviceState.disconnected;
+
   /// (Unique?) id of the device
   String get deviceId;
 
@@ -37,11 +51,10 @@ abstract class BluetoothDevice<
   /// Memoized service list for the device
   List<BS>? _services;
 
-  bool _isConnected = false;
   StreamSubscription<BluetoothConnectionState>? _connectionListener;
 
   /// Whether the device is connected
-  bool get isConnected => _isConnected;
+  bool get isConnected => _state == BluetoothDeviceState.connected;
 
   /// Stream to listen to for connection state changes after connecting to a device
   Stream<BluetoothConnectionState> get connectionStream;
@@ -61,10 +74,47 @@ abstract class BluetoothDevice<
   /// callbacks.
   final List<bool Function()> disconnectCallbacks = [];
 
+  /// Waits and calls itself recursively as long as the current device [_state] equals [BluetoothDeviceState.disconnecting]
+  Future<void> _chainWaitForDisconnectingStateChange() async {
+    if (_state == BluetoothDeviceState.disconnecting) {
+      logger.finest('Waiting because device is still disconnecting');
+      await Future.delayed(const Duration(milliseconds: 10))
+        .then((_) => _chainWaitForDisconnectingStateChange());
+    }
+  }
+
   /// Connect to the device
   ///
-  /// Always call disconnect when ready after calling connect
-  Future<bool> connect({ VoidCallback? onConnect, bool Function()? onDisconnect, ValueSetter<Object>? onError }) async {
+  /// Always call [disconnect] when ready after calling connect
+  /// [onConnect] Called after device is connected
+  /// [onDisconnect] Called after device is disconnected, see [disconnectCallbacks]
+  /// [onError] Called when an error occurs
+  /// [waitForDisconnectingStateChangeTimeout] If connect is called while the device is still disconnecting, wait
+  ///   for the device to change it's state. A value of -1 means don't ever wait, a value of 0 means wait indefinitely
+  ///   Setting this timeout ensures correct state management of the device so users only have to call disconnect()/connect() 
+  Future<bool> connect({
+    VoidCallback? onConnect,
+    bool Function()? onDisconnect,
+    ValueSetter<Object>? onError,
+    int waitForDisconnectingStateChangeTimeout = 3000
+  }) async {
+    final futures = [_chainWaitForDisconnectingStateChange()];
+    if (waitForDisconnectingStateChangeTimeout > 0) {
+      futures.add(
+        Future.delayed(Duration(milliseconds: waitForDisconnectingStateChangeTimeout)).then((_) {
+          logger.finest('connect: Wait for state change timed out after $waitForDisconnectingStateChangeTimeout ms');
+        })
+      );
+    }
+
+    await Future.any(futures);
+    assert(_state == BluetoothDeviceState.disconnected, 'Device is not in disconnected state, got $_state instead');
+    if (_state != BluetoothDeviceState.disconnected) {
+      return false;
+    }
+
+    _state = BluetoothDeviceState.connecting;
+
     final completer = Completer<bool>();
     logger.finer('connect: Init');
 
@@ -74,21 +124,23 @@ abstract class BluetoothDevice<
 
     await _connectionListener?.cancel();
     _connectionListener = connectionStream.listen((BluetoothConnectionState state) {
-      logger.finest('connectionStream.listen[isConnected: $_isConnected]: $state');
+      logger.finest('connectionStream.listen[state: $_state]: $state');
 
       switch (state) {
         case BluetoothConnectionState.connected:
-          if (_isConnected) {
+          if (_state == BluetoothDeviceState.connected) {
+            logger.finest('Ignoring state update because device was already not connected');
             // Ignore status update if the updated state did not change
             return;
           }
 
           onConnect?.call();
           if (!completer.isCompleted) completer.complete(true);
-          _isConnected = true;
+          _state = BluetoothDeviceState.connected;
           return;
         case BluetoothConnectionState.disconnected:
-          if (!_isConnected) {
+          if (_state == BluetoothDeviceState.disconnected) {
+            logger.finest('Ignoring state update because device was already not connected');
             // Ignore status update if the updated state did not change
             return;
           }
@@ -102,7 +154,7 @@ abstract class BluetoothDevice<
 
           disconnectCallbacks.clear();
           if (!completer.isCompleted) completer.complete(false);
-          _isConnected = false;
+          _state = BluetoothDeviceState.disconnected;
       }
     }, onError: onError);
 
@@ -116,9 +168,35 @@ abstract class BluetoothDevice<
   /// Disconnect & dispose the device
   ///
   /// Always call [disconnect] after calling [connect] to ensure all resources are disposed
-  Future<bool> disconnect() async {
-    await _connectionListener?.cancel();
+  /// Optionally specifiy [waitForStateChangeTimeout] in milliseconds to indicate how long we
+  /// should wait for the device to send a disconnect event. Specifying a value of -1 disables
+  /// waiting for the state change, a value of 0 means wait indefinitely.
+  /// Note that waiting for state changes happens in iterations of max 10ms. So if you specify
+  /// [waitForStateChangeTimeout]=10 then this method waits 10ms. But if you specify
+  /// [waitForStateChangeTimeout]=65 then this method will wait 7x 10ms=70ms and not 65ms.
+  Future<bool> disconnect({ int waitForStateChangeTimeout = 3000 }) async {
+    _state = BluetoothDeviceState.disconnecting;
     await backendDisconnect();
+
+    if (waitForStateChangeTimeout >= 0) {
+      final futures = [_chainWaitForDisconnectingStateChange()];
+      if (waitForStateChangeTimeout > 0) {
+        futures.add(
+          Future.delayed(Duration(milliseconds: waitForStateChangeTimeout)).then((_) {
+            logger.finest('disconnect: Wait for state change timed out after $waitForStateChangeTimeout ms');
+          })
+        );
+      }
+
+      await Future.any(futures);
+
+      assert(
+        _state == BluetoothDeviceState.disconnecting || _state == BluetoothDeviceState.disconnected,
+        'Expected state either to be disconnecting (due to timeout) or disconnected. Got $_state instead'
+      );
+    }
+
+    await _connectionListener?.cancel();
     await dispose();
     return true;
   }
