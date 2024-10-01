@@ -55,7 +55,7 @@ extension EntryUtils on BuildContext {
         }
       }
     } on ProviderNotFoundException {
-      Log.err('createEntry($initial) was called from a context without Provider.');
+      log.severe('[extension.EntryUtils] createEntry($initial) was called from a context without Provider.');
     } catch (e, stack) {
       await ErrorReporting.reportCriticalError('Error opening add measurement dialoge', '$e\n$stack',);
     }
@@ -93,7 +93,7 @@ extension EntryUtils on BuildContext {
         ),);
       }
     } on ProviderNotFoundException {
-      Log.err('deleteEntry($entry) was called from a context without Provider.');
+      log.severe('[extension.EntryUtils] deleteEntry($entry) was called from a context without Provider.');
     }
   }
 }

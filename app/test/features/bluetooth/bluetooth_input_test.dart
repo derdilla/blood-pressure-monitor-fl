@@ -1,4 +1,6 @@
 import 'package:bloc_test/bloc_test.dart';
+import 'package:blood_pressure_app/features/bluetooth/backend/mock/mock_device.dart';
+import 'package:blood_pressure_app/features/bluetooth/backend/mock/mock_manager.dart';
 import 'package:blood_pressure_app/features/bluetooth/bluetooth_input.dart';
 import 'package:blood_pressure_app/features/bluetooth/logic/ble_read_cubit.dart';
 import 'package:blood_pressure_app/features/bluetooth/logic/bluetooth_cubit.dart';
@@ -7,7 +9,6 @@ import 'package:blood_pressure_app/features/bluetooth/logic/device_scan_cubit.da
 import 'package:blood_pressure_app/features/bluetooth/ui/closed_bluetooth_input.dart';
 import 'package:blood_pressure_app/features/bluetooth/ui/measurement_success.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_blue_plus/flutter_blue_plus.dart' hide BluetoothState;
 import 'package:flutter_test/flutter_test.dart';
 import 'package:health_data_store/health_data_store.dart';
 
@@ -30,10 +31,10 @@ class _MockBluetoothCubitFailingEnable extends MockCubit<BluetoothState>
 void main() {
   testWidgets('propagates successful read', (WidgetTester tester) async {
     final bluetoothCubit = _MockBluetoothCubit();
-    whenListen(bluetoothCubit, Stream<BluetoothState>.fromIterable([BluetoothReady()]),
-      initialState: BluetoothReady());
+    whenListen(bluetoothCubit, Stream<BluetoothState>.fromIterable([BluetoothStateReady()]),
+      initialState: BluetoothStateReady());
     final deviceScanCubit = _MockDeviceScanCubit();
-    final devScanOk = DeviceSelected(BluetoothDevice(remoteId: DeviceIdentifier('tstDev')));
+    final devScanOk = DeviceSelected(MockBluetoothDevice(MockBluetoothManager(), 'tstDev'));
     whenListen(deviceScanCubit, Stream<DeviceScanState>.fromIterable([devScanOk]),
       initialState: devScanOk);
     final bleReadCubit = _MockBleReadCubit();
@@ -42,10 +43,6 @@ void main() {
       diastolic: 45,
       meanArterialPressure: 67,
       isMMHG: true,
-      pulse: null,
-      userID: null,
-      status: null,
-      timestamp: null,
     ));
     whenListen(bleReadCubit, Stream<BleReadState>.fromIterable([bleReadOk]),
       initialState: bleReadOk,
@@ -53,6 +50,7 @@ void main() {
 
     final List<BloodPressureRecord> reads = [];
     await tester.pumpWidget(materialApp(BluetoothInput(
+      manager: MockBluetoothManager(),
       onMeasurement: reads.add,
       bluetoothCubit: () => bluetoothCubit,
       deviceScanCubit: () => deviceScanCubit,
@@ -70,10 +68,10 @@ void main() {
   });
   testWidgets('allows closing after successful read', (WidgetTester tester) async {
     final bluetoothCubit = _MockBluetoothCubit();
-    whenListen(bluetoothCubit, Stream<BluetoothState>.fromIterable([BluetoothReady()]),
-      initialState: BluetoothReady());
+    whenListen(bluetoothCubit, Stream<BluetoothState>.fromIterable([BluetoothStateReady()]),
+      initialState: BluetoothStateReady());
     final deviceScanCubit = _MockDeviceScanCubit();
-    final devScanOk = DeviceSelected(BluetoothDevice(remoteId: DeviceIdentifier('tstDev')));
+    final devScanOk = DeviceSelected(MockBluetoothDevice(MockBluetoothManager(), 'tstDev'));
     whenListen(deviceScanCubit, Stream<DeviceScanState>.fromIterable([devScanOk]),
       initialState: devScanOk);
     final bleReadCubit = _MockBleReadCubit();
@@ -82,10 +80,6 @@ void main() {
       diastolic: 45,
       meanArterialPressure: 67,
       isMMHG: true,
-      pulse: null,
-      userID: null,
-      status: null,
-      timestamp: null,
     ));
     whenListen(bleReadCubit, Stream<BleReadState>.fromIterable([bleReadOk]),
       initialState: bleReadOk,
@@ -93,6 +87,7 @@ void main() {
 
     final List<BloodPressureRecord> reads = [];
     await tester.pumpWidget(materialApp(BluetoothInput(
+      manager: MockBluetoothManager(),
       onMeasurement: reads.add,
       bluetoothCubit: () => bluetoothCubit,
       deviceScanCubit: () => deviceScanCubit,
@@ -110,9 +105,10 @@ void main() {
   });
   testWidgets("doesn't attempt to turn on bluetooth before interaction", (tester) async {
     final bluetoothCubit = _MockBluetoothCubitFailingEnable();
-    whenListen(bluetoothCubit, Stream<BluetoothState>.fromIterable([BluetoothDisabled()]),
-      initialState: BluetoothReady());
+    whenListen(bluetoothCubit, Stream<BluetoothState>.fromIterable([BluetoothStateDisabled()]),
+      initialState: BluetoothStateReady());
     await tester.pumpWidget(materialApp(BluetoothInput(
+      manager: MockBluetoothManager(),
       onMeasurement: (_) {},
       bluetoothCubit: () => bluetoothCubit,
     )));

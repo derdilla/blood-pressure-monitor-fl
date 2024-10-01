@@ -1,30 +1,49 @@
+import 'dart:typed_data';
+
+import 'package:blood_pressure_app/features/bluetooth/logic/characteristics/ble_date_time.dart';
+import 'package:blood_pressure_app/features/bluetooth/logic/characteristics/ble_measurement_status.dart';
+import 'package:blood_pressure_app/features/bluetooth/logic/characteristics/decoding_util.dart';
 import 'package:blood_pressure_app/logging.dart';
+import 'package:health_data_store/health_data_store.dart';
 
-import 'ble_date_time.dart';
-import 'ble_measurement_status.dart';
-import 'decoding_util.dart';
-
+/// Result of a single bp measurement as by ble spec.
+///
 /// https://developer.nordicsemi.com/nRF51_SDK/nRF51_SDK_v4.x.x/doc/html/structble__bps__meas__s.html
 /// https://github.com/NordicSemiconductor/Kotlin-BLE-Library/blob/6b565e59de21dfa53ef80ff8351ac4a4550e8d58/profile/src/main/java/no/nordicsemi/android/kotlin/ble/profile/bps/BloodPressureMeasurementParser.kt
 class BleMeasurementData {
+  /// Initialize result of a single bp measurement.
   BleMeasurementData({
     required this.systolic,
     required this.diastolic,
     required this.meanArterialPressure,
     required this.isMMHG,
-    required this.pulse,
-    required this.userID,
-    required this.status,
-    required this.timestamp,
+    this.pulse,
+    this.userID,
+    this.status,
+    this.timestamp,
   });
 
-  static BleMeasurementData? decode(List<int> data, int offset) {
+  /// Return BleMeasurementData as a BloodPressureRecord
+  BloodPressureRecord asBloodPressureRecord() =>
+    BloodPressureRecord(
+      time: timestamp ?? DateTime.now(),
+      sys: isMMHG
+        ? Pressure.mmHg(systolic.toInt())
+        : Pressure.kPa(systolic),
+      dia: isMMHG
+        ? Pressure.mmHg(diastolic.toInt())
+        : Pressure.kPa(diastolic),
+      pul: pulse?.toInt(),
+    );
+
+  /// Decode bytes read from the characteristic into a [BleMeasurementData]
+  static BleMeasurementData? decode(Uint8List data, int offset) {
     // https://github.com/NordicSemiconductor/Kotlin-BLE-Library/blob/6b565e59de21dfa53ef80ff8351ac4a4550e8d58/profile/src/main/java/no/nordicsemi/android/kotlin/ble/profile/bps/BloodPressureMeasurementParser.kt
 
     // Reading specific bits: `(byte & (1 << bitIdx))`
 
     if (data.length < 7) {
-      Log.trace('BleMeasurementData decodeMeasurement: Not enough data, $data has less than 7 bytes.');
+      log.warning('BleMeasurementData decodeMeasurement: Not enough data, $data has less than 7 bytes.');
       return null;
     }
 
@@ -45,7 +64,7 @@ class BleMeasurementData {
       + (userIdPresent ? 1 : 0)
       + (measurementStatusPresent ? 2 : 0)
     )) {
-      Log.trace("BleMeasurementData decodeMeasurement: Flags don't match, $data has less bytes than expected.");
+      log.warning("BleMeasurementData decodeMeasurement: Flags don't match, $data has less bytes than expected.");
       return null;
     }
 
@@ -57,7 +76,7 @@ class BleMeasurementData {
     offset += 2;
 
     if (systolic == null || diastolic == null || meanArterialPressure == null) {
-      Log.trace('BleMeasurementData decodeMeasurement: Unable to decode required values sys, dia, and meanArterialPressure, $data.');
+      log.warning('BleMeasurementData decodeMeasurement: Unable to decode required values sys, dia, and meanArterialPressure, $data.');
       return null;
     }
 
@@ -96,13 +115,21 @@ class BleMeasurementData {
     );
   }
 
+  /// Systolic pressure
   final double systolic;
+  /// Diatolic pressure
   final double diastolic;
+  /// Mean arterial pressure
   final double meanArterialPressure;
+  /// True if pressure values are in mmHg, False if in kPa
   final bool isMMHG; // mmhg or kpa
+  /// Pulse rate (of heart)
   final double? pulse;
+  /// User id
   final int? userID;
+  /// [BleMeasurementStatus] status
   final BleMeasurementStatus? status;
+  /// Timestamp of measurement
   final DateTime? timestamp;
 
   @override

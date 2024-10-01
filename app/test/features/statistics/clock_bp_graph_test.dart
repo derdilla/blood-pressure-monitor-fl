@@ -14,7 +14,7 @@ void main() {
       home: Scaffold(
         body: ChangeNotifierProvider<Settings>(
           create: (_) => Settings(),
-          child: ClockBpGraph(measurements: []),
+          child: const ClockBpGraph(measurements: []),
         ),
       ),
     ));
@@ -43,7 +43,7 @@ void main() {
     ));
     await expectLater(find.byType(ClockBpGraph), matchesGoldenFile('ClockBpGraph-light.png'));
   });
-  testWidgets('renders sample data like expected in dart mode', (tester) async {
+  testWidgets('renders sample data like expected in dark mode', (tester) async {
     final rng = Random(1234);
     await tester.pumpWidget(MaterialApp(
       theme: ThemeData.dark(useMaterial3: true),

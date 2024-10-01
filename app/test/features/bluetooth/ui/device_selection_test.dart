@@ -1,30 +1,21 @@
 import 'dart:ui';
 
+import 'package:blood_pressure_app/features/bluetooth/backend/bluetooth_backend.dart';
+import 'package:blood_pressure_app/features/bluetooth/backend/mock/mock_device.dart';
+import 'package:blood_pressure_app/features/bluetooth/backend/mock/mock_manager.dart';
 import 'package:blood_pressure_app/features/bluetooth/ui/device_selection.dart';
-import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mockito/annotations.dart';
-import 'package:mockito/mockito.dart';
 
 import '../../../util.dart';
-@GenerateNiceMocks([
-  MockSpec<BluetoothDevice>(),
-  MockSpec<ScanResult>(),
-])
-import 'device_selection_test.mocks.dart';
 
 void main() {
   testWidgets('Connects with one element', (WidgetTester tester) async {
-    final dev = MockBluetoothDevice();
-    when(dev.platformName).thenReturn('Test device with long name (No.124356)');
-
-    final scanRes = MockScanResult();
-    when(scanRes.device).thenReturn(dev);
+    final dev = MockBluetoothDevice(MockBluetoothManager(), 'Test device with long name (No.124356)');
 
     final List<BluetoothDevice> accepted = [];
     await tester.pumpWidget(materialApp(DeviceSelection(
-      scanResults: [ scanRes ],
+      scanResults: [ dev ],
       onAccepted: accepted.add,
     )));
 
@@ -44,15 +35,7 @@ void main() {
   });
 
   testWidgets('Shows multiple elements', (WidgetTester tester) async {
-    ScanResult getDev(String name) {
-      final dev = MockBluetoothDevice();
-      when(dev.platformName).thenReturn(name);
-
-      final scanRes = MockScanResult();
-      when(scanRes.device).thenReturn(dev);
-
-      return scanRes;
-    }
+    BluetoothDevice getDev(String name) => MockBluetoothDevice(MockBluetoothManager(), name);
 
     await tester.pumpWidget(materialApp(DeviceSelection(
       scanResults: [

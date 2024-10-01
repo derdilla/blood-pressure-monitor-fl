@@ -22,7 +22,7 @@ class DeviceListAvailable extends DeviceScanState {
   DeviceListAvailable(this.devices);
 
   /// All found devices.
-  final List<ScanResult> devices;
+  final List<BluetoothDevice> devices;
 }
 
 /// One unrecognized device has been found.
@@ -34,5 +34,5 @@ class SingleDeviceAvailable extends DeviceScanState {
   SingleDeviceAvailable(this.device);
 
   /// The only found device.
-  final ScanResult device;
+  final BluetoothDevice device;
 }

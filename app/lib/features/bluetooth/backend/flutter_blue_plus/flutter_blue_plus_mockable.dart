@@ -2,8 +2,7 @@ import 'dart:async';
 
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 
-/// Wrapper for FlutterBluePlus in order to easily mock it
-/// Wraps all calls for testing purposes
+/// Wrapper for FlutterBluePlus in allowing easy mocking during testing
 class FlutterBluePlusMockable {
   LogLevel get logLevel => FlutterBluePlus.logLevel;
 

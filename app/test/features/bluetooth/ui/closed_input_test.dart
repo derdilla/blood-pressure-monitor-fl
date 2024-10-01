@@ -12,7 +12,9 @@ import '../../../util.dart';
 
 class MockBluetoothCubit extends MockCubit<BluetoothState>
     implements BluetoothCubit {
+  @override
   Future<bool> enableBluetooth() async => true;
+  @override
   Future<void> forceRefresh() async {}
 }
 
@@ -21,7 +23,7 @@ void main() {
     final states = StreamController<BluetoothState>.broadcast();
 
     final cubit = MockBluetoothCubit();
-    whenListen(cubit, states.stream, initialState: BluetoothInitial());
+    whenListen(cubit, states.stream, initialState: BluetoothStateInitial());
 
     int startCount = 0;
     await tester.pumpWidget(materialApp(ClosedBluetoothInput(
@@ -35,12 +37,12 @@ void main() {
     expect(find.byType(SizedBox), findsOneWidget);
     expect(find.byType(ListTile), findsNothing);
 
-    states.sink.add(BluetoothUnfeasible());
+    states.sink.add(BluetoothStateUnfeasible());
     await tester.pump();
     expect(find.byType(SizedBox), findsOneWidget);
     expect(find.byType(ListTile), findsNothing);
 
-    states.sink.add(BluetoothUnauthorized());
+    states.sink.add(BluetoothStateUnauthorized());
     await tester.pump();
     final localizations = await AppLocalizations.delegate.load(const Locale('en'));
     expect(find.text(localizations.errBleNoPerms), findsOneWidget);
@@ -48,14 +50,14 @@ void main() {
     await tester.tap(find.byType(ClosedBluetoothInput));
     expect(startCount, 0);
 
-    states.sink.add(BluetoothDisabled());
+    states.sink.add(BluetoothStateDisabled());
     await tester.pump();
     expect(find.text(localizations.bluetoothDisabled), findsOneWidget);
 
     await tester.tap(find.byType(ClosedBluetoothInput));
     expect(startCount, 0);
 
-    states.sink.add(BluetoothReady());
+    states.sink.add(BluetoothStateReady());
     await tester.pump();
     expect(find.text(localizations.bluetoothInput), findsOneWidget);
 

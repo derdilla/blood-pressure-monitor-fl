@@ -1,0 +1,362 @@
+import 'dart:async';
+
+import 'package:blood_pressure_app/features/bluetooth/backend/bluetooth_connection.dart';
+import 'package:blood_pressure_app/features/bluetooth/backend/bluetooth_manager.dart';
+import 'package:blood_pressure_app/features/bluetooth/backend/bluetooth_service.dart';
+import 'package:blood_pressure_app/logging.dart';
+import 'package:collection/collection.dart';
+import 'package:flutter/foundation.dart';
+
+/// Current state of the bluetooth device
+enum BluetoothDeviceState {
+  /// Started connecting to the device
+  connecting,
+  /// Started disconnecting the device
+  disconnecting,
+  /// Device is connected (f.e. it send a connected event)
+  connected,
+  /// Device is disconnected (f.e. it send a disconnected event)
+  disconnected;
+}
+
+/// Wrapper class for bluetooth implementations to generically expose required functionality
+abstract class BluetoothDevice<
+  BM extends BluetoothManager,
+  BS extends BluetoothService,
+  BC extends BluetoothCharacteristic,
+  BackendDevice
+> with TypeLogger {
+  /// Create a new BluetoothDevice.
+  ///
+  /// * [manager] Manager the device belongs to
+  /// * [source] Device implementation of the current backend
+  BluetoothDevice(this.manager, this.source) {
+    logger.finer('init device: $this');
+  }
+
+  /// [BluetoothManager] this device belongs to
+  final BM manager;
+
+  /// Original source device as returned by the backend
+  final BackendDevice source;
+
+  BluetoothDeviceState _state = BluetoothDeviceState.disconnected;
+
+  /// (Unique?) id of the device
+  String get deviceId;
+
+  /// Name of the device
+  String get name;
+
+  /// Memoized service list for the device
+  List<BS>? _services;
+
+  StreamSubscription<BluetoothConnectionState>? _connectionListener;
+
+  /// Whether the device is connected
+  bool get isConnected => _state == BluetoothDeviceState.connected;
+
+  /// Stream to listen to for connection state changes after connecting to a device
+  Stream<BluetoothConnectionState> get connectionStream;
+
+  /// Backend implementation to connect to the device
+  Future<void> backendConnect();
+  /// Backend implementation to disconnect to the device
+  Future<void> backendDisconnect();
+
+  /// Require backends to implement a dispose method to cleanup any resources
+  Future<void> dispose();
+
+  /// Array of disconnect callbacks
+  ///
+  /// Disconnect callbacks are processed in reverse order, i.e. the latest added callback is executed as first. Callbacks
+  /// can return true to indicate they have fully handled the disconnect. This will then also stop executing any remaining
+  /// callbacks.
+  final List<bool Function()> disconnectCallbacks = [];
+
+  /// Waits and calls itself recursively as long as the current device [_state] equals [BluetoothDeviceState.disconnecting]
+  Future<void> _chainWaitForDisconnectingStateChange() async {
+    if (_state == BluetoothDeviceState.disconnecting) {
+      logger.finest('Waiting because device is still disconnecting');
+      await Future.delayed(const Duration(milliseconds: 10))
+        .then((_) => _chainWaitForDisconnectingStateChange());
+    }
+  }
+
+  /// Connect to the device
+  ///
+  /// Always call [disconnect] when ready after calling connect
+  /// [onConnect] Called after device is connected
+  /// [onDisconnect] Called after device is disconnected, see [disconnectCallbacks]
+  /// [onError] Called when an error occurs
+  /// [waitForDisconnectingStateChangeTimeout] If connect is called while the device is still disconnecting, wait
+  ///   for the device to change it's state. A value of -1 means don't ever wait, a value of 0 means wait indefinitely
+  ///   Setting this timeout ensures correct state management of the device so users only have to call disconnect()/connect() 
+  Future<bool> connect({
+    VoidCallback? onConnect,
+    bool Function()? onDisconnect,
+    ValueSetter<Object>? onError,
+    int waitForDisconnectingStateChangeTimeout = 3000
+  }) async {
+    final futures = [_chainWaitForDisconnectingStateChange()];
+    if (waitForDisconnectingStateChangeTimeout > 0) {
+      futures.add(
+        Future.delayed(Duration(milliseconds: waitForDisconnectingStateChangeTimeout)).then((_) {
+          logger.finest('connect: Wait for state change timed out after $waitForDisconnectingStateChangeTimeout ms');
+        })
+      );
+    }
+
+    await Future.any(futures);
+    assert(_state == BluetoothDeviceState.disconnected, 'Device is not in disconnected state, got $_state instead');
+    if (_state != BluetoothDeviceState.disconnected) {
+      return false;
+    }
+
+    _state = BluetoothDeviceState.connecting;
+
+    final completer = Completer<bool>();
+    logger.finer('connect: Init');
+
+    if (onDisconnect != null) {
+      disconnectCallbacks.add(onDisconnect);
+    }
+
+    await _connectionListener?.cancel();
+    _connectionListener = connectionStream.listen((BluetoothConnectionState state) {
+      logger.finest('connectionStream.listen[state: $_state]: $state');
+
+      switch (state) {
+        case BluetoothConnectionState.connected:
+          if (_state == BluetoothDeviceState.connected) {
+            logger.finest('Ignoring state update because device was already not connected');
+            // Ignore status update if the updated state did not change
+            return;
+          }
+
+          onConnect?.call();
+          if (!completer.isCompleted) completer.complete(true);
+          _state = BluetoothDeviceState.connected;
+          return;
+        case BluetoothConnectionState.disconnected:
+          if (_state == BluetoothDeviceState.disconnected) {
+            logger.finest('Ignoring state update because device was already not connected');
+            // Ignore status update if the updated state did not change
+            return;
+          }
+
+          for (final fn in disconnectCallbacks.reversed) {
+            if (fn()) {
+              // ignore other disconnect callbacks
+              break;
+            }
+          }
+
+          disconnectCallbacks.clear();
+          if (!completer.isCompleted) completer.complete(false);
+          _state = BluetoothDeviceState.disconnected;
+      }
+    }, onError: onError);
+
+    await backendConnect();
+    return completer.future.then((res) {
+      logger.finer('connect: completer.resolved($res)');
+      return res;
+    });
+  }
+
+  /// Disconnect & dispose the device
+  ///
+  /// Always call [disconnect] after calling [connect] to ensure all resources are disposed
+  /// Optionally specifiy [waitForStateChangeTimeout] in milliseconds to indicate how long we
+  /// should wait for the device to send a disconnect event. Specifying a value of -1 disables
+  /// waiting for the state change, a value of 0 means wait indefinitely.
+  /// Note that waiting for state changes happens in iterations of max 10ms. So if you specify
+  /// [waitForStateChangeTimeout]=10 then this method waits 10ms. But if you specify
+  /// [waitForStateChangeTimeout]=65 then this method will wait 7x 10ms=70ms and not 65ms.
+  Future<bool> disconnect({ int waitForStateChangeTimeout = 3000 }) async {
+    _state = BluetoothDeviceState.disconnecting;
+    await backendDisconnect();
+
+    if (waitForStateChangeTimeout >= 0) {
+      final futures = [_chainWaitForDisconnectingStateChange()];
+      if (waitForStateChangeTimeout > 0) {
+        futures.add(
+          Future.delayed(Duration(milliseconds: waitForStateChangeTimeout)).then((_) {
+            logger.finest('disconnect: Wait for state change timed out after $waitForStateChangeTimeout ms');
+          })
+        );
+      }
+
+      await Future.any(futures);
+
+      assert(
+        _state == BluetoothDeviceState.disconnecting || _state == BluetoothDeviceState.disconnected,
+        'Expected state either to be disconnecting (due to timeout) or disconnected. Got $_state instead'
+      );
+    }
+
+    await _connectionListener?.cancel();
+    await dispose();
+    return true;
+  }
+
+  /// Discover all available services on the device
+  ///
+  /// It's recommended to use [getServices] instead
+  Future<List<BS>?> discoverServices();
+
+  /// Return all available services for this device
+  ///
+  /// Difference with [discoverServices] is that [getServices] memoizes the results
+  Future<List<BS>?> getServices() async {
+    final logServices = _services == null; // only log services on the first call
+    _services ??= await discoverServices();
+    if (_services == null) {
+      logger.finer('Failed to discoverServices on: $this');
+    }
+
+    if (logServices) {
+      logger.finest(_services
+        ?.map((s) => 'Found services\n$s:\n  - ${s.characteristics.join('\n  - ')}]')
+        .join('\n'));
+    }
+
+    return _services;
+  }
+
+  /// Returns the service with requested [uuid] or null if requested service is not available
+  Future<BS?> getServiceByUuid(BluetoothUuid uuid) async {
+    final services = await getServices();
+    return services?.firstWhereOrNull((service) => service.uuid == uuid);
+  }
+
+  /// Retrieves the value of [characteristic] from the device and calls [onValue] for all received values
+  /// 
+  /// This method provides a generic implementation for async reading of data, regardless whether the
+  /// characteristic can be read directly or through a notification or indication. In case the value
+  /// is being read using an indication, then the [onValue] callback receives a second argument [complete] with
+  /// which you can stop reading the data.
+  ///
+  /// Note that a [characteristic] could have multiple values, so [onValue] can be called more then once.
+  /// TODO: implement reading values for characteristics with [canNotify]
+  Future<bool> getCharacteristicValue(BC characteristic, void Function(Uint8List value, [void Function(bool success)? complete]) onValue);
+
+  @override
+  String toString() => 'BluetoothDevice{name: $name, deviceId: $deviceId}';
+
+  @override
+  bool operator == (Object other) => other is BluetoothDevice
+    && hashCode == other.hashCode;
+
+  @override
+  int get hashCode => deviceId.hashCode ^ name.hashCode;
+}
+
+/// Generic logic to implement an indication stream to read characteristic values
+mixin CharacteristicValueListener<
+  BM extends BluetoothManager,
+  BS extends BluetoothService,
+  BC extends BluetoothCharacteristic,
+  BackendDevice
+> on BluetoothDevice<BM, BS, BC, BackendDevice> {
+  /// List of read characteristic completers, used for cleanup on device disconnect
+  final List<Completer<bool>> _readCharacteristicCompleters = [];
+  /// List of read characteristic subscriptions, used for cleanup on device disconnect
+  final List<StreamSubscription<Uint8List?>> _readCharacteristicListeners = [];
+
+  /// Dispose of all resources used to read characteristics
+  ///
+  /// Internal method, should not be used by users
+  @protected
+  Future<void> disposeCharacteristics() async {
+    for (final completer in _readCharacteristicCompleters) {
+      // completing the completer also cancels the listener
+      completer.complete(false);
+    }
+
+    _readCharacteristicCompleters.clear();
+    _readCharacteristicListeners.clear();
+  }
+
+  /// Trigger notifications or indications for the [characteristic]
+  @protected
+  Future<bool> triggerCharacteristicValue(BC characteristic, [bool state = true]);
+
+  /// Read characteristic values from a stream
+  ///
+  /// It's not recommended to use this method directly, use [BluetoothDevice.getCharacteristicValue] instead
+  @protected
+  Future<bool> listenCharacteristicValue(
+    BC characteristic,
+    Stream<Uint8List?> characteristicValueStream,
+    void Function(Uint8List value, [void Function(bool success)? complete]) onValue
+  ) async {
+    if (!characteristic.canIndicate) {
+      return false;
+    }
+
+    final completer = Completer<bool>();
+    bool receivedSomeData = false;
+
+    bool disconnectCallback() {
+      logger.finer('listenCharacteristicValue(receivedSomeData: $receivedSomeData): onDisconnect called');
+      if (!receivedSomeData) {
+        return false;
+      }
+
+      completer.complete(true);
+      return true;
+    }
+
+    disconnectCallbacks.add(disconnectCallback);
+
+    final listener = characteristicValueStream.listen((value) {
+      if (value == null) {
+        // ignore null values
+        return;
+      }
+
+      logger.finer('listenCharacteristicValue[${value.length}] $value');
+
+      receivedSomeData = true;
+      onValue(value, completer.complete);
+    },
+      cancelOnError: true,
+      onDone: () {
+        logger.finer('listenCharacteristicValue: onDone called');
+        completer.complete(receivedSomeData);
+      },
+      onError: (Object err) {
+        logger.shout('listenCharacteristicValue: Error while reading characteristic', err);
+        completer.complete(false);
+      }
+    );
+
+    // track completer & listener so we can clean them up
+    // when the device unexpectedly disconnects (ie before
+    // any data has been received yet)
+    _readCharacteristicCompleters.add(completer);
+    _readCharacteristicListeners.add(listener);
+
+    final bool triggerSuccess = await triggerCharacteristicValue(characteristic);
+    if (!triggerSuccess) {
+      logger.warning('listenCharacteristicValue: triggerCharacteristicValue returned $triggerSuccess');
+    }
+
+    return completer.future.then((res) {
+      // Ensure listener is always cancelled when completer resolves
+      listener.cancel().then((_) => _readCharacteristicListeners.remove(listener));
+
+      // Remove stored completer reference
+      _readCharacteristicCompleters.remove(completer);
+
+      // Remove disconnect callback in case the connection was not automatically disconnected
+      if (disconnectCallbacks.remove(disconnectCallback)) {
+        logger.finer('listenCharacteristicValue: device was not automatically disconnected after completer finished, removing disconnect callback');
+      }
+
+      return res;
+    });
+  }
+}
