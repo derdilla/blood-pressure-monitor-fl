@@ -1,5 +1,0 @@
-* Reimplementar gráficos de estatísticas e home para corrigir alguns bugs de longa data e melhorar o desempenho geral
-* Corrigir exclusão de ingestão de medicamentos
-* Simplificar o formato de armazenamento de configurações para corrigir configurações que não são salvas em alguns dispositivos
-* Corrigir alternador de data recortando em alguns casoss
-* Traduções completas em turco, italiano, espanhol, francês, holandês e chinês (graças a várias pessoas no weblate)
