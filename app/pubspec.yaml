@@ -1,10 +1,12 @@
 name: blood_pressure_app
 description: Privacy focused, diary like app for storing blood pressure values.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+repository: https://github.com/derdilla/blood-pressure-monitor-fl
+issue_tracker: https://github.com/derdilla/blood-pressure-monitor-fl/issues
 
 version: 1.8.1+43
 # F-Droid needs the Flutter version used to build releases to be in the repository.
-# f-droid-flutter: 3.25.0-0.1.pre
+# f-droid-flutter: 3.24.3
 
 environment:
   sdk: '>=3.0.2 <4.0.0'
