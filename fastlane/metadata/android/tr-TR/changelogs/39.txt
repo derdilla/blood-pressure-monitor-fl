@@ -1,3 +1,0 @@
-* Tarih ve saat giriş alanları ayrıldı
-* İlaç alımı dışa ve içe aktarımına izin verildi
-* Giriş iletişim kutusu metin biçimi birleştirildi
