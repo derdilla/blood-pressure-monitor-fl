@@ -140,7 +140,7 @@
   "@pulsePressure": {},
   "addExportformat": "Aggiungi formato di esportazione",
   "@addExportformat": {},
-  "timeResolvedMetrics": "Grafico a intervallo temporale definito",
+  "timeResolvedMetrics": "Metriche per ora del giorno",
   "@timeResolvedMetrics": {},
   "exportAfterEveryInputDesc": "Non consigliato (sovraccarico file)",
   "@exportAfterEveryInputDesc": {},
@@ -516,5 +516,15 @@
   "invalidZip": "File zip non valido.",
   "@invalidZip": {},
   "errCantCreateArchive": "Impossibile creare l''archivio. Segnalare il bug, se possibile.",
-  "@errCantCreateArchive": {}
+  "@errCantCreateArchive": {},
+  "activateWeightFeatures": "Attiva funzionalità relative al peso",
+  "@activateWeightFeatures": {},
+  "weight": "Peso",
+  "@weight": {},
+  "enterWeight": "Inserisci peso",
+  "@enterWeight": {},
+  "preferredWeightUnit": "Unità di peso preferita",
+  "@preferredWeightUnit": {
+    "description": "Setting for the unit the app will use for displaying weight"
+  }
 }
