@@ -1,5 +1,0 @@
-* Reimplementación de los gráficos de inicio y estadísticas para corregir algunos errores antiguos y mejorar el rendimiento general.
-* Corrección de la eliminación de medicamentos ingeridos.
-* Simplificación del formato de almacenamiento de los ajustes para evitar que se guarden en algunos dispositivos.
-* Corrección del recorte del conmutador de fechas en algunos casos.
-* Traducciones completas al turco, italiano, español, francés, holandesa y chino (gracias a varias personas de weblate)

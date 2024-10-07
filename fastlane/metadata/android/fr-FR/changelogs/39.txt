@@ -1,3 +1,0 @@
-* Séparer les champs de saisie de la date et de l'heure
-* Permettre l'exportation et l'importation de la prise de médicaments
-* Uniformiser le style du texte dans les dialogues de saisie

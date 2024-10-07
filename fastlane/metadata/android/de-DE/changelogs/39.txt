@@ -1,3 +1,0 @@
-* Trenne Datum und Uhrzeit Eingabefelder
-* Implementiere Import und Export von Medizineinnahmen
-* Vereinheitliche Teststil des Eingabedialogs
