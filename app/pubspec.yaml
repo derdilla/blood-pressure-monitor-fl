@@ -13,34 +13,34 @@ environment:
 
 dependencies:
   csv: ^6.0.0
-  collection: ^1.19.0
+  collection: ^1.18.0
   intl: ^0.19.0
   flutter:
     sdk: flutter
   flutter_localizations:
     sdk: flutter
-  flutter_markdown: ^0.7.3+1
+  flutter_markdown: ^0.7.3+2
   function_tree: ^0.9.1
   provider: ^6.1.2
   path: ^1.9.0
   pdf: ^3.11.1
   package_info_plus: ^8.0.2
   week_of_year: 2.2.0
-  sqflite: ^2.3.3+1
+  sqflite: ^2.3.3+2
   shared_preferences: ^2.3.2
   url_launcher: ^6.3.0
   health_data_store:
     path: ../health_data_store/
   flutter_bloc: ^8.1.6
-  flutter_blue_plus: ^1.32.12
+  flutter_blue_plus: ^1.33.2
   archive: ^3.6.1
   file_picker: ^8.1.2
   fluttertoast: ^8.2.8
   app_settings: ^5.1.1
+  persistent_user_dir_access_android: ^0.0.1
 
   # desktop only
-  sqflite_common_ffi: ^2.3.3
-  persistent_user_dir_access_android: ^0.0.1
+  sqflite_common_ffi: ^2.3.3+1
 
 dev_dependencies:
   integration_test:
@@ -48,10 +48,10 @@ dev_dependencies:
   file: ^7.0.0
   flutter_test:
     sdk: flutter
-  flutter_lints: ^4.0.0
+  flutter_lints: ^5.0.0
   mockito: ^5.4.4
   translations_cleaner: ^0.0.5
-  build_runner: ^2.4.12
+  build_runner: ^2.4.13
   bloc_test: ^9.1.7
 
 flutter:
