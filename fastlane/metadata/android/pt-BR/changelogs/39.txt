@@ -1,3 +1,0 @@
-* Dividir campos de entrada de data e hora
-* Permitir exportação e importação de medicamentos
-* Unificar estilo de texto de diálogo de entrada
