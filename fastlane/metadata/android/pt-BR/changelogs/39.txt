@@ -1,3 +1,0 @@
-* Split date and time input fields
-* Allow medicine intake export and import
-* Unify input dialogue text style

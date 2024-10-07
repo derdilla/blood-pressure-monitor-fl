@@ -1,5 +1,0 @@
-* Reimplement home and statistics graphs to fix some longstanding bugs and improve general performance
-* Fix medicine intake deletion
-* Simplify settings storage format to fix settings not saving on some devices
-* Fix date switcher clipping in some cases
-* Complete Turkish, Italian, Spanish, French, and Chinese translations (thanks to various people on weblate)

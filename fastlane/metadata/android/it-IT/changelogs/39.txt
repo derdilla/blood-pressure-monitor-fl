@@ -1,3 +1,0 @@
-* Dividi i campi di input per data e ora
-* Consenti l'esportazione e l'importazione dell'assunzione di medicinali
-* Uniforma lo stile del testo nella finestra di dialogo di input
