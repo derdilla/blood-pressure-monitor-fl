@@ -1,0 +1,8 @@
+* düzeltme: veri tabanı yolunu özyinelemeli olarak oluştur (teşekkürler pimlie)
+* Dışa aktarmadan önce en son aralığa ayarla
+* nl için eksik dil adı eklendi
+* Kullanılmayan yerelleştirmeler kaldırıldı
+* Dağıtım seçimi değişikliğinde renk değiştirme
+* İsteğe bağlı ağırlık girişi eklendi
+* Katılımcı deneyiminde çeşitli iyileştirmeler
+* İspanyolca, Estonca, İtalyanca, İspanyolca (Brezilya), Türkçe ve Çince çeviriler güncellendi (weblate'te katkıda bulunanlara teşekkürler)

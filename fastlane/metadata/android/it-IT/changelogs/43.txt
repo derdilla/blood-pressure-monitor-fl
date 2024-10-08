@@ -1,0 +1,8 @@
+* Corretto: crea percorso database ricorsivamente (grazie pimlie)
+* Imposta sull'intervallo più recente prima di esportare
+* Aggiunto nome lingua mancante per nl
+* Rimosso localizzazioni inutilizzate
+* Cambia colore alla modifica della selezione della distribuzione
+* Implementa voce peso opt-in
+* Vari miglioramenti all'esperienza dei collaboratori
+* Aggiorna traduzioni in spagnolo, estone, italiano, spagnolo (Brasile), turco e cinese (grazie ai collaboratori su weblate)
