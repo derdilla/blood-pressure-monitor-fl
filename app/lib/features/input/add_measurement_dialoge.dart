@@ -42,6 +42,7 @@ class AddEntryDialoge extends StatefulWidget {
 }
 
 class _AddEntryDialogeState extends State<AddEntryDialoge> {
+  final dateTimeFormKey = GlobalKey<DateTimeFormState>();
   final recordFormKey = GlobalKey<FormState>();
   final medicationFormKey = GlobalKey<FormState>();
 
@@ -202,6 +203,10 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
           || diaController.text.isNotEmpty
           || pulController.text.isNotEmpty);
 
+        final newTime = dateTimeFormKey.currentState?.save();
+        if (newTime == null) return;
+        time = newTime;
+
         if (shouldHaveRecord && (recordFormKey.currentState?.validate() ?? false)) {
           recordFormKey.currentState?.save();
           if (systolic != null || diastolic != null || pulse != null) {
@@ -259,10 +264,8 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
             if (settings.allowManualTimeInput)
               DateTimeForm(
                 validate: settings.validateInputs,
-                initialTime: time,
-                onTimeSelected: (newTime) => setState(() {
-                  time = newTime;
-                }),
+                initialValue: time,
+                key: dateTimeFormKey,
               ),
             Form(
               key: recordFormKey,
