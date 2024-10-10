@@ -263,7 +263,6 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
               ),
             if (settings.allowManualTimeInput)
               DateTimeForm(
-                validate: settings.validateInputs,
                 initialValue: time,
                 key: dateTimeFormKey,
               ),

@@ -1,18 +1,16 @@
 import 'package:blood_pressure_app/features/input/forms/form_base.dart';
+import 'package:blood_pressure_app/model/storage/settings_store.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 /// Input to allow date and time input.
 class DateTimeForm extends FormBase<DateTime> {
   /// Create input to allow date and time input.
   const DateTimeForm({super.key,
     required super.initialValue,
-    required this.validate,
   });
-
-  /// Whether to validate whether the time is after now.
-  final bool validate;
 
   @override
   FormStateBase<DateTime, DateTimeForm> createState() => DateTimeFormState();
@@ -33,7 +31,7 @@ class DateTimeFormState extends FormStateBase<DateTime, DateTimeForm> {
 
   @override
   bool validate() {
-    if (widget.validate && _time.isAfter(DateTime.now())) {
+    if (context.read<Settings>().validateInputs && _time.isAfter(DateTime.now())) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text(AppLocalizations.of(context)!.errTimeAfterNow),
       )); // TODO: display error as below
