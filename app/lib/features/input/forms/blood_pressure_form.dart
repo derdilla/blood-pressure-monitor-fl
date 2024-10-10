@@ -32,6 +32,7 @@ class BloodPressureFormState extends FormStateBase<({int? sys, int? dia, int? pu
     _sysController = TextEditingController(text: widget.initialValue?.sys?.toString() ?? '');
     _diaController = TextEditingController(text: widget.initialValue?.dia?.toString() ?? '');
     _pulController = TextEditingController(text: widget.initialValue?.pul?.toString() ?? '');
+    _sysFocusNode.requestFocus();
   }
 
   @override

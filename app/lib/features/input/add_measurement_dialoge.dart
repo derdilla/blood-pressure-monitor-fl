@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:blood_pressure_app/components/fullscreen_dialoge.dart';
 import 'package:blood_pressure_app/features/bluetooth/bluetooth_input.dart';
 import 'package:blood_pressure_app/features/input/add_bodyweight_dialoge.dart';
+import 'package:blood_pressure_app/features/input/forms/add_entry_form.dart';
 import 'package:blood_pressure_app/features/input/forms/date_time_form.dart';
 import 'package:blood_pressure_app/features/settings/tiles/color_picker_list_tile.dart';
 import 'package:blood_pressure_app/model/blood_pressure/pressure_unit.dart';
@@ -190,7 +191,14 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
   );
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) => FullscreenDialoge(
+    actionButtonText: AppLocalizations.of(context)!.btnSave,
+    bottomAppBar: false, // TODO
+    body: AddEntryForm(meds: widget.availableMeds),
+  );
+
+  @Deprecated('towards AddEntryForm')
+  Widget _buildOld(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
     final settings = context.watch<Settings>();
     return FullscreenDialoge(
