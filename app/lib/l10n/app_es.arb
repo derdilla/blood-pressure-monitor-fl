@@ -210,7 +210,7 @@
   },
   "measurementsPerDay": "Mediciones por día",
   "@measurementsPerDay": {},
-  "timeResolvedMetrics": "Métricas en base al tiempo",
+  "timeResolvedMetrics": "Medidas por hora del día",
   "@timeResolvedMetrics": {},
   "minOf": "{txt} min.",
   "@minOf": {
@@ -516,5 +516,15 @@
   "invalidZip": "Archivo zip no válido.",
   "@invalidZip": {},
   "errCantCreateArchive": "No se puede crear el archivo. Por favor, informe del error si es posible.",
-  "@errCantCreateArchive": {}
+  "@errCantCreateArchive": {},
+  "activateWeightFeatures": "Activar funciones relacionadas con el peso",
+  "@activateWeightFeatures": {},
+  "weight": "Peso",
+  "@weight": {},
+  "enterWeight": "Introducir peso",
+  "@enterWeight": {},
+  "preferredWeightUnit": "Unidad de peso preferida",
+  "@preferredWeightUnit": {
+    "description": "Setting for the unit the app will use for displaying weight"
+  }
 }

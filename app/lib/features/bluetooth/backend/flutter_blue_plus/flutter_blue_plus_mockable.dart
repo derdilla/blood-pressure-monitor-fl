@@ -48,8 +48,8 @@ class FlutterBluePlusMockable {
   /// Retrieve a list of devices currently connected to the system
   /// - The list includes devices connected to by *any* app
   /// - You must still call device.connect() to connect them to *your app*
-  Future<List<BluetoothDevice>> get systemDevices =>
-      FlutterBluePlus.systemDevices;
+  Future<List<BluetoothDevice>> systemDevices(List<Guid> withServices) =>
+      FlutterBluePlus.systemDevices(withServices);
 
   /// Retrieve a list of bonded devices (Android only)
   Future<List<BluetoothDevice>> get bondedDevices =>

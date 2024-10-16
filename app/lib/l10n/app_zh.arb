@@ -209,7 +209,7 @@
   "@measurementCount": {},
   "measurementsPerDay": "日测量次数",
   "@measurementsPerDay": {},
-  "timeResolvedMetrics": "时间解析图表",
+  "timeResolvedMetrics": "按一天中不同时间的度量",
   "@timeResolvedMetrics": {},
   "avgOf": "{txt} Ø",
   "@avgOf": {
@@ -514,5 +514,15 @@
   "invalidZip": "无效的 ZIP 文件。",
   "@invalidZip": {},
   "errCantCreateArchive": "无法创建存档。如果可能请报告 Bug。",
-  "@errCantCreateArchive": {}
+  "@errCantCreateArchive": {},
+  "activateWeightFeatures": "激活体重相关功能",
+  "@activateWeightFeatures": {},
+  "weight": "体重",
+  "@weight": {},
+  "enterWeight": "输入体重",
+  "@enterWeight": {},
+  "preferredWeightUnit": "首选体重单位",
+  "@preferredWeightUnit": {
+    "description": "Setting for the unit the app will use for displaying weight"
+  }
 }

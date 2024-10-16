@@ -1,11 +1,11 @@
-<p><i>blood pressure monitor</i> is a reliable blood pressure measurement tracker and analyzer. It has the ambition to allow saving measurements faster than anywhere else and make sharing data with you doctor effortless. It works out of the box but can also be configured for individual use cases.</p>
+<p><i>血压监测仪</i>是一种可靠的血压测量跟踪器和分析仪。它的目标是比其他任何地方都更快地保存测量结果，并使与您的医生轻松共享数据。它开箱即用，但也可以针对单个用例进行配置。</p>
 
-Features:
-- 📏 <b>Reliable</b> measurement storing
-- 🚀 Fast input through <b>user-friendly</b> dialogues on launch and automatic form navigation
-- 📊 <b>Beautiful</b> analytics provide insights on trends, distribution, differences over the day and much more
-- 📂 Versatile <b>export and import</b> (CSV, PDF, SQLite) with granular control
-- ⚙️ High configurability
-- 🔗 BLE GATT input through bluetooth devices
-- Ad free without disturbances
-- Well-documented, <b>open-source</b> code
+特征：
+- 📏<b>可信赖的</b>测量存储
+- 🚀通过启动时<b>用户友好的</b>对话和自动表单导航快速输入
+- 📊<b>漂亮的</b>分析提供了对趋势、分布、一天中的差异等的见解
+- 📂具有粒度控制的多功能<b>导出和导入</b>（CSV、PDF、SQLite）
+- ⚙️高度可配置性
+- 🔗BLE GATT通过蓝牙设备输入
+-无广告，无干扰
+-文档完善，<b>开源</b>代码

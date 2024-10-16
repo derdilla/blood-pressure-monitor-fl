@@ -321,7 +321,7 @@
       }
     }
   },
-  "timeResolvedMetrics": "Saatlik Belirlenen Metrikler",
+  "timeResolvedMetrics": "Günün saatine göre ölçümler",
   "@timeResolvedMetrics": {},
   "enterTimeFormatScreen": "Zaman biçimi",
   "@enterTimeFormatScreen": {},
@@ -516,5 +516,15 @@
   "invalidZip": "Geçersiz zip dosyası.",
   "@invalidZip": {},
   "errCantCreateArchive": "Arşiv oluşturulamıyor. Lütfen mümkünse hatayı bildirin.",
-  "@errCantCreateArchive": {}
+  "@errCantCreateArchive": {},
+  "activateWeightFeatures": "Ağırlıkla ilgili özellikleri etkinleştir",
+  "@activateWeightFeatures": {},
+  "weight": "Ağırlık",
+  "@weight": {},
+  "enterWeight": "Ağırlık girin",
+  "@enterWeight": {},
+  "preferredWeightUnit": "Tercih edilen ağırlık birimi",
+  "@preferredWeightUnit": {
+    "description": "Setting for the unit the app will use for displaying weight"
+  }
 }

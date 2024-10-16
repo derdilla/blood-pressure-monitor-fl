@@ -1,5 +1,0 @@
-* Aktualisiere Graphen auf Start- und Statistikseiten um alte Bugs und Performance zu verbessern
-* Behebe löschen von Medikamenteneinnahme
-* Vereinfache Speicherformat von Einstellungen, um auf persistenz auf allen Geräten zu gewährleisten
-* Behebe teilweises clippen der Datumsauswahl
-* Vervollständige türkische, italienische, spanische, französische, niederländisch und chinesische Übersetzungen (Dank vieler Helfer auf weblate)

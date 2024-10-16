@@ -1,0 +1,11 @@
+<p><i>bloed druk monitor</i> is een betrouwbare bloeddruk meting tracker en analyse app. De app probeert de snelste en laagdrempeligste manier te zijn om bloeddruk metingen op te slaan, en maakt het delen van gegevens met uw dokter eenvoudig. Het werkt meteen na installatie zonder dat enige configuratie benodigd is, maar kan ook aan uw specifieke wensen worden aangepast.</p>
+
+Eigenschappen:
+- 📏 <b>Betrouwbare</b> metingen opslag
+- 🚀 Snelle en <b>gebruikersvriendelijke</b> invoer via dialogen bij app lancering en automatische form navigatie
+- 📊 <b>Mooie</b> analyzes die inzicht geven in tendensen, distributie en verschillen gedurende de dag en veel meer
+- 📂 Veelzijdige <b>export en import</b> mogelijkheden (CSV, PDF, SQLite) met granulaire controle
+- ⚙️ Uitgebreide configuratie mogelijkheden
+- 🔗 Invoer direct van bluetooth ondersteunde apparaten (via BLE GATT)
+- Reklamevrij zonder stoornissen
+- Uitgebreide documentatie, <b>open-source</b> broncode
