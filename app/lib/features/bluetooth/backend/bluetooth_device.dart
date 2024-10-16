@@ -116,7 +116,7 @@ abstract class BluetoothDevice<
     _state = BluetoothDeviceState.connecting;
 
     final completer = Completer<bool>();
-    logger.finer('connect: Init');
+    logger.finer('connect: start connecting');
 
     if (onDisconnect != null) {
       disconnectCallbacks.add(onDisconnect);
@@ -124,13 +124,19 @@ abstract class BluetoothDevice<
 
     await _connectionListener?.cancel();
     _connectionListener = connectionStream.listen((BluetoothConnectionState state) {
-      logger.finest('connectionStream.listen[state: $_state]: $state');
+      logger.finest('connectionStream.listen[_state: $_state]: $state');
 
+      // Note: in this abstraction we want the device state to be singular. Unfortunately
+      // not all libraries on all platforms send only a single connection state event. F.e.
+      // flutter_blue_plus can send 3 disconnect events the very first time you try to connect
+      // with a device. These multiple similar events for the same device will break our logic
+      // so we need to filter the states.
       switch (state) {
         case BluetoothConnectionState.connected:
-          if (_state == BluetoothDeviceState.connected) {
-            logger.finest('Ignoring state update because device was already not connected');
-            // Ignore status update if the updated state did not change
+          if (_state != BluetoothDeviceState.connecting) {
+            // Ignore status update if the current device state was not connecting. Cause then
+            // the library probably send multiple state update events.
+            logger.finest('Ignoring state update because device was not connecting: $_state');
             return;
           }
 
@@ -139,9 +145,9 @@ abstract class BluetoothDevice<
           _state = BluetoothDeviceState.connected;
           return;
         case BluetoothConnectionState.disconnected:
-          if (_state == BluetoothDeviceState.disconnected) {
-            logger.finest('Ignoring state update because device was already not connected');
-            // Ignore status update if the updated state did not change
+          if ([BluetoothDeviceState.connecting, BluetoothDeviceState.disconnected].any((s) => s == _state)) {
+            // Ignore status update if the state was connecting or already disconnected
+            logger.finest('Ignoring state update because device was already disconnected: $_state');
             return;
           }
 
