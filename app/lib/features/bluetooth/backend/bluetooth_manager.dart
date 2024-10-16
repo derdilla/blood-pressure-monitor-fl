@@ -26,7 +26,7 @@ abstract class BluetoothManager<BackendDevice, BackendUuid, BackendService, Back
   ///
   /// Returns null if no permissions were requested (ie because its not needed on a platform)
   /// or true/false to indicate whether requesting permissions succeeded (not if it was granted)
-  Future<bool> enable(); // TODO: use task specific plugin/native code
+  Future<bool?> enable(); // TODO: use task specific plugin/native code
 
   /// Last known adapter state
   ///

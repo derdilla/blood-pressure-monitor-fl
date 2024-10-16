@@ -20,7 +20,15 @@ final class BluetoothLowEnergyManager extends BluetoothManager<DiscoveredEventAr
   }
 
   @override
-  Future<bool> enable() async => Platform.isAndroid && await backend.authorize();
+  Future<bool?> enable() async {
+    if (!Platform.isAndroid) {
+      return null;
+    }
+
+    final b = await backend.authorize();
+    await backend.showAppSettings();
+    return b;
+  }
 
   /// The actual backend implementation
   final CentralManager backend = CentralManager();

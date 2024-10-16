@@ -1,4 +1,3 @@
-import 'package:blood_pressure_app/logging.dart';
 import 'package:collection/collection.dart';
 
 /// Bluetooth Base UUID from Bluetooth Core Spec

@@ -11,7 +11,7 @@ final class MockBluetoothManager extends BluetoothManager<String, String, Mocked
   BluetoothDeviceDiscovery<BluetoothManager> get discovery => throw UnimplementedError();
 
   @override
-  Future<bool> enable() async => false;
+  Future<bool?> enable() async => null;
   
   @override
   BluetoothAdapterState get lastKnownAdapterState => BluetoothAdapterState.initial;

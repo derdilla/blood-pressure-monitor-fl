@@ -23,12 +23,12 @@ class FlutterBluePlusManager extends BluetoothManager<ScanResult, Guid, fbp.Blue
   final FlutterBluePlusMockable backend;
 
   @override
-  Future<bool> enable() async {
+  Future<bool?> enable() async {
     if (Platform.isAndroid) {
       await backend.turnOn();
       return true;
     }
-    return false;
+    return null;
   }
 
   @override

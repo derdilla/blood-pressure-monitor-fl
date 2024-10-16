@@ -164,7 +164,13 @@ abstract class BluetoothDevice<
       }
     }, onError: onError);
 
-    await backendConnect();
+    try {
+      await backendConnect();
+    } catch (e) {
+      logger.severe('Failed to connect to device', e);
+      if (!completer.isCompleted) completer.complete(false);
+    }
+
     return completer.future.then((res) {
       logger.finer('connect: completer.resolved($res)');
       return res;
@@ -317,17 +323,18 @@ mixin CharacteristicValueListener<
 
     disconnectCallbacks.add(disconnectCallback);
 
-    final listener = characteristicValueStream.listen((value) {
-      if (value == null) {
-        // ignore null values
-        return;
-      }
+    final listener = characteristicValueStream.listen(
+      (value) {
+        if (value == null) {
+          // ignore null values
+          return;
+        }
 
-      logger.finer('listenCharacteristicValue[${value.length}] $value');
+        logger.finer('listenCharacteristicValue[${value.length}] $value');
 
-      receivedSomeData = true;
-      onValue(value, completer.complete);
-    },
+        receivedSomeData = true;
+        onValue(value, completer.complete);
+      },
       cancelOnError: true,
       onDone: () {
         logger.finer('listenCharacteristicValue: onDone called');
@@ -345,9 +352,13 @@ mixin CharacteristicValueListener<
     _readCharacteristicCompleters.add(completer);
     _readCharacteristicListeners.add(listener);
 
-    final bool triggerSuccess = await triggerCharacteristicValue(characteristic);
-    if (!triggerSuccess) {
-      logger.warning('listenCharacteristicValue: triggerCharacteristicValue returned $triggerSuccess');
+    try {
+      final bool triggerSuccess = await triggerCharacteristicValue(characteristic);
+      if (!triggerSuccess) {
+        logger.warning('listenCharacteristicValue: triggerCharacteristicValue returned $triggerSuccess');
+      }
+    } catch (e) {
+      logger.severe('Error occured while triggering characteristic', e);
     }
 
     return completer.future.then((res) {
