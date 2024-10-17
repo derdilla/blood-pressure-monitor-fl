@@ -60,6 +60,7 @@ void main() {
 
     final localizations = await AppLocalizations.delegate.load(const Locale('en'));
     expect(find.text(localizations.selectMeasurementTitle), findsOneWidget);
+    expect(find.byIcon(Icons.close), findsOneWidget);
 
     expect(find.byType(ListTile), findsNWidgets(2));
 
@@ -78,7 +79,7 @@ void main() {
     expect(selected, contains(measurements[0]));
 
     expect(tapCount, 0);
-    await tester.tap(find.text(localizations.selectMeasurementTitle));
+    await tester.tap(find.byIcon(Icons.close));
     await tester.pump();
     expect(tapCount, 1);
   });
