@@ -190,6 +190,7 @@ abstract class BluetoothDevice<
     } catch (e) {
       logger.severe('Failed to connect to device', e);
       if (!completer.isCompleted) completer.complete(false);
+      _state = BluetoothDeviceState.disconnected;
     }
 
     return completer.future.then((res) {
