@@ -202,7 +202,7 @@ abstract class BluetoothDevice<
   /// Disconnect & dispose the device
   ///
   /// Always call [disconnect] after calling [connect] to ensure all resources are disposed
-  /// Optionally specifiy [waitForStateChangeTimeout] in milliseconds to indicate how long we
+  /// Optionally specify [waitForStateChangeTimeout] in milliseconds to indicate how long we
   /// should wait for the device to send a disconnect event. Specifying a value of -1 disables
   /// waiting for the state change, a value of 0 means wait indefinitely.
   Future<bool> disconnect({ int waitForStateChangeTimeout = 3000 }) async {
