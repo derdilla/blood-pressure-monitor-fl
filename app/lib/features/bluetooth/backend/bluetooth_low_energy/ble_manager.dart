@@ -25,9 +25,7 @@ final class BluetoothLowEnergyManager extends BluetoothManager<DiscoveredEventAr
       return null;
     }
 
-    final b = await backend.authorize();
-    await backend.showAppSettings();
-    return b;
+    return backend.authorize();
   }
 
   /// The actual backend implementation
