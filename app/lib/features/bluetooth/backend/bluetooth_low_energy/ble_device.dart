@@ -94,6 +94,7 @@ final class BluetoothLowEnergyDevice
         onValue(data);
         return true;
       } catch (err) {
+        logger.warning('getCharacteristicValue: ble readCharacteristic failed', err);
         return false;
       }
     }
