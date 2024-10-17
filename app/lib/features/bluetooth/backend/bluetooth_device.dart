@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 
 import 'package:blood_pressure_app/features/bluetooth/backend/bluetooth_connection.dart';
 import 'package:blood_pressure_app/features/bluetooth/backend/bluetooth_manager.dart';
@@ -74,13 +75,40 @@ abstract class BluetoothDevice<
   /// callbacks.
   final List<bool Function()> disconnectCallbacks = [];
 
-  /// Waits and calls itself recursively as long as the current device [_state] equals [BluetoothDeviceState.disconnecting]
-  Future<void> _chainWaitForDisconnectingStateChange() async {
-    if (_state == BluetoothDeviceState.disconnecting) {
-      logger.finest('Waiting because device is still disconnecting');
-      await Future.delayed(const Duration(milliseconds: 10))
-        .then((_) => _chainWaitForDisconnectingStateChange());
+  /// Wait for the device state to change to a different value then disconnecting
+  ///
+  /// [timeout] - How long to wait before timeout occurs. A value of -1 disables waiting, a value of 0 waits indefinitely
+  Future<void> _waitForDisconnectingStateChange({ int timeout = 300000 }) async {
+    if (timeout < 0) {
+      return;
     }
+
+    // Futures within an any still always resolve, it's just that the results
+    // are disregard for futures that do not finish first. Use this bool to
+    // keep track whether the futures are already completed or not
+    bool futuresCompleted = false;
+
+    /// Waits and calls itself recursively as long as the current device [_state] equals [BluetoothDeviceState.disconnecting]
+    Future<void> checkDeviceState() async {
+      while (!futuresCompleted && _state == BluetoothDeviceState.disconnecting) {
+        logger.finest('Waiting because device is still disconnecting');
+        await Future.delayed(const Duration(milliseconds: 10));
+      }
+    }
+
+    final futures = [checkDeviceState()];
+    if (timeout > 0) {
+      futures.add(
+        Future.delayed(Duration(milliseconds: min(timeout, 300000))).then((_) {
+          if (!futuresCompleted) {
+            logger.finest('connect: Wait for state change timed out after $timeout ms');
+          }
+        })
+      );
+    }
+
+    await Future.any(futures);
+    futuresCompleted = true;
   }
 
   /// Connect to the device
@@ -98,17 +126,10 @@ abstract class BluetoothDevice<
     ValueSetter<Object>? onError,
     int waitForDisconnectingStateChangeTimeout = 3000
   }) async {
-    final futures = [_chainWaitForDisconnectingStateChange()];
-    if (waitForDisconnectingStateChangeTimeout > 0) {
-      futures.add(
-        Future.delayed(Duration(milliseconds: waitForDisconnectingStateChangeTimeout)).then((_) {
-          logger.finest('connect: Wait for state change timed out after $waitForDisconnectingStateChangeTimeout ms');
-        })
-      );
+    if (_state == BluetoothDeviceState.disconnecting) {
+      await _waitForDisconnectingStateChange(timeout: waitForDisconnectingStateChangeTimeout);
     }
 
-    await Future.any(futures);
-    assert(_state == BluetoothDeviceState.disconnected, 'Device is not in disconnected state, got $_state instead');
     if (_state != BluetoothDeviceState.disconnected) {
       return false;
     }
@@ -183,24 +204,12 @@ abstract class BluetoothDevice<
   /// Optionally specifiy [waitForStateChangeTimeout] in milliseconds to indicate how long we
   /// should wait for the device to send a disconnect event. Specifying a value of -1 disables
   /// waiting for the state change, a value of 0 means wait indefinitely.
-  /// Note that waiting for state changes happens in iterations of max 10ms. So if you specify
-  /// [waitForStateChangeTimeout]=10 then this method waits 10ms. But if you specify
-  /// [waitForStateChangeTimeout]=65 then this method will wait 7x 10ms=70ms and not 65ms.
   Future<bool> disconnect({ int waitForStateChangeTimeout = 3000 }) async {
     _state = BluetoothDeviceState.disconnecting;
     await backendDisconnect();
 
-    if (waitForStateChangeTimeout >= 0) {
-      final futures = [_chainWaitForDisconnectingStateChange()];
-      if (waitForStateChangeTimeout > 0) {
-        futures.add(
-          Future.delayed(Duration(milliseconds: waitForStateChangeTimeout)).then((_) {
-            logger.finest('disconnect: Wait for state change timed out after $waitForStateChangeTimeout ms');
-          })
-        );
-      }
-
-      await Future.any(futures);
+    if (waitForStateChangeTimeout > -1) {
+      await _waitForDisconnectingStateChange(timeout: waitForStateChangeTimeout);
 
       assert(
         _state == BluetoothDeviceState.disconnecting || _state == BluetoothDeviceState.disconnected,
@@ -353,6 +362,7 @@ mixin CharacteristicValueListener<
     _readCharacteristicListeners.add(listener);
 
     try {
+      logger.finest('listenCharacteristicValue: triggering characteristic value');
       final bool triggerSuccess = await triggerCharacteristicValue(characteristic);
       if (!triggerSuccess) {
         logger.warning('listenCharacteristicValue: triggerCharacteristicValue returned $triggerSuccess');
