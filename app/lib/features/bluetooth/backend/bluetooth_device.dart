@@ -268,8 +268,7 @@ abstract class BluetoothDevice<
   String toString() => 'BluetoothDevice{name: $name, deviceId: $deviceId}';
 
   @override
-  bool operator == (Object other) => other is BluetoothDevice
-    && hashCode == other.hashCode;
+  bool operator == (Object other) => other is BluetoothDevice && hashCode == other.hashCode && deviceId == other.deviceId;
 
   @override
   int get hashCode => deviceId.hashCode ^ name.hashCode;

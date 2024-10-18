@@ -63,7 +63,6 @@ void main() {
     mockResults.sink.add([wrongRes0, wrongRes1]);
     await expectLater(cubit.stream, emits(isA<DeviceListAvailable>()));
 
-
     final (res, dev) = createScanResultMock('testDev');
     mockResults.sink.add([res]);
     await expectLater(cubit.stream, emits(isA<DeviceListAvailable>()
