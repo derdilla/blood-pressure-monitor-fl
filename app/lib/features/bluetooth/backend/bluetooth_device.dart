@@ -268,6 +268,9 @@ abstract class BluetoothDevice<
   String toString() => 'BluetoothDevice{name: $name, deviceId: $deviceId}';
 
   @override
+  /// Compare devices, only checking hashCode is not sufficient during tests as hashCode
+  /// of mocked classes seems to be always 0 hence why also comparing by deviceId
+  /// TODO: Understand why the mocked devices in the device_scan_cubit_test have the same hashCode=0 and are therefore not all added to the set
   bool operator == (Object other) => other is BluetoothDevice && hashCode == other.hashCode && deviceId == other.deviceId;
 
   @override
