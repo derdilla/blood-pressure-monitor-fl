@@ -28,7 +28,7 @@ class IntakeHistory extends ChangeNotifier {
           try {
             return OldMedicineIntake.deserialize(e, availableMedicines);
           } on FormatException {
-            Log.err('OldMedicineIntake deserialization problem: "$e"');
+            log.severe('OldMedicineIntake deserialization problem: "$e"');
             return null;
           }
         })

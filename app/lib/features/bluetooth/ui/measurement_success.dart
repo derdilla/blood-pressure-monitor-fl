@@ -24,7 +24,7 @@ class MeasurementSuccess extends StatelessWidget {
       onClosed: onTap,
       child: Center(
         child: ListTileTheme(
-          data: ListTileThemeData(
+          data: const ListTileThemeData(
             iconColor: Colors.orange,
           ),
           child: Column(
@@ -47,32 +47,32 @@ class MeasurementSuccess extends StatelessWidget {
               if (data.status?.bodyMovementDetected ?? false)
                 ListTile(
                   title: Text(AppLocalizations.of(context)!.bodyMovementDetected),
-                  leading: Icon(Icons.directions_walk),
+                  leading: const Icon(Icons.directions_walk),
                 ),
               if (data.status?.cuffTooLose ?? false)
                 ListTile(
                   title: Text(AppLocalizations.of(context)!.cuffTooLoose),
-                  leading: Icon(Icons.space_bar),
+                  leading: const Icon(Icons.space_bar),
                 ),
               if (data.status?.improperMeasurementPosition ?? false)
                 ListTile(
                   title: Text(AppLocalizations.of(context)!.improperMeasurementPosition),
-                  leading: Icon(Icons.emoji_people),
+                  leading: const Icon(Icons.emoji_people),
                 ),
               if (data.status?.irregularPulseDetected ?? false)
                 ListTile(
                   title: Text(AppLocalizations.of(context)!.irregularPulseDetected),
-                  leading: Icon(Icons.heart_broken),
+                  leading: const Icon(Icons.heart_broken),
                 ),
               if (data.status?.pulseRateExceedsUpperLimit ?? false)
                 ListTile(
                   title: Text(AppLocalizations.of(context)!.pulseRateExceedsUpperLimit),
-                  leading: Icon(Icons.monitor_heart),
+                  leading: const Icon(Icons.monitor_heart),
                 ),
               if (data.status?.pulseRateIsLessThenLowerLimit ?? false)
                 ListTile(
                   title: Text(AppLocalizations.of(context)!.pulseRateLessThanLowerLimit),
-                  leading: Icon(Icons.monitor_heart),
+                  leading: const Icon(Icons.monitor_heart),
                 ),
             ],
           ),

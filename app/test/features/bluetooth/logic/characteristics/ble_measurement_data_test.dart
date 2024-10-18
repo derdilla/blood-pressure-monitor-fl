@@ -1,10 +1,12 @@
+import 'dart:typed_data';
+
 import 'package:blood_pressure_app/features/bluetooth/logic/characteristics/ble_measurement_data.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   test('decodes sample data', () {
     // 22 => 0001 0110
-    final result = BleMeasurementData.decode([22, 124, 0, 86, 0, 97, 0, 232, 7, 6, 15, 17, 17, 27, 51, 0, 0, 0], 0);
+    final result = BleMeasurementData.decode(Uint8List.fromList([22, 124, 0, 86, 0, 97, 0, 232, 7, 6, 15, 17, 17, 27, 51, 0, 0, 0]), 0);
 
     expect(result, isNotNull);
     expect(result!.systolic, 124.0);

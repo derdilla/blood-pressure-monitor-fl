@@ -33,10 +33,12 @@ dependencies:
     path: ../health_data_store/
   flutter_bloc: ^8.1.6
   flutter_blue_plus: ^1.33.2
+  bluetooth_low_energy: ^6.0.2
   archive: ^3.6.1
   file_picker: ^8.1.2
   fluttertoast: ^8.2.8
   app_settings: ^5.1.1
+  logging: ^1.2.0
   persistent_user_dir_access_android: ^0.0.1
 
   # desktop only
