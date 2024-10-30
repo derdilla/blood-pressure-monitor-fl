@@ -66,7 +66,7 @@ class AppHome extends StatelessWidget {
         _appStart++;
       }
 
-      if (orientation == Orientation.landscape) return _buildValueGraph(context);
+      if (orientation == Orientation.landscape) return Scaffold(body: _buildValueGraph(context));
       return DefaultTabController(
         length: 2,
         child: Scaffold(
