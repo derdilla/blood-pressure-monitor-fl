@@ -38,9 +38,9 @@ class BloodPressureValueGraph extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (records.sysGraph().length <= 2
-      || records.diaGraph().length <= 2
-      || records.pulGraph().length <= 2) {
+    if (records.sysGraph().length < 2
+      && records.diaGraph().length < 2
+      && records.pulGraph().length < 2) {
       return Center(
         child: Text(AppLocalizations.of(context)!.errNotEnoughDataToGraph),
       );
@@ -198,6 +198,8 @@ class _ValueGraphPainter extends CustomPainter {
     double maxY,
     double? warnValue,
   ) {
+    if (data.isEmpty) return;
+
     Path? path;
     for (final e in data) {
       final point = ui.Offset(_transformX(size, e.$1, range), _transformY(size, e.$2, minY, maxY));
