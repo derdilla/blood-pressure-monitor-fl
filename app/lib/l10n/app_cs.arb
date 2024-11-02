@@ -1,0 +1,530 @@
+{
+  "success": "Úspěch: {msg}",
+  "@success": {
+    "placeholders": {
+      "msg": {
+        "type": "String"
+      }
+    }
+  },
+  "errNaN": "Zadejte číslo",
+  "@errNaN": {},
+  "error": "Chyba: {msg}",
+  "@error": {
+    "placeholders": {
+      "msg": {
+        "type": "String"
+      }
+    }
+  },
+  "errUnrealistic": "Nereálná hodnota? Vypněte ověřování v nastavení!",
+  "@errUnrealistic": {},
+  "errNotEnoughDataToGraph": "Není dostatek dat pro nakreslení grafu.",
+  "@errNotEnoughDataToGraph": {},
+  "sysLong": "Systolický",
+  "@sysLong": {},
+  "sysShort": "sys",
+  "@sysShort": {},
+  "iconSize": "Velikost ikon",
+  "@iconSize": {},
+  "accentColor": "Barva motivu",
+  "@accentColor": {},
+  "exportCsvHeadlineDesc": "Pomáhá rozlišit typy",
+  "@exportCsvHeadlineDesc": {},
+  "csv": "CSV",
+  "@csv": {},
+  "pdf": "PDF",
+  "@pdf": {},
+  "export": "EXPORT",
+  "@export": {},
+  "minOf": "{txt} min.",
+  "@minOf": {
+    "placeholders": {
+      "txt": {
+        "type": "String"
+      }
+    }
+  },
+  "exportWarnConfigNotImportable": "Ahoj! Jen přátelské upozornění: aktuální konfiguraci exportu nebude možné importovat. Chcete-li to napravit, ujistěte se, že jste nastavili typ exportu jako CSV a uvedli jeden z dostupných časových formátů.",
+  "@exportWarnConfigNotImportable": {},
+  "maxOf": "{txt} max.",
+  "@maxOf": {
+    "placeholders": {
+      "txt": {
+        "type": "String"
+      }
+    }
+  },
+  "day": "Den",
+  "@day": {},
+  "month": "Měsíc",
+  "@month": {},
+  "year": "Rok",
+  "@year": {},
+  "drawRegressionLinesDesc": "Kreslí regresní přímky do grafu. Užitečné pouze pro velké intervaly.",
+  "@drawRegressionLinesDesc": {},
+  "pulsePressure": "Pulzní tlak",
+  "@pulsePressure": {},
+  "delete": "Smazat",
+  "@delete": {},
+  "addExportformat": "Přidat exportní formát",
+  "@addExportformat": {},
+  "title": "Aplikace Krevní tlak",
+  "@title": {},
+  "loading": "načítání…",
+  "@loading": {},
+  "errLt30": "Číslo <= 30? Vypněte ověřování v nastavení!",
+  "@errLt30": {},
+  "errDiaGtSys": "dia >= sys? Vypněte ověřování v nastavení!",
+  "@errDiaGtSys": {},
+  "errCantOpenURL": "Nelze otevřít URL: {url}",
+  "@errCantOpenURL": {
+    "placeholders": {
+      "url": {
+        "type": "String"
+      }
+    }
+  },
+  "errNoFileOpened": "nebyl otevřen žádný soubor",
+  "@errNoFileOpened": {},
+  "errNotStarted": "není spuštěn",
+  "@errNotStarted": {},
+  "errNoValue": "Zadejte hodnotu",
+  "@errNoValue": {},
+  "errNoData": "nejsou data",
+  "@errNoData": {},
+  "errWrongImportFormat": "Importovat lze pouze soubory ve formátu CSV a databáze SQLite.",
+  "@errWrongImportFormat": {},
+  "errNeedHeadline": "Importovat lze pouze soubory s nadpisem.",
+  "@errNeedHeadline": {},
+  "errCantReadFile": "Obsah souboru nelze přečíst",
+  "@errCantReadFile": {},
+  "errNotImportable": "Tento soubor nelze importovat",
+  "@errNotImportable": {},
+  "btnCancel": "ZRUŠIT",
+  "@btnCancel": {},
+  "btnSave": "ULOŽIT",
+  "@btnSave": {},
+  "btnConfirm": "OK",
+  "@btnConfirm": {},
+  "btnUndo": "ZPĚT",
+  "@btnUndo": {},
+  "diaLong": "Diastolický",
+  "@diaLong": {},
+  "diaShort": "dia",
+  "@diaShort": {},
+  "pulLong": "Pulz",
+  "@pulLong": {},
+  "pulShort": "pul",
+  "@pulShort": {},
+  "addNote": "Poznámka (volitelně)",
+  "@addNote": {},
+  "settings": "Nastavení",
+  "@settings": {},
+  "layout": "Rozvržení",
+  "@layout": {},
+  "allowManualTimeInput": "Povolit ruční zadání času",
+  "@allowManualTimeInput": {},
+  "enterTimeFormatScreen": "Formát času",
+  "@enterTimeFormatScreen": {},
+  "theme": "Motiv",
+  "@theme": {},
+  "system": "Systém",
+  "@system": {},
+  "dark": "Tmavý",
+  "@dark": {},
+  "light": "Světlý",
+  "@light": {},
+  "graphLineThickness": "Tloušťka linky",
+  "@graphLineThickness": {},
+  "animationSpeed": "Trvání animace",
+  "@animationSpeed": {},
+  "sysColor": "Systolická barva",
+  "@sysColor": {},
+  "behavior": "Chování",
+  "@behavior": {},
+  "diaColor": "Diastolická barva",
+  "@diaColor": {},
+  "pulColor": "Barva pulzu",
+  "@pulColor": {},
+  "validateInputs": "Ověření vstupů",
+  "@validateInputs": {},
+  "confirmDeletion": "Potvrdit smazání",
+  "@confirmDeletion": {},
+  "age": "Věk",
+  "@age": {},
+  "determineWarnValues": "Určení varovných hodnot",
+  "@determineWarnValues": {},
+  "aboutWarnValuesScreen": "O...",
+  "@aboutWarnValuesScreen": {},
+  "aboutWarnValuesScreenDesc": "Více informací o varovných hodnotách",
+  "@aboutWarnValuesScreenDesc": {},
+  "sysWarn": "Systolické varování",
+  "@sysWarn": {},
+  "diaWarn": "Diastolické varování",
+  "@diaWarn": {},
+  "data": "Data",
+  "@data": {},
+  "version": "Verze",
+  "@version": {},
+  "versionOf": "Verze: {version}",
+  "@versionOf": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "buildNumberOf": "Číslo verze: {buildNumber}",
+  "@buildNumberOf": {
+    "placeholders": {
+      "buildNumber": {
+        "type": "String"
+      }
+    }
+  },
+  "packageNameOf": "Název balíčku: {name}",
+  "@packageNameOf": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "exportImport": "Export / Import",
+  "@exportImport": {},
+  "exportDir": "Adresář exportu",
+  "@exportDir": {},
+  "exportAfterEveryInput": "Export po každém záznamu",
+  "@exportAfterEveryInput": {},
+  "exportAfterEveryInputDesc": "Nedoporučuje se (mnoho souborů)",
+  "@exportAfterEveryInputDesc": {},
+  "exportFormat": "Formát exportu",
+  "@exportFormat": {},
+  "exportCustomEntries": "Přizpůsobit pole",
+  "@exportCustomEntries": {},
+  "addEntry": "Přidat pole",
+  "@addEntry": {},
+  "exportMimeType": "Typ exportovaného média",
+  "@exportMimeType": {},
+  "exportCsvHeadline": "Záhlaví",
+  "@exportCsvHeadline": {},
+  "db": "SQLite DB",
+  "@db": {},
+  "text": "text",
+  "@text": {},
+  "other": "jiné",
+  "@other": {},
+  "fieldDelimiter": "Oddělovač polí",
+  "@fieldDelimiter": {},
+  "textDelimiter": "Oddělovač textu",
+  "@textDelimiter": {},
+  "shared": "sdílené",
+  "@shared": {},
+  "import": "IMPORT",
+  "@import": {},
+  "sourceCode": "Zdrojový kód",
+  "@sourceCode": {},
+  "licenses": "Licence třetích stran",
+  "@licenses": {},
+  "importSuccess": "Importováno {count} záznamů",
+  "@importSuccess": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "exportWarnNotEveryFieldExported": "Dejte si pozor, abyste neexportovali všechna pole: {fields} {count, plural, one{is} other{are}} chybí.",
+  "@exportWarnNotEveryFieldExported": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "fields": {
+        "type": "String"
+      }
+    }
+  },
+  "statistics": "Statistika",
+  "@statistics": {},
+  "measurementCount": "Počet měření",
+  "@measurementCount": {},
+  "measurementsPerDay": "Měření za den",
+  "@measurementsPerDay": {},
+  "timeResolvedMetrics": "Metriky podle denní doby",
+  "@timeResolvedMetrics": {},
+  "avgOf": "{txt} Ø",
+  "@avgOf": {
+    "placeholders": {
+      "txt": {
+        "type": "String"
+      }
+    }
+  },
+  "warnValues": "Varovné hodnoty",
+  "@warnValues": {},
+  "warnAboutTxt1": "Varovné hodnoty jsou pouhým doporučením, nikoli lékařským doporučením.",
+  "@warnAboutTxt1": {},
+  "warnAboutTxt2": "Výchozí hodnoty závislé na věku pocházejí z tohoto zdroje.",
+  "@warnAboutTxt2": {},
+  "warnAboutTxt3": "Nebojte se změnit hodnoty podle svých potřeb a dodržujte doporučení svého lékaře.",
+  "@warnAboutTxt3": {},
+  "enterTimeFormatString": "formát času",
+  "@enterTimeFormatString": {},
+  "now": "teď",
+  "@now": {},
+  "notes": "Poznámky",
+  "@notes": {},
+  "time": "Čas",
+  "@time": {},
+  "confirmDelete": "Potvrzení smazání",
+  "@confirmDelete": {},
+  "confirmDeleteDesc": "Smazat tuto položku? (Tato potvrzení můžete vypnout v nastavení.)",
+  "@confirmDeleteDesc": {},
+  "deletionConfirmed": "Záznam smazán.",
+  "@deletionConfirmed": {},
+  "week": "Týden",
+  "@week": {},
+  "lifetime": "Celé období",
+  "@lifetime": {},
+  "weekOfYear": "Týden {weekNum}, {year}",
+  "@weekOfYear": {
+    "placeholders": {
+      "weekNum": {
+        "type": "int"
+      },
+      "year": {
+        "type": "int"
+      }
+    }
+  },
+  "last7Days": "7 dní",
+  "@last7Days": {},
+  "last30Days": "30 dní",
+  "@last30Days": {},
+  "allowMissingValues": "Povolit chybějící hodnoty",
+  "@allowMissingValues": {},
+  "errTimeAfterNow": "Vybraný denní čas byl vynulován, protože nastane po tomto okamžiku. Tuto validaci můžete vypnout v nastavení.",
+  "@errTimeAfterNow": {},
+  "language": "Jazyk",
+  "@language": {},
+  "custom": "Vlastní",
+  "@custom": {},
+  "drawRegressionLines": "Kreslení trendových čar",
+  "@drawRegressionLines": {},
+  "pdfDocumentTitle": "Hodnoty krevního tlaku od {start} do {end}",
+  "@pdfDocumentTitle": {
+    "placeholders": {
+      "start": {
+        "type": "String"
+      },
+      "end": {
+        "type": "String"
+      }
+    }
+  },
+  "fieldFormat": "Formát pole",
+  "@fieldFormat": {},
+  "result": "Výsledek:",
+  "@result": {},
+  "edit": "Upravit",
+  "@edit": {},
+  "enterWeight": "Zadejte hmotnost",
+  "@enterWeight": {},
+  "deleteAllNotes": "Odstranit všechny poznámky",
+  "@deleteAllNotes": {},
+  "errCantCreateArchive": "Nelze vytvořit archiv. Pokud je to možné, nahlaste prosím chybu.",
+  "@errCantCreateArchive": {},
+  "preferredWeightUnit": "Preferovaná jednotka hmotnosti",
+  "@preferredWeightUnit": {
+    "description": "Setting for the unit the app will use for displaying weight"
+  },
+  "exportFieldFormatDocumentation": "'## Proměnné\nFormát exportního pole podporuje vkládání hodnot pro následující zástupné znaky:\n- `$TIMESTAMP:` Představuje čas od epochy Unixu v milisekundách.\n- `$SYS:` Uvádí hodnotu, pokud je k dispozici; jinak je výchozí hodnota -1.\n- `$DIA:` Udává hodnotu, pokud je k dispozici; jinak je výchozí hodnotou -1.\n- `$PUL:` Udává hodnotu, je-li k dispozici; jinak je výchozí hodnotou -1.\n- `$NOTE:` Udává hodnotu, je-li k dispozici; jinak je výchozí hodnotou -1.\n- `$COLOR:` Představuje barvu měření jako číslo. (příklad hodnoty: `4291681337`)\n\nPokud některý z výše uvedených zástupných symbolů není v záznamu krevního tlaku přítomen, bude nahrazen hodnotou `null`.\n\n## Math\nUvnitř dvojitých závorek (\"`{{}}`\") můžete používat základní matematické údaje.\n\nPodporovány jsou následující matematické operace:\n- Operace: +, -, *, /, %, ^\n- Jednoparametrové funkce: abs, acos, asin, atan, ceil, cos, cosh, cot, coth, csc, csch, exp, floor, ln, log, round sec, sech, sin, sinh, sqrt, tan, tanh \n- Dvouparametrové funkce: log, nrt, pow\n- Konstanty: e, pi, ln2, ln10, log2e, log10e, sqrt1_2, sqrt2\n\nÚplnou specifikaci matematického interpretu najdete v dokumentaci [function_tree](https://pub.dev/documentation/function_tree/latest#interpreter).\n\n## Pořadí zpracování\n1. nahrazení proměnné\n2. Math'",
+  "@exportFieldFormatDocumentation": {},
+  "enterTimeFormatDesc": "Formátovací řetězec je směs předdefinovaných řetězců ICU/Skeleton a jakéhokoli dalšího textu, který chcete zahrnout.\n\n[Pokud vás zajímá úplný seznam platných formátů, najdete je přímo zde] (screen://TimeFormattingHelp).\n\nJen přátelsky připomínáme, že použití delších nebo kratších formátovacích řetězců nezmění zázračně šířku sloupců tabulky, což by mohlo vést k nepříjemnému zalomení řádků a nezobrazení textu.\n\nvýchozí: „yy-MM-dd HH:mm“",
+  "@enterTimeFormatDesc": {},
+  "errParseUnknownColumn": "Neexistuje žádný sloupec s názvem „{title}“.",
+  "@errParseUnknownColumn": {
+    "placeholders": {
+      "title": {
+        "type": "String"
+      }
+    }
+  },
+  "errParseLineTooShort": "Řádek {lineNumber} má méně sloupců než první řádek.",
+  "@errParseLineTooShort": {
+    "placeholders": {
+      "lineNumber": {
+        "type": "int"
+      }
+    }
+  },
+  "errAccuracyLoss": "Při exportu s vlastními formátovači času se očekává ztráta přesnosti.",
+  "@errAccuracyLoss": {},
+  "valueDistribution": "Rozložení hodnot",
+  "@valueDistribution": {},
+  "measurementSuccess": "Měření proběhlo úspěšně!",
+  "@measurementSuccess": {},
+  "improperMeasurementPosition": "Nesprávná poloha při měření",
+  "@improperMeasurementPosition": {},
+  "default_": "Výchozí",
+  "@default_": {},
+  "exportPdfHeaderHeight": "Výška záhlaví",
+  "@exportPdfHeaderHeight": {},
+  "exportPdfCellHeight": "Výška řádku",
+  "@exportPdfCellHeight": {},
+  "exportPdfHeaderFontSize": "Velikost písma záhlaví",
+  "@exportPdfHeaderFontSize": {},
+  "exportPdfCellFontSize": "Velikost písma řádku",
+  "@exportPdfCellFontSize": {},
+  "average": "Průměr",
+  "@average": {},
+  "maximum": "Maximum",
+  "@maximum": {},
+  "minimum": "Minimum",
+  "@minimum": {},
+  "exportPdfExportTitle": "Záhlaví",
+  "@exportPdfExportTitle": {},
+  "exportPdfExportStatistics": "Statistika",
+  "@exportPdfExportStatistics": {},
+  "exportPdfExportData": "Tabulka dat",
+  "@exportPdfExportData": {},
+  "startWithAddMeasurementPage": "Měření při spuštění",
+  "@startWithAddMeasurementPage": {},
+  "startWithAddMeasurementPageDescription": "Po spuštění aplikace se zobrazí obrazovka pro zadávání měření.",
+  "@startWithAddMeasurementPageDescription": {},
+  "horizontalLines": "Vodorovné čáry",
+  "@horizontalLines": {},
+  "linePositionY": "Poloha čáry (y)",
+  "@linePositionY": {},
+  "customGraphMarkings": "Vlastní značení",
+  "@customGraphMarkings": {},
+  "addLine": "Přidat linku",
+  "@addLine": {},
+  "useLegacyList": "Použít starší seznam",
+  "@useLegacyList": {},
+  "addMeasurement": "Přidat měření",
+  "@addMeasurement": {},
+  "timestamp": "Časové razítko",
+  "@timestamp": {},
+  "note": "Poznámka",
+  "@note": {},
+  "color": "Barva",
+  "@color": {},
+  "exportSettings": "Nastavení zálohy",
+  "@exportSettings": {},
+  "importSettings": "Obnovit nastavení",
+  "@importSettings": {},
+  "requiresAppRestart": "Vyžaduje restart aplikace",
+  "@requiresAppRestart": {},
+  "restartNow": "Restartovat",
+  "@restartNow": {},
+  "warnNeedsRestartForUsingApp": "Soubory, které byly v této relaci odstraněny. Restartujte aplikaci, abyste mohli pokračovat v používání a vrátit se do dalších částí aplikace!",
+  "@warnNeedsRestartForUsingApp": {},
+  "deleteAllSettings": "Odstranit všechna nastavení",
+  "@deleteAllSettings": {},
+  "deleteAllMeasurements": "Odstranit všechna měření",
+  "@deleteAllMeasurements": {},
+  "warnDeletionUnrecoverable": "Tento krok nelze vrátit, pokud jste ručně neprovedli zálohu. Opravdu to chcete smazat?",
+  "@warnDeletionUnrecoverable": {},
+  "needlePinBarWidth": "Tloušťka barvy",
+  "@needlePinBarWidth": {},
+  "needlePinBarWidthDesc": "Šířka čar, které barevné položky tvoří v grafu.",
+  "@needlePinBarWidthDesc": {},
+  "errParseEmptyCsvFile": "V souboru csv není dostatek řádků pro analýzu záznamu.",
+  "@errParseEmptyCsvFile": {},
+  "errParseTimeNotRestoreable": "Neexistuje žádný sloupec, který by umožňoval obnovení časového razítka.",
+  "@errParseTimeNotRestoreable": {},
+  "date": "Datum",
+  "@date": {},
+  "intakes": "Příjem léků",
+  "@intakes": {},
+  "errFeatureNotSupported": "Tato funkce není na této platformě k dispozici.",
+  "@errFeatureNotSupported": {},
+  "invalidZip": "Neplatný soubor zip.",
+  "@invalidZip": {},
+  "activateWeightFeatures": "Aktivace funkcí souvisejících s hmotností",
+  "@activateWeightFeatures": {},
+  "weight": "Hmotnost",
+  "@weight": {},
+  "errParseFailedDecodingField": "Dekódování pole „{fieldContent}“ v řádku {lineNumber} se nezdařilo.",
+  "@errParseFailedDecodingField": {
+    "placeholders": {
+      "lineNumber": {
+        "type": "int"
+      },
+      "fieldContent": {
+        "type": "String"
+      }
+    }
+  },
+  "exportFieldsPreset": "Předvolba polí pro export",
+  "@exportFieldsPreset": {},
+  "remove": "Odstranit",
+  "@remove": {},
+  "manageExportColumns": "Správa sloupců pro export",
+  "@manageExportColumns": {},
+  "buildIn": "Integrované",
+  "@buildIn": {},
+  "csvTitle": "CSV-název",
+  "@csvTitle": {},
+  "recordFormat": "Formát záznamu",
+  "@recordFormat": {},
+  "timeFormat": "Formát času",
+  "@timeFormat": {},
+  "bottomAppBars": "Spodní dialogové lišty",
+  "@bottomAppBars": {},
+  "medications": "Léky",
+  "@medications": {},
+  "addMedication": "Přidat léky",
+  "@addMedication": {},
+  "name": "Název",
+  "@name": {},
+  "defaultDosis": "Výchozí dávkování",
+  "@defaultDosis": {},
+  "noMedication": "Žádné léky",
+  "@noMedication": {},
+  "dosis": "Dávkování",
+  "@dosis": {},
+  "titleInCsv": "Název v CSV",
+  "@titleInCsv": {},
+  "errBleNoPerms": "Žádné oprávnění Bluetooth",
+  "@errBleNoPerms": {},
+  "preferredPressureUnit": "Preferovaná jednotka tlaku",
+  "@preferredPressureUnit": {},
+  "compactList": "Kompaktní seznam měření",
+  "@compactList": {},
+  "bluetoothDisabled": "Bluetooth vypnuto",
+  "@bluetoothDisabled": {},
+  "errMeasurementRead": "Chyba během měření!",
+  "@errMeasurementRead": {},
+  "connect": "Připojit",
+  "@connect": {},
+  "bluetoothInput": "Vstup Bluetooth",
+  "@bluetoothInput": {},
+  "aboutBleInput": "Některá měřicí zařízení jsou kompatibilní s BLE GATT. Tato zařízení zde můžete spárovat a automaticky přenášet měření nebo tuto možnost v nastavení zakázat.",
+  "@aboutBleInput": {},
+  "scanningForDevices": "Skenování zařízení",
+  "@scanningForDevices": {},
+  "tapToClose": "Klepnutím zavřete.",
+  "@tapToClose": {},
+  "meanArterialPressure": "Střední arteriální tlak",
+  "@meanArterialPressure": {},
+  "userID": "ID uživatele",
+  "@userID": {},
+  "bodyMovementDetected": "Zjištěný pohyb těla",
+  "@bodyMovementDetected": {},
+  "cuffTooLoose": "Příliš volná manžeta",
+  "@cuffTooLoose": {},
+  "irregularPulseDetected": "Zjištěn nepravidelný puls",
+  "@irregularPulseDetected": {},
+  "pulseRateExceedsUpperLimit": "Tepová frekvence překračuje horní hranici",
+  "@pulseRateExceedsUpperLimit": {},
+  "pulseRateLessThanLowerLimit": "Tepová frekvence je nižší než spodní hranice",
+  "@pulseRateLessThanLowerLimit": {},
+  "availableDevices": "Dostupná zařízení",
+  "@availableDevices": {},
+  "deleteAllMedicineIntakes": "Vymazat všechny příjmy léků",
+  "@deleteAllMedicineIntakes": {}
+}
