@@ -56,7 +56,10 @@ class IntervalPicker extends StatelessWidget {
                       );
                       if (res != null) {
                         intervall.changeStepSize(value!);
-                        intervall.currentRange = res.dateRange;
+                        final dateRange = res.dateRange.copyWith(
+                          end: res.end.copyWith(hour: 23, minute: 59, second: 59),
+                        );
+                        intervall.currentRange = dateRange;
                       }
                     } else if (value != null) {
                       intervall.changeStepSize(value);
