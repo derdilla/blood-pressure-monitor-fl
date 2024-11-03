@@ -52,7 +52,7 @@ class IntervalPicker extends StatelessWidget {
                       final res = await showDateRangePicker(
                         context: context,
                         firstDate: DateTime.fromMillisecondsSinceEpoch(1),
-                        lastDate: DateTime.now(),
+                        lastDate: DateTime.now().copyWith(day: DateTime.now().day + 1),
                       );
                       if (res != null) {
                         intervall.changeStepSize(value!);

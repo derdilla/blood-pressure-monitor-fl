@@ -84,4 +84,37 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.text('${year + 1}'), findsOneWidget);
   });
+  testWidgets('selected custom interval gets interpreted correctly', (tester) async {
+    final s = IntervalStoreManager(IntervalStorage(),IntervalStorage(),IntervalStorage());
+
+    await tester.pumpWidget(materialApp(ChangeNotifierProvider.value(
+      value: s,
+      child: const IntervalPicker(type: IntervalStoreManagerLocation.mainPage),
+    )));
+    final localizations = await AppLocalizations.delegate.load(const Locale('en'));
+    final materialLocalizations = await DefaultMaterialLocalizations.delegate.load(const Locale('en'));
+
+    await tester.tap(find.byType(DropdownButton<TimeStep>));
+    await tester.pumpAndSettle();
+    
+    await tester.tap(find.text(localizations.custom));
+    await tester.pumpAndSettle(); // opens date interval selection
+
+    await tester.tap(find.text('${DateTime.now().day}').last);
+    await tester.pump();
+    await tester.tap(find.text('${DateTime.now().day + 1}').last);
+    await tester.pump();
+    await tester.tap(find.text(materialLocalizations.saveButtonLabel).first);
+    await tester.pumpAndSettle();
+
+    expect(find.byType(DateRangePickerDialog), findsNothing);
+
+    expect(s.mainPage.stepSize, TimeStep.custom);
+    expect(s.mainPage.currentRange.start.day, DateTime.now().day);
+    expect(s.mainPage.currentRange.end.day, DateTime.now().day + 1);
+
+    expect(s.mainPage.currentRange.end.hour, 23, reason: 'should always be after newer measurements (#466)');
+    expect(s.mainPage.currentRange.end.minute, 59, reason: 'should always be after newer measurements (#466)');
+    expect(s.mainPage.currentRange.end.second, 59, reason: 'should always be after newer measurements (#466)');
+  });
 }
