@@ -128,6 +128,74 @@ Future<Widget> appBaseWithData(Widget child,  {
   );
 }
 
+/// [materialApp] variant that doesn't assume scaffold.
+Widget materialForScreens(Widget child, {
+  Settings? settings,
+  ExportSettings? exportSettings,
+  CsvExportSettings? csvExportSettings,
+  PdfExportSettings? pdfExportSettings,
+  IntervalStoreManager? intervallStoreManager,
+}) {
+  settings ??= Settings();
+  exportSettings ??= ExportSettings();
+  csvExportSettings ??= CsvExportSettings();
+  pdfExportSettings ??= PdfExportSettings();
+  intervallStoreManager ??= IntervalStoreManager(IntervalStorage(), IntervalStorage(), IntervalStorage());
+  return MultiProvider(
+    providers: [
+      ChangeNotifierProvider.value(value: settings),
+      ChangeNotifierProvider.value(value: exportSettings),
+      ChangeNotifierProvider.value(value: csvExportSettings),
+      ChangeNotifierProvider.value(value: pdfExportSettings),
+      ChangeNotifierProvider.value(value: intervallStoreManager),
+    ],
+    child: MaterialApp(
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      locale: const Locale('en'),
+      home: child,
+    ),
+  );
+}
+
+Widget appBaseForScreen(Widget child,  {
+  Settings? settings,
+  ExportSettings? exportSettings,
+  CsvExportSettings? csvExportSettings,
+  PdfExportSettings? pdfExportSettings,
+  IntervalStoreManager? intervallStoreManager,
+  BloodPressureRepository? bpRepo,
+  MedicineRepository? medRepo,
+  NoteRepository? noteRepo,
+  MedicineIntakeRepository? intakeRepo,
+  BodyweightRepository? weightRepo,
+}) {
+  HealthDataStore? db;
+  if (bpRepo == null
+      || medRepo == null
+      || intakeRepo == null
+      || noteRepo == null
+      || weightRepo == null
+  ) {
+    db = MockHealthDataSore();
+  }
+
+  return MultiRepositoryProvider(
+    providers: [
+      RepositoryProvider(create: (context) => bpRepo ?? db!.bpRepo),
+      RepositoryProvider(create: (context) => medRepo ?? db!.medRepo),
+      RepositoryProvider(create: (context) => intakeRepo ?? db!.intakeRepo),
+      RepositoryProvider(create: (context) => noteRepo ?? db!.noteRepo),
+      RepositoryProvider(create: (context) => weightRepo ?? db!.weightRepo),
+    ],
+    child: materialForScreens(child,
+      settings: settings,
+      exportSettings: exportSettings,
+      csvExportSettings: csvExportSettings,
+      pdfExportSettings: pdfExportSettings,
+      intervallStoreManager: intervallStoreManager,
+    ),
+  );
+}
 
 /// Open a dialoge through a button press.
 ///
