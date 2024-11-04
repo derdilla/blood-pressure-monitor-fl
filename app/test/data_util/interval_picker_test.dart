@@ -89,7 +89,10 @@ void main() {
 
     await tester.pumpWidget(materialApp(ChangeNotifierProvider.value(
       value: s,
-      child: const IntervalPicker(type: IntervalStoreManagerLocation.mainPage),
+      child: IntervalPicker(
+        type: IntervalStoreManagerLocation.mainPage,
+        customRangePickerCurrentDay: DateTime(2024, 1, 25),
+      ),
     )));
     final localizations = await AppLocalizations.delegate.load(const Locale('en'));
     final materialLocalizations = await DefaultMaterialLocalizations.delegate.load(const Locale('en'));
@@ -100,9 +103,9 @@ void main() {
     await tester.tap(find.text(localizations.custom));
     await tester.pumpAndSettle(); // opens date interval selection
 
-    await tester.tap(find.text('${DateTime.now().day}').last);
+    await tester.tap(find.text('20').first);
     await tester.pump();
-    await tester.tap(find.text('${DateTime.now().day + 1}').last);
+    await tester.tap(find.text('25').first);
     await tester.pump();
     await tester.tap(find.text(materialLocalizations.saveButtonLabel).first);
     await tester.pumpAndSettle();
@@ -110,11 +113,19 @@ void main() {
     expect(find.byType(DateRangePickerDialog), findsNothing);
 
     expect(s.mainPage.stepSize, TimeStep.custom);
-    expect(s.mainPage.currentRange.start.day, DateTime.now().day);
-    expect(s.mainPage.currentRange.end.day, DateTime.now().day + 1);
+    expect(s.mainPage.currentRange.start.year, 2024);
+    expect(s.mainPage.currentRange.start.month, 1);
+    expect(s.mainPage.currentRange.start.day, 20);
+    expect(s.mainPage.currentRange.end.year, 2024);
+    expect(s.mainPage.currentRange.end.month, 1);
+    expect(s.mainPage.currentRange.end.day, 25);
 
     expect(s.mainPage.currentRange.end.hour, 23, reason: 'should always be after newer measurements (#466)');
     expect(s.mainPage.currentRange.end.minute, 59, reason: 'should always be after newer measurements (#466)');
     expect(s.mainPage.currentRange.end.second, 59, reason: 'should always be after newer measurements (#466)');
+
+    expect(s.mainPage.currentRange.start.hour, 0);
+    expect(s.mainPage.currentRange.start.minute, 0);
+    expect(s.mainPage.currentRange.start.second, 0);
   });
 }
