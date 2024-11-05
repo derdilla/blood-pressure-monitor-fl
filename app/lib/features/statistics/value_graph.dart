@@ -11,7 +11,6 @@ import 'package:health_data_store/health_data_store.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
-
 /// A graph of [BloodPressureRecord] values.
 ///
 /// Note that this can't follow the users preferred unit as this would not allow
@@ -201,13 +200,18 @@ class _ValueGraphPainter extends CustomPainter {
     if (data.isEmpty) return;
 
     Path? path;
+    Path? warnPath = warnValue == null ? null : Path();
     for (final e in data) {
       final point = ui.Offset(_transformX(size, e.$1, range), _transformY(size, e.$2, minY, maxY));
       if (path != null) {
         path.lineTo(point.dx, point.dy);
+        warnPath?.lineTo(point.dx, point.dy);
       } else {
         path = Path();
         path.moveTo(point.dx, point.dy);
+
+        warnPath?.moveTo(_kLeftLegendWidth, _transformY(size, warnValue!, minY, maxY));
+        warnPath?.lineTo(point.dx, point.dy);
       }
     }
 
@@ -215,18 +219,17 @@ class _ValueGraphPainter extends CustomPainter {
     path = subPath(path, progress);
 
     if (warnValue != null) {
-      final graphPath = Path();
-      // FIXME: technically wont fill area before graph start
-      // (to see have the first value be above warn value and disable maskFilter)
-      graphPath.addPath(path, ui.Offset.zero);
-      graphPath.relativeLineTo(0, size.height);
+      assert(warnPath != null);
+
+      warnPath = subPath(warnPath!, progress);
+      warnPath.relativeLineTo(0, size.height);
 
       final y = _transformY(size, warnValue, minY, maxY);
 
       final warnRect = Rect.fromLTRB(_kLeftLegendWidth, 0, size.width, y);
       final clippedPath = Path.combine(
         PathOperation.intersect,
-        graphPath,
+        warnPath,
         Path()..addRect(warnRect),
       );
       canvas.drawPath(clippedPath, ui.Paint()
