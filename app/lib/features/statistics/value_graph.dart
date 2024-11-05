@@ -445,18 +445,15 @@ class _ValueGraphPainter extends CustomPainter {
 /// Create graph data from a list of blood pressure records.
 extension GraphData on List<BloodPressureRecord> {
   /// Get the timestamps and mmHg values of all non-null sys values.
-  Iterable<(DateTime, double)> sysGraph() => this
-    .map((r) => (r.time, r.sys?.mmHg.toDouble()))
+  Iterable<(DateTime, double)> sysGraph() => map((r) => (r.time, r.sys?.mmHg.toDouble()))
     .whereNot(((DateTime, double?) e) => e.$2 == null)
     .cast<(DateTime, double)>();
   /// Get the timestamps and mmHg values of all non-null dia values.
-  Iterable<(DateTime, double)> diaGraph() => this
-    .map((r) => (r.time, r.dia?.mmHg.toDouble()))
+  Iterable<(DateTime, double)> diaGraph() => map((r) => (r.time, r.dia?.mmHg.toDouble()))
     .whereNot(((DateTime, double?) e) => e.$2 == null)
     .cast<(DateTime, double)>();
   /// Get the timestamps and values as doubles of all non-null pul values.
-  Iterable<(DateTime, double)> pulGraph() => this
-    .map((r) => (r.time, r.pul?.toDouble()))
+  Iterable<(DateTime, double)> pulGraph() => map((r) => (r.time, r.pul?.toDouble()))
     .whereNot(((DateTime, double?) e) => e.$2 == null)
     .cast<(DateTime, double)>();
 }
