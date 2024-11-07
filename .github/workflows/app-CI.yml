@@ -241,7 +241,7 @@ jobs:
       - name: Disable analytics
         run: flutter config --no-analytics --suppress-analytics
       - name: Build linux
-        run: flutter build linux --flavor github --${{ matrix.build }}
+        run: flutter build linux --${{ matrix.build }}
         working-directory: app
       - name: Upload program
         uses: actions/upload-artifact@v4
