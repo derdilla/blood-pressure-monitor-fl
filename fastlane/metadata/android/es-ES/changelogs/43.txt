@@ -1,8 +1,0 @@
-* Solución: crear ruta de base de datos recursivamente (gracias pimlie)
-* Establecer el intervalo más reciente antes de exportar
-* Agregar nombre del idioma para nl
-* Eliminar ubicaciones no utilizadas
-* Cambiar color al cambiar la selección de distribución
-* Implementar la entrada de peso opt-in
-* Varias mejoras en la experiencia del colaborador.
-* Actualizar traducciones al español, estonio, italiano, español (Brasil), turco y chino (gracias a los colaboradores de weblate)
