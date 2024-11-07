@@ -332,5 +332,114 @@
   "errCantCreateArchive": "Arhiivi loomine ei õnnestu. Kui võimalik siis palun teata sellest veast.",
   "@errCantCreateArchive": {},
   "intakes": "Ravimite võtmine",
-  "@intakes": {}
+  "@intakes": {},
+  "timeResolvedMetrics": "Andmestik päevaaja järgi",
+  "@timeResolvedMetrics": {},
+  "warnAboutTxt1": "Hoiatuslävend on vaid soovitus ega pole meditsiiniline nõuanne.",
+  "@warnAboutTxt1": {},
+  "warnAboutTxt2": "Vaikimisi lävendväärtused on east sõltuvad ja tulevad sellest allikast.",
+  "@warnAboutTxt2": {},
+  "warnAboutTxt3": "Palun muuda väärtusi vastavalt oma vajadustele ning järgi oma arsti soovitusi.",
+  "@warnAboutTxt3": {},
+  "errTimeAfterNow": "Kuna valitud aeg on tulevikus, siis on ta ära muudetud. Sa saad selle kontrollireegli seadistustest välja lülitada.",
+  "@errTimeAfterNow": {},
+  "avgOf": "{txt} Ø",
+  "@avgOf": {
+    "placeholders": {
+      "txt": {
+        "type": "String"
+      }
+    }
+  },
+  "minOf": "{txt} min.",
+  "@minOf": {
+    "placeholders": {
+      "txt": {
+        "type": "String"
+      }
+    }
+  },
+  "maxOf": "{txt} maks.",
+  "@maxOf": {
+    "placeholders": {
+      "txt": {
+        "type": "String"
+      }
+    }
+  },
+  "warnValues": "Hoiatuslävendid",
+  "@warnValues": {},
+  "enterTimeFormatString": "kellaja vorming",
+  "@enterTimeFormatString": {},
+  "now": "praegu",
+  "@now": {},
+  "language": "Keel",
+  "@language": {},
+  "drawRegressionLines": "Joonista trendijooni",
+  "@drawRegressionLines": {},
+  "drawRegressionLinesDesc": "Lisa graafikule lineaarregressiooni joon. Mõttekas vaid suurema andmehulga puhul.",
+  "@drawRegressionLinesDesc": {},
+  "fieldFormat": "Välja vorming",
+  "@fieldFormat": {},
+  "result": "Tulemus:",
+  "@result": {},
+  "pulsePressure": "Pulsirõhk",
+  "@pulsePressure": {},
+  "addExportformat": "Lisa ekspordivorming",
+  "@addExportformat": {},
+  "edit": "Muuda",
+  "@edit": {},
+  "delete": "Kustuta",
+  "@delete": {},
+  "startWithAddMeasurementPage": "Lisamise vaade rakenduse käivitamisel",
+  "@startWithAddMeasurementPage": {},
+  "startWithAddMeasurementPageDescription": "Rakenduse käivitamisel kuvatakse lisamise vaade.",
+  "@startWithAddMeasurementPageDescription": {},
+  "horizontalLines": "Horisontaaljooned",
+  "@horizontalLines": {},
+  "linePositionY": "Joone asukoht (y)",
+  "@linePositionY": {},
+  "custom": "Kohandatud",
+  "@custom": {},
+  "pdfDocumentTitle": "Vererõhu väärtused alates {start} kuni {end}",
+  "@pdfDocumentTitle": {
+    "placeholders": {
+      "start": {
+        "type": "String"
+      },
+      "end": {
+        "type": "String"
+      }
+    }
+  },
+  "addLine": "Lisa joon",
+  "@addLine": {},
+  "customGraphMarkings": "Kohandatud markerid",
+  "@customGraphMarkings": {},
+  "useLegacyList": "Kasuta pärandloendit",
+  "@useLegacyList": {},
+  "needlePinBarWidth": "Joone paksus",
+  "@needlePinBarWidth": {},
+  "needlePinBarWidthDesc": "Joone paksus, mille värvilised kirjed graafikul teevad.",
+  "@needlePinBarWidthDesc": {},
+  "errParseUnknownColumn": "Pole veergu nimega „{title}“.",
+  "@errParseUnknownColumn": {
+    "placeholders": {
+      "title": {
+        "type": "String"
+      }
+    }
+  },
+  "errParseLineTooShort": "Real {lineNumber} on esimese reaga võrreldes vähem välju.",
+  "@errParseLineTooShort": {
+    "placeholders": {
+      "lineNumber": {
+        "type": "int"
+      }
+    }
+  },
+  "errParseTimeNotRestoreable": "Pole veergu, mis võimaldaks ajatempli taastamist.",
+  "@errParseTimeNotRestoreable": {},
+  "errParseEmptyCsvFile": "Kirjete töötlemiseks pole csv-failis piisavalt ridu.",
+  "@errParseEmptyCsvFile": {}
 }
