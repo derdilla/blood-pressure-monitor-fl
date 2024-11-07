@@ -75,6 +75,11 @@ jobs:
       contents: write
       pull-requests: write
     steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: |
+            app
+            health_data_store
       - name: Download src directory
         uses: actions/download-artifact@v4
         with:
