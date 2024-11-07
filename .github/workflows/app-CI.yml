@@ -190,7 +190,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: setup-env
     steps:
-    - name: Download health_data_store directory
+    - name: Download src directory
       uses: actions/download-artifact@v4
       with:
         name: src-${{ matrix.branch }}
@@ -213,5 +213,39 @@ jobs:
     - name: Upload apks
       uses: actions/upload-artifact@v4
       with:
-        name: app-${{ matrix.build }}-java${{ matrix.java-version }}-flutter${{ matrix.branch }}-
+        name: app-${{ matrix.build }}-java${{ matrix.java-version }}-flutter${{ matrix.branch }}
         path: ./app/build/app/outputs/flutter-apk/*.apk
+    build-android:
+      name: "🖥️ Build Desktop (linux)"
+      strategy:
+        matrix:
+          branch:
+            - beta
+            - stable
+          build:
+            - debug
+            - release
+
+      runs-on: ubuntu-latest
+      needs: setup-env
+      steps:
+        - name: Download src directory
+          uses: actions/download-artifact@v4
+          with:
+            name: src-${{ matrix.branch }}
+        - name: Setup Flutter
+          uses: subosito/flutter-action@v2
+          with:
+            channel: ${{ matrix.branch }}
+            cache: true
+        - name: Disable analytics
+          run: flutter config --no-analytics --suppress-analytics
+        - name: Build linux
+          run: flutter build linux --flavor github --${{ matrix.build }}
+          working-directory: app
+        - name: Upload program
+          uses: actions/upload-artifact@v4
+          with:
+            name: linux-${{ matrix.build }}-flutter${{ matrix.branch }}-
+            path: ./app/build/linux/x64/release/bundle/blood_pressure_app/
+
