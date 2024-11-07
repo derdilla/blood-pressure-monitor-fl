@@ -210,3 +210,8 @@ jobs:
     - name: Build apk
       run: flutter build apk --flavor github --${{ matrix.build }}
       working-directory: app
+    - name: Upload apks
+      uses: actions/upload-artifact@v4
+      with:
+        name: app-${{ matrix.build }}-java${{ matrix.java-version }}-flutter${{ matrix.branch }}-
+        path: ./app/build/app/outputs/flutter-apk/*.apk
