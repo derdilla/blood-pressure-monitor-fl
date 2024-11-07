@@ -27,8 +27,8 @@ jobs:
           sparse-checkout: |
             app
             health_data_store
-            - name: Cache generated health data store
-      - id: cache-generated
+      - name: Cache generated health data store
+        id: cache-generated
         uses: actions/cache@v4
         with:
           path: health_data_store/lib
