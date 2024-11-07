@@ -45,7 +45,7 @@ jobs:
       - name: Upload results
         uses: actions/upload-artifact@v4
         with:
-          name: src
+          name: src-${{ matrix.branch }}
           path: ./
 
   unit-test:
@@ -64,7 +64,7 @@ jobs:
     - name: Download health_data_store directory
       uses: actions/download-artifact@v4
       with:
-        name: src
+        name: src-${{ matrix.branch }}
     - name: Setup Flutter
       uses: subosito/flutter-action@v2
       with:
@@ -181,7 +181,7 @@ jobs:
     - name: Download health_data_store directory
       uses: actions/download-artifact@v4
       with:
-        name: src
+        name: src-${{ matrix.branch }}
     - name: Setup Flutter
       uses: subosito/flutter-action@v2
       with:
