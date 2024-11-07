@@ -52,6 +52,7 @@ jobs:
           flutter config --no-analytics --suppress-analytics
       - name: Update app dependencies
         run: flutter pub get
+        working-directory: app
       - name: Generate app mock code
         run: flutter pub run build_runner build
         working-directory: app
