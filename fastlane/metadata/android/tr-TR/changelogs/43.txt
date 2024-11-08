@@ -1,8 +1,8 @@
-* fix: create database path recursively (thanks pimlie)
-* Set to most recent interval before exporting
-* Add missing lang name for nl
-* Remove unused localizations
-* Change color on distribution selection change
-* Implement opt-in weight entry
-* Various improvements to contributor experience
-* Update Spanish, Estonian, Italian, Spanish (Brazil), Türkish, and Chinese translations (thanks to contributors on weblate)
+* düzeltme: veri tabanı yolunu özyinelemeli olarak oluştur (teşekkürler pimlie)
+* Dışa aktarmadan önce en son aralığa ayarla
+* nl için eksik dil adı eklendi
+* Kullanılmayan yerelleştirmeler kaldırıldı
+* Dağıtım seçimi değişikliğinde renk değiştirme
+* İsteğe bağlı ağırlık girişi eklendi
+* Katılımcı deneyiminde çeşitli iyileştirmeler
+* İspanyolca, Estonca, İtalyanca, İspanyolca (Brezilya), Türkçe ve Çince çeviriler güncellendi (weblate'te katkıda bulunanlara teşekkürler)
