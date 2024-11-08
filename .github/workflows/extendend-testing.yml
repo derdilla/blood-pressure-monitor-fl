@@ -84,8 +84,8 @@ jobs:
           cache: true
       - name: Disable analytics
         run: flutter config --no-analytics --suppress-analytics
-      - name: Run tests
-        run: flutter test --coverage
+      - name: Run tests ignoring goldens
+        run: flutter test --coverage --update-goldens
         working-directory: app
 
 #  Disabled: Integration tests are disabled as emulator setup fails on

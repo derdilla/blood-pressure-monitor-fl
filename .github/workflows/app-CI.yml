@@ -54,6 +54,7 @@ jobs:
         working-directory: app
       - name: Generate app mock code # no efficient caching possible
         run: flutter pub run build_runner build
+        working-directory: app
       - name: Run tests
         run: flutter test --coverage --dart-define="channel=${{ matrix.channel }}"
         working-directory: app
