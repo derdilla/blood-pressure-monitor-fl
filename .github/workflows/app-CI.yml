@@ -60,7 +60,6 @@ jobs:
         working-directory: app
       - name: Run tests
         run: flutter test --coverage --dart-define="channel=${{ matrix.channel }}"
-        continue-on-error: true # when a PR gets created everything is still fine
         working-directory: app
       - name: Update goldens
         id: gold-upd
