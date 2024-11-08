@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        branch:
+        channel:
           - beta
           - stable
     steps:
@@ -31,12 +31,12 @@ jobs:
         uses: actions/cache@v4
         with:
           path: health_data_store/lib
-          key: builder-${{ matrix.branch }}-${{ hashFiles('health_data_store/pubspec.yaml', 'health_data_store/lib/*', 'health_data_store/lib/**/*dart') }}
+          key: builder-${{ matrix.channel }}-${{ hashFiles('health_data_store/pubspec.yaml', 'health_data_store/lib/*', 'health_data_store/lib/**/*dart') }}
       - name: Setup dart
         if: steps.cache-generated.outputs.cache-hit != 'true'
         uses: dart-lang/setup-dart@v1
         with:
-          sdk: ${{ matrix.branch }}
+          sdk: ${{ matrix.channel }}
       - name: Generate code
         if: steps.cache-generated.outputs.cache-hit != 'true'
         run: dart run build_runner build
@@ -44,7 +44,7 @@ jobs:
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          channel: ${{ matrix.branch }}
+          channel: ${{ matrix.channel }}
           cache: true
       - name: Disable analytics
         run:
