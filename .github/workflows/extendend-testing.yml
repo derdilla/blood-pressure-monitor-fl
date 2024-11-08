@@ -1,0 +1,229 @@
+name: 'Extended testing'
+
+on:
+  workflow_dispatch:
+
+jobs:
+  setup-env:
+    name: "Setup environment"
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        branch:
+          - beta
+          - stable
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          # ensures there are no unexpected directories needed
+          sparse-checkout: |
+            app
+            health_data_store
+      - name: Cache generated health data store
+        id: cache-generated
+        uses: actions/cache@v4
+        with:
+          path: health_data_store/lib
+          key: builder-${{ matrix.branch }}-${{ hashFiles('health_data_store/pubspec.yaml', 'health_data_store/lib/*', 'health_data_store/lib/**/*dart') }}
+      - name: Setup dart
+        if: steps.cache-generated.outputs.cache-hit != 'true'
+        uses: dart-lang/setup-dart@v1
+        with:
+          sdk: ${{ matrix.branch }}
+      - name: Generate code
+        if: steps.cache-generated.outputs.cache-hit != 'true'
+        run: dart run build_runner build
+        working-directory: health_data_store
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: ${{ matrix.branch }}
+          cache: true
+      - name: Disable analytics
+        run:
+          flutter config --no-analytics --suppress-analytics
+      - name: Update app dependencies
+        run: flutter pub get
+        working-directory: app
+      - name: Generate app mock code
+        run: flutter pub run build_runner build
+        working-directory: app
+      - name: Upload results
+        uses: actions/upload-artifact@v4
+        with:
+          name: src-${{ matrix.branch }}
+          path: ./
+
+  unit-test:
+    name: "🧩🧪 Run unit tests"
+    runs-on: ubuntu-latest
+    needs: setup-env
+    strategy:
+      matrix:
+        branch:
+          - beta
+          - stable
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: |
+            app
+            health_data_store
+      - name: Download src directory
+        uses: actions/download-artifact@v4
+        with:
+          name: src-${{ matrix.branch }}
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: ${{ matrix.branch }}
+          cache: true
+      - name: Disable analytics
+        run: flutter config --no-analytics --suppress-analytics
+      - name: Run tests
+        run: flutter test --coverage
+        working-directory: app
+
+#  Disabled: Integration tests are disabled as emulator setup fails on
+#  GH-actions. Actions images no longer provide enough disk space to create
+#  the userdata partition.
+#
+#  integration-test:
+#    name: "🛠️🧪 Run integration tests"
+#    runs-on: ubuntu-latest
+#
+#    steps:
+#      - name: Checkout code
+#        uses: actions/checkout@v4
+#        with:
+#          # ensures there are no unexpected directories needed
+#          sparse-checkout: |
+#            app
+#            health_data_store
+#      - name: Enable KVM group perms
+#        # see: https://github.com/actions/runner-images/discussions/7191
+#        run: |
+#          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+#          sudo udevadm control --reload-rules
+#          sudo udevadm trigger --name-match=kvm
+#      - name: Setup Java
+#        uses: actions/setup-java@v3
+#        with:
+#          distribution: 'zulu'
+#          java-version: ${{ env.JAVA_VERSION }}
+#
+#      - name: Download Android emulator image
+#        run: |
+#          export ANDROID_TOOLS="$ANDROID_HOME/cmdline-tools/latest/bin"
+#          echo "y" | $ANDROID_TOOLS/sdkmanager --install "${{ env.EMULATOR_VERSION }}"
+#          echo "no" | $ANDROID_TOOLS/avdmanager create avd --force --name emu -k '${{ env.EMULATOR_VERSION }}'
+#          echo "Android emulator installed"
+#          $ANDROID_HOME/emulator/emulator -list-avds
+#      - name: Setup dart
+#        uses: dart-lang/setup-dart@v1
+#        with:
+#          sdk: ${{ env.DART_SDK }}
+#      - name: Generate code
+#        run: dart run build_runner build
+#        working-directory: health_data_store
+#      - name: Setup Flutter
+#        uses: subosito/flutter-action@v2
+#        with:
+#          channel: ${{ env.FLUTTER_CHANNEL }}
+#      - name: Start Android emulator
+#        timeout-minutes: 10
+#        run: |
+#          export ANDROID_TOOLS="$ANDROID_HOME/cmdline-tools/latest/bin"
+#          echo "Starting emulator"
+#          $ANDROID_TOOLS/sdkmanager "platform-tools" "${{ env.EMULATOR_VERSION }}"
+#          nohup $ANDROID_HOME/emulator/emulator -avd emu -no-audio -no-snapshot -no-window &
+#          $ANDROID_HOME/platform-tools/adb wait-for-device shell 'while [[ -z $(getprop sys.boot_completed | tr -d '\r') ]]; do sleep 1; done; input keyevent 82'
+#          $ANDROID_HOME/platform-tools/adb devices
+#          echo "Android emulator started"
+#      - name: Run integration tests
+#        run: flutter test integration_test --flavor github
+#        working-directory: app
+
+  build-android:
+    name: "🛠️ Build Android"
+    strategy:
+      matrix:
+        java-version:
+          - 17
+          - 21
+        branch:
+          - beta
+          - stable
+        build:
+          - debug
+          - release
+
+        flavor:
+          - github
+          - fdroid
+    runs-on: ubuntu-latest
+    needs: setup-env
+    steps:
+      - name: Download src directory
+        uses: actions/download-artifact@v4
+        with:
+          name: src-${{ matrix.branch }}
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: ${{ matrix.branch }}
+          cache: true
+      - name: Disable analytics
+        run: flutter config --no-analytics --suppress-analytics
+      - name: Setup java
+        uses: actions/setup-java@v2
+        with:
+          java-version: "17"
+          distribution: "temurin"
+          cache: 'gradle'
+      - name: Build apk
+        run: flutter build apk --flavor ${{ matrix.flavor }} --${{ matrix.build }}
+        working-directory: app
+      - name: Upload apks
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-${{ matrix.build }}-java${{ matrix.java-version }}-flutter${{ matrix.branch }}
+          path: ./app/build/app/outputs/flutter-apk/*.apk
+  build-linux:
+    name: "🖥️ Build Desktop (linux)"
+    strategy:
+      matrix:
+        branch:
+          - beta
+          - stable
+        build:
+          - debug
+          - release
+
+    runs-on: ubuntu-latest
+    needs: setup-env
+    steps:
+      - name: Download src directory
+        uses: actions/download-artifact@v4
+        with:
+          name: src-${{ matrix.branch }}
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: ${{ matrix.branch }}
+          cache: true
+      - name: Disable analytics
+        run: flutter config --no-analytics --suppress-analytics
+      - name: Build linux
+        run: flutter build linux --${{ matrix.build }}
+        working-directory: app
+      - name: Upload program
+        uses: actions/upload-artifact@v4
+        with:
+          name: linux-${{ matrix.build }}-flutter${{ matrix.branch }}-
+          path: ./app/build/linux/x64/release/bundle/blood_pressure_app/
+

@@ -327,3 +327,8 @@ class MockMedicineIntakeRepository extends _MockRepo<MedicineIntake> implements 
 class MockMedicineRepository extends _MockRepo<Medicine> implements MedicineRepository {}
 class MockNoteRepository extends _MockRepo<Note> implements NoteRepository {}
 class MockBodyweightRepository extends _MockRepo<BodyweightRecord> implements BodyweightRepository {}
+
+dynamic myMatchesGoldenFile(String key) {
+  final channel = String.fromEnvironment('channel');
+  return matchesGoldenFile('$channel-key');
+}
