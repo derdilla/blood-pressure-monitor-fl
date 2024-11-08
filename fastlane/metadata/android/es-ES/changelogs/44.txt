@@ -1,7 +1,7 @@
-* Fix horizontal graph theme
-* Reduce data needed to draw graph
-* Fix custom date range ending before midnight
-* Correctly fill warn area at start of graph
-* Update android compilation options
-* Update German, French, and Estonian translations from weblate
-* Add Czech translations (thanks @trendspotter)
+* Corregir el tema del gráfico horizontal
+* Reducir los datos necesarios para dibujar el gráfico
+* Corregir el intervalo de fechas personalizado que termina antes de medianoche
+* Rellenar correctamente el área de advertencia al inicio del gráfico
+* Actualizar las opciones de compilación de android
+* Actualizar las traducciones al alemán, francés y estonio de weblate
+* Añadir traducciones al checo (gracias @trendspotter)
