@@ -100,7 +100,7 @@ void main() {
     final localizations = await AppLocalizations.delegate.load(const Locale('en'));
     expect(find.text(localizations.errNotEnoughDataToGraph), findsNothing);
 
-    await expectLater(find.byType(BloodPressureValueGraph), matchesGoldenFile('full_graph-years.png'));
+    await expectLater(find.byType(BloodPressureValueGraph), myMatchesGoldenFile('full_graph-years.png'));
   });
 
   testWidgets('BloodPressureValueGraph is fine with enough values in sys category', (tester) async {
@@ -142,7 +142,7 @@ void main() {
     final localizations = await AppLocalizations.delegate.load(const Locale('en'));
     expect(find.text(localizations.errNotEnoughDataToGraph), findsNothing);
 
-    await expectLater(find.byType(BloodPressureValueGraph), matchesGoldenFile('value-graph-start-warn.png'));
+    await expectLater(find.byType(BloodPressureValueGraph), myMatchesGoldenFile('value-graph-start-warn.png'));
   });
   testWidgets('graph renders area at end correctly', (tester) async {
     await tester.pumpWidget(_buildGraph([
@@ -158,7 +158,7 @@ void main() {
     final localizations = await AppLocalizations.delegate.load(const Locale('en'));
     expect(find.text(localizations.errNotEnoughDataToGraph), findsNothing);
 
-    await expectLater(find.byType(BloodPressureValueGraph), matchesGoldenFile('value-graph-end-warn.png'));
+    await expectLater(find.byType(BloodPressureValueGraph), myMatchesGoldenFile('value-graph-end-warn.png'));
   });
 }
 
