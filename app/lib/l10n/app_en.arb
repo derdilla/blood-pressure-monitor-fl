@@ -523,6 +523,22 @@
   "@weight": {},
   "enterWeight": "Enter weight",
   "@enterWeight": {},
+  "selectMeasurementTitle": "Select the measurement to use",
+  "@selectMeasurementTitle": {},
+  "measurementIndex": "Measurement #{number}",
+  "@measurementIndex": {
+      "placeholders": {
+          "number": {
+              "type": "int"
+          }
+      }
+  },
+  "select": "Select",
+  "@select": {
+      "description": "Used when f.e. selecting a single measurement when the bluetooth device returned multiple"
+  },
+  "bloodPressure": "Blood pressure",
+  "@bloodPressure": {},
   "preferredWeightUnit": "Preferred weight unit",
   "@preferredWeightUnit": {
     "description": "Setting for the unit the app will use for displaying weight"

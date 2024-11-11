@@ -144,8 +144,8 @@ void main() {
         bleInput: true,
       );
       await tester.pumpWidget(materialApp(
-        AddEntryDialoge(
-          availableMeds: const [],
+        const AddEntryDialoge(
+          availableMeds: [],
         ),
         settings: settings,
       ),);
@@ -418,7 +418,7 @@ void main() {
         matching: find.byType(TextFormField),
       );
       expect(focusedTextFormField, findsOneWidget);
-      final field = await tester.widget<TextFormField>(focusedTextFormField);
+      final field = tester.widget<TextFormField>(focusedTextFormField);
       expect(field.initialValue, '12');
     });
     testWidgets('should focus next on input finished', (tester) async {

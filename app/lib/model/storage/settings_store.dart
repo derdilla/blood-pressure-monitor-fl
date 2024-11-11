@@ -1,13 +1,12 @@
 import 'dart:collection';
 import 'dart:convert';
-import 'dart:io';
 
+import 'package:blood_pressure_app/config.dart';
 import 'package:blood_pressure_app/model/blood_pressure/medicine/medicine.dart';
 import 'package:blood_pressure_app/model/blood_pressure/pressure_unit.dart';
 import 'package:blood_pressure_app/model/horizontal_graph_line.dart';
 import 'package:blood_pressure_app/model/storage/convert_util.dart';
 import 'package:blood_pressure_app/model/weight_unit.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 /// Stores settings that are directly controllable by the user through the
@@ -412,9 +411,7 @@ class Settings extends ChangeNotifier {
 
   bool _bleInput = true;
   /// Whether to show bluetooth input on add measurement page.
-  bool get bleInput => (Platform.isAndroid || Platform.isIOS || Platform.isMacOS
-    || (kDebugMode && Platform.environment['FLUTTER_TEST'] == 'true'))
-      && _bleInput;
+  bool get bleInput => isPlatformSupportedBluetooth && _bleInput;
   set bleInput(bool value) {
     _bleInput = value;
     notifyListeners();

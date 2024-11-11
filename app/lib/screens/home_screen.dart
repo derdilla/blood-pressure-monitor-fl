@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:blood_pressure_app/config.dart';
 import 'package:blood_pressure_app/data_util/entry_context.dart';
 import 'package:blood_pressure_app/data_util/full_entry_builder.dart';
 import 'package:blood_pressure_app/data_util/interval_picker.dart';
@@ -66,7 +69,9 @@ class AppHome extends StatelessWidget {
         _appStart++;
       }
 
-      if (orientation == Orientation.landscape) return Scaffold(body: _buildValueGraph(context));
+      if (showValueGraphAsHomeScreenInLandscapeMode && orientation == Orientation.landscape) {
+        return Scaffold(body: _buildValueGraph(context));
+      }
       return DefaultTabController(
         length: 2,
         child: Scaffold(

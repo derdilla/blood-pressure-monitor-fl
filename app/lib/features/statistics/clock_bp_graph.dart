@@ -24,7 +24,7 @@ class ClockBpGraph extends StatelessWidget {
     return SizedBox.square(
       dimension: MediaQuery.of(context).size.width,
       child: Padding(
-        padding: EdgeInsets.all(24.0),
+        padding: const EdgeInsets.all(24.0),
         child: CustomPaint(
           painter: _RadarChartPainter(
             brightness: Theme.of(context).brightness,
