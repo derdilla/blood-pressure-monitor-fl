@@ -7,6 +7,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:provider/provider.dart';
 
 import '../../model/analyzer_test.dart';
+import '../../util.dart';
 
 void main() {
   testWidgets("doesn't throw when empty" , (tester) async {
@@ -41,7 +42,7 @@ void main() {
         ),
       ),
     ));
-    await expectLater(find.byType(ClockBpGraph), matchesGoldenFile('ClockBpGraph-light.png'));
+    await expectLater(find.byType(ClockBpGraph), myMatchesGoldenFile('ClockBpGraph-light.png'));
   });
   testWidgets('renders sample data like expected in dark mode', (tester) async {
     final rng = Random(1234);
@@ -64,6 +65,6 @@ void main() {
         ),
       ),
     ));
-    await expectLater(find.byType(ClockBpGraph), matchesGoldenFile('ClockBpGraph-dark.png'));
+    await expectLater(find.byType(ClockBpGraph), myMatchesGoldenFile('ClockBpGraph-dark.png'));
   });
 }

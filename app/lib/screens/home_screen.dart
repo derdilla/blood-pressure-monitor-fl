@@ -70,9 +70,8 @@ class AppHome extends StatelessWidget {
       }
 
       if (showValueGraphAsHomeScreenInLandscapeMode && orientation == Orientation.landscape) {
-        return _buildValueGraph(context);
+        return Scaffold(body: _buildValueGraph(context));
       }
-
       return DefaultTabController(
         length: 2,
         child: Scaffold(
