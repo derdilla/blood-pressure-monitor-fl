@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:inline_tab_view/inline_tab_view.dart';
 
 class FormSwitcher extends StatefulWidget {
   const FormSwitcher({super.key, required this.subforms});
@@ -13,14 +14,11 @@ class _FormSwitcherState extends State<FormSwitcher>
     with TickerProviderStateMixin {
   late final TabController controller;
 
-
   @override
   void initState() {
     super.initState();
-
     controller = TabController(length: widget.subforms.length, vsync: this);
   }
-
 
   @override
   void dispose() {
@@ -47,14 +45,12 @@ class _FormSwitcherState extends State<FormSwitcher>
               ),
           ],
         ),
-        Expanded( // TODO: dynamically get size of child and animate height on switch
-          child: TabBarView(
-            controller: controller,
-            children: [
-              for (final f in widget.subforms)
-                Align(alignment: Alignment.topCenter, child: f.$2),
-            ],
-          ),
+        InlineTabView(
+          controller: controller,
+          children: [
+            for (final f in widget.subforms)
+              f.$2,
+          ],
         ),
       ],
     );
