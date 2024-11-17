@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 /// Base for a generic form with return value [T].
 abstract class FormBase<T> extends StatefulWidget {
@@ -29,6 +30,29 @@ abstract class FormBase<T> extends StatefulWidget {
 ///   )
 /// ```
 abstract class FormStateBase<T, G extends FormBase> extends State<G> {
+  @override
+  void initState() {
+    super.initState();
+    ServicesBinding.instance.keyboard.addHandler(_onKey);
+  }
+
+  @override
+  void dispose() {
+    ServicesBinding.instance.keyboard.removeHandler(_onKey);
+    super.dispose();
+  }
+
+  bool _onKey(KeyEvent event) {
+    if (event is KeyDownEvent
+        && event.logicalKey == LogicalKeyboardKey.backspace
+        && isEmptyInputFocused()
+        && !FocusScope.of(context).isFirstFocus) {
+      FocusScope.of(context).previousFocus();
+      return true;
+    }
+    return false;
+  }
+
   /// Validates all form fields and shows errors on failing form fields.
   ///
   /// Returns whether the all fields validated without error.
@@ -36,6 +60,12 @@ abstract class FormStateBase<T, G extends FormBase> extends State<G> {
 
   /// Parses and returns the forms current value, if [validate] passes.
   T? save();
+
+  /// Whether an empty input field is focused.
+  ///
+  /// Used to automatically focus the last input field on back key.
+  @protected
+  bool isEmptyInputFocused();
 }
 
 

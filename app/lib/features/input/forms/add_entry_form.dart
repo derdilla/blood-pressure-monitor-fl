@@ -81,6 +81,10 @@ class AddEntryFormState extends FormStateBase<AddEntryFormValue, AddEntryForm> {
     );
   }
 
+  // doesn't contain inputs
+  @override
+  bool isEmptyInputFocused() => false;
+
   @override
   Widget build(BuildContext context) { // TODO: initial values
     final settings = context.watch<Settings>();
@@ -89,18 +93,14 @@ class AddEntryFormState extends FormStateBase<AddEntryFormValue, AddEntryForm> {
       children: [
         DateTimeForm(key: _timeForm, initialValue: null),
         SizedBox(height: 10),
-        SizedBox(
-          // TODO: remove when updating FormSwitcher code
-          height: MediaQuery.of(context).size.height * 0.2,
-          child: FormSwitcher(
-            subforms: [
-              (Icon(Icons.monitor_heart_outlined), BloodPressureForm(key: _bpForm,),),
-              if (widget.meds.isNotEmpty)
-                (Icon(Icons.medication_outlined), MedicineIntakeForm(key: _intakeForm,),),
-              if (settings.weightInput)
-                (Icon(Icons.scale), WeightForm(key: _weightForm,),),
-            ],
-          ),
+        FormSwitcher(
+          subforms: [
+            (Icon(Icons.monitor_heart_outlined), BloodPressureForm(key: _bpForm,),),
+            if (widget.meds.isNotEmpty)
+              (Icon(Icons.medication_outlined), MedicineIntakeForm(key: _intakeForm,),),
+            if (settings.weightInput)
+              (Icon(Icons.scale), WeightForm(key: _weightForm,),),
+          ],
         ),
         NoteForm(key: _noteForm),
       ]

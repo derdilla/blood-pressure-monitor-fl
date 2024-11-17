@@ -30,6 +30,9 @@ class DateTimeFormState extends FormStateBase<DateTime, DateTimeForm> {
   DateTime? save() => validate() ? _time : null;
 
   @override
+  bool isEmptyInputFocused() => false;
+
+  @override
   bool validate() {
     if (context.read<Settings>().validateInputs && _time.isAfter(DateTime.now())) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(

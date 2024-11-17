@@ -31,4 +31,10 @@ class MedicineIntakeFormState extends FormStateBase<MedicineIntake, MedicineInta
     // TODO
     return const Placeholder();
   }
+
+  @override
+  bool isEmptyInputFocused() {
+    // TODO: implement isEmptyInputFocused
+    return false;
+  }
 }

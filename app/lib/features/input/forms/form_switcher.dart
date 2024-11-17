@@ -49,7 +49,10 @@ class _FormSwitcherState extends State<FormSwitcher>
           controller: controller,
           children: [
             for (final f in widget.subforms)
-              f.$2,
+              Padding(
+                padding: EdgeInsets.only(top: 8.0),
+                child: f.$2,
+              ),
           ],
         ),
       ],

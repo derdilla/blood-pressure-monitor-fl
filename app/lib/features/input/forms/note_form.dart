@@ -15,6 +15,9 @@ class NoteForm extends FormBase<(String?, Color?)> {
 /// State of form to enter freeform text and select color.
 class NoteFormState extends FormStateBase<(String?, Color?), NoteForm> {
   late final TextEditingController _controller;
+
+  final FocusNode _focusNode = FocusNode();
+
   Color? _color;
 
   @override
@@ -26,6 +29,7 @@ class NoteFormState extends FormStateBase<(String?, Color?), NoteForm> {
 
   @override
   void dispose() {
+    _focusNode.dispose();
     _controller.dispose();
     super.dispose();
   }
@@ -37,11 +41,15 @@ class NoteFormState extends FormStateBase<(String?, Color?), NoteForm> {
   (String?, Color?)? save() => (_controller.text.isEmpty ? null : _controller.text, _color);
 
   @override
+  bool isEmptyInputFocused() => _focusNode.hasFocus && _controller.text.isEmpty;
+
+  @override
   Widget build(BuildContext context) => Column(
     children: [
       Padding(
         padding: const EdgeInsets.symmetric(vertical: 16),
         child: TextFormField(
+          focusNode: _focusNode,
           controller: _controller,
           decoration: InputDecoration(
             labelText: AppLocalizations.of(context)!.addNote,
