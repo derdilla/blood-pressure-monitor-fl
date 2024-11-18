@@ -22,7 +22,7 @@ void main() {
     expect(tester.takeException(), isNull);
     expect(find.byType(ClockBpGraph), findsOneWidget);
   });
-  testWidgets('renders sample data like expected in light mode', (tester) async {
+  testWidgets('[gold] renders sample data like expected in light mode', (tester) async {
     final rng = Random(1234);
     await tester.pumpWidget(MaterialApp(
       home: Scaffold(
@@ -44,7 +44,7 @@ void main() {
     ));
     await expectLater(find.byType(ClockBpGraph), myMatchesGoldenFile('ClockBpGraph-light.png'));
   });
-  testWidgets('renders sample data like expected in dart mode', (tester) async {
+  testWidgets('[gold] renders sample data like expected in dark mode', (tester) async {
     final rng = Random(1234);
     await tester.pumpWidget(MaterialApp(
       theme: ThemeData.dark(useMaterial3: true),

@@ -64,7 +64,7 @@ jobs:
       - name: Update goldens
         id: gold-upd
         if: failure()
-        run: flutter test --update-goldens --fail-fast --dart-define="channel=${{ matrix.channel }}"
+        run: flutter test --update-goldens --fail-fast --name="\[gold\].*" --dart-define="channel=${{ matrix.channel }}"
         working-directory: app
       - name: PR golden changes
         # https://docs.github.com/en/actions/writing-workflows/choosing-what-your-workflow-does/evaluate-expressions-in-workflows-and-actions#example-of-failure-with-conditions
