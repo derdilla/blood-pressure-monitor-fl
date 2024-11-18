@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:health_data_store/health_data_store.dart';
+import 'package:path/path.dart';
 import 'package:provider/provider.dart';
 
 /// Create a root material widget with localizations.
@@ -328,7 +329,8 @@ class MockMedicineRepository extends _MockRepo<Medicine> implements MedicineRepo
 class MockNoteRepository extends _MockRepo<Note> implements NoteRepository {}
 class MockBodyweightRepository extends _MockRepo<BodyweightRecord> implements BodyweightRepository {}
 
+/// [matchesGoldenFile] wrapper that includes a dir and a channel for image names
 dynamic myMatchesGoldenFile(String key) {
   final channel = const String.fromEnvironment('channel');
-  return matchesGoldenFile('$channel-$key');
+  return matchesGoldenFile(join('golden', '$channel-$key'));
 }
