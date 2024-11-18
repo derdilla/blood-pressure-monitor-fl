@@ -210,7 +210,7 @@ class _ValueGraphPainter extends CustomPainter {
         path = Path();
         path.moveTo(point.dx, point.dy);
 
-        warnPath?.moveTo(_kLeftLegendWidth, _transformY(size, warnValue!, minY, maxY));
+        warnPath?.moveTo(_kLeftLegendWidth, warnValue!);
         warnPath?.lineTo(point.dx, point.dy);
       }
     }

@@ -163,6 +163,19 @@ void main() {
 
     await expectLater(find.byType(BloodPressureValueGraph), myMatchesGoldenFile('value-graph-end-warn.png'));
   });
+  testWidgets('[gold] warn area not drawn above graph', (tester) async {
+    await tester.pumpWidget(_buildGraph([
+      mockRecord(time: DateTime(2005), sys: 103, dia: null, pul: null),
+      mockRecord(time: DateTime(2003), sys: 89, dia: null, pul: null),
+    ], [], [],
+      settings: Settings(sysWarn: 120),
+    ));
+    await tester.pumpAndSettle();
+    final localizations = await AppLocalizations.delegate.load(const Locale('en'));
+    expect(find.text(localizations.errNotEnoughDataToGraph), findsNothing);
+
+    await expectLater(find.byType(BloodPressureValueGraph), myMatchesGoldenFile('value-graph-warn-not-above.png'));
+  });
 }
 
 Widget _buildGraph(
