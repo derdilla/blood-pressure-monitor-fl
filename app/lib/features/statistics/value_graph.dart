@@ -210,8 +210,13 @@ class _ValueGraphPainter extends CustomPainter {
         path = Path();
         path.moveTo(point.dx, point.dy);
 
-        warnPath?.moveTo(_kLeftLegendWidth, warnValue!);
-        warnPath?.lineTo(point.dx, point.dy);
+        // This must not cause #461, #482, or #487.
+        if ((warnValue ?? 0) > point.dy) {
+          warnPath?.moveTo(_kLeftLegendWidth, warnValue!);
+          warnPath?.lineTo(point.dx, point.dy);
+        } else {
+          warnPath?.moveTo(point.dx, point.dy);
+        }
       }
     }
 
