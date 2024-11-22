@@ -197,7 +197,7 @@ class _ValueGraphPainter extends CustomPainter {
     double maxY,
     double? warnValue,
   ) {
-    if (data.isEmpty) return;
+    if (data.length < 2) return;
 
     Path? path;
     Path? warnPath = warnValue == null ? null : Path();
@@ -228,6 +228,7 @@ class _ValueGraphPainter extends CustomPainter {
 
       warnPath = subPath(warnPath!, progress);
       warnPath.relativeLineTo(0, size.height);
+      warnPath.lineTo(_kLeftLegendWidth, size.height);
 
       final y = _transformY(size, warnValue, minY, maxY);
 
