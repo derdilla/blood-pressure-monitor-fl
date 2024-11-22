@@ -45,8 +45,10 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.byType(BloodPressureValueGraph), findsOneWidget);
+    expect(find.byType(SafeArea), findsAtLeast(1));
+    expect(find.byType(Scaffold), findsAtLeast(1));
     expect(find.byType(NavigationActionButtons), findsNothing);
-    expect(find.byType(IntervalPicker), findsNothing);
+    expect(find.byType(IntervalPicker), findsOneWidget);
     expect(find.byType(MeasurementList), findsNothing);
   });
 
