@@ -526,5 +526,21 @@
   "preferredWeightUnit": "Unidad de peso preferida",
   "@preferredWeightUnit": {
     "description": "Setting for the unit the app will use for displaying weight"
-  }
+  },
+  "select": "Seleccionar",
+  "@select": {
+    "description": "Used when f.e. selecting a single measurement when the bluetooth device returned multiple"
+  },
+  "selectMeasurementTitle": "Selecciona la medida a utilizar",
+  "@selectMeasurementTitle": {},
+  "measurementIndex": "Medida #{number}",
+  "@measurementIndex": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "bloodPressure": "Presión arterial",
+  "@bloodPressure": {}
 }
