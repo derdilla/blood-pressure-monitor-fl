@@ -526,5 +526,21 @@
   "weight": "Poids",
   "@weight": {},
   "enterWeight": "Indiquez le poids",
-  "@enterWeight": {}
+  "@enterWeight": {},
+  "selectMeasurementTitle": "Choisissez la mesure à utiliser",
+  "@selectMeasurementTitle": {},
+  "measurementIndex": "Mesure n° {number}",
+  "@measurementIndex": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "select": "Choisissez",
+  "@select": {
+    "description": "Used when f.e. selecting a single measurement when the bluetooth device returned multiple"
+  },
+  "bloodPressure": "Pression artérielle",
+  "@bloodPressure": {}
 }
