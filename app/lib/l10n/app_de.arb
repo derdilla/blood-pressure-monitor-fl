@@ -526,5 +526,21 @@
   "enterWeight": "Gewicht eingeben",
   "@enterWeight": {},
   "intakes": "Medikamenten-Einnahmen",
-  "@intakes": {}
+  "@intakes": {},
+  "selectMeasurementTitle": "Zu nutzende Messung auswählen",
+  "@selectMeasurementTitle": {},
+  "measurementIndex": "Messung #{number}",
+  "@measurementIndex": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "select": "Auswählen",
+  "@select": {
+    "description": "Used when f.e. selecting a single measurement when the bluetooth device returned multiple"
+  },
+  "bloodPressure": "Blutdruck",
+  "@bloodPressure": {}
 }
