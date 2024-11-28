@@ -526,5 +526,21 @@
   "availableDevices": "Dostupná zařízení",
   "@availableDevices": {},
   "deleteAllMedicineIntakes": "Vymazat všechny příjmy léků",
-  "@deleteAllMedicineIntakes": {}
+  "@deleteAllMedicineIntakes": {},
+  "selectMeasurementTitle": "Zvolte měření, které chcete použít",
+  "@selectMeasurementTitle": {},
+  "measurementIndex": "Měření #{number}",
+  "@measurementIndex": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "select": "Vybrat",
+  "@select": {
+    "description": "Used when f.e. selecting a single measurement when the bluetooth device returned multiple"
+  },
+  "bloodPressure": "Krevní tlak",
+  "@bloodPressure": {}
 }
