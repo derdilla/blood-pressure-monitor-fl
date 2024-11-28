@@ -6,7 +6,7 @@ issue_tracker: https://github.com/derdilla/blood-pressure-monitor-fl/issues
 
 version: 1.8.3+45
 # F-Droid needs the Flutter version used to build releases to be in the repository.
-# f-droid-flutter: 3.24.4
+# f-droid-flutter: 3.24.5
 
 environment:
   sdk: '>=3.0.2 <4.0.0'
