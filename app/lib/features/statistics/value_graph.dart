@@ -120,14 +120,14 @@ class _ValueGraphPainter extends CustomPainter {
 
     final labelTextHeight = ((labelStyle.height ?? 1.0) * (labelStyle.fontSize ?? 14.0));
     (){
-    // calculate horizontal decoration positions
+    // calculate vertical decoration positions
     final double drawHeight = size.height - _kBottomLegendHeight;
 
     final leftLabelHeight = labelTextHeight + 4.0; // padding
     final leftLabelWidth = _kLeftLegendWidth - 6.0 - 2.0;
     final leftLegendLabelCount = drawHeight / leftLabelHeight;
 
-    // draw horizontal decorations
+    // draw vertical decorations
     for (int i = 0; i < leftLegendLabelCount; i += 2) {
       final h = (size.height - _kBottomLegendHeight) - i * leftLabelHeight;
       canvas.drawLine(
@@ -150,7 +150,7 @@ class _ValueGraphPainter extends CustomPainter {
     while (stepDuration == null && bottomLabelCount > 4) {
       stepDuration = range.duration ~/ bottomLabelCount;
       format = switch(stepDuration) {
-        < const Duration(hours: 4) => DateFormat('H:m EEE'),
+        < const Duration(hours: 4) => DateFormat('HH:mm EEE'),
         < const Duration(days: 1) => DateFormat('EEE'),
         < const Duration(days: 5) => DateFormat('dd'),
         < const Duration(days: 30) => DateFormat('MMM, dd'),
