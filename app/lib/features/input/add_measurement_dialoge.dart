@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:io';
 
 import 'package:blood_pressure_app/components/fullscreen_dialoge.dart';
 import 'package:blood_pressure_app/config.dart';
@@ -258,8 +257,6 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
                 manager: BluetoothManager.create(
                   isTestingEnvironment
                     ? BluetoothBackend.mock
-                    : Platform.isAndroid
-                    ? BluetoothBackend.flutterBluePlus
                     : BluetoothBackend.bluetoothLowEnergy
                 ),
                 onMeasurement: (record) => setState(
@@ -343,7 +340,7 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
                 initialColor: color ?? Colors.transparent,
               ),
             ),
-            if (widget.initialRecord == null && widget.availableMeds.isNotEmpty)
+            if (widget.availableMeds.isNotEmpty)
               Form(
                 key: medicationFormKey,
                 child: Padding(
