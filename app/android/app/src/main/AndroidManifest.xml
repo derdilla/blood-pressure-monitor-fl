@@ -25,7 +25,7 @@
 
     </queries>
     <application
-        android:label="blood pressure app"
+        android:label="Blood pressure app"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher"
         android:roundIcon="@mipmap/ic_launcher">
