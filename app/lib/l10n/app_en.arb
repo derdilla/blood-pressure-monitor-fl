@@ -542,5 +542,15 @@
   "preferredWeightUnit": "Preferred weight unit",
   "@preferredWeightUnit": {
     "description": "Setting for the unit the app will use for displaying weight"
-  }
+  },
+  "disabled": "Disabled",
+  "@disabled": {},
+  "oldBluetoothInput": "Stable",
+  "@oldBluetoothInput": {},
+  "newBluetoothInputOldLib": "Beta",
+  "@newBluetoothInputOldLib": {},
+  "newBluetoothInputCrossPlatform": "Beta cross-platform",
+  "@newBluetoothInputCrossPlatform": {},
+  "bluetoothInputDesc": "The beta backend works on more devices but is less tested. The cross-platform version may work on non-android and is planned to supersede the stable implementation once mature enough.",
+  "@bluetoothInputDesc": {}
 }

@@ -21,6 +21,7 @@ import 'package:blood_pressure_app/logging.dart';
 import 'package:blood_pressure_app/model/blood_pressure/pressure_unit.dart';
 import 'package:blood_pressure_app/model/blood_pressure/warn_values.dart';
 import 'package:blood_pressure_app/model/iso_lang_names.dart';
+import 'package:blood_pressure_app/model/storage/bluetooth_input_mode.dart';
 import 'package:blood_pressure_app/model/storage/db/config_db.dart';
 import 'package:blood_pressure_app/model/storage/db/file_settings_loader.dart';
 import 'package:blood_pressure_app/model/storage/db/settings_loader.dart';
@@ -160,12 +161,20 @@ class SettingsPage extends StatelessWidget {
                 title: Text(localizations.medications),
                 trailing: const Icon(Icons.arrow_forward_ios),
               ),
-              SwitchListTile(
-                value: settings.bleInput,
-                onChanged: isPlatformSupportedBluetooth ? (value) { settings.bleInput = value; } : null,
-                secondary: const Icon(Icons.bluetooth),
+              DropDownListTile<BluetoothInputMode>(
                 title: Text(localizations.bluetoothInput),
-                subtitle: isPlatformSupportedBluetooth ? null : Text(localizations.errFeatureNotSupported),
+                subtitle: Text(localizations.bluetoothInputDesc),
+                leading: const Icon(Icons.bluetooth),
+                items: [
+                  for (final e in BluetoothInputMode.values)
+                    DropdownMenuItem(
+                      value: e,
+                      child: Text(e.localize(localizations)),
+                    ),
+                ],
+                value: settings.bleInput,
+                onChanged: (value) => settings.bleInput = value ?? settings.bleInput,
+
               ),
               SwitchListTile(
                 value: settings.allowManualTimeInput,
