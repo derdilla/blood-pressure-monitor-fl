@@ -6,7 +6,7 @@ import FlutterMacOS
 import Foundation
 
 import bluetooth_low_energy_darwin
-import flutter_blue_plus
+import flutter_blue_plus_macos
 import package_info_plus
 import shared_preferences_foundation
 import sqflite_darwin
