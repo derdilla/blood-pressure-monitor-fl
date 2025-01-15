@@ -28,6 +28,7 @@ jobs:
       uses: dart-lang/setup-dart@v1
       with:
         sdk: ${{ env.DART_SDK }}
+    - run: sudo apt-get -y install libsqlite3-dev
 
     - name: Get dependencies
       run: |
