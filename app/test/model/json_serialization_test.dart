@@ -3,6 +3,7 @@ import 'package:blood_pressure_app/model/blood_pressure/pressure_unit.dart';
 import 'package:blood_pressure_app/model/export_import/column.dart';
 import 'package:blood_pressure_app/model/export_import/export_configuration.dart';
 import 'package:blood_pressure_app/model/horizontal_graph_line.dart';
+import 'package:blood_pressure_app/model/storage/bluetooth_input_mode.dart';
 import 'package:blood_pressure_app/model/storage/export_columns_store.dart';
 import 'package:blood_pressure_app/model/storage/export_csv_settings_store.dart';
 import 'package:blood_pressure_app/model/storage/export_pdf_settings_store.dart';
@@ -97,7 +98,7 @@ void main() {
         horizontalGraphLines: [HorizontalGraphLine(Colors.blue, 1230)],
         bottomAppBars: true,
         knownBleDev: ['a', 'b'],
-        bleInput: false,
+        bleInput: BluetoothInputMode.newBluetoothInputCrossPlatform,
         weightInput: true,
         weightUnit: WeightUnit.st,
         preferredPressureUnit: PressureUnit.kPa,

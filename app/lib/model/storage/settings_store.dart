@@ -2,9 +2,11 @@ import 'dart:collection';
 import 'dart:convert';
 
 import 'package:blood_pressure_app/config.dart';
+import 'package:blood_pressure_app/features/bluetooth/logic/device_scan_cubit.dart';
 import 'package:blood_pressure_app/model/blood_pressure/medicine/medicine.dart';
 import 'package:blood_pressure_app/model/blood_pressure/pressure_unit.dart';
 import 'package:blood_pressure_app/model/horizontal_graph_line.dart';
+import 'package:blood_pressure_app/model/storage/bluetooth_input_mode.dart';
 import 'package:blood_pressure_app/model/storage/convert_util.dart';
 import 'package:blood_pressure_app/model/weight_unit.dart';
 import 'package:flutter/material.dart';
@@ -48,7 +50,7 @@ class Settings extends ChangeNotifier {
     PressureUnit? preferredPressureUnit,
     List<String>? knownBleDev,
     int? highestMedIndex,
-    bool? bleInput,
+    BluetoothInputMode? bleInput,
     bool? weightInput,
     WeightUnit? weightUnit,
   }) {
@@ -113,7 +115,7 @@ class Settings extends ChangeNotifier {
           Medicine.fromJson(jsonDecode(e)),).toList(),
       highestMedIndex: ConvertUtil.parseInt(map['highestMedIndex']),
       knownBleDev: ConvertUtil.parseList<String>(map['knownBleDev']),
-      bleInput: ConvertUtil.parseBool(map['bleInput']),
+      bleInput: BluetoothInputMode.deserialize(ConvertUtil.parseInt(map['bleInput'])),
       weightInput: ConvertUtil.parseBool(map['weightInput']),
       preferredPressureUnit: PressureUnit.decode(ConvertUtil.parseInt(map['preferredPressureUnit'])),
       weightUnit: WeightUnit.deserialize(ConvertUtil.parseInt(map['weightUnit'])),
@@ -163,7 +165,7 @@ class Settings extends ChangeNotifier {
     'highestMedIndex': highestMedIndex,
     'preferredPressureUnit': preferredPressureUnit.encode(),
     'knownBleDev': knownBleDev,
-    'bleInput': bleInput,
+    'bleInput': bleInput.serialize(),
     'weightInput': weightInput,
     'weightUnit': weightUnit.serialized,
   };
@@ -409,11 +411,11 @@ class Settings extends ChangeNotifier {
     notifyListeners();
   }
 
-  bool _bleInput = true;
+  BluetoothInputMode _bleInput = BluetoothInputMode.oldBluetoothInput;
   /// Whether to show bluetooth input on add measurement page.
-  bool get bleInput => isPlatformSupportedBluetooth && _bleInput;
-  set bleInput(bool value) {
-    _bleInput = value;
+  BluetoothInputMode get bleInput => _bleInput;
+  set bleInput(BluetoothInputMode value) {
+    if (isPlatformSupportedBluetooth) _bleInput = value;
     notifyListeners();
   }
 

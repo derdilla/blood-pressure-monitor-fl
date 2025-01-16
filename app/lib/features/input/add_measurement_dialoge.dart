@@ -7,8 +7,10 @@ import 'package:blood_pressure_app/features/bluetooth/backend/bluetooth_backend.
 import 'package:blood_pressure_app/features/bluetooth/bluetooth_input.dart';
 import 'package:blood_pressure_app/features/input/add_bodyweight_dialoge.dart';
 import 'package:blood_pressure_app/features/input/forms/date_time_form.dart';
+import 'package:blood_pressure_app/features/old_bluetooth/bluetooth_input.dart';
 import 'package:blood_pressure_app/features/settings/tiles/color_picker_list_tile.dart';
 import 'package:blood_pressure_app/model/blood_pressure/pressure_unit.dart';
+import 'package:blood_pressure_app/model/storage/bluetooth_input_mode.dart';
 import 'package:blood_pressure_app/model/storage/storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -191,6 +193,11 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
     ),
   );
 
+  void _onExternalMeasurement(BloodPressureRecord record) => setState(() {
+    final note = Note(time: record.time, note: noteController.text, color: color?.value);
+    _loadFields((record, note, []));
+  });
+
   @override
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
@@ -253,19 +260,20 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
         child: ListView(
           padding: const EdgeInsets.symmetric(horizontal: 8),
           children: [
-            if (settings.bleInput)
-              BluetoothInput(
-                manager: BluetoothManager.create(
-                  isTestingEnvironment
-                    ? BluetoothBackend.mock
-                    : Platform.isAndroid
-                    ? BluetoothBackend.flutterBluePlus
-                    : BluetoothBackend.bluetoothLowEnergy
-                ),
-                onMeasurement: (record) => setState(
-                  () => _loadFields((record, Note(time: record.time, note: noteController.text, color: color?.value), [])),
-                ),
+            (() => switch (settings.bleInput) {
+              BluetoothInputMode.disabled => SizedBox.shrink(),
+              BluetoothInputMode.oldBluetoothInput => OldBluetoothInput(
+                onMeasurement: _onExternalMeasurement,
               ),
+              BluetoothInputMode.newBluetoothInputOldLib => BluetoothInput(
+                manager: BluetoothManager.create(isTestingEnvironment ? BluetoothBackend.mock : BluetoothBackend.flutterBluePlus),
+                onMeasurement: _onExternalMeasurement,
+              ),
+              BluetoothInputMode.newBluetoothInputCrossPlatform => BluetoothInput(
+                manager: BluetoothManager.create(isTestingEnvironment ? BluetoothBackend.mock : BluetoothBackend.bluetoothLowEnergy),
+                onMeasurement: _onExternalMeasurement,
+              ),
+            })(),
             if (settings.allowManualTimeInput)
               DateTimeForm(
                 validate: settings.validateInputs,

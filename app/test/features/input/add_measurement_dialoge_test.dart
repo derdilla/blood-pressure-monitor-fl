@@ -2,6 +2,7 @@ import 'package:blood_pressure_app/features/bluetooth/bluetooth_input.dart';
 import 'package:blood_pressure_app/features/input/add_bodyweight_dialoge.dart';
 import 'package:blood_pressure_app/features/input/add_measurement_dialoge.dart';
 import 'package:blood_pressure_app/features/settings/tiles/color_picker_list_tile.dart';
+import 'package:blood_pressure_app/model/storage/bluetooth_input_mode.dart';
 import 'package:blood_pressure_app/model/storage/settings_store.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -141,7 +142,7 @@ void main() {
     });
     testWidgets('respects settings about showing bluetooth input', (tester) async {
       final settings = Settings(
-        bleInput: true,
+        bleInput: BluetoothInputMode.newBluetoothInputCrossPlatform,
       );
       await tester.pumpWidget(materialApp(
         const AddEntryDialoge(
@@ -152,7 +153,7 @@ void main() {
       await tester.pumpAndSettle();
       expect(find.byType(BluetoothInput, skipOffstage: false), findsOneWidget);
 
-      settings.bleInput = false;
+      settings.bleInput = BluetoothInputMode.disabled;
       await tester.pumpAndSettle();
       expect(find.byType(BluetoothInput), findsNothing);
     });
