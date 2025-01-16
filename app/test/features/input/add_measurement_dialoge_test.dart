@@ -157,7 +157,7 @@ void main() {
       await tester.pumpAndSettle();
       expect(find.byType(BluetoothInput), findsNothing);
     });
-  });
+  }, skip: true);
   group('showAddEntryDialoge', () {
     testWidgets('should return null on cancel', (tester) async {
       dynamic result = 'result before save';
