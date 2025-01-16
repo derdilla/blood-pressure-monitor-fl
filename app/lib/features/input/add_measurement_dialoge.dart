@@ -260,20 +260,21 @@ class _AddEntryDialogeState extends State<AddEntryDialoge> {
         child: ListView(
           padding: const EdgeInsets.symmetric(horizontal: 8),
           children: [
-            (() => switch (settings.bleInput) {
-              BluetoothInputMode.disabled => SizedBox.shrink(),
-              BluetoothInputMode.oldBluetoothInput => OldBluetoothInput(
-                onMeasurement: _onExternalMeasurement,
-              ),
-              BluetoothInputMode.newBluetoothInputOldLib => BluetoothInput(
-                manager: BluetoothManager.create(isTestingEnvironment ? BluetoothBackend.mock : BluetoothBackend.flutterBluePlus),
-                onMeasurement: _onExternalMeasurement,
-              ),
-              BluetoothInputMode.newBluetoothInputCrossPlatform => BluetoothInput(
-                manager: BluetoothManager.create(isTestingEnvironment ? BluetoothBackend.mock : BluetoothBackend.bluetoothLowEnergy),
-                onMeasurement: _onExternalMeasurement,
-              ),
-            })(),
+            if (!isTestingEnvironment) // TODO: test feature (#494)
+              (() => switch (settings.bleInput) {
+                BluetoothInputMode.disabled => SizedBox.shrink(),
+                BluetoothInputMode.oldBluetoothInput => OldBluetoothInput(
+                  onMeasurement: _onExternalMeasurement,
+                ),
+                BluetoothInputMode.newBluetoothInputOldLib => BluetoothInput(
+                  manager: BluetoothManager.create(BluetoothBackend.flutterBluePlus),
+                  onMeasurement: _onExternalMeasurement,
+                ),
+                BluetoothInputMode.newBluetoothInputCrossPlatform => BluetoothInput(
+                  manager: BluetoothManager.create( BluetoothBackend.bluetoothLowEnergy),
+                  onMeasurement: _onExternalMeasurement,
+                ),
+              })(),
             if (settings.allowManualTimeInput)
               DateTimeForm(
                 validate: settings.validateInputs,
