@@ -1,7 +1,0 @@
-* Corregir el tema del gráfico horizontal
-* Reducir los datos necesarios para dibujar el gráfico
-* Corregir el intervalo de fechas personalizado que termina antes de medianoche
-* Rellenar correctamente el área de advertencia al inicio del gráfico
-* Actualizar las opciones de compilación de android
-* Actualizar las traducciones al alemán, francés y estonio de weblate
-* Añadir traducciones al checo (gracias @trendspotter)

@@ -1,7 +1,0 @@
-If you want to help this app and test a new bluetooth input supporting more devices just reach out through contact@derdilla.com or GitHub!
-
-* Fix warn area appearing somewhere below the value graph line
-* Fix start of warn area not filled at specific angles
-* Fix hour:minute precision in home screen graph
-* Fix multi-column PDF export missing rows at table breaks
-* Updated Chinese, Czech, Estonian, French, German, Italian, Spanish translations thanks to various contributors on weblate
