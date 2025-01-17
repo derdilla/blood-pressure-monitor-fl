@@ -1,7 +1,0 @@
-* Behebe fehlendes Graphen theme im horizontalem Modus
-* Benötige weniger Daten um Graph zu zeichnen
-* Behebe Tageszeit eigene Datenschranken
-* Behebe unvollständig gefüllte Warnbereiche am start des Graphen
-* Aktuallisiere Compileroptionen
-* Aktuallisiere Deutsche, Französische und Estländische Übersetzungen über weblate
-* Füge Cheschische Übersetzung hinzu (danke @trendspotter)
