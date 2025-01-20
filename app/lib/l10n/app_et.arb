@@ -542,5 +542,15 @@
     "description": "Used when f.e. selecting a single measurement when the bluetooth device returned multiple"
   },
   "bloodPressure": "Vererõhk",
-  "@bloodPressure": {}
+  "@bloodPressure": {},
+  "disabled": "Pole kasutusel",
+  "@disabled": {},
+  "oldBluetoothInput": "Stabiilne liides",
+  "@oldBluetoothInput": {},
+  "newBluetoothInputCrossPlatform": "Platvormiülene beetaliides",
+  "@newBluetoothInputCrossPlatform": {},
+  "newBluetoothInputOldLib": "Beetaliides",
+  "@newBluetoothInputOldLib": {},
+  "bluetoothInputDesc": "Beetaliides toimib enamate seadmetega, aga on vähem testitud. Platvormiülene beetaliides võib toimida ka muude, kui Androidipõhiste seadmetega ning meie eesmärk on, et peale piisavat testimist ta ühel hetkel asendab senise stabiilse liidese.",
+  "@bluetoothInputDesc": {}
 }

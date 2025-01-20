@@ -542,5 +542,15 @@
   "select": "Seleziona",
   "@select": {
     "description": "Used when f.e. selecting a single measurement when the bluetooth device returned multiple"
-  }
+  },
+  "oldBluetoothInput": "Stabile",
+  "@oldBluetoothInput": {},
+  "newBluetoothInputCrossPlatform": "Beta multipiattaforma",
+  "@newBluetoothInputCrossPlatform": {},
+  "newBluetoothInputOldLib": "Beta",
+  "@newBluetoothInputOldLib": {},
+  "disabled": "Disabilitato",
+  "@disabled": {},
+  "bluetoothInputDesc": "Il backend beta funziona su più dispositivi ma è meno testato. La versione multipiattaforma potrebbe funzionare su dispositivi non Android e si prevede che sostituirà l'implementazione stabile una volta sufficientemente matura.",
+  "@bluetoothInputDesc": {}
 }

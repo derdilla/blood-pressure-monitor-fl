@@ -1,0 +1,546 @@
+{
+  "title": "இரத்த அழுத்த பயன்பாடு",
+  "@title": {},
+  "success": "வெற்றி: {msg}",
+  "@success": {
+    "placeholders": {
+      "msg": {
+        "type": "String"
+      }
+    }
+  },
+  "loading": "ஏற்றுகிறது…",
+  "@loading": {},
+  "error": "பிழை: {msg}",
+  "@error": {
+    "placeholders": {
+      "msg": {
+        "type": "String"
+      }
+    }
+  },
+  "errNaN": "தயவுசெய்து ஒரு எண்ணை உள்ளிடவும்",
+  "@errNaN": {},
+  "errLt30": "எண் <= 30? அமைப்புகளில் சரிபார்ப்பை அணைக்கவும்!",
+  "@errLt30": {},
+  "errUnrealistic": "நம்பத்தகாத மதிப்பு? அமைப்புகளில் சரிபார்ப்பை அணைக்கவும்!",
+  "@errUnrealistic": {},
+  "errNotEnoughDataToGraph": "வரைபடத்தை வரைய போதுமான தரவு இல்லை.",
+  "@errNotEnoughDataToGraph": {},
+  "buildNumberOf": "பதிப்பு எண்: {buildNumber}",
+  "@buildNumberOf": {
+    "placeholders": {
+      "buildNumber": {
+        "type": "String"
+      }
+    }
+  },
+  "packageNameOf": "தொகுப்பு பெயர்: {name}",
+  "@packageNameOf": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "exportFormat": "ஏற்றுமதி வடிவம்",
+  "@exportFormat": {},
+  "exportCustomEntries": "புலங்களைத் தனிப்பயனாக்குங்கள்",
+  "@exportCustomEntries": {},
+  "db": "SQLite DB",
+  "@db": {},
+  "text": "உரை",
+  "@text": {},
+  "other": "மற்றொன்று",
+  "@other": {},
+  "fieldDelimiter": "புலம் டிலிமிட்டர்",
+  "@fieldDelimiter": {},
+  "textDelimiter": "உரை டிலிமிட்டர்",
+  "@textDelimiter": {},
+  "export": "ஏற்றுமதி",
+  "@export": {},
+  "shared": "பகிரப்பட்டது",
+  "@shared": {},
+  "import": "இறக்குமதி",
+  "@import": {},
+  "sourceCode": "மூலக் குறியீடு",
+  "@sourceCode": {},
+  "licenses": "3 வது கட்சி உரிமங்கள்",
+  "@licenses": {},
+  "importSuccess": "இறக்குமதி செய்யப்பட்ட {count} உள்ளீடுகள்",
+  "@importSuccess": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "statistics": "புள்ளிவிவரங்கள்",
+  "@statistics": {},
+  "measurementCount": "அளவீட்டு எண்ணிக்கை",
+  "@measurementCount": {},
+  "warnAboutTxt3": "உங்கள் தேவைகளுக்கு ஏற்ப மதிப்புகளை மாற்றவும், உங்கள் மருத்துவரின் பரிந்துரைகளைப் பின்பற்றவும் தயங்க.",
+  "@warnAboutTxt3": {},
+  "enterTimeFormatString": "நேர வடிவம்",
+  "@enterTimeFormatString": {},
+  "now": "இப்போது",
+  "@now": {},
+  "notes": "குறிப்புகள்",
+  "@notes": {},
+  "time": "நேரம்",
+  "@time": {},
+  "day": "நாள்",
+  "@day": {},
+  "week": "வாரம்",
+  "@week": {},
+  "month": "மாதம்",
+  "@month": {},
+  "year": "ஆண்டு",
+  "@year": {},
+  "lifetime": "வாழ்நாள்",
+  "@lifetime": {},
+  "weekOfYear": "வாரம் {weekNum}, {year}",
+  "@weekOfYear": {
+    "placeholders": {
+      "weekNum": {
+        "type": "int"
+      },
+      "year": {
+        "type": "int"
+      }
+    }
+  },
+  "errTimeAfterNow": "தேர்ந்தெடுக்கப்பட்ட நாள் நேரம் மீட்டமைக்கப்பட்டது, ஏனெனில் இது இந்த தருணத்திற்குப் பிறகு நிகழ்கிறது. அமைப்புகளில் இந்த சரிபார்ப்பை நீங்கள் அணைக்கலாம்.",
+  "@errTimeAfterNow": {},
+  "language": "மொழி",
+  "@language": {},
+  "custom": "தனிப்பயன்",
+  "@custom": {},
+  "drawRegressionLines": "போக்கு கோடுகளை வரையவும்",
+  "@drawRegressionLines": {},
+  "drawRegressionLinesDesc": "வரைபடத்தில் பின்னடைவு கோடுகளை ஈர்க்கிறது. பெரிய இடைவெளிகளுக்கு மட்டுமே பயனுள்ளதாக இருக்கும்.",
+  "@drawRegressionLinesDesc": {},
+  "fieldFormat": "புலம் வடிவம்",
+  "@fieldFormat": {},
+  "result": "முடிவு:",
+  "@result": {},
+  "exportPdfHeaderHeight": "தலைப்பு உயரம்",
+  "@exportPdfHeaderHeight": {},
+  "exportPdfCellHeight": "வரிசை உயரம்",
+  "@exportPdfCellHeight": {},
+  "exportPdfHeaderFontSize": "தலைப்பு எழுத்துரு அளவு",
+  "@exportPdfHeaderFontSize": {},
+  "color": "நிறம்",
+  "@color": {},
+  "needlePinBarWidth": "வண்ண தடிமன்",
+  "@needlePinBarWidth": {},
+  "needlePinBarWidthDesc": "கோடுகளின் அகலம் வண்ண உள்ளீடுகள் வரைபடத்தில் உருவாக்குகின்றன.",
+  "@needlePinBarWidthDesc": {},
+  "exportFieldsPreset": "ஏற்றுமதி புலங்கள் முன்னமைக்கப்பட்டவை",
+  "@exportFieldsPreset": {},
+  "remove": "அகற்று",
+  "@remove": {},
+  "manageExportColumns": "ஏற்றுமதி நெடுவரிசைகளை நிர்வகிக்கவும்",
+  "@manageExportColumns": {},
+  "buildIn": "உருவாக்க",
+  "@buildIn": {},
+  "csvTitle": "சி.எச்.வி-தலைப்பு",
+  "@csvTitle": {},
+  "recordFormat": "பதிவு வடிவம்",
+  "@recordFormat": {},
+  "timeFormat": "நேர வடிவம்",
+  "@timeFormat": {},
+  "bottomAppBars": "கீழே உரையாடல் பார்கள்",
+  "@bottomAppBars": {},
+  "bluetoothInput": "ஊடலை உள்ளீடு",
+  "@bluetoothInput": {},
+  "aboutBleInput": "சில அளவீட்டு சாதனங்கள் பிளே காட் இணக்கமானவை. இந்த சாதனங்களை நீங்கள் இங்கே இணைக்கலாம் மற்றும் தானாக அளவீடுகளை அனுப்பலாம் அல்லது அமைப்புகளில் இந்த விருப்பத்தை முடக்கலாம்.",
+  "@aboutBleInput": {},
+  "scanningForDevices": "சாதனங்களுக்கான ச்கேன்",
+  "@scanningForDevices": {},
+  "tapToClose": "மூட தட்டவும்.",
+  "@tapToClose": {},
+  "meanArterialPressure": "தமனி சார்ந்த அழுத்தம்",
+  "@meanArterialPressure": {},
+  "userID": "பயனர் ஐடி",
+  "@userID": {},
+  "select": "தேர்ந்தெடு",
+  "@select": {
+    "description": "Used when f.e. selecting a single measurement when the bluetooth device returned multiple"
+  },
+  "bloodPressure": "இரத்த அழுத்தம்",
+  "@bloodPressure": {},
+  "preferredWeightUnit": "விருப்பமான எடை அலகு",
+  "@preferredWeightUnit": {
+    "description": "Setting for the unit the app will use for displaying weight"
+  },
+  "enterWeight": "எடையை உள்ளிடவும்",
+  "@enterWeight": {},
+  "selectMeasurementTitle": "பயன்படுத்த அளவீட்டைத் தேர்ந்தெடுக்கவும்",
+  "@selectMeasurementTitle": {},
+  "measurementIndex": "அளவீட்டு #{number}",
+  "@measurementIndex": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "errDiaGtSys": "dia> = sys? அமைப்புகளில் சரிபார்ப்பை அணைக்கவும்!",
+  "@errDiaGtSys": {},
+  "errCantOpenURL": "முகவரி ஐ திறக்க முடியாது: {url}",
+  "@errCantOpenURL": {
+    "placeholders": {
+      "url": {
+        "type": "String"
+      }
+    }
+  },
+  "errNoFileOpened": "எந்த கோப்பும் திறக்கப்படவில்லை",
+  "@errNoFileOpened": {},
+  "errNotStarted": "தொடங்கப்படவில்லை",
+  "@errNotStarted": {},
+  "errNoValue": "தயவுசெய்து ஒரு மதிப்பை உள்ளிடவும்",
+  "@errNoValue": {},
+  "errNoData": "தரவு இல்லை",
+  "@errNoData": {},
+  "errWrongImportFormat": "நீங்கள் காபிம மற்றும் SQLITE தரவுத்தள வடிவத்தில் மட்டுமே கோப்புகளை இறக்குமதி செய்ய முடியும்.",
+  "@errWrongImportFormat": {},
+  "errNeedHeadline": "நீங்கள் ஒரு தலைப்புடன் மட்டுமே கோப்புகளை இறக்குமதி செய்ய முடியும்.",
+  "@errNeedHeadline": {},
+  "errCantReadFile": "கோப்பின் உள்ளடக்கங்களைப் படிக்க முடியாது",
+  "@errCantReadFile": {},
+  "errNotImportable": "இந்த கோப்பை இறக்குமதி செய்ய முடியாது",
+  "@errNotImportable": {},
+  "btnCancel": "ரத்துசெய்",
+  "@btnCancel": {},
+  "btnSave": "சேமி",
+  "@btnSave": {},
+  "btnConfirm": "சரி",
+  "@btnConfirm": {},
+  "btnUndo": "செயல்தவிர்",
+  "@btnUndo": {},
+  "sysLong": "சிச்டாலிக்",
+  "@sysLong": {},
+  "sysShort": "சிச்",
+  "@sysShort": {},
+  "diaLong": "டயச்டாலிக்",
+  "@diaLong": {},
+  "diaShort": "டியா",
+  "@diaShort": {},
+  "pulLong": "நாடி",
+  "@pulLong": {},
+  "pulShort": "புல்",
+  "@pulShort": {},
+  "addNote": "குறிப்பு (விரும்பினால்)",
+  "@addNote": {},
+  "settings": "அமைப்புகள்",
+  "@settings": {},
+  "layout": "மனையமைவு",
+  "@layout": {},
+  "allowManualTimeInput": "கையேடு நேர உள்ளீட்டை அனுமதிக்கவும்",
+  "@allowManualTimeInput": {},
+  "enterTimeFormatScreen": "நேர வடிவம்",
+  "@enterTimeFormatScreen": {},
+  "theme": "கருப்பொருள்",
+  "@theme": {},
+  "system": "மண்டலம்",
+  "@system": {},
+  "dark": "இருண்ட",
+  "@dark": {},
+  "light": "ஒளி",
+  "@light": {},
+  "iconSize": "படவுரு அளவு",
+  "@iconSize": {},
+  "graphLineThickness": "வரி தடிமன்",
+  "@graphLineThickness": {},
+  "animationSpeed": "அனிமேசன் காலம்",
+  "@animationSpeed": {},
+  "accentColor": "கருப்பொருள் நிறம்",
+  "@accentColor": {},
+  "sysColor": "சிச்டாலிக் நிறம்",
+  "@sysColor": {},
+  "diaColor": "டயச்டாலிக் நிறம்",
+  "@diaColor": {},
+  "pulColor": "துடிப்பு நிறம்",
+  "@pulColor": {},
+  "behavior": "நடத்தை",
+  "@behavior": {},
+  "validateInputs": "உள்ளீடுகளை சரிபார்க்கவும்",
+  "@validateInputs": {},
+  "confirmDeletion": "நீக்குதலை உறுதிப்படுத்தவும்",
+  "@confirmDeletion": {},
+  "age": "அகவை",
+  "@age": {},
+  "determineWarnValues": "எச்சரிக்கை மதிப்புகளை தீர்மானிக்கவும்",
+  "@determineWarnValues": {},
+  "aboutWarnValuesScreen": "பற்றி",
+  "@aboutWarnValuesScreen": {},
+  "aboutWarnValuesScreenDesc": "எச்சரிக்கை மதிப்புகள் பற்றிய கூடுதல் செய்தி",
+  "@aboutWarnValuesScreenDesc": {},
+  "sysWarn": "சிச்டாலிக் எச்சரிக்கை",
+  "@sysWarn": {},
+  "diaWarn": "டயச்டாலிக் எச்சரிக்கை",
+  "@diaWarn": {},
+  "data": "தகவல்கள்",
+  "@data": {},
+  "version": "பதிப்பு",
+  "@version": {},
+  "versionOf": "பதிப்பு: {version}",
+  "@versionOf": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "exportImport": "ஏற்றுமதி / இறக்குமதி",
+  "@exportImport": {},
+  "exportDir": "ஏற்றுமதி அடைவு",
+  "@exportDir": {},
+  "exportAfterEveryInput": "ஒவ்வொரு நுழைவுக்கும் பிறகு ஏற்றுமதி செய்யுங்கள்",
+  "@exportAfterEveryInput": {},
+  "exportAfterEveryInputDesc": "பரிந்துரைக்கப்படவில்லை (கோப்பு வெடிப்பு)",
+  "@exportAfterEveryInputDesc": {},
+  "addEntry": "புலத்தைச் சேர்க்கவும்",
+  "@addEntry": {},
+  "exportMimeType": "ஊடக வகை ஏற்றுமதி",
+  "@exportMimeType": {},
+  "exportCsvHeadline": "தலைப்பு",
+  "@exportCsvHeadline": {},
+  "exportCsvHeadlineDesc": "வகைகளை பாகுபடுத்த உதவுகிறது",
+  "@exportCsvHeadlineDesc": {},
+  "csv": "சிஎச்வி",
+  "@csv": {},
+  "pdf": "பி.டி.எஃப்",
+  "@pdf": {},
+  "exportWarnConfigNotImportable": "ஏய்! ஒரு நட்புரீதியானது: தற்போதைய ஏற்றுமதி உள்ளமைவு இறக்குமதி செய்யப்படாது. அதை சரிசெய்ய, நீங்கள் ஏற்றுமதி வகையை காபிம ஆக அமைத்து, கிடைக்கக்கூடிய நேர வடிவங்களில் ஒன்றைச் சேர்க்கவும்.",
+  "@exportWarnConfigNotImportable": {},
+  "measurementsPerDay": "ஒரு நாளைக்கு அளவீடுகள்",
+  "@measurementsPerDay": {},
+  "timeResolvedMetrics": "நாளின் நேரத்தின் அளவீடுகள்",
+  "@timeResolvedMetrics": {},
+  "avgOf": "{txt}",
+  "@avgOf": {
+    "placeholders": {
+      "txt": {
+        "type": "String"
+      }
+    }
+  },
+  "minOf": "{txt} min.",
+  "@minOf": {
+    "placeholders": {
+      "txt": {
+        "type": "String"
+      }
+    }
+  },
+  "maxOf": "{txt} அதிகபட்சம்.",
+  "@maxOf": {
+    "placeholders": {
+      "txt": {
+        "type": "String"
+      }
+    }
+  },
+  "warnValues": "மதிப்புகளை எச்சரிக்கவும்",
+  "@warnValues": {},
+  "warnAboutTxt1": "எச்சரிக்கை மதிப்புகள் ஒரு தூய்மையான பரிந்துரைகள் மற்றும் மருத்துவ ஆலோசனைகள் இல்லை.",
+  "@warnAboutTxt1": {},
+  "warnAboutTxt2": "இயல்புநிலை அகவை சார்ந்த மதிப்புகள் இந்த மூலத்திலிருந்து வருகின்றன.",
+  "@warnAboutTxt2": {},
+  "confirmDelete": "நீக்குதலை உறுதிப்படுத்தவும்",
+  "@confirmDelete": {},
+  "deletionConfirmed": "நுழைவு நீக்கப்பட்டது.",
+  "@deletionConfirmed": {},
+  "confirmDeleteDesc": "இந்த உள்ளீட்டை நீக்கவா? (அமைப்புகளில் இந்த உறுதிப்படுத்தல்களை நீங்கள் அணைக்கலாம்.)",
+  "@confirmDeleteDesc": {},
+  "last7Days": "7 நாட்கள்",
+  "@last7Days": {},
+  "last30Days": "30 நாட்கள்",
+  "@last30Days": {},
+  "allowMissingValues": "காணாமல் போன மதிப்புகளை அனுமதிக்கவும்",
+  "@allowMissingValues": {},
+  "pdfDocumentTitle": "{start} முதல் {end} வரை இரத்த அழுத்த மதிப்புகள்",
+  "@pdfDocumentTitle": {
+    "placeholders": {
+      "start": {
+        "type": "String"
+      },
+      "end": {
+        "type": "String"
+      }
+    }
+  },
+  "pulsePressure": "துடிப்பு அழுத்தம்",
+  "@pulsePressure": {},
+  "addExportformat": "ஏற்றுமதி வடிவத்தைச் சேர்க்கவும்",
+  "@addExportformat": {},
+  "edit": "தொகு",
+  "@edit": {},
+  "delete": "நீக்கு",
+  "@delete": {},
+  "default_": "இயல்புநிலை",
+  "@default_": {},
+  "exportPdfCellFontSize": "வரிசை எழுத்துரு அளவு",
+  "@exportPdfCellFontSize": {},
+  "average": "சராசரி",
+  "@average": {},
+  "maximum": "பெருமம்",
+  "@maximum": {},
+  "minimum": "சிறுமம்",
+  "@minimum": {},
+  "exportPdfExportTitle": "தலைப்பு",
+  "@exportPdfExportTitle": {},
+  "exportPdfExportStatistics": "புள்ளிவிவரங்கள்",
+  "@exportPdfExportStatistics": {},
+  "exportPdfExportData": "தரவு அட்டவணை",
+  "@exportPdfExportData": {},
+  "startWithAddMeasurementPage": "துவக்கத்தில் அளவீட்டு",
+  "@startWithAddMeasurementPage": {},
+  "startWithAddMeasurementPageDescription": "பயன்பாட்டு வெளியீட்டில், அளவீட்டு உள்ளீட்டுத் திரை காட்டப்பட்டுள்ளது.",
+  "@startWithAddMeasurementPageDescription": {},
+  "horizontalLines": "கிடைமட்ட கோடுகள்",
+  "@horizontalLines": {},
+  "linePositionY": "வரி நிலை (y)",
+  "@linePositionY": {},
+  "customGraphMarkings": "தனிப்பயன் அடையாளங்கள்",
+  "@customGraphMarkings": {},
+  "addLine": "வரி சேர்க்கவும்",
+  "@addLine": {},
+  "useLegacyList": "மரபு பட்டியலைப் பயன்படுத்தவும்",
+  "@useLegacyList": {},
+  "addMeasurement": "அளவீட்டு சேர்க்கவும்",
+  "@addMeasurement": {},
+  "timestamp": "நேர முத்திரை",
+  "@timestamp": {},
+  "note": "குறிப்பு",
+  "@note": {},
+  "exportSettings": "காப்பு அமைப்புகள்",
+  "@exportSettings": {},
+  "importSettings": "அமைப்புகளை மீட்டெடுங்கள்",
+  "@importSettings": {},
+  "requiresAppRestart": "பயன்பாட்டு மறுதொடக்கம் தேவை",
+  "@requiresAppRestart": {},
+  "restartNow": "இப்போது மறுதொடக்கம் செய்யுங்கள்",
+  "@restartNow": {},
+  "warnNeedsRestartForUsingApp": "இந்த அமர்வை நீக்கிய கோப்புகள். பயன்பாட்டின் பிற பகுதிகளுக்குத் திரும்புவதைப் பயன்படுத்த பயன்பாட்டை மறுதொடக்கம் செய்யுங்கள்!",
+  "@warnNeedsRestartForUsingApp": {},
+  "deleteAllMeasurements": "அனைத்து அளவீடுகளையும் நீக்கவும்",
+  "@deleteAllMeasurements": {},
+  "deleteAllSettings": "எல்லா அமைப்புகளையும் நீக்கவும்",
+  "@deleteAllSettings": {},
+  "warnDeletionUnrecoverable": "நீங்கள் கைமுறையாக ஒரு காப்புப்பிரதியைச் செய்யாவிட்டால் இந்த நடவடிக்கை மாற்றியமைக்காது. இதை நீக்க விரும்புகிறீர்களா?",
+  "@warnDeletionUnrecoverable": {},
+  "enterTimeFormatDesc": "ஒரு ஃபார்மேட்டர் சரம் என்பது முன் வரையறுக்கப்பட்ட ஐ.சி.யூ/எலும்புக்கூடு சரங்களின் கலவையாகும் மற்றும் நீங்கள் சேர்க்க விரும்பும் கூடுதல் உரை.\n\n [செல்லுபடியாகும் வடிவங்களின் முழுமையான பட்டியலைப் பற்றி நீங்கள் ஆர்வமாக இருந்தால், அவற்றை இங்கேயே காணலாம்.] (திரை: // timeformattinghelp)\n\n ஒரு நட்பு நினைவூட்டல், நீண்ட அல்லது குறுகிய வடிவ சரங்களை பயன்படுத்துவது அட்டவணை நெடுவரிசைகளின் அகலத்தை மாயமாக மாற்றவில்லை, இது சில மோசமான வரி இடைவெளிகளுக்கும் உரை காட்டப்படாதது.\n\n இயல்புநிலை: \"YY-MM-DD HH: MM\"",
+  "@enterTimeFormatDesc": {},
+  "errParseEmptyCsvFile": "பதிவை அலசுவதற்கு காபிம கோப்பில் போதுமான வரிகள் இல்லை.",
+  "@errParseEmptyCsvFile": {},
+  "errParseTimeNotRestoreable": "நேர முத்திரையை மீட்டெடுக்க அனுமதிக்கும் நெடுவரிசை எதுவும் இல்லை.",
+  "@errParseTimeNotRestoreable": {},
+  "errParseUnknownColumn": "\"{title}\" என்ற தலைப்பைக் கொண்ட நெடுவரிசை இல்லை.",
+  "@errParseUnknownColumn": {
+    "placeholders": {
+      "title": {
+        "type": "String"
+      }
+    }
+  },
+  "errParseLineTooShort": "வரி {lineNumber} முதல் வரியை விட குறைவான நெடுவரிசைகளைக் கொண்டுள்ளது.",
+  "@errParseLineTooShort": {
+    "placeholders": {
+      "lineNumber": {
+        "type": "int"
+      }
+    }
+  },
+  "errParseFailedDecodingField": "டிகோடிங் புலம் \"{fieldContent}\" வரியில் {lineNumber} தோல்வியுற்றது.",
+  "@errParseFailedDecodingField": {
+    "placeholders": {
+      "lineNumber": {
+        "type": "int"
+      },
+      "fieldContent": {
+        "type": "String"
+      }
+    }
+  },
+  "errAccuracyLoss": "தனிப்பயன் நேர வடிவங்களுடன் ஏற்றுமதி செய்யும் போது துல்லியமான இழப்பு எதிர்பார்க்கப்படுகிறது.",
+  "@errAccuracyLoss": {},
+  "medications": "மருந்துகள்",
+  "@medications": {},
+  "addMedication": "மருந்து சேர்க்கவும்",
+  "@addMedication": {},
+  "name": "பெயர்",
+  "@name": {},
+  "defaultDosis": "இயல்புநிலை டோச்",
+  "@defaultDosis": {},
+  "noMedication": "மருந்து இல்லை",
+  "@noMedication": {},
+  "dosis": "டோச்",
+  "@dosis": {},
+  "valueDistribution": "மதிப்பு வழங்கல்",
+  "@valueDistribution": {},
+  "titleInCsv": "காபிம இல் தலைப்பு",
+  "@titleInCsv": {},
+  "errBleNoPerms": "ஊடலை அனுமதிகள் இல்லை",
+  "@errBleNoPerms": {},
+  "preferredPressureUnit": "விருப்பமான அழுத்தம் அலகு",
+  "@preferredPressureUnit": {},
+  "compactList": "சிறிய அளவீட்டு பட்டியல்",
+  "@compactList": {},
+  "bluetoothDisabled": "ஊடலை முடக்கப்பட்டது",
+  "@bluetoothDisabled": {},
+  "errMeasurementRead": "அளவீட்டு எடுக்கும்போது பிழை!",
+  "@errMeasurementRead": {},
+  "measurementSuccess": "அளவீட்டு வெற்றிகரமாக எடுக்கப்பட்டது!",
+  "@measurementSuccess": {},
+  "connect": "இணை",
+  "@connect": {},
+  "bodyMovementDetected": "உடல் இயக்கம் கண்டறியப்பட்டது",
+  "@bodyMovementDetected": {},
+  "cuffTooLoose": "சுற்றுப்பட்டை மிகவும் தளர்வானது",
+  "@cuffTooLoose": {},
+  "improperMeasurementPosition": "முறையற்ற அளவீட்டு நிலை",
+  "@improperMeasurementPosition": {},
+  "irregularPulseDetected": "ஒழுங்கற்ற துடிப்பு கண்டறியப்பட்டது",
+  "@irregularPulseDetected": {},
+  "pulseRateExceedsUpperLimit": "துடிப்பு வீதம் மேல் வரம்பை மீறுகிறது",
+  "@pulseRateExceedsUpperLimit": {},
+  "pulseRateLessThanLowerLimit": "துடிப்பு வீதம் குறைந்த வரம்பை விட குறைவாக உள்ளது",
+  "@pulseRateLessThanLowerLimit": {},
+  "availableDevices": "கிடைக்கும் சாதனங்கள்",
+  "@availableDevices": {},
+  "deleteAllMedicineIntakes": "அனைத்து மருந்து உட்கொள்ளல்களையும் நீக்கு",
+  "@deleteAllMedicineIntakes": {},
+  "deleteAllNotes": "எல்லா குறிப்புகளையும் நீக்கு",
+  "@deleteAllNotes": {},
+  "date": "திகதி",
+  "@date": {},
+  "intakes": "மருந்து உட்கொள்ளல்",
+  "@intakes": {},
+  "errFeatureNotSupported": "இந்த மேடையில் இந்த நற்பொருத்தம் கிடைக்கவில்லை.",
+  "@errFeatureNotSupported": {},
+  "invalidZip": "தவறான சிப் கோப்பு.",
+  "@invalidZip": {},
+  "errCantCreateArchive": "காப்பகத்தை உருவாக்க முடியாது. முடிந்தால் பிழையைப் புகாரளிக்கவும்.",
+  "@errCantCreateArchive": {},
+  "activateWeightFeatures": "எடை தொடர்பான அம்சங்களை செயல்படுத்தவும்",
+  "@activateWeightFeatures": {},
+  "weight": "எடை",
+  "@weight": {},
+  "exportFieldFormatDocumentation": "'## மாறிகள்\nஏற்றுமதி புலம் வடிவம் பின்வரும் ஒதுக்கிடங்களுக்கான மதிப்புகளைச் செருகுவதை ஆதரிக்கிறது:\n- `$TIMESTAMP:` மில்லி விநாடிகளில் யூனிக்ச் சகாப்தத்திலிருந்து நேரத்தைக் குறிக்கிறது.\n- `$SYS:` கிடைத்தால் ஒரு மதிப்பை வழங்குகிறது; இல்லையெனில், இது -1 க்கு இயல்புநிலையாகும்.\n- `$DIA:` கிடைத்தால் ஒரு மதிப்பை வழங்குகிறது; இல்லையெனில், இது -1 க்கு இயல்புநிலையாகும்.\n- `$PUL:` கிடைத்தால் ஒரு மதிப்பை வழங்குகிறது; இல்லையெனில், இது -1 க்கு இயல்புநிலையாகும்.\n- `$NOTE:` கிடைத்தால் ஒரு மதிப்பை வழங்குகிறது; இல்லையெனில், இது -1 க்கு இயல்புநிலையாகும்.\n- `$COLOR:` ஒரு அளவீட்டின் நிறத்தை ஒரு எண்ணாகக் குறிக்கிறது. (எடுத்துக்காட்டு மதிப்பு: `4291681337`)\n\nமேலே குறிப்பிட்டுள்ள இடம் வைத்திருப்பவர்கள் யாராவது இரத்த அழுத்தப் பதிவில் இல்லை என்றால், அவர்கள் `null` உடன் மாற்றப்படுவார்கள்.\n\n## கணிதம்\nநீங்கள் இரட்டை அடைப்புக்குறிக்குள் அடிப்படை கணிதத்தைப் பயன்படுத்தலாம் (\"`{{}}`\").\n\nபின்வரும் கணித நடவடிக்கைகள் ஆதரிக்கப்படுகின்றன:\n- செயல்பாடுகள்: +, -, *, /, %, ^.\n- ஒற்றை-அளவுரு செயல்பாடுகள்: abs, acos, asin, atan, ceil, cos, cosh, cot, coth, csc, csch, exp, floor, ln, log, round sec, sech, sin, sinh, sqrt, tan, tanh \n- இரண்டு-அளவுரு செயல்பாடுகள்: அடுக்குஎண், என்ஆர்டி, அடுக்கு.\n- மாறிலிகள்: e, pi, ln2, ln10, log2e, log10e, sqrt1_2, sqrt2\n\nமுழு கணித மொழிபெயர்ப்பாளர் விவரக்குறிப்புக்கு, நீங்கள் [function_tree](https://pub.dev/documentation/function_tree/latest#interpreter) ஆவணங்களைக் குறிப்பிடலாம்.\n\n## செயலாக்க ஒழுங்கு\n1. மாறி மாற்று\n2. கணிதம்'",
+  "@exportFieldFormatDocumentation": {},
+  "exportWarnNotEveryFieldExported": "நீங்கள் எல்லா புலங்களையும் ஏற்றுமதி செய்யவில்லை என்பதில் புரிந்துகெள்ளுங்கள்: {fields} {count, plural, one{is} other{are}}காணவில்லை.",
+  "@exportWarnNotEveryFieldExported": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "fields": {
+        "type": "String"
+      }
+    }
+  }
+}
