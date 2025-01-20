@@ -1,6 +1,11 @@
 name: 'PR checks'
 on:
   pull_request:
+    types:
+      - synchronize
+      - labeled
+      - opened
+      - reopened
 
 jobs:
   update-doldens:
@@ -64,3 +69,90 @@ jobs:
           git push
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}%
+    test:
+      if: contains(github.event.pull_request.labels.*.name, 'auto-test')
+      runs-on: ubuntu-latest
+      steps:
+        - name: Checkout code
+          uses: actions/checkout@v4
+          with:
+            # ensures there are no unexpected directories needed
+            sparse-checkout: |
+              app
+              health_data_store
+        - name: Cache generated health data store
+          id: cache-generated
+          uses: actions/cache@v4
+          with:
+            path: health_data_store/lib
+            key: builder-${{ matrix.channel }}-${{ hashFiles('health_data_store/pubspec.yaml', 'health_data_store/lib/*', 'health_data_store/lib/**/*dart') }}
+        - name: Setup dart
+          if: steps.cache-generated.outputs.cache-hit != 'true'
+          uses: dart-lang/setup-dart@v1
+          with:
+            sdk: ${{ matrix.channel }}
+        - name: Generate code
+          if: steps.cache-generated.outputs.cache-hit != 'true'
+          run: dart run build_runner build
+          working-directory: health_data_store
+        - name: Setup Flutter
+          uses: subosito/flutter-action@v2
+          with:
+            channel: ${{ matrix.channel }}
+            cache: true
+        - name: Disable analytics
+          run:
+            flutter config --no-analytics --suppress-analytics
+        - name: Update app dependencies
+          run: flutter pub get
+          working-directory: app
+        - name: Generate app mock code # no efficient caching possible
+          run: flutter pub run build_runner build
+          working-directory: app
+        - name: Run tests
+          run: flutter test --coverage --dart-define="channel=${{ matrix.channel }}"
+          working-directory: app
+    build:
+      if: contains(github.event.pull_request.labels.*.name, 'auto-build')
+      runs-on: ubuntu-latest
+      steps:
+        - name: Checkout code
+          uses: actions/checkout@v4
+          with:
+            # ensures there are no unexpected directories needed
+            sparse-checkout: |
+              app
+              health_data_store
+        - name: Cache generated health data store
+          id: cache-generated
+          uses: actions/cache@v4
+          with:
+            path: health_data_store/lib
+            key: builder-${{ matrix.channel }}-${{ hashFiles('health_data_store/pubspec.yaml', 'health_data_store/lib/*', 'health_data_store/lib/**/*dart') }}
+        - name: Setup dart
+          if: steps.cache-generated.outputs.cache-hit != 'true'
+          uses: dart-lang/setup-dart@v1
+          with:
+            sdk: ${{ matrix.channel }}
+        - name: Generate code
+          if: steps.cache-generated.outputs.cache-hit != 'true'
+          run: dart run build_runner build
+          working-directory: health_data_store
+        - name: Set Up Java
+          uses: actions/setup-java@v3.12.0
+          with:
+            distribution: 'oracle'
+            java-version: '17'
+        - name: Setup Flutter
+          uses: subosito/flutter-action@v2
+          with:
+            channel: ${{ matrix.channel }}
+            cache: true
+        - name: Disable analytics
+          run:
+            flutter config --no-analytics --suppress-analytics
+        - name: Update app dependencies
+          run: flutter pub get
+          working-directory: app
+        - name: Build
+          run: flutter build apk --debug --flavor=github
