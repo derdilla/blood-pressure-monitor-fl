@@ -1,0 +1,5 @@
+* Přidání abstrakce bluetooth backendu a podpora zařízení s vícenásobným měřením od @pimlie
+* Přidání nastavení pro nový backend bluetooth
+* Změna velkých písmen v názvu aplikace od @tct123
+* Aktualizace závislostí
+* Aktualizace překladů do estonštiny, ruštiny, italštiny, švédštiny a tamilštiny prostřednictvím weblate
