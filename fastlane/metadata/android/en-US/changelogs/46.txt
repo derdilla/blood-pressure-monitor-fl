@@ -3,3 +3,4 @@
 * Change app name capitalization by @tct123
 * Update dependencies
 * Update Estonian, Russian, Italian, Swedish, and Tamil translations via weblate
+* Added Tamil translation via Weblate
