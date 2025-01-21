@@ -1,0 +1,33 @@
+name: Label PRs & Issues
+description: Allows external contributors to add labels to add labels to issues and PRs.
+# Note for maintainers: Don't add labels that can be abused
+
+on:
+  issue_comment:                                     
+    types: [ created ]
+
+jobs:
+  build:
+    if: ${{ github.event.issue.pull_request && contains(github.event.comment.body, '/build') }}
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+    steps:
+      - run: gh issue edit "$NUMBER" --add-label "$LABELS"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+          NUMBER: ${{ github.event.issue.number }}
+          LABELS: auto-build
+  test:
+    if: ${{ github.event.issue.pull_request && contains(github.event.comment.body, '/test') }}
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+    steps:
+      - run: gh issue edit "$NUMBER" --add-label "$LABELS"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+          NUMBER: ${{ github.event.issue.number }}
+          LABELS: auto-test
