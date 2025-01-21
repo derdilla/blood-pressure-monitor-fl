@@ -52,8 +52,10 @@ jobs:
       - name: Update app dependencies
         run: flutter pub get
         working-directory: app
-      # Golden tests don't need mocks if they ever do this would be a good oportunity to
-      # introduce test mock testign
+      # TODO: cache using non-generated dart files in the test dir as key
+      - name: Generate app mock code
+        run: flutter pub run build_runner build
+        working-directory: app
       - name: Update goldens
         id: gold-upd
         run: flutter test --update-goldens --fail-fast --name="\[gold\].*" --dart-define="channel=${{ matrix.channel }}"
@@ -72,6 +74,7 @@ jobs:
   test:
     if: contains(github.event.pull_request.labels.*.name, 'auto-test')
     runs-on: ubuntu-latest
+    needs: update-goldens # this is guaranteed to fail if goldens need to be updated
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -106,7 +109,8 @@ jobs:
       - name: Update app dependencies
         run: flutter pub get
         working-directory: app
-      - name: Generate app mock code # no efficient caching possible
+      # TODO: cache using non-generated dart files in the test dir as key
+      - name: Generate app mock code
         run: flutter pub run build_runner build
         working-directory: app
       - name: Run tests
