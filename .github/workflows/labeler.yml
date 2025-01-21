@@ -12,6 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       issues: write
+      pull-requests: write
     steps:
       - run: gh issue edit "$NUMBER" --add-label "$LABELS"
         env:
