@@ -149,15 +149,15 @@ jobs:
           channel: ${{ matrix.channel }}
           cache: true
       - name: Disable analytics
-        run:
-          flutter config --no-analytics --suppress-analytics
+        run: flutter config --no-analytics --suppress-analytics
       - name: Update app dependencies
         run: flutter pub get
         working-directory: app
+      - name: Build
+        run: flutter build apk --debug --flavor=github
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
           name: build-results
           path: app/build/app/outputs/flutter-apk
-        - name: Build
-          run: flutter build apk --debug --flavor=github
+      
