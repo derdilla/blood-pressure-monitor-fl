@@ -1,5 +1,4 @@
 name: Label PRs & Issues
-description: Allows external contributors to add labels to add labels to issues and PRs.
 # Note for maintainers: Don't add labels that can be abused
 
 on:
@@ -25,6 +24,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       issues: write
+      pull-requests: write
     steps:
       - run: gh issue edit "$NUMBER" --add-label "$LABELS"
         env:
