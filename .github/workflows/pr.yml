@@ -21,11 +21,6 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-        with:
-          # ensures there are no unexpected directories needed
-          sparse-checkout: |
-            app
-            health_data_store
       - name: Cache generated health data store
         id: cache-generated
         uses: actions/cache@v4
@@ -67,7 +62,7 @@ jobs:
           if [[ $(git status -s) ]]; then
               git config user.name "GitHub Action (update goldens)"
               git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-              git add app/test/**/*.png
+              git add app/test/
               git commit -m "Update goldens"
               git push
           else
