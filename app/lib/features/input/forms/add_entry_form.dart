@@ -5,6 +5,7 @@ import 'package:blood_pressure_app/features/input/forms/form_switcher.dart';
 import 'package:blood_pressure_app/features/input/forms/medicine_intake_form.dart';
 import 'package:blood_pressure_app/features/input/forms/note_form.dart';
 import 'package:blood_pressure_app/features/input/forms/weight_form.dart';
+import 'package:blood_pressure_app/logging.dart';
 import 'package:blood_pressure_app/model/storage/storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -12,7 +13,8 @@ import 'package:health_data_store/health_data_store.dart';
 import 'package:provider/provider.dart';
 
 /// Primary form to enter all types of entries.
-class AddEntryForm extends FormBase<AddEntryFormValue> {
+class AddEntryForm extends FormBase<AddEntryFormValue>
+    with TypeLogger {
   /// Create primary form to enter all types of entries.
   const AddEntryForm({super.key, super.initialValue, required this.meds});
 
@@ -34,11 +36,18 @@ class AddEntryFormState extends FormStateBase<AddEntryFormValue, AddEntryForm> {
   final _intakeForm = GlobalKey<MedicineIntakeFormState>();
 
   @override
-  bool validate() => (_timeForm.currentState?.validate() ?? false)
+  bool validate() {
+    log.info('_timeForm validation: ${_timeForm.currentState?.validate()}');
+    log.info('_noteForm validation: ${_noteForm.currentState?.validate()}');
+    log.info('_bpForm validation: ${_bpForm.currentState?.validate()}');
+    log.info('_weightForm validation: ${_weightForm.currentState?.validate()}');
+    log.info('_intakeForm validation: ${_intakeForm.currentState?.validate()}');
+    return (_timeForm.currentState?.validate() ?? false)
     && (_noteForm.currentState?.validate() ?? false)
     && ((_bpForm.currentState?.validate() ?? false)
       || (_weightForm.currentState?.validate() ?? false)
       || (_intakeForm.currentState?.validate() ?? false));
+  }
 
   @override
   AddEntryFormValue? save() {
@@ -49,11 +58,11 @@ class AddEntryFormState extends FormStateBase<AddEntryFormValue, AddEntryForm> {
     BodyweightRecord? weight;
     MedicineIntake? intake;
 
-    final noteFormValue = _noteForm.currentState!.save();
+    final noteFormValue = _noteForm.currentState?.save();
     if (noteFormValue != null) {
       note = Note(time: time, note: noteFormValue.$1, color: noteFormValue.$2?.value);
     }
-    final recordFormValue = _bpForm.currentState!.save();
+    final recordFormValue = _bpForm.currentState?.save();
     if (recordFormValue != null) {
       final unit = context.read<Settings>().preferredPressureUnit;
       record = BloodPressureRecord(
@@ -63,11 +72,11 @@ class AddEntryFormState extends FormStateBase<AddEntryFormValue, AddEntryForm> {
         pul: recordFormValue.pul,
       );
     }
-    final weightFormValue = _weightForm.currentState!.save();
+    final weightFormValue = _weightForm.currentState?.save();
     if (weightFormValue != null) {
       weight = BodyweightRecord(time: time, weight: weightFormValue);
     }
-    final intakeFormValue = _intakeForm.currentState!.save();
+    final intakeFormValue = _intakeForm.currentState?.save();
     if (intakeFormValue != null) {
       // TODO
       // intake = MedicineIntake(time: time, medicine: null, dosis: null);

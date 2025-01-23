@@ -52,9 +52,9 @@ class BloodPressureFormState extends FormStateBase<({int? sys, int? dia, int? pu
   @override
   ({int? sys, int? dia, int? pul})? save() {
     if (!validate()
-      || (_sysController.text.isEmpty
-      && _diaController.text.isEmpty
-      && _pulController.text.isEmpty)) {
+      || (int.tryParse(_sysController.text) == null
+      && int.tryParse(_diaController.text) == null
+      && int.tryParse(_pulController.text) == null)) {
       return null;
     }
     return (

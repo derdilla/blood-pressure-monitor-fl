@@ -43,6 +43,7 @@ dependencies:
 
   # desktop only
   sqflite_common_ffi: ^2.3.4+4
+  inline_tab_view: ^1.0.1
 
 dev_dependencies:
   integration_test:

@@ -38,7 +38,11 @@ class NoteFormState extends FormStateBase<(String?, Color?), NoteForm> {
   bool validate() => true;
 
   @override
-  (String?, Color?)? save() => (_controller.text.isEmpty ? null : _controller.text, _color);
+  (String?, Color?)? save() {
+    final String? text = _controller.text.isEmpty ? null : _controller.text;
+    if (text == null && _color == null) return null;
+    return (text, _color);
+  }
 
   @override
   bool isEmptyInputFocused() => _focusNode.hasFocus && _controller.text.isEmpty;

@@ -70,7 +70,7 @@ class _CompactMeasurementListState extends State<CompactMeasurementList> {
         key: Key(widget.data[index].time.toIso8601String()),
         confirmDismiss: (direction) async {
           if (direction == DismissDirection.startToEnd) { // edit
-            await context.createEntry(widget.data[index]);
+            await context.createEntry(/* FIXME: widget.data[index] */);
             return false;
           } else { // delete
             await context.deleteEntry(widget.data[index]);

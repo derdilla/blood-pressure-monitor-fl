@@ -70,7 +70,7 @@ class MeasurementList extends StatelessWidget {
             itemCount: entries.length,
             itemBuilder: (context, idx) => MeasurementListRow(
               data: entries[idx],
-              onRequestEdit: () => context.createEntry(entries[idx]),
+              onRequestEdit: () => context.createEntry(/* FIXME: entries[idx] */),
             ),
           ),
         ),
