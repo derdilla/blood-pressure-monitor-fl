@@ -27,4 +27,16 @@ class FakeBleBPService implements BluetoothService {
   @override
   Guid get uuid => Guid('1810');
 
+  @override
+  // TODO: implement isSecondary
+  bool get isSecondary => throw UnimplementedError();
+
+  @override
+  // TODO: implement primaryService
+  BluetoothService? get primaryService => throw UnimplementedError();
+
+  @override
+  // TODO: implement primaryServiceUuid
+  Guid? get primaryServiceUuid => throw UnimplementedError();
+
 }

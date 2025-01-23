@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:blood_pressure_app/data_util/interval_picker.dart';
 import 'package:blood_pressure_app/features/home/navigation_action_buttons.dart';
 import 'package:blood_pressure_app/features/measurement_list/compact_measurement_list.dart';
@@ -7,6 +5,7 @@ import 'package:blood_pressure_app/features/measurement_list/measurement_list.da
 import 'package:blood_pressure_app/features/statistics/value_graph.dart';
 import 'package:blood_pressure_app/model/storage/settings_store.dart';
 import 'package:blood_pressure_app/screens/home_screen.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../model/analyzer_test.dart';
@@ -46,8 +45,10 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.byType(BloodPressureValueGraph), findsOneWidget);
+    expect(find.byType(SafeArea), findsAtLeast(1));
+    expect(find.byType(Scaffold), findsAtLeast(1));
     expect(find.byType(NavigationActionButtons), findsNothing);
-    expect(find.byType(IntervalPicker), findsNothing);
+    expect(find.byType(IntervalPicker), findsOneWidget);
     expect(find.byType(MeasurementList), findsNothing);
   });
 
@@ -66,5 +67,16 @@ void main() {
 
     expect(find.byType(MeasurementList), findsNothing);
     expect(find.byType(CompactMeasurementList), findsOneWidget);
+  });
+
+  testWidgets('landscape graph is wrapped in theming', (tester) async {
+    await binding.setSurfaceSize(const Size(800, 400));
+
+    await tester.pumpWidget(appBaseForScreen(const AppHome()));
+    await tester.pumpAndSettle();
+
+    expect(find.byType(BloodPressureValueGraph), findsOneWidget);
+    expect(find.ancestor(of: find.byType(BloodPressureValueGraph), matching: find.byType(Scaffold)), findsOneWidget);
+    expect(find.ancestor(of: find.byType(BloodPressureValueGraph), matching: find.byType(MaterialApp)), findsOneWidget);
   });
 }

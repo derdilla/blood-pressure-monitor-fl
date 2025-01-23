@@ -84,4 +84,48 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.text('${year + 1}'), findsOneWidget);
   });
+  testWidgets('selected custom interval gets interpreted correctly', (tester) async {
+    final s = IntervalStoreManager(IntervalStorage(),IntervalStorage(),IntervalStorage());
+
+    await tester.pumpWidget(materialApp(ChangeNotifierProvider.value(
+      value: s,
+      child: IntervalPicker(
+        type: IntervalStoreManagerLocation.mainPage,
+        customRangePickerCurrentDay: DateTime(2024, 1, 25),
+      ),
+    )));
+    final localizations = await AppLocalizations.delegate.load(const Locale('en'));
+    final materialLocalizations = await DefaultMaterialLocalizations.delegate.load(const Locale('en'));
+
+    await tester.tap(find.byType(DropdownButton<TimeStep>));
+    await tester.pumpAndSettle();
+    
+    await tester.tap(find.text(localizations.custom));
+    await tester.pumpAndSettle(); // opens date interval selection
+
+    await tester.tap(find.text('20').first);
+    await tester.pump();
+    await tester.tap(find.text('25').first);
+    await tester.pump();
+    await tester.tap(find.text(materialLocalizations.saveButtonLabel).first);
+    await tester.pumpAndSettle();
+
+    expect(find.byType(DateRangePickerDialog), findsNothing);
+
+    expect(s.mainPage.stepSize, TimeStep.custom);
+    expect(s.mainPage.currentRange.start.year, 2024);
+    expect(s.mainPage.currentRange.start.month, 1);
+    expect(s.mainPage.currentRange.start.day, 20);
+    expect(s.mainPage.currentRange.end.year, 2024);
+    expect(s.mainPage.currentRange.end.month, 1);
+    expect(s.mainPage.currentRange.end.day, 25);
+
+    expect(s.mainPage.currentRange.end.hour, 23, reason: 'should always be after newer measurements (#466)');
+    expect(s.mainPage.currentRange.end.minute, 59, reason: 'should always be after newer measurements (#466)');
+    expect(s.mainPage.currentRange.end.second, 59, reason: 'should always be after newer measurements (#466)');
+
+    expect(s.mainPage.currentRange.start.hour, 0);
+    expect(s.mainPage.currentRange.start.minute, 0);
+    expect(s.mainPage.currentRange.start.second, 0);
+  });
 }

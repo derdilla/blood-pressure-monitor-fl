@@ -194,12 +194,13 @@ class PdfConverter {
 
         final List<pw.Widget> tables = [];
         int pageNum = 0;
-        for (int offset = 0; offset < data.length; offset += rowCount) {
+        for (int offset = 0; offset < data.length; offset += (rowCount - 1)) {
           final dataRange = data.getRange(offset, min(offset + rowCount, data.length)).toList();
           // Correct rowcount after first page (2 tables)
           if (pageNum == 1) {
             rowCount = (PdfPageFormat.a4.availableHeight - realHeaderHeight)
                 ~/ (realCellHeight);
+            offset -= 1;
           }
           tables.add(pw.Container(
             padding: const pw.EdgeInsets.symmetric(horizontal: 5),
@@ -248,7 +249,6 @@ class PdfConverter {
           ),);
           pageNum++;
         }
-
 
         return pw.Wrap(
             children: [

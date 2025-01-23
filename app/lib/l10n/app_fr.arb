@@ -220,7 +220,7 @@
   "@measurementCount": {},
   "measurementsPerDay": "Mesures par jour",
   "@measurementsPerDay": {},
-  "timeResolvedMetrics": "Mesures déterminées par heure",
+  "timeResolvedMetrics": "Statistiques de mesures selon l''heure",
   "@timeResolvedMetrics": {},
   "avgOf": "{txt} Ø",
   "@avgOf": {
@@ -250,7 +250,7 @@
   "@warnValues": {},
   "warnAboutTxt1": "Les valeurs d''alerte ne sont que des suggestions et n''ont pas valeur d''avis médical.",
   "@warnAboutTxt1": {},
-  "warnAboutTxt2": "Les valeurs par défaut dépendant de l''âge proviennent de cette source.",
+  "warnAboutTxt2": "Source des valeurs par défaut en fonction de l''âge.",
   "@warnAboutTxt2": {},
   "warnAboutTxt3": "N''hésitez pas à modifier les valeurs pour qu''elles vous conviennent et suivent les recommandations de votre médecin.",
   "@warnAboutTxt3": {},
@@ -374,9 +374,9 @@
   "@exportPdfHeaderFontSize": {},
   "color": "Couleur",
   "@color": {},
-  "enterTimeFormatDesc": "Une chaine de formatage est un mélange de chaines ICU/Skeleton et de n''importe quel texte supplémentaire que vous souhaitez inclure.\n\n[Si vous souhaitez en savoir plus sur la liste complète des formats valides, tapez ici.](screen://TimeFormattingHelp)\n\nRappel amical: utiliser des chaines de formatage plus courtes ou plus longues ne modifieront pas la largeur des colonnes de table par magie, ce qui pourrait générer des retours à la ligne inattendus ou que du texte n''apparaisse pas.\n\nvaleur par défaut: \"yy-MM-dd HH:mm\"",
+  "enterTimeFormatDesc": "Une chaine de formatage est un mélange de chaines ICU/Skeleton et de n''importe quel texte supplémentaire que vous souhaitez inclure.\n\n[Si vous souhaitez en savoir plus sur la liste complète des formats valides, tapez ici.](screen ://TimeFormattingHelp)\n\nRappel amical : utiliser des chaines de formatage plus courtes ou plus longues ne modifiera pas la largeur des colonnes de la table par magie, ce qui pourrait générer des retours à la ligne inattendus ou que du texte n''apparaisse pas.\n\nValeur par défaut : \"yy-MM-dd HH:mm\"",
   "@enterTimeFormatDesc": {},
-  "exportSettings": "Paramètres de sauvegarde",
+  "exportSettings": "Sauvegarder les paramètres",
   "@exportSettings": {},
   "restartNow": "Redémarrer maintenant",
   "@restartNow": {},
@@ -390,7 +390,7 @@
   "@importSettings": {},
   "warnDeletionUnrecoverable": "Cette étape est irréversible à moins que vous n''ayez fait une sauvegarde manuelle. Êtes-vous certain de vouloir supprimer ceci ?",
   "@warnDeletionUnrecoverable": {},
-  "needlePinBarWidthDesc": "La largeur des lignes coloriées que les entrées font sur la courbe.",
+  "needlePinBarWidthDesc": "L''épaisseur des lignes coloriées que les saisies font sur la courbe.",
   "@needlePinBarWidthDesc": {},
   "exportFieldFormatDocumentation": "'## Variables\nLe format d''export supporte l''insertion de valeurs pour les placeholders suivants :\n- `$TIMESTAMP :` Représente la durée depuis l''époque Unix en millisecondes.\n- `$SYS :` Fournit une valeur si disponible ; sinon, it defaults to -1.\n- `$DIA :` Fournit une valeur si disponible ; sinon, it defaults to -1.\n- `$PUL :`Fournit une valeur si disponible ; sinon, it defaults to -1.\n- `$NOTE :` Fournit une valeur si disponible ; sinon, it defaults to -1.\n- `$COLOR :` Représente la couleur d''une mesure comme nombre. ( example de valeur : `4291681337`)\n\nSi n''importe lequel de ces placeholders mentionnés ci-dessus ne sont pas présents dans l''enregistement de pression artérielle, ils seront remplacés par -1.\n\n## Maths\nVous pouvez utiliser des mathématiques basiques à l''intérieur de doubles crochets (\"`{{}}`\").\n\nLes opérations mathématiques suivantes sont supportées :\n- Opérations : +, -, *, /, %, ^\n- Fonctions à paramètre unique : abs, acos, asin, atan, ceil, cos, cosh, cot, coth, csc, csch, exp, floor, ln, log, round sec, sech, sin, sinh, sqrt, tan, tanh \n- Fonctions à deux paramètres : log, nrt, pow\n- Constantes : e, pi, ln2, ln10, log2e, log10e, sqrt1_2, sqrt2\nPour la spécification complète de l''interpréteur mathématique, vous pouvez vous référer au [function_tree](https ://pub.dev/documentation/function_tree/latest#interpreter) specification\n\n## Ordre de traitement\n1. remplacement de variable\n2. Maths'",
   "@exportFieldFormatDocumentation": {},
@@ -510,5 +510,37 @@
   "deleteAllMedicineIntakes": "Supprimer toutes les prises de médicaments",
   "@deleteAllMedicineIntakes": {},
   "intakes": "Doses de médicaments",
-  "@intakes": {}
+  "@intakes": {},
+  "valueDistribution": "Distribution des mesures",
+  "@valueDistribution": {},
+  "invalidZip": "Fichier ZIP invalide.",
+  "@invalidZip": {},
+  "errCantCreateArchive": "Impossible de créer l''archive. Si possible, signalez ce bug.",
+  "@errCantCreateArchive": {},
+  "preferredWeightUnit": "Unité de poids préférée",
+  "@preferredWeightUnit": {
+    "description": "Setting for the unit the app will use for displaying weight"
+  },
+  "activateWeightFeatures": "Activer les fonctions relatives au poids",
+  "@activateWeightFeatures": {},
+  "weight": "Poids",
+  "@weight": {},
+  "enterWeight": "Indiquez le poids",
+  "@enterWeight": {},
+  "selectMeasurementTitle": "Choisissez la mesure à utiliser",
+  "@selectMeasurementTitle": {},
+  "measurementIndex": "Mesure n° {number}",
+  "@measurementIndex": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "select": "Choisissez",
+  "@select": {
+    "description": "Used when f.e. selecting a single measurement when the bluetooth device returned multiple"
+  },
+  "bloodPressure": "Pression artérielle",
+  "@bloodPressure": {}
 }

@@ -9,6 +9,7 @@ String getDisplayLanguage(Locale l) => switch(l.toLanguageTag()) {
   'fr' => 'Française',
   'it' => 'Italiano',
   'nb' => 'Norsk bokmål',
+  'nl' => 'Nederlands',
   'pt' => 'Português',
   'pt-BR' => 'Português (Brasil)',
   'ru' => 'Русский',
@@ -18,7 +19,8 @@ String getDisplayLanguage(Locale l) => switch(l.toLanguageTag()) {
   'zh-Hant' => '中文（繁體)',
   'hu' => 'Magyar (Magyarország)',
   'et' => 'Eesti (Eesti)',
-  'nl' => 'Nederlands',
+  'cs' => 'Čeština',
+  'ta' => 'தமிழ்',
   // Websites with names for expanding when new languages get added:
   // - https://chronoplexsoftware.com/localisation/help/languagecodes.htm
   // - https://localizely.com/locale-code/zh-Hans/

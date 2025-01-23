@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:blood_pressure_app/features/bluetooth/logic/flutter_blue_plus_mockable.dart';
+import 'package:blood_pressure_app/features/bluetooth/backend/flutter_blue_plus/flutter_blue_plus_mockable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 
@@ -55,7 +55,7 @@ class FakeFlutterBluePlus extends FlutterBluePlusMockable {
   List<BluetoothDevice> get connectedDevices => throw UnimplementedError();
 
   @override
-  Future<List<BluetoothDevice>> get systemDevices => throw UnimplementedError();
+  Future<List<BluetoothDevice>> systemDevices(List<Guid> withServices) => throw UnimplementedError();
 
   @override
   Future<List<BluetoothDevice>> get bondedDevices => throw UnimplementedError();
@@ -64,7 +64,7 @@ class FakeFlutterBluePlus extends FlutterBluePlusMockable {
   Future<void> setOptions({bool showPowerAlert = true,}) => throw UnimplementedError();
 
   @override
-  Future<void> turnOn({int timeout = 60}) async => null;
+  Future<void> turnOn({int timeout = 60}) async {}
 
   @override
   Future<void> startScan({

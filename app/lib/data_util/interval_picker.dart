@@ -12,10 +12,18 @@ import 'package:week_of_year/date_week_extensions.dart';
 /// in both directions.
 class IntervalPicker extends StatelessWidget {
   /// Create a selector for [IntervalStorage] values.
-  const IntervalPicker({super.key, required this.type});
+  const IntervalPicker({super.key,
+    required this.type,
+    this.customRangePickerCurrentDay,
+  });
 
   /// Which range to display and modify.
   final IntervalStoreManagerLocation type;
+
+  /// The day from which to start the custom date range picker.
+  ///
+  /// Defaults to the current day which is the desired value in all non-test scenarios.
+  final DateTime? customRangePickerCurrentDay;
   
   @override
   Widget build(BuildContext context) => Consumer<IntervalStoreManager>(
@@ -52,11 +60,15 @@ class IntervalPicker extends StatelessWidget {
                       final res = await showDateRangePicker(
                         context: context,
                         firstDate: DateTime.fromMillisecondsSinceEpoch(1),
-                        lastDate: DateTime.now(),
+                        lastDate: customRangePickerCurrentDay ?? DateTime.now(),
+                        currentDate: customRangePickerCurrentDay,
                       );
                       if (res != null) {
                         intervall.changeStepSize(value!);
-                        intervall.currentRange = res.dateRange;
+                        final dateRange = res.dateRange.copyWith(
+                          end: res.end.copyWith(hour: 23, minute: 59, second: 59),
+                        );
+                        intervall.currentRange = dateRange;
                       }
                     } else if (value != null) {
                       intervall.changeStepSize(value);

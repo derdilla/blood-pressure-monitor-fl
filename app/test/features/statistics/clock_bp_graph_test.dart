@@ -7,6 +7,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:provider/provider.dart';
 
 import '../../model/analyzer_test.dart';
+import '../../util.dart';
 
 void main() {
   testWidgets("doesn't throw when empty" , (tester) async {
@@ -14,14 +15,14 @@ void main() {
       home: Scaffold(
         body: ChangeNotifierProvider<Settings>(
           create: (_) => Settings(),
-          child: ClockBpGraph(measurements: []),
+          child: const ClockBpGraph(measurements: []),
         ),
       ),
     ));
     expect(tester.takeException(), isNull);
     expect(find.byType(ClockBpGraph), findsOneWidget);
   });
-  testWidgets('renders sample data like expected in light mode', (tester) async {
+  testWidgets('[gold] renders sample data like expected in light mode', (tester) async {
     final rng = Random(1234);
     await tester.pumpWidget(MaterialApp(
       home: Scaffold(
@@ -41,9 +42,9 @@ void main() {
         ),
       ),
     ));
-    await expectLater(find.byType(ClockBpGraph), matchesGoldenFile('ClockBpGraph-light.png'));
+    await expectLater(find.byType(ClockBpGraph), myMatchesGoldenFile('ClockBpGraph-light.png'));
   });
-  testWidgets('renders sample data like expected in dart mode', (tester) async {
+  testWidgets('[gold] renders sample data like expected in dark mode', (tester) async {
     final rng = Random(1234);
     await tester.pumpWidget(MaterialApp(
       theme: ThemeData.dark(useMaterial3: true),
@@ -64,6 +65,6 @@ void main() {
         ),
       ),
     ));
-    await expectLater(find.byType(ClockBpGraph), matchesGoldenFile('ClockBpGraph-dark.png'));
+    await expectLater(find.byType(ClockBpGraph), myMatchesGoldenFile('ClockBpGraph-dark.png'));
   });
 }

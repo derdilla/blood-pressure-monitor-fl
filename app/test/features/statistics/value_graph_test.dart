@@ -17,6 +17,7 @@ void main() {
     final records = [
       mockRecord(time: DateTime(2000), sys: 123),
       mockRecord(time: DateTime(2001), sys: 120),
+      // ignore: avoid_redundant_argument_values
       mockRecord(time: DateTime(2002), sys: null),
       mockRecord(time: DateTime(2003), sys: 123),
       mockRecord(time: DateTime(2004), sys: 200),
@@ -35,6 +36,7 @@ void main() {
     final records = [
       mockRecord(time: DateTime(2000), dia: 123),
       mockRecord(time: DateTime(2001), dia: 120),
+      // ignore: avoid_redundant_argument_values
       mockRecord(time: DateTime(2002), dia: null),
       mockRecord(time: DateTime(2003), dia: 123),
       mockRecord(time: DateTime(2004), dia: 200),
@@ -53,6 +55,7 @@ void main() {
     final records = [
       mockRecord(time: DateTime(2000), pul: 123),
       mockRecord(time: DateTime(2001), pul: 120),
+      // ignore: avoid_redundant_argument_values
       mockRecord(time: DateTime(2002), pul: null),
       mockRecord(time: DateTime(2003), pul: 123),
       mockRecord(time: DateTime(2004), pul: 200),
@@ -72,7 +75,7 @@ void main() {
     final localizations = await AppLocalizations.delegate.load(const Locale('en'));
     expect(find.text(localizations.errNotEnoughDataToGraph), findsOneWidget);
   });
-  testWidgets('graph with all extras is rendered correctly', (tester) async {
+  testWidgets('[gold] graph with all extras is rendered correctly', (tester) async {
     await tester.pumpWidget(_buildGraph([
       mockRecord(time: DateTime(2005), sys: 123, dia: 80, pul: 50),
       mockRecord(time: DateTime(2003), sys: 110, dia: 73, pul: 130),
@@ -100,7 +103,78 @@ void main() {
     final localizations = await AppLocalizations.delegate.load(const Locale('en'));
     expect(find.text(localizations.errNotEnoughDataToGraph), findsNothing);
 
-    await expectLater(find.byType(BloodPressureValueGraph), matchesGoldenFile('full_graph-years.png'));
+    await expectLater(find.byType(BloodPressureValueGraph), myMatchesGoldenFile('full_graph-years.png'));
+  });
+
+  testWidgets('BloodPressureValueGraph is fine with enough values in sys category', (tester) async {
+    await tester.pumpWidget(_buildGraph([
+      mockRecord(time: DateTime(2005), sys: 123),
+      mockRecord(time: DateTime(2003), sys: 110),
+    ], [], []));
+    final localizations = await AppLocalizations.delegate.load(const Locale('en'));
+    expect(find.text(localizations.errNotEnoughDataToGraph), findsNothing);
+  });
+  testWidgets('BloodPressureValueGraph is fine with enough values in dia category', (tester) async {
+    await tester.pumpWidget(_buildGraph([
+      mockRecord(time: DateTime(2005), dia: 123),
+      mockRecord(time: DateTime(2003), dia: 110),
+    ], [], []));
+    final localizations = await AppLocalizations.delegate.load(const Locale('en'));
+    expect(find.text(localizations.errNotEnoughDataToGraph), findsNothing);
+  });
+  testWidgets('BloodPressureValueGraph is fine with enough values in pul category', (tester) async {
+    await tester.pumpWidget(_buildGraph([
+      mockRecord(time: DateTime(2005), pul: 123),
+      mockRecord(time: DateTime(2003), pul: 110),
+    ], [], []));
+    final localizations = await AppLocalizations.delegate.load(const Locale('en'));
+    expect(find.text(localizations.errNotEnoughDataToGraph), findsNothing);
+  });
+
+  testWidgets('[gold] graph renders area at start correctly', (tester) async {
+    await tester.pumpWidget(_buildGraph([
+        mockRecord(time: DateTime(2003), sys: 170, dia: 100, pul: 50),
+        mockRecord(time: DateTime(2005), sys: 110, dia: 70, pul: 50),
+      ], [], [],
+      settings: Settings(
+        diaWarn: 75,
+        sysWarn: 120,
+      ),
+    ));
+    await tester.pumpAndSettle();
+    final localizations = await AppLocalizations.delegate.load(const Locale('en'));
+    expect(find.text(localizations.errNotEnoughDataToGraph), findsNothing);
+
+    await expectLater(find.byType(BloodPressureValueGraph), myMatchesGoldenFile('value-graph-start-warn.png'));
+  });
+  testWidgets('[gold] graph renders area at end correctly', (tester) async {
+    await tester.pumpWidget(_buildGraph([
+      mockRecord(time: DateTime(2005), sys: 170, dia: 100, pul: 50),
+      mockRecord(time: DateTime(2003), sys: 110, dia: 70, pul: 50),
+    ], [], [],
+      settings: Settings(
+        diaWarn: 75,
+        sysWarn: 120,
+      ),
+    ));
+    await tester.pumpAndSettle();
+    final localizations = await AppLocalizations.delegate.load(const Locale('en'));
+    expect(find.text(localizations.errNotEnoughDataToGraph), findsNothing);
+
+    await expectLater(find.byType(BloodPressureValueGraph), myMatchesGoldenFile('value-graph-end-warn.png'));
+  });
+  testWidgets('[gold] warn area not drawn above graph', (tester) async {
+    await tester.pumpWidget(_buildGraph([
+      mockRecord(time: DateTime(2005), sys: 103, dia: null, pul: null),
+      mockRecord(time: DateTime(2003), sys: 89, dia: null, pul: null),
+    ], [], [],
+      settings: Settings(sysWarn: 120),
+    ));
+    await tester.pumpAndSettle();
+    final localizations = await AppLocalizations.delegate.load(const Locale('en'));
+    expect(find.text(localizations.errNotEnoughDataToGraph), findsNothing);
+
+    await expectLater(find.byType(BloodPressureValueGraph), myMatchesGoldenFile('value-graph-warn-not-above.png'));
   });
 }
 

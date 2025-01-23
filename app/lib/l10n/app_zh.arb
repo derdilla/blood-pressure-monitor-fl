@@ -524,5 +524,21 @@
   "preferredWeightUnit": "首选体重单位",
   "@preferredWeightUnit": {
     "description": "Setting for the unit the app will use for displaying weight"
+  },
+  "selectMeasurementTitle": "选择要使用的测量",
+  "@selectMeasurementTitle": {},
+  "measurementIndex": "测量#{number}",
+  "@measurementIndex": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "bloodPressure": "血压",
+  "@bloodPressure": {},
+  "select": "选择",
+  "@select": {
+    "description": "Used when f.e. selecting a single measurement when the bluetooth device returned multiple"
   }
 }

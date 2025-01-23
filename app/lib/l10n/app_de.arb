@@ -209,7 +209,7 @@
   "@measurementCount": {},
   "measurementsPerDay": "Messungen pro Tag",
   "@measurementsPerDay": {},
-  "timeResolvedMetrics": "Werte nach Uhrzeit",
+  "timeResolvedMetrics": "Werte nach Tageszeit",
   "@timeResolvedMetrics": {},
   "avgOf": "{txt} Ø",
   "@avgOf": {
@@ -340,7 +340,7 @@
   "@fieldFormat": {},
   "pulsePressure": "Pulsdruck",
   "@pulsePressure": {},
-  "average": "Duchschnitt",
+  "average": "Durchschnitt",
   "@average": {},
   "maximum": "Maximum",
   "@maximum": {},
@@ -352,7 +352,7 @@
   "@exportPdfExportStatistics": {},
   "exportPdfExportData": "Datentabelle",
   "@exportPdfExportData": {},
-  "exportFieldFormatDocumentation": "'## Variablen\nDas Exportfeldformat unterstützt das Einfügen von Werten für die folgenden Platzhalter:\n- `$TIMESTAMP:` Stellt die Zeit seit der Unix-Epoche in Millisekunden dar.\n- `$SYS:` Liefert einen Wert, falls vorhanden; andernfalls ist er standardmäßig -1.\n- `$DIA:` Liefert einen Wert, falls vorhanden; andernfalls ist er standardmäßig -1.\n- `$PUL:` Gibt einen Wert an, falls verfügbar; andernfalls ist er standardmäßig -1.\n- `$NOTE:` Gibt einen Wert an, falls verfügbar; andernfalls ist er standardmäßig -1.\n\nWenn einer der oben genannten Platzhalter im Blutdruckdatensatz nicht vorhanden ist, wird er durch -1 ersetzt.\n\n## Mathematik\nInnerhalb von Doppelklammern (\"`{{}}`\") kannst Du die Grundrechenarten verwenden.\n\nDie folgenden mathematischen Operationen werden unterstützt:\n- Operationen: +, -, *, /, %, ^\n- Funktionen mit einem Parameter: abs, acos, asin, atan, ceil, cos, cosh, cot, coth, csc, csch, exp, floor, ln, log, round sec, sech, sin, sinh, sqrt, tan, tanh \n- Funktionen mit zwei Parametern: log, nrt, pow\n- Konstanten: e, pi, ln2, ln10, log2e, log10e, sqrt1_2, sqrt2\nDie vollständige Spezifikation des mathematischen Interpreters findest Du in der [function_tree](https://pub.dev/documentation/function_tree/latest#interpreter) Spezifikation\n\n## Reihenfolge der Verarbeitung\n1. Variablen-Ersetzung\n2. Mathematik'",
+  "exportFieldFormatDocumentation": "'## Variablen\nDas Exportfeldformat unterstützt das Einfügen von Werten für die folgenden Platzhalter:\n- `$TIMESTAMP:` Stellt die Zeit seit der Unix-Epoche in Millisekunden dar.\n- `$SYS:` Liefert einen Wert, falls vorhanden; andernfalls ist er standardmäßig -1.\n- `$DIA:` Liefert einen Wert, falls vorhanden; andernfalls ist er standardmäßig -1.\n- `$PUL:` Gibt einen Wert an, falls verfügbar; andernfalls ist er standardmäßig -1.\n- `$NOTE:` Gibt einen Wert an, falls verfügbar; andernfalls ist er standardmäßig -1.\n- `$COLOR:` Repräsentiert die Farbe einer Messung als eine Zahl. (Beispielwert: `4291681337`)\n\nWenn einer der oben genannten Platzhalter im Blutdruckdatensatz nicht vorhanden ist, wird er durch -1 ersetzt.\n\n## Mathematik\nInnerhalb von Doppelklammern (\"`{{}}`\") kannst Du die Grundrechenarten verwenden.\n\nDie folgenden mathematischen Operationen werden unterstützt:\n- Operationen: +, -, *, /, %, ^\n- Funktionen mit einem Parameter: abs, acos, asin, atan, ceil, cos, cosh, cot, coth, csc, csch, exp, floor, ln, log, round sec, sech, sin, sinh, sqrt, tan, tanh \n- Funktionen mit zwei Parametern: log, nrt, pow\n- Konstanten: e, pi, ln2, ln10, log2e, log10e, sqrt1_2, sqrt2\n\nDie vollständige Spezifikation des mathematischen Interpreters findest Du in der [function_tree](https://pub.dev/documentation/function_tree/latest#interpreter) Spezifikation\n\n## Reihenfolge der Verarbeitung\n1. Variablen-Ersetzung\n2. Mathematik'",
   "@exportFieldFormatDocumentation": {},
   "startWithAddMeasurementPage": "Eintrag nach Start",
   "@startWithAddMeasurementPage": {},
@@ -400,7 +400,7 @@
   "@needlePinBarWidth": {},
   "errParseTimeNotRestoreable": "Es ist keine Spalte zum wiederherstellen des Zeitstempels vorhanden.",
   "@errParseTimeNotRestoreable": {},
-  "needlePinBarWidthDesc": "Die dicke der Linien aus denen der Graph besteht.",
+  "needlePinBarWidthDesc": "Die Dicke der Linien, aus denen der Graph besteht.",
   "@needlePinBarWidthDesc": {},
   "errParseUnknownColumn": "Es wurde keine Spalte mit dem Titel \"{title}\" gefunden.",
   "@errParseUnknownColumn": {
@@ -465,7 +465,7 @@
   "@timeFormat": {},
   "preferredPressureUnit": "Bevorzugte Druck-Maßeinheit",
   "@preferredPressureUnit": {},
-  "compactList": "Kompate Messwertliste",
+  "compactList": "Kompakte Messwertliste",
   "@compactList": {},
   "bluetoothDisabled": "Bluetooth deaktiviert",
   "@bluetoothDisabled": {},
@@ -506,5 +506,41 @@
   "connect": "Verbinden",
   "@connect": {},
   "deleteAllMedicineIntakes": "Alle Medikamenteneinnahmen löschen",
-  "@deleteAllMedicineIntakes": {}
+  "@deleteAllMedicineIntakes": {},
+  "errFeatureNotSupported": "Diese Funktion ist auf dieser Plattform nicht verfügbar.",
+  "@errFeatureNotSupported": {},
+  "preferredWeightUnit": "Bevorzugte Maßeinheit für Gewicht",
+  "@preferredWeightUnit": {
+    "description": "Setting for the unit the app will use for displaying weight"
+  },
+  "activateWeightFeatures": "Gewichtsbezogene Funktionen aktivieren",
+  "@activateWeightFeatures": {},
+  "weight": "Gewicht",
+  "@weight": {},
+  "invalidZip": "Ungültige ZIP-Datei.",
+  "@invalidZip": {},
+  "errCantCreateArchive": "Konnte Archiv nicht erstellen. Bitte melden Sie wenn möglich diesen Fehler.",
+  "@errCantCreateArchive": {},
+  "date": "Datum",
+  "@date": {},
+  "enterWeight": "Gewicht eingeben",
+  "@enterWeight": {},
+  "intakes": "Medikamenten-Einnahmen",
+  "@intakes": {},
+  "selectMeasurementTitle": "Zu nutzende Messung auswählen",
+  "@selectMeasurementTitle": {},
+  "measurementIndex": "Messung #{number}",
+  "@measurementIndex": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "select": "Auswählen",
+  "@select": {
+    "description": "Used when f.e. selecting a single measurement when the bluetooth device returned multiple"
+  },
+  "bloodPressure": "Blutdruck",
+  "@bloodPressure": {}
 }

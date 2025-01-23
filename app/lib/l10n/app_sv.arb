@@ -32,5 +32,9 @@
   "errNotEnoughDataToGraph": "Inte tillräckligt med data för att rita en graf.",
   "@errNotEnoughDataToGraph": {},
   "errNoData": "ingen data",
-  "@errNoData": {}
+  "@errNoData": {},
+  "title": "Blodtrycksapp",
+  "@title": {},
+  "errNaN": "Vänligen skriv in ett tal",
+  "@errNaN": {}
 }

@@ -1,3 +1,4 @@
+import 'package:blood_pressure_app/config.dart';
 import 'package:blood_pressure_app/data_util/entry_context.dart';
 import 'package:blood_pressure_app/data_util/full_entry_builder.dart';
 import 'package:blood_pressure_app/data_util/interval_picker.dart';
@@ -21,20 +22,25 @@ class AppHome extends StatelessWidget {
   /// Create a home screen.
   const AppHome({super.key});
 
-  Widget _buildValueGraph(BuildContext context) => Padding(
-    padding: const EdgeInsets.only(right: 8, top: 16),
-    child: SizedBox(
-      height: 240.0,
-      width: MediaQuery.of(context).size.width,
-      child: FullEntryBuilder(
-        rangeType: IntervalStoreManagerLocation.mainPage,
-        onData: (context, records, intakes, notes) => BloodPressureValueGraph(
-          records: records,
-          colors: notes,
-          intakes: intakes,
+  Widget _buildValueGraph(BuildContext context) => Column(
+    children: [
+      Padding(
+        padding: const EdgeInsets.only(right: 8, top: 16),
+        child: SizedBox(
+          height: 240.0,
+          width: MediaQuery.of(context).size.width,
+          child: FullEntryBuilder(
+            rangeType: IntervalStoreManagerLocation.mainPage,
+            onData: (context, records, intakes, notes) => BloodPressureValueGraph(
+              records: records,
+              colors: notes,
+              intakes: intakes,
+            ),
+          ),
         ),
       ),
-    ),
+      IntervalPicker(type: IntervalStoreManagerLocation.mainPage),
+    ],
   );
 
   Widget _buildMeasurementList(BuildContext context) => FullEntryBuilder(
@@ -60,20 +66,24 @@ class AppHome extends StatelessWidget {
             } else {
               _appStart--;
             }
-
           });
         }
         _appStart++;
       }
 
-      if (orientation == Orientation.landscape) return _buildValueGraph(context);
+      if (showValueGraphAsHomeScreenInLandscapeMode && orientation == Orientation.landscape) {
+        return SafeArea(
+          child: Scaffold(
+            body: _buildValueGraph(context),
+          ),
+        );
+      }
       return DefaultTabController(
         length: 2,
         child: Scaffold(
           body: CustomScrollView(
             slivers: [
               SliverToBoxAdapter(child: _buildValueGraph(context),),
-              const SliverToBoxAdapter(child: IntervalPicker(type: IntervalStoreManagerLocation.mainPage)),
               if (!(context.select<Settings, bool>((s) => s.weightInput)))
                 SliverFillRemaining(child: _buildMeasurementList(context)),
 

@@ -516,5 +516,31 @@
   "errBleNoPerms": "Sem permissões de bluetooth",
   "@errBleNoPerms": {},
   "intakes": "Ingestão de medicamentos",
-  "@intakes": {}
+  "@intakes": {},
+  "activateWeightFeatures": "Habilitar funções relacionadas ao peso",
+  "@activateWeightFeatures": {},
+  "selectMeasurementTitle": "Selecione a medição para usar",
+  "@selectMeasurementTitle": {},
+  "measurementIndex": "Medição #{number}",
+  "@measurementIndex": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "select": "Selecionar",
+  "@select": {
+    "description": "Used when f.e. selecting a single measurement when the bluetooth device returned multiple"
+  },
+  "bloodPressure": "Pressão sanguínea",
+  "@bloodPressure": {},
+  "preferredWeightUnit": "Medida de peso preferida",
+  "@preferredWeightUnit": {
+    "description": "Setting for the unit the app will use for displaying weight"
+  },
+  "weight": "Peso",
+  "@weight": {},
+  "enterWeight": "Informe seu peso",
+  "@enterWeight": {}
 }

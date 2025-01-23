@@ -7,185 +7,57 @@ on:
     paths:
       - "app/**"
       - "health_data_store/**"
-      - ".github/workflows/app-CI.yml"
+      - "extendend-testing.yml"
   workflow_dispatch:
 
-env:
-  FLUTTER_CHANNEL: 'beta'
-  DART_SDK: 'beta'
-  JAVA_VERSION: '17'
-  EMULATOR_VERSION: 'system-images;android-34;aosp_atd;x86_64'
-
 jobs:
-  unit-test:
-    name: "🧩🧪 Run unit tests"
+  run-tests:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        channel:
+          - beta
+          - stable
     permissions:
       contents: write
       pull-requests: write
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
-      with:
-        # ensures there are no unexpected directories needed
-        sparse-checkout: |
-          app
-          health_data_store
-    - name: Cache generated health data store
-      id: cache-generated
-      uses: actions/cache@v4
-      with:
-        path: health_data_store/lib
-        key: builder-${{ hashFiles('health_data_store/pubspec.yaml', 'health_data_store/lib/*', 'health_data_store/lib/**/*dart') }}
-    - name: Setup dart
-      if: steps.cache-generated.outputs.cache-hit != 'true'
-      uses: dart-lang/setup-dart@v1
-      with:
-        sdk: ${{ env.DART_SDK }}
-    - name: Generate code
-      if: steps.cache-generated.outputs.cache-hit != 'true'
-      run: dart run build_runner build
-      working-directory: health_data_store
-    - name: Setup Flutter
-      uses: subosito/flutter-action@v2
-      with:
-        channel: ${{ env.FLUTTER_CHANNEL }}
-        cache: true
-    - name: Disable analytics
-      run: flutter config --no-analytics --suppress-analytics
-    - name: Generate mock code
-      run: |
-        flutter pub get
-        flutter pub run build_runner build
-      working-directory: app
-    - name: Run tests
-      run: flutter test --coverage
-      working-directory: app
-    - name: Update goldens
-      id: gold-upd
-      if: failure()
-      run: flutter test --update-goldens --fail-fast
-      working-directory: app
-    - name: PR golden changes
-      # https://docs.github.com/en/actions/writing-workflows/choosing-what-your-workflow-does/evaluate-expressions-in-workflows-and-actions#example-of-failure-with-conditions
-      if: ${{ failure() && steps.gold-upd.conclusion == 'success' }}
-      run: |
-        git config user.name "GitHub Action (update goldens)"
-        git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-        
-        git checkout -B action-update-goldens
-        export STATUS=$(git status)
-        git commit -am "Update goldens"
-        git push --set-upstream origin action-update-goldens
-        
-        gh pr create \
-          --base main \
-          --head action-update-goldens \
-          --title "Update goldens" \
-          --body "$STATUS"
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-#  Disabled: Integration tests are disabled as emulator setup fails on
-#  GH-actions. Actions images no longer provide enough disk space to create
-#  the userdata partition.
-#
-#  integration-test:
-#    name: "🛠️🧪 Run integration tests"
-#    runs-on: ubuntu-latest
-#
-#    steps:
-#      - name: Checkout code
-#        uses: actions/checkout@v4
-#        with:
-#          # ensures there are no unexpected directories needed
-#          sparse-checkout: |
-#            app
-#            health_data_store
-#      - name: Enable KVM group perms
-#        # see: https://github.com/actions/runner-images/discussions/7191
-#        run: |
-#          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
-#          sudo udevadm control --reload-rules
-#          sudo udevadm trigger --name-match=kvm
-#      - name: Setup Java
-#        uses: actions/setup-java@v3
-#        with:
-#          distribution: 'zulu'
-#          java-version: ${{ env.JAVA_VERSION }}
-#
-#      - name: Download Android emulator image
-#        run: |
-#          export ANDROID_TOOLS="$ANDROID_HOME/cmdline-tools/latest/bin"
-#          echo "y" | $ANDROID_TOOLS/sdkmanager --install "${{ env.EMULATOR_VERSION }}"
-#          echo "no" | $ANDROID_TOOLS/avdmanager create avd --force --name emu -k '${{ env.EMULATOR_VERSION }}'
-#          echo "Android emulator installed"
-#          $ANDROID_HOME/emulator/emulator -list-avds
-#      - name: Setup dart
-#        uses: dart-lang/setup-dart@v1
-#        with:
-#          sdk: ${{ env.DART_SDK }}
-#      - name: Generate code
-#        run: dart run build_runner build
-#        working-directory: health_data_store
-#      - name: Setup Flutter
-#        uses: subosito/flutter-action@v2
-#        with:
-#          channel: ${{ env.FLUTTER_CHANNEL }}
-#      - name: Start Android emulator
-#        timeout-minutes: 10
-#        run: |
-#          export ANDROID_TOOLS="$ANDROID_HOME/cmdline-tools/latest/bin"
-#          echo "Starting emulator"
-#          $ANDROID_TOOLS/sdkmanager "platform-tools" "${{ env.EMULATOR_VERSION }}"
-#          nohup $ANDROID_HOME/emulator/emulator -avd emu -no-audio -no-snapshot -no-window &
-#          $ANDROID_HOME/platform-tools/adb wait-for-device shell 'while [[ -z $(getprop sys.boot_completed | tr -d '\r') ]]; do sleep 1; done; input keyevent 82'
-#          $ANDROID_HOME/platform-tools/adb devices
-#          echo "Android emulator started"
-#      - name: Run integration tests
-#        run: flutter test integration_test --flavor github
-#        working-directory: app
-
-  build-android:
-    name: "🛠️ Build Android"
-    runs-on: ubuntu-latest
-
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
-      with:
-        # ensures there are no unexpected directories needed
-        sparse-checkout: |
-          app
-          health_data_store
-    - name: Cache generated health data store
-      id: cache-generated
-      uses: actions/cache@v4
-      with:
-        path: health_data_store/lib
-        key: builder-${{ hashFiles('health_data_store/pubspec.yaml', 'health_data_store/lib/*', 'health_data_store/lib/**/*dart') }}
-    - name: Setup dart
-      if: steps.cache-generated.outputs.cache-hit != 'true'
-      uses: dart-lang/setup-dart@v1
-      with:
-        sdk: ${{ env.DART_SDK }}
-    - name: Generate code
-      if: steps.cache-generated.outputs.cache-hit != 'true'
-      run: dart run build_runner build
-      working-directory: health_data_store
-    - name: Setup Flutter
-      uses: subosito/flutter-action@v2
-      with:
-        channel: ${{ env.FLUTTER_CHANNEL }}
-        cache: true
-    - name: Disable analytics
-      run: flutter config --no-analytics --suppress-analytics
-    - name: Setup java
-      uses: actions/setup-java@v2
-      with:
-        java-version: "17"
-        distribution: "temurin"
-        cache: 'gradle'
-    - name: Build apk
-      run: flutter build apk --flavor github --debug
-      working-directory: app
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          # ensures there are no unexpected directories needed
+          sparse-checkout: |
+            app
+            health_data_store
+      - name: Cache generated health data store
+        id: cache-generated
+        uses: actions/cache@v4
+        with:
+          path: health_data_store/lib
+          key: builder-${{ matrix.channel }}-${{ hashFiles('health_data_store/pubspec.yaml', 'health_data_store/lib/*', 'health_data_store/lib/**/*dart') }}
+      - name: Setup dart
+        if: steps.cache-generated.outputs.cache-hit != 'true'
+        uses: dart-lang/setup-dart@v1
+        with:
+          sdk: ${{ matrix.channel }}
+      - name: Generate code
+        if: steps.cache-generated.outputs.cache-hit != 'true'
+        run: dart run build_runner build
+        working-directory: health_data_store
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: ${{ matrix.channel }}
+          cache: true
+      - name: Disable analytics
+        run:
+          flutter config --no-analytics --suppress-analytics
+      - name: Update app dependencies
+        run: flutter pub get
+        working-directory: app
+      - name: Generate app mock code # no efficient caching possible
+        run: flutter pub run build_runner build
+        working-directory: app
+      - name: Run tests
+        run: flutter test --coverage --dart-define="channel=${{ matrix.channel }}"
+        working-directory: app

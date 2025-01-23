@@ -17,7 +17,6 @@ linter:
     # consider: https://dart.dev/tools/linter-rules/avoid_bool_literals_in_conditional_expressions
     - avoid_double_and_int_checks
     - avoid_escaping_inner_quotes
-    - avoid_redundant_argument_values
     - directives_ordering
     - eol_at_end_of_file
     - leading_newlines_in_multiline_strings
