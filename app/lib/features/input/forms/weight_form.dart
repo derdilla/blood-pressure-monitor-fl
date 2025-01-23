@@ -9,7 +9,7 @@ import 'package:provider/provider.dart';
 /// A form to enter [Weight] in the preferred unit.
 class WeightForm extends FormBase<Weight> {
   /// Create a form to enter [Weight] in the preferred unit.
-  const WeightForm({super.key});
+  const WeightForm({super.key, super.initialValue});
 
   @override
   FormStateBase<Weight, WeightForm> createState() => WeightFormState();

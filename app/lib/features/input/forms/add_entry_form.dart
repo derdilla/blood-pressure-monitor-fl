@@ -16,7 +16,10 @@ import 'package:provider/provider.dart';
 class AddEntryForm extends FormBase<AddEntryFormValue>
     with TypeLogger {
   /// Create primary form to enter all types of entries.
-  const AddEntryForm({super.key, super.initialValue, required this.meds});
+  const AddEntryForm({super.key,
+    super.initialValue,
+    required this.meds,
+  });
 
   /// All medicines selectable.
   ///
@@ -96,22 +99,48 @@ class AddEntryFormState extends FormStateBase<AddEntryFormValue, AddEntryForm> {
 
   @override
   Widget build(BuildContext context) { // TODO: initial values
+    //log.fine('Opening AddEntryForm with: ${widget.initialValue}');
     final settings = context.watch<Settings>();
     return ListView(
       padding: const EdgeInsets.symmetric(horizontal: 8),
       children: [
-        DateTimeForm(key: _timeForm, initialValue: null),
+        DateTimeForm(
+          key: _timeForm,
+          initialValue: widget.initialValue?.timestamp,
+        ),
         SizedBox(height: 10),
         FormSwitcher(
           subforms: [
-            (Icon(Icons.monitor_heart_outlined), BloodPressureForm(key: _bpForm,),),
+            (Icon(Icons.monitor_heart_outlined), BloodPressureForm(
+              key: _bpForm,
+              initialValue: (
+                // TODO: pressure units
+                sys: widget.initialValue?.record?.sys?.mmHg,
+                dia: widget.initialValue?.record?.dia?.mmHg,
+                pul: widget.initialValue?.record?.pul,
+              ),
+            )),
             if (widget.meds.isNotEmpty)
-              (Icon(Icons.medication_outlined), MedicineIntakeForm(key: _intakeForm,),),
+              (Icon(Icons.medication_outlined), MedicineIntakeForm(
+                key: _intakeForm,
+                initialValue: widget.initialValue?.intake,
+              )),
             if (settings.weightInput)
-              (Icon(Icons.scale), WeightForm(key: _weightForm,),),
+              (Icon(Icons.scale), WeightForm(
+                key: _weightForm,
+                initialValue: widget.initialValue?.weight?.weight,
+              ),),
           ],
         ),
-        NoteForm(key: _noteForm),
+        NoteForm(
+          key: _noteForm,
+          initialValue: (){
+            if (widget.initialValue?.note?.note == null) return null;
+            final note = widget.initialValue!.note!;
+            final color = note.color == null ? null : Color(note.color!);
+            return (note.note, color);
+          }(),
+        ),
       ]
     );
   }
@@ -125,3 +154,18 @@ typedef AddEntryFormValue = ({
   MedicineIntake? intake,
   BodyweightRecord? weight,
 });
+
+/// Compatibility extension for simpler API surface.
+extension AddEntryFormValueCompat on FullEntry {
+  /// Utility converter for the differences in API.
+  AddEntryFormValue get asAddEntry {
+    assert(intakes.length <= 1);
+    return (
+      timestamp: time,
+      note: noteObj,
+      record: recordObj,
+      intake: intakes.firstOrNull,
+      weight: null,
+    );
+  }
+}

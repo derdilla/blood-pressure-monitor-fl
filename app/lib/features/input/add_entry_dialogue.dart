@@ -54,6 +54,7 @@ class _AddEntryDialogueState extends State<AddEntryDialogue> {
     bottomAppBar: false, // TODO
     body: AddEntryForm(
       key: formKey,
+      initialValue: widget.initialRecord,
       meds: widget.availableMeds
     ),
   );

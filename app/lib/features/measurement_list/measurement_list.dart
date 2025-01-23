@@ -1,4 +1,5 @@
 import 'package:blood_pressure_app/data_util/entry_context.dart';
+import 'package:blood_pressure_app/features/input/forms/add_entry_form.dart';
 import 'package:blood_pressure_app/features/measurement_list/measurement_list_entry.dart';
 import 'package:blood_pressure_app/model/storage/settings_store.dart';
 import 'package:flutter/material.dart';
@@ -70,7 +71,7 @@ class MeasurementList extends StatelessWidget {
             itemCount: entries.length,
             itemBuilder: (context, idx) => MeasurementListRow(
               data: entries[idx],
-              onRequestEdit: () => context.createEntry(/* FIXME: entries[idx] */),
+              onRequestEdit: () => context.createEntry(entries[idx].asAddEntry),
             ),
           ),
         ),

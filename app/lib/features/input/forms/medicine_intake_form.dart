@@ -5,7 +5,7 @@ import 'package:health_data_store/health_data_store.dart';
 /// Form to enter medicine intakes.
 class MedicineIntakeForm extends FormBase<MedicineIntake> {
   /// Create form to enter medicine intakes.
-  const MedicineIntakeForm({super.key});
+  const MedicineIntakeForm({super.key, super.initialValue});
 
   @override
   FormStateBase<MedicineIntake, MedicineIntakeForm> createState() =>

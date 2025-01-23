@@ -8,7 +8,9 @@ import 'package:provider/provider.dart';
 /// Form to enter freeform text and select color.
 class BloodPressureForm extends FormBase<({int? sys, int? dia, int? pul})> {
   /// Create form to enter freeform text and select color.
-  const BloodPressureForm({super.key});
+  const BloodPressureForm({super.key,
+    super.initialValue,
+  });
 
   @override
   BloodPressureFormState createState() => BloodPressureFormState();

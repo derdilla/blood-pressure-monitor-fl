@@ -6,7 +6,9 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 /// Form to enter freeform text and select color.
 class NoteForm extends FormBase<(String?, Color?)> {
   /// Create form to enter freeform text and select color.
-  const NoteForm({super.key});
+  const NoteForm({super.key,
+    super.initialValue,
+  });
 
   @override
   NoteFormState createState() => NoteFormState();
