@@ -81,8 +81,11 @@ class AddEntryFormState extends FormStateBase<AddEntryFormValue, AddEntryForm> {
     }
     final intakeFormValue = _intakeForm.currentState?.save();
     if (intakeFormValue != null) {
-      // TODO
-      // intake = MedicineIntake(time: time, medicine: null, dosis: null);
+      intake = MedicineIntake(
+        time: time,
+        medicine: intakeFormValue.$1,
+        dosis: intakeFormValue.$2,
+      );
     }
     return (
       timestamp: time,
@@ -123,7 +126,11 @@ class AddEntryFormState extends FormStateBase<AddEntryFormValue, AddEntryForm> {
             if (widget.meds.isNotEmpty)
               (Icon(Icons.medication_outlined), MedicineIntakeForm(
                 key: _intakeForm,
-                initialValue: widget.initialValue?.intake,
+                meds: widget.meds,
+                initialValue: widget.initialValue?.intake == null ? null : (
+                  widget.initialValue!.intake!.medicine,
+                  widget.initialValue!.intake!.dosis,
+                ),
               )),
             if (settings.weightInput)
               (Icon(Icons.scale), WeightForm(

@@ -58,10 +58,7 @@ class WeightFormState extends FormStateBase<Weight, WeightForm> {
   }
 
   @override
-  bool isEmptyInputFocused() {
-    // TODO: implement isEmptyInputFocused
-    return false;
-  }
+  bool isEmptyInputFocused() => false;
 
   @override
   Widget build(BuildContext context) => TextField(
