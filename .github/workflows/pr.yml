@@ -9,6 +9,7 @@ on:
 
 jobs:
   update-goldens:
+    if: github.event.pull_request.draft == false
     runs-on: ubuntu-latest
     strategy:
       matrix:
