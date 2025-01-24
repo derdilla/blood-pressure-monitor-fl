@@ -1,6 +1,6 @@
 import 'package:blood_pressure_app/features/bluetooth/bluetooth_input.dart';
-import 'package:blood_pressure_app/features/input/add_bodyweight_dialoge.dart';
 import 'package:blood_pressure_app/features/input/add_entry_dialogue.dart';
+import 'package:blood_pressure_app/features/input/forms/add_entry_form.dart';
 import 'package:blood_pressure_app/features/settings/tiles/color_picker_list_tile.dart';
 import 'package:blood_pressure_app/model/storage/bluetooth_input_mode.dart';
 import 'package:blood_pressure_app/model/storage/settings_store.dart';
@@ -33,7 +33,7 @@ void main() {
         AddEntryDialogue(
           initialRecord: mockEntryPos(
             DateTime.now(), 123, 56, 43, 'Test note', Colors.teal,
-          ),
+          ).asAddEntry,
           availableMeds: const [],
         ),
       ),);
@@ -157,14 +157,14 @@ void main() {
       await tester.pumpAndSettle();
       expect(find.byType(BluetoothInput), findsNothing);
     });
-  }, skip: true);
+  });
   group('showAddEntryDialoge', () {
     testWidgets('should return null on cancel', (tester) async {
       dynamic result = 'result before save';
       await loadDialoge(tester, (context) async
       => result = await showAddEntryDialogue(context,
         medRepo(),
-        mockEntry(sys: 123, dia: 56, pul: 43, note: 'Test note', pin: Colors.teal),),);
+        mockEntry(sys: 123, dia: 56, pul: 43, note: 'Test note', pin: Colors.teal).asAddEntry));
       expect(find.byType(DropdownButton<Medicine?>), findsNothing, reason: 'No medication in settings.');
 
       expect(find.byType(AddEntryDialogue), findsOneWidget);
@@ -178,7 +178,7 @@ void main() {
       dynamic result = 'result before save';
       final record = mockEntry(sys: 123, dia: 56, pul: 43, note: 'Test note', pin: Colors.teal);
       await loadDialoge(tester, (context) async {
-        result = await showAddEntryDialogue(context, medRepo(), record);
+        result = await showAddEntryDialogue(context, medRepo(), record.asAddEntry);
       },);
       expect(find.byType(DropdownButton<Medicine?>), findsNothing, reason: 'No medication in settings.');
 
@@ -409,7 +409,7 @@ void main() {
     testWidgets('should start with sys input focused', (tester) async {
       final mRep = medRepo();
       await loadDialoge(tester, (context) =>
-          showAddEntryDialogue(context, mRep, mockEntry(sys: 12)),);
+          showAddEntryDialogue(context, mRep, mockEntry(sys: 12).asAddEntry));
       expect(find.byType(DropdownButton<Medicine?>), findsNothing, reason: 'No medication in settings.');
 
       final primaryFocus = FocusManager.instance.primaryFocus;
@@ -425,7 +425,7 @@ void main() {
     testWidgets('should focus next on input finished', (tester) async {
       final mRep = medRepo();
       await loadDialoge(tester, (context) =>
-          showAddEntryDialogue(context, mRep, mockEntry(sys: 12, dia: 3, pul: 4, note: 'note')),);
+          showAddEntryDialogue(context, mRep, mockEntry(sys: 12, dia: 3, pul: 4, note: 'note').asAddEntry),);
       expect(find.byType(DropdownButton<Medicine?>), findsNothing, reason: 'No medication in settings.');
 
       await tester.enterText(find.ancestor(of: find.text('Systolic').first, matching: find.byType(TextFormField)), '123');
@@ -467,7 +467,7 @@ void main() {
     testWidgets('should focus last input field on backspace pressed in empty input field', (tester) async {
       final mRep = medRepo();
       await loadDialoge(tester, (context) =>
-          showAddEntryDialogue(context, mRep, mockEntry(sys: 12, dia: 3, pul: 4, note: 'note')),);
+          showAddEntryDialogue(context, mRep, mockEntry(sys: 12, dia: 3, pul: 4, note: 'note').asAddEntry),);
       expect(find.byType(DropdownButton<Medicine?>), findsNothing, reason: 'No medication in settings.');
 
       await tester.enterText(find.ancestor(of: find.text('note').first, matching: find.byType(TextFormField)), '');
@@ -613,7 +613,7 @@ void main() {
     testWidgets('should not go back to last field when the current field is still filled', (tester) async {
       final mRep = medRepo([mockMedicine(designation: 'testmed')]);
       await loadDialoge(tester, (context) =>
-          showAddEntryDialogue(context, mRep, mockEntry(sys: 12, dia: 3, pul: 4, note: 'note')),);
+          showAddEntryDialogue(context, mRep, mockEntry(sys: 12, dia: 3, pul: 4, note: 'note').asAddEntry),);
       expect(find.byType(DropdownButton<Medicine?>), findsNothing, reason: 'No medication in settings.');
 
       await tester.enterText(find.ancestor(
@@ -632,29 +632,8 @@ void main() {
       expect(find.descendant(of: focusedTextFormField, matching: find.text('Pulse')), findsNothing);
       expect(find.descendant(of: focusedTextFormField, matching: find.text('Note (optional)')), findsWidgets);
     });
-    testWidgets('opens weight input if necessary', (tester) async {
-      final repo = MockBodyweightRepository();
-      await tester.pumpWidget(appBase(Builder(
-        builder: (context) => TextButton(onPressed: () => showAddEntryDialogue(context, MockMedRepo([])), child: const Text('X'))
-      ), settings: Settings(weightInput: true), weightRepo: repo));
-      final localizations = await AppLocalizations.delegate.load(const Locale('en'));
-      await tester.tap(find.text('X'));
-      await tester.pumpAndSettle();
-
-      expect(find.text(localizations.enterWeight), findsOneWidget);
-      expect(find.byIcon(Icons.scale), findsOneWidget);
-      await tester.tap(find.text(localizations.enterWeight));
-      await tester.pumpAndSettle();
-      
-      expect(repo.data, isEmpty);
-      await tester.enterText(find.descendant(
-        of: find.byType(AddBodyweightDialoge),
-        matching: find.byType(TextFormField)
-      ), '123.45');
-      await tester.testTextInput.receiveAction(TextInputAction.done);
-      await tester.pumpAndSettle();
-      expect(repo.data, hasLength(1));
-      expect(repo.data[0].weight, Weight.kg(123.45));
+    testWidgets('Shows weight input if necessary', (tester) async {
+      fail('TODO');
     });
   });
 }
