@@ -22,6 +22,7 @@ extension EntryUtils on BuildContext {
       final recordRepo = RepositoryProvider.of<BloodPressureRepository>(this);
       final noteRepo = RepositoryProvider.of<NoteRepository>(this);
       final intakeRepo = RepositoryProvider.of<MedicineIntakeRepository>(this);
+      final weightRepo = RepositoryProvider.of<BodyweightRepository>(this);
       final exportSettings = Provider.of<ExportSettings>(this, listen: false);
 
       final entry = await showAddEntryDialogue(this,
@@ -47,6 +48,9 @@ extension EntryUtils on BuildContext {
         }
         if (entry.intake != null) {
           await intakeRepo.add(entry.intake!);
+        }
+        if(entry.weight != null) {
+          await weightRepo.add(entry.weight!);
         }
 
         if (mounted && exportSettings.exportAfterEveryEntry) {

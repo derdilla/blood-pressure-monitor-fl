@@ -38,21 +38,19 @@ class WeightFormState extends FormStateBase<Weight, WeightForm> {
 
   @override
   bool validate() {
-    if (_controller.text.isEmpty
-        || double.tryParse(_controller.text) == null
-    ) {
+    if (_controller.text.isNotEmpty && double.tryParse(_controller.text) == null) {
       setState(() => _error = AppLocalizations.of(context)!.errNaN);
       return false;
-    } else {
-      _error = null;
-      return true;
     }
+    setState(() => _error = null);
+    return true;
   }
 
   @override
   Weight? save() {
     if(validate()) {
-      return context.read<Settings>().weightUnit.store(double.tryParse(_controller.text) ?? 0.0);
+      return context.read<Settings>().weightUnit
+          .store(double.tryParse(_controller.text) ?? 0.0);
     }
     return null;
   }
@@ -67,6 +65,7 @@ class WeightFormState extends FormStateBase<Weight, WeightForm> {
       suffix: Text(context.select((Settings s) => s.weightUnit).name),
       errorText: _error,
     ),
+    controller: _controller,
     inputFormatters: [FilteringTextInputFormatter.allow(RegExp('[0-9,.]'))],
     keyboardType: const TextInputType.numberWithOptions(decimal: true),
   );
