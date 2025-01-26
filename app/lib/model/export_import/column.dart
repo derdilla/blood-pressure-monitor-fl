@@ -110,7 +110,7 @@ class NativeColumn extends ExportColumn {
   );
   static final NativeColumn bodyweight = NativeColumn._create(
     'bodyweight',
-    RowDataFieldType.color,
+    RowDataFieldType.weightKg,
       (_, __, ___, weight) => weight?.kg.toString() ?? '',
       double.tryParse,
   );
