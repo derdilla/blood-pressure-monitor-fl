@@ -49,7 +49,14 @@ class BloodPressureFormState extends FormStateBase<({int? sys, int? dia, int? pu
   }
 
   @override
-  bool validate() => _formKey.currentState?.validate() ?? false;
+  bool validate() {
+    if (_sysController.text.isEmpty
+        && _diaController.text.isEmpty
+        && _pulController.text.isEmpty) {
+      return true;
+    }
+    return _formKey.currentState?.validate() ?? false;
+  }
 
   @override
   ({int? sys, int? dia, int? pul})? save() {

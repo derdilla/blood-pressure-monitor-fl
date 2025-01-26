@@ -40,6 +40,12 @@ class MedicineIntakeFormState extends FormStateBase<(Medicine, Weight), Medicine
   }
 
   @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
   bool validate() {
     if (_leadingMed != null && double.tryParse(_controller.text) == null) {
       setState(() => _error = AppLocalizations.of(context)!.errNaN);
