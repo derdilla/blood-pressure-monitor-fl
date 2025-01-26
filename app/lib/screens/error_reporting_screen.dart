@@ -110,6 +110,7 @@ class ErrorScreen extends StatelessWidget {
                         assert(dbPath != inMemoryDatabasePath);
                         dbPath = join(dbPath, 'blood_pressure.db');
                         await FilePicker.platform.saveFile(
+                          fileName: 'blood_pressure.db',
                           bytes: File(dbPath).readAsBytesSync(),
                           type: FileType.any, // application/vnd.sqlite3
                         );
@@ -129,6 +130,7 @@ class ErrorScreen extends StatelessWidget {
                         dbPath = join(dbPath, 'config.db');
 
                         await FilePicker.platform.saveFile(
+                          fileName: 'config.db',
                           bytes: File(dbPath).readAsBytesSync(),
                           type: FileType.any, // application/vnd.sqlite3
                         );
@@ -147,6 +149,7 @@ class ErrorScreen extends StatelessWidget {
                         assert(dbPath != inMemoryDatabasePath);
                         dbPath = join(dbPath, 'medicine.intakes');
                         await FilePicker.platform.saveFile(
+                          fileName: 'medicine.intakes',
                           bytes: File(dbPath).readAsBytesSync(),
                           type: FileType.any, // application/octet-stream
                         );
@@ -165,6 +168,7 @@ class ErrorScreen extends StatelessWidget {
                         assert(dbPath != inMemoryDatabasePath);
                         dbPath = join(dbPath, 'bp.db');
                         await FilePicker.platform.saveFile(
+                          fileName: 'bp.db',
                           bytes: File(dbPath).readAsBytesSync(),
                           type: FileType.any, // application/vnd.sqlite3
                         );
