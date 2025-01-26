@@ -16,7 +16,6 @@ import 'package:blood_pressure_app/model/storage/export_pdf_settings_store.dart'
 import 'package:blood_pressure_app/model/storage/export_settings_store.dart';
 import 'package:blood_pressure_app/model/storage/interval_store.dart';
 import 'package:blood_pressure_app/model/storage/settings_store.dart';
-import 'package:blood_pressure_app/platform_integration/platform_client.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -231,7 +230,11 @@ Future<List<FullEntry>> _getEntries(BuildContext context) async {
 Future<void> _exportData(BuildContext context, Uint8List data, String fullFileName, String mimeType) async {
   final settings = Provider.of<ExportSettings>(context, listen: false);
   if (settings.defaultExportDir.isEmpty || !Platform.isAndroid) {
-    await PlatformClient.shareData(data, mimeType, fullFileName);
+    await FilePicker.platform.saveFile(
+      type: FileType.any, // mimeType
+      fileName: fullFileName,
+      bytes: data,
+    );
   } else {
     const userDir = PersistentUserDirAccessAndroid();
     await userDir.writeFile(settings.defaultExportDir, fullFileName, mimeType, data);
