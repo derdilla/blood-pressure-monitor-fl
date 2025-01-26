@@ -22,11 +22,11 @@ class CsvConverter {
   final List<Medicine> availableMedicines;
 
   /// Create the contents of a csv file from passed records.
-  String create(List<FullEntry> entries) {
+  String create(List<(DateTime, BloodPressureRecord, Note, List<MedicineIntake>, Weight?)> entries) {
     final columns = settings.exportFieldsConfiguration.getActiveColumns(availableColumns);
     final table = entries.map(
       (entry) => columns.map(
-        (column) => column.encode(entry.$1, entry.$2, entry.$3),
+        (column) => column.encode(entry.$2, entry.$3, entry.$4, entry.$5),
       ).toList(),
     ).toList();
 
@@ -116,7 +116,7 @@ class CsvConverter {
       final List<(RowDataFieldType, dynamic)> recordPieces = [];
       for (int fieldIndex = 0; fieldIndex < parsers.length; fieldIndex++) {
         final parser = parsers[fieldIndex];
-        (RowDataFieldType, dynamic)? piece = parser?.decode(currentLine[fieldIndex]);
+        final (RowDataFieldType, dynamic)? piece = parser?.decode(currentLine[fieldIndex]);
         // Validate that the column parsed the expected type.
         // Null can be the result of empty fields.
         if (piece?.$1 != parser?.restoreAbleType
@@ -172,7 +172,7 @@ class CsvConverter {
           if (med == null) return null;
           return MedicineIntake(time: timestamp, medicine: med, dosis: Weight.mg(s.$2));
         })
-        .whereNotNull()
+        .nonNulls
         .toList();
       entries.add((record, note, intakes ?? []));
       currentLineNumber++;

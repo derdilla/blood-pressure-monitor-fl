@@ -173,7 +173,7 @@ class _AddExportColumnDialogeState extends State<AddExportColumnDialoge>
                     final formatter = (type == _FormatterType.record)
                       ? ScriptedFormatter(recordPattern ?? '')
                       : ScriptedTimeFormatter(timePattern ?? '');
-                    final text = formatter.encode(record, note, []);
+                    final text = formatter.encode(record, note, [], null);
                     final decoded = formatter.decode(text);
                     return Column(
                       children: [

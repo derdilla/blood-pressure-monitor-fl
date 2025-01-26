@@ -24,12 +24,13 @@ class NativeColumn extends ExportColumn {
     color,
     needlePin,
     intakes,
+    bodyweight,
   ];
 
   static final NativeColumn timestampUnixMs = NativeColumn._create(
     'timestampUnixMs',
     RowDataFieldType.timestamp,
-    (record, _, __) => record.time.millisecondsSinceEpoch.toString(),
+    (record, _, __, ___) => record.time.millisecondsSinceEpoch.toString(),
     (pattern) {
       final value = int.tryParse(pattern);
       return (value == null) ? null : DateTime.fromMillisecondsSinceEpoch(value);
@@ -38,31 +39,31 @@ class NativeColumn extends ExportColumn {
   static final NativeColumn systolic = NativeColumn._create(
     'systolic',
     RowDataFieldType.sys,
-    (record, _, __) => (record.sys?.mmHg).toString(),
+    (record, _, __, ___) => (record.sys?.mmHg).toString(),
     int.tryParse,
   );
   static final NativeColumn diastolic = NativeColumn._create(
     'diastolic',
     RowDataFieldType.dia,
-    (record, _, __) => (record.dia?.mmHg).toString(),
+    (record, _, __, ___) => (record.dia?.mmHg).toString(),
     int.tryParse,
   );
   static final NativeColumn pulse = NativeColumn._create(
     'pulse',
     RowDataFieldType.pul,
-    (record, _, __) => record.pul.toString(),
+    (record, _, __, ___) => record.pul.toString(),
     int.tryParse,
   );
   static final NativeColumn notes = NativeColumn._create(
     'notes',
     RowDataFieldType.notes,
-    (_, note, __) => note.note ?? '',
+    (_, note, __, ___) => note.note ?? '',
     (pattern) => pattern,
   );
   static final NativeColumn color = NativeColumn._create(
     'color',
     RowDataFieldType.color,
-    (_, note, __) => note.color?.toString() ?? '',
+    (_, note, __, ___) => note.color?.toString() ?? '',
     (pattern) {
       final value = int.tryParse(pattern);
       return value;
@@ -71,7 +72,7 @@ class NativeColumn extends ExportColumn {
   static final NativeColumn needlePin = NativeColumn._create(
     'needlePin',
     RowDataFieldType.color,
-    (_, note, __) => '{"color":${note.color}}',
+    (_, note, __, ___) => '{"color":${note.color}}',
     (pattern) {
       try {
         final json = jsonDecode(pattern);
@@ -91,7 +92,7 @@ class NativeColumn extends ExportColumn {
   static final NativeColumn intakes = NativeColumn._create(
     'intakes',
     RowDataFieldType.intakes,
-    (_, __, intakes) => intakes
+    (_, __, intakes, ___) => intakes
       .map((i) => '${i.medicine.designation}(${i.dosis.mg})')
       .join('|'),
     (String pattern) {
@@ -107,10 +108,16 @@ class NativeColumn extends ExportColumn {
       return intakes;
     }
   );
+  static final NativeColumn bodyweight = NativeColumn._create(
+    'bodyweight',
+    RowDataFieldType.color,
+      (_, __, ___, weight) => weight?.kg.toString() ?? '',
+      double.tryParse,
+  );
   
   final String _csvTitle;
   final RowDataFieldType _restoreableType;
-  final String Function(BloodPressureRecord record, Note note, List<MedicineIntake> intakes) _encode;
+  final String Function(BloodPressureRecord record, Note note, List<MedicineIntake> intakes, Weight? bodyweight) _encode;
   /// Function to attempt decoding.
   ///
   /// Must either return null or the type indicated by [_restoreableType].
@@ -127,8 +134,8 @@ class NativeColumn extends ExportColumn {
   }
 
   @override
-  String encode(BloodPressureRecord record, Note note, List<MedicineIntake> intakes) =>
-    _encode(record, note, intakes);
+  String encode(BloodPressureRecord record, Note note, List<MedicineIntake> intakes, Weight? bodyweight) =>
+    _encode(record, note, intakes, bodyweight);
 
   @override
   String? get formatPattern => null;
@@ -243,8 +250,8 @@ class BuildInColumn extends ExportColumn {
   (RowDataFieldType, dynamic)? decode(String pattern) => _formatter.decode(pattern);
 
   @override
-  String encode(BloodPressureRecord record, Note note, List<MedicineIntake> intakes) =>
-    _formatter.encode(record, note, intakes);
+  String encode(BloodPressureRecord record, Note note, List<MedicineIntake> intakes, Weight? bodyweight) =>
+    _formatter.encode(record, note, intakes, bodyweight);
 
   @override
   String? get formatPattern => _formatter.formatPattern;
@@ -289,8 +296,8 @@ class UserColumn extends ExportColumn {
   (RowDataFieldType, dynamic)? decode(String pattern) => formatter.decode(pattern);
 
   @override
-  String encode(BloodPressureRecord record, Note note, List<MedicineIntake> intakes) =>
-    formatter.encode(record, note, intakes);
+  String encode(BloodPressureRecord record, Note note, List<MedicineIntake> intakes, Weight? bodyweight) =>
+    formatter.encode(record, note, intakes, bodyweight);
 
   @override
   String? get formatPattern => formatter.formatPattern;
@@ -328,9 +335,9 @@ class TimeColumn extends ExportColumn {
   }
 
   @override
-  String encode(BloodPressureRecord record, Note note, List<MedicineIntake> intakes) {
+  String encode(BloodPressureRecord record, Note note, List<MedicineIntake> intakes, Weight? bodyweight) {
     _formatter ??= ScriptedTimeFormatter(formatPattern);
-    return _formatter!.encode(record, note, intakes);
+    return _formatter!.encode(record, note, intakes, bodyweight);
   }
 
   @override

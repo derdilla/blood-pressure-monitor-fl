@@ -45,13 +45,13 @@ void main() {
     final parsedRecords = converter.parse(csv).getOr(failParse);
 
     expect(parsedRecords, pairwiseCompare(initialRecords,
-      (FullEntry p0, FullEntry p1) =>
-        p0.$1.time == p1.$1.time &&
-        p0.$1.sys == p1.$1.sys &&
-        p0.$1.dia == p1.$1.dia &&
-        p0.$1.pul == p1.$1.pul &&
-        p0.$2.note == p1.$2.note &&
-        p0.$2.color == p1.$2.color,
+      ((DateTime, BloodPressureRecord, Note, List<MedicineIntake>, Weight?) p0, (DateTime, BloodPressureRecord, Note, List<MedicineIntake>, Weight?) p1) =>
+        p0.$2.time == p1.$2.time &&
+        p0.$2.sys == p1.$2.sys &&
+        p0.$2.dia == p1.$2.dia &&
+        p0.$2.pul == p1.$2.pul &&
+        p0.$3.note == p1.$3.note &&
+        p0.$3.color == p1.$3.color,
       'equal to',),);
   });
   test('should allow partial imports', () {
@@ -354,11 +354,12 @@ void main() {
   });
 }
 
-List<FullEntry> createRecords([int count = 20]) => [
+List<(DateTime, BloodPressureRecord, Note, List<MedicineIntake>, Null)> createRecords([int count = 20]) => [
   for (int i = 0; i<count; i++)
     mockEntryPos(DateTime.fromMillisecondsSinceEpoch(123456 + i),
         i, 100+i, 200+1, 'note $i', Color(123+i),),
-];
+].map((e) => (e.time, e.recordObj, e.noteObj, e.intakes, null))
+    .toList();
 
 List<FullEntry>? failParse(EntryParsingError error) {
   switch (error) {

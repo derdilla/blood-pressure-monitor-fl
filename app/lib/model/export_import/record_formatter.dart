@@ -16,7 +16,7 @@ abstract interface class Formatter {
   ///
   /// There is no guarantee that the information in the record can be restored.
   /// If not null this must follow [formatPattern].
-  String encode(BloodPressureRecord record, Note note, List<MedicineIntake> intakes);
+  String encode(BloodPressureRecord record, Note note, List<MedicineIntake> intakes, Weight? bodyweight);
 
   /// Type of data that can be restored from a string obtained by [encode].
   RowDataFieldType? get restoreAbleType;
@@ -57,13 +57,14 @@ class ScriptedFormatter implements Formatter {
         } on FormatException { return null; } on TypeError { return null; }
       }(),
       RowDataFieldType.intakes => NativeColumn.intakes.decode(text),
+      RowDataFieldType.weightKg => double.tryParse(text),
     };
     if (value != null) return (restoreAbleType!, value);
     return null;
   }
 
   @override
-  String encode(BloodPressureRecord record, Note note, List<MedicineIntake> intakes) {
+  String encode(BloodPressureRecord record, Note note, List<MedicineIntake> intakes, Weight? bodyweight) {
     var fieldContents = pattern;
 
     // variables
@@ -73,6 +74,7 @@ class ScriptedFormatter implements Formatter {
     fieldContents = fieldContents.replaceAll(r'$PUL', record.pul.toString());
     fieldContents = fieldContents.replaceAll(r'$NOTE', note.note ?? '');
     fieldContents = fieldContents.replaceAll(r'$COLOR', note.color?.toString() ?? '');
+    // TODO: Weight? formatter, use for mhWeight
 
     // math
     fieldContents = fieldContents.replaceAllMapped(RegExp(r'\{\{([^}]*)}}'), (m) {
@@ -185,7 +187,7 @@ class ScriptedTimeFormatter implements Formatter {
   }
 
   @override
-  String encode(BloodPressureRecord record, Note note, List<MedicineIntake> intakes) =>
+  String encode(BloodPressureRecord record, Note note, List<MedicineIntake> intakes, Weight? _) =>
     _timeFormatter.format(record.time);
 
   @override
