@@ -38,6 +38,25 @@ class AddEntryFormState extends FormStateBase<AddEntryFormValue, AddEntryForm> {
   final _weightForm = GlobalKey<WeightFormState>();
   final _intakeForm = GlobalKey<MedicineIntakeFormState>();
 
+  final _controller = FormSwitcherController();
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.initialValue != null) {
+      if (widget.initialValue!.record == null
+          && widget.initialValue!.intake == null
+          && widget.initialValue!.weight != null) {
+        _controller.animateTo(2);
+      } else if (widget.initialValue!.record == null
+          && widget.initialValue!.intake != null) {
+        _controller.animateTo(1);
+      }
+      // In all other cases we are at the correct position
+      // or don't need to jump at all.
+    }
+  }
+
   @override
   bool validate() {
     log.info('_timeForm validation: ${_timeForm.currentState?.validate()}');
@@ -113,7 +132,8 @@ class AddEntryFormState extends FormStateBase<AddEntryFormValue, AddEntryForm> {
         ),
         SizedBox(height: 10),
         FormSwitcher(
-          subforms: [
+          controller: _controller,
+          subForms: [
             (Icon(Icons.monitor_heart_outlined), BloodPressureForm(
               key: _bpForm,
               initialValue: (
@@ -169,8 +189,8 @@ extension AddEntryFormValueCompat on FullEntry {
     assert(intakes.length <= 1);
     return (
       timestamp: time,
-      note: noteObj,
-      record: recordObj,
+      note: note != null || color != null ? noteObj : null,
+      record: sys != null || dia != null || pul != null ? recordObj : null,
       intake: intakes.firstOrNull,
       weight: null,
     );
