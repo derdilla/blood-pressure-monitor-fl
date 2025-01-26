@@ -231,7 +231,11 @@ Future<List<FullEntry>> _getEntries(BuildContext context) async {
 Future<void> _exportData(BuildContext context, Uint8List data, String fullFileName, String mimeType) async {
   final settings = Provider.of<ExportSettings>(context, listen: false);
   if (settings.defaultExportDir.isEmpty || !Platform.isAndroid) {
-    await PlatformClient.shareData(data, mimeType, fullFileName);
+    await FilePicker.platform.saveFile(
+      type: FileType.any, // mimeType
+      fileName: fullFileName,
+      bytes: data,
+    );
   } else {
     const userDir = PersistentUserDirAccessAndroid();
     await userDir.writeFile(settings.defaultExportDir, fullFileName, mimeType, data);

@@ -354,7 +354,11 @@ class SettingsPage extends StatelessWidget {
                       return;
                     }
                     final archiveData = Uint8List.fromList(compressedArchive);
-                    await PlatformClient.shareData(archiveData, 'application/zip', 'bloodPressureSettings.zip');
+                    await FilePicker.platform.saveFile(
+                      type: FileType.any, // application/zip
+                      fileName: 'bloodPressureSettings.zip',
+                      bytes: archiveData,
+                    );
                   },
                 ),
                 ListTile(

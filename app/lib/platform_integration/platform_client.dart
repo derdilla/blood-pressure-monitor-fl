@@ -65,4 +65,6 @@ class PlatformClient {
       return false;
     }
   }
+
+  // TODO: delete as this is superseded by use of file_picker for file saving
 }
