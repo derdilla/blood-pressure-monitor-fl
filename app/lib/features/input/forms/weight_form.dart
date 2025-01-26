@@ -48,9 +48,8 @@ class WeightFormState extends FormStateBase<Weight, WeightForm> {
 
   @override
   Weight? save() {
-    if(validate()) {
-      return context.read<Settings>().weightUnit
-          .store(double.tryParse(_controller.text) ?? 0.0);
+    if((validate(), double.tryParse(_controller.text)) case (true, final double x)) {
+      return context.read<Settings>().weightUnit.store(x);
     }
     return null;
   }

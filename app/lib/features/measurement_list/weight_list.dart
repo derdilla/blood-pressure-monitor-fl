@@ -33,6 +33,16 @@ class WeightList extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 IconButton(
+                  icon: Icon(Icons.edit),
+                  onPressed: () => context.createEntry((
+                    timestamp: records[idx].time,
+                    note: null,
+                    record: null,
+                    intake: null,
+                    weight: records[idx],
+                  )),
+                ),
+                IconButton(
                   icon: Icon(Icons.delete),
                   onPressed: () async {
                     final repo = context.read<BodyweightRepository>();
@@ -40,16 +50,6 @@ class WeightList extends StatelessWidget {
                       await repo.remove(records[idx]);
                     }
                   },
-                ),
-                IconButton(
-                  icon: Icon(Icons.edit),
-                  onPressed: () => context.createEntry((
-                  timestamp: records[idx].time,
-                  note: null,
-                  record: null,
-                  intake: null,
-                  weight: records[idx],
-                  )),
                 ),
               ],
             ),
