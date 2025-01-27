@@ -31,7 +31,7 @@ void main() {
       // Use BuildInColumn for utility columns
       for (final c in NativeColumn.allColumns) {
         final r = _filledRecord(true);
-        expect(c.encode(r.$1, r.$2, r.$3), isNotEmpty, reason: '${c.internalIdentifier} is NativeColumn');
+        expect(c.encode(r.$1, r.$2, r.$3, Weight.kg(123)), isNotEmpty, reason: '${c.internalIdentifier} is NativeColumn');
       }
     });
     test('should only contain restoreable types', () {
@@ -43,7 +43,7 @@ void main() {
     test('should decode correctly', () {
       final r = _filledRecord(true);
       for (final c in NativeColumn.allColumns) {
-        final txt = c.encode(r.$1, r.$2, r.$3);
+        final txt = c.encode(r.$1, r.$2, r.$3, Weight.kg(123));
         final decoded = c.decode(txt);
         expect(decoded, isNotNull, reason: 'a real value was encoded: ${c.internalIdentifier}: ${r.debugToString()} > $txt');
         switch (decoded!.$1) {
@@ -71,6 +71,9 @@ void main() {
             .having((p0) => p0.length, 'length', 1,)
             .having((p0) => p0[0].$1, 'designation', 'mockMed',)
             .having((p0) => p0[0].$2, 'dosis', 123.4,));
+        case RowDataFieldType.weightKg:
+          expect(decoded.$2, isA<double>()
+            .having((p0) => p0, 'weight', 123.0));
         }
       }
     });
@@ -98,13 +101,13 @@ void main() {
     test('should encode without problems', () {
       for (final c in BuildInColumn.allColumns) {
         final r = _filledRecord();
-        expect(c.encode(r.$1, r.$2, r.$3), isNotNull);
+        expect(c.encode(r.$1, r.$2, r.$3, null), isNotNull);
       }
     });
     test('should decode correctly', () {
       final r = _filledRecord(true);
       for (final c in BuildInColumn.allColumns) {
-        final txt = c.encode(r.$1, r.$2, r.$3);
+        final txt = c.encode(r.$1, r.$2, r.$3, Weight.kg(123.45));
         final decoded = c.decode(txt);
         switch (decoded?.$1) {
           case RowDataFieldType.timestamp:
@@ -138,8 +141,11 @@ void main() {
               .having((p0) => p0.length, 'length', 1,)
               .having((p0) => p0[0].$1, 'designation', 'mockMed',)
               .having((p0) => p0[0].$2, 'dosis', 123.4,));
+          case RowDataFieldType.weightKg:
+            expect(decoded?.$2, isA<double>()
+              .having((p0) => p0, 'weight', 123.45));
           case null:
-            // no-op
+          // no-op
         }
       }
     });
@@ -153,24 +159,24 @@ void main() {
     test('should encode like ScriptedFormatter', () {
       final r = _filledRecord();
       expect(
-        UserColumn('','', 'TEST').encode(r.$1, r.$2, r.$3),
-        ScriptedFormatter('TEST').encode(r.$1, r.$2, r.$3),
+        UserColumn('','', 'TEST').encode(r.$1, r.$2, r.$3, null),
+        ScriptedFormatter('TEST').encode(r.$1, r.$2, r.$3, null),
       );
       expect(
-        UserColumn('','', r'$SYS').encode(r.$1, r.$2, r.$3),
-        ScriptedFormatter(r'$SYS').encode(r.$1, r.$2, r.$3),
+        UserColumn('','', r'$SYS').encode(r.$1, r.$2, r.$3, null),
+        ScriptedFormatter(r'$SYS').encode(r.$1, r.$2, r.$3, null),
       );
       expect(
-        UserColumn('','', r'$SYS-$DIA').encode(r.$1, r.$2, r.$3),
-        ScriptedFormatter(r'$SYS-$DIA').encode(r.$1, r.$2, r.$3),
+        UserColumn('','', r'$SYS-$DIA').encode(r.$1, r.$2, r.$3, null),
+        ScriptedFormatter(r'$SYS-$DIA').encode(r.$1, r.$2, r.$3, null),
       );
       expect(
-        UserColumn('','', r'$TIMESTAMP').encode(r.$1, r.$2, r.$3),
-        ScriptedFormatter(r'$TIMESTAMP').encode(r.$1, r.$2, r.$3),
+        UserColumn('','', r'$TIMESTAMP').encode(r.$1, r.$2, r.$3, null),
+        ScriptedFormatter(r'$TIMESTAMP').encode(r.$1, r.$2, r.$3, null),
       );
       expect(
-        UserColumn('','', '').encode(r.$1, r.$2, r.$3),
-        ScriptedFormatter('').encode(r.$1, r.$2, r.$3),
+        UserColumn('','', '').encode(r.$1, r.$2, r.$3, null),
+        ScriptedFormatter('').encode(r.$1, r.$2, r.$3, null),
       );
     });
     test('should decode like ScriptedFormatter', () {
@@ -181,8 +187,8 @@ void main() {
         final column = UserColumn('','', pattern);
         final formatter = ScriptedFormatter(pattern);
         expect(
-          column.decode(column.encode(r.$1, r.$2, r.$3)),
-          formatter.decode(formatter.encode(r.$1, r.$2, r.$3)),
+          column.decode(column.encode(r.$1, r.$2, r.$3, null)),
+          formatter.decode(formatter.encode(r.$1, r.$2, r.$3, null)),
         );
       }
     });

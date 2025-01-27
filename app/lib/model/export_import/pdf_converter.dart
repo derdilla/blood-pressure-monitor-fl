@@ -30,11 +30,11 @@ class PdfConverter {
   final ExportColumnsManager availableColumns;
 
   /// Create a pdf from a record list.
-  Future<Uint8List> create(List<FullEntry> entries) async {
+  Future<Uint8List> create(List<(DateTime, BloodPressureRecord, Note, List<MedicineIntake>, Weight?)> entries) async {
     final pdf = pw.Document(
       creator: 'Blood pressure app',
     );
-    final analyzer = BloodPressureAnalyser(entries.records);
+    final analyzer = BloodPressureAnalyser(entries.map((e) => e.$2).toList());
 
     pdf.addPage(pw.MultiPage(
       pageFormat: PdfPageFormat.a4,
@@ -88,12 +88,11 @@ class PdfConverter {
       ),
     );
 
-  pw.Widget _buildPdfTable(Iterable<FullEntry> entries, double availableHeightOnFirstPage) {
+  pw.Widget _buildPdfTable(Iterable<(DateTime, BloodPressureRecord, Note, List<MedicineIntake>, Weight?)> entries, double availableHeightOnFirstPage) {
     final columns = pdfSettings.exportFieldsConfiguration.getActiveColumns(availableColumns);
-
     final data = entries.map(
       (entry) => columns.map(
-        (column) => column.encode(entry.$1, entry.$2, entry.$3),
+        (column) => column.encode(entry.$2, entry.$3, entry.$4, entry.$5),
       ).toList(),
     ).toList();
 
@@ -262,5 +261,5 @@ class PdfConverter {
 }
 
 extension _PdfCompatability on Color {
-  PdfColor toPdfColor() => PdfColor(red / 256, green / 256, blue / 256, opacity);
+  PdfColor toPdfColor() => PdfColor(r / 256, g / 256, b / 256, a);
 }

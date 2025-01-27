@@ -16,6 +16,7 @@ import 'package:blood_pressure_app/model/storage/export_pdf_settings_store.dart'
 import 'package:blood_pressure_app/model/storage/export_settings_store.dart';
 import 'package:blood_pressure_app/model/storage/interval_store.dart';
 import 'package:blood_pressure_app/model/storage/settings_store.dart';
+import 'package:collection/collection.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -211,19 +212,29 @@ void performExport(BuildContext context, [AppLocalizations? localizations]) asyn
 }
 
 /// Get the records that should be exported (oldest first).
-Future<List<FullEntry>> _getEntries(BuildContext context) async {
+Future<List<(DateTime, BloodPressureRecord, Note, List<MedicineIntake>, Weight?)>> _getEntries(BuildContext context) async {
   final range = Provider.of<IntervalStoreManager>(context, listen: false).exportPage.currentRange;
   final bpRepo = RepositoryProvider.of<BloodPressureRepository>(context);
   final noteRepo = RepositoryProvider.of<NoteRepository>(context);
   final intakeRepo = RepositoryProvider.of<MedicineIntakeRepository>(context);
+  final weightRepo = RepositoryProvider.of<BodyweightRepository>(context);
 
   final records = await bpRepo.get(range);
   final notes = await noteRepo.get(range);
   final intakes = await intakeRepo.get(range);
+  final weights = await weightRepo.get(range);
 
   final entries = FullEntryList.merged(records, notes, intakes);
-  entries.sort((a, b) => a.time.compareTo(b.time));
-  return entries;
+
+  final entriesWithWeight = entries
+      .map((e) => (e.time, e.recordObj, e.noteObj, e.intakes, weights.firstWhereOrNull((w) => e.time == w.time)?.weight))
+      .toList();
+  for (final e in weights.where((w) => entriesWithWeight.firstWhereOrNull((n) => n.$1 == w.time) == null)) {
+    entriesWithWeight.add((e.time, BloodPressureRecord(time: e.time), Note(time: e.time), [], e.weight));
+  }
+
+  entriesWithWeight.sort((a, b) => a.$1.compareTo(b.$1));
+  return entriesWithWeight;
 }
 
 /// Save to default export path or share by providing binary data.
