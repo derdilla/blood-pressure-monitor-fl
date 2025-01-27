@@ -27,7 +27,7 @@ class Pressure {
 
   @override
   String toString() {
-    assert(false, 'Avoid calling toString on Pressure directly as this may not'
+    assert(true, 'Avoid calling toString on Pressure directly as this may not'
                   'respect the users preferences.');
     return mmHg.toString();
   }

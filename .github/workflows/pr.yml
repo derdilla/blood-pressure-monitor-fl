@@ -100,7 +100,7 @@ jobs:
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          channel: ${{ matrix.channel }}
+          channel: ${{ matrix.channel }} # FIXME: only use one channel type for this
           cache: true
       - name: Disable analytics
         run:

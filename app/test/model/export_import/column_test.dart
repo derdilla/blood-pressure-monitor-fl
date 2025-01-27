@@ -108,7 +108,6 @@ void main() {
       final r = _filledRecord(true);
       for (final c in BuildInColumn.allColumns) {
         final txt = c.encode(r.$1, r.$2, r.$3, Weight.kg(123.45));
-        print('${c.csvTitle} (${c.restoreAbleType}): $txt');
         final decoded = c.decode(txt);
         switch (decoded?.$1) {
           case RowDataFieldType.timestamp:

@@ -40,18 +40,18 @@ void main() {
 
   test('should be able to recreate records from csv in default configuration', () {
     final converter = CsvConverter(CsvExportSettings(), ExportColumnsManager(), []);
-    final initialRecords = createRecords();
+    final List<(DateTime, BloodPressureRecord, Note, List<MedicineIntake>, Weight?)> initialRecords = createRecords();
     final csv = converter.create(initialRecords);
-    final parsedRecords = converter.parse(csv).getOr(failParse);
+    final List<FullEntry> parsedRecords = converter.parse(csv).getOr(failParse);
 
     expect(parsedRecords, pairwiseCompare(initialRecords,
-      ((DateTime, BloodPressureRecord, Note, List<MedicineIntake>, Weight?) p0, (DateTime, BloodPressureRecord, Note, List<MedicineIntake>, Weight?) p1) =>
+      ((DateTime, BloodPressureRecord, Note, List<MedicineIntake>, Weight?) p0, FullEntry p1) =>
         p0.$2.time == p1.$2.time &&
-        p0.$2.sys == p1.$2.sys &&
-        p0.$2.dia == p1.$2.dia &&
-        p0.$2.pul == p1.$2.pul &&
-        p0.$3.note == p1.$3.note &&
-        p0.$3.color == p1.$3.color,
+        p0.$2.sys == p1.$1.sys &&
+        p0.$2.dia == p1.$1.dia &&
+        p0.$2.pul == p1.$1.pul &&
+        p0.$3.note == p1.$2.note &&
+        p0.$3.color == p1.$2.color,
       'equal to',),);
   });
   test('should allow partial imports', () {
