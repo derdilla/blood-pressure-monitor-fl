@@ -46,11 +46,7 @@ void main() {
     };
     final id2 = await db.db.insert('medicine', item2);
 
-    final item3 = {
-      'medID': 3,
-      'designation': 'test2',
-      'defaultDose': null
-    };
+    final item3 = {'medID': 3, 'designation': 'test2', 'defaultDose': null};
     final id3 = await db.db.insert('medicine', item3);
     expect(id2, greaterThan(id1));
     expect(id3, greaterThan(id2));
@@ -58,33 +54,36 @@ void main() {
     final resultCols = await db.db
         .query('medicine', columns: ['medID', 'designation', 'defaultDose']);
     expect(resultCols, hasLength(equals(3)));
-    expect(resultCols.first.keys, containsAll([
-      'medID',
-      'designation',
-      'defaultDose',
-    ]));
-    expect(resultCols, containsAllInOrder([item1, item2, item3,]));
+    expect(
+        resultCols.first.keys,
+        containsAll([
+          'medID',
+          'designation',
+          'defaultDose',
+        ]));
+    expect(
+        resultCols,
+        containsAllInOrder([
+          item1,
+          item2,
+          item3,
+        ]));
 
     final resultAll = await db.db.query('medicine');
     expect(resultAll, hasLength(equals(3)));
-    expect(resultCols.first.keys, containsAll([
-      'medID',
-      'designation',
-      'defaultDose',
-    ]));
     expect(
-      resultCols.first.keys,
-      hasLength(resultCols.first.keys.length),
-      reason: 'no extra columns.'
-    );
+        resultCols.first.keys,
+        containsAll([
+          'medID',
+          'designation',
+          'defaultDose',
+        ]));
+    expect(resultCols.first.keys, hasLength(resultCols.first.keys.length),
+        reason: 'no extra columns.');
 
-    final item4 = {
-      'medID': 1,
-      'designation': null,
-      'defaultDose': null
-    };
-    await expectLater(() async => db.db.insert('medicine', item4),
-        throwsException);
+    final item4 = {'medID': 1, 'designation': null, 'defaultDose': null};
+    await expectLater(
+        () async => db.db.insert('medicine', item4), throwsException);
   });
   test('creates timestamps table correctly', () async {
     final db = await mockDBManager();
@@ -97,14 +96,18 @@ void main() {
     expect(data, hasLength(1));
     expect(data.first.keys, hasLength(2));
 
-    await expectLater(() async => db.db.insert('Timestamps', {
-      'entryID': 1,
-      'timestampUnixS': DateTime.now().secondsSinceEpoch,
-    }), throwsException);
-    await expectLater(() async => db.db.insert('Timestamps', {
-      'entryID': 1,
-      'timestampUnixS': null,
-    }), throwsException);
+    await expectLater(
+        () async => db.db.insert('Timestamps', {
+              'entryID': 1,
+              'timestampUnixS': DateTime.now().secondsSinceEpoch,
+            }),
+        throwsException);
+    await expectLater(
+        () async => db.db.insert('Timestamps', {
+              'entryID': 1,
+              'timestampUnixS': null,
+            }),
+        throwsException);
   });
   test('creates intake table correctly', () async {
     final db = await mockDBManager();
@@ -123,9 +126,9 @@ void main() {
     final db = await mockDBManager();
     addTearDown(db.close);
     for (final t in [
-      ('Systolic','sys'),
+      ('Systolic', 'sys'),
       ('Diastolic', 'dia'),
-      ('Pulse','pul')
+      ('Pulse', 'pul')
     ]) {
       await db.db.insert(t.$1, {
         'entryID': 1,
@@ -200,7 +203,6 @@ void main() {
       'dosis': 1,
     });
 
-
     expect(await db.db.query('Medicine'), hasLength(2));
     await db.performCleanup();
     final data = await db.db.query('Medicine');
@@ -222,10 +224,18 @@ void main() {
       'medID': 0,
       'dosis': 0,
     });
-    await db.db.insert('Systolic', {'entryID': 2,});
-    await db.db.insert('Diastolic', {'entryID': 3,});
-    await db.db.insert('Pulse', {'entryID': 4,});
-    await db.db.insert('Notes', {'entryID': 5,});
+    await db.db.insert('Systolic', {
+      'entryID': 2,
+    });
+    await db.db.insert('Diastolic', {
+      'entryID': 3,
+    });
+    await db.db.insert('Pulse', {
+      'entryID': 4,
+    });
+    await db.db.insert('Notes', {
+      'entryID': 5,
+    });
     await db.db.insert('Weight', {'entryID': 6, 'weightKg': 1.0});
 
     expect(await db.db.query('Timestamps'), hasLength(7));
@@ -236,5 +246,5 @@ void main() {
 }
 
 Future<DatabaseManager> mockDBManager() async => DatabaseManager.load(
-  await openDatabase(inMemoryDatabasePath),
-);
+      await openDatabase(inMemoryDatabasePath),
+    );

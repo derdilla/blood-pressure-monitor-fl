@@ -13,13 +13,10 @@ void main() {
 }
 
 /// Creates a new medicine with a random designation if none is specified.
-Medicine mockMedicine({
-  String? designation,
-  double? dosis,
-  int? color
-}) => Medicine(
-  designation: designation ??
-      'med'+(Random().nextInt(899999) + 100000).toString(),
-  dosis: dosis == null ? null : Weight.mg(dosis),
-  color: color,
-);
+Medicine mockMedicine({String? designation, double? dosis, int? color}) =>
+    Medicine(
+      designation:
+          designation ?? 'med' + (Random().nextInt(899999) + 100000).toString(),
+      dosis: dosis == null ? null : Weight.mg(dosis),
+      color: color,
+    );

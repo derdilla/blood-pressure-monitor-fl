@@ -20,24 +20,23 @@ class MedicineRepositoryImpl extends MedicineRepository {
 
   @override
   Future<void> add(Medicine medicine) => _db.transaction((txn) async {
-    final idRes = await txn.query('Medicine', columns: ['MAX(medID)']);
-    final id = (idRes.firstOrNull?['MAX(medID)']?.castOrNull<int>() ?? 0) + 1;
-    _controller.add(null);
-    await txn.insert('Medicine', {
-      'medID': id,
-      'designation': medicine.designation,
-      'defaultDose': medicine.dosis?.mg,
-      'color': medicine.color,
-      'removed': 0,
-    });
-  });
+        final idRes = await txn.query('Medicine', columns: ['MAX(medID)']);
+        final id =
+            (idRes.firstOrNull?['MAX(medID)']?.castOrNull<int>() ?? 0) + 1;
+        _controller.add(null);
+        await txn.insert('Medicine', {
+          'medID': id,
+          'designation': medicine.designation,
+          'defaultDose': medicine.dosis?.mg,
+          'color': medicine.color,
+          'removed': 0,
+        });
+      });
 
   @override
   Future<List<Medicine>> getAll() async {
     final medData = await _db.query('Medicine',
-      columns: ['designation', 'defaultDose', 'color'],
-      where: 'removed = 0'
-    );
+        columns: ['designation', 'defaultDose', 'color'], where: 'removed = 0');
     final meds = <Medicine>[];
     for (final m in medData) {
       meds.add(Medicine(
@@ -53,19 +52,19 @@ class MedicineRepositoryImpl extends MedicineRepository {
   @override
   Future<void> remove(Medicine value) async {
     _controller.add(null);
-    await _db.update('Medicine', {
+    await _db.update(
+      'Medicine',
+      {
         'removed': 1,
       },
-      where: 'designation = ? AND color '
-          + (value.color == null ? 'IS NULL' : '= ?')
-          + ' AND defaultDose '
-          + (value.dosis == null ? 'IS NULL' : '= ?'),
+      where: 'designation = ? AND color ' +
+          (value.color == null ? 'IS NULL' : '= ?') +
+          ' AND defaultDose ' +
+          (value.dosis == null ? 'IS NULL' : '= ?'),
       whereArgs: [
         value.designation,
-        if (value.color != null)
-          value.color,
-        if (value.dosis != null)
-          value.dosis!.mg,
+        if (value.color != null) value.color,
+        if (value.dosis != null) value.dosis!.mg,
       ],
     );
   }

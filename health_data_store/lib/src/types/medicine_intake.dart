@@ -11,8 +11,10 @@ class MedicineIntake with _$MedicineIntake {
   const factory MedicineIntake({
     /// Timestamp when the medicine was taken.
     required DateTime time,
+
     /// Description of the taken medicine.
     required Medicine medicine,
+
     /// Amount of medicine taken.
     ///
     /// When the medication has a default value, this must be set to that value,

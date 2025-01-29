@@ -37,7 +37,8 @@ class HealthDataStore {
   /// When loading a database as [isReadOnly] no automatic changes to the
   /// database are made. It will however not protect you from manually
   /// attempting to modify the stored contents (e.g. in [Repository] methods).
-  static Future<HealthDataStore> load(Database db, [bool isReadOnly = false]) async {
+  static Future<HealthDataStore> load(Database db,
+      [bool isReadOnly = false]) async {
     // TODO: loading readOnly dbs
     assert(db.isOpen);
     final mngr = await DatabaseManager.load(db);
@@ -48,22 +49,18 @@ class HealthDataStore {
   }
 
   /// Repository for blood pressure data.
-  BloodPressureRepository get bpRepo =>
-    BloodPressureRepositoryImpl(_dbMngr.db);
+  BloodPressureRepository get bpRepo => BloodPressureRepositoryImpl(_dbMngr.db);
 
   /// Repository for notes.
-  NoteRepository get noteRepo =>
-    NoteRepositoryImpl(_dbMngr.db);
+  NoteRepository get noteRepo => NoteRepositoryImpl(_dbMngr.db);
 
   /// Repository for medicines.
-  MedicineRepository get medRepo =>
-    MedicineRepositoryImpl(_dbMngr.db);
+  MedicineRepository get medRepo => MedicineRepositoryImpl(_dbMngr.db);
 
   /// Repository for intakes.
   MedicineIntakeRepository get intakeRepo =>
-    MedicineIntakeRepositoryImpl(_dbMngr.db);
+      MedicineIntakeRepositoryImpl(_dbMngr.db);
 
   /// Repository for weight data.
-  BodyweightRepository get weightRepo =>
-    BodyweightRepositoryImpl(_dbMngr.db);
+  BodyweightRepository get weightRepo => BodyweightRepositoryImpl(_dbMngr.db);
 }

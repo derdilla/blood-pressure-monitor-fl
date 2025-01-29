@@ -1,6 +1,6 @@
 name: health_data_store
 description: A package to easily store health related data.
-version: 1.0.1+1
+version: 1.0.2
 publish_to: none
 
 environment:

@@ -25,49 +25,52 @@ class MedicineIntakeRepositoryImpl extends MedicineIntakeRepository {
 
   @override
   Future<void> add(MedicineIntake intake) => _db.transaction((txn) async {
-    _controller.add(null);
-    // obtain medicine id
-    final medIDRes = await txn.query('Medicine',
-      columns: ['medID'],
-      where: 'designation = ? '
-          'AND color ' + ((intake.medicine.color != null) ? '= ?' : 'IS NULL')
-          + ' AND defaultDose ' + ((intake.medicine.dosis != null) ? '= ?':'IS '
-          'NULL'),
-      whereArgs: [
-        intake.medicine.designation,
-        if (intake.medicine.color != null)
-          intake.medicine.color,
-        if (intake.medicine.dosis != null)
-          intake.medicine.dosis!.mg,
-      ],
-    );
-    assert(medIDRes.isNotEmpty);
-    // Assuming intakes only contain medications that have been added
-    final medID = medIDRes.first['medID'];
+        _controller.add(null);
+        // obtain medicine id
+        final medIDRes = await txn.query(
+          'Medicine',
+          columns: ['medID'],
+          where: 'designation = ? '
+                  'AND color ' +
+              ((intake.medicine.color != null) ? '= ?' : 'IS NULL') +
+              ' AND defaultDose ' +
+              ((intake.medicine.dosis != null)
+                  ? '= ?'
+                  : 'IS '
+                      'NULL'),
+          whereArgs: [
+            intake.medicine.designation,
+            if (intake.medicine.color != null) intake.medicine.color,
+            if (intake.medicine.dosis != null) intake.medicine.dosis!.mg,
+          ],
+        );
+        assert(medIDRes.isNotEmpty);
+        // Assuming intakes only contain medications that have been added
+        final medID = medIDRes.first['medID'];
 
-    // obtain free entry id
-    final id = await DBHelper.getEntryID(txn, intake.time.secondsSinceEpoch);
-    await txn.delete('Intake', where: 'entryID = ?', whereArgs: [id]);
+        // obtain free entry id
+        final id =
+            await DBHelper.getEntryID(txn, intake.time.secondsSinceEpoch);
+        await txn.delete('Intake', where: 'entryID = ?', whereArgs: [id]);
 
-    // store to db
-    await txn.insert('Intake', {
-      'entryID': id,
-      'medID': medID,
-      'dosis': intake.dosis.mg,
-    });
-  });
+        // store to db
+        await txn.insert('Intake', {
+          'entryID': id,
+          'medID': medID,
+          'dosis': intake.dosis.mg,
+        });
+      });
 
   @override
   Future<List<MedicineIntake>> get(DateRange range) async {
     final results = await _db.rawQuery(
-      'SELECT t.timestampUnixS, dosis, defaultDose, designation, color '
+        'SELECT t.timestampUnixS, dosis, defaultDose, designation, color '
         'FROM Timestamps AS t '
         'JOIN Intake AS i ON t.entryID = i.entryID '
         'JOIN Medicine AS m ON m.medID = i.medID '
-      'WHERE t.timestampUnixS BETWEEN ? AND ?'
-      'AND i.dosis IS NOT NULL', // deleted intakes
-      [range.startStamp, range.endStamp]
-    );
+        'WHERE t.timestampUnixS BETWEEN ? AND ?'
+        'AND i.dosis IS NOT NULL', // deleted intakes
+        [range.startStamp, range.endStamp]);
     final intakes = <MedicineIntake>[];
     for (final r in results) {
       final timeS = r['timestampUnixS'] as int;
@@ -88,28 +91,25 @@ class MedicineIntakeRepositoryImpl extends MedicineIntakeRepository {
   Future<void> remove(MedicineIntake intake) {
     _controller.add(null);
     return _db.rawDelete(
-      'DELETE FROM Intake WHERE entryID IN ('
-        'SELECT entryID FROM Timestamps '
-        'WHERE timestampUnixS = ?'
-      ') AND dosis = ? '
-      'AND medID IN ('
-        'SELECT medID FROM Medicine '
-        'WHERE designation = ?'
-        'AND color '
-          + ((intake.medicine.color != null) ? '= ?' : 'IS NULL') +
-        ' AND defaultDose '
-          + ((intake.medicine.dosis != null) ? '= ?' : 'IS NULL') +
-      ')',
-      [
-        intake.time.secondsSinceEpoch,
-        intake.dosis.mg,
-        intake.medicine.designation,
-        if (intake.medicine.color != null)
-          intake.medicine.color,
-        if (intake.medicine.dosis != null)
-          intake.medicine.dosis?.mg,
-      ]
-    );
+        'DELETE FROM Intake WHERE entryID IN ('
+                'SELECT entryID FROM Timestamps '
+                'WHERE timestampUnixS = ?'
+                ') AND dosis = ? '
+                'AND medID IN ('
+                'SELECT medID FROM Medicine '
+                'WHERE designation = ?'
+                'AND color ' +
+            ((intake.medicine.color != null) ? '= ?' : 'IS NULL') +
+            ' AND defaultDose ' +
+            ((intake.medicine.dosis != null) ? '= ?' : 'IS NULL') +
+            ')',
+        [
+          intake.time.secondsSinceEpoch,
+          intake.dosis.mg,
+          intake.medicine.designation,
+          if (intake.medicine.color != null) intake.medicine.color,
+          if (intake.medicine.dosis != null) intake.medicine.dosis?.mg,
+        ]);
   }
 
   Weight? _decode(Object? value) {
@@ -119,5 +119,4 @@ class MedicineIntakeRepositoryImpl extends MedicineIntakeRepository {
 
   @override
   Stream subscribe() => _controller.stream;
-
 }

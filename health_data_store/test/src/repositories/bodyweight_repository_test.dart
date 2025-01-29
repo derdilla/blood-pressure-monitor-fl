@@ -28,7 +28,7 @@ void main() {
       end: DateTime.fromMillisecondsSinceEpoch(1234570000),
     ));
     expect(values, hasLength(2));
-    expect(values, containsAll([r1,r2]));
+    expect(values, containsAll([r1, r2]));
   });
   test('removes records', () async {
     final db = await mockDBManager();

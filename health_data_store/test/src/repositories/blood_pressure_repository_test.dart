@@ -39,7 +39,7 @@ void main() {
       end: DateTime.fromMillisecondsSinceEpoch(80000),
     ));
     expect(values, hasLength(3));
-    expect(values, containsAll([r1,r2,r3]));
+    expect(values, containsAll([r1, r2, r3]));
   });
   test('should remove records', () async {
     final db = await mockDBManager();
@@ -78,7 +78,7 @@ void main() {
       end: DateTime.fromMillisecondsSinceEpoch(80000),
     ));
     expect(values0, hasLength(3));
-    expect(values0, containsAll([r1,r2,r3]));
+    expect(values0, containsAll([r1, r2, r3]));
 
     await repo.remove(r1);
     final values1 = await repo.get(DateRange(
@@ -86,7 +86,7 @@ void main() {
       end: DateTime.fromMillisecondsSinceEpoch(80000),
     ));
     expect(values1, hasLength(2));
-    expect(values1, containsAll([r2,r3]));
+    expect(values1, containsAll([r2, r3]));
 
     await repo.remove(r2);
     final values2 = await repo.get(DateRange(

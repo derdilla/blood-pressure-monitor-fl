@@ -1,4 +1,3 @@
-
 import 'package:sqflite_common/sqflite.dart';
 
 /// Helper methods for database interaction to allow code reuse.
@@ -19,9 +18,7 @@ class DBHelper {
     );
     int entryID;
     if (existing.isEmpty) {
-      final result = await txn.query('Timestamps',
-        columns: ['MAX(entryID)']
-      );
+      final result = await txn.query('Timestamps', columns: ['MAX(entryID)']);
       final highestID = result.first['MAX(entryID)'] as int?;
       entryID = (highestID ?? 0) + 1;
       await txn.insert('Timestamps', {

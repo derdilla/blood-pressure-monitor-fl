@@ -51,8 +51,8 @@ extension FullEntryList on List<FullEntry> {
   List<Medicine> get distinctMedicines {
     final Set<Medicine> meds = Set();
     forEach((e) => e.$3.forEach((m) {
-      meds.add(m.medicine);
-    }));
+          meds.add(m.medicine);
+        }));
     return meds.toList();
   }
 
@@ -83,11 +83,9 @@ extension FullEntryList on List<FullEntry> {
       for (int i = 0; i < count; i++) {
         entries.add((
           recordsAtTimeIt.moveNext()
-            ? recordsAtTimeIt.current
-            : BloodPressureRecord(time: time),
-          notesAtTimeIt.moveNext()
-            ? notesAtTimeIt.current
-            : Note(time: time),
+              ? recordsAtTimeIt.current
+              : BloodPressureRecord(time: time),
+          notesAtTimeIt.moveNext() ? notesAtTimeIt.current : Note(time: time),
           [],
         ));
       }

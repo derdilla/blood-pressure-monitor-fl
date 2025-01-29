@@ -1,4 +1,3 @@
-
 import 'package:health_data_store/src/database_helper.dart';
 import 'package:health_data_store/src/database_manager.dart';
 import 'package:sqflite_common/sqflite.dart';
