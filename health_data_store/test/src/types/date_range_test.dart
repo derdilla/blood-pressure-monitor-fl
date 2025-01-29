@@ -14,7 +14,7 @@ void main() {
     final start = DateTime.now();
     final end = start.subtract(Duration(hours: 20));
     expect(end.isBefore(start), true);
-    expect(() => DateRange(start: start,end: end),
+    expect(() => DateRange(start: start, end: end),
         throwsA(isA<AssertionError>()));
   });
   test('should calculate difference', () {

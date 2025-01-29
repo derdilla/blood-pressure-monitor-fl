@@ -28,15 +28,15 @@ class NoteRepositoryImpl extends NoteRepository {
     }
     await _db.transaction((txn) async {
       final id = await DBHelper.getEntryID(txn, note.time.secondsSinceEpoch);
-      await txn.delete('Notes', where: 'entryID = ?',
+      await txn.delete(
+        'Notes',
+        where: 'entryID = ?',
         whereArgs: [id],
       );
       await txn.insert('Notes', {
         'entryID': id,
-        if (note.note != null)
-          'note': note.note,
-        if (note.color != null)
-          'color': note.color,
+        if (note.note != null) 'note': note.note,
+        if (note.color != null) 'color': note.color,
       });
     });
   }
@@ -44,15 +44,15 @@ class NoteRepositoryImpl extends NoteRepository {
   @override
   Future<List<Note>> get(DateRange range) async {
     final result = await _db.rawQuery(
-      'SELECT t.timestampUnixS AS time, note, color '
+        'SELECT t.timestampUnixS AS time, note, color '
         'FROM Timestamps AS t '
         'JOIN Notes AS n ON t.entryID = n.entryID '
-      'WHERE t.timestampUnixS BETWEEN ? AND ?'
-      'AND (n.note IS NOT NULL OR n.color IS NOT NULL)', [
-      range.startStamp,
-      range.endStamp,
-    ]
-    );
+        'WHERE t.timestampUnixS BETWEEN ? AND ?'
+        'AND (n.note IS NOT NULL OR n.color IS NOT NULL)',
+        [
+          range.startStamp,
+          range.endStamp,
+        ]);
     final notes = <Note>[];
     for (final row in result) {
       notes.add(Note(
@@ -68,19 +68,18 @@ class NoteRepositoryImpl extends NoteRepository {
   Future<void> remove(Note value) {
     _controller.add(null);
     return _db.rawDelete(
-    'DELETE FROM Notes WHERE entryID IN ('
-      'SELECT entryID FROM Timestamps '
-      'WHERE timestampUnixS = ?'
-    ') AND note '
-    + ((value.note == null) ? 'IS NULL' : '= ?')
-    + ' AND color '
-    + ((value.color == null) ? 'IS NULL' : '= ?'), [
-   value.time.secondsSinceEpoch,
-   if (value.note != null)
-     value.note,
-   if (value.color != null)
-     value.color,
-  ]);
+        'DELETE FROM Notes WHERE entryID IN ('
+                'SELECT entryID FROM Timestamps '
+                'WHERE timestampUnixS = ?'
+                ') AND note ' +
+            ((value.note == null) ? 'IS NULL' : '= ?') +
+            ' AND color ' +
+            ((value.color == null) ? 'IS NULL' : '= ?'),
+        [
+          value.time.secondsSinceEpoch,
+          if (value.note != null) value.note,
+          if (value.color != null) value.color,
+        ]);
   }
 
   @override

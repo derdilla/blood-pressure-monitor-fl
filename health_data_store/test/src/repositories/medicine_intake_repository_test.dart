@@ -20,7 +20,9 @@ void main() {
     final db = await mockDBManager();
     addTearDown(db.close);
     final med1 = mockMedicine(designation: 'med1', dosis: 2.4);
-    final med2 = mockMedicine(designation: 'med2',);
+    final med2 = mockMedicine(
+      designation: 'med2',
+    );
     final medRepo = MedicineRepositoryImpl(db.db);
     await medRepo.add(med1);
     await medRepo.add(med2);
@@ -45,7 +47,11 @@ void main() {
     final repo = MedicineIntakeRepositoryImpl(db.db);
     final t1 = mockIntake(med1, time: 20000);
     final t2 = mockIntake(med2, time: 76000);
-    final t3 = mockIntake(med1, dosis: 123, time: 50000,);
+    final t3 = mockIntake(
+      med1,
+      dosis: 123,
+      time: 50000,
+    );
     await repo.add(t1);
     await repo.add(t2);
     await repo.add(t3);
@@ -56,7 +62,13 @@ void main() {
       end: DateTime.fromMillisecondsSinceEpoch(80000),
     ));
     expect(values, hasLength(3));
-    expect(values, containsAll([t1, t2, t3,]));
+    expect(
+        values,
+        containsAll([
+          t1,
+          t2,
+          t3,
+        ]));
   });
   test('should remove intakes', () async {
     final db = await mockDBManager();

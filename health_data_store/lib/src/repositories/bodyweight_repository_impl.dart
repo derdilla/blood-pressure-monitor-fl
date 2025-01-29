@@ -15,7 +15,7 @@ class BodyweightRepositoryImpl extends BodyweightRepository {
 
   /// The [DatabaseManager] managed database.
   final Database _db;
-  
+
   @override
   Future<void> add(BodyweightRecord record) async {
     _controller.add(null);
@@ -24,7 +24,9 @@ class BodyweightRepositoryImpl extends BodyweightRepository {
         txn,
         record.time.secondsSinceEpoch,
       );
-      await txn.delete('Weight', where: 'entryID = ?',
+      await txn.delete(
+        'Weight',
+        where: 'entryID = ?',
         whereArgs: [entryID],
       );
       await txn.insert('Weight', {
@@ -37,18 +39,16 @@ class BodyweightRepositoryImpl extends BodyweightRepository {
   @override
   Future<List<BodyweightRecord>> get(DateRange range) async {
     final results = await _db.rawQuery(
-      'SELECT timestampUnixS, weightKg '
+        'SELECT timestampUnixS, weightKg '
         'FROM Timestamps AS t '
         'INNER JOIN Weight AS w ON t.entryID = w.entryID '
-      'WHERE timestampUnixS BETWEEN ? AND ?',
-      [range.startStamp, range.endStamp]
-    );
+        'WHERE timestampUnixS BETWEEN ? AND ?',
+        [range.startStamp, range.endStamp]);
     return <BodyweightRecord>[
       for (final r in results)
         BodyweightRecord(
-          time: DateTimeS.fromSecondsSinceEpoch(r['timestampUnixS'] as int),
-          weight: Weight.kg(r['weightKg'] as double)
-        ),
+            time: DateTimeS.fromSecondsSinceEpoch(r['timestampUnixS'] as int),
+            weight: Weight.kg(r['weightKg'] as double)),
     ];
   }
 
@@ -57,8 +57,8 @@ class BodyweightRepositoryImpl extends BodyweightRepository {
     _controller.add(null);
     await _db.rawDelete(
       'DELETE FROM Weight WHERE entryID IN ('
-        'SELECT entryID FROM Timestamps '
-        'WHERE timestampUnixS = ?'
+      'SELECT entryID FROM Timestamps '
+      'WHERE timestampUnixS = ?'
       ') AND weightKg = ?',
       [
         record.time.secondsSinceEpoch,
@@ -69,5 +69,4 @@ class BodyweightRepositoryImpl extends BodyweightRepository {
 
   @override
   Stream subscribe() => _controller.stream;
-
 }
