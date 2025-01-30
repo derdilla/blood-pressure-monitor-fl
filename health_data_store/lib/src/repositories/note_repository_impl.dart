@@ -23,7 +23,7 @@ class NoteRepositoryImpl extends NoteRepository {
   Future<void> add(Note note) async {
     _controller.add(null);
     if (note.note == null && note.color == null) {
-      assert(false);
+      assert(false, 'Attempting to store a note without content and color');
       return;
     }
     await _db.transaction((txn) async {

@@ -571,6 +571,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.3.0"
+  inline_tab_view:
+    dependency: "direct main"
+    description:
+      name: inline_tab_view
+      sha256: f7cc58e3253b9a9c1e45ad2eaba96ab01ce8b7fe0034e453e6e178ee97fde02d
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.1"
   integration_test:
     dependency: "direct dev"
     description: flutter

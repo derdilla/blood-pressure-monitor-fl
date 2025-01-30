@@ -1,4 +1,5 @@
 import 'package:blood_pressure_app/components/confirm_deletion_dialoge.dart';
+import 'package:blood_pressure_app/data_util/entry_context.dart';
 import 'package:blood_pressure_app/data_util/repository_builder.dart';
 import 'package:blood_pressure_app/model/storage/storage.dart';
 import 'package:blood_pressure_app/model/weight_unit.dart';
@@ -28,14 +29,29 @@ class WeightList extends StatelessWidget {
           itemBuilder: (context, idx) => ListTile(
             title: Text(_buildWeightText(weightUnit, records[idx].weight)),
             subtitle: Text(format.format(records[idx].time)),
-            trailing: IconButton(
-              icon: const Icon(Icons.delete),
-              onPressed: () async {
-                final repo = context.read<BodyweightRepository>();
-                if ((!context.read<Settings>().confirmDeletion) || await showConfirmDeletionDialoge(context)) {
-                  await repo.remove(records[idx]);
-                }
-              }
+            trailing: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                IconButton(
+                  icon: Icon(Icons.edit),
+                  onPressed: () => context.createEntry((
+                    timestamp: records[idx].time,
+                    note: null,
+                    record: null,
+                    intake: null,
+                    weight: records[idx],
+                  )),
+                ),
+                IconButton(
+                  icon: Icon(Icons.delete),
+                  onPressed: () async {
+                    final repo = context.read<BodyweightRepository>();
+                    if ((!context.read<Settings>().confirmDeletion) || await showConfirmDeletionDialoge(context)) {
+                      await repo.remove(records[idx]);
+                    }
+                  },
+                ),
+              ],
             ),
           ),
         );
