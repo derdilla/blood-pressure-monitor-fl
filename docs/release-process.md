@@ -7,7 +7,7 @@
 - [ ] in case new languages got added, add them to `iso_lang_names.dart`
 - [ ] create changelog
 - [ ] update app version name and number in `pubspec.yaml`
-- [ ] update to latest flutter beta and update the flutter version name for f-droid in `pubspec.yaml`
+- [ ] update to latest flutter stable and update the flutter version name for f-droid in `pubspec.yaml`
 - [ ] `dart pub upgrade --tighten --major-versions` in health data store dir
 - [ ] `flutter clean` in app dir
 - [ ] `flutter pub upgrade --tighten --major-versions` in app dir

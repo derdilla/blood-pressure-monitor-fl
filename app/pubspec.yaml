@@ -4,9 +4,9 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 repository: https://github.com/derdilla/blood-pressure-monitor-fl
 issue_tracker: https://github.com/derdilla/blood-pressure-monitor-fl/issues
 
-version: 1.8.4+46
+version: 1.8.5+47
 # F-Droid needs the Flutter version used to build releases to be in the repository.
-# f-droid-flutter: 3.27.2
+# f-droid-flutter: 3.27.3
 
 environment:
   sdk: '>=3.0.2 <4.0.0'
