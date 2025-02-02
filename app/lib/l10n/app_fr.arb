@@ -85,7 +85,7 @@
       }
     }
   },
-  "errNaN": "Veuillez entrer un Nombre",
+  "errNaN": "Veuillez entrer un nombre",
   "@errNaN": {},
   "errLt30": "Nombre <= 30 ? Désactivez la validation dans les paramètres !",
   "@errLt30": {},
@@ -394,7 +394,7 @@
   "@needlePinBarWidthDesc": {},
   "exportFieldFormatDocumentation": "'## Variables\nLe format d''export supporte l''insertion de valeurs pour les placeholders suivants :\n- `$TIMESTAMP :` Représente la durée depuis l''époque Unix en millisecondes.\n- `$SYS :` Fournit une valeur si disponible ; sinon, it defaults to -1.\n- `$DIA :` Fournit une valeur si disponible ; sinon, it defaults to -1.\n- `$PUL :`Fournit une valeur si disponible ; sinon, it defaults to -1.\n- `$NOTE :` Fournit une valeur si disponible ; sinon, it defaults to -1.\n- `$COLOR :` Représente la couleur d''une mesure comme nombre. ( example de valeur : `4291681337`)\n\nSi n''importe lequel de ces placeholders mentionnés ci-dessus ne sont pas présents dans l''enregistement de pression artérielle, ils seront remplacés par -1.\n\n## Maths\nVous pouvez utiliser des mathématiques basiques à l''intérieur de doubles crochets (\"`{{}}`\").\n\nLes opérations mathématiques suivantes sont supportées :\n- Opérations : +, -, *, /, %, ^\n- Fonctions à paramètre unique : abs, acos, asin, atan, ceil, cos, cosh, cot, coth, csc, csch, exp, floor, ln, log, round sec, sech, sin, sinh, sqrt, tan, tanh \n- Fonctions à deux paramètres : log, nrt, pow\n- Constantes : e, pi, ln2, ln10, log2e, log10e, sqrt1_2, sqrt2\nPour la spécification complète de l''interpréteur mathématique, vous pouvez vous référer au [function_tree](https ://pub.dev/documentation/function_tree/latest#interpreter) specification\n\n## Ordre de traitement\n1. remplacement de variable\n2. Maths'",
   "@exportFieldFormatDocumentation": {},
-  "warnNeedsRestartForUsingApp": "Des fichiers ont été supprimés durant cette session. Redémarrez l''application pour continuer à utiliser d''autres parties de celle-ci !",
+  "warnNeedsRestartForUsingApp": "Des fichiers ont été supprimés durant cette session. Redémarrez l''application pour continuer à utiliser d''autres parties de celle-ci !",
   "@warnNeedsRestartForUsingApp": {},
   "needlePinBarWidth": "Épaisseur",
   "@needlePinBarWidth": {},
@@ -542,5 +542,15 @@
     "description": "Used when f.e. selecting a single measurement when the bluetooth device returned multiple"
   },
   "bloodPressure": "Pression artérielle",
-  "@bloodPressure": {}
+  "@bloodPressure": {},
+  "disabled": "Désactivé",
+  "@disabled": {},
+  "oldBluetoothInput": "Stable",
+  "@oldBluetoothInput": {},
+  "newBluetoothInputOldLib": "Beta",
+  "@newBluetoothInputOldLib": {},
+  "newBluetoothInputCrossPlatform": "Beta multi-plateformes",
+  "@newBluetoothInputCrossPlatform": {},
+  "bluetoothInputDesc": "La version bêta fonctionne sur un plus grand nombre d''appareils mais a moins été testée. La version multi-plateformes peut fonctionner sur des appareils non-Android et il est prévu qu''elle remplace la version stable une fois qu''elle sera suffisamment mature.",
+  "@bluetoothInputDesc": {}
 }

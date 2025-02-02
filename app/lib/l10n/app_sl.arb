@@ -1,0 +1,556 @@
+{
+  "btnSave": "SHRANI",
+  "@btnSave": {},
+  "validateInputs": "Preverjaj vnose",
+  "@validateInputs": {},
+  "errNoValue": "Prosim, vnesite vrednost",
+  "@errNoValue": {},
+  "addNote": "Opomba (izbirno)",
+  "@addNote": {},
+  "data": "Podatki",
+  "@data": {},
+  "loading": "nalaganje…",
+  "@loading": {},
+  "buildNumberOf": "Številka različice: {buildNumber}",
+  "@buildNumberOf": {
+    "placeholders": {
+      "buildNumber": {
+        "type": "String"
+      }
+    }
+  },
+  "btnConfirm": "OK",
+  "@btnConfirm": {},
+  "errCantReadFile": "Vsebine datoteke ni mogoče prebrati",
+  "@errCantReadFile": {},
+  "year": "Leto",
+  "@year": {},
+  "diaWarn": "Opozorilo glede diastoličnega tlaka",
+  "@diaWarn": {},
+  "measurementsPerDay": "Meritev na dan",
+  "@measurementsPerDay": {},
+  "title": "Aplikacija za spremljanje krvnega tlaka",
+  "@title": {},
+  "success": "Uspešno: {msg}",
+  "@success": {
+    "placeholders": {
+      "msg": {
+        "type": "String"
+      }
+    }
+  },
+  "error": "Napaka: {msg}",
+  "@error": {
+    "placeholders": {
+      "msg": {
+        "type": "String"
+      }
+    }
+  },
+  "errNaN": "Prosim, vnesite vrednost",
+  "@errNaN": {},
+  "errLt30": "Vrednost je manj kot 30? V nastavitvah izključite preverjanje!",
+  "@errLt30": {},
+  "errUnrealistic": "Nerealna vrednost? V nastavitvah izključite preverjanje!",
+  "@errUnrealistic": {},
+  "errDiaGtSys": "Diastolični pritisk je večji ali enak kot sistolični? V nastavitvah izključite preverjanje!",
+  "@errDiaGtSys": {},
+  "errCantOpenURL": "Ne morem odpreti URL-ja: {url}",
+  "@errCantOpenURL": {
+    "placeholders": {
+      "url": {
+        "type": "String"
+      }
+    }
+  },
+  "errNoFileOpened": "datoteka ni bila odprta",
+  "@errNoFileOpened": {},
+  "errNotStarted": "ni zagnano",
+  "@errNotStarted": {},
+  "errNotEnoughDataToGraph": "Ni dovolj podatkov za izris grafa.",
+  "@errNotEnoughDataToGraph": {},
+  "errNoData": "ni podatkov",
+  "@errNoData": {},
+  "errWrongImportFormat": "Uvozite lahko samo datoteke v CSV ali SQLite zapisu.",
+  "@errWrongImportFormat": {},
+  "errNeedHeadline": "Uvozite lahko samo datoteke z naslovno vrstico.",
+  "@errNeedHeadline": {},
+  "errNotImportable": "Te datoteke ni mogoče uvoziti",
+  "@errNotImportable": {},
+  "btnCancel": "PREKLIČI",
+  "@btnCancel": {},
+  "btnUndo": "RAZVELJAVI",
+  "@btnUndo": {},
+  "sysLong": "Sistolični",
+  "@sysLong": {},
+  "diaLong": "Diastolični",
+  "@diaLong": {},
+  "diaShort": "dia",
+  "@diaShort": {},
+  "pulShort": "pul",
+  "@pulShort": {},
+  "pulLong": "Utrip",
+  "@pulLong": {},
+  "layout": "Postavitev",
+  "@layout": {},
+  "allowManualTimeInput": "Dovoli ročni vnos časa",
+  "@allowManualTimeInput": {},
+  "enterTimeFormatScreen": "Format časa",
+  "@enterTimeFormatScreen": {},
+  "theme": "Tema",
+  "@theme": {},
+  "dark": "Temna",
+  "@dark": {},
+  "light": "Svetla",
+  "@light": {},
+  "iconSize": "Velikost ikon",
+  "@iconSize": {},
+  "graphLineThickness": "Debelina črte",
+  "@graphLineThickness": {},
+  "animationSpeed": "Trajanje animacije",
+  "@animationSpeed": {},
+  "accentColor": "Barva teme",
+  "@accentColor": {},
+  "sysColor": "Barva sistoličnega tlaka",
+  "@sysColor": {},
+  "diaColor": "Barva diastoličnega tlaka",
+  "@diaColor": {},
+  "pulColor": "Barva utripa",
+  "@pulColor": {},
+  "age": "Starost",
+  "@age": {},
+  "aboutWarnValuesScreen": "O mejnih vrednostih",
+  "@aboutWarnValuesScreen": {},
+  "aboutWarnValuesScreenDesc": "Več informacij o mejnih vrednostih",
+  "@aboutWarnValuesScreenDesc": {},
+  "sysWarn": "Opozorilo glede sistoličnega tlaka",
+  "@sysWarn": {},
+  "packageNameOf": "Ime paketa: {name}",
+  "@packageNameOf": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "exportImport": "Izvoz / Uvoz",
+  "@exportImport": {},
+  "exportDir": "Mapa za izvoz",
+  "@exportDir": {},
+  "exportAfterEveryInput": "Izvozi po vsakem novem vnosu",
+  "@exportAfterEveryInput": {},
+  "exportAfterEveryInputDesc": "Ni priporočljivo (nastalo bo zelo veliko datotek)",
+  "@exportAfterEveryInputDesc": {},
+  "exportFormat": "Format izvoza",
+  "@exportFormat": {},
+  "exportCustomEntries": "Prilagodite polja",
+  "@exportCustomEntries": {},
+  "addEntry": "Dodaj polje",
+  "@addEntry": {},
+  "exportCsvHeadline": "Naslovna vrstica",
+  "@exportCsvHeadline": {},
+  "exportCsvHeadlineDesc": "Pomaga pri razlikovanju vrst",
+  "@exportCsvHeadlineDesc": {},
+  "csv": "CSV",
+  "@csv": {},
+  "pdf": "PDF",
+  "@pdf": {},
+  "db": "SQLite DB",
+  "@db": {},
+  "text": "besedilo",
+  "@text": {},
+  "other": "ostalo",
+  "@other": {},
+  "fieldDelimiter": "Ločilo polj",
+  "@fieldDelimiter": {},
+  "textDelimiter": "Ločilo besedila",
+  "@textDelimiter": {},
+  "export": "IZVOZI",
+  "@export": {},
+  "shared": "deljeno",
+  "@shared": {},
+  "import": "UVOZI",
+  "@import": {},
+  "sourceCode": "Izvorna koda",
+  "@sourceCode": {},
+  "licenses": "Licence tretjih oseb",
+  "@licenses": {},
+  "importSuccess": "Število uvoženih vnosov: {count}",
+  "@importSuccess": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "exportWarnConfigNotImportable": "hej Samo prijateljsko opozorilo: trenutnega izvoza podatkov ne bo mogoče uvoziti nazaj v aplikacijo. Če želite to popraviti, se prepričajte, da ste nastavili vrsto izvoza kot CSV in vključili enega od razpoložljivih formatov časa.",
+  "@exportWarnConfigNotImportable": {},
+  "exportWarnNotEveryFieldExported": "Pozor, ne izvažate vseh polj: {fields} {count, plural, one{manjka} two{manjkata} other{manjkajo}}.",
+  "@exportWarnNotEveryFieldExported": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "fields": {
+        "type": "String"
+      }
+    }
+  },
+  "statistics": "Statistika",
+  "@statistics": {},
+  "measurementCount": "Število meritev",
+  "@measurementCount": {},
+  "timeResolvedMetrics": "Meritve glede na čas dneva",
+  "@timeResolvedMetrics": {},
+  "avgOf": "{txt} Ø",
+  "@avgOf": {
+    "placeholders": {
+      "txt": {
+        "type": "String"
+      }
+    }
+  },
+  "minOf": "{txt} min.",
+  "@minOf": {
+    "placeholders": {
+      "txt": {
+        "type": "String"
+      }
+    }
+  },
+  "maxOf": "{txt} max.",
+  "@maxOf": {
+    "placeholders": {
+      "txt": {
+        "type": "String"
+      }
+    }
+  },
+  "warnValues": "Opozorilne vrednosti",
+  "@warnValues": {},
+  "warnAboutTxt1": "Opozorilne vrednosti so zgolj predlogi in ne predstavljajo zdravstvenega nasveta.",
+  "@warnAboutTxt1": {},
+  "warnAboutTxt2": "Privzete vrednosti, odvisne od starosti, prihajajo iz tega vira.",
+  "@warnAboutTxt2": {},
+  "warnAboutTxt3": "Vrednosti lahko spremenite tako, da ustrezajo vašim potrebam in da upoštevate priporočila svojega zdravnika.",
+  "@warnAboutTxt3": {},
+  "enterTimeFormatString": "format časa",
+  "@enterTimeFormatString": {},
+  "now": "zdaj",
+  "@now": {},
+  "notes": "Opombe",
+  "@notes": {},
+  "time": "Čas",
+  "@time": {},
+  "confirmDelete": "Potrdi izbris",
+  "@confirmDelete": {},
+  "confirmDeleteDesc": "Želite izbrisati ta vnos? (Te potrditve lahko izklopite v nastavitvah.)",
+  "@confirmDeleteDesc": {},
+  "deletionConfirmed": "Vnos izbrisan.",
+  "@deletionConfirmed": {},
+  "day": "Dan",
+  "@day": {},
+  "week": "Teden",
+  "@week": {},
+  "month": "Mesec",
+  "@month": {},
+  "lifetime": "Celotno obdobje",
+  "@lifetime": {},
+  "weekOfYear": "Teden {weekNum}, {year}",
+  "@weekOfYear": {
+    "placeholders": {
+      "weekNum": {
+        "type": "int"
+      },
+      "year": {
+        "type": "int"
+      }
+    }
+  },
+  "last7Days": "7 dni",
+  "@last7Days": {},
+  "last30Days": "30 dni",
+  "@last30Days": {},
+  "allowMissingValues": "Dovoli manjkajoče vrednosti",
+  "@allowMissingValues": {},
+  "errTimeAfterNow": "Izbrani čas dneva je bil ponastavljen, saj je bil izbran v prihodnosti. To preverjanje lahko izklopite v nastavitvah.",
+  "@errTimeAfterNow": {},
+  "language": "Jezik",
+  "@language": {},
+  "custom": "Po meri",
+  "@custom": {},
+  "drawRegressionLines": "Nariši trendne črte",
+  "@drawRegressionLines": {},
+  "drawRegressionLinesDesc": "Na grafu nariše regresijske črte. Uporabno samo za velike intervale.",
+  "@drawRegressionLinesDesc": {},
+  "pdfDocumentTitle": "Vrednosti krvnega tlaka od {start} do {end}",
+  "@pdfDocumentTitle": {
+    "placeholders": {
+      "start": {
+        "type": "String"
+      },
+      "end": {
+        "type": "String"
+      }
+    }
+  },
+  "fieldFormat": "Format polja",
+  "@fieldFormat": {},
+  "result": "Rezultat:",
+  "@result": {},
+  "pulsePressure": "Pulzni tlak",
+  "@pulsePressure": {},
+  "addExportformat": "Dodaj obliko izvoza",
+  "@addExportformat": {},
+  "edit": "Uredi",
+  "@edit": {},
+  "default_": "Privzeto",
+  "@default_": {},
+  "exportPdfHeaderHeight": "Višina vzglavja",
+  "@exportPdfHeaderHeight": {},
+  "exportPdfHeaderFontSize": "Velikost pisave vzglavja",
+  "@exportPdfHeaderFontSize": {},
+  "exportPdfCellHeight": "Višina vrstice",
+  "@exportPdfCellHeight": {},
+  "exportPdfCellFontSize": "Velikost pisave vrstice",
+  "@exportPdfCellFontSize": {},
+  "maximum": "Maksimum",
+  "@maximum": {},
+  "minimum": "Minimum",
+  "@minimum": {},
+  "exportPdfExportTitle": "Naslovna vrstica",
+  "@exportPdfExportTitle": {},
+  "exportPdfExportStatistics": "Statistika",
+  "@exportPdfExportStatistics": {},
+  "startWithAddMeasurementPage": "Meritev ob zagonu",
+  "@startWithAddMeasurementPage": {},
+  "addLine": "Dodaj črto",
+  "@addLine": {},
+  "timestamp": "Časovni žig",
+  "@timestamp": {},
+  "note": "Opomba",
+  "@note": {},
+  "exportSettings": "Nastavitve varnostne kopije",
+  "@exportSettings": {},
+  "importSettings": "Nastavitve obnove varnostne kopije",
+  "@importSettings": {},
+  "requiresAppRestart": "Zahteva ponoven zagon aplikacije",
+  "@requiresAppRestart": {},
+  "restartNow": "Ponovno zaženi sedaj",
+  "@restartNow": {},
+  "deleteAllMeasurements": "Izbriši vse meritve",
+  "@deleteAllMeasurements": {},
+  "deleteAllSettings": "Izbriši vse nastavitve",
+  "@deleteAllSettings": {},
+  "warnDeletionUnrecoverable": "Ta korak je nepovraten, razen če ste ročno naredili varnostno kopijo. Ali res želite to izbrisati?",
+  "@warnDeletionUnrecoverable": {},
+  "needlePinBarWidth": "Debelina barve",
+  "@needlePinBarWidth": {},
+  "needlePinBarWidthDesc": "Širina barvnih vnosov črt na grafu.",
+  "@needlePinBarWidthDesc": {},
+  "errParseEmptyCsvFile": "V datoteki CSV ni dovolj vrstic za razčlenitev zapisa.",
+  "@errParseEmptyCsvFile": {},
+  "titleInCsv": "Naslov v CSV",
+  "@titleInCsv": {},
+  "errBleNoPerms": "Manjkajo dovoljenja za Bluetooth",
+  "@errBleNoPerms": {},
+  "preferredPressureUnit": "Želena enota za tlak",
+  "@preferredPressureUnit": {},
+  "compactList": "Zgoščen seznam meritev",
+  "@compactList": {},
+  "bluetoothDisabled": "Bluetooth onemogočen",
+  "@bluetoothDisabled": {},
+  "errMeasurementRead": "Napaka pri zajemu meritve!",
+  "@errMeasurementRead": {},
+  "measurementSuccess": "Meritev uspešno zajeta!",
+  "@measurementSuccess": {},
+  "connect": "Poveži",
+  "@connect": {},
+  "bluetoothInput": "Bluetooth vnos",
+  "@bluetoothInput": {},
+  "scanningForDevices": "Iskanje naprav",
+  "@scanningForDevices": {},
+  "errParseTimeNotRestoreable": "Ni stolpca, ki bi omogočal obnovitev časovnega žiga.",
+  "@errParseTimeNotRestoreable": {},
+  "errParseUnknownColumn": "Ni stolpca z imenom \"{title}\".",
+  "@errParseUnknownColumn": {
+    "placeholders": {
+      "title": {
+        "type": "String"
+      }
+    }
+  },
+  "csvTitle": "CSV-naslov",
+  "@csvTitle": {},
+  "errParseLineTooShort": "Vrstica št. {lineNumber} ima manj stolpcev kot prva vrstica.",
+  "@errParseLineTooShort": {
+    "placeholders": {
+      "lineNumber": {
+        "type": "int"
+      }
+    }
+  },
+  "exportFieldsPreset": "Prednastavitev izvoznih polj",
+  "@exportFieldsPreset": {},
+  "remove": "Odstrani",
+  "@remove": {},
+  "manageExportColumns": "Upravljanje stolpcev za izvoz",
+  "@manageExportColumns": {},
+  "buildIn": "Vgrajeno",
+  "@buildIn": {},
+  "recordFormat": "Format zapisa",
+  "@recordFormat": {},
+  "timeFormat": "Format časa",
+  "@timeFormat": {},
+  "errAccuracyLoss": "Pri izvozu podatkov z zapisom časa po meri lahko pride do izgube natančnosti.",
+  "@errAccuracyLoss": {},
+  "medications": "Zdravila",
+  "@medications": {},
+  "addMedication": "Dodaj zdravilo",
+  "@addMedication": {},
+  "name": "Ime",
+  "@name": {},
+  "defaultDosis": "Privzeti odmerek",
+  "@defaultDosis": {},
+  "noMedication": "Brez zdravil",
+  "@noMedication": {},
+  "dosis": "Odmerek",
+  "@dosis": {},
+  "valueDistribution": "Porazdelitev vrednosti",
+  "@valueDistribution": {},
+  "tapToClose": "Tapnite za zapiranje.",
+  "@tapToClose": {},
+  "meanArterialPressure": "Povprečni arterijski tlak",
+  "@meanArterialPressure": {},
+  "userID": "ID uporabnika",
+  "@userID": {},
+  "bodyMovementDetected": "Zaznano gibanje telesa",
+  "@bodyMovementDetected": {},
+  "cuffTooLoose": "Manšeta je preveč ohlapna",
+  "@cuffTooLoose": {},
+  "irregularPulseDetected": "Zaznan nepravilen utrip",
+  "@irregularPulseDetected": {},
+  "pulseRateExceedsUpperLimit": "Utrip presega zgornjo mejo",
+  "@pulseRateExceedsUpperLimit": {},
+  "pulseRateLessThanLowerLimit": "Utrip presega spodnjo mejo",
+  "@pulseRateLessThanLowerLimit": {},
+  "availableDevices": "Razpoložljive naprave",
+  "@availableDevices": {},
+  "deleteAllMedicineIntakes": "Izbrišite vse vnose zdravil",
+  "@deleteAllMedicineIntakes": {},
+  "deleteAllNotes": "Izbrišite vse opombe",
+  "@deleteAllNotes": {},
+  "date": "Datum",
+  "@date": {},
+  "intakes": "Vnosi zdravil",
+  "@intakes": {},
+  "errFeatureNotSupported": "Ta funkcija ni na voljo na tej platformi.",
+  "@errFeatureNotSupported": {},
+  "invalidZip": "Neveljavna ZIP datoteka.",
+  "@invalidZip": {},
+  "errCantCreateArchive": "Ne morem ustvariti arhiva. Prosim, prijavite napako.",
+  "@errCantCreateArchive": {},
+  "weight": "Teža",
+  "@weight": {},
+  "enterWeight": "Vnesite težo",
+  "@enterWeight": {},
+  "selectMeasurementTitle": "Izberite meritev, ki jo želite uporabiti",
+  "@selectMeasurementTitle": {},
+  "measurementIndex": "Meritev #{number}",
+  "@measurementIndex": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "select": "Izberi",
+  "@select": {
+    "description": "Used when f.e. selecting a single measurement when the bluetooth device returned multiple"
+  },
+  "preferredWeightUnit": "Želena enota teže",
+  "@preferredWeightUnit": {
+    "description": "Setting for the unit the app will use for displaying weight"
+  },
+  "disabled": "Onemogočeno",
+  "@disabled": {},
+  "newBluetoothInputOldLib": "Beta",
+  "@newBluetoothInputOldLib": {},
+  "oldBluetoothInput": "Stabilna",
+  "@oldBluetoothInput": {},
+  "newBluetoothInputCrossPlatform": "Beta med platformami",
+  "@newBluetoothInputCrossPlatform": {},
+  "bluetoothInputDesc": "Zaledje beta različice deluje na več napravah, vendar je manj preizkušeno. Različica za več platform morda deluje na napravah, ki niso Android, načrtujemo pa, da bo ta različica - ko bo dovolj razvita - nadomestila stabilno različico aplikacije.",
+  "@bluetoothInputDesc": {},
+  "delete": "Izbriši",
+  "@delete": {},
+  "useLegacyList": "Uporabi stari seznam",
+  "@useLegacyList": {},
+  "linePositionY": "Položaj črte (y)",
+  "@linePositionY": {},
+  "startWithAddMeasurementPageDescription": "Ob zagonu aplikacije se prikaže okno za vnos meritev.",
+  "@startWithAddMeasurementPageDescription": {},
+  "customGraphMarkings": "Oznake po meri",
+  "@customGraphMarkings": {},
+  "exportFieldFormatDocumentation": "'## Spremenljivke\nOblika izvoznega polja podpira vstavljanje vrednosti za naslednje oznake:\n- `$TIMESTAMP`: Predstavlja tim. Unix čas v milisekundah.\n- `$SYS:` Zagotavlja vrednost, če je na voljo; sicer je privzeta vrednost -1.\n- `$DIA:` Zagotavlja vrednost, če je na voljo; sicer je privzeta vrednost -1.\n- `$PUL:` Zagotavlja vrednost, če je na voljo; sicer je privzeta vrednost -1.\n- `$NOTE:` Zagotavlja vrednost, če je na voljo; sicer je privzeta vrednost -1.\n- `$COLOR:` predstavlja barvo meritve kot številko. (primer vrednosti: `4291681337`)\n\nČe katera od zgoraj omenjenih oznak ni prisotna v zapisu o krvnem tlaku, bo nadomeščena z `null`.\n\n## Matematične operacije\nOsnovne matematične operacije lahko uporabite znotraj dvojnih oklepajev (\"`{{}}`\").\n\nPodprte so naslednje matematične operacije:\n- Operacije: +, -, *, /, %, ^\n- Funkcije z enim parametrom: abs, acos, asin, atan, ceil, cos, cosh, cot, coth, csc, csch, exp, floor, ln, log, round sec, sech, sin, sinh, sqrt, tan, tanh\n- Funkcije z dvema parametroma: log, nrt, pow\n- Konstante: e, pi, ln2, ln10, log2e, log10e, sqrt1_2, sqrt2\n\nZa celotno specifikacijo matematičnih funkcij si lahko ogledate dokumentacijo [function_tree](https://pub.dev/documentation/function_tree/latest#interpreter).\n\n## Procesiranje\n1. zamenjava spremenljivke\n2. matematične operacije'",
+  "@exportFieldFormatDocumentation": {},
+  "warnNeedsRestartForUsingApp": "V tej seji so bile izbrisane datoteke. Znova zaženite aplikacijo, če želite še naprej uporabljati vrnitev v druge dele aplikacije!",
+  "@warnNeedsRestartForUsingApp": {},
+  "average": "Povprečje",
+  "@average": {},
+  "exportPdfExportData": "Podatkovna tabela",
+  "@exportPdfExportData": {},
+  "horizontalLines": "Horizontalne črte",
+  "@horizontalLines": {},
+  "addMeasurement": "Dodaj meritev",
+  "@addMeasurement": {},
+  "color": "Barva",
+  "@color": {},
+  "sysShort": "sis",
+  "@sysShort": {},
+  "settings": "Nastavitve",
+  "@settings": {},
+  "system": "Sistemska",
+  "@system": {},
+  "confirmDeletion": "Potrdi brisanje",
+  "@confirmDeletion": {},
+  "determineWarnValues": "Določi opozorilne vrednosti",
+  "@determineWarnValues": {},
+  "version": "Različica",
+  "@version": {},
+  "versionOf": "Različica: {version}",
+  "@versionOf": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "enterTimeFormatDesc": "Oblikovalnik je mešanica vnaprej določenih nizov ICU/Skeleton in morebitnega dodatnega besedila, ki ga želite vključiti.\n\n[Če vas zanima celoten seznam veljavnih formatov, jih lahko najdete tukaj.](screen://TimeFormattingHelp)\n\nSamo prijazen opomnik, uporaba nizov daljšega ali krajšega formata ne bo spremenila širine stolpcev tabele, kar bi lahko povzročilo nerodne prelome vrstic in neprikazovanje besedila.\n\nprivzeto: \"ll-MM-dd HH:mm\"",
+  "@enterTimeFormatDesc": {},
+  "aboutBleInput": "Nekatere merilne naprave so združljive z BLE GATT. Tukaj lahko te naprave povežete z aplikacijo in omogočite samodejno posredovanje meritev ali pa to možnost onemogočite v nastavitvah.",
+  "@aboutBleInput": {},
+  "improperMeasurementPosition": "Nepravilen položaj merjenja",
+  "@improperMeasurementPosition": {},
+  "activateWeightFeatures": "Aktivirajte funkcije, povezane s težo",
+  "@activateWeightFeatures": {},
+  "bloodPressure": "Krvni tlak",
+  "@bloodPressure": {},
+  "bottomAppBars": "Spodnje vrstice pogovornega okna",
+  "@bottomAppBars": {},
+  "errParseFailedDecodingField": "Dekodiranje polja \"{fieldContent}\" v vrstici št. {lineNumber} ni uspelo.",
+  "@errParseFailedDecodingField": {
+    "placeholders": {
+      "lineNumber": {
+        "type": "int"
+      },
+      "fieldContent": {
+        "type": "String"
+      }
+    }
+  },
+  "behavior": "Obnašanje",
+  "@behavior": {},
+  "exportMimeType": "Tip izvozne datoteke",
+  "@exportMimeType": {}
+}
