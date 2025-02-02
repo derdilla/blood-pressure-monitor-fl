@@ -19,7 +19,7 @@
       }
     }
   },
-  "errNaN": "Please enter a Number",
+  "errNaN": "Please enter a number",
   "@errNaN": {},
   "errLt30": "Number <= 30? Turn off validation in settings!",
   "@errLt30": {},
@@ -384,7 +384,7 @@
   "@requiresAppRestart": {},
   "restartNow": "Restart now",
   "@restartNow": {},
-  "warnNeedsRestartForUsingApp": "Files where deleted this session. Restart the app to continue using returning to other parts of the app!",
+  "warnNeedsRestartForUsingApp": "Files were deleted in this session. Restart the app to continue using returning to other parts of the app!",
   "@warnNeedsRestartForUsingApp": {},
   "deleteAllMeasurements": "Delete all measurements",
   "@deleteAllMeasurements": {},
@@ -445,7 +445,7 @@
   "@timeFormat": {},
   "errAccuracyLoss": "There is precision loss expected when exporting with custom time formatters.",
   "@errAccuracyLoss": {},
-  "bottomAppBars": "Bottom dialoge bars",
+  "bottomAppBars": "Bottom dialogue bars",
   "@bottomAppBars": {},
   "medications": "Medications",
   "@medications": {},
@@ -472,7 +472,7 @@
   "bluetoothDisabled": "Bluetooth disabled",
   "@bluetoothDisabled": {},
   "errMeasurementRead": "Error while taking measurement!",
-  "@errBluetooth": {},
+  "@errMeasurementRead": {},
   "measurementSuccess": "Measurement taken successfully!",
   "@measurementSuccess": {},
   "connect": "Connect",
@@ -518,7 +518,7 @@
   "errCantCreateArchive": "Can''t create archive. Please report the bug if possible.",
   "@errCantCreateArchive": {},
   "activateWeightFeatures": "Activate weight related features",
-  "@weightInput": {},
+  "@activateWeightFeatures": {},
   "weight": "Weight",
   "@weight": {},
   "enterWeight": "Enter weight",
@@ -527,15 +527,15 @@
   "@selectMeasurementTitle": {},
   "measurementIndex": "Measurement #{number}",
   "@measurementIndex": {
-      "placeholders": {
-          "number": {
-              "type": "int"
-          }
+    "placeholders": {
+      "number": {
+        "type": "int"
       }
+    }
   },
   "select": "Select",
   "@select": {
-      "description": "Used when f.e. selecting a single measurement when the bluetooth device returned multiple"
+    "description": "Used when f.e. selecting a single measurement when the bluetooth device returned multiple"
   },
   "bloodPressure": "Blood pressure",
   "@bloodPressure": {},
