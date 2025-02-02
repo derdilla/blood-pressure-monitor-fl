@@ -551,6 +551,6 @@
   "@newBluetoothInputOldLib": {},
   "newBluetoothInputCrossPlatform": "Beta multi-plateformes",
   "@newBluetoothInputCrossPlatform": {},
-  "bluetoothInputDesc": "La version bêta fonctionne sur un plus grand nombre d'appareils mais a moins été testée. La version multi-plateformes peut fonctionner sur des appareils non-Android et il est prévu qu'elle remplace la version stable une fois qu'elle sera suffisamment mature.",
+  "bluetoothInputDesc": "La version bêta fonctionne sur un plus grand nombre d''appareils mais a moins été testée. La version multi-plateformes peut fonctionner sur des appareils non-Android et il est prévu qu''elle remplace la version stable une fois qu''elle sera suffisamment mature.",
   "@bluetoothInputDesc": {}
 }
