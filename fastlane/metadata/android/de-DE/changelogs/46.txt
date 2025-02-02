@@ -1,5 +1,0 @@
-* Add bluetooth backend abstraction & support devices with multiple measurements by @pimlie
-* Add setting for new bluetooth backend
-* Change app name capitalization by @tct123
-* Update dependencies
-* Update Estonian, Russian, Italian, Swedish, and Tamil translations via weblate
