@@ -1,4 +1,4 @@
-* Fix export on new android versions
-* Allow exporting bodyweight to csv & pdf
-* Update German, French, Hungarian, English and Chinese translations via weblate
-* Add Slovenian translations (thanks Matej)
+* Parandasime ekspordivead Androidi uutes versioonides
+* Nüüd saab kehakaalu eksportida csv- ja pdf-failidesse
+* Uuendasime saksa, prantsuse, ungari, inglise ja hiina keele tõlkeid Weblate'ist 
+* Lisasime sloveeni keele tõlke (tänud: Matej)
