@@ -21,7 +21,7 @@ String getDisplayLanguage(Locale l) => switch(l.toLanguageTag()) {
   'et' => 'Eesti (Eesti)',
   'cs' => 'Čeština',
   'ta' => 'தமிழ்',
-  'sl' => 'slovenščina',
+  'sl' => 'Slovenščina',
   // Websites with names for expanding when new languages get added:
   // - https://chronoplexsoftware.com/localisation/help/languagecodes.htm
   // - https://localizely.com/locale-code/zh-Hans/
