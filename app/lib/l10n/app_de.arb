@@ -542,5 +542,9 @@
     "description": "Used when f.e. selecting a single measurement when the bluetooth device returned multiple"
   },
   "bloodPressure": "Blutdruck",
-  "@bloodPressure": {}
+  "@bloodPressure": {},
+  "bluetoothInputDesc": "Das Beta-Backend funktioniert auf mehr Geräten, ist aber weniger getestet. Die plattformübergreifende Version kann auf Nicht-Android-Geräten funktionieren und soll die stabile Implementierung ablösen, sobald sie ausgereift genug ist.",
+  "@bluetoothInputDesc": {},
+  "disabled": "Deaktiviert",
+  "@disabled": {}
 }
