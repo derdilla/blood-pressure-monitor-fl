@@ -3,3 +3,4 @@
 * Modificato capitalizzazione del nome dell'app di @tct123
 * Aggiornate dipendenze
 * Aggiornate traduzioni in estone, russo, italiano, svedese e tamil tramite weblate
+ny prostřednictvím weblate
