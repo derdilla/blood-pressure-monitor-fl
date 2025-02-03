@@ -383,7 +383,7 @@ class SettingsPage extends StatelessWidget {
                       loader = ConfigDao(configDB);
                     } else if (path.endsWith('zip')) {
                       try {
-                        final decoded = ZipDecoder().decodeBuffer(InputFileStream(result.files.single.path!));
+                        final decoded = ZipDecoder().decodeStream(InputFileStream(result.files.single.path!));
                         final dir = join(Directory.systemTemp.path, 'settingsBackup');
                         await extractArchiveToDisk(decoded, dir);
                         loader = await FileSettingsLoader.load(dir);
