@@ -1,4 +1,0 @@
-* Fix export on new android versions
-* Allow exporting bodyweight to csv & pdf
-* Update German, French, Hungarian, English and Chinese translations via weblate
-* Add Slovenian translations (thanks Matej)
