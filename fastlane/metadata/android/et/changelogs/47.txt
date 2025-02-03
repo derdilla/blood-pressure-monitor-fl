@@ -1,0 +1,4 @@
+* Parandasime ekspordivead Androidi uutes versioonides
+* Nüüd saab kehakaalu eksportida csv- ja pdf-failidesse
+* Uuendasime saksa, prantsuse, ungari, inglise ja hiina keele tõlkeid Weblate'ist 
+* Lisasime sloveeni keele tõlke (tänud: Matej)
