@@ -7,11 +7,6 @@ jobs:
   setup-env:
     name: "Setup environment"
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        branch:
-          - beta
-          - stable
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -25,12 +20,12 @@ jobs:
         uses: actions/cache@v4
         with:
           path: health_data_store/lib
-          key: builder-${{ matrix.branch }}-${{ hashFiles('health_data_store/pubspec.yaml', 'health_data_store/lib/*', 'health_data_store/lib/**/*dart') }}
+          key: builder-${{ hashFiles('health_data_store/pubspec.yaml', 'health_data_store/lib/*', 'health_data_store/lib/**/*dart') }}
       - name: Setup dart
         if: steps.cache-generated.outputs.cache-hit != 'true'
         uses: dart-lang/setup-dart@v1
         with:
-          sdk: ${{ matrix.branch }}
+          sdk: stable
       - name: Generate code
         if: steps.cache-generated.outputs.cache-hit != 'true'
         run: dart run build_runner build
@@ -38,7 +33,7 @@ jobs:
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          channel: ${{ matrix.branch }}
+          channel: stable
           cache: true
       - name: Disable analytics
         run:
@@ -52,18 +47,13 @@ jobs:
       - name: Upload results
         uses: actions/upload-artifact@v4
         with:
-          name: src-${{ matrix.branch }}
+          name: src
           path: ./
 
   unit-test:
     name: "🧩🧪 Run unit tests"
     runs-on: ubuntu-latest
     needs: setup-env
-    strategy:
-      matrix:
-        branch:
-          - beta
-          - stable
     permissions:
       contents: write
       pull-requests: write
@@ -76,11 +66,11 @@ jobs:
       - name: Download src directory
         uses: actions/download-artifact@v4
         with:
-          name: src-${{ matrix.branch }}
+          name: src
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          channel: ${{ matrix.branch }}
+          channel: stable
           cache: true
       - name: Disable analytics
         run: flutter config --no-analytics --suppress-analytics
@@ -155,9 +145,6 @@ jobs:
         java-version:
           - 17
           - 21
-        branch:
-          - beta
-          - stable
         build:
           - debug
           - release
@@ -171,11 +158,11 @@ jobs:
       - name: Download src directory
         uses: actions/download-artifact@v4
         with:
-          name: src-${{ matrix.branch }}
+          name: src
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          channel: ${{ matrix.branch }}
+          channel: stable
           cache: true
       - name: Disable analytics
         run: flutter config --no-analytics --suppress-analytics
@@ -191,15 +178,11 @@ jobs:
       - name: Upload apks
         uses: actions/upload-artifact@v4
         with:
-          name: app-${{ matrix.build }}-java${{ matrix.java-version }}-flutter${{ matrix.branch }}
+          name: app-${{ matrix.build }}-java${{ matrix.java-version }}-flutter
           path: ./app/build/app/outputs/flutter-apk/*.apk
   build-linux:
     name: "🖥️ Build Desktop (linux)"
     strategy:
-      matrix:
-        branch:
-          - beta
-          - stable
         build:
           - debug
           - release
@@ -210,11 +193,11 @@ jobs:
       - name: Download src directory
         uses: actions/download-artifact@v4
         with:
-          name: src-${{ matrix.branch }}
+          name: src
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          channel: ${{ matrix.branch }}
+          channel: stable
           cache: true
       - name: Disable analytics
         run: flutter config --no-analytics --suppress-analytics

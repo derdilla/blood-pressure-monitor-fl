@@ -6,15 +6,14 @@ on:
       - labeled
       - opened
       - reopened
+    paths:
+      - "app/**"
+      - "health_data_store/**"
+      - "pr.yml"
 
 jobs:
   update-goldens:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        channel:
-          - beta
-          - stable
     permissions:
       contents: write
       pull-requests: write
@@ -26,12 +25,12 @@ jobs:
         uses: actions/cache@v4
         with:
           path: health_data_store/lib
-          key: builder-${{ matrix.channel }}-${{ hashFiles('health_data_store/pubspec.yaml', 'health_data_store/lib/*', 'health_data_store/lib/**/*dart') }}
+          key: builder-${{ hashFiles('health_data_store/pubspec.yaml', 'health_data_store/lib/*', 'health_data_store/lib/**/*dart') }}
       - name: Setup dart
         if: steps.cache-generated.outputs.cache-hit != 'true'
         uses: dart-lang/setup-dart@v1
         with:
-          sdk: ${{ matrix.channel }}
+          sdk: stable
       - name: Generate code
         if: steps.cache-generated.outputs.cache-hit != 'true'
         run: dart run build_runner build
@@ -39,7 +38,7 @@ jobs:
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          channel: ${{ matrix.channel }}
+          channel: stable
           cache: true
       - name: Disable analytics
         run:
@@ -53,7 +52,7 @@ jobs:
         working-directory: app
       - name: Update goldens
         id: gold-upd
-        run: flutter test --update-goldens --fail-fast --name="\[gold\].*" --dart-define="channel=${{ matrix.channel }}"
+        run: flutter test --update-goldens --fail-fast --name="\[gold\].*"
         working-directory: app
       - name: Push golden changes
         # https://docs.github.com/en/actions/writing-workflows/choosing-what-your-workflow-does/evaluate-expressions-in-workflows-and-actions#example-of-failure-with-conditions
@@ -87,12 +86,12 @@ jobs:
         uses: actions/cache@v4
         with:
           path: health_data_store/lib
-          key: builder-${{ matrix.channel }}-${{ hashFiles('health_data_store/pubspec.yaml', 'health_data_store/lib/*', 'health_data_store/lib/**/*dart') }}
+          key: builder-${{ hashFiles('health_data_store/pubspec.yaml', 'health_data_store/lib/*', 'health_data_store/lib/**/*dart') }}
       - name: Setup dart
         if: steps.cache-generated.outputs.cache-hit != 'true'
         uses: dart-lang/setup-dart@v1
         with:
-          sdk: ${{ matrix.channel }}
+          sdk: stable
       - name: Generate code
         if: steps.cache-generated.outputs.cache-hit != 'true'
         run: dart run build_runner build
@@ -100,7 +99,7 @@ jobs:
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          channel: ${{ matrix.channel }} # FIXME: only use one channel type for this
+          channel: stable
           cache: true
       - name: Disable analytics
         run:
@@ -131,12 +130,12 @@ jobs:
         uses: actions/cache@v4
         with:
           path: health_data_store/lib
-          key: builder-${{ matrix.channel }}-${{ hashFiles('health_data_store/pubspec.yaml', 'health_data_store/lib/*', 'health_data_store/lib/**/*dart') }}
+          key: builder-${{ hashFiles('health_data_store/pubspec.yaml', 'health_data_store/lib/*', 'health_data_store/lib/**/*dart') }}
       - name: Setup dart
         if: steps.cache-generated.outputs.cache-hit != 'true'
         uses: dart-lang/setup-dart@v1
         with:
-          sdk: ${{ matrix.channel }}
+          sdk: stable
       - name: Generate code
         if: steps.cache-generated.outputs.cache-hit != 'true'
         run: dart run build_runner build
@@ -149,7 +148,7 @@ jobs:
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          channel: ${{ matrix.channel }}
+          channel: stable
           cache: true
       - name: Disable analytics
         run: flutter config --no-analytics --suppress-analytics
@@ -163,4 +162,3 @@ jobs:
         with:
           name: build-results
           path: app/build/app/outputs/flutter-apk
-      

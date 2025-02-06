@@ -14,10 +14,6 @@ jobs:
   run-tests:
     runs-on: ubuntu-latest
     strategy:
-      matrix:
-        channel:
-          - beta
-          - stable
     permissions:
       contents: write
       pull-requests: write
@@ -34,12 +30,12 @@ jobs:
         uses: actions/cache@v4
         with:
           path: health_data_store/lib
-          key: builder-${{ matrix.channel }}-${{ hashFiles('health_data_store/pubspec.yaml', 'health_data_store/lib/*', 'health_data_store/lib/**/*dart') }}
+          key: builder-${{ hashFiles('health_data_store/pubspec.yaml', 'health_data_store/lib/*', 'health_data_store/lib/**/*dart') }}
       - name: Setup dart
         if: steps.cache-generated.outputs.cache-hit != 'true'
         uses: dart-lang/setup-dart@v1
         with:
-          sdk: ${{ matrix.channel }}
+          sdk: stable
       - name: Generate code
         if: steps.cache-generated.outputs.cache-hit != 'true'
         run: dart run build_runner build
@@ -59,5 +55,5 @@ jobs:
         run: flutter pub run build_runner build
         working-directory: app
       - name: Run tests
-        run: flutter test --coverage --dart-define="channel=${{ matrix.channel }}"
+        run: flutter test
         working-directory: app
