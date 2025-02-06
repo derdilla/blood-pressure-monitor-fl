@@ -19,8 +19,10 @@ jobs:
       contents: write
       pull-requests: write
     steps:
-      - name: Checkout code
+      - name: Checkout PR code
         uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
       - name: Cache generated health data store
         id: cache-generated
         uses: actions/cache@v4
@@ -113,7 +115,7 @@ jobs:
         run: flutter pub run build_runner build
         working-directory: app
       - name: Run tests
-        run: flutter test --coverage --dart-define="channel=${{ matrix.channel }}"
+        run: flutter test --coverage
         working-directory: app
   build:
     if: contains(github.event.pull_request.labels.*.name, 'auto-build')
