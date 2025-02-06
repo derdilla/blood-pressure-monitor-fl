@@ -1,3 +1,7 @@
+import 'package:blood_pressure_app/config.dart';
+import 'package:blood_pressure_app/features/bluetooth/backend/bluetooth_backend.dart';
+import 'package:blood_pressure_app/features/bluetooth/backend/bluetooth_manager.dart';
+import 'package:blood_pressure_app/features/bluetooth/bluetooth_input.dart';
 import 'package:blood_pressure_app/features/input/forms/blood_pressure_form.dart';
 import 'package:blood_pressure_app/features/input/forms/date_time_form.dart';
 import 'package:blood_pressure_app/features/input/forms/form_base.dart';
@@ -5,7 +9,9 @@ import 'package:blood_pressure_app/features/input/forms/form_switcher.dart';
 import 'package:blood_pressure_app/features/input/forms/medicine_intake_form.dart';
 import 'package:blood_pressure_app/features/input/forms/note_form.dart';
 import 'package:blood_pressure_app/features/input/forms/weight_form.dart';
+import 'package:blood_pressure_app/features/old_bluetooth/bluetooth_input.dart';
 import 'package:blood_pressure_app/logging.dart';
+import 'package:blood_pressure_app/model/storage/bluetooth_input_mode.dart';
 import 'package:blood_pressure_app/model/storage/storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -119,13 +125,31 @@ class AddEntryFormState extends FormStateBase<AddEntryFormValue, AddEntryForm> {
   @override
   bool isEmptyInputFocused() => false;
 
+  void _onExternalMeasurement(BloodPressureRecord record) => setState(() {
+    // TODO: implement
+  });
+
   @override
-  Widget build(BuildContext context) { // TODO: initial values
-    //log.fine('Opening AddEntryForm with: ${widget.initialValue}');
+  Widget build(BuildContext context) {
     final settings = context.watch<Settings>();
     return ListView(
       padding: const EdgeInsets.symmetric(horizontal: 8),
       children: [
+        if (!isTestingEnvironment) // TODO: test feature (#494)
+          (() => switch (settings.bleInput) {
+            BluetoothInputMode.disabled => SizedBox.shrink(),
+            BluetoothInputMode.oldBluetoothInput => OldBluetoothInput(
+              onMeasurement: _onExternalMeasurement,
+            ),
+            BluetoothInputMode.newBluetoothInputOldLib => BluetoothInput(
+              manager: BluetoothManager.create(BluetoothBackend.flutterBluePlus),
+              onMeasurement: _onExternalMeasurement,
+            ),
+            BluetoothInputMode.newBluetoothInputCrossPlatform => BluetoothInput(
+              manager: BluetoothManager.create( BluetoothBackend.bluetoothLowEnergy),
+              onMeasurement: _onExternalMeasurement,
+            ),
+          })(),
         DateTimeForm(
           key: _timeForm,
           initialValue: widget.initialValue?.timestamp,
@@ -137,7 +161,6 @@ class AddEntryFormState extends FormStateBase<AddEntryFormValue, AddEntryForm> {
             (Icon(Icons.monitor_heart_outlined), BloodPressureForm(
               key: _bpForm,
               initialValue: (
-                // TODO: pressure units
                 sys: widget.initialValue?.record?.sys?.mmHg,
                 dia: widget.initialValue?.record?.dia?.mmHg,
                 pul: widget.initialValue?.record?.pul,
