@@ -10,6 +10,7 @@ version: 1.8.5+47
 
 environment:
   sdk: '>=3.0.2 <4.0.0'
+  flutter: '3.27.4'
 
 dependencies:
   csv: ^6.0.0
