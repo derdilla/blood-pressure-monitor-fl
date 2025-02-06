@@ -13,7 +13,6 @@ on:
 jobs:
   run-tests:
     runs-on: ubuntu-latest
-    strategy:
     permissions:
       contents: write
       pull-requests: write
