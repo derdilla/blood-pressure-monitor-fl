@@ -329,8 +329,5 @@ class MockMedicineRepository extends _MockRepo<Medicine> implements MedicineRepo
 class MockNoteRepository extends _MockRepo<Note> implements NoteRepository {}
 class MockBodyweightRepository extends _MockRepo<BodyweightRecord> implements BodyweightRepository {}
 
-/// [matchesGoldenFile] wrapper that includes a dir and a channel for image names
-dynamic myMatchesGoldenFile(String key) {
-  final channel = const String.fromEnvironment('channel');
-  return matchesGoldenFile(join('golden', '$channel-$key'));
-}
+/// [matchesGoldenFile] wrapper that includes a dir for image names.
+dynamic myMatchesGoldenFile(String key) => matchesGoldenFile(join('golden', key));
