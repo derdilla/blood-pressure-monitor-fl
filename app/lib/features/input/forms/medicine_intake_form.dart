@@ -65,6 +65,17 @@ class MedicineIntakeFormState extends FormStateBase<(Medicine, Weight), Medicine
   bool isEmptyInputFocused() => false;
 
   @override
+  void fillForm((Medicine, Weight)? value) => setState(() {
+    if (value == null) {
+      _leadingMed = null;
+      _controller.text = '';
+    } else {
+      _leadingMed = value.$1;
+      _controller.text = value.$2.mg.toString();
+    }
+  });
+
+  @override
   Widget build(BuildContext context) {
     if (_leadingMed != null) {
       return TextField(

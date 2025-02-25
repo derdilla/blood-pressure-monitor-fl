@@ -1,6 +1,5 @@
 import 'package:blood_pressure_app/config.dart';
 import 'package:blood_pressure_app/features/bluetooth/backend/bluetooth_backend.dart';
-import 'package:blood_pressure_app/features/bluetooth/backend/bluetooth_manager.dart';
 import 'package:blood_pressure_app/features/bluetooth/bluetooth_input.dart';
 import 'package:blood_pressure_app/features/input/forms/blood_pressure_form.dart';
 import 'package:blood_pressure_app/features/input/forms/date_time_form.dart';
@@ -125,9 +124,46 @@ class AddEntryFormState extends FormStateBase<AddEntryFormValue, AddEntryForm> {
   @override
   bool isEmptyInputFocused() => false;
 
-  void _onExternalMeasurement(BloodPressureRecord record) => setState(() {
-    // TODO: implement
-  });
+  @override
+  void fillForm(AddEntryFormValue? value) {
+    if (value == null) {
+      _timeForm.currentState!.fillForm(null);
+      _noteForm.currentState!.fillForm(null);
+      _bpForm.currentState!.fillForm(null);
+      _weightForm.currentState!.fillForm(null);
+      _intakeForm.currentState!.fillForm(null);
+    } else {
+      _timeForm.currentState!.fillForm(value.timestamp);
+      if (value.note != null) {
+        final c = value.note?.color == null ? null : Color(value.note!.color!);
+        _noteForm.currentState!.fillForm((value.note!.note, c));
+      }
+      if (value.record != null) {
+        _bpForm.currentState!.fillForm((
+          sys: value.record?.sys?.mmHg,
+          dia: value.record?.dia?.mmHg,
+          pul: value.record?.pul,
+        ));
+      }
+      if (value.weight != null) {
+        _weightForm.currentState!.fillForm(value.weight!.weight);
+      }
+      if (value.intake != null) {
+        _intakeForm.currentState!.fillForm((
+          value.intake!.medicine,
+          value.intake!.dosis,
+        ));
+      }
+    }
+  }
+
+  void _onExternalMeasurement(BloodPressureRecord record) => fillForm((
+    timestamp: record.time,
+    note: null,
+    record: record,
+    intake: null,
+    weight: null,
+  ));
 
   @override
   Widget build(BuildContext context) {

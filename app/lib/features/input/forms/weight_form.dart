@@ -58,6 +58,16 @@ class WeightFormState extends FormStateBase<Weight, WeightForm> {
   bool isEmptyInputFocused() => false;
 
   @override
+  void fillForm(Weight? value) {
+    if (value == null) {
+      _controller.text = '';
+    } else {
+      final w = context.read<Settings>().weightUnit.extract(widget.initialValue!);
+      _controller.text = w.toString();
+    }
+  }
+
+  @override
   Widget build(BuildContext context) => TextField(
     decoration: InputDecoration(
       labelText: AppLocalizations.of(context)!.weight,

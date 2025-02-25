@@ -66,6 +66,13 @@ abstract class FormStateBase<T, G extends FormBase> extends State<G> {
   /// Used to automatically focus the last input field on back key.
   @protected
   bool isEmptyInputFocused();
+
+  /// Set the input fields with the [value].
+  ///
+  /// If [value} is null clear the form. If value contains attributes that
+  /// correspond to different fields, only the non null attributes change field
+  /// contents.
+  void fillForm(T? value);
 }
 
 

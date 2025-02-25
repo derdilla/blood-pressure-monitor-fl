@@ -23,7 +23,7 @@ class DateTimeFormState extends FormStateBase<DateTime, DateTimeForm> {
   @override
   void initState() {
     super.initState();
-    _time = widget.initialValue ?? DateTime.now();
+
   }
 
   @override
@@ -42,6 +42,11 @@ class DateTimeFormState extends FormStateBase<DateTime, DateTimeForm> {
     }
     return true;
   }
+
+  @override
+  void fillForm(DateTime? value) => setState(() {
+    _time = widget.initialValue ?? DateTime.now();
+  });
 
   Future<void> _openDatePicker() async {
     final now = DateTime.now();

@@ -50,6 +50,17 @@ class NoteFormState extends FormStateBase<(String?, Color?), NoteForm> {
   bool isEmptyInputFocused() => _focusNode.hasFocus && _controller.text.isEmpty;
 
   @override
+  void fillForm((String?, Color?)? value) => setState(() {
+    if (value == null) {
+      _controller.text = '';
+      _color = null;
+    } else {
+      if (value.$1 != null) _controller.text = value.$1!;
+      if (value.$2 != null) _color = value.$2!;
+    }
+  });
+
+  @override
   Widget build(BuildContext context) => Column(
     children: [
       Padding(
