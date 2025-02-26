@@ -1,5 +1,5 @@
 import 'package:blood_pressure_app/components/confirm_deletion_dialoge.dart';
-import 'package:blood_pressure_app/features/export_import/export_button_bar.dart';
+import 'package:blood_pressure_app/features/export_import/export_button.dart';
 import 'package:blood_pressure_app/features/input/add_measurement_dialoge.dart';
 import 'package:blood_pressure_app/logging.dart';
 import 'package:blood_pressure_app/model/storage/storage.dart';
@@ -51,7 +51,7 @@ extension EntryUtils on BuildContext {
         }
         if (mounted && exportSettings.exportAfterEveryEntry) {
           read<IntervalStoreManager>().exportPage.setToMostRecentInterval();
-          performExport(this, AppLocalizations.of(this)!);
+          performExport(this);
         }
       }
     } on ProviderNotFoundException {
