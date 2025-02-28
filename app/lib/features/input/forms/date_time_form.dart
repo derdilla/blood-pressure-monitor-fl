@@ -9,7 +9,7 @@ import 'package:provider/provider.dart';
 class DateTimeForm extends FormBase<DateTime> {
   /// Create input to allow date and time input.
   const DateTimeForm({super.key,
-    required super.initialValue,
+    super.initialValue,
   });
 
   @override
@@ -20,10 +20,12 @@ class DateTimeForm extends FormBase<DateTime> {
 class DateTimeFormState extends FormStateBase<DateTime, DateTimeForm> {
   late DateTime _time;
 
+  String? _error;
+
   @override
   void initState() {
     super.initState();
-
+    _time = widget.initialValue ?? DateTime.now();
   }
 
   @override
@@ -35,17 +37,21 @@ class DateTimeFormState extends FormStateBase<DateTime, DateTimeForm> {
   @override
   bool validate() {
     if (context.read<Settings>().validateInputs && _time.isAfter(DateTime.now())) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text(AppLocalizations.of(context)!.errTimeAfterNow),
-      )); // TODO: display error as below
+      setState(() {
+        _error = AppLocalizations.of(context)!.errTimeAfterNow;
+      });
       return false;
+    } else if (_error != null) {
+      setState(() {
+        _error = null;
+      });
     }
     return true;
   }
 
   @override
   void fillForm(DateTime? value) => setState(() {
-    _time = widget.initialValue ?? DateTime.now();
+    _time = value ?? DateTime.now();
   });
 
   Future<void> _openDatePicker() async {
@@ -76,10 +82,11 @@ class DateTimeFormState extends FormStateBase<DateTime, DateTimeForm> {
     ));
   }
 
-  Widget _buildInput(String content, void Function() onTap, String label) => Expanded(
+  Widget _buildInput(String content, void Function() onTap, String label, [String? error]) => Expanded(
     child: InputDecorator(
       decoration: InputDecoration(
         labelText: label,
+        error: error == null ? null : Text(error),
       ),
       child: GestureDetector(
         onTap: onTap,
@@ -96,7 +103,7 @@ class DateTimeFormState extends FormStateBase<DateTime, DateTimeForm> {
       children: [
         _buildInput(date, _openDatePicker, AppLocalizations.of(context)!.date),
         SizedBox(width: 8,),
-        _buildInput(timeOfDay, _openTimePicker, AppLocalizations.of(context)!.time),
+        _buildInput(timeOfDay, _openTimePicker, AppLocalizations.of(context)!.time, _error),
       ],
     );
   }
