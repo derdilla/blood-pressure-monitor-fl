@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:blood_pressure_app/config.dart';
 import 'package:blood_pressure_app/features/bluetooth/bluetooth_input.dart' show BluetoothInput;
 import 'package:blood_pressure_app/features/old_bluetooth/logic/ble_read_cubit.dart';
 import 'package:blood_pressure_app/features/old_bluetooth/logic/bluetooth_cubit.dart';
@@ -23,24 +24,12 @@ import 'package:health_data_store/health_data_store.dart';
 /// This widget is superseded by [BluetoothInput].
 class OldBluetoothInput extends StatefulWidget {
   /// Create a measurement input through bluetooth.
-  const OldBluetoothInput({super.key,
+  OldBluetoothInput({super.key,
     required this.onMeasurement,
-    this.bluetoothCubit,
-    this.deviceScanCubit,
-    this.bleReadCubit,
-  });
+  }) : assert(!isTestingEnvironment, "OldBluetoothInput isn't maintained in tests");
 
   /// Called when a measurement was received through bluetooth.
   final void Function(BloodPressureRecord data) onMeasurement;
-
-  /// Function to customize [BluetoothCubit] creation.
-  final BluetoothCubit Function()? bluetoothCubit;
-
-  /// Function to customize [DeviceScanCubit] creation.
-  final DeviceScanCubit Function()? deviceScanCubit;
-
-  /// Function to customize [BleReadCubit] creation.
-  final BleReadCubit Function(BluetoothDevice dev)? bleReadCubit;
 
   @override
   State<OldBluetoothInput> createState() => _OldBluetoothInputState();
@@ -64,7 +53,7 @@ class _OldBluetoothInputState extends State<OldBluetoothInput> with TypeLogger {
   @override
   void initState() {
     super.initState();
-    _bluetoothCubit = widget.bluetoothCubit?.call() ?? BluetoothCubit();
+    _bluetoothCubit = BluetoothCubit();
   }
 
   @override
@@ -103,7 +92,7 @@ class _OldBluetoothInputState extends State<OldBluetoothInput> with TypeLogger {
       }
     });
     final settings = context.watch<Settings>();
-    _deviceScanCubit ??= widget.deviceScanCubit?.call() ?? DeviceScanCubit(
+    _deviceScanCubit ??= DeviceScanCubit(
       service: serviceUUID,
       settings: settings,
     );
@@ -128,7 +117,7 @@ class _OldBluetoothInputState extends State<OldBluetoothInput> with TypeLogger {
             // distinction
           DeviceSelected() => BlocConsumer<BleReadCubit, BleReadState>(
             bloc: () {
-              _deviceReadCubit = widget.bleReadCubit?.call(state.device) ?? BleReadCubit(
+              _deviceReadCubit = BleReadCubit(
                 state.device,
                 characteristicUUID: characteristicUUID,
                 serviceUUID: serviceUUID,

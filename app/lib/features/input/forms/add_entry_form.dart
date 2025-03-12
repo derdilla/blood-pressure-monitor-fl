@@ -1,6 +1,10 @@
 import 'package:blood_pressure_app/config.dart';
 import 'package:blood_pressure_app/features/bluetooth/backend/bluetooth_backend.dart';
+import 'package:blood_pressure_app/features/bluetooth/backend/flutter_blue_plus/flutter_blue_plus_mockable.dart';
 import 'package:blood_pressure_app/features/bluetooth/bluetooth_input.dart';
+import 'package:blood_pressure_app/features/bluetooth/logic/ble_read_cubit.dart';
+import 'package:blood_pressure_app/features/bluetooth/logic/bluetooth_cubit.dart';
+import 'package:blood_pressure_app/features/bluetooth/logic/device_scan_cubit.dart';
 import 'package:blood_pressure_app/features/input/forms/blood_pressure_form.dart';
 import 'package:blood_pressure_app/features/input/forms/date_time_form.dart';
 import 'package:blood_pressure_app/features/input/forms/form_base.dart';
@@ -24,12 +28,27 @@ class AddEntryForm extends FormBase<AddEntryFormValue>
   const AddEntryForm({super.key,
     super.initialValue,
     required this.meds,
+    this.bluetoothCubit,
+    this.deviceScanCubit,
+    this.bleReadCubit,
   });
 
   /// All medicines selectable.
   ///
   /// Hides med input when this is empty.
   final List<Medicine> meds;
+
+  /// Function to customize [BluetoothCubit] creation.
+  @visibleForTesting
+  final BluetoothCubit Function()? bluetoothCubit;
+
+  /// Function to customize [DeviceScanCubit] creation.
+  @visibleForTesting
+  final DeviceScanCubit Function()? deviceScanCubit;
+
+  /// Function to customize [BleReadCubit] creation.
+  @visibleForTesting
+  final BleReadCubit Function(BluetoothDevice dev)? bleReadCubit;
 
   @override
   FormStateBase createState() => AddEntryFormState();
@@ -171,27 +190,34 @@ class AddEntryFormState extends FormStateBase<AddEntryFormValue, AddEntryForm> {
     return ListView(
       padding: const EdgeInsets.symmetric(horizontal: 8),
       children: [
-        if (!isTestingEnvironment) // TODO: test feature (#494)
-          (() => switch (settings.bleInput) {
-            BluetoothInputMode.disabled => SizedBox.shrink(),
-            BluetoothInputMode.oldBluetoothInput => OldBluetoothInput(
-              onMeasurement: _onExternalMeasurement,
-            ),
-            BluetoothInputMode.newBluetoothInputOldLib => BluetoothInput(
-              manager: BluetoothManager.create(BluetoothBackend.flutterBluePlus),
-              onMeasurement: _onExternalMeasurement,
-            ),
-            BluetoothInputMode.newBluetoothInputCrossPlatform => BluetoothInput(
-              manager: BluetoothManager.create( BluetoothBackend.bluetoothLowEnergy),
-              onMeasurement: _onExternalMeasurement,
-            ),
-          })(),
-        DateTimeForm(
-          key: _timeForm,
-          initialValue: widget.initialValue?.timestamp,
-        ),
+        (() => switch (settings.bleInput) {
+          BluetoothInputMode.disabled => SizedBox.shrink(),
+          BluetoothInputMode.oldBluetoothInput => OldBluetoothInput(
+            onMeasurement: _onExternalMeasurement,
+          ),
+          BluetoothInputMode.newBluetoothInputOldLib => BluetoothInput(
+            manager: BluetoothManager.create(BluetoothBackend.flutterBluePlus),
+            onMeasurement: _onExternalMeasurement,
+            bluetoothCubit: widget.bluetoothCubit,
+            deviceScanCubit: widget.deviceScanCubit,
+            bleReadCubit: widget.bleReadCubit,
+          ),
+          BluetoothInputMode.newBluetoothInputCrossPlatform => BluetoothInput(
+            manager: BluetoothManager.create( BluetoothBackend.bluetoothLowEnergy),
+            onMeasurement: _onExternalMeasurement,
+            bluetoothCubit: widget.bluetoothCubit,
+            deviceScanCubit: widget.deviceScanCubit,
+            bleReadCubit: widget.bleReadCubit,
+          ),
+        })(),
+        if (settings.allowManualTimeInput)
+          DateTimeForm(
+            key: _timeForm,
+            initialValue: widget.initialValue?.timestamp,
+          ),
         SizedBox(height: 10),
         FormSwitcher(
+          key: Key('AddEntryFormSwitcher'),
           controller: _controller,
           subForms: [
             (Icon(Icons.monitor_heart_outlined), BloodPressureForm(

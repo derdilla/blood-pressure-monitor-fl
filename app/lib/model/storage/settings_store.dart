@@ -411,7 +411,7 @@ class Settings extends ChangeNotifier {
     notifyListeners();
   }
 
-  BluetoothInputMode _bleInput = BluetoothInputMode.oldBluetoothInput;
+  BluetoothInputMode _bleInput = BluetoothInputMode.disabled;
   /// Whether to show bluetooth input on add measurement page.
   BluetoothInputMode get bleInput => _bleInput;
   set bleInput(BluetoothInputMode value) {
