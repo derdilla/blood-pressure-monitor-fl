@@ -30,28 +30,15 @@ extension EntryUtils on BuildContext {
         initial,
       );
       if (entry != null) {
-        if (initial?.record != null) {
-          await recordRepo.remove(initial!.record!);
-        }
-        if (initial?.note != null) {
-          await noteRepo.remove(initial!.note!);
-        }
-        if (initial?.intake != null) {
-          await intakeRepo.remove(initial!.intake!);
-        }
+        if (initial?.record != null) await recordRepo.remove(initial!.record!);
+        if (initial?.note != null) await noteRepo.remove(initial!.note!);
+        if (initial?.intake != null) await intakeRepo.remove(initial!.intake!);
+        if (initial?.weight != null) await weightRepo.remove(initial!.weight!);
 
-        if (entry.record != null) {
-          await recordRepo.add(entry.record!);
-        }
-        if (entry.note != null) {
-          await noteRepo.add(entry.note!);
-        }
-        if (entry.intake != null) {
-          await intakeRepo.add(entry.intake!);
-        }
-        if(entry.weight != null) {
-          await weightRepo.add(entry.weight!);
-        }
+        if (entry.record != null) await recordRepo.add(entry.record!);
+        if (entry.note != null) await noteRepo.add(entry.note!);
+        if (entry.intake != null) await intakeRepo.add(entry.intake!);
+        if(entry.weight != null) await weightRepo.add(entry.weight!);
 
         if (mounted && exportSettings.exportAfterEveryEntry) {
           read<IntervalStoreManager>().exportPage.setToMostRecentInterval();
