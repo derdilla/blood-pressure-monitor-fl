@@ -13,10 +13,12 @@ import 'package:blood_pressure_app/model/storage/bluetooth_input_mode.dart';
 import 'package:blood_pressure_app/model/storage/settings_store.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:health_data_store/health_data_store.dart';
 import 'package:intl/intl.dart';
 
 import '../../../model/analyzer_test.dart';
 import '../../../util.dart';
+import '../../measurement_list/measurement_list_entry_test.dart';
 
 void main() {
   group('shows sub-forms depending on settings', () {
@@ -268,13 +270,62 @@ void main() {
     expect(key.currentState?.validate(), false);
   });
 
-  testWidgets('loads initial values', (tester) {fail('TODO');});
+  testWidgets('saves initial values as is', (tester) async {
+    final key = GlobalKey<AddEntryFormState>();
+    final med = mockMedicine(designation: 'somemed123');
+    final intake = mockIntake(med);
+    final value = (
+      timestamp: intake.time,
+      intake: intake,
+      note: Note(time: intake.time, note: '123test', color: Colors.teal.value),
+      record: mockRecord(time: intake.time, sys: 123, dia: 45, pul: 67),
+      weight: BodyweightRecord(time: intake.time, weight: Weight.kg(123.45))
+    );
+    await tester.pumpWidget(materialApp(AddEntryForm(
+      key: key,
+      meds: [med],
+      initialValue: value,
+    )));
+    await tester.pumpAndSettle();
 
-  testWidgets('saves prefilled values as is', (tester) {fail('TODO');});
+    expect(key.currentState?.validate(), true);
+    expect(key.currentState?.save(), isA<AddEntryFormValue>()
+      .having((e) => e.timestamp, 'timestamp', value.timestamp)
+      .having((e) => e.intake, 'intake', value.intake)
+      .having((e) => e.record, 'record', value.record)
+      .having((e) => e.weight, 'weight', value.weight)
+      .having((e) => e.note, 'note', value.note));
+  });
+
+  testWidgets('saves loaded values as is', (tester) async {
+    final key = GlobalKey<AddEntryFormState>();
+    final med = mockMedicine(designation: 'somemed123');
+    final intake = mockIntake(med);
+    final value = (
+      timestamp: intake.time,
+      intake: intake,
+      note: Note(time: intake.time, note: '123test', color: Colors.teal.value),
+      record: mockRecord(time: intake.time, sys: 123, dia: 45, pul: 67),
+      weight: BodyweightRecord(time: intake.time, weight: Weight.kg(123.45))
+    );
+    await tester.pumpWidget(materialApp(AddEntryForm(
+      key: key,
+      meds: [med],
+    )));
+    await tester.pumpAndSettle();
+    key.currentState!.fillForm(value);
+    await tester.pumpAndSettle();
+
+    expect(key.currentState?.validate(), true);
+    expect(key.currentState?.save(), isA<AddEntryFormValue>()
+        .having((e) => e.timestamp, 'timestamp', value.timestamp)
+        .having((e) => e.intake, 'intake', value.intake)
+        .having((e) => e.record, 'record', value.record)
+        .having((e) => e.weight, 'weight', value.weight)
+        .having((e) => e.note, 'note', value.note));
+  });
 
   testWidgets("doesn't save empty forms", (tester) {fail('TODO');});
-
-  testWidgets('loads values through method call', (tester) {fail('TODO');});
 
   testWidgets('only shows bluetooth input when requested', (tester) {fail('TODO');});
 
@@ -285,7 +336,7 @@ void main() {
 
   testWidgets("doesn't focus last input on backspace if the current is still filled", (tester) {fail('TODO');});
 
-  //testWidgets('description', (tester) {fail('TODO');});
+  //testWidgets('description', (tester) async {fail('TODO');});
 }
 
 class _MockBluetoothCubit extends Fake implements BluetoothCubit {
@@ -296,8 +347,5 @@ class _MockBluetoothCubit extends Fake implements BluetoothCubit {
   BluetoothState get state => BluetoothStateDisabled();
 
   @override
-  // TODO: implement stream
   Stream<BluetoothState> get stream => Stream.empty();
 }
-class _MockDeviceScanCubit extends Fake implements DeviceScanCubit {}
-class _MockBleReadCubit extends Fake implements BleReadCubit {}

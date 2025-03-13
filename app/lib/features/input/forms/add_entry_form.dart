@@ -62,10 +62,19 @@ class AddEntryFormState extends FormStateBase<AddEntryFormValue, AddEntryForm> {
 
   final _controller = FormSwitcherController();
 
+  // because these values are no necessarily in tree a copy is needed to get
+  // overridden values.
+  BloodPressureRecord? _lastSavedPressure;
+  BodyweightRecord? _lastSavedWeight;
+  MedicineIntake? _lastSavedIntake;
+
   @override
   void initState() {
     super.initState();
     if (widget.initialValue != null) {
+      _lastSavedPressure = widget.initialValue?.record;
+      _lastSavedWeight = widget.initialValue?.weight;
+      _lastSavedIntake = widget.initialValue?.intake;
       if (widget.initialValue!.record == null
           && widget.initialValue!.intake == null
           && widget.initialValue!.weight != null) {
@@ -92,9 +101,9 @@ class AddEntryFormState extends FormStateBase<AddEntryFormValue, AddEntryForm> {
     if (!validate()) return null;
     final time = _timeForm.currentState!.save()!;
     Note? note;
-    BloodPressureRecord? record;
-    BodyweightRecord? weight;
-    MedicineIntake? intake;
+    BloodPressureRecord? record = _lastSavedPressure;
+    BodyweightRecord? weight = _lastSavedWeight;
+    MedicineIntake? intake = _lastSavedIntake;
 
     final noteFormValue = _noteForm.currentState?.save();
     if (noteFormValue != null) {
@@ -114,6 +123,7 @@ class AddEntryFormState extends FormStateBase<AddEntryFormValue, AddEntryForm> {
     if (weightFormValue != null) {
       weight = BodyweightRecord(time: time, weight: weightFormValue);
     }
+
     final intakeFormValue = _intakeForm.currentState?.save();
     if (intakeFormValue != null) {
       intake = MedicineIntake(
@@ -137,6 +147,9 @@ class AddEntryFormState extends FormStateBase<AddEntryFormValue, AddEntryForm> {
 
   @override
   void fillForm(AddEntryFormValue? value) {
+    _lastSavedPressure = value?.record;
+    _lastSavedWeight = value?.weight;
+    _lastSavedIntake = value?.intake;
     if (value == null) {
       _timeForm.currentState!.fillForm(null);
       _noteForm.currentState!.fillForm(null);
@@ -150,17 +163,17 @@ class AddEntryFormState extends FormStateBase<AddEntryFormValue, AddEntryForm> {
         _noteForm.currentState!.fillForm((value.note!.note, c));
       }
       if (value.record != null) {
-        _bpForm.currentState!.fillForm((
+        _bpForm.currentState?.fillForm((
           sys: value.record?.sys?.mmHg,
           dia: value.record?.dia?.mmHg,
           pul: value.record?.pul,
         ));
       }
       if (value.weight != null) {
-        _weightForm.currentState!.fillForm(value.weight!.weight);
+        _weightForm.currentState?.fillForm(value.weight!.weight);
       }
       if (value.intake != null) {
-        _intakeForm.currentState!.fillForm((
+        _intakeForm.currentState?.fillForm((
           value.intake!.medicine,
           value.intake!.dosis,
         ));
