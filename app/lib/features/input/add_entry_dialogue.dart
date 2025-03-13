@@ -2,7 +2,9 @@ import 'dart:async';
 
 import 'package:blood_pressure_app/components/fullscreen_dialoge.dart';
 import 'package:blood_pressure_app/features/input/forms/add_entry_form.dart';
+import 'package:blood_pressure_app/model/storage/storage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:health_data_store/health_data_store.dart';
 
@@ -51,7 +53,7 @@ class _AddEntryDialogueState extends State<AddEntryDialogue> {
   Widget build(BuildContext context) => FullscreenDialoge(
     actionButtonText: AppLocalizations.of(context)!.btnSave,
     onActionButtonPressed: _onSavePressed,
-    bottomAppBar: false, // TODO
+    bottomAppBar: context.select((Settings s) => s.bottomAppBars),
     body: AddEntryForm(
       key: formKey,
       initialValue: widget.initialRecord,

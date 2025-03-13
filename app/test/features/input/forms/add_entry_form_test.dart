@@ -333,11 +333,6 @@ void main() {
     expect(key.currentState!.save(), isNull);
   });
 
-  testWidgets('only shows bluetooth input when requested', (tester) {fail('TODO');});
-
-  // TODO: reevaluate this. Can other code change?
-  testWidgets('returns values on edit cancel', (tester) {fail('TODO');});
-
   testWidgets('focuses last input field on backspace', (tester) {fail('TODO');});
 
   testWidgets("doesn't focus last input on backspace if the current is still filled", (tester) {fail('TODO');});

@@ -17,7 +17,18 @@ import '../settings/tiles/color_picker_list_tile_test.dart';
 // FIXME: most of these are already tested at add_entry_form_test. make tests more concise
 
 void main() {
-  // TODO: test bottomAppBars works
+  testWidgets('respects bottomAppBars', (tester) async {
+    final settings = Settings(bottomAppBars: false);
+    await tester.pumpWidget(materialApp(const AddEntryDialogue(availableMeds: []),
+      settings: settings
+    ));
+    final initialHeights = tester.getCenter(find.byType(AppBar)).dy;
+
+    settings.bottomAppBars = true;
+    await tester.pump();
+
+    expect(tester.getCenter(find.byType(AppBar)).dy, greaterThan(initialHeights));
+  });
 
   group('AddEntryDialoge', () {
     testWidgets('should show everything on initial page', (tester) async {
