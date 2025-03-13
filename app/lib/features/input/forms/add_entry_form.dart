@@ -108,7 +108,8 @@ class AddEntryFormState extends FormStateBase<AddEntryFormValue, AddEntryForm> {
   }
 
   @override
-  bool validate() => (_timeForm.currentState?.validate() ?? false)
+  bool validate() => !context.read<Settings>().validateInputs
+    || (_timeForm.currentState?.validate() ?? false)
     && (_noteForm.currentState?.validate() ?? false)
     // the following become null when unopened
     && (_bpForm.currentState?.validate() ?? true)
