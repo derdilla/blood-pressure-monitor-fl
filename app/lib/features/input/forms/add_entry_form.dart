@@ -1,6 +1,4 @@
-import 'package:blood_pressure_app/config.dart';
 import 'package:blood_pressure_app/features/bluetooth/backend/bluetooth_backend.dart';
-import 'package:blood_pressure_app/features/bluetooth/backend/flutter_blue_plus/flutter_blue_plus_mockable.dart';
 import 'package:blood_pressure_app/features/bluetooth/bluetooth_input.dart';
 import 'package:blood_pressure_app/features/bluetooth/logic/ble_read_cubit.dart';
 import 'package:blood_pressure_app/features/bluetooth/logic/bluetooth_cubit.dart';
@@ -82,18 +80,12 @@ class AddEntryFormState extends FormStateBase<AddEntryFormValue, AddEntryForm> {
   }
 
   @override
-  bool validate() {
-    log.info('_timeForm validation: ${_timeForm.currentState?.validate()}');
-    log.info('_noteForm validation: ${_noteForm.currentState?.validate()}');
-    log.info('_bpForm validation: ${_bpForm.currentState?.validate()}');
-    log.info('_weightForm validation: ${_weightForm.currentState?.validate()}');
-    log.info('_intakeForm validation: ${_intakeForm.currentState?.validate()}');
-    return (_timeForm.currentState?.validate() ?? false)
+  bool validate() => (_timeForm.currentState?.validate() ?? false)
     && (_noteForm.currentState?.validate() ?? false)
-    && ((_bpForm.currentState?.validate() ?? false)
-      || (_weightForm.currentState?.validate() ?? false)
-      || (_intakeForm.currentState?.validate() ?? false));
-  }
+    // the following become null when unopened
+    && (_bpForm.currentState?.validate() ?? true)
+    && (_weightForm.currentState?.validate() ?? true)
+    && (_intakeForm.currentState?.validate() ?? true);
 
   @override
   AddEntryFormValue? save() {

@@ -1,29 +1,33 @@
 import 'package:blood_pressure_app/features/input/forms/medicine_intake_form.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:health_data_store/health_data_store.dart';
 
 import '../../../util.dart';
 
 void main() {
-  testWidgets('shows input field without close option on single med', (WidgetTester tester) async {
+  testWidgets('shows input list on single med', (WidgetTester tester) async {
     final mockMed = mockMedicine(designation: 'monozernorditrocin');
     await tester.pumpWidget(materialApp(MedicineIntakeForm(meds: [mockMed])));
+    final localizations = await AppLocalizations.delegate.load(Locale('en'));
 
-    expect(find.byType(TextField), findsOneWidget);
-    expect(find.byIcon(Icons.close), findsNothing);
+    expect(find.byType(TextField), findsNothing);
     expect(find.text('monozernorditrocin'), findsOneWidget);
+    expect(find.text(localizations.tapToSelect), findsOneWidget);
   });
 
   testWidgets('shows input list on multiple meds', (WidgetTester tester) async {
     final med1 = mockMedicine(designation: 'tetraebraphthyme');
     final med2 = mockMedicine(designation: 'hypovonyhensas');
     await tester.pumpWidget(materialApp(MedicineIntakeForm(meds: [med1,med2])));
+    final localizations = await AppLocalizations.delegate.load(Locale('en'));
 
     expect(find.text('tetraebraphthyme'), findsOneWidget);
     expect(find.text('hypovonyhensas'), findsOneWidget);
     expect(find.byType(TextField), findsNothing);
     expect(find.byIcon(Icons.close), findsNothing);
+    expect(find.text(localizations.tapToSelect), findsNothing);
 
     await tester.tap(find.text('hypovonyhensas'));
     await tester.pumpAndSettle();
@@ -73,14 +77,6 @@ void main() {
     await tester.enterText(find.byType(TextField), '3.14');
     expect(key.currentState!.validate(), isTrue);
     expect(key.currentState!.save(), (med1, Weight.mg(3.14)));
-  });
-
-  testWidgets('prefills values with single med', (WidgetTester tester) async {
-    final m = mockMedicine(designation: 'monozernorditrocin', defaultDosis: 3.141);
-    await tester.pumpWidget(materialApp(MedicineIntakeForm(meds: [m])));
-
-    expect(find.text('monozernorditrocin'), findsOneWidget);
-    expect(find.text('3.141'), findsOneWidget);
   });
 
   testWidgets('prefills values when selecting med', (WidgetTester tester) async {

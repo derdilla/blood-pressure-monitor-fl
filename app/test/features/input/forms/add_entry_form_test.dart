@@ -13,7 +13,9 @@ import 'package:blood_pressure_app/model/storage/bluetooth_input_mode.dart';
 import 'package:blood_pressure_app/model/storage/settings_store.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:intl/intl.dart';
 
+import '../../../model/analyzer_test.dart';
 import '../../../util.dart';
 
 void main() {
@@ -101,23 +103,170 @@ void main() {
     });
   });
 
-  testWidgets('saves all entered values', (tester) {fail('TODO');});
+  testWidgets('saves all entered values', (tester) async {
+    final med1 = mockMedicine(color: Colors.blue, designation: 'med123', defaultDosis: 3.14);
+    final key = GlobalKey<AddEntryFormState>();
+    await tester.pumpWidget(materialApp(AddEntryForm(key: key, meds: [med1]),
+      settings: Settings(weightInput: true)
+    ));
 
-  testWidgets('saves partially entered values (blood pressure)', (tester) {fail('TODO');});
+    final fields = find.byType(TextField);
+    await tester.enterText(fields.at(0), '123'); // sys
+    await tester.enterText(fields.at(1), '45'); // dia
+    await tester.enterText(fields.at(2), '67'); // pul
 
-  testWidgets('saves partially entered values (intake)', (tester) {fail('TODO');});
+    await tester.tap(find.byIcon(Icons.medication_outlined));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text(med1.designation)); // med
+    await tester.pumpAndSettle();
 
-  testWidgets('saves partially entered values (note)', (tester) {fail('TODO');});
+    await tester.tap(find.byIcon(Icons.scale));
+    await tester.pumpAndSettle();
+    await tester.enterText(find.byType(TextField).first, '65.4'); // weight
 
-  testWidgets('initializes timestamp correctly', (tester) {fail('TODO');});
+    await tester.enterText(find.descendant(
+        of: find.byType(NoteForm),
+        matching: find.byType(TextField),
+    ), 'some note'); // note text
+    await tester.pumpAndSettle();
 
-  testWidgets('validates time form', (tester) {fail('TODO');});
+    expect(key.currentState!.validate(), true);
+    final res = key.currentState!.save();
+    expect(res?.record?.sys?.mmHg, 123);
+    expect(res?.record?.dia?.mmHg, 45);
+    expect(res?.record?.pul, 67);
+    expect(res?.intake?.medicine, med1);
+    expect(res?.intake?.dosis, med1.dosis);
+    expect(res?.weight?.weight.kg, 65.4);
+    expect(res?.note?.note, 'some note');
+    expect(res?.note?.color, isNull);
+  });
 
-  testWidgets('validates bp form', (tester) {fail('TODO');});
+  testWidgets('saves partially entered values (blood pressure)', (tester) async {
+    final key = GlobalKey<AddEntryFormState>();
+    await tester.pumpWidget(materialApp(AddEntryForm(key: key, meds: [])));
 
-  testWidgets('validates weight form', (tester) {fail('TODO');});
+    final fields = find.byType(TextField);
+    await tester.enterText(fields.at(0), '123'); // sys
+    await tester.enterText(fields.at(1), '45'); // dia
+    await tester.enterText(fields.at(2), '67'); // pul
 
-  testWidgets('validates intake form', (tester) {fail('TODO');});
+    expect(key.currentState!.validate(), true);
+    final res = key.currentState!.save();
+    expect(res?.record?.sys?.mmHg, 123);
+    expect(res?.record?.dia?.mmHg, 45);
+    expect(res?.record?.pul, 67);
+    expect(res?.intake, isNull);
+    expect(res?.note, isNull);
+  });
+
+  testWidgets('saves partially entered values (note)', (tester) async {
+    final key = GlobalKey<AddEntryFormState>();
+    await tester.pumpWidget(materialApp(AddEntryForm(key: key, meds: [])));
+
+    await tester.enterText(find.descendant(
+      of: find.byType(NoteForm),
+      matching: find.byType(TextField),
+    ), 'some note'); // note text
+    await tester.pumpAndSettle();
+
+    expect(key.currentState!.validate(), true);
+    final res = key.currentState!.save();
+    expect(res?.record, isNull);
+    expect(res?.intake, isNull);
+    expect(res?.weight, isNull);
+    expect(res?.note?.note, 'some note');
+  });
+
+  testWidgets('saves partially entered values (intake)', (tester) async {
+    final med1 = mockMedicine(color: Colors.blue, designation: 'med123', defaultDosis: 3.14);
+    final key = GlobalKey<AddEntryFormState>();
+    await tester.pumpWidget(materialApp(AddEntryForm(key: key, meds: [med1])));
+
+    await tester.tap(find.byIcon(Icons.medication_outlined));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text(med1.designation)); // med
+    await tester.pumpAndSettle();
+
+    expect(key.currentState!.validate(), true);
+    final res = key.currentState!.save();
+    expect(res?.record, isNull);
+    expect(res?.weight, isNull);
+    expect(res?.note, isNull);
+    expect(res?.intake?.medicine, med1);
+    expect(res?.intake?.dosis, med1.dosis);
+  });
+
+  testWidgets('initializes timestamp correctly', (tester) async {
+    final dateFormatter = DateFormat('yyyy-MM-dd');
+    final timeFormatter = DateFormat('HH:mm');
+
+    final start = DateTime.now();
+    await tester.pumpWidget(materialApp(AddEntryForm(meds: [])));
+
+    expect(find.text(dateFormatter.format(start)), findsOneWidget);
+    final allowedTimes = anyOf(timeFormatter.format(start), timeFormatter.format(start.add(Duration(minutes: 1))));
+    expect(find.byWidgetPredicate(
+            (w) => w is Text && allowedTimes.matches(w.data, {})),
+        findsOneWidget);
+  });
+
+  testWidgets('validates time form', (tester) async {
+    final key = GlobalKey<AddEntryFormState>();
+    final time = DateTime.now();
+    await tester.pumpWidget(materialApp(AddEntryForm(key: key, meds: [])));
+    expect(key.currentState?.validate(), true);
+
+    key.currentState!.fillForm((
+      timestamp: time.add(Duration(hours: 1)),
+      intake: null, note: null, record: null, weight: null,
+    ));
+    await tester.pump();
+    expect(key.currentState?.validate(), false);
+  });
+
+  testWidgets('validates bp form', (tester) async {
+    final key = GlobalKey<AddEntryFormState>();
+    await tester.pumpWidget(materialApp(AddEntryForm(key: key, meds: [])));
+    expect(key.currentState?.validate(), true);
+
+    key.currentState!.fillForm((
+      timestamp: DateTime.now(),
+      record: mockRecord(sys: 123123),
+      note: null, intake: null, weight: null,
+    ));
+    await tester.pump();
+    expect(key.currentState?.validate(), false);
+  });
+
+  testWidgets('validates weight form', (tester) async {
+    final key = GlobalKey<AddEntryFormState>();
+    await tester.pumpWidget(materialApp(AddEntryForm(key: key, meds: []),
+      settings: Settings(weightInput: true),
+    ));
+    expect(key.currentState?.validate(), true);
+
+    await tester.tap(find.byIcon(Icons.scale));
+    await tester.pumpAndSettle();
+    await tester.enterText(find.byType(TextField).first, ',.,');
+    await tester.pump();
+    expect(key.currentState?.validate(), false);
+  });
+
+  testWidgets('validates intake form', (tester) async {
+    final key = GlobalKey<AddEntryFormState>();
+    final med = mockMedicine(designation: 'testmed');
+    await tester.pumpWidget(materialApp(AddEntryForm(key: key, meds: [med])));
+    expect(key.currentState?.validate(), true);
+
+    await tester.tap(find.byIcon(Icons.medication_outlined));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text(med.designation));
+    await tester.pump();
+    await tester.enterText(find.byType(TextField).first, ',.,');
+    await tester.pump();
+    expect(key.currentState?.validate(), false);
+  });
 
   testWidgets('loads initial values', (tester) {fail('TODO');});
 

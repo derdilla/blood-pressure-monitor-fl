@@ -30,7 +30,6 @@ class MedicineIntakeFormState extends FormStateBase<(Medicine, Weight), Medicine
   @override
   void initState() {
     super.initState();
-    if (widget.meds.length == 1) _leadingMed = widget.meds.first;
     _controller.text = _leadingMed?.dosis?.mg.toString() ?? '';
 
     if (widget.initialValue != null) {
@@ -84,7 +83,7 @@ class MedicineIntakeFormState extends FormStateBase<(Medicine, Weight), Medicine
           labelText: AppLocalizations.of(context)!.dosis,
           prefixIcon: Icon(Icons.medication,
             color: _leadingMed!.color == null ? null : Color(_leadingMed!.color!)),
-          suffixIcon: widget.meds.length == 1 ? null : IconButton(
+          suffixIcon: IconButton(
             onPressed: () => setState(() => _leadingMed = null),
             icon: Icon(Icons.close),
           ),
@@ -101,6 +100,9 @@ class MedicineIntakeFormState extends FormStateBase<(Medicine, Weight), Medicine
           ListTile(
             leading: Icon(Icons.medication, color: m.color == null ? null : Color(m.color!)),
             title: Text(m.designation),
+            subtitle: (widget.meds.length == 1)
+                ? Text(AppLocalizations.of(context)!.tapToSelect)
+                : null,
             onTap: () => setState(() {
               _leadingMed = m;
               _controller.text = _leadingMed?.dosis?.mg.toString() ?? '';
