@@ -1,7 +1,5 @@
 import 'package:blood_pressure_app/features/bluetooth/bluetooth_input.dart';
-import 'package:blood_pressure_app/features/bluetooth/logic/ble_read_cubit.dart';
 import 'package:blood_pressure_app/features/bluetooth/logic/bluetooth_cubit.dart';
-import 'package:blood_pressure_app/features/bluetooth/logic/device_scan_cubit.dart';
 import 'package:blood_pressure_app/features/input/forms/add_entry_form.dart';
 import 'package:blood_pressure_app/features/input/forms/blood_pressure_form.dart';
 import 'package:blood_pressure_app/features/input/forms/date_time_form.dart';
@@ -12,6 +10,8 @@ import 'package:blood_pressure_app/features/old_bluetooth/bluetooth_input.dart';
 import 'package:blood_pressure_app/model/storage/bluetooth_input_mode.dart';
 import 'package:blood_pressure_app/model/storage/settings_store.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:health_data_store/health_data_store.dart';
 import 'package:intl/intl.dart';
@@ -333,9 +333,58 @@ void main() {
     expect(key.currentState!.save(), isNull);
   });
 
-  testWidgets('focuses last input field on backspace', (tester) {fail('TODO');});
+  testWidgets('focuses last input field on backspace', (tester) async {
+    final key = GlobalKey<AddEntryFormState>();
+    await tester.pumpWidget(materialApp(AddEntryForm(key: key, meds: [])));
+    final localizations = await AppLocalizations.delegate.load(const Locale('en'));
 
-  testWidgets("doesn't focus last input on backspace if the current is still filled", (tester) {fail('TODO');});
+    final fields = find.byType(TextField);
+    await tester.enterText(fields.at(0), '123'); // sys
+    await tester.enterText(fields.at(1), '45'); // dia
+    await tester.enterText(fields.at(2), '67'); // pul
+
+    await tester.tap(find.text('67'));
+
+    Finder focusedTextField() {
+      final firstFocused = FocusManager.instance.primaryFocus;
+      expect(firstFocused?.context?.widget, isNotNull);
+      return find.ancestor(
+        of: find.byWidget(FocusManager.instance.primaryFocus!.context!.widget),
+        matching: find.byType(TextField),
+      );
+    }
+    expect(find.descendant(of: focusedTextField(), matching: find.text(localizations.sysLong)), findsNothing);
+    expect(find.descendant(of: focusedTextField(), matching: find.text(localizations.diaLong)), findsNothing);
+    expect(find.descendant(of: focusedTextField(), matching: find.text(localizations.pulLong)), findsOneWidget);
+
+    await tester.enterText(focusedTextField(), '');
+    await tester.sendKeyEvent(LogicalKeyboardKey.backspace);
+    await tester.pump();
+
+    expect(find.descendant(of: focusedTextField(), matching: find.text(localizations.sysLong)), findsNothing);
+    expect(find.descendant(of: focusedTextField(), matching: find.text(localizations.diaLong)), findsOneWidget);
+    expect(find.descendant(of: focusedTextField(), matching: find.text(localizations.pulLong)), findsNothing);
+
+    await tester.sendKeyEvent(LogicalKeyboardKey.backspace);
+    await tester.sendKeyEvent(LogicalKeyboardKey.backspace);
+    await tester.sendKeyEvent(LogicalKeyboardKey.backspace);
+    await tester.pump();
+
+    expect(find.descendant(of: focusedTextField(), matching: find.text(localizations.sysLong)), findsOneWidget);
+    expect(find.descendant(of: focusedTextField(), matching: find.text(localizations.diaLong)), findsNothing);
+    expect(find.descendant(of: focusedTextField(), matching: find.text(localizations.pulLong)), findsNothing);
+
+    // doesn't focus last input on backspace if the current is still filled
+    await tester.sendKeyEvent(LogicalKeyboardKey.backspace);
+    await tester.sendKeyEvent(LogicalKeyboardKey.backspace);
+    await tester.sendKeyEvent(LogicalKeyboardKey.backspace);
+    await tester.sendKeyEvent(LogicalKeyboardKey.backspace);
+    await tester.pump();
+
+    expect(find.descendant(of: focusedTextField(), matching: find.text(localizations.sysLong)), findsOneWidget);
+    expect(find.descendant(of: focusedTextField(), matching: find.text(localizations.diaLong)), findsNothing);
+    expect(find.descendant(of: focusedTextField(), matching: find.text(localizations.pulLong)), findsNothing);
+  });
 
   //testWidgets('description', (tester) async {fail('TODO');});
 }

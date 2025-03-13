@@ -15,6 +15,7 @@ import 'package:blood_pressure_app/logging.dart';
 import 'package:blood_pressure_app/model/storage/bluetooth_input_mode.dart';
 import 'package:blood_pressure_app/model/storage/storage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:health_data_store/health_data_store.dart';
 import 'package:provider/provider.dart';
@@ -86,6 +87,24 @@ class AddEntryFormState extends FormStateBase<AddEntryFormValue, AddEntryForm> {
       // In all other cases we are at the correct position
       // or don't need to jump at all.
     }
+    ServicesBinding.instance.keyboard.addHandler(_onKey);
+  }
+
+  @override
+  void dispose() {
+    ServicesBinding.instance.keyboard.removeHandler(_onKey);
+    super.dispose();
+  }
+
+  bool _onKey(KeyEvent event) {
+    if(event.logicalKey == LogicalKeyboardKey.backspace
+      && ((_bpForm.currentState?.isEmptyInputFocused() ?? false)
+          || (_noteForm.currentState?.isEmptyInputFocused() ?? false)
+          || (_weightForm.currentState?.isEmptyInputFocused() ?? false)
+          || (_intakeForm.currentState?.isEmptyInputFocused() ?? false))) {
+      FocusScope.of(context).previousFocus();
+    }
+    return false;
   }
 
   @override
