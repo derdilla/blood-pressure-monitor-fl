@@ -132,6 +132,13 @@ class AddEntryFormState extends FormStateBase<AddEntryFormValue, AddEntryForm> {
         dosis: intakeFormValue.$2,
       );
     }
+
+    if (note == null
+      && record == null
+      && weight == null
+      && intake == null) {
+      return null;
+    }
     return (
       timestamp: time,
       note: note,

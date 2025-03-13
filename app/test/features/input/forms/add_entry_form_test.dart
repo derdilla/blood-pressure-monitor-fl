@@ -325,7 +325,13 @@ void main() {
         .having((e) => e.note, 'note', value.note));
   });
 
-  testWidgets("doesn't save empty forms", (tester) {fail('TODO');});
+  testWidgets("doesn't save empty forms", (tester) async {
+    final key = GlobalKey<AddEntryFormState>();
+    await tester.pumpWidget(materialApp(AddEntryForm(key: key, meds: [])));
+    await tester.pumpAndSettle();
+    expect(key.currentState!.validate(), true);
+    expect(key.currentState!.save(), isNull);
+  });
 
   testWidgets('only shows bluetooth input when requested', (tester) {fail('TODO');});
 
