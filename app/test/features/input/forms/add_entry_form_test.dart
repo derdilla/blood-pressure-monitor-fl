@@ -386,7 +386,40 @@ void main() {
     expect(find.descendant(of: focusedTextField(), matching: find.text(localizations.pulLong)), findsNothing);
   });
 
-  //testWidgets('description', (tester) async {fail('TODO');});
+  testWidgets('should allow invalid values when setting is set', (tester) async {
+    final key = GlobalKey<AddEntryFormState>();
+    await tester.pumpWidget(materialApp(AddEntryForm(key: key, meds: []),
+      settings: Settings(validateInputs: false)),
+    );
+
+    final fields = find.byType(TextField);
+    await tester.enterText(fields.at(0), '12'); // sys
+    await tester.enterText(fields.at(1), '450'); // dia
+    await tester.enterText(fields.at(2), '67123'); // pul
+
+    expect(key.currentState!.validate(), true);
+    final res = key.currentState!.save();
+    expect(res?.record?.sys?.mmHg, 12);
+    expect(res?.record?.dia?.mmHg, 450);
+    expect(res?.record?.pul, 67123);
+  });
+
+  testWidgets('starts with sys input focused', (tester) async {
+    final key = GlobalKey<AddEntryFormState>();
+    await tester.pumpWidget(materialApp(AddEntryForm(key: key, meds: [])));
+    final localizations = await AppLocalizations.delegate.load(const Locale('en'));
+
+    await tester.pump();
+    print(FocusManager.instance.primaryFocus!.context!.widget);
+    print(tester.element(find.byWidget(FocusManager.instance.primaryFocus!.context!.widget)).owner);
+    expect(find.descendant(
+      of: find.ancestor(
+        of: find.byWidget(FocusManager.instance.primaryFocus!.context!.widget),
+        matching: find.byType(TextField)
+      ),
+      matching: find.text(localizations.sysLong)
+    ), findsOneWidget);
+  });
 }
 
 class _MockBluetoothCubit extends Fake implements BluetoothCubit {
