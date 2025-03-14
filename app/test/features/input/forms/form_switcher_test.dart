@@ -13,9 +13,9 @@ void main() {
       ],
     ))));
 
-    expect(find.byType(TabBar), findsOneWidget);
+    expect(find.byType(TabBar), findsNothing, reason: 'only one tab present');
     expect(find.byType(TabBarView), findsNothing);
-    expect(find.byType(InlineTabView), findsOneWidget);
+    expect(find.byType(InlineTabView), findsNothing, reason: 'only one tab present');
   });
 
   testWidgets('shows all passed tabs in TabBar', (tester) async {
@@ -68,24 +68,5 @@ void main() {
     expect(find.text('Content 2'), findsNothing);
     expect(find.text('Content 3'), findsNothing);
     expect(find.text('Content 4'), findsOneWidget);
-  });
-
-  testWidgets('should switch to tabs registered in passed controller',
-      (WidgetTester tester) async {
-    final controller = FormSwitcherController();
-    controller.animateTo(2);
-    await tester.pumpWidget(FormSwitcher(
-      subForms: [
-        (Text('tab1'), Text('body1')),
-        (Text('tab2'), Text('body2')),
-        (Text('tab3'), Text('body3')),
-      ],
-      controller: controller,
-    ));
-
-    await tester.pumpAndSettle();
-
-    expect(find.text('body1'), findsNothing);
-    expect(find.text('body3'), findsOneWidget);
   });
 }

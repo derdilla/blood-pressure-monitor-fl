@@ -1,18 +1,14 @@
-import 'package:blood_pressure_app/features/bluetooth/bluetooth_input.dart';
 import 'package:blood_pressure_app/features/input/add_entry_dialogue.dart';
 import 'package:blood_pressure_app/features/input/forms/add_entry_form.dart';
 import 'package:blood_pressure_app/features/settings/tiles/color_picker_list_tile.dart';
-import 'package:blood_pressure_app/model/storage/bluetooth_input_mode.dart';
 import 'package:blood_pressure_app/model/storage/settings_store.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:health_data_store/health_data_store.dart';
 
 import '../../model/export_import/record_formatter_test.dart';
 import '../../util.dart';
-import '../settings/tiles/color_picker_list_tile_test.dart';
 
 void main() {
   testWidgets('respects bottomAppBars', (tester) async {
@@ -89,8 +85,8 @@ void main() {
     expect(find.text(localizations.errUnrealistic), findsNothing);
     expect(find.text(localizations.errDiaGtSys), findsNothing);
 
-    await tester.enterText(find.ancestor(of: find.text('Systolic').first, matching: find.byType(TextFormField)), '123');
-    await tester.enterText(find.ancestor(of: find.text('Diastolic').first, matching: find.byType(TextFormField)), '67');
+    await tester.enterText(find.ancestor(of: find.text('Systolic').first, matching: find.byType(TextField)), '123');
+    await tester.enterText(find.ancestor(of: find.text('Diastolic').first, matching: find.byType(TextField)), '67');
 
     await tester.tap(find.text('SAVE'));
     await tester.pumpAndSettle();
@@ -100,7 +96,7 @@ void main() {
     expect(find.text(localizations.errUnrealistic), findsNothing);
     expect(find.text(localizations.errDiaGtSys), findsNothing);
 
-    await tester.enterText(find.ancestor(of: find.text('Pulse').first, matching: find.byType(TextFormField)), '20');
+    await tester.enterText(find.ancestor(of: find.text('Pulse').first, matching: find.byType(TextField)), '20');
     await tester.tap(find.text('SAVE'));
     await tester.pumpAndSettle();
     expect(find.byType(AddEntryDialogue), findsOneWidget);
@@ -109,8 +105,8 @@ void main() {
     expect(find.text(localizations.errUnrealistic), findsNothing);
     expect(find.text(localizations.errDiaGtSys), findsNothing);
 
-    await tester.enterText(find.ancestor(of: find.text('Pulse').first, matching: find.byType(TextFormField)), '60');
-    await tester.enterText(find.ancestor(of: find.text('Diastolic').first, matching: find.byType(TextFormField)), '500');
+    await tester.enterText(find.ancestor(of: find.text('Pulse').first, matching: find.byType(TextField)), '60');
+    await tester.enterText(find.ancestor(of: find.text('Diastolic').first, matching: find.byType(TextField)), '500');
     await tester.tap(find.text('SAVE'));
     await tester.pumpAndSettle();
     expect(find.byType(AddEntryDialogue), findsOneWidget);
@@ -119,8 +115,8 @@ void main() {
     expect(find.text(localizations.errUnrealistic), findsOneWidget);
     expect(find.text(localizations.errDiaGtSys), findsNothing);
 
-    await tester.enterText(find.ancestor(of: find.text('Diastolic').first, matching: find.byType(TextFormField)), '100');
-    await tester.enterText(find.ancestor(of: find.text('Systolic').first, matching: find.byType(TextFormField)), '90');
+    await tester.enterText(find.ancestor(of: find.text('Diastolic').first, matching: find.byType(TextField)), '100');
+    await tester.enterText(find.ancestor(of: find.text('Systolic').first, matching: find.byType(TextField)), '90');
     await tester.tap(find.text('SAVE'));
     await tester.pumpAndSettle();
     expect(find.byType(AddEntryDialogue), findsOneWidget);
@@ -130,8 +126,8 @@ void main() {
     expect(find.text(localizations.errDiaGtSys), findsOneWidget);
 
 
-    await tester.enterText(find.ancestor(of: find.text('Diastolic').first, matching: find.byType(TextFormField)), '78');
-    await tester.enterText(find.ancestor(of: find.text('Systolic').first, matching: find.byType(TextFormField)), '123');
+    await tester.enterText(find.ancestor(of: find.text('Diastolic').first, matching: find.byType(TextField)), '78');
+    await tester.enterText(find.ancestor(of: find.text('Systolic').first, matching: find.byType(TextField)), '123');
     await tester.tap(find.text('SAVE'));
     await tester.pumpAndSettle();
     expect(find.byType(AddEntryDialogue), findsNothing);
@@ -147,8 +143,8 @@ void main() {
     );
     expect(find.byType(DropdownButton<Medicine?>), findsNothing, reason: 'No medication in settings.');
 
-    await tester.enterText(find.ancestor(of: find.text('Systolic').first, matching: find.byType(TextFormField)), '2');
-    await tester.enterText(find.ancestor(of: find.text('Diastolic').first, matching: find.byType(TextFormField)), '500');
+    await tester.enterText(find.ancestor(of: find.text('Systolic').first, matching: find.byType(TextField)), '2');
+    await tester.enterText(find.ancestor(of: find.text('Diastolic').first, matching: find.byType(TextField)), '500');
     await tester.tap(find.text('SAVE'));
     await tester.pumpAndSettle();
     expect(find.byType(AddEntryDialogue), findsNothing);
@@ -161,13 +157,13 @@ void main() {
 
     final primaryFocus = FocusManager.instance.primaryFocus;
     expect(primaryFocus?.context?.widget, isNotNull);
-    final focusedTextFormField = find.ancestor(
+    final focusedTextField = find.ancestor(
       of: find.byWidget(primaryFocus!.context!.widget),
-      matching: find.byType(TextFormField),
+      matching: find.byType(TextField),
     );
-    expect(focusedTextFormField, findsOneWidget);
-    final field = tester.widget<TextFormField>(focusedTextFormField);
-    expect(field.initialValue, '12');
+    expect(focusedTextField, findsOneWidget);
+    final field = tester.widget<TextField>(focusedTextField);
+    expect(field.controller?.text, '12');
   });
   testWidgets('should focus next on input finished', (tester) async {
     final mRep = medRepo();
@@ -175,40 +171,39 @@ void main() {
         showAddEntryDialogue(context, mRep, mockEntry(sys: 12, dia: 3, pul: 4, note: 'note').asAddEntry),);
     expect(find.byType(DropdownButton<Medicine?>), findsNothing, reason: 'No medication in settings.');
 
-    await tester.enterText(find.ancestor(of: find.text('Systolic').first, matching: find.byType(TextFormField)), '123');
+    await tester.enterText(find.ancestor(of: find.text('Systolic').first, matching: find.byType(TextField)), '123');
 
     final firstFocused = FocusManager.instance.primaryFocus;
     expect(firstFocused?.context?.widget, isNotNull);
-    final focusedTextFormField = find.ancestor(
+    final focusedTextField = find.ancestor(
       of: find.byWidget(firstFocused!.context!.widget),
-      matching: find.byType(TextFormField),
+      matching: find.byType(TextField),
     );
-    expect(focusedTextFormField, findsOneWidget);
-    expect(focusedTextFormField.evaluate().first.widget, isA<TextFormField>()
-        .having((p0) => p0.initialValue, 'diastolic content', '3'),);
+    expect(focusedTextField, findsOneWidget);
+    expect(focusedTextField.evaluate().first.widget, isA<TextField>()
+        .having((p0) => p0.controller?.text, 'diastolic content', '3'),);
 
-    await tester.enterText(find.ancestor(of: find.text('Diastolic').first, matching: find.byType(TextFormField)), '78');
+    await tester.enterText(find.ancestor(of: find.text('Diastolic').first, matching: find.byType(TextField)), '78');
 
     final secondFocused = FocusManager.instance.primaryFocus;
     expect(secondFocused?.context?.widget, isNotNull);
-    final secondFocusedTextFormField = find.ancestor(
+    final secondFocusedTextField = find.ancestor(
       of: find.byWidget(secondFocused!.context!.widget),
-      matching: find.byType(TextFormField),
+      matching: find.byType(TextField),
     );
-    expect(secondFocusedTextFormField, findsOneWidget);
-    expect(secondFocusedTextFormField.evaluate().first.widget, isA<TextFormField>()
-        .having((p0) => p0.initialValue, 'pulse content', '4'),);
+    expect(secondFocusedTextField, findsOneWidget);
+    expect(secondFocusedTextField.evaluate().first.widget, isA<TextField>()
+        .having((p0) => p0.controller?.text, 'pulse content', '4'),);
 
-    await tester.enterText(find.ancestor(of: find.text('Pulse').first, matching: find.byType(TextFormField)), '60');
+    await tester.enterText(find.ancestor(of: find.text('Pulse').first, matching: find.byType(TextField)), '60');
 
     final thirdFocused = FocusManager.instance.primaryFocus;
     expect(thirdFocused?.context?.widget, isNotNull);
-    final thirdFocusedTextFormField = find.ancestor(
+    final thirdFocusedTextField = find.ancestor(
       of: find.byWidget(thirdFocused!.context!.widget),
-      matching: find.byType(TextFormField),
+      matching: find.byType(TextField),
     );
-    expect(thirdFocusedTextFormField, findsOneWidget);
-    expect(thirdFocusedTextFormField.evaluate().first.widget, isA<TextFormField>()
-        .having((p0) => p0.initialValue, 'note input content', 'note'),);
+    expect(thirdFocusedTextField, findsOneWidget);
+    expect(find.descendant(of: thirdFocusedTextField, matching: find.text('Note (optional)')), findsOneWidget);
   });
 }
