@@ -53,7 +53,7 @@ class _AddEntryDialogueState extends State<AddEntryDialogue> {
     body: AddEntryForm(
       key: formKey,
       initialValue: widget.initialRecord,
-      meds: widget.availableMeds ?? []
+      meds: widget.availableMeds ?? [],
     ),
   );
 }

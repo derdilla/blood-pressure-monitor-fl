@@ -21,15 +21,12 @@ import 'package:health_data_store/health_data_store.dart';
 import 'package:provider/provider.dart';
 
 /// Primary form to enter all types of entries.
-class AddEntryForm extends FormBase<AddEntryFormValue>
-    with TypeLogger {
+class AddEntryForm extends FormBase<AddEntryFormValue> with TypeLogger {
   /// Create primary form to enter all types of entries.
   const AddEntryForm({super.key,
     super.initialValue,
-    required this.meds,
+    this.meds = const [],
     this.bluetoothCubit,
-    this.deviceScanCubit,
-    this.bleReadCubit,
   });
 
   /// All medicines selectable.
@@ -40,14 +37,6 @@ class AddEntryForm extends FormBase<AddEntryFormValue>
   /// Function to customize [BluetoothCubit] creation.
   @visibleForTesting
   final BluetoothCubit Function()? bluetoothCubit;
-
-  /// Function to customize [DeviceScanCubit] creation.
-  @visibleForTesting
-  final DeviceScanCubit Function()? deviceScanCubit;
-
-  /// Function to customize [BleReadCubit] creation.
-  @visibleForTesting
-  final BleReadCubit Function(BluetoothDevice dev)? bleReadCubit;
 
   @override
   FormStateBase createState() => AddEntryFormState();
@@ -84,7 +73,7 @@ class AddEntryFormState extends FormStateBase<AddEntryFormValue, AddEntryForm> {
           && widget.initialValue!.intake != null) {
         _controller.animateTo(1);
       }
-      // In all other cases we are at the correct position
+      // In all other cases we are at the correct position (0)
       // or don't need to jump at all.
     }
     ServicesBinding.instance.keyboard.addHandler(_onKey);
@@ -143,7 +132,6 @@ class AddEntryFormState extends FormStateBase<AddEntryFormValue, AddEntryForm> {
     if (weightFormValue != null) {
       weight = BodyweightRecord(time: time, weight: weightFormValue);
     }
-
     final intakeFormValue = _intakeForm.currentState?.save();
     if (intakeFormValue != null) {
       intake = MedicineIntake(
@@ -168,9 +156,8 @@ class AddEntryFormState extends FormStateBase<AddEntryFormValue, AddEntryForm> {
     );
   }
 
-  // doesn't contain inputs
   @override
-  bool isEmptyInputFocused() => false;
+  bool isEmptyInputFocused() => false; // doesn't contain text inputs
 
   @override
   void fillForm(AddEntryFormValue? value) {
@@ -178,16 +165,16 @@ class AddEntryFormState extends FormStateBase<AddEntryFormValue, AddEntryForm> {
     _lastSavedWeight = value?.weight;
     _lastSavedIntake = value?.intake;
     if (value == null) {
-      _timeForm.currentState!.fillForm(null);
-      _noteForm.currentState!.fillForm(null);
-      _bpForm.currentState!.fillForm(null);
-      _weightForm.currentState!.fillForm(null);
-      _intakeForm.currentState!.fillForm(null);
+      _timeForm.currentState?.fillForm(null);
+      _noteForm.currentState?.fillForm(null);
+      _bpForm.currentState?.fillForm(null);
+      _weightForm.currentState?.fillForm(null);
+      _intakeForm.currentState?.fillForm(null);
     } else {
-      _timeForm.currentState!.fillForm(value.timestamp);
+      _timeForm.currentState?.fillForm(value.timestamp);
       if (value.note != null) {
         final c = value.note?.color == null ? null : Color(value.note!.color!);
-        _noteForm.currentState!.fillForm((value.note!.note, c));
+        _noteForm.currentState?.fillForm((value.note!.note, c));
       }
       if (value.record != null) {
         _bpForm.currentState?.fillForm((
@@ -231,15 +218,11 @@ class AddEntryFormState extends FormStateBase<AddEntryFormValue, AddEntryForm> {
             manager: BluetoothManager.create(BluetoothBackend.flutterBluePlus),
             onMeasurement: _onExternalMeasurement,
             bluetoothCubit: widget.bluetoothCubit,
-            deviceScanCubit: widget.deviceScanCubit,
-            bleReadCubit: widget.bleReadCubit,
           ),
           BluetoothInputMode.newBluetoothInputCrossPlatform => BluetoothInput(
-            manager: BluetoothManager.create( BluetoothBackend.bluetoothLowEnergy),
+            manager: BluetoothManager.create(BluetoothBackend.bluetoothLowEnergy),
             onMeasurement: _onExternalMeasurement,
             bluetoothCubit: widget.bluetoothCubit,
-            deviceScanCubit: widget.deviceScanCubit,
-            bleReadCubit: widget.bleReadCubit,
           ),
         })(),
         if (settings.allowManualTimeInput)
@@ -249,7 +232,7 @@ class AddEntryFormState extends FormStateBase<AddEntryFormValue, AddEntryForm> {
           ),
         SizedBox(height: 10),
         FormSwitcher(
-          key: Key('AddEntryFormSwitcher'),
+          key: Key('AddEntryFormSwitcher'), // ensures widgets are in tree
           controller: _controller,
           subForms: [
             (Icon(Icons.monitor_heart_outlined), BloodPressureForm(
@@ -306,8 +289,8 @@ extension AddEntryFormValueCompat on FullEntry {
     assert(intakes.length <= 1);
     return (
       timestamp: time,
-      note: note != null || color != null ? noteObj : null,
-      record: sys != null || dia != null || pul != null ? recordObj : null,
+      note: (note != null && color == null) ? null : noteObj,
+      record: (sys == null && dia == null && pul == null) ? null : recordObj,
       intake: intakes.firstOrNull,
       weight: null,
     );
