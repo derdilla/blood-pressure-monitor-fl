@@ -410,8 +410,6 @@ void main() {
     final localizations = await AppLocalizations.delegate.load(const Locale('en'));
 
     await tester.pump();
-    print(FocusManager.instance.primaryFocus!.context!.widget);
-    print(tester.element(find.byWidget(FocusManager.instance.primaryFocus!.context!.widget)).owner);
     expect(find.descendant(
       of: find.ancestor(
         of: find.byWidget(FocusManager.instance.primaryFocus!.context!.widget),

@@ -14,12 +14,10 @@ import '../../model/export_import/record_formatter_test.dart';
 import '../../util.dart';
 import '../settings/tiles/color_picker_list_tile_test.dart';
 
-// FIXME: most of these are already tested at add_entry_form_test. make tests more concise
-
 void main() {
   testWidgets('respects bottomAppBars', (tester) async {
     final settings = Settings(bottomAppBars: false);
-    await tester.pumpWidget(materialApp(const AddEntryDialogue(availableMeds: []),
+    await tester.pumpWidget(materialApp(const AddEntryDialogue(),
       settings: settings
     ));
     final initialHeights = tester.getCenter(find.byType(AppBar)).dy;
@@ -32,7 +30,7 @@ void main() {
 
   // TODO: update these old tests
   testWidgets('should show everything on initial page', (tester) async {
-    await tester.pumpWidget(materialApp(const AddEntryDialogue(availableMeds: [])));
+    await tester.pumpWidget(materialApp(const AddEntryDialogue()));
     expect(tester.takeException(), isNull);
 
     expect(find.byType(DropdownButton<Medicine?>), findsNothing, reason: 'No medication in settings.');

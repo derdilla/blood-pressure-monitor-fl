@@ -14,7 +14,7 @@ class AddEntryDialogue extends StatefulWidget {
   /// 
   /// This is usually created through the [showAddEntryDialogue] function.
   const AddEntryDialogue({super.key,
-    required this.availableMeds,
+    this.availableMeds,
     this.initialRecord,
   });
 
@@ -22,15 +22,12 @@ class AddEntryDialogue extends StatefulWidget {
   ///
   /// When this is null the timestamp is [DateTime.now] and the other fields
   /// will be empty.
-  ///
-  /// When an initial record is set medicine input is not possible because it is
-  /// saved separately.
   final AddEntryFormValue? initialRecord;
 
   /// All medicines selectable.
   ///
-  /// Hides med input when this is empty.
-  final List<Medicine> availableMeds;
+  /// Hides med input when this is empty or null.
+  final List<Medicine>? availableMeds;
 
   @override
   State<AddEntryDialogue> createState() => _AddEntryDialogueState();
@@ -48,7 +45,6 @@ class _AddEntryDialogueState extends State<AddEntryDialogue> {
     }
   }
 
-  /// FIXME: reimplement the things done in main from 637ca463 to 469c93a2
   @override
   Widget build(BuildContext context) => FullscreenDialoge(
     actionButtonText: AppLocalizations.of(context)!.btnSave,
@@ -57,7 +53,7 @@ class _AddEntryDialogueState extends State<AddEntryDialogue> {
     body: AddEntryForm(
       key: formKey,
       initialValue: widget.initialRecord,
-      meds: widget.availableMeds
+      meds: widget.availableMeds ?? []
     ),
   );
 }
@@ -77,7 +73,6 @@ Future<AddEntryFormValue?> showAddEntryDialogue(
           availableMeds: meds,
         ),
     );
-  } else {
-    return null;
   }
+  return null;
 }
