@@ -3,7 +3,6 @@ import 'dart:typed_data';
 
 import 'package:archive/archive_io.dart';
 import 'package:blood_pressure_app/components/input_dialoge.dart';
-import 'package:blood_pressure_app/config.dart';
 import 'package:blood_pressure_app/data_util/consistent_future_builder.dart';
 import 'package:blood_pressure_app/features/settings/delete_data_screen.dart';
 import 'package:blood_pressure_app/features/settings/enter_timeformat_dialoge.dart';
@@ -28,7 +27,6 @@ import 'package:blood_pressure_app/model/storage/db/settings_loader.dart';
 import 'package:blood_pressure_app/model/storage/export_columns_store.dart';
 import 'package:blood_pressure_app/model/storage/storage.dart';
 import 'package:blood_pressure_app/model/weight_unit.dart';
-import 'package:blood_pressure_app/platform_integration/platform_client.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -354,7 +352,11 @@ class SettingsPage extends StatelessWidget {
                       return;
                     }
                     final archiveData = Uint8List.fromList(compressedArchive);
-                    await PlatformClient.shareData(archiveData, 'application/zip', 'bloodPressureSettings.zip');
+                    await FilePicker.platform.saveFile(
+                      type: FileType.any, // application/zip
+                      fileName: 'bloodPressureSettings.zip',
+                      bytes: archiveData,
+                    );
                   },
                 ),
                 ListTile(
@@ -381,7 +383,7 @@ class SettingsPage extends StatelessWidget {
                       loader = ConfigDao(configDB);
                     } else if (path.endsWith('zip')) {
                       try {
-                        final decoded = ZipDecoder().decodeBuffer(InputFileStream(result.files.single.path!));
+                        final decoded = ZipDecoder().decodeStream(InputFileStream(result.files.single.path!));
                         final dir = join(Directory.systemTemp.path, 'settingsBackup');
                         await extractArchiveToDisk(decoded, dir);
                         loader = await FileSettingsLoader.load(dir);

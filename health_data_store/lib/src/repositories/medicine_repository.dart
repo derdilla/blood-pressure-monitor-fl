@@ -4,7 +4,6 @@ import 'package:health_data_store/src/types/medicine_intake.dart';
 
 /// Repository for medicines that are taken by the user.
 abstract class MedicineRepository extends Repository<Medicine> {
-
   /// Store a [Medicine] in the repository.
   @override
   Future<void> add(Medicine medicine);
@@ -19,5 +18,4 @@ abstract class MedicineRepository extends Repository<Medicine> {
   /// still displayed correctly.
   @override
   Future<void> remove(Medicine value);
-
 }

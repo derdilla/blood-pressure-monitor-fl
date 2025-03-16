@@ -9,8 +9,10 @@ class Note with _$Note {
   const factory Note({
     /// Timestamp when the note was taken.
     required DateTime time,
+
     /// Content of the note.
     String? note,
+
     /// ARGB color in number format.
     ///
     /// Can also be obtained through the `dart:ui` Colors `value` attribute.

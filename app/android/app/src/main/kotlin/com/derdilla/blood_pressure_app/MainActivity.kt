@@ -8,10 +8,5 @@ import java.io.File
 class MainActivity: FlutterActivity() {
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)
-        val shareFolder = File(context.cacheDir, "share")
-        if (shareFolder.exists()) shareFolder.deleteRecursively();
-
-        MethodChannel(flutterEngine.dartExecutor.binaryMessenger, StorageProvider.CHANNEL)
-            .setMethodCallHandler(StorageProvider(context, shareFolder))
     }
 }

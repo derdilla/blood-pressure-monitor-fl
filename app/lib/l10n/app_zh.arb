@@ -540,5 +540,17 @@
   "select": "选择",
   "@select": {
     "description": "Used when f.e. selecting a single measurement when the bluetooth device returned multiple"
-  }
+  },
+  "newBluetoothInputOldLib": "测试",
+  "@newBluetoothInputOldLib": {},
+  "bluetoothInputDesc": "测试版本后端可以在更多设备上工作，但未经充分测试。该跨平台版本可以在非 android 设备上工作，并且按计划在足够成熟后将取代稳定版。",
+  "@bluetoothInputDesc": {},
+  "oldBluetoothInput": "稳定",
+  "@oldBluetoothInput": {},
+  "newBluetoothInputCrossPlatform": "跨平台（测试）",
+  "@newBluetoothInputCrossPlatform": {},
+  "disabled": "已停用",
+  "@disabled": {},
+  "warnNeedsRestartForUsingApp": "文件在此会话中被删除了。重启本应用继续使用将返回到应用的其他部分！",
+  "@warnNeedsRestartForUsingApp": {}
 }

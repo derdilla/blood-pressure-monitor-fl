@@ -1,4 +1,6 @@
-import 'package:blood_pressure_app/platform_integration/platform_client.dart';
+import 'dart:io';
+
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -107,7 +109,11 @@ class ErrorScreen extends StatelessWidget {
 
                         assert(dbPath != inMemoryDatabasePath);
                         dbPath = join(dbPath, 'blood_pressure.db');
-                        await PlatformClient.shareFile(dbPath, 'application/vnd.sqlite3');
+                        await FilePicker.platform.saveFile(
+                          fileName: 'blood_pressure.db',
+                          bytes: File(dbPath).readAsBytesSync(),
+                          type: FileType.any, // application/vnd.sqlite3
+                        );
                       } catch(e) {
                         scaffoldMessenger.showSnackBar(SnackBar(
                             content: Text('ERR: $e'),),);
@@ -122,7 +128,12 @@ class ErrorScreen extends StatelessWidget {
 
                         assert(dbPath != inMemoryDatabasePath);
                         dbPath = join(dbPath, 'config.db');
-                        await PlatformClient.shareFile(dbPath, 'application/vnd.sqlite3');
+
+                        await FilePicker.platform.saveFile(
+                          fileName: 'config.db',
+                          bytes: File(dbPath).readAsBytesSync(),
+                          type: FileType.any, // application/vnd.sqlite3
+                        );
                       } catch(e) {
                         scaffoldMessenger.showSnackBar(SnackBar(
                             content: Text('ERR: $e'),),);
@@ -137,7 +148,11 @@ class ErrorScreen extends StatelessWidget {
 
                         assert(dbPath != inMemoryDatabasePath);
                         dbPath = join(dbPath, 'medicine.intakes');
-                        await PlatformClient.shareFile(dbPath, 'application/octet-stream');
+                        await FilePicker.platform.saveFile(
+                          fileName: 'medicine.intakes',
+                          bytes: File(dbPath).readAsBytesSync(),
+                          type: FileType.any, // application/octet-stream
+                        );
                       } catch(e) {
                         scaffoldMessenger.showSnackBar(SnackBar(
                           content: Text('ERR: $e'),),);
@@ -152,7 +167,11 @@ class ErrorScreen extends StatelessWidget {
 
                         assert(dbPath != inMemoryDatabasePath);
                         dbPath = join(dbPath, 'bp.db');
-                        await PlatformClient.shareFile(dbPath, 'application/vnd.sqlite3');
+                        await FilePicker.platform.saveFile(
+                          fileName: 'bp.db',
+                          bytes: File(dbPath).readAsBytesSync(),
+                          type: FileType.any, // application/vnd.sqlite3
+                        );
                       } catch(e) {
                         scaffoldMessenger.showSnackBar(SnackBar(
                           content: Text('ERR: $e'),),);

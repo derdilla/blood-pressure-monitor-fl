@@ -4,6 +4,6 @@ extension DateTimeS on DateTime {
   int get secondsSinceEpoch => millisecondsSinceEpoch ~/ 1000;
 
   /// Constructs a new DateTime instance with the given [secondsSinceEpoch].
-  static DateTime fromSecondsSinceEpoch(int secondsSinceEpoch)
-      => DateTime.fromMillisecondsSinceEpoch(secondsSinceEpoch * 1000);
+  static DateTime fromSecondsSinceEpoch(int secondsSinceEpoch) =>
+      DateTime.fromMillisecondsSinceEpoch(secondsSinceEpoch * 1000);
 }

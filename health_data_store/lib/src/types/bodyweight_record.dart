@@ -10,6 +10,7 @@ class BodyweightRecord with _$BodyweightRecord {
   const factory BodyweightRecord({
     /// Timestamp when the weight was measured.
     required DateTime time,
+
     /// Weight at [time].
     required Weight weight,
   }) = _BodyweightRecord;

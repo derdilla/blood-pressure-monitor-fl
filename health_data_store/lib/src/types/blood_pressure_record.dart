@@ -10,10 +10,13 @@ class BloodPressureRecord with _$BloodPressureRecord {
   const factory BloodPressureRecord({
     /// Timestamp when the measurement was taken.
     required DateTime time,
+
     /// Systolic value of the measurement.
     Pressure? sys,
+
     /// Diastolic value of the measurement.
     Pressure? dia,
+
     /// Pulse value of the measurement in bpm.
     int? pul,
   }) = _BloodPressureRecord;

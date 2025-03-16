@@ -12,11 +12,13 @@ void main() {
     expect(note.time, equals(time));
     expect(note.color, equals(0xFF42A5F5));
     expect(note.note, equals('testNote'));
-    expect(note, equals(Note(
-      time: time,
-      note: 'testNote',
-      color: 0xFF42A5F5,
-    )));
+    expect(
+        note,
+        equals(Note(
+          time: time,
+          note: 'testNote',
+          color: 0xFF42A5F5,
+        )));
   });
 }
 
@@ -24,8 +26,11 @@ Note mockNote({
   int? time,
   String? note,
   int? color,
-}) => Note(
-  time: time!=null ? DateTime.fromMillisecondsSinceEpoch(time) : DateTime.now(),
-  note: note,
-  color: color,
-);
+}) =>
+    Note(
+      time: time != null
+          ? DateTime.fromMillisecondsSinceEpoch(time)
+          : DateTime.now(),
+      note: note,
+      color: color,
+    );

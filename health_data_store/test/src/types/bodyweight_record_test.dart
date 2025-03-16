@@ -15,7 +15,10 @@ void main() {
 BodyweightRecord mockWeight({
   int? time,
   double? kg,
-}) => BodyweightRecord(
-  time: time!=null ? DateTime.fromMillisecondsSinceEpoch(time) : DateTime.now(),
-  weight: Weight.kg(kg ?? 42.0),
-);
+}) =>
+    BodyweightRecord(
+      time: time != null
+          ? DateTime.fromMillisecondsSinceEpoch(time)
+          : DateTime.now(),
+      weight: Weight.kg(kg ?? 42.0),
+    );

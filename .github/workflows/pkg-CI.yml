@@ -9,9 +9,6 @@ on:
       - ".github/workflows/pkg-CI.yml"
   workflow_dispatch:
 
-env:
-  DART_SDK: 'beta'
-
 jobs:
   test-health_data_store:
     name: '🧪 Test'
@@ -27,7 +24,7 @@ jobs:
     - name: Setup dart
       uses: dart-lang/setup-dart@v1
       with:
-        sdk: ${{ env.DART_SDK }}
+        sdk: stable
     - run: sudo apt-get -y install libsqlite3-dev
 
     - name: Get dependencies

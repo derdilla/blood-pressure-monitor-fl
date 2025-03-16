@@ -10,11 +10,13 @@ class Medicine with _$Medicine {
   const factory Medicine({
     /// Name of the medicine.
     required String designation,
+
     /// ARGB color in number format.
     ///
     /// Can also be obtained through the `dart:ui` Colors `value` attribute.
     /// Sample value: `0xFF42A5F5`
     int? color,
+
     /// Default dosis of medication.
     Weight? dosis,
   }) = _Medicine;

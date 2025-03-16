@@ -4,12 +4,11 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 repository: https://github.com/derdilla/blood-pressure-monitor-fl
 issue_tracker: https://github.com/derdilla/blood-pressure-monitor-fl/issues
 
-version: 1.8.4+46
-# F-Droid needs the Flutter version used to build releases to be in the repository.
-# f-droid-flutter: 3.27.2
+version: 1.8.5+47
 
 environment:
   sdk: '>=3.0.2 <4.0.0'
+  flutter: '3.27.4'
 
 dependencies:
   csv: ^6.0.0
@@ -19,23 +18,23 @@ dependencies:
     sdk: flutter
   flutter_localizations:
     sdk: flutter
-  flutter_markdown: ^0.7.5
+  flutter_markdown: ^0.7.6
   function_tree: ^0.9.1
   provider: ^6.1.2
   path: ^1.9.0
-  pdf: ^3.11.1
-  package_info_plus: ^8.1.3
+  pdf: ^3.11.2
+  package_info_plus: ^8.1.4
   week_of_year: 2.2.0
   sqflite: ^2.4.1
-  shared_preferences: ^2.3.5
+  shared_preferences: ^2.5.1
   url_launcher: ^6.3.1
   health_data_store:
     path: ../health_data_store/
   flutter_bloc: ^9.0.0
   bluetooth_low_energy: ^6.0.2
-  flutter_blue_plus: ^1.35.0
-  archive: ^3.6.1
-  file_picker: ^8.1.7
+  flutter_blue_plus: ^1.35.2
+  archive: ^4.0.2
+  file_picker: ^8.3.1
   fluttertoast: ^8.2.10
   app_settings: ^5.1.1
   logging: ^1.3.0

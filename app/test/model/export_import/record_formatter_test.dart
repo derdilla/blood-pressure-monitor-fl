@@ -12,38 +12,38 @@ void main() {
       
       expect(f.formatPattern, r'$SYS');
       final r1 = mockEntryPos(DateTime.now(), 123, 456, 789, 'test text');
-      f.encode(r1.$1, r1.$2, r1.$3);
+      f.encode(r1.$1, r1.$2, r1.$3, null);
       final r2 = mockEntry();
-      f.encode(r2.$1, r2.$2, r2.$3);
+      f.encode(r2.$1, r2.$2, r2.$3, null);
       f.decode('123');
     });
     test('should create correct strings', () {
       final r = mockEntryPos(DateTime.fromMillisecondsSinceEpoch(31415926), 123, 45, 67, 'Test', Colors.red);
 
-      expect(ScriptedFormatter(r'constant text',).encode(r.$1, r.$2, r.$3), 'constant text');
-      expect(ScriptedFormatter(r'$SYS',).encode(r.$1, r.$2, r.$3), r.$1.sys?.mmHg.toString());
-      expect(ScriptedFormatter(r'$DIA',).encode(r.$1, r.$2, r.$3), r.$1.dia?.mmHg.toString());
-      expect(ScriptedFormatter(r'$PUL',).encode(r.$1, r.$2, r.$3), r.$1.pul.toString());
-      expect(ScriptedFormatter(r'$COLOR',).encode(r.$1, r.$2, r.$3), r.$2.color.toString());
-      expect(ScriptedFormatter(r'$NOTE',).encode(r.$1, r.$2, r.$3), r.$2.note);
-      expect(ScriptedFormatter(r'$TIMESTAMP',).encode(r.$1, r.$2, r.$3), r.$1.time.millisecondsSinceEpoch.toString());
+      expect(ScriptedFormatter(r'constant text',).encode(r.$1, r.$2, r.$3, null), 'constant text');
+      expect(ScriptedFormatter(r'$SYS',).encode(r.$1, r.$2, r.$3, null), r.$1.sys?.mmHg.toString());
+      expect(ScriptedFormatter(r'$DIA',).encode(r.$1, r.$2, r.$3, null), r.$1.dia?.mmHg.toString());
+      expect(ScriptedFormatter(r'$PUL',).encode(r.$1, r.$2, r.$3, null), r.$1.pul.toString());
+      expect(ScriptedFormatter(r'$COLOR',).encode(r.$1, r.$2, r.$3, null), r.$2.color.toString());
+      expect(ScriptedFormatter(r'$NOTE',).encode(r.$1, r.$2, r.$3, null), r.$2.note);
+      expect(ScriptedFormatter(r'$TIMESTAMP',).encode(r.$1, r.$2, r.$3, null), r.$1.time.millisecondsSinceEpoch.toString());
       expect(
-        ScriptedFormatter(r'$SYS$DIA$PUL',).encode(r.$1, r.$2, r.$3),
+        ScriptedFormatter(r'$SYS$DIA$PUL',).encode(r.$1, r.$2, r.$3, null),
         (r.$1.sys!.mmHg.toString() + r.$1.dia!.mmHg.toString() + r.$1.pul.toString()),);
       expect(
-        ScriptedFormatter(r'$SYS$SYS',).encode(r.$1, r.$2, r.$3),
+        ScriptedFormatter(r'$SYS$SYS',).encode(r.$1, r.$2, r.$3, null),
         (r.$1.sys!.mmHg.toString() + r.$1.sys!.mmHg.toString()),);
       expect(
-        ScriptedFormatter(r'{{$SYS-$DIA}}',).encode(r.$1, r.$2, r.$3),
+        ScriptedFormatter(r'{{$SYS-$DIA}}',).encode(r.$1, r.$2, r.$3, null),
         (r.$1.sys!.mmHg - r.$1.dia!.mmHg).toDouble().toString(),);
       expect(
-        ScriptedFormatter(r'{{$SYS*$DIA-$PUL}}',).encode(r.$1, r.$2, r.$3),
+        ScriptedFormatter(r'{{$SYS*$DIA-$PUL}}',).encode(r.$1, r.$2, r.$3, null),
           (r.$1.sys!.mmHg * r.$1.dia!.mmHg - r.$1.pul!).toDouble().toString(),);
       expect(
-          ScriptedFormatter(r'$SYS-$DIA',).encode(r.$1, r.$2, r.$3), ('${r.$1.sys?.mmHg}-${r.$1.dia?.mmHg}'));
+          ScriptedFormatter(r'$SYS-$DIA',).encode(r.$1, r.$2, r.$3, null), ('${r.$1.sys?.mmHg}-${r.$1.dia?.mmHg}'));
 
       final formatter = DateFormat.yMMMMEEEEd();
-      expect(ScriptedFormatter('\$FORMAT{\$TIMESTAMP,${formatter.pattern}}',).encode(r.$1, r.$2, r.$3),
+      expect(ScriptedFormatter('\$FORMAT{\$TIMESTAMP,${formatter.pattern}}',).encode(r.$1, r.$2, r.$3, null),
           formatter.format(r.$1.time),);
     });
     test('should report correct reversibility', () {
@@ -70,7 +70,7 @@ void main() {
       expect(ScriptedFormatter(r'$TIMESTAMP',).decode('12345678'), (RowDataFieldType.timestamp, DateTime.fromMillisecondsSinceEpoch(12345678)));
       expect(ScriptedFormatter(r'$NOTE',).decode('test note'), (RowDataFieldType.notes, 'test note'));
       final r = mockEntryPos(DateTime.now(), null, null, null, '', Colors.purple);
-      final encodedPurple = ScriptedFormatter(r'$COLOR',).encode(r.$1, r.$2, r.$3);
+      final encodedPurple = ScriptedFormatter(r'$COLOR',).encode(r.$1, r.$2, r.$3, null);
       expect(ScriptedFormatter(r'$COLOR',).decode(encodedPurple)?.$1, RowDataFieldType.color);
       expect(ScriptedFormatter(r'$COLOR',).decode(encodedPurple)?.$2, Colors.purple.value);
       expect(ScriptedFormatter(r'test$SYS',).decode('test567'), (RowDataFieldType.sys, 567));
@@ -89,10 +89,10 @@ void main() {
 
     test('should when ignore groups in format strings', () {
       final r1 = mockEntry(sys: 123);
-      expect(ScriptedFormatter(r'($SYS)',).encode(r1.$1, r1.$2, r1.$3), '(123)');
-      expect(ScriptedFormatter(r'($SYS',).encode(r1.$1, r1.$2, r1.$3), '(123');
+      expect(ScriptedFormatter(r'($SYS)',).encode(r1.$1, r1.$2, r1.$3, null), '(123)');
+      expect(ScriptedFormatter(r'($SYS',).encode(r1.$1, r1.$2, r1.$3, null), '(123');
       final r2 = mockEntry(note: 'test');
-      expect(ScriptedFormatter(r'($NOTE',).encode(r2.$1, r2.$2, r2.$3), '(test');
+      expect(ScriptedFormatter(r'($NOTE',).encode(r2.$1, r2.$2, r2.$3, null), '(test');
 
       expect(ScriptedFormatter(r'($SYS)',).restoreAbleType, RowDataFieldType.sys);
       expect(ScriptedFormatter(r'($SYS',).restoreAbleType, RowDataFieldType.sys);
@@ -114,14 +114,14 @@ void main() {
   group('ScriptedTimeFormatter', () {
     test('should create non-empty string', () {
       final r1 = mockEntry();
-      expect(ScriptedTimeFormatter('dd').encode(r1.$1, r1.$2, r1.$3), isNotNull);
-      expect(ScriptedTimeFormatter('dd').encode(r1.$1, r1.$2, r1.$3), isNotEmpty);
+      expect(ScriptedTimeFormatter('dd').encode(r1.$1, r1.$2, r1.$3, null), isNotNull);
+      expect(ScriptedTimeFormatter('dd').encode(r1.$1, r1.$2, r1.$3, null), isNotEmpty);
     });
     test('should decode rough time', () {
       final formatter = ScriptedTimeFormatter('yyyy.MMMM.dd GGG hh:mm.ss aaa');
       final r = mockEntry();
-      expect(formatter.encode(r.$1, r.$2, r.$3), isNotNull);
-      expect(formatter.decode(formatter.encode(r.$1, r.$2, r.$3))?.$2, isA<DateTime>()
+      expect(formatter.encode(r.$1, r.$2, r.$3, null), isNotNull);
+      expect(formatter.decode(formatter.encode(r.$1, r.$2, r.$3, null))?.$2, isA<DateTime>()
         .having((p0) => p0.millisecondsSinceEpoch, 'time(up to one second difference)', closeTo(r.$1.time.millisecondsSinceEpoch, 1000)),);
     });
   });

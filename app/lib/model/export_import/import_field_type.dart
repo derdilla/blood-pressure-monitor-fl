@@ -21,7 +21,9 @@ enum RowDataFieldType {
   /// Backwards compatability with [MeasurementNeedlePin] json is maintained.
   color,
   /// Guarantees [List<(String medicineDesignation, double dosisMg)>] is returned.
-  intakes;
+  intakes,
+  /// Guarantees a [double] is parsed.
+  weightKg;
 
   /// Select the matching string from [localizations].
   String localize(AppLocalizations localizations) => switch(this) {
@@ -32,5 +34,6 @@ enum RowDataFieldType {
     notes => localizations.notes,
     color => localizations.color,
     intakes => localizations.intakes,
+    weightKg => localizations.weight,
   };
 }

@@ -6,38 +6,34 @@ on:
       - labeled
       - opened
       - reopened
+    paths:
+      - "app/**"
+      - "health_data_store/**"
+      - "pr.yml"
 
 jobs:
   update-goldens:
     if: github.event.pull_request.draft == false
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        channel:
-          - beta
-          - stable
     permissions:
       contents: write
       pull-requests: write
     steps:
-      - name: Checkout code
+      - name: Checkout PR code
         uses: actions/checkout@v4
         with:
-          # ensures there are no unexpected directories needed
-          sparse-checkout: |
-            app
-            health_data_store
+          ref: ${{ github.head_ref }}
       - name: Cache generated health data store
         id: cache-generated
         uses: actions/cache@v4
         with:
           path: health_data_store/lib
-          key: builder-${{ matrix.channel }}-${{ hashFiles('health_data_store/pubspec.yaml', 'health_data_store/lib/*', 'health_data_store/lib/**/*dart') }}
+          key: builder-${{ hashFiles('health_data_store/pubspec.yaml', 'health_data_store/lib/*', 'health_data_store/lib/**/*dart') }}
       - name: Setup dart
         if: steps.cache-generated.outputs.cache-hit != 'true'
         uses: dart-lang/setup-dart@v1
         with:
-          sdk: ${{ matrix.channel }}
+          sdk: stable
       - name: Generate code
         if: steps.cache-generated.outputs.cache-hit != 'true'
         run: dart run build_runner build
@@ -45,7 +41,7 @@ jobs:
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          channel: ${{ matrix.channel }}
+          channel: stable
           cache: true
       - name: Disable analytics
         run:
@@ -53,26 +49,33 @@ jobs:
       - name: Update app dependencies
         run: flutter pub get
         working-directory: app
-      # Golden tests don't need mocks if they ever do this would be a good oportunity to
-      # introduce test mock testign
+      # TODO: cache using non-generated dart files in the test dir as key
+      - name: Generate app mock code
+        run: flutter pub run build_runner build
+        working-directory: app
       - name: Update goldens
         id: gold-upd
-        run: flutter test --update-goldens --fail-fast --name="\[gold\].*" --dart-define="channel=${{ matrix.channel }}"
+        run: flutter test --update-goldens --fail-fast --name="\[gold\].*"
         working-directory: app
-      - name: PR golden changes
+      - name: Push golden changes
         # https://docs.github.com/en/actions/writing-workflows/choosing-what-your-workflow-does/evaluate-expressions-in-workflows-and-actions#example-of-failure-with-conditions
         if: ${{ steps.gold-upd.conclusion == 'success' }}
         run: |
-          git config user.name "GitHub Action (update goldens)"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add app/test/**/*.png
-          git commit -m "Update goldens"
-          git push
+          if [[ $(git status -s | grep png) ]]; then
+              git config user.name "GitHub Action (update goldens)"
+              git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+              git add app/test/
+              git commit -m "Update goldens"
+              git push
+          else
+              echo "no changes to commit"
+          fi
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}%
   test:
     if: contains(github.event.pull_request.labels.*.name, 'auto-test')
     runs-on: ubuntu-latest
+    needs: update-goldens # this is guaranteed to fail if goldens need to be updated
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -86,12 +89,12 @@ jobs:
         uses: actions/cache@v4
         with:
           path: health_data_store/lib
-          key: builder-${{ matrix.channel }}-${{ hashFiles('health_data_store/pubspec.yaml', 'health_data_store/lib/*', 'health_data_store/lib/**/*dart') }}
+          key: builder-${{ hashFiles('health_data_store/pubspec.yaml', 'health_data_store/lib/*', 'health_data_store/lib/**/*dart') }}
       - name: Setup dart
         if: steps.cache-generated.outputs.cache-hit != 'true'
         uses: dart-lang/setup-dart@v1
         with:
-          sdk: ${{ matrix.channel }}
+          sdk: stable
       - name: Generate code
         if: steps.cache-generated.outputs.cache-hit != 'true'
         run: dart run build_runner build
@@ -99,7 +102,7 @@ jobs:
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          channel: ${{ matrix.channel }}
+          channel: stable
           cache: true
       - name: Disable analytics
         run:
@@ -107,11 +110,12 @@ jobs:
       - name: Update app dependencies
         run: flutter pub get
         working-directory: app
-      - name: Generate app mock code # no efficient caching possible
+      # TODO: cache using non-generated dart files in the test dir as key
+      - name: Generate app mock code
         run: flutter pub run build_runner build
         working-directory: app
       - name: Run tests
-        run: flutter test --coverage --dart-define="channel=${{ matrix.channel }}"
+        run: flutter test --coverage
         working-directory: app
   build:
     if: contains(github.event.pull_request.labels.*.name, 'auto-build')
@@ -129,12 +133,12 @@ jobs:
         uses: actions/cache@v4
         with:
           path: health_data_store/lib
-          key: builder-${{ matrix.channel }}-${{ hashFiles('health_data_store/pubspec.yaml', 'health_data_store/lib/*', 'health_data_store/lib/**/*dart') }}
+          key: builder-${{ hashFiles('health_data_store/pubspec.yaml', 'health_data_store/lib/*', 'health_data_store/lib/**/*dart') }}
       - name: Setup dart
         if: steps.cache-generated.outputs.cache-hit != 'true'
         uses: dart-lang/setup-dart@v1
         with:
-          sdk: ${{ matrix.channel }}
+          sdk: stable
       - name: Generate code
         if: steps.cache-generated.outputs.cache-hit != 'true'
         run: dart run build_runner build
@@ -147,18 +151,17 @@ jobs:
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          channel: ${{ matrix.channel }}
+          channel: stable
           cache: true
       - name: Disable analytics
-        run:
-          flutter config --no-analytics --suppress-analytics
+        run: flutter config --no-analytics --suppress-analytics
       - name: Update app dependencies
         run: flutter pub get
         working-directory: app
+      - name: Build
+        run: flutter build apk --debug --flavor=github
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
           name: build-results
           path: app/build/app/outputs/flutter-apk
-        - name: Build
-          run: flutter build apk --debug --flavor=github

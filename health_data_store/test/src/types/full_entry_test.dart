@@ -72,7 +72,7 @@ void main() {
     final med3 = mockMedicine();
 
     final List<FullEntry> list = [
-      (record, note, [mockIntake(med1),mockIntake(med2)]),
+      (record, note, [mockIntake(med1), mockIntake(med2)]),
       (record, note, [mockIntake(med1)]),
       (record, note, []),
       (record, note, [mockIntake(med3), mockIntake(med1)]),
@@ -118,11 +118,26 @@ void main() {
       mockNote(time: 70000, color: 123),
     ];
     final intakes = [
-      mockIntake(mockMedicine(), time: 10000,),
-      mockIntake(mockMedicine(), time: 20000,),
-      mockIntake(mockMedicine(), time: 30000,),
-      mockIntake(mockMedicine(), time: 50000,),
-      mockIntake(mockMedicine(), time: 50000,),
+      mockIntake(
+        mockMedicine(),
+        time: 10000,
+      ),
+      mockIntake(
+        mockMedicine(),
+        time: 20000,
+      ),
+      mockIntake(
+        mockMedicine(),
+        time: 30000,
+      ),
+      mockIntake(
+        mockMedicine(),
+        time: 50000,
+      ),
+      mockIntake(
+        mockMedicine(),
+        time: 50000,
+      ),
       mockIntake(mockMedicine(), time: 60000, dosis: 12343.0),
       mockIntake(mockMedicine(), time: 70000),
       mockIntake(mockMedicine(), time: 70000),
@@ -130,74 +145,79 @@ void main() {
     ];
     final list = FullEntryList.merged(records, notes, intakes);
     expect(list, hasLength(8));
-    expect(list, containsAll([
-      isA<FullEntry>()
-        .having((e) => e.time.millisecondsSinceEpoch, 'time', 10000)
-        .having((e) => e.sys?.mmHg, 'sys', 123)
-        .having((e) => e.dia?.mmHg, 'dia', 456)
-        .having((e) => e.pul, 'pul', null)
-        .having((e) => e.note, 'note', 'testnote')
-        .having((e) => e.color, 'color', 123)
-        .having((e) => e.intakes, 'intakes', hasLength(1)),
-      isA<FullEntry>()
-        .having((e) => e.time.millisecondsSinceEpoch, 'time', 20000)
-        .having((e) => e.sys?.mmHg, 'sys', null)
-        .having((e) => e.dia?.mmHg, 'dia', null)
-        .having((e) => e.pul, 'pul', null)
-        .having((e) => e.note, 'note', 'testnote')
-        .having((e) => e.color, 'color', 123)
-        .having((e) => e.intakes, 'intakes', hasLength(1)),
-      isA<FullEntry>()
-        .having((e) => e.time.millisecondsSinceEpoch, 'time', 30000)
-        .having((e) => e.sys?.mmHg, 'sys', null)
-        .having((e) => e.dia?.mmHg, 'dia', 456)
-        .having((e) => e.pul, 'pul', null)
-        .having((e) => e.note, 'note', null)
-        .having((e) => e.color, 'color', null)
-        .having((e) => e.intakes, 'intakes', hasLength(1)),
-      isA<FullEntry>()
-        .having((e) => e.time.millisecondsSinceEpoch, 'time', 40000)
-        .having((e) => e.sys?.mmHg, 'sys', 123)
-        .having((e) => e.dia?.mmHg, 'dia', 456)
-        .having((e) => e.pul, 'pul', null)
-        .having((e) => e.note, 'note', null)
-        .having((e) => e.color, 'color', null)
-        .having((e) => e.intakes, 'intakes', isEmpty),
-      isA<FullEntry>()
-        .having((e) => e.time.millisecondsSinceEpoch, 'time', 50000)
-        .having((e) => e.sys?.mmHg, 'sys', null)
-        .having((e) => e.dia?.mmHg, 'dia', null)
-        .having((e) => e.pul, 'pul', null)
-        .having((e) => e.note, 'note', null)
-        .having((e) => e.color, 'color', null)
-        .having((e) => e.intakes, 'intakes', hasLength(2)),
-      isA<FullEntry>()
-        .having((e) => e.time.millisecondsSinceEpoch, 'time', 60000)
-        .having((e) => e.sys?.mmHg, 'sys', null)
-        .having((e) => e.dia?.mmHg, 'dia', null)
-        .having((e) => e.pul, 'pul', null)
-        .having((e) => e.note, 'note', null)
-        .having((e) => e.color, 'color', null)
-        .having((e) => e.intakes, 'intakes', hasLength(1))
-        .having((e) => e.intakes, 'intakes', contains(isA<MedicineIntake>()
-          .having((i) => i.dosis.mg, 'dosis', 12343.0))),
-      isA<FullEntry>()
-        .having((e) => e.time.millisecondsSinceEpoch, 'time', 70000)
-        .having((e) => e.sys?.mmHg, 'sys', null)
-        .having((e) => e.dia?.mmHg, 'dia', null)
-        .having((e) => e.pul, 'pul', null)
-        .having((e) => e.note, 'note', null)
-        .having((e) => e.color, 'color', 123)
-        .having((e) => e.intakes, 'intakes', hasLength(3)),
-      isA<FullEntry>()
-        .having((e) => e.time.millisecondsSinceEpoch, 'time', 80000)
-        .having((e) => e.sys?.mmHg, 'sys', 123)
-        .having((e) => e.dia?.mmHg, 'dia', 456)
-        .having((e) => e.pul, 'pul', 567)
-        .having((e) => e.note, 'note', null)
-        .having((e) => e.color, 'color', null)
-        .having((e) => e.intakes, 'intakes', isEmpty),
-    ]));
+    expect(
+        list,
+        containsAll([
+          isA<FullEntry>()
+              .having((e) => e.time.millisecondsSinceEpoch, 'time', 10000)
+              .having((e) => e.sys?.mmHg, 'sys', 123)
+              .having((e) => e.dia?.mmHg, 'dia', 456)
+              .having((e) => e.pul, 'pul', null)
+              .having((e) => e.note, 'note', 'testnote')
+              .having((e) => e.color, 'color', 123)
+              .having((e) => e.intakes, 'intakes', hasLength(1)),
+          isA<FullEntry>()
+              .having((e) => e.time.millisecondsSinceEpoch, 'time', 20000)
+              .having((e) => e.sys?.mmHg, 'sys', null)
+              .having((e) => e.dia?.mmHg, 'dia', null)
+              .having((e) => e.pul, 'pul', null)
+              .having((e) => e.note, 'note', 'testnote')
+              .having((e) => e.color, 'color', 123)
+              .having((e) => e.intakes, 'intakes', hasLength(1)),
+          isA<FullEntry>()
+              .having((e) => e.time.millisecondsSinceEpoch, 'time', 30000)
+              .having((e) => e.sys?.mmHg, 'sys', null)
+              .having((e) => e.dia?.mmHg, 'dia', 456)
+              .having((e) => e.pul, 'pul', null)
+              .having((e) => e.note, 'note', null)
+              .having((e) => e.color, 'color', null)
+              .having((e) => e.intakes, 'intakes', hasLength(1)),
+          isA<FullEntry>()
+              .having((e) => e.time.millisecondsSinceEpoch, 'time', 40000)
+              .having((e) => e.sys?.mmHg, 'sys', 123)
+              .having((e) => e.dia?.mmHg, 'dia', 456)
+              .having((e) => e.pul, 'pul', null)
+              .having((e) => e.note, 'note', null)
+              .having((e) => e.color, 'color', null)
+              .having((e) => e.intakes, 'intakes', isEmpty),
+          isA<FullEntry>()
+              .having((e) => e.time.millisecondsSinceEpoch, 'time', 50000)
+              .having((e) => e.sys?.mmHg, 'sys', null)
+              .having((e) => e.dia?.mmHg, 'dia', null)
+              .having((e) => e.pul, 'pul', null)
+              .having((e) => e.note, 'note', null)
+              .having((e) => e.color, 'color', null)
+              .having((e) => e.intakes, 'intakes', hasLength(2)),
+          isA<FullEntry>()
+              .having((e) => e.time.millisecondsSinceEpoch, 'time', 60000)
+              .having((e) => e.sys?.mmHg, 'sys', null)
+              .having((e) => e.dia?.mmHg, 'dia', null)
+              .having((e) => e.pul, 'pul', null)
+              .having((e) => e.note, 'note', null)
+              .having((e) => e.color, 'color', null)
+              .having((e) => e.intakes, 'intakes', hasLength(1))
+              .having(
+                  (e) => e.intakes,
+                  'intakes',
+                  contains(isA<MedicineIntake>()
+                      .having((i) => i.dosis.mg, 'dosis', 12343.0))),
+          isA<FullEntry>()
+              .having((e) => e.time.millisecondsSinceEpoch, 'time', 70000)
+              .having((e) => e.sys?.mmHg, 'sys', null)
+              .having((e) => e.dia?.mmHg, 'dia', null)
+              .having((e) => e.pul, 'pul', null)
+              .having((e) => e.note, 'note', null)
+              .having((e) => e.color, 'color', 123)
+              .having((e) => e.intakes, 'intakes', hasLength(3)),
+          isA<FullEntry>()
+              .having((e) => e.time.millisecondsSinceEpoch, 'time', 80000)
+              .having((e) => e.sys?.mmHg, 'sys', 123)
+              .having((e) => e.dia?.mmHg, 'dia', 456)
+              .having((e) => e.pul, 'pul', 567)
+              .having((e) => e.note, 'note', null)
+              .having((e) => e.color, 'color', null)
+              .having((e) => e.intakes, 'intakes', isEmpty),
+        ]));
   });
   test('merges lists with entries at same time', () {
     final list = FullEntryList.merged(
@@ -207,6 +227,7 @@ void main() {
     );
     expect(list, hasLength(2));
     expect(list, contains(isA<FullEntry>().having((e) => e.color, 'color', 1)));
-    expect(list, contains(isA<FullEntry>().having((e) =>e.color, 'note',null)));
+    expect(
+        list, contains(isA<FullEntry>().having((e) => e.color, 'note', null)));
   });
 }
