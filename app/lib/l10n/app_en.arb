@@ -297,7 +297,7 @@
   "@last30Days": {},
   "allowMissingValues": "Allow missing values",
   "@allowMissingValues": {},
-  "errTimeAfterNow": "The selected time of day was reset, as it occurs after this moment. You can turn off this validation in the settings.",
+  "errTimeAfterNow": "The selected time is in the future. You can turn off this validation in the settings.",
   "@errTimeAfterNow": {},
   "language": "Language",
   "@language": {},
@@ -552,5 +552,8 @@
   "newBluetoothInputCrossPlatform": "Beta cross-platform",
   "@newBluetoothInputCrossPlatform": {},
   "bluetoothInputDesc": "The beta backend works on more devices but is less tested. The cross-platform version may work on non-android and is planned to supersede the stable implementation once mature enough.",
-  "@bluetoothInputDesc": {}
+  "@bluetoothInputDesc": {},
+  "@bluetoothInputDesc": {},
+  "tapToSelect": "Tap to select",
+  "@tapToSelect": {}
 }

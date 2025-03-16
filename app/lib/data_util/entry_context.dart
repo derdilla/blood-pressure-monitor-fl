@@ -1,6 +1,7 @@
 import 'package:blood_pressure_app/components/confirm_deletion_dialoge.dart';
+import 'package:blood_pressure_app/features/input/add_entry_dialogue.dart';
+import 'package:blood_pressure_app/features/input/forms/add_entry_form.dart';
 import 'package:blood_pressure_app/features/export_import/export_button.dart';
-import 'package:blood_pressure_app/features/input/add_measurement_dialoge.dart';
 import 'package:blood_pressure_app/logging.dart';
 import 'package:blood_pressure_app/model/storage/storage.dart';
 import 'package:blood_pressure_app/screens/error_reporting_screen.dart';
@@ -12,43 +13,33 @@ import 'package:provider/provider.dart';
 
 /// Allow high level operations on the repositories in context.
 extension EntryUtils on BuildContext {
-  /// Open the [AddEntryDialoge] and save received entries.
+  /// Open the [AddEntryDialogue] and save received entries.
   ///
   /// Follows [ExportSettings.exportAfterEveryEntry]. When [initial] is not null
   /// the dialoge will be opened in edit mode.
-  Future<void> createEntry([FullEntry? initial]) async {
+  Future<void> createEntry([AddEntryFormValue? initial]) async {
     try {
       final recordRepo = RepositoryProvider.of<BloodPressureRepository>(this);
       final noteRepo = RepositoryProvider.of<NoteRepository>(this);
       final intakeRepo = RepositoryProvider.of<MedicineIntakeRepository>(this);
+      final weightRepo = RepositoryProvider.of<BodyweightRepository>(this);
       final exportSettings = Provider.of<ExportSettings>(this, listen: false);
 
-      final entry = await showAddEntryDialoge(this,
+      final entry = await showAddEntryDialogue(this,
         RepositoryProvider.of<MedicineRepository>(this),
         initial,
       );
       if (entry != null) {
-        if (initial != null) {
-          if ((initial.sys != null || initial.dia != null || initial.pul != null)) {
-            await recordRepo.remove(initial.$1);
-          }
-          if ((initial.note != null || initial.color != null)) {
-            await noteRepo.remove(initial.$2);
-          }
-          for (final intake in initial.$3) {
-            await intakeRepo.remove(intake);
-          }
-        }
+        if (initial?.record != null) await recordRepo.remove(initial!.record!);
+        if (initial?.note != null) await noteRepo.remove(initial!.note!);
+        if (initial?.intake != null) await intakeRepo.remove(initial!.intake!);
+        if (initial?.weight != null) await weightRepo.remove(initial!.weight!);
 
-        if (entry.sys != null || entry.dia != null || entry.pul != null) {
-          await recordRepo.add(entry.$1);
-        }
-        if (entry.note != null || entry.color != null) {
-          await noteRepo.add(entry.$2);
-        }
-        for (final intake in entry.$3) {
-          await intakeRepo.add(intake);
-        }
+        if (entry.record != null) await recordRepo.add(entry.record!);
+        if (entry.note != null) await noteRepo.add(entry.note!);
+        if (entry.intake != null) await intakeRepo.add(entry.intake!);
+        if(entry.weight != null) await weightRepo.add(entry.weight!);
+
         if (mounted && exportSettings.exportAfterEveryEntry) {
           read<IntervalStoreManager>().exportPage.setToMostRecentInterval();
           performExport(this);

@@ -1,88 +1,109 @@
+import 'package:blood_pressure_app/features/input/forms/form_base.dart';
+import 'package:blood_pressure_app/model/storage/settings_store.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 /// Input to allow date and time input.
-class DateTimeForm extends StatefulWidget {
+class DateTimeForm extends FormBase<DateTime> {
   /// Create input to allow date and time input.
   const DateTimeForm({super.key,
-    required this.initialTime,
-    required this.validate,
-    required this.onTimeSelected,
+    super.initialValue,
   });
 
-  /// Initial time to display
-  final DateTime initialTime;
-
-  /// Whether to validate whether the time is after now.
-  final bool validate;
-
-  /// Call after a new time is successfully selected.
-  final void Function(DateTime time) onTimeSelected;
-
   @override
-  State<DateTimeForm> createState() => _DateTimeFormState();
+  FormStateBase<DateTime, DateTimeForm> createState() => DateTimeFormState();
 }
 
-class _DateTimeFormState extends State<DateTimeForm> {
+/// State of a [DateTimeForm].
+class DateTimeFormState extends FormStateBase<DateTime, DateTimeForm> {
+  late DateTime _time;
+
+  String? _error;
+
+  @override
+  void initState() {
+    super.initState();
+    _time = widget.initialValue ?? DateTime.now();
+  }
+
+  @override
+  DateTime? save() => validate() ? _time : null;
+
+  @override
+  bool isEmptyInputFocused() => false;
+
+  @override
+  bool validate() {
+    if (context.read<Settings>().validateInputs && _time.isAfter(DateTime.now())) {
+      setState(() {
+        _error = AppLocalizations.of(context)!.errTimeAfterNow;
+      });
+      return false;
+    } else if (_error != null) {
+      setState(() {
+        _error = null;
+      });
+    }
+    return true;
+  }
+
+  @override
+  void fillForm(DateTime? value) => setState(() {
+    _time = value ?? DateTime.now();
+  });
+
   Future<void> _openDatePicker() async {
     final now = DateTime.now();
     final date = await showDatePicker(
       context: context,
-      initialDate: widget.initialTime,
+      initialDate: _time,
       firstDate: DateTime.fromMillisecondsSinceEpoch(1),
-      lastDate: widget.initialTime.isAfter(now) ? widget.initialTime : now,
+      lastDate: _time.isAfter(now) ? _time : now,
     );
     if (date == null) return;
-    _validateAndInvoke(date.copyWith(
-      hour: widget.initialTime.hour,
-      minute: widget.initialTime.minute,
+    setState(() => _time = date.copyWith(
+      hour: _time.hour,
+      minute: _time.minute,
     ));
+
   }
 
   Future<void> _openTimePicker() async {
-    final time = await showTimePicker(
+    final timeOfDay = await showTimePicker(
       context: context,
-      initialTime: TimeOfDay.fromDateTime(widget.initialTime),
+      initialTime: TimeOfDay.fromDateTime(_time),
     );
-    if (time == null) return;
-    _validateAndInvoke(widget.initialTime.copyWith(
-      hour: time.hour,
-      minute: time.minute,
+    if (timeOfDay == null) return;
+    setState(() => _time = _time.copyWith(
+      hour: timeOfDay.hour,
+      minute: timeOfDay.minute,
     ));
   }
 
-  void _validateAndInvoke(DateTime time) {
-    if (widget.validate && time.isAfter(DateTime.now())) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text(AppLocalizations.of(context)!.errTimeAfterNow),
-      ));
-      return;
-    }
-    widget.onTimeSelected(time);
-  }
-
-  Widget _buildInput(String content, void Function() onTap, String label) => Expanded(
+  Widget _buildInput(String content, void Function() onTap, String label, [String? error]) => Expanded(
     child: InputDecorator(
+      decoration: InputDecoration(
+        labelText: label,
+        error: error == null ? null : Text(error),
+      ),
       child: GestureDetector(
         onTap: onTap,
         child: Text(content, style: Theme.of(context).textTheme.bodyLarge)
-      ),
-      decoration: InputDecoration(
-        labelText: label,
       ),
     ),
   );
 
   @override
   Widget build(BuildContext context) {
-    final date = DateFormat('yyyy-MM-dd').format(widget.initialTime);
-    final time = DateFormat('HH:mm').format(widget.initialTime);
+    final date = DateFormat('yyyy-MM-dd').format(_time);
+    final timeOfDay = DateFormat('HH:mm').format(_time);
     return Row(
       children: [
         _buildInput(date, _openDatePicker, AppLocalizations.of(context)!.date),
         SizedBox(width: 8,),
-        _buildInput(time, _openTimePicker, AppLocalizations.of(context)!.time),
+        _buildInput(timeOfDay, _openTimePicker, AppLocalizations.of(context)!.time, _error),
       ],
     );
   }

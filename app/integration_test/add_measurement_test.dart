@@ -1,5 +1,5 @@
 import 'package:blood_pressure_app/app.dart';
-import 'package:blood_pressure_app/features/input/add_measurement_dialoge.dart';
+import 'package:blood_pressure_app/features/input/add_entry_dialogue.dart';
 import 'package:blood_pressure_app/features/measurement_list/measurement_list_entry.dart';
 import 'package:blood_pressure_app/features/settings/tiles/color_picker_list_tile.dart';
 import 'package:blood_pressure_app/screens/home_screen.dart';
@@ -20,13 +20,13 @@ void main() {
     await tester.pumpAndSettle();
     await tester.pumpUntil(() => find.byType(AppHome).hasFound);
     expect(find.byType(AppHome), findsOneWidget);
-    expect(find.byType(AddEntryDialoge), findsNothing);
+    expect(find.byType(AddEntryDialogue), findsNothing);
     expect(find.byType(MeasurementListRow), findsNothing);
 
     expect(find.byIcon(Icons.add), findsOneWidget);
     await tester.tap(find.byIcon(Icons.add));
     await tester.pumpAndSettle();
-    expect(find.byType(AddEntryDialoge), findsOneWidget);
+    expect(find.byType(AddEntryDialogue), findsOneWidget);
 
     await tester.enterText(find.byType(TextFormField).at(0), '123'); // sys
     await tester.enterText(find.byType(TextFormField).at(1), '67'); // dia
@@ -34,7 +34,7 @@ void main() {
 
     await tester.tap(find.text(localizations.btnSave));
     await tester.pumpAndSettle();
-    expect(find.byType(AddEntryDialoge), findsNothing);
+    expect(find.byType(AddEntryDialogue), findsNothing);
 
     await tester.pumpUntil(() => !find.text(localizations.loading).hasFound);
     expect(find.text(localizations.loading), findsNothing);
@@ -64,7 +64,7 @@ void main() {
 
     await tester.tap(find.byIcon(Icons.add));
     await tester.pumpAndSettle();
-    expect(find.byType(AddEntryDialoge), findsOneWidget);
+    expect(find.byType(AddEntryDialogue), findsOneWidget);
 
     await tester.enterText(find.byType(TextFormField).at(0), '123'); // sys
     await tester.enterText(find.byType(TextFormField).at(1), '67'); // dia
@@ -77,7 +77,7 @@ void main() {
 
     await tester.tap(find.text(localizations.btnSave));
     await tester.pumpAndSettle();
-    expect(find.byType(AddEntryDialoge), findsNothing);
+    expect(find.byType(AddEntryDialogue), findsNothing);
 
     await tester.pumpUntil(() => !find.text(localizations.loading).hasFound);
     expect(find.text(localizations.loading), findsNothing);

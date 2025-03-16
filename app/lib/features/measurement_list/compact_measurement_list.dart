@@ -1,6 +1,7 @@
 import 'package:blood_pressure_app/components/nullable_text.dart';
 import 'package:blood_pressure_app/components/pressure_text.dart';
 import 'package:blood_pressure_app/data_util/entry_context.dart';
+import 'package:blood_pressure_app/features/input/forms/add_entry_form.dart';
 import 'package:blood_pressure_app/model/storage/settings_store.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -70,7 +71,7 @@ class _CompactMeasurementListState extends State<CompactMeasurementList> {
         key: Key(widget.data[index].time.toIso8601String()),
         confirmDismiss: (direction) async {
           if (direction == DismissDirection.startToEnd) { // edit
-            await context.createEntry(widget.data[index]);
+            await context.createEntry(widget.data[index].asAddEntry);
             return false;
           } else { // delete
             await context.deleteEntry(widget.data[index]);
