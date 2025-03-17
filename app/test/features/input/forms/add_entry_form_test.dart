@@ -417,6 +417,25 @@ void main() {
       matching: find.text(localizations.sysLong)
     ), findsOneWidget);
   });
+
+  testWidgets('opens correct tab on edit', (tester) async {
+    final key = GlobalKey<AddEntryFormState>();
+    await tester.pumpWidget(materialApp(AddEntryForm(key: key,
+      initialValue: (
+        timestamp: DateTime.now(),
+        weight: BodyweightRecord(time:  DateTime.now(), weight: Weight.kg(123.0)),
+        record: null,
+        note: null,
+        intake: null,
+      ),
+    ),
+      settings: Settings(weightInput: true),
+    ));
+    await tester.pumpAndSettle();
+
+    expect(find.byType(BloodPressureForm), findsNothing);
+    expect(find.byType(WeightForm), findsOneWidget);
+  });
 }
 
 class _MockBluetoothCubit extends Fake implements BluetoothCubit {
