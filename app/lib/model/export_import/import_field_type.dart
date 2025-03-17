@@ -1,8 +1,6 @@
 import 'package:blood_pressure_app/model/blood_pressure/needle_pin.dart';
 import 'package:blood_pressure_app/model/export_import/record_formatter.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-
 
 /// Type a [Formatter] can uses to indicate the kind of data returned.
 enum RowDataFieldType {

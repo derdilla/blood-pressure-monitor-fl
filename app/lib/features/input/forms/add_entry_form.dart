@@ -1,8 +1,6 @@
 import 'package:blood_pressure_app/features/bluetooth/backend/bluetooth_backend.dart';
 import 'package:blood_pressure_app/features/bluetooth/bluetooth_input.dart';
-import 'package:blood_pressure_app/features/bluetooth/logic/ble_read_cubit.dart';
 import 'package:blood_pressure_app/features/bluetooth/logic/bluetooth_cubit.dart';
-import 'package:blood_pressure_app/features/bluetooth/logic/device_scan_cubit.dart';
 import 'package:blood_pressure_app/features/input/forms/blood_pressure_form.dart';
 import 'package:blood_pressure_app/features/input/forms/date_time_form.dart';
 import 'package:blood_pressure_app/features/input/forms/form_base.dart';

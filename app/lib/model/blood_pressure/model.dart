@@ -18,13 +18,6 @@ class BloodPressureModel extends ChangeNotifier {
 
   late final Database _database;
 
-  FutureOr<void> _onDBCreate(Database db, int version) => db.execute('CREATE TABLE bloodPressureModel('
-        'timestamp INTEGER(14) PRIMARY KEY,'
-        'systolic INTEGER, diastolic INTEGER,'
-        'pulse INTEGER,'
-        'notes STRING,'
-        'needlePin STRING)');
-
   FutureOr<void> _onDBUpgrade(Database db, int oldVersion, int newVersion) async {
     // When adding more versions the upgrade procedure proposed in https://stackoverflow.com/a/75153875/21489239
     // might be useful, to avoid duplicated code. Currently this would only lead to complexity, without benefits.

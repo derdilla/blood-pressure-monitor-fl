@@ -56,7 +56,7 @@ void main() {
       intervallStoreManager: IntervalStoreManager(interval, IntervalStorage(), IntervalStorage()),
       const WeightList(rangeType: IntervalStoreManagerLocation.mainPage),
     ));
-    final localizations = await AppLocalizations.delegate.load(const Locale('en'))!;
+    final localizations = await AppLocalizations.delegate.load(const Locale('en'));
     await tester.pumpAndSettle();
 
     expect(find.text('123 kg'), findsOneWidget);
@@ -91,7 +91,7 @@ void main() {
       settings: Settings(confirmDeletion: false),
       const WeightList(rangeType: IntervalStoreManagerLocation.mainPage),
     ));
-    final localizations = await AppLocalizations.delegate.load(const Locale('en'))!;
+    final localizations = await AppLocalizations.delegate.load(const Locale('en'));
     await tester.pumpAndSettle();
 
     expect(find.text('123 kg'), findsOneWidget);

@@ -64,10 +64,6 @@ class FakeBleBpCharacteristic implements BluetoothCharacteristic {
   DeviceIdentifier get remoteId => throw UnimplementedError();
 
   @override
-  // TODO: implement secondaryServiceUuid
-  Guid? get secondaryServiceUuid => throw UnimplementedError();
-
-  @override
   // TODO: implement serviceUuid
   Guid get serviceUuid => throw UnimplementedError();
 

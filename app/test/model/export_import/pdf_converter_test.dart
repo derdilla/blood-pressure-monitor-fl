@@ -5,10 +5,7 @@ import 'package:blood_pressure_app/model/storage/settings_store.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:health_data_store/health_data_store.dart';
-
 import 'csv_converter_test.dart';
-import 'record_formatter_test.dart';
 
 void main() {
   test('should not return empty data', () async {
