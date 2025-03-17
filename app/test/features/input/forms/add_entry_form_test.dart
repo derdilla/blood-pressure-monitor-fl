@@ -417,6 +417,24 @@ void main() {
       matching: find.text(localizations.sysLong)
     ), findsOneWidget);
   });
+
+  testWidgets('opens correct tab on edit', (tester) async {
+    final key = GlobalKey<AddEntryFormState>();
+    await tester.pumpWidget(materialApp(AddEntryForm(key: key,
+      initialValue: (
+        timestamp: DateTime.now(),
+        note: Note(time:  DateTime.now(), note: '123test'),
+        record: null, weight: null, intake: null,
+      ),
+    ),
+      settings: Settings(weightInput: true),
+    ));
+    await tester.pumpAndSettle();
+
+    final localizations = await AppLocalizations.delegate.load(const Locale('en'));
+    expect(find.text(localizations.sysLong), findsNothing);
+    expect(find.text(localizations.note), findsOneWidget);
+  });
 }
 
 class _MockBluetoothCubit extends Fake implements BluetoothCubit {

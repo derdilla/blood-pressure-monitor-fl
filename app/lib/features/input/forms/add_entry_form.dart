@@ -68,7 +68,7 @@ class AddEntryFormState extends FormStateBase<AddEntryFormValue, AddEntryForm> {
       if (widget.initialValue!.record == null
           && widget.initialValue!.intake == null
           && widget.initialValue!.weight != null) {
-        _controller.animateTo(2);
+        _controller.animateTo(widget.meds.isEmpty ? 1 : 2);
       } else if (widget.initialValue!.record == null
           && widget.initialValue!.intake != null) {
         _controller.animateTo(1);
