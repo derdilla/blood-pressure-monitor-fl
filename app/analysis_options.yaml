@@ -25,7 +25,6 @@ linter:
     - matching_super_parameters
     - no_literal_bool_comparisons
     - noop_primitive_operations
-    - package_api_docs
     - prefer_asserts_in_initializer_lists
     - prefer_expression_function_bodies
     - prefer_final_in_for_each
