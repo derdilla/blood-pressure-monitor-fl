@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'dart:typed_data';
 
 import 'package:archive/archive_io.dart';
 import 'package:blood_pressure_app/components/input_dialoge.dart';
@@ -346,16 +345,11 @@ class SettingsPage extends StatelessWidget {
                       messenger.showSnackBar(SnackBar(content: Text(localizations.errCantCreateArchive)));
                       return;
                     }
-                    final compressedArchive = ZipEncoder().encode(archive);
-                    if (compressedArchive == null) {
-                      messenger.showSnackBar(SnackBar(content: Text(localizations.errCantCreateArchive)));
-                      return;
-                    }
-                    final archiveData = Uint8List.fromList(compressedArchive);
+                    final compressedArchive = ZipEncoder().encodeBytes(archive);
                     await FilePicker.platform.saveFile(
                       type: FileType.any, // application/zip
                       fileName: 'bloodPressureSettings.zip',
-                      bytes: archiveData,
+                      bytes: compressedArchive,
                     );
                   },
                 ),
