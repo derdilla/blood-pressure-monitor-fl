@@ -15,7 +15,7 @@ class Note with _$Note {
 
     /// ARGB color in number format.
     ///
-    /// Can also be obtained through the `dart:ui` Colors..toARGB32()` attribute.
+    /// Can also be obtained through the `Colors.toARGB32()` method in `dart:ui`.
     /// Sample value: `0xFF42A5F5`
     int? color,
   }) = _Notes;
