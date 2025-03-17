@@ -16,7 +16,7 @@ enum RowDataFieldType {
   pul,
   /// Guarantees [String] is returned.
   notes,
-  /// Guarantees that a [int] containing a [Color.value] is returned.
+  /// Guarantees that a [int] containing a [Color.toARGB32()] is returned.
   ///
   /// Backwards compatability with [MeasurementNeedlePin] json is maintained.
   color,

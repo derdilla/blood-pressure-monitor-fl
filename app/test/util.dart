@@ -267,13 +267,13 @@ Medicine mockMedicine({
   double? defaultDosis,
 }) {
   final matchingMeds = _meds.where((med) => med.dosis?.mg == defaultDosis
-    && med.color == color.value
+    && med.color == color.toARGB32()
     && med.designation == designation,
   );
   if (matchingMeds.isNotEmpty) return matchingMeds.first;
   final med = Medicine(
     designation: designation,
-    color: color.value,
+    color: color.toARGB32(),
     dosis: defaultDosis == null ? null : Weight.mg(defaultDosis),
   );
   _meds.add(med);

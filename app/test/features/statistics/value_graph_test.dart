@@ -190,7 +190,7 @@ Widget _buildGraph(
     height: 300,
     child: BloodPressureValueGraph(
       records: data,
-      colors: colors.map((e) => Note(time: e.$1, color: e.$2.value)).toList(),
+      colors: colors.map((e) => Note(time: e.$1, color: e.$2.toARGB32())).toList(),
       intakes: intakes,
     ),
   ),

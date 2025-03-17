@@ -111,7 +111,7 @@ void main() {
     
     expect(find.byWidgetPredicate((widget) => widget is Icon
       && widget.icon == Icons.medication
-      && widget.color?.value == Colors.red.toARGB32()), findsOneWidget);
+      && widget.color?.toARGB32() == Colors.red.toARGB32()), findsOneWidget);
   });
 }
 

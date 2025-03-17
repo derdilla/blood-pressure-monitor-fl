@@ -249,7 +249,7 @@ Future<void> migrateDatabaseSettings(
   settings.copyFrom(oldSettings);
   final oldMeds = settings.medications.map((e) => Medicine(
     designation: e.designation,
-    color: e.color.value,
+    color: e.color.toARGB32(),
     dosis: e.defaultDosis == null ? null : Weight.mg(e.defaultDosis!),
   ));
   await Future.forEach(oldMeds, medRepo.add);

@@ -163,7 +163,7 @@ FullEntry mockEntry({
     Note(
       time: time,
       note: note,
-      color: pin?.value,
+      color: pin?.toARGB32(),
     ),
     (intake == null ? [] : [ intake ]),
   );

@@ -35,7 +35,7 @@ Future<void> updateLegacyEntries(
         if (med == null) {
           med = hds.Medicine(
             designation: i.medicine.designation,
-            color: i.medicine.color.value,
+            color: i.medicine.color.toARGB32(),
             dosis: i.medicine.defaultDosis == null ? null : hds.Weight.mg(i.medicine.defaultDosis!),
           );
           addedMeds[i.medicine] = med;
@@ -74,7 +74,7 @@ Future<void> updateLegacyEntries(
         await noteRepo.add(hds.Note(
           time: r.creationTime,
           note: r.notes.isEmpty ? null : r.notes,
-          color: r.needlePin?.color.value,
+          color: r.needlePin?.color.toARGB32(),
         ));
       }
     }

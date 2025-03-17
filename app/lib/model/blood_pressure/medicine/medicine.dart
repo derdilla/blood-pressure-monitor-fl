@@ -52,7 +52,7 @@ class Medicine {
           runtimeType == other.runtimeType &&
           id == other.id &&
           designation == other.designation &&
-          color.value == other.color.value &&
+          color.toARGB32() == other.color.toARGB32() &&
           defaultDosis == other.defaultDosis &&
           hidden == other.hidden;
 
