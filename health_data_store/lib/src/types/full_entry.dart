@@ -34,7 +34,7 @@ extension FastFullEntryGetters on FullEntry {
 
   /// ARGB color in number format.
   ///
-  /// Can also be obtained through the `dart:ui` Colors `value` attribute.
+  /// Can also be obtained through the `dart:ui` Colors..toARGB32()` attribute.
   /// Sample value: `0xFF42A5F5`
   int? get color => this.$2.color;
 }

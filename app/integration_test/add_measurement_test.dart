@@ -87,7 +87,7 @@ void main() {
     expect(submittedRecord.sys?.mmHg, 123);
     expect(submittedRecord.dia?.mmHg, 67);
     expect(submittedRecord.pul, 56);
-    expect(submittedRecord.color, Colors.red.value);
+    expect(submittedRecord.color, Colors.red.toARGB32());
     expect(submittedRecord.note, 'some test sample note');
 
     expect(find.text('some test sample note'), findsNothing);

@@ -72,7 +72,7 @@ void main() {
       final r = mockEntryPos(DateTime.now(), null, null, null, '', Colors.purple);
       final encodedPurple = ScriptedFormatter(r'$COLOR',).encode(r.$1, r.$2, r.$3, null);
       expect(ScriptedFormatter(r'$COLOR',).decode(encodedPurple)?.$1, RowDataFieldType.color);
-      expect(ScriptedFormatter(r'$COLOR',).decode(encodedPurple)?.$2, Colors.purple.value);
+      expect(ScriptedFormatter(r'$COLOR',).decode(encodedPurple)?.$2, Colors.purple.toARGB32());
       expect(ScriptedFormatter(r'test$SYS',).decode('test567'), (RowDataFieldType.sys, 567));
       expect(ScriptedFormatter(r'test$SYS123',).decode('test567123'), (RowDataFieldType.sys, 567));
       expect(ScriptedFormatter(r'test$DIA123',).decode('test567123'), (RowDataFieldType.dia, 567));

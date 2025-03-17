@@ -13,7 +13,7 @@ class Medicine with _$Medicine {
 
     /// ARGB color in number format.
     ///
-    /// Can also be obtained through the `dart:ui` Colors `value` attribute.
+    /// Can also be obtained through the `dart:ui` Colors..toARGB32()` attribute.
     /// Sample value: `0xFF42A5F5`
     int? color,
 

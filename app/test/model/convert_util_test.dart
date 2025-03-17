@@ -76,9 +76,9 @@ void main() {
 
   test('parseMaterialColor should parse valid values correctly', () {
     expect(ConvertUtil.parseColor(Colors.deepOrange), Colors.deepOrange);
-    expect(ConvertUtil.parseColor(Colors.grey)?.value, Colors.grey.value);
-    expect(ConvertUtil.parseColor(Colors.grey.value)?.value, Colors.grey.value);
-    expect(ConvertUtil.parseColor(Colors.deepOrange.value)?.value, Colors.deepOrange.value);
+    expect(ConvertUtil.parseColor(Colors.grey)?.value, Colors.grey.toARGB32());
+    expect(ConvertUtil.parseColor(Colors.grey.toARGB32())?.value, Colors.grey.toARGB32());
+    expect(ConvertUtil.parseColor(Colors.deepOrange.toARGB32())?.value, Colors.deepOrange.toARGB32());
     expect(ConvertUtil.parseColor(0xff000000)?.value, 0xff000000);
     expect(ConvertUtil.parseColor('0x00ff0000')?.value, 0x00ff0000);
     expect(ConvertUtil.parseColor(const Color(0x00ff0000))?.value, 0x00ff0000);
