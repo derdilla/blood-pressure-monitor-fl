@@ -288,7 +288,7 @@ void main() {
       .having((p0) => p0.$1.dia?.mmHg, 'diastolic', 71)
       .having((p0) => p0.$1.pul, 'pulse', 66)
       .having((p0) => p0.$2.note, 'notes', 'fsaf &_*¢|^✓[=%®©')
-      .having((p0) => p0.$2.color, 'color', Colors.lightGreen.value),
+      .having((p0) => p0.$2.color, 'color', Colors.lightGreen.toARGB32()),
     ),);
     expect(records, anyElement(isA<FullEntry>()
       .having((p0) => p0.$1.time.millisecondsSinceEpoch, 'timestamp', 1701034952000)

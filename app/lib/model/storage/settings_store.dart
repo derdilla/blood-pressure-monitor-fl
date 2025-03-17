@@ -139,10 +139,10 @@ class Settings extends ChangeNotifier {
 
   /// Serialize the object to a restoreable map.
   Map<String, dynamic> toMap() => <String, dynamic>{
-    'accentColor': accentColor.value,
-    'sysColor': sysColor.value,
-    'diaColor': diaColor.value,
-    'pulColor': pulColor.value,
+    'accentColor': accentColor.toARGB32(),
+    'sysColor': sysColor.toARGB32(),
+    'diaColor': diaColor.toARGB32(),
+    'pulColor': pulColor.toARGB32(),
     'dateFormatString': dateFormatString,
     'graphLineThickness': graphLineThickness,
     'animationSpeed': animationSpeed,

@@ -168,7 +168,7 @@ class _AddExportColumnDialogeState extends State<AddExportColumnDialoge>
                     final note = Note(
                       time: record.time,
                       note: 'test note',
-                      color: Colors.red.value,
+                      color: Colors.red.toARGB32(),
                     );
                     final formatter = (type == _FormatterType.record)
                       ? ScriptedFormatter(recordPattern ?? '')

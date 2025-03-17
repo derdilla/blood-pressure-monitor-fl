@@ -28,7 +28,7 @@ void main() {
       final settings1 = await loader1.loadSettings();
       settings1.sysColor = Colors.blueGrey;
       final settings2 = await loader2.loadSettings();
-      expect(settings2.sysColor.value, settings1.sysColor.value);
+      expect(settings2.sysColor.toARGB32(), settings1.sysColor.toARGB32());
 
       final exportSettings1 = await loader1.loadExportSettings();
       exportSettings1.exportFormat = ExportFormat.db;

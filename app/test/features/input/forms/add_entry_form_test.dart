@@ -276,7 +276,7 @@ void main() {
     final value = (
       timestamp: intake.time,
       intake: intake,
-      note: Note(time: intake.time, note: '123test', color: Colors.teal.value),
+      note: Note(time: intake.time, note: '123test', color: Colors.teal.toARGB32()),
       record: mockRecord(time: intake.time, sys: 123, dia: 45, pul: 67),
       weight: BodyweightRecord(time: intake.time, weight: Weight.kg(123.45))
     );
@@ -303,7 +303,7 @@ void main() {
     final value = (
       timestamp: intake.time,
       intake: intake,
-      note: Note(time: intake.time, note: '123test', color: Colors.teal.value),
+      note: Note(time: intake.time, note: '123test', color: Colors.teal.toARGB32()),
       record: mockRecord(time: intake.time, sys: 123, dia: 45, pul: 67),
       weight: BodyweightRecord(time: intake.time, weight: Weight.kg(123.45))
     );

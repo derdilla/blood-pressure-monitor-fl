@@ -115,7 +115,7 @@ class ImportButton extends StatelessWidget {
                 notes.add(Note(
                   time: oldR.creationTime,
                   note: oldR.notes.isEmpty ? null : oldR.notes,
-                  color: oldR.needlePin?.color.value,
+                  color: oldR.needlePin?.color.toARGB32(),
                 ));
               }
             }

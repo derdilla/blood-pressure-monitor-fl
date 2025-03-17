@@ -24,7 +24,7 @@ class HorizontalGraphLine {
 
   /// Serialize the object to a restoreable map.
   Map<String, dynamic> toJson() => {
-    'color': color.value,
+    'color': color.toARGB32(),
     'height': height,
   };
 }

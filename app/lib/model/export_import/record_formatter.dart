@@ -53,7 +53,7 @@ class ScriptedFormatter implements Formatter {
       RowDataFieldType.notes => text,
       RowDataFieldType.color => (){
         try {
-          return int.tryParse(text) ?? MeasurementNeedlePin.fromMap(jsonDecode(text)).color.value;
+          return int.tryParse(text) ?? MeasurementNeedlePin.fromMap(jsonDecode(text)).color.toARGB32();
         } on FormatException { return null; } on TypeError { return null; }
       }(),
       RowDataFieldType.intakes => NativeColumn.intakes.decode(text),

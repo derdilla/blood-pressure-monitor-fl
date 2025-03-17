@@ -16,7 +16,7 @@ class MedicineManagerScreen extends StatelessWidget {
   const MedicineManagerScreen({super.key});
 
   Widget _buildMedicine(BuildContext context, Medicine med) => ListTile(
-    leading: med.color == Colors.transparent.value
+    leading: med.color == Colors.transparent.toARGB32()
         || med.color == null
         ? null
         : Container(
@@ -34,7 +34,7 @@ class MedicineManagerScreen extends StatelessWidget {
     trailing: IconButton(
       icon: const Icon(Icons.delete),
       onPressed: () async {
-        if (await showConfirmDeletionDialoge(context)) {
+        if (await showConfirmDeletionDialoge(context) && context.mounted) {
           await RepositoryProvider.of<MedicineRepository>(context).remove(med);
         }
       },
@@ -54,29 +54,26 @@ class MedicineManagerScreen extends StatelessWidget {
   );
 
  @override
-  Widget build(BuildContext context) {
-    final localizations = AppLocalizations.of(context)!;
-    return Scaffold(
-      appBar: AppBar(
-        forceMaterialTransparency: true,
-      ),
-      body: Center(
-        child: StreamBuilder(
-          stream: RepositoryProvider.of<MedicineRepository>(context).subscribe(),
-          builder: (context, _) => ConsistentFutureBuilder(
-            future: RepositoryProvider.of<MedicineRepository>(context).getAll(),
-            onData: (context, medicines) => ListView.builder(
-              itemCount: medicines.length + 1,
-              itemBuilder: (context, i) {
-                if (i == medicines.length) { // last row
-                  return _buildAddMed(context);
-                }
-                return _buildMedicine(context, medicines[i]);
-              },
-            ),
+  Widget build(BuildContext context) => Scaffold(
+    appBar: AppBar(
+      forceMaterialTransparency: true,
+    ),
+    body: Center(
+      child: StreamBuilder(
+        stream: RepositoryProvider.of<MedicineRepository>(context).subscribe(),
+        builder: (context, _) => ConsistentFutureBuilder(
+          future: RepositoryProvider.of<MedicineRepository>(context).getAll(),
+          onData: (context, medicines) => ListView.builder(
+            itemCount: medicines.length + 1,
+            itemBuilder: (context, i) {
+              if (i == medicines.length) { // last row
+                return _buildAddMed(context);
+              }
+              return _buildMedicine(context, medicines[i]);
+            },
           ),
         ),
       ),
-    );
-  }
+    ),
+  );
 }

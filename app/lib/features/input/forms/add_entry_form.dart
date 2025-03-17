@@ -116,7 +116,7 @@ class AddEntryFormState extends FormStateBase<AddEntryFormValue, AddEntryForm> {
 
     final noteFormValue = _noteForm.currentState?.save();
     if (noteFormValue != null) {
-      note = Note(time: time, note: noteFormValue.$1, color: noteFormValue.$2?.value);
+      note = Note(time: time, note: noteFormValue.$1, color: noteFormValue.$2?.toARGB32());
     }
     final recordFormValue = _bpForm.currentState?.save();
     if (recordFormValue != null) {

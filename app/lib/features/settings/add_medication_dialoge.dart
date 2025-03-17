@@ -41,7 +41,7 @@ class _AddMedicationDialogeState extends State<AddMedicationDialoge> {
         formKey.currentState?.save();
         Navigator.pop(context, Medicine(
           designation: _designation ?? '',
-          color: _color.value,
+          color: _color.toARGB32(),
           dosis: _defaultDosis == null ? null : Weight.mg(_defaultDosis!),
         ),);
       },

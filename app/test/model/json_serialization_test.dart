@@ -106,10 +106,10 @@ void main() {
       final fromJson = Settings.fromJson(initial.toJson());
 
       expect(initial.language, fromJson.language);
-      expect(initial.accentColor.value, fromJson.accentColor.value);
-      expect(initial.sysColor.value, fromJson.sysColor.value);
-      expect(initial.diaColor.value, fromJson.diaColor.value);
-      expect(initial.pulColor.value, fromJson.pulColor.value);
+      expect(initial.accentColor.toARGB32(), fromJson.accentColor.toARGB32());
+      expect(initial.sysColor.toARGB32(), fromJson.sysColor.toARGB32());
+      expect(initial.diaColor.toARGB32(), fromJson.diaColor.toARGB32());
+      expect(initial.pulColor.toARGB32(), fromJson.pulColor.toARGB32());
       expect(initial.dateFormatString, fromJson.dateFormatString);
       expect(initial.graphLineThickness, fromJson.graphLineThickness);
       expect(initial.animationSpeed, fromJson.animationSpeed);
@@ -124,7 +124,7 @@ void main() {
       expect(initial.startWithAddMeasurementPage, fromJson.startWithAddMeasurementPage);
       expect(initial.compactList, fromJson.compactList);
       expect(initial.horizontalGraphLines.length, fromJson.horizontalGraphLines.length);
-      expect(initial.horizontalGraphLines.first.color.value, fromJson.horizontalGraphLines.first.color.value);
+      expect(initial.horizontalGraphLines.first.color.toARGB32(), fromJson.horizontalGraphLines.first.color.toARGB32());
       expect(initial.horizontalGraphLines.first.height, fromJson.horizontalGraphLines.first.height);
       expect(initial.needlePinBarWidth, fromJson.needlePinBarWidth);
       expect(initial.bottomAppBars, fromJson.bottomAppBars);
@@ -151,7 +151,7 @@ void main() {
       final v3 = Settings.fromJson('{"validateInputs": "month", "useLegacyList": 10.5}');
       Settings.fromJson('{"sysWarn": 18.6, "diaWarn": 90.65}');
 
-      expect(v1.pulColor.value, Settings().pulColor.value);
+      expect(v1.pulColor.toARGB32(), Settings().pulColor.toARGB32());
       expect(v2.validateInputs, Settings().validateInputs);
       expect(v3.compactList, Settings().compactList);
     });
