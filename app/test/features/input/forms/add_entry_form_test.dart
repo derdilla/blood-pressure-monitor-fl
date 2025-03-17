@@ -423,17 +423,18 @@ void main() {
     await tester.pumpWidget(materialApp(AddEntryForm(key: key,
       initialValue: (
         timestamp: DateTime.now(),
-        note: Note(time:  DateTime.now(), note: '123test'),
-        record: null, weight: null, intake: null,
+        weight: BodyweightRecord(time:  DateTime.now(), weight: Weight.kg(123.0)),
+        record: null,
+        note: null,
+        intake: null,
       ),
     ),
       settings: Settings(weightInput: true),
     ));
     await tester.pumpAndSettle();
 
-    final localizations = await AppLocalizations.delegate.load(const Locale('en'));
-    expect(find.text(localizations.sysLong), findsNothing);
-    expect(find.text(localizations.note), findsOneWidget);
+    expect(find.byType(BloodPressureForm), findsNothing);
+    expect(find.byType(WeightForm), findsOneWidget);
   });
 }
 
