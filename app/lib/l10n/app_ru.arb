@@ -542,5 +542,15 @@
         "type": "int"
       }
     }
-  }
+  },
+  "disabled": "Откючено",
+  "@disabled": {},
+  "oldBluetoothInput": "Стабильно",
+  "@oldBluetoothInput": {},
+  "newBluetoothInputOldLib": "Бета",
+  "@newBluetoothInputOldLib": {},
+  "newBluetoothInputCrossPlatform": "Кросс-платформеннная бета",
+  "@newBluetoothInputCrossPlatform": {},
+  "bluetoothInputDesc": "Бета работает на большем количестве устройств, но меньше тестируется. Кросс-платформенная версия может работать и на не Андроиде и планируется заменить стабильную реализацию, как только она станет достаточно взрослой.",
+  "@bluetoothInputDesc": {}
 }
