@@ -542,5 +542,15 @@
     "description": "Used when f.e. selecting a single measurement when the bluetooth device returned multiple"
   },
   "bloodPressure": "Krevní tlak",
-  "@bloodPressure": {}
+  "@bloodPressure": {},
+  "disabled": "Vypnuto",
+  "@disabled": {},
+  "oldBluetoothInput": "Stabilní",
+  "@oldBluetoothInput": {},
+  "newBluetoothInputOldLib": "Beta",
+  "@newBluetoothInputOldLib": {},
+  "newBluetoothInputCrossPlatform": "Beta multiplatformní",
+  "@newBluetoothInputCrossPlatform": {},
+  "bluetoothInputDesc": "Beta verze backendu funguje na více zařízeních, ale je méně otestovaná. Multiplatformní verze může fungovat i na jiných zařízeních než Android a plánuje se, že nahradí stabilní implementaci, jakmile bude dostatečně zralá.",
+  "@bluetoothInputDesc": {}
 }

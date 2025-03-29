@@ -275,7 +275,7 @@
       }
     }
   },
-  "timeResolvedMetrics": "時間解析圖表",
+  "timeResolvedMetrics": "時段指標",
   "@timeResolvedMetrics": {},
   "enterTimeFormatScreen": "時間格式",
   "@enterTimeFormatScreen": {},
@@ -323,5 +323,11 @@
   "confirmDeleteDesc": "刪除這筆記錄嗎? (您可以從設定把這個通知關掉。)",
   "@confirmDeleteDesc": {},
   "errNoFileOpened": "沒有打開任何檔案",
-  "@errNoFileOpened": {}
+  "@errNoFileOpened": {},
+  "addExportformat": "增加匯出格式",
+  "@addExportformat": {},
+  "edit": "編輯",
+  "@edit": {},
+  "delete": "刪除",
+  "@delete": {}
 }

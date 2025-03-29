@@ -341,7 +341,7 @@
   "@warnAboutTxt2": {},
   "warnAboutTxt3": "Palun muuda väärtusi vastavalt oma vajadustele ning järgi oma arsti soovitusi.",
   "@warnAboutTxt3": {},
-  "errTimeAfterNow": "Kuna valitud aeg on tulevikus, siis on ta ära muudetud. Sa saad selle kontrollireegli seadistustest välja lülitada.",
+  "errTimeAfterNow": "Valitud aeg on tulevikus. Sa saad selle kontrollireegli seadistustest välja lülitada.",
   "@errTimeAfterNow": {},
   "avgOf": "{txt} Ø",
   "@avgOf": {
@@ -552,5 +552,7 @@
   "newBluetoothInputOldLib": "Beetaliides",
   "@newBluetoothInputOldLib": {},
   "bluetoothInputDesc": "Beetaliides toimib enamate seadmetega, aga on vähem testitud. Platvormiülene beetaliides võib toimida ka muude, kui Androidipõhiste seadmetega ning meie eesmärk on, et peale piisavat testimist ta ühel hetkel asendab senise stabiilse liidese.",
-  "@bluetoothInputDesc": {}
+  "@bluetoothInputDesc": {},
+  "tapToSelect": "Valimiseks puuduta",
+  "@tapToSelect": {}
 }
