@@ -1,3 +1,3 @@
-* Update to material 3 bottom buttons for import/export dialog
-* Update entry-adding form
-* Improvements to internal code-structure and stability
+* Aggiornamento dei pulsanti in basso a material 3 per la finestra di dialogo di importazione/esportazione
+* Aggiornamento del modulo di aggiunta voci
+* Miglioramenti alla struttura interna del codice e alla stabilità
