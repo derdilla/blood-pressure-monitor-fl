@@ -4,7 +4,7 @@ part 'note.freezed.dart';
 
 /// Supporting information left by the enduser.
 @freezed
-class Note with _$Note {
+abstract class Note with _$Note {
   /// Create supporting information from the enduser.
   const factory Note({
     /// Timestamp when the note was taken.

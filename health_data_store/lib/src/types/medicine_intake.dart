@@ -6,7 +6,7 @@ part 'medicine_intake.freezed.dart';
 
 /// Instance of a [Medicine] intake.
 @freezed
-class MedicineIntake with _$MedicineIntake {
+abstract class MedicineIntake with _$MedicineIntake {
   /// Create a instance of a medicine intake.
   const factory MedicineIntake({
     /// Timestamp when the medicine was taken.

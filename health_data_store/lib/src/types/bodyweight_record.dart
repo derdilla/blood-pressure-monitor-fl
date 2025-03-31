@@ -5,7 +5,7 @@ part 'bodyweight_record.freezed.dart';
 
 /// Body weight at a specific time.
 @freezed
-class BodyweightRecord with _$BodyweightRecord {
+abstract class BodyweightRecord with _$BodyweightRecord {
   /// Create a body weight measurement.
   const factory BodyweightRecord({
     /// Timestamp when the weight was measured.

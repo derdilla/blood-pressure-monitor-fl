@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:typed_data';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
@@ -64,7 +65,7 @@ class FakeDevice implements BluetoothDevice {
   Stream<BluetoothConnectionState> get connectionState => _connectedController.stream;
 
   @override
-  Future<void> createBond({int timeout = 90}) {
+  Future<void> createBond({int timeout = 90, Uint8List? pin}) {
     // TODO: implement createBond
     throw UnimplementedError();
   }

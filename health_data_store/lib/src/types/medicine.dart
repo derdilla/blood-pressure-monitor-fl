@@ -5,7 +5,7 @@ part 'medicine.freezed.dart';
 
 /// Description of a medicine.
 @freezed
-class Medicine with _$Medicine {
+abstract class Medicine with _$Medicine {
   /// Create a medicine description.
   const factory Medicine({
     /// Name of the medicine.
