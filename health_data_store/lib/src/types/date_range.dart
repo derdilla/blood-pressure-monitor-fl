@@ -9,7 +9,7 @@ part 'date_range.freezed.dart';
 /// may be equal to indicate a date range of a single day. The [start] date must
 /// not be after the [end] date.
 @freezed
-class DateRange with _$DateRange {
+abstract class DateRange with _$DateRange {
   // ignore: unused_element,
   const DateRange._();
 

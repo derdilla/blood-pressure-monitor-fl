@@ -5,7 +5,7 @@ part 'blood_pressure_record.freezed.dart';
 
 /// Immutable representation of a blood pressure measurement.
 @freezed
-class BloodPressureRecord with _$BloodPressureRecord {
+abstract class BloodPressureRecord with _$BloodPressureRecord {
   /// Create a immutable representation of a blood pressure measurement.
   const factory BloodPressureRecord({
     /// Timestamp when the measurement was taken.
