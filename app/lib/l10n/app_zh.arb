@@ -300,7 +300,7 @@
   "@delete": {},
   "minimum": "最小值",
   "@minimum": {},
-  "errTimeAfterNow": "您选择了超出范围的时间，系统自动为您恢复了上一次的选择。",
+  "errTimeAfterNow": "当所选的时间在未来时会发生这个错误。如果是这样，本应用在尝试更改前会重置时间（不是整个选中的时间）为当前时间。",
   "@errTimeAfterNow": {},
   "last7Days": "最近七天",
   "@last7Days": {},
@@ -552,5 +552,7 @@
   "disabled": "已停用",
   "@disabled": {},
   "warnNeedsRestartForUsingApp": "文件在此会话中被删除了。重启本应用继续使用将返回到应用的其他部分！",
-  "@warnNeedsRestartForUsingApp": {}
+  "@warnNeedsRestartForUsingApp": {},
+  "tapToSelect": "轻按选择",
+  "@tapToSelect": {}
 }

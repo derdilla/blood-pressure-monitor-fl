@@ -267,5 +267,40 @@
   "validateInputs": "Értékek validálása",
   "@validateInputs": {},
   "addEntry": "Mező hozzáadása",
-  "@addEntry": {}
+  "@addEntry": {},
+  "exportWarnNotEveryFieldExported": "Vigyázzon, mert nem minden mező lesz exportálva: {fields} {count, plural, one{is} other{are}} hiányoznak.",
+  "@exportWarnNotEveryFieldExported": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "fields": {
+        "type": "String"
+      }
+    }
+  },
+  "warnAboutTxt3": "Nyugodtan változtassa meg az értékeket a saját igényeinek megfelelően, és kövesse orvosa ajánlásait.",
+  "@warnAboutTxt3": {},
+  "language": "Nyelv",
+  "@language": {},
+  "allowMissingValues": "Hiányzó értékek engedélyezése",
+  "@allowMissingValues": {},
+  "custom": "Tetszőleges",
+  "@custom": {},
+  "drawRegressionLines": "Trend vonal kirajzolása",
+  "@drawRegressionLines": {},
+  "warnAboutTxt1": "A figyelmeztető értékek puszta javaslatok és nem orvosi tanácsadás.",
+  "@warnAboutTxt1": {},
+  "warnValues": "Figyelmeztetési értékek",
+  "@warnValues": {},
+  "timeResolvedMetrics": "Napon belüli mérések ideje",
+  "@timeResolvedMetrics": {},
+  "warnAboutTxt2": "Az alapértelmezett korfüggő értékek ebből a forrásból származnak.",
+  "@warnAboutTxt2": {},
+  "confirmDeleteDesc": "Törli ezt a bejegyzést? (A beállításokban kikapcsolhatja ezeket a megerősítéseket.)",
+  "@confirmDeleteDesc": {},
+  "result": "Eredmény:",
+  "@result": {},
+  "errTimeAfterNow": "A kiválasztott nap vissza lett állítva, mivel ez egy jövőbeli időpont. Ezt az érvényesítést kikapcsolhatja a beállításokban.",
+  "@errTimeAfterNow": {}
 }

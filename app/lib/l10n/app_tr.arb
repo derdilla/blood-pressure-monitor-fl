@@ -32,7 +32,7 @@
   "@accentColor": {},
   "title": "Kan Basıncı Uygulaması",
   "@title": {},
-  "errTimeAfterNow": "Seçilen vakit şu andan sonra olduğundan dolayı sıfırlandı. Bu doğrulamayı ayarlardan kapatabilirsiniz.",
+  "errTimeAfterNow": "Seçilen zaman gelecekte. Bu doğrulamayı ayarlardan kapatabilirsiniz.",
   "@errTimeAfterNow": {},
   "versionOf": "Sürüm: {version}",
   "@versionOf": {
@@ -210,7 +210,7 @@
   "@pulsePressure": {},
   "errNotImportable": "Bu dosya aktarılamaz",
   "@errNotImportable": {},
-  "errNaN": "Lütfen bir Numara girin",
+  "errNaN": "Lütfen bir sayı girin",
   "@errNaN": {},
   "confirmDeletion": "Silmeyi onayla",
   "@confirmDeletion": {},
@@ -394,7 +394,7 @@
   "@deleteAllMeasurements": {},
   "color": "Renk",
   "@color": {},
-  "warnNeedsRestartForUsingApp": "Bu oturumda dosyalar silindi. Uygulamanın diğer bölümlerine dönerek kullanmaya devam etmek için uygulamayı yeniden başlatın!",
+  "warnNeedsRestartForUsingApp": "Bu oturumda dosyalar silindi. Uygulamanın diğer bölümlerine dönüp kullanmaya devam etmek için uygulamayı yeniden başlatın!",
   "@warnNeedsRestartForUsingApp": {},
   "needlePinBarWidth": "Renk kalınlığı",
   "@needlePinBarWidth": {},
@@ -526,5 +526,21 @@
   "preferredWeightUnit": "Tercih edilen ağırlık birimi",
   "@preferredWeightUnit": {
     "description": "Setting for the unit the app will use for displaying weight"
-  }
+  },
+  "selectMeasurementTitle": "Kullanılacak ölçüyü seçin",
+  "@selectMeasurementTitle": {},
+  "select": "Seç",
+  "@select": {
+    "description": "Used when f.e. selecting a single measurement when the bluetooth device returned multiple"
+  },
+  "bloodPressure": "Kan basıncı",
+  "@bloodPressure": {},
+  "tapToSelect": "Seçmek için dokunun",
+  "@tapToSelect": {},
+  "disabled": "Devre dışı",
+  "@disabled": {},
+  "oldBluetoothInput": "Kararlı",
+  "@oldBluetoothInput": {},
+  "newBluetoothInputOldLib": "Beta",
+  "@newBluetoothInputOldLib": {}
 }

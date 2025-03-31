@@ -130,7 +130,7 @@
   "@lifetime": {},
   "confirmDeleteDesc": "Eliminare questa voce? Puoi disattivare queste conferme nelle impostazioni",
   "@confirmDeleteDesc": {},
-  "errTimeAfterNow": "L''ora del giorno selezionata è stata reimpostata, in quanto era successiva all''ora attuale. Puoi disattivare questa convalida nelle impostazioni.",
+  "errTimeAfterNow": "L''orario selezionato è nel futuro. Puoi disattivare questa convalida nelle impostazioni.",
   "@errTimeAfterNow": {},
   "custom": "Personalizzato",
   "@custom": {},
@@ -552,5 +552,7 @@
   "disabled": "Disabilitato",
   "@disabled": {},
   "bluetoothInputDesc": "Il backend beta funziona su più dispositivi ma è meno testato. La versione multipiattaforma potrebbe funzionare su dispositivi non Android e si prevede che sostituirà l''implementazione stabile una volta sufficientemente matura.",
-  "@bluetoothInputDesc": {}
+  "@bluetoothInputDesc": {},
+  "tapToSelect": "Tocca per selezionare",
+  "@tapToSelect": {}
 }
