@@ -1,11 +1,12 @@
-<p><i>blood pressure monitor</i> is a reliable blood pressure measurement tracker and analyzer. It has the ambition to allow saving measurements faster than anywhere else and make sharing data with you doctor effortless. It works out of the box but can also be configured for individual use cases.</p>
+<p> <i> Монитор артериального давления </i> это надёжный трекер измерения артериального давления и его анализатор. У него есть амбиции чтобы записывать измерения быстрее чем где-либо еще, и упросить обмен данных с вашим врачом. Он работает из коробки, но также может быть настроен для отдельных вариантов использования. </p>
 
-Features:
-- 📏 <b>Reliable</b> measurement storing
-- 🚀 Fast input through <b>user-friendly</b> dialogues on launch and automatic form navigation
-- 📊 <b>Beautiful</b> analytics provide insights on trends, distribution, differences over the day and much more
-- 📂 Versatile <b>export and import</b> (CSV, PDF, SQLite) with granular control
-- ⚙️ High configurability
-- 🔗 BLE GATT input through bluetooth devices
-- Ad free without disturbances
-- Well-documented, <b>open-source</b> code
+<b>Возможности:</b>
+<ul>
+<li> 📏 <b>Надёжное</b> сохранение измерений</li>
+<li> 🚀 Быстрый ввод через <b>удобные для пользователя</b> диалоги при запуске и автоматической навигации по форме</li>
+<li> 📊 <b>Красивая</b> аналитика даёт представление о тенденциях, распределении, различиях в течение дня и многом другом</li> <li> 📂 <b>экспорт и импорт</b> (CSV, PDF, SQLite) с детальным контролем</li>
+<li> ⚙ Высокая настраивамость</li>
+<li> 🔗 BLE GATT ввод через устройства Bluetooth</li>
+<li> Без рекламы и отвлеканий</li>
+<li> Хорошо задокументированный, с <b>открытым исходным кодом</b></li>
+</ul>
