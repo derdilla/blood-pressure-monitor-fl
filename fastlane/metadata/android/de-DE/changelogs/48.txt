@@ -1,3 +1,0 @@
-* Import/Export-Dialog auf unten angeordnete Material-3-Schaltflächen aktualisiert
-* Formular für Eingabe aktualisiert
-* Verbesserungen an der internen Code-Struktur und Stabilität
