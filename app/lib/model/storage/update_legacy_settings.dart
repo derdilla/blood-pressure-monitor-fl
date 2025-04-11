@@ -245,15 +245,7 @@ Future<void> migrateDatabaseSettings(
   await _updateLegacyExport(configDB, manager); // TODO: test these older migrations
   final configDao = ConfigDao(configDB);
 
-  final oldSettings = await configDao.loadSettings();
-  settings.copyFrom(oldSettings);
-  final oldMeds = settings.medications.map((e) => Medicine(
-    designation: e.designation,
-    color: e.color.toARGB32(),
-    dosis: e.defaultDosis == null ? null : Weight.mg(e.defaultDosis!),
-  ));
-  await Future.forEach(oldMeds, medRepo.add);
-
+  settings.copyFrom(await configDao.loadSettings());
   exportSettings.copyFrom(await configDao.loadExportSettings());
   csvExportSettings.copyFrom(await configDao.loadCsvExportSettings());
   pdfExportSettings.copyFrom(await configDao.loadPdfExportSettings());

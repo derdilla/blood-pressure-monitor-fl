@@ -147,25 +147,6 @@ class ErrorScreen extends StatelessWidget {
                         String dbPath = await getDatabasesPath();
 
                         assert(dbPath != inMemoryDatabasePath);
-                        dbPath = join(dbPath, 'medicine.intakes');
-                        await FilePicker.platform.saveFile(
-                          fileName: 'medicine.intakes',
-                          bytes: File(dbPath).readAsBytesSync(),
-                          type: FileType.any, // application/octet-stream
-                        );
-                      } catch(e) {
-                        scaffoldMessenger.showSnackBar(SnackBar(
-                          content: Text('ERR: $e'),),);
-                      }
-                    },
-                    child: const Text('rescue old medicine intakes'),
-                  ),
-                  TextButton(
-                    onPressed: () async {
-                      try {
-                        String dbPath = await getDatabasesPath();
-
-                        assert(dbPath != inMemoryDatabasePath);
                         dbPath = join(dbPath, 'bp.db');
                         await FilePicker.platform.saveFile(
                           fileName: 'bp.db',
