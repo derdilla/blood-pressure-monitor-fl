@@ -1,6 +1,5 @@
-import 'package:blood_pressure_app/model/blood_pressure/needle_pin.dart';
-import 'package:blood_pressure_app/model/export_import/record_formatter.dart';
 import 'package:blood_pressure_app/l10n/app_localizations.dart';
+import 'package:blood_pressure_app/model/export_import/record_formatter.dart';
 
 /// Type a [Formatter] can uses to indicate the kind of data returned.
 enum RowDataFieldType {
@@ -15,8 +14,6 @@ enum RowDataFieldType {
   /// Guarantees [String] is returned.
   notes,
   /// Guarantees that a [int] containing a [Color.toARGB32()] is returned.
-  ///
-  /// Backwards compatability with [MeasurementNeedlePin] json is maintained.
   color,
   /// Guarantees [List<(String medicineDesignation, double dosisMg)>] is returned.
   intakes,

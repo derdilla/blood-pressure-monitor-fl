@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:blood_pressure_app/model/blood_pressure/needle_pin.dart';
 import 'package:blood_pressure_app/model/export_import/column.dart';
 import 'package:blood_pressure_app/model/export_import/import_field_type.dart';
 import 'package:function_tree/function_tree.dart';
@@ -51,11 +50,7 @@ class ScriptedFormatter implements Formatter {
       }(),
       RowDataFieldType.sys || RowDataFieldType.dia || RowDataFieldType.pul => int.tryParse(text),
       RowDataFieldType.notes => text,
-      RowDataFieldType.color => (){
-        try {
-          return int.tryParse(text) ?? MeasurementNeedlePin.fromMap(jsonDecode(text)).color.toARGB32();
-        } on FormatException { return null; } on TypeError { return null; }
-      }(),
+      RowDataFieldType.color => int.tryParse(text),
       RowDataFieldType.intakes => NativeColumn.intakes.decode(text),
       RowDataFieldType.weightKg => double.tryParse(text),
     };

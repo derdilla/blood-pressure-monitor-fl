@@ -1,8 +1,7 @@
 import 'dart:convert';
 
 import 'package:blood_pressure_app/features/export_import/import_preview_dialoge.dart';
-import 'package:blood_pressure_app/model/blood_pressure/model.dart';
-import 'package:blood_pressure_app/model/blood_pressure/record.dart';
+import 'package:blood_pressure_app/l10n/app_localizations.dart';
 import 'package:blood_pressure_app/model/export_import/csv_converter.dart';
 import 'package:blood_pressure_app/model/export_import/csv_record_parsing_actor.dart';
 import 'package:blood_pressure_app/model/storage/export_columns_store.dart';
@@ -10,7 +9,6 @@ import 'package:blood_pressure_app/model/storage/storage.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:blood_pressure_app/l10n/app_localizations.dart';
 import 'package:health_data_store/health_data_store.dart';
 import 'package:provider/provider.dart';
 import 'package:sqflite/sqflite.dart';
@@ -98,31 +96,6 @@ class ImportButton extends StatelessWidget {
             // DB doesn't conform new format
           }
 
-          try { // Update legacy format
-            final model = (records.isNotEmpty || notes.isNotEmpty || intakes.isNotEmpty)
-                ? null
-                : await BloodPressureModel.create(dbPath: file.path!, isFullPath: true);
-            for (final OldBloodPressureRecord oldR in (await model?.all) ?? []) {
-              if (oldR.systolic != null || oldR.diastolic != null || oldR.pulse != null) {
-                records.add(BloodPressureRecord(
-                  time: oldR.creationTime,
-                  sys: oldR.systolic == null ? null :Pressure.mmHg(oldR.systolic!),
-                  dia: oldR.diastolic == null ? null :Pressure.mmHg(oldR.diastolic!),
-                  pul: oldR.pulse,
-                ));
-              }
-              if (oldR.notes.isNotEmpty || oldR.needlePin != null) {
-                notes.add(Note(
-                  time: oldR.creationTime,
-                  note: oldR.notes.isEmpty ? null : oldR.notes,
-                  color: oldR.needlePin?.color.toARGB32(),
-                ));
-              }
-            }
-            await model?.close();
-          } catch (e) {
-            // DB not importable
-          }
 
           await Future.forEach(records, bpRepo.add);
           await Future.forEach(notes, noteRepo.add);

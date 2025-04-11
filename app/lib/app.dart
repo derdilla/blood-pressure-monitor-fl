@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:blood_pressure_app/data_util/consistent_future_builder.dart';
-import 'package:blood_pressure_app/model/blood_pressure/update_legacy_entries.dart';
 import 'package:blood_pressure_app/model/export_import/export_configuration.dart';
 import 'package:blood_pressure_app/model/storage/db/file_settings_loader.dart';
 import 'package:blood_pressure_app/model/storage/db/settings_loader.dart';
@@ -116,14 +115,6 @@ class _AppState extends State<App> {
     }
 
     try {
-      await updateLegacyEntries(
-        _settings!,
-        bpRepo,
-        noteRepo,
-        medRepo,
-        intakeRepo,
-      );
-
       // update logic
       if (_settings!.lastVersion == 0) {
         await migrateSharedPreferences(_settings!, _exportSettings!, _csvExportSettings!, _pdfExportSettings!, _intervalStorageManager!);
