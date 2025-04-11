@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:blood_pressure_app/model/blood_pressure/warn_values.dart';
-import 'package:blood_pressure_app/model/export_import/column.dart';
 import 'package:blood_pressure_app/model/export_import/export_configuration.dart';
 import 'package:blood_pressure_app/model/horizontal_graph_line.dart';
 import 'package:blood_pressure_app/model/storage/convert_util.dart';
@@ -13,10 +12,8 @@ import 'package:blood_pressure_app/model/storage/export_settings_store.dart';
 import 'package:blood_pressure_app/model/storage/interval_store.dart';
 import 'package:blood_pressure_app/model/storage/settings_store.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:health_data_store/health_data_store.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:sqflite/sqflite.dart';
 
 import 'db/config_dao.dart';
 
@@ -199,36 +196,6 @@ Future<void> migrateSharedPreferences(Settings settings, ExportSettings exportSe
   }
 }
 
-/// Function for upgrading pre 1.5.8 columns and settings to new structures.
-/// 
-/// - Adds columns from old db table to [manager].
-Future<void> _updateLegacyExport(ConfigDB database, ExportColumnsManager manager) async {
-  if (await _tableExists(database.database, ConfigDB.exportStringsTable)) {
-    final existingDbEntries = await database.database.query(
-        ConfigDB.exportStringsTable,
-        columns: ['internalColumnName', 'columnTitle', 'formatPattern'],
-    );
-    for (final e in existingDbEntries) {
-      final column = UserColumn(
-          e['internalColumnName'].toString(),
-          e['columnTitle'].toString(),
-          e['formatPattern'].toString(),
-      );
-      if (column.formatPattern?.contains(r'$FORMAT') ?? false) {
-        await Fluttertoast.showToast(
-          msg: r'The export $FORMAT pattern got replaced. Your export columns broke.',
-        );
-      }
-      manager.addOrUpdate(column);
-    }
-
-    await database.database.execute('DROP TABLE IF EXISTS ${ConfigDB.exportStringsTable};');
-  }
-}
-
-Future<bool> _tableExists(Database database, String tableName) async => (await database.rawQuery(
-  "SELECT name FROM sqlite_master WHERE type='table' AND name='$tableName';",)).isNotEmpty;
-
 /// Migrate to file based settings format from db in pre 1.7.4 (Jul 24).
 Future<void> migrateDatabaseSettings(
   Settings settings,
@@ -242,7 +209,6 @@ Future<void> migrateDatabaseSettings(
   final configDB = await ConfigDB.open();
   if(configDB == null) return; // not upgradable
 
-  await _updateLegacyExport(configDB, manager); // TODO: test these older migrations
   final configDao = ConfigDao(configDB);
 
   settings.copyFrom(await configDao.loadSettings());

@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:blood_pressure_app/model/export_import/column.dart';
 import 'package:blood_pressure_app/model/export_import/import_field_type.dart';
 import 'package:function_tree/function_tree.dart';
