@@ -3,7 +3,7 @@ import 'package:blood_pressure_app/features/bluetooth/logic/bluetooth_cubit.dart
 import 'package:blood_pressure_app/logging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:blood_pressure_app/l10n/app_localizations.dart';
 
 /// A closed ble input that shows the adapter state and allows to start the input.
 class ClosedBluetoothInput extends StatelessWidget with TypeLogger {

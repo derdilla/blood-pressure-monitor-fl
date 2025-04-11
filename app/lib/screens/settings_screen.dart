@@ -28,7 +28,7 @@ import 'package:blood_pressure_app/model/storage/storage.dart';
 import 'package:blood_pressure_app/model/weight_unit.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:blood_pressure_app/l10n/app_localizations.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:path/path.dart';
 import 'package:provider/provider.dart';

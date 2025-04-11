@@ -4,7 +4,7 @@ import 'package:blood_pressure_app/features/settings/add_medication_dialoge.dart
 import 'package:blood_pressure_app/model/storage/settings_store.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:blood_pressure_app/l10n/app_localizations.dart';
 import 'package:health_data_store/health_data_store.dart';
 
 /// Screen to view and edit medications saved in [Settings].

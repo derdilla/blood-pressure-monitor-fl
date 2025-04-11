@@ -3,7 +3,7 @@ import 'package:blood_pressure_app/features/export_import/export_field_format_do
 import 'package:blood_pressure_app/features/measurement_list/measurement_list_entry.dart';
 import 'package:blood_pressure_app/model/export_import/column.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:blood_pressure_app/l10n/app_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../../util.dart';

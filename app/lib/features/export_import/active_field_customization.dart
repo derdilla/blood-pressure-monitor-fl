@@ -8,7 +8,7 @@ import 'package:blood_pressure_app/model/storage/export_csv_settings_store.dart'
 import 'package:blood_pressure_app/model/storage/export_pdf_settings_store.dart';
 import 'package:blood_pressure_app/model/storage/export_settings_store.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:blood_pressure_app/l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 
 /// Setting for configuring fields in the current export.

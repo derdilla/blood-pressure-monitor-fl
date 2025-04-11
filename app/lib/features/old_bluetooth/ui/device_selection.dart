@@ -1,7 +1,7 @@
 import 'package:blood_pressure_app/features/old_bluetooth/ui/input_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:blood_pressure_app/l10n/app_localizations.dart';
 
 /// A pairing dialoge with a single bluetooth device.
 class DeviceSelection extends StatelessWidget {

@@ -7,7 +7,7 @@ import 'package:blood_pressure_app/model/storage/export_csv_settings_store.dart'
 import 'package:blood_pressure_app/model/storage/export_settings_store.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:blood_pressure_app/l10n/app_localizations.dart';
 
 /// Banner that gives the user information on the importability of their export.
 class ExportWarnBanner extends StatefulWidget {

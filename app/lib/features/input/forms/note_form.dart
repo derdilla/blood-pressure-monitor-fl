@@ -1,7 +1,7 @@
 import 'package:blood_pressure_app/features/input/forms/form_base.dart';
 import 'package:blood_pressure_app/features/settings/tiles/color_picker_list_tile.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:blood_pressure_app/l10n/app_localizations.dart';
 
 /// Form to enter freeform text and select color.
 class NoteForm extends FormBase<(String?, Color?)> {
