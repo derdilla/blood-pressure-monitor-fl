@@ -53,3 +53,4 @@ app.*.map.json
 /fastlane/metadata/android/en-US/images/phoneScreenshots/resizeAll.sh
 /tmp6.csv
 /android/app/.cxx/
+/app/lib/l10n/app_localizations*.dart
