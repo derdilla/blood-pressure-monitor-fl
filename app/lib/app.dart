@@ -1,8 +1,7 @@
 import 'dart:io';
 
 import 'package:blood_pressure_app/data_util/consistent_future_builder.dart';
-import 'package:blood_pressure_app/model/blood_pressure/update_legacy_entries.dart';
-import 'package:blood_pressure_app/model/export_import/export_configuration.dart';
+import 'package:blood_pressure_app/l10n/app_localizations.dart';
 import 'package:blood_pressure_app/model/storage/db/file_settings_loader.dart';
 import 'package:blood_pressure_app/model/storage/db/settings_loader.dart';
 import 'package:blood_pressure_app/model/storage/export_columns_store.dart';
@@ -13,8 +12,6 @@ import 'package:blood_pressure_app/screens/loading_screen.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:blood_pressure_app/l10n/app_localizations.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:health_data_store/health_data_store.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:path/path.dart';
@@ -77,10 +74,14 @@ class _AppState extends State<App> {
       try {
         File(join(dbPath, 'config.db')).deleteSync();
         File(join(dbPath, 'config.db-journal')).deleteSync();
-      } on FileSystemException { }
+      } on FileSystemException {
+        // No file to delete
+      }
       try {
         File(join(dbPath, 'medicine.intakes')).deleteSync();
-      } on FileSystemException { }
+      } on FileSystemException {
+        // No file to delete
+      }
     }
 
     try {
@@ -116,31 +117,7 @@ class _AppState extends State<App> {
     }
 
     try {
-      await updateLegacyEntries(
-        _settings!,
-        bpRepo,
-        noteRepo,
-        medRepo,
-        intakeRepo,
-      );
-
       // update logic
-      if (_settings!.lastVersion == 0) {
-        await migrateSharedPreferences(_settings!, _exportSettings!, _csvExportSettings!, _pdfExportSettings!, _intervalStorageManager!);
-
-        _settings!.lastVersion = 30;
-        if (_exportSettings!.exportAfterEveryEntry) {
-          await Fluttertoast.showToast(
-            msg: r'Please review your export settings to ensure everything works as expected.',
-          );
-        }
-      }
-      if (_settings!.lastVersion == 30) {
-        if (_pdfExportSettings!.exportFieldsConfiguration.activePreset == ExportImportPreset.bloodPressureApp) {
-          _pdfExportSettings!.exportFieldsConfiguration.activePreset = ExportImportPreset.bloodPressureAppPdf;
-        }
-        _settings!.lastVersion = 31;
-      }
       if (_settings!.allowMissingValues && _settings!.validateInputs){
         _settings!.validateInputs = false;
       }
