@@ -1,7 +1,7 @@
 import 'package:blood_pressure_app/data_util/consistent_future_builder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:blood_pressure_app/l10n/app_localizations.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 class VersionScreen extends StatelessWidget {

@@ -13,7 +13,7 @@ import 'package:blood_pressure_app/screens/loading_screen.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:blood_pressure_app/l10n/app_localizations.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:health_data_store/health_data_store.dart';
 import 'package:package_info_plus/package_info_plus.dart';

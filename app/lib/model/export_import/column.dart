@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:blood_pressure_app/model/export_import/export_configuration.dart';
 import 'package:blood_pressure_app/model/export_import/import_field_type.dart';
 import 'package:blood_pressure_app/model/export_import/record_formatter.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:blood_pressure_app/l10n/app_localizations.dart';
 import 'package:health_data_store/health_data_store.dart';
 
 // TODO: respect preferred Pressure unit

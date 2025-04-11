@@ -1,6 +1,6 @@
 
 
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:blood_pressure_app/l10n/app_localizations.dart';
 import 'package:health_data_store/health_data_store.dart';
 
 /// Indicate a possible error during record parsing.

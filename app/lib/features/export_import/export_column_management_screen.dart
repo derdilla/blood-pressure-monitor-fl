@@ -2,7 +2,7 @@ import 'package:blood_pressure_app/features/export_import/add_export_column_dial
 import 'package:blood_pressure_app/model/export_import/column.dart';
 import 'package:blood_pressure_app/model/storage/export_columns_store.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:blood_pressure_app/l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 
 /// Page that shows all export columns and allows adding and editing custom
