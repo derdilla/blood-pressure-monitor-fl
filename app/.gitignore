@@ -52,3 +52,4 @@ app.*.map.json
 /l10n_errors.txt
 /fastlane/metadata/android/en-US/images/phoneScreenshots/resizeAll.sh
 /tmp6.csv
+/android/app/.cxx/
