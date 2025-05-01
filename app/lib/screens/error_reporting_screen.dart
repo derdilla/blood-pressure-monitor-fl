@@ -108,25 +108,6 @@ class ErrorScreen extends StatelessWidget {
                         String dbPath = await getDatabasesPath();
 
                         assert(dbPath != inMemoryDatabasePath);
-                        dbPath = join(dbPath, 'blood_pressure.db');
-                        await FilePicker.platform.saveFile(
-                          fileName: 'blood_pressure.db',
-                          bytes: File(dbPath).readAsBytesSync(),
-                          type: FileType.any, // application/vnd.sqlite3
-                        );
-                      } catch(e) {
-                        scaffoldMessenger.showSnackBar(SnackBar(
-                            content: Text('ERR: $e'),),);
-                      }
-                    },
-                    child: const Text('rescue legacy blood_pressure.db'),
-                  ),
-                  TextButton(
-                    onPressed: () async {
-                      try {
-                        String dbPath = await getDatabasesPath();
-
-                        assert(dbPath != inMemoryDatabasePath);
                         dbPath = join(dbPath, 'config.db');
 
                         await FilePicker.platform.saveFile(
@@ -140,25 +121,6 @@ class ErrorScreen extends StatelessWidget {
                       }
                     },
                     child: const Text('rescue config.db'),
-                  ),
-                  TextButton(
-                    onPressed: () async {
-                      try {
-                        String dbPath = await getDatabasesPath();
-
-                        assert(dbPath != inMemoryDatabasePath);
-                        dbPath = join(dbPath, 'medicine.intakes');
-                        await FilePicker.platform.saveFile(
-                          fileName: 'medicine.intakes',
-                          bytes: File(dbPath).readAsBytesSync(),
-                          type: FileType.any, // application/octet-stream
-                        );
-                      } catch(e) {
-                        scaffoldMessenger.showSnackBar(SnackBar(
-                          content: Text('ERR: $e'),),);
-                      }
-                    },
-                    child: const Text('rescue old medicine intakes'),
                   ),
                   TextButton(
                     onPressed: () async {

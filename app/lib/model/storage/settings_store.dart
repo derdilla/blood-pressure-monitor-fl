@@ -3,7 +3,6 @@ import 'dart:convert';
 
 import 'package:blood_pressure_app/config.dart';
 import 'package:blood_pressure_app/features/bluetooth/logic/device_scan_cubit.dart';
-import 'package:blood_pressure_app/model/blood_pressure/medicine/medicine.dart';
 import 'package:blood_pressure_app/model/blood_pressure/pressure_unit.dart';
 import 'package:blood_pressure_app/model/horizontal_graph_line.dart';
 import 'package:blood_pressure_app/model/storage/bluetooth_input_mode.dart';
@@ -46,7 +45,6 @@ class Settings extends ChangeNotifier {
     bool? startWithAddMeasurementPage,
     bool? useLegacyList,
     bool? bottomAppBars,
-    List<Medicine>? medications,
     PressureUnit? preferredPressureUnit,
     List<String>? knownBleDev,
     int? highestMedIndex,
@@ -75,7 +73,6 @@ class Settings extends ChangeNotifier {
     if (horizontalGraphLines != null) _horizontalGraphLines = horizontalGraphLines;
     if (lastVersion != null) _lastVersion = lastVersion;
     if (bottomAppBars != null) _bottomAppBars = bottomAppBars;
-    if (medications != null) _medications.addAll(medications);
     if (preferredPressureUnit != null) _preferredPressureUnit = preferredPressureUnit;
     if (highestMedIndex != null) _highestMedIndex = highestMedIndex;
     if (knownBleDev != null) _knownBleDev = knownBleDev;
@@ -111,8 +108,6 @@ class Settings extends ChangeNotifier {
       needlePinBarWidth: ConvertUtil.parseDouble(map['needlePinBarWidth']),
       lastVersion: ConvertUtil.parseInt(map['lastVersion']),
       bottomAppBars: ConvertUtil.parseBool(map['bottomAppBars']),
-      medications: ConvertUtil.parseList<String>(map['medications'])?.map((e) =>
-          Medicine.fromJson(jsonDecode(e)),).toList(),
       highestMedIndex: ConvertUtil.parseInt(map['highestMedIndex']),
       knownBleDev: ConvertUtil.parseList<String>(map['knownBleDev']),
       bleInput: BluetoothInputMode.deserialize(ConvertUtil.parseInt(map['bleInput'])),
@@ -161,7 +156,6 @@ class Settings extends ChangeNotifier {
     'needlePinBarWidth': _needlePinBarWidth,
     'lastVersion': lastVersion,
     'bottomAppBars': bottomAppBars,
-    'medications': medications.map(jsonEncode).toList(),
     'highestMedIndex': highestMedIndex,
     'preferredPressureUnit': preferredPressureUnit.encode(),
     'knownBleDev': knownBleDev,
@@ -200,8 +194,6 @@ class Settings extends ChangeNotifier {
     _preferredPressureUnit = other._preferredPressureUnit;
     _knownBleDev = other._knownBleDev;
     _bleInput = other._bleInput;
-    _medications.clear();
-    _medications.addAll(other._medications);
     _highestMedIndex = other._highestMedIndex;
     _weightInput = other._weightInput;
     _weightUnit = other._weightUnit;
@@ -437,15 +429,6 @@ class Settings extends ChangeNotifier {
     _knownBleDev = value;
     notifyListeners();
   }
-
-  final List<Medicine> _medications = [];
-  /// All medications ever added.
-  ///
-  /// This includes medications that got hidden. To obtain medications for a
-  /// selection, do `settings.medications.where((e) => !e.hidden)`.
-  @Deprecated('use health_data_store')
-  UnmodifiableListView<Medicine> get medications =>
-    UnmodifiableListView(_medications);
 
   int _highestMedIndex = 0;
   /// Total amount of medicines created.
