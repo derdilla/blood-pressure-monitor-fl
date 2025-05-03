@@ -1,3 +1,4 @@
+import 'package:blood_pressure_app/logging.dart';
 import 'package:blood_pressure_app/model/export_import/column.dart';
 import 'package:blood_pressure_app/model/export_import/import_field_type.dart' show RowDataFieldType;
 import 'package:blood_pressure_app/model/export_import/record_parsing_result.dart';
@@ -8,9 +9,15 @@ import 'package:csv/csv.dart';
 import 'package:health_data_store/health_data_store.dart';
 
 /// Utility class to convert between csv strings and [BloodPressureRecord]s.
-class CsvConverter {
+class CsvConverter with TypeLogger {
   /// Create converter between csv strings and [BloodPressureRecord] values that respects settings.
-  CsvConverter(this.settings, this.availableColumns, this.availableMedicines);
+  CsvConverter(this.settings, this.availableColumns, this.availableMedicines) {
+    logger.fine('Creating CsvConverter with '
+        'settings=${settings.toJson()}, '
+        'availableColumns=$availableColumns, ',
+        'availableMedicines=$availableMedicines'
+    );
+  }
 
   /// Settings that apply for ex- and import.
   final CsvExportSettings settings;
