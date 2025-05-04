@@ -41,7 +41,8 @@ class AddEntryForm extends FormBase<AddEntryFormValue> with TypeLogger {
 }
 
 /// State of primary form to enter all types of entries.
-class AddEntryFormState extends FormStateBase<AddEntryFormValue, AddEntryForm> {
+class AddEntryFormState extends FormStateBase<AddEntryFormValue, AddEntryForm>
+    with TypeLogger {
   final _timeForm = GlobalKey<DateTimeFormState>();
   final _noteForm = GlobalKey<NoteFormState>();
   final _bpForm = GlobalKey<BloodPressureFormState>();
@@ -59,6 +60,7 @@ class AddEntryFormState extends FormStateBase<AddEntryFormValue, AddEntryForm> {
   @override
   void initState() {
     super.initState();
+    logger.finer('Initializing with ${widget.initialValue}');
     if (widget.initialValue != null) {
       _lastSavedPressure = widget.initialValue?.record;
       _lastSavedWeight = widget.initialValue?.weight;
@@ -95,16 +97,30 @@ class AddEntryFormState extends FormStateBase<AddEntryFormValue, AddEntryForm> {
   }
 
   @override
-  bool validate() => !context.read<Settings>().validateInputs
-    || (_timeForm.currentState?.validate() ?? false)
-    && (_noteForm.currentState?.validate() ?? false)
+  bool validate() {
+    final timeFormValidation = _timeForm.currentState?.validate();
+    final noteFormValidation = _noteForm.currentState?.validate();
+    final bpFormValidation = _bpForm.currentState?.validate();
+    final weightFormValidation = _weightForm.currentState?.validate();
+    final intakeFormValidation = _intakeForm.currentState?.validate();
+    logger.fine('validating...');
+    logger.finest('time: $timeFormValidation');
+    logger.finest('note: $noteFormValidation');
+    logger.finest('bp: $bpFormValidation');
+    logger.finest('weight: $weightFormValidation');
+    logger.finest('intake: $intakeFormValidation');
+    return !context.read<Settings>().validateInputs
+    || (timeFormValidation ?? false)
+    && (noteFormValidation ?? false)
     // the following become null when unopened
-    && (_bpForm.currentState?.validate() ?? true)
-    && (_weightForm.currentState?.validate() ?? true)
-    && (_intakeForm.currentState?.validate() ?? true);
+    && (bpFormValidation ?? true)
+    && (weightFormValidation ?? true)
+    && (intakeFormValidation ?? true);
+  }
 
   @override
   AddEntryFormValue? save() {
+    logger.fine('Calling save');
     if (!validate()) return null;
     final time = _timeForm.currentState!.save()!;
     Note? note;
@@ -138,11 +154,13 @@ class AddEntryFormState extends FormStateBase<AddEntryFormValue, AddEntryForm> {
         dosis: intakeFormValue.$2,
       );
     }
+    logger.finer('Saving values: $note, $record, $weight, $intake');
 
     if (note == null
       && record == null
       && weight == null
       && intake == null) {
+      logger.fine('note, record, weight, and intake are null: returning null');
       return null;
     }
     return (
@@ -159,6 +177,7 @@ class AddEntryFormState extends FormStateBase<AddEntryFormValue, AddEntryForm> {
 
   @override
   void fillForm(AddEntryFormValue? value) {
+    logger.finer('fillForm($value)');
     _lastSavedPressure = value?.record;
     _lastSavedWeight = value?.weight;
     _lastSavedIntake = value?.intake;
@@ -260,7 +279,8 @@ class AddEntryFormState extends FormStateBase<AddEntryFormValue, AddEntryForm> {
         NoteForm(
           key: _noteForm,
           initialValue: (){
-            if (widget.initialValue?.note?.note == null) return null;
+            logger.fine('NoteForm.initialValue: ${widget.initialValue?.note}');
+            if (widget.initialValue?.note == null) return null;
             final note = widget.initialValue!.note!;
             final color = note.color == null ? null : Color(note.color!);
             return (note.note, color);
@@ -287,7 +307,7 @@ extension AddEntryFormValueCompat on FullEntry {
     assert(intakes.length <= 1);
     return (
       timestamp: time,
-      note: (note != null && color == null) ? null : noteObj,
+      note: (note == null && color == null) ? null : noteObj,
       record: (sys == null && dia == null && pul == null) ? null : recordObj,
       intake: intakes.firstOrNull,
       weight: null,

@@ -18,8 +18,17 @@ mixin TypeLogger {
 ///
 /// Also contains some logging configuration logic
 class Log {
-  /// Whether logging is enabled
+  static final _verboseLevel = Level.ALL;
+  static final _normalLevel = Level.WARNING;
+
+  /// Logs recorded this session.
+  static final logs = <LogRecord>[];
+
+  /// Whether debug logging is enabled.
   static final enabled = kDebugMode && !isTestingEnvironment;
+
+  /// Whether verbose logging is activated.
+  static bool get isVerbose => Logger.root.level == Level.ALL;
 
   /// Format a log record
   static String format(LogRecord record) {
@@ -32,9 +41,20 @@ class Log {
 
   /// Register the apps logging config with [Logger].
   static void setup() {
+    Logger.root.onRecord.listen(logs.add);
     if (Log.enabled) {
-      Logger.root.level = Level.ALL;
+      Logger.root.level = _verboseLevel;
       Logger.root.onRecord.listen((record) => debugPrint(Log.format(record)));
+    } else {
+      Logger.root.level = _normalLevel;
     }
+  }
+
+  /// Set ultra verbose(true) or normal logging(false).
+  static void setVerbose(bool isVerbose) {
+    Logger.root.level = isVerbose
+        ? _verboseLevel
+        : _normalLevel;
+    Logger.root.info('Verbose logging set to $isVerbose');
   }
 }

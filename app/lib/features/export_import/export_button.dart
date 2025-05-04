@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:blood_pressure_app/logging.dart';
 import 'package:blood_pressure_app/model/export_import/csv_converter.dart';
 import 'package:blood_pressure_app/model/export_import/pdf_converter.dart';
 import 'package:blood_pressure_app/model/storage/export_columns_store.dart';
@@ -17,6 +18,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:blood_pressure_app/l10n/app_localizations.dart';
 import 'package:health_data_store/health_data_store.dart';
+import 'package:logging/logging.dart';
 import 'package:path/path.dart';
 import 'package:persistent_user_dir_access_android/persistent_user_dir_access_android.dart';
 import 'package:provider/provider.dart';
@@ -35,10 +37,14 @@ class ExportButton extends StatelessWidget {
   );
 }
 
+Logger _logger = Logger('BPM[export_button]');
+
 /// Perform a full export according to the configuration in [context].
 void performExport(BuildContext context) async { // TODO: extract
+  _logger.finer('performExport - mounted=${context.mounted}');
   final localizations = AppLocalizations.of(context);
   final exportSettings = Provider.of<ExportSettings>(context, listen: false);
+  _logger.fine('performExport - exportSettings=${exportSettings.toJson()}');
   final filename = 'blood_press_${DateTime.now().toIso8601String()}';
   switch (exportSettings.exportFormat) {
     case ExportFormat.db:
@@ -55,10 +61,19 @@ void performExport(BuildContext context) async { // TODO: extract
         exportColumnsManager,
         await RepositoryProvider.of<MedicineRepository>(context).getAll(),
       );
-      if (!context.mounted) return;
+      if (!context.mounted) {
+        _logger.warning('performExport - No longer mounted: stopping export');
+        return;
+      }
       final csvString = csvConverter.create(await _getEntries(context));
+      _logger.fine('performExport - Created csvString=$csvString');
       final data = Uint8List.fromList(utf8.encode(csvString));
-      if (context.mounted) await _exportData(context, data, '$filename.csv', 'text/csv');
+      if (context.mounted) {
+        _logger.finer('performExport - Calling _exportData');
+        await _exportData(context, data, '$filename.csv', 'text/csv');
+      } else  {
+        _logger.warning('performExport - No longer mounted: stopping export');
+      }
       break;
     case ExportFormat.pdf:
       final pdfConverter = PdfConverter(
@@ -75,6 +90,7 @@ void performExport(BuildContext context) async { // TODO: extract
 /// Get the records that should be exported (oldest first).
 Future<List<(DateTime, BloodPressureRecord, Note, List<MedicineIntake>, Weight?)>> _getEntries(BuildContext context) async {
   final range = Provider.of<IntervalStoreManager>(context, listen: false).exportPage.currentRange;
+  _logger.fine('_getEntries - range=$range');
   final bpRepo = RepositoryProvider.of<BloodPressureRepository>(context);
   final noteRepo = RepositoryProvider.of<NoteRepository>(context);
   final intakeRepo = RepositoryProvider.of<MedicineIntakeRepository>(context);
@@ -85,7 +101,11 @@ Future<List<(DateTime, BloodPressureRecord, Note, List<MedicineIntake>, Weight?)
   final intakes = await intakeRepo.get(range);
   final weights = await weightRepo.get(range);
 
+  _logger.finest('_getEntries - range=$range');
+
   final entries = FullEntryList.merged(records, notes, intakes);
+  _logger.fine('_getEntries - merged ${records.length} records, ${notes.length}'
+      ' notes, and ${intakes.length} intakes to ${entries.length} entries');
 
   final entriesWithWeight = entries
       .map((e) => (e.time, e.recordObj, e.noteObj, e.intakes, weights.firstWhereOrNull((w) => e.time == w.time)?.weight))
@@ -93,6 +113,9 @@ Future<List<(DateTime, BloodPressureRecord, Note, List<MedicineIntake>, Weight?)
   for (final e in weights.where((w) => entriesWithWeight.firstWhereOrNull((n) => n.$1 == w.time) == null)) {
     entriesWithWeight.add((e.time, BloodPressureRecord(time: e.time), Note(time: e.time), [], e.weight));
   }
+
+  _logger.fine('_getEntries - added ${weights.length} weights to get'
+      ' ${entries.length} entries');
 
   entriesWithWeight.sort((a, b) => a.$1.compareTo(b.$1));
   return entriesWithWeight;
@@ -102,12 +125,14 @@ Future<List<(DateTime, BloodPressureRecord, Note, List<MedicineIntake>, Weight?)
 Future<void> _exportData(BuildContext context, Uint8List data, String fullFileName, String mimeType) async {
   final settings = Provider.of<ExportSettings>(context, listen: false);
   if (settings.defaultExportDir.isEmpty || !Platform.isAndroid) {
+    _logger.fine('_exportData - Saving file using FilePicker');
     await FilePicker.platform.saveFile(
       type: FileType.any, // mimeType
       fileName: fullFileName,
       bytes: data,
     );
   } else {
+    _logger.fine('_exportData - Saving file using PersistentUserDirAccessAndroid');
     const userDir = PersistentUserDirAccessAndroid();
     await userDir.writeFile(settings.defaultExportDir, fullFileName, mimeType, data);
   }

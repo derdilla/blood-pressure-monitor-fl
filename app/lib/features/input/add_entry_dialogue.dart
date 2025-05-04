@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:blood_pressure_app/components/fullscreen_dialoge.dart';
 import 'package:blood_pressure_app/features/input/forms/add_entry_form.dart';
+import 'package:blood_pressure_app/logging.dart';
 import 'package:blood_pressure_app/model/storage/storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -33,12 +34,13 @@ class AddEntryDialogue extends StatefulWidget {
   State<AddEntryDialogue> createState() => _AddEntryDialogueState();
 }
 
-class _AddEntryDialogueState extends State<AddEntryDialogue> {
+class _AddEntryDialogueState extends State<AddEntryDialogue> with TypeLogger {
   final formKey = GlobalKey<AddEntryFormState>();
 
   void _onSavePressed() {
     if (formKey.currentState?.validate() ?? false) {
       final AddEntryFormValue? result = formKey.currentState?.save();
+      logger.finer('Returning result: $result');
       Navigator.pop(context, result);
     } else {
       // Errors are displayed below their specific widgets

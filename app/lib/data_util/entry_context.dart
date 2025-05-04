@@ -9,15 +9,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart' hide ProviderNotFoundException;
 import 'package:blood_pressure_app/l10n/app_localizations.dart';
 import 'package:health_data_store/health_data_store.dart';
+import 'package:logging/logging.dart';
 import 'package:provider/provider.dart';
 
 /// Allow high level operations on the repositories in context.
 extension EntryUtils on BuildContext {
+  Logger get _logger => Logger('BPM[context.EntryUtils]');
+
   /// Open the [AddEntryDialogue] and save received entries.
   ///
   /// Follows [ExportSettings.exportAfterEveryEntry]. When [initial] is not null
   /// the dialoge will be opened in edit mode.
   Future<void> createEntry([AddEntryFormValue? initial]) async {
+    _logger.finer('createEntry($initial)');
     try {
       final recordRepo = RepositoryProvider.of<BloodPressureRepository>(this);
       final noteRepo = RepositoryProvider.of<NoteRepository>(this);
@@ -29,6 +33,7 @@ extension EntryUtils on BuildContext {
         RepositoryProvider.of<MedicineRepository>(this),
         initial,
       );
+      _logger.finest('received $entry from dialog');
       if (entry != null) {
         if (initial?.record != null) await recordRepo.remove(initial!.record!);
         if (initial?.note != null) await noteRepo.remove(initial!.note!);
@@ -40,8 +45,19 @@ extension EntryUtils on BuildContext {
         if (entry.intake != null) await intakeRepo.add(entry.intake!);
         if(entry.weight != null) await weightRepo.add(entry.weight!);
 
+        /*
+        read<IntervalStoreManager>().mainPage.setToMostRecentInterval();
+        read<IntervalStoreManager>().statsPage.setToMostRecentInterval();
+        read<IntervalStoreManager>().exportPage.setToMostRecentInterval();*/
+
+        _logger.finest('mounted=$mounted');
+        if (!mounted) {
+          _logger.warning('Context no longer mounted');
+          return;
+        }
+
+        log.info(read<IntervalStoreManager>());
         if (mounted && exportSettings.exportAfterEveryEntry) {
-          read<IntervalStoreManager>().exportPage.setToMostRecentInterval();
           performExport(this);
         }
       }
