@@ -95,6 +95,7 @@ class _VersionScreenState extends State<VersionScreen> with TypeLogger {
                       //mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Chip(
+                          // FIXME: doesn't work in light mode
                           backgroundColor: switch(record.level.value) {
                             <= 500 => Colors.transparent,
                             <= 800 => Colors.grey.shade800,
@@ -102,7 +103,6 @@ class _VersionScreenState extends State<VersionScreen> with TypeLogger {
                             <= 1000 => Colors.red,
                             int() => Colors.red.shade900,
                           },
-                          // TODO: color
                           label: Text(record.level.name),
                         ),
                         Text(record.loggerName),
