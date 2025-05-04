@@ -17,7 +17,7 @@ class VersionScreen extends StatefulWidget {
   State<VersionScreen> createState() => _VersionScreenState();
 }
 
-class _VersionScreenState extends State<VersionScreen> {
+class _VersionScreenState extends State<VersionScreen> with TypeLogger {
   @override
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
@@ -42,7 +42,7 @@ class _VersionScreenState extends State<VersionScreen> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(10.0),
-        child: Column(
+        child: ListView(
           children: [
             // Debug info
             ConsistentFutureBuilder<PackageInfo>(
@@ -81,28 +81,56 @@ class _VersionScreenState extends State<VersionScreen> {
                 }
               },
             ),
-            ListView.builder(
-              shrinkWrap: true,
-              itemCount: Log.logs.length,
-              itemBuilder: (context, idx) {
-                final record = Log.logs[Log.logs.length - idx - 1];
-                return ExpansionTile(
-                  title: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            SizedBox(
+               height: 600,
+              child: ListView.builder(
+                shrinkWrap: true,
+                itemCount: Log.logs.length,
+                itemBuilder: (context, idx) {
+                  final record = Log.logs[Log.logs.length - idx - 1];
+                  return ExpansionTile(
+                    title: Wrap(
+                      spacing: 4.0,
+                      crossAxisAlignment: WrapCrossAlignment.center,
+                      //mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Chip(
+                          backgroundColor: switch(record.level.value) {
+                            <= 500 => Colors.transparent,
+                            <= 800 => Colors.grey.shade800,
+                            <= 900 => Colors.deepOrange,
+                            <= 1000 => Colors.red,
+                            int() => Colors.red.shade900,
+                          },
+                          // TODO: color
+                          label: Text(record.level.name),
+                        ),
+                        Text(record.loggerName),
+                      ],
+                    ),
+                    subtitle: Text('Timestamp: ${record.time.hour}:${record.time.minute}.${record.time.second}'),
                     children: [
-                      Text(record.level.name), // TODO: color
-                      Text(record.loggerName),
-                      Text('${record.time.hour}:${record.time.minute}.${record.time.second}'),
+                      Text(record.message),
+                      if (record.stackTrace != null)
+                        Text(record.stackTrace.toString()),
                     ],
-                  ),
-                  subtitle: Text(record.message),
-                  children: [
-                    if (record.stackTrace != null)
-                      Text(record.stackTrace.toString()),
-                  ],
-                );
-              },
+                  );
+                },
+              ),
             ),
+            ListTile(
+              title: Text('Test log messages'),
+              trailing: Icon(Icons.chevron_right),
+              onTap: () {
+                logger.finest('test finest');
+                logger.finer('test finer');
+                logger.fine('test fine');
+                logger.info('test info');
+                logger.warning('test warning');
+                logger.severe('test severe');
+                logger.shout('test shout');
+              },
+            )
           ],
         ),
       ),
