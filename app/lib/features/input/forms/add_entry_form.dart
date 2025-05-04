@@ -279,7 +279,8 @@ class AddEntryFormState extends FormStateBase<AddEntryFormValue, AddEntryForm>
         NoteForm(
           key: _noteForm,
           initialValue: (){
-            if (widget.initialValue?.note?.note == null) return null;
+            logger.fine('NoteForm.initialValue: ${widget.initialValue?.note}');
+            if (widget.initialValue?.note == null) return null;
             final note = widget.initialValue!.note!;
             final color = note.color == null ? null : Color(note.color!);
             return (note.note, color);
@@ -306,7 +307,7 @@ extension AddEntryFormValueCompat on FullEntry {
     assert(intakes.length <= 1);
     return (
       timestamp: time,
-      note: (note != null && color == null) ? null : noteObj,
+      note: (note == null && color == null) ? null : noteObj,
       record: (sys == null && dia == null && pul == null) ? null : recordObj,
       intake: intakes.firstOrNull,
       weight: null,

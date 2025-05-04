@@ -14,7 +14,7 @@ import 'package:provider/provider.dart';
 
 /// Allow high level operations on the repositories in context.
 extension EntryUtils on BuildContext {
-  Logger get _logger => Logger('BPM[${Log.withoutTypes('$runtimeType')}]');
+  Logger get _logger => Logger('BPM[context.EntryUtils]');
 
   /// Open the [AddEntryDialogue] and save received entries.
   ///
@@ -45,11 +45,18 @@ extension EntryUtils on BuildContext {
         if (entry.intake != null) await intakeRepo.add(entry.intake!);
         if(entry.weight != null) await weightRepo.add(entry.weight!);
 
+        /*
         read<IntervalStoreManager>().mainPage.setToMostRecentInterval();
         read<IntervalStoreManager>().statsPage.setToMostRecentInterval();
-        read<IntervalStoreManager>().exportPage.setToMostRecentInterval();
+        read<IntervalStoreManager>().exportPage.setToMostRecentInterval();*/
 
         _logger.finest('mounted=$mounted');
+        if (!mounted) {
+          _logger.warning('Context no longer mounted');
+          return;
+        }
+
+        log.info(read<IntervalStoreManager>());
         if (mounted && exportSettings.exportAfterEveryEntry) {
           performExport(this);
         }
