@@ -305,7 +305,7 @@
   "@last30Days": {},
   "allowMissingValues": "Povolit chybějící hodnoty",
   "@allowMissingValues": {},
-  "errTimeAfterNow": "Vybraný denní čas byl vynulován, protože nastane po tomto okamžiku. Tuto validaci můžete vypnout v nastavení.",
+  "errTimeAfterNow": "Vybraný čas je v budoucnosti. Toto ověřování můžete vypnout v nastavení.",
   "@errTimeAfterNow": {},
   "language": "Jazyk",
   "@language": {},
@@ -552,5 +552,7 @@
   "newBluetoothInputCrossPlatform": "Beta multiplatformní",
   "@newBluetoothInputCrossPlatform": {},
   "bluetoothInputDesc": "Beta verze backendu funguje na více zařízeních, ale je méně otestovaná. Multiplatformní verze může fungovat i na jiných zařízeních než Android a plánuje se, že nahradí stabilní implementaci, jakmile bude dostatečně zralá.",
-  "@bluetoothInputDesc": {}
+  "@bluetoothInputDesc": {},
+  "tapToSelect": "Ťuknutím na položku vyberte",
+  "@tapToSelect": {}
 }
