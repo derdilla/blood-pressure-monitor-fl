@@ -542,5 +542,15 @@
   "oldBluetoothInput": "Kararlı",
   "@oldBluetoothInput": {},
   "newBluetoothInputOldLib": "Beta",
-  "@newBluetoothInputOldLib": {}
+  "@newBluetoothInputOldLib": {},
+  "measurementIndex": "Ölçüm #{number}",
+  "@measurementIndex": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "newBluetoothInputCrossPlatform": "Birden fazla işletim sistemini destekleyen beta sürüm",
+  "@newBluetoothInputCrossPlatform": {}
 }
