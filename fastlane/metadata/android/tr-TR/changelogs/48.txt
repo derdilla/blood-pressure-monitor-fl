@@ -1,3 +1,0 @@
-* İçe/dışa aktarma iletişim kutusu için 3 alt düğmeyi materyal olarak güncelleyin
-* Giriş ekleme formunu güncelleyin
-* Dahili kod yapısında ve kararlılıkta iyileştirmeler

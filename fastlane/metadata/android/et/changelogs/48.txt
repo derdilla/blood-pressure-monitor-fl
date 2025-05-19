@@ -1,3 +1,0 @@
-* Impordi- ja ekspordivaates on nüüd kasutusel 3 Material-kujunduskeeles vormistatud nuppu
-* Uuendasime kirje lisamise vormi
-* Sisemise koodistruktuuri parandused, sh stabiilsusparandused
