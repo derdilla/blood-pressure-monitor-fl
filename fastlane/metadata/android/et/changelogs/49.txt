@@ -1,2 +1,2 @@
-* Remove old data migration code
-* Allow creating detailed debug logs
+* Vana andmete ümbertõstmise kood on eemaldatud
+* Lisandus võimalus luua detailseid veaotsingu logisid
