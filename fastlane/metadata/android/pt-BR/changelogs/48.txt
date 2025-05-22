@@ -1,0 +1,3 @@
+* Update to material 3 bottom buttons for import/export dialog
+* Update entry-adding form
+* Improvements to internal code-structure and stability
