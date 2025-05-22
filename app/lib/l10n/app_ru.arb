@@ -126,7 +126,7 @@
   "@errNoData": {},
   "btnCancel": "ОТМЕНА",
   "@btnCancel": {},
-  "btnUndo": "ОТМЕНА",
+  "btnUndo": "ОТМЕНИТЬ",
   "@btnUndo": {},
   "pulLong": "Пульс",
   "@pulLong": {},
@@ -331,7 +331,7 @@
   "@time": {},
   "confirmDelete": "Подтвердите удаление",
   "@confirmDelete": {},
-  "errTimeAfterNow": "Выбранное время было сброшено, так как оно находится в будущем и ещё не наступило. Вы можете отключить эту проверку в настройках.",
+  "errTimeAfterNow": "Выбранное время было сброшено, так как оно находится в будущем. Вы можете отключить эту проверку в настройках.",
   "@errTimeAfterNow": {},
   "enterTimeFormatDesc": "Строка форматирования - это смесь предопределенных строк ICU/Skeleton и любого дополнительного текста, который вы хотели бы включить.\n\n[Если вам интересен полный список допустимых форматов, вы можете найти их прямо здесь.](screen://TimeFormattingHelp)\n\nПросто дружеское напоминание: использование более длинных или более коротких строк формата волшебным образом не изменит ширину столбцов таблицы, что может привести к некоторым неудобным разрывам строк и не отображению текста.\n\nпо умолчанию: \"yy-MM-dd HH:mm\"",
   "@enterTimeFormatDesc": {},
@@ -347,7 +347,7 @@
   "@irregularPulseDetected": {},
   "valueDistribution": "Распределение стоимости",
   "@valueDistribution": {},
-  "startWithAddMeasurementPageDescription": "При запуске приложения отображается экран ввода измерений.",
+  "startWithAddMeasurementPageDescription": "При запуске приложения отображается экран ввода результатов измерений.",
   "@startWithAddMeasurementPageDescription": {},
   "errParseUnknownColumn": "Не существует столбца с заголовком \"{title}\".",
   "@errParseUnknownColumn": {
@@ -369,11 +369,11 @@
   "@noMedication": {},
   "restartNow": "Перезапустить сейчас",
   "@restartNow": {},
-  "lifetime": "Жизнь",
+  "lifetime": "Весь период",
   "@lifetime": {},
   "allowMissingValues": "Разрешить пропущенные значения",
   "@allowMissingValues": {},
-  "custom": "Пользовательский",
+  "custom": "Собственный",
   "@custom": {},
   "useLegacyList": "Используйте унаследованный список",
   "@useLegacyList": {},
@@ -448,7 +448,7 @@
   "@userID": {},
   "warnDeletionUnrecoverable": "Этот шаг не подлежит восстановлению, если только вы не сделали резервную копию вручную. Вы действительно хотите удалить это?",
   "@warnDeletionUnrecoverable": {},
-  "remove": "Удалить",
+  "remove": "Убрать",
   "@remove": {},
   "requiresAppRestart": "Требуется перезапуск приложения",
   "@requiresAppRestart": {},
@@ -464,7 +464,7 @@
   "@importSettings": {},
   "startWithAddMeasurementPage": "Измерение при запуске",
   "@startWithAddMeasurementPage": {},
-  "exportWarnNotEveryFieldExported": "Обратите внимание, что вы экспортируете не все поля: {fields} {count, plural, one{is} other{are}} отсутствуют.",
+  "exportWarnNotEveryFieldExported": "Помните, что вы не экспортируете все поля: {fields} {count, plural, one{будет} other{будут}} пропущены.",
   "@exportWarnNotEveryFieldExported": {
     "placeholders": {
       "count": {
@@ -552,5 +552,7 @@
   "newBluetoothInputCrossPlatform": "Кросс-платформеннная бета",
   "@newBluetoothInputCrossPlatform": {},
   "bluetoothInputDesc": "Бета работает на большем количестве устройств, но меньше тестируется. Кросс-платформенная версия может работать и на не Андроиде и планируется заменить стабильную реализацию, как только она станет достаточно взрослой.",
-  "@bluetoothInputDesc": {}
+  "@bluetoothInputDesc": {},
+  "tapToSelect": "Нажмите чтобы выбрать",
+  "@tapToSelect": {}
 }
