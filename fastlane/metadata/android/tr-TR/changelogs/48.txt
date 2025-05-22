@@ -1,3 +1,3 @@
-* Update to material 3 bottom buttons for import/export dialog
-* Update entry-adding form
-* Improvements to internal code-structure and stability
+* İçe/dışa aktarma iletişim kutusu için 3 alt düğmeyi materyal olarak güncelleyin
+* Giriş ekleme formunu güncelleyin
+* Dahili kod yapısında ve kararlılıkta iyileştirmeler
