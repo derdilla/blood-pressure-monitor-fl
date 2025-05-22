@@ -1,2 +1,0 @@
-* Vana andmete ümbertõstmise kood on eemaldatud
-* Lisandus võimalus luua detailseid veaotsingu logisid
