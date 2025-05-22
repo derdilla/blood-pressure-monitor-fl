@@ -1,3 +1,0 @@
-* Aggiornamento dei pulsanti in basso a material 3 per la finestra di dialogo di importazione/esportazione
-* Aggiornamento del modulo di aggiunta voci
-* Miglioramenti alla struttura interna del codice e alla stabilità

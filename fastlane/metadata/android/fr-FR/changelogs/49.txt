@@ -1,2 +1,0 @@
-* Remove old data migration code
-* Allow creating detailed debug logs
