@@ -319,6 +319,14 @@ class SettingsPage extends StatelessWidget {
                     if (value != null) settings.weightUnit = value;
                   },
                 ),
+              SwitchListTile(
+                value: settings.trustBLETime,
+                title: Text(localizations.trustBLETime),
+                secondary: const Icon(Icons.lock_clock_outlined),
+                onChanged: (value) {
+                  settings.trustBLETime = value;
+                },
+              ),
             ],),
             TitledColumn(
               title: Text(localizations.data),

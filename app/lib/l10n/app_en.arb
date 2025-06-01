@@ -555,5 +555,7 @@
   "@bluetoothInputDesc": {},
   "@bluetoothInputDesc": {},
   "tapToSelect": "Tap to select",
-  "@tapToSelect": {}
+  "@tapToSelect": {},
+  "trustBLETime": "Trust time reported by bluetooth devices",
+  "@trustBLETime": {}
 }
