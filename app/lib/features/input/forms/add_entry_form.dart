@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:blood_pressure_app/features/bluetooth/backend/bluetooth_backend.dart';
 import 'package:blood_pressure_app/features/bluetooth/bluetooth_input.dart';
 import 'package:blood_pressure_app/features/bluetooth/logic/bluetooth_cubit.dart';
@@ -9,6 +11,7 @@ import 'package:blood_pressure_app/features/input/forms/medicine_intake_form.dar
 import 'package:blood_pressure_app/features/input/forms/note_form.dart';
 import 'package:blood_pressure_app/features/input/forms/weight_form.dart';
 import 'package:blood_pressure_app/features/old_bluetooth/bluetooth_input.dart';
+import 'package:blood_pressure_app/l10n/app_localizations.dart';
 import 'package:blood_pressure_app/logging.dart';
 import 'package:blood_pressure_app/model/storage/bluetooth_input_mode.dart';
 import 'package:blood_pressure_app/model/storage/storage.dart';
@@ -215,15 +218,35 @@ class AddEntryFormState extends FormStateBase<AddEntryFormValue, AddEntryForm>
   }
 
   /// Gets called on inputs from a bluetooth device or similar.
-  void _onExternalMeasurement(BloodPressureRecord record) => fillForm((
-    timestamp: context.read<Settings>().trustBLETime
-        ? record.time
-        : _timeForm.currentState?.save() ?? DateTime.now(),
-    note: null,
-    record: record,
-    intake: null,
-    weight: null,
-  ));
+  void _onExternalMeasurement(BloodPressureRecord record) {
+    final settings = context.read<Settings>();
+    if (settings.trustBLETime
+      // TODO: don't show hint too often
+        && record.time.difference(DateTime.now()).inHours > 5) {
+      // FIXME: this is completely untested
+      unawaited(showDialog(context: context, builder: (context) => AlertDialog(
+        content: Text(AppLocalizations.of(context)!.warnBLETimeSus(
+          record.time.difference(DateTime.now()).inHours
+        )),
+        actions: [
+          ElevatedButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text(AppLocalizations.of(context)!.btnConfirm),
+          ),
+        ],
+      )));
+    }
+
+    fillForm((
+      timestamp: settings.trustBLETime
+          ? record.time
+          : _timeForm.currentState?.save() ?? DateTime.now(),
+      note: null,
+      record: record,
+      intake: null,
+      weight: null,
+    ));
+  }
 
   @override
   Widget build(BuildContext context) {

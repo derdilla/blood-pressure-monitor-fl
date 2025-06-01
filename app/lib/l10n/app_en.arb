@@ -553,9 +553,16 @@
   "@newBluetoothInputCrossPlatform": {},
   "bluetoothInputDesc": "The beta backend works on more devices but is less tested. The cross-platform version may work on non-android and is planned to supersede the stable implementation once mature enough.",
   "@bluetoothInputDesc": {},
-  "@bluetoothInputDesc": {},
   "tapToSelect": "Tap to select",
   "@tapToSelect": {},
   "trustBLETime": "Trust time reported by bluetooth devices",
-  "@trustBLETime": {}
+  "@trustBLETime": {},
+  "warnBLETimeSus": "The bluetooth device reported a time off by {hours} hours. You can disable trusting timestamps from bluetooth devices in the settings.",
+  "@warnBLETimeSus": {
+    "placeholders": {
+      "hours": {
+        "type": "int"
+      }
+    }
+  }
 }
