@@ -1,3 +1,5 @@
+import 'package:bloc/src/change.dart';
+import 'package:blood_pressure_app/features/bluetooth/backend/bluetooth_manager.dart';
 import 'package:blood_pressure_app/features/bluetooth/bluetooth_input.dart';
 import 'package:blood_pressure_app/features/bluetooth/logic/bluetooth_cubit.dart';
 import 'package:blood_pressure_app/features/input/forms/add_entry_form.dart';
@@ -7,6 +9,7 @@ import 'package:blood_pressure_app/features/input/forms/medicine_intake_form.dar
 import 'package:blood_pressure_app/features/input/forms/note_form.dart';
 import 'package:blood_pressure_app/features/input/forms/weight_form.dart';
 import 'package:blood_pressure_app/features/old_bluetooth/bluetooth_input.dart';
+import 'package:blood_pressure_app/logging.dart';
 import 'package:blood_pressure_app/model/storage/bluetooth_input_mode.dart';
 import 'package:blood_pressure_app/model/storage/settings_store.dart';
 import 'package:flutter/material.dart';
@@ -15,6 +18,7 @@ import 'package:blood_pressure_app/l10n/app_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:health_data_store/health_data_store.dart';
 import 'package:intl/intl.dart';
+import 'package:logging/src/logger.dart';
 
 import '../../../model/analyzer_test.dart';
 import '../../../model/export_import/record_formatter_test.dart';
@@ -79,7 +83,7 @@ void main() {
     testWidgets('show the BluetoothInput specified by setting', (tester) async {
       final settings = Settings(bleInput: BluetoothInputMode.disabled);
       await tester.pumpWidget(materialApp(AddEntryForm(
-        bluetoothCubit: _MockBluetoothCubit.new
+        bluetoothCubit: _MockBoringBluetoothCubit.new
       ), settings: settings));
 
       expect(find.byType(TabBar, skipOffstage: false), findsNothing);
@@ -442,9 +446,36 @@ void main() {
     final FullEntry entry = mockEntry(note: 'Test');
     expect(entry.asAddEntry.note?.note, 'Test');
   });
+
+  testWidgets("doesn't update ble time if setting isn't set", (tester) async {
+    final key = GlobalKey<AddEntryFormState>();
+    final initialTime = DateTime.now();
+
+    await tester.pumpWidget(materialApp(AddEntryForm(key: key,
+      initialValue: (
+        timestamp: initialTime,
+        weight: null,
+        record: null,
+        note: null,
+        intake: null,
+      ),
+    ),
+      settings: Settings(
+        bleInput: BluetoothInputMode.newBluetoothInputCrossPlatform,
+        trustBLETime: false,
+      ),
+    ));
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.byIcon(Icons.bluetooth));
+    // FIXME: implement this test once a mechanism for mocking bluetooth
+    //  measurement exists
+    fail('TODO');
+  }, skip: true);
 }
 
-class _MockBluetoothCubit extends Fake implements BluetoothCubit {
+/// A mock ble cubit that never does anything.
+class _MockBoringBluetoothCubit extends Fake implements BluetoothCubit {
   @override
   Future<void> close() async {}
 

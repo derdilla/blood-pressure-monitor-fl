@@ -33,6 +33,8 @@ class AddEntryForm extends FormBase<AddEntryFormValue> with TypeLogger {
   final List<Medicine> meds;
 
   /// Function to customize [BluetoothCubit] creation.
+  ///
+  /// Works on [BluetoothInputMode.newBluetoothInputCrossPlatform].
   @visibleForTesting
   final BluetoothCubit Function()? bluetoothCubit;
 
@@ -212,8 +214,11 @@ class AddEntryFormState extends FormStateBase<AddEntryFormValue, AddEntryForm>
     }
   }
 
+  /// Gets called on inputs from a bluetooth device or similar.
   void _onExternalMeasurement(BloodPressureRecord record) => fillForm((
-    timestamp: record.time,
+    timestamp: context.read<Settings>().trustBLETime
+        ? record.time
+        : _timeForm.currentState?.save() ?? DateTime.now(),
     note: null,
     record: record,
     intake: null,
