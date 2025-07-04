@@ -51,6 +51,8 @@ class Settings extends ChangeNotifier {
     BluetoothInputMode? bleInput,
     bool? weightInput,
     WeightUnit? weightUnit,
+    bool? trustBLETime,
+    bool? showBLETimeTrustDialog,
   }) {
     if (accentColor != null) _accentColor = accentColor;
     if (sysColor != null) _sysColor = sysColor;
@@ -79,6 +81,8 @@ class Settings extends ChangeNotifier {
     if (bleInput != null) _bleInput = bleInput;
     if (weightInput != null) _weightInput = weightInput;
     if (weightUnit != null) _weightUnit = weightUnit;
+    if (trustBLETime != null) _trustBLETime = trustBLETime;
+    if (showBLETimeTrustDialog != null) _showBLETimeTrustDialog = showBLETimeTrustDialog;
     _language = language; // No check here, as null is the default as well.
   }
 
@@ -114,6 +118,8 @@ class Settings extends ChangeNotifier {
       weightInput: ConvertUtil.parseBool(map['weightInput']),
       preferredPressureUnit: PressureUnit.decode(ConvertUtil.parseInt(map['preferredPressureUnit'])),
       weightUnit: WeightUnit.deserialize(ConvertUtil.parseInt(map['weightUnit'])),
+      trustBLETime: ConvertUtil.parseBool(map['trustBLETime']),
+      showBLETimeTrustDialog: ConvertUtil.parseBool(map['showBLETimeTrustDialog']),
     );
 
     // update
@@ -162,6 +168,8 @@ class Settings extends ChangeNotifier {
     'bleInput': bleInput.serialize(),
     'weightInput': weightInput,
     'weightUnit': weightUnit.serialized,
+    'trustBLETime': trustBLETime,
+    'showBLETimeTrustDialog': showBLETimeTrustDialog,
   };
 
   /// Serialize the object to a restoreable string.
@@ -197,6 +205,8 @@ class Settings extends ChangeNotifier {
     _highestMedIndex = other._highestMedIndex;
     _weightInput = other._weightInput;
     _weightUnit = other._weightUnit;
+    _trustBLETime = other._trustBLETime;
+    _showBLETimeTrustDialog = other._showBLETimeTrustDialog;
     notifyListeners();
   }
 
@@ -441,7 +451,26 @@ class Settings extends ChangeNotifier {
     _weightUnit = value;
     notifyListeners();
   }
-  
+
+
+  bool _trustBLETime = true;
+  /// Whether to autofill the time the bluetooth device reports.
+  ///
+  /// This was introduced because the system time tends to be more accurate.
+  bool get trustBLETime => _trustBLETime;
+  set trustBLETime(bool value) {
+    _trustBLETime = value;
+    notifyListeners();
+  }
+
+  bool _showBLETimeTrustDialog = true;
+  /// Whether to warn the user when the time the bluetooth device reports is far
+  /// in the past and [trustBLETime] is true.
+  bool get showBLETimeTrustDialog => _showBLETimeTrustDialog;
+  set showBLETimeTrustDialog(bool value) {
+    _showBLETimeTrustDialog = value;
+    notifyListeners();
+  }
 // When adding fields notice the checklist at the top.
 }
 

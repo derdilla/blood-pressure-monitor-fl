@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:blood_pressure_app/features/bluetooth/backend/bluetooth_backend.dart';
 import 'package:blood_pressure_app/features/bluetooth/bluetooth_input.dart';
 import 'package:blood_pressure_app/features/bluetooth/logic/bluetooth_cubit.dart';
@@ -9,6 +11,7 @@ import 'package:blood_pressure_app/features/input/forms/medicine_intake_form.dar
 import 'package:blood_pressure_app/features/input/forms/note_form.dart';
 import 'package:blood_pressure_app/features/input/forms/weight_form.dart';
 import 'package:blood_pressure_app/features/old_bluetooth/bluetooth_input.dart';
+import 'package:blood_pressure_app/l10n/app_localizations.dart';
 import 'package:blood_pressure_app/logging.dart';
 import 'package:blood_pressure_app/model/storage/bluetooth_input_mode.dart';
 import 'package:blood_pressure_app/model/storage/storage.dart';
@@ -25,6 +28,7 @@ class AddEntryForm extends FormBase<AddEntryFormValue> with TypeLogger {
     super.initialValue,
     this.meds = const [],
     this.bluetoothCubit,
+    this.mockBleInput,
   });
 
   /// All medicines selectable.
@@ -33,8 +37,14 @@ class AddEntryForm extends FormBase<AddEntryFormValue> with TypeLogger {
   final List<Medicine> meds;
 
   /// Function to customize [BluetoothCubit] creation.
+  ///
+  /// Works on [BluetoothInputMode.newBluetoothInputCrossPlatform].
   @visibleForTesting
   final BluetoothCubit Function()? bluetoothCubit;
+
+  /// A builder for a widget that can act as a bluetooth input.
+  @visibleForTesting
+  final Widget Function(void Function(BloodPressureRecord data))? mockBleInput;
 
   @override
   FormStateBase createState() => AddEntryFormState();
@@ -212,13 +222,42 @@ class AddEntryFormState extends FormStateBase<AddEntryFormValue, AddEntryForm>
     }
   }
 
-  void _onExternalMeasurement(BloodPressureRecord record) => fillForm((
-    timestamp: record.time,
-    note: null,
-    record: record,
-    intake: null,
-    weight: null,
-  ));
+  /// Gets called on inputs from a bluetooth device or similar.
+  void _onExternalMeasurement(BloodPressureRecord record) {
+    final settings = context.read<Settings>();
+    if (settings.trustBLETime
+        && settings.showBLETimeTrustDialog
+        && record.time.difference(DateTime.now()).inHours.abs() > 5) {
+      unawaited(showDialog(context: context, builder: (context) => AlertDialog(
+        content: Text(AppLocalizations.of(context)!.warnBLETimeSus(
+          record.time.difference(DateTime.now()).inHours
+        )),
+        actions: [
+          ElevatedButton(
+            onPressed: () {
+              settings.showBLETimeTrustDialog = false;
+              Navigator.pop(context);
+            },
+            child: Text(AppLocalizations.of(context)!.dontShowAgain),
+          ),
+          ElevatedButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text(AppLocalizations.of(context)!.btnConfirm),
+          ),
+        ],
+      )));
+    }
+
+    fillForm((
+      timestamp: settings.trustBLETime
+          ? record.time
+          : _timeForm.currentState?.save() ?? DateTime.now(),
+      note: null,
+      record: record,
+      intake: null,
+      weight: null,
+    ));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -226,6 +265,8 @@ class AddEntryFormState extends FormStateBase<AddEntryFormValue, AddEntryForm>
     return ListView(
       padding: const EdgeInsets.symmetric(horizontal: 8),
       children: [
+        if (widget.mockBleInput != null)
+          widget.mockBleInput!.call(_onExternalMeasurement),
         (() => switch (settings.bleInput) {
           BluetoothInputMode.disabled => SizedBox.shrink(),
           BluetoothInputMode.oldBluetoothInput => OldBluetoothInput(

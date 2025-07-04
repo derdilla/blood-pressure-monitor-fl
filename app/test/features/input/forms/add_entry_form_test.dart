@@ -7,11 +7,11 @@ import 'package:blood_pressure_app/features/input/forms/medicine_intake_form.dar
 import 'package:blood_pressure_app/features/input/forms/note_form.dart';
 import 'package:blood_pressure_app/features/input/forms/weight_form.dart';
 import 'package:blood_pressure_app/features/old_bluetooth/bluetooth_input.dart';
+import 'package:blood_pressure_app/l10n/app_localizations.dart';
 import 'package:blood_pressure_app/model/storage/bluetooth_input_mode.dart';
 import 'package:blood_pressure_app/model/storage/settings_store.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:blood_pressure_app/l10n/app_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:health_data_store/health_data_store.dart';
 import 'package:intl/intl.dart';
@@ -79,7 +79,7 @@ void main() {
     testWidgets('show the BluetoothInput specified by setting', (tester) async {
       final settings = Settings(bleInput: BluetoothInputMode.disabled);
       await tester.pumpWidget(materialApp(AddEntryForm(
-        bluetoothCubit: _MockBluetoothCubit.new
+        bluetoothCubit: _MockBoringBluetoothCubit.new
       ), settings: settings));
 
       expect(find.byType(TabBar, skipOffstage: false), findsNothing);
@@ -442,9 +442,135 @@ void main() {
     final FullEntry entry = mockEntry(note: 'Test');
     expect(entry.asAddEntry.note?.note, 'Test');
   });
+
+  testWidgets("doesn't update time from ble if setting isn't set", (tester) async {
+    final key = GlobalKey<AddEntryFormState>();
+    final initialTime = DateTime.now();
+
+    await tester.pumpWidget(materialApp(AddEntryForm(key: key,
+      initialValue: (
+        timestamp: initialTime,
+        weight: null,
+        record: null,
+        note: null,
+        intake: null,
+      ),
+      mockBleInput: (callback) => ListTile(
+        onTap: () => callback(mockRecord(time: DateTime(2000))),
+        title: Text('mockBleInput'),
+      ),
+    ),
+      settings: Settings(
+        bleInput: BluetoothInputMode.disabled,
+        trustBLETime: false,
+      ),
+    ));
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.text('mockBleInput'));
+    final returnedEntry = key.currentState!.save();
+    expect(returnedEntry!.timestamp.isAfter(DateTime(2000)), isTrue);
+    expect(returnedEntry.timestamp, initialTime);
+
+    // also check if the hint dialog isn't incorrectly displayed
+    await tester.pumpAndSettle();
+    expect(find.byType(AlertDialog), findsNothing);
+  });
+
+  testWidgets('updates time from ble if setting is set', (tester) async {
+    final key = GlobalKey<AddEntryFormState>();
+    final initialTime = DateTime.now();
+
+    await tester.pumpWidget(materialApp(AddEntryForm(key: key,
+      initialValue: (
+        timestamp: initialTime,
+        weight: null,
+        record: null,
+        note: null,
+        intake: null,
+      ),
+      mockBleInput: (callback) => ListTile(
+        onTap: () => callback(mockRecord(time: DateTime(2000))),
+        title: Text('mockBleInput'),
+      ),
+    ),
+      settings: Settings(
+        bleInput: BluetoothInputMode.disabled,
+        trustBLETime: true,
+      ),
+    ));
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.text('mockBleInput'));
+    final returnedEntry = key.currentState!.save();
+    expect(returnedEntry!.timestamp, equals(DateTime(2000)));
+  });
+
+  testWidgets('shows warning if time from ble is too old', (tester) async {
+    final localizations = await AppLocalizations.delegate.load(const Locale('en'));
+    await tester.pumpWidget(materialApp(AddEntryForm(
+      mockBleInput: (callback) => ListTile(
+        onTap: () => callback(mockRecord(time: DateTime(2000))),
+        title: Text('mockBleInput'),
+      ),
+    ),
+      settings: Settings(
+        bleInput: BluetoothInputMode.disabled,
+        trustBLETime: true,
+      ),
+    ));
+    await tester.pumpAndSettle();
+
+    expect(find.byType(AlertDialog), findsNothing);
+    await tester.tap(find.text('mockBleInput'));
+    await tester.pumpAndSettle();
+    expect(find.byType(AlertDialog), findsOneWidget);
+    expect(find.textContaining('The bluetooth device reported a time off by'), findsOneWidget);
+    expect(find.text(localizations.btnConfirm), findsOneWidget);
+
+    await tester.tap(find.text(localizations.btnConfirm));
+    await tester.pumpAndSettle();
+    expect(find.byType(AlertDialog), findsNothing);
+
+    // reopens the next time
+    await tester.tap(find.text('mockBleInput'));
+    await tester.pumpAndSettle();
+    expect(find.byType(AlertDialog), findsOneWidget);
+  });
+
+  testWidgets('allows disabling warning if time from ble is too old', (tester) async {
+    final localizations = await AppLocalizations.delegate.load(const Locale('en'));
+    await tester.pumpWidget(materialApp(AddEntryForm(
+      mockBleInput: (callback) => ListTile(
+        onTap: () => callback(mockRecord(time: DateTime(2000))),
+        title: Text('mockBleInput'),
+      ),
+    ),
+      settings: Settings(
+        bleInput: BluetoothInputMode.disabled,
+        trustBLETime: true,
+      ),
+    ));
+    await tester.pumpAndSettle();
+
+    expect(find.byType(AlertDialog), findsNothing);
+    await tester.tap(find.text('mockBleInput'));
+    await tester.pumpAndSettle();
+    expect(find.byType(AlertDialog), findsOneWidget);
+    expect(find.textContaining('The bluetooth device reported a time off by'), findsOneWidget);
+    expect(find.text(localizations.dontShowAgain), findsOneWidget);
+
+    await tester.tap(find.text(localizations.dontShowAgain));
+    await tester.pumpAndSettle();
+    expect(find.byType(AlertDialog), findsNothing);
+    await tester.tap(find.text('mockBleInput'));
+    await tester.pumpAndSettle();
+    expect(find.byType(AlertDialog), findsNothing);
+  });
 }
 
-class _MockBluetoothCubit extends Fake implements BluetoothCubit {
+/// A mock ble cubit that never does anything.
+class _MockBoringBluetoothCubit extends Fake implements BluetoothCubit {
   @override
   Future<void> close() async {}
 
