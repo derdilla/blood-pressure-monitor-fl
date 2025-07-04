@@ -227,8 +227,7 @@ class AddEntryFormState extends FormStateBase<AddEntryFormValue, AddEntryForm>
     final settings = context.read<Settings>();
     if (settings.trustBLETime
       // TODO: don't show hint too often
-        && record.time.difference(DateTime.now()).inHours > 5) {
-      // FIXME: this is completely untested
+        && record.time.difference(DateTime.now()).inHours.abs() > 5) {
       unawaited(showDialog(context: context, builder: (context) => AlertDialog(
         content: Text(AppLocalizations.of(context)!.warnBLETimeSus(
           record.time.difference(DateTime.now()).inHours

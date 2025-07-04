@@ -1,8 +1,3 @@
-import 'package:blood_pressure_app/features/bluetooth/backend/bluetooth_device.dart';
-import 'package:blood_pressure_app/features/bluetooth/backend/bluetooth_discovery.dart';
-import 'package:blood_pressure_app/features/bluetooth/backend/bluetooth_manager.dart';
-import 'package:blood_pressure_app/features/bluetooth/backend/bluetooth_service.dart';
-import 'package:blood_pressure_app/features/bluetooth/backend/bluetooth_state.dart';
 import 'package:blood_pressure_app/features/bluetooth/bluetooth_input.dart';
 import 'package:blood_pressure_app/features/bluetooth/logic/bluetooth_cubit.dart';
 import 'package:blood_pressure_app/features/input/forms/add_entry_form.dart';
@@ -12,15 +7,14 @@ import 'package:blood_pressure_app/features/input/forms/medicine_intake_form.dar
 import 'package:blood_pressure_app/features/input/forms/note_form.dart';
 import 'package:blood_pressure_app/features/input/forms/weight_form.dart';
 import 'package:blood_pressure_app/features/old_bluetooth/bluetooth_input.dart';
+import 'package:blood_pressure_app/l10n/app_localizations.dart';
 import 'package:blood_pressure_app/model/storage/bluetooth_input_mode.dart';
 import 'package:blood_pressure_app/model/storage/settings_store.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:blood_pressure_app/l10n/app_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:health_data_store/health_data_store.dart';
 import 'package:intl/intl.dart';
-import 'package:logging/src/logger.dart';
 
 import '../../../model/analyzer_test.dart';
 import '../../../model/export_import/record_formatter_test.dart';
@@ -477,6 +471,10 @@ void main() {
     final returnedEntry = key.currentState!.save();
     expect(returnedEntry!.timestamp.isAfter(DateTime(2000)), isTrue);
     expect(returnedEntry.timestamp, initialTime);
+
+    // also check if the hint dialog isn't incorrectly displayed
+    await tester.pumpAndSettle();
+    expect(find.byType(AlertDialog), findsNothing);
   });
 
   testWidgets('updates time from ble if setting is set', (tester) async {
@@ -506,6 +504,33 @@ void main() {
     await tester.tap(find.text('mockBleInput'));
     final returnedEntry = key.currentState!.save();
     expect(returnedEntry!.timestamp, equals(DateTime(2000)));
+  });
+
+  testWidgets('shows warning if time from ble is too old', (tester) async {
+    final localizations = await AppLocalizations.delegate.load(const Locale('en'));
+    await tester.pumpWidget(materialApp(AddEntryForm(
+      mockBleInput: (callback) => ListTile(
+        onTap: () => callback(mockRecord(time: DateTime(2000))),
+        title: Text('mockBleInput'),
+      ),
+    ),
+      settings: Settings(
+        bleInput: BluetoothInputMode.disabled,
+        trustBLETime: true,
+      ),
+    ));
+    await tester.pumpAndSettle();
+
+    expect(find.byType(AlertDialog), findsNothing);
+    await tester.tap(find.text('mockBleInput'));
+    await tester.pumpAndSettle();
+    expect(find.byType(AlertDialog), findsOneWidget);
+    expect(find.textContaining('The bluetooth device reported a time off by'), findsOneWidget);
+    expect(find.text(localizations.btnConfirm), findsOneWidget);
+
+    await tester.tap(find.text(localizations.btnConfirm));
+    await tester.pumpAndSettle();
+    expect(find.byType(AlertDialog), findsNothing);
   });
 }
 
