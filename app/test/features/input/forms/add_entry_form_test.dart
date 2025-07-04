@@ -531,6 +531,41 @@ void main() {
     await tester.tap(find.text(localizations.btnConfirm));
     await tester.pumpAndSettle();
     expect(find.byType(AlertDialog), findsNothing);
+
+    // reopens the next time
+    await tester.tap(find.text('mockBleInput'));
+    await tester.pumpAndSettle();
+    expect(find.byType(AlertDialog), findsOneWidget);
+  });
+
+  testWidgets('allows disabling warning if time from ble is too old', (tester) async {
+    final localizations = await AppLocalizations.delegate.load(const Locale('en'));
+    await tester.pumpWidget(materialApp(AddEntryForm(
+      mockBleInput: (callback) => ListTile(
+        onTap: () => callback(mockRecord(time: DateTime(2000))),
+        title: Text('mockBleInput'),
+      ),
+    ),
+      settings: Settings(
+        bleInput: BluetoothInputMode.disabled,
+        trustBLETime: true,
+      ),
+    ));
+    await tester.pumpAndSettle();
+
+    expect(find.byType(AlertDialog), findsNothing);
+    await tester.tap(find.text('mockBleInput'));
+    await tester.pumpAndSettle();
+    expect(find.byType(AlertDialog), findsOneWidget);
+    expect(find.textContaining('The bluetooth device reported a time off by'), findsOneWidget);
+    expect(find.text(localizations.dontShowAgain), findsOneWidget);
+
+    await tester.tap(find.text(localizations.dontShowAgain));
+    await tester.pumpAndSettle();
+    expect(find.byType(AlertDialog), findsNothing);
+    await tester.tap(find.text('mockBleInput'));
+    await tester.pumpAndSettle();
+    expect(find.byType(AlertDialog), findsNothing);
   });
 }
 

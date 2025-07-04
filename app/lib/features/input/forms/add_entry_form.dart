@@ -226,13 +226,20 @@ class AddEntryFormState extends FormStateBase<AddEntryFormValue, AddEntryForm>
   void _onExternalMeasurement(BloodPressureRecord record) {
     final settings = context.read<Settings>();
     if (settings.trustBLETime
-      // TODO: don't show hint too often
+        && settings.showBLETimeTrustDialog
         && record.time.difference(DateTime.now()).inHours.abs() > 5) {
       unawaited(showDialog(context: context, builder: (context) => AlertDialog(
         content: Text(AppLocalizations.of(context)!.warnBLETimeSus(
           record.time.difference(DateTime.now()).inHours
         )),
         actions: [
+          ElevatedButton(
+            onPressed: () {
+              settings.showBLETimeTrustDialog = false;
+              Navigator.pop(context);
+            },
+            child: Text(AppLocalizations.of(context)!.dontShowAgain),
+          ),
           ElevatedButton(
             onPressed: () => Navigator.pop(context),
             child: Text(AppLocalizations.of(context)!.btnConfirm),

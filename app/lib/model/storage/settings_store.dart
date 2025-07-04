@@ -54,6 +54,7 @@ class Settings extends ChangeNotifier {
     bool? weightInput,
     WeightUnit? weightUnit,
     bool? trustBLETime,
+    bool? showBLETimeTrustDialog,
   }) {
     if (accentColor != null) _accentColor = accentColor;
     if (sysColor != null) _sysColor = sysColor;
@@ -83,6 +84,7 @@ class Settings extends ChangeNotifier {
     if (weightInput != null) _weightInput = weightInput;
     if (weightUnit != null) _weightUnit = weightUnit;
     if (trustBLETime != null) _trustBLETime = trustBLETime;
+    if (showBLETimeTrustDialog != null) _showBLETimeTrustDialog = showBLETimeTrustDialog;
     _language = language; // No check here, as null is the default as well.
   }
   factory Settings.fromMap(Map<String, dynamic> map) {
@@ -117,6 +119,7 @@ class Settings extends ChangeNotifier {
       preferredPressureUnit: PressureUnit.decode(ConvertUtil.parseInt(map['preferredPressureUnit'])),
       weightUnit: WeightUnit.deserialize(ConvertUtil.parseInt(map['weightUnit'])),
       trustBLETime: ConvertUtil.parseBool(map['trustBLETime']),
+      showBLETimeTrustDialog: ConvertUtil.parseBool(map['showBLETimeTrustDialog']),
     );
 
     // update
@@ -166,6 +169,7 @@ class Settings extends ChangeNotifier {
     'weightInput': weightInput,
     'weightUnit': weightUnit.serialized,
     'trustBLETime': trustBLETime,
+    'showBLETimeTrustDialog': showBLETimeTrustDialog,
   };
 
   /// Serialize the object to a restoreable string.
@@ -202,6 +206,7 @@ class Settings extends ChangeNotifier {
     _weightInput = other._weightInput;
     _weightUnit = other._weightUnit;
     _trustBLETime = other._trustBLETime;
+    _showBLETimeTrustDialog = other._showBLETimeTrustDialog;
     notifyListeners();
   }
 
@@ -455,6 +460,15 @@ class Settings extends ChangeNotifier {
   bool get trustBLETime => _trustBLETime;
   set trustBLETime(bool value) {
     _trustBLETime = value;
+    notifyListeners();
+  }
+
+  bool _showBLETimeTrustDialog = true;
+  /// Whether to warn the user when the time the bluetooth device reports is far
+  /// in the past and [trustBLETime] is true.
+  bool get showBLETimeTrustDialog => _showBLETimeTrustDialog;
+  set showBLETimeTrustDialog(bool value) {
+    _showBLETimeTrustDialog = value;
     notifyListeners();
   }
 // When adding fields notice the checklist at the top.

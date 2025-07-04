@@ -564,5 +564,7 @@
         "type": "int"
       }
     }
-  }
+  },
+  "dontShowAgain": "Don''t show again",
+  "@dontShowAgain": {}
 }
