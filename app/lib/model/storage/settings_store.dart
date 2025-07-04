@@ -22,8 +22,6 @@ class Settings extends ChangeNotifier {
   /// Creates a settings object with the default values.
   ///
   /// When the values should be set consider using the factory methods.
-  /// Create a instance from a map created by [toMap].
-
   Settings({
     Locale? language,
     Color? accentColor,
@@ -87,6 +85,8 @@ class Settings extends ChangeNotifier {
     if (showBLETimeTrustDialog != null) _showBLETimeTrustDialog = showBLETimeTrustDialog;
     _language = language; // No check here, as null is the default as well.
   }
+
+  /// Create a instance from a map created by [toMap].
   factory Settings.fromMap(Map<String, dynamic> map) {
     final settingsObject = Settings(
       accentColor: ConvertUtil.parseColor(map['accentColor']),
