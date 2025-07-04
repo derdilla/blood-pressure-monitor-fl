@@ -28,6 +28,7 @@ class AddEntryForm extends FormBase<AddEntryFormValue> with TypeLogger {
     super.initialValue,
     this.meds = const [],
     this.bluetoothCubit,
+    this.mockBleInput,
   });
 
   /// All medicines selectable.
@@ -40,6 +41,10 @@ class AddEntryForm extends FormBase<AddEntryFormValue> with TypeLogger {
   /// Works on [BluetoothInputMode.newBluetoothInputCrossPlatform].
   @visibleForTesting
   final BluetoothCubit Function()? bluetoothCubit;
+
+  /// A builder for a widget that can act as a bluetooth input.
+  @visibleForTesting
+  final Widget Function(void Function(BloodPressureRecord data))? mockBleInput;
 
   @override
   FormStateBase createState() => AddEntryFormState();
@@ -254,6 +259,8 @@ class AddEntryFormState extends FormStateBase<AddEntryFormValue, AddEntryForm>
     return ListView(
       padding: const EdgeInsets.symmetric(horizontal: 8),
       children: [
+        if (widget.mockBleInput != null)
+          widget.mockBleInput!.call(_onExternalMeasurement),
         (() => switch (settings.bleInput) {
           BluetoothInputMode.disabled => SizedBox.shrink(),
           BluetoothInputMode.oldBluetoothInput => OldBluetoothInput(
@@ -262,12 +269,10 @@ class AddEntryFormState extends FormStateBase<AddEntryFormValue, AddEntryForm>
           BluetoothInputMode.newBluetoothInputOldLib => BluetoothInput(
             manager: BluetoothManager.create(BluetoothBackend.flutterBluePlus),
             onMeasurement: _onExternalMeasurement,
-            bluetoothCubit: widget.bluetoothCubit,
           ),
           BluetoothInputMode.newBluetoothInputCrossPlatform => BluetoothInput(
             manager: BluetoothManager.create(BluetoothBackend.bluetoothLowEnergy),
             onMeasurement: _onExternalMeasurement,
-            bluetoothCubit: widget.bluetoothCubit,
           ),
         })(),
         if (settings.allowManualTimeInput)

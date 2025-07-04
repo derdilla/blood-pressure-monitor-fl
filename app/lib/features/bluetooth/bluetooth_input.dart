@@ -11,11 +11,11 @@ import 'package:blood_pressure_app/features/bluetooth/ui/input_card.dart';
 import 'package:blood_pressure_app/features/bluetooth/ui/measurement_failure.dart';
 import 'package:blood_pressure_app/features/bluetooth/ui/measurement_multiple.dart';
 import 'package:blood_pressure_app/features/bluetooth/ui/measurement_success.dart';
+import 'package:blood_pressure_app/l10n/app_localizations.dart';
 import 'package:blood_pressure_app/logging.dart';
 import 'package:blood_pressure_app/model/storage/storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:blood_pressure_app/l10n/app_localizations.dart';
 import 'package:health_data_store/health_data_store.dart';
 
 /// Class for inputting measurement through bluetooth.
