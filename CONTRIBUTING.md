@@ -47,4 +47,4 @@ I'm looking for people who want to bring this app to many more users on IOS or d
 
 ## Donations
 
-If you have too much money, I would advise you to donate to either [F-Droid](https://f-droid.org/en/donate/), [Weblate](https://weblate.org/en/donate/), or some other service that has unavoidable maintenance costs.
+If you sponsor [me](https://github.com/derdilla), I may be more motivated to work on this, seeing that people actually care enough to pay for it.
