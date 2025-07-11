@@ -1,9 +1,9 @@
 <div align="center">  
-  <img src="https://github.com/derdilla/blood-pressure-monitor-fl/blob/79b8a2d38703a5ff6d491019ba51b0374c39963a/android/app/src/main/res/drawable/icon.png" width="20%" height="20%"></img>
+  <img src="https://github.com/derdilla/blood-pressure-monitor-fl/blob/79b8a2d38703a5ff6d491019ba51b0374c39963a/android/app/src/main/res/drawable/icon.png" width="100px" height="100px"></img>
 </div>
 
 
-<h1 align="center"> blood pressure monitor </h1>
+<h1 align="center">Blood Pressure Monitor</h1>
 <div align="center">
   <img alt="Play installs" src="https://img.shields.io/endpoint?color=green&logo=google-play&logoColor=green&url=https%3A%2F%2Fplay.cuzi.workers.dev%2Fplay%3Fi%3Dcom.derdilla.bloodPressureApp%26gl%3DUS%26hl%3Den%26l%3DInstalls%26m%3D%24totalinstalls">
   <img alt="Play rating" src="https://img.shields.io/endpoint?color=green&logo=google-play&logoColor=green&url=https%3A%2F%2Fplay.cuzi.workers.dev%2Fplay%3Fi%3Dcom.derdilla.bloodPressureApp%26gl%3DDE%26hl%3Den%26l%3DRating%26m%3D%24rating%2520%25E2%2598%2585%2520">
@@ -43,14 +43,12 @@ As there is no demand Windows, Linux and MacOS builds have been stopped. In case
 
 ### Screenshots
 
-<table style="width: 100%; border-collapse: collapse;">
-  <tr>
-    <td><img src="https://github.com/derdilla/blood-pressure-monitor-fl/blob/main/fastlane/metadata/android/en-US/images/phoneScreenshots/01-example_add.png?raw=true" height="100%" alt="Home"></td>
-    <td><img src="https://github.com/derdilla/blood-pressure-monitor-fl/blob/main/fastlane/metadata/android/en-US/images/phoneScreenshots/03-example_settings.png?raw=true" height="100%" alt="Settings"></td>
-  <td><img src="https://github.com/derdilla/blood-pressure-monitor-fl/blob/main/fastlane/metadata/android/en-US/images/phoneScreenshots/02-example_home.png?raw=true" height="100%" alt="Home"></td>
-    <td><img src="https://github.com/derdilla/blood-pressure-monitor-fl/blob/main/fastlane/metadata/android/en-US/images/phoneScreenshots/04-example_stats.png?raw=true" height="100%" alt="Statistics"></td>
-  </tr>
-</table>
+<div align="center">
+  <img src="https://github.com/derdilla/blood-pressure-monitor-fl/blob/main/fastlane/metadata/android/en-US/images/phoneScreenshots/01-example_add.png?raw=true" width="23%" alt="Home">
+  <img src="https://github.com/derdilla/blood-pressure-monitor-fl/blob/main/fastlane/metadata/android/en-US/images/phoneScreenshots/03-example_settings.png?raw=true" width="23%" alt="Settings">
+  <img src="https://github.com/derdilla/blood-pressure-monitor-fl/blob/main/fastlane/metadata/android/en-US/images/phoneScreenshots/02-example_home.png?raw=true" width="23%" alt="Home">
+  <img src="https://github.com/derdilla/blood-pressure-monitor-fl/blob/main/fastlane/metadata/android/en-US/images/phoneScreenshots/04-example_stats.png?raw=true" width="23%" alt="Statistics">
+</div>
 
 ## Contributing
 
