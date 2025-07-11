@@ -1,0 +1,5 @@
+* Allow not trusting device bluetooth time
+* Setup GitHub sponsors
+* Add share button to export page
+* Ensure statistics page interval picker is visible
+* Turkish and Russian Translations update from Hosted Weblate
