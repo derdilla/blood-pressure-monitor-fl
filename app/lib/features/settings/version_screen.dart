@@ -1,11 +1,8 @@
 import 'package:blood_pressure_app/data_util/consistent_future_builder.dart';
-import 'package:blood_pressure_app/features/settings/tiles/titled_column.dart';
 import 'package:blood_pressure_app/logging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:blood_pressure_app/l10n/app_localizations.dart';
-import 'package:flutter_blue_plus/flutter_blue_plus.dart';
-import 'package:logging/logging.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 /// Screen that shows app version and debug options.

@@ -58,7 +58,7 @@ extension EntryUtils on BuildContext {
 
         log.info(read<IntervalStoreManager>());
         if (mounted && exportSettings.exportAfterEveryEntry) {
-          performExport(this);
+          performExport(this, false);
         }
       }
     } on ProviderNotFoundException {
