@@ -181,9 +181,10 @@ class ExportImportScreen extends StatelessWidget {
             ],
           ),
         ),),
-      persistentFooterButtons: [
-        const ExportButton(),
-        const ImportButton(),
+      persistentFooterButtons: const [
+        ExportButton(share: true),
+        ExportButton(share: false),
+        ImportButton(),
       ],
     );
   }

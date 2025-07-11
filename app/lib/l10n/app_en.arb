@@ -566,5 +566,7 @@
     }
   },
   "dontShowAgain": "Don''t show again",
-  "@dontShowAgain": {}
+  "@dontShowAgain": {},
+  "btnShare": "SHARE",
+  "@btnShare": {}
 }
