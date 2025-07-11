@@ -60,11 +60,11 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
           );
         },
       ),
-      bottomNavigationBar: Container(
-        height: 70,
-        margin: const EdgeInsets.only(top: 15, bottom: 5),
+      persistentFooterButtons: [Container(
+        height: 76.0,
+        margin: const EdgeInsets.only(top: 8.0, bottom: 6.0),
         child: const IntervalPicker(type: IntervalStoreManagerLocation.statsPage,),
-      ),
+      )],
     );
   }
 
