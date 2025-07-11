@@ -1,0 +1,5 @@
+* Erlaube die Zeitangabe von Bluetoothgeräten zu ignorieren
+* Aktiviere GitHub sponsors
+* Füge "teilen"-Knopf zur Exportseite hinzu
+* Stelle sicher das die Datenauswahl auf der Statistikseite sichtbar ist
+* Türkische und Russische Übersetzungen via Weblate aktualisiert
