@@ -439,7 +439,7 @@
   "@recordFormat": {},
   "timeFormat": "Zaman biçimi",
   "@timeFormat": {},
-  "bottomAppBars": "Alt iletişim kutusu çubukları",
+  "bottomAppBars": "Alt diyalog çubukları",
   "@bottomAppBars": {},
   "medications": "İlaçlar",
   "@medications": {},
@@ -552,5 +552,7 @@
     }
   },
   "newBluetoothInputCrossPlatform": "Birden fazla işletim sistemini destekleyen beta sürüm",
-  "@newBluetoothInputCrossPlatform": {}
+  "@newBluetoothInputCrossPlatform": {},
+  "bluetoothInputDesc": "Beta arka uç daha fazla cihazda çalışır ancak daha az test edilmiştir. Çok platformlu sürüm, Android dışındaki cihazlarda da çalışabilir ve yeterince olgunlaştığında kararlı sürümün yerini alması planlanmaktadır.",
+  "@bluetoothInputDesc": {}
 }
