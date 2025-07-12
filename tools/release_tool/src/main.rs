@@ -49,7 +49,7 @@ fn main() -> Result<()>{
     summary.build = prompt_bool("Build app?", Some(true))?;
 
     summary.print();
-
+    summary.apply();
 
     Ok(())
 }
