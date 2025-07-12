@@ -1,9 +1,9 @@
 use std::ffi::OsStr;
-use std::io::Read;
+use std::io::{BufRead, BufReader, Read};
 use std::os::unix::prelude::OsStrExt;
+use std::os::unix::process::CommandExt;
 use std::path::PathBuf;
 use std::process::{exit, Command, Stdio};
-use std::thread;
 use indicatif::{MultiProgress, ProgressBar, ProgressStyle};
 
 /// Summary of actions that will be taken
@@ -80,7 +80,7 @@ impl Summary {
                 }
                 pb.set_message("Stopped reading from stdout");
                 child.wait().unwrap();
-                pb.finish_with_message("Finished");
+                pb.finish_with_message("Completed");
             } else if let Err(err) = child {
                 pb.println(format!("{}", err));
                 pb.finish_with_message("flutter upgrade failed");
@@ -98,13 +98,116 @@ impl Summary {
                 pb.println(format!("{}", String::from_utf8_lossy(&ouput.stderr)));
                 exit(1);
             }
-            pb.finish_with_message("Finished");
+            pb.finish_with_message("Completed");
             let output = String::from_utf8_lossy(&ouput.stdout);
             let version = output.split(" ").nth(2).unwrap();
             version.to_string()
         };
 
+        if self.update_dependencies {
+            let pb = m.add(ProgressBar::new_spinner());
+            pb.set_style(spinner_style.clone());
+            pb.set_prefix("Updating dependencies");
 
+            pb.set_message("health_data_store pub deps");
+            Self::spawn_propagating_logs(
+                Command::new("dart")
+                            .arg("pub").arg("upgrade")
+                            .arg("--tighten").arg("--major-versions")
+                            .current_dir(&self.root.join("health_data_store")),
+                    &pb,
+            );
 
+            pb.set_message("health_data_store generate");
+            Self::spawn_propagating_logs(
+                Command::new("dart")
+                            .arg("run").arg("build_runner").arg("build")
+                            .arg("--delete-conflicting-outputs")
+                            .current_dir(&self.root.join("health_data_store")),
+                    &pb,
+            );
+
+            pb.set_message("app pub deps");
+            Self::spawn_propagating_logs(
+                Command::new("flutter")
+                            .arg("pub").arg("upgrade")
+                            .arg("--tighten").arg("--major-versions")
+                            .current_dir(&self.root.join("app")),
+                    &pb,
+            );
+
+            pb.set_message("app generate");
+            Self::spawn_propagating_logs(
+                Command::new("flutter").arg("pub")
+                            .arg("run").arg("build_runner").arg("build")
+                            .arg("--delete-conflicting-outputs")
+                            .current_dir(&self.root.join("app")),
+                    &pb,
+            );
+
+            pb.finish_with_message("Completed");
+        }
+
+        assert!(!self.run_tests, "unimplemented");
+
+        // TODO: update pubspec.yaml here
+
+        if self.build {
+            let pb = m.add(ProgressBar::new_spinner());
+            pb.set_style(spinner_style.clone());
+            pb.set_prefix("Build App");
+
+            pb.set_message("Cleaning...");
+            Self::spawn_propagating_logs(
+                Command::new("flutter").arg("clean")
+                        .current_dir(&self.root.join("app")),
+                    &pb,
+            );
+
+            pb.set_message("Build APK...");
+            Self::spawn_propagating_logs(
+                Command::new("flutter").arg("build").arg("apk")
+                        .arg("--release").arg("--flavor").arg("github")
+                        .arg("--obfuscate").arg("--split-debug-info=./build/debug-info")
+                        .current_dir(&self.root.join("app")),
+                    &pb,
+            );
+
+            pb.set_message("Build bundle...");
+            Self::spawn_propagating_logs(
+                Command::new("flutter").arg("build").arg("appbundle")
+                        .arg("--release").arg("--flavor").arg("github")
+                        .arg("--obfuscate").arg("--split-debug-info=./build/debug-info")
+                        .current_dir(&self.root.join("app")),
+                    &pb,
+            );
+
+            pb.set_message("Compressing debug symbols");
+            Command::new("zip").arg("debug-info.zip").arg("debug-info/*")
+                .current_dir(&self.root.join("app").join("target"))
+                .output().unwrap();
+
+            // TODO: copy files to useful location
+
+            pb.finish();
+        }
+    }
+
+     fn spawn_propagating_logs(cmd: &mut Command, pb: &ProgressBar) {
+        let child = cmd.stdout(Stdio::piped()).spawn();
+        if let Ok(mut child) = child {
+            let stdout = child.stdout.take().unwrap();
+            let mut bufread = BufReader::new(stdout);
+            let mut buf = String::new();
+
+            while let Ok(n) = bufread.read_line(&mut buf) {
+                if n > 0 {
+                    pb.println(&buf);
+                    buf.clear();
+                } else {
+                    break;
+                }
+            }
+        }
     }
 }
