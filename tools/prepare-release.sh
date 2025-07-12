@@ -2,9 +2,11 @@
 
 APP_DIR="${BASH_SOURCE%/*}/.."
 CURRENT_VERSION=$(sed -n -E "s/.*version:\s*[^\+]*\+//p" "$APP_DIR/app/pubspec.yaml")
+CURRENT_VERSION_NAME=$(awk -F'[ +]' '/^version:/ {print $2}' "$APP_DIR/app/pubspec.yaml")
 NEXT_VERSION=$((CURRENT_VERSION+1))
 
 echo "Preparing update ($CURRENT_VERSION -> $NEXT_VERSION)"
+
 
 
 read -p "Cleanup old changelogs? [y/n]" -n 1 -r
