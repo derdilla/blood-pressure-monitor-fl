@@ -1,9 +1,15 @@
+import 'dart:io';
+
 import 'package:blood_pressure_app/data_util/consistent_future_builder.dart';
 import 'package:blood_pressure_app/logging.dart';
+import 'package:blood_pressure_app/screens/error_reporting_screen.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:blood_pressure_app/l10n/app_localizations.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:path/path.dart';
+import 'package:sqflite/sqflite.dart';
 
 /// Screen that shows app version and debug options.
 class VersionScreen extends StatefulWidget {
@@ -61,6 +67,30 @@ class _VersionScreenState extends State<VersionScreen> with TypeLogger {
               value: Log.isVerbose,
               onChanged: (v) =>  setState(() => Log.setVerbose(v)),
             ),
+            FutureBuilder(future: Future(() async {
+              final dbPath = await getDatabasesPath();
+              return join(dbPath, 'blood_pressure.db');
+            }), builder: (context, snapshot) {
+              if (snapshot.data == null || !File(snapshot.data!).existsSync()) {
+                return SizedBox.shrink();
+              }
+              return ListTile(
+                onTap: () async {
+                  try {
+                    await FilePicker.platform.saveFile(
+                      fileName: 'blood_pressure.db',
+                      bytes: File(snapshot.data!).readAsBytesSync(),
+                      type: FileType.any, // application/vnd.sqlite3
+                    );
+                  } catch(e) {
+                    if (!context.mounted) return;
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      content: Text('ERR: $e'),),);
+                  }
+                },
+                title: const Text('rescue legacy db'),
+              );
+            }),
             ListTile(
               title: Text('Logs:'),
               trailing: Icon(Icons.copy),

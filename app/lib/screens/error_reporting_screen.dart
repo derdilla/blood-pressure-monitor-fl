@@ -139,7 +139,7 @@ class ErrorScreen extends StatelessWidget {
                           content: Text('ERR: $e'),),);
                       }
                     },
-                    child: const Text('rescue new db'),
+                    child: const Text('rescue db'),
                   ),
                 ],
               ),
