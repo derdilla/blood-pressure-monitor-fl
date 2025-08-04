@@ -15,26 +15,27 @@ Most devices provide 2 ways to retrieve measurements over bluetooth, but there a
     1. and automatically remove all locally stored measurements after a succesful download
     2. and leave measurements untouched, i.e. the user needs to remove the stored measurements themselves
 
-> :warning: At the moment situation 2.i is not well supported. Do not use this unless you are ok with loosing previously stored measurements
+> ⚠️ At the moment situation 2.i is not well supported. Do not use this unless you are ok with loosing previously stored measurements
 
 ## Known working devices
 
-> If your device is not listed please edit this page and add it! :bow:
+> If your device is not listed please edit this page and add it! 🙇
 
 |Device|Bluetooth name|Read after measurement|Download mode|Automatically disconnects after reading|
 |---|---| :---: | :---: | :---: |
-|HealthForYou by Silvercrest (Type SBM 69)|SBM69| :1234: | :white_check_mark: | :white_check_mark: |
-|Omron X4 Smart|X4 Smart| :one: | :white_check_mark::wastebasket: | :white_check_mark: |
+|HealthForYou by Silvercrest (Type SBM 69)|SBM69| 🔢 | ✅ | ✅ |
+|Omron X4 Smart|X4 Smart| 1️⃣ | ✅🗑️ | ✅ |
+|Omron X2 Smart+|X2 Smart+| 1️⃣ | ? | ? |
 
 #### Legenda
 
 |Icon|Description|
 | :---: | --- |
-| :no_entry_sign: |Not supported / No|
-| :white_check_mark: |Supported / Yes|
-| :one: | Returns latest measurement|
-| :1234: | Returns all measurements|
-| :white_check_mark::wastebasket: |Supported and removes all locally stored measurements|
+| 🚫 |Not supported / No|
+| ✅ |Supported / Yes|
+| 1️⃣ | Returns latest measurement|
+| 🔢 | Returns all measurements|
+| ✅🗑️ |Supported and removes all locally stored measurements|
 
 ## Specifications
 
