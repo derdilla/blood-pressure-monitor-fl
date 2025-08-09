@@ -6,6 +6,7 @@ use std::os::unix::process::CommandExt;
 use std::path::{Path, PathBuf};
 use std::process::{exit, Command, Stdio};
 use indicatif::{MultiProgress, ProgressBar, ProgressStyle};
+use regex::Regex;
 
 /// Summary of actions that will be taken
 #[derive(Debug, Default)]
@@ -101,7 +102,7 @@ impl Summary {
             }
             pb.finish_with_message("Completed");
             let output = String::from_utf8_lossy(&ouput.stdout);
-            let version = output.split(" ").nth(2).unwrap();
+            let version = output.split(" ").nth(1).unwrap();
             version.to_string()
         };
 
@@ -149,9 +150,21 @@ impl Summary {
             pb.finish_with_message("Completed");
         }
 
-        assert!(!self.run_tests, "unimplemented");
+        {
+            _ = m.println("Updating pubspec.yaml");
+            let pubspec = fs::read_to_string(self.root.join("app").join("pubspec.yaml")).unwrap();
+            let version_re = Regex::new(r"flutter: '\d*.\d*.\d*'").unwrap();
+            let pubspec = version_re.replace(pubspec.as_str(), format!("flutter: '{current_flutter_version}'"));
 
-        // TODO: update pubspec.yaml here
+            let pubspec = if let Some(new_version_line) = &self.new_version_line {
+                let version_re = Regex::new(r"version:\s*\d*.\d*.\d*\+\d*").unwrap();
+                version_re.replace(&pubspec, new_version_line)
+            } else { pubspec };
+
+            fs::write(self.root.join("app").join("pubspec.yaml"), pubspec.to_string()).unwrap();
+        }
+
+        assert!(!self.run_tests, "unimplemented"); // TODO
 
         if self.build {
             let pb = m.add(ProgressBar::new_spinner());

@@ -23,6 +23,7 @@ fn main() -> Result<()>{
         io::stdout().flush()?;
         let mut buffer = String::new();
         io::stdin().read_line(&mut buffer)?;
+        buffer = buffer.trim().to_string();
         let regex = Regex::new(r"(\d+).(\d+).(\d+)")?;
         if regex.is_match(&buffer) {
             /*
