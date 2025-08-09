@@ -1,8 +1,9 @@
 use std::ffi::OsStr;
+use std::fs;
 use std::io::{BufRead, BufReader, Read};
 use std::os::unix::prelude::OsStrExt;
 use std::os::unix::process::CommandExt;
-use std::path::PathBuf;
+use std::path::{Path, PathBuf};
 use std::process::{exit, Command, Stdio};
 use indicatif::{MultiProgress, ProgressBar, ProgressStyle};
 
@@ -165,10 +166,14 @@ impl Summary {
             );
 
             pb.set_message("Build APK...");
+            let debug_info_path = self.root
+                .join("app")
+                .join("build")
+                .join("debug_info");
             Self::spawn_propagating_logs(
                 Command::new("flutter").arg("build").arg("apk")
                         .arg("--release").arg("--flavor").arg("github")
-                        .arg("--obfuscate").arg("--split-debug-info=./build/debug-info")
+                        .arg("--obfuscate").arg(format!("--split-debug-info={}", debug_info_path.display()))
                         .current_dir(&self.root.join("app")),
                     &pb,
             );
@@ -177,17 +182,32 @@ impl Summary {
             Self::spawn_propagating_logs(
                 Command::new("flutter").arg("build").arg("appbundle")
                         .arg("--release").arg("--flavor").arg("github")
-                        .arg("--obfuscate").arg("--split-debug-info=./build/debug-info")
+                        .arg("--obfuscate").arg(format!("--split-debug-info={}", debug_info_path.display()))
                         .current_dir(&self.root.join("app")),
                     &pb,
             );
 
             pb.set_message("Compressing debug symbols");
-            Command::new("zip").arg("debug-info.zip").arg("debug-info/*")
-                .current_dir(&self.root.join("app").join("target"))
-                .output().unwrap();
+            Command::new("zip")
+                .arg("-r").arg("debug-info.zip").arg(".") // zip everything in debug_info
+                .current_dir(&debug_info_path)
+                .status().unwrap();
 
-            // TODO: copy files to useful location
+            // Clean target dir and copy files
+            pb.set_message("Copying outputs");
+            let target_dir = self.root.join("target");
+            if target_dir.exists() {
+                fs::remove_dir_all(&target_dir).unwrap();
+            }
+            fs::create_dir_all(&target_dir).unwrap();
+            let out_base = self.root.join("app").join("build").join("app").join("outputs");
+            let apk_path = out_base.join("flutter-apk").join("app-github-release.apk");
+            let aab_path = out_base.join("bundle").join("githubRelease").join("app-github-release.aab");
+            let zip_path = debug_info_path.join("debug-info.zip");
+
+            fs::copy(&apk_path, target_dir.join("app-github-release.apk")).unwrap();
+            fs::copy(&aab_path, target_dir.join("app-github-release.aab")).unwrap();
+            fs::copy(&zip_path, target_dir.join("debug-info.zip")).unwrap();
 
             pb.finish();
         }
