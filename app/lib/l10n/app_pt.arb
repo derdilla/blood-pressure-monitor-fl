@@ -50,7 +50,7 @@
   "@csv": {},
   "accentColor": "Cor do tema",
   "@accentColor": {},
-  "errTimeAfterNow": "A hora do dia selecionada foi revertida, porque ela está no futuro. Você pode desligar essa validação nas configurações.",
+  "errTimeAfterNow": "A hora escolhida é no futuro. Pode desligar esta validação nas configurações.",
   "@errTimeAfterNow": {},
   "versionOf": "Versão: {version}",
   "@versionOf": {
@@ -390,7 +390,7 @@
   "@needlePinBarWidth": {},
   "valueDistribution": "Distribuição de valor",
   "@valueDistribution": {},
-  "warnNeedsRestartForUsingApp": "Os ficheiros foram eliminados nesta sessão. Reinicie a aplicação para utilizar outras partes da aplicação!",
+  "warnNeedsRestartForUsingApp": "Os ficheiros foram apagados nesta sessão. Reinicie a app para utilizar outras partes da app!",
   "@warnNeedsRestartForUsingApp": {},
   "needlePinBarWidthDesc": "A largura das linhas que as entradas coloridas fazem no gráfico.",
   "@needlePinBarWidthDesc": {},
@@ -542,5 +542,31 @@
     "description": "Setting for the unit the app will use for displaying weight"
   },
   "intakes": "Ingestão de medicamentos",
-  "@intakes": {}
+  "@intakes": {},
+  "disabled": "Desativado",
+  "@disabled": {},
+  "oldBluetoothInput": "Estável",
+  "@oldBluetoothInput": {},
+  "newBluetoothInputOldLib": "Beta",
+  "@newBluetoothInputOldLib": {},
+  "newBluetoothInputCrossPlatform": "Beta multiplataforma",
+  "@newBluetoothInputCrossPlatform": {},
+  "bluetoothInputDesc": "O backend beta funciona em mais dispositivos, mas é menos testado. A versão multiplataforma pode funcionar em não-Android e está planeada a supervisionar a implementação estável uma vez suficientemente madura.",
+  "@bluetoothInputDesc": {},
+  "tapToSelect": "Toque para selecionar",
+  "@tapToSelect": {},
+  "trustBLETime": "Tempo de confiança relatado por dispositivos bluetooth",
+  "@trustBLETime": {},
+  "warnBLETimeSus": "O dispositivo bluetooth informou um tempo de folga por {hours} horas. Pode desativar os carimbos de tempo de confiança de dispositivos bluetooth nas configurações.",
+  "@warnBLETimeSus": {
+    "placeholders": {
+      "hours": {
+        "type": "int"
+      }
+    }
+  },
+  "dontShowAgain": "Não mostrar novamente",
+  "@dontShowAgain": {},
+  "btnShare": "PARTILHAR",
+  "@btnShare": {}
 }
