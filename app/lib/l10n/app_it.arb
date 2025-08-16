@@ -554,5 +554,19 @@
   "bluetoothInputDesc": "Il backend beta funziona su più dispositivi ma è meno testato. La versione multipiattaforma potrebbe funzionare su dispositivi non Android e si prevede che sostituirà l''implementazione stabile una volta sufficientemente matura.",
   "@bluetoothInputDesc": {},
   "tapToSelect": "Tocca per selezionare",
-  "@tapToSelect": {}
+  "@tapToSelect": {},
+  "trustBLETime": "Tempo di attendibilità segnalato dai dispositivi Bluetooth",
+  "@trustBLETime": {},
+  "warnBLETimeSus": "Il dispositivo Bluetooth ha segnalato un ritardo di {hours} ore. Puoi disattivare l''affidabilità dei timestamp dei dispositivi Bluetooth nelle impostazioni.",
+  "@warnBLETimeSus": {
+    "placeholders": {
+      "hours": {
+        "type": "int"
+      }
+    }
+  },
+  "dontShowAgain": "Non mostrare più",
+  "@dontShowAgain": {},
+  "btnShare": "CONDIVIDI",
+  "@btnShare": {}
 }
