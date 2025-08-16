@@ -554,5 +554,19 @@
   "warnNeedsRestartForUsingApp": "文件在此会话中被删除了。重启本应用继续使用将返回到应用的其他部分！",
   "@warnNeedsRestartForUsingApp": {},
   "tapToSelect": "轻按选择",
-  "@tapToSelect": {}
+  "@tapToSelect": {},
+  "trustBLETime": "信任蓝牙设备报告的时间",
+  "@trustBLETime": {},
+  "warnBLETimeSus": "蓝牙设备报告了 {hours} 小时的时间偏差。你可以在设置中停用信任来自蓝牙设备的时间戳。",
+  "@warnBLETimeSus": {
+    "placeholders": {
+      "hours": {
+        "type": "int"
+      }
+    }
+  },
+  "dontShowAgain": "不再显示",
+  "@dontShowAgain": {},
+  "btnShare": "分享",
+  "@btnShare": {}
 }
