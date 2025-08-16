@@ -181,7 +181,7 @@
   },
   "determineWarnValues": "Seadista hoiatuslävendid",
   "@determineWarnValues": {},
-  "aboutWarnValuesScreen": "Teave",
+  "aboutWarnValuesScreen": "Rakenduse teave",
   "@aboutWarnValuesScreen": {},
   "sysWarn": "Ülemise ehk süstoolse vererõhu hoiatuslävend",
   "@sysWarn": {},
@@ -554,5 +554,19 @@
   "bluetoothInputDesc": "Beetaliides toimib enamate seadmetega, aga on vähem testitud. Platvormiülene beetaliides võib toimida ka muude, kui Androidipõhiste seadmetega ning meie eesmärk on, et peale piisavat testimist ta ühel hetkel asendab senise stabiilse liidese.",
   "@bluetoothInputDesc": {},
   "tapToSelect": "Valimiseks puuduta",
-  "@tapToSelect": {}
+  "@tapToSelect": {},
+  "trustBLETime": "Usalda Bluetoothi seadme edastatud aega",
+  "@trustBLETime": {},
+  "warnBLETimeSus": "Bluetoothi seadme edastatud kellaaeg on {hours} tundi õigest kellaajast nihkes. Seadistustest saad määrata, kas usaldad seda ajamääratlust.",
+  "@warnBLETimeSus": {
+    "placeholders": {
+      "hours": {
+        "type": "int"
+      }
+    }
+  },
+  "dontShowAgain": "Ära näita enam uuesti",
+  "@dontShowAgain": {},
+  "btnShare": "JAGA",
+  "@btnShare": {}
 }
