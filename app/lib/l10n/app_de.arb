@@ -19,7 +19,7 @@
       }
     }
   },
-  "errNaN": "Bitte Zahl eingeben",
+  "errNaN": "Bitte eine Zahl eingeben",
   "@errNaN": {},
   "errLt30": "Wert <= 30? Deaktiviere Prüfung in Einstellungen!",
   "@errLt30": {},
@@ -299,7 +299,7 @@
   "@allowMissingValues": {},
   "custom": "Benutzerdefiniert",
   "@custom": {},
-  "errTimeAfterNow": "Die ausgewählte Uhrzeit wurde zurückgesetzt, da sie in der Zukunft liegt. Die Überprüfung lässt sich in den Einstellungen deaktivieren.",
+  "errTimeAfterNow": "Die ausgewählte Uhrzeit liegt in der Zukunft. Diese Überprüfung lässt sich in den Einstellungen deaktivieren.",
   "@errTimeAfterNow": {},
   "language": "Sprache",
   "@language": {},
@@ -546,5 +546,27 @@
   "bluetoothInputDesc": "Das Beta-Backend funktioniert auf mehr Geräten, ist aber weniger getestet. Die plattformübergreifende Version kann auf Nicht-Android-Geräten funktionieren und soll die stabile Implementierung ablösen, sobald sie ausgereift genug ist.",
   "@bluetoothInputDesc": {},
   "disabled": "Deaktiviert",
-  "@disabled": {}
+  "@disabled": {},
+  "oldBluetoothInput": "Stabil",
+  "@oldBluetoothInput": {},
+  "newBluetoothInputOldLib": "Beta",
+  "@newBluetoothInputOldLib": {},
+  "newBluetoothInputCrossPlatform": "Beta plattformübergreifend",
+  "@newBluetoothInputCrossPlatform": {},
+  "tapToSelect": "Berühren zum Auswählen",
+  "@tapToSelect": {},
+  "trustBLETime": "Von Bluetooth-Geräten gemeldeter Uhrzeit vertrauen",
+  "@trustBLETime": {},
+  "warnBLETimeSus": "Das Bluetooth-Gerät hat eine Zeitabweichung von {hours} Stunden gemeldet. Sie können in den Einstellungen festlegen, dass Zeitstempel von Bluetooth-Geräten nicht mehr als vertrauenswürdig angesehen werden.",
+  "@warnBLETimeSus": {
+    "placeholders": {
+      "hours": {
+        "type": "int"
+      }
+    }
+  },
+  "dontShowAgain": "Nicht erneut anzeigen",
+  "@dontShowAgain": {},
+  "btnShare": "TEILEN",
+  "@btnShare": {}
 }
