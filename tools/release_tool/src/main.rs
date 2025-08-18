@@ -6,6 +6,12 @@ use regex::Regex;
 use std::io::Write;
 use std::{env, fs, io, path::PathBuf};
 
+// TODO:
+// - changelog management
+// - weblate integration
+// - git commits / PR-ing
+// - release tagging / github publishing
+
 fn main() -> Result<()>{
     let mut summary = Summary::default();
 
@@ -26,18 +32,6 @@ fn main() -> Result<()>{
         buffer = buffer.trim().to_string();
         let regex = Regex::new(r"(\d+).(\d+).(\d+)")?;
         if regex.is_match(&buffer) {
-            /*
-            let old_parts = regex.captures(&buffer).context("Couldn't parse old version")?;
-            let new_parts = regex.captures(&buffer).context("Couldn't parse new version")?;
-            if (new_parts.get(1).unwrap().as_str().parse::<usize>()? // TODO: This is wrong
-                    < new_parts.get(1).unwrap().as_str().parse::<usize>()?)
-                || (new_parts.get(2).unwrap().as_str().parse::<usize>()?
-                    < new_parts.get(2).unwrap().as_str().parse::<usize>()?)
-                || (new_parts.get(3).unwrap().as_str().parse::<usize>()?
-                    < new_parts.get(3).unwrap().as_str().parse::<usize>()?){
-                bail!("New version name is ");
-            }
-             */
             summary.new_version_line = Some(format!("version: {buffer}+{}", version.1 + 1));
         } else {
             bail!("New version is malformed");

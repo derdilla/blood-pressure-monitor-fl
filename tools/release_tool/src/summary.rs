@@ -283,7 +283,6 @@ impl Summary {
                 pb.println(&String::from_utf8_lossy(&line_buf));
             }
 
-            // FIXME: continuously updating flutter test line doesn't update.
             return child.wait().is_ok_and(|e| e.success())
         }
          false
