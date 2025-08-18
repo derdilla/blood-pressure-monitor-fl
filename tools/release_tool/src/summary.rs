@@ -1,12 +1,12 @@
-use std::ffi::OsStr;
-use std::fs;
-use std::io::{BufRead, BufReader, Read};
-use std::os::unix::prelude::OsStrExt;
-use std::os::unix::process::CommandExt;
-use std::path::{Path, PathBuf};
-use std::process::{exit, Command, Stdio};
+use crate::prompt_bool;
 use indicatif::{MultiProgress, ProgressBar, ProgressStyle};
 use regex::Regex;
+use std::ffi::OsStr;
+use std::fs;
+use std::io::{BufReader, Read};
+use std::os::unix::prelude::OsStrExt;
+use std::path::PathBuf;
+use std::process::{exit, Command, Stdio};
 
 /// Summary of actions that will be taken
 #[derive(Debug, Default)]
@@ -150,7 +150,7 @@ impl Summary {
             pb.finish_with_message("Completed");
         }
 
-        {
+        if self.update_flutter || self.new_version_line.is_some() {
             _ = m.println("Updating pubspec.yaml");
             let pubspec = fs::read_to_string(self.root.join("app").join("pubspec.yaml")).unwrap();
             let version_re = Regex::new(r"flutter: '\d*.\d*.\d*'").unwrap();
@@ -164,7 +164,33 @@ impl Summary {
             fs::write(self.root.join("app").join("pubspec.yaml"), pubspec.to_string()).unwrap();
         }
 
-        assert!(!self.run_tests, "unimplemented"); // TODO
+        if self.run_tests {
+            let pb = m.add(ProgressBar::new_spinner());
+            pb.set_style(spinner_style.clone());
+            pb.set_prefix("Running tests");
+
+            pb.set_message("Testing health_data_store");
+            let libs_ok = Self::spawn_propagating_logs(
+                Command::new("dart").arg("test")
+                    .current_dir(&self.root.join("health_data_store")),
+                &pb,
+            );
+
+            pb.set_message("Testing app");
+            let app_ok = Self::spawn_propagating_logs(
+                Command::new("flutter").arg("test")
+                    .current_dir(&self.root.join("app")),
+                &pb,
+            );
+
+            if !libs_ok || !app_ok {
+                if !prompt_bool("App or Library tests failed. Do you want to proceed?", None).unwrap_or(false) {
+                    exit(0);
+                }
+            }
+
+            pb.finish();
+        }
 
         if self.build {
             let pb = m.add(ProgressBar::new_spinner());
@@ -226,21 +252,40 @@ impl Summary {
         }
     }
 
-     fn spawn_propagating_logs(cmd: &mut Command, pb: &ProgressBar) {
+     fn spawn_propagating_logs(cmd: &mut Command, pb: &ProgressBar) -> bool {
         let child = cmd.stdout(Stdio::piped()).spawn();
         if let Ok(mut child) = child {
             let stdout = child.stdout.take().unwrap();
-            let mut bufread = BufReader::new(stdout);
-            let mut buf = String::new();
+            let mut reader = BufReader::new(stdout);
+            let mut line_buf: Vec<u8> = Vec::new();
+            let mut read_buf = [0; 1024];
 
-            while let Ok(n) = bufread.read_line(&mut buf) {
-                if n > 0 {
-                    pb.println(&buf);
-                    buf.clear();
-                } else {
+            while let Ok(n) = reader.read(&mut read_buf) {
+                if n == 0 {
                     break;
                 }
+
+                for &byte in &read_buf[..n] {
+                    match byte {
+                        b'\n' | b'\r' => {
+                            pb.println(&String::from_utf8_lossy(&line_buf));
+                            pb.force_draw();
+                            line_buf.clear();
+                        }
+                        _ => {
+                            line_buf.push(byte);
+                        }
+                    }
+                }
             }
+
+            if !line_buf.is_empty() {
+                pb.println(&String::from_utf8_lossy(&line_buf));
+            }
+
+            // FIXME: continuously updating flutter test line doesn't update.
+            return child.wait().is_ok_and(|e| e.success())
         }
+         false
     }
 }

@@ -44,9 +44,9 @@ fn main() -> Result<()>{
         }
     }
 
-    summary.update_flutter = prompt_bool("Update flutter?", Some(true))?; // TODO: don't forge to update pubspec file
+    summary.update_flutter = prompt_bool("Update flutter?", Some(true))?;
     summary.update_dependencies = prompt_bool("Update dependencies?", Some(true))?;
-    summary.run_tests = false; // prompt_bool("Run tests?", Some(true))?;
+    summary.run_tests = prompt_bool("Run tests?", Some(false))?;
     summary.build = prompt_bool("Build app?", Some(true))?;
 
     summary.print();
