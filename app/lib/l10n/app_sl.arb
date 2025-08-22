@@ -185,7 +185,7 @@
     },
     "exportWarnConfigNotImportable": "hej Samo prijateljsko opozorilo: trenutnega izvoza podatkov ne bo mogoče uvoziti nazaj v aplikacijo. Če želite to popraviti, se prepričajte, da ste nastavili vrsto izvoza kot CSV in vključili enega od razpoložljivih formatov časa.",
     "@exportWarnConfigNotImportable": {},
-    "exportWarnNotEveryFieldExported": "Pozor, ne izvažate vseh polj: {fields} {count, plural, one{manjka} two{manjkata} other{manjkajo}}.",
+    "exportWarnNotEveryFieldExported": "Pozor, ne izvažate vseh polj: {fields} {count, plural, one{manjka} other{manjkajo}}.",
     "@exportWarnNotEveryFieldExported": {
         "placeholders": {
             "count": {
