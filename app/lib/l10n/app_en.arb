@@ -568,5 +568,7 @@
   "dontShowAgain": "Don''t show again",
   "@dontShowAgain": {},
   "btnShare": "SHARE",
-  "@btnShare": {}
+  "@btnShare": {},
+  "exportSuccess": "Export successful",
+  "@exportSuccess": {}
 }
