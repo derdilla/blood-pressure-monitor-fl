@@ -1,572 +1,572 @@
 {
-  "title": "血压记录",
-  "@title": {},
-  "success": "成功：{msg}",
-  "@success": {
-    "placeholders": {
-      "msg": {
-        "type": "String"
-      }
-    }
-  },
-  "loading": "正在载入…",
-  "@loading": {},
-  "error": "错误：{msg}",
-  "@error": {
-    "placeholders": {
-      "msg": {
-        "type": "String"
-      }
-    }
-  },
-  "errNaN": "请输入数字",
-  "@errNaN": {},
-  "errLt30": "数字<=30？请在设置中关闭验证！",
-  "@errLt30": {},
-  "errUnrealistic": "不符实际的数值？请在设置中关闭验证！",
-  "@errUnrealistic": {},
-  "errDiaGtSys": "低压>=高压？请在设置中关闭验证！",
-  "@errDiaGtSys": {},
-  "errCantOpenURL": "无法打开网址：{url}",
-  "@errCantOpenURL": {
-    "placeholders": {
-      "url": {
-        "type": "String"
-      }
-    }
-  },
-  "errNoFileOpened": "没有打开的文件",
-  "@errNoFileOpened": {},
-  "errNotStarted": "没有启动",
-  "@errNotStarted": {},
-  "errNoValue": "请输入数值",
-  "@errNoValue": {},
-  "errNotEnoughDataToGraph": "数据太少，无法绘制图表。",
-  "@errNotEnoughDataToGraph": {},
-  "errNoData": "没有数据",
-  "@errNoData": {},
-  "errWrongImportFormat": "只能导入csv和SQLite数据库格式的文件。",
-  "@errWrongImportFormat": {},
-  "errNeedHeadline": "只能导入有标题行的文件。",
-  "@errNeedHeadline": {},
-  "errCantReadFile": "文件内容无法读取",
-  "@errCantReadFile": {},
-  "errNotImportable": "此文件无法导入",
-  "@errNotImportable": {},
-  "btnCancel": "取消",
-  "@btnCancel": {},
-  "btnSave": "保存",
-  "@btnSave": {},
-  "btnConfirm": "确定",
-  "@btnConfirm": {},
-  "btnUndo": "撤销",
-  "@btnUndo": {},
-  "sysLong": "高压",
-  "@sysLong": {},
-  "sysShort": "高压",
-  "@sysShort": {},
-  "diaLong": "低压",
-  "@diaLong": {},
-  "diaShort": "低压",
-  "@diaShort": {},
-  "pulLong": "脉搏",
-  "@pulLong": {},
-  "pulShort": "脉搏",
-  "@pulShort": {},
-  "addNote": "备注（选填）",
-  "@addNote": {},
-  "settings": "设置",
-  "@settings": {},
-  "layout": "布局",
-  "@layout": {},
-  "allowManualTimeInput": "允许手动输入时间",
-  "@allowManualTimeInput": {},
-  "enterTimeFormatScreen": "时间格式",
-  "@enterTimeFormatScreen": {},
-  "theme": "主题",
-  "@theme": {},
-  "system": "系统",
-  "@system": {},
-  "dark": "暗色",
-  "@dark": {},
-  "light": "亮色",
-  "@light": {},
-  "iconSize": "图标大小",
-  "@iconSize": {},
-  "graphLineThickness": "线条粗细",
-  "@graphLineThickness": {},
-  "animationSpeed": "动画时长",
-  "@animationSpeed": {},
-  "accentColor": "主题颜色",
-  "@accentColor": {},
-  "sysColor": "高压颜色",
-  "@sysColor": {},
-  "diaColor": "低压颜色",
-  "@diaColor": {},
-  "pulColor": "脉搏颜色",
-  "@pulColor": {},
-  "behavior": "行为",
-  "@behavior": {},
-  "validateInputs": "验证输入",
-  "@validateInputs": {},
-  "confirmDeletion": "确认删除",
-  "@confirmDeletion": {},
-  "age": "年龄",
-  "@age": {},
-  "aboutWarnValuesScreen": "关于",
-  "@aboutWarnValuesScreen": {},
-  "aboutWarnValuesScreenDesc": "关于警告值的更多信息",
-  "@aboutWarnValuesScreenDesc": {},
-  "sysWarn": "高压警告",
-  "@sysWarn": {},
-  "diaWarn": "低压警告",
-  "@diaWarn": {},
-  "data": "数据",
-  "@data": {},
-  "version": "版本",
-  "@version": {},
-  "versionOf": "版本：{version}",
-  "@versionOf": {
-    "placeholders": {
-      "version": {
-        "type": "String"
-      }
-    }
-  },
-  "buildNumberOf": "版本号：{buildNumber}",
-  "@buildNumberOf": {
-    "placeholders": {
-      "buildNumber": {
-        "type": "String"
-      }
-    }
-  },
-  "packageNameOf": "软件包名称：{name}",
-  "@packageNameOf": {
-    "placeholders": {
-      "name": {
-        "type": "String"
-      }
-    }
-  },
-  "exportImport": "导出/导入",
-  "@exportImport": {},
-  "exportDir": "导出目录",
-  "@exportDir": {},
-  "exportAfterEveryInput": "每次记录后导出",
-  "@exportAfterEveryInput": {},
-  "exportAfterEveryInputDesc": "不推荐（会导致文件数量激增）",
-  "@exportAfterEveryInputDesc": {},
-  "exportFormat": "导出格式",
-  "@exportFormat": {},
-  "exportCustomEntries": "自定义字段",
-  "@exportCustomEntries": {},
-  "addEntry": "添加字段",
-  "@addEntry": {},
-  "exportMimeType": "导出MIME类型",
-  "@exportMimeType": {},
-  "exportCsvHeadline": "标题行",
-  "@exportCsvHeadline": {},
-  "exportCsvHeadlineDesc": "有助于区分类型",
-  "@exportCsvHeadlineDesc": {},
-  "csv": "CSV",
-  "@csv": {},
-  "pdf": "PDF",
-  "@pdf": {},
-  "db": "SQLite数据",
-  "@db": {},
-  "text": "文本",
-  "@text": {},
-  "other": "其他",
-  "@other": {},
-  "fieldDelimiter": "字段分隔符",
-  "@fieldDelimiter": {},
-  "textDelimiter": "文本分隔符",
-  "@textDelimiter": {},
-  "export": "导出",
-  "@export": {},
-  "shared": "已分享",
-  "@shared": {},
-  "import": "导入",
-  "@import": {},
-  "sourceCode": "源代码",
-  "@sourceCode": {},
-  "licenses": "第3方许可协议",
-  "@licenses": {},
-  "importSuccess": "已成功导入{count}条记录",
-  "@importSuccess": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "exportWarnConfigNotImportable": "友情提示：当前的导出配置将导致无法导入。要修复此问题，请确定将导出类型设置为CSV——带有标题行，标题行中包含“diastolic”、“systolic”、“pulse”、“notes”，以及有效的时间格式。",
-  "@exportWarnConfigNotImportable": {},
-  "statistics": "统计",
-  "@statistics": {},
-  "measurementCount": "测量次数",
-  "@measurementCount": {},
-  "measurementsPerDay": "日测量次数",
-  "@measurementsPerDay": {},
-  "timeResolvedMetrics": "按一天中不同时间的度量",
-  "@timeResolvedMetrics": {},
-  "avgOf": "{txt} Ø",
-  "@avgOf": {
-    "placeholders": {
-      "txt": {
-        "type": "String"
-      }
-    }
-  },
-  "minOf": "{txt}最低",
-  "@minOf": {
-    "placeholders": {
-      "txt": {
-        "type": "String"
-      }
-    }
-  },
-  "maxOf": "{txt}最高",
-  "@maxOf": {
-    "placeholders": {
-      "txt": {
-        "type": "String"
-      }
-    }
-  },
-  "warnValues": "警告值",
-  "@warnValues": {},
-  "warnAboutTxt1": "警告值仅供参考，并非医学建议。",
-  "@warnAboutTxt1": {},
-  "warnAboutTxt2": "不同年龄的默认参考值来源于此。",
-  "@warnAboutTxt2": {},
-  "warnAboutTxt3": "您可以按需随意修改此值，请遵从医生的建议。",
-  "@warnAboutTxt3": {},
-  "enterTimeFormatString": "时间格式",
-  "@enterTimeFormatString": {},
-  "now": "现在",
-  "@now": {},
-  "notes": "备注",
-  "@notes": {},
-  "time": "时间",
-  "@time": {},
-  "confirmDelete": "确认删除",
-  "@confirmDelete": {},
-  "confirmDeleteDesc": "确定要删除此记录吗？（您可以在设置中关闭这些确认。）",
-  "@confirmDeleteDesc": {},
-  "deletionConfirmed": "记录已删除。",
-  "@deletionConfirmed": {},
-  "day": "日",
-  "@day": {},
-  "week": "周",
-  "@week": {},
-  "month": "月",
-  "@month": {},
-  "year": "年",
-  "@year": {},
-  "lifetime": "终身",
-  "@lifetime": {},
-  "weekOfYear": "{year}年第{weekNum}周",
-  "@weekOfYear": {
-    "placeholders": {
-      "weekNum": {
-        "type": "int"
-      },
-      "year": {
-        "type": "int"
-      }
-    }
-  },
-  "enterTimeFormatDesc": "格式化字符串是一个预定义的ICU/Skeleton字符串和您想要包含的其他文字的混合体。\n\n[点击即可查看可用的格式化字符串的完整列表。](screen://TimeFormattingHelp)\n\n友情提示：使用更长或更短的格式字符串不会改变表的列宽，还可能导致意外的换行和文字显示不全。\n\n默认：\"yy-MM-dd HH:mm\"",
-  "@enterTimeFormatDesc": {},
-  "last30Days": "最近三十天",
-  "@last30Days": {},
-  "determineWarnValues": "设置警戒值",
-  "@determineWarnValues": {},
-  "allowMissingValues": "允许空缺",
-  "@allowMissingValues": {},
-  "language": "语言",
-  "@language": {},
-  "custom": "样式",
-  "@custom": {},
-  "drawRegressionLines": "画出趋势线",
-  "@drawRegressionLines": {},
-  "result": "结果：",
-  "@result": {},
-  "edit": "编辑",
-  "@edit": {},
-  "delete": "删除",
-  "@delete": {},
-  "minimum": "最小值",
-  "@minimum": {},
-  "errTimeAfterNow": "当所选的时间在未来时会发生这个错误。如果是这样，本应用在尝试更改前会重置时间（不是整个选中的时间）为当前时间。",
-  "@errTimeAfterNow": {},
-  "last7Days": "最近七天",
-  "@last7Days": {},
-  "average": "平均值",
-  "@average": {},
-  "maximum": "最大值",
-  "@maximum": {},
-  "exportWarnNotEveryFieldExported": "请注意你没有导出所有字段：缺少 {fields} 个字段。",
-  "@exportWarnNotEveryFieldExported": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      },
-      "fields": {
-        "type": "String"
-      }
-    }
-  },
-  "pdfDocumentTitle": "{start} 到 {end} 之间的血压",
-  "@pdfDocumentTitle": {
-    "placeholders": {
-      "start": {
-        "type": "String"
-      },
-      "end": {
-        "type": "String"
-      }
-    }
-  },
-  "exportPdfHeaderFontSize": "页眉字体大小",
-  "@exportPdfHeaderFontSize": {},
-  "preferredPressureUnit": "首选的血压单位",
-  "@preferredPressureUnit": {},
-  "exportPdfHeaderHeight": "页眉高度",
-  "@exportPdfHeaderHeight": {},
-  "exportPdfCellFontSize": "行字体大小",
-  "@exportPdfCellFontSize": {},
-  "valueDistribution": "值分布",
-  "@valueDistribution": {},
-  "startWithAddMeasurementPage": "启动时的测量",
-  "@startWithAddMeasurementPage": {},
-  "recordFormat": "记录格式",
-  "@recordFormat": {},
-  "addMeasurement": "添加测量",
-  "@addMeasurement": {},
-  "deleteAllSettings": "删除所有设置",
-  "@deleteAllSettings": {},
-  "dosis": "剂量",
-  "@dosis": {},
-  "drawRegressionLinesDesc": "绘制回归线。仅对大间隔有用。",
-  "@drawRegressionLinesDesc": {},
-  "fieldFormat": "字段格式",
-  "@fieldFormat": {},
-  "pulsePressure": "收缩压和舒张压之间的差异",
-  "@pulsePressure": {},
-  "addExportformat": "添加导出格式",
-  "@addExportformat": {},
-  "startWithAddMeasurementPageDescription": "应用启动时显示的测量输入屏幕。",
-  "@startWithAddMeasurementPageDescription": {},
-  "addLine": "添加行",
-  "@addLine": {},
-  "note": "附注",
-  "@note": {},
-  "exportSettings": "备份设置",
-  "@exportSettings": {},
-  "importSettings": "还原设置",
-  "@importSettings": {},
-  "requiresAppRestart": "需要重启应用",
-  "@requiresAppRestart": {},
-  "restartNow": "立即重启",
-  "@restartNow": {},
-  "deleteAllMeasurements": "删除所有测量",
-  "@deleteAllMeasurements": {},
-  "warnDeletionUnrecoverable": "除非你人工备份，否则此步骤是不可逆的。你真要删除这个吗？",
-  "@warnDeletionUnrecoverable": {},
-  "needlePinBarWidth": "颜色厚度",
-  "@needlePinBarWidth": {},
-  "needlePinBarWidthDesc": "图表上有色条目的宽度。",
-  "@needlePinBarWidthDesc": {},
-  "errParseEmptyCsvFile": "csv 文件中行数不足以解析记录。",
-  "@errParseEmptyCsvFile": {},
-  "errParseTimeNotRestoreable": "没有允许恢复时间戳的列。",
-  "@errParseTimeNotRestoreable": {},
-  "errParseUnknownColumn": "没有名为 \"{title}\"的列。",
-  "@errParseUnknownColumn": {
-    "placeholders": {
-      "title": {
-        "type": "String"
-      }
-    }
-  },
-  "errParseLineTooShort": "行 {lineNumber} 的列数少于第一行。",
-  "@errParseLineTooShort": {
-    "placeholders": {
-      "lineNumber": {
-        "type": "int"
-      }
-    }
-  },
-  "errParseFailedDecodingField": "解码行 {lineNumber} 中的 \"{fieldContent}\"字段失败了。",
-  "@errParseFailedDecodingField": {
-    "placeholders": {
-      "lineNumber": {
-        "type": "int"
-      },
-      "fieldContent": {
-        "type": "String"
-      }
-    }
-  },
-  "exportFieldsPreset": "导出字段预设",
-  "@exportFieldsPreset": {},
-  "remove": "删除",
-  "@remove": {},
-  "manageExportColumns": "管理导出列",
-  "@manageExportColumns": {},
-  "buildIn": "内置",
-  "@buildIn": {},
-  "csvTitle": "CSV标题",
-  "@csvTitle": {},
-  "timeFormat": "时间格式",
-  "@timeFormat": {},
-  "bottomAppBars": "底部对话栏",
-  "@bottomAppBars": {},
-  "addMedication": "添加药物",
-  "@addMedication": {},
-  "name": "名称",
-  "@name": {},
-  "defaultDosis": "默认剂量",
-  "@defaultDosis": {},
-  "noMedication": "没有药物",
-  "@noMedication": {},
-  "exportFieldFormatDocumentation": "'## 变量\n导出格式字段支持插入以下占位符的数值：\n- `$TIMESTAMP:` 表示自 Unix 纪元以来的时间，单位毫秒\n- `$SYS:` 如果有的话，提供一个值；否则默认为 -1.\n- `$DIA:` 如果有的话，提供一个值；否则，默认为 -1.\n- `$PUL:` 如果有的话，提供一个值；否则，默认为 -1.\n- `$NOTE:` 如果有的话，提供一个值；否则，默认为 -1.\n- `$COLOR:` 代表测量的颜色数值（示例值: `4291681337`）\n\n如果以上提及字段中的任何一个没有出现在血压记录中，它们将被 `null`代替。\n\n## Math\n你可以在双括号 (\"`{{}}`\") 内使用基本的数学计算。\n\n支持以下运算符：\n- 操作: +, -, *, /, %, ^\n- 一个参数的函数: abs, acos, asin, atan, ceil, cos, cosh, cot, coth, csc, csch, exp, floor, ln, log, round sec, sech, sin, sinh, sqrt, tan, tanh\n- 两个参数的函数: log, nrt, pow\n- 常数: e, pi, ln2, ln10, log2e, log10e, sqrt1_2, sqrt2\n\n完整的数学解释器规范可参见 [function_tree](https://pub.dev/documentation/function_tree/latest#interpreter) 文档。\n\n## 处理顺序\n1. 变量替换\n2. Math'",
-  "@exportFieldFormatDocumentation": {},
-  "medications": "服药",
-  "@medications": {},
-  "errAccuracyLoss": "使用自定义时间格式导出预计会损失精度。",
-  "@errAccuracyLoss": {},
-  "useLegacyList": "使用旧式列表",
-  "@useLegacyList": {},
-  "horizontalLines": "水平线",
-  "@horizontalLines": {},
-  "customGraphMarkings": "自定义记号",
-  "@customGraphMarkings": {},
-  "linePositionY": "行位置 (y)",
-  "@linePositionY": {},
-  "default_": "默认",
-  "@default_": {},
-  "exportPdfCellHeight": "行高",
-  "@exportPdfCellHeight": {},
-  "titleInCsv": "CSV 标题",
-  "@titleInCsv": {},
-  "exportPdfExportStatistics": "统计数字",
-  "@exportPdfExportStatistics": {},
-  "exportPdfExportData": "数据表格",
-  "@exportPdfExportData": {},
-  "timestamp": "时间戳",
-  "@timestamp": {},
-  "color": "颜色",
-  "@color": {},
-  "exportPdfExportTitle": "标题",
-  "@exportPdfExportTitle": {},
-  "deleteAllMedicineIntakes": "删除所有药品摄入量",
-  "@deleteAllMedicineIntakes": {},
-  "errBleNoPerms": "没有蓝牙权限",
-  "@errBleNoPerms": {},
-  "connect": "连接",
-  "@connect": {},
-  "aboutBleInput": "某些测量设备兼容 BLE GATT。你可以在此配对这些设备并自动传输测量数据或在设置中停用此选项。",
-  "@aboutBleInput": {},
-  "scanningForDevices": "扫描设备",
-  "@scanningForDevices": {},
-  "tapToClose": "轻按关闭。",
-  "@tapToClose": {},
-  "meanArterialPressure": "表示动脉压",
-  "@meanArterialPressure": {},
-  "userID": "用户 ID",
-  "@userID": {},
-  "bodyMovementDetected": "检测到身体移动",
-  "@bodyMovementDetected": {},
-  "cuffTooLoose": "袖带太松",
-  "@cuffTooLoose": {},
-  "improperMeasurementPosition": "测量方位不恰当",
-  "@improperMeasurementPosition": {},
-  "pulseRateExceedsUpperLimit": "心率超出上限",
-  "@pulseRateExceedsUpperLimit": {},
-  "pulseRateLessThanLowerLimit": "心率低于下限",
-  "@pulseRateLessThanLowerLimit": {},
-  "availableDevices": "可用的设备",
-  "@availableDevices": {},
-  "bluetoothDisabled": "停用了蓝牙",
-  "@bluetoothDisabled": {},
-  "errMeasurementRead": "测量时发生错误！",
-  "@errMeasurementRead": {},
-  "measurementSuccess": "测量成功！",
-  "@measurementSuccess": {},
-  "bluetoothInput": "蓝牙输入",
-  "@bluetoothInput": {},
-  "irregularPulseDetected": "检测到不规律的心跳",
-  "@irregularPulseDetected": {},
-  "deleteAllNotes": "删除所有附注",
-  "@deleteAllNotes": {},
-  "compactList": "紧凑测量列表",
-  "@compactList": {},
-  "date": "日期",
-  "@date": {},
-  "intakes": "服药",
-  "@intakes": {},
-  "errFeatureNotSupported": "这个功能在这个平台上不可用。",
-  "@errFeatureNotSupported": {},
-  "invalidZip": "无效的 ZIP 文件。",
-  "@invalidZip": {},
-  "errCantCreateArchive": "无法创建存档。如果可能请报告 Bug。",
-  "@errCantCreateArchive": {},
-  "activateWeightFeatures": "激活体重相关功能",
-  "@activateWeightFeatures": {},
-  "weight": "体重",
-  "@weight": {},
-  "enterWeight": "输入体重",
-  "@enterWeight": {},
-  "preferredWeightUnit": "首选体重单位",
-  "@preferredWeightUnit": {
-    "description": "Setting for the unit the app will use for displaying weight"
-  },
-  "selectMeasurementTitle": "选择要使用的测量",
-  "@selectMeasurementTitle": {},
-  "measurementIndex": "测量#{number}",
-  "@measurementIndex": {
-    "placeholders": {
-      "number": {
-        "type": "int"
-      }
-    }
-  },
-  "bloodPressure": "血压",
-  "@bloodPressure": {},
-  "select": "选择",
-  "@select": {
-    "description": "Used when f.e. selecting a single measurement when the bluetooth device returned multiple"
-  },
-  "newBluetoothInputOldLib": "测试",
-  "@newBluetoothInputOldLib": {},
-  "bluetoothInputDesc": "测试版本后端可以在更多设备上工作，但未经充分测试。该跨平台版本可以在非 android 设备上工作，并且按计划在足够成熟后将取代稳定版。",
-  "@bluetoothInputDesc": {},
-  "oldBluetoothInput": "稳定",
-  "@oldBluetoothInput": {},
-  "newBluetoothInputCrossPlatform": "跨平台（测试）",
-  "@newBluetoothInputCrossPlatform": {},
-  "disabled": "已停用",
-  "@disabled": {},
-  "warnNeedsRestartForUsingApp": "文件在此会话中被删除了。重启本应用继续使用将返回到应用的其他部分！",
-  "@warnNeedsRestartForUsingApp": {},
-  "tapToSelect": "轻按选择",
-  "@tapToSelect": {},
-  "trustBLETime": "信任蓝牙设备报告的时间",
-  "@trustBLETime": {},
-  "warnBLETimeSus": "蓝牙设备报告了 {hours} 小时的时间偏差。你可以在设置中停用信任来自蓝牙设备的时间戳。",
-  "@warnBLETimeSus": {
-    "placeholders": {
-      "hours": {
-        "type": "int"
-      }
-    }
-  },
-  "dontShowAgain": "不再显示",
-  "@dontShowAgain": {},
-  "btnShare": "分享",
-  "@btnShare": {}
+    "title": "血压记录",
+    "@title": {},
+    "success": "成功：{msg}",
+    "@success": {
+        "placeholders": {
+            "msg": {
+                "type": "String"
+            }
+        }
+    },
+    "loading": "正在载入…",
+    "@loading": {},
+    "error": "错误：{msg}",
+    "@error": {
+        "placeholders": {
+            "msg": {
+                "type": "String"
+            }
+        }
+    },
+    "errNaN": "请输入数字",
+    "@errNaN": {},
+    "errLt30": "数字<=30？请在设置中关闭验证！",
+    "@errLt30": {},
+    "errUnrealistic": "不符实际的数值？请在设置中关闭验证！",
+    "@errUnrealistic": {},
+    "errDiaGtSys": "低压>=高压？请在设置中关闭验证！",
+    "@errDiaGtSys": {},
+    "errCantOpenURL": "无法打开网址：{url}",
+    "@errCantOpenURL": {
+        "placeholders": {
+            "url": {
+                "type": "String"
+            }
+        }
+    },
+    "errNoFileOpened": "没有打开的文件",
+    "@errNoFileOpened": {},
+    "errNotStarted": "没有启动",
+    "@errNotStarted": {},
+    "errNoValue": "请输入数值",
+    "@errNoValue": {},
+    "errNotEnoughDataToGraph": "数据太少，无法绘制图表。",
+    "@errNotEnoughDataToGraph": {},
+    "errNoData": "没有数据",
+    "@errNoData": {},
+    "errWrongImportFormat": "只能导入csv和SQLite数据库格式的文件。",
+    "@errWrongImportFormat": {},
+    "errNeedHeadline": "只能导入有标题行的文件。",
+    "@errNeedHeadline": {},
+    "errCantReadFile": "文件内容无法读取",
+    "@errCantReadFile": {},
+    "errNotImportable": "此文件无法导入",
+    "@errNotImportable": {},
+    "btnCancel": "取消",
+    "@btnCancel": {},
+    "btnSave": "保存",
+    "@btnSave": {},
+    "btnConfirm": "确定",
+    "@btnConfirm": {},
+    "btnUndo": "撤销",
+    "@btnUndo": {},
+    "sysLong": "高压",
+    "@sysLong": {},
+    "sysShort": "高压",
+    "@sysShort": {},
+    "diaLong": "低压",
+    "@diaLong": {},
+    "diaShort": "低压",
+    "@diaShort": {},
+    "pulLong": "脉搏",
+    "@pulLong": {},
+    "pulShort": "脉搏",
+    "@pulShort": {},
+    "addNote": "备注（选填）",
+    "@addNote": {},
+    "settings": "设置",
+    "@settings": {},
+    "layout": "布局",
+    "@layout": {},
+    "allowManualTimeInput": "允许手动输入时间",
+    "@allowManualTimeInput": {},
+    "enterTimeFormatScreen": "时间格式",
+    "@enterTimeFormatScreen": {},
+    "theme": "主题",
+    "@theme": {},
+    "system": "系统",
+    "@system": {},
+    "dark": "暗色",
+    "@dark": {},
+    "light": "亮色",
+    "@light": {},
+    "iconSize": "图标大小",
+    "@iconSize": {},
+    "graphLineThickness": "线条粗细",
+    "@graphLineThickness": {},
+    "animationSpeed": "动画时长",
+    "@animationSpeed": {},
+    "accentColor": "主题颜色",
+    "@accentColor": {},
+    "sysColor": "高压颜色",
+    "@sysColor": {},
+    "diaColor": "低压颜色",
+    "@diaColor": {},
+    "pulColor": "脉搏颜色",
+    "@pulColor": {},
+    "behavior": "行为",
+    "@behavior": {},
+    "validateInputs": "验证输入",
+    "@validateInputs": {},
+    "confirmDeletion": "确认删除",
+    "@confirmDeletion": {},
+    "age": "年龄",
+    "@age": {},
+    "aboutWarnValuesScreen": "关于",
+    "@aboutWarnValuesScreen": {},
+    "aboutWarnValuesScreenDesc": "关于警告值的更多信息",
+    "@aboutWarnValuesScreenDesc": {},
+    "sysWarn": "高压警告",
+    "@sysWarn": {},
+    "diaWarn": "低压警告",
+    "@diaWarn": {},
+    "data": "数据",
+    "@data": {},
+    "version": "版本",
+    "@version": {},
+    "versionOf": "版本：{version}",
+    "@versionOf": {
+        "placeholders": {
+            "version": {
+                "type": "String"
+            }
+        }
+    },
+    "buildNumberOf": "版本号：{buildNumber}",
+    "@buildNumberOf": {
+        "placeholders": {
+            "buildNumber": {
+                "type": "String"
+            }
+        }
+    },
+    "packageNameOf": "软件包名称：{name}",
+    "@packageNameOf": {
+        "placeholders": {
+            "name": {
+                "type": "String"
+            }
+        }
+    },
+    "exportImport": "导出/导入",
+    "@exportImport": {},
+    "exportDir": "导出目录",
+    "@exportDir": {},
+    "exportAfterEveryInput": "每次记录后导出",
+    "@exportAfterEveryInput": {},
+    "exportAfterEveryInputDesc": "不推荐（会导致文件数量激增）",
+    "@exportAfterEveryInputDesc": {},
+    "exportFormat": "导出格式",
+    "@exportFormat": {},
+    "exportCustomEntries": "自定义字段",
+    "@exportCustomEntries": {},
+    "addEntry": "添加字段",
+    "@addEntry": {},
+    "exportMimeType": "导出MIME类型",
+    "@exportMimeType": {},
+    "exportCsvHeadline": "标题行",
+    "@exportCsvHeadline": {},
+    "exportCsvHeadlineDesc": "有助于区分类型",
+    "@exportCsvHeadlineDesc": {},
+    "csv": "CSV",
+    "@csv": {},
+    "pdf": "PDF",
+    "@pdf": {},
+    "db": "SQLite数据",
+    "@db": {},
+    "text": "文本",
+    "@text": {},
+    "other": "其他",
+    "@other": {},
+    "fieldDelimiter": "字段分隔符",
+    "@fieldDelimiter": {},
+    "textDelimiter": "文本分隔符",
+    "@textDelimiter": {},
+    "export": "导出",
+    "@export": {},
+    "shared": "已分享",
+    "@shared": {},
+    "import": "导入",
+    "@import": {},
+    "sourceCode": "源代码",
+    "@sourceCode": {},
+    "licenses": "第3方许可协议",
+    "@licenses": {},
+    "importSuccess": "已成功导入{count}条记录",
+    "@importSuccess": {
+        "placeholders": {
+            "count": {
+                "type": "int"
+            }
+        }
+    },
+    "exportWarnConfigNotImportable": "友情提示：当前的导出配置将导致无法导入。要修复此问题，请确定将导出类型设置为CSV——带有标题行，标题行中包含“diastolic”、“systolic”、“pulse”、“notes”，以及有效的时间格式。",
+    "@exportWarnConfigNotImportable": {},
+    "statistics": "统计",
+    "@statistics": {},
+    "measurementCount": "测量次数",
+    "@measurementCount": {},
+    "measurementsPerDay": "日测量次数",
+    "@measurementsPerDay": {},
+    "timeResolvedMetrics": "按一天中不同时间的度量",
+    "@timeResolvedMetrics": {},
+    "avgOf": "{txt} Ø",
+    "@avgOf": {
+        "placeholders": {
+            "txt": {
+                "type": "String"
+            }
+        }
+    },
+    "minOf": "{txt}最低",
+    "@minOf": {
+        "placeholders": {
+            "txt": {
+                "type": "String"
+            }
+        }
+    },
+    "maxOf": "{txt}最高",
+    "@maxOf": {
+        "placeholders": {
+            "txt": {
+                "type": "String"
+            }
+        }
+    },
+    "warnValues": "警告值",
+    "@warnValues": {},
+    "warnAboutTxt1": "警告值仅供参考，并非医学建议。",
+    "@warnAboutTxt1": {},
+    "warnAboutTxt2": "不同年龄的默认参考值来源于此。",
+    "@warnAboutTxt2": {},
+    "warnAboutTxt3": "您可以按需随意修改此值，请遵从医生的建议。",
+    "@warnAboutTxt3": {},
+    "enterTimeFormatString": "时间格式",
+    "@enterTimeFormatString": {},
+    "now": "现在",
+    "@now": {},
+    "notes": "备注",
+    "@notes": {},
+    "time": "时间",
+    "@time": {},
+    "confirmDelete": "确认删除",
+    "@confirmDelete": {},
+    "confirmDeleteDesc": "确定要删除此记录吗？（您可以在设置中关闭这些确认。）",
+    "@confirmDeleteDesc": {},
+    "deletionConfirmed": "记录已删除。",
+    "@deletionConfirmed": {},
+    "day": "日",
+    "@day": {},
+    "week": "周",
+    "@week": {},
+    "month": "月",
+    "@month": {},
+    "year": "年",
+    "@year": {},
+    "lifetime": "终身",
+    "@lifetime": {},
+    "weekOfYear": "{year}年第{weekNum}周",
+    "@weekOfYear": {
+        "placeholders": {
+            "weekNum": {
+                "type": "int"
+            },
+            "year": {
+                "type": "int"
+            }
+        }
+    },
+    "enterTimeFormatDesc": "格式化字符串是一个预定义的ICU/Skeleton字符串和您想要包含的其他文字的混合体。\n\n[点击即可查看可用的格式化字符串的完整列表。](screen://TimeFormattingHelp)\n\n友情提示：使用更长或更短的格式字符串不会改变表的列宽，还可能导致意外的换行和文字显示不全。\n\n默认：\"yy-MM-dd HH:mm\"",
+    "@enterTimeFormatDesc": {},
+    "last30Days": "最近三十天",
+    "@last30Days": {},
+    "determineWarnValues": "设置警戒值",
+    "@determineWarnValues": {},
+    "allowMissingValues": "允许空缺",
+    "@allowMissingValues": {},
+    "language": "语言",
+    "@language": {},
+    "custom": "样式",
+    "@custom": {},
+    "drawRegressionLines": "画出趋势线",
+    "@drawRegressionLines": {},
+    "result": "结果：",
+    "@result": {},
+    "edit": "编辑",
+    "@edit": {},
+    "delete": "删除",
+    "@delete": {},
+    "minimum": "最小值",
+    "@minimum": {},
+    "errTimeAfterNow": "当所选的时间在未来时会发生这个错误。如果是这样，本应用在尝试更改前会重置时间（不是整个选中的时间）为当前时间。",
+    "@errTimeAfterNow": {},
+    "last7Days": "最近七天",
+    "@last7Days": {},
+    "average": "平均值",
+    "@average": {},
+    "maximum": "最大值",
+    "@maximum": {},
+    "exportWarnNotEveryFieldExported": "请注意你没有导出所有字段：缺少 {fields} 个字段。",
+    "@exportWarnNotEveryFieldExported": {
+        "placeholders": {
+            "count": {
+                "type": "int"
+            },
+            "fields": {
+                "type": "String"
+            }
+        }
+    },
+    "pdfDocumentTitle": "{start} 到 {end} 之间的血压",
+    "@pdfDocumentTitle": {
+        "placeholders": {
+            "start": {
+                "type": "String"
+            },
+            "end": {
+                "type": "String"
+            }
+        }
+    },
+    "exportPdfHeaderFontSize": "页眉字体大小",
+    "@exportPdfHeaderFontSize": {},
+    "preferredPressureUnit": "首选的血压单位",
+    "@preferredPressureUnit": {},
+    "exportPdfHeaderHeight": "页眉高度",
+    "@exportPdfHeaderHeight": {},
+    "exportPdfCellFontSize": "行字体大小",
+    "@exportPdfCellFontSize": {},
+    "valueDistribution": "值分布",
+    "@valueDistribution": {},
+    "startWithAddMeasurementPage": "启动时的测量",
+    "@startWithAddMeasurementPage": {},
+    "recordFormat": "记录格式",
+    "@recordFormat": {},
+    "addMeasurement": "添加测量",
+    "@addMeasurement": {},
+    "deleteAllSettings": "删除所有设置",
+    "@deleteAllSettings": {},
+    "dosis": "剂量",
+    "@dosis": {},
+    "drawRegressionLinesDesc": "绘制回归线。仅对大间隔有用。",
+    "@drawRegressionLinesDesc": {},
+    "fieldFormat": "字段格式",
+    "@fieldFormat": {},
+    "pulsePressure": "收缩压和舒张压之间的差异",
+    "@pulsePressure": {},
+    "addExportformat": "添加导出格式",
+    "@addExportformat": {},
+    "startWithAddMeasurementPageDescription": "应用启动时显示的测量输入屏幕。",
+    "@startWithAddMeasurementPageDescription": {},
+    "addLine": "添加行",
+    "@addLine": {},
+    "note": "附注",
+    "@note": {},
+    "exportSettings": "备份设置",
+    "@exportSettings": {},
+    "importSettings": "还原设置",
+    "@importSettings": {},
+    "requiresAppRestart": "需要重启应用",
+    "@requiresAppRestart": {},
+    "restartNow": "立即重启",
+    "@restartNow": {},
+    "deleteAllMeasurements": "删除所有测量",
+    "@deleteAllMeasurements": {},
+    "warnDeletionUnrecoverable": "除非你人工备份，否则此步骤是不可逆的。你真要删除这个吗？",
+    "@warnDeletionUnrecoverable": {},
+    "needlePinBarWidth": "颜色厚度",
+    "@needlePinBarWidth": {},
+    "needlePinBarWidthDesc": "图表上有色条目的宽度。",
+    "@needlePinBarWidthDesc": {},
+    "errParseEmptyCsvFile": "csv 文件中行数不足以解析记录。",
+    "@errParseEmptyCsvFile": {},
+    "errParseTimeNotRestoreable": "没有允许恢复时间戳的列。",
+    "@errParseTimeNotRestoreable": {},
+    "errParseUnknownColumn": "没有名为 \"{title}\"的列。",
+    "@errParseUnknownColumn": {
+        "placeholders": {
+            "title": {
+                "type": "String"
+            }
+        }
+    },
+    "errParseLineTooShort": "行 {lineNumber} 的列数少于第一行。",
+    "@errParseLineTooShort": {
+        "placeholders": {
+            "lineNumber": {
+                "type": "int"
+            }
+        }
+    },
+    "errParseFailedDecodingField": "解码行 {lineNumber} 中的 \"{fieldContent}\"字段失败了。",
+    "@errParseFailedDecodingField": {
+        "placeholders": {
+            "lineNumber": {
+                "type": "int"
+            },
+            "fieldContent": {
+                "type": "String"
+            }
+        }
+    },
+    "exportFieldsPreset": "导出字段预设",
+    "@exportFieldsPreset": {},
+    "remove": "删除",
+    "@remove": {},
+    "manageExportColumns": "管理导出列",
+    "@manageExportColumns": {},
+    "buildIn": "内置",
+    "@buildIn": {},
+    "csvTitle": "CSV标题",
+    "@csvTitle": {},
+    "timeFormat": "时间格式",
+    "@timeFormat": {},
+    "bottomAppBars": "底部对话栏",
+    "@bottomAppBars": {},
+    "addMedication": "添加药物",
+    "@addMedication": {},
+    "name": "名称",
+    "@name": {},
+    "defaultDosis": "默认剂量",
+    "@defaultDosis": {},
+    "noMedication": "没有药物",
+    "@noMedication": {},
+    "exportFieldFormatDocumentation": "'## 变量\n导出格式字段支持插入以下占位符的数值：\n- `$TIMESTAMP:` 表示自 Unix 纪元以来的时间，单位毫秒\n- `$SYS:` 如果有的话，提供一个值；否则默认为 -1.\n- `$DIA:` 如果有的话，提供一个值；否则，默认为 -1.\n- `$PUL:` 如果有的话，提供一个值；否则，默认为 -1.\n- `$NOTE:` 如果有的话，提供一个值；否则，默认为 -1.\n- `$COLOR:` 代表测量的颜色数值（示例值: `4291681337`）\n\n如果以上提及字段中的任何一个没有出现在血压记录中，它们将被 `null`代替。\n\n## Math\n你可以在双括号 (\"`{{}}`\") 内使用基本的数学计算。\n\n支持以下运算符：\n- 操作: +, -, *, /, %, ^\n- 一个参数的函数: abs, acos, asin, atan, ceil, cos, cosh, cot, coth, csc, csch, exp, floor, ln, log, round sec, sech, sin, sinh, sqrt, tan, tanh\n- 两个参数的函数: log, nrt, pow\n- 常数: e, pi, ln2, ln10, log2e, log10e, sqrt1_2, sqrt2\n\n完整的数学解释器规范可参见 [function_tree](https://pub.dev/documentation/function_tree/latest#interpreter) 文档。\n\n## 处理顺序\n1. 变量替换\n2. Math'",
+    "@exportFieldFormatDocumentation": {},
+    "medications": "服药",
+    "@medications": {},
+    "errAccuracyLoss": "使用自定义时间格式导出预计会损失精度。",
+    "@errAccuracyLoss": {},
+    "useLegacyList": "使用旧式列表",
+    "@useLegacyList": {},
+    "horizontalLines": "水平线",
+    "@horizontalLines": {},
+    "customGraphMarkings": "自定义记号",
+    "@customGraphMarkings": {},
+    "linePositionY": "行位置 (y)",
+    "@linePositionY": {},
+    "default_": "默认",
+    "@default_": {},
+    "exportPdfCellHeight": "行高",
+    "@exportPdfCellHeight": {},
+    "titleInCsv": "CSV 标题",
+    "@titleInCsv": {},
+    "exportPdfExportStatistics": "统计数字",
+    "@exportPdfExportStatistics": {},
+    "exportPdfExportData": "数据表格",
+    "@exportPdfExportData": {},
+    "timestamp": "时间戳",
+    "@timestamp": {},
+    "color": "颜色",
+    "@color": {},
+    "exportPdfExportTitle": "标题",
+    "@exportPdfExportTitle": {},
+    "deleteAllMedicineIntakes": "删除所有药品摄入量",
+    "@deleteAllMedicineIntakes": {},
+    "errBleNoPerms": "没有蓝牙权限",
+    "@errBleNoPerms": {},
+    "connect": "连接",
+    "@connect": {},
+    "aboutBleInput": "某些测量设备兼容 BLE GATT。你可以在此配对这些设备并自动传输测量数据或在设置中停用此选项。",
+    "@aboutBleInput": {},
+    "scanningForDevices": "扫描设备",
+    "@scanningForDevices": {},
+    "tapToClose": "轻按关闭。",
+    "@tapToClose": {},
+    "meanArterialPressure": "表示动脉压",
+    "@meanArterialPressure": {},
+    "userID": "用户 ID",
+    "@userID": {},
+    "bodyMovementDetected": "检测到身体移动",
+    "@bodyMovementDetected": {},
+    "cuffTooLoose": "袖带太松",
+    "@cuffTooLoose": {},
+    "improperMeasurementPosition": "测量方位不恰当",
+    "@improperMeasurementPosition": {},
+    "pulseRateExceedsUpperLimit": "心率超出上限",
+    "@pulseRateExceedsUpperLimit": {},
+    "pulseRateLessThanLowerLimit": "心率低于下限",
+    "@pulseRateLessThanLowerLimit": {},
+    "availableDevices": "可用的设备",
+    "@availableDevices": {},
+    "bluetoothDisabled": "停用了蓝牙",
+    "@bluetoothDisabled": {},
+    "errMeasurementRead": "测量时发生错误！",
+    "@errMeasurementRead": {},
+    "measurementSuccess": "测量成功！",
+    "@measurementSuccess": {},
+    "bluetoothInput": "蓝牙输入",
+    "@bluetoothInput": {},
+    "irregularPulseDetected": "检测到不规律的心跳",
+    "@irregularPulseDetected": {},
+    "deleteAllNotes": "删除所有附注",
+    "@deleteAllNotes": {},
+    "compactList": "紧凑测量列表",
+    "@compactList": {},
+    "date": "日期",
+    "@date": {},
+    "intakes": "服药",
+    "@intakes": {},
+    "errFeatureNotSupported": "这个功能在这个平台上不可用。",
+    "@errFeatureNotSupported": {},
+    "invalidZip": "无效的 ZIP 文件。",
+    "@invalidZip": {},
+    "errCantCreateArchive": "无法创建存档。如果可能请报告 Bug。",
+    "@errCantCreateArchive": {},
+    "activateWeightFeatures": "激活体重相关功能",
+    "@activateWeightFeatures": {},
+    "weight": "体重",
+    "@weight": {},
+    "enterWeight": "输入体重",
+    "@enterWeight": {},
+    "preferredWeightUnit": "首选体重单位",
+    "@preferredWeightUnit": {
+        "description": "Setting for the unit the app will use for displaying weight"
+    },
+    "selectMeasurementTitle": "选择要使用的测量",
+    "@selectMeasurementTitle": {},
+    "measurementIndex": "测量#{number}",
+    "@measurementIndex": {
+        "placeholders": {
+            "number": {
+                "type": "int"
+            }
+        }
+    },
+    "bloodPressure": "血压",
+    "@bloodPressure": {},
+    "select": "选择",
+    "@select": {
+        "description": "Used when f.e. selecting a single measurement when the bluetooth device returned multiple"
+    },
+    "newBluetoothInputOldLib": "测试",
+    "@newBluetoothInputOldLib": {},
+    "bluetoothInputDesc": "测试版本后端可以在更多设备上工作，但未经充分测试。该跨平台版本可以在非 android 设备上工作，并且按计划在足够成熟后将取代稳定版。",
+    "@bluetoothInputDesc": {},
+    "oldBluetoothInput": "稳定",
+    "@oldBluetoothInput": {},
+    "newBluetoothInputCrossPlatform": "跨平台（测试）",
+    "@newBluetoothInputCrossPlatform": {},
+    "disabled": "已停用",
+    "@disabled": {},
+    "warnNeedsRestartForUsingApp": "文件在此会话中被删除了。重启本应用继续使用将返回到应用的其他部分！",
+    "@warnNeedsRestartForUsingApp": {},
+    "tapToSelect": "轻按选择",
+    "@tapToSelect": {},
+    "trustBLETime": "信任蓝牙设备报告的时间",
+    "@trustBLETime": {},
+    "warnBLETimeSus": "蓝牙设备报告了 {hours} 小时的时间偏差。你可以在设置中停用信任来自蓝牙设备的时间戳。",
+    "@warnBLETimeSus": {
+        "placeholders": {
+            "hours": {
+                "type": "int"
+            }
+        }
+    },
+    "dontShowAgain": "不再显示",
+    "@dontShowAgain": {},
+    "btnShare": "分享",
+    "@btnShare": {}
 }
