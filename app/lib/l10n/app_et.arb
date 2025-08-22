@@ -267,7 +267,7 @@
     "@restartNow": {},
     "deleteAllSettings": "Kustuta kõik seadistused",
     "@deleteAllSettings": {},
-    "warnNeedsRestartForUsingApp": "Selles sessioonis kustutasime mõned failid. Jätkamaks muus osas rakenduse kasutamist käivita ta uuesti!",
+    "warnNeedsRestartForUsingApp": "Selles sessioonis kustutasime mõned failid. Jätkamaks rakenduse kasutamist käivita ta uuesti!",
     "@warnNeedsRestartForUsingApp": {},
     "warnDeletionUnrecoverable": "Kui sa pole just varem teinud varukoopiat, siis see samm on pöördumatu. Kas sa kindlasti soovid selle info kustutada?",
     "@warnDeletionUnrecoverable": {},
