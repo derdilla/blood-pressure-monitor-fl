@@ -92,6 +92,19 @@ void performExport(BuildContext context, bool share) async { // TODO: extract
       );
       final pdf = await pdfConverter.create(await _getEntries(context));
       if (context.mounted) await _exportData(context, pdf, '$filename.pdf', 'text/pdf', share);
+      break;
+  }
+
+  if (context.mounted) {
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      content: Row(
+        children: [
+          Icon(Icons.check_circle, color: Colors.green),
+          SizedBox(width: 8.0),
+          Text(localizations!.exportSuccess),
+        ],
+      ),
+    ));
   }
 }
 
