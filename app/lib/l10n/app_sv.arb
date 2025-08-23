@@ -1,40 +1,50 @@
 {
-  "success": "Lyckades: {msg}",
-  "@success": {
-    "placeholders": {
-      "msg": {
-        "type": "String"
-      }
-    }
-  },
-  "loading": "laddar…",
-  "@loading": {},
-  "error": "Fel: {msg}",
-  "@error": {
-    "placeholders": {
-      "msg": {
-        "type": "String"
-      }
-    }
-  },
-  "errUnrealistic": "Orealistiskt värde? Stäng av validering i inställningarna!",
-  "@errUnrealistic": {},
-  "errCantOpenURL": "Kan inte öppna URL: {url}",
-  "@errCantOpenURL": {
-    "placeholders": {
-      "url": {
-        "type": "String"
-      }
-    }
-  },
-  "errNotStarted": "ej startad",
-  "@errNotStarted": {},
-  "errNotEnoughDataToGraph": "Inte tillräckligt med data för att rita en graf.",
-  "@errNotEnoughDataToGraph": {},
-  "errNoData": "ingen data",
-  "@errNoData": {},
-  "title": "Blodtrycksapp",
-  "@title": {},
-  "errNaN": "Vänligen skriv in ett tal",
-  "@errNaN": {}
+    "success": "Lyckades: {msg}",
+    "@success": {
+        "placeholders": {
+            "msg": {
+                "type": "String"
+            }
+        }
+    },
+    "loading": "laddar…",
+    "@loading": {},
+    "error": "Fel: {msg}",
+    "@error": {
+        "placeholders": {
+            "msg": {
+                "type": "String"
+            }
+        }
+    },
+    "errUnrealistic": "Orealistiskt värde? Stäng av validering i inställningarna!",
+    "@errUnrealistic": {},
+    "errCantOpenURL": "Kan inte öppna URL: {url}",
+    "@errCantOpenURL": {
+        "placeholders": {
+            "url": {
+                "type": "String"
+            }
+        }
+    },
+    "errNotStarted": "ej startad",
+    "@errNotStarted": {},
+    "errNotEnoughDataToGraph": "Inte tillräckligt med data för att rita en graf.",
+    "@errNotEnoughDataToGraph": {},
+    "errNoData": "ingen data",
+    "@errNoData": {},
+    "title": "Blodtrycksapp",
+    "@title": {},
+    "errNaN": "Vänligen skriv in ett tal",
+    "@errNaN": {},
+    "errLt30": "Nummer <= 30? Stäng av validering i inställningarna!",
+    "@errLt30": {},
+    "errDiaGtSys": "dia >= sys? Stäng av validering i inställningarna!",
+    "@errDiaGtSys": {},
+    "errNoFileOpened": "ingen fil öppnades",
+    "@errNoFileOpened": {},
+    "errNoValue": "Vänligen skriv ett värde",
+    "@errNoValue": {},
+    "errWrongImportFormat": "Du kan endast importera filer i databas-formatet CSV och SQLite.",
+    "@errWrongImportFormat": {}
 }

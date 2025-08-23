@@ -1,0 +1,186 @@
+{
+    "title": "Kraujo spaudimo programėlė",
+    "@title": {},
+    "success": "Pavyko: {msg}",
+    "@success": {
+        "placeholders": {
+            "msg": {
+                "type": "String"
+            }
+        }
+    },
+    "loading": "kraunama…",
+    "@loading": {},
+    "error": "Klaida: {msg}",
+    "@error": {
+        "placeholders": {
+            "msg": {
+                "type": "String"
+            }
+        }
+    },
+    "errNaN": "Įveskite skaičių",
+    "@errNaN": {},
+    "errLt30": "Skaičius <= 30? Išjunkite patvirtinimą nustatymuose!",
+    "@errLt30": {},
+    "errUnrealistic": "Nerealistiška vertė? Išjunkite patvirtinimą nustatymuose!",
+    "@errUnrealistic": {},
+    "errDiaGtSys": "dia >= sys? Išjunkite patvirtinimą nustatymuose!",
+    "@errDiaGtSys": {},
+    "errCantOpenURL": "Negalima atidaryti URL: {url}",
+    "@errCantOpenURL": {
+        "placeholders": {
+            "url": {
+                "type": "String"
+            }
+        }
+    },
+    "errNoFileOpened": "neatidarytas joks failas",
+    "@errNoFileOpened": {},
+    "errNotStarted": "nepradėta",
+    "@errNotStarted": {},
+    "errNoValue": "Įveskite vertę",
+    "@errNoValue": {},
+    "errNotEnoughDataToGraph": "Nepakanka duomenų grafiko piešimui.",
+    "@errNotEnoughDataToGraph": {},
+    "errNoData": "nėra duomenų",
+    "@errNoData": {},
+    "errWrongImportFormat": "Galite importuoti tik CSV ir SQLite duomenų bazių formato failus.",
+    "@errWrongImportFormat": {},
+    "errNeedHeadline": "Galite importuoti tik pavadinimą turinčius failus.",
+    "@errNeedHeadline": {},
+    "errCantReadFile": "Negalima perskaityti failo turinio",
+    "@errCantReadFile": {},
+    "errNotImportable": "Negalima importuoti šio failo",
+    "@errNotImportable": {},
+    "btnCancel": "ATŠAUKTI",
+    "@btnCancel": {},
+    "btnSave": "IŠSAUGOTI",
+    "@btnSave": {},
+    "btnConfirm": "GERAI",
+    "@btnConfirm": {},
+    "btnUndo": "ATSTATYTI",
+    "@btnUndo": {},
+    "sysLong": "Sistolinis",
+    "@sysLong": {},
+    "sysShort": "sis",
+    "@sysShort": {},
+    "diaLong": "Diastolinis",
+    "@diaLong": {},
+    "diaShort": "dia",
+    "@diaShort": {},
+    "pulLong": "Pulsas",
+    "@pulLong": {},
+    "pulShort": "pul",
+    "@pulShort": {},
+    "addNote": "Pastaba (neprivaloma)",
+    "@addNote": {},
+    "settings": "Nustatymai",
+    "@settings": {},
+    "layout": "Išdėstymas",
+    "@layout": {},
+    "allowManualTimeInput": "Leisti rankinį laiko įvedimą",
+    "@allowManualTimeInput": {},
+    "enterTimeFormatScreen": "Laiko formatas",
+    "@enterTimeFormatScreen": {},
+    "theme": "Tema",
+    "@theme": {},
+    "system": "Sistema",
+    "@system": {},
+    "dark": "Tamsus",
+    "@dark": {},
+    "light": "Šviesus",
+    "@light": {},
+    "iconSize": "Piktogramos dydis",
+    "@iconSize": {},
+    "graphLineThickness": "Linijos storis",
+    "@graphLineThickness": {},
+    "animationSpeed": "Animacijos trukmė",
+    "@animationSpeed": {},
+    "accentColor": "Temos spalva",
+    "@accentColor": {},
+    "sysColor": "Sistolinės linijos spalva",
+    "@sysColor": {},
+    "diaColor": "Diastolinės linijos spalva",
+    "@diaColor": {},
+    "pulColor": "Pulso linijos spalva",
+    "@pulColor": {},
+    "behavior": "Elgesys",
+    "@behavior": {},
+    "validateInputs": "Patvirtinti įvestis",
+    "@validateInputs": {},
+    "confirmDeletion": "Patvirtinti ištrynimą",
+    "@confirmDeletion": {},
+    "age": "Amžius",
+    "@age": {},
+    "determineWarnValues": "Nustatyti įspėjimo vertes",
+    "@determineWarnValues": {},
+    "aboutWarnValuesScreen": "Apie",
+    "@aboutWarnValuesScreen": {},
+    "aboutWarnValuesScreenDesc": "Daugiau informacijos apie įspėjimo vertes",
+    "@aboutWarnValuesScreenDesc": {},
+    "sysWarn": "Įspėjimas apie sistolinę vertę",
+    "@sysWarn": {},
+    "diaWarn": "Įspėjimas apie diastolinę vertę",
+    "@diaWarn": {},
+    "data": "Duomenys",
+    "@data": {},
+    "version": "Versija",
+    "@version": {},
+    "versionOf": "Versija: {version}",
+    "@versionOf": {
+        "placeholders": {
+            "version": {
+                "type": "String"
+            }
+        }
+    },
+    "buildNumberOf": "Versijos numeris: {buildNumber}",
+    "@buildNumberOf": {
+        "placeholders": {
+            "buildNumber": {
+                "type": "String"
+            }
+        }
+    },
+    "packageNameOf": "Paketo pavadinimas: {name}",
+    "@packageNameOf": {
+        "placeholders": {
+            "name": {
+                "type": "String"
+            }
+        }
+    },
+    "exportImport": "Eksportuoti / Importuoti",
+    "@exportImport": {},
+    "exportDir": "Eksporto katalogas",
+    "@exportDir": {},
+    "exportAfterEveryInput": "Eksportuoti po kiekvieno įrašo",
+    "@exportAfterEveryInput": {},
+    "exportAfterEveryInputDesc": "Nerekomenduojama (atsiras labai daug failų)",
+    "@exportAfterEveryInputDesc": {},
+    "exportFormat": "Eksportuoti formatą",
+    "@exportFormat": {},
+    "exportCustomEntries": "Tinkinti laukelius",
+    "@exportCustomEntries": {},
+    "addEntry": "Įtraukti laukelį",
+    "@addEntry": {},
+    "exportMimeType": "Eksportuoti medijos tipą",
+    "@exportMimeType": {},
+    "exportCsvHeadline": "Pavadinimas",
+    "@exportCsvHeadline": {},
+    "exportCsvHeadlineDesc": "Padeda atskirti tipus",
+    "@exportCsvHeadlineDesc": {},
+    "csv": "CSV",
+    "@csv": {},
+    "pdf": "PDF",
+    "@pdf": {},
+    "db": "SQLite DB",
+    "@db": {},
+    "text": "tekstas",
+    "@text": {},
+    "other": "kita",
+    "@other": {},
+    "fieldDelimiter": "Laukelio skyriklis",
+    "@fieldDelimiter": {}
+}
