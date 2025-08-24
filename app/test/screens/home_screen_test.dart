@@ -79,4 +79,13 @@ void main() {
     expect(find.ancestor(of: find.byType(BloodPressureValueGraph), matching: find.byType(Scaffold)), findsOneWidget);
     expect(find.ancestor(of: find.byType(BloodPressureValueGraph), matching: find.byType(MaterialApp)), findsOneWidget);
   });
+
+  testWidgets('includes safe area in phone mode', (tester) async {
+    await binding.setSurfaceSize(const Size(400, 800));
+
+    await tester.pumpWidget(await appBaseWithData(const AppHome()));
+    await tester.pumpAndSettle();
+
+    expect(find.byType(SafeArea), findsOneWidget);
+  });
 }
