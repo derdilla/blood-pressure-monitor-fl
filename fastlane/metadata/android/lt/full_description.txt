@@ -1,0 +1,11 @@
+<p><i>blood pressure monitor</i> is a reliable blood pressure measurement tracker and analyzer. It has the ambition to allow saving measurements faster than anywhere else and make sharing data with you doctor effortless. It works out of the box but can also be configured for individual use cases.</p>
+
+Features:
+- 📏 <b>Reliable</b> measurement storing
+- 🚀 Fast input through <b>user-friendly</b> dialogues on launch and automatic form navigation
+- 📊 <b>Beautiful</b> analytics provide insights on trends, distribution, differences over the day and much more
+- 📂 Versatile <b>export and import</b> (CSV, PDF, SQLite) with granular control
+- ⚙️ High configurability
+- 🔗 BLE GATT input through bluetooth devices
+- Ad free without disturbances
+- Well-documented, <b>open-source</b> code
