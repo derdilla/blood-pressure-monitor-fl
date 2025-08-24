@@ -1,2 +1,2 @@
-* Implement export of legacy files
-* Implement export success feedback
+* Pärandvormingus failide eksport
+* Korrektne tagasiside ekspordi õnnestumise kohta
