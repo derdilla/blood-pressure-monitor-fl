@@ -25,7 +25,7 @@ class AppHome extends StatelessWidget {
   Widget _buildValueGraph(BuildContext context) => Column(
     children: [
       Padding(
-        padding: const EdgeInsets.only(right: 8, top: 16),
+        padding: const EdgeInsets.only(right: 8.0),
         child: SizedBox(
           height: 240.0,
           width: MediaQuery.of(context).size.width,
@@ -54,60 +54,60 @@ class AppHome extends StatelessWidget {
   );
 
   @override
-  Widget build(BuildContext context) => OrientationBuilder(
-    builder: (BuildContext context, Orientation orientation) {
-      // direct use of settings possible as no listening is required
-      if (_appStart == 0) {
-        if (Provider.of<Settings>(context, listen: false).startWithAddMeasurementPage) {
-          SchedulerBinding.instance.addPostFrameCallback((_) {
-            if (context.mounted) {
-              context.createEntry();
-              _appStart++;
-            } else {
-              _appStart--;
-            }
-          });
+  Widget build(BuildContext context) => SafeArea(
+    child: OrientationBuilder(
+      builder: (BuildContext context, Orientation orientation) {
+        // direct use of settings possible as no listening is required
+        if (_appStart == 0) {
+          if (Provider.of<Settings>(context, listen: false).startWithAddMeasurementPage) {
+            SchedulerBinding.instance.addPostFrameCallback((_) {
+              if (context.mounted) {
+                context.createEntry();
+                _appStart++;
+              } else {
+                _appStart--;
+              }
+            });
+          }
+          _appStart++;
         }
-        _appStart++;
-      }
-
-      if (showValueGraphAsHomeScreenInLandscapeMode && orientation == Orientation.landscape) {
-        return SafeArea(
-          child: Scaffold(
+    
+        if (showValueGraphAsHomeScreenInLandscapeMode && orientation == Orientation.landscape) {
+          return Scaffold(
             body: _buildValueGraph(context),
+          );
+        }
+        return DefaultTabController(
+          length: 2,
+          child: Scaffold(
+            body: CustomScrollView(
+              slivers: [
+                SliverToBoxAdapter(child: _buildValueGraph(context),),
+                if (!(context.select<Settings, bool>((s) => s.weightInput)))
+                  SliverFillRemaining(child: _buildMeasurementList(context)),
+    
+                if ((context.select<Settings, bool>((s) => s.weightInput)))
+                  const SliverToBoxAdapter(child: TabBar(
+                    tabs: [
+                      Tab(icon: Icon(Icons.monitor_heart)),
+                      Tab(icon: Icon(Icons.scale)),
+                    ],
+                  )),
+                if ((context.select<Settings, bool>((s) => s.weightInput)))
+                  SliverFillRemaining(
+                    child: TabBarView(
+                        children: [
+                          _buildMeasurementList(context),
+                          const WeightList(rangeType: IntervalStoreManagerLocation.mainPage),
+                        ]
+                    ),
+                  )
+              ],
+            ),
+            floatingActionButton: const NavigationActionButtons(),
           ),
         );
-      }
-      return DefaultTabController(
-        length: 2,
-        child: Scaffold(
-          body: CustomScrollView(
-            slivers: [
-              SliverToBoxAdapter(child: _buildValueGraph(context),),
-              if (!(context.select<Settings, bool>((s) => s.weightInput)))
-                SliverFillRemaining(child: _buildMeasurementList(context)),
-
-              if ((context.select<Settings, bool>((s) => s.weightInput)))
-                const SliverToBoxAdapter(child: TabBar(
-                  tabs: [
-                    Tab(icon: Icon(Icons.monitor_heart)),
-                    Tab(icon: Icon(Icons.scale)),
-                  ],
-                )),
-              if ((context.select<Settings, bool>((s) => s.weightInput)))
-                SliverFillRemaining(
-                  child: TabBarView(
-                      children: [
-                        _buildMeasurementList(context),
-                        const WeightList(rangeType: IntervalStoreManagerLocation.mainPage),
-                      ]
-                  ),
-                )
-            ],
-          ),
-          floatingActionButton: const NavigationActionButtons(),
-        ),
-      );
-    },
+      },
+    ),
   );
 }
