@@ -1,11 +1,11 @@
-<p><i>blood pressure monitor</i> is a reliable blood pressure measurement tracker and analyzer. It has the ambition to allow saving measurements faster than anywhere else and make sharing data with you doctor effortless. It works out of the box but can also be configured for individual use cases.</p>
+<p><i>Kraujo spaudimo stebėjimo programėlė</i> yra patikimas kraujo spaudimo sekiklis ir analizatorius. Jos tikslas yra sparčiau išsaugoti atliktus matavimus nei kitose programėlėse ir leisti jums be vargo dalytis šia informacija su jūsų gydytoju. Ji veikia iš karto, bet yra galimybė sukonfigūruoti pagal individualius poreikius.</p>
 
-Features:
-- 📏 <b>Reliable</b> measurement storing
-- 🚀 Fast input through <b>user-friendly</b> dialogues on launch and automatic form navigation
-- 📊 <b>Beautiful</b> analytics provide insights on trends, distribution, differences over the day and much more
-- 📂 Versatile <b>export and import</b> (CSV, PDF, SQLite) with granular control
-- ⚙️ High configurability
-- 🔗 BLE GATT input through bluetooth devices
-- Ad free without disturbances
-- Well-documented, <b>open-source</b> code
+Ypatybės:
+- 📏 <b>Patikimas</b> matavimų saugojimas
+- 🚀 Greitas įvedimas per <b>vartotojui draugiškus</b> dialogo langus paleidus programėlę ir automatinė formų navigacija
+- 📊 <b>Įspūdingai atrodanti</b> analitika suteikia įžvalgų apie tendencijas, pasiskirstymą ir skirtumus per visą dieną ir dar daugiau
+- 📂 Įvairiapusis <b>eksportas ir importas</b> (CSV, PDF, SQLite) su daugiafunkce kontrole
+- ⚙️ Konfigūravimo laisvė
+- 🔗 BLE GATT įvestis iš Bluetooth įrenginių
+- Be įkyrių reklamų
+- Gerai dokumentuota, <b>atviro kodo</b> programėlė
