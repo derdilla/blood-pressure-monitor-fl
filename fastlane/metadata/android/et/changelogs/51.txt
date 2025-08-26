@@ -1,2 +1,3 @@
-* Implement export of legacy files
-* Implement export success feedback
+* Pärandvormingus failide eksport
+* Korrektne tagasiside ekspordi õnnestumise kohta
+* Tõlgete täiendused: saksa, hispaania, itaalia, leedu, portugali, portugali (Brasiilia), vene, rootsi, türgi, hiina (lihtsustatud) ja hiina (traditsiooniline) keeltes
