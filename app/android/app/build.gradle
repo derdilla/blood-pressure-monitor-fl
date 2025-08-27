@@ -29,7 +29,7 @@ def keystoreProperties = new Properties()
    }
 
 android {
-    compileSdkVersion 35
+    compileSdkVersion 36
     ndkVersion flutter.ndkVersion
 
     compileOptions {
@@ -47,7 +47,7 @@ android {
 
     defaultConfig {
         applicationId = "com.derdilla.bloodPressureApp"
-        minSdkVersion = 21
+        minSdkVersion = flutter.minSdkVersion
         targetSdkVersion = flutter.targetSdkVersion
         versionCode = flutterVersionCode.toInteger()
         versionName = flutterVersionName
