@@ -1,0 +1,11 @@
+<p><i>Kraujo spaudimo stebėjimo programėlė</i> yra patikimas kraujo spaudimo sekiklis ir analizatorius. Jos tikslas yra sparčiau išsaugoti atliktus matavimus nei kitose programėlėse ir leisti jums be vargo dalytis šia informacija su jūsų gydytoju. Ji veikia iš karto, bet yra galimybė sukonfigūruoti pagal individualius poreikius.</p>
+
+Ypatybės:
+- 📏 <b>Patikimas</b> matavimų saugojimas
+- 🚀 Greitas įvedimas per <b>vartotojui draugiškus</b> dialogo langus paleidus programėlę ir automatinė formų navigacija
+- 📊 <b>Įspūdingai atrodanti</b> analitika suteikia įžvalgų apie tendencijas, pasiskirstymą ir skirtumus per visą dieną ir dar daugiau
+- 📂 Įvairiapusis <b>eksportas ir importas</b> (CSV, PDF, SQLite) su daugiafunkce kontrole
+- ⚙️ Konfigūravimo laisvė
+- 🔗 BLE GATT įvestis iš Bluetooth įrenginių
+- Be įkyrių reklamų
+- Gerai dokumentuota, <b>atviro kodo</b> programėlė
