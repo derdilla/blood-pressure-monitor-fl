@@ -3,4 +3,3 @@ template-arb-file: app_en.arb
 output-localization-file: app_localizations.dart
 untranslated-messages-file: l10n_errors.txt
 use-escaping: true
-synthetic-package: false
