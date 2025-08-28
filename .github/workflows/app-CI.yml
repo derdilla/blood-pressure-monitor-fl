@@ -67,3 +67,30 @@ jobs:
       - name: Run tests
         run: flutter test
         working-directory: app
+  fdroid-build: # follows https://gitlab.com/fdroid/fdroiddata/-/blob/master/metadata/com.derdilla.bloodPressureApp.yml
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+        with:
+          sparse-checkout: |
+            app
+            health_data_store
+      - id: vars
+        run: echo "flutterVersion=$(sed -n -E "s/.*flutter:\s*'(.*)'/\1/p" app/pubspec.yaml)" >> $GITHUB_OUTPUT
+      - uses: actions/checkout@v5
+        with:
+          repository: 'https://github.com/flutter/flutter.git'
+          ref: ${{ steps.vars.outputs.flutterVersion }}
+          path: flutter
+      - run: sed -i -e 's/-Xmx1536M/-Xmx4096M/' app/android/gradle.properties
+      - run: |
+          cd health_data_store
+          ../flutter/bin/dart run build_runner build
+          ../flutter/bin/dart pub get
+      - run: |
+          cd app
+          ../flutter/bin/flutter config --no-analytics
+          ../flutter/bin/flutter packages pub get
+          ../flutter/bin/flutter build apk --flavor fdroid --release --obfuscate --split-debug-info=./build/debug-info
+          
