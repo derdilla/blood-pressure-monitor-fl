@@ -80,7 +80,7 @@ jobs:
         run: echo "flutterVersion=$(sed -n -E "s/.*flutter:\s*'(.*)'/\1/p" app/pubspec.yaml)" >> $GITHUB_OUTPUT
       - uses: actions/checkout@v5
         with:
-          repository: 'https://github.com/flutter/flutter.git'
+          repository: 'flutter/flutter'
           ref: ${{ steps.vars.outputs.flutterVersion }}
           path: flutter
       - run: sed -i -e 's/-Xmx1536M/-Xmx4096M/' app/android/gradle.properties
