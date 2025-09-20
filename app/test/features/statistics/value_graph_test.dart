@@ -104,7 +104,7 @@ void main() {
     expect(find.text(localizations.errNotEnoughDataToGraph), findsNothing);
 
     await expectLater(find.byType(BloodPressureValueGraph), myMatchesGoldenFile('full_graph-years.png'));
-  });
+  }, tags: 'gold');
 
   testWidgets('BloodPressureValueGraph is fine with enough values in sys category', (tester) async {
     await tester.pumpWidget(_buildGraph([
@@ -146,7 +146,7 @@ void main() {
     expect(find.text(localizations.errNotEnoughDataToGraph), findsNothing);
 
     await expectLater(find.byType(BloodPressureValueGraph), myMatchesGoldenFile('value-graph-start-warn.png'));
-  });
+  }, tags: 'gold');
   testWidgets('[gold] graph renders area at end correctly', (tester) async {
     await tester.pumpWidget(_buildGraph([
       mockRecord(time: DateTime(2005), sys: 170, dia: 100, pul: 50),
@@ -162,7 +162,7 @@ void main() {
     expect(find.text(localizations.errNotEnoughDataToGraph), findsNothing);
 
     await expectLater(find.byType(BloodPressureValueGraph), myMatchesGoldenFile('value-graph-end-warn.png'));
-  });
+  }, tags: 'gold');
   testWidgets('[gold] warn area not drawn above graph', (tester) async {
     await tester.pumpWidget(_buildGraph([
       mockRecord(time: DateTime(2005), sys: 103, dia: null, pul: null),
@@ -175,7 +175,7 @@ void main() {
     expect(find.text(localizations.errNotEnoughDataToGraph), findsNothing);
 
     await expectLater(find.byType(BloodPressureValueGraph), myMatchesGoldenFile('value-graph-warn-not-above.png'));
-  });
+  }, tags: 'gold');
 }
 
 Widget _buildGraph(
