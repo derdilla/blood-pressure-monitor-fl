@@ -1,6 +1,6 @@
 import 'package:blood_pressure_app/features/input/forms/date_time_form.dart';
-import 'package:flutter/material.dart';
 import 'package:blood_pressure_app/l10n/app_localizations.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:intl/intl.dart';
 
@@ -38,7 +38,11 @@ void main() {
     await tester.tap(find.text(timeOfDayFormated));
     await tester.pumpAndSettle();
     expect(find.byType(TimePickerDialog), findsOneWidget);
-    final dialCenter = tester.getCenter(find.byKey(const ValueKey<String>('time-picker-dial')));
+    final Finder customPaintFinder = find.descendant(
+      of: find.byWidgetPredicate((Widget w) => '${w.runtimeType}' == '_Dial'),
+      matching: find.byType(CustomPaint),
+    );
+    final dialCenter = tester.getCenter(customPaintFinder);
     await tester.tapAt(Offset(dialCenter.dx, dialCenter.dy + 10)); // 6 AM
     await tester.pumpAndSettle();
     await tester.tapAt(Offset(dialCenter.dx - 10, dialCenter.dy));  // 45
@@ -64,7 +68,11 @@ void main() {
 
     await tester.tap(find.text(DateFormat('HH:mm').format(initialTime)));
     await tester.pumpAndSettle();
-    final dialCenter = tester.getCenter(find.byKey(const ValueKey<String>('time-picker-dial')));
+    final Finder customPaintFinder = find.descendant(
+      of: find.byWidgetPredicate((Widget w) => '${w.runtimeType}' == '_Dial'),
+      matching: find.byType(CustomPaint),
+    );
+    final dialCenter = tester.getCenter(customPaintFinder);
     await tester.tapAt(Offset(dialCenter.dx - 3, dialCenter.dy - 9.5));
     await tester.tap(find.text('PM')); // 11 PM
     await tester.pumpAndSettle();
