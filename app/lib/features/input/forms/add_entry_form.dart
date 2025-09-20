@@ -108,7 +108,11 @@ class AddEntryFormState extends FormStateBase<AddEntryFormValue, AddEntryForm>
 
   @override
   bool validate() {
-    final timeFormValidation = _timeForm.currentState?.validate();
+    final settings = context.read<Settings>();
+
+    final timeFormValidation = settings.allowManualTimeInput
+      ? _timeForm.currentState?.validate()
+      : true;
     final noteFormValidation = _noteForm.currentState?.validate();
     final bpFormValidation = _bpForm.currentState?.validate();
     final weightFormValidation = _weightForm.currentState?.validate();
@@ -132,7 +136,7 @@ class AddEntryFormState extends FormStateBase<AddEntryFormValue, AddEntryForm>
   AddEntryFormValue? save() {
     logger.fine('Calling save');
     if (!validate()) return null;
-    final time = _timeForm.currentState!.save()!;
+    final time = _timeForm.currentState?.save() ?? DateTime.now();
     Note? note;
     BloodPressureRecord? record = _lastSavedPressure;
     BodyweightRecord? weight = _lastSavedWeight;
