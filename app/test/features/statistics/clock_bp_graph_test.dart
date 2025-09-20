@@ -43,7 +43,7 @@ void main() {
       ),
     ));
     await expectLater(find.byType(ClockBpGraph), myMatchesGoldenFile('ClockBpGraph-light.png'));
-  });
+  }, tags: 'gold');
   testWidgets('[gold] renders sample data like expected in dark mode', (tester) async {
     final rng = Random(1234);
     await tester.pumpWidget(MaterialApp(
@@ -66,5 +66,5 @@ void main() {
       ),
     ));
     await expectLater(find.byType(ClockBpGraph), myMatchesGoldenFile('ClockBpGraph-dark.png'));
-  });
+  }, tags: 'gold');
 }

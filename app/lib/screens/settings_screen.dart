@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:archive/archive_io.dart';
 import 'package:blood_pressure_app/components/input_dialoge.dart';
 import 'package:blood_pressure_app/data_util/consistent_future_builder.dart';
+import 'package:blood_pressure_app/features/settings/configure_warn_values_screen.dart';
 import 'package:blood_pressure_app/features/settings/delete_data_screen.dart';
 import 'package:blood_pressure_app/features/settings/enter_timeformat_dialoge.dart';
 import 'package:blood_pressure_app/features/settings/export_import_screen.dart';
@@ -203,44 +204,15 @@ class SettingsPage extends StatelessWidget {
                 onChanged: (value) {
                   settings.confirmDeletion = value;
                 },),
-              NumberInputListTile(
-                label: localizations.sysWarn,
-                leading: const Icon(Icons.warning_amber_outlined),
-                value: settings.sysWarn,
-                onParsableSubmit: (double value) {
-                  settings.sysWarn = value.round();
-                },
-              ),
-              NumberInputListTile(
-                label: localizations.diaWarn,
-                leading: const Icon(Icons.warning_amber_outlined),
-                value: settings.diaWarn,
-                onParsableSubmit: (double value) {
-                  settings.diaWarn = value.round();
-                },
-              ),
               ListTile(
-                leading: const Icon(Icons.settings_applications_outlined),
+                leading: const Icon(Icons.warning_amber_outlined),
                 title: Text(localizations.determineWarnValues),
-                onTap: () async {
-                  final age = (await showNumberInputDialoge(context,
-                    hintText: localizations.age,
-                  ))?.round();
-                  if (age != null) {
-                    settings.sysWarn = BloodPressureWarnValues.getUpperSysWarnValue(age);
-                    settings.diaWarn = BloodPressureWarnValues.getUpperDiaWarnValue(age);
-                  }
-                },
-              ),
-              ListTile(
-                title: Text(localizations.aboutWarnValuesScreen),
                 subtitle: Text(localizations.aboutWarnValuesScreenDesc),
-                leading: const Icon(Icons.info_outline),
                 trailing: const Icon(Icons.arrow_forward_ios),
                 onTap: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => const AboutWarnValuesScreen()),
+                    MaterialPageRoute(builder: (context) => const ConfigureWarnValuesScreen()),
                   );
                 },
               ),
