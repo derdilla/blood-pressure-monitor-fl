@@ -567,6 +567,30 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.byType(AlertDialog), findsNothing);
   });
+
+  testWidgets('saves measurement when time input is hidden', (tester) async {
+    final key = GlobalKey<AddEntryFormState>();
+    await tester.pumpWidget(materialApp(AddEntryForm(key: key),
+        settings: Settings(allowManualTimeInput: false),
+    ));
+
+    final fields = find.byType(TextField);
+    await tester.enterText(fields.at(0), '123'); // sys
+    await tester.enterText(fields.at(1), '45'); // dia
+    await tester.enterText(fields.at(2), '67'); // pul
+
+    expect(key.currentState!.validate(), true);
+    final res = key.currentState!.save();
+    expect(res, isNotNull);
+    expect(res?.record, isNotNull);
+    expect(res?.record?.sys?.mmHg, 123);
+    expect(res?.record?.dia?.mmHg, 45);
+    expect(res?.record?.pul, 67);
+    expect(res?.record?.time
+        .difference(DateTime.now())
+        .inMinutes
+        .abs(), lessThan(5));
+  });
 }
 
 /// A mock ble cubit that never does anything.
