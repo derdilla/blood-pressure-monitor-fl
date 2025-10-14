@@ -75,19 +75,16 @@ class ExportSettings extends ChangeNotifier {
 /// File formats to which measurements can be exported.
 enum ExportFormat {
   csv,
+  xsl,
   pdf,
   db;
 
-  int serialize() {
-    switch(this) {
-      case ExportFormat.csv:
-        return 0;
-      case ExportFormat.pdf:
-        return 1;
-      case ExportFormat.db:
-        return 2;
-    }
-  }
+  int serialize() => switch(this) {
+    ExportFormat.csv => 0,
+    ExportFormat.pdf => 1,
+    ExportFormat.db => 2,
+    ExportFormat.xsl => 3,
+  };
 
   factory ExportFormat.deserialize(value) {
     final int? intValue = ConvertUtil.parseInt(value);
@@ -100,6 +97,8 @@ enum ExportFormat {
         return ExportFormat.pdf;
       case 2:
         return ExportFormat.db;
+      case 3:
+        return ExportFormat.xsl;
       default:
         assert(false);
         return ExportFormat.csv;

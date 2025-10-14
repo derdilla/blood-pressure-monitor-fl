@@ -570,5 +570,7 @@
     "btnShare": "SHARE",
     "@btnShare": {},
     "exportSuccess": "Export successful",
-    "@exportSuccess": {}
+    "@exportSuccess": {},
+    "xsl": "Excel (xsl)",
+    "@xsl": {}
 }

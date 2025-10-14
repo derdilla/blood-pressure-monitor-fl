@@ -76,11 +76,13 @@ class ExportImportScreen extends StatelessWidget {
                 value: settings.exportFormat,
                 items: [
                   DropdownMenuItem(
-                      value: ExportFormat.csv, child: Text(localizations.csv),),
+                      value: ExportFormat.csv, child: Text(localizations.csv)),
                   DropdownMenuItem(
-                      value: ExportFormat.pdf, child: Text(localizations.pdf),),
+                      value: ExportFormat.pdf, child: Text(localizations.pdf)),
                   DropdownMenuItem(
-                      value: ExportFormat.db, child: Text(localizations.db),),
+                      value: ExportFormat.db, child: Text(localizations.db)),
+                  DropdownMenuItem(
+                    value: ExportFormat.xsl, child: Text(localizations.xsl)),
                 ],
                 onChanged: (ExportFormat? value) {
                   if (value != null) {

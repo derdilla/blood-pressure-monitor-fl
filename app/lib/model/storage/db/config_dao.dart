@@ -4,6 +4,7 @@ import 'package:blood_pressure_app/model/storage/export_columns_store.dart';
 import 'package:blood_pressure_app/model/storage/export_csv_settings_store.dart';
 import 'package:blood_pressure_app/model/storage/export_pdf_settings_store.dart';
 import 'package:blood_pressure_app/model/storage/export_settings_store.dart';
+import 'package:blood_pressure_app/model/storage/export_xsl_settings_store.dart';
 import 'package:blood_pressure_app/model/storage/interval_store.dart';
 import 'package:blood_pressure_app/model/storage/settings_store.dart';
 
@@ -185,4 +186,8 @@ class ConfigDao implements SettingsLoader {
     _exportColumnsManagerInstance = columnsManager;
     return columnsManager;
   }
+
+  @override
+  Future<ExcelExportSettings> loadXslExportSettings() async =>
+      ExcelExportSettings(); // This was added after file settings
 }

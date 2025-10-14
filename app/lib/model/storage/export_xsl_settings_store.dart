@@ -7,20 +7,19 @@ import 'package:flutter/material.dart';
 /// Settings that are only important for exporting entries to csv files.
 class ExcelExportSettings extends ChangeNotifier implements CustomFieldsSettings {
   ExcelExportSettings({
-    bool? exportHeadline,
     ActiveExportColumnConfiguration? exportFieldsConfiguration,
   }) {
     if (exportFieldsConfiguration != null) _exportFieldsConfiguration = exportFieldsConfiguration;
-    if (exportHeadline != null) _exportHeadline = exportHeadline;
 
     _exportFieldsConfiguration.addListener(notifyListeners);
   }
 
+  /// Create a instance from a map created by [toMap].
   factory ExcelExportSettings.fromMap(Map<String, dynamic> map) => ExcelExportSettings(
-    exportHeadline: map['exportHeadline'],
     exportFieldsConfiguration: ActiveExportColumnConfiguration.fromJson(map['exportFieldsConfiguration']),
   );
 
+  /// Create a instance from a map created by [toJson].
   factory ExcelExportSettings.fromJson(String json) {
     try {
       return ExcelExportSettings.fromMap(jsonDecode(json));
@@ -30,8 +29,8 @@ class ExcelExportSettings extends ChangeNotifier implements CustomFieldsSettings
     }
   }
 
+  /// Serialize the object to a restoreable map.
   Map<String, dynamic> toMap() => <String, dynamic>{
-    'exportHeadline': exportHeadline,
     'exportFieldsConfiguration': exportFieldsConfiguration.toJson(),
   };
 
@@ -40,20 +39,12 @@ class ExcelExportSettings extends ChangeNotifier implements CustomFieldsSettings
 
   /// Copy all values from another instance.
   void copyFrom(ExcelExportSettings other) {
-    _exportHeadline = other._exportHeadline;
     _exportFieldsConfiguration = other._exportFieldsConfiguration;
     notifyListeners();
   }
 
   /// Reset all fields to their default values.
   void reset() => copyFrom(ExcelExportSettings());
-
-  bool _exportHeadline = true;
-  bool get exportHeadline => _exportHeadline;
-  set exportHeadline(bool value) {
-    _exportHeadline = value;
-    notifyListeners();
-  }
 
   ActiveExportColumnConfiguration _exportFieldsConfiguration = ActiveExportColumnConfiguration();
   @override

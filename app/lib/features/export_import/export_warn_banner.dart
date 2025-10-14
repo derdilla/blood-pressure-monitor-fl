@@ -78,6 +78,8 @@ class _ExportWarnBannerState extends State<ExportWarnBanner> {
           case ExportImportPreset.bloodPressureAppPdf:
             return _buildNotImportable(context);
         }
+      case ExportFormat.xsl:
+        return _buildNotImportable(context);
     }
   }
 

@@ -5,6 +5,7 @@ import 'package:blood_pressure_app/l10n/app_localizations.dart';
 import 'package:blood_pressure_app/model/storage/db/file_settings_loader.dart';
 import 'package:blood_pressure_app/model/storage/db/settings_loader.dart';
 import 'package:blood_pressure_app/model/storage/export_columns_store.dart';
+import 'package:blood_pressure_app/model/storage/export_xsl_settings_store.dart';
 import 'package:blood_pressure_app/model/storage/storage.dart';
 import 'package:blood_pressure_app/screens/error_reporting_screen.dart';
 import 'package:blood_pressure_app/screens/home_screen.dart';
@@ -41,6 +42,7 @@ class _AppState extends State<App> {
   ExportSettings? _exportSettings;
   CsvExportSettings? _csvExportSettings;
   PdfExportSettings? _pdfExportSettings;
+  ExcelExportSettings? _xslExportSettings;
   IntervalStoreManager? _intervalStorageManager;
   ExportColumnsManager? _exportColumnsManager;
 
@@ -52,6 +54,7 @@ class _AppState extends State<App> {
     _exportSettings?.dispose();
     _csvExportSettings?.dispose();
     _pdfExportSettings?.dispose();
+    _xslExportSettings?.dispose();
     _intervalStorageManager?.dispose();
     _exportColumnsManager?.dispose();
     super.dispose();
@@ -90,6 +93,7 @@ class _AppState extends State<App> {
       _exportSettings ??= await settingsLoader.loadExportSettings();
       _csvExportSettings ??= await settingsLoader.loadCsvExportSettings();
       _pdfExportSettings ??= await settingsLoader.loadPdfExportSettings();
+      _xslExportSettings ??= await settingsLoader.loadXslExportSettings();
       _intervalStorageManager ??= await settingsLoader.loadIntervalStorageManager();
       _exportColumnsManager ??= await settingsLoader.loadExportColumnsManager();
     } catch (e, stack) {
@@ -167,6 +171,7 @@ class _AppState extends State<App> {
           ChangeNotifierProvider.value(value: _exportSettings!),
           ChangeNotifierProvider.value(value: _csvExportSettings!),
           ChangeNotifierProvider.value(value: _pdfExportSettings!),
+          ChangeNotifierProvider.value(value: _xslExportSettings!),
           ChangeNotifierProvider.value(value: _intervalStorageManager!),
           ChangeNotifierProvider.value(value: _exportColumnsManager!),
         ],

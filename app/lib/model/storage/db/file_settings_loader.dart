@@ -7,6 +7,7 @@ import 'package:blood_pressure_app/model/storage/export_columns_store.dart';
 import 'package:blood_pressure_app/model/storage/export_csv_settings_store.dart';
 import 'package:blood_pressure_app/model/storage/export_pdf_settings_store.dart';
 import 'package:blood_pressure_app/model/storage/export_settings_store.dart';
+import 'package:blood_pressure_app/model/storage/export_xsl_settings_store.dart';
 import 'package:blood_pressure_app/model/storage/interval_store.dart';
 import 'package:blood_pressure_app/model/storage/settings_store.dart';
 import 'package:flutter/widgets.dart';
@@ -99,6 +100,14 @@ class FileSettingsLoader implements SettingsLoader {
     'pdf-export',
     PdfExportSettings.fromJson,
     PdfExportSettings.new,
+    (e) => e.toJson(),
+  );
+
+  @override
+  Future<ExcelExportSettings> loadXslExportSettings() async => _loadFile(
+    'xsl-export',
+    ExcelExportSettings.fromJson,
+    ExcelExportSettings.new,
     (e) => e.toJson(),
   );
 
