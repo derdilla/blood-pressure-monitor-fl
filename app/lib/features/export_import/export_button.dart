@@ -5,11 +5,13 @@ import 'dart:typed_data';
 
 import 'package:blood_pressure_app/logging.dart';
 import 'package:blood_pressure_app/model/export_import/csv_converter.dart';
+import 'package:blood_pressure_app/model/export_import/excel_converter.dart';
 import 'package:blood_pressure_app/model/export_import/pdf_converter.dart';
 import 'package:blood_pressure_app/model/storage/export_columns_store.dart';
 import 'package:blood_pressure_app/model/storage/export_csv_settings_store.dart';
 import 'package:blood_pressure_app/model/storage/export_pdf_settings_store.dart';
 import 'package:blood_pressure_app/model/storage/export_settings_store.dart';
+import 'package:blood_pressure_app/model/storage/export_xsl_settings_store.dart';
 import 'package:blood_pressure_app/model/storage/interval_store.dart';
 import 'package:blood_pressure_app/model/storage/settings_store.dart';
 import 'package:collection/collection.dart';
@@ -92,6 +94,17 @@ void performExport(BuildContext context, bool share) async { // TODO: extract
       );
       final pdf = await pdfConverter.create(await _getEntries(context));
       if (context.mounted) await _exportData(context, pdf, '$filename.pdf', 'text/pdf', share);
+      break;
+    case ExportFormat.xsl:
+      final xslConverter = ExcelConverter(
+        Provider.of<ExcelExportSettings>(context, listen: false),
+        Provider.of<ExportColumnsManager>(context, listen: false),
+        await RepositoryProvider.of<MedicineRepository>(context).getAll(),
+      );
+      if (!context.mounted) return;
+      final string = xslConverter.create(await _getEntries(context));
+      final data = Uint8List.fromList(utf8.encode(string));
+      if (context.mounted) await _exportData(context, data, '$filename.xsl', 'application/vnd.ms-excel', share);
       break;
   }
 
