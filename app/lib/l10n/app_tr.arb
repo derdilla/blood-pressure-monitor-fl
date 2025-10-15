@@ -394,7 +394,7 @@
     "@deleteAllMeasurements": {},
     "color": "Renk",
     "@color": {},
-    "warnNeedsRestartForUsingApp": "Bu oturumda dosyalar silindi. Uygulamanın diğer bölümlerine dönüp kullanmaya devam etmek için uygulamayı yeniden başlatın!",
+    "warnNeedsRestartForUsingApp": "Bu oturumda dosyalar silindi. Kullanmaya devam etmek için uygulamayı yeniden başlatın!",
     "@warnNeedsRestartForUsingApp": {},
     "needlePinBarWidth": "Renk kalınlığı",
     "@needlePinBarWidth": {},
@@ -558,5 +558,17 @@
     "dontShowAgain": "Tekrar gösterme",
     "@dontShowAgain": {},
     "btnShare": "PAYLAŞ",
-    "@btnShare": {}
+    "@btnShare": {},
+    "trustBLETime": "Bluetooth aygıtları tarafından bildirilen zamana güven",
+    "@trustBLETime": {},
+    "warnBLETimeSus": "Bluetooth aygıtı {hours} saatlik bir zaman farkı bildirdi. Ayarlardan Bluetooth aygıtlarının zaman damgalarına güvenmeyi devre dışı bırakabilirsiniz.",
+    "@warnBLETimeSus": {
+        "placeholders": {
+            "hours": {
+                "type": "int"
+            }
+        }
+    },
+    "exportSuccess": "Dışa aktarma başarılı",
+    "@exportSuccess": {}
 }
