@@ -551,7 +551,7 @@
     "@newBluetoothInputCrossPlatform": {},
     "disabled": "已停用",
     "@disabled": {},
-    "warnNeedsRestartForUsingApp": "文件在此会话中被删除了。重启本应用继续使用将返回到应用的其他部分！",
+    "warnNeedsRestartForUsingApp": "文件在此会话中被删除了。重启本应用继续使用它！",
     "@warnNeedsRestartForUsingApp": {},
     "tapToSelect": "轻按选择",
     "@tapToSelect": {},
@@ -568,5 +568,7 @@
     "dontShowAgain": "不再显示",
     "@dontShowAgain": {},
     "btnShare": "分享",
-    "@btnShare": {}
+    "@btnShare": {},
+    "exportSuccess": "成功导出",
+    "@exportSuccess": {}
 }
