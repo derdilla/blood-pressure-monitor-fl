@@ -1,0 +1,457 @@
+{
+    "title": "Ciśnienie tętnicze",
+    "@title": {},
+    "success": "Sukces: {msg}",
+    "@success": {
+        "placeholders": {
+            "msg": {
+                "type": "String"
+            }
+        }
+    },
+    "loading": "ładowanie…",
+    "@loading": {},
+    "error": "Błąd: {msg}",
+    "@error": {
+        "placeholders": {
+            "msg": {
+                "type": "String"
+            }
+        }
+    },
+    "errNaN": "Podaj numer",
+    "@errNaN": {},
+    "errLt30": "Wartość <=30? Wyłącz walidację w ustawieniach!",
+    "@errLt30": {},
+    "errUnrealistic": "Nierealistyczna wartość? Wyłącz walidację w ustawieniach!",
+    "@errUnrealistic": {},
+    "errDiaGtSys": "dia >= sys? Wyłącz walidację w ustawieniach!",
+    "@errDiaGtSys": {},
+    "errCantOpenURL": "Nie można otworzyć adresu URL:{url}",
+    "@errCantOpenURL": {
+        "placeholders": {
+            "url": {
+                "type": "String"
+            }
+        }
+    },
+    "errNoFileOpened": "żaden plik nie został otwarty",
+    "@errNoFileOpened": {},
+    "errNotStarted": "nie rozpoczęto",
+    "@errNotStarted": {},
+    "errNoValue": "Podaj wartość",
+    "@errNoValue": {},
+    "errNotEnoughDataToGraph": "Zbyt mało danych do utworzenia wykresu.",
+    "@errNotEnoughDataToGraph": {},
+    "errNoData": "brak danych",
+    "@errNoData": {},
+    "errWrongImportFormat": "Można importować jedynie pliki w formatach CSV oraz SQLite.",
+    "@errWrongImportFormat": {},
+    "errNeedHeadline": "Można importować jedynie pliki z linią nagłówka.",
+    "@errNeedHeadline": {},
+    "errCantReadFile": "Zawartość pliku nie może zostać odczytana",
+    "@errCantReadFile": {},
+    "errNotImportable": "Plik nie może zostać zaimportowany",
+    "@errNotImportable": {},
+    "btnCancel": "ANULUJ",
+    "@btnCancel": {},
+    "btnSave": "ZAPISZ",
+    "@btnSave": {},
+    "btnConfirm": "OK",
+    "@btnConfirm": {},
+    "btnUndo": "WSTECZ",
+    "@btnUndo": {},
+    "sysLong": "Skurczowe",
+    "@sysLong": {},
+    "sysShort": "sys",
+    "@sysShort": {},
+    "diaLong": "Rozkurczowe",
+    "@diaLong": {},
+    "diaShort": "dia",
+    "@diaShort": {},
+    "pulLong": "Tętno",
+    "@pulLong": {},
+    "pulShort": "pul",
+    "@pulShort": {},
+    "addNote": "Notatka (opcjonalnie)",
+    "@addNote": {},
+    "settings": "Ustawienia",
+    "@settings": {},
+    "layout": "Wygląd",
+    "@layout": {},
+    "allowManualTimeInput": "Zezwól na ręczne wprowadzanie czasu",
+    "@allowManualTimeInput": {},
+    "enterTimeFormatScreen": "Format daty i czasu",
+    "@enterTimeFormatScreen": {},
+    "theme": "Motyw",
+    "@theme": {},
+    "system": "Systemowy",
+    "@system": {},
+    "dark": "Ciemny",
+    "@dark": {},
+    "light": "Jasny",
+    "@light": {},
+    "iconSize": "Rozmiar ikon",
+    "@iconSize": {},
+    "graphLineThickness": "Grubość linii",
+    "@graphLineThickness": {},
+    "animationSpeed": "Czas trwania animacji",
+    "@animationSpeed": {},
+    "accentColor": "Kolor motywu",
+    "@accentColor": {},
+    "sysColor": "Kolor ciśnienia skurczowego",
+    "@sysColor": {},
+    "diaColor": "Kolor ciśnienia rozkurczowego",
+    "@diaColor": {},
+    "pulColor": "Kolor tętna",
+    "@pulColor": {},
+    "behavior": "Zachowanie",
+    "@behavior": {},
+    "validateInputs": "Sprawdzaj dane",
+    "@validateInputs": {},
+    "confirmDeletion": "Potwierdzaj usunięcie",
+    "@confirmDeletion": {},
+    "age": "Wiek",
+    "@age": {},
+    "determineWarnValues": "Wyznacz wartości ostrzegawcze",
+    "@determineWarnValues": {},
+    "aboutWarnValuesScreen": "O aplikacji",
+    "@aboutWarnValuesScreen": {},
+    "aboutWarnValuesScreenDesc": "Więcej informacji o wartościach ostrzegawczych",
+    "@aboutWarnValuesScreenDesc": {},
+    "sysWarn": "Ostrzeżenie o ciśnieniu skurczowym",
+    "@sysWarn": {},
+    "diaWarn": "Ostrzeżenie o ciśnieniu rozkurczowym",
+    "@diaWarn": {},
+    "data": "Dane",
+    "@data": {},
+    "version": "Wersja",
+    "@version": {},
+    "versionOf": "Wersja: {version}",
+    "@versionOf": {
+        "placeholders": {
+            "version": {
+                "type": "String"
+            }
+        }
+    },
+    "buildNumberOf": "Numer wersji: {buildNumber}",
+    "@buildNumberOf": {
+        "placeholders": {
+            "buildNumber": {
+                "type": "String"
+            }
+        }
+    },
+    "packageNameOf": "Nazwa pakietu: {name}",
+    "@packageNameOf": {
+        "placeholders": {
+            "name": {
+                "type": "String"
+            }
+        }
+    },
+    "exportImport": "Eksport / Import",
+    "@exportImport": {},
+    "exportDir": "Katalog eksportu",
+    "@exportDir": {},
+    "exportAfterEveryInput": "Eksportuj po każdym wpisie",
+    "@exportAfterEveryInput": {},
+    "exportAfterEveryInputDesc": "Nie zalecane (ekspozja pliku)",
+    "@exportAfterEveryInputDesc": {},
+    "exportFormat": "Format eksportu",
+    "@exportFormat": {},
+    "exportCustomEntries": "Dostosuj pola",
+    "@exportCustomEntries": {},
+    "addEntry": "Dodaj pole",
+    "@addEntry": {},
+    "exportMimeType": "Rodzaj eksportu",
+    "@exportMimeType": {},
+    "exportCsvHeadline": "Nagłówek",
+    "@exportCsvHeadline": {},
+    "exportCsvHeadlineDesc": "Pomaga rozróżnić typy",
+    "@exportCsvHeadlineDesc": {},
+    "csv": "CSV",
+    "@csv": {},
+    "pdf": "PDF",
+    "@pdf": {},
+    "db": "SQLite DB",
+    "@db": {},
+    "text": "tekst",
+    "@text": {},
+    "other": "inne",
+    "@other": {},
+    "export": "EKSPORT",
+    "@export": {},
+    "shared": "współdzielone",
+    "@shared": {},
+    "import": "IMPORT",
+    "@import": {},
+    "sourceCode": "Kod źródłowy",
+    "@sourceCode": {},
+    "importSuccess": "Zaimportowano {count} pozycji",
+    "@importSuccess": {
+        "placeholders": {
+            "count": {
+                "type": "int"
+            }
+        }
+    },
+    "statistics": "Statystyki",
+    "@statistics": {},
+    "measurementCount": "Liczba pomiarów",
+    "@measurementCount": {},
+    "measurementsPerDay": "Pomiary na dzień",
+    "@measurementsPerDay": {},
+    "avgOf": "{txt} Ø",
+    "@avgOf": {
+        "placeholders": {
+            "txt": {
+                "type": "String"
+            }
+        }
+    },
+    "minOf": "{txt} min.",
+    "@minOf": {
+        "placeholders": {
+            "txt": {
+                "type": "String"
+            }
+        }
+    },
+    "maxOf": "{txt} max.",
+    "@maxOf": {
+        "placeholders": {
+            "txt": {
+                "type": "String"
+            }
+        }
+    },
+    "warnValues": "Wartości ostrzeżeń",
+    "@warnValues": {},
+    "warnAboutTxt1": "Wartości ostrzeżeń to tylko sugestie, a nie porada medyczna",
+    "@warnAboutTxt1": {},
+    "warnAboutTxt2": "Domyślna wartość wieku pochodzi z tego źródła",
+    "@warnAboutTxt2": {},
+    "enterTimeFormatString": "format czasu",
+    "@enterTimeFormatString": {},
+    "now": "teraz",
+    "@now": {},
+    "notes": "Notatki",
+    "@notes": {},
+    "time": "Czas",
+    "@time": {},
+    "confirmDelete": "Potwierdź usunięcie",
+    "@confirmDelete": {},
+    "deletionConfirmed": "Wpis usunięty.",
+    "@deletionConfirmed": {},
+    "confirmDeleteDesc": "Usunąć wpis? (Możesz wyłączyć te komunikaty w ustawieniach.)",
+    "@confirmDeleteDesc": {},
+    "day": "Dzień",
+    "@day": {},
+    "week": "Tydzień",
+    "@week": {},
+    "month": "Miesiąc",
+    "@month": {},
+    "year": "Rok",
+    "@year": {},
+    "lifetime": "Czas życia",
+    "@lifetime": {},
+    "weekOfYear": "Tydzień {weekNum}, {year}",
+    "@weekOfYear": {
+        "placeholders": {
+            "weekNum": {
+                "type": "int"
+            },
+            "year": {
+                "type": "int"
+            }
+        }
+    },
+    "last7Days": "7 dni",
+    "@last7Days": {},
+    "last30Days": "39 dni",
+    "@last30Days": {},
+    "allowMissingValues": "Zezwól na brakujące wartości",
+    "@allowMissingValues": {},
+    "language": "Język",
+    "@language": {},
+    "errTimeAfterNow": "Wybrano przyszły czas. Możesz wyłączyć sprawdzanie tego w ustawieniach.",
+    "@errTimeAfterNow": {},
+    "custom": "Własne",
+    "@custom": {},
+    "drawRegressionLines": "Rysuj linie trendu",
+    "@drawRegressionLines": {},
+    "fieldFormat": "Format pola",
+    "@fieldFormat": {},
+    "result": "Wynik:",
+    "@result": {},
+    "pulsePressure": "Ciśnienie tętnicze",
+    "@pulsePressure": {},
+    "addExportformat": "Dodaj format eksportu",
+    "@addExportformat": {},
+    "edit": "Edytuj",
+    "@edit": {},
+    "delete": "Usuń",
+    "@delete": {},
+    "default_": "Domyślne",
+    "@default_": {},
+    "exportPdfHeaderHeight": "Wysokość nagłówka",
+    "@exportPdfHeaderHeight": {},
+    "exportPdfCellHeight": "Wysokość wiersza",
+    "@exportPdfCellHeight": {},
+    "exportPdfHeaderFontSize": "Rozmiar czcionki nagłówka",
+    "@exportPdfHeaderFontSize": {},
+    "exportPdfCellFontSize": "Rozmiar czcionki wiersza",
+    "@exportPdfCellFontSize": {},
+    "average": "Średnia",
+    "@average": {},
+    "maximum": "Maksimum",
+    "@maximum": {},
+    "minimum": "Minimum",
+    "@minimum": {},
+    "exportPdfExportTitle": "Nagłówek",
+    "@exportPdfExportTitle": {},
+    "exportPdfExportStatistics": "Statystyki",
+    "@exportPdfExportStatistics": {},
+    "exportPdfExportData": "Tabela danych",
+    "@exportPdfExportData": {},
+    "startWithAddMeasurementPage": "Pomiar po uruchomieniu",
+    "@startWithAddMeasurementPage": {},
+    "startWithAddMeasurementPageDescription": "Po uruchomieniu aplikacji, wyświetl pole wprowadzania pomiaru.",
+    "@startWithAddMeasurementPageDescription": {},
+    "horizontalLines": "Linie poziome",
+    "@horizontalLines": {},
+    "linePositionY": "Pozycja linii (y)",
+    "@linePositionY": {},
+    "customGraphMarkings": "Własne znaczniki",
+    "@customGraphMarkings": {},
+    "addLine": "Dodaj linię",
+    "@addLine": {},
+    "useLegacyList": "Użyj listy zgodności",
+    "@useLegacyList": {},
+    "addMeasurement": "Dodaj pomiar",
+    "@addMeasurement": {},
+    "timestamp": "Znacznik czasu",
+    "@timestamp": {},
+    "note": "Notatka",
+    "@note": {},
+    "color": "Kolor",
+    "@color": {},
+    "exportSettings": "Kopia zapasowa ustawień",
+    "@exportSettings": {},
+    "importSettings": "Przywróć ustawienia",
+    "@importSettings": {},
+    "requiresAppRestart": "Wymaga restartu aplikcji",
+    "@requiresAppRestart": {},
+    "restartNow": "Uruchom ponownie teraz",
+    "@restartNow": {},
+    "warnNeedsRestartForUsingApp": "Pliki zostały usunięte podczas tej sesji. Zrestartuj aplikację aby kontynuować jej używanie!",
+    "@warnNeedsRestartForUsingApp": {},
+    "deleteAllMeasurements": "Usuń wszystkie pomiary",
+    "@deleteAllMeasurements": {},
+    "deleteAllSettings": "Usuń wszystkie ustawienia",
+    "@deleteAllSettings": {},
+    "warnDeletionUnrecoverable": "Ten krok jest nieodwracalny, chyba że wykonałeś ręcznie kopię zapasową. Czy na pewno chcesz to usunąć?",
+    "@warnDeletionUnrecoverable": {},
+    "needlePinBarWidth": "Grubość koloru",
+    "@needlePinBarWidth": {},
+    "fieldDelimiter": "Separator pól",
+    "@fieldDelimiter": {},
+    "textDelimiter": "Separator tekstu",
+    "@textDelimiter": {},
+    "licenses": "Licencje stron trzecich",
+    "@licenses": {},
+    "exportWarnConfigNotImportable": "Hej! Tylko mała podpowiedź: obecna konfiguracja eksportu nie będzie możliwa do zaimportowania. Aby to naprawić, upewnij się, że ustawiłeś typ eksportu na CSV i uwzględniłeś jeden z dostępnych formatów czasu.",
+    "@exportWarnConfigNotImportable": {},
+    "exportWarnNotEveryFieldExported": "Pamiętaj, że nie wyeksportowałeś wszystkich pól: {fields}.",
+    "@exportWarnNotEveryFieldExported": {
+        "placeholders": {
+            "count": {
+                "type": "int"
+            },
+            "fields": {
+                "type": "String"
+            }
+        }
+    },
+    "timeResolvedMetrics": "Metryki według pory dnia",
+    "@timeResolvedMetrics": {},
+    "warnAboutTxt3": "Możesz swobodnie zmieniać wartości, aby dostosować je do swoich potrzeb i stosować się do zaleceń swojego lekarza.",
+    "@warnAboutTxt3": {},
+    "drawRegressionLinesDesc": "Rysuje linie regresji na wykresie. Przydatne tylko dla dużych przedziałów.",
+    "@drawRegressionLinesDesc": {},
+    "pdfDocumentTitle": "Wartości ciśnienia krwi od {start} do {end}",
+    "@pdfDocumentTitle": {
+        "placeholders": {
+            "start": {
+                "type": "String"
+            },
+            "end": {
+                "type": "String"
+            }
+        }
+    },
+    "exportSuccess": "Eksport zakończony sukcesem",
+    "@exportSuccess": {},
+    "btnShare": "UDOSTĘPNIJ",
+    "@btnShare": {},
+    "dontShowAgain": "Nie pokazuj więcej",
+    "@dontShowAgain": {},
+    "trustBLETime": "Ufaj czasowi zgłaszanemu przez urządzenia bluetooth",
+    "@trustBLETime": {},
+    "tapToSelect": "Dotknij aby wybrać",
+    "@tapToSelect": {},
+    "newBluetoothInputOldLib": "Beta",
+    "@newBluetoothInputOldLib": {},
+    "oldBluetoothInput": "Stabilna",
+    "@oldBluetoothInput": {},
+    "disabled": "Zablokowane",
+    "@disabled": {},
+    "preferredWeightUnit": "Preferowana jednostka wagi",
+    "@preferredWeightUnit": {
+        "description": "Setting for the unit the app will use for displaying weight"
+    },
+    "bloodPressure": "Ciśnienie krwi",
+    "@bloodPressure": {},
+    "select": "Wybierz",
+    "@select": {
+        "description": "Used when f.e. selecting a single measurement when the bluetooth device returned multiple"
+    },
+    "measurementIndex": "Pomiar #{number}",
+    "@measurementIndex": {
+        "placeholders": {
+            "number": {
+                "type": "int"
+            }
+        }
+    },
+    "enterWeight": "Wprowadź wagę",
+    "@enterWeight": {},
+    "weight": "Waga",
+    "@weight": {},
+    "activateWeightFeatures": "Aktywuj funkcje związane z wagą",
+    "@activateWeightFeatures": {},
+    "invalidZip": "Niepoprawny plik zip.",
+    "@invalidZip": {},
+    "errFeatureNotSupported": "Funkcja niedostępna na tej platformie",
+    "@errFeatureNotSupported": {},
+    "date": "Data",
+    "@date": {},
+    "deleteAllNotes": "Skasuj wszystkie notatki",
+    "@deleteAllNotes": {},
+    "availableDevices": "Dostępne urządzenia",
+    "@availableDevices": {},
+    "pulseRateLessThanLowerLimit": "Tętno poniżej dolnego limitu",
+    "@pulseRateLessThanLowerLimit": {},
+    "pulseRateExceedsUpperLimit": "Tętno powyżej górnego limitu",
+    "@pulseRateExceedsUpperLimit": {},
+    "irregularPulseDetected": "Wykryto nieregularne tętno",
+    "@irregularPulseDetected": {},
+    "userID": "ID użytkownika",
+    "@userID": {},
+    "tapToClose": "Dotnij, aby zamkjąć",
+    "@tapToClose": {},
+    "scanningForDevices": "Skanuj urządzenia",
+    "@scanningForDevices": {}
+}
