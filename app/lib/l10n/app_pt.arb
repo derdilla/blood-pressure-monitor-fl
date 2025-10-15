@@ -568,5 +568,7 @@
     "dontShowAgain": "Não mostrar novamente",
     "@dontShowAgain": {},
     "btnShare": "PARTILHAR",
-    "@btnShare": {}
+    "@btnShare": {},
+    "exportSuccess": "Exportado com sucesso",
+    "@exportSuccess": {}
 }
