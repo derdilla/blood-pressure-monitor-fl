@@ -394,7 +394,7 @@
     "@deleteAllSettings": {},
     "deleteAllMeasurements": "Elimina tutte le misurazioni",
     "@deleteAllMeasurements": {},
-    "warnNeedsRestartForUsingApp": "Alcuni file sono stati eliminati durante questa sessione. Riavvia l''app per continuare a utilizzare le altre parti dell''app!",
+    "warnNeedsRestartForUsingApp": "I file sono stati eliminati in questa sessione. Riavvia l''app per continuare a usarla!",
     "@warnNeedsRestartForUsingApp": {},
     "needlePinBarWidth": "Spessore colore",
     "@needlePinBarWidth": {},
@@ -568,5 +568,7 @@
     "dontShowAgain": "Non mostrare più",
     "@dontShowAgain": {},
     "btnShare": "CONDIVIDI",
-    "@btnShare": {}
+    "@btnShare": {},
+    "exportSuccess": "Esportazione riuscita",
+    "@exportSuccess": {}
 }
