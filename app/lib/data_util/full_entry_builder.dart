@@ -1,6 +1,7 @@
 import 'package:blood_pressure_app/data_util/repository_builder.dart';
 import 'package:blood_pressure_app/model/storage/interval_store.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:health_data_store/health_data_store.dart';
 
 /// Shorthand class for getting a [rangeType]s [FullEntry] values.
@@ -32,6 +33,23 @@ class FullEntryBuilder extends StatelessWidget {
       onData: (BuildContext context, List<MedicineIntake> intakes) => RepositoryBuilder<Note, NoteRepository>(
         rangeType: rangeType,
         onData: (BuildContext context, List<Note> notes) {
+          final manager = context.watch<IntervalStoreManager>();
+          final timeLimitRange = manager.get(rangeType).timeLimitRange;
+          if (timeLimitRange != null) {
+            records = records.where((r) {
+              final time = TimeOfDay.fromDateTime(r.time);
+              return time.isAfter(timeLimitRange.start) && time.isBefore(timeLimitRange.end);
+            }).toList();
+            intakes = intakes.where((i) {
+              final time = TimeOfDay.fromDateTime(i.time);
+              return time.isAfter(timeLimitRange.start) && time.isBefore(timeLimitRange.end);
+            }).toList();
+            notes = notes.where((n) {
+              final time = TimeOfDay.fromDateTime(n.time);
+              return time.isAfter(timeLimitRange.start) && time.isBefore(timeLimitRange.end);
+            }).toList();
+          }
+
           if (onData != null) return onData!(context, records, intakes, notes);
 
           final entries = FullEntryList.merged(records, notes, intakes);

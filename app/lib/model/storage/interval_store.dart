@@ -51,6 +51,7 @@ class IntervalStorage extends ChangeNotifier {
   /// The stepSize gets set through the changeStepSize method.
   TimeStep get stepSize => _stepSize;
 
+  // TODO: programmatically ensure this is respected:
   /// The [TimeRange] used to limit data selection if non-null.
   ///
   /// Data points must fall on or between the start and end times to be selected.

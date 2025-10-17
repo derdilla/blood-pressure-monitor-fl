@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:blood_pressure_app/l10n/app_localizations.dart';
 import 'package:blood_pressure_app/logging.dart';
 import 'package:blood_pressure_app/model/export_import/csv_converter.dart';
 import 'package:blood_pressure_app/model/export_import/excel_converter.dart';
@@ -18,7 +19,6 @@ import 'package:collection/collection.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:blood_pressure_app/l10n/app_localizations.dart';
 import 'package:health_data_store/health_data_store.dart';
 import 'package:logging/logging.dart';
 import 'package:path/path.dart';
@@ -129,11 +129,36 @@ Future<List<(DateTime, BloodPressureRecord, Note, List<MedicineIntake>, Weight?)
   final noteRepo = RepositoryProvider.of<NoteRepository>(context);
   final intakeRepo = RepositoryProvider.of<MedicineIntakeRepository>(context);
   final weightRepo = RepositoryProvider.of<BodyweightRepository>(context);
+  final intervalManager = context.watch<IntervalStoreManager>();
 
-  final records = await bpRepo.get(range);
-  final notes = await noteRepo.get(range);
-  final intakes = await intakeRepo.get(range);
-  final weights = await weightRepo.get(range);
+  List<BloodPressureRecord> records = await bpRepo.get(range);
+  List<Note> notes = await noteRepo.get(range);
+  List<MedicineIntake> intakes = await intakeRepo.get(range);
+  List<BodyweightRecord> weights = await weightRepo.get(range);
+
+  // Apply time of day filter
+
+  final timeLimitRange = intervalManager
+      .get(IntervalStoreManagerLocation.exportPage)
+      .timeLimitRange;
+  if (timeLimitRange != null) {
+    records = records.where((r) {
+      final time = TimeOfDay.fromDateTime(r.time);
+      return time.isAfter(timeLimitRange.start) && time.isBefore(timeLimitRange.end);
+    }).toList();
+    intakes = intakes.where((i) {
+      final time = TimeOfDay.fromDateTime(i.time);
+      return time.isAfter(timeLimitRange.start) && time.isBefore(timeLimitRange.end);
+    }).toList();
+    notes = notes.where((n) {
+      final time = TimeOfDay.fromDateTime(n.time);
+      return time.isAfter(timeLimitRange.start) && time.isBefore(timeLimitRange.end);
+    }).toList();
+    weights = weights.where((w) {
+      final time = TimeOfDay.fromDateTime(w.time);
+      return time.isAfter(timeLimitRange.start) && time.isBefore(timeLimitRange.end);
+    }).toList();
+  }
 
   _logger.finest('_getEntries - range=$range');
 

@@ -23,6 +23,14 @@ class WeightList extends StatelessWidget {
     return RepositoryBuilder<BodyweightRecord, BodyweightRepository>(
       rangeType: rangeType,
       onData: (context, records) {
+        final manager = context.watch<IntervalStoreManager>();
+        final timeLimitRange = manager.get(rangeType).timeLimitRange;
+        if (timeLimitRange != null) {
+          records = records.where((r) {
+            final time = TimeOfDay.fromDateTime(r.time);
+            return time.isAfter(timeLimitRange.start) && time.isBefore(timeLimitRange.end);
+          }).toList();
+        }
         records.sort((a, b) => b.time.compareTo(a.time));
         return ListView.builder(
           itemCount: records.length,
