@@ -1,7 +1,9 @@
+import 'package:blood_pressure_app/features/data_picker/filter_button.dart';
 import 'package:blood_pressure_app/model/datarange_extension.dart';
 import 'package:blood_pressure_app/model/storage/interval_store.dart';
 import 'package:flutter/material.dart';
 import 'package:blood_pressure_app/l10n/app_localizations.dart';
+import 'package:health_data_store/health_data_store.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:week_of_year/date_week_extensions.dart';
@@ -28,15 +30,15 @@ class IntervalPicker extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Consumer<IntervalStoreManager>(
     builder: (context, intervallStoreManager, _) {
-      final intervall = intervallStoreManager.get(type);
+      final interval = intervallStoreManager.get(type);
       final loc = AppLocalizations.of(context)!;
-      final start = intervall.currentRange.start;
-      final end = intervall.currentRange.end;
-      final String intervallDisplayText = switch (intervall.stepSize) {
+      final start = interval.currentRange.start;
+      final end = interval.currentRange.end;
+      final String intervallDisplayText = switch (interval.stepSize) {
         TimeStep.day => DateFormat.yMMMd().format(start),
         TimeStep.week => loc.weekOfYear(start.weekOfYear, start.year),
-        TimeStep.month => DateFormat.yMMM().format(intervall.currentRange.start),
-        TimeStep.year => DateFormat.y().format(intervall.currentRange.start),
+        TimeStep.month => DateFormat.yMMM().format(interval.currentRange.start),
+        TimeStep.year => DateFormat.y().format(interval.currentRange.start),
         TimeStep.lifetime => '-',
         TimeStep.last7Days || TimeStep.last30Days || TimeStep.custom =>
           '${DateFormat.yMMMd().format(start)} - ${DateFormat.yMMMd().format(end)}',
@@ -48,12 +50,12 @@ class IntervalPicker extends StatelessWidget {
           Row(
             children: [
               MaterialButton(
-                onPressed: () => intervall.moveDataRangeByStep(-1),
+                onPressed: () => interval.moveDataRangeByStep(-1),
                 child: const Icon(Icons.chevron_left, size: 48),
               ),
               Expanded(
                 child: DropdownButton<TimeStep>(
-                  value: intervall.stepSize,
+                  value: interval.stepSize,
                   isExpanded: true,
                   onChanged: (TimeStep? value) async {
                     if (value == TimeStep.custom) {
@@ -64,14 +66,14 @@ class IntervalPicker extends StatelessWidget {
                         currentDate: customRangePickerCurrentDay,
                       );
                       if (res != null) {
-                        intervall.changeStepSize(value!);
+                        interval.changeStepSize(value!);
                         final dateRange = res.dateRange.copyWith(
                           end: res.end.copyWith(hour: 23, minute: 59, second: 59),
                         );
-                        intervall.currentRange = dateRange;
+                        interval.currentRange = dateRange;
                       }
                     } else if (value != null) {
-                      intervall.changeStepSize(value);
+                      interval.changeStepSize(value);
                     }
                   },
                   items: [
@@ -80,8 +82,9 @@ class IntervalPicker extends StatelessWidget {
                   ]
                 ),
               ),
+              FilterButton(interval: interval),
               MaterialButton(
-                onPressed: () => intervall.moveDataRangeByStep(1),
+                onPressed: () => interval.moveDataRangeByStep(1),
                 child: const Icon(Icons.chevron_right, size: 48),
               ),
             ],
