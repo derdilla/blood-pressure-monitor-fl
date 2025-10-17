@@ -1,4 +1,4 @@
-import 'package:blood_pressure_app/data_util/interval_picker.dart';
+import 'package:blood_pressure_app/features/data_picker/interval_picker.dart';
 import 'package:blood_pressure_app/data_util/repository_builder.dart';
 import 'package:blood_pressure_app/features/statistics/blood_pressure_distribution.dart';
 import 'package:blood_pressure_app/features/statistics/clock_bp_graph.dart';
