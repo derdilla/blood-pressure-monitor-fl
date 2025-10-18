@@ -129,7 +129,7 @@ Future<List<(DateTime, BloodPressureRecord, Note, List<MedicineIntake>, Weight?)
   final noteRepo = RepositoryProvider.of<NoteRepository>(context);
   final intakeRepo = RepositoryProvider.of<MedicineIntakeRepository>(context);
   final weightRepo = RepositoryProvider.of<BodyweightRepository>(context);
-  final intervalManager = context.watch<IntervalStoreManager>();
+  final intervalManager = context.read<IntervalStoreManager>();
 
   List<BloodPressureRecord> records = await bpRepo.get(range);
   List<Note> notes = await noteRepo.get(range);

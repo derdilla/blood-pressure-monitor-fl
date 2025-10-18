@@ -1,9 +1,9 @@
 import 'dart:convert';
 
+import 'package:blood_pressure_app/l10n/app_localizations.dart';
 import 'package:blood_pressure_app/model/storage/convert_util.dart';
 import 'package:blood_pressure_app/model/storage/db/settings_loader.dart';
 import 'package:flutter/material.dart';
-import 'package:blood_pressure_app/l10n/app_localizations.dart';
 import 'package:health_data_store/health_data_store.dart';
 
 /// Class for storing the current interval, as it is needed in start page, statistics and export.
@@ -166,7 +166,7 @@ enum TimeStep {
   custom;
 
   /// Recreate a TimeStep from a number created with [TimeStep.serialize].
-  factory TimeStep.deserialize(value) {
+  factory TimeStep.deserialize(Object? value) {
     final int? intValue = ConvertUtil.parseInt(value);
     assert(intValue == null || intValue >= 0 && intValue <= 7);
     return switch (intValue) {
@@ -232,7 +232,7 @@ class IntervalStoreManager extends ChangeNotifier {
     notifyListeners();
   }
 
-  // Copy all values from another instance.
+  /// Copy all values from another instance.
   void copyFrom(IntervalStoreManager other) {
     mainPage = other.mainPage;
     exportPage = other.exportPage;
@@ -260,8 +260,11 @@ class IntervalStoreManager extends ChangeNotifier {
 
 /// Locations supported by [IntervalStoreManager].
 enum IntervalStoreManagerLocation {
+  /// List on home screen.
   mainPage,
+  /// All exported data.
   exportPage,
+  /// Data for all statistics.
   statsPage,
 }
 
@@ -300,8 +303,8 @@ class TimeRange {
     }
 
     try {
-      final TimeOfDay start = _timeOfDayFromString(json['start'] as String);
-      final TimeOfDay end = _timeOfDayFromString(json['end'] as String);
+      final start = _timeOfDayFromString(json['start'] as String);
+      final end = _timeOfDayFromString(json['end'] as String);
       return TimeRange(start: start, end: end);
     } catch (_) {
       // Return null on parsing errors (e.g., non-numeric parts)
@@ -311,8 +314,8 @@ class TimeRange {
 
   /// Converts a TimeOfDay to 'HH:MM' string.
   static String _timeOfDayToString(TimeOfDay time) {
-    final String hour = time.hour.toString().padLeft(2, '0');
-    final String minute = time.minute.toString().padLeft(2, '0');
+    final hour = time.hour.toString().padLeft(2, '0');
+    final minute = time.minute.toString().padLeft(2, '0');
     return '$hour:$minute';
   }
 

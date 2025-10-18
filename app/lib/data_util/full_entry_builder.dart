@@ -1,8 +1,8 @@
 import 'package:blood_pressure_app/data_util/repository_builder.dart';
 import 'package:blood_pressure_app/model/storage/interval_store.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:health_data_store/health_data_store.dart';
+import 'package:provider/provider.dart';
 
 /// Shorthand class for getting a [rangeType]s [FullEntry] values.
 class FullEntryBuilder extends StatelessWidget {
