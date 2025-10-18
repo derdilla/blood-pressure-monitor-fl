@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:blood_pressure_app/components/disabled.dart';
-import 'package:blood_pressure_app/data_util/interval_picker.dart';
+import 'package:blood_pressure_app/features/data_picker/interval_picker.dart';
 import 'package:blood_pressure_app/features/export_import/active_field_customization.dart';
 import 'package:blood_pressure_app/features/export_import/export_button.dart';
 import 'package:blood_pressure_app/features/export_import/export_warn_banner.dart';

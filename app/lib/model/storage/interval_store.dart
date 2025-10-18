@@ -1,9 +1,9 @@
 import 'dart:convert';
 
+import 'package:blood_pressure_app/l10n/app_localizations.dart';
 import 'package:blood_pressure_app/model/storage/convert_util.dart';
 import 'package:blood_pressure_app/model/storage/db/settings_loader.dart';
 import 'package:flutter/material.dart';
-import 'package:blood_pressure_app/l10n/app_localizations.dart';
 import 'package:health_data_store/health_data_store.dart';
 
 /// Class for storing the current interval, as it is needed in start page, statistics and export.
@@ -12,6 +12,7 @@ class IntervalStorage extends ChangeNotifier {
   factory IntervalStorage.fromMap(Map<String, dynamic> map) => IntervalStorage(
     stepSize: TimeStep.deserialize(map['stepSize']),
     range: ConvertUtil.parseRange(map['start'], map['end']),
+    timeRange: TimeRange.fromJson(map['timeRange'])
   );
 
   /// Create a instance from a [String] created by [toJson].
@@ -24,20 +25,24 @@ class IntervalStorage extends ChangeNotifier {
   }
 
   /// Create a storage to interact with a display intervall.
-  IntervalStorage({TimeStep? stepSize, DateRange? range}) :
+  IntervalStorage({TimeStep? stepSize, DateRange? range, TimeRange? timeRange}) :
     _stepSize = stepSize ?? TimeStep.last7Days {
     _currentRange = range ?? _getMostRecentDisplayIntervall();
+    _timeRange = timeRange;
   }
 
   TimeStep _stepSize;
 
   late DateRange _currentRange;
 
+  TimeRange? _timeRange;
+
   /// Serialize the object to a restoreable map.
   Map<String, dynamic> toMap() => <String, dynamic>{
     'stepSize': stepSize.serialize(),
     'start': currentRange.start.millisecondsSinceEpoch,
     'end': currentRange.end.millisecondsSinceEpoch,
+    'timeRange': _timeRange?.toJson(),
   };
 
   /// Serialize the object to a restoreable string.
@@ -45,6 +50,17 @@ class IntervalStorage extends ChangeNotifier {
 
   /// The stepSize gets set through the changeStepSize method.
   TimeStep get stepSize => _stepSize;
+
+  // TODO: programmatically ensure this is respected:
+  /// The [TimeRange] used to limit data selection if non-null.
+  ///
+  /// Data points must fall on or between the start and end times to be selected.
+  TimeRange? get timeLimitRange => _timeRange;
+
+  set timeLimitRange(TimeRange? value) {
+    _timeRange = value;
+    notifyListeners();
+  }
 
   /// sets the stepSize to the new value and resets the currentRange to the most recent one. 
   void changeStepSize(TimeStep value) {
@@ -150,7 +166,7 @@ enum TimeStep {
   custom;
 
   /// Recreate a TimeStep from a number created with [TimeStep.serialize].
-  factory TimeStep.deserialize(value) {
+  factory TimeStep.deserialize(Object? value) {
     final int? intValue = ConvertUtil.parseInt(value);
     assert(intValue == null || intValue >= 0 && intValue <= 7);
     return switch (intValue) {
@@ -216,7 +232,7 @@ class IntervalStoreManager extends ChangeNotifier {
     notifyListeners();
   }
 
-  // Copy all values from another instance.
+  /// Copy all values from another instance.
   void copyFrom(IntervalStoreManager other) {
     mainPage = other.mainPage;
     exportPage = other.exportPage;
@@ -244,7 +260,70 @@ class IntervalStoreManager extends ChangeNotifier {
 
 /// Locations supported by [IntervalStoreManager].
 enum IntervalStoreManagerLocation {
+  /// List on home screen.
   mainPage,
+  /// All exported data.
   exportPage,
+  /// Data for all statistics.
   statsPage,
+}
+
+/// Represents an inclusive time span, defined by a [start] and an [end]
+/// [TimeOfDay].
+///
+/// **Serialization:**
+/// The class serializes the [TimeOfDay] objects into simple string representations
+/// of their hour and minute values (e.g., '14:30' for 2:30 PM).
+class TimeRange {
+  /// Creates a new [TimeRange] with a specified [start] and [end] time.
+  const TimeRange({
+    required this.start,
+    required this.end,
+  });
+
+  /// The starting time of the range (inclusive).
+  final TimeOfDay start;
+
+  /// The ending time of the range (inclusive).
+  final TimeOfDay end;
+
+  /// Serialization to JSON-compatible map
+  Map<String, dynamic> toJson() => {
+      'start': _timeOfDayToString(start),
+      'end': _timeOfDayToString(end),
+    };
+
+  /// Creates a [TimeRange] instance from a JSON map.
+  ///
+  /// Returns `null` if the input map is null or if the required keys ('start', 'end')
+  /// are missing or contain invalid time strings.
+  static TimeRange? fromJson(Map<String, dynamic>? json) {
+    if (json == null || json['start'] is! String || json['end'] is! String) {
+      return null;
+    }
+
+    try {
+      final start = _timeOfDayFromString(json['start'] as String);
+      final end = _timeOfDayFromString(json['end'] as String);
+      return TimeRange(start: start, end: end);
+    } catch (_) {
+      // Return null on parsing errors (e.g., non-numeric parts)
+      return null;
+    }
+  }
+
+  /// Converts a TimeOfDay to 'HH:MM' string.
+  static String _timeOfDayToString(TimeOfDay time) {
+    final hour = time.hour.toString().padLeft(2, '0');
+    final minute = time.minute.toString().padLeft(2, '0');
+    return '$hour:$minute';
+  }
+
+  /// Converts an 'HH:MM' string back to a TimeOfDay.
+  static TimeOfDay _timeOfDayFromString(String timeString) {
+    final parts = timeString.split(':');
+    final hour = int.parse(parts[0]);
+    final minute = int.parse(parts[1]);
+    return TimeOfDay(hour: hour, minute: minute);
+  }
 }

@@ -572,5 +572,7 @@
     "exportSuccess": "Export successful",
     "@exportSuccess": {},
     "xsl": "Excel (xsl)",
-    "@xsl": {}
+    "@xsl": {},
+    "reset": "Reset",
+    "@reset": {}
 }
