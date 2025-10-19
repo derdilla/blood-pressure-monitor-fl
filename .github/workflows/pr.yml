@@ -22,7 +22,7 @@ jobs:
           sparse-checkout: "app/lib/l10n"
       - name: Validate localizations
         # check for [^'"]'[^'"] in .arb files
-        run: "grep "[^'\"]'[^'\"]" app/lib/l10n/*.arb && exit 1 || exit 0"
+        run: "grep \"[^'\\\"]'[^'\\\"]\" app/lib/l10n/*.arb && exit 1 || exit 0"
   update-goldens:
     if: github.event.pull_request.draft == false
     runs-on: ubuntu-latest
