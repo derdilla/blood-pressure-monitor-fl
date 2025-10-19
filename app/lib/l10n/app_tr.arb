@@ -359,7 +359,7 @@
             }
         }
     },
-    "pdfDocumentTitle": "{start}'den {end}'e kan basıncı değerleri",
+    "pdfDocumentTitle": "{start}''den {end}''e kan basıncı değerleri",
     "@pdfDocumentTitle": {
         "placeholders": {
             "start": {
