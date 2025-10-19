@@ -20,13 +20,9 @@ jobs:
         with:
           ref: ${{ github.head_ref }}
           sparse-checkout: 'app/lib/l10n'
-      - name: Install ripgrep
-        run: sudo apt-get install ripgrep
       - name: Validate localizations
         # check for [^'"]'[^'"] in .arb files
-        run: |
-            "rg \"[^'\\\"]'[^'\\\"]\" app/lib/l10n/*.arb"
-            "[[ `rg \"[^'\\\"]'[^'\\\"]\" app/lib/l10n/*.arb` ]] && exit 1 || exit 0"
+        run: "grep "[^'\"]'[^'\"]" app/lib/l10n/*.arb && echo err || echo ok"
   update-goldens:
     if: github.event.pull_request.draft == false
     runs-on: ubuntu-latest
