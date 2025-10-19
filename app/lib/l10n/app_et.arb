@@ -568,5 +568,7 @@
     "dontShowAgain": "Ära näita enam uuesti",
     "@dontShowAgain": {},
     "btnShare": "JAGA",
-    "@btnShare": {}
+    "@btnShare": {},
+    "exportSuccess": "Eksportimine õnnestus",
+    "@exportSuccess": {}
 }
