@@ -557,7 +557,7 @@
     "@tapToSelect": {},
     "trustBLETime": "Horodatage certifié envoyé par les périphériques Bluetooth",
     "@trustBLETime": {},
-    "warnBLETimeSus": "Le périphérique Bluetooth signale un arrêt de {hours} heures. Vous pouvez désactiver la certification d'horodatage des périphériques Bluetooth dans les paramètres.",
+    "warnBLETimeSus": "Le périphérique Bluetooth signale un arrêt de {hours} heures. Vous pouvez désactiver la certification d''horodatage des périphériques Bluetooth dans les paramètres.",
     "@warnBLETimeSus": {
         "placeholders": {
             "hours": {
