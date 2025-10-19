@@ -1,3 +1,0 @@
-* Implement export of legacy files
-* Implement export success feedback
-* Update German, Spanish, Italian, Lithuanian, Portuguese, Portuguese (Brazil), Russian, Swedish, Turkish, Chinese, and traditional Chinese translations
