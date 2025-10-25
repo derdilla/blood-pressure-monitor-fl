@@ -1,0 +1,5 @@
+- Veaparandus, kus sisendi salvestamine et toiminud ilma aja alamvormita
+- Hoiatuse seadistamine uues vaates
+- Eksport XLS-vormingus
+- Kirjete filtreerimine päeva aja järgi
+- Lisandus poola keele tõlge
