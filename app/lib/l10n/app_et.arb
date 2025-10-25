@@ -570,5 +570,9 @@
     "btnShare": "JAGA",
     "@btnShare": {},
     "exportSuccess": "Eksportimine õnnestus",
-    "@exportSuccess": {}
+    "@exportSuccess": {},
+    "xsl": "Excel (xls)",
+    "@xsl": {},
+    "reset": "Lähtesta",
+    "@reset": {}
 }
