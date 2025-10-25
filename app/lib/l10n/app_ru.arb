@@ -379,7 +379,7 @@
     "@useLegacyList": {},
     "timestamp": "Временная метка",
     "@timestamp": {},
-    "warnNeedsRestartForUsingApp": "Файлы были удалены в этом сеансе. Перезапустите приложение, чтобы продолжить использование, вернувшись к другим частям приложения!",
+    "warnNeedsRestartForUsingApp": "Файлы были удалены в этом сеансе. Перезапустите приложение, чтобы продолжить его использовать!",
     "@warnNeedsRestartForUsingApp": {},
     "deleteAllMeasurements": "Удалить все измерения",
     "@deleteAllMeasurements": {},
@@ -570,5 +570,9 @@
     "btnShare": "ПЕРЕДАТЬ",
     "@btnShare": {},
     "exportSuccess": "Экспорт завершен",
-    "@exportSuccess": {}
+    "@exportSuccess": {},
+    "xsl": "Excel (xsl)",
+    "@xsl": {},
+    "reset": "Сбросить",
+    "@reset": {}
 }
