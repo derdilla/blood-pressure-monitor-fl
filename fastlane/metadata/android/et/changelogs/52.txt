@@ -1,5 +1,5 @@
-- Fix input form being unsubmitable without time sub-form
-- Extract warning configuration to a new screen
-- Implement xls export
-- Allow filtering a records time of day
-- Update add Polish translation
+- Veaparandus, kus sisendi salvestamine et toiminud ilma aja alamvormita
+- Hoiatuse seadistamine uues vaates
+- Eksport XLS-vormingus
+- Kirjete filtreerimine päeva aja järgi
+- Lisandus poola keele tõlge
