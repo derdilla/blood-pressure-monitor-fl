@@ -570,5 +570,9 @@
     "btnShare": "分享",
     "@btnShare": {},
     "exportSuccess": "成功导出",
-    "@exportSuccess": {}
+    "@exportSuccess": {},
+    "xsl": "Excel 文件(xsl)",
+    "@xsl": {},
+    "reset": "重置",
+    "@reset": {}
 }
