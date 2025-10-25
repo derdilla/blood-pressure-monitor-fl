@@ -570,5 +570,9 @@
     "btnShare": "CONDIVIDI",
     "@btnShare": {},
     "exportSuccess": "Esportazione riuscita",
-    "@exportSuccess": {}
+    "@exportSuccess": {},
+    "xsl": "Excel (xsl)",
+    "@xsl": {},
+    "reset": "Reimposta",
+    "@reset": {}
 }
