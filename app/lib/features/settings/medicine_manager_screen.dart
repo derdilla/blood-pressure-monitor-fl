@@ -31,13 +31,34 @@ class MedicineManagerScreen extends StatelessWidget {
     subtitle: med.dosis == null ? null
         : Text('${AppLocalizations.of(context)!.defaultDosis}: '
         '${med.dosis!.mg} mg'),
-    trailing: IconButton(
-      icon: const Icon(Icons.delete),
-      onPressed: () async {
-        if (await showConfirmDeletionDialoge(context) && context.mounted) {
-          await RepositoryProvider.of<MedicineRepository>(context).remove(med);
-        }
-      },
+    trailing: Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        IconButton(
+          icon: const Icon(Icons.edit),
+          onPressed: () async {
+            final medRepo = RepositoryProvider.of<MedicineRepository>(context);
+            final newMed = await showAddMedicineDialoge(context,
+                initialValue: med);
+            if (newMed != null) {
+              // We can not edit the med directly since this could skew old
+              // entries. Marking a medicine as removed just hides it from the
+              // selection list, while editing it would alter old the default
+              // dosis of old records.
+              await medRepo.remove(med);
+              await medRepo.add(newMed);
+            }
+          },
+        ),
+        IconButton(
+          icon: const Icon(Icons.delete),
+          onPressed: () async {
+            if (await showConfirmDeletionDialoge(context) && context.mounted) {
+              await RepositoryProvider.of<MedicineRepository>(context).remove(med);
+            }
+          },
+        ),
+      ],
     ),
   );
 
