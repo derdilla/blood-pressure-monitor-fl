@@ -86,12 +86,12 @@ class IntervalStorage extends ChangeNotifier {
     final oldEnd = currentRange.end;
     currentRange = switch (stepSize) {
       TimeStep.day => DateRange(
-        start: oldStart.add(Duration(days: directionalStep)),
-        end: oldEnd.add(Duration(days: directionalStep)),
+        start: oldStart.copyWith(day: oldStart.day + directionalStep),
+        end: oldEnd.copyWith(day: oldEnd.day + directionalStep),
       ),
       TimeStep.week || TimeStep.last7Days => DateRange(
-        start: oldStart.add(Duration(days: directionalStep * 7)),
-        end: oldEnd.add(Duration(days: directionalStep * 7)),
+        start: oldStart.copyWith(day: oldStart.day + 7 * directionalStep),
+        end: oldEnd.copyWith(day: oldEnd.day + 7 * directionalStep),
       ),
       TimeStep.month => DateRange(
         // No fitting Duration: wraps correctly according to doc
@@ -108,8 +108,8 @@ class IntervalStorage extends ChangeNotifier {
         end: DateTime.now().copyWith(hour: 23, minute: 59, second: 59),
       ),
       TimeStep.last30Days => DateRange(
-        start: oldStart.add(Duration(days: directionalStep * 30)),
-        end: oldEnd.add(Duration(days:  directionalStep * 30)),
+        start: oldStart.copyWith(day: oldStart.day + 30 * directionalStep),
+        end: oldEnd.copyWith(day: oldEnd.day + 30 * directionalStep),
       ),
       TimeStep.custom => DateRange(
         start: oldStart.add(oldEnd.difference(oldStart) * directionalStep),
