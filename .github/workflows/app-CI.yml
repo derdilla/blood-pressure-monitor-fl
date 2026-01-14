@@ -67,3 +67,6 @@ jobs:
       - name: Run tests
         run: flutter test
         working-directory: app
+      - name: Run golden tests
+        run: flutter test --tags gold --run-skipped
+        working-directory: app

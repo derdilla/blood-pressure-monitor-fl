@@ -1,0 +1,3 @@
+tags:
+  gold:
+    skip: "Only run on CI"

@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:blood_pressure_app/components/disabled.dart';
 import 'package:blood_pressure_app/features/data_picker/interval_picker.dart';
 import 'package:blood_pressure_app/features/export_import/active_field_customization.dart';
 import 'package:blood_pressure_app/features/export_import/export_button.dart';
@@ -44,10 +43,8 @@ class ExportImportScreen extends StatelessWidget {
               const SizedBox(
                 height: 15,
               ),
-              Disabled(
-                disabled: settings.exportFormat == ExportFormat.db,
-                child: const IntervalPicker(type: IntervalStoreManagerLocation.exportPage,),
-              ),
+              if (settings.exportFormat != ExportFormat.db)
+                const IntervalPicker(type: IntervalStoreManagerLocation.exportPage),
               if (Platform.isAndroid) // only supported on android
                 ListTile(
                   title: Text(localizations.exportDir),
