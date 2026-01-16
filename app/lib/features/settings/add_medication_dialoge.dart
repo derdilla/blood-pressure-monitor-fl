@@ -10,7 +10,10 @@ import 'package:provider/provider.dart';
 /// Dialoge to enter values for a [Medicine].
 class AddMedicationDialoge extends StatefulWidget {
   /// Create a dialoge to enter values for a [Medicine].
-  const AddMedicationDialoge({super.key});
+  const AddMedicationDialoge({super.key, this.initialValue});
+
+  /// Medicine to use to prefill input fields.
+  final Medicine? initialValue;
 
   @override
   State<AddMedicationDialoge> createState() => _AddMedicationDialogeState();
@@ -21,13 +24,20 @@ class _AddMedicationDialogeState extends State<AddMedicationDialoge> {
   final nameFocusNode = FocusNode();
 
   Color _color = Colors.transparent;
-  String? _designation;
-  double? _defaultDosis;
 
+  String? _designation;
+
+  /// Selected default dosis in mg.
+  double? _defaultDosis;
 
   @override
   void initState() {
     super.initState();
+    if (widget.initialValue != null) {
+      _color = Color(widget.initialValue!.color ?? 0);
+      _designation = widget.initialValue!.designation;
+      _defaultDosis = widget.initialValue!.dosis?.mg;
+    }
     nameFocusNode.requestFocus();
   }
 
@@ -53,6 +63,7 @@ class _AddMedicationDialogeState extends State<AddMedicationDialoge> {
             TextFormField(
               focusNode: nameFocusNode,
               decoration: _getInputDecoration(context, localizations.name),
+              initialValue: _designation,
               onSaved: (value) => _designation = value,
             ),
             const SizedBox(height: 8,),
@@ -69,6 +80,7 @@ class _AddMedicationDialogeState extends State<AddMedicationDialoge> {
               keyboardType: TextInputType.number,
               decoration: _getInputDecoration(context, localizations.defaultDosis),
               inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r'([0-9]+(\.([0-9]*))?)')),],
+              initialValue: _defaultDosis?.toString(),
               onSaved: (value) => _defaultDosis = double.tryParse(value ?? '')
                   ?? int.tryParse(value ?? '')?.toDouble(),
             ),
@@ -98,7 +110,9 @@ class _AddMedicationDialogeState extends State<AddMedicationDialoge> {
 /// Shows a full screen dialoge to input a medicine.
 ///
 /// The created medicine gets an index that was never in settings.
-Future<Medicine?> showAddMedicineDialoge(BuildContext context) =>
+Future<Medicine?> showAddMedicineDialoge(BuildContext context, {
+  Medicine? initialValue,
+}) =>
   showDialog<Medicine?>(context: context,
-    builder: (context) => AddMedicationDialoge(),
+    builder: (context) => AddMedicationDialoge(initialValue: initialValue),
   );
