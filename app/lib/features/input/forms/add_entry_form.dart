@@ -16,6 +16,7 @@ import 'package:blood_pressure_app/logging.dart';
 import 'package:blood_pressure_app/model/storage/bluetooth_input_mode.dart';
 import 'package:blood_pressure_app/model/storage/storage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:health_data_store/health_data_store.dart';
@@ -86,6 +87,7 @@ class AddEntryFormState extends FormStateBase<AddEntryFormValue, AddEntryForm>
       // In all other cases we are at the correct position (0)
       // or don't need to jump at all.
     }
+    _emptyFocussed = _emptyFocussedNow;
     ServicesBinding.instance.keyboard.addHandler(_onKey);
   }
 
@@ -95,16 +97,31 @@ class AddEntryFormState extends FormStateBase<AddEntryFormValue, AddEntryForm>
     super.dispose();
   }
 
+  /// Whether an empty input was focused in the last frame.
+  late bool _emptyFocussed;
   bool _onKey(KeyEvent event) {
-    if(event.logicalKey == LogicalKeyboardKey.backspace
-      && ((_bpForm.currentState?.isEmptyInputFocused() ?? false)
-          || (_noteForm.currentState?.isEmptyInputFocused() ?? false)
-          || (_weightForm.currentState?.isEmptyInputFocused() ?? false)
-          || (_intakeForm.currentState?.isEmptyInputFocused() ?? false))) {
+    // Don't handle key up events to avoid double-triggering this function.
+    if (event is KeyUpEvent) return false;
+    // If an empty input has been focussed before pressing the back key,
+    // we move back one Input-Field. We don't do so if the field was
+    // just now emptied with this press.
+    if(event.logicalKey == LogicalKeyboardKey.backspace && _emptyFocussed) {
       FocusScope.of(context).previousFocus();
+      _emptyFocussed = false;
     }
+    // Avoid updating triggering another backwards focus before the last one
+    // is detectable by child states.
+    SchedulerBinding.instance.addPostFrameCallback((_) {
+      _emptyFocussed = _emptyFocussedNow;
+    });
     return false;
   }
+
+  bool get _emptyFocussedNow =>
+      ((_bpForm.currentState?.isEmptyInputFocused() ?? false)
+    || (_noteForm.currentState?.isEmptyInputFocused() ?? false)
+    || (_weightForm.currentState?.isEmptyInputFocused() ?? false)
+    || (_intakeForm.currentState?.isEmptyInputFocused() ?? false));
 
   @override
   bool validate() {
