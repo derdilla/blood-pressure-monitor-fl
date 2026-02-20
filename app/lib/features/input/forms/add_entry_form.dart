@@ -87,6 +87,7 @@ class AddEntryFormState extends FormStateBase<AddEntryFormValue, AddEntryForm>
       // In all other cases we are at the correct position (0)
       // or don't need to jump at all.
     }
+    _emptyFocussed = _emptyFocussedNow;
     ServicesBinding.instance.keyboard.addHandler(_onKey);
   }
 
@@ -96,10 +97,11 @@ class AddEntryFormState extends FormStateBase<AddEntryFormValue, AddEntryForm>
     super.dispose();
   }
 
-  bool _emptyFocussed = false; // TODO proper init
+  /// Whether an empty input was focused in the last frame.
+  late bool _emptyFocussed;
   bool _onKey(KeyEvent event) {
     // Don't handle key up events to avoid double-triggering this function.
-    if (event is KeyDownEvent) return false;
+    if (event is KeyUpEvent) return false;
     // If an empty input has been focussed before pressing the back key,
     // we move back one Input-Field. We don't do so if the field was
     // just now emptied with this press.
@@ -110,13 +112,16 @@ class AddEntryFormState extends FormStateBase<AddEntryFormValue, AddEntryForm>
     // Avoid updating triggering another backwards focus before the last one
     // is detectable by child states.
     SchedulerBinding.instance.addPostFrameCallback((_) {
-      _emptyFocussed = ((_bpForm.currentState?.isEmptyInputFocused() ?? false)
-          || (_noteForm.currentState?.isEmptyInputFocused() ?? false)
-          || (_weightForm.currentState?.isEmptyInputFocused() ?? false)
-          || (_intakeForm.currentState?.isEmptyInputFocused() ?? false));
+      _emptyFocussed = _emptyFocussedNow;
     });
     return false;
   }
+
+  bool get _emptyFocussedNow =>
+      ((_bpForm.currentState?.isEmptyInputFocused() ?? false)
+    || (_noteForm.currentState?.isEmptyInputFocused() ?? false)
+    || (_weightForm.currentState?.isEmptyInputFocused() ?? false)
+    || (_intakeForm.currentState?.isEmptyInputFocused() ?? false));
 
   @override
   bool validate() {

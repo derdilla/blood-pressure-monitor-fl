@@ -343,47 +343,41 @@ void main() {
     await tester.enterText(fields.at(1), '45'); // dia
     await tester.enterText(fields.at(2), '67'); // pul
 
-    await tester.tap(find.text('67'));
-
-    Finder focusedTextField() {
-      final firstFocused = FocusManager.instance.primaryFocus;
-      expect(firstFocused?.context?.widget, isNotNull);
-      return find.ancestor(
-        of: find.byWidget(FocusManager.instance.primaryFocus!.context!.widget),
-        matching: find.byType(TextField),
-      );
+    await tester.showKeyboard(find.ancestor(of: find.text('67'), matching: find.byType(TextField)));
+    Future<void> backspace(int n) async {
+      for (int i = 0; i < n; i++) {
+        await tester.sendKeyEvent(LogicalKeyboardKey.backspace);
+        await tester.pump();
+      }
     }
-    expect(find.descendant(of: focusedTextField(), matching: find.text(localizations.sysLong)), findsNothing);
-    expect(find.descendant(of: focusedTextField(), matching: find.text(localizations.diaLong)), findsNothing);
-    expect(find.descendant(of: focusedTextField(), matching: find.text(localizations.pulLong)), findsOneWidget);
 
-    await tester.enterText(focusedTextField(), '');
-    await tester.sendKeyEvent(LogicalKeyboardKey.backspace);
-    await tester.pump();
+    expect(find.descendant(of: _focusedTextField(), matching: find.text(localizations.sysLong)), findsNothing);
+    expect(find.descendant(of: _focusedTextField(), matching: find.text(localizations.diaLong)), findsNothing);
+    expect(find.descendant(of: _focusedTextField(), matching: find.text(localizations.pulLong)), findsOneWidget);
 
-    expect(find.descendant(of: focusedTextField(), matching: find.text(localizations.sysLong)), findsNothing);
-    expect(find.descendant(of: focusedTextField(), matching: find.text(localizations.diaLong)), findsOneWidget);
-    expect(find.descendant(of: focusedTextField(), matching: find.text(localizations.pulLong)), findsNothing);
+    await backspace(3);
+    await tester.idle();
+    await tester.pumpAndSettle();
 
-    await tester.sendKeyEvent(LogicalKeyboardKey.backspace);
-    await tester.sendKeyEvent(LogicalKeyboardKey.backspace);
-    await tester.sendKeyEvent(LogicalKeyboardKey.backspace);
-    await tester.pump();
+    expect(find.descendant(of: _focusedTextField(), matching: find.text(localizations.sysLong)), findsNothing);
+    expect(find.descendant(of: _focusedTextField(), matching: find.text(localizations.diaLong)), findsOneWidget);
+    expect(find.descendant(of: _focusedTextField(), matching: find.text(localizations.pulLong)), findsNothing);
 
-    expect(find.descendant(of: focusedTextField(), matching: find.text(localizations.sysLong)), findsOneWidget);
-    expect(find.descendant(of: focusedTextField(), matching: find.text(localizations.diaLong)), findsNothing);
-    expect(find.descendant(of: focusedTextField(), matching: find.text(localizations.pulLong)), findsNothing);
+    await backspace(3);
+    await tester.idle();
+    await tester.pumpAndSettle();
+
+    expect(find.descendant(of: _focusedTextField(), matching: find.text(localizations.sysLong)), findsOneWidget);
+    expect(find.descendant(of: _focusedTextField(), matching: find.text(localizations.diaLong)), findsNothing);
+    expect(find.descendant(of: _focusedTextField(), matching: find.text(localizations.pulLong)), findsNothing);
 
     // doesn't focus last input on backspace if the current is still filled
-    await tester.sendKeyEvent(LogicalKeyboardKey.backspace);
-    await tester.sendKeyEvent(LogicalKeyboardKey.backspace);
-    await tester.sendKeyEvent(LogicalKeyboardKey.backspace);
-    await tester.sendKeyEvent(LogicalKeyboardKey.backspace);
-    await tester.pump();
+    await backspace(6);
+    await tester.pumpAndSettle();
 
-    expect(find.descendant(of: focusedTextField(), matching: find.text(localizations.sysLong)), findsOneWidget);
-    expect(find.descendant(of: focusedTextField(), matching: find.text(localizations.diaLong)), findsNothing);
-    expect(find.descendant(of: focusedTextField(), matching: find.text(localizations.pulLong)), findsNothing);
+    expect(find.descendant(of: _focusedTextField(), matching: find.text(localizations.sysLong)), findsOneWidget);
+    expect(find.descendant(of: _focusedTextField(), matching: find.text(localizations.diaLong)), findsNothing);
+    expect(find.descendant(of: _focusedTextField(), matching: find.text(localizations.pulLong)), findsNothing);
   });
 
   testWidgets('should allow invalid values when setting is set', (tester) async {
@@ -591,6 +585,41 @@ void main() {
         .inMinutes
         .abs(), lessThan(5));
   });
+
+  testWidgets("Doesn't focus back without sending extra event", (WidgetTester tester) async {
+    await tester.pumpWidget(materialApp(AddEntryForm()));
+    final localizations = await AppLocalizations.delegate.load(const Locale('en'));
+    await tester.pumpAndSettle();
+    await tester.enterText(find.ancestor(of: find.text(localizations.sysLong), matching: find.byType(TextField)), '123');
+    await tester.enterText(find.ancestor(of: find.text(localizations.diaLong), matching: find.byType(TextField)), '67');
+    await tester.enterText(find.ancestor(of: find.text(localizations.pulLong), matching: find.byType(TextField)), '8');
+
+    await tester.showKeyboard(find.ancestor(of: find.text(localizations.pulLong), matching: find.byType(TextField)));
+    await tester.pumpAndSettle();
+    expect(find.descendant(of: _focusedTextField(), matching: find.text(localizations.pulLong)), findsOneWidget);
+
+    await tester.sendKeyEvent(LogicalKeyboardKey.backspace);
+    await tester.pumpAndSettle();
+    // Doesn't focus back without sending extra event
+    expect(find.descendant(of: _focusedTextField(), matching: find.text(localizations.diaLong)), findsNothing);
+    expect(find.descendant(of: _focusedTextField(), matching: find.text(localizations.pulLong)), findsOneWidget);
+
+    await tester.sendKeyEvent(LogicalKeyboardKey.backspace);
+    await tester.pumpAndSettle();
+    expect(find.descendant(
+      of: _focusedTextField(),
+      matching: find.text(localizations.diaLong),
+    ), findsOneWidget);
+  });
+}
+
+Finder _focusedTextField() {
+  final firstFocused = FocusManager.instance.primaryFocus;
+  expect(firstFocused?.context?.widget, isNotNull);
+  return find.ancestor(
+    of: find.byWidget(FocusManager.instance.primaryFocus!.context!.widget),
+    matching: find.byType(TextField),
+  );
 }
 
 /// A mock ble cubit that never does anything.
