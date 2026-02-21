@@ -1,6 +1,6 @@
 import 'package:blood_pressure_app/features/measurement_list/compact_measurement_list.dart';
-import 'package:flutter/material.dart';
 import 'package:blood_pressure_app/l10n/app_localizations.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../../model/export_import/record_formatter_test.dart';

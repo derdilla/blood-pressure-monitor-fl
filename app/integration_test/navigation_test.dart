@@ -9,11 +9,11 @@ import 'package:blood_pressure_app/features/settings/export_import_screen.dart';
 import 'package:blood_pressure_app/features/settings/graph_markings_screen.dart';
 import 'package:blood_pressure_app/features/settings/medicine_manager_screen.dart';
 import 'package:blood_pressure_app/features/settings/warn_about_screen.dart';
+import 'package:blood_pressure_app/l10n/app_localizations.dart';
 import 'package:blood_pressure_app/screens/home_screen.dart';
 import 'package:blood_pressure_app/screens/settings_screen.dart';
 import 'package:blood_pressure_app/screens/statistics_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:blood_pressure_app/l10n/app_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 

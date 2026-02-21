@@ -1,5 +1,6 @@
 import 'package:blood_pressure_app/features/export_import/export_column_management_screen.dart';
 import 'package:blood_pressure_app/features/settings/tiles/dropdown_list_tile.dart';
+import 'package:blood_pressure_app/l10n/app_localizations.dart';
 import 'package:blood_pressure_app/model/export_import/column.dart';
 import 'package:blood_pressure_app/model/export_import/export_configuration.dart';
 import 'package:blood_pressure_app/model/storage/common_settings_interfaces.dart';
@@ -9,7 +10,6 @@ import 'package:blood_pressure_app/model/storage/export_pdf_settings_store.dart'
 import 'package:blood_pressure_app/model/storage/export_settings_store.dart';
 import 'package:blood_pressure_app/model/storage/export_xsl_settings_store.dart';
 import 'package:flutter/material.dart';
-import 'package:blood_pressure_app/l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 
 /// Setting for configuring fields in the current export.

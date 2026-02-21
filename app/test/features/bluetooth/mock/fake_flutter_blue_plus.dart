@@ -21,13 +21,13 @@ class FakeFlutterBluePlus extends FlutterBluePlusMockable {
     )
   ];
 
-  StreamController<List<ScanResult>> _fakeScanResultsEmiter = StreamController.broadcast();
+  final StreamController<List<ScanResult>> _fakeScanResultsEmiter = StreamController.broadcast();
   Timer? _fakeScanResultsEmitTimer;
 
   @override
   BluetoothAdapterState get adapterStateNow => BluetoothAdapterState.on;
 
-  StreamController<bool> _isScanning = StreamController.broadcast();
+  final StreamController<bool> _isScanning = StreamController.broadcast();
   bool _scanningNow = false;
 
   @override

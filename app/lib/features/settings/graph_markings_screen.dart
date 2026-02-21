@@ -1,9 +1,9 @@
 import 'package:blood_pressure_app/components/color_picker.dart';
 import 'package:blood_pressure_app/components/input_dialoge.dart';
+import 'package:blood_pressure_app/l10n/app_localizations.dart';
 import 'package:blood_pressure_app/model/horizontal_graph_line.dart';
 import 'package:blood_pressure_app/model/storage/settings_store.dart';
 import 'package:flutter/material.dart';
-import 'package:blood_pressure_app/l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 
 class GraphMarkingsScreen extends StatelessWidget {

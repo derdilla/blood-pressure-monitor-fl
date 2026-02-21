@@ -1,9 +1,9 @@
 import 'package:blood_pressure_app/components/fullscreen_dialoge.dart';
 import 'package:blood_pressure_app/features/settings/tiles/color_picker_list_tile.dart';
+import 'package:blood_pressure_app/l10n/app_localizations.dart';
 import 'package:blood_pressure_app/model/storage/settings_store.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:blood_pressure_app/l10n/app_localizations.dart';
 import 'package:health_data_store/health_data_store.dart';
 import 'package:provider/provider.dart';
 

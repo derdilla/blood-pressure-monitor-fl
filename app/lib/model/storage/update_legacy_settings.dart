@@ -4,6 +4,7 @@ import 'package:blood_pressure_app/model/blood_pressure/warn_values.dart';
 import 'package:blood_pressure_app/model/export_import/export_configuration.dart';
 import 'package:blood_pressure_app/model/horizontal_graph_line.dart';
 import 'package:blood_pressure_app/model/storage/convert_util.dart';
+import 'package:blood_pressure_app/model/storage/db/config_dao.dart';
 import 'package:blood_pressure_app/model/storage/db/config_db.dart';
 import 'package:blood_pressure_app/model/storage/export_columns_store.dart';
 import 'package:blood_pressure_app/model/storage/export_csv_settings_store.dart';
@@ -14,8 +15,6 @@ import 'package:blood_pressure_app/model/storage/settings_store.dart';
 import 'package:flutter/material.dart';
 import 'package:health_data_store/health_data_store.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-import 'db/config_dao.dart';
 
 /// Function for upgrading shared preferences from pre 1.5.4 (Oct 23) versions.
 Future<void> migrateSharedPreferences(Settings settings, ExportSettings exportSettings, CsvExportSettings csvExportSettings,

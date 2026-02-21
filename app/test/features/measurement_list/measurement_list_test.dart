@@ -1,8 +1,8 @@
 import 'package:blood_pressure_app/features/measurement_list/measurement_list.dart';
 import 'package:blood_pressure_app/features/measurement_list/measurement_list_entry.dart';
+import 'package:blood_pressure_app/l10n/app_localizations.dart';
 import 'package:blood_pressure_app/model/storage/settings_store.dart';
 import 'package:flutter/material.dart';
-import 'package:blood_pressure_app/l10n/app_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../../model/export_import/record_formatter_test.dart';
@@ -38,9 +38,9 @@ void main() {
     ));
     expect(find.byType(MeasurementListRow), findsNWidgets(3));
     // coordinates starting at top left
-    final top = await tester.getCenter(find.text('1')).dy;
-    final center = await tester.getCenter(find.text('2')).dy;
-    final bottom = await tester.getCenter(find.text('3')).dy;
+    final top = tester.getCenter(find.text('1')).dy;
+    final center = tester.getCenter(find.text('2')).dy;
+    final bottom = tester.getCenter(find.text('3')).dy;
     expect(bottom, greaterThan(center));
     expect(top, lessThan(center));
   });

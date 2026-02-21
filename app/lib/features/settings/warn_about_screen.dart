@@ -1,6 +1,6 @@
+import 'package:blood_pressure_app/l10n/app_localizations.dart';
 import 'package:blood_pressure_app/model/blood_pressure/warn_values.dart';
 import 'package:flutter/material.dart';
-import 'package:blood_pressure_app/l10n/app_localizations.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class AboutWarnValuesScreen extends StatelessWidget {

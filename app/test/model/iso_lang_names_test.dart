@@ -1,6 +1,6 @@
+import 'package:blood_pressure_app/l10n/app_localizations.dart';
 import 'package:blood_pressure_app/model/iso_lang_names.dart';
 import 'package:flutter/material.dart';
-import 'package:blood_pressure_app/l10n/app_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
@@ -27,7 +27,9 @@ void main() {
     for (final c1 in 'abcdefghijklmnopqrstuvwxyz'.characters) {
       for (final c2 in 'abcdefghijklmnopqrstuvwxyz'.characters) {
         if (AppLocalizations.supportedLocales.where(
-            (e) => e.toLanguageTag() == '$c1$c2',).isNotEmpty) continue;
+            (e) => e.toLanguageTag() == '$c1$c2',).isNotEmpty) {
+          continue;
+        }
         expect(() => getDisplayLanguage(Locale('$c1$c2')),
           throwsAssertionError,
           reason: 'Lang $c1$c2 does not exist'

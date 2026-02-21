@@ -1,12 +1,12 @@
 import 'dart:math' as math;
 import 'dart:ui' as ui;
 
+import 'package:blood_pressure_app/l10n/app_localizations.dart';
 import 'package:blood_pressure_app/model/horizontal_graph_line.dart';
 import 'package:blood_pressure_app/model/storage/storage.dart';
 import 'package:blood_pressure_app/screens/loading_screen.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
-import 'package:blood_pressure_app/l10n/app_localizations.dart';
 import 'package:health_data_store/health_data_store.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';

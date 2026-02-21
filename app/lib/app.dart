@@ -25,7 +25,7 @@ import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 /// that should be available everywhere in the app.
 class App extends StatefulWidget {
   /// Create the base for the entire app.
-  const App();
+  const App({super.key});
 
   @override
   State<App> createState() => _AppState();

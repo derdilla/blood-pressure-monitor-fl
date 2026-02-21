@@ -100,7 +100,7 @@ class ConvertUtil {
   };
 
   /// Does its best attempt at parsing a time in arbitrary format.
-  static DateTime? parseTime(dynamic time) {
+  static DateTime? parseTime(time) {
     final intTime = parseInt(time);
     if (intTime != null) {
       if (intTime.toString().length == 10) { // seconds

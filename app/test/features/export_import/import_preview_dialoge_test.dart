@@ -1,11 +1,11 @@
 import 'package:blood_pressure_app/components/custom_banner.dart';
 import 'package:blood_pressure_app/features/export_import/import_preview_dialoge.dart';
+import 'package:blood_pressure_app/l10n/app_localizations.dart';
 import 'package:blood_pressure_app/model/export_import/csv_converter.dart';
 import 'package:blood_pressure_app/model/export_import/csv_record_parsing_actor.dart';
 import 'package:blood_pressure_app/model/storage/export_columns_store.dart';
 import 'package:blood_pressure_app/model/storage/export_csv_settings_store.dart';
 import 'package:flutter/material.dart';
-import 'package:blood_pressure_app/l10n/app_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:health_data_store/health_data_store.dart';
 
@@ -92,7 +92,7 @@ void main() {
     ),),);
 
     expect(find.byType(CheckboxMenuButton), findsOneWidget);
-    expect(tester.getSemantics(find.byType(Checkbox)), containsSemantics(
+    expect(tester.getSemantics(find.byType(Checkbox)), isSemantics(
       isChecked: true,
     ),);
     expect(find.text('line1'), findsNothing);
@@ -101,7 +101,7 @@ void main() {
 
     await tester.tap(find.byType(CheckboxMenuButton));
     await tester.pumpAndSettle();
-    expect(tester.getSemantics(find.byType(Checkbox)), containsSemantics(
+    expect(tester.getSemantics(find.byType(Checkbox)), isSemantics(
       isChecked: false,
     ),);
     expect(find.text('line1'), findsOneWidget);
