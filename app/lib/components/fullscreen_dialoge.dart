@@ -52,11 +52,8 @@ class FullscreenDialoge extends StatelessWidget {
     child: Scaffold(
       body: _buildBody(),
       appBar: bottomAppBar ? null : _buildAppBar(context),
-      bottomNavigationBar: bottomAppBar ? BottomAppBar(
-        color: Colors.transparent,
-        shadowColor: Colors.transparent,
-        surfaceTintColor: Colors.transparent,
-        child: _buildAppBar(context),
+      bottomNavigationBar: bottomAppBar ? SafeArea(
+        child: SizedBox(height: kToolbarHeight, child: _buildAppBar(context)),
       ) : null,
     ),
   );
