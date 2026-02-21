@@ -14,14 +14,12 @@ linter:
     # Style:
     - always_declare_return_types
     - avoid_annotating_with_dynamic
-    # consider: https://dart.dev/tools/linter-rules/avoid_bool_literals_in_conditional_expressions
     - avoid_double_and_int_checks
     - avoid_escaping_inner_quotes
     - directives_ordering
     - eol_at_end_of_file
     - leading_newlines_in_multiline_strings
     - library_annotations
-    # TODO: - lines_longer_than_80_chars
     - matching_super_parameters
     - no_literal_bool_comparisons
     - noop_primitive_operations
@@ -30,9 +28,7 @@ linter:
     - prefer_final_in_for_each
     - prefer_final_locals
     - prefer_if_elements_to_conditional_expressions
-    # consider: https://dart.dev/tools/linter-rules/prefer_mixin
     - prefer_single_quotes
-    - public_member_api_docs
     - sort_constructors_first
     - type_annotate_public_apis
     - unnecessary_await_in_return
@@ -42,6 +38,18 @@ linter:
     - use_decorated_box
     - use_if_null_to_convert_nulls_to_bools
     - use_to_and_as_if_applicable
+    - void_checks
 
     # Pub
     - sort_pub_dependencies
+
+analyzer:
+  language:
+    strict-inference: true
+    strict-raw-types: true
+    strict-casts: true
+  exclude:
+    # Testing takes enough time as is
+    - test/**
+    # TODO: clean up this code
+    - lib/model/storage/**
