@@ -8,7 +8,6 @@
         }
     },
     "loading": "laddar…",
-    "@loading": {},
     "error": "Fel: {msg}",
     "@error": {
         "placeholders": {
@@ -18,7 +17,6 @@
         }
     },
     "errUnrealistic": "Orealistiskt värde? Stäng av validering i inställningarna!",
-    "@errUnrealistic": {},
     "errCantOpenURL": "Kan inte öppna URL: {url}",
     "@errCantOpenURL": {
         "placeholders": {
@@ -28,23 +26,347 @@
         }
     },
     "errNotStarted": "ej startad",
-    "@errNotStarted": {},
     "errNotEnoughDataToGraph": "Inte tillräckligt med data för att rita en graf.",
-    "@errNotEnoughDataToGraph": {},
     "errNoData": "ingen data",
-    "@errNoData": {},
     "title": "Blodtrycksapp",
-    "@title": {},
     "errNaN": "Vänligen skriv in ett tal",
-    "@errNaN": {},
     "errLt30": "Nummer <= 30? Stäng av validering i inställningarna!",
-    "@errLt30": {},
     "errDiaGtSys": "dia >= sys? Stäng av validering i inställningarna!",
-    "@errDiaGtSys": {},
     "errNoFileOpened": "ingen fil öppnades",
-    "@errNoFileOpened": {},
     "errNoValue": "Vänligen skriv ett värde",
-    "@errNoValue": {},
     "errWrongImportFormat": "Du kan endast importera filer i databas-formatet CSV och SQLite.",
-    "@errWrongImportFormat": {}
+    "behavior": "",
+    "connect": "",
+    "bluetoothInput": "",
+    "weekOfYear": "",
+    "@weekOfYear": {
+        "placeholders": {
+            "weekNum": {
+                "type": "int"
+            },
+            "year": {
+                "type": "int"
+            }
+        }
+    },
+    "aboutWarnValuesScreenDesc": "",
+    "warnAboutTxt2": "",
+    "validateInputs": "",
+    "month": "",
+    "addExportformat": "",
+    "exportDir": "",
+    "csv": "",
+    "exportSuccess": "",
+    "default_": "",
+    "accentColor": "",
+    "compactList": "",
+    "errTimeAfterNow": "",
+    "versionOf": "",
+    "@versionOf": {
+        "placeholders": {
+            "version": {
+                "type": "String"
+            }
+        }
+    },
+    "reset": "",
+    "measurementIndex": "",
+    "@measurementIndex": {
+        "placeholders": {
+            "number": {
+                "type": "int"
+            }
+        }
+    },
+    "btnConfirm": "",
+    "addMeasurement": "",
+    "startWithAddMeasurementPageDescription": "",
+    "deleteAllMedicineIntakes": "",
+    "invalidZip": "",
+    "warnBLETimeSus": "",
+    "@warnBLETimeSus": {
+        "placeholders": {
+            "hours": {
+                "type": "int"
+            }
+        }
+    },
+    "selectMeasurementTitle": "",
+    "activateWeightFeatures": "",
+    "animationSpeed": "",
+    "noMedication": "",
+    "licenses": "",
+    "remove": "",
+    "importSettings": "",
+    "warnDeletionUnrecoverable": "",
+    "exportPdfExportData": "",
+    "allowManualTimeInput": "",
+    "bodyMovementDetected": "",
+    "exportSettings": "",
+    "errBleNoPerms": "",
+    "drawRegressionLines": "",
+    "btnSave": "",
+    "deletionConfirmed": "",
+    "last30Days": "",
+    "fieldDelimiter": "",
+    "horizontalLines": "",
+    "preferredPressureUnit": "",
+    "exportPdfExportTitle": "",
+    "errParseEmptyCsvFile": "",
+    "date": "",
+    "import": "",
+    "pulShort": "",
+    "newBluetoothInputCrossPlatform": "",
+    "availableDevices": "",
+    "buildIn": "",
+    "timeFormat": "",
+    "errCantCreateArchive": "",
+    "sysLong": "",
+    "exportPdfCellHeight": "",
+    "exportCustomEntries": "",
+    "exportImport": "",
+    "enterTimeFormatString": "",
+    "allowMissingValues": "",
+    "edit": "",
+    "trustBLETime": "",
+    "needlePinBarWidthDesc": "",
+    "diaShort": "",
+    "export": "",
+    "bloodPressure": "",
+    "theme": "",
+    "scanningForDevices": "",
+    "year": "",
+    "warnAboutTxt1": "",
+    "measurementSuccess": "",
+    "improperMeasurementPosition": "",
+    "customGraphMarkings": "",
+    "exportFormat": "",
+    "exportPdfHeaderHeight": "",
+    "iconSize": "",
+    "name": "",
+    "measurementsPerDay": "",
+    "tapToSelect": "",
+    "aboutBleInput": "",
+    "bluetoothDisabled": "",
+    "errParseFailedDecodingField": "",
+    "@errParseFailedDecodingField": {
+        "placeholders": {
+            "lineNumber": {
+                "type": "int"
+            },
+            "fieldContent": {
+                "type": "String"
+            }
+        }
+    },
+    "light": "",
+    "newBluetoothInputOldLib": "",
+    "lifetime": "",
+    "exportMimeType": "",
+    "manageExportColumns": "",
+    "delete": "",
+    "errCantReadFile": "",
+    "notes": "",
+    "restartNow": "",
+    "importSuccess": "",
+    "@importSuccess": {
+        "placeholders": {
+            "count": {
+                "type": "int"
+            }
+        }
+    },
+    "meanArterialPressure": "",
+    "graphLineThickness": "",
+    "data": "",
+    "version": "",
+    "errMeasurementRead": "",
+    "other": "",
+    "enterWeight": "",
+    "errParseLineTooShort": "",
+    "@errParseLineTooShort": {
+        "placeholders": {
+            "lineNumber": {
+                "type": "int"
+            }
+        }
+    },
+    "exportWarnConfigNotImportable": "",
+    "timestamp": "",
+    "exportCsvHeadlineDesc": "",
+    "btnUndo": "",
+    "addNote": "",
+    "packageNameOf": "",
+    "@packageNameOf": {
+        "placeholders": {
+            "name": {
+                "type": "String"
+            }
+        }
+    },
+    "drawRegressionLinesDesc": "",
+    "pulColor": "",
+    "addLine": "",
+    "warnAboutTxt3": "",
+    "pulLong": "",
+    "sysColor": "",
+    "maxOf": "",
+    "@maxOf": {
+        "placeholders": {
+            "txt": {
+                "type": "String"
+            }
+        }
+    },
+    "medications": "",
+    "startWithAddMeasurementPage": "",
+    "pulsePressure": "",
+    "errNotImportable": "",
+    "confirmDeletion": "",
+    "textDelimiter": "",
+    "select": "",
+    "@select": {
+        "description": "Used when f.e. selecting a single measurement when the bluetooth device returned multiple"
+    },
+    "diaColor": "",
+    "requiresAppRestart": "",
+    "deleteAllSettings": "",
+    "pdf": "",
+    "aboutWarnValuesScreen": "",
+    "exportPdfExportStatistics": "",
+    "age": "",
+    "db": "",
+    "exportPdfCellFontSize": "",
+    "dark": "",
+    "maximum": "",
+    "tapToClose": "",
+    "exportCsvHeadline": "",
+    "pulseRateLessThanLowerLimit": "",
+    "errNeedHeadline": "",
+    "determineWarnValues": "",
+    "csvTitle": "",
+    "statistics": "",
+    "diaWarn": "",
+    "minimum": "",
+    "shared": "",
+    "disabled": "",
+    "btnCancel": "",
+    "intakes": "",
+    "btnShare": "",
+    "deleteAllMeasurements": "",
+    "language": "",
+    "exportWarnNotEveryFieldExported": "",
+    "@exportWarnNotEveryFieldExported": {
+        "placeholders": {
+            "count": {
+                "type": "int"
+            },
+            "fields": {
+                "type": "String"
+            }
+        }
+    },
+    "average": "",
+    "addEntry": "",
+    "sourceCode": "",
+    "useLegacyList": "",
+    "measurementCount": "",
+    "exportAfterEveryInputDesc": "",
+    "valueDistribution": "",
+    "exportFieldFormatDocumentation": "",
+    "exportFieldsPreset": "",
+    "exportAfterEveryInput": "",
+    "cuffTooLoose": "",
+    "irregularPulseDetected": "",
+    "week": "",
+    "bluetoothInputDesc": "",
+    "titleInCsv": "",
+    "addMedication": "",
+    "linePositionY": "",
+    "dontShowAgain": "",
+    "warnValues": "",
+    "preferredWeightUnit": "",
+    "@preferredWeightUnit": {
+        "description": "Setting for the unit the app will use for displaying weight"
+    },
+    "result": "",
+    "settings": "",
+    "text": "",
+    "errParseTimeNotRestoreable": "",
+    "avgOf": "",
+    "@avgOf": {
+        "placeholders": {
+            "txt": {
+                "type": "String"
+            }
+        }
+    },
+    "enterTimeFormatDesc": "",
+    "confirmDelete": "",
+    "deleteAllNotes": "",
+    "weight": "",
+    "recordFormat": "",
+    "pulseRateExceedsUpperLimit": "",
+    "errAccuracyLoss": "",
+    "minOf": "",
+    "@minOf": {
+        "placeholders": {
+            "txt": {
+                "type": "String"
+            }
+        }
+    },
+    "timeResolvedMetrics": "",
+    "enterTimeFormatScreen": "",
+    "fieldFormat": "",
+    "errParseUnknownColumn": "",
+    "@errParseUnknownColumn": {
+        "placeholders": {
+            "title": {
+                "type": "String"
+            }
+        }
+    },
+    "system": "",
+    "sysShort": "",
+    "sysWarn": "",
+    "now": "",
+    "layout": "",
+    "diaLong": "",
+    "time": "",
+    "oldBluetoothInput": "",
+    "xsl": "",
+    "custom": "",
+    "day": "",
+    "note": "",
+    "exportPdfHeaderFontSize": "",
+    "userID": "",
+    "color": "",
+    "last7Days": "",
+    "needlePinBarWidth": "",
+    "buildNumberOf": "",
+    "@buildNumberOf": {
+        "placeholders": {
+            "buildNumber": {
+                "type": "String"
+            }
+        }
+    },
+    "errFeatureNotSupported": "",
+    "pdfDocumentTitle": "",
+    "@pdfDocumentTitle": {
+        "placeholders": {
+            "start": {
+                "type": "String"
+            },
+            "end": {
+                "type": "String"
+            }
+        }
+    },
+    "confirmDeleteDesc": "",
+    "bottomAppBars": "",
+    "warnNeedsRestartForUsingApp": "",
+    "defaultDosis": "",
+    "dosis": ""
 }
