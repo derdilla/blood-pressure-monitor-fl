@@ -98,6 +98,7 @@ class _AddExportColumnDialogeState extends State<AddExportColumnDialoge>
           key: formKey,
           child: ListView(
             children: [
+              SizedBox(height: 6.0),
               TextFormField(
                 initialValue: csvTitle,
                 decoration: InputDecoration(
