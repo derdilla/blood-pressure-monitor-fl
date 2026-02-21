@@ -1,4 +1,8 @@
+import 'dart:io';
+
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:integration_test/integration_test.dart';
 
 extension WaitUntil on WidgetTester {
   /// Retries with 100ms delay for up to [maxLength] for a [test] to succeed.
@@ -13,5 +17,14 @@ extension WaitUntil on WidgetTester {
       await pump(Duration(milliseconds: 100));
     }
     await pump();
+  }
+
+extension Screenshot on WidgetTester {
+  Future<void> takeScreenshot(String name) async {
+    await pumpAndSettle();
+    await expectLater(
+      find.byType(MaterialApp),
+      matchesGoldenFile('screenshots/$name.png'),
+    );
   }
 }

@@ -52,16 +52,8 @@ void main() {
       color: Colors.yellow,
       save: false,
     );
-    await tester.tap(find.text(localizations.noMedication));
-    await tester.pumpAndSettle();
-    await tester.tap(find.text('Metolazone'));
-    await tester.pumpAndSettle();
-    await tester.enterText(find.byType(TextFormField).at(4), '1.5');
 
-    await tester.pumpAndSettle();
-    await binding.convertFlutterSurfaceToImage();
-    await tester.pump();
-    await binding.takeScreenshot('01-example_add');
+    await tester.takeScreenshot('01-example_add');
   });
 }
 

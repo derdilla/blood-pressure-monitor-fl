@@ -26,17 +26,14 @@ void main() {
       tester.getCenter(find.text(localizations.animationSpeed)),
       tester.getCenter(find.text(localizations.animationSpeed)) - tester.getCenter(find.text(localizations.timeFormat))
     );
-    await tester.pumpAndSettle();
 
-    await binding.convertFlutterSurfaceToImage();
-    await tester.pump();
-    await binding.takeScreenshot('03-example_settings');
+    await tester.takeScreenshot('03-example_settings');
 
     await tester.scrollUntilVisible(find.text(localizations.exportImport, skipOffstage: false), 50.0);
     await tester.pumpAndSettle();
     await tester.tap(find.text(localizations.exportImport));
     await tester.pumpAndSettle();
 
-    await binding.takeScreenshot('05-export_example');
+    await tester.takeScreenshot('05-export_example');
   });
 }

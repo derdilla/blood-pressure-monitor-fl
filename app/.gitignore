@@ -54,3 +54,4 @@ app.*.map.json
 /tmp6.csv
 /android/app/.cxx/
 /lib/l10n/app_localizations*.dart
+/integration_test/screenshots/
