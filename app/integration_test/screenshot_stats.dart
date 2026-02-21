@@ -1,4 +1,3 @@
-
 import 'dart:math';
 
 import 'package:blood_pressure_app/l10n/app_localizations.dart';
@@ -8,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:health_data_store/health_data_store.dart';
-import 'package:integration_test/integration_test.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:provider/provider.dart';
 
@@ -16,7 +14,6 @@ import '../test/model/analyzer_test.dart';
 import 'util.dart';
 
 void main() {
-  final binding = IntegrationTestWidgetsFlutterBinding.ensureInitialized();
   testWidgets('Statistics screen', (WidgetTester tester) async {
     TestWidgetsFlutterBinding.ensureInitialized();
     await initializeDateFormatting('en');

@@ -39,12 +39,7 @@ class CsvConverter with TypeLogger {
 
     if (settings.exportHeadline) table.insert(0, columns.map((c) => c.csvTitle).toList());
 
-    final csvCreator = ListToCsvConverter(
-        fieldDelimiter: settings.fieldDelimiter,
-        textDelimiter: settings.textDelimiter,
-    );
-
-    return csvCreator.convert(table);
+    return _buildCodec().encode(table);
   }
 
   /// Attempts to parse a csv string automatically.
@@ -76,16 +71,21 @@ class CsvConverter with TypeLogger {
   /// Parses lines from csv files according to settings.
   /// 
   /// Works around different EOL types n
-  List<List<String>> getCsvLines(String csvString) {
-    final converter = CsvToListConverter(
-      fieldDelimiter: settings.fieldDelimiter,
-      textDelimiter: settings.textDelimiter,
-      shouldParseNumbers: false,
+  List<List<dynamic>> getCsvLines(String csvString) {
+    final codec = _buildCodec(
+      lineDelimiter: csvString.contains('\r\n') ? '\r\n' : '\n',
     );
-    final csvLines = converter.convert<String>(csvString, eol: '\r\n');
-    if (csvLines.length < 2) return converter.convert<String>(csvString, eol: '\n');
-    return csvLines;
+    return codec.decode(csvString);
   }
+
+  CsvCodec _buildCodec({
+    String lineDelimiter = '\r\n',
+  }) => CsvCodec(
+    fieldDelimiter: settings.fieldDelimiter,
+    quoteCharacter: settings.textDelimiter,
+    addBom: true, // Better excel compatibility
+    lineDelimiter: lineDelimiter,
+  );
 
   /// Map column names in the first csv-line to matching [ExportColumn].
   Map<String, ExportColumn> getColumns(List<String> headline) {
@@ -109,7 +109,7 @@ class CsvConverter with TypeLogger {
   /// [assumeHeadline] controls whether the line number should be offset by one
   /// in case of error.
   RecordParsingResult parseRecords(
-      List<List<String>> dataLines,
+      List<List<dynamic>> dataLines,
       List<ExportColumn?> parsers, [
         bool assumeHeadline = true,
       ]) {
@@ -123,12 +123,12 @@ class CsvConverter with TypeLogger {
       final List<(RowDataFieldType, dynamic)> recordPieces = [];
       for (int fieldIndex = 0; fieldIndex < parsers.length; fieldIndex++) {
         final parser = parsers[fieldIndex];
-        final (RowDataFieldType, dynamic)? piece = parser?.decode(currentLine[fieldIndex]);
+        final (RowDataFieldType, dynamic)? piece = parser?.decode(currentLine[fieldIndex].toString());
         // Validate that the column parsed the expected type.
         // Null can be the result of empty fields.
         if (piece?.$1 != parser?.restoreAbleType
             && piece != null) {
-          return RecordParsingResult.err(RecordParsingErrorUnparsableField(currentLineNumber, currentLine[fieldIndex]));
+          return RecordParsingResult.err(RecordParsingErrorUnparsableField(currentLineNumber, currentLine[fieldIndex].toString()));
         }
         if (piece != null) recordPieces.add(piece);
       }

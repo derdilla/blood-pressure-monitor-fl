@@ -12,13 +12,13 @@ environment:
 
 dependencies:
   collection: ^1.19.1
-  csv: ^6.0.0
+  csv: ^7.0.0
   intl: ^0.20.2
   flutter:
     sdk: flutter
   flutter_localizations:
     sdk: flutter
-  flutter_markdown: ^0.7.7+1
+  flutter_markdown_plus: ^1.0.7
   function_tree: ^0.9.1
   provider: ^6.1.5+1
   path: ^1.9.1
@@ -32,10 +32,10 @@ dependencies:
     path: ../health_data_store/
   flutter_bloc: ^9.1.1
   bluetooth_low_energy: ^6.1.0
-  flutter_blue_plus: ^1.35.8
+  flutter_blue_plus: ^1.36.8 # Can't update further: Starting from 2.0 the license gets weird
   archive: ^4.0.7
   file_picker: ^10.3.3
-  app_settings: ^6.1.1
+  app_settings: ^7.0.0
   logging: ^1.3.0
   persistent_user_dir_access_android: ^0.0.1
   share_plus: ^12.0.1
