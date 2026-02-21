@@ -60,6 +60,7 @@ class _AddMedicationDialogeState extends State<AddMedicationDialoge> {
         key: formKey,
         child: ListView(
           children: [
+            SizedBox(height: 6.0),
             TextFormField(
               focusNode: nameFocusNode,
               decoration: _getInputDecoration(context, localizations.name),
