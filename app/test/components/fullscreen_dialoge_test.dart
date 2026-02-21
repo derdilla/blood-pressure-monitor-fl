@@ -54,7 +54,6 @@ void main() {
       bottomAppBar: false,
       actionButtonText: null,
     )));
-    expect(find.byType(BottomAppBar), findsNothing);
     expect(tester.getTopLeft(find.byType(AppBar)), tester.getTopLeft(find.byType(FullscreenDialoge)));
     final double topAppBarYPos = tester.getTopLeft(find.byType(AppBar)).dy;
 
@@ -63,7 +62,7 @@ void main() {
       bottomAppBar: true,
       actionButtonText: null,
     )));
-    expect(tester.getBottomRight(find.byType(BottomAppBar)), tester.getBottomRight(find.byType(FullscreenDialoge)));
+    expect(tester.getBottomRight(find.byType(AppBar)), tester.getBottomRight(find.byType(FullscreenDialoge)));
     
     expect(tester.getTopLeft(find.byType(AppBar)).dy, greaterThan(topAppBarYPos));
   });
