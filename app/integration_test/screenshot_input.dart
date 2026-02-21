@@ -52,6 +52,7 @@ void main() {
       color: Colors.yellow,
       save: false,
     );
+    FocusManager.instance.primaryFocus?.unfocus();
 
     await tester.takeScreenshot('01-example_add');
   });
