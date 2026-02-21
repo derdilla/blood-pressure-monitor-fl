@@ -73,7 +73,7 @@ class CsvExportSettings extends ChangeNotifier implements CustomFieldsSettings {
   /// Reset all fields to their default values.
   void reset() => copyFrom(CsvExportSettings());
 
-  String _fieldDelimiter = ',';
+  String _fieldDelimiter = ';';
   String get fieldDelimiter => _fieldDelimiter;
   set fieldDelimiter(String value) {
     _fieldDelimiter = value;
