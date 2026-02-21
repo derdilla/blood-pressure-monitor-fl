@@ -1,6 +1,5 @@
 {
     "title": "Kraujo spaudimo programėlė",
-    "@title": {},
     "success": "Pavyko: {msg}",
     "@success": {
         "placeholders": {
@@ -10,7 +9,6 @@
         }
     },
     "loading": "kraunama…",
-    "@loading": {},
     "error": "Klaida: {msg}",
     "@error": {
         "placeholders": {
@@ -20,13 +18,9 @@
         }
     },
     "errNaN": "Įveskite skaičių",
-    "@errNaN": {},
     "errLt30": "Skaičius <= 30? Išjunkite patvirtinimą nustatymuose!",
-    "@errLt30": {},
     "errUnrealistic": "Nerealistiška vertė? Išjunkite patvirtinimą nustatymuose!",
-    "@errUnrealistic": {},
     "errDiaGtSys": "dia >= sys? Išjunkite patvirtinimą nustatymuose!",
-    "@errDiaGtSys": {},
     "errCantOpenURL": "Negalima atidaryti URL: {url}",
     "@errCantOpenURL": {
         "placeholders": {
@@ -36,97 +30,51 @@
         }
     },
     "errNoFileOpened": "neatidarytas joks failas",
-    "@errNoFileOpened": {},
     "errNotStarted": "nepradėta",
-    "@errNotStarted": {},
     "errNoValue": "Įveskite vertę",
-    "@errNoValue": {},
     "errNotEnoughDataToGraph": "Nepakanka duomenų grafiko piešimui.",
-    "@errNotEnoughDataToGraph": {},
     "errNoData": "nėra duomenų",
-    "@errNoData": {},
     "errWrongImportFormat": "Galite importuoti tik CSV ir SQLite duomenų bazių formato failus.",
-    "@errWrongImportFormat": {},
     "errNeedHeadline": "Galite importuoti tik pavadinimą turinčius failus.",
-    "@errNeedHeadline": {},
     "errCantReadFile": "Negalima perskaityti failo turinio",
-    "@errCantReadFile": {},
     "errNotImportable": "Negalima importuoti šio failo",
-    "@errNotImportable": {},
     "btnCancel": "ATŠAUKTI",
-    "@btnCancel": {},
     "btnSave": "IŠSAUGOTI",
-    "@btnSave": {},
     "btnConfirm": "GERAI",
-    "@btnConfirm": {},
     "btnUndo": "ATSTATYTI",
-    "@btnUndo": {},
     "sysLong": "Sistolinis",
-    "@sysLong": {},
     "sysShort": "sis",
-    "@sysShort": {},
     "diaLong": "Diastolinis",
-    "@diaLong": {},
     "diaShort": "dia",
-    "@diaShort": {},
     "pulLong": "Pulsas",
-    "@pulLong": {},
     "pulShort": "pul",
-    "@pulShort": {},
     "addNote": "Pastaba (neprivaloma)",
-    "@addNote": {},
     "settings": "Nustatymai",
-    "@settings": {},
     "layout": "Išdėstymas",
-    "@layout": {},
     "allowManualTimeInput": "Leisti rankinį laiko įvedimą",
-    "@allowManualTimeInput": {},
     "enterTimeFormatScreen": "Laiko formatas",
-    "@enterTimeFormatScreen": {},
     "theme": "Tema",
-    "@theme": {},
     "system": "Sistema",
-    "@system": {},
     "dark": "Tamsus",
-    "@dark": {},
     "light": "Šviesus",
-    "@light": {},
     "iconSize": "Piktogramos dydis",
-    "@iconSize": {},
     "graphLineThickness": "Linijos storis",
-    "@graphLineThickness": {},
     "animationSpeed": "Animacijos trukmė",
-    "@animationSpeed": {},
     "accentColor": "Temos spalva",
-    "@accentColor": {},
     "sysColor": "Sistolinės linijos spalva",
-    "@sysColor": {},
     "diaColor": "Diastolinės linijos spalva",
-    "@diaColor": {},
     "pulColor": "Pulso linijos spalva",
-    "@pulColor": {},
     "behavior": "Elgesys",
-    "@behavior": {},
     "validateInputs": "Patvirtinti įvestis",
-    "@validateInputs": {},
     "confirmDeletion": "Patvirtinti ištrynimą",
-    "@confirmDeletion": {},
     "age": "Amžius",
-    "@age": {},
     "determineWarnValues": "Nustatyti įspėjimo vertes",
-    "@determineWarnValues": {},
     "aboutWarnValuesScreen": "Apie",
-    "@aboutWarnValuesScreen": {},
     "aboutWarnValuesScreenDesc": "Daugiau informacijos apie įspėjimo vertes",
-    "@aboutWarnValuesScreenDesc": {},
     "sysWarn": "Įspėjimas apie sistolinę vertę",
-    "@sysWarn": {},
     "diaWarn": "Įspėjimas apie diastolinę vertę",
-    "@diaWarn": {},
     "data": "Duomenys",
-    "@data": {},
     "version": "Versija",
-    "@version": {},
     "versionOf": "Versija: {version}",
     "@versionOf": {
         "placeholders": {
@@ -152,35 +100,273 @@
         }
     },
     "exportImport": "Eksportuoti / Importuoti",
-    "@exportImport": {},
     "exportDir": "Eksporto katalogas",
-    "@exportDir": {},
     "exportAfterEveryInput": "Eksportuoti po kiekvieno įrašo",
-    "@exportAfterEveryInput": {},
     "exportAfterEveryInputDesc": "Nerekomenduojama (atsiras labai daug failų)",
-    "@exportAfterEveryInputDesc": {},
     "exportFormat": "Eksportuoti formatą",
-    "@exportFormat": {},
     "exportCustomEntries": "Tinkinti laukelius",
-    "@exportCustomEntries": {},
     "addEntry": "Įtraukti laukelį",
-    "@addEntry": {},
     "exportMimeType": "Eksportuoti medijos tipą",
-    "@exportMimeType": {},
     "exportCsvHeadline": "Pavadinimas",
-    "@exportCsvHeadline": {},
     "exportCsvHeadlineDesc": "Padeda atskirti tipus",
-    "@exportCsvHeadlineDesc": {},
     "csv": "CSV",
-    "@csv": {},
     "pdf": "PDF",
-    "@pdf": {},
     "db": "SQLite DB",
-    "@db": {},
     "text": "tekstas",
-    "@text": {},
     "other": "kita",
-    "@other": {},
     "fieldDelimiter": "Laukelio skyriklis",
-    "@fieldDelimiter": {}
+    "connect": "",
+    "bluetoothInput": "",
+    "weekOfYear": "",
+    "@weekOfYear": {
+        "placeholders": {
+            "weekNum": {
+                "type": "int"
+            },
+            "year": {
+                "type": "int"
+            }
+        }
+    },
+    "warnAboutTxt2": "",
+    "month": "",
+    "addExportformat": "",
+    "exportSuccess": "",
+    "default_": "",
+    "compactList": "",
+    "errTimeAfterNow": "",
+    "reset": "",
+    "measurementIndex": "",
+    "@measurementIndex": {
+        "placeholders": {
+            "number": {
+                "type": "int"
+            }
+        }
+    },
+    "addMeasurement": "",
+    "startWithAddMeasurementPageDescription": "",
+    "deleteAllMedicineIntakes": "",
+    "invalidZip": "",
+    "warnBLETimeSus": "",
+    "@warnBLETimeSus": {
+        "placeholders": {
+            "hours": {
+                "type": "int"
+            }
+        }
+    },
+    "selectMeasurementTitle": "",
+    "activateWeightFeatures": "",
+    "noMedication": "",
+    "licenses": "",
+    "remove": "",
+    "importSettings": "",
+    "warnDeletionUnrecoverable": "",
+    "exportPdfExportData": "",
+    "bodyMovementDetected": "",
+    "exportSettings": "",
+    "errBleNoPerms": "",
+    "drawRegressionLines": "",
+    "deletionConfirmed": "",
+    "last30Days": "",
+    "horizontalLines": "",
+    "preferredPressureUnit": "",
+    "exportPdfExportTitle": "",
+    "errParseEmptyCsvFile": "",
+    "date": "",
+    "import": "",
+    "newBluetoothInputCrossPlatform": "",
+    "availableDevices": "",
+    "buildIn": "",
+    "timeFormat": "",
+    "errCantCreateArchive": "",
+    "exportPdfCellHeight": "",
+    "enterTimeFormatString": "",
+    "allowMissingValues": "",
+    "edit": "",
+    "trustBLETime": "",
+    "needlePinBarWidthDesc": "",
+    "export": "",
+    "bloodPressure": "",
+    "scanningForDevices": "",
+    "year": "",
+    "warnAboutTxt1": "",
+    "measurementSuccess": "",
+    "improperMeasurementPosition": "",
+    "customGraphMarkings": "",
+    "exportPdfHeaderHeight": "",
+    "name": "",
+    "measurementsPerDay": "",
+    "tapToSelect": "",
+    "aboutBleInput": "",
+    "bluetoothDisabled": "",
+    "errParseFailedDecodingField": "",
+    "@errParseFailedDecodingField": {
+        "placeholders": {
+            "lineNumber": {
+                "type": "int"
+            },
+            "fieldContent": {
+                "type": "String"
+            }
+        }
+    },
+    "newBluetoothInputOldLib": "",
+    "lifetime": "",
+    "bottomAppBars": "",
+    "manageExportColumns": "",
+    "delete": "",
+    "notes": "",
+    "restartNow": "",
+    "importSuccess": "",
+    "@importSuccess": {
+        "placeholders": {
+            "count": {
+                "type": "int"
+            }
+        }
+    },
+    "meanArterialPressure": "",
+    "errMeasurementRead": "",
+    "enterWeight": "",
+    "errParseLineTooShort": "",
+    "@errParseLineTooShort": {
+        "placeholders": {
+            "lineNumber": {
+                "type": "int"
+            }
+        }
+    },
+    "exportWarnConfigNotImportable": "",
+    "timestamp": "",
+    "drawRegressionLinesDesc": "",
+    "addLine": "",
+    "warnAboutTxt3": "",
+    "maxOf": "",
+    "@maxOf": {
+        "placeholders": {
+            "txt": {
+                "type": "String"
+            }
+        }
+    },
+    "medications": "",
+    "startWithAddMeasurementPage": "",
+    "pulsePressure": "",
+    "textDelimiter": "",
+    "select": "",
+    "@select": {
+        "description": "Used when f.e. selecting a single measurement when the bluetooth device returned multiple"
+    },
+    "requiresAppRestart": "",
+    "deleteAllSettings": "",
+    "exportPdfExportStatistics": "",
+    "exportPdfCellFontSize": "",
+    "maximum": "",
+    "tapToClose": "",
+    "pulseRateLessThanLowerLimit": "",
+    "csvTitle": "",
+    "statistics": "",
+    "minimum": "",
+    "shared": "",
+    "disabled": "",
+    "intakes": "",
+    "btnShare": "",
+    "deleteAllMeasurements": "",
+    "language": "",
+    "exportWarnNotEveryFieldExported": "",
+    "@exportWarnNotEveryFieldExported": {
+        "placeholders": {
+            "count": {
+                "type": "int"
+            },
+            "fields": {
+                "type": "String"
+            }
+        }
+    },
+    "average": "",
+    "sourceCode": "",
+    "useLegacyList": "",
+    "measurementCount": "",
+    "valueDistribution": "",
+    "defaultDosis": "",
+    "exportFieldFormatDocumentation": "",
+    "exportFieldsPreset": "",
+    "cuffTooLoose": "",
+    "irregularPulseDetected": "",
+    "week": "",
+    "bluetoothInputDesc": "",
+    "titleInCsv": "",
+    "addMedication": "",
+    "linePositionY": "",
+    "dontShowAgain": "",
+    "warnValues": "",
+    "preferredWeightUnit": "",
+    "@preferredWeightUnit": {
+        "description": "Setting for the unit the app will use for displaying weight"
+    },
+    "result": "",
+    "errParseTimeNotRestoreable": "",
+    "avgOf": "",
+    "@avgOf": {
+        "placeholders": {
+            "txt": {
+                "type": "String"
+            }
+        }
+    },
+    "enterTimeFormatDesc": "",
+    "confirmDelete": "",
+    "deleteAllNotes": "",
+    "weight": "",
+    "recordFormat": "",
+    "dosis": "",
+    "pulseRateExceedsUpperLimit": "",
+    "errAccuracyLoss": "",
+    "minOf": "",
+    "@minOf": {
+        "placeholders": {
+            "txt": {
+                "type": "String"
+            }
+        }
+    },
+    "timeResolvedMetrics": "",
+    "fieldFormat": "",
+    "errParseUnknownColumn": "",
+    "@errParseUnknownColumn": {
+        "placeholders": {
+            "title": {
+                "type": "String"
+            }
+        }
+    },
+    "now": "",
+    "time": "",
+    "oldBluetoothInput": "",
+    "xsl": "",
+    "custom": "",
+    "day": "",
+    "note": "",
+    "exportPdfHeaderFontSize": "",
+    "userID": "",
+    "color": "",
+    "last7Days": "",
+    "needlePinBarWidth": "",
+    "errFeatureNotSupported": "",
+    "pdfDocumentTitle": "",
+    "@pdfDocumentTitle": {
+        "placeholders": {
+            "start": {
+                "type": "String"
+            },
+            "end": {
+                "type": "String"
+            }
+        }
+    },
+    "confirmDeleteDesc": "",
+    "warnNeedsRestartForUsingApp": ""
 }
