@@ -9,7 +9,6 @@ import 'package:integration_test/integration_test.dart';
 import 'util.dart';
 
 void main() {
-  final binding = IntegrationTestWidgetsFlutterBinding.ensureInitialized();
   testWidgets('Screenshot home page', (WidgetTester tester) async {
     final localizations = await AppLocalizations.delegate.load(const Locale('en'));
 
@@ -32,9 +31,7 @@ void main() {
     await tester.tap(find.text('116'));
     await tester.pumpAndSettle();
 
-    await binding.convertFlutterSurfaceToImage();
-    await tester.pump();
-    await binding.takeScreenshot('02-example_home');
+    await tester.takeScreenshot('02-example_home');
   });
 }
 

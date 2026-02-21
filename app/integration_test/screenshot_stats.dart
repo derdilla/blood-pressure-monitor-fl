@@ -13,6 +13,7 @@ import 'package:intl/date_symbol_data_local.dart';
 import 'package:provider/provider.dart';
 
 import '../test/model/analyzer_test.dart';
+import 'util.dart';
 
 void main() {
   final binding = IntegrationTestWidgetsFlutterBinding.ensureInitialized();
@@ -52,10 +53,7 @@ void main() {
       ),
     ));
 
-    await tester.pumpAndSettle();
-    await binding.convertFlutterSurfaceToImage();
-    await tester.pump();
-    await binding.takeScreenshot('04-example_stats');
+    await tester.takeScreenshot('04-example_stats');
   });
 }
 
