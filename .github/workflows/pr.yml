@@ -95,10 +95,10 @@ jobs:
         with:
           sdk: stable
       - name: Analyze package
-        run: flutter analyze
+        run: dart analyze
         working-directory: app
       - name: Analyze app
-        run: flutter analyze
+        run: dart analyze
         working-directory: app
   test:
     if: contains(github.event.pull_request.labels.*.name, 'auto-test')

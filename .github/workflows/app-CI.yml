@@ -23,10 +23,10 @@ jobs:
         with:
           sdk: stable
       - name: Analyze package
-        run: flutter analyze
+        run: dart analyze
         working-directory: app
       - name: Analyze app
-        run: flutter analyze
+        run: dart analyze
         working-directory: app
   run-tests:
     runs-on: ubuntu-latest
