@@ -10,8 +10,8 @@ class CsvRecordParsingActor {
   /// Create an intermediate object to manage a record parsing process.
   CsvRecordParsingActor(this._converter, String csvString) {
     final lines = _converter.getCsvLines(csvString);
-    _firstLine = lines.removeAt(0);
-    _bodyLines = lines;
+    _firstLine = lines.removeAt(0).cast<String>();
+    _bodyLines = lines.map((l) => l.cast<String>()).toList();
     _columnNames = _firstLine ?? [];
 
     final assumedColumns = _converter.getColumns(_columnNames);
