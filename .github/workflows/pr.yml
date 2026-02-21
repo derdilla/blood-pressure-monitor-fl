@@ -85,9 +85,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}%
   analyze-code:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
-      pull-requests: write
     steps:
       - name: Checkout PR code
         uses: actions/checkout@v4
@@ -98,11 +95,9 @@ jobs:
         with:
           sdk: stable
       - name: Analyze package
-        id: gold-upd
         run: flutter analyze
         working-directory: app
       - name: Analyze app
-        id: gold-upd
         run: flutter analyze
         working-directory: app
   test:
