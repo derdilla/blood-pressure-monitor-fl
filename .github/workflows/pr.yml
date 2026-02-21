@@ -18,7 +18,7 @@ jobs:
       - name: Checkout PR code
         uses: actions/checkout@v4
         with:
-          ref: ${{ github.head_ref }}
+          ref: ${{ github.event.pull_request.head.sha }}
           sparse-checkout: "app/lib/l10n"
       - name: Validate localizations
         # check for [^'"]'[^'"] in .arb files
@@ -88,7 +88,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: ${{ github.head_ref }}
+          ref: ${{ github.event.pull_request.head.sha }}
           sparse-checkout: app
       - uses: dart-lang/setup-dart@v1
         with:
@@ -100,7 +100,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: ${{ github.head_ref }}
+          ref: ${{ github.event.pull_request.head.sha }}
           sparse-checkout: health_data_store
       - uses: dart-lang/setup-dart@v1
         with:
