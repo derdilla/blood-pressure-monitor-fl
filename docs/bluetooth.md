@@ -21,10 +21,9 @@ Most devices provide 2 ways to retrieve measurements over bluetooth, but there a
 ## Known working devices
 
 >[!WARNING]
-> Now kind of warranty here. They can be submitted by anonymous users. 
-
->[!TIP]
-> If your device is not listed please edit this page and add it! 🙇
+> No warranty here – they can be submitted by anonymous users. 
+> 
+> Including you! If your device is not listed please edit this page and add it! 🙇
 
 |Device|Bluetooth name|Read after measurement|Download mode|Automatically disconnects after reading|
 |---|---| :---: | :---: | :---: |
