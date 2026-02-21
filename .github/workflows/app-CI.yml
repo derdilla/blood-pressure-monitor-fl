@@ -7,32 +7,10 @@ on:
     paths:
       - "app/**"
       - "health_data_store/**"
-      - "extendend-testing.yml"
+      - "app-CI.yml"
   workflow_dispatch:
 
 jobs:
-  analyze-app:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          sparse-checkout: app
-      - uses: dart-lang/setup-dart@v1
-        with:
-          sdk: stable
-      - run: dart analyze
-        working-directory: app
-  analyze-pkg:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          sparse-checkout: health_data_store
-      - uses: dart-lang/setup-dart@v1
-        with:
-          sdk: stable
-      - run: dart analyze
-        working-directory: health_data_store
   run-tests:
     runs-on: ubuntu-latest
     permissions:
@@ -85,6 +63,9 @@ jobs:
         working-directory: app
       - name: Generate app mock code # no efficient caching possible
         run: flutter pub run build_runner build
+        working-directory: app
+      - name: Run analysis
+        run: flutter analyze
         working-directory: app
       - name: Run tests
         run: flutter test

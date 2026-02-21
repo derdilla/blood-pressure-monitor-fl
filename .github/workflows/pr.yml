@@ -64,6 +64,9 @@ jobs:
       - name: Generate app mock code
         run: flutter pub run build_runner build
         working-directory: app
+      - name: Analyze code
+        run: flutter analyze
+        working-directory: app
       - name: Update goldens
         id: gold-upd
         run: flutter test --update-goldens --fail-fast --tags gold --run-skipped
@@ -83,30 +86,6 @@ jobs:
           fi
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}%
-  analyze-app:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          ref: ${{ github.event.pull_request.head.sha }}
-          sparse-checkout: app
-      - uses: dart-lang/setup-dart@v1
-        with:
-          sdk: stable
-      - run: dart analyze
-        working-directory: app
-  analyze-pkg:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          ref: ${{ github.event.pull_request.head.sha }}
-          sparse-checkout: health_data_store
-      - uses: dart-lang/setup-dart@v1
-        with:
-          sdk: stable
-      - run: dart analyze
-        working-directory: health_data_store
   test:
     if: contains(github.event.pull_request.labels.*.name, 'auto-test')
     runs-on: ubuntu-latest
