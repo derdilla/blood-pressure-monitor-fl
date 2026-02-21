@@ -1,3 +1,6 @@
+// TODO: cleanup types
+// ignore_for_file: strict_raw_type
+
 import 'dart:async';
 
 import 'package:blood_pressure_app/features/bluetooth/backend/bluetooth_backend.dart';

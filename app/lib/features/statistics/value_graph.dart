@@ -329,7 +329,7 @@ class _ValueGraphPainter extends CustomPainter {
           ui.Offset(x, size.height - _kBottomLegendHeight),
           ui.Paint()
             ..strokeWidth = settings.needlePinBarWidth
-            ..color = Color(color.color!).withOpacity(0.4),
+            ..color = Color(color.color!).withAlpha(102),
       );
     }
   }

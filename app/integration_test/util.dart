@@ -18,7 +18,6 @@ extension WaitUntil on WidgetTester {
     }
     await pump();
   }
-}
 
 extension Screenshot on WidgetTester {
   Future<void> takeScreenshot(String name) async {

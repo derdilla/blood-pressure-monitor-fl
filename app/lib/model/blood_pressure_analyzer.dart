@@ -107,7 +107,7 @@ class BloodPressureAnalyser {
 extension _NullableMath on Iterable<num?> {
   /// Gets the average value or null if the iterable is empty.
   num? get tryAverage {
-    final nonNull = whereNotNull();
+    final nonNull = nonNulls;
     if(nonNull.isEmpty) return null;
     final double result = nonNull.fold(0.0, (last, next) => last + next / length);
     return result;
@@ -115,14 +115,14 @@ extension _NullableMath on Iterable<num?> {
 
   /// Gets the minimum value or null if the iterable is empty.
   num? get tryMin {
-    final nonNull = whereNotNull();
+    final nonNull = nonNulls;
     if(nonNull.isEmpty) return null;
     return nonNull.reduce(min);
   }
 
   /// Gets the maximum value or null if the iterable is empty.
   num? get tryMax {
-    final nonNull = whereNotNull();
+    final nonNull = nonNulls;
     if(nonNull.isEmpty) return null;
     return nonNull.reduce(max);
   }

@@ -80,9 +80,12 @@ class FileSettingsLoader implements SettingsLoader {
       final json = jsonDecode(jsonStr);
       if (json is Map<String, dynamic>) {
         return IntervalStoreManager(
-          json['main'] is! String ? IntervalStorage() : IntervalStorage.fromJson(json['main']!),
-          json['export'] is! String ? IntervalStorage() : IntervalStorage.fromJson(json['export']!),
-          json['stats'] is! String ? IntervalStorage() : IntervalStorage.fromJson(json['stats']!),
+          json['main'] is! String ? IntervalStorage()
+              : IntervalStorage.fromJson(json['main']! as String),
+          json['export'] is! String ? IntervalStorage()
+              : IntervalStorage.fromJson(json['export']! as String),
+          json['stats'] is! String ? IntervalStorage()
+              : IntervalStorage.fromJson(json['stats']! as String),
         );
       }
       return IntervalStoreManager(IntervalStorage(), IntervalStorage(), IntervalStorage());

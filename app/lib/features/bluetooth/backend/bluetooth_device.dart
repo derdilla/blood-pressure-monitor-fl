@@ -1,3 +1,6 @@
+// TODO: cleanup types
+// ignore_for_file: strict_raw_type
+
 import 'dart:async';
 import 'dart:math';
 
@@ -92,14 +95,14 @@ abstract class BluetoothDevice<
     Future<void> checkDeviceState() async {
       while (!futuresCompleted && _state == BluetoothDeviceState.disconnecting) {
         logger.finest('Waiting because device is still disconnecting');
-        await Future.delayed(const Duration(milliseconds: 10));
+        await Future<void>.delayed(const Duration(milliseconds: 10));
       }
     }
 
     final futures = [checkDeviceState()];
     if (timeout > 0) {
       futures.add(
-        Future.delayed(Duration(milliseconds: min(timeout, 300000))).then((_) {
+        Future<void>.delayed(Duration(milliseconds: min(timeout, 300000))).then((_) {
           if (!futuresCompleted) {
             logger.finest('connect: Wait for state change timed out after $timeout ms');
           }
@@ -257,11 +260,11 @@ abstract class BluetoothDevice<
   /// 
   /// This method provides a generic implementation for async reading of data, regardless whether the
   /// characteristic can be read directly or through a notification or indication. In case the value
-  /// is being read using an indication, then the [onValue] callback receives a second argument [complete] with
+  /// is being read using an indication, then the [onValue] callback receives a second argument `complete` with
   /// which you can stop reading the data.
   ///
   /// Note that a [characteristic] could have multiple values, so [onValue] can be called more then once.
-  /// TODO: implement reading values for characteristics with [canNotify]
+  /// TODO: implement reading values for characteristics with `canNotify`
   Future<bool> getCharacteristicValue(BC characteristic, void Function(Uint8List value, [void Function(bool success)? complete]) onValue);
 
   @override

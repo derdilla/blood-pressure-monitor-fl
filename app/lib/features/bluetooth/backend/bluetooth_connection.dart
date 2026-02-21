@@ -5,4 +5,3 @@ enum BluetoothConnectionState {
   /// Device is disconnect
   disconnected;
 }
-

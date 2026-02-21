@@ -1,3 +1,6 @@
+// TODO: cleanup types
+// ignore_for_file: strict_raw_type
+
 import 'package:collection/collection.dart';
 
 /// Bluetooth Base UUID from Bluetooth Core Spec

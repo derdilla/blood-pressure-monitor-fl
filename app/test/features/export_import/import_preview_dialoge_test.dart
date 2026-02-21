@@ -1,6 +1,7 @@
 import 'package:blood_pressure_app/components/custom_banner.dart';
 import 'package:blood_pressure_app/features/export_import/import_preview_dialoge.dart';
 import 'package:blood_pressure_app/l10n/app_localizations.dart';
+import 'package:blood_pressure_app/model/export_import/column.dart';
 import 'package:blood_pressure_app/model/export_import/csv_converter.dart';
 import 'package:blood_pressure_app/model/export_import/csv_record_parsing_actor.dart';
 import 'package:blood_pressure_app/model/storage/export_columns_store.dart';
@@ -28,7 +29,7 @@ void main() {
     ),),);
 
     expect(tester.takeException(), isNull);
-    expect(find.byType(DropdownButton), findsNWidgets(6), reason: '6 columns');
+    expect(find.byType(DropdownButton<ExportColumn?>), findsNWidgets(6), reason: '6 columns');
     expect(find.text('note1'), findsOneWidget);
     expect(find.byType(CustomBanner), findsNothing, reason: 'no error');
 
@@ -130,7 +131,7 @@ void main() {
 
     expect(find.byType(ImportPreviewDialoge), findsOneWidget);
     expect(tester.takeException(), isNull);
-    expect(find.byType(DropdownButton), findsNWidgets(6), reason: '6 columns');
+    expect(find.byType(DropdownButton<ExportColumn?>), findsNWidgets(6), reason: '6 columns');
     expect(find.text('note1'), findsOneWidget);
     expect(find.byType(CustomBanner), findsNothing, reason: 'no error');
 
@@ -170,7 +171,7 @@ void main() {
 
     expect(find.byType(ImportPreviewDialoge), findsOneWidget);
     expect(tester.takeException(), isNull);
-    expect(find.byType(DropdownButton), findsNWidgets(2), reason: '2 columns');
+    expect(find.byType(DropdownButton<ExportColumn?>), findsNWidgets(2), reason: '2 columns');
     expect(find.textContaining('testMed1'), findsNWidgets(2));
     expect(find.textContaining('testMed2'), findsOneWidget);
     expect(find.byType(CustomBanner), findsNothing, reason: 'no error');

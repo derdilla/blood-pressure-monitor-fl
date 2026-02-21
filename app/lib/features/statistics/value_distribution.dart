@@ -176,7 +176,7 @@ class _ValueDistributionPainter extends CustomPainter {
     void drawLabel(String text, Alignment alignment) {
       final style = TextStyle(
         color: _kDecorationColor,
-        backgroundColor: Colors.black.withOpacity(0.5),
+        backgroundColor: Colors.black.withAlpha(127),
         fontSize: 16,
       );
       final textSpan = TextSpan(
