@@ -1,306 +1,372 @@
 {
-  "success": "Sikeres: {msg}",
-  "@success": {
-    "placeholders": {
-      "msg": {
-        "type": "String"
-      }
-    }
-  },
-  "loading": "Betöltés…",
-  "@loading": {},
-  "error": "Hiba: {msg}",
-  "@error": {
-    "placeholders": {
-      "msg": {
-        "type": "String"
-      }
-    }
-  },
-  "errNaN": "Kérem adjon meg egy számot",
-  "@errNaN": {},
-  "errCantOpenURL": "Nem sikerült megnyitni az URL-t : {url}",
-  "@errCantOpenURL": {
-    "placeholders": {
-      "url": {
-        "type": "String"
-      }
-    }
-  },
-  "errNoFileOpened": "Nincs megnyitható file",
-  "@errNoFileOpened": {},
-  "errNotStarted": "nem indult el",
-  "@errNotStarted": {},
-  "errNoValue": "Kérem adjon meg egy értéket",
-  "@errNoValue": {},
-  "errNotEnoughDataToGraph": "Nincs elég adat az ábra rajzolásához.",
-  "@errNotEnoughDataToGraph": {},
-  "errNoData": "Nincs adat",
-  "@errNoData": {},
-  "btnCancel": "MÉGSE",
-  "@btnCancel": {},
-  "btnConfirm": "OK",
-  "@btnConfirm": {},
-  "btnUndo": "VISSZA",
-  "@btnUndo": {},
-  "sysLong": "Szisztolés",
-  "@sysLong": {},
-  "sysShort": "sys",
-  "@sysShort": {},
-  "diaLong": "Diasztolés",
-  "@diaLong": {},
-  "addNote": "Jegyzet (opcionális)",
-  "@addNote": {},
-  "settings": "Beállítások",
-  "@settings": {},
-  "title": "Vérnyomás alkalmazás",
-  "@title": {},
-  "errLt30": "Érték <= 30? Kapcsolja ki az ellenőrzést a beállításokban!",
-  "@errLt30": {},
-  "errUnrealistic": "Nem valóságos érték? Kapcsolja ki az ellenőrzést a beállításokban!",
-  "@errUnrealistic": {},
-  "errDiaGtSys": "dia > sys? Kapcsolja ki az ellenőrzést a beállításokban!",
-  "@errDiaGtSys": {},
-  "btnSave": "MENTÉS",
-  "@btnSave": {},
-  "pulLong": "Pulzus",
-  "@pulLong": {},
-  "theme": "Téma",
-  "@theme": {},
-  "errWrongImportFormat": "Csak CSV és SQLite formátumok beolvasása lehetséges.",
-  "@errWrongImportFormat": {},
-  "errNeedHeadline": "Csak fejléccel rendelkező fájl olvasható be.",
-  "@errNeedHeadline": {},
-  "errCantReadFile": "A fájl tartalma nem olvasható",
-  "@errCantReadFile": {},
-  "errNotImportable": "A fájlt nem lehet beolvasni",
-  "@errNotImportable": {},
-  "diaShort": "dia",
-  "@diaShort": {},
-  "pulShort": "pul",
-  "@pulShort": {},
-  "layout": "Elrendezés",
-  "@layout": {},
-  "enterTimeFormatScreen": "Idő formátum",
-  "@enterTimeFormatScreen": {},
-  "system": "Rendszer",
-  "@system": {},
-  "light": "Világos",
-  "@light": {},
-  "iconSize": "Icon méret",
-  "@iconSize": {},
-  "graphLineThickness": "Vonal vastagság",
-  "@graphLineThickness": {},
-  "allowManualTimeInput": "Engedje meg az idő kézi megadását",
-  "@allowManualTimeInput": {},
-  "animationSpeed": "Animáció időtartalma",
-  "@animationSpeed": {},
-  "sysColor": "Szisztolé szín",
-  "@sysColor": {},
-  "diaColor": "Diasztolé szín",
-  "@diaColor": {},
-  "confirmDeletion": "Törlés megerősítése",
-  "@confirmDeletion": {},
-  "age": "Életkor",
-  "@age": {},
-  "determineWarnValues": "Figyelmeztetési értékek meghatározása",
-  "@determineWarnValues": {},
-  "packageNameOf": "Csomag neve: {name}",
-  "@packageNameOf": {
-    "placeholders": {
-      "name": {
-        "type": "String"
-      }
-    }
-  },
-  "dark": "Sötét",
-  "@dark": {},
-  "accentColor": "Téma szín",
-  "@accentColor": {},
-  "pulColor": "Pulzus szín",
-  "@pulColor": {},
-  "aboutWarnValuesScreen": "Rólunk",
-  "@aboutWarnValuesScreen": {},
-  "versionOf": "Verzió: {version}",
-  "@versionOf": {
-    "placeholders": {
-      "version": {
-        "type": "String"
-      }
-    }
-  },
-  "buildNumberOf": "Verzió szám: {buildNumber}",
-  "@buildNumberOf": {
-    "placeholders": {
-      "buildNumber": {
-        "type": "String"
-      }
-    }
-  },
-  "exportImport": "Export / Import",
-  "@exportImport": {},
-  "data": "Adatok",
-  "@data": {},
-  "version": "Verzió",
-  "@version": {},
-  "sysWarn": "Figyelmeztetés (szisztolés)",
-  "@sysWarn": {},
-  "exportAfterEveryInputDesc": "Nem ajánlott (túl sok fájl keletkezik)",
-  "@exportAfterEveryInputDesc": {},
-  "exportCustomEntries": "Mezők testreszabása",
-  "@exportCustomEntries": {},
-  "csv": "CSV",
-  "@csv": {},
-  "pdf": "PDF",
-  "@pdf": {},
-  "textDelimiter": "Szövegelválasztó",
-  "@textDelimiter": {},
-  "exportCsvHeadline": "Fejléc",
-  "@exportCsvHeadline": {},
-  "export": "EXPORT",
-  "@export": {},
-  "licenses": "3rd party licensz",
-  "@licenses": {},
-  "importSuccess": "Importált bejegyzések: {count}",
-  "@importSuccess": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "statistics": "Statisztika",
-  "@statistics": {},
-  "measurementCount": "Mérések száma",
-  "@measurementCount": {},
-  "measurementsPerDay": "Mérések naponta",
-  "@measurementsPerDay": {},
-  "avgOf": "{txt} Ø",
-  "@avgOf": {
-    "placeholders": {
-      "txt": {
-        "type": "String"
-      }
-    }
-  },
-  "enterTimeFormatString": "időformátum",
-  "@enterTimeFormatString": {},
-  "notes": "Jegyzetek",
-  "@notes": {},
-  "time": "Idő",
-  "@time": {},
-  "confirmDelete": "Törlés megerősítése",
-  "@confirmDelete": {},
-  "deletionConfirmed": "Bejegyzés törölve.",
-  "@deletionConfirmed": {},
-  "week": "Hét",
-  "@week": {},
-  "month": "Hónap",
-  "@month": {},
-  "year": "Év",
-  "@year": {},
-  "weekOfYear": "Hét {weekNum}, {year}",
-  "@weekOfYear": {
-    "placeholders": {
-      "weekNum": {
-        "type": "int"
-      },
-      "year": {
-        "type": "int"
-      }
-    }
-  },
-  "lifetime": "Élettartam",
-  "@lifetime": {},
-  "diaWarn": "Figyelmeztetés (diasztolés)",
-  "@diaWarn": {},
-  "exportAfterEveryInput": "Export minden bevitel után",
-  "@exportAfterEveryInput": {},
-  "exportDir": "Export helye",
-  "@exportDir": {},
-  "exportFormat": "Export formátum",
-  "@exportFormat": {},
-  "fieldDelimiter": "Mezőelválasztó",
-  "@fieldDelimiter": {},
-  "db": "SQLite DB",
-  "@db": {},
-  "text": "szöveg",
-  "@text": {},
-  "other": "egyéb",
-  "@other": {},
-  "shared": "megosztott",
-  "@shared": {},
-  "import": "IMPORT",
-  "@import": {},
-  "sourceCode": "Forráskód",
-  "@sourceCode": {},
-  "maxOf": "{txt} max.",
-  "@maxOf": {
-    "placeholders": {
-      "txt": {
-        "type": "String"
-      }
-    }
-  },
-  "day": "Nap",
-  "@day": {},
-  "last7Days": "7 nap",
-  "@last7Days": {},
-  "last30Days": "30 nap",
-  "@last30Days": {},
-  "aboutWarnValuesScreenDesc": "Több infó a figyelmeztetésekről",
-  "@aboutWarnValuesScreenDesc": {},
-  "minOf": "{txt} min.",
-  "@minOf": {
-    "placeholders": {
-      "txt": {
-        "type": "String"
-      }
-    }
-  },
-  "now": "most",
-  "@now": {},
-  "exportWarnConfigNotImportable": "Hello! Csak egy baráti figyelmeztetés: a jelenlegi exportkonfiguráció nem lesz importálható. A javításhoz győződjön meg róla, hogy az export típusát CSV-re állította be, és tartalmazza a rendelkezésre álló időformátumok egyikét.",
-  "@exportWarnConfigNotImportable": {},
-  "behavior": "Viselkedés",
-  "@behavior": {},
-  "validateInputs": "Értékek validálása",
-  "@validateInputs": {},
-  "addEntry": "Mező hozzáadása",
-  "@addEntry": {},
-  "exportWarnNotEveryFieldExported": "Vigyázzon, mert nem minden mező lesz exportálva: {fields} {count, plural, one{is} other{are}} hiányoznak.",
-  "@exportWarnNotEveryFieldExported": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      },
-      "fields": {
-        "type": "String"
-      }
-    }
-  },
-  "warnAboutTxt3": "Nyugodtan változtassa meg az értékeket a saját igényeinek megfelelően, és kövesse orvosa ajánlásait.",
-  "@warnAboutTxt3": {},
-  "language": "Nyelv",
-  "@language": {},
-  "allowMissingValues": "Hiányzó értékek engedélyezése",
-  "@allowMissingValues": {},
-  "custom": "Tetszőleges",
-  "@custom": {},
-  "drawRegressionLines": "Trend vonal kirajzolása",
-  "@drawRegressionLines": {},
-  "warnAboutTxt1": "A figyelmeztető értékek puszta javaslatok és nem orvosi tanácsadás.",
-  "@warnAboutTxt1": {},
-  "warnValues": "Figyelmeztetési értékek",
-  "@warnValues": {},
-  "timeResolvedMetrics": "Napon belüli mérések ideje",
-  "@timeResolvedMetrics": {},
-  "warnAboutTxt2": "Az alapértelmezett korfüggő értékek ebből a forrásból származnak.",
-  "@warnAboutTxt2": {},
-  "confirmDeleteDesc": "Törli ezt a bejegyzést? (A beállításokban kikapcsolhatja ezeket a megerősítéseket.)",
-  "@confirmDeleteDesc": {},
-  "result": "Eredmény:",
-  "@result": {},
-  "errTimeAfterNow": "A kiválasztott nap vissza lett állítva, mivel ez egy jövőbeli időpont. Ezt az érvényesítést kikapcsolhatja a beállításokban.",
-  "@errTimeAfterNow": {}
+    "success": "Sikeres: {msg}",
+    "@success": {
+        "placeholders": {
+            "msg": {
+                "type": "String"
+            }
+        }
+    },
+    "loading": "Betöltés…",
+    "error": "Hiba: {msg}",
+    "@error": {
+        "placeholders": {
+            "msg": {
+                "type": "String"
+            }
+        }
+    },
+    "errNaN": "Kérem adjon meg egy számot",
+    "errCantOpenURL": "Nem sikerült megnyitni az URL-t : {url}",
+    "@errCantOpenURL": {
+        "placeholders": {
+            "url": {
+                "type": "String"
+            }
+        }
+    },
+    "errNoFileOpened": "Nincs megnyitható file",
+    "errNotStarted": "nem indult el",
+    "errNoValue": "Kérem adjon meg egy értéket",
+    "errNotEnoughDataToGraph": "Nincs elég adat az ábra rajzolásához.",
+    "errNoData": "Nincs adat",
+    "btnCancel": "MÉGSE",
+    "btnConfirm": "OK",
+    "btnUndo": "VISSZA",
+    "sysLong": "Szisztolés",
+    "sysShort": "sys",
+    "diaLong": "Diasztolés",
+    "addNote": "Jegyzet (opcionális)",
+    "settings": "Beállítások",
+    "title": "Vérnyomás alkalmazás",
+    "errLt30": "Érték <= 30? Kapcsolja ki az ellenőrzést a beállításokban!",
+    "errUnrealistic": "Nem valóságos érték? Kapcsolja ki az ellenőrzést a beállításokban!",
+    "errDiaGtSys": "dia > sys? Kapcsolja ki az ellenőrzést a beállításokban!",
+    "btnSave": "MENTÉS",
+    "pulLong": "Pulzus",
+    "theme": "Téma",
+    "errWrongImportFormat": "Csak CSV és SQLite formátumok beolvasása lehetséges.",
+    "errNeedHeadline": "Csak fejléccel rendelkező fájl olvasható be.",
+    "errCantReadFile": "A fájl tartalma nem olvasható",
+    "errNotImportable": "A fájlt nem lehet beolvasni",
+    "diaShort": "dia",
+    "pulShort": "pul",
+    "layout": "Elrendezés",
+    "enterTimeFormatScreen": "Idő formátum",
+    "system": "Rendszer",
+    "light": "Világos",
+    "iconSize": "Icon méret",
+    "graphLineThickness": "Vonal vastagság",
+    "allowManualTimeInput": "Engedje meg az idő kézi megadását",
+    "animationSpeed": "Animáció időtartalma",
+    "sysColor": "Szisztolé szín",
+    "diaColor": "Diasztolé szín",
+    "confirmDeletion": "Törlés megerősítése",
+    "age": "Életkor",
+    "determineWarnValues": "Figyelmeztetési értékek meghatározása",
+    "packageNameOf": "Csomag neve: {name}",
+    "@packageNameOf": {
+        "placeholders": {
+            "name": {
+                "type": "String"
+            }
+        }
+    },
+    "dark": "Sötét",
+    "accentColor": "Téma szín",
+    "pulColor": "Pulzus szín",
+    "aboutWarnValuesScreen": "Rólunk",
+    "versionOf": "Verzió: {version}",
+    "@versionOf": {
+        "placeholders": {
+            "version": {
+                "type": "String"
+            }
+        }
+    },
+    "buildNumberOf": "Verzió szám: {buildNumber}",
+    "@buildNumberOf": {
+        "placeholders": {
+            "buildNumber": {
+                "type": "String"
+            }
+        }
+    },
+    "exportImport": "Export / Import",
+    "data": "Adatok",
+    "version": "Verzió",
+    "sysWarn": "Figyelmeztetés (szisztolés)",
+    "exportAfterEveryInputDesc": "Nem ajánlott (túl sok fájl keletkezik)",
+    "exportCustomEntries": "Mezők testreszabása",
+    "csv": "CSV",
+    "pdf": "PDF",
+    "textDelimiter": "Szövegelválasztó",
+    "exportCsvHeadline": "Fejléc",
+    "export": "EXPORT",
+    "licenses": "3rd party licensz",
+    "importSuccess": "Importált bejegyzések: {count}",
+    "@importSuccess": {
+        "placeholders": {
+            "count": {
+                "type": "int"
+            }
+        }
+    },
+    "statistics": "Statisztika",
+    "measurementCount": "Mérések száma",
+    "measurementsPerDay": "Mérések naponta",
+    "avgOf": "{txt} Ø",
+    "@avgOf": {
+        "placeholders": {
+            "txt": {
+                "type": "String"
+            }
+        }
+    },
+    "enterTimeFormatString": "időformátum",
+    "notes": "Jegyzetek",
+    "time": "Idő",
+    "confirmDelete": "Törlés megerősítése",
+    "deletionConfirmed": "Bejegyzés törölve.",
+    "week": "Hét",
+    "month": "Hónap",
+    "year": "Év",
+    "weekOfYear": "Hét {weekNum}, {year}",
+    "@weekOfYear": {
+        "placeholders": {
+            "weekNum": {
+                "type": "int"
+            },
+            "year": {
+                "type": "int"
+            }
+        }
+    },
+    "lifetime": "Élettartam",
+    "diaWarn": "Figyelmeztetés (diasztolés)",
+    "exportAfterEveryInput": "Export minden bevitel után",
+    "exportDir": "Export helye",
+    "exportFormat": "Export formátum",
+    "fieldDelimiter": "Mezőelválasztó",
+    "db": "SQLite DB",
+    "text": "szöveg",
+    "other": "egyéb",
+    "shared": "megosztott",
+    "import": "IMPORT",
+    "sourceCode": "Forráskód",
+    "maxOf": "{txt} max.",
+    "@maxOf": {
+        "placeholders": {
+            "txt": {
+                "type": "String"
+            }
+        }
+    },
+    "day": "Nap",
+    "last7Days": "7 nap",
+    "last30Days": "30 nap",
+    "aboutWarnValuesScreenDesc": "Több infó a figyelmeztetésekről",
+    "minOf": "{txt} min.",
+    "@minOf": {
+        "placeholders": {
+            "txt": {
+                "type": "String"
+            }
+        }
+    },
+    "now": "most",
+    "exportWarnConfigNotImportable": "Hello! Csak egy baráti figyelmeztetés: a jelenlegi exportkonfiguráció nem lesz importálható. A javításhoz győződjön meg róla, hogy az export típusát CSV-re állította be, és tartalmazza a rendelkezésre álló időformátumok egyikét.",
+    "behavior": "Viselkedés",
+    "validateInputs": "Értékek validálása",
+    "addEntry": "Mező hozzáadása",
+    "exportWarnNotEveryFieldExported": "Vigyázzon, mert nem minden mező lesz exportálva: {fields} {count, plural, one{is} other{are}} hiányoznak.",
+    "@exportWarnNotEveryFieldExported": {
+        "placeholders": {
+            "count": {
+                "type": "int"
+            },
+            "fields": {
+                "type": "String"
+            }
+        }
+    },
+    "warnAboutTxt3": "Nyugodtan változtassa meg az értékeket a saját igényeinek megfelelően, és kövesse orvosa ajánlásait.",
+    "language": "Nyelv",
+    "allowMissingValues": "Hiányzó értékek engedélyezése",
+    "custom": "Tetszőleges",
+    "drawRegressionLines": "Trend vonal kirajzolása",
+    "warnAboutTxt1": "A figyelmeztető értékek puszta javaslatok és nem orvosi tanácsadás.",
+    "warnValues": "Figyelmeztetési értékek",
+    "timeResolvedMetrics": "Napon belüli mérések ideje",
+    "warnAboutTxt2": "Az alapértelmezett korfüggő értékek ebből a forrásból származnak.",
+    "confirmDeleteDesc": "Törli ezt a bejegyzést? (A beállításokban kikapcsolhatja ezeket a megerősítéseket.)",
+    "result": "Eredmény:",
+    "errTimeAfterNow": "A kiválasztott nap vissza lett állítva, mivel ez egy jövőbeli időpont. Ezt az érvényesítést kikapcsolhatja a beállításokban.",
+    "connect": "",
+    "bluetoothInput": "",
+    "addExportformat": "",
+    "exportSuccess": "",
+    "default_": "",
+    "compactList": "",
+    "reset": "",
+    "measurementIndex": "",
+    "@measurementIndex": {
+        "placeholders": {
+            "number": {
+                "type": "int"
+            }
+        }
+    },
+    "addMeasurement": "",
+    "startWithAddMeasurementPageDescription": "",
+    "deleteAllMedicineIntakes": "",
+    "invalidZip": "",
+    "warnBLETimeSus": "",
+    "@warnBLETimeSus": {
+        "placeholders": {
+            "hours": {
+                "type": "int"
+            }
+        }
+    },
+    "selectMeasurementTitle": "",
+    "activateWeightFeatures": "",
+    "noMedication": "",
+    "remove": "",
+    "importSettings": "",
+    "warnDeletionUnrecoverable": "",
+    "exportPdfExportData": "",
+    "bodyMovementDetected": "",
+    "exportSettings": "",
+    "errBleNoPerms": "",
+    "horizontalLines": "",
+    "preferredPressureUnit": "",
+    "exportPdfExportTitle": "",
+    "errParseEmptyCsvFile": "",
+    "date": "",
+    "newBluetoothInputCrossPlatform": "",
+    "availableDevices": "",
+    "buildIn": "",
+    "timeFormat": "",
+    "errCantCreateArchive": "",
+    "exportPdfCellHeight": "",
+    "edit": "",
+    "trustBLETime": "",
+    "needlePinBarWidthDesc": "",
+    "bloodPressure": "",
+    "scanningForDevices": "",
+    "measurementSuccess": "",
+    "improperMeasurementPosition": "",
+    "customGraphMarkings": "",
+    "exportPdfHeaderHeight": "",
+    "name": "",
+    "tapToSelect": "",
+    "aboutBleInput": "",
+    "bluetoothDisabled": "",
+    "errParseFailedDecodingField": "",
+    "@errParseFailedDecodingField": {
+        "placeholders": {
+            "lineNumber": {
+                "type": "int"
+            },
+            "fieldContent": {
+                "type": "String"
+            }
+        }
+    },
+    "newBluetoothInputOldLib": "",
+    "exportMimeType": "",
+    "manageExportColumns": "",
+    "delete": "",
+    "restartNow": "",
+    "meanArterialPressure": "",
+    "errMeasurementRead": "",
+    "enterWeight": "",
+    "errParseLineTooShort": "",
+    "@errParseLineTooShort": {
+        "placeholders": {
+            "lineNumber": {
+                "type": "int"
+            }
+        }
+    },
+    "timestamp": "",
+    "exportCsvHeadlineDesc": "",
+    "drawRegressionLinesDesc": "",
+    "addLine": "",
+    "medications": "",
+    "startWithAddMeasurementPage": "",
+    "pulsePressure": "",
+    "select": "",
+    "@select": {
+        "description": "Used when f.e. selecting a single measurement when the bluetooth device returned multiple"
+    },
+    "requiresAppRestart": "",
+    "deleteAllSettings": "",
+    "exportPdfExportStatistics": "",
+    "exportPdfCellFontSize": "",
+    "maximum": "",
+    "tapToClose": "",
+    "pulseRateLessThanLowerLimit": "",
+    "csvTitle": "",
+    "minimum": "",
+    "disabled": "",
+    "intakes": "",
+    "btnShare": "",
+    "deleteAllMeasurements": "",
+    "average": "",
+    "useLegacyList": "",
+    "valueDistribution": "",
+    "defaultDosis": "",
+    "exportFieldFormatDocumentation": "",
+    "exportFieldsPreset": "",
+    "cuffTooLoose": "",
+    "irregularPulseDetected": "",
+    "bluetoothInputDesc": "",
+    "titleInCsv": "",
+    "addMedication": "",
+    "linePositionY": "",
+    "dontShowAgain": "",
+    "preferredWeightUnit": "",
+    "@preferredWeightUnit": {
+        "description": "Setting for the unit the app will use for displaying weight"
+    },
+    "errParseTimeNotRestoreable": "",
+    "enterTimeFormatDesc": "",
+    "deleteAllNotes": "",
+    "weight": "",
+    "recordFormat": "",
+    "dosis": "",
+    "pulseRateExceedsUpperLimit": "",
+    "errAccuracyLoss": "",
+    "fieldFormat": "",
+    "errParseUnknownColumn": "",
+    "@errParseUnknownColumn": {
+        "placeholders": {
+            "title": {
+                "type": "String"
+            }
+        }
+    },
+    "oldBluetoothInput": "",
+    "xsl": "",
+    "note": "",
+    "exportPdfHeaderFontSize": "",
+    "userID": "",
+    "color": "",
+    "needlePinBarWidth": "",
+    "errFeatureNotSupported": "",
+    "pdfDocumentTitle": "",
+    "@pdfDocumentTitle": {
+        "placeholders": {
+            "start": {
+                "type": "String"
+            },
+            "end": {
+                "type": "String"
+            }
+        }
+    },
+    "bottomAppBars": "",
+    "warnNeedsRestartForUsingApp": ""
 }
