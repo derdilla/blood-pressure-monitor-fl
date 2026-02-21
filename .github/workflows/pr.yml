@@ -83,23 +83,28 @@ jobs:
           fi
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}%
-  analyze-code:
+  analyze-app:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout PR code
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
         with:
-          ref: ${{ github.head_ref }}
-      - name: Setup dart
-        uses: dart-lang/setup-dart@v1
+          sparse-checkout: app
+      - uses: dart-lang/setup-dart@v1
         with:
           sdk: stable
-      - name: Analyze package
-        run: dart analyze
+      - run: dart analyze
         working-directory: app
-      - name: Analyze app
-        run: dart analyze
-        working-directory: app
+  analyze-pkg:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: health_data_store
+      - uses: dart-lang/setup-dart@v1
+        with:
+          sdk: stable
+      - run: dart analyze
+        working-directory: health_data_store
   test:
     if: contains(github.event.pull_request.labels.*.name, 'auto-test')
     runs-on: ubuntu-latest
