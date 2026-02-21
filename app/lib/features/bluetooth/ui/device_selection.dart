@@ -1,3 +1,6 @@
+// TODO: cleanup types
+// ignore_for_file: strict_raw_type
+
 import 'package:blood_pressure_app/features/bluetooth/backend/bluetooth_backend.dart';
 import 'package:blood_pressure_app/features/bluetooth/ui/input_card.dart';
 import 'package:blood_pressure_app/l10n/app_localizations.dart';

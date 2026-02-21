@@ -48,7 +48,7 @@ class AddEntryForm extends FormBase<AddEntryFormValue> with TypeLogger {
   final Widget Function(void Function(BloodPressureRecord data))? mockBleInput;
 
   @override
-  FormStateBase createState() => AddEntryFormState();
+  FormStateBase<AddEntryFormValue, AddEntryForm> createState() => AddEntryFormState();
 }
 
 /// State of primary form to enter all types of entries.

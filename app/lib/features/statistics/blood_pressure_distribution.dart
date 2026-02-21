@@ -1,7 +1,6 @@
 import 'package:blood_pressure_app/features/statistics/value_distribution.dart';
 import 'package:blood_pressure_app/l10n/app_localizations.dart';
 import 'package:blood_pressure_app/model/storage/settings_store.dart';
-import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:health_data_store/health_data_store.dart';
 import 'package:provider/provider.dart';
@@ -85,17 +84,17 @@ class _BloodPressureDistributionState extends State<BloodPressureDistribution>
               // Preferred pressure unit can be ignored as values are relative.
               ValueDistribution(
                 key: const Key('sys-dist'),
-                values: widget.records.map((e) => e.sys?.mmHg).whereNotNull(),
+                values: widget.records.map((e) => e.sys?.mmHg).nonNulls,
                 color: context.select<Settings, Color>((s) => s.sysColor),
               ),
               ValueDistribution(
                 key: const Key('dia-dist'),
-                values: widget.records.map((e) => e.dia?.mmHg).whereNotNull(),
+                values: widget.records.map((e) => e.dia?.mmHg).nonNulls,
                 color: context.select<Settings, Color>((s) => s.diaColor),
               ),
               ValueDistribution(
                 key: const Key('pul-dist'),
-                values: widget.records.map((e) => e.pul).whereNotNull(),
+                values: widget.records.map((e) => e.pul).nonNulls,
                 color: context.select<Settings, Color>((s) => s.pulColor),
               ),
             ],

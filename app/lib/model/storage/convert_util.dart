@@ -11,14 +11,14 @@ import 'package:health_data_store/health_data_store.dart';
 /// automatically and can be just checked with the `is boolean` condition, but the user may also write `"true"` or 1
 /// which are equally valid but would not get converted automatically.
 class ConvertUtil {
-  static bool? parseBool(value) {
+  static bool? parseBool(Object? value) {
     if (value is bool) return value;
     if (parseString(value)?.toLowerCase() == 'true' || parseInt(value) == 1) return true;
     if (parseString(value)?.toLowerCase() == 'false' || parseInt(value) == 0) return false;
     return null;
   }
 
-  static int? parseInt(value) {
+  static int? parseInt(Object? value) {
     if (value is int) return value;
     if (value is double) return _isInt(value);
     if (value is String) return int.tryParse(value) ?? _isInt(double.tryParse(value));
@@ -30,14 +30,14 @@ class ConvertUtil {
     return null;
   }
 
-  static double? parseDouble(value) {
+  static double? parseDouble(Object? value) {
     if (value is double) return value;
     if (value is int) return value.toDouble();
     if (value is String) return double.tryParse(value);
     return null;
   }
 
-  static String? parseString(value) {
+  static String? parseString(Object? value) {
     if (value is String) return value;
     if (value is int || value is double || value is bool) return value.toString();
     // No check for Object. While this would be convertible to string,
@@ -49,7 +49,7 @@ class ConvertUtil {
     return value.languageCode;
   }
 
-  static Locale? parseLocale(value) {
+  static Locale? parseLocale(Object? value) {
     if (value is Locale) return value;
     // Should not use parseString, as values that get caught by it can not be locales.
     if (value is String && value.toLowerCase() == 'null') return null;
@@ -57,8 +57,9 @@ class ConvertUtil {
     return null;
   }
 
-  static Color? parseColor(value) {
-    if (value is MaterialColor || value is Color) return value;
+  static Color? parseColor(Object? value) {
+    if (value is Color) return value;
+    if (value is MaterialColor) return value as Color;
     if (value == null) return null;
 
     if (parseInt(value) != null) {
@@ -67,7 +68,7 @@ class ConvertUtil {
     return null;
   }
 
-  static DateRange? parseRange(start, end) {
+  static DateRange? parseRange(Object? start, Object? end) {
     final startTimestamp = parseInt(start);
     final endTimestamp = parseInt(end);
     if (startTimestamp == null || endTimestamp == null) return null;
@@ -78,7 +79,7 @@ class ConvertUtil {
   }
 
   /// Example usage: `ConvertUtil.parseList<String>(json['columns'])`
-  static List<T>? parseList<T>(value) {
+  static List<T>? parseList<T>(Object? value) {
     if (value is List<T>) return value;
     if (value is List<dynamic>) {
       final List<T> validValues = [];
@@ -92,7 +93,7 @@ class ConvertUtil {
   }
 
   /// Try to recreate the theme mode stored as a integer.
-  static ThemeMode? parseThemeMode(value) => switch(ConvertUtil.parseInt(value)) {
+  static ThemeMode? parseThemeMode(Object? value) => switch(parseInt(value)) {
     0 => ThemeMode.system,
     1 => ThemeMode.dark,
     2 => ThemeMode.light,
@@ -100,7 +101,7 @@ class ConvertUtil {
   };
 
   /// Does its best attempt at parsing a time in arbitrary format.
-  static DateTime? parseTime(time) {
+  static DateTime? parseTime(Object? time) {
     final intTime = parseInt(time);
     if (intTime != null) {
       if (intTime.toString().length == 10) { // seconds

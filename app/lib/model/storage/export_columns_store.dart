@@ -4,6 +4,8 @@ import 'dart:convert';
 import 'package:blood_pressure_app/model/export_import/column.dart';
 import 'package:flutter/material.dart';
 
+// ignore_for_file: strict_casts
+
 /// Class for managing columns available to the user.
 class ExportColumnsManager extends ChangeNotifier {
   /// Create a instance from a map created by [toMap].

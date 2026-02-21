@@ -103,9 +103,9 @@ class _ImportPreviewDialogeState extends State<ImportPreviewDialoge> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
-                  DropdownButton(
+                  DropdownButton<ExportColumn?>(
                     items: [
-                      DropdownMenuItem(
+                      DropdownMenuItem<ExportColumn?>(
                         child: Text(
                           MaterialLocalizations.of(context).keyboardKeySelect,
                           style: Theme.of(context).textTheme.bodyMedium?.copyWith(
@@ -114,7 +114,7 @@ class _ImportPreviewDialogeState extends State<ImportPreviewDialoge> {
                         ),
                       ),
                       for (final parser in widget.columnsManager.getAllColumns())
-                        DropdownMenuItem(
+                        DropdownMenuItem<ExportColumn?>(
                           value: parser,
                           child: Padding(
                             padding: const EdgeInsets.only(top: 8),

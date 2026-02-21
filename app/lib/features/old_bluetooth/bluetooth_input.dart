@@ -181,7 +181,7 @@ class _OldBluetoothInputState extends State<OldBluetoothInput> with TypeLogger {
       },
       inputInfo: () async {
         if (context.mounted) {
-          await showDialog(
+          await showDialog<void>(
             context: context,
             builder: (BuildContext context) => AlertDialog(
               title: Text(AppLocalizations.of(context)!.bluetoothInput),

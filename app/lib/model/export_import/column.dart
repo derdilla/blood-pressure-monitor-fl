@@ -96,7 +96,7 @@ class NativeColumn extends ExportColumn {
       .map((i) => '${i.medicine.designation}(${i.dosis.mg})')
       .join('|'),
     (String pattern) {
-      final intakes = [];
+      final intakes = <(String, double?)>[];
       for (final e in pattern.split('|')) {
         final es = e.split('(');
         if (es.length < 2) return null;
