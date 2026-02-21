@@ -83,6 +83,28 @@ jobs:
           fi
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}%
+  analyze-code:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - name: Checkout PR code
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
+      - name: Setup dart
+        uses: dart-lang/setup-dart@v1
+        with:
+          sdk: stable
+      - name: Analyze package
+        id: gold-upd
+        run: flutter analyze
+        working-directory: app
+      - name: Analyze app
+        id: gold-upd
+        run: flutter analyze
+        working-directory: app
   test:
     if: contains(github.event.pull_request.labels.*.name, 'auto-test')
     runs-on: ubuntu-latest
