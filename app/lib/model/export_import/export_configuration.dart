@@ -1,11 +1,11 @@
 import 'dart:convert';
 
+import 'package:blood_pressure_app/l10n/app_localizations.dart';
 import 'package:blood_pressure_app/model/export_import/column.dart';
 import 'package:blood_pressure_app/model/storage/convert_util.dart';
 import 'package:blood_pressure_app/model/storage/export_columns_store.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/widgets.dart';
-import 'package:blood_pressure_app/l10n/app_localizations.dart';
 
 /// Class for managing columns currently used for ex- and import.
 class ActiveExportColumnConfiguration extends ChangeNotifier {

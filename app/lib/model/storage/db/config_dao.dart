@@ -24,7 +24,7 @@ class ConfigDao implements SettingsLoader {
 
   final ConfigDB _configDB;
 
-  Settings? _settingsInstance = null;
+  Settings? _settingsInstance;
   @override
   Future<Settings> loadSettings() async {
     if (_settingsInstance != null) return _settingsInstance!;
@@ -51,7 +51,7 @@ class ConfigDao implements SettingsLoader {
     return settings;
   }
 
-  ExportSettings? _exportSettingsInstance = null;
+  ExportSettings? _exportSettingsInstance;
   @override
   Future<ExportSettings> loadExportSettings() async {
     if (_exportSettingsInstance != null) return _exportSettingsInstance!;
@@ -78,7 +78,7 @@ class ConfigDao implements SettingsLoader {
     return exportSettings;
   }
 
-  CsvExportSettings? _csvExportSettingsInstance = null;
+  CsvExportSettings? _csvExportSettingsInstance;
   @override
   Future<CsvExportSettings> loadCsvExportSettings() async {
     if (_csvExportSettingsInstance != null) return _csvExportSettingsInstance!;
@@ -105,7 +105,7 @@ class ConfigDao implements SettingsLoader {
     return exportSettings;
   }
 
-  PdfExportSettings? _pdfExportSettingsInstance = null;
+  PdfExportSettings? _pdfExportSettingsInstance;
   @override
   Future<PdfExportSettings> loadPdfExportSettings() async {
     if (_pdfExportSettingsInstance != null) return _pdfExportSettingsInstance!;
@@ -160,7 +160,7 @@ class ConfigDao implements SettingsLoader {
     return intervallStorage;
   }
 
-  ExportColumnsManager? _exportColumnsManagerInstance = null;
+  ExportColumnsManager? _exportColumnsManagerInstance;
   @override
   Future<ExportColumnsManager> loadExportColumnsManager() async {
     if (_exportColumnsManagerInstance != null) return _exportColumnsManagerInstance!;

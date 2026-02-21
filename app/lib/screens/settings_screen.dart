@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:archive/archive_io.dart';
-import 'package:blood_pressure_app/components/input_dialoge.dart';
 import 'package:blood_pressure_app/data_util/consistent_future_builder.dart';
 import 'package:blood_pressure_app/features/settings/configure_warn_values_screen.dart';
 import 'package:blood_pressure_app/features/settings/delete_data_screen.dart';
@@ -11,14 +10,12 @@ import 'package:blood_pressure_app/features/settings/graph_markings_screen.dart'
 import 'package:blood_pressure_app/features/settings/medicine_manager_screen.dart';
 import 'package:blood_pressure_app/features/settings/tiles/color_picker_list_tile.dart';
 import 'package:blood_pressure_app/features/settings/tiles/dropdown_list_tile.dart';
-import 'package:blood_pressure_app/features/settings/tiles/number_input_list_tile.dart';
 import 'package:blood_pressure_app/features/settings/tiles/slider_list_tile.dart';
 import 'package:blood_pressure_app/features/settings/tiles/titled_column.dart';
 import 'package:blood_pressure_app/features/settings/version_screen.dart';
-import 'package:blood_pressure_app/features/settings/warn_about_screen.dart';
+import 'package:blood_pressure_app/l10n/app_localizations.dart';
 import 'package:blood_pressure_app/logging.dart';
 import 'package:blood_pressure_app/model/blood_pressure/pressure_unit.dart';
-import 'package:blood_pressure_app/model/blood_pressure/warn_values.dart';
 import 'package:blood_pressure_app/model/iso_lang_names.dart';
 import 'package:blood_pressure_app/model/storage/bluetooth_input_mode.dart';
 import 'package:blood_pressure_app/model/storage/db/config_db.dart';
@@ -29,7 +26,6 @@ import 'package:blood_pressure_app/model/storage/storage.dart';
 import 'package:blood_pressure_app/model/weight_unit.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:blood_pressure_app/l10n/app_localizations.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:path/path.dart';
 import 'package:provider/provider.dart';

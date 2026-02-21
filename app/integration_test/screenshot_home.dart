@@ -1,8 +1,8 @@
 
 import 'package:blood_pressure_app/app.dart';
+import 'package:blood_pressure_app/l10n/app_localizations.dart';
 import 'package:blood_pressure_app/screens/home_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:blood_pressure_app/l10n/app_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 
@@ -54,7 +54,7 @@ extension on WidgetTester {
     if (sys != null) await enterText(find.byType(TextFormField).at(0), '$sys');
     if (dia != null) await enterText(find.byType(TextFormField).at(1), '$dia');
     if (pul != null) await enterText(find.byType(TextFormField).at(2), '$pul');
-    if (note != null) await enterText(find.byType(TextFormField).at(3), '$note');
+    if (note != null) await enterText(find.byType(TextFormField).at(3), note);
     if (color != null) {
       await tap(find.text(localizations.color));
       await pumpAndSettle();

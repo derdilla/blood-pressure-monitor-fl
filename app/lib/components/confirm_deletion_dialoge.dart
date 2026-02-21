@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:blood_pressure_app/l10n/app_localizations.dart';
+import 'package:flutter/material.dart';
 
 /// Show a dialoge that prompts the user to confirm a deletion.
 ///

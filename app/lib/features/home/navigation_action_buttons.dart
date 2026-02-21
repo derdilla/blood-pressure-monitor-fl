@@ -1,9 +1,9 @@
 import 'package:blood_pressure_app/data_util/entry_context.dart';
+import 'package:blood_pressure_app/l10n/app_localizations.dart';
 import 'package:blood_pressure_app/model/storage/storage.dart';
 import 'package:blood_pressure_app/screens/settings_screen.dart';
 import 'package:blood_pressure_app/screens/statistics_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:blood_pressure_app/l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 
 /// Column of floating action buttons to navigate to [SettingsPage],

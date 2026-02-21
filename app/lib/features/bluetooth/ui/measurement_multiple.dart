@@ -1,7 +1,7 @@
 import 'package:blood_pressure_app/features/bluetooth/logic/characteristics/ble_measurement_data.dart';
 import 'package:blood_pressure_app/features/bluetooth/ui/input_card.dart';
-import 'package:flutter/material.dart';
 import 'package:blood_pressure_app/l10n/app_localizations.dart';
+import 'package:flutter/material.dart';
 
 /// Indication of a successful bluetooth read that returned multiple measurements.
 ///

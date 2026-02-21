@@ -21,11 +21,15 @@ extension BleDateTimeParser on DateTime {
       || day == null
       || hourOfDay == null
       || minute == null
-      || second == null) return null;
+      || second == null) {
+      return null;
+    }
 
     if (year <= 0
       || month <= 0
-      || day <= 0) return null;
+      || day <= 0) {
+      return null;
+    }
 
     return DateTime(year, month, day, hourOfDay, minute, second);
   }

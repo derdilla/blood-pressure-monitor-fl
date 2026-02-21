@@ -1,9 +1,8 @@
 import 'package:blood_pressure_app/features/data_picker/filter_button.dart';
+import 'package:blood_pressure_app/l10n/app_localizations.dart';
 import 'package:blood_pressure_app/model/datarange_extension.dart';
 import 'package:blood_pressure_app/model/storage/interval_store.dart';
 import 'package:flutter/material.dart';
-import 'package:blood_pressure_app/l10n/app_localizations.dart';
-import 'package:health_data_store/health_data_store.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:week_of_year/date_week_extensions.dart';

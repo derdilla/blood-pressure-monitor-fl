@@ -3,12 +3,12 @@ import 'dart:math';
 
 import 'package:blood_pressure_app/components/custom_banner.dart';
 import 'package:blood_pressure_app/components/fullscreen_dialoge.dart';
+import 'package:blood_pressure_app/l10n/app_localizations.dart';
 import 'package:blood_pressure_app/model/export_import/column.dart';
 import 'package:blood_pressure_app/model/export_import/csv_record_parsing_actor.dart';
 import 'package:blood_pressure_app/model/storage/export_columns_store.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
-import 'package:blood_pressure_app/l10n/app_localizations.dart';
 import 'package:health_data_store/health_data_store.dart';
 
 /// A preview that allows customizing columns used for csv data import.

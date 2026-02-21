@@ -14,14 +14,14 @@ class FakeDevice implements BluetoothDevice {
   }
 
   bool _connected = false;
-  StreamController<BluetoothConnectionState> _connectedController = StreamController.broadcast();
+  final StreamController<BluetoothConnectionState> _connectedController = StreamController.broadcast();
 
 
-  List<BluetoothService> _services = [
+  final List<BluetoothService> _services = [
     FakeBleBPService(),
   ];
 
-  String _platformName = 'test device 1234';
+  final String _platformName = 'test device 1234';
 
   AdvertisementData createFakeData() => AdvertisementData(
     advName: advName,

@@ -14,7 +14,7 @@
 /// - To verify everything was done correctly, tests should be expanded with the newly added fields (json_serialization_test.dart)
 ///
 /// Keeping data modular reduces the amount of data saved to the database and makes the purpose of a setting more clear.
-library storage;
+library;
 
 export 'common_settings_interfaces.dart';
 export 'db/config_dao.dart';

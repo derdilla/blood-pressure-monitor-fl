@@ -1,11 +1,11 @@
 
 import 'dart:math';
 
+import 'package:blood_pressure_app/l10n/app_localizations.dart';
 import 'package:blood_pressure_app/model/storage/storage.dart';
 import 'package:blood_pressure_app/screens/statistics_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:blood_pressure_app/l10n/app_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:health_data_store/health_data_store.dart';
 import 'package:integration_test/integration_test.dart';
@@ -17,7 +17,7 @@ import '../test/model/analyzer_test.dart';
 void main() {
   final binding = IntegrationTestWidgetsFlutterBinding.ensureInitialized();
   testWidgets('Statistics screen', (WidgetTester tester) async {
-    await TestWidgetsFlutterBinding.ensureInitialized();
+    TestWidgetsFlutterBinding.ensureInitialized();
     await initializeDateFormatting('en');
     await tester.pumpWidget(MaterialApp(
       darkTheme: _buildTheme(ColorScheme.fromSeed(
