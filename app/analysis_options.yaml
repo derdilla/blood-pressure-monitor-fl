@@ -40,9 +40,6 @@ linter:
     - use_to_and_as_if_applicable
     - void_checks
 
-    # Pub
-    - sort_pub_dependencies
-
 analyzer:
   language:
     strict-inference: true

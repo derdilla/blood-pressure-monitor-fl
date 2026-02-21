@@ -96,9 +96,13 @@ void performExport(BuildContext context, bool share) async { // TODO: extract
       if (context.mounted) await _exportData(context, pdf, '$filename.pdf', 'text/pdf', share);
       break;
     case ExportFormat.xsl:
+      final excelExportSettings = Provider.of<ExcelExportSettings>(context,
+          listen: false);
+      final exportColumnsManager = Provider.of<ExportColumnsManager>(context,
+          listen: false);
       final xslConverter = ExcelConverter(
-        Provider.of<ExcelExportSettings>(context, listen: false),
-        Provider.of<ExportColumnsManager>(context, listen: false),
+        excelExportSettings,
+        exportColumnsManager,
         await RepositoryProvider.of<MedicineRepository>(context).getAll(),
       );
       if (!context.mounted) return;

@@ -85,7 +85,7 @@ class ActiveExportColumnConfiguration extends ChangeNotifier {
   /// Columns to respect for export.
   UnmodifiableListView<ExportColumn> getActiveColumns(ExportColumnsManager availableColumns) => UnmodifiableListView(
     switch (_activePreset) {
-      ExportImportPreset.none => _userSelectedColumns.map((e) => availableColumns.getColumn(e)).whereNotNull(),
+      ExportImportPreset.none => _userSelectedColumns.map((e) => availableColumns.getColumn(e)).nonNulls,
       ExportImportPreset.bloodPressureApp => [
         NativeColumn.timestampUnixMs,
         NativeColumn.systolic,

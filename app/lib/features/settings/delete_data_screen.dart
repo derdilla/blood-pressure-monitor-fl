@@ -36,6 +36,7 @@ class _DeleteDataScreenState extends State<DeleteDataScreen> {
             onTap: () async {
               final messanger = ScaffoldMessenger.of(context);
               if (await showConfirmDeletionDialoge(context, localizations.warnDeletionUnrecoverable)) {
+                if (!context.mounted) return;
                 context.read<Settings>().reset();
                 context.read<ExportSettings>().reset();
                 context.read<CsvExportSettings>().reset();
@@ -55,6 +56,7 @@ class _DeleteDataScreenState extends State<DeleteDataScreen> {
             onTap: () async {
               final messanger = ScaffoldMessenger.of(context);
               if (await showConfirmDeletionDialoge(context, localizations.warnDeletionUnrecoverable)) {
+                if (!context.mounted) return;
                 final repo = RepositoryProvider.of<BloodPressureRepository>(context);
                 final previousRecords = await repo.get(DateRange.all());
                 for (final record in previousRecords) {
@@ -77,6 +79,7 @@ class _DeleteDataScreenState extends State<DeleteDataScreen> {
             onTap: () async {
               final messanger = ScaffoldMessenger.of(context);
               if (await showConfirmDeletionDialoge(context, localizations.warnDeletionUnrecoverable)) {
+                if (!context.mounted) return;
                 final repo = RepositoryProvider.of<NoteRepository>(context);
                 final previousNotes = await repo.get(DateRange.all());
                 for (final note in previousNotes) {
@@ -98,12 +101,13 @@ class _DeleteDataScreenState extends State<DeleteDataScreen> {
             trailing: const Icon(Icons.delete_forever),
             onTap: () async {
               if (await showConfirmDeletionDialoge(context, localizations.warnDeletionUnrecoverable)) {
+                if (!context.mounted) return;
                 final repo = context.read<MedicineIntakeRepository>();
+                final messanger = ScaffoldMessenger.of(context);
                 final allIntakes = await repo.get(DateRange.all());
                 for (final intake in allIntakes) {
                   await repo.remove(intake);
                 }
-                final messanger = ScaffoldMessenger.of(context);
                 messanger.showSnackBar(SnackBar(
                   content: Text(localizations.deletionConfirmed),
                 ));

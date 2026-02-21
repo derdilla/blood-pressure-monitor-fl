@@ -36,7 +36,7 @@ final class FlutterBluePlusDevice
     .map((fbp.BluetoothConnectionState rawState) => switch (rawState) {
       fbp.BluetoothConnectionState.connected => BluetoothConnectionState.connected,
       fbp.BluetoothConnectionState.disconnected => BluetoothConnectionState.disconnected,
-      // code should never reach here
+      // ignore: deprecated_member_use, code should never reach here
       fbp.BluetoothConnectionState.connecting || fbp.BluetoothConnectionState.disconnecting
         => throw ErrorDescription('Unsupported connection state: $rawState'),
     });

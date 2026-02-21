@@ -324,6 +324,11 @@ class SettingsPage extends StatelessWidget {
                   leading: const Icon(Icons.settings_backup_restore),
                   onTap: () async {
                     final messenger = ScaffoldMessenger.of(context);
+                    final exportSettings = context.read<ExportSettings>();
+                    final csvExportSettings = context.read<CsvExportSettings>();
+                    final pdfExportSettings = context.read<PdfExportSettings>();
+                    final intervalStoreManager = context.read<IntervalStoreManager>();
+                    final exportColumnsManager = context.read<ExportColumnsManager>();
                     final result = await FilePicker.platform.pickFiles();
                     if (result == null) {
                       messenger.showSnackBar(SnackBar(content: Text(localizations.errNoFileOpened)));
@@ -355,12 +360,14 @@ class SettingsPage extends StatelessWidget {
                       messenger.showSnackBar(SnackBar(content: Text(localizations.errNotImportable)));
                       return;
                     }
+
                     settings.copyFrom(await loader.loadSettings());
-                    context.read<ExportSettings>().copyFrom(await loader.loadExportSettings());
-                    context.read<CsvExportSettings>().copyFrom(await loader.loadCsvExportSettings());
-                    context.read<PdfExportSettings>().copyFrom(await loader.loadPdfExportSettings());
-                    context.read<IntervalStoreManager>().copyFrom(await loader.loadIntervalStorageManager());
-                    context.read<ExportColumnsManager>().copyFrom(await loader.loadExportColumnsManager());
+                    exportSettings.copyFrom(await loader.loadExportSettings());
+                    csvExportSettings.copyFrom(await loader.loadCsvExportSettings());
+                    pdfExportSettings.copyFrom(await loader.loadPdfExportSettings());
+                    intervalStoreManager.copyFrom(await loader.loadIntervalStorageManager());
+                    exportColumnsManager.copyFrom(await loader.loadExportColumnsManager());
+
                     messenger.showSnackBar(SnackBar(content: Text(localizations.success(localizations.importSettings))));
                   },
                 ),

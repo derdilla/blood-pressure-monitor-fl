@@ -111,7 +111,7 @@ class _ExportWarnBannerState extends State<ExportWarnBanner> {
     return _banner(localizations.exportWarnNotEveryFieldExported(
       missingTypes.length,
       missingTypes
-          .whereNotNull()
+          .nonNulls
           .map((e) => e.localize(localizations))
           .join(', '),
     ), localizations,);

@@ -260,11 +260,11 @@ abstract class BluetoothDevice<
   /// 
   /// This method provides a generic implementation for async reading of data, regardless whether the
   /// characteristic can be read directly or through a notification or indication. In case the value
-  /// is being read using an indication, then the [onValue] callback receives a second argument [complete] with
+  /// is being read using an indication, then the [onValue] callback receives a second argument `complete` with
   /// which you can stop reading the data.
   ///
   /// Note that a [characteristic] could have multiple values, so [onValue] can be called more then once.
-  /// TODO: implement reading values for characteristics with [canNotify]
+  /// TODO: implement reading values for characteristics with `canNotify`
   Future<bool> getCharacteristicValue(BC characteristic, void Function(Uint8List value, [void Function(bool success)? complete]) onValue);
 
   @override

@@ -36,7 +36,7 @@ class Log {
     return '${record.level.name}: ${record.time}: ${loggerName != null ? '$loggerName: ' : ''}${record.message}';
   }
 
-  /// Strip types from definition, i.e. MyClass<SomeType> -> MyClass
+  /// Strip types from definition, i.e. `MyClass<SomeType> -> MyClass`
   static String withoutTypes(String type) => type.replaceAll(RegExp(r'<[^>]+>'), '');
 
   /// Register the apps logging config with [Logger].
