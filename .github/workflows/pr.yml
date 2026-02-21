@@ -88,6 +88,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
+          ref: ${{ github.head_ref }}
           sparse-checkout: app
       - uses: dart-lang/setup-dart@v1
         with:
@@ -99,6 +100,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
+          ref: ${{ github.head_ref }}
           sparse-checkout: health_data_store
       - uses: dart-lang/setup-dart@v1
         with:
