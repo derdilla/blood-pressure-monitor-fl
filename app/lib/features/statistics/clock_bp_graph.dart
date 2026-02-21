@@ -74,7 +74,7 @@ class _RadarChartPainter extends CustomPainter {
     final decoPaint = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = 3.0
-      ..color = (brightness == Brightness.dark ? Colors.white : Colors.black).withOpacity(0.3);
+      ..color = (brightness == Brightness.dark ? Colors.white : Colors.black).withAlpha(76);
 
     final maxRadius = size.shortestSide / 2;
 
@@ -114,7 +114,7 @@ class _RadarChartPainter extends CustomPainter {
       path!.lineTo(startPos.dx, startPos.dy); // connect to start
 
       canvas.drawPath(path, Paint() // fill
-        ..color = dataRow.$1.withOpacity(0.4));
+        ..color = dataRow.$1.withAlpha(102));
       canvas.drawPath(path, Paint() // stroke around
         ..color = dataRow.$1
         ..strokeWidth = 5.0
@@ -125,7 +125,7 @@ class _RadarChartPainter extends CustomPainter {
     // draw labels on top of content
     final textStyle = TextStyle(
       color: brightness == Brightness.dark ? Colors.white : Colors.black,
-      backgroundColor: (brightness == Brightness.dark ? Colors.black : Colors.white).withOpacity(0.6),
+      backgroundColor: (brightness == Brightness.dark ? Colors.black : Colors.white).withAlpha(153),
       fontSize: 24.0
     );
     for (int i = 0; i < labels.length; i += 2) {

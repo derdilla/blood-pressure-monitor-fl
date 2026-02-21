@@ -57,7 +57,7 @@ class ActiveExportFieldCustomization extends StatelessWidget {
           onTap: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => const ExportColumnsManagementScreen()),);
+              MaterialPageRoute<void>(builder: (context) => const ExportColumnsManagementScreen()),);
           },
         ),
         if (fieldsConfig.activePreset == ExportImportPreset.none)

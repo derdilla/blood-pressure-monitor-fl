@@ -9,7 +9,7 @@ abstract class FormBase<T> extends StatefulWidget {
   final T? initialValue;
 
   @override
-  FormStateBase createState();
+  FormStateBase<T, FormBase<T>> createState();
 }
 
 /// State of a form allowing validation and result gathering using [GlobalKey].
@@ -28,7 +28,7 @@ abstract class FormBase<T> extends StatefulWidget {
 ///     },
 ///   )
 /// ```
-abstract class FormStateBase<T, G extends FormBase> extends State<G> {
+abstract class FormStateBase<T, G extends FormBase<T>> extends State<G> {
   /// Validates all form fields and shows errors on failing form fields.
   ///
   /// Returns whether the all fields validated without error.

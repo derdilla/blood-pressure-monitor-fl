@@ -133,24 +133,24 @@ class CsvConverter with TypeLogger {
         if (piece != null) recordPieces.add(piece);
       }
 
-      final DateTime? timestamp = recordPieces.firstWhereOrNull(
-            (piece) => piece.$1 == RowDataFieldType.timestamp,)?.$2;
+      final timestamp = recordPieces.firstWhereOrNull(
+            (piece) => piece.$1 == RowDataFieldType.timestamp,)?.$2 as DateTime?;
       if (timestamp == null) {
         return RecordParsingResult.err(RecordParsingErrorTimeNotRestoreable());
       }
 
-      final int? sys = recordPieces.firstWhereOrNull(
-            (piece) => piece.$1 == RowDataFieldType.sys,)?.$2;
-      final int? dia = recordPieces.firstWhereOrNull(
-            (piece) => piece.$1 == RowDataFieldType.dia,)?.$2;
-      final int? pul = recordPieces.firstWhereOrNull(
-            (piece) => piece.$1 == RowDataFieldType.pul,)?.$2;
-      String noteText = recordPieces.firstWhereOrNull(
-            (piece) => piece.$1 == RowDataFieldType.notes,)?.$2 ?? '';
-      final int? color = recordPieces.firstWhereOrNull(
-            (piece) => piece.$1 == RowDataFieldType.color,)?.$2;
-      final List<dynamic>? intakesData = recordPieces.firstWhereOrNull(
-            (piece) => piece.$1 == RowDataFieldType.intakes,)?.$2;
+      final sys = recordPieces.firstWhereOrNull(
+            (piece) => piece.$1 == RowDataFieldType.sys)?.$2 as int?;
+      final dia = recordPieces.firstWhereOrNull(
+            (piece) => piece.$1 == RowDataFieldType.dia)?.$2 as int?;
+      final pul = recordPieces.firstWhereOrNull(
+            (piece) => piece.$1 == RowDataFieldType.pul)?.$2 as int?;
+      String noteText = (recordPieces.firstWhereOrNull(
+            (piece) => piece.$1 == RowDataFieldType.notes)?.$2 as String?) ?? '';
+      final color = recordPieces.firstWhereOrNull(
+            (piece) => piece.$1 == RowDataFieldType.color)?.$2 as int?;
+      final intakesData = recordPieces.firstWhereOrNull(
+            (piece) => piece.$1 == RowDataFieldType.intakes)?.$2 as List<dynamic>?;
 
       // manually trim quotes after https://pub.dev/packages/csv/changelog#600
       noteText = noteText.trim();
@@ -177,7 +177,7 @@ class CsvConverter with TypeLogger {
           assert(s is (String, double));
           final med = availableMedicines.firstWhereOrNull((med) => med.designation == s.$1);
           if (med == null) return null;
-          return MedicineIntake(time: timestamp, medicine: med, dosis: Weight.mg(s.$2));
+          return MedicineIntake(time: timestamp, medicine: med, dosis: Weight.mg(s.$2 as double));
         })
         .nonNulls
         .toList();

@@ -1,3 +1,5 @@
+// ignore_for_file: strict_raw_type
+
 import 'dart:typed_data';
 
 import 'package:blood_pressure_app/config.dart';

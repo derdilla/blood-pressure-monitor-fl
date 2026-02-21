@@ -18,7 +18,7 @@ jobs:
       - name: Checkout PR code
         uses: actions/checkout@v4
         with:
-          ref: ${{ github.head_ref }}
+          ref: ${{ github.event.pull_request.head.sha }}
           sparse-checkout: "app/lib/l10n"
       - name: Validate localizations
         # check for [^'"]'[^'"] in .arb files
@@ -63,6 +63,9 @@ jobs:
       # TODO: cache using non-generated dart files in the test dir as key
       - name: Generate app mock code
         run: flutter pub run build_runner build
+        working-directory: app
+      - name: Analyze code
+        run: flutter analyze
         working-directory: app
       - name: Update goldens
         id: gold-upd
