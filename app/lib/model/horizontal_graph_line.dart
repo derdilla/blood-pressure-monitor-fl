@@ -1,3 +1,4 @@
+import 'package:blood_pressure_app/model/storage/convert_util.dart';
 import 'package:flutter/material.dart';
 import 'package:health_data_store/health_data_store.dart';
 
@@ -8,8 +9,8 @@ import 'package:health_data_store/health_data_store.dart';
 class HorizontalGraphLine {
   /// Create a instance from a [String] created by [toJson].
   HorizontalGraphLine.fromJson(Map<String, dynamic> json)
-      : color = Color(json['color']),
-        height = json['height'];
+      : color = ConvertUtil.parseColor(json['color'])!,
+        height = ConvertUtil.parseInt(json['height'])!;
 
   /// Create information about a new horizontal line through the graph.
   HorizontalGraphLine(this.color, this.height);

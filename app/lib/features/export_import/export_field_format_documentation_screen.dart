@@ -45,14 +45,14 @@ LinkTapHandler getLinkTapHandler(BuildContext context) => (String text, String? 
   if (destination.startsWith('http://') || destination.startsWith('https://')) {
     final url = Uri.tryParse(destination);
     if (url != null && await canLaunchUrl(url)) {
-      launchUrl(url);
+      await launchUrl(url);
       return;
     }
   } else if (destination.startsWith('screen://')) {
     switch (destination.split('//')[1]) {
       case 'TimeFormattingHelp':
-        Navigator.push(context, MaterialPageRoute(builder:
-            (context) => const TimeFormattingReferenceScreen(),),);
+        Navigator.push(context, MaterialPageRoute<void>(builder:
+            (context) => const TimeFormattingReferenceScreen())).ignore();
         return;
     }
   }

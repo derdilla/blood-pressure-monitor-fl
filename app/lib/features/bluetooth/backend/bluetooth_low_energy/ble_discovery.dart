@@ -9,6 +9,8 @@ final class BluetoothLowEnergyDiscovery extends BluetoothDeviceDiscovery<Bluetoo
   BluetoothLowEnergyDiscovery(super.manager);
 
   @override
+  // TODO: cleanup types
+  // ignore: strict_raw_type
   Stream<List<BluetoothDevice>> get discoverStream => manager.backend.discovered.map(
     (device) => [manager.createDevice(device)]
   );

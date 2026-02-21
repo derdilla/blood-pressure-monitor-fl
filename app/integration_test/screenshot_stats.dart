@@ -72,7 +72,7 @@ class _MockRepo extends BloodPressureRepository {
   Future<void> remove(BloodPressureRecord value) => throw UnimplementedError();
 
   @override
-  Stream subscribe() => Stream.empty();
+  Stream<List<BloodPressureRecord>> subscribe() => Stream.empty();
 }
 
 // Copy of app method

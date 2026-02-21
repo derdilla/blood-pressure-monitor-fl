@@ -1,3 +1,6 @@
+// TODO: cleanup types
+// ignore_for_file: strict_raw_type
+
 part of 'device_scan_cubit.dart';
 
 /// Search of bluetooth devices that meet some criteria.

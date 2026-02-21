@@ -1,3 +1,6 @@
+// TODO: cleanup types
+// ignore_for_file: strict_raw_type
+
 import 'dart:async';
 
 import 'package:blood_pressure_app/features/bluetooth/backend/bluetooth_backend.dart';
@@ -126,7 +129,7 @@ class _BluetoothInputState extends State<BluetoothInput> with TypeLogger {
       inputInfo: () async {
         logger.finer('build.inputInfo[mounted: ${context.mounted}]');
         if (context.mounted) {
-          await showDialog(
+          await showDialog<void>(
             context: context,
             builder: (BuildContext context) => AlertDialog(
               title: Text(AppLocalizations.of(context)!.bluetoothInput),

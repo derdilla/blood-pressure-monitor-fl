@@ -127,7 +127,7 @@ class FlutterBluePlusMockable {
   /// This function simplifies cleanup, to prevent creating duplicate stream subscriptions.
   ///   - this is an optional convenience function
   ///   - prevents accidentally creating duplicate subscriptions before each scan
-  void cancelWhenScanComplete(StreamSubscription subscription) =>
+  void cancelWhenScanComplete(StreamSubscription<dynamic> subscription) =>
       FlutterBluePlus.cancelWhenScanComplete(subscription);
 
   /// Sets the internal FlutterBlue log level

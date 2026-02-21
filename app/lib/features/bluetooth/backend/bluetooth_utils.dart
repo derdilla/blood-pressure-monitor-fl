@@ -3,20 +3,20 @@ import 'dart:async';
 import 'package:blood_pressure_app/features/bluetooth/backend/bluetooth_state.dart';
 import 'package:blood_pressure_app/logging.dart';
 
-/// Generic stream data parser base class
-abstract class StreamDataParser<StreamData, ParsedData> {
-  /// Method to be implemented by backend that converts the raw bluetooth adapter state to our BluetoothState
-  ParsedData parse(StreamData rawState);
-}
 
-/// Generic stream data parser base class that caches the last known state returned by the stream
-abstract class StreamDataParserCached<StreamData, ParsedData> extends StreamDataParser<StreamData, ParsedData> {
+
+/// Generic stream data parser base class that caches the last known state
+/// returned by the stream.
+abstract class StreamDataParserCached<StreamData, ParsedData> {
   /// Initial state when it's unknown, f.e. when stream didn't return any data yet
   ParsedData get initialState;
   ParsedData? _lastKnownState;
 
   /// The last known adapter state
   ParsedData get lastKnownState => _lastKnownState ?? initialState;
+
+  /// Method to be implemented by backend that converts the raw bluetooth adapter state to our BluetoothState
+  ParsedData parse(StreamData rawState);
 
   /// Internal method to cache the last adapter state value, backends should only implement parse not this method
   ParsedData parseAndCache(StreamData rawState) {
@@ -28,7 +28,7 @@ abstract class StreamDataParserCached<StreamData, ParsedData> extends StreamData
 /// Transforms the backend's bluetooth adapter state stream to emit [BluetoothAdapterState]'s
 ///
 /// Can normally be used directly, backends should only inject a customized BluetoothStateParser
-class StreamDataParserTransformer<StreamData, ParsedData, SD extends StreamDataParser<StreamData, ParsedData>>
+class StreamDataParserTransformer<StreamData, ParsedData, SD extends StreamDataParserCached<StreamData, ParsedData>>
   extends StreamDataTransformer<StreamData, ParsedData> {
   /// Create a BluetoothAdapterStateStreamTransformer
   ///
@@ -42,11 +42,7 @@ class StreamDataParserTransformer<StreamData, ParsedData, SD extends StreamDataP
   @override
   void onData(StreamData streamData) {
     late ParsedData data;
-    if (_stateParser is StreamDataParserCached) {
-      data = (_stateParser as StreamDataParserCached).parseAndCache(streamData);
-    } else {
-      data = _stateParser.parse(streamData);
-    }
+    data = _stateParser.parseAndCache(streamData);
 
     sendData(data);
   }
@@ -77,7 +73,7 @@ abstract class StreamDataTransformer<S,T> with TypeLogger implements StreamTrans
   }
 
   late StreamController<T> _controller;
-  StreamSubscription? _subscription;
+  StreamSubscription<S>? _subscription;
   Stream<S>? _stream;
   bool _cancelOnError = false;
 

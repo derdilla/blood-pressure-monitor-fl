@@ -1,3 +1,5 @@
+// ignore_for_file: strict_raw_type
+
 import 'package:blood_pressure_app/features/bluetooth/backend/bluetooth_service.dart';
 
 /// Backend implementation for MockBluetoothService

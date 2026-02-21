@@ -18,7 +18,6 @@ import 'package:blood_pressure_app/l10n/app_localizations.dart';
 import 'package:blood_pressure_app/logging.dart';
 import 'package:blood_pressure_app/model/blood_pressure/pressure_unit.dart';
 import 'package:blood_pressure_app/model/iso_lang_names.dart';
-import 'package:blood_pressure_app/model/storage/bluetooth_input_mode.dart';
 import 'package:blood_pressure_app/model/storage/db/config_db.dart';
 import 'package:blood_pressure_app/model/storage/db/file_settings_loader.dart';
 import 'package:blood_pressure_app/model/storage/db/settings_loader.dart';
@@ -149,8 +148,8 @@ class SettingsPage extends StatelessWidget {
             TitledColumn(title: Text(localizations.behavior), children: [
               ListTile(
                 onTap: () {
-                  Navigator.push(context, MaterialPageRoute(builder:
-                      (context) => const MedicineManagerScreen(),),);
+                  Navigator.push(context, MaterialPageRoute<void>(builder:
+                      (context) => const MedicineManagerScreen()));
                 },
                 leading: const Icon(Icons.medication),
                 title: Text(localizations.medications),
@@ -198,7 +197,7 @@ class SettingsPage extends StatelessWidget {
                 onTap: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => const ConfigureWarnValuesScreen()),
+                    MaterialPageRoute<void>(builder: (context) => const ConfigureWarnValuesScreen()),
                   );
                 },
               ),
@@ -209,7 +208,7 @@ class SettingsPage extends StatelessWidget {
                 onTap: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => const GraphMarkingsScreen()),
+                    MaterialPageRoute<void>(builder: (context) => const GraphMarkingsScreen()),
                   );
                 },
               ),
@@ -296,7 +295,7 @@ class SettingsPage extends StatelessWidget {
                   onTap: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => const ExportImportScreen()),
+                      MaterialPageRoute<void>(builder: (context) => const ExportImportScreen()),
                     );
                   },
                 ),
@@ -372,7 +371,7 @@ class SettingsPage extends StatelessWidget {
                   onTap: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => const DeleteDataScreen()),
+                      MaterialPageRoute<void>(builder: (context) => const DeleteDataScreen()),
                     );
                   },
                 ),
@@ -391,7 +390,7 @@ class SettingsPage extends StatelessWidget {
                   onTap: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => const VersionScreen()),
+                      MaterialPageRoute<void>(builder: (context) => const VersionScreen()),
                     );
                   },
               ),

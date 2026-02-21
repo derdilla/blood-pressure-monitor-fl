@@ -1,3 +1,6 @@
+// TODO: cleanup types
+// ignore_for_file: strict_raw_type
+
 import 'dart:async';
 import 'dart:math';
 
@@ -92,14 +95,14 @@ abstract class BluetoothDevice<
     Future<void> checkDeviceState() async {
       while (!futuresCompleted && _state == BluetoothDeviceState.disconnecting) {
         logger.finest('Waiting because device is still disconnecting');
-        await Future.delayed(const Duration(milliseconds: 10));
+        await Future<void>.delayed(const Duration(milliseconds: 10));
       }
     }
 
     final futures = [checkDeviceState()];
     if (timeout > 0) {
       futures.add(
-        Future.delayed(Duration(milliseconds: min(timeout, 300000))).then((_) {
+        Future<void>.delayed(Duration(milliseconds: min(timeout, 300000))).then((_) {
           if (!futuresCompleted) {
             logger.finest('connect: Wait for state change timed out after $timeout ms');
           }
