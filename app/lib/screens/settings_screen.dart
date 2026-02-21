@@ -8,6 +8,7 @@ import 'package:blood_pressure_app/features/settings/enter_timeformat_dialoge.da
 import 'package:blood_pressure_app/features/settings/export_import_screen.dart';
 import 'package:blood_pressure_app/features/settings/graph_markings_screen.dart';
 import 'package:blood_pressure_app/features/settings/medicine_manager_screen.dart';
+import 'package:blood_pressure_app/features/settings/tiles/ble_input_options_tile.dart';
 import 'package:blood_pressure_app/features/settings/tiles/color_picker_list_tile.dart';
 import 'package:blood_pressure_app/features/settings/tiles/dropdown_list_tile.dart';
 import 'package:blood_pressure_app/features/settings/tiles/slider_list_tile.dart';
@@ -155,20 +156,9 @@ class SettingsPage extends StatelessWidget {
                 title: Text(localizations.medications),
                 trailing: const Icon(Icons.arrow_forward_ios),
               ),
-              DropDownListTile<BluetoothInputMode>(
-                title: Text(localizations.bluetoothInput),
-                subtitle: Text(localizations.bluetoothInputDesc),
-                leading: const Icon(Icons.bluetooth),
-                items: [
-                  for (final e in BluetoothInputMode.values)
-                    DropdownMenuItem(
-                      value: e,
-                      child: Text(e.localize(localizations)),
-                    ),
-                ],
+              BleInputOptionsTile(
                 value: settings.bleInput,
                 onChanged: (value) => settings.bleInput = value ?? settings.bleInput,
-
               ),
               SwitchListTile(
                 value: settings.allowManualTimeInput,

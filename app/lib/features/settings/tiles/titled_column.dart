@@ -21,18 +21,20 @@ class TitledColumn extends StatelessWidget {
   final List<Widget> children;
 
   @override
-  Widget build(BuildContext context) {
-    final List<Widget> items = [
-      ListTile(
-        title: DefaultTextStyle(
-          style: Theme.of(context).textTheme.titleLarge!,
+  Widget build(BuildContext context) => Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      Padding(
+        padding: const EdgeInsets.only(left: 8.0, top: 16.0),
+        child: DefaultTextStyle(
+          style: TextStyle(
+            color: Theme.of(context).colorScheme.primary,
+            fontWeight: FontWeight.bold
+          ),
           child: title,
         ),
       ),
-    ];
-    items.addAll(children);
-    return Column(
-      children: items,
-    );
-  }
+      ...children,
+    ],
+  );
 }
