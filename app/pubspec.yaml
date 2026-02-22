@@ -4,7 +4,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 repository: https://github.com/derdilla/blood-pressure-monitor-fl
 issue_tracker: https://github.com/derdilla/blood-pressure-monitor-fl/issues
 
-version: 1.8.10+52
+version: 1.8.11+53
 
 environment:
   sdk: '>=3.0.2 <4.0.0'
