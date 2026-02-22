@@ -1,5 +1,0 @@
-- Fix input form being unsubmitable without time sub-form
-- Extract warning configuration to a new screen
-- Implement xls export
-- Allow filtering a records time of day
-- Update add Polish translation

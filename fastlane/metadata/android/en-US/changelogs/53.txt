@@ -1,0 +1,7 @@
+- Fix date range step moving to off-day hours on DST
+- Hide time picker on SQL export
+- Allow editing medications
+- Fix early backwards focus traversal in measurement input
+- Fix text overflowing into title bar when input is active
+- Improve settings design
+- Various accessibility and performance improvements
