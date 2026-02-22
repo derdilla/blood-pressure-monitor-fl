@@ -7,6 +7,7 @@ use std::io::{BufReader, Read};
 use std::os::unix::prelude::OsStrExt;
 use std::path::PathBuf;
 use std::process::{exit, Command, Stdio};
+use std::time::Duration;
 
 /// Summary of actions that will be taken
 #[derive(Debug, Default)]
@@ -46,12 +47,13 @@ impl Summary {
         // 4. run tests and build
         let spinner_style = ProgressStyle::with_template("{prefix:.bold.dim} {spinner} {wide_msg}")
             .unwrap()
-            .tick_chars("⠁⠂⠄⡀⢀⠠⠐⠈ ");
+            .tick_chars("⠈⠐⠠⢀⡀⠄⠂⠁");
         let m = MultiProgress::new();
 
         if self.update_flutter {
             let pb = m.add(ProgressBar::new_spinner());
             pb.set_style(spinner_style.clone());
+            pb.enable_steady_tick(Duration::from_millis(1000 / 4));
             pb.set_prefix("$ flutter upgrade");
             pb.set_message("Starting...");
 
@@ -92,6 +94,7 @@ impl Summary {
         let current_flutter_version = {
             let pb = m.add(ProgressBar::new_spinner());
             pb.set_style(spinner_style.clone());
+            pb.enable_steady_tick(Duration::from_millis(1000 / 4));
             pb.set_prefix("$ flutter --version");
             pb.set_message("Starting...");
             let ouput = Command::new("flutter").arg("--version").stdout(Stdio::piped()).output().unwrap();
@@ -109,6 +112,7 @@ impl Summary {
         if self.update_dependencies {
             let pb = m.add(ProgressBar::new_spinner());
             pb.set_style(spinner_style.clone());
+            pb.enable_steady_tick(Duration::from_millis(1000 / 4));
             pb.set_prefix("Updating dependencies");
 
             pb.set_message("health_data_store pub deps");
@@ -167,6 +171,7 @@ impl Summary {
         if self.run_tests {
             let pb = m.add(ProgressBar::new_spinner());
             pb.set_style(spinner_style.clone());
+            pb.enable_steady_tick(Duration::from_millis(1000 / 4));
             pb.set_prefix("Running tests");
 
             pb.set_message("Testing health_data_store");
@@ -195,6 +200,7 @@ impl Summary {
         if self.build {
             let pb = m.add(ProgressBar::new_spinner());
             pb.set_style(spinner_style.clone());
+            pb.enable_steady_tick(Duration::from_millis(1000 / 4));
             pb.set_prefix("Build App");
 
             pb.set_message("Cleaning...");
@@ -262,7 +268,7 @@ impl Summary {
             fs::copy(&zip_path, target_dir.join("debug-info.zip")).unwrap();
             fs::copy(&apk_path_v8a, target_dir.join("app-arm64-v8a-github-release.apk")).unwrap();
             fs::copy(&apk_path_v7a, target_dir.join("app-armeabi-v7a-github-release.apk")).unwrap();
-            fs::copy(&apk_path_x86_64, target_dir.join("app-x86_64-github-release.apk").unwrap();
+            fs::copy(&apk_path_x86_64, target_dir.join("app-x86_64-github-release.apk")).unwrap();
 
             pb.finish();
         }
