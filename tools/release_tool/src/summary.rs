@@ -217,6 +217,16 @@ impl Summary {
                     &pb,
             );
 
+            pb.set_message("Build split APKs...");
+            Self::spawn_propagating_logs(
+                Command::new("flutter").arg("build").arg("apk")
+                        .arg("--release").arg("--flavor").arg("github")
+                        .arg("--obfuscate").arg(format!("--split-debug-info={}", debug_info_path.display()))
+                        .arg("--split-per-abi")
+                        .current_dir(&self.root.join("app")),
+                    &pb,
+            );
+
             pb.set_message("Build bundle...");
             Self::spawn_propagating_logs(
                 Command::new("flutter").arg("build").arg("appbundle")
@@ -241,12 +251,18 @@ impl Summary {
             fs::create_dir_all(&target_dir).unwrap();
             let out_base = self.root.join("app").join("build").join("app").join("outputs");
             let apk_path = out_base.join("flutter-apk").join("app-github-release.apk");
+            let apk_path_v8a = out_base.join("flutter-apk").join("app-arm64-v8a-github-release.apk");
+            let apk_path_v7a = out_base.join("flutter-apk").join("app-armeabi-v7a-github-release.apk");
+            let apk_path_x86_64 = out_base.join("flutter-apk").join("app-x86_64-github-release.apk");
             let aab_path = out_base.join("bundle").join("githubRelease").join("app-github-release.aab");
             let zip_path = debug_info_path.join("debug-info.zip");
 
             fs::copy(&apk_path, target_dir.join("app-github-release.apk")).unwrap();
             fs::copy(&aab_path, target_dir.join("app-github-release.aab")).unwrap();
             fs::copy(&zip_path, target_dir.join("debug-info.zip")).unwrap();
+            fs::copy(&apk_path_v8a, target_dir.join("app-arm64-v8a-github-release.apk")).unwrap();
+            fs::copy(&apk_path_v7a, target_dir.join("app-armeabi-v7a-github-release.apk")).unwrap();
+            fs::copy(&apk_path_x86_64, target_dir.join("app-x86_64-github-release.apk").unwrap();
 
             pb.finish();
         }
