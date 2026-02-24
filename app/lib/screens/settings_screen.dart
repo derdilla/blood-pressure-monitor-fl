@@ -26,6 +26,7 @@ import 'package:blood_pressure_app/model/storage/storage.dart';
 import 'package:blood_pressure_app/model/weight_unit.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:health/health.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:path/path.dart';
 import 'package:provider/provider.dart';
@@ -46,6 +47,53 @@ class SettingsPage extends StatelessWidget {
       ),
       body: Consumer<Settings>(builder: (context, settings, child) => ListView(
           children: [
+            // TODO: move the launch somewhere
+            ListTile(
+              title: Text('health connect test'),
+              onTap: () async {
+                final health = Health();
+
+                // configure the health plugin before use.
+                await health.configure();
+
+
+                // define the types to get
+                var types = [
+                  HealthDataType.WEIGHT,
+                  HealthDataType.BLOOD_PRESSURE_SYSTOLIC,
+                  HealthDataType.BLOOD_PRESSURE_DIASTOLIC,
+                ];
+
+                // requesting access to the data types before reading them
+                final requested = await health.requestAuthorization(types);
+
+                var now = DateTime.now();
+
+                // fetch health data from the last 24 hours
+                List<HealthDataPoint> healthData = await health.getHealthDataFromTypes(
+                  startTime: now.subtract(Duration(days: 30)),
+                  endTime: now,
+                  types: types,
+                );
+                print(healthData);
+              },
+            ),
+            ListTile(
+              title: Text('add health connect sample'),
+              onTap: () async {
+                final health = Health();
+                await health.requestAuthorization([
+                  HealthDataType.BLOOD_PRESSURE_SYSTOLIC,
+                  HealthDataType.BLOOD_PRESSURE_DIASTOLIC,
+                ], permissions: List.generate(2, (_) => HealthDataAccess.WRITE));
+                final time = DateTime.now();
+                final success = await health.writeBloodPressure(
+                  systolic: 123,
+                  diastolic: 45,
+                  startTime: DateTime.now(),
+                );
+              },
+            ),
             TitledColumn(title: Text(localizations.layout), children: [
               ListTile(
                 key: const Key('EnterTimeFormatScreen'),
