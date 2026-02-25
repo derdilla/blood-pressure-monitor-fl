@@ -6,6 +6,7 @@ import 'package:blood_pressure_app/model/storage/db/file_settings_loader.dart';
 import 'package:blood_pressure_app/model/storage/db/settings_loader.dart';
 import 'package:blood_pressure_app/model/storage/export_columns_store.dart';
 import 'package:blood_pressure_app/model/storage/export_xsl_settings_store.dart';
+import 'package:blood_pressure_app/model/storage/health_connect_settings_store.dart';
 import 'package:blood_pressure_app/model/storage/storage.dart';
 import 'package:blood_pressure_app/screens/error_reporting_screen.dart';
 import 'package:blood_pressure_app/screens/home_screen.dart';
@@ -45,6 +46,7 @@ class _AppState extends State<App> {
   ExcelExportSettings? _xslExportSettings;
   IntervalStoreManager? _intervalStorageManager;
   ExportColumnsManager? _exportColumnsManager;
+  HealthConnectSettingsStore? _healthConnectSettingsStore;
 
   @override
   void dispose() {
@@ -57,6 +59,7 @@ class _AppState extends State<App> {
     _xslExportSettings?.dispose();
     _intervalStorageManager?.dispose();
     _exportColumnsManager?.dispose();
+    _healthConnectSettingsStore?.dispose();
     super.dispose();
   }
 
@@ -96,6 +99,7 @@ class _AppState extends State<App> {
       _xslExportSettings ??= await settingsLoader.loadXslExportSettings();
       _intervalStorageManager ??= await settingsLoader.loadIntervalStorageManager();
       _exportColumnsManager ??= await settingsLoader.loadExportColumnsManager();
+      _healthConnectSettingsStore ??= await settingsLoader.loadHealthConnectSettingsStore();
     } catch (e, stack) {
       await ErrorReporting.reportCriticalError('Error loading settings from files', '$e\n$stack',);
     }
@@ -174,6 +178,7 @@ class _AppState extends State<App> {
           ChangeNotifierProvider.value(value: _xslExportSettings!),
           ChangeNotifierProvider.value(value: _intervalStorageManager!),
           ChangeNotifierProvider.value(value: _exportColumnsManager!),
+          ChangeNotifierProvider.value(value: _healthConnectSettingsStore!),
         ],
         child: _buildAppRoot(),
       ),
