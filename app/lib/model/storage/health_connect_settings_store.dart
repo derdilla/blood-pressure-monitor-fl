@@ -7,16 +7,19 @@ class HealthConnectSettingsStore extends ChangeNotifier {
   /// Creates a settings object with the default values.
   HealthConnectSettingsStore({
     bool? useHealthConnect,
-    bool? syncNewMeasurements,
+    bool? syncNewWeightMeasurements,
+    bool? syncNewPressureMeasurements,
   }) {
     if (useHealthConnect != null) _useHealthConnect = useHealthConnect;
-    if (syncNewMeasurements != null) _syncNewMeasurements = syncNewMeasurements;
+    if (syncNewWeightMeasurements != null) _syncNewWeightMeasurements = syncNewWeightMeasurements;
+    if (syncNewPressureMeasurements != null) _syncNewPressureMeasurements = syncNewPressureMeasurements;
   }
 
   /// Create a instance from a map created by [toMap].
   factory HealthConnectSettingsStore.fromMap(Map<String, dynamic> map) => HealthConnectSettingsStore(
     useHealthConnect: ConvertUtil.parseBool(map['useHealthConnect']),
-    syncNewMeasurements: ConvertUtil.parseBool(map['syncNewMeasurements']),
+    syncNewWeightMeasurements: ConvertUtil.parseBool(map['syncNewWeightMeasurements']),
+    syncNewPressureMeasurements: ConvertUtil.parseBool(map['syncNewPressureMeasurements']),
   );
 
   /// Create a instance from a [String] created by [toJson].
@@ -30,7 +33,8 @@ class HealthConnectSettingsStore extends ChangeNotifier {
 
   Map<String, dynamic> toMap() => <String, dynamic>{
     'useHealthConnect': useHealthConnect,
-    'syncNewMeasurements': syncNewMeasurements,
+    'syncNewWeightMeasurements': syncNewWeightMeasurements,
+    'syncNewPressureMeasurements': syncNewPressureMeasurements,
   };
 
   /// Serialize the object to a restoreable string.
@@ -39,7 +43,8 @@ class HealthConnectSettingsStore extends ChangeNotifier {
   /// Copy all values from another instance.
   void copyFrom(HealthConnectSettingsStore other) {
     _useHealthConnect = other._useHealthConnect;
-    _syncNewMeasurements = other._syncNewMeasurements;
+    _syncNewWeightMeasurements = other._syncNewWeightMeasurements;
+    _syncNewPressureMeasurements = other._syncNewPressureMeasurements;
   }
 
   /// Reset all fields to their default values.
@@ -53,11 +58,19 @@ class HealthConnectSettingsStore extends ChangeNotifier {
     notifyListeners();
   }
 
-  bool _syncNewMeasurements = true;
-  /// Whether to automatically sync new measurements.
-  bool get syncNewMeasurements => _syncNewMeasurements;
-  set syncNewMeasurements(bool value) {
-    _syncNewMeasurements = value;
+  bool _syncNewWeightMeasurements = true;
+  /// Whether to automatically sync new weight measurements.
+  bool get syncNewWeightMeasurements => _syncNewWeightMeasurements;
+  set syncNewWeightMeasurements(bool value) {
+    _syncNewWeightMeasurements = value;
+    notifyListeners();
+  }
+
+  bool _syncNewPressureMeasurements = true;
+  /// Whether to automatically sync new blood pressre measurements.
+  bool get syncNewPressureMeasurements => _syncNewPressureMeasurements;
+  set syncNewPressureMeasurements(bool value) {
+    _syncNewPressureMeasurements = value;
     notifyListeners();
   }
 }
