@@ -2,9 +2,10 @@ import 'dart:io';
 
 import 'package:blood_pressure_app/components/custom_banner.dart';
 import 'package:blood_pressure_app/features/health_connect/bp_sync_model.dart';
-import 'package:blood_pressure_app/features/health_connect/weight_sync_model.dart';
 import 'package:blood_pressure_app/features/health_connect/sync_tile.dart';
+import 'package:blood_pressure_app/features/health_connect/weight_sync_model.dart';
 import 'package:blood_pressure_app/features/settings/tiles/titled_column.dart';
+import 'package:blood_pressure_app/l10n/app_localizations.dart';
 import 'package:blood_pressure_app/model/storage/health_connect_settings_store.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -60,42 +61,26 @@ class _HealthConnectScreenState extends State<HealthConnectScreen> {
   @override
   Widget build(BuildContext context) {
     final settings = context.watch<HealthConnectSettingsStore>();
+    final localizations = AppLocalizations.of(context)!;
     return Scaffold(
-      body: CustomScrollView(
-        slivers: [
-          SliverAppBar(
-            expandedHeight: 100.0,
-            stretchTriggerOffset: 300.0,
-            flexibleSpace: const FlexibleSpaceBar(
-              centerTitle: true,
-              title: Text('Health Connect'),
+      appBar: AppBar(
+        title: Text(localizations.healthConnect),
+      ),
+      body: ListView(
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(
+              left: 10.0,
+              right: 10.0,
+              top: 16.0,
+              bottom: 10.0
             ),
+            child: Text(localizations.healthConnectDesc),
           ),
-          SliverToBoxAdapter(
-            child: Padding(
-              padding: const EdgeInsets.only(
-                left: 10.0,
-                right: 10.0,
-                top: 16.0,
-              ),
-              child: Text('Health Connect uses system APIs to sync...'),
-            ),
-          ),
-          SliverToBoxAdapter(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 10.0,
-                vertical: 10.0,
-              ),
-              child: Text('If you choose to opt-in, we will use the Health'
-                  ' Connect API to share blood pressure and weight measurements '
-                  'with the system. Other authorized apps may request those'
-                  ' values. No data will leave your device.'),
-            ),
-          ),
-          SliverToBoxAdapter(
+          Padding(
+            padding: EdgeInsetsGeometry.symmetric(horizontal: 8.0),
             child: SwitchListTile(
-              title: Text('Use Health Connect'),
+              title: Text(localizations.optEnableHealthConnect),
               tileColor: Theme.of(context).cardColor,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadiusGeometry.circular(16.0)
@@ -114,79 +99,55 @@ class _HealthConnectScreenState extends State<HealthConnectScreen> {
                 } else {
                   await _health.revokePermissions();
                 }
-                if (!success && context.mounted) {
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(
-                      'Detected that some or all permissions where not granted. Go to'
-                          'androids app settings to fix this.'
-                  )));
-                }
                 settings.useHealthConnect = newValue;
                 await _checkPermissions();
               } : null,
+              subtitle: _platformSupport ? null : Text(localizations.healthConnectPlatformUnsupported,
+                  style: TextStyle(color: Theme.of(context).colorScheme.error)),
             ),
           ),
-          SliverList.list(
-            children: [
-              if (!_platformSupport)
-                CustomBanner(
-                  content: Text("Your platform doesn't support Health Connect."),
-                ),
-              if (_platformSupport && !_hasWeightPermission && _hasBloodPressurePermission)
-                CustomBanner(
-                  content: Text('No weight permission granted.'),
-                  action: TextButton(
-                    onPressed: _checkPermissions,
-                    child: Text('check again'),
-                  ),
-                ),
-              if (_platformSupport && _hasWeightPermission && !_hasBloodPressurePermission)
-                CustomBanner(
-                  content: Text('No blood pressure permission granted.'),
-                  action: TextButton(
-                    onPressed: _checkPermissions,
-                    child: Text('check again'),
-                  ),
-                ),
-              if (_platformSupport && !_hasWeightPermission && !_hasBloodPressurePermission)
-                CustomBanner(
-                  content: Text('No permissions granted.'),
-                  action: TextButton(
-                    onPressed: _checkPermissions,
-                    child: Text('check again'),
-                  ),
-                ),
 
-              TitledColumn(
-                title: Text('Weight'),
-                children: [
-                  SwitchListTile(
-                    title: Text('Automatically add new data'),
-                    value: settings.syncNewWeightMeasurements,
-                    onChanged: _hasWeightPermission
-                        ? (v) => settings.syncNewWeightMeasurements = v
-                        : null,
-                  ),
-                  SyncTile(mdl: WeightSyncModel(
-                    weightRepo: context.watch<BodyweightRepository>(),
-                    health: _health,
-                  )),
-                ],
+          if (_platformSupport && !_hasWeightPermission && _hasBloodPressurePermission)
+            _missingPermissionsBanner(localizations.noWeightPermission),
+          if (_platformSupport && _hasWeightPermission && !_hasBloodPressurePermission)
+            _missingPermissionsBanner(localizations.noBloodPressurePermission),
+          if (_platformSupport && !_hasWeightPermission && !_hasBloodPressurePermission)
+            _missingPermissionsBanner(localizations.noPermissions),
+          TitledColumn(
+            title: Text(localizations.weight),
+            children: [
+              SwitchListTile(
+                title: Text(localizations.automaticallyAddNewData),
+                value: settings.syncNewWeightMeasurements,
+                onChanged: _hasWeightPermission
+                    ? (v) => settings.syncNewWeightMeasurements = v
+                    : null,
               ),
-              TitledColumn(
-                title: Text('Blood pressure'),
-                children: [
-                  SwitchListTile(
-                    title: Text('Automatically add new data'),
-                    value: settings.syncNewPressureMeasurements,
-                    onChanged: _hasBloodPressurePermission
-                        ? (v) => settings.syncNewPressureMeasurements = v
-                        : null,
-                  ),
-                  SyncTile(mdl: BPSyncModel(
-                    weightRepo: context.watch<BodyweightRepository>(),
-                    health: _health,
-                  )),
-                ],
+              SyncTile(
+                disabled: !_hasWeightPermission,
+                mdl: WeightSyncModel(
+                  weightRepo: context.watch<BodyweightRepository>(),
+                  health: _health,
+                ),
+              ),
+            ],
+          ),
+          TitledColumn(
+            title: Text(localizations.bloodPressure),
+            children: [
+              SwitchListTile(
+                title: Text(localizations.automaticallyAddNewData),
+                value: settings.syncNewPressureMeasurements,
+                onChanged: _hasBloodPressurePermission
+                    ? (v) => settings.syncNewPressureMeasurements = v
+                    : null,
+              ),
+              SyncTile(
+                disabled: !_hasBloodPressurePermission,
+                mdl: BPSyncModel(
+                  bpRepo: context.watch<BloodPressureRepository>(),
+                  health: _health,
+                ),
               ),
             ],
           ),
@@ -195,57 +156,21 @@ class _HealthConnectScreenState extends State<HealthConnectScreen> {
     );
   }
 
-  Future<void> _syncWeight() async {
-    // performance: We load all data into memory at once; this might is fine
-    // since there are not that many records. Measuring every day fpr 100 years
-    // will yield 36525 records, or about 500 kB. 30 days would yield ~ 1 kB.
-
-    // TODO: wrap in dialog with loading
-    final weightRepo = RepositoryProvider.of<BodyweightRepository>(context);
-    final now = DateTime.now();
-    DateTime start = now.subtract(Duration(days: 30));
-    if (await _health.isHealthDataHistoryAuthorized()) {
-      start = DateTime(0);
-    }
-
-    final healthConnectData = await _health.getHealthDataFromTypes(
-      types: [HealthDataType.WEIGHT],
-      startTime: start,
-      endTime: now,
-    ).then((dataList) => {
-      for (final x in dataList)
-        x.dateFrom.millisecondsSinceEpoch: BodyweightRecord(
-          time: x.dateFrom,
-          // TODO: automatically validate with dataTypeToUnit Map
-          weight: Weight.kg((x.value as NumericHealthValue).numericValue.toDouble()),
+  Widget _missingPermissionsBanner(String reason) => Padding(
+    padding: EdgeInsetsGeometry.symmetric(
+      horizontal: 8.0,
+      vertical: 2.0
+    ),
+    child: Row(
+      mainAxisSize: MainAxisSize.max,
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(reason, style: TextStyle(color: Theme.of(context).colorScheme.error)),
+        TextButton(
+          onPressed: _checkPermissions,
+          child: Text(AppLocalizations.of(context)!.btnCheckAgain),
         ),
-    });
-    final appData = await weightRepo.get(DateRange(
-        start: start,
-        end: now,
-    )).then((dataList) => {
-      for (final x in dataList)
-        x.time.millisecondsSinceEpoch: x,
-    });
-
-    // Detect records only on device, or with new value
-    final healthConnectOnlyData = [
-      for (final x in healthConnectData.values)
-        if (appData[x.time.millisecondsSinceEpoch]?.weight != x.weight)
-          x,
-    ];
-    // Detect records only in app
-    final appOnlyData = [
-      for (final x in appData.values)
-        if (!healthConnectData.containsKey(x.time.millisecondsSinceEpoch))
-          x,
-    ];
-
-    await Future.forEach(healthConnectOnlyData, weightRepo.add);
-    await Future.forEach(appOnlyData, (record) => _health.writeHealthData(
-      type: HealthDataType.WEIGHT,
-      value: record.weight.kg,
-      startTime: record.time
-    ));
-  }
+      ],
+    ),
+  );
 }

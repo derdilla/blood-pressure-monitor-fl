@@ -27,9 +27,16 @@ class WeightSyncModel extends SyncModel {
     _progress = 0;
     notifyListeners();
 
+    if (!(await health.hasPermissions([HealthDataType.WEIGHT],
+        permissions: [HealthDataAccess.READ_WRITE]) ?? false)) {
+      // We are annoying here since one-way sync would be a different feature.
+      await health.requestAuthorization([HealthDataType.WEIGHT],
+          permissions: [HealthDataAccess.READ_WRITE]);
+    }
     final now = DateTime.now();
     DateTime start = now.subtract(Duration(days: 30));
-    if (await health.isHealthDataHistoryAuthorized()) {
+    if (await health.isHealthDataHistoryAuthorized()
+        || await health.requestHealthDataHistoryAuthorization()) {
       start = DateTime(0);
     }
     _progress += 1;
@@ -43,7 +50,6 @@ class WeightSyncModel extends SyncModel {
       for (final x in dataList)
         x.dateFrom.millisecondsSinceEpoch: BodyweightRecord(
           time: x.dateFrom,
-          // TODO: automatically validate with dataTypeToUnit Map
           weight: Weight.kg((x.value as NumericHealthValue).numericValue.toDouble()),
         ),
     });

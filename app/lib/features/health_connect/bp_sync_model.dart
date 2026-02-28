@@ -1,11 +1,12 @@
 import 'package:blood_pressure_app/features/health_connect/sync_model.dart';
+import 'package:blood_pressure_app/logging.dart';
 import 'package:health/health.dart';
 import 'package:health_data_store/health_data_store.dart';
 
-class BPSyncModel extends SyncModel {
-  BPSyncModel({required this.weightRepo, required this.health});
+class BPSyncModel extends SyncModel with TypeLogger {
+  BPSyncModel({required this.bpRepo, required this.health});
 
-  final BodyweightRepository weightRepo;
+  final BloodPressureRepository bpRepo;
   final Health health;
 
   bool _syncing = false;
@@ -22,9 +23,22 @@ class BPSyncModel extends SyncModel {
     _progress = 0;
     notifyListeners();
 
+    final hasPermissions = await health.hasPermissions([
+      HealthDataType.BLOOD_PRESSURE_SYSTOLIC,
+      HealthDataType.BLOOD_PRESSURE_DIASTOLIC],
+      permissions: List.filled(2, HealthDataAccess.READ_WRITE),
+    );
+    if (!(hasPermissions ?? false)) {
+      // We are annoying here since one-way sync would be a different feature.
+      await health.requestAuthorization([
+        HealthDataType.BLOOD_PRESSURE_SYSTOLIC,
+        HealthDataType.BLOOD_PRESSURE_DIASTOLIC,
+      ], permissions: List.filled(2, HealthDataAccess.READ_WRITE));
+    }
     final now = DateTime.now();
     DateTime start = now.subtract(Duration(days: 30));
-    if (await health.isHealthDataHistoryAuthorized()) {
+    if (await health.isHealthDataHistoryAuthorized()
+      || await health.requestHealthDataHistoryAuthorization()) {
       start = DateTime(0);
     }
     _progress += 1;
@@ -68,7 +82,57 @@ class BPSyncModel extends SyncModel {
     _progress += 1;
     notifyListeners();
 
-    // FIXME: implement
-    print(healthConnectData);
+    final appData = await bpRepo.get(DateRange(
+      start: start,
+      end: now,
+    )).then((dataList) => {
+      for (final x in dataList)
+        x.time.millisecondsSinceEpoch: x,
+    });
+    _progress += 1;
+    notifyListeners();
+
+    // Detect records only on device, or with new value
+    final healthConnectOnlyData = [
+      for (final x in healthConnectData.values)
+        if (appData[x.time.millisecondsSinceEpoch]?.sys != x.sys
+            || appData[x.time.millisecondsSinceEpoch]?.dia != x.dia)
+          BloodPressureRecord(
+            time: x.time,
+            sys: x.sys,
+            dia: x.dia,
+            pul: appData[x.time.millisecondsSinceEpoch]?.pul
+          ),
+    ];
+    _progress += 1;
+    notifyListeners();
+
+    // Detect records only in app
+    final appOnlyData = [
+      for (final x in appData.values)
+        if (!healthConnectData.containsKey(x.time.millisecondsSinceEpoch))
+          x,
+    ];
+    _progress += 1;
+    notifyListeners();
+
+    await Future.forEach(healthConnectOnlyData, bpRepo.add);
+    _progress += 1;
+    notifyListeners();
+
+    await Future.forEach(appOnlyData, (record) async {
+      if (record.sys == null || record.dia == null) {
+        logger.info('Skip syncing incomplete BP record');
+        return false;
+      }
+      return health.writeBloodPressure(
+        systolic: record.sys!.mmHg,
+        diastolic: record.dia!.mmHg,
+        startTime: record.time,
+      );
+    });
+    _progress += 1;
+    _syncing = false;
+    notifyListeners();
   }
 }
