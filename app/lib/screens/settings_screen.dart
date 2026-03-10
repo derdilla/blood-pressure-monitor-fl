@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:archive/archive_io.dart';
 import 'package:blood_pressure_app/data_util/consistent_future_builder.dart';
+import 'package:blood_pressure_app/features/health_connect/health_connect_screen.dart';
 import 'package:blood_pressure_app/features/settings/configure_warn_values_screen.dart';
 import 'package:blood_pressure_app/features/settings/delete_data_screen.dart';
 import 'package:blood_pressure_app/features/settings/enter_timeformat_dialoge.dart';
@@ -288,6 +289,17 @@ class SettingsPage extends StatelessWidget {
             TitledColumn(
               title: Text(localizations.data),
               children: [
+                ListTile(
+                  title: Text(localizations.healthConnect),
+                  leading: const Icon(Icons.sync),
+                  trailing: const Icon(Icons.arrow_forward_ios),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute<void>(builder: (context) => const HealthConnectScreen()),
+                    );
+                  },
+                ),
                 ListTile(
                   title: Text(localizations.exportImport),
                   leading: const Icon(Icons.download),
