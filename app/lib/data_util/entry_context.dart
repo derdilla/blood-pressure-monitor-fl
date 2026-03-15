@@ -4,7 +4,6 @@ import 'package:blood_pressure_app/features/input/add_entry_dialogue.dart';
 import 'package:blood_pressure_app/features/input/forms/add_entry_form.dart';
 import 'package:blood_pressure_app/l10n/app_localizations.dart';
 import 'package:blood_pressure_app/logging.dart';
-import 'package:blood_pressure_app/model/storage/health_connect_settings_store.dart';
 import 'package:blood_pressure_app/model/storage/storage.dart';
 import 'package:blood_pressure_app/screens/error_reporting_screen.dart';
 import 'package:flutter/material.dart';
