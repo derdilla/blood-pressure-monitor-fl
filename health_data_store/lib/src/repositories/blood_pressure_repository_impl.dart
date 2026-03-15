@@ -17,14 +17,14 @@ class BloodPressureRepositoryImpl extends BloodPressureRepository {
   /// Create [BloodPressureRecord] repository.
   BloodPressureRepositoryImpl(this._db);
 
-  final _controller = StreamController.broadcast();
+  final _controller = StreamController<BloodPressureRecord?>.broadcast();
 
   /// The [DatabaseManager] managed database
   final Database _db;
 
   @override
   Future<void> add(BloodPressureRecord record) async {
-    _controller.add(null);
+    _controller.add(record);
     assert(
         record.sys != null || record.dia != null || record.pul != null,
         "Adding records that don't contain values(sys,dia,pul) can't be accessed"
@@ -145,5 +145,5 @@ class BloodPressureRepositoryImpl extends BloodPressureRepository {
   }
 
   @override
-  Stream subscribe() => _controller.stream;
+  Stream<BloodPressureRecord?> subscribe() => _controller.stream;
 }

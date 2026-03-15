@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:health_data_store/src/repositories/blood_pressure_repository_impl.dart';
 import 'package:health_data_store/src/repositories/note_repository_impl.dart';
 import 'package:health_data_store/src/types/date_range.dart';
+import 'package:health_data_store/src/types/note.dart';
 import 'package:test/test.dart';
 
 import '../database_manager_test.dart';
@@ -83,16 +84,25 @@ void main() {
     addTearDown(db.close);
 
     int notifyCount = 0;
+    Note? latestNote;
 
     final repo = NoteRepositoryImpl(db.db);
-    unawaited(repo.subscribe().forEach((_) => notifyCount++));
+    final subscription = repo.subscribe().listen((n) {
+      latestNote = n;
+      notifyCount++;
+    });
+    addTearDown(subscription.cancel);
     final n = mockNote(time: 1000, note: 'asd');
     expect(notifyCount, 0);
+    expect(latestNote, null);
     await repo.add(n);
     expect(notifyCount, 1);
+    expect(latestNote?.note, 'asd');
     await repo.add(mockNote(time: 50000, color: 0x00FF00));
     expect(notifyCount, 2);
+    expect(latestNote?.color, 0x00FF00);
     await repo.remove(n);
     expect(notifyCount, 3);
+    expect(latestNote, null);
   });
 }

@@ -1,8 +1,7 @@
-import 'dart:async';
-
 import 'package:health_data_store/src/repositories/medicine_intake_repository_impl.dart';
 import 'package:health_data_store/src/repositories/medicine_repository_impl.dart';
 import 'package:health_data_store/src/types/date_range.dart';
+import 'package:health_data_store/src/types/medicine_intake.dart';
 import 'package:test/test.dart';
 
 import '../database_manager_test.dart';
@@ -137,16 +136,25 @@ void main() {
     await medRepo.add(med);
 
     int notifyCount = 0;
+    MedicineIntake? lastIntake;
 
     final repo = MedicineIntakeRepositoryImpl(db.db);
-    unawaited(repo.subscribe().forEach((_) => notifyCount++));
+    final subscription = repo.subscribe().listen((intake) {
+      lastIntake = intake;
+      notifyCount++;
+    });
+    addTearDown(subscription.cancel);
     final i = mockIntake(med);
     expect(notifyCount, 0);
+    expect(lastIntake?.time.millisecondsSinceEpoch, null);
     await repo.add(i);
     expect(notifyCount, 1);
+    expect(lastIntake?.time, i.time);
     await repo.add(mockIntake(med, dosis: 12345));
     expect(notifyCount, 2);
+    expect(lastIntake?.dosis.mg, 12345);
     await repo.remove(i);
     expect(notifyCount, 3);
+    expect(lastIntake, null);
   });
 }

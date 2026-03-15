@@ -1,5 +1,4 @@
-import 'dart:async';
-
+import 'package:health_data_store/health_data_store.dart';
 import 'package:health_data_store/src/repositories/bodyweight_repository_impl.dart';
 import 'package:health_data_store/src/types/date_range.dart';
 import 'package:test/test.dart';
@@ -96,19 +95,25 @@ void main() {
     final db = await mockDBManager();
     addTearDown(db.close);
     int notifyCount = 0;
+    BodyweightRecord? lastRecord;
 
     final repo = BodyweightRepositoryImpl(db.db);
-    unawaited(repo.subscribe().forEach((_) => notifyCount++));
+    final subscription = repo.subscribe().listen((r) {
+      lastRecord = r;
+      notifyCount++;
+    });
+    addTearDown(subscription.cancel);
     final r = mockWeight(time: 10000, kg: 1.0);
     expect(notifyCount, 0);
-
+    expect(lastRecord, null);
     await repo.add(r);
     expect(notifyCount, 1);
-
+    expect(lastRecord?.time.millisecondsSinceEpoch, 10000);
     await repo.add(mockWeight(time: 20000, kg: 2.0));
     expect(notifyCount, 2);
-
+    expect(lastRecord?.time.millisecondsSinceEpoch, 20000);
     await repo.remove(r);
     expect(notifyCount, 3);
+    expect(lastRecord, null);
   }, timeout: const Timeout(Duration(seconds: 5)));
 }

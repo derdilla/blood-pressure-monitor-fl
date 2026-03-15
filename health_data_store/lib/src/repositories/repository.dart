@@ -27,6 +27,6 @@ abstract class Repository<T> {
   /// Inclusively returns all values in the specified [range].
   Future<List<T>> get(DateRange range);
 
-  /// Stream that emits events everytime the data changes.
-  Stream subscribe();
+  /// Stream that emits events everytime the data changes. Returns added records
+  Stream<T?> subscribe();
 }

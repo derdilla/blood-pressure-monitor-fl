@@ -16,14 +16,14 @@ class MedicineRepositoryImpl extends MedicineRepository {
   /// The [DatabaseManager] managed database.
   final Database _db;
 
-  final _controller = StreamController.broadcast();
+  final _controller = StreamController<Medicine?>.broadcast();
 
   @override
   Future<void> add(Medicine medicine) => _db.transaction((txn) async {
         final idRes = await txn.query('Medicine', columns: ['MAX(medID)']);
         final id =
             (idRes.firstOrNull?['MAX(medID)']?.castOrNull<int>() ?? 0) + 1;
-        _controller.add(null);
+        _controller.add(medicine);
         await txn.insert('Medicine', {
           'medID': id,
           'designation': medicine.designation,
@@ -79,5 +79,5 @@ class MedicineRepositoryImpl extends MedicineRepository {
   Future<List<Medicine>> get(DateRange _) => getAll();
 
   @override
-  Stream subscribe() => _controller.stream;
+  Stream<Medicine?> subscribe() => _controller.stream;
 }
