@@ -4,6 +4,7 @@ import 'package:blood_pressure_app/data_util/repository_builder.dart';
 import 'package:blood_pressure_app/model/storage/storage.dart';
 import 'package:blood_pressure_app/model/weight_unit.dart';
 import 'package:flutter/material.dart';
+import 'package:health/health.dart';
 import 'package:health_data_store/health_data_store.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -54,8 +55,16 @@ class WeightList extends StatelessWidget {
                   icon: Icon(Icons.delete),
                   onPressed: () async {
                     final repo = context.read<BodyweightRepository>();
+                    final hcSettings = context.read<HealthConnectSettingsStore>();
                     if ((!context.read<Settings>().confirmDeletion) || await showConfirmDeletionDialoge(context)) {
                       await repo.remove(records[idx]);
+                      if (hcSettings.useHealthConnect && hcSettings.syncWeightMeasurements){
+                        await Health().delete(
+                          type: HealthDataType.BLOOD_PRESSURE_SYSTOLIC,
+                          startTime: records[idx].time.subtract(Duration(milliseconds: 500)),
+                          endTime: records[idx].time.add(Duration(milliseconds: 500)),
+                        );
+                      }
                     }
                   },
                 ),

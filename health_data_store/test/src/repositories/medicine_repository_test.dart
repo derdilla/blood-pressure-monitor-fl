@@ -111,18 +111,28 @@ void main() {
     final db = await mockDBManager();
     addTearDown(db.close);
     final repo = MedicineRepositoryImpl(db.db);
+
     int calls = 0;
-    repo.subscribe().listen((_) => calls++);
+    Medicine? latestMedicine;
+
+    final subscription = repo.subscribe().listen((m) {
+      latestMedicine = m;
+      calls++;
+    });
+    addTearDown(subscription.cancel);
     final med1 = Medicine(
       designation: 'med1',
       color: 0xFF226A,
     );
     await repo.add(med1);
     expect(calls, 1);
+    expect(latestMedicine, med1);
     await repo.add(mockMedicine(designation: 'med2', dosis: 43));
     await repo.add(Medicine(designation: 'med3'));
     expect(calls, 3);
+    expect(latestMedicine?.designation, 'med3');
     await repo.remove(med1);
     expect(calls, 4);
+    expect(latestMedicine, null);
   });
 }

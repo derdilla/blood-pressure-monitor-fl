@@ -14,14 +14,14 @@ class NoteRepositoryImpl extends NoteRepository {
   /// Create a repository for notes.
   NoteRepositoryImpl(this._db);
 
-  final _controller = StreamController.broadcast();
+  final _controller = StreamController<Note?>.broadcast();
 
   /// The [DatabaseManager] managed database.
   final Database _db;
 
   @override
   Future<void> add(Note note) async {
-    _controller.add(null);
+    _controller.add(note);
     if (note.note == null && note.color == null) {
       assert(false, 'Attempting to store a note without content and color');
       return;
@@ -83,5 +83,5 @@ class NoteRepositoryImpl extends NoteRepository {
   }
 
   @override
-  Stream subscribe() => _controller.stream;
+  Stream<Note?> subscribe() => _controller.stream;
 }

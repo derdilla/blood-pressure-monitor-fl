@@ -11,14 +11,14 @@ class BodyweightRepositoryImpl extends BodyweightRepository {
   /// Create [BodyweightRecord] repository.
   BodyweightRepositoryImpl(this._db);
 
-  final _controller = StreamController.broadcast();
+  final _controller = StreamController<BodyweightRecord?>.broadcast();
 
   /// The [DatabaseManager] managed database.
   final Database _db;
 
   @override
   Future<void> add(BodyweightRecord record) async {
-    _controller.add(null);
+    _controller.add(record);
     await _db.transaction((txn) async {
       final entryID = await DBHelper.getEntryID(
         txn,
@@ -68,5 +68,5 @@ class BodyweightRepositoryImpl extends BodyweightRepository {
   }
 
   @override
-  Stream subscribe() => _controller.stream;
+  Stream<BodyweightRecord?> subscribe() => _controller.stream;
 }

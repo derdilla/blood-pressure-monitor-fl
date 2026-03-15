@@ -7,6 +7,7 @@ import 'package:blood_pressure_app/model/storage/export_settings_store.dart';
 import 'package:blood_pressure_app/model/storage/export_xsl_settings_store.dart';
 import 'package:blood_pressure_app/model/storage/interval_store.dart';
 import 'package:blood_pressure_app/model/storage/settings_store.dart';
+import 'package:blood_pressure_app/model/storage/health_connect_settings_store.dart';
 
 /// Class for loading data from the database.
 ///
@@ -187,7 +188,11 @@ class ConfigDao implements SettingsLoader {
     return columnsManager;
   }
 
+  // These were added after file settings
   @override
   Future<ExcelExportSettings> loadXslExportSettings() async =>
-      ExcelExportSettings(); // This was added after file settings
+      ExcelExportSettings();
+
+  Future<HealthConnectSettingsStore> loadHealthConnectSettingsStore() async =>
+      HealthConnectSettingsStore();
 }

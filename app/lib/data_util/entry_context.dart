@@ -8,6 +8,7 @@ import 'package:blood_pressure_app/model/storage/storage.dart';
 import 'package:blood_pressure_app/screens/error_reporting_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart' hide ProviderNotFoundException;
+import 'package:health/health.dart';
 import 'package:health_data_store/health_data_store.dart';
 import 'package:logging/logging.dart';
 import 'package:provider/provider.dart';
@@ -69,10 +70,11 @@ extension EntryUtils on BuildContext {
   }
 
   /// Delete record and note of an entry from the repositories.
-  Future<void> deleteEntry(FullEntry entry) async {
+  Future<void> deleteEntry(FullEntry entry, [Health? health]) async {
     try {
       final localizations = AppLocalizations.of(this)!;
       final settings = Provider.of<Settings>(this, listen: false);
+      final hcSettings = Provider.of<HealthConnectSettingsStore>(this, listen: false);
       final bpRepo = RepositoryProvider.of<BloodPressureRepository>(this);
       final noteRepo = RepositoryProvider.of<NoteRepository>(this);
       final intakeRepo = RepositoryProvider.of<MedicineIntakeRepository>(this);
@@ -87,6 +89,26 @@ extension EntryUtils on BuildContext {
         await bpRepo.remove(entry.$1);
         await noteRepo.remove(entry.$2);
         await Future.forEach(entry.$3, intakeRepo.remove);
+
+        // Avoid automatically re-adding deleted measurements on app start
+        if (hcSettings.useHealthConnect && hcSettings.syncPressureMeasurements){
+          health ??= Health();
+          if (entry.sys != null) {
+            await health.delete(
+              type: HealthDataType.BLOOD_PRESSURE_SYSTOLIC,
+              startTime: entry.time.subtract(Duration(milliseconds: 500)),
+              endTime: entry.time.add(Duration(milliseconds: 500)),
+            );
+          }
+          if (entry.dia != null) {
+            await health.delete(
+              type: HealthDataType.BLOOD_PRESSURE_DIASTOLIC,
+              startTime: entry.time.subtract(Duration(milliseconds: 500)),
+              endTime: entry.time.add(Duration(milliseconds: 500)),
+            );
+          }
+        }
+
         messenger.removeCurrentSnackBar();
         messenger.showSnackBar(SnackBar(
           content: Text(localizations.deletionConfirmed),

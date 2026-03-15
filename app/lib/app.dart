@@ -1,7 +1,11 @@
 import 'dart:io';
 
 import 'package:blood_pressure_app/data_util/consistent_future_builder.dart';
+import 'package:blood_pressure_app/features/health_connect/bp_sync_model.dart';
+import 'package:blood_pressure_app/features/health_connect/sync_model.dart';
+import 'package:blood_pressure_app/features/health_connect/weight_sync_model.dart';
 import 'package:blood_pressure_app/l10n/app_localizations.dart';
+import 'package:blood_pressure_app/logging.dart';
 import 'package:blood_pressure_app/model/storage/db/file_settings_loader.dart';
 import 'package:blood_pressure_app/model/storage/db/settings_loader.dart';
 import 'package:blood_pressure_app/model/storage/export_columns_store.dart';
@@ -13,6 +17,7 @@ import 'package:blood_pressure_app/screens/loading_screen.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:health/health.dart';
 import 'package:health_data_store/health_data_store.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:path/path.dart';
@@ -31,7 +36,7 @@ class App extends StatefulWidget {
   State<App> createState() => _AppState();
 }
 
-class _AppState extends State<App> {
+class _AppState extends State<App> with TypeLogger {
   Database? _entryDB;
 
   /// The result of the first [_loadApp] call.
@@ -45,6 +50,7 @@ class _AppState extends State<App> {
   ExcelExportSettings? _xslExportSettings;
   IntervalStoreManager? _intervalStorageManager;
   ExportColumnsManager? _exportColumnsManager;
+  HealthConnectSettingsStore? _healthConnectSettingsStore;
 
   @override
   void dispose() {
@@ -57,6 +63,7 @@ class _AppState extends State<App> {
     _xslExportSettings?.dispose();
     _intervalStorageManager?.dispose();
     _exportColumnsManager?.dispose();
+    _healthConnectSettingsStore?.dispose();
     super.dispose();
   }
 
@@ -96,6 +103,7 @@ class _AppState extends State<App> {
       _xslExportSettings ??= await settingsLoader.loadXslExportSettings();
       _intervalStorageManager ??= await settingsLoader.loadIntervalStorageManager();
       _exportColumnsManager ??= await settingsLoader.loadExportColumnsManager();
+      _healthConnectSettingsStore ??= await settingsLoader.loadHealthConnectSettingsStore();
     } catch (e, stack) {
       await ErrorReporting.reportCriticalError('Error loading settings from files', '$e\n$stack',);
     }
@@ -156,6 +164,61 @@ class _AppState extends State<App> {
         await ErrorReporting.reportCriticalError('Error upgrading to file based settings:', '$e\n$stack',);
       }
     }
+    
+    // Sync with health-connect API
+    if (_healthConnectSettingsStore!.useHealthConnect
+        && _healthConnectSettingsStore!.syncOnAppStart) {
+      if (_healthConnectSettingsStore!.syncPressureMeasurements) {
+        logger.info('Syncing blood pressure measurements');
+        await BPSyncModel(bpRepo: bpRepo, health: Health()).sync();
+      }
+      if (_healthConnectSettingsStore!.syncWeightMeasurements) {
+        logger.info('Syncing weight measurements');
+        await WeightSyncModel(weightRepo: weightRepo, health: Health()).sync();
+      }
+    }
+
+    // Register listeners that sync on new measurements
+    if (_healthConnectSettingsStore!.useHealthConnect) {
+      final health = Health();
+      if (_healthConnectSettingsStore!.syncWeightMeasurements) {
+        weightRepo.subscribe().listen((record) async {
+          if (record != null) {
+            final canWrite = await health.requestPermissionsIfMissing(
+              [HealthDataType.WEIGHT],
+              HealthDataAccess.WRITE,
+            );
+            if (!canWrite) logger.warning('Health Connect weight write permissions not granted');
+            await health.writeHealthData(
+              type: HealthDataType.WEIGHT,
+              value: record.weight.kg,
+              startTime: record.time,
+              recordingMethod: RecordingMethod.manual,
+            );
+          }
+        });
+      }
+      if (_healthConnectSettingsStore!.syncPressureMeasurements) {
+        bpRepo.subscribe().listen((record) async {
+          if (record?.sys != null && record?.dia != null) {
+            final canWrite = await health.requestPermissionsIfMissing(
+              [
+                HealthDataType.BLOOD_PRESSURE_SYSTOLIC,
+                HealthDataType.BLOOD_PRESSURE_DIASTOLIC,
+              ],
+              HealthDataAccess.WRITE,
+            );
+            if (!canWrite) logger.warning('Health Connect BP write permissions not granted');
+            await health.writeBloodPressure(
+              systolic: record!.sys!.mmHg,
+              diastolic: record.dia!.mmHg,
+              startTime: record.time,
+            );
+          }
+        });
+      }
+
+    }
 
     _loadedChild = MultiRepositoryProvider(
       providers: [
@@ -174,6 +237,7 @@ class _AppState extends State<App> {
           ChangeNotifierProvider.value(value: _xslExportSettings!),
           ChangeNotifierProvider.value(value: _intervalStorageManager!),
           ChangeNotifierProvider.value(value: _exportColumnsManager!),
+          ChangeNotifierProvider.value(value: _healthConnectSettingsStore!),
         ],
         child: _buildAppRoot(),
       ),

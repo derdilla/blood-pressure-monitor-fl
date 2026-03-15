@@ -15,12 +15,14 @@ Widget materialApp(Widget child, {
   ExportSettings? exportSettings,
   CsvExportSettings? csvExportSettings,
   PdfExportSettings? pdfExportSettings,
+  HealthConnectSettingsStore? hcSettings,
   IntervalStoreManager? intervallStoreManager,
 }) {
   settings ??= Settings();
   exportSettings ??= ExportSettings();
   csvExportSettings ??= CsvExportSettings();
   pdfExportSettings ??= PdfExportSettings();
+  hcSettings ??= HealthConnectSettingsStore();
   intervallStoreManager ??= IntervalStoreManager(IntervalStorage(), IntervalStorage(), IntervalStorage());
   return MultiProvider(
     providers: [
@@ -28,6 +30,7 @@ Widget materialApp(Widget child, {
       ChangeNotifierProvider.value(value: exportSettings),
       ChangeNotifierProvider.value(value: csvExportSettings),
       ChangeNotifierProvider.value(value: pdfExportSettings),
+      ChangeNotifierProvider.value(value: hcSettings),
       ChangeNotifierProvider.value(value: intervallStoreManager),
     ],
     child: MaterialApp(
@@ -231,12 +234,12 @@ class MockMedRepo implements MedicineRepository {
 
   final List<Medicine> _meds = [];
 
-  final _controller = StreamController.broadcast();
+  final _controller = StreamController<Medicine?>.broadcast();
 
   @override
   Future<void> add(Medicine medicine) async {
     _meds.add(medicine);
-    _controller.add(null);
+    _controller.add(medicine);
   }
 
   @override
@@ -253,7 +256,7 @@ class MockMedRepo implements MedicineRepository {
   Future<List<Medicine>> get(DateRange range) => getAll();
 
   @override
-  Stream subscribe() => _controller.stream;
+  Stream<Medicine?> subscribe() => _controller.stream;
 }
 
 final List<Medicine> _meds = [];
@@ -299,12 +302,12 @@ class MockHealthDataSore implements HealthDataStore {
 
 class _MockRepo<T> extends Repository<T> {
   List<T> data = [];
-  final contr = StreamController.broadcast();
+  final contr = StreamController<T?>.broadcast();
 
   @override
   Future<void> add(T value) async {
     data.add(value);
-    contr.sink.add(null);
+    contr.add(value);
   }
 
   @override
@@ -317,7 +320,7 @@ class _MockRepo<T> extends Repository<T> {
   }
 
   @override
-  Stream subscribe() => contr.stream;
+  Stream<T?> subscribe() => contr.stream;
 
   @override
   dynamic noSuchMethod(Invocation invocation) => throw Exception('unexpected call: $invocation');

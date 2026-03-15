@@ -1,6 +1,5 @@
-import 'dart:async';
-
 import 'package:health_data_store/src/repositories/blood_pressure_repository_impl.dart';
+import 'package:health_data_store/src/types/blood_pressure_record.dart';
 import 'package:health_data_store/src/types/date_range.dart';
 import 'package:test/test.dart';
 
@@ -149,18 +148,28 @@ void main() {
     addTearDown(db.close);
 
     int notifyCount = 0;
+    BloodPressureRecord? lastRecord;
 
     final repo = BloodPressureRepositoryImpl(db.db);
-    unawaited(repo.subscribe().forEach((_) => notifyCount++));
+    final subscription = repo.subscribe().listen((r) {
+      lastRecord = r;
+      notifyCount++;
+    });
+    addTearDown(subscription.cancel);
     final r = mockRecord(time: 10000, sys: 456, dia: 457, pul: 458);
     expect(notifyCount, 0);
+    expect(lastRecord, null);
     await repo.add(r);
     expect(notifyCount, 1);
+    expect(lastRecord?.time.millisecondsSinceEpoch, 10000);
     await repo.add(mockRecord(time: 20000, sys: 123));
     expect(notifyCount, 2);
+    expect(lastRecord?.time.millisecondsSinceEpoch, 20000);
     await repo.add(mockRecord(time: 30000, sys: 788, pul: 789));
     expect(notifyCount, 3);
+    expect(lastRecord?.time.millisecondsSinceEpoch, 30000);
     await repo.remove(r);
     expect(notifyCount, 4);
+    expect(lastRecord?.time.millisecondsSinceEpoch, null);
   });
 }

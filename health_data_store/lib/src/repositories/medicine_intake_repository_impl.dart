@@ -18,14 +18,14 @@ class MedicineIntakeRepositoryImpl extends MedicineIntakeRepository {
   /// Create a repository for medicine intakes.
   MedicineIntakeRepositoryImpl(this._db);
 
-  final _controller = StreamController.broadcast();
+  final _controller = StreamController<MedicineIntake?>.broadcast();
 
   /// The [DatabaseManager] managed database.
   final Database _db;
 
   @override
   Future<void> add(MedicineIntake intake) => _db.transaction((txn) async {
-        _controller.add(null);
+        _controller.add(intake);
         // obtain medicine id
         final medIDRes = await txn.query(
           'Medicine',
@@ -118,5 +118,5 @@ class MedicineIntakeRepositoryImpl extends MedicineIntakeRepository {
   }
 
   @override
-  Stream subscribe() => _controller.stream;
+  Stream<MedicineIntake?> subscribe() => _controller.stream;
 }
