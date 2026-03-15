@@ -593,6 +593,8 @@
     "@noBloodbornePermission": {},
     "btnCheckAgain": "Check again",
     "@btnCheckAgain": {},
-    "automaticallyAddNewData": "Automatically add new data",
-    "@automaticallyAddNewData": {}
+    "automaticallySyncData": "Automatically sync data",
+    "@automaticallyAddNewData": {},
+    "syncOnAppStart": "Sync data on app start",
+    "@syncOnAppStart": {}
 }

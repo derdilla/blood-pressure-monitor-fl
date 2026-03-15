@@ -18,7 +18,7 @@ class WeightSyncModel extends SyncModel {
   double get progress => _progress / 7;
 
   @override
-  Future<void> syncWeight() async {
+  Future<void> sync() async {
     // performance: We load all data into memory at once; this might is fine
     // since there are not that many records. Measuring every day fpr 100 years
     // will yield 36525 records, or about 500 kB. 30 days would yield ~ 1 kB.
@@ -27,12 +27,7 @@ class WeightSyncModel extends SyncModel {
     _progress = 0;
     notifyListeners();
 
-    if (!(await health.hasPermissions([HealthDataType.WEIGHT],
-        permissions: [HealthDataAccess.READ_WRITE]) ?? false)) {
-      // We are annoying here since one-way sync would be a different feature.
-      await health.requestAuthorization([HealthDataType.WEIGHT],
-          permissions: [HealthDataAccess.READ_WRITE]);
-    }
+    await health.requestPermissionsIfMissing([HealthDataType.WEIGHT]);
     final now = DateTime.now();
     DateTime start = now.subtract(Duration(days: 30));
     if (await health.isHealthDataHistoryAuthorized()

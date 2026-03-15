@@ -23,7 +23,7 @@ class SyncTile extends StatelessWidget {
       trailing: mdl.syncing
           ? const CircularProgressIndicator()
           : const Icon(Icons.sync),
-      onTap: (disabled || mdl.syncing) ? null : mdl.syncWeight,
+      onTap: (disabled || mdl.syncing) ? null : mdl.sync,
       enabled: !disabled,
     ),
   );

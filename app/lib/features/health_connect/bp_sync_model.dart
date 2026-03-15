@@ -18,23 +18,15 @@ class BPSyncModel extends SyncModel with TypeLogger {
   double get progress => _progress / 7;
 
   @override
-  Future<void> syncWeight() async {
+  Future<void> sync() async {
     _syncing = true;
     _progress = 0;
     notifyListeners();
 
-    final hasPermissions = await health.hasPermissions([
+    await health.requestPermissionsIfMissing([
       HealthDataType.BLOOD_PRESSURE_SYSTOLIC,
-      HealthDataType.BLOOD_PRESSURE_DIASTOLIC],
-      permissions: List.filled(2, HealthDataAccess.READ_WRITE),
-    );
-    if (!(hasPermissions ?? false)) {
-      // We are annoying here since one-way sync would be a different feature.
-      await health.requestAuthorization([
-        HealthDataType.BLOOD_PRESSURE_SYSTOLIC,
-        HealthDataType.BLOOD_PRESSURE_DIASTOLIC,
-      ], permissions: List.filled(2, HealthDataAccess.READ_WRITE));
-    }
+      HealthDataType.BLOOD_PRESSURE_DIASTOLIC,
+    ]);
     final now = DateTime.now();
     DateTime start = now.subtract(Duration(days: 30));
     if (await health.isHealthDataHistoryAuthorized()

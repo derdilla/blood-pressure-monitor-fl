@@ -7,19 +7,22 @@ class HealthConnectSettingsStore extends ChangeNotifier {
   /// Creates a settings object with the default values.
   HealthConnectSettingsStore({
     bool? useHealthConnect,
-    bool? syncNewWeightMeasurements,
-    bool? syncNewPressureMeasurements,
+    bool? syncWeightMeasurements,
+    bool? syncPressureMeasurements,
+    bool? syncOnAppStart,
   }) {
     if (useHealthConnect != null) _useHealthConnect = useHealthConnect;
-    if (syncNewWeightMeasurements != null) _syncNewWeightMeasurements = syncNewWeightMeasurements;
-    if (syncNewPressureMeasurements != null) _syncNewPressureMeasurements = syncNewPressureMeasurements;
+    if (syncWeightMeasurements != null) _syncWeightMeasurements = syncWeightMeasurements;
+    if (syncPressureMeasurements != null) _syncPressureMeasurements = syncPressureMeasurements;
+    if (syncOnAppStart != null) _syncOnAppStart = syncOnAppStart;
   }
 
   /// Create a instance from a map created by [toMap].
   factory HealthConnectSettingsStore.fromMap(Map<String, dynamic> map) => HealthConnectSettingsStore(
     useHealthConnect: ConvertUtil.parseBool(map['useHealthConnect']),
-    syncNewWeightMeasurements: ConvertUtil.parseBool(map['syncNewWeightMeasurements']),
-    syncNewPressureMeasurements: ConvertUtil.parseBool(map['syncNewPressureMeasurements']),
+    syncWeightMeasurements: ConvertUtil.parseBool(map['syncWeightMeasurements']),
+    syncPressureMeasurements: ConvertUtil.parseBool(map['syncPressureMeasurements']),
+    syncOnAppStart: ConvertUtil.parseBool(map['syncOnAppStart']),
   );
 
   /// Create a instance from a [String] created by [toJson].
@@ -33,8 +36,9 @@ class HealthConnectSettingsStore extends ChangeNotifier {
 
   Map<String, dynamic> toMap() => <String, dynamic>{
     'useHealthConnect': useHealthConnect,
-    'syncNewWeightMeasurements': syncNewWeightMeasurements,
-    'syncNewPressureMeasurements': syncNewPressureMeasurements,
+    'syncWeightMeasurements': syncWeightMeasurements,
+    'syncPressureMeasurements': syncPressureMeasurements,
+    'syncOnAppStart': syncOnAppStart,
   };
 
   /// Serialize the object to a restoreable string.
@@ -43,8 +47,9 @@ class HealthConnectSettingsStore extends ChangeNotifier {
   /// Copy all values from another instance.
   void copyFrom(HealthConnectSettingsStore other) {
     _useHealthConnect = other._useHealthConnect;
-    _syncNewWeightMeasurements = other._syncNewWeightMeasurements;
-    _syncNewPressureMeasurements = other._syncNewPressureMeasurements;
+    _syncWeightMeasurements = other._syncWeightMeasurements;
+    _syncPressureMeasurements = other._syncPressureMeasurements;
+    _syncOnAppStart = other._syncOnAppStart;
   }
 
   /// Reset all fields to their default values.
@@ -58,19 +63,28 @@ class HealthConnectSettingsStore extends ChangeNotifier {
     notifyListeners();
   }
 
-  bool _syncNewWeightMeasurements = true;
+  // TODO: implement auto syncs on save
+  bool _syncWeightMeasurements = true;
   /// Whether to automatically sync new weight measurements.
-  bool get syncNewWeightMeasurements => _syncNewWeightMeasurements;
-  set syncNewWeightMeasurements(bool value) {
-    _syncNewWeightMeasurements = value;
+  bool get syncWeightMeasurements => _syncWeightMeasurements;
+  set syncWeightMeasurements(bool value) {
+    _syncWeightMeasurements = value;
     notifyListeners();
   }
 
-  bool _syncNewPressureMeasurements = true;
+  bool _syncPressureMeasurements = true;
   /// Whether to automatically sync new blood pressre measurements.
-  bool get syncNewPressureMeasurements => _syncNewPressureMeasurements;
-  set syncNewPressureMeasurements(bool value) {
-    _syncNewPressureMeasurements = value;
+  bool get syncPressureMeasurements => _syncPressureMeasurements;
+  set syncPressureMeasurements(bool value) {
+    _syncPressureMeasurements = value;
+    notifyListeners();
+  }
+
+  bool _syncOnAppStart = true;
+  /// Whether to automatically sync data on app start.
+  bool get syncOnAppStart => _syncOnAppStart;
+  set syncOnAppStart(bool value) {
+    _syncOnAppStart = value;
     notifyListeners();
   }
 }

@@ -1,7 +1,7 @@
 import 'dart:io';
 
-import 'package:blood_pressure_app/components/custom_banner.dart';
 import 'package:blood_pressure_app/features/health_connect/bp_sync_model.dart';
+import 'package:blood_pressure_app/features/health_connect/sync_model.dart';
 import 'package:blood_pressure_app/features/health_connect/sync_tile.dart';
 import 'package:blood_pressure_app/features/health_connect/weight_sync_model.dart';
 import 'package:blood_pressure_app/features/settings/tiles/titled_column.dart';
@@ -88,14 +88,13 @@ class _HealthConnectScreenState extends State<HealthConnectScreen> {
               minVerticalPadding: 22.0,
               value: settings.useHealthConnect,
               onChanged: (Platform.isAndroid || Platform.isIOS) ? (newValue) async {
-                bool success = true;
                 if (newValue) {
-                  final types = [
-                    HealthDataType.WEIGHT,
-                    HealthDataType.BLOOD_PRESSURE_SYSTOLIC,
-                    HealthDataType.BLOOD_PRESSURE_DIASTOLIC,
-                  ];
-                  success = await _health.requestAuthorization(types);
+                  final granted = await _health.requestPermissionsIfMissing();
+                  if (!granted && context.mounted) {
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                        content: Text(localizations.noPermissions),
+                    ));
+                  }
                 } else {
                   await _health.revokePermissions();
                 }
@@ -113,14 +112,21 @@ class _HealthConnectScreenState extends State<HealthConnectScreen> {
             _missingPermissionsBanner(localizations.noBloodPressurePermission),
           if (_platformSupport && !_hasWeightPermission && !_hasBloodPressurePermission)
             _missingPermissionsBanner(localizations.noPermissions),
+          SwitchListTile(
+            title: Text(localizations.syncOnAppStart),
+            value: settings.syncOnAppStart,
+            onChanged: _hasBloodPressurePermission
+                ? (v) => settings.syncOnAppStart = v
+                : null,
+          ),
           TitledColumn(
             title: Text(localizations.weight),
             children: [
               SwitchListTile(
-                title: Text(localizations.automaticallyAddNewData),
-                value: settings.syncNewWeightMeasurements,
+                title: Text(localizations.automaticallySyncData),
+                value: settings.syncWeightMeasurements,
                 onChanged: _hasWeightPermission
-                    ? (v) => settings.syncNewWeightMeasurements = v
+                    ? (v) => settings.syncWeightMeasurements = v
                     : null,
               ),
               SyncTile(
@@ -136,10 +142,10 @@ class _HealthConnectScreenState extends State<HealthConnectScreen> {
             title: Text(localizations.bloodPressure),
             children: [
               SwitchListTile(
-                title: Text(localizations.automaticallyAddNewData),
-                value: settings.syncNewPressureMeasurements,
+                title: Text(localizations.automaticallySyncData),
+                value: settings.syncPressureMeasurements,
                 onChanged: _hasBloodPressurePermission
-                    ? (v) => settings.syncNewPressureMeasurements = v
+                    ? (v) => settings.syncPressureMeasurements = v
                     : null,
               ),
               SyncTile(
