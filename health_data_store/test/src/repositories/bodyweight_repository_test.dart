@@ -1,5 +1,5 @@
-import 'package:health_data_store/health_data_store.dart';
 import 'package:health_data_store/src/repositories/bodyweight_repository_impl.dart';
+import 'package:health_data_store/src/types/bodyweight_record.dart';
 import 'package:health_data_store/src/types/date_range.dart';
 import 'package:test/test.dart';
 

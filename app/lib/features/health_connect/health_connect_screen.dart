@@ -20,8 +20,6 @@ class HealthConnectScreen extends StatefulWidget {
 }
 
 class _HealthConnectScreenState extends State<HealthConnectScreen> {
-  // TODO: support limited permissions and one way sync
-
   @override
   void initState() {
     super.initState();
