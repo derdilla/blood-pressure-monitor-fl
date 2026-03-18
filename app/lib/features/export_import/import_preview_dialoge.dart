@@ -66,7 +66,11 @@ class _ImportPreviewDialogeState extends State<ImportPreviewDialoge> {
       final localizations = AppLocalizations.of(context)!;
       messenger.showMaterialBanner(CustomBanner(
         content: Text(err.localize(localizations),
-          style: TextStyle(color: Theme.of(context).colorScheme.error),),
+          style: TextStyle(color: Theme.of(context).colorScheme.error),
+        ),
+        action: TextButton(
+          onPressed: messenger.hideCurrentMaterialBanner,
+          child: Text(localizations.btnConfirm)),
       ),);
       setState(() {
         _showingError = true;

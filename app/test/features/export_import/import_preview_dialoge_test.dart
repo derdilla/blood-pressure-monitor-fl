@@ -77,6 +77,7 @@ void main() {
     expect(find.byType(CustomBanner), findsOneWidget);
     final localizations = await AppLocalizations.delegate.load(const Locale('en'));
     expect(find.text(localizations.errParseTimeNotRestoreable), findsOneWidget);
+    expect(find.text(localizations.btnConfirm), findsOneWidget);
   });
   testWidgets('should have multiple lines', (tester) async {
     await tester.pumpWidget(materialApp(ImportPreviewDialoge(
