@@ -568,5 +568,7 @@
     "dontShowAgain": "Nicht erneut anzeigen",
     "@dontShowAgain": {},
     "btnShare": "TEILEN",
-    "@btnShare": {}
+    "@btnShare": {},
+    "warnDiscardingData": "Du hast ungespeicherte Werte. Möchtest du sie verwerfen?",
+    "@warnDiscardingData": {}
 }

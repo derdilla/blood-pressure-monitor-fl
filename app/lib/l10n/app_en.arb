@@ -596,5 +596,7 @@
     "automaticallySyncData": "Automatically sync data",
     "@automaticallyAddNewData": {},
     "syncOnAppStart": "Sync data on app start",
-    "@syncOnAppStart": {}
+    "@syncOnAppStart": {},
+    "warnDiscardingData": "You have unsaved data. Do you want to continue and discard them?",
+    "@warnDiscardingData": {}
 }
