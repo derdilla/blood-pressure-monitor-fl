@@ -48,21 +48,29 @@ class _AddEntryDialogueState extends State<AddEntryDialogue> with TypeLogger {
     }
   }
 
+  Future<bool> shouldPop() async {
+    if (context.read<Settings>().validateInputs
+        && !(formKey.currentState?.isEmpty ?? true)) {
+      final res = await showConfirmDeletionDialoge(context,
+          AppLocalizations.of(context)!.warnDiscardingData);
+      return res;
+    }
+    return true;
+  }
+
   @override
   Widget build(BuildContext context) => PopScope(
-    canPop: (!context.watch<Settings>().validateInputs
-            || (formKey.currentState?.isEmpty ?? true)),
+    canPop: false,
+    // Popping though system buttons
     onPopInvokedWithResult: (didPop, result) async {
-      if (didPop) return;
-      final shouldPop = await showConfirmDeletionDialoge(context,
-          AppLocalizations.of(context)!.warnDiscardingData);
-      if(shouldPop && context.mounted) {
-        Navigator.pop(context, result);
-      }
+      if(didPop) return;
+      if (await shouldPop() && context.mounted) Navigator.pop(context, result);
     },
     child: FullscreenDialoge(
       actionButtonText: AppLocalizations.of(context)!.btnSave,
       onActionButtonPressed: _onSavePressed,
+      // Popping though in-app buttons
+      canClose: shouldPop,
       bottomAppBar: context.select((Settings s) => s.bottomAppBars),
       body: AddEntryForm(
         key: formKey,
