@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:blood_pressure_app/components/confirm_deletion_dialoge.dart';
 import 'package:blood_pressure_app/components/fullscreen_dialoge.dart';
 import 'package:blood_pressure_app/features/input/forms/add_entry_form.dart';
 import 'package:blood_pressure_app/l10n/app_localizations.dart';
@@ -47,15 +48,35 @@ class _AddEntryDialogueState extends State<AddEntryDialogue> with TypeLogger {
     }
   }
 
+  Future<bool> shouldPop() async {
+    if (context.read<Settings>().validateInputs
+        && !(formKey.currentState?.isEmpty ?? true)) {
+      final res = await showConfirmDeletionDialoge(context,
+          AppLocalizations.of(context)!.warnDiscardingData);
+      return res;
+    }
+    return true;
+  }
+
   @override
-  Widget build(BuildContext context) => FullscreenDialoge(
-    actionButtonText: AppLocalizations.of(context)!.btnSave,
-    onActionButtonPressed: _onSavePressed,
-    bottomAppBar: context.select((Settings s) => s.bottomAppBars),
-    body: AddEntryForm(
-      key: formKey,
-      initialValue: widget.initialRecord,
-      meds: widget.availableMeds ?? [],
+  Widget build(BuildContext context) => PopScope(
+    canPop: false,
+    // Popping though system buttons
+    onPopInvokedWithResult: (didPop, result) async {
+      if(didPop) return;
+      if (await shouldPop() && context.mounted) Navigator.pop(context, result);
+    },
+    child: FullscreenDialoge(
+      actionButtonText: AppLocalizations.of(context)!.btnSave,
+      onActionButtonPressed: _onSavePressed,
+      // Popping though in-app buttons
+      canClose: shouldPop,
+      bottomAppBar: context.select((Settings s) => s.bottomAppBars),
+      body: AddEntryForm(
+        key: formKey,
+        initialValue: widget.initialRecord,
+        meds: widget.availableMeds ?? [],
+      ),
     ),
   );
 }

@@ -61,6 +61,9 @@ class NoteFormState extends FormStateBase<(String?, Color?), NoteForm> {
   });
 
   @override
+  bool get isEmpty => _controller.text.isEmpty;
+
+  @override
   Widget build(BuildContext context) => Column(
     children: [
       Padding(

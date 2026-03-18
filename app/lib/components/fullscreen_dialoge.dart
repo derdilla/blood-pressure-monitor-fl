@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 /// Base for fullscreen dialoges that allow value input.
@@ -10,6 +12,7 @@ class FullscreenDialoge extends StatelessWidget {
     required this.bottomAppBar,
     this.closeIcon = Icons.close,
     this.actions = const <Widget>[],
+    this.canClose,
   });
 
   /// The primary content of the dialoge.
@@ -47,6 +50,11 @@ class FullscreenDialoge extends StatelessWidget {
   /// Recommended to be used with [CheckboxMenuButton].
   final List<Widget> actions;
 
+  /// Called after [closeIcon] is pressed before poping the route.
+  ///
+  /// Consider also using [PopScope] to handle system navigation correctly.
+  final FutureOr<bool> Function()? canClose;
+
   @override
   Widget build(BuildContext context) => Dialog.fullscreen(
     child: Scaffold(
@@ -61,7 +69,11 @@ class FullscreenDialoge extends StatelessWidget {
   PreferredSizeWidget _buildAppBar(BuildContext context) => AppBar(
     forceMaterialTransparency: true,
     leading: (closeIcon == null) ? null : IconButton(
-      onPressed: () => Navigator.pop(context, null),
+      onPressed: () async {
+        if (await (canClose?.call() ?? true) && context.mounted) {
+          Navigator.pop(context, null);
+        }
+      },
       icon: Icon(closeIcon),
     ),
     title: Row(

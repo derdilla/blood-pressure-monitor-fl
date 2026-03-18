@@ -90,6 +90,13 @@ class BloodPressureFormState extends FormStateBase<({int? sys, int? dia, int? pu
     }
   });
 
+  @override
+  bool get isEmpty => (
+      _sysController.text.isEmpty
+      && _diaController.text.isEmpty
+      && _pulController.text.isEmpty
+  );
+
   Widget _buildValueInput({
     String? labelText,
     FocusNode? focusNode,

@@ -48,4 +48,7 @@ abstract class FormStateBase<T, G extends FormBase<T>> extends State<G> {
   /// correspond to different fields, only the non null attributes change field
   /// contents.
   void fillForm(T? value);
+
+  /// Whether all inputs have the empty state
+  bool get isEmpty;
 }

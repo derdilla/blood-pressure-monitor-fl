@@ -124,6 +124,14 @@ class AddEntryFormState extends FormStateBase<AddEntryFormValue, AddEntryForm>
     || (_intakeForm.currentState?.isEmptyInputFocused() ?? false));
 
   @override
+  bool get isEmpty => (
+      (_bpForm.currentState?.isEmpty ?? true)
+        && (_weightForm.currentState?.isEmpty ?? true)
+        && (_intakeForm.currentState?.isEmpty ?? true)
+        && (_noteForm.currentState?.isEmpty ?? true)
+  );
+
+  @override
   bool validate() {
     final settings = context.read<Settings>();
 

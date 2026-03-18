@@ -85,4 +85,21 @@ void main() {
     expect(tester.getTopLeft(find.text('A')).dy, greaterThan(bodyStart));
     expect(tester.getTopLeft(find.text('A')).dy, bodyStart + 4.0);
   });
+  testWidgets("Close button doesn't pop scope when canClose returns false", (tester) async {
+    int popInvokedCount = 0;
+    await tester.pumpWidget(materialApp(PopScope(
+      onPopInvoked: (_) => popInvokedCount++,
+      child: FullscreenDialoge(
+        closeIcon: Icons.add,
+        bottomAppBar: false,
+        actionButtonText: null,
+        canClose: () => false,
+      ),
+    )));
+
+    expect(popInvokedCount, 0);
+    await tester.tap(find.byIcon(Icons.add));
+    await tester.pumpAndSettle();
+    expect(popInvokedCount, 0);
+  });
 }

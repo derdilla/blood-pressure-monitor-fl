@@ -68,6 +68,9 @@ void main() {
     expect(find.byType(AddEntryDialogue), findsOneWidget);
     await tester.tap(find.byIcon(Icons.close));
     await tester.pumpAndSettle();
+    await tester.tap(find.byIcon(Icons.delete_forever));
+    await tester.pumpAndSettle();
+
     expect(find.byType(AddEntryDialogue), findsNothing);
 
     expect(result, null);
@@ -205,5 +208,15 @@ void main() {
     );
     expect(thirdFocusedTextField, findsOneWidget);
     expect(find.descendant(of: thirdFocusedTextField, matching: find.text('Note (optional)')), findsOneWidget);
+  });
+  testWidgets('warns before discarding', (tester) async {
+    final mRep = medRepo();
+    await loadDialoge(tester, (context) =>
+        showAddEntryDialogue(context, mRep, mockEntry(sys: 12).asAddEntry));
+
+    expect(find.byType(AddEntryDialogue), findsOneWidget);
+    await tester.tap(find.byIcon(Icons.close));
+    await tester.pumpAndSettle();
+    expect(find.byType(AddEntryDialogue), findsOneWidget);
   });
 }
