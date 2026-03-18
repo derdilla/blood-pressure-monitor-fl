@@ -611,6 +611,40 @@ void main() {
       matching: find.text(localizations.diaLong),
     ), findsOneWidget);
   });
+
+  testWidgets('Switches to the form with an error', (tester) async {
+    final settings = Settings(weightInput: true);
+    final key = GlobalKey<AddEntryFormState>();
+    final localizations = await AppLocalizations.delegate.load(const Locale('en'));
+    await tester.pumpWidget(materialApp(AddEntryForm(
+        key: key,
+        meds: [],
+    ), settings: settings));
+
+    final fields = find.byType(TextField);
+    await tester.enterText(fields.at(0), '123'); // sys
+    await tester.enterText(fields.at(1), '45'); // dia
+    await tester.enterText(fields.at(2), '67'); // pul
+    await tester.pumpAndSettle();
+    expect(find.text(localizations.sysLong), findsOneWidget);
+
+    await tester.tap(find.byIcon(Icons.scale));
+    await tester.pumpAndSettle();
+    await tester.enterText(find.byType(TextField).first, ',.,..'); // weight
+    await tester.pumpAndSettle();
+    expect(find.text(localizations.sysLong), findsNothing);
+    expect(find.text(',.,..'), findsOneWidget);
+
+    await tester.tap(find.byIcon(Icons.monitor_heart_outlined));
+    await tester.pumpAndSettle();
+    expect(find.text(localizations.sysLong), findsOneWidget);
+    expect(find.text(',.,..'), findsNothing);
+
+    expect(key.currentState!.validate(), false);
+    await tester.pumpAndSettle();
+    expect(find.text(localizations.sysLong), findsNothing);
+    expect(find.text(',.,..'), findsOneWidget);
+  });
 }
 
 Finder _focusedTextField() {

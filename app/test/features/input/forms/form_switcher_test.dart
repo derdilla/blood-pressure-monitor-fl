@@ -69,4 +69,31 @@ void main() {
     expect(find.text('Content 3'), findsNothing);
     expect(find.text('Content 4'), findsOneWidget);
   });
+
+  testWidgets('controller provides index', (tester) async {
+    final controller = FormSwitcherController();
+    await tester.pumpWidget(MaterialApp(
+      home: Scaffold(
+        body: FormSwitcher(
+          controller: controller,
+          subForms: [
+            (Text('Tab 1'), Text('Content 1')),
+            (Text('Tab 2'), Text('Content 2')),
+            (Text('Tab 3'), Text('Content 3')),
+            (Text('Tab 4'), Text('Content 4')),
+          ],
+        ),
+      ),
+    ));
+    await tester.pumpAndSettle();
+    expect(controller.index, 0);
+
+    await tester.tap(find.text('Tab 2'));
+    await tester.pumpAndSettle();
+    expect(controller.index, 1);
+
+    controller.animateTo(3);
+    await tester.pumpAndSettle();
+    expect(controller.index, 3);
+  });
 }
