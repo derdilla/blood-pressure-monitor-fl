@@ -445,7 +445,7 @@
     "@timeFormat": {},
     "errAccuracyLoss": "There is precision loss expected when exporting with custom time formatters.",
     "@errAccuracyLoss": {},
-    "bottomAppBars": "Bottom dialogue bars",
+    "bottomAppBars": "Bottom dialog bars",
     "@bottomAppBars": {},
     "medications": "Medications",
     "@medications": {},
