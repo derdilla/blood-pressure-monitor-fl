@@ -97,4 +97,7 @@ class FormSwitcherController {
       _controller!.animateTo(index);
     }
   }
+
+  /// Returns the current index, if initialized.
+  int? get index => _controller?.index;
 }
