@@ -2,7 +2,7 @@
 
 Features:
 - 📏 <b>Reliable</b> measurement storing
-- 🚀 Fast input through <b>user-friendly</b> dialogues on launch and automatic form navigation
+- 🚀 Fast input through <b>user-friendly</b> dialogs on launch and automatic form navigation
 - 📊 <b>Beautiful</b> analytics provide insights on trends, distribution, differences over the day and much more
 - 📂 Versatile <b>export and import</b> (CSV, PDF, SQLite) with granular control
 - ⚙️ High configurability
