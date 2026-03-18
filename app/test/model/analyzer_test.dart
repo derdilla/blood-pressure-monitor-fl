@@ -5,7 +5,7 @@ import 'package:health_data_store/health_data_store.dart';
 
 void main() {
   test('should return averages', () {
-    final m = BloodPressureAnalyser([
+    final m = BloodPressureAnalyzer([
       mockRecordPos(DateTime.fromMillisecondsSinceEpoch(1), 122, 87, 65),
       mockRecordPos(DateTime.fromMillisecondsSinceEpoch(2), 100, 60, 62),
       mockRecordPos(DateTime.fromMillisecondsSinceEpoch(3), 111, 73, 73),
@@ -17,7 +17,7 @@ void main() {
   });
 
   test('should return max', () {
-    final a = BloodPressureAnalyser([
+    final a = BloodPressureAnalyzer([
       mockRecordPos(DateTime.fromMillisecondsSinceEpoch(1), 123, 87, 65),
       mockRecordPos(DateTime.fromMillisecondsSinceEpoch(2), 100, 60, 62),
       mockRecordPos(DateTime.fromMillisecondsSinceEpoch(3), 111, 73, 73),
@@ -30,7 +30,7 @@ void main() {
   });
 
   test('should return min', () {
-    final a = BloodPressureAnalyser([
+    final a = BloodPressureAnalyzer([
       mockRecordPos(DateTime.fromMillisecondsSinceEpoch(1), 123, 87, 65),
       mockRecordPos(DateTime.fromMillisecondsSinceEpoch(2), 100, 60, 62),
       mockRecordPos(DateTime.fromMillisecondsSinceEpoch(3), 111, 73, 73),
@@ -43,7 +43,7 @@ void main() {
   });
 
   test('should know count', () {
-    final m = BloodPressureAnalyser([
+    final m = BloodPressureAnalyzer([
       for (int i = 1; i < 101; i++)
         mockRecordPos(DateTime.fromMillisecondsSinceEpoch(i), 0, 0, 0),
     ]);
@@ -51,7 +51,7 @@ void main() {
   });
 
   test('should determine special days', () {
-    final m = BloodPressureAnalyser([mockRecordPos(DateTime.fromMillisecondsSinceEpoch(100), 0, 0, 0),
+    final m = BloodPressureAnalyzer([mockRecordPos(DateTime.fromMillisecondsSinceEpoch(100), 0, 0, 0),
       mockRecordPos(DateTime.fromMillisecondsSinceEpoch(20), 0, 0, 0),
       mockRecordPos(DateTime.fromMillisecondsSinceEpoch(9000000), 0, 0, 0),
       mockRecordPos(DateTime.fromMillisecondsSinceEpoch(3124159), 0, 0, 0),
@@ -62,14 +62,14 @@ void main() {
   });
   
   test('groups analyzers for all hours', () {
-    final analyzer = BloodPressureAnalyser([]);
-    final groups = analyzer.groupAnalysers();
+    final analyzer = BloodPressureAnalyzer([]);
+    final groups = analyzer.groupAnalyzers();
     expect(groups, hasLength(24));
-    expect(groups, everyElement(isA<BloodPressureAnalyser>().having((a) => a.count, 'count', 0)));
+    expect(groups, everyElement(isA<BloodPressureAnalyzer>().having((a) => a.count, 'count', 0)));
   });
 
   test('creates groups correctly', () {
-    final analyzer = BloodPressureAnalyser([
+    final analyzer = BloodPressureAnalyzer([
       mockRecordPos(DateTime(2000, 1, 1, 5), 123),
       mockRecordPos(DateTime(2000, 1, 1, 5), 123),
       mockRecordPos(DateTime(2000, 1, 1, 5), 123),
@@ -81,7 +81,7 @@ void main() {
       mockRecord(time: DateTime(2000, 1, 1, 19), pul: 12),
       mockRecordPos(DateTime(2000, 1, 1, 23, 40), 123),
     ]);
-    final groups = analyzer.groupAnalysers();
+    final groups = analyzer.groupAnalyzers();
     expect(groups[5].count, 3);
     expect(groups[8].count, 1);
     expect(groups[12].count, 2);

@@ -19,8 +19,8 @@ class ClockBpGraph extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final analyzer = BloodPressureAnalyser(measurements);
-    final groups = analyzer.groupAnalysers();
+    final analyzer = BloodPressureAnalyzer(measurements);
+    final groups = analyzer.groupAnalyzers();
     return SizedBox.square(
       dimension: MediaQuery.of(context).size.width,
       child: Padding(

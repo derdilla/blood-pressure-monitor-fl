@@ -38,7 +38,7 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
               return time.isAfter(timeLimitRange.start) && time.isBefore(timeLimitRange.end);
             }).toList();
           }
-          final analyzer = BloodPressureAnalyser(records.toList());
+          final analyzer = BloodPressureAnalyzer(records.toList());
           return ListView(
             children: [
               _buildSubTitle(localizations.statistics,),

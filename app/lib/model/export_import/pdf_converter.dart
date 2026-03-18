@@ -34,7 +34,7 @@ class PdfConverter {
     final pdf = pw.Document(
       creator: 'Blood pressure app',
     );
-    final analyzer = BloodPressureAnalyser(entries.map((e) => e.$2).toList());
+    final analyzer = BloodPressureAnalyzer(entries.map((e) => e.$2).toList());
 
     pdf.addPage(pw.MultiPage(
       pageFormat: PdfPageFormat.a4,
@@ -60,7 +60,7 @@ class PdfConverter {
     return pdf.save();
   }
 
-  pw.Widget _buildPdfTitle(BloodPressureAnalyser analyzer) {
+  pw.Widget _buildPdfTitle(BloodPressureAnalyzer analyzer) {
     if (analyzer.count < 2) return pw.Text(localizations.errNoData);
     final dateFormatter = DateFormat(settings.dateFormatString);
     return pw.Container(
@@ -76,7 +76,7 @@ class PdfConverter {
     );
   }
 
-  pw.Widget _buildPdfStatistics(BloodPressureAnalyser analyzer) => pw.Container(
+  pw.Widget _buildPdfStatistics(BloodPressureAnalyzer analyzer) => pw.Container(
       margin: const pw.EdgeInsets.all(20),
       child: pw.TableHelper.fromTextArray(
           data: [
