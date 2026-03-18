@@ -140,13 +140,29 @@ class AddEntryFormState extends FormStateBase<AddEntryFormValue, AddEntryForm>
     logger.finest('bp: $bpFormValidation');
     logger.finest('weight: $weightFormValidation');
     logger.finest('intake: $intakeFormValidation');
-    return !context.read<Settings>().validateInputs
+
+    final isOk = !settings.validateInputs
     || (timeFormValidation ?? false)
     && (noteFormValidation ?? false)
     // the following become null when unopened
     && (bpFormValidation ?? true)
     && (weightFormValidation ?? true)
     && (intakeFormValidation ?? true);
+
+    if (!isOk) {
+      // Switch to tab with error
+      final wrongTabs = [
+        if (!(bpFormValidation ?? true))
+          0,
+        if (!(weightFormValidation ?? true))
+          (widget.meds.isEmpty ? 1 : 2),
+      ];
+      if (!wrongTabs.contains(_controller.index) && wrongTabs.isNotEmpty) {
+        _controller.animateTo(wrongTabs.first);
+      }
+    }
+
+    return isOk;
   }
 
   @override
