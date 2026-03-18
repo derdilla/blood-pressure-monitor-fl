@@ -68,6 +68,9 @@ class WeightFormState extends FormStateBase<Weight, WeightForm> {
   }
 
   @override
+  bool get isEmpty => _controller.text.isEmpty;
+
+  @override
   Widget build(BuildContext context) => TextField(
     decoration: InputDecoration(
       labelText: AppLocalizations.of(context)!.weight,

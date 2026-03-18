@@ -107,4 +107,7 @@ class DateTimeFormState extends FormStateBase<DateTime, DateTimeForm> {
       ],
     );
   }
+
+  @override
+  bool get isEmpty => true;
 }

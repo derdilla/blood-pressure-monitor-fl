@@ -75,6 +75,9 @@ class MedicineIntakeFormState extends FormStateBase<(Medicine, Weight), Medicine
   });
 
   @override
+  bool get isEmpty => _leadingMed == null;
+
+  @override
   Widget build(BuildContext context) {
     if (_leadingMed != null) {
       return TextField(
