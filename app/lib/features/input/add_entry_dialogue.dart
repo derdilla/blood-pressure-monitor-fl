@@ -49,23 +49,26 @@ class _AddEntryDialogueState extends State<AddEntryDialogue> with TypeLogger {
   }
 
   @override
-  Widget build(BuildContext context) => FullscreenDialoge(
-    actionButtonText: AppLocalizations.of(context)!.btnSave,
-    onActionButtonPressed: _onSavePressed,
-    canClose: () async {
-      if (context.read<Settings>().validateInputs
-          && !(formKey.currentState?.isEmpty ?? true)) {
-        final res = await showConfirmDeletionDialoge(context,
-            AppLocalizations.of(context)!.warnDiscardingData);
-        return res;
+  Widget build(BuildContext context) => PopScope(
+    canPop: (!context.watch<Settings>().validateInputs
+            || (formKey.currentState?.isEmpty ?? true)),
+    onPopInvokedWithResult: (didPop, result) async {
+      if (didPop) return;
+      final shouldPop = await showConfirmDeletionDialoge(context,
+          AppLocalizations.of(context)!.warnDiscardingData);
+      if(shouldPop && context.mounted) {
+        Navigator.pop(context, result);
       }
-      return true;
     },
-    bottomAppBar: context.select((Settings s) => s.bottomAppBars),
-    body: AddEntryForm(
-      key: formKey,
-      initialValue: widget.initialRecord,
-      meds: widget.availableMeds ?? [],
+    child: FullscreenDialoge(
+      actionButtonText: AppLocalizations.of(context)!.btnSave,
+      onActionButtonPressed: _onSavePressed,
+      bottomAppBar: context.select((Settings s) => s.bottomAppBars),
+      body: AddEntryForm(
+        key: formKey,
+        initialValue: widget.initialRecord,
+        meds: widget.availableMeds ?? [],
+      ),
     ),
   );
 }

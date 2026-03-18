@@ -51,6 +51,8 @@ class FullscreenDialoge extends StatelessWidget {
   final List<Widget> actions;
 
   /// Called after [closeIcon] is pressed before poping the route.
+  ///
+  /// Consider using [PopScope] instead to support system navigation.
   final FutureOr<bool> Function()? canClose;
 
   @override
