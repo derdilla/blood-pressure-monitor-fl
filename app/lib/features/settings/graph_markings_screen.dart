@@ -1,5 +1,5 @@
 import 'package:blood_pressure_app/components/color_picker.dart';
-import 'package:blood_pressure_app/components/input_dialoge.dart';
+import 'package:blood_pressure_app/components/input_dialog.dart';
 import 'package:blood_pressure_app/l10n/app_localizations.dart';
 import 'package:blood_pressure_app/model/horizontal_graph_line.dart';
 import 'package:blood_pressure_app/model/storage/settings_store.dart';
@@ -9,7 +9,7 @@ import 'package:provider/provider.dart';
 class GraphMarkingsScreen extends StatelessWidget {
   const GraphMarkingsScreen({super.key});
 
-  // TODO: consider adding fullscreen dialoge for adding markings (like medicine)
+  // TODO: consider adding fullscreen dialog for adding markings (like medicine)
   @override
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
@@ -40,7 +40,7 @@ class GraphMarkingsScreen extends StatelessWidget {
                   onTap: () async {
                     final color = await showColorPickerDialog(context);
                     if (!context.mounted) return;
-                    final height = await showNumberInputDialoge(context, hintText: localizations.linePositionY);
+                    final height = await showNumberInputDialog(context, hintText: localizations.linePositionY);
 
                     if (color == null || height == null) return;
                     lines.add(HorizontalGraphLine(color, height.round()));

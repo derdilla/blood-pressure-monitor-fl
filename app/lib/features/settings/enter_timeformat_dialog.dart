@@ -1,14 +1,14 @@
-import 'package:blood_pressure_app/components/fullscreen_dialoge.dart';
+import 'package:blood_pressure_app/components/fullscreen_dialog.dart';
 import 'package:blood_pressure_app/features/export_import/export_field_format_documentation_screen.dart';
 import 'package:blood_pressure_app/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown_plus/flutter_markdown_plus.dart';
 import 'package:intl/intl.dart';
 
-/// Fullscreen dialoge that explains the time format and pops the context with either null or a time format string.
-class EnterTimeFormatDialoge extends StatefulWidget {
-  /// Create dialoge for entering time formats as used by the [DateFormat] class.
-  const EnterTimeFormatDialoge({super.key,
+/// Fullscreen dialog that explains the time format and pops the context with either null or a time format string.
+class EnterTimeFormatDialog extends StatefulWidget {
+  /// Create dialog for entering time formats as used by the [DateFormat] class.
+  const EnterTimeFormatDialog({super.key,
     required this.initialValue,
     this.previewTime,
     this.bottomAppBars = false,
@@ -27,10 +27,10 @@ class EnterTimeFormatDialoge extends StatefulWidget {
   final bool bottomAppBars;
 
   @override
-  State<EnterTimeFormatDialoge> createState() => _EnterTimeFormatDialogeState();
+  State<EnterTimeFormatDialog> createState() => _EnterTimeFormatDialogState();
 }
 
-class _EnterTimeFormatDialogeState extends State<EnterTimeFormatDialoge> {
+class _EnterTimeFormatDialogState extends State<EnterTimeFormatDialog> {
   final timeFormatFieldController = TextEditingController();
   final focusNode = FocusNode();
 
@@ -52,7 +52,7 @@ class _EnterTimeFormatDialogeState extends State<EnterTimeFormatDialoge> {
   @override
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
-    return FullscreenDialoge(
+    return FullscreenDialog(
       actionButtonText: localizations.btnSave,
       bottomAppBar: widget.bottomAppBars,
       onActionButtonPressed: () {
@@ -92,11 +92,11 @@ class _EnterTimeFormatDialogeState extends State<EnterTimeFormatDialoge> {
   }
 }
 
-/// Shows a dialoge that explains the ICU DateTime format and allows editing [initialTimeFormat] with a preview.
+/// Shows a dialog that explains the ICU DateTime format and allows editing [initialTimeFormat] with a preview.
 ///
 /// When canceled null is returned.
-Future<String?> showTimeFormatPickerDialoge(BuildContext context, String initialTimeFormat, bool bottomAppBars) =>
-  showDialog<String?>(context: context, builder: (context) => EnterTimeFormatDialoge(
+Future<String?> showTimeFormatPickerDialog(BuildContext context, String initialTimeFormat, bool bottomAppBars) =>
+  showDialog<String?>(context: context, builder: (context) => EnterTimeFormatDialog(
     initialValue: initialTimeFormat,
     bottomAppBars: bottomAppBars,),
   );

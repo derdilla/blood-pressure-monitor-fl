@@ -329,7 +329,7 @@ class Settings extends ChangeNotifier {
   }
 
   bool _confirmDeletion = true;
-  /// Whether to show a dialoge that requires confirmation before deleting
+  /// Whether to show a dialog that requires confirmation before deleting
   /// entries.
   bool get confirmDeletion => _confirmDeletion;
   set confirmDeletion(bool value) {
@@ -398,7 +398,7 @@ class Settings extends ChangeNotifier {
   }
 
   bool _bottomAppBars = false;
-  /// Whether to put the app bar in dialoges at the bottom of the screen.
+  /// Whether to put the app bar in dialogs at the bottom of the screen.
   bool get bottomAppBars => _bottomAppBars;
   set bottomAppBars(bool value) {
     _bottomAppBars = value;

@@ -47,7 +47,7 @@ void main() {
       mockEntry(sys: 123, dia: 45, pul: 67, note: 'testnote'),
     ])));
 
-    expect(find.byType(AddEntryDialoge), findsNothing);
+    expect(find.byType(AddEntryDialog), findsNothing);
     expect(find.byIcon(Icons.delete), findsNothing);
 
     await tester.drag(find.text('45'), const Offset(-500.0, 0));

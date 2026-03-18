@@ -1,4 +1,4 @@
-import 'package:blood_pressure_app/components/fullscreen_dialoge.dart';
+import 'package:blood_pressure_app/components/fullscreen_dialog.dart';
 import 'package:blood_pressure_app/features/export_import/export_field_format_documentation_screen.dart';
 import 'package:blood_pressure_app/features/measurement_list/measurement_list_entry.dart';
 import 'package:blood_pressure_app/l10n/app_localizations.dart';
@@ -10,12 +10,12 @@ import 'package:health_data_store/health_data_store.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
-/// Dialoge widget for creating and editing a [UserColumn].
+/// Dialog widget for creating and editing a [UserColumn].
 ///
-/// For further documentation please refer to [showAddExportColumnDialoge].
-class AddExportColumnDialoge extends StatefulWidget {
+/// For further documentation please refer to [showAddExportColumnDialog].
+class AddExportColumnDialog extends StatefulWidget {
   /// Create a widget for creating and editing a [UserColumn].
-  const AddExportColumnDialoge({super.key,
+  const AddExportColumnDialog({super.key,
     this.initialColumn,
   });
 
@@ -25,15 +25,15 @@ class AddExportColumnDialoge extends StatefulWidget {
   final ExportColumn? initialColumn;
 
   @override
-  State<AddExportColumnDialoge> createState() => _AddExportColumnDialogeState();
+  State<AddExportColumnDialog> createState() => _AddExportColumnDialogState();
 }
 
-class _AddExportColumnDialogeState extends State<AddExportColumnDialoge>
+class _AddExportColumnDialogState extends State<AddExportColumnDialog>
     with SingleTickerProviderStateMixin {
   final formKey = GlobalKey<FormState>();
 
   /// Csv column title used to compute internal identifier in case
-  /// [AddExportColumnDialoge.initialColumn] is null.
+  /// [AddExportColumnDialog.initialColumn] is null.
   late String csvTitle;
 
   /// Pattern for record formatting preview and for column creation on save.
@@ -79,7 +79,7 @@ class _AddExportColumnDialogeState extends State<AddExportColumnDialoge>
   Widget build(BuildContext context) {
     final settings = context.watch<Settings>();
     final localizations = AppLocalizations.of(context)!;
-    return FullscreenDialoge(
+    return FullscreenDialog(
       actionButtonText: localizations.btnSave,
       onActionButtonPressed: _saveForm,
       bottomAppBar: settings.bottomAppBars,
@@ -319,25 +319,25 @@ enum _FormatterType {
   time,
 }
 
-/// Shows a dialoge containing a export column editor to create a [UserColumn]
+/// Shows a dialog containing a export column editor to create a [UserColumn]
 /// or [TimeColumn].
 ///
 /// In case [initialColumn] is null fields are initially empty.
 /// When initialColumn is provided, it is ensured that the
 /// returned column has the same [UserColumn.internalIdentifier].
 ///
-/// The dialoge allows entering a csv title and a format
+/// The dialog allows entering a csv title and a format
 /// pattern from which it generates a preview encoding and
 /// shows values decode able.
 ///
 /// Internal identifier and display title are generated from
 /// the CSV title. There is no check whether a userColumn
 /// with the generated title exists.
-Future<ExportColumn?> showAddExportColumnDialoge(
+Future<ExportColumn?> showAddExportColumnDialog(
   BuildContext context, [
     ExportColumn? initialColumn,
 ]) => showDialog<ExportColumn?>(context: context,
-  builder: (context) => AddExportColumnDialoge(
+  builder: (context) => AddExportColumnDialog(
     initialColumn: initialColumn,
   ),
 );

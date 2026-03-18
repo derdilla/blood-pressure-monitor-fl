@@ -1,7 +1,7 @@
 import 'dart:async';
 
-import 'package:blood_pressure_app/components/confirm_deletion_dialoge.dart';
-import 'package:blood_pressure_app/components/fullscreen_dialoge.dart';
+import 'package:blood_pressure_app/components/confirm_deletion_dialog.dart';
+import 'package:blood_pressure_app/components/fullscreen_dialog.dart';
 import 'package:blood_pressure_app/features/input/forms/add_entry_form.dart';
 import 'package:blood_pressure_app/l10n/app_localizations.dart';
 import 'package:blood_pressure_app/logging.dart';
@@ -11,11 +11,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:health_data_store/health_data_store.dart';
 
 /// Input mask for entering measurements.
-class AddEntryDialogue extends StatefulWidget {
+class AddEntryDialog extends StatefulWidget {
   /// Create a input mask for entering measurements.
   /// 
-  /// This is usually created through the [showAddEntryDialogue] function.
-  const AddEntryDialogue({super.key,
+  /// This is usually created through the [showAddEntryDialog] function.
+  const AddEntryDialog({super.key,
     this.availableMeds,
     this.initialRecord,
   });
@@ -32,10 +32,10 @@ class AddEntryDialogue extends StatefulWidget {
   final List<Medicine>? availableMeds;
 
   @override
-  State<AddEntryDialogue> createState() => _AddEntryDialogueState();
+  State<AddEntryDialog> createState() => _AddEntryDialogState();
 }
 
-class _AddEntryDialogueState extends State<AddEntryDialogue> with TypeLogger {
+class _AddEntryDialogState extends State<AddEntryDialog> with TypeLogger {
   final formKey = GlobalKey<AddEntryFormState>();
 
   void _onSavePressed() {
@@ -51,7 +51,7 @@ class _AddEntryDialogueState extends State<AddEntryDialogue> with TypeLogger {
   Future<bool> shouldPop() async {
     if (context.read<Settings>().validateInputs
         && !(formKey.currentState?.isEmpty ?? true)) {
-      final res = await showConfirmDeletionDialoge(context,
+      final res = await showConfirmDeletionDialog(context,
           AppLocalizations.of(context)!.warnDiscardingData);
       return res;
     }
@@ -66,7 +66,7 @@ class _AddEntryDialogueState extends State<AddEntryDialogue> with TypeLogger {
       if(didPop) return;
       if (await shouldPop() && context.mounted) Navigator.pop(context, result);
     },
-    child: FullscreenDialoge(
+    child: FullscreenDialog(
       actionButtonText: AppLocalizations.of(context)!.btnSave,
       onActionButtonPressed: _onSavePressed,
       // Popping though in-app buttons
@@ -81,8 +81,8 @@ class _AddEntryDialogueState extends State<AddEntryDialogue> with TypeLogger {
   );
 }
 
-/// Shows a dialogue to input a blood pressure measurement or a medication.
-Future<AddEntryFormValue?> showAddEntryDialogue(
+/// Shows a dialog to input a blood pressure measurement or a medication.
+Future<AddEntryFormValue?> showAddEntryDialog(
   BuildContext context,
   MedicineRepository medRepo,
   [AddEntryFormValue? initialRecord,
@@ -91,7 +91,7 @@ Future<AddEntryFormValue?> showAddEntryDialogue(
   if (context.mounted) {
     return showDialog<AddEntryFormValue>(
       context: context, builder: (context) =>
-        AddEntryDialogue(
+        AddEntryDialog(
           initialRecord: initialRecord,
           availableMeds: meds,
         ),

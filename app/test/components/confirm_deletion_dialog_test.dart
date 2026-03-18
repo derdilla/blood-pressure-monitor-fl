@@ -1,4 +1,4 @@
-import 'package:blood_pressure_app/components/confirm_deletion_dialoge.dart';
+import 'package:blood_pressure_app/components/confirm_deletion_dialog.dart';
 import 'package:blood_pressure_app/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -7,7 +7,7 @@ import '../util.dart';
 
 void main() {
   testWidgets('shows entire content', (tester) async {
-    await loadDialoge(tester, showConfirmDeletionDialoge);
+    await loadDialog(tester, showConfirmDeletionDialog);
     await tester.pumpAndSettle();
     expect(find.byType(AlertDialog), findsOneWidget);
     expect(find.descendant(

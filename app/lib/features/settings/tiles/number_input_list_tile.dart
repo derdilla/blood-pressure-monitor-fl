@@ -1,4 +1,4 @@
-import 'package:blood_pressure_app/components/input_dialoge.dart';
+import 'package:blood_pressure_app/components/input_dialog.dart';
 import 'package:flutter/material.dart';
 
 /// Widget for editing numbers in a list tile.
@@ -13,7 +13,7 @@ class NumberInputListTile extends StatelessWidget {
 
   /// Short label describing the required field contents.
   ///
-  /// This will be both the title of the list tile as well as the hint text in the input dialoge.
+  /// This will be both the title of the list tile as well as the hint text in the input dialog.
   final String label;
 
   /// Widget to display before the label in the list tile.
@@ -32,7 +32,7 @@ class NumberInputListTile extends StatelessWidget {
       leading: leading,
       trailing: const Icon(Icons.edit),
       onTap: () async {
-        final result = await showNumberInputDialoge(context,
+        final result = await showNumberInputDialog(context,
           initialValue: value,
           hintText: label,
         );

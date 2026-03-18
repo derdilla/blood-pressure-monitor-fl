@@ -5,7 +5,7 @@ import 'package:blood_pressure_app/data_util/consistent_future_builder.dart';
 import 'package:blood_pressure_app/features/health_connect/health_connect_screen.dart';
 import 'package:blood_pressure_app/features/settings/configure_warn_values_screen.dart';
 import 'package:blood_pressure_app/features/settings/delete_data_screen.dart';
-import 'package:blood_pressure_app/features/settings/enter_timeformat_dialoge.dart';
+import 'package:blood_pressure_app/features/settings/enter_timeformat_dialog.dart';
 import 'package:blood_pressure_app/features/settings/export_import_screen.dart';
 import 'package:blood_pressure_app/features/settings/graph_markings_screen.dart';
 import 'package:blood_pressure_app/features/settings/medicine_manager_screen.dart';
@@ -55,7 +55,7 @@ class SettingsPage extends StatelessWidget {
                 leading: const Icon(Icons.schedule),
                 trailing: const Icon(Icons.arrow_forward_ios),
                 onTap: () async {
-                  final pickedFormat = await showTimeFormatPickerDialoge(context,
+                  final pickedFormat = await showTimeFormatPickerDialog(context,
                       settings.dateFormatString,
                       settings.bottomAppBars,);
                   if (pickedFormat != null) {

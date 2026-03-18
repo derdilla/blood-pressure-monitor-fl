@@ -1,5 +1,5 @@
 import 'package:blood_pressure_app/components/custom_banner.dart';
-import 'package:blood_pressure_app/components/input_dialoge.dart';
+import 'package:blood_pressure_app/components/input_dialog.dart';
 import 'package:blood_pressure_app/features/settings/tiles/number_input_list_tile.dart';
 import 'package:blood_pressure_app/l10n/app_localizations.dart';
 import 'package:blood_pressure_app/model/blood_pressure/warn_values.dart';
@@ -21,7 +21,7 @@ class ConfigureWarnValuesScreen extends StatelessWidget {
       floatingActionButton: FloatingActionButton.extended(
         label: Text(AppLocalizations.of(context)!.determineWarnValues),
         onPressed:() async {
-          final age = (await showNumberInputDialoge(context,
+          final age = (await showNumberInputDialog(context,
             hintText: AppLocalizations.of(context)!.age,
           ))?.round();
           if (age != null) {

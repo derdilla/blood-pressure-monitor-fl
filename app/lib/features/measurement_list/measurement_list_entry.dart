@@ -1,4 +1,4 @@
-import 'package:blood_pressure_app/components/confirm_deletion_dialoge.dart';
+import 'package:blood_pressure_app/components/confirm_deletion_dialog.dart';
 import 'package:blood_pressure_app/components/nullable_text.dart';
 import 'package:blood_pressure_app/components/pressure_text.dart';
 import 'package:blood_pressure_app/data_util/entry_context.dart';
@@ -71,7 +71,7 @@ class MeasurementListRow extends StatelessWidget {
               onPressed: () async {
                 final messenger = ScaffoldMessenger.of(context);
                 final intakeRepo = RepositoryProvider.of<MedicineIntakeRepository>(context);
-                if (!settings.confirmDeletion || await showConfirmDeletionDialoge(context)) {
+                if (!settings.confirmDeletion || await showConfirmDeletionDialog(context)) {
                   await intakeRepo.remove(intake);
                 }
                 messenger.removeCurrentSnackBar();

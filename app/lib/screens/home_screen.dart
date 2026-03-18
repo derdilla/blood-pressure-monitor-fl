@@ -13,7 +13,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:provider/provider.dart';
 
-/// 0 when add entry dialoge has not been shown, 1 when dialoge is scheduled, 2 when dialoge was launched.
+/// 0 when add entry dialog has not been shown, 1 when dialog is scheduled, 2 when dialog was launched.
 int _appStart = 0;
 
 /// Central screen of the app with graph and measurement list that is the center
