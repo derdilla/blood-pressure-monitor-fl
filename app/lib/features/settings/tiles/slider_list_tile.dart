@@ -66,6 +66,7 @@ class SliderListTile extends StatelessWidget {
         max: max,
         divisions: (max - min) ~/ stepSize,
         onChanged: onChanged,
+        label: value.toString(),
       ),
     );
 

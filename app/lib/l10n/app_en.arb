@@ -598,5 +598,9 @@
     "syncOnAppStart": "Sync data on app start",
     "@syncOnAppStart": {},
     "warnDiscardingData": "You have unsaved data. Do you want to continue and discard them?",
-    "@warnDiscardingData": {}
+    "@warnDiscardingData": {},
+    "maxDataInterval": "Maximum data interval",
+    "@maxDataInterval": {},
+    "maxDataIntervalDesc": "Amount of days after which the graph line is disconnected. Negative values disable this behavior, zero leads to drawing dots.",
+    "@maxDataIntervalDesc": {}
 }

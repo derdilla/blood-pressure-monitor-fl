@@ -15,9 +15,6 @@ import 'package:flutter/material.dart';
 ///
 /// This class should not be used to save persistent state of individual app
 /// components and screens.
-///
-/// The `storage.dart` library comment has more information on the architecture
-/// for adding persistent fields.
 class Settings extends ChangeNotifier {
   /// Creates a settings object with the default values.
   ///
@@ -53,6 +50,7 @@ class Settings extends ChangeNotifier {
     WeightUnit? weightUnit,
     bool? trustBLETime,
     bool? showBLETimeTrustDialog,
+    int? interruptGraphAfterNDays,
   }) {
     if (accentColor != null) _accentColor = accentColor;
     if (sysColor != null) _sysColor = sysColor;
@@ -83,6 +81,7 @@ class Settings extends ChangeNotifier {
     if (weightUnit != null) _weightUnit = weightUnit;
     if (trustBLETime != null) _trustBLETime = trustBLETime;
     if (showBLETimeTrustDialog != null) _showBLETimeTrustDialog = showBLETimeTrustDialog;
+    if (interruptGraphAfterNDays != null) _interruptGraphAfterNDays = interruptGraphAfterNDays;
     _language = language; // No check here, as null is the default as well.
   }
 
@@ -120,6 +119,7 @@ class Settings extends ChangeNotifier {
       weightUnit: WeightUnit.deserialize(ConvertUtil.parseInt(map['weightUnit'])),
       trustBLETime: ConvertUtil.parseBool(map['trustBLETime']),
       showBLETimeTrustDialog: ConvertUtil.parseBool(map['showBLETimeTrustDialog']),
+      interruptGraphAfterNDays: ConvertUtil.parseInt(map['interruptGraphAfterNDays']),
     );
 
     // update
@@ -170,6 +170,7 @@ class Settings extends ChangeNotifier {
     'weightUnit': weightUnit.serialized,
     'trustBLETime': trustBLETime,
     'showBLETimeTrustDialog': showBLETimeTrustDialog,
+    'interruptGraphAfterNDays': interruptGraphAfterNDays,
   };
 
   /// Serialize the object to a restoreable string.
@@ -207,6 +208,7 @@ class Settings extends ChangeNotifier {
     _weightUnit = other._weightUnit;
     _trustBLETime = other._trustBLETime;
     _showBLETimeTrustDialog = other._showBLETimeTrustDialog;
+    _interruptGraphAfterNDays = other._interruptGraphAfterNDays;
     notifyListeners();
   }
 
@@ -471,7 +473,16 @@ class Settings extends ChangeNotifier {
     _showBLETimeTrustDialog = value;
     notifyListeners();
   }
-// When adding fields notice the checklist at the top.
+
+  int _interruptGraphAfterNDays = 10;
+  /// Days after which to interrupt line graphs.
+  ///
+  /// Negative numbers mean disabled, 0 means draw dots.
+  int get interruptGraphAfterNDays => _interruptGraphAfterNDays;
+  set interruptGraphAfterNDays(int value) {
+    _interruptGraphAfterNDays = value;
+    notifyListeners();
+  }
 }
 
 /// Extension to add a serialize method that can be restored by
