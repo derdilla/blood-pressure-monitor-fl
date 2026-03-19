@@ -97,7 +97,8 @@ void main() {
       horizontalGraphLines: [
         HorizontalGraphLine(Colors.lightBlue, 113),
         HorizontalGraphLine(Colors.amber, 45),
-      ]
+      ],
+      interruptGraphAfterNDays: -1,
     )));
     await tester.pumpAndSettle();
     final localizations = await AppLocalizations.delegate.load(const Locale('en'));
@@ -139,6 +140,7 @@ void main() {
       settings: Settings(
         diaWarn: 75,
         sysWarn: 120,
+        interruptGraphAfterNDays: -1,
       ),
     ));
     await tester.pumpAndSettle();
@@ -155,6 +157,7 @@ void main() {
       settings: Settings(
         diaWarn: 75,
         sysWarn: 120,
+        interruptGraphAfterNDays: -1,
       ),
     ));
     await tester.pumpAndSettle();
@@ -168,7 +171,10 @@ void main() {
       mockRecord(time: DateTime(2005), sys: 103, dia: null, pul: null),
       mockRecord(time: DateTime(2003), sys: 89, dia: null, pul: null),
     ], [], [],
-      settings: Settings(sysWarn: 120),
+      settings: Settings(
+        sysWarn: 120,
+        interruptGraphAfterNDays: -1,
+      ),
     ));
     await tester.pumpAndSettle();
     final localizations = await AppLocalizations.delegate.load(const Locale('en'));
