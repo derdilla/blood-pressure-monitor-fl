@@ -201,25 +201,25 @@ Widget appBaseForScreen(Widget child,  {
   );
 }
 
-/// Open a dialoge through a button press.
+/// Open a dialog through a button press.
 ///
 /// Example usage:
 /// ```dart
 /// dynamic returnedValue = false;
-/// await loadDialoge(tester, (context) async => returnedValue =
-///    await showAddExportColumnDialoge(context, Settings(),
+/// await loadDialog(tester, (context) async => returnedValue =
+///    await showAddExportColumnDialog(context, Settings(),
 ///      UserColumn('initialInternalIdentifier', 'csvTitle', 'formatPattern')
 /// ));
 /// ```
-Future<void> loadDialoge(WidgetTester tester, void Function(BuildContext context) dialogeStarter, {
-  String dialogeStarterText = 'X',
+Future<void> loadDialog(WidgetTester tester, void Function(BuildContext context) dialogStarter, {
+  String dialogStarterText = 'X',
   Settings? settings,
 }) async {
   await tester.pumpWidget(materialApp(
-    Builder(builder: (context) => TextButton(onPressed: () => dialogeStarter(context), child: Text(dialogeStarterText)),),
+    Builder(builder: (context) => TextButton(onPressed: () => dialogStarter(context), child: Text(dialogStarterText)),),
     settings: settings,
   ),);
-  await tester.tap(find.text(dialogeStarterText));
+  await tester.tap(find.text(dialogStarterText));
   await tester.pumpAndSettle();
 }
 

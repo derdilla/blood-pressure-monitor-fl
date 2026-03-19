@@ -2,7 +2,7 @@
 import 'dart:math';
 
 import 'package:blood_pressure_app/components/custom_banner.dart';
-import 'package:blood_pressure_app/components/fullscreen_dialoge.dart';
+import 'package:blood_pressure_app/components/fullscreen_dialog.dart';
 import 'package:blood_pressure_app/l10n/app_localizations.dart';
 import 'package:blood_pressure_app/model/export_import/column.dart';
 import 'package:blood_pressure_app/model/export_import/csv_record_parsing_actor.dart';
@@ -14,9 +14,9 @@ import 'package:health_data_store/health_data_store.dart';
 /// A preview that allows customizing columns used for csv data import.
 ///
 /// Pops the scope with a list of measurements on save ([List<BloodPressureRecord>?]).
-class ImportPreviewDialoge extends StatefulWidget {
+class ImportPreviewDialog extends StatefulWidget {
   /// Create a preview of how the app would import csv with options.
-  const ImportPreviewDialoge({super.key,
+  const ImportPreviewDialog({super.key,
     required this.bottomAppBar,
     required this.initialActor, 
     required this.columnsManager,
@@ -32,10 +32,10 @@ class ImportPreviewDialoge extends StatefulWidget {
   final CsvRecordParsingActor initialActor;
 
   @override
-  State<ImportPreviewDialoge> createState() => _ImportPreviewDialogeState();
+  State<ImportPreviewDialog> createState() => _ImportPreviewDialogState();
 }
 
-class _ImportPreviewDialogeState extends State<ImportPreviewDialoge> {
+class _ImportPreviewDialogState extends State<ImportPreviewDialog> {
   static const int _kRowLimit = 30;
 
   late CsvRecordParsingActor _actor;
@@ -79,7 +79,7 @@ class _ImportPreviewDialogeState extends State<ImportPreviewDialoge> {
   }
 
   @override
-  Widget build(BuildContext context) => FullscreenDialoge(
+  Widget build(BuildContext context) => FullscreenDialog(
     bottomAppBar: widget.bottomAppBar,
     actionButtonText: AppLocalizations.of(context)!.import,
     onActionButtonPressed: (_showingError) ? null : () {
@@ -196,7 +196,7 @@ class _ImportPreviewDialogeState extends State<ImportPreviewDialoge> {
   }
 }
 
-/// Shows a dialoge to preview import of a csv file
+/// Shows a dialog to preview import of a csv file
 Future<List<FullEntry>?> showImportPreview(
   BuildContext context,
   CsvRecordParsingActor initialActor,
@@ -204,7 +204,7 @@ Future<List<FullEntry>?> showImportPreview(
   bool bottomAppBar,) =>
   showDialog<List<FullEntry>>(
     context: context, builder: (context) =>
-    ImportPreviewDialoge(
+    ImportPreviewDialog(
       bottomAppBar: bottomAppBar,
       initialActor: initialActor,
       columnsManager: columnsManager,

@@ -2,10 +2,10 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
-/// Base for fullscreen dialoges that allow value input.
-class FullscreenDialoge extends StatelessWidget {
-  /// Create a dialoge that has a icon- and a textbutton in the app bar.
-  const FullscreenDialoge({super.key,
+/// Base for fullscreen dialogs that allow value input.
+class FullscreenDialog extends StatelessWidget {
+  /// Create a dialog that has a icon- and a textbutton in the app bar.
+  const FullscreenDialog({super.key,
     this.body,
     required this.actionButtonText,
     this.onActionButtonPressed,
@@ -15,7 +15,7 @@ class FullscreenDialoge extends StatelessWidget {
     this.canClose,
   });
 
-  /// The primary content of the dialoge.
+  /// The primary content of the dialog.
   final Widget? body;
 
   /// Icon of button leading in the app bar.

@@ -1,4 +1,4 @@
-import 'package:blood_pressure_app/components/confirm_deletion_dialoge.dart';
+import 'package:blood_pressure_app/components/confirm_deletion_dialog.dart';
 import 'package:blood_pressure_app/l10n/app_localizations.dart';
 import 'package:blood_pressure_app/model/storage/export_columns_store.dart';
 import 'package:blood_pressure_app/model/storage/storage.dart';
@@ -35,7 +35,7 @@ class _DeleteDataScreenState extends State<DeleteDataScreen> {
             trailing: const Icon(Icons.delete_forever),
             onTap: () async {
               final messanger = ScaffoldMessenger.of(context);
-              if (await showConfirmDeletionDialoge(context, localizations.warnDeletionUnrecoverable)) {
+              if (await showConfirmDeletionDialog(context, localizations.warnDeletionUnrecoverable)) {
                 if (!context.mounted) return;
                 context.read<Settings>().reset();
                 context.read<ExportSettings>().reset();
@@ -55,7 +55,7 @@ class _DeleteDataScreenState extends State<DeleteDataScreen> {
             trailing: const Icon(Icons.delete_forever),
             onTap: () async {
               final messanger = ScaffoldMessenger.of(context);
-              if (await showConfirmDeletionDialoge(context, localizations.warnDeletionUnrecoverable)) {
+              if (await showConfirmDeletionDialog(context, localizations.warnDeletionUnrecoverable)) {
                 if (!context.mounted) return;
                 final repo = RepositoryProvider.of<BloodPressureRepository>(context);
                 final previousRecords = await repo.get(DateRange.all());
@@ -78,7 +78,7 @@ class _DeleteDataScreenState extends State<DeleteDataScreen> {
             trailing: const Icon(Icons.delete_forever),
             onTap: () async {
               final messanger = ScaffoldMessenger.of(context);
-              if (await showConfirmDeletionDialoge(context, localizations.warnDeletionUnrecoverable)) {
+              if (await showConfirmDeletionDialog(context, localizations.warnDeletionUnrecoverable)) {
                 if (!context.mounted) return;
                 final repo = RepositoryProvider.of<NoteRepository>(context);
                 final previousNotes = await repo.get(DateRange.all());
@@ -100,7 +100,7 @@ class _DeleteDataScreenState extends State<DeleteDataScreen> {
             title: Text(localizations.deleteAllMedicineIntakes),
             trailing: const Icon(Icons.delete_forever),
             onTap: () async {
-              if (await showConfirmDeletionDialoge(context, localizations.warnDeletionUnrecoverable)) {
+              if (await showConfirmDeletionDialog(context, localizations.warnDeletionUnrecoverable)) {
                 if (!context.mounted) return;
                 final repo = context.read<MedicineIntakeRepository>();
                 final messanger = ScaffoldMessenger.of(context);

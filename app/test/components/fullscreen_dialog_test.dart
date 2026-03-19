@@ -1,4 +1,4 @@
-import 'package:blood_pressure_app/components/fullscreen_dialoge.dart';
+import 'package:blood_pressure_app/components/fullscreen_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -6,7 +6,7 @@ import '../util.dart';
 
 void main() {
   testWidgets('shows passed body and bar', (tester) async {
-    await tester.pumpWidget(materialApp(const FullscreenDialoge(
+    await tester.pumpWidget(materialApp(const FullscreenDialog(
       actionButtonText: 'BTN',
       closeIcon: Icons.access_time,
       actions: [Text('ACTION')],
@@ -23,7 +23,7 @@ void main() {
     int popInvokedCount = 0;
     await tester.pumpWidget(materialApp(PopScope(
       onPopInvoked: (_) => popInvokedCount++,
-      child: const FullscreenDialoge(
+      child: const FullscreenDialog(
         closeIcon: Icons.add,
         bottomAppBar: false,
         actionButtonText: null,
@@ -36,7 +36,7 @@ void main() {
   });
   testWidgets('action button callback works', (tester) async {
     int actionCallbackCount = 0;
-    await tester.pumpWidget(materialApp(FullscreenDialoge(
+    await tester.pumpWidget(materialApp(FullscreenDialog(
       actionButtonText: 'BTN',
       onActionButtonPressed: () => actionCallbackCount++,
       bottomAppBar: false,
@@ -49,25 +49,25 @@ void main() {
     expect(actionCallbackCount, 2);
   });
   testWidgets('app bar is positioned according to bottomAppBar', (tester) async {
-    await tester.pumpWidget(materialApp(const FullscreenDialoge(
+    await tester.pumpWidget(materialApp(const FullscreenDialog(
       closeIcon: Icons.add,
       bottomAppBar: false,
       actionButtonText: null,
     )));
-    expect(tester.getTopLeft(find.byType(AppBar)), tester.getTopLeft(find.byType(FullscreenDialoge)));
+    expect(tester.getTopLeft(find.byType(AppBar)), tester.getTopLeft(find.byType(FullscreenDialog)));
     final double topAppBarYPos = tester.getTopLeft(find.byType(AppBar)).dy;
 
-    await tester.pumpWidget(materialApp(const FullscreenDialoge(
+    await tester.pumpWidget(materialApp(const FullscreenDialog(
       closeIcon: Icons.add,
       bottomAppBar: true,
       actionButtonText: null,
     )));
-    expect(tester.getBottomRight(find.byType(AppBar)), tester.getBottomRight(find.byType(FullscreenDialoge)));
+    expect(tester.getBottomRight(find.byType(AppBar)), tester.getBottomRight(find.byType(FullscreenDialog)));
     
     expect(tester.getTopLeft(find.byType(AppBar)).dy, greaterThan(topAppBarYPos));
   });
   testWidgets('bottomAppBar adds 4 units of padding to the top', (tester) async {
-    await tester.pumpWidget(materialApp(const FullscreenDialoge(
+    await tester.pumpWidget(materialApp(const FullscreenDialog(
       closeIcon: Icons.add,
       bottomAppBar: false,
       actionButtonText: null,
@@ -75,7 +75,7 @@ void main() {
     )));
     final double bodyStart = tester.getTopLeft(find.text('A')).dy - tester.getBottomRight(find.byType(AppBar)).dy;
 
-    await tester.pumpWidget(materialApp(const FullscreenDialoge(
+    await tester.pumpWidget(materialApp(const FullscreenDialog(
       closeIcon: Icons.add,
       bottomAppBar: true,
       actionButtonText: null,
@@ -89,7 +89,7 @@ void main() {
     int popInvokedCount = 0;
     await tester.pumpWidget(materialApp(PopScope(
       onPopInvoked: (_) => popInvokedCount++,
-      child: FullscreenDialoge(
+      child: FullscreenDialog(
         closeIcon: Icons.add,
         bottomAppBar: false,
         actionButtonText: null,

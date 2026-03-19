@@ -1,4 +1,4 @@
-import 'package:blood_pressure_app/components/confirm_deletion_dialoge.dart';
+import 'package:blood_pressure_app/components/confirm_deletion_dialog.dart';
 import 'package:blood_pressure_app/data_util/entry_context.dart';
 import 'package:blood_pressure_app/data_util/repository_builder.dart';
 import 'package:blood_pressure_app/model/storage/storage.dart';
@@ -56,7 +56,7 @@ class WeightList extends StatelessWidget {
                   onPressed: () async {
                     final repo = context.read<BodyweightRepository>();
                     final hcSettings = context.read<HealthConnectSettingsStore>();
-                    if ((!context.read<Settings>().confirmDeletion) || await showConfirmDeletionDialoge(context)) {
+                    if ((!context.read<Settings>().confirmDeletion) || await showConfirmDeletionDialog(context)) {
                       await repo.remove(records[idx]);
                       if (hcSettings.useHealthConnect && hcSettings.syncWeightMeasurements){
                         await Health().delete(

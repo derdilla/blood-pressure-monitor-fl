@@ -6,9 +6,9 @@ import 'package:health_data_store/health_data_store.dart';
 // TODO: test calculations work and return null in case of error
 
 /// Analysis utils for a list of blood pressure records.
-class BloodPressureAnalyser {
+class BloodPressureAnalyzer {
   /// Create a analyzer for a list of records.
-  BloodPressureAnalyser(this._records);
+  BloodPressureAnalyzer(this._records);
 
   final List<BloodPressureRecord> _records;
 
@@ -77,10 +77,10 @@ class BloodPressureAnalyser {
   /// Creates analyzers for each hour of the day (0-23).
   ///
   /// This function groups records by the hour of the day (e.g 23:30-00:29.59)
-  /// and creates an [BloodPressureAnalyser] for each. The analyzers are
+  /// and creates an [BloodPressureAnalyzer] for each. The analyzers are
   /// returned ordered by the hour of the day and the index can be used as the
   /// hour.
-  List<BloodPressureAnalyser> groupAnalysers() {
+  List<BloodPressureAnalyzer> groupAnalyzers() {
     // Group records around the full hour so that there are 24 sublists from 0
     // to 23. ([0] -> 23:30-00:29.59; [1] -> ...).
     final Map<int, List<BloodPressureRecord>> grouped = _records.groupListsBy((BloodPressureRecord record) {
@@ -94,7 +94,7 @@ class BloodPressureAnalyser {
     }
     final groupedAnalyzers = grouped.map((hour, subList) => MapEntry(
       hour,
-      BloodPressureAnalyser(subList),
+      BloodPressureAnalyzer(subList),
     ));
     final sortedAnalyzersList = groupedAnalyzers.entries
       .sorted((a,b) => a.key.compareTo(b.key));

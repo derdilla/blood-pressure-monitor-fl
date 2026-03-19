@@ -1,6 +1,6 @@
-import 'package:blood_pressure_app/components/confirm_deletion_dialoge.dart';
+import 'package:blood_pressure_app/components/confirm_deletion_dialog.dart';
 import 'package:blood_pressure_app/features/export_import/export_button.dart';
-import 'package:blood_pressure_app/features/input/add_entry_dialogue.dart';
+import 'package:blood_pressure_app/features/input/add_entry_dialog.dart';
 import 'package:blood_pressure_app/features/input/forms/add_entry_form.dart';
 import 'package:blood_pressure_app/l10n/app_localizations.dart';
 import 'package:blood_pressure_app/logging.dart';
@@ -17,10 +17,10 @@ import 'package:provider/provider.dart';
 extension EntryUtils on BuildContext {
   Logger get _logger => Logger('BPM[context.EntryUtils]');
 
-  /// Open the [AddEntryDialogue] and save received entries.
+  /// Open the [AddEntryDialog] and save received entries.
   ///
   /// Follows [ExportSettings.exportAfterEveryEntry]. When [initial] is not null
-  /// the dialoge will be opened in edit mode.
+  /// the dialog will be opened in edit mode.
   Future<void> createEntry([AddEntryFormValue? initial]) async {
     _logger.finer('createEntry($initial)');
     try {
@@ -30,7 +30,7 @@ extension EntryUtils on BuildContext {
       final weightRepo = RepositoryProvider.of<BodyweightRepository>(this);
       final exportSettings = Provider.of<ExportSettings>(this, listen: false);
 
-      final entry = await showAddEntryDialogue(this,
+      final entry = await showAddEntryDialog(this,
         RepositoryProvider.of<MedicineRepository>(this),
         initial,
       );
@@ -65,7 +65,7 @@ extension EntryUtils on BuildContext {
     } on ProviderNotFoundException {
       log.severe('[extension.EntryUtils] createEntry($initial) was called from a context without Provider.');
     } catch (e, stack) {
-      await ErrorReporting.reportCriticalError('Error opening add measurement dialoge', '$e\n$stack',);
+      await ErrorReporting.reportCriticalError('Error opening add measurement dialog', '$e\n$stack',);
     }
   }
 
@@ -82,7 +82,7 @@ extension EntryUtils on BuildContext {
 
       bool confirmedDeletion = true;
       if (settings.confirmDeletion) {
-        confirmedDeletion = await showConfirmDeletionDialoge(this);
+        confirmedDeletion = await showConfirmDeletionDialog(this);
       }
 
       if (confirmedDeletion) {
