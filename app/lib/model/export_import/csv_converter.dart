@@ -78,9 +78,9 @@ class CsvConverter with TypeLogger {
     return codec.decode(csvString);
   }
 
-  CsvCodec _buildCodec({
+  Csv _buildCodec({
     String lineDelimiter = '\r\n',
-  }) => CsvCodec(
+  }) => Csv(
     fieldDelimiter: settings.fieldDelimiter,
     quoteCharacter: settings.textDelimiter,
     addBom: true, // Better excel compatibility
