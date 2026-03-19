@@ -204,7 +204,7 @@ class _ValueGraphPainter extends CustomPainter {
     DateTime? lastPoint;
     for (final e in data) {
       bool shouldSplit = false;
-      if (lastPoint != null && settings.interruptGraphAfterNDays >= 0) {
+      if (lastPoint != null && settings.interruptGraphAfterNDays > 0) {
         shouldSplit = lastPoint.difference(e.$1).inDays.abs() > settings.interruptGraphAfterNDays;
       }
       lastPoint = e.$1;

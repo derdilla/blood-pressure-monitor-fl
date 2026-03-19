@@ -115,18 +115,6 @@ class SettingsPage extends StatelessWidget {
                 max: 20,
               ),
               SliderListTile(
-                title: Text(localizations.maxDataInterval),
-                subtitle: Text(localizations.maxDataIntervalDesc),
-                leading: const Icon(Icons.auto_graph_outlined),
-                onChanged: (double value) {
-                  settings.interruptGraphAfterNDays = value.toInt();
-                },
-                value: settings.interruptGraphAfterNDays.toDouble(),
-                min: -1,
-                max: 30,
-                stepSize: 1,
-              ),
-              SliderListTile(
                 title: Text(localizations.animationSpeed),
                 leading: const Icon(Icons.speed),
                 onChanged: (double value) {
@@ -233,6 +221,17 @@ class SettingsPage extends StatelessWidget {
                 onChanged: (value) {
                   settings.drawRegressionLines = value;
                 },
+              ),
+              SliderListTile(
+                title: Text(localizations.maxDataInterval),
+                subtitle: Text(localizations.maxDataIntervalDesc),
+                leading: const Icon(Icons.auto_graph_outlined),
+                onChanged: (double value) {
+                  settings.interruptGraphAfterNDays = value.toInt();
+                },
+                value: settings.interruptGraphAfterNDays.toDouble(),
+                min: 0,
+                max: 30,
               ),
               SwitchListTile(
                 title: Text(localizations.startWithAddMeasurementPage),

@@ -601,6 +601,6 @@
     "@warnDiscardingData": {},
     "maxDataInterval": "Maximum data interval",
     "@maxDataInterval": {},
-    "maxDataIntervalDesc": "Amount of days after which the graph line is disconnected. Negative values disable this behavior, zero leads to drawing dots.",
+    "maxDataIntervalDesc": "Amount of days after which the graph line disconnects. Zero disables this.",
     "@maxDataIntervalDesc": {}
 }

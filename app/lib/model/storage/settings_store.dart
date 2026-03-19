@@ -475,11 +475,10 @@ class Settings extends ChangeNotifier {
   }
 
   int _interruptGraphAfterNDays = 10;
-  /// Days after which to interrupt line graphs.
-  ///
-  /// Negative numbers mean disabled, 0 means draw dots.
+  /// Days after which to interrupt line graphs. Disabled when zero
   int get interruptGraphAfterNDays => _interruptGraphAfterNDays;
   set interruptGraphAfterNDays(int value) {
+    assert(value >= 0);
     _interruptGraphAfterNDays = value;
     notifyListeners();
   }
