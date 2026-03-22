@@ -77,8 +77,6 @@
     "@addNote": {},
     "settings": "Ustawienia",
     "@settings": {},
-    "layout": "Wygląd",
-    "@layout": {},
     "allowManualTimeInput": "Zezwól na ręczne wprowadzanie czasu",
     "@allowManualTimeInput": {},
     "enterTimeFormatScreen": "Format daty i czasu",

@@ -91,8 +91,6 @@
     "@pulShort": {},
     "pulLong": "Utrip",
     "@pulLong": {},
-    "layout": "Postavitev",
-    "@layout": {},
     "allowManualTimeInput": "Dovoli ročni vnos časa",
     "@allowManualTimeInput": {},
     "enterTimeFormatScreen": "Format časa",

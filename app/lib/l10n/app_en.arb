@@ -77,8 +77,6 @@
     "@addNote": {},
     "settings": "Settings",
     "@settings": {},
-    "layout": "Layout",
-    "@layout": {},
     "allowManualTimeInput": "Allow manual time input",
     "@allowManualTimeInput": {},
     "enterTimeFormatScreen": "Time format",
@@ -602,5 +600,9 @@
     "maxDataInterval": "Maximum data interval",
     "@maxDataInterval": {},
     "maxDataIntervalDesc": "Amount of days after which the graph line disconnects. Zero disables this.",
-    "@maxDataIntervalDesc": {}
+    "@maxDataIntervalDesc": {},
+    "generalSettingsSection": "General",
+    "featuresSetting": "Features",
+    "graphSettings": "Graph settings",
+    "appStyleSettings": "App style"
 }
