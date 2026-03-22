@@ -1,5 +1,5 @@
 import 'package:blood_pressure_app/components/custom_banner.dart';
-import 'package:blood_pressure_app/features/export_import/import_preview_dialoge.dart';
+import 'package:blood_pressure_app/features/export_import/import_preview_dialog.dart';
 import 'package:blood_pressure_app/l10n/app_localizations.dart';
 import 'package:blood_pressure_app/model/export_import/column.dart';
 import 'package:blood_pressure_app/model/export_import/csv_converter.dart';
@@ -14,7 +14,7 @@ import '../../util.dart';
 
 void main() {
   testWidgets('should open', (tester) async {
-    await tester.pumpWidget(materialApp(ImportPreviewDialoge(
+    await tester.pumpWidget(materialApp(ImportPreviewDialog(
       bottomAppBar: false,
       initialActor: CsvRecordParsingActor(
         CsvConverter(
@@ -40,7 +40,7 @@ void main() {
       csvTxt += '\n${1703147206000 + i},1,1,1,row-content,null';
     }
 
-    await tester.pumpWidget(materialApp(ImportPreviewDialoge(
+    await tester.pumpWidget(materialApp(ImportPreviewDialog(
       bottomAppBar: false,
       initialActor: CsvRecordParsingActor(
         CsvConverter(
@@ -59,7 +59,7 @@ void main() {
     expect(find.text('…'), findsAtLeast(1));
   });
   testWidgets('should show error banner', (tester) async {
-    await tester.pumpWidget(materialApp(ImportPreviewDialoge(
+    await tester.pumpWidget(materialApp(ImportPreviewDialog(
       bottomAppBar: false,
       initialActor: CsvRecordParsingActor(
         CsvConverter(
@@ -80,7 +80,7 @@ void main() {
     expect(find.text(localizations.btnConfirm), findsOneWidget);
   });
   testWidgets('should have multiple lines', (tester) async {
-    await tester.pumpWidget(materialApp(ImportPreviewDialoge(
+    await tester.pumpWidget(materialApp(ImportPreviewDialog(
       bottomAppBar: false,
       initialActor: CsvRecordParsingActor(
         CsvConverter(
@@ -113,7 +113,7 @@ void main() {
   testWidgets('should parse data as expected', (tester) async {
     dynamic data = 1;
 
-    await loadDialoge(tester, (context) async {
+    await loadDialog(tester, (context) async {
       data = await showImportPreview(
         context,
         CsvRecordParsingActor(
@@ -130,7 +130,7 @@ void main() {
       );
     },);
 
-    expect(find.byType(ImportPreviewDialoge), findsOneWidget);
+    expect(find.byType(ImportPreviewDialog), findsOneWidget);
     expect(tester.takeException(), isNull);
     expect(find.byType(DropdownButton<ExportColumn?>), findsNWidgets(6), reason: '6 columns');
     expect(find.text('note1'), findsOneWidget);
@@ -140,7 +140,7 @@ void main() {
     expect(find.text(localizations.import), findsOneWidget);
     await tester.tap(find.text(localizations.import));
     await tester.pumpAndSettle();
-    expect(find.byType(ImportPreviewDialoge), findsNothing);
+    expect(find.byType(ImportPreviewDialog), findsNothing);
 
     expect(data, isA<List<FullEntry>>());
     final List<FullEntry> res = data;
@@ -152,7 +152,7 @@ void main() {
   testWidgets('should parse intakes data', (tester) async {
     dynamic data = 1;
 
-    await loadDialoge(tester, (context) async {
+    await loadDialog(tester, (context) async {
       data = await showImportPreview(
         context,
         CsvRecordParsingActor(
@@ -170,7 +170,7 @@ void main() {
       );
     },);
 
-    expect(find.byType(ImportPreviewDialoge), findsOneWidget);
+    expect(find.byType(ImportPreviewDialog), findsOneWidget);
     expect(tester.takeException(), isNull);
     expect(find.byType(DropdownButton<ExportColumn?>), findsNWidgets(2), reason: '2 columns');
     expect(find.textContaining('testMed1'), findsNWidgets(2));
@@ -181,7 +181,7 @@ void main() {
     expect(find.text(localizations.import), findsOneWidget);
     await tester.tap(find.text(localizations.import));
     await tester.pumpAndSettle();
-    expect(find.byType(ImportPreviewDialoge), findsNothing);
+    expect(find.byType(ImportPreviewDialog), findsNothing);
 
     expect(data, isA<List<FullEntry>>());
     final List<FullEntry> res = data;

@@ -1,4 +1,4 @@
-import 'package:blood_pressure_app/features/settings/enter_timeformat_dialoge.dart';
+import 'package:blood_pressure_app/features/settings/enter_timeformat_dialog.dart';
 import 'package:blood_pressure_app/features/settings/tiles/color_picker_list_tile.dart';
 import 'package:blood_pressure_app/features/settings/tiles/dropdown_list_tile.dart';
 import 'package:blood_pressure_app/features/settings/tiles/slider_list_tile.dart';
@@ -52,7 +52,7 @@ class StyleScreen extends StatelessWidget {
             leading: const Icon(Icons.schedule),
             trailing: const Icon(Icons.arrow_forward_ios),
             onTap: () async {
-              final pickedFormat = await showTimeFormatPickerDialoge(context,
+              final pickedFormat = await showTimeFormatPickerDialog(context,
                 settings.dateFormatString,
                 settings.bottomAppBars,);
               if (pickedFormat != null) {

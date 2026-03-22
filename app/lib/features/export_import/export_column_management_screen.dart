@@ -1,4 +1,4 @@
-import 'package:blood_pressure_app/features/export_import/add_export_column_dialoge.dart';
+import 'package:blood_pressure_app/features/export_import/add_export_column_dialog.dart';
 import 'package:blood_pressure_app/l10n/app_localizations.dart';
 import 'package:blood_pressure_app/model/export_import/column.dart';
 import 'package:blood_pressure_app/model/storage/export_columns_store.dart';
@@ -47,7 +47,7 @@ class ExportColumnsManagementScreen extends StatelessWidget {
                         IconButton(
                           icon: const Icon(Icons.edit),
                           onPressed: () async {
-                            final editedColumn = await showAddExportColumnDialoge(context, column);
+                            final editedColumn = await showAddExportColumnDialog(context, column);
                             if (editedColumn != null) {
                               columnsManager.addOrUpdate(editedColumn);
                             }
@@ -81,13 +81,13 @@ class ExportColumnsManagementScreen extends StatelessWidget {
                   leading: const Icon(Icons.add),
                   title: Text(localizations.addExportformat),
                   onTap: () async{
-                    ExportColumn? editedColumn = await showAddExportColumnDialoge(context);
+                    ExportColumn? editedColumn = await showAddExportColumnDialog(context);
                     if (editedColumn != null) {
                       while (columnsManager.userColumns.containsKey(editedColumn!.internalIdentifier)) {
                         if (editedColumn is UserColumn) {
                           editedColumn = UserColumn.explicit('${editedColumn.internalIdentifier}I', editedColumn.csvTitle, editedColumn.formatPattern!);
                         } else {
-                          assert(editedColumn is TimeColumn, 'Creation of other types not supported in dialoge.');
+                          assert(editedColumn is TimeColumn, 'Creation of other types not supported in dialog.');
                           editedColumn = TimeColumn.explicit('${editedColumn.internalIdentifier}I', editedColumn.csvTitle, editedColumn.formatPattern!);
                         }
                       }

@@ -1,6 +1,6 @@
-import 'package:blood_pressure_app/components/confirm_deletion_dialoge.dart';
+import 'package:blood_pressure_app/components/confirm_deletion_dialog.dart';
 import 'package:blood_pressure_app/data_util/consistent_future_builder.dart';
-import 'package:blood_pressure_app/features/settings/add_medication_dialoge.dart';
+import 'package:blood_pressure_app/features/settings/add_medication_dialog.dart';
 import 'package:blood_pressure_app/l10n/app_localizations.dart';
 import 'package:blood_pressure_app/model/storage/settings_store.dart';
 import 'package:flutter/material.dart';
@@ -38,7 +38,7 @@ class MedicineManagerScreen extends StatelessWidget {
           icon: const Icon(Icons.edit),
           onPressed: () async {
             final medRepo = RepositoryProvider.of<MedicineRepository>(context);
-            final newMed = await showAddMedicineDialoge(context,
+            final newMed = await showAddMedicineDialog(context,
                 initialValue: med);
             if (newMed != null) {
               // We can not edit the med directly since this could skew old
@@ -53,7 +53,7 @@ class MedicineManagerScreen extends StatelessWidget {
         IconButton(
           icon: const Icon(Icons.delete),
           onPressed: () async {
-            if (await showConfirmDeletionDialoge(context) && context.mounted) {
+            if (await showConfirmDeletionDialog(context) && context.mounted) {
               await RepositoryProvider.of<MedicineRepository>(context).remove(med);
             }
           },
@@ -67,7 +67,7 @@ class MedicineManagerScreen extends StatelessWidget {
     title: Text(AppLocalizations.of(context)!.addMedication),
     onTap: () async {
       final medRepo = RepositoryProvider.of<MedicineRepository>(context);
-      final medicine = await showAddMedicineDialoge(context);
+      final medicine = await showAddMedicineDialog(context);
       if (medicine != null) {
         await medRepo.add(medicine);
       }

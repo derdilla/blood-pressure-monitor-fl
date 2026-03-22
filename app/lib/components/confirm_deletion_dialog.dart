@@ -1,12 +1,12 @@
 import 'package:blood_pressure_app/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 
-/// Show a dialoge that prompts the user to confirm a deletion.
+/// Show a dialog that prompts the user to confirm a deletion.
 ///
 /// Returns whether it is ok to proceed with deletion.
 ///
 /// When [customDescription] is set it is used instead of confirmDeleteDesc.
-Future<bool> showConfirmDeletionDialoge(BuildContext context, [String? customDescription]) async =>
+Future<bool> showConfirmDeletionDialog(BuildContext context, [String? customDescription]) async =>
 await showDialog<bool>(context: context,
   builder: (context) => AlertDialog(
     title: Text(AppLocalizations.of(context)!.confirmDelete),

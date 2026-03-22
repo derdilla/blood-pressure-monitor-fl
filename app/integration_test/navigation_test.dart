@@ -1,10 +1,10 @@
 
 import 'package:blood_pressure_app/app.dart';
-import 'package:blood_pressure_app/features/export_import/add_export_column_dialoge.dart';
+import 'package:blood_pressure_app/features/export_import/add_export_column_dialog.dart';
 import 'package:blood_pressure_app/features/export_import/export_column_management_screen.dart';
-import 'package:blood_pressure_app/features/settings/add_medication_dialoge.dart';
+import 'package:blood_pressure_app/features/settings/add_medication_dialog.dart';
 import 'package:blood_pressure_app/features/settings/delete_data_screen.dart';
-import 'package:blood_pressure_app/features/settings/enter_timeformat_dialoge.dart';
+import 'package:blood_pressure_app/features/settings/enter_timeformat_dialog.dart';
 import 'package:blood_pressure_app/features/settings/export_import_screen.dart';
 import 'package:blood_pressure_app/features/settings/graph_markings_screen.dart';
 import 'package:blood_pressure_app/features/settings/medicine_manager_screen.dart';
@@ -21,7 +21,7 @@ import 'util.dart';
 
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
-  testWidgets('Can visit all screens and dialoges', (WidgetTester tester) async {
+  testWidgets('Can visit all screens and dialogs', (WidgetTester tester) async {
     final localizations = await AppLocalizations.delegate.load(const Locale('en'));
     const double settingsScrollAmount = 200.0;
 
@@ -38,16 +38,16 @@ void main() {
     expect(find.byType(SettingsPage), findsOneWidget);
     // settings
 
-    expect(find.byType(EnterTimeFormatDialoge), findsNothing);
+    expect(find.byType(EnterTimeFormatDialog), findsNothing);
     expect(find.text(localizations.timeFormat), findsOneWidget);
     await tester.tap(find.text(localizations.timeFormat));
     await tester.pumpAndSettle();
-    expect(find.byType(EnterTimeFormatDialoge), findsOneWidget);
+    expect(find.byType(EnterTimeFormatDialog), findsOneWidget);
     // time format
     expect(find.text(localizations.btnSave), findsOneWidget);
     await tester.tap(find.text(localizations.btnSave));
     await tester.pumpAndSettle();
-    expect(find.byType(EnterTimeFormatDialoge), findsNothing);
+    expect(find.byType(EnterTimeFormatDialog), findsNothing);
     // settings
 
     expect(find.byType(MedicineManagerScreen), findsNothing);
@@ -56,14 +56,14 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.byType(MedicineManagerScreen), findsOneWidget);
     // medication manager
-    expect(find.byType(AddMedicationDialoge), findsNothing);
+    expect(find.byType(AddMedicationDialog), findsNothing);
     await tester.tap(find.text(localizations.addMedication));
     await tester.pumpAndSettle();
-    expect(find.byType(AddMedicationDialoge), findsOneWidget);
+    expect(find.byType(AddMedicationDialog), findsOneWidget);
     // add medication
     await tester.tap(find.byIcon(Icons.close));
     await tester.pumpAndSettle();
-    expect(find.byType(AddMedicationDialoge), findsNothing);
+    expect(find.byType(AddMedicationDialog), findsNothing);
     // medication manager
     await tester.tap(find.byIcon(Icons.arrow_back));
     await tester.pumpAndSettle();
@@ -104,14 +104,14 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.byType(ExportColumnsManagementScreen), findsOneWidget);
     // export column manager
-    expect(find.byType(AddExportColumnDialoge), findsNothing);
+    expect(find.byType(AddExportColumnDialog), findsNothing);
     await tester.tap(find.text(localizations.addExportformat));
     await tester.pumpAndSettle();
-    expect(find.byType(AddExportColumnDialoge), findsOneWidget);
+    expect(find.byType(AddExportColumnDialog), findsOneWidget);
     // add export column
     await tester.tap(find.byIcon(Icons.close));
     await tester.pumpAndSettle();
-    expect(find.byType(AddExportColumnDialoge), findsNothing);
+    expect(find.byType(AddExportColumnDialog), findsNothing);
     // export column manager
     await tester.tap(find.byIcon(Icons.arrow_back));
     await tester.pumpAndSettle();

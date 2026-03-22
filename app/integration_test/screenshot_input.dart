@@ -7,7 +7,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'util.dart';
 
 void main() {
-  testWidgets('Screenshot input dialoge', (WidgetTester tester) async {
+  testWidgets('Screenshot input dialog', (WidgetTester tester) async {
     final localizations = await AppLocalizations.delegate.load(const Locale('en'));
     const double settingsScrollAmount = 200.0;
 

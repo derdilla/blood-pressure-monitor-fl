@@ -1,4 +1,4 @@
-import 'package:blood_pressure_app/components/fullscreen_dialoge.dart';
+import 'package:blood_pressure_app/components/fullscreen_dialog.dart';
 import 'package:blood_pressure_app/features/settings/tiles/color_picker_list_tile.dart';
 import 'package:blood_pressure_app/l10n/app_localizations.dart';
 import 'package:blood_pressure_app/model/storage/settings_store.dart';
@@ -7,19 +7,19 @@ import 'package:flutter/services.dart';
 import 'package:health_data_store/health_data_store.dart';
 import 'package:provider/provider.dart';
 
-/// Dialoge to enter values for a [Medicine].
-class AddMedicationDialoge extends StatefulWidget {
-  /// Create a dialoge to enter values for a [Medicine].
-  const AddMedicationDialoge({super.key, this.initialValue});
+/// Dialog to enter values for a [Medicine].
+class AddMedicationDialog extends StatefulWidget {
+  /// Create a dialog to enter values for a [Medicine].
+  const AddMedicationDialog({super.key, this.initialValue});
 
   /// Medicine to use to prefill input fields.
   final Medicine? initialValue;
 
   @override
-  State<AddMedicationDialoge> createState() => _AddMedicationDialogeState();
+  State<AddMedicationDialog> createState() => _AddMedicationDialogState();
 }
 
-class _AddMedicationDialogeState extends State<AddMedicationDialoge> {
+class _AddMedicationDialogState extends State<AddMedicationDialog> {
   final formKey = GlobalKey<FormState>();
   final nameFocusNode = FocusNode();
 
@@ -45,7 +45,7 @@ class _AddMedicationDialogeState extends State<AddMedicationDialoge> {
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
     final settings = context.watch<Settings>();
-    return FullscreenDialoge(
+    return FullscreenDialog(
       actionButtonText: localizations.btnSave,
       onActionButtonPressed: () {
         formKey.currentState?.save();
@@ -108,12 +108,12 @@ class _AddMedicationDialogeState extends State<AddMedicationDialoge> {
   );
 }
 
-/// Shows a full screen dialoge to input a medicine.
+/// Shows a full screen dialog to input a medicine.
 ///
 /// The created medicine gets an index that was never in settings.
-Future<Medicine?> showAddMedicineDialoge(BuildContext context, {
+Future<Medicine?> showAddMedicineDialog(BuildContext context, {
   Medicine? initialValue,
 }) =>
   showDialog<Medicine?>(context: context,
-    builder: (context) => AddMedicationDialoge(initialValue: initialValue),
+    builder: (context) => AddMedicationDialog(initialValue: initialValue),
   );
