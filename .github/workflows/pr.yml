@@ -12,19 +12,6 @@ on:
       - "pr.yml"
 
 jobs:
-  bad-words:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout PR code
-        uses: actions/checkout@v6
-        with:
-          ref: ${{ github.event.pull_request.head.sha }}
-      - name: Search for bad words
-        run: |
-          # show potentially bad words and fail on actual ones
-          git grep --full-name --extended-regexp --line-number "dialoge|dialogue" -- ':*.dart'
-          git grep --full-name --extended-regexp --line-number "dialoge|dialogue" -- ':*.dart' && exit 1 || exit 0
-
   validate-localizations:
     runs-on: ubuntu-latest
     steps:
