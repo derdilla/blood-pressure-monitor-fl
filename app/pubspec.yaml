@@ -45,6 +45,7 @@ dependencies:
   inline_tab_view: ^1.0.1
   xml: ^6.6.1
   health: ^13.3.1
+  receive_intent: ^0.2.7
 
 dev_dependencies:
   integration_test:
