@@ -17,7 +17,7 @@ import 'package:provider/provider.dart';
 /// to put all data on one graph
 class BloodPressureValueGraph extends StatelessWidget {
   /// Create a new graph of [BloodPressureRecord] values.
-  const BloodPressureValueGraph({super.key, // TODO: intakes ??
+  const BloodPressureValueGraph({super.key,
     required this.records,
     required this.colors,
     required this.intakes,
@@ -201,11 +201,23 @@ class _ValueGraphPainter extends CustomPainter {
 
     Path? path;
     Path? warnPath = warnValue == null ? null : Path();
+    DateTime? lastPoint;
     for (final e in data) {
+      bool shouldSplit = false;
+      if (lastPoint != null && settings.interruptGraphAfterNDays > 0) {
+        shouldSplit = lastPoint.difference(e.$1).inDays.abs() > settings.interruptGraphAfterNDays;
+      }
+      lastPoint = e.$1;
+
       final point = ui.Offset(_transformX(size, e.$1, range), _transformY(size, e.$2, minY, maxY));
       if (path != null) {
-        path.lineTo(point.dx, point.dy);
-        warnPath?.lineTo(point.dx, point.dy);
+        if (shouldSplit) {
+          path.moveTo(point.dx, point.dy);
+          warnPath?.moveTo(point.dx, point.dy);
+        } else {
+          path.lineTo(point.dx, point.dy);
+          warnPath?.lineTo(point.dx, point.dy);
+        }
       } else {
         path = Path();
         path.moveTo(point.dx, point.dy);
@@ -412,6 +424,7 @@ class _ValueGraphPainter extends CustomPainter {
     || oldDelegate.settings.drawRegressionLines != settings.drawRegressionLines
     || oldDelegate.settings.needlePinBarWidth != settings.needlePinBarWidth
     || oldDelegate.settings.horizontalGraphLines != settings.horizontalGraphLines
+    || oldDelegate.settings.interruptGraphAfterNDays != settings.interruptGraphAfterNDays
     || oldDelegate.records != records
     || oldDelegate.colors != colors
     || oldDelegate.intakes != intakes;

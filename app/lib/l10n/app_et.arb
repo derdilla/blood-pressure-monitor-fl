@@ -75,8 +75,6 @@
     "@pulLong": {},
     "settings": "Seadistused",
     "@settings": {},
-    "layout": "Paigutus",
-    "@layout": {},
     "allowManualTimeInput": "Luba kellaaja sisestamist käsitsi",
     "@allowManualTimeInput": {},
     "enterTimeFormatScreen": "Kellaja vorming",

@@ -77,8 +77,6 @@
     "@addNote": {},
     "settings": "Settings",
     "@settings": {},
-    "layout": "Layout",
-    "@layout": {},
     "allowManualTimeInput": "Allow manual time input",
     "@allowManualTimeInput": {},
     "enterTimeFormatScreen": "Time format",
@@ -598,5 +596,13 @@
     "syncOnAppStart": "Sync data on app start",
     "@syncOnAppStart": {},
     "warnDiscardingData": "You have unsaved data. Do you want to continue and discard them?",
-    "@warnDiscardingData": {}
+    "@warnDiscardingData": {},
+    "maxDataInterval": "Maximum data interval",
+    "@maxDataInterval": {},
+    "maxDataIntervalDesc": "Amount of days after which the graph line disconnects. Zero disables this.",
+    "@maxDataIntervalDesc": {},
+    "generalSettingsSection": "General",
+    "featuresSetting": "Features",
+    "graphSettings": "Graph settings",
+    "appStyleSettings": "App style"
 }
