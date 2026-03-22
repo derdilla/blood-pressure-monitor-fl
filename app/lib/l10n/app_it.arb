@@ -186,8 +186,6 @@
     "@animationSpeed": {},
     "accentColor": "Colore del tema",
     "@accentColor": {},
-    "layout": "Disposizione",
-    "@layout": {},
     "btnUndo": "Precedente",
     "@btnUndo": {},
     "allowManualTimeInput": "Data e ora manuale",

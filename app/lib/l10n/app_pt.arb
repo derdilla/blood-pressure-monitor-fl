@@ -295,8 +295,6 @@
     "@sysWarn": {},
     "now": "agora",
     "@now": {},
-    "layout": "Layout",
-    "@layout": {},
     "diaLong": "Diastólica",
     "@diaLong": {},
     "time": "Hora",
