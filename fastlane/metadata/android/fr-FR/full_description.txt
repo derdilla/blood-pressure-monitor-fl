@@ -1,1 +1,17 @@
-<p><I>Moniteur de pression sanguine</i> vous laisse sauvegarder et analyser des valeurs de pression sanguine et permet un export de donner versatile et facile. Cette app permet la création de mesures en fonction du temps et les affiche de différentes manières. Elle est très customisable sans être surchargée et permet l'import et l'export d'informations en format CSV.</p>Suivez votre pression sanguine où qu vous alliez. Sans connexion, sans publicité et open source.
+<p><i>blood pressure monitor</i> est un outil fiable de suivi et d'analyse de la tension artérielle. Il est conçu pour enregistrer les mesures plus rapidement que toute autre solution et faciliter le partage des données avec votre médecin. Il fonctionne dès l'installation mais peut également être configuré pour des besoins spécifiques.</p>
+
+Caractéristiques principales :
+- Enregistrement <b>fiable</b> des mesures.
+- Saisie rapide via des dialogues <b>conviviaux</b> au lancement et navigation automatique dans les formulaires.
+- Des analyses <b>claires</b> offrent un aperçu des tendances, de la répartition, des variations au cours de la journée et bien plus encore.
+- <b>Exportation et importation</b> polyvalentes (CSV, PDF, SQLite) avec un contrôle granulaire.
+- Hautement configurable.
+- Entrée BLE GATT via des appareils Bluetooth.
+- Pas de publicité - pas de compte.
+- Code <b>open-source</b> bien documenté.
+- Prise en charge d'autres mesures liées comme le poids ou la prise de médicaments.
+- Synchronisation optionnelle avec d'autres applications via Health-Connect.
+
+Les mesures peuvent être saisies manuellement ou automatiquement si vous possédez un appareil compatible avec le protocole BLE GATT. Nous ne recommandons aucun appareil spécifique ; veuillez effectuer vos propres recherches.
+
+Cette application n'est <b>pas</b> un dispositif médical. Elle ne mesure <b>pas</b> votre tension artérielle et ne donne <b>aucun</b> conseil médical. Consultez un médecin pour cela. Cette application est uniquement un outil permettant d'enregistrer des mesures de manière rapide, simple et sécurisée.
