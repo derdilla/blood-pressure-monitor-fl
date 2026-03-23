@@ -1,11 +1,17 @@
-<p><i>blood pressure monitor</i> is a reliable blood pressure measurement tracker and analyzer. It has the ambition to allow saving measurements faster than anywhere else and make sharing data with you doctor effortless. It works out of the box but can also be configured for individual use cases.</p>
+<p><i>blood pressure monitor</i> is a reliable blood pressure measurement tracker and analyzer. It is designed to allow saving measurements faster than anywhere else and make sharing data with you doctor effortless. It works out of the box but can also be configured for individual use cases.</p>
 
-Features:
-- 📏 <b>Reliable</b> measurement storing
-- 🚀 Fast input through <b>user-friendly</b> dialogs on launch and automatic form navigation
-- 📊 <b>Beautiful</b> analytics provide insights on trends, distribution, differences over the day and much more
-- 📂 Versatile <b>export and import</b> (CSV, PDF, SQLite) with granular control
-- ⚙️ High configurability
-- 🔗 BLE GATT input through bluetooth devices
-- Ad free without disturbances
-- Well-documented, <b>open-source</b> code
+Key Features:
+- <b>Reliable</b> measurement storing.
+- Fast input through <b>user-friendly</b> dialogues on launch and automatic form navigation.
+- <b>Beautiful</b> analytics provide insights on trends, distribution, differences over the day and much more.
+- Versatile <b>export and import</b> (CSV, PDF, SQLite) with granular control.
+- Highly configurable.
+- BLE GATT input through Bluetooth devices.
+- No advertisements - no accounts.
+- Well-documented, <b>open-source</b> code.
+- Support for entering other related measurements like weight or medicine intakes.
+- Optionally sync with other apps via Health-Connect.
+
+Measurements can be entered manually, or automatically, if you own any device that supports the BlE GATT protocol. We don't recommend any specific device, please do your own research.
+
+This app is <b>not</b> a medical device. It does <b>not</b> measure your blood pressure or give you any medical advice. Consult with a doctor for that. This app is only a tool to quickly record measurements in an easy and secure fashion.

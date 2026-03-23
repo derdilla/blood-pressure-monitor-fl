@@ -1,11 +1,17 @@
-<p><i>Blutdruck Monitor</i> ist ein zuverlässiges Tagebuch und Analysewerkzeug für Blutdruckmessungen. Er ermöglicht das schnelle Speichern von Messungen und macht das Teilen der Daten mit Ihrem Arzt mühelos. Die App funktioniert sofort nach der Installation, kann aber auch für individuelle Anwendungsfälle konfiguriert werden.</p>
+<p><i>blood pressure monitor</i> ist ein zuverlässiges Tagebuch zur Erfassung und Analyse von Blutdruckmesswerten. Die App ist darauf ausgelegt, Messungen schnell und einfach zu speichern und den Datenaustausch mit Ihrem Arzt zu vereinfachen. Die app funktioniert out-of-the-box, kann aber auch für individuelle Anwendungsfälle konfiguriert werden.</p>
 
-Funktionen:
-- 📏 <b>Zuverlässiges</b> Speichern von Messungen
-- 🚀 Schnelle Eingabe durch <b>benutzerfreundliche</b> Dialoge beim Start und automatische Formularnavigation
-- 📊 <b>Attraktive</b> Analysen bieten Einblicke in Trends, Verteilung, Unterschiede über den Tag und vieles mehr
-- 📂 Vielseitiger <b>Export und Import</b> (CSV, PDF, SQLite) mit detaillierter Kontrolle
-- ⚙️ Hohe Konfigurierbarkeit
-- 🔗 BLE GATT-Eingabe über Bluetooth-Geräte
-- Werbefrei ohne Störungen
-- Gut dokumentierter, <b>offener Quellcode</b>
+Hauptmerkmale:
+- <b>Zuverlässige</b> Speicherung von Messwerten.
+- Schnelle Eingabe durch <b>benutzerfreundliche</b> Dialoge beim Start und automatische Formularnavigation.
+- <b>Ansprechende</b> Analysen bieten Einblicke in Trends, Verteilungen, Tagesunterschiede und vieles mehr.
+- Vielseitiger <b>Export und Import</b> (CSV, PDF, SQLite) mit präziser Steuerung.
+- Hochgradig konfigurierbar.
+- BLE GATT-Eingabe über Bluetooth-Geräte.
+- Keine Werbung - keine Konten.
+- Gut dokumentierter <b>Open-Source</b>-Code.
+- Unterstützung für weitere Messwerte wie Gewicht oder Medikamenteneinnahme.
+- Optionaler Abgleich mit anderen Apps über Health-Connect.
+
+Messwerte können manuell oder automatisch eingegeben werden, sofern Sie ein Gerät besitzen, das das BLE GATT-Protokoll unterstützt. Wir empfehlen kein bestimmtes Gerät; bitte informieren Sie sich eigenständig.
+
+Diese App ist <b>kein</b> Medizinprodukt. Sie misst <b>nicht</b> Ihren Blutdruck und bietet <b>keine</b> medizinische Beratung. Konsultieren Sie hierfür einen Arzt. Diese App ist lediglich ein Werkzeug, um Messwerte schnell, einfach und sicher aufzuzeichnen.

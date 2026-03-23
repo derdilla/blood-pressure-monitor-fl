@@ -1,11 +1,17 @@
-<p><i>El monitor de presión arterial</i> es un rastreador y analizador confiable de medición de la presión arterial. Tiene la ambición de permitir guardar mediciones más rápido que en cualquier otro lugar y hacer que compartir datos con su médico sea fácil. Funciona de forma inmediata, pero también se puede configurar para casos de uso individuales.</p>
+<p><i>blood pressure monitor</i> es un rastreador y analizador fiable de mediciones de presión arterial. Está diseñado para permitir guardar las mediciones con mayor rapidez y facilitar el intercambio de datos con su médico. Funciona directamente al instalarse, pero también puede configurarse para casos de uso individuales.</p>
 
-Funciones:
-- 📏 <b>Almacenamiento fiable</b> de mediciones
-- 🚀 Entrada rápida a través de diálogos <b>fáciles de usar</b> al iniciar y navegación automática de formularios
-- 📊 <b>Hermosos</b> análisis que brindan información sobre tendencias, distribución, diferencias a lo largo del día y mucho más
-- 📂 <b>Exportación e importación</b> versátiles (CSV, PDF, SQLite) con control granular
-- ⚙️ Alta configurabilidad
-- 🔗 Entrada BLE GATT a través de dispositivos bluetooth
-- Sin publicidad y sin molestias
-- Código <b>abierto</b> bien documentado
+Funciones principales:
+- Almacenamiento <b>fiable</b> de mediciones.
+- Entrada rápida mediante diálogos <b>intuitivos</b> al iniciar y navegación automática por los formularios.
+- Análisis <b>detallados</b> que ofrecen información sobre tendencias, distribución, variaciones durante el día y mucho más.
+- <b>Exportación e importación</b> versátil (CSV, PDF, SQLite) con control granular.
+- Altamente configurable.
+- Entrada BLE GATT a través de dispositivos Bluetooth.
+- Sin publicidad - sin cuentas.
+- Código de <b>fuente abierta</b> bien documentado.
+- Soporte para introducir otras mediciones relacionadas como el peso o la toma de medicamentos.
+- Sincronización opcional con otras aplicaciones a través de Health-Connect.
+
+Las mediciones pueden introducirse de forma manual o automática si posee algún dispositivo compatible con el protocolo BLE GATT. No recomendamos ningún dispositivo específico; por favor, realice su propia investigación.
+
+Esta aplicación <b>no</b> es un dispositivo médico. <b>No</b> mide su presión arterial ni ofrece asesoramiento médico. Consulte a un médico para ello. Esta aplicación es solo una herramienta para registrar mediciones de forma rápida, sencilla y segura.
