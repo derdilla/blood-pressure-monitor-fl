@@ -1,0 +1,4 @@
+* Reorganize settings
+* Update app description
+
+If you didn't install the app from google play you can safely ignore this version.

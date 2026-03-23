@@ -602,7 +602,11 @@
     "maxDataIntervalDesc": "Amount of days after which the graph line disconnects. Zero disables this.",
     "@maxDataIntervalDesc": {},
     "generalSettingsSection": "General",
+    "@generalSettingsSection": {},
     "featuresSetting": "Features",
+    "@featuresSetting": {},
     "graphSettings": "Graph settings",
-    "appStyleSettings": "App style"
+    "@graphSettings": {},
+    "appStyleSettings": "App style",
+    "@appStyleSettings": {}
 }
