@@ -1,4 +1,4 @@
-<p><i>blood pressure monitor</i> ist ein zuverlässiges Tool zur Erfassung und Analyse von Blutdruckmesswerten. Die App ist darauf ausgelegt, Messungen schneller als üblich zu speichern und den Datenaustausch mit Ihrem Arzt zu vereinfachen. Sie ist sofort einsatzbereit, kann aber auch für individuelle Anwendungsfälle konfiguriert werden.</p>
+<p><i>blood pressure monitor</i> ist ein zuverlässiges Tagebuch zur Erfassung und Analyse von Blutdruckmesswerten. Die App ist darauf ausgelegt, Messungen schnell und einfach zu speichern und den Datenaustausch mit Ihrem Arzt zu vereinfachen. Die app funktioniert out-of-the-box, kann aber auch für individuelle Anwendungsfälle konfiguriert werden.</p>
 
 Hauptmerkmale:
 - <b>Zuverlässige</b> Speicherung von Messwerten.
