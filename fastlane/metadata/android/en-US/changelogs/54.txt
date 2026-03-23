@@ -1,6 +1,0 @@
-- Relicense as GNU GPLv3
-- Implement health connect support
-- Interrupt graph line after n days
-- Animate to corresponding tab on input validation error
-- Warn before discarding input data
-- Fix undismissable import preview banner

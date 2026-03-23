@@ -4,11 +4,11 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 repository: https://github.com/derdilla/blood-pressure-monitor-fl
 issue_tracker: https://github.com/derdilla/blood-pressure-monitor-fl/issues
 
-version: 1.8.12+54
+version: 1.8.13+55
 
 environment:
   sdk: '>=3.0.2 <4.0.0'
-  flutter: '3.41.2'
+  flutter: '3.41.5'
 
 dependencies:
   collection: ^1.19.1
