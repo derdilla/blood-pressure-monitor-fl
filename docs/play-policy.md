@@ -34,13 +34,13 @@ There they can:
 2. Sync historic data
 
 ### Blood pressure permissions
-The blood pressure permission is necessary in case users that want to automatically make this data available to other apps.
+As the app name suggest blood pressure record management is a core feature of the app. The blood pressure permission is necessary in case users want to automatically make this data available to other apps.
 
 They can do so by going to Settings > "Health Connect" and enabling it and then pressing Sync now in the "Blood pressure" section of that screen.
 
-If Automatically sync data is enabled the app will now add measurement to health connect when entered via App Home > Plus icon > SAVE. That's why it needs the write permission.
+The read permission is required so that data saved by other apps can be displayed in the graph and list on the apps home screen. The data is also used to create the statistics at App Home > statistics icon. This is available after the sync described earlier.
 
-The read permission is required so that data saved through other apps can be displayed in the graph and list on the apps home screen.
+The write permission is required to make taken measurements available to other apps. The app allows saving measurements manually (via App Home > Plus icon > SAVE) and when received through any compatible Bluetooth device. If "Automatically sync data" is enabled in the health connect settings, the app will now add these measurements to health connect.
 
 ### Weight permission
 The user can enable an additional weight input by going to Settings > "Features" > "Activate weight related features".
