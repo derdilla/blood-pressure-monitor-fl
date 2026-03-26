@@ -13,7 +13,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 part 'device_scan_state.dart';
 
-/// A component to search for bluetooth devices.
+/// A component to search for bluetooth devices .
 ///
 /// For this to work the app must have access to the bluetooth adapter
 /// ([BluetoothCubit]).
@@ -25,7 +25,7 @@ class DeviceScanCubit extends Cubit<DeviceScanState> with TypeLogger {
   /// ([Settings.knownBleDev]).
   DeviceScanCubit({
     required BluetoothManager manager,
-    required this.service,
+    required this.services,
     required this.settings,
   }): super(DeviceListLoading()) {
     _manager = manager;
@@ -36,7 +36,7 @@ class DeviceScanCubit extends Cubit<DeviceScanState> with TypeLogger {
   late final Settings settings;
 
   /// Service required from bluetooth devices.
-  late final String service;
+  final List<String> services;
 
   late final BluetoothManager _manager;
 
@@ -52,7 +52,7 @@ class DeviceScanCubit extends Cubit<DeviceScanState> with TypeLogger {
     try {
       // no timeout, the user knows best how long scanning is needed
       // Not all devices are found using this configuration (https://pub.dev/packages/flutter_blue_plus#scanning-does-not-find-my-device).
-      await _manager.discovery.start(service, _onScanResult);
+      await _manager.discovery.start(services, _onScanResult);
     } catch (e) {
       _onScanError(e);
     }

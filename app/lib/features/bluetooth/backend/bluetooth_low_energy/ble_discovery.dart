@@ -16,11 +16,14 @@ final class BluetoothLowEnergyDiscovery extends BluetoothDeviceDiscovery<Bluetoo
   );
 
   @override
-  Future<void> backendStart(String serviceUuid) async {
+  Future<void> backendStart(List<String> serviceUuids) async {
     try {
       await manager.backend.startDiscovery(
         // no timeout, the user knows best how long scanning is needed
-        serviceUUIDs: [UUID.fromString(serviceUuid)],
+        serviceUUIDs: [
+          for (final uuid in serviceUuids)
+            UUID.fromString(uuid),
+        ],
         // Not all devices might be found using this configuration
       );
     } catch (e) {
