@@ -4,6 +4,7 @@
 import 'dart:async';
 
 import 'package:blood_pressure_app/features/bluetooth/backend/bluetooth_backend.dart';
+import 'package:blood_pressure_app/features/bluetooth/logic/ble_read_cubit.dart';
 import 'package:blood_pressure_app/features/bluetooth/logic/bluetooth_cubit.dart';
 import 'package:blood_pressure_app/logging.dart';
 import 'package:blood_pressure_app/model/storage/settings_store.dart';
@@ -81,8 +82,19 @@ class DeviceScanCubit extends Cubit<DeviceScanState> with TypeLogger {
       settings.knownBleDev.contains(dev.name));
 
     if (preferred != null) {
-      _stopScanning()
-        .then((_) => emit(DeviceSelected(preferred)));
+      BleReadCubit.build(preferred).then((cubit) async {
+        if (cubit == null) {
+          logger.info('Device no longer supported: $preferred');
+          devices.remove(preferred);
+          if (settings.knownBleDev.contains(preferred.name)) {
+            settings.knownBleDev.remove(preferred.name);
+          }
+          emit(DeviceListAvailable(devices));
+          return;
+        }
+        await _stopScanning();
+        emit(DeviceSelected(cubit));
+      });
     } else if (devices.isEmpty) {
       emit(DeviceListLoading());
     } else if (devices.length == 1) {
@@ -106,8 +118,15 @@ class DeviceScanCubit extends Cubit<DeviceScanState> with TypeLogger {
       return;
     }
 
+    final cubit = await BleReadCubit.build(device);
+    if (cubit == null) {
+      // TODO: indicate in UI
+      logger.info('Unsupported device: $device');
+      return;
+    }
+
     assert(!_manager.discovery.isDiscovering);
-    emit(DeviceSelected(device));
+    emit(DeviceSelected(cubit));
     final List<String> list = settings.knownBleDev.toList();
     list.add(device.name);
     settings.knownBleDev = list;
