@@ -10,7 +10,7 @@ final class MockBluetoothDiscovery extends BluetoothDeviceDiscovery<MockBluetoot
   MockBluetoothDiscovery(super.manager);
   
   @override
-  Future<void> backendStart(String serviceUuid) {
+  Future<void> backendStart(List<String> serviceUuids) {
     throw UnimplementedError();
   }
   

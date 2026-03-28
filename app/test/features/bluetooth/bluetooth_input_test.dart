@@ -34,10 +34,10 @@ void main() {
     whenListen(bluetoothCubit, Stream<BluetoothState>.fromIterable([BluetoothStateReady()]),
       initialState: BluetoothStateReady());
     final deviceScanCubit = _MockDeviceScanCubit();
-    final devScanOk = DeviceSelected(MockBluetoothDevice(MockBluetoothManager(), 'tstDev'));
+    final bleReadCubit = _MockBleReadCubit();
+    final devScanOk = DeviceSelected(bleReadCubit);
     whenListen(deviceScanCubit, Stream<DeviceScanState>.fromIterable([devScanOk]),
       initialState: devScanOk);
-    final bleReadCubit = _MockBleReadCubit();
     final bleReadOk = BleReadSuccess(BleMeasurementData(
       systolic: 123,
       diastolic: 45,
@@ -54,7 +54,7 @@ void main() {
       onMeasurement: reads.add,
       bluetoothCubit: () => bluetoothCubit,
       deviceScanCubit: () => deviceScanCubit,
-      bleReadCubit: (device) => bleReadCubit,
+      bleReadCubit: () => bleReadCubit,
     )));
 
     await tester.tap(find.byType(ClosedBluetoothInput));
@@ -71,10 +71,10 @@ void main() {
     whenListen(bluetoothCubit, Stream<BluetoothState>.fromIterable([BluetoothStateReady()]),
       initialState: BluetoothStateReady());
     final deviceScanCubit = _MockDeviceScanCubit();
-    final devScanOk = DeviceSelected(MockBluetoothDevice(MockBluetoothManager(), 'tstDev'));
+    final bleReadCubit = _MockBleReadCubit();
+    final devScanOk = DeviceSelected(bleReadCubit);
     whenListen(deviceScanCubit, Stream<DeviceScanState>.fromIterable([devScanOk]),
       initialState: devScanOk);
-    final bleReadCubit = _MockBleReadCubit();
     final bleReadOk = BleReadSuccess(BleMeasurementData(
       systolic: 123,
       diastolic: 45,
@@ -91,7 +91,6 @@ void main() {
       onMeasurement: reads.add,
       bluetoothCubit: () => bluetoothCubit,
       deviceScanCubit: () => deviceScanCubit,
-      bleReadCubit: (device) => bleReadCubit,
     )));
 
     await tester.tap(find.byType(ClosedBluetoothInput));

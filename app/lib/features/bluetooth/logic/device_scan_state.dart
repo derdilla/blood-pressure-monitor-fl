@@ -13,10 +13,10 @@ class DeviceListLoading extends DeviceScanState {}
 /// A device has been selected, either automatically or by the user.
 class DeviceSelected extends DeviceScanState {
   /// Indicate that a device has been selected.
-  DeviceSelected(this.device);
+  DeviceSelected(this.readCubit);
 
   /// The selected device.
-  final BluetoothDevice device;
+  final BleReadCubit readCubit;
 }
 
 /// Multiple unrecognized devices.

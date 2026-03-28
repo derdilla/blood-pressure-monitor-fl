@@ -45,7 +45,7 @@ class BluetoothInput extends StatefulWidget {
   final DeviceScanCubit Function()? deviceScanCubit;
 
   /// Function to customize [BleReadCubit] creation.
-  final BleReadCubit Function(BluetoothDevice dev)? bleReadCubit;
+  final BleReadCubit Function()? bleReadCubit;
 
   @override
   State<BluetoothInput> createState() => _BluetoothInputState();
@@ -149,11 +149,6 @@ class _BluetoothInputState extends State<BluetoothInput> with TypeLogger {
 
   /// Build widget for 'adapter ready & discovering devices from bluetooth' state
   Widget _buildActive(BuildContext context) {
-    /// blood pressure service, see https://developer.nordicsemi.com/nRF51_SDK/nRF51_SDK_v4.x.x/doc/html/group___u_u_i_d___s_e_r_v_i_c_e_s.html
-    const String serviceUUID = '1810';
-    /// blood pressure characterisic, see https://developer.nordicsemi.com/nRF51_SDK/nRF51_SDK_v4.x.x/doc/html/group___u_u_i_d___c_h_a_r_a_c_t_e_r_i_s_t_i_c_s.html#ga95fc99c7a99cf9d991c81027e4866936
-    const String characteristicUUID = '2A35';
-
     _bluetoothSubscription = _bluetoothCubit.stream.listen((state) {
       if (state is BluetoothStateReady) {
         logger.finest('_bluetoothSubscription.listen: state=$state');
@@ -166,7 +161,7 @@ class _BluetoothInputState extends State<BluetoothInput> with TypeLogger {
     final settings = context.watch<Settings>();
     _deviceScanCubit ??= widget.deviceScanCubit?.call() ?? DeviceScanCubit(
       manager: widget.manager,
-      service: serviceUUID,
+      services: BleReadCubit.supportedServices,
       settings: settings,
     );
 
@@ -188,22 +183,18 @@ class _BluetoothInputState extends State<BluetoothInput> with TypeLogger {
             scanResults: [ state.device ],
             onAccepted: (dev) => _deviceScanCubit!.acceptDevice(dev),
           ),
-          DeviceSelected() => _buildReadDevice(state, serviceUUID: serviceUUID, characteristicUUID: characteristicUUID)
+          DeviceSelected() => _buildReadDevice(state)
         };
       },
     );
   }
 
   /// Build widget for 'reading characteristic value from bluetooth' state
-  Widget _buildReadDevice(DeviceSelected state, { required String serviceUUID, required String characteristicUUID }) {
+  Widget _buildReadDevice(DeviceSelected state) {
     logger.finer('_buildReadDevice: state: $state');
     return BlocConsumer<BleReadCubit, BleReadState>(
       bloc: () {
-        _deviceReadCubit = widget.bleReadCubit?.call(state.device) ?? BleReadCubit(
-          state.device,
-          characteristicUUID: characteristicUUID,
-          serviceUUID: serviceUUID,
-        );
+        _deviceReadCubit = widget.bleReadCubit?.call() ?? state.readCubit;
         return _deviceReadCubit;
       }(),
       listener: (BuildContext context, BleReadState state) {

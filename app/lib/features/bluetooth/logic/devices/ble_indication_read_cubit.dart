@@ -1,0 +1,145 @@
+// TODO: cleanup types
+// ignore_for_file: strict_raw_type
+
+import 'dart:async';
+
+import 'package:blood_pressure_app/features/bluetooth/logic/ble_read_cubit.dart';
+import 'package:blood_pressure_app/features/bluetooth/logic/characteristics/ble_measurement_data.dart';
+import 'package:blood_pressure_app/logging.dart';
+import 'package:flutter/foundation.dart';
+
+/// Logic for reading a characteristic from a device through a "indication".
+///
+/// For using this Cubit the flow is as follows:
+/// 1. Create a instance with the initial [BleReadInProgress] state
+/// 2. Wait for either a [BleReadFailure] or a [BleReadSuccess].
+///
+/// When a read failure is emitted, the only way to try again is to create a new
+/// cubit. This should be accompanied with reconnecting to the [device].
+///
+/// Internally the class performs multiple steps to successfully read data, if
+/// one of them fails the entire cubit fails:
+/// 1. Discover services
+/// 2. If the searched service is found read characteristics
+/// 3. If the searched characteristic is found read its value
+/// 4. If binary data is read decode it to object
+/// 5. Emit decoded object
+abstract class BleIndicationReadCubit extends BleReadCubit with TypeLogger {
+  /// TODO: make this class more generic by accepting a data decoder argument?
+
+  /// Start reading a characteristic from a device.
+  BleIndicationReadCubit(super.initialState, {
+    required super.device,
+    required this.serviceUUID,
+    required this.characteristicUUID,
+  })
+  {
+    takeMeasurement();
+
+    // start read timeout
+    _timeoutTimer = Timer(const Duration(minutes: 2), () {
+      if (state is BleReadInProgress) {
+        logger.finer('BleReadCubit timeout reached and still running');
+        emit(BleReadFailure('Timed out after 2 minutes'));
+      } else {
+        logger.finer('BleReadCubit timeout reached with state: $state, ${state is BleReadInProgress}');
+      }
+    });
+  }
+
+  /// UUID of the service to read.
+  final String serviceUUID;
+
+  /// UUID of the characteristic to read.
+  final String characteristicUUID;
+
+  late final Timer _timeoutTimer;
+
+  int _retryCount = 0;
+  final int _maxRetries = 3;
+
+  /// Take a 'measurement', i.e. read the blood pressure values from the given characteristicUUID
+  @override
+  Future<void> takeMeasurement() async {
+    final success = await device.connect(
+        onDisconnect: () {
+          if (_retryCount < _maxRetries) {
+            _retryCount++;
+            takeMeasurement();
+
+            logger.finer('BleReadCubit: retrying after device.onDisconnect called');
+            return true;
+          }
+
+          logger.finer('BleReadCubit: device.onDisconnect called');
+          emit(BleReadFailure('Device unexpectedly disconnected'));
+          return true;
+        },
+        onError: (Object err) => emit(BleReadFailure(err.toString()))
+    );
+    if (success) {
+      final uuidService = device.manager.createUuidFromString(serviceUUID);
+      final service = await device.getServiceByUuid(uuidService);
+      logger.finer('BleReadCubit: Found service: $service');
+      if (service == null) {
+        // TODO: add a BleReadUnsupported state
+        emit(BleReadFailure('Device does not provide the expected service with uuid $serviceUUID'));
+        return;
+      }
+
+      final uuidCharacteristic = device.manager.createUuidFromString(characteristicUUID);
+      final characteristic = await service.getCharacteristicByUuid(uuidCharacteristic);
+      logger.finer('BleReadCubit: Found characteristic: $characteristic');
+      if (characteristic == null) {
+        emit(BleReadFailure('Device does not provide the expected characteristic with uuid $characteristicUUID'));
+        return;
+      }
+
+      final List<Uint8List> data = [];
+      final success = await device.getCharacteristicValue(characteristic, (Uint8List value, [_]) => data.add(value));
+
+      logger.finer('BleReadCubit(success: $success): Got data: $data');
+      if (!success) {
+        emit(BleReadFailure('Could not retrieve characteristic value'));
+        return;
+      }
+
+      final List<BleMeasurementData> measurements = [];
+
+      for (final item in data) {
+        final decodedData = BleMeasurementData.decode(item, 0);
+        if (decodedData == null) {
+          logger.severe('BleReadCubit decoding failed', item);
+          emit(BleReadFailure('Could not decode data'));
+          return;
+        }
+
+        measurements.add(decodedData);
+      }
+
+      if (measurements.length > 1) {
+        logger.finer('BleReadMultiple decoded ${measurements.length} measurements');
+        emit(BleReadMultiple(measurements));
+      } else {
+        logger.finer('BleReadCubit decoded: ${measurements.first}');
+        emit(BleReadSuccess(measurements.first));
+      }
+    }
+  }
+
+  @override
+  Future<void> close() async {
+    logger.finer('BleReadCubit close');
+    _timeoutTimer.cancel();
+
+    await super.close();
+  }
+
+  /// Called after reading from a device returned multiple measurements and the
+  /// user chose which measurement they wanted to add.
+  @override
+  Future<void> useMeasurement(BleMeasurementData data) async {
+    assert(state is! BleReadSuccess);
+    emit(BleReadSuccess(data));
+  }
+}
