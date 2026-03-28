@@ -11,6 +11,4 @@ enum BluetoothBackend {
   bluetoothLowEnergy,
   /// Flutter Blue Plus backend
   flutterBluePlus,
-  /// Mock backend
-  mock;
 }

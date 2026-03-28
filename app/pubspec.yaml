@@ -32,7 +32,6 @@ dependencies:
     path: ../health_data_store/
   flutter_bloc: ^9.1.1
   bluetooth_low_energy: ^6.2.1
-  flutter_blue_plus: 1.36.8 # Can't update further: Starting from 2.0 the license gets weird
   archive: ^4.0.9
   file_picker: ^10.3.10
   app_settings: ^7.0.0

@@ -10,7 +10,6 @@ import 'package:blood_pressure_app/features/input/forms/form_switcher.dart';
 import 'package:blood_pressure_app/features/input/forms/medicine_intake_form.dart';
 import 'package:blood_pressure_app/features/input/forms/note_form.dart';
 import 'package:blood_pressure_app/features/input/forms/weight_form.dart';
-import 'package:blood_pressure_app/features/old_bluetooth/bluetooth_input.dart';
 import 'package:blood_pressure_app/l10n/app_localizations.dart';
 import 'package:blood_pressure_app/logging.dart';
 import 'package:blood_pressure_app/model/storage/bluetooth_input_mode.dart';
@@ -314,14 +313,6 @@ class AddEntryFormState extends FormStateBase<AddEntryFormValue, AddEntryForm>
           widget.mockBleInput!.call(_onExternalMeasurement),
         (() => switch (settings.bleInput) {
           BluetoothInputMode.disabled => SizedBox.shrink(),
-          BluetoothInputMode.oldBluetoothInput => OldBluetoothInput(
-            onMeasurement: _onExternalMeasurement,
-          ),
-          BluetoothInputMode.newBluetoothInputOldLib => BluetoothInput(
-            manager: BluetoothManager.create(BluetoothBackend.flutterBluePlus),
-            onMeasurement: _onExternalMeasurement,
-            bluetoothCubit: widget.bluetoothCubit,
-          ),
           BluetoothInputMode.newBluetoothInputCrossPlatform => BluetoothInput(
             manager: BluetoothManager.create(BluetoothBackend.bluetoothLowEnergy),
             onMeasurement: _onExternalMeasurement,

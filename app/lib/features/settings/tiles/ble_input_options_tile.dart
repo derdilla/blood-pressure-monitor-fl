@@ -16,7 +16,6 @@ class BleInputOptionsTile extends StatelessWidget {
   Widget build(BuildContext context) => RadioGroup<BluetoothInputMode>(
     groupValue: value,
     onChanged: onChanged,
-    // TODO: Write shorter texts per tile
     child: ExpansionTile(
       title: Text(AppLocalizations.of(context)!.bluetoothInput),
       leading: const Icon(Icons.bluetooth),
