@@ -30,6 +30,7 @@ Most devices provide 2 ways to retrieve measurements over bluetooth, but there a
 |HealthForYou by Silvercrest (Type SBM 69)|SBM69| 🔢 | ✅ | ✅ |
 |Omron X4 Smart|X4 Smart| 1️⃣ | ✅🗑️ | ✅ |
 |Omron X2 Smart+|X2 Smart+| 1️⃣ | ? | ? |
+|Omron Bronze BP5150|BLESmart_(long identifier string)| 1️⃣ | ? | ? |
 
 #### Legenda
 
