@@ -28,7 +28,7 @@ abstract class BluetoothDeviceDiscovery<BM extends BluetoothManager> with TypeLo
 
   /// Backend implementation to start discovering
   @protected
-  Future<void> backendStart(List<String> serviceUuids);
+  Future<void> backendStart();
 
   /// Backend implementation to stop discovering
   @protected

@@ -6,6 +6,7 @@ import 'dart:async';
 import 'package:blood_pressure_app/features/bluetooth/backend/bluetooth_backend.dart';
 import 'package:blood_pressure_app/features/bluetooth/logic/characteristics/ble_measurement_data.dart';
 import 'package:blood_pressure_app/features/bluetooth/logic/devices/ble_gatt_read_cubit.dart';
+import 'package:blood_pressure_app/features/bluetooth/logic/devices/yonker_read_cubit.dart';
 import 'package:blood_pressure_app/logging.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
@@ -27,6 +28,7 @@ abstract class BleReadCubit extends Cubit<BleReadState> with TypeLogger {
 
   static const supportedServices = [
     BleGattReadCubit.defaultServiceUUID,
+    YonkerReadCubit.defaultServiceUUID,
   ];
 
   /// Create instance that understands the device.
@@ -49,6 +51,10 @@ abstract class BleReadCubit extends Cubit<BleReadState> with TypeLogger {
       log.info('Found GATT service');
       return BleGattReadCubit(device: device);
     }
+
+    // FIXME: service only available after connection,
+    log.info('Found Yonker service');
+    return YonkerReadCubit(device: device);
 
     // ...
 
