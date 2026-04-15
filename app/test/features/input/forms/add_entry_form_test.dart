@@ -16,7 +16,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:health_data_store/health_data_store.dart';
 import 'package:intl/intl.dart';
 
-import '../../../model/analyzer_test.dart';
+import '../../../model/blood_pressure_analyzer_test.dart';
 import '../../../model/export_import/record_formatter_test.dart';
 import '../../../util.dart';
 import '../../measurement_list/measurement_list_entry_test.dart';

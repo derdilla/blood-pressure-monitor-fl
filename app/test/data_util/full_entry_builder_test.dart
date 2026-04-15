@@ -6,7 +6,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:health_data_store/health_data_store.dart';
 
 import '../features/measurement_list/measurement_list_entry_test.dart';
-import '../model/analyzer_test.dart';
+import '../model/blood_pressure_analyzer_test.dart';
 import '../util.dart';
 
 void main() {

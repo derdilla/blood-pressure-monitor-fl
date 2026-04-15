@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:provider/provider.dart';
 
-import '../../model/analyzer_test.dart';
+import '../../model/blood_pressure_analyzer_test.dart';
 import '../../util.dart';
 
 void main() {

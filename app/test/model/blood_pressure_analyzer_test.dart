@@ -92,6 +92,19 @@ void main() {
       expect(groups[i].count, 0);
     }
   });
+
+  test('Averages correctly with partial null values', () {
+    final records = [
+      mockRecord(sys: 1, dia: 1, pul: 1),
+      mockRecord(sys: null, dia: 1, pul: 1),
+      mockRecord(sys: 1, dia: null, pul: 1),
+      mockRecord(sys: 1, dia: 1, pul: null),
+    ];
+    final analyzer = BloodPressureAnalyzer(records);
+    expect(analyzer.avgSys?.mmHg, 1);
+    expect(analyzer.avgDia?.mmHg, 1);
+    expect(analyzer.avgPul, 1);
+  });
 }
 
 BloodPressureRecord mockRecordPos([
