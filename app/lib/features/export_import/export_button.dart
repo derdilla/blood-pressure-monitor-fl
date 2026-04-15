@@ -61,6 +61,7 @@ void performExport(BuildContext context, bool share) async { // TODO: extract
       final path = join(await getDatabasesPath(), 'bp.db');
       final data = await File(path).readAsBytes();
 
+      // https://mimetype.io/application/vnd.sqlite3
       if (context.mounted) await _exportData(context, data, '$filename.db', 'application/vnd.sqlite3', share);
       break;
     case ExportFormat.csv:
@@ -80,6 +81,7 @@ void performExport(BuildContext context, bool share) async { // TODO: extract
       final data = Uint8List.fromList(utf8.encode(csvString));
       if (context.mounted) {
         _logger.finer('performExport - Calling _exportData');
+        // https://www.rfc-editor.org/rfc/rfc7111
         await _exportData(context, data, '$filename.csv', 'text/csv', share);
       } else  {
         _logger.warning('performExport - No longer mounted: stopping export');
@@ -93,7 +95,8 @@ void performExport(BuildContext context, bool share) async { // TODO: extract
           Provider.of<ExportColumnsManager>(context, listen: false),
       );
       final pdf = await pdfConverter.create(await _getEntries(context));
-      if (context.mounted) await _exportData(context, pdf, '$filename.pdf', 'text/pdf', share);
+      // https://www.rfc-editor.org/rfc/rfc3778
+      if (context.mounted) await _exportData(context, pdf, '$filename.pdf', 'application/pdf', share);
       break;
     case ExportFormat.xsl:
       final excelExportSettings = Provider.of<ExcelExportSettings>(context,
