@@ -1,0 +1,7 @@
+builders:
+  member_count:
+    import: "package:settings_builder/generator.dart"
+    builder_factories: ["modelLibraryBuilder"]
+    build_extensions: {".dart": [".store.dart"]}
+    auto_apply: dependents
+    build_to: source
