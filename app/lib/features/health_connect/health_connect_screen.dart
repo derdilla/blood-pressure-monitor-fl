@@ -58,7 +58,7 @@ class _HealthConnectScreenState extends State<HealthConnectScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final settings = context.watch<HealthConnectSettingsStore>();
+    final settings = context.watch<HealthConnectSettings>();
     final localizations = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: AppBar(

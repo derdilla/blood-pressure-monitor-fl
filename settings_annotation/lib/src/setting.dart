@@ -15,7 +15,10 @@ class Setting<T> {
 
   Object? toMapValue() => value;
 
-  void fromMapValue(Object? value) => this.value = value as T;
+  void fromMapValue(Object? value) {
+      if (value == null) return;
+      this.value = value as T;
+  }
 
   /// Current data
   T value;

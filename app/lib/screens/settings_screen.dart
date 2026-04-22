@@ -198,7 +198,8 @@ class SettingsPage extends StatelessWidget {
                       messenger.showSnackBar(SnackBar(content: Text(localizations.errNotImportable)));
                       return;
                     }
-        
+
+                    // FIXME: update/ generate
                     settings.copyFrom(await loader.loadSettings());
                     exportSettings.copyFrom(await loader.loadExportSettings());
                     csvExportSettings.copyFrom(await loader.loadCsvExportSettings());

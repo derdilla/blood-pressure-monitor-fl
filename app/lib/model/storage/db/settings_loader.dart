@@ -1,8 +1,8 @@
 import 'package:blood_pressure_app/model/storage/export_columns_store.dart';
-import 'package:blood_pressure_app/model/storage/export_csv_settings_store.dart';
-import 'package:blood_pressure_app/model/storage/export_pdf_settings_store.dart';
+import 'package:blood_pressure_app/model/storage/export_csv_settings.dart';
+import 'package:blood_pressure_app/model/storage/export_pdf_settings.dart';
 import 'package:blood_pressure_app/model/storage/export_settings_store.dart';
-import 'package:blood_pressure_app/model/storage/export_xsl_settings_store.dart';
+import 'package:blood_pressure_app/model/storage/export_xsl_settings.dart';
 import 'package:blood_pressure_app/model/storage/interval_store.dart';
 import 'package:blood_pressure_app/model/storage/settings_store.dart';
 import 'package:blood_pressure_app/model/storage/health_connect_settings.dart';
@@ -71,5 +71,5 @@ abstract class SettingsLoader {
   /// created. Changes in the object will save to the automatically.
   ///
   /// Changes to the disk data will not propagate to the object.
-  Future<HealthConnectSettingsStore> loadHealthConnectSettingsStore();
+  Future<HealthConnectSettings> loadHealthConnectSettings();
 }

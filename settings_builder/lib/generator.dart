@@ -5,6 +5,9 @@ import 'package:build/build.dart';
 import 'package:settings_annotation/src/annotations.dart';
 import 'package:source_gen/source_gen.dart';
 
+
+// TODO: handle nested changeNotifiers
+
 Builder modelLibraryBuilder(BuilderOptions options) =>
     LibraryBuilder(ModelGenerator(), generatedExtension: '.store.dart');
 
@@ -24,11 +27,11 @@ class ModelGenerator extends Generator {
     if (classes.isEmpty) return null;
 
     final imports = <String>[];
-    imports.add("import 'dart:convert';");
-    imports.add("import 'package:flutter/foundation.dart';");
-    imports.add(
-      "import 'package:settings_annotation/settings_annotation.dart';",
-    );
+//    imports.add("import 'dart:convert';");
+//    imports.add("import 'package:flutter/foundation.dart';");
+//    imports.add(
+//      "import 'package:settings_annotation/settings_annotation.dart';",
+//    );
     imports.add("part of '${library.element.uri}';");
 
     final out = <String>[];
@@ -48,7 +51,7 @@ class ModelGenerator extends Generator {
       if (name.startsWith('_')) {
         name = name.substring(1, name.length);
       }
-      final newClassName = '${name}Store';
+      final newClassName = name;
       out.add(
         'class $newClassName with ChangeNotifier {',
       );

@@ -74,7 +74,7 @@ extension EntryUtils on BuildContext {
     try {
       final localizations = AppLocalizations.of(this)!;
       final settings = Provider.of<Settings>(this, listen: false);
-      final hcSettings = Provider.of<HealthConnectSettingsStore>(this, listen: false);
+      final hcSettings = Provider.of<HealthConnectSettings>(this, listen: false);
       final bpRepo = RepositoryProvider.of<BloodPressureRepository>(this);
       final noteRepo = RepositoryProvider.of<NoteRepository>(this);
       final intakeRepo = RepositoryProvider.of<MedicineIntakeRepository>(this);

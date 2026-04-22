@@ -5,7 +5,7 @@ import 'package:blood_pressure_app/model/export_import/column.dart';
 import 'package:blood_pressure_app/model/export_import/csv_converter.dart';
 import 'package:blood_pressure_app/model/export_import/csv_record_parsing_actor.dart';
 import 'package:blood_pressure_app/model/storage/export_columns_store.dart';
-import 'package:blood_pressure_app/model/storage/export_csv_settings_store.dart';
+import 'package:blood_pressure_app/model/storage/export_csv_settings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:health_data_store/health_data_store.dart';

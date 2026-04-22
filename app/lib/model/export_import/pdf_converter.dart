@@ -5,7 +5,7 @@ import 'dart:ui';
 import 'package:blood_pressure_app/l10n/app_localizations.dart';
 import 'package:blood_pressure_app/model/blood_pressure_analyzer.dart';
 import 'package:blood_pressure_app/model/storage/export_columns_store.dart';
-import 'package:blood_pressure_app/model/storage/export_pdf_settings_store.dart';
+import 'package:blood_pressure_app/model/storage/export_pdf_settings.dart';
 import 'package:blood_pressure_app/model/storage/settings_store.dart';
 import 'package:health_data_store/health_data_store.dart';
 import 'package:intl/intl.dart';

@@ -1,10 +1,10 @@
 import 'package:blood_pressure_app/model/storage/db/config_db.dart';
 import 'package:blood_pressure_app/model/storage/db/settings_loader.dart';
 import 'package:blood_pressure_app/model/storage/export_columns_store.dart';
-import 'package:blood_pressure_app/model/storage/export_csv_settings_store.dart';
-import 'package:blood_pressure_app/model/storage/export_pdf_settings_store.dart';
+import 'package:blood_pressure_app/model/storage/export_csv_settings.dart';
+import 'package:blood_pressure_app/model/storage/export_pdf_settings.dart';
 import 'package:blood_pressure_app/model/storage/export_settings_store.dart';
-import 'package:blood_pressure_app/model/storage/export_xsl_settings_store.dart';
+import 'package:blood_pressure_app/model/storage/export_xsl_settings.dart';
 import 'package:blood_pressure_app/model/storage/interval_store.dart';
 import 'package:blood_pressure_app/model/storage/settings_store.dart';
 import 'package:blood_pressure_app/model/storage/health_connect_settings.dart';
@@ -193,6 +193,6 @@ class ConfigDao implements SettingsLoader {
   Future<ExcelExportSettings> loadXslExportSettings() async =>
       ExcelExportSettings();
 
-  Future<HealthConnectSettingsStore> loadHealthConnectSettingsStore() async =>
-      HealthConnectSettingsStore();
+  Future<HealthConnectSettings> loadHealthConnectSettings() async =>
+      HealthConnectSettings();
 }

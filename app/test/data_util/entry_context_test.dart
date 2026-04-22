@@ -64,7 +64,7 @@ void main() {
 
     await tester.pumpWidget(materialApp(
       settings: Settings(confirmDeletion: false),
-      hcSettings: HealthConnectSettingsStore(
+      hcSettings: HealthConnectSettings(
         useHealthConnect: true,
         syncPressureMeasurements: true,
       ),

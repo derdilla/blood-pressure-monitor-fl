@@ -55,7 +55,7 @@ class WeightList extends StatelessWidget {
                   icon: Icon(Icons.delete),
                   onPressed: () async {
                     final repo = context.read<BodyweightRepository>();
-                    final hcSettings = context.read<HealthConnectSettingsStore>();
+                    final hcSettings = context.read<HealthConnectSettings>();
                     if ((!context.read<Settings>().confirmDeletion) || await showConfirmDeletionDialog(context)) {
                       await repo.remove(records[idx]);
                       if (hcSettings.useHealthConnect && hcSettings.syncWeightMeasurements){

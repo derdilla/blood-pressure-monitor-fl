@@ -17,7 +17,7 @@ void main() {
       await expectLater(loader.loadPdfExportSettings, returnsNormally);
       await expectLater(loader.loadIntervalStorageManager, returnsNormally);
       await expectLater(loader.loadExportColumnsManager, returnsNormally);
-      await expectLater(loader.loadHealthConnectSettingsStore, returnsNormally);
+      await expectLater(loader.loadHealthConnectSettings, returnsNormally);
     });
 
   });
@@ -56,9 +56,9 @@ void main() {
       final exportColumnsManager2 = await loader2.loadExportColumnsManager();
       expect(exportColumnsManager2.userColumns.keys, exportColumnsManager1.userColumns.keys);
 
-      final hcSettings1 = await loader1.loadHealthConnectSettingsStore();
+      final hcSettings1 = await loader1.loadHealthConnectSettings();
       hcSettings1.useHealthConnect = true;
-      final hvSettings2 = await loader2.loadHealthConnectSettingsStore();
+      final hvSettings2 = await loader2.loadHealthConnectSettings();
       expect(hvSettings2.useHealthConnect, hcSettings1.useHealthConnect);
     });
   });

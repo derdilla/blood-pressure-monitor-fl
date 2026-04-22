@@ -16,10 +16,9 @@
 /// Keeping data modular reduces the amount of data saved to the database and makes the purpose of a setting more clear.
 library;
 
-export 'common_settings_interfaces.dart';
 export 'db/config_dao.dart';
-export 'export_csv_settings_store.dart';
-export 'export_pdf_settings_store.dart';
+export 'export_csv_settings.dart';
+export 'export_pdf_settings.dart';
 export 'export_settings_store.dart';
 export 'health_connect_settings.dart';
 export 'interval_store.dart';
