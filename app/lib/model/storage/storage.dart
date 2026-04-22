@@ -21,7 +21,7 @@ export 'db/config_dao.dart';
 export 'export_csv_settings_store.dart';
 export 'export_pdf_settings_store.dart';
 export 'export_settings_store.dart';
-export 'health_connect_settings_store.dart';
+export 'health_connect_settings.dart';
 export 'interval_store.dart';
 export 'settings_store.dart';
 export 'update_legacy_settings.dart';

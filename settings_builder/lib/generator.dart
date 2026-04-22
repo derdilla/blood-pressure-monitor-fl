@@ -2,7 +2,7 @@ import 'package:analyzer/dart/element/element.dart';
 import 'package:analyzer/dart/element/nullability_suffix.dart';
 import 'package:analyzer/dart/element/type.dart';
 import 'package:build/build.dart';
-import 'package:settings_annotation/settings_annotation.dart';
+import 'package:settings_annotation/src/annotations.dart';
 import 'package:source_gen/source_gen.dart';
 
 Builder modelLibraryBuilder(BuilderOptions options) =>
@@ -15,19 +15,21 @@ class ModelGenerator extends Generator {
   Future<String?> generate(LibraryReader library, BuildStep buildStep) async {
     // Get the settings type exposed by this package
     final settingTypeLibrary = await buildStep.resolver
-        .libraryFor(AssetId.resolve(Uri.parse('package:flutter_settings_model_v2/src/setting.dart')));
+        .libraryFor(AssetId.resolve(Uri.parse('package:settings_annotation/src/setting.dart')));
     final settingType = settingTypeLibrary.exportNamespace.get2('Setting') as InterfaceElement;
 
     // Class analysis
     final generateSettingsTypeChecker = TypeChecker.typeNamed(GenerateSettings);
     final classes = library.annotatedWith(generateSettingsTypeChecker);
+    if (classes.isEmpty) return null;
 
     final imports = <String>[];
     imports.add("import 'dart:convert';");
     imports.add("import 'package:flutter/foundation.dart';");
     imports.add(
-      "import 'package:flutter_settings_model_v2/flutter_settings_model_v2.dart';",
+      "import 'package:settings_annotation/settings_annotation.dart';",
     );
+    imports.add("part of '${library.element.uri}';");
 
     final out = <String>[];
 
@@ -38,13 +40,13 @@ class ModelGenerator extends Generator {
       if (!classElement.isConstructable) {
         throw "Can't instantiate class ${classElement.name}";
       }
-      
-      imports.add("import '${classElement.library.uri}';");
-
 
       String name = classElement.name!;
       if (name.endsWith('Spec')) {
         name = name.substring(0, name.length - 4);
+      }
+      if (name.startsWith('_')) {
+        name = name.substring(1, name.length);
       }
       final newClassName = '${name}Store';
       out.add(
