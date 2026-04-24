@@ -9,13 +9,13 @@ enum PressureUnit {
   /// Kilo Pascal
   kPa;
 
-  /// Encodes the pressure unit to [decode]able value.
-  int encode() => switch(this) {
+  /// Create a [PressureUnit.deserialize]able number.
+  int get serialized => switch(this) {
     PressureUnit.mmHg => 0,
     PressureUnit.kPa => 1,
   };
   /// Decodes a pressure unit from an [encode]d value.
-  static PressureUnit? decode(int? encoded) => switch(encoded) {
+  static PressureUnit? deserialize(int? encoded) => switch(encoded) {
     0 => PressureUnit.mmHg,
     1 => PressureUnit.kPa,
     _ => null,

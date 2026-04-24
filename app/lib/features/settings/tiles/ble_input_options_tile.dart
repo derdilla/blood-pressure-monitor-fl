@@ -1,5 +1,5 @@
 import 'package:blood_pressure_app/l10n/app_localizations.dart';
-import 'package:blood_pressure_app/model/storage/bluetooth_input_mode.dart';
+import 'package:blood_pressure_app/model/bluetooth_input_mode.dart';
 import 'package:flutter/material.dart';
 
 class BleInputOptionsTile extends StatelessWidget {

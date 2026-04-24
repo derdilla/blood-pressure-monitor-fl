@@ -50,7 +50,7 @@ class _AppState extends State<App> with TypeLogger {
   ExcelExportSettings? _xslExportSettings;
   IntervalStoreManager? _intervalStorageManager;
   ExportColumnsManager? _exportColumnsManager;
-  HealthConnectSettings? _HealthConnectSettings;
+  HealthConnectSettings? _healthConnectSettings;
 
   @override
   void dispose() {
@@ -63,7 +63,7 @@ class _AppState extends State<App> with TypeLogger {
     _xslExportSettings?.dispose();
     _intervalStorageManager?.dispose();
     _exportColumnsManager?.dispose();
-    _HealthConnectSettings?.dispose();
+    _healthConnectSettings?.dispose();
     super.dispose();
   }
 
@@ -103,7 +103,7 @@ class _AppState extends State<App> with TypeLogger {
       _xslExportSettings ??= await settingsLoader.loadXslExportSettings();
       _intervalStorageManager ??= await settingsLoader.loadIntervalStorageManager();
       _exportColumnsManager ??= await settingsLoader.loadExportColumnsManager();
-      _HealthConnectSettings ??= await settingsLoader.loadHealthConnectSettings();
+      _healthConnectSettings ??= await settingsLoader.loadHealthConnectSettings();
     } catch (e, stack) {
       await ErrorReporting.reportCriticalError('Error loading settings from files', '$e\n$stack',);
     }
@@ -166,22 +166,22 @@ class _AppState extends State<App> with TypeLogger {
     }
     
     // Sync with health-connect API
-    if (_HealthConnectSettings!.useHealthConnect
-        && _HealthConnectSettings!.syncOnAppStart) {
-      if (_HealthConnectSettings!.syncPressureMeasurements) {
+    if (_healthConnectSettings!.useHealthConnect
+        && _healthConnectSettings!.syncOnAppStart) {
+      if (_healthConnectSettings!.syncPressureMeasurements) {
         logger.info('Syncing blood pressure measurements');
         await BPSyncModel(bpRepo: bpRepo, health: Health()).sync();
       }
-      if (_HealthConnectSettings!.syncWeightMeasurements) {
+      if (_healthConnectSettings!.syncWeightMeasurements) {
         logger.info('Syncing weight measurements');
         await WeightSyncModel(weightRepo: weightRepo, health: Health()).sync();
       }
     }
 
     // Register listeners that sync on new measurements
-    if (_HealthConnectSettings!.useHealthConnect) {
+    if (_healthConnectSettings!.useHealthConnect) {
       final health = Health();
-      if (_HealthConnectSettings!.syncWeightMeasurements) {
+      if (_healthConnectSettings!.syncWeightMeasurements) {
         weightRepo.subscribe().listen((record) async {
           if (record != null) {
             final canWrite = await health.requestPermissionsIfMissing(
@@ -198,7 +198,7 @@ class _AppState extends State<App> with TypeLogger {
           }
         });
       }
-      if (_HealthConnectSettings!.syncPressureMeasurements) {
+      if (_healthConnectSettings!.syncPressureMeasurements) {
         bpRepo.subscribe().listen((record) async {
           if (record?.sys != null && record?.dia != null) {
             final canWrite = await health.requestPermissionsIfMissing(
@@ -237,7 +237,7 @@ class _AppState extends State<App> with TypeLogger {
           ChangeNotifierProvider.value(value: _xslExportSettings!),
           ChangeNotifierProvider.value(value: _intervalStorageManager!),
           ChangeNotifierProvider.value(value: _exportColumnsManager!),
-          ChangeNotifierProvider.value(value: _HealthConnectSettings!),
+          ChangeNotifierProvider.value(value: _healthConnectSettings!),
         ],
         child: _buildAppRoot(),
       ),
