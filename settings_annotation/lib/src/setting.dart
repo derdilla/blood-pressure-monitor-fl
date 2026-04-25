@@ -1,6 +1,6 @@
 import 'package:flutter/widgets.dart';
 
-class Setting<T> {
+class Setting<T> with ChangeNotifier {
   Setting({
     /// Initial value.
     required T initialValue,
@@ -8,7 +8,7 @@ class Setting<T> {
     this.titleBuilder,
     this.descriptionBuilder,
     this.iconBuilder,
-  }) : value = initialValue;
+  }) : _value = initialValue;
 
   /// For serialization
   final String? name;
@@ -20,20 +20,18 @@ class Setting<T> {
       this.value = value as T;
   }
 
-  /// Current data
-  T value;
+  T _value;
+
+  /// Current value.
+  T get value => _value;
+  set value(T newValue) {
+    _value = newValue;
+    notifyListeners();
+  }
 
   final String? Function(BuildContext context)? titleBuilder;
 
   final String? Function(BuildContext context)? descriptionBuilder;
 
   final Widget? Function(BuildContext context)? iconBuilder;
-}
-
-extension BoolToSetting on bool {
-  Setting<bool> toSetting() => Setting(initialValue: this);
-}
-
-extension BoolOptToSetting on bool? {
-  Setting<bool?> toSetting() => Setting(initialValue: this);
 }

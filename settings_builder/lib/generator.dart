@@ -21,25 +21,21 @@ class ModelGenerator extends Generator {
         .libraryFor(AssetId.resolve(Uri.parse('package:settings_annotation/src/setting.dart')));
     final settingType = settingTypeLibrary.exportNamespace.get2('Setting') as InterfaceElement;
 
+    final flutterFoundationLibrary = await buildStep.resolver
+        .libraryFor(AssetId.resolve(Uri.parse('package:flutter/foundation.dart')));
+    final changeNotifierType = flutterFoundationLibrary.exportNamespace.get2('ChangeNotifier') as InterfaceElement;
+
     // Class analysis
     final generateSettingsTypeChecker = TypeChecker.typeNamed(GenerateSettings);
     final classes = library.annotatedWith(generateSettingsTypeChecker);
     if (classes.isEmpty) return null;
 
-    final imports = <String>[];
-//    imports.add("import 'dart:convert';");
-//    imports.add("import 'package:flutter/foundation.dart';");
-//    imports.add(
-//      "import 'package:settings_annotation/settings_annotation.dart';",
-//    );
-    imports.add("part of '${library.element.uri}';");
-
-    final out = <String>[];
+    final out = <String>["part of '${library.element.uri}';"];
 
     for (final annotatedClassElement in classes) {
       assert(annotatedClassElement.element.kind == ElementKind.CLASS);
       final classElement = annotatedClassElement.element as ClassElement;
-      
+
       if (!classElement.isConstructable) {
         throw "Can't instantiate class ${classElement.name}";
       }
@@ -70,6 +66,8 @@ class ModelGenerator extends Generator {
         final innerType = instanceType.typeArguments.first;
         final varName = fieldFragment.name!;
         final comment = fieldFragment.documentationComment;
+        final isChangeNotifier = fieldFragment.type
+            .asInstanceOf(changeNotifierType) != null;
 
         classVariables.add(
           _Variable(
@@ -77,6 +75,7 @@ class ModelGenerator extends Generator {
             outerType: outerType,
             name: varName,
             comment: comment,
+            isChangeNotifier: isChangeNotifier,
           ),
         );
       }
@@ -90,6 +89,7 @@ class ModelGenerator extends Generator {
       out.add('final defaultValues = ${classElement.name}();');
       for (final v in classVariables) {
         out.add('_${v.name} = defaultValues.${v.name};');
+        out.add('_${v.name}.addListener(notifyListeners);');
         out.add('if (${v.name} != null) _${v.name}.value = ${v.name};');
       }
       out.add('}');
@@ -108,7 +108,8 @@ class ModelGenerator extends Generator {
       out.add('}');
       out.add('');
 
-      out.add('''/// Create a instance from a [String] created by [toJson].
+      out.add('''
+      /// Create a instance from a [String] created by [toJson].
       factory $newClassName.fromJson(String json) {
         try {
           return $newClassName.fromMap(jsonDecode(json));
@@ -116,7 +117,8 @@ class ModelGenerator extends Generator {
           assert(e is FormatException || e is TypeError);
           return $newClassName();
         }
-      }''');
+      }
+      ''');
       out.add('');
 
       // serialization
@@ -136,8 +138,8 @@ class ModelGenerator extends Generator {
       out.add('/// Copy all values from another instance.');
       out.add('void copyFrom($newClassName other) {');
       for (final v in classVariables) {
-        // TODO: serialize special types
-        out.add("_${v.name} = other._${v.name};");
+        // TODO: clone special types
+        out.add('_${v.name} = other._${v.name};');
       }
       out.add('notifyListeners();');
       out.add('}');
@@ -145,6 +147,15 @@ class ModelGenerator extends Generator {
 
       out.add('/// Reset all fields to their default values.');
       out.add('void reset() => copyFrom($newClassName());');
+      out.add('');
+
+      out.add('@override');
+      out.add('void dispose() {');
+      for (final v in classVariables) {
+        out.add('_${v.name}.dispose();');
+      }
+      out.add('super.dispose();');
+      out.add('}');
       out.add('');
 
 
@@ -155,12 +166,7 @@ class ModelGenerator extends Generator {
           out.add('${v.comment}');
         }
         out.add('${v.innerType} get ${v.name} => _${v.name}.value;');
-        out.add(
-          'set ${v.name}(${v.innerType} v) {\n'
-              '_${v.name}.value = v;\n'
-              'notifyListeners();\n'
-              '}',
-        );
+        out.add('set ${v.name}(${v.innerType} v) => _${v.name}.value = v;');
         out.add('');
       }
 
@@ -174,9 +180,6 @@ class ModelGenerator extends Generator {
       out.add('}'); // class $nameImpl
     }
 
-    imports.add('');
-    out.insert(0, imports.join('\n'));
-
     return out.join('\n');
   }
 }
@@ -187,6 +190,7 @@ class _Variable {
     required this.outerType,
     required this.name,
     required this.comment,
+    required this.isChangeNotifier,
   });
 
   /// Type of the stored value.
@@ -198,6 +202,8 @@ class _Variable {
   final String name;
 
   final String? comment;
+
+  final bool isChangeNotifier;
 
   String get nullableType =>
       '$innerType'

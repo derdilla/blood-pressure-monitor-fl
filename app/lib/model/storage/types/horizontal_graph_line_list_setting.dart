@@ -12,7 +12,7 @@ class HorizontalGraphLineListSetting extends Setting<List<HorizontalGraphLine>> 
   @override
   void fromMapValue(Object? value) => super.fromMapValue(
       ConvertUtil.parseList<String>(value)
-          .map(jsonDecode)
-          .map(HorizontalGraphLine.fromJson)
+          ?.map(jsonDecode)
+          .map((v) => HorizontalGraphLine.fromJson(v))
           .toList());
 }

@@ -101,14 +101,14 @@ class _SettingsSpec extends ChangeNotifier {
   /// Whether to use the compact list with swipe deletion.
   final compactList = Setting<bool>(
     name: 'useLegacyList',
-    intialValue: false,
+    initialValue: false,
   );
 
   /// The width the color of measurements should have on the graph.
-  final needlePinBarWidth = Setting<double>(intialValue: 5);
+  final needlePinBarWidth = Setting<double>(initialValue: 5);
 
   /// Whether to put the app bar in dialogs at the bottom of the screen.
-  final bottomAppBars = Setting<bool>(intialValue: false);
+  final bottomAppBars = Setting<bool>(initialValue: false);
 
   /// Preferred unit to display and enter measurements in.
   final Setting<PressureUnit> preferredPressureUnit = PressureUnitSetting(

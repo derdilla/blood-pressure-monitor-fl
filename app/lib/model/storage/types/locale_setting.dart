@@ -9,5 +9,5 @@ class LocaleSetting extends Setting<Locale?> {
   Object? toMapValue() => ConvertUtil.serializeLocale(value);
 
   @override
-  void fromMapValue(Object? value) => this.value = ConvertUtil.parseLocale(value));
+  void fromMapValue(Object? value) => this.value = ConvertUtil.parseLocale(value);
 }
