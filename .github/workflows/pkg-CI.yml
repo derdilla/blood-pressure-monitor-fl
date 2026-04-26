@@ -45,6 +45,22 @@ jobs:
       with:
         name: health_data_store-coverage
         path: health_data_store/coverage.lcov
+  test-settings_annotation:
+    runs-on: ubuntu-slim
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+        with:
+          sparse-checkout: |
+            settings_annotation
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          cache: true
+      - name: Disable analytics
+        run: flutter config --no-analytics --suppress-analytics
+      - run: flutter test
+        working-directory: ./settings_annotation
   analyze:
     runs-on: ubuntu-slim
     strategy:

@@ -2,7 +2,6 @@ import 'package:flutter/widgets.dart';
 
 class Setting<T> with ChangeNotifier {
   Setting({
-    /// Initial value.
     required T initialValue,
     this.name,
     this.titleBuilder,

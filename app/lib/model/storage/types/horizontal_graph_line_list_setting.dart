@@ -2,6 +2,7 @@ import 'package:settings_annotation/settings_annotation.dart';
 import '../convert_util.dart';
 import 'package:blood_pressure_app/model/horizontal_graph_line.dart';
 import 'dart:convert';
+import 'dart:collection';
 
 class HorizontalGraphLineListSetting extends Setting<List<HorizontalGraphLine>> {
   HorizontalGraphLineListSetting({required super.initialValue});
@@ -15,4 +16,7 @@ class HorizontalGraphLineListSetting extends Setting<List<HorizontalGraphLine>> 
           ?.map(jsonDecode)
           .map((v) => HorizontalGraphLine.fromJson(v))
           .toList());
+
+  @override
+  List<HorizontalGraphLine> get value => UnmodifiableListView(super.value);
 }

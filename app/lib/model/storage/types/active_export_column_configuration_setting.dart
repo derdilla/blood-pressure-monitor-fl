@@ -1,7 +1,7 @@
 import 'package:settings_annotation/settings_annotation.dart';
 import 'package:blood_pressure_app/model/export_import/export_configuration.dart';
 
-class ActiveExportColumnConfigurationSetting extends Setting<ActiveExportColumnConfiguration> {
+class ActiveExportColumnConfigurationSetting extends DeepSetting<ActiveExportColumnConfiguration> {
   ActiveExportColumnConfigurationSetting({required super.initialValue});
 
   @override
