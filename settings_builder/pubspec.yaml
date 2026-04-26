@@ -1,7 +1,7 @@
 name: settings_builder
-description: "A new Flutter package project."
+description: "Typesafe settings builder for Blood Pressure Monitor."
 version: 0.0.1
-homepage:
+publish_to: none
 
 environment:
   sdk: ^3.11.3

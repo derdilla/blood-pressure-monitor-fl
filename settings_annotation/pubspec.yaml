@@ -1,7 +1,7 @@
 name: settings_annotation
-description: "A new Flutter package project."
+description: "Types for building typesafe settings for Blood Pressure Monitor."
 version: 0.0.1
-homepage:
+publish_to: none
 
 environment:
   sdk: ^3.11.3

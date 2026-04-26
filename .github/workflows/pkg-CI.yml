@@ -11,14 +11,12 @@ on:
 
 jobs:
   test-health_data_store:
-    name: '🧪 Test'
     runs-on: ubuntu-latest
  
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
       with:
-        # ensures there are no unexpected directories needed
         sparse-checkout: |
           health_data_store
     - name: Setup dart
@@ -47,3 +45,20 @@ jobs:
       with:
         name: health_data_store-coverage
         path: health_data_store/coverage.lcov
+  analyze:
+    runs-on: ubuntu-slim
+    strategy:
+      matrix:
+        component: [settings_annotation, settings_builder]
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+        with:
+          sparse-checkout: |
+            ${{ matrix.package }}
+      - name: Analyze
+        run: dart analyze
+        working-directory: ./${{ matrix.package }}
+      - name: Format
+        run: dart format --output show --set-exit-if-changed
+        working-directory: ./${{ matrix.package }}
