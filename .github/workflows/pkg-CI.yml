@@ -21,6 +21,12 @@ jobs:
       settings_annotation: ${{ steps.filter.outputs.settings_annotation }}
       health_data_store: ${{ steps.filter.outputs.health_data_store }}
     steps:
+      - uses: actions/checkout@v6
+        with:
+          sparse-checkout: |
+            health_data_store
+            settings_annotation
+            settings_builder
       - uses: dorny/paths-filter@v4
         id: filter
         with:
