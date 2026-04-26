@@ -5,20 +5,15 @@ publish_to: none
 
 environment:
   sdk: ^3.11.3
-  flutter: ">=1.17.0"
 
 dependencies:
   analyzer: ^10.0.1
   build: ^4.0.5
-  flutter:
-    sdk: flutter
   source_gen: ^4.2.2
   settings_annotation:
     path: ../settings_annotation
 
 dev_dependencies:
-  flutter_test:
-    sdk: flutter
-  flutter_lints: ^6.0.0
+  lints: ^6.0.0
 
 flutter:

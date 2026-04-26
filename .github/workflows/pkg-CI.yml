@@ -78,12 +78,6 @@ jobs:
     needs: changes
     if: ${{ needs.changes.outputs.settings_annotation == 'true' }}
     steps:
-      - uses: dorny/paths-filter@v4
-        id: filter
-        with:
-          filters: |
-            annotation:
-              - 'settings_annotation/**'
       - name: Checkout code
         uses: actions/checkout@v6
         with:

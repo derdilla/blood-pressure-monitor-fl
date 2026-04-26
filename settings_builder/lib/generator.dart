@@ -2,7 +2,7 @@ import 'package:analyzer/dart/element/element.dart';
 import 'package:analyzer/dart/element/nullability_suffix.dart';
 import 'package:analyzer/dart/element/type.dart';
 import 'package:build/build.dart';
-import 'package:settings_annotation/src/annotations.dart';
+import 'package:settings_annotation/annotations.dart';
 import 'package:source_gen/source_gen.dart';
 
 
@@ -196,7 +196,7 @@ class _Variable {
   /// Type of the stored value.
   final DartType innerType;
 
-  /// Type of the [Setting] object storing the value.
+  /// Type of the `Setting` object storing the value.
   final DartType outerType;
 
   final String name;

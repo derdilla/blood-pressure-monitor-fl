@@ -14,7 +14,7 @@ enum PressureUnit {
     PressureUnit.mmHg => 0,
     PressureUnit.kPa => 1,
   };
-  /// Decodes a pressure unit from an [encode]d value.
+  /// Decodes a pressure unit from an [serialized] value.
   static PressureUnit? deserialize(int? encoded) => switch(encoded) {
     0 => PressureUnit.mmHg,
     1 => PressureUnit.kPa,

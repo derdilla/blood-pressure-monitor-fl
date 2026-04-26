@@ -82,8 +82,6 @@ class _ExportWarnBannerState extends State<ExportWarnBanner> {
       case ExportFormat.xsl:
         return _buildNotImportable(context);
     }
-
-    return _buildNotImportable(context);
   }
 
   /// Exports made with this configuration are importable.

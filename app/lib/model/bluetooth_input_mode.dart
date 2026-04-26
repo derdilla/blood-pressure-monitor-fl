@@ -19,7 +19,7 @@ enum BluetoothInputMode {
     BluetoothInputMode.newBluetoothInputCrossPlatform => 3,
   };
 
-  /// Try to create an object from [serialize]d form.
+  /// Try to create an object from [serialized] form.
   static BluetoothInputMode? deserialize(int? value) => switch (value) {
     0 => BluetoothInputMode.disabled,
     1 => BluetoothInputMode.oldBluetoothInput,
