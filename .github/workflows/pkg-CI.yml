@@ -109,6 +109,7 @@ jobs:
         with:
           sdk: stable
       - run: dart pub get
+        working-directory: ./${{ matrix.component }}
       - run: dart analyze
         working-directory: ./${{ matrix.component }}
       - name: Format
