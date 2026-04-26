@@ -103,14 +103,14 @@ jobs:
         uses: actions/checkout@v6
         with:
           sparse-checkout: |
-            ${{ matrix.package }}
+            ${{ matrix.component }}
       - name: Setup dart
         uses: dart-lang/setup-dart@v1
         with:
           sdk: stable
       - name: Analyze
         run: dart analyze
-        working-directory: ./${{ matrix.package }}
+        working-directory: ./${{ matrix.component }}
       - name: Format
         run: dart format --output show --set-exit-if-changed
-        working-directory: ./${{ matrix.package }}
+        working-directory: ./${{ matrix.component }}
