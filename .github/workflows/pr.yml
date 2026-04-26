@@ -36,6 +36,10 @@ jobs:
         with:
           sparse-checkout: |
             ${{ matrix.package }}
+      - name: Setup dart
+        uses: dart-lang/setup-dart@v1
+        with:
+          sdk: stable
       - name: Analyze
         run: dart analyze
         working-directory: ./${{ matrix.package }}

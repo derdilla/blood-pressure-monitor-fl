@@ -6,13 +6,35 @@ on:
       - 'main'
     paths:
       - "health_data_store/**"
+      - "settings_builder/**"
+      - "settings_annotation/**"
       - ".github/workflows/pkg-CI.yml"
   workflow_dispatch:
 
 jobs:
+  changes:
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: read
+    outputs:
+      settings_builder: ${{ steps.filter.outputs.settings_builder }}
+      settings_annotation: ${{ steps.filter.outputs.settings_annotation }}
+      health_data_store: ${{ steps.filter.outputs.health_data_store }}
+    steps:
+      - uses: dorny/paths-filter@v4
+        id: filter
+        with:
+          filters: |
+            settings_builder:
+              - 'settings_builder/**'
+            settings_annotation:
+              - 'settings_annotation/**'
+            health_data_store:
+              - 'health_data_store/**'
   test-health_data_store:
     runs-on: ubuntu-latest
- 
+    needs: changes
+    if: ${{ needs.changes.outputs.health_data_store == 'true' }}
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
@@ -47,7 +69,15 @@ jobs:
         path: health_data_store/coverage.lcov
   test-settings_annotation:
     runs-on: ubuntu-slim
+    needs: changes
+    if: ${{ needs.changes.outputs.settings_annotation == 'true' }}
     steps:
+      - uses: dorny/paths-filter@v4
+        id: filter
+        with:
+          filters: |
+            annotation:
+              - 'settings_annotation/**'
       - name: Checkout code
         uses: actions/checkout@v6
         with:
@@ -63,6 +93,8 @@ jobs:
         working-directory: ./settings_annotation
   analyze:
     runs-on: ubuntu-slim
+    needs: changes
+    if: ${{ needs.changes.outputs.settings_annotation == 'true' || needs.changes.outputs.settings_builder == 'true' }}
     strategy:
       matrix:
         component: [settings_annotation, settings_builder]
@@ -72,6 +104,10 @@ jobs:
         with:
           sparse-checkout: |
             ${{ matrix.package }}
+      - name: Setup dart
+        uses: dart-lang/setup-dart@v1
+        with:
+          sdk: stable
       - name: Analyze
         run: dart analyze
         working-directory: ./${{ matrix.package }}
