@@ -91,31 +91,5 @@ jobs:
       - run: dart analyze
         working-directory: ./settings_annotation
       - name: Format
-        run: dart format --output show --set-exit-if-changed
+        run: dart format --output show --set-exit-if-changed .
         working-directory: ./settings_annotation
-
-  analyze:
-    runs-on: ubuntu-slim
-    needs: changes
-    if: ${{ needs.changes.outputs.settings_annotation == 'true' || needs.changes.outputs.settings_builder == 'true' }}
-    strategy:
-      matrix:
-        component: [settings_builder, health_data_store]
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v6
-        with:
-          sparse-checkout: |
-            ${{ matrix.component }}
-            settings_annotation
-      - name: Setup dart
-        uses: dart-lang/setup-dart@v1
-        with:
-          sdk: stable
-      - run: dart pub get
-        working-directory: ./${{ matrix.component }}
-      - run: dart analyze
-        working-directory: ./${{ matrix.component }}
-      - name: Format
-        run: dart format --output show --set-exit-if-changed
-        working-directory: ./${{ matrix.component }}

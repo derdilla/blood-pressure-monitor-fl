@@ -25,5 +25,4 @@ class DeepSetting<T extends ChangeNotifier> extends Setting<T> {
     newValue.addListener(notifyListeners);
     super.value = newValue;
   }
-
 }

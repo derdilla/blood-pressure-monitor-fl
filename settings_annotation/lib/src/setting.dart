@@ -15,8 +15,8 @@ class Setting<T> with ChangeNotifier {
   Object? toMapValue() => value;
 
   void fromMapValue(Object? value) {
-      if (value == null) return;
-      this.value = value as T;
+    if (value == null) return;
+    this.value = value as T;
   }
 
   T _value;
