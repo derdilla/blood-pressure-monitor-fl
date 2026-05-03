@@ -107,6 +107,7 @@ jobs:
         with:
           sparse-checkout: |
             ${{ matrix.component }}
+            settings_annotation
       - name: Setup dart
         uses: dart-lang/setup-dart@v1
         with:
