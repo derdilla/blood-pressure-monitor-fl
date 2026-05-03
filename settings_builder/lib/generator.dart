@@ -5,9 +5,6 @@ import 'package:build/build.dart';
 import 'package:settings_annotation/annotations.dart';
 import 'package:source_gen/source_gen.dart';
 
-
-// TODO: handle nested changeNotifiers
-
 Builder modelLibraryBuilder(BuilderOptions options) =>
     LibraryBuilder(ModelGenerator(), generatedExtension: '.store.dart');
 
@@ -135,11 +132,10 @@ class ModelGenerator extends Generator {
       out.add('');
 
       // helpers
-      out.add('/// Copy all values from another instance.');
+      out.add('/// Shallow copy all values from another instance.');
       out.add('void copyFrom($newClassName other) {');
       for (final v in classVariables) {
-        // TODO: clone special types
-        out.add('_${v.name} = other._${v.name};');
+        out.add('_${v.name}.value = other._${v.name}.value;');
       }
       out.add('notifyListeners();');
       out.add('}');
