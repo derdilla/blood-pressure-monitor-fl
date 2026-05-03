@@ -55,7 +55,7 @@ void main() {
   testWidgets('respects compact list setting', (tester) async {
     await binding.setSurfaceSize(const Size(400, 800));
 
-    final s = Settings(useLegacyList: false);
+    final s = Settings(compactList: false);
     await tester.pumpWidget(await appBaseWithData(const AppHome(), settings: s));
     await tester.pumpAndSettle();
 

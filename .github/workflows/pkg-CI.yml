@@ -61,9 +61,6 @@ jobs:
     - name: Generate code
       run: dart run build_runner build
       working-directory: ./health_data_store
-    - name: Analyze code
-      run: dart analyze
-      working-directory: ./health_data_store
     - name: Run tests
       run: |
         dart test --coverage=coverage
@@ -91,13 +88,19 @@ jobs:
         run: flutter config --no-analytics --suppress-analytics
       - run: flutter test
         working-directory: ./settings_annotation
+      - run: dart analyze
+        working-directory: ./settings_annotation
+      - name: Format
+        run: dart format --output show --set-exit-if-changed
+        working-directory: ./settings_annotation
+
   analyze:
     runs-on: ubuntu-slim
     needs: changes
     if: ${{ needs.changes.outputs.settings_annotation == 'true' || needs.changes.outputs.settings_builder == 'true' }}
     strategy:
       matrix:
-        component: [settings_annotation, settings_builder]
+        component: [settings_builder, health_data_store]
     steps:
       - name: Checkout code
         uses: actions/checkout@v6
