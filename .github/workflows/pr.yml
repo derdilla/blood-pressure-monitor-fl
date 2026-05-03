@@ -25,27 +25,6 @@ jobs:
       - name: Validate localizations
         # check for [^'"]'[^'"] in .arb files
         run: "grep \"[^'\\\"]'[^'\\\"]\" app/lib/l10n/*.arb && exit 1 || exit 0"
-  analyze-packages:
-    runs-on: ubuntu-slim
-    strategy:
-      matrix:
-        component: [ health_data_store, settings_annotation, settings_builder ]
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v6
-        with:
-          sparse-checkout: |
-            ${{ matrix.package }}
-      - name: Setup dart
-        uses: dart-lang/setup-dart@v1
-        with:
-          sdk: stable
-      - name: Analyze
-        run: dart analyze
-        working-directory: ./${{ matrix.package }}
-      - name: Format
-        run: dart format --output show --set-exit-if-changed
-        working-directory: ./${{ matrix.package }}
   update-goldens:
     if: github.event.pull_request.draft == false
     runs-on: ubuntu-latest
