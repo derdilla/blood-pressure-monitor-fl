@@ -1,7 +1,7 @@
 import 'dart:math';
 
 import 'package:blood_pressure_app/features/statistics/clock_bp_graph.dart';
-import 'package:blood_pressure_app/model/storage/settings_store.dart';
+import 'package:blood_pressure_app/model/storage/settings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:provider/provider.dart';

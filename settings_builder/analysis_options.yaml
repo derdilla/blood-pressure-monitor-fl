@@ -1,0 +1,32 @@
+include: package:lints/recommended.yaml
+
+linter:
+  rules:
+    - always_use_package_imports
+    - comment_references
+    - unawaited_futures
+    - always_declare_return_types
+    - avoid_annotating_with_dynamic
+    - avoid_escaping_inner_quotes
+    - directives_ordering
+    - eol_at_end_of_file
+    - leading_newlines_in_multiline_strings
+    - matching_super_parameters
+    - noop_primitive_operations
+    - prefer_asserts_in_initializer_lists
+    - prefer_expression_function_bodies
+    - prefer_final_in_for_each
+    - prefer_final_locals
+    - prefer_if_elements_to_conditional_expressions
+    - prefer_single_quotes
+    - type_annotate_public_apis
+    - unnecessary_await_in_return
+    - unnecessary_lambdas
+    - unnecessary_null_aware_operator_on_extension_on_nullable
+    - use_to_and_as_if_applicable
+
+analyzer:
+  language:
+    strict-inference: true
+    strict-raw-types: true
+    strict-casts: true

@@ -9,11 +9,13 @@ on:
     paths:
       - "app/**"
       - "health_data_store/**"
+      - "settings_annotation/**"
+      - "settings_builder/**"
       - "pr.yml"
 
 jobs:
   validate-localizations:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-slim
     steps:
       - name: Checkout PR code
         uses: actions/checkout@v6
@@ -34,6 +36,11 @@ jobs:
         uses: actions/checkout@v4
         with:
           ref: ${{ github.head_ref }}
+          sparse-checkout: |
+            app
+            health_data_store
+            settings_annotation
+            settings_builder
       - name: Cache generated health data store
         id: cache-generated
         uses: actions/cache@v4
@@ -60,9 +67,12 @@ jobs:
       - name: Update app dependencies
         run: flutter pub get
         working-directory: app
-      # TODO: cache using non-generated dart files in the test dir as key
+        # no efficient caching possible
+      - name: Generate settings code
+        run: dart run build_runner build --build-filter "lib/model/storage/*.dart"
+        working-directory: app
       - name: Generate app mock code
-        run: flutter pub run build_runner build
+        run: dart run build_runner build --build-filter "test/**/*.dart"
         working-directory: app
       - name: Analyze code
         run: flutter analyze
@@ -94,10 +104,12 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
-          # ensures there are no unexpected directories needed
+          ref: ${{ github.head_ref }}
           sparse-checkout: |
             app
             health_data_store
+            settings_annotation
+            settings_builder
       - name: Cache generated health data store
         id: cache-generated
         uses: actions/cache@v4
@@ -124,9 +136,12 @@ jobs:
       - name: Update app dependencies
         run: flutter pub get
         working-directory: app
-      # TODO: cache using non-generated dart files in the test dir as key
+        # no efficient caching possible
+      - name: Generate settings code
+        run: dart run build_runner build --build-filter "lib/model/storage/*.dart"
+        working-directory: app
       - name: Generate app mock code
-        run: flutter pub run build_runner build
+        run: dart run build_runner build --build-filter "test/**/*.dart"
         working-directory: app
       - name: Run tests
         run: flutter test --coverage
@@ -138,10 +153,12 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
-          # ensures there are no unexpected directories needed
+          ref: ${{ github.head_ref }}
           sparse-checkout: |
             app
             health_data_store
+            settings_annotation
+            settings_builder
       - name: Cache generated health data store
         id: cache-generated
         uses: actions/cache@v4
@@ -171,6 +188,10 @@ jobs:
         run: flutter config --no-analytics --suppress-analytics
       - name: Update app dependencies
         run: flutter pub get
+        working-directory: app
+        # no efficient caching possible
+      - name: Generate settings code
+        run: dart run build_runner build --build-filter "lib/model/storage/*.dart"
         working-directory: app
       - name: Build
         run: flutter build apk --debug --flavor=github

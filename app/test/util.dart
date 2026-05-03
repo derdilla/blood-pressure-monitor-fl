@@ -15,14 +15,14 @@ Widget materialApp(Widget child, {
   ExportSettings? exportSettings,
   CsvExportSettings? csvExportSettings,
   PdfExportSettings? pdfExportSettings,
-  HealthConnectSettingsStore? hcSettings,
+  HealthConnectSettings? hcSettings,
   IntervalStoreManager? intervallStoreManager,
 }) {
   settings ??= Settings();
   exportSettings ??= ExportSettings();
   csvExportSettings ??= CsvExportSettings();
   pdfExportSettings ??= PdfExportSettings();
-  hcSettings ??= HealthConnectSettingsStore();
+  hcSettings ??= HealthConnectSettings();
   intervallStoreManager ??= IntervalStoreManager(IntervalStorage(), IntervalStorage(), IntervalStorage());
   return MultiProvider(
     providers: [

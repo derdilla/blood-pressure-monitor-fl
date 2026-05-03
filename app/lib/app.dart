@@ -9,7 +9,6 @@ import 'package:blood_pressure_app/logging.dart';
 import 'package:blood_pressure_app/model/storage/db/file_settings_loader.dart';
 import 'package:blood_pressure_app/model/storage/db/settings_loader.dart';
 import 'package:blood_pressure_app/model/storage/export_columns_store.dart';
-import 'package:blood_pressure_app/model/storage/export_xsl_settings_store.dart';
 import 'package:blood_pressure_app/model/storage/storage.dart';
 import 'package:blood_pressure_app/screens/error_reporting_screen.dart';
 import 'package:blood_pressure_app/screens/home_screen.dart';
@@ -50,7 +49,7 @@ class _AppState extends State<App> with TypeLogger {
   ExcelExportSettings? _xslExportSettings;
   IntervalStoreManager? _intervalStorageManager;
   ExportColumnsManager? _exportColumnsManager;
-  HealthConnectSettingsStore? _healthConnectSettingsStore;
+  HealthConnectSettings? _healthConnectSettings;
 
   @override
   void dispose() {
@@ -63,7 +62,7 @@ class _AppState extends State<App> with TypeLogger {
     _xslExportSettings?.dispose();
     _intervalStorageManager?.dispose();
     _exportColumnsManager?.dispose();
-    _healthConnectSettingsStore?.dispose();
+    _healthConnectSettings?.dispose();
     super.dispose();
   }
 
@@ -103,7 +102,7 @@ class _AppState extends State<App> with TypeLogger {
       _xslExportSettings ??= await settingsLoader.loadXslExportSettings();
       _intervalStorageManager ??= await settingsLoader.loadIntervalStorageManager();
       _exportColumnsManager ??= await settingsLoader.loadExportColumnsManager();
-      _healthConnectSettingsStore ??= await settingsLoader.loadHealthConnectSettingsStore();
+      _healthConnectSettings ??= await settingsLoader.loadHealthConnectSettings();
     } catch (e, stack) {
       await ErrorReporting.reportCriticalError('Error loading settings from files', '$e\n$stack',);
     }
@@ -166,22 +165,22 @@ class _AppState extends State<App> with TypeLogger {
     }
     
     // Sync with health-connect API
-    if (_healthConnectSettingsStore!.useHealthConnect
-        && _healthConnectSettingsStore!.syncOnAppStart) {
-      if (_healthConnectSettingsStore!.syncPressureMeasurements) {
+    if (_healthConnectSettings!.useHealthConnect
+        && _healthConnectSettings!.syncOnAppStart) {
+      if (_healthConnectSettings!.syncPressureMeasurements) {
         logger.info('Syncing blood pressure measurements');
         await BPSyncModel(bpRepo: bpRepo, health: Health()).sync();
       }
-      if (_healthConnectSettingsStore!.syncWeightMeasurements) {
+      if (_healthConnectSettings!.syncWeightMeasurements) {
         logger.info('Syncing weight measurements');
         await WeightSyncModel(weightRepo: weightRepo, health: Health()).sync();
       }
     }
 
     // Register listeners that sync on new measurements
-    if (_healthConnectSettingsStore!.useHealthConnect) {
+    if (_healthConnectSettings!.useHealthConnect) {
       final health = Health();
-      if (_healthConnectSettingsStore!.syncWeightMeasurements) {
+      if (_healthConnectSettings!.syncWeightMeasurements) {
         weightRepo.subscribe().listen((record) async {
           if (record != null) {
             final canWrite = await health.requestPermissionsIfMissing(
@@ -198,7 +197,7 @@ class _AppState extends State<App> with TypeLogger {
           }
         });
       }
-      if (_healthConnectSettingsStore!.syncPressureMeasurements) {
+      if (_healthConnectSettings!.syncPressureMeasurements) {
         bpRepo.subscribe().listen((record) async {
           if (record?.sys != null && record?.dia != null) {
             final canWrite = await health.requestPermissionsIfMissing(
@@ -237,7 +236,7 @@ class _AppState extends State<App> with TypeLogger {
           ChangeNotifierProvider.value(value: _xslExportSettings!),
           ChangeNotifierProvider.value(value: _intervalStorageManager!),
           ChangeNotifierProvider.value(value: _exportColumnsManager!),
-          ChangeNotifierProvider.value(value: _healthConnectSettingsStore!),
+          ChangeNotifierProvider.value(value: _healthConnectSettings!),
         ],
         child: _buildAppRoot(),
       ),

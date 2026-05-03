@@ -4,13 +4,13 @@ import 'dart:io';
 import 'package:archive/archive_io.dart';
 import 'package:blood_pressure_app/model/storage/db/settings_loader.dart';
 import 'package:blood_pressure_app/model/storage/export_columns_store.dart';
-import 'package:blood_pressure_app/model/storage/export_csv_settings_store.dart';
-import 'package:blood_pressure_app/model/storage/export_pdf_settings_store.dart';
-import 'package:blood_pressure_app/model/storage/export_settings_store.dart';
-import 'package:blood_pressure_app/model/storage/export_xsl_settings_store.dart';
+import 'package:blood_pressure_app/model/storage/export_csv_settings.dart';
+import 'package:blood_pressure_app/model/storage/export_pdf_settings.dart';
+import 'package:blood_pressure_app/model/storage/export_settings.dart';
+import 'package:blood_pressure_app/model/storage/export_xsl_settings.dart';
 import 'package:blood_pressure_app/model/storage/interval_store.dart';
-import 'package:blood_pressure_app/model/storage/settings_store.dart';
-import 'package:blood_pressure_app/model/storage/health_connect_settings_store.dart';
+import 'package:blood_pressure_app/model/storage/settings.dart';
+import 'package:blood_pressure_app/model/storage/health_connect_settings.dart';
 import 'package:flutter/widgets.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
@@ -124,10 +124,10 @@ class FileSettingsLoader implements SettingsLoader {
   );
 
   @override
-  Future<HealthConnectSettingsStore> loadHealthConnectSettingsStore() async => _loadFile(
+  Future<HealthConnectSettings> loadHealthConnectSettings() async => _loadFile(
     'health_connect',
-    HealthConnectSettingsStore.fromJson,
-    HealthConnectSettingsStore.new,
+    HealthConnectSettings.fromJson,
+    HealthConnectSettings.new,
     (e) => e.toJson(),
   );
 

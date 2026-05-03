@@ -3,12 +3,11 @@ import 'package:blood_pressure_app/features/settings/tiles/dropdown_list_tile.da
 import 'package:blood_pressure_app/l10n/app_localizations.dart';
 import 'package:blood_pressure_app/model/export_import/column.dart';
 import 'package:blood_pressure_app/model/export_import/export_configuration.dart';
-import 'package:blood_pressure_app/model/storage/common_settings_interfaces.dart';
 import 'package:blood_pressure_app/model/storage/export_columns_store.dart';
-import 'package:blood_pressure_app/model/storage/export_csv_settings_store.dart';
-import 'package:blood_pressure_app/model/storage/export_pdf_settings_store.dart';
-import 'package:blood_pressure_app/model/storage/export_settings_store.dart';
-import 'package:blood_pressure_app/model/storage/export_xsl_settings_store.dart';
+import 'package:blood_pressure_app/model/storage/export_csv_settings.dart';
+import 'package:blood_pressure_app/model/storage/export_pdf_settings.dart';
+import 'package:blood_pressure_app/model/storage/export_xsl_settings.dart';
+import 'package:blood_pressure_app/model/storage/types/export_format_setting.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -22,15 +21,20 @@ class ActiveExportFieldCustomization extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => switch (format) {
-    ExportFormat.csv => Consumer<CsvExportSettings>(builder: _builder),
-    ExportFormat.pdf => Consumer<PdfExportSettings>(builder: _builder),
-    ExportFormat.xsl => Consumer<ExcelExportSettings>(builder: _builder),
+    ExportFormat.csv => Consumer<CsvExportSettings>(
+      builder: (context, settings, _) => _builder(context, settings.exportFieldsConfiguration),
+    ),
+    ExportFormat.pdf => Consumer<PdfExportSettings>(
+      builder: (context, settings, _) => _builder(context, settings.exportFieldsConfiguration),
+    ),
+    ExportFormat.xsl => Consumer<ExcelExportSettings>(
+      builder: (context, settings, _) => _builder(context, settings.exportFieldsConfiguration),
+    ),
     ExportFormat.db => const SizedBox.shrink()
   };
 
-  Widget _builder(BuildContext context, CustomFieldsSettings settings, Widget? child) {
+  Widget _builder(BuildContext context, ActiveExportColumnConfiguration fieldsConfig) {
     final localizations = AppLocalizations.of(context)!;
-    final fieldsConfig = settings.exportFieldsConfiguration;
     final dropdown = DropDownListTile(
       title: Text(localizations.exportFieldsPreset),
       value: fieldsConfig.activePreset,

@@ -3,7 +3,7 @@ import 'package:blood_pressure_app/model/export_import/column.dart';
 import 'package:blood_pressure_app/model/export_import/import_field_type.dart' show RowDataFieldType;
 import 'package:blood_pressure_app/model/export_import/record_parsing_result.dart';
 import 'package:blood_pressure_app/model/storage/export_columns_store.dart';
-import 'package:blood_pressure_app/model/storage/export_csv_settings_store.dart';
+import 'package:blood_pressure_app/model/storage/export_csv_settings.dart';
 import 'package:collection/collection.dart';
 import 'package:csv/csv.dart';
 import 'package:health_data_store/health_data_store.dart';

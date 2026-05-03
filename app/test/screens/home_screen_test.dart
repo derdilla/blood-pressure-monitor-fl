@@ -3,7 +3,7 @@ import 'package:blood_pressure_app/features/home/navigation_action_buttons.dart'
 import 'package:blood_pressure_app/features/measurement_list/compact_measurement_list.dart';
 import 'package:blood_pressure_app/features/measurement_list/measurement_list.dart';
 import 'package:blood_pressure_app/features/statistics/value_graph.dart';
-import 'package:blood_pressure_app/model/storage/settings_store.dart';
+import 'package:blood_pressure_app/model/storage/settings.dart';
 import 'package:blood_pressure_app/screens/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -55,7 +55,7 @@ void main() {
   testWidgets('respects compact list setting', (tester) async {
     await binding.setSurfaceSize(const Size(400, 800));
 
-    final s = Settings(useLegacyList: false);
+    final s = Settings(compactList: false);
     await tester.pumpWidget(await appBaseWithData(const AppHome(), settings: s));
     await tester.pumpAndSettle();
 

@@ -30,6 +30,8 @@ dependencies:
   url_launcher: ^6.3.2
   health_data_store:
     path: ../health_data_store/
+  settings_annotation:
+    path: ../settings_annotation
   flutter_bloc: ^9.1.1
   bluetooth_low_energy: ^6.2.1
   flutter_blue_plus: 1.36.8 # Can't update further: Starting from 2.0 the license gets weird
@@ -58,6 +60,8 @@ dev_dependencies:
   translations_cleaner: ^0.1.1
   build_runner: ^2.13.0
   bloc_test: ^10.0.0
+  settings_builder:
+    path: ../settings_builder
 
 flutter:
   uses-material-design: true

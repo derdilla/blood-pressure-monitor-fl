@@ -1,5 +1,5 @@
 import 'package:blood_pressure_app/model/storage/export_columns_store.dart';
-import 'package:blood_pressure_app/model/storage/export_xsl_settings_store.dart';
+import 'package:blood_pressure_app/model/storage/export_xsl_settings.dart';
 import 'package:health_data_store/health_data_store.dart';
 
 /// Utility class to convert [FullEntry]s to xsl files.

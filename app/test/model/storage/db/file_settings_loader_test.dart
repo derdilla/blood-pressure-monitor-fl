@@ -3,10 +3,11 @@ import 'dart:io';
 
 import 'package:blood_pressure_app/model/export_import/column.dart';
 import 'package:blood_pressure_app/model/storage/db/file_settings_loader.dart';
-import 'package:blood_pressure_app/model/storage/export_settings_store.dart';
+import 'package:blood_pressure_app/model/storage/export_settings.dart';
 import 'package:blood_pressure_app/model/storage/interval_store.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:blood_pressure_app/model/storage/types/export_format_setting.dart';
 
 void main() {
   test('constructs new objects', () async {
@@ -17,7 +18,7 @@ void main() {
       await expectLater(loader.loadPdfExportSettings, returnsNormally);
       await expectLater(loader.loadIntervalStorageManager, returnsNormally);
       await expectLater(loader.loadExportColumnsManager, returnsNormally);
-      await expectLater(loader.loadHealthConnectSettingsStore, returnsNormally);
+      await expectLater(loader.loadHealthConnectSettings, returnsNormally);
     });
 
   });
@@ -56,9 +57,9 @@ void main() {
       final exportColumnsManager2 = await loader2.loadExportColumnsManager();
       expect(exportColumnsManager2.userColumns.keys, exportColumnsManager1.userColumns.keys);
 
-      final hcSettings1 = await loader1.loadHealthConnectSettingsStore();
+      final hcSettings1 = await loader1.loadHealthConnectSettings();
       hcSettings1.useHealthConnect = true;
-      final hvSettings2 = await loader2.loadHealthConnectSettingsStore();
+      final hvSettings2 = await loader2.loadHealthConnectSettings();
       expect(hvSettings2.useHealthConnect, hcSettings1.useHealthConnect);
     });
   });

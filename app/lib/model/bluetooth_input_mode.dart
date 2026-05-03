@@ -11,15 +11,15 @@ enum BluetoothInputMode {
   /// The new bluetooth input with bluetooth_low_energy backend.
   newBluetoothInputCrossPlatform;
 
-  /// Turn object into [deserialize]able number.
-  int serialize() => switch(this) {
+  /// Create a [BluetoothInputMode.deserialize]able number.
+  int get serialized => switch(this) {
     BluetoothInputMode.disabled => 0,
     BluetoothInputMode.oldBluetoothInput => 1,
     BluetoothInputMode.newBluetoothInputOldLib => 2,
     BluetoothInputMode.newBluetoothInputCrossPlatform => 3,
   };
 
-  /// Try to create an object from [serialize]d form.
+  /// Try to create an object from [serialized] form.
   static BluetoothInputMode? deserialize(int? value) => switch (value) {
     0 => BluetoothInputMode.disabled,
     1 => BluetoothInputMode.oldBluetoothInput,
