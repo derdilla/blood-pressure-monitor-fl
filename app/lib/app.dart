@@ -9,7 +9,6 @@ import 'package:blood_pressure_app/logging.dart';
 import 'package:blood_pressure_app/model/storage/db/file_settings_loader.dart';
 import 'package:blood_pressure_app/model/storage/db/settings_loader.dart';
 import 'package:blood_pressure_app/model/storage/export_columns_store.dart';
-import 'package:blood_pressure_app/model/storage/export_xsl_settings.dart';
 import 'package:blood_pressure_app/model/storage/storage.dart';
 import 'package:blood_pressure_app/screens/error_reporting_screen.dart';
 import 'package:blood_pressure_app/screens/home_screen.dart';
