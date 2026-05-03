@@ -1,12 +1,9 @@
-import 'dart:collection';
 import 'dart:convert';
 
-import 'package:blood_pressure_app/config.dart';
 import 'package:blood_pressure_app/features/bluetooth/logic/device_scan_cubit.dart';
 import 'package:blood_pressure_app/model/blood_pressure/pressure_unit.dart';
-import 'package:blood_pressure_app/model/horizontal_graph_line.dart';
 import 'package:blood_pressure_app/model/bluetooth_input_mode.dart';
-import 'package:blood_pressure_app/model/storage/convert_util.dart';
+import 'package:blood_pressure_app/model/horizontal_graph_line.dart';
 import 'package:blood_pressure_app/model/storage/types/bluetooth_input_mode_setting.dart';
 import 'package:blood_pressure_app/model/storage/types/color_setting.dart';
 import 'package:blood_pressure_app/model/storage/types/horizontal_graph_line_list_setting.dart';
@@ -17,7 +14,6 @@ import 'package:blood_pressure_app/model/storage/types/theme_mode_setting.dart';
 import 'package:blood_pressure_app/model/storage/types/weight_unit_setting.dart';
 import 'package:blood_pressure_app/model/weight_unit.dart';
 import 'package:flutter/material.dart';
-
 import 'package:settings_annotation/settings_annotation.dart';
 
 part 'settings.store.dart';
@@ -81,7 +77,8 @@ class _SettingsSpec extends ChangeNotifier {
   final confirmDeletion = Setting<bool>(initialValue: true);
 
   /// What color theme the whole app should use.
-  final Setting<ThemeMode> themeMode = ThemeModeSetting(initialValue: ThemeMode.system);
+  final Setting<ThemeMode> themeMode =
+      ThemeModeSetting(initialValue: ThemeMode.system);
 
   /// Whether to run any validators on values inputted on add measurement page.
   final validateInputs = Setting<bool>(initialValue: true);
@@ -123,12 +120,10 @@ class _SettingsSpec extends ChangeNotifier {
   /// Whether to show weight related features.
   final weightInput = Setting<bool>(initialValue: false);
 
-
   /// Bluetooth devices that previously connected.
   ///
   /// The exact value that is stored here is determined in [DeviceScanCubit].
-  final Setting<List<String>> knownBleDev = StringListSetting(
-      initialValue: []);
+  final Setting<List<String>> knownBleDev = StringListSetting(initialValue: []);
 
   /// Preferred unit for bodyweight.
   final Setting<WeightUnit> weightUnit = WeightUnitSetting(

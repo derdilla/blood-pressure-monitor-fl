@@ -30,18 +30,12 @@ enum ExportFormat {
     final int? intValue = ConvertUtil.parseInt(value);
     if (value == null || intValue == null) return ExportFormat.csv;
 
-    switch(intValue) {
-      case 0:
-        return ExportFormat.csv;
-      case 1:
-        return ExportFormat.pdf;
-      case 2:
-        return ExportFormat.db;
-      case 3:
-        return ExportFormat.xsl;
-      default:
-        assert(false);
-        return ExportFormat.csv;
-    }
+    return switch(intValue) {
+      0 => ExportFormat.csv,
+      1 => ExportFormat.pdf,
+      2 => ExportFormat.db,
+      3 => ExportFormat.xsl,
+      _ => ExportFormat.csv,
+    };
   }
 }

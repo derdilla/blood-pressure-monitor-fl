@@ -165,6 +165,8 @@ class SettingsPage extends StatelessWidget {
                     final exportSettings = context.read<ExportSettings>();
                     final csvExportSettings = context.read<CsvExportSettings>();
                     final pdfExportSettings = context.read<PdfExportSettings>();
+                    final xslExportSettings = context.read<ExcelExportSettings>();
+                    final healthConnectSettings = context.read<HealthConnectSettings>();
                     final intervalStoreManager = context.read<IntervalStoreManager>();
                     final exportColumnsManager = context.read<ExportColumnsManager>();
                     final result = await FilePicker.platform.pickFiles();
@@ -177,7 +179,7 @@ class SettingsPage extends StatelessWidget {
                       messenger.showSnackBar(SnackBar(content: Text(localizations.errCantReadFile)));
                       return;
                     }
-        
+
                     late SettingsLoader loader;
                     if (path.endsWith('db')) {
                       final configDB = await ConfigDB.open(dbPath: path, isFullPath: true);
@@ -199,14 +201,15 @@ class SettingsPage extends StatelessWidget {
                       return;
                     }
 
-                    // FIXME: update/ generate
                     settings.copyFrom(await loader.loadSettings());
                     exportSettings.copyFrom(await loader.loadExportSettings());
                     csvExportSettings.copyFrom(await loader.loadCsvExportSettings());
                     pdfExportSettings.copyFrom(await loader.loadPdfExportSettings());
+                    xslExportSettings.copyFrom(await loader.loadXslExportSettings());
+                    healthConnectSettings.copyFrom(await loader.loadHealthConnectSettings());
                     intervalStoreManager.copyFrom(await loader.loadIntervalStorageManager());
                     exportColumnsManager.copyFrom(await loader.loadExportColumnsManager());
-        
+
                     messenger.showSnackBar(SnackBar(content: Text(localizations.success(localizations.importSettings))));
                   },
                 ),
