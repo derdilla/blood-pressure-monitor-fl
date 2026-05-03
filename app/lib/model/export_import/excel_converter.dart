@@ -1,10 +1,10 @@
 import 'package:blood_pressure_app/model/storage/export_columns_store.dart';
-import 'package:blood_pressure_app/model/storage/export_xsl_settings.dart';
+import 'package:blood_pressure_app/model/storage/export_xls_settings.dart';
 import 'package:health_data_store/health_data_store.dart';
 
-/// Utility class to convert [FullEntry]s to xsl files.
+/// Utility class to convert [FullEntry]s to xls files.
 class ExcelConverter {
-  /// Initialize object to convert [FullEntry]s to xsl files.
+  /// Initialize object to convert [FullEntry]s to xls files.
   ExcelConverter(this.settings, this.availableColumns, this.availableMedicines);
 
   /// Settings that apply for exports.

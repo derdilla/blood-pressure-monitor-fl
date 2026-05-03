@@ -165,7 +165,7 @@ class SettingsPage extends StatelessWidget {
                     final exportSettings = context.read<ExportSettings>();
                     final csvExportSettings = context.read<CsvExportSettings>();
                     final pdfExportSettings = context.read<PdfExportSettings>();
-                    final xslExportSettings = context.read<ExcelExportSettings>();
+                    final xlsExportSettings = context.read<ExcelExportSettings>();
                     final healthConnectSettings = context.read<HealthConnectSettings>();
                     final intervalStoreManager = context.read<IntervalStoreManager>();
                     final exportColumnsManager = context.read<ExportColumnsManager>();
@@ -205,7 +205,7 @@ class SettingsPage extends StatelessWidget {
                     exportSettings.copyFrom(await loader.loadExportSettings());
                     csvExportSettings.copyFrom(await loader.loadCsvExportSettings());
                     pdfExportSettings.copyFrom(await loader.loadPdfExportSettings());
-                    xslExportSettings.copyFrom(await loader.loadXslExportSettings());
+                    xlsExportSettings.copyFrom(await loader.loadXlsExportSettings());
                     healthConnectSettings.copyFrom(await loader.loadHealthConnectSettings());
                     intervalStoreManager.copyFrom(await loader.loadIntervalStorageManager());
                     exportColumnsManager.copyFrom(await loader.loadExportColumnsManager());

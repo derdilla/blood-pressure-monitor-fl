@@ -569,8 +569,8 @@
     "@btnShare": {},
     "exportSuccess": "Esportazione riuscita",
     "@exportSuccess": {},
-    "xsl": "Excel (xsl)",
-    "@xsl": {},
+    "xls": "Excel (xls)",
+    "@xls": {},
     "reset": "Reimposta",
     "@reset": {}
 }

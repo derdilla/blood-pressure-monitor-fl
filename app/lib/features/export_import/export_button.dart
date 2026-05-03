@@ -12,7 +12,7 @@ import 'package:blood_pressure_app/model/storage/export_columns_store.dart';
 import 'package:blood_pressure_app/model/storage/export_csv_settings.dart';
 import 'package:blood_pressure_app/model/storage/export_pdf_settings.dart';
 import 'package:blood_pressure_app/model/storage/export_settings.dart';
-import 'package:blood_pressure_app/model/storage/export_xsl_settings.dart';
+import 'package:blood_pressure_app/model/storage/export_xls_settings.dart';
 import 'package:blood_pressure_app/model/storage/interval_store.dart';
 import 'package:blood_pressure_app/model/storage/settings.dart';
 import 'package:blood_pressure_app/model/storage/types/export_format_setting.dart';
@@ -99,20 +99,20 @@ void performExport(BuildContext context, bool share) async { // TODO: extract
       // https://www.rfc-editor.org/rfc/rfc3778
       if (context.mounted) await _exportData(context, pdf, '$filename.pdf', 'application/pdf', share);
       break;
-    case ExportFormat.xsl:
+    case ExportFormat.xls:
       final excelExportSettings = Provider.of<ExcelExportSettings>(context,
           listen: false);
       final exportColumnsManager = Provider.of<ExportColumnsManager>(context,
           listen: false);
-      final xslConverter = ExcelConverter(
+      final xlsConverter = ExcelConverter(
         excelExportSettings,
         exportColumnsManager,
         await RepositoryProvider.of<MedicineRepository>(context).getAll(),
       );
       if (!context.mounted) return;
-      final string = xslConverter.create(await _getEntries(context));
+      final string = xlsConverter.create(await _getEntries(context));
       final data = Uint8List.fromList(utf8.encode(string));
-      if (context.mounted) await _exportData(context, data, '$filename.xsl', 'application/vnd.ms-excel', share);
+      if (context.mounted) await _exportData(context, data, '$filename.xls', 'application/vnd.ms-excel', share);
       break;
   }
 
