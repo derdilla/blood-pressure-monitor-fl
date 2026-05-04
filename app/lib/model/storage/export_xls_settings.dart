@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:settings_annotation/settings_annotation.dart';
 import 'types/active_export_column_configuration_setting.dart';
 
-part 'export_xsl_settings.store.dart';
+part 'export_xls_settings.store.dart';
 
 @GenerateSettings()
 class _ExcelExportSettingsSpec {

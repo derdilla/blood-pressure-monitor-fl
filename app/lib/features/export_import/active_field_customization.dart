@@ -6,7 +6,7 @@ import 'package:blood_pressure_app/model/export_import/export_configuration.dart
 import 'package:blood_pressure_app/model/storage/export_columns_store.dart';
 import 'package:blood_pressure_app/model/storage/export_csv_settings.dart';
 import 'package:blood_pressure_app/model/storage/export_pdf_settings.dart';
-import 'package:blood_pressure_app/model/storage/export_xsl_settings.dart';
+import 'package:blood_pressure_app/model/storage/export_xls_settings.dart';
 import 'package:blood_pressure_app/model/storage/types/export_format_setting.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -27,7 +27,7 @@ class ActiveExportFieldCustomization extends StatelessWidget {
     ExportFormat.pdf => Consumer<PdfExportSettings>(
       builder: (context, settings, _) => _builder(context, settings.exportFieldsConfiguration),
     ),
-    ExportFormat.xsl => Consumer<ExcelExportSettings>(
+    ExportFormat.xls => Consumer<ExcelExportSettings>(
       builder: (context, settings, _) => _builder(context, settings.exportFieldsConfiguration),
     ),
     ExportFormat.db => const SizedBox.shrink()

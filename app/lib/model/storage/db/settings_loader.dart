@@ -2,7 +2,7 @@ import 'package:blood_pressure_app/model/storage/export_columns_store.dart';
 import 'package:blood_pressure_app/model/storage/export_csv_settings.dart';
 import 'package:blood_pressure_app/model/storage/export_pdf_settings.dart';
 import 'package:blood_pressure_app/model/storage/export_settings.dart';
-import 'package:blood_pressure_app/model/storage/export_xsl_settings.dart';
+import 'package:blood_pressure_app/model/storage/export_xls_settings.dart';
 import 'package:blood_pressure_app/model/storage/interval_store.dart';
 import 'package:blood_pressure_app/model/storage/settings.dart';
 import 'package:blood_pressure_app/model/storage/health_connect_settings.dart';
@@ -63,7 +63,7 @@ abstract class SettingsLoader {
   /// created. Changes in the object will save to the automatically.
   ///
   /// Changes to the disk data will not propagate to the object.
-  Future<ExcelExportSettings> loadXslExportSettings();
+  Future<ExcelExportSettings> loadXlsExportSettings();
 
   /// Loads the profiles [ExcelExportSettings] object from disk.
   ///

@@ -46,7 +46,7 @@ class _AppState extends State<App> with TypeLogger {
   ExportSettings? _exportSettings;
   CsvExportSettings? _csvExportSettings;
   PdfExportSettings? _pdfExportSettings;
-  ExcelExportSettings? _xslExportSettings;
+  ExcelExportSettings? _xlsExportSettings;
   IntervalStoreManager? _intervalStorageManager;
   ExportColumnsManager? _exportColumnsManager;
   HealthConnectSettings? _healthConnectSettings;
@@ -59,7 +59,7 @@ class _AppState extends State<App> with TypeLogger {
     _exportSettings?.dispose();
     _csvExportSettings?.dispose();
     _pdfExportSettings?.dispose();
-    _xslExportSettings?.dispose();
+    _xlsExportSettings?.dispose();
     _intervalStorageManager?.dispose();
     _exportColumnsManager?.dispose();
     _healthConnectSettings?.dispose();
@@ -99,7 +99,7 @@ class _AppState extends State<App> with TypeLogger {
       _exportSettings ??= await settingsLoader.loadExportSettings();
       _csvExportSettings ??= await settingsLoader.loadCsvExportSettings();
       _pdfExportSettings ??= await settingsLoader.loadPdfExportSettings();
-      _xslExportSettings ??= await settingsLoader.loadXslExportSettings();
+      _xlsExportSettings ??= await settingsLoader.loadXlsExportSettings();
       _intervalStorageManager ??= await settingsLoader.loadIntervalStorageManager();
       _exportColumnsManager ??= await settingsLoader.loadExportColumnsManager();
       _healthConnectSettings ??= await settingsLoader.loadHealthConnectSettings();
@@ -233,7 +233,7 @@ class _AppState extends State<App> with TypeLogger {
           ChangeNotifierProvider.value(value: _exportSettings!),
           ChangeNotifierProvider.value(value: _csvExportSettings!),
           ChangeNotifierProvider.value(value: _pdfExportSettings!),
-          ChangeNotifierProvider.value(value: _xslExportSettings!),
+          ChangeNotifierProvider.value(value: _xlsExportSettings!),
           ChangeNotifierProvider.value(value: _intervalStorageManager!),
           ChangeNotifierProvider.value(value: _exportColumnsManager!),
           ChangeNotifierProvider.value(value: _healthConnectSettings!),

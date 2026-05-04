@@ -15,7 +15,7 @@ class ExportFormatSetting extends Setting<ExportFormat> {
 /// File formats to which measurements can be exported.
 enum ExportFormat {
   csv,
-  xsl,
+  xls,
   pdf,
   db;
 
@@ -23,7 +23,7 @@ enum ExportFormat {
     ExportFormat.csv => 0,
     ExportFormat.pdf => 1,
     ExportFormat.db => 2,
-    ExportFormat.xsl => 3,
+    ExportFormat.xls => 3,
   };
 
   factory ExportFormat.deserialize(Object? value) {
@@ -34,7 +34,7 @@ enum ExportFormat {
       0 => ExportFormat.csv,
       1 => ExportFormat.pdf,
       2 => ExportFormat.db,
-      3 => ExportFormat.xsl,
+      3 => ExportFormat.xls,
       _ => ExportFormat.csv,
     };
   }

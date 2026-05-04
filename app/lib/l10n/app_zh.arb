@@ -569,8 +569,8 @@
     "@btnShare": {},
     "exportSuccess": "成功导出",
     "@exportSuccess": {},
-    "xsl": "Excel 文件(xsl)",
-    "@xsl": {},
+    "xls": "Excel 文件(xls)",
+    "@xls": {},
     "reset": "重置",
     "@reset": {}
 }
