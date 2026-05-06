@@ -11,10 +11,8 @@ This is probably the simplest to do: Use the app and find out what's wrong and w
 ## Improving texts and translating
 
 Another easy way to help is to go through the texts (this one, store listings or the ones in the app) and fix grammar, punctuation, or other mistakes.
-The easiest way to do this is [weblate](https://hosted.weblate.org/engage/blood-pressure-monitor-fl/).
 
-[![Translation status](https://hosted.weblate.org/widgets/blood-pressure-monitor-fl/-/multi-auto.svg)](https://hosted.weblate.org/engage/blood-pressure-monitor-fl/)
-
+The [weblate](https://hosted.weblate.org/engage/blood-pressure-monitor-fl/) contributions are currently broken. If you are interested in fixing them, please reach out. For now, you can just open a Pull Request files in `/app/lib/l10n` or submit them through some other channel like E-Mail.
 
 ## Coding
 
