@@ -32,14 +32,22 @@ To build the app locally you have to:
 1. [set up](https://docs.flutter.dev/get-started/install) flutter
 2. `git clone https://github.com/derdilla/blood-pressure-monitor-fl.git`
 3. run `dart run build_runner build` in the `health_data_store` directory
+4. run `dart run build_runner build` in the `app` directory
 
 After this initial setup you can:
-- Test the app: `flutter run --flavor github`
-- Compile the app `flutter build apk --flavor github --release`
+- Test the app: `flutter run --flavor github` to run the app locally or on devices attached via adb
+- Compile the app `flutter build apk --flavor github`
+  - For Android release builds (`--release`), you need to [configure a signing key](https://docs.flutter.dev/deployment/android#sign-the-app).
+
+Once you change a file with the `@GenerateSettings` annotation, rebuild the settings:
+`dart run build_runner build --build-filter="lib/model/storage/*.dart"`
 
 ### Pull requests
 
 If you can fix issues or implement features from the issues page feel free to make a PR on GitHub with your changes. While not a strict requirement, it is recommended to talk about it in an issue first.
+
+- If you have any questions on the codebase, just open a discussion
+- For [all the right reasons](https://en.wikipedia.org/wiki/Large_language_model#Societal_concerns) we don't accept AI (LLM) generated contributions
 
 ### Platform-support
 
