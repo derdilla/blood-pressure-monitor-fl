@@ -10,10 +10,13 @@ import 'package:health_data_store/health_data_store.dart';
 class AddEntryScreen extends StatelessWidget {
   const AddEntryScreen({
     super.key,
-    required this.initialMedicineList,
+    required this.medicineList,
+    this.initialRecord
   });
 
-  final List<Medicine> initialMedicineList;
+  final List<Medicine> medicineList;
+
+  final AddEntryFormValue? initialRecord;
 
   @override
   Widget build(BuildContext context) {
@@ -26,10 +29,21 @@ class AddEntryScreen extends StatelessWidget {
       onPopInvokedWithResult: (_, entry) async {
         if (entry is! AddEntryFormValue) return;
 
+        if (initialRecord?.record != null) await recordRepo.remove(initialRecord!.record!);
+        if (initialRecord?.note != null) await noteRepo.remove(initialRecord!.note!);
+        if (initialRecord?.intake != null) await intakeRepo.remove(initialRecord!.intake!);
+        if (initialRecord?.weight != null) await weightRepo.remove(initialRecord!.weight!);
+
         if (entry.record != null) await recordRepo.add(entry.record!);
         if (entry.note != null) await noteRepo.add(entry.note!);
         if (entry.intake != null) await intakeRepo.add(entry.intake!);
         if (entry.weight != null) await weightRepo.add(entry.weight!);
+
+        /*
+        read<IntervalStoreManager>().mainPage.setToMostRecentInterval();
+        read<IntervalStoreManager>().statsPage.setToMostRecentInterval();
+        read<IntervalStoreManager>().exportPage.setToMostRecentInterval();
+        */
 
         if (context.mounted &&
             context.read<ExportSettings>().exportAfterEveryEntry) {
@@ -37,8 +51,8 @@ class AddEntryScreen extends StatelessWidget {
         }
       },
       child: AddEntryDialog(
-        availableMeds: initialMedicineList,
-        // TODO: initialMeasurement,
+        availableMeds: medicineList,
+        initialRecord: initialRecord,
       ),
     );
   }

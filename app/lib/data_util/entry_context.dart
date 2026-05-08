@@ -1,10 +1,10 @@
 import 'package:blood_pressure_app/components/confirm_deletion_dialog.dart';
-import 'package:blood_pressure_app/features/export_import/export_button.dart';
 import 'package:blood_pressure_app/features/input/add_entry_dialog.dart';
 import 'package:blood_pressure_app/features/input/forms/add_entry_form.dart';
 import 'package:blood_pressure_app/l10n/app_localizations.dart';
 import 'package:blood_pressure_app/logging.dart';
 import 'package:blood_pressure_app/model/storage/storage.dart';
+import 'package:blood_pressure_app/screens/add_entry_screen.dart';
 import 'package:blood_pressure_app/screens/error_reporting_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart' hide ProviderNotFoundException;
@@ -24,46 +24,14 @@ extension EntryUtils on BuildContext {
   Future<void> createEntry([AddEntryFormValue? initial]) async {
     _logger.finer('createEntry($initial)');
     try {
-      final recordRepo = RepositoryProvider.of<BloodPressureRepository>(this);
-      final noteRepo = RepositoryProvider.of<NoteRepository>(this);
-      final intakeRepo = RepositoryProvider.of<MedicineIntakeRepository>(this);
-      final weightRepo = RepositoryProvider.of<BodyweightRepository>(this);
-      final exportSettings = Provider.of<ExportSettings>(this, listen: false);
+      final medicineList = await read<MedicineRepository>().getAll();
+      await Navigator.of(this).push(MaterialPageRoute<Object?>(
+        builder: (_) => AddEntryScreen(
+          medicineList: medicineList,
+          initialRecord: initial,
+        )
+      ));
 
-      final entry = await showAddEntryDialog(this,
-        RepositoryProvider.of<MedicineRepository>(this),
-        initial,
-      );
-      _logger.finest('received $entry from dialog');
-      if (entry != null) {
-        // When updating this logic: keep in mind the add entry screen,
-        // which does much of the same
-        if (initial?.record != null) await recordRepo.remove(initial!.record!);
-        if (initial?.note != null) await noteRepo.remove(initial!.note!);
-        if (initial?.intake != null) await intakeRepo.remove(initial!.intake!);
-        if (initial?.weight != null) await weightRepo.remove(initial!.weight!);
-
-        if (entry.record != null) await recordRepo.add(entry.record!);
-        if (entry.note != null) await noteRepo.add(entry.note!);
-        if (entry.intake != null) await intakeRepo.add(entry.intake!);
-        if(entry.weight != null) await weightRepo.add(entry.weight!);
-
-        /*
-        read<IntervalStoreManager>().mainPage.setToMostRecentInterval();
-        read<IntervalStoreManager>().statsPage.setToMostRecentInterval();
-        read<IntervalStoreManager>().exportPage.setToMostRecentInterval();*/
-
-        _logger.finest('mounted=$mounted');
-        if (!mounted) {
-          _logger.warning('Context no longer mounted');
-          return;
-        }
-
-        log.info(read<IntervalStoreManager>());
-        if (mounted && exportSettings.exportAfterEveryEntry) {
-          performExport(this, false);
-        }
-      }
     } on ProviderNotFoundException {
       log.severe('[extension.EntryUtils] createEntry($initial) was called from a context without Provider.');
     } catch (e, stack) {
