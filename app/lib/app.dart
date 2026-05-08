@@ -228,9 +228,9 @@ class _AppState extends State<App> with TypeLogger {
     }
 
     // Initial route building
-    String initialRoute = '/';
+    AppRoute initialRoute = AppRoute.home;
     if (_settings?.startWithAddMeasurementPage ?? false) {
-      initialRoute = '/add';
+      initialRoute = AppRoute.add;
     }
     if (Platform.isAndroid) {
       try {
@@ -239,10 +239,10 @@ class _AppState extends State<App> with TypeLogger {
         if (intent?.action == 'android.intent.action.VIEW_PERMISSION_USAGE') {
           switch (intent!.extra?['android.intent.extra.PERMISSION_GROUP_NAME']) {
             case 'android.permission-group.HEALTH':
-              initialRoute = '/settings/healthConnect';
+              initialRoute = AppRoute.settingsHealthConnect;
               break;
             case 'android.permission-group.NEARBY_DEVICES':
-              initialRoute = '/settings/features';
+              initialRoute = AppRoute.settingsFeatures;
               break;
           }
         }
@@ -294,7 +294,7 @@ class _AppState extends State<App> with TypeLogger {
   }
 
   /// Central [MaterialApp] widget of the app that sets the uniform style options.
-  Widget _buildAppRoot(String initialRoute, List<Medicine> initialMedicineList) => Consumer<Settings>(
+  Widget _buildAppRoot(AppRoute initialRoute, List<Medicine> initialMedicineList) => Consumer<Settings>(
     builder: (context, settings, child) => MaterialApp(
       title: 'Blood Pressure App',
       onGenerateTitle: (context) => AppLocalizations.of(context)!.title,
@@ -310,17 +310,17 @@ class _AppState extends State<App> with TypeLogger {
       supportedLocales: AppLocalizations.supportedLocales,
       locale: settings.language,
       debugShowCheckedModeBanner: false,
-      initialRoute: initialRoute,
+      initialRoute: initialRoute.path,
       routes: {
-        '/': (_) => const AppHome(),
-        '/add': (_) => AddEntryScreen(
-          initialMedicineList: initialMedicineList
+        AppRoute.home.path: (_) => const AppHome(),
+        AppRoute.add.path: (_) => AddEntryScreen(
+          medicineList: initialMedicineList
         ),
-        '/statistics': (_) => const StatisticsScreen(),
-        '/settings': (_) => const SettingsPage(),
-        '/settings/export': (_) => const ExportImportScreen(),
-        '/settings/features': (_) => const FeaturesScreen(),
-        '/settings/healthConnect': (_) => const HealthConnectScreen(),
+        AppRoute.statistics.path: (_) => const StatisticsScreen(),
+        AppRoute.settings.path: (_) => const SettingsPage(),
+        AppRoute.settingsExport.path: (_) => const ExportImportScreen(),
+        AppRoute.settingsFeatures.path: (_) => const FeaturesScreen(),
+        AppRoute.settingsHealthConnect.path: (_) => const HealthConnectScreen(),
       },
     ),
   );
@@ -364,4 +364,20 @@ class _AppState extends State<App> with TypeLogger {
       ),
     );
   }
+}
+
+enum AppRoute {
+  home('/'),
+  add('/add'),
+  statistics('/statistics'),
+  settings('/settings'),
+  settingsExport('/settings/export'),
+  settingsFeatures('/settings/features'),
+  settingsHealthConnect('/settings/healthConnect');
+
+  const AppRoute(this.path);
+
+  final String path;
+
+  String get name => path;
 }
