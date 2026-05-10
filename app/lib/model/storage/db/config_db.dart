@@ -8,7 +8,7 @@ import 'package:sqflite/sqflite.dart';
 /// Database for storing settings and internal app state.
 ///
 /// The table names ensured by this class are stored as constant public strings ending in Table.
-@deprecated
+@Deprecated('The file based loader is now default')
 class ConfigDB {
   ConfigDB._create();
   
@@ -120,8 +120,5 @@ class ConfigDB {
   }
 
   /// The database created by this class for getting and setting entries.
-  ///
-  /// Changes to the database structure should be done by altering the [_onDBCreate] and [_onDBUpgrade] methods of this
-  /// class to ensure smooth upgrades without the possibility of error.
   Database get database => _database;
 }

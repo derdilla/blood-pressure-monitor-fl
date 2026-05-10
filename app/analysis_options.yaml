@@ -45,6 +45,3 @@ analyzer:
     strict-inference: true
     strict-raw-types: true
     strict-casts: true
-  exclude:
-    # TODO: clean up this code
-    - lib/model/storage/**

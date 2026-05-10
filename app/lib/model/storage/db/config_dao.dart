@@ -5,9 +5,9 @@ import 'package:blood_pressure_app/model/storage/export_csv_settings.dart';
 import 'package:blood_pressure_app/model/storage/export_pdf_settings.dart';
 import 'package:blood_pressure_app/model/storage/export_settings.dart';
 import 'package:blood_pressure_app/model/storage/export_xls_settings.dart';
+import 'package:blood_pressure_app/model/storage/health_connect_settings.dart';
 import 'package:blood_pressure_app/model/storage/interval_store.dart';
 import 'package:blood_pressure_app/model/storage/settings.dart';
-import 'package:blood_pressure_app/model/storage/health_connect_settings.dart';
 
 /// Class for loading data from the database.
 ///
@@ -18,7 +18,7 @@ import 'package:blood_pressure_app/model/storage/health_connect_settings.dart';
 ///
 /// The load... methods have to schedule a initial save to db in case an
 /// migration / update of fields occurred.
-@deprecated
+@Deprecated('The file based loader is now default')
 class ConfigDao implements SettingsLoader {
   /// Create a serializer to initialize data from a database.
   ConfigDao(this._configDB);
@@ -193,6 +193,7 @@ class ConfigDao implements SettingsLoader {
   Future<ExcelExportSettings> loadXlsExportSettings() async =>
       ExcelExportSettings();
 
+  @override
   Future<HealthConnectSettings> loadHealthConnectSettings() async =>
       HealthConnectSettings();
 }
