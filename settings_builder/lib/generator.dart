@@ -110,9 +110,9 @@ class ModelGenerator extends Generator {
       out.add('''
       /// Create a instance from a [String] created by [toJson].
       factory $newClassName.fromJson(String json) {
-        final decoded = jsonDecode(json);
-        if (decoded is! Map<String, dynamic>) return $newClassName();
         try {
+          final decoded = jsonDecode(json);
+          if (decoded is! Map<String, dynamic>) return $newClassName();
           return $newClassName.fromMap(decoded);
         } catch (e) {
           assert(e is FormatException || e is TypeError);
