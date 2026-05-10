@@ -1,5 +1,5 @@
+import 'package:blood_pressure_app/model/storage/convert_util.dart';
 import 'package:settings_annotation/settings_annotation.dart';
-import '../convert_util.dart';
 
 class ExportFormatSetting extends Setting<ExportFormat> {
   ExportFormatSetting({required super.initialValue});
@@ -19,13 +19,6 @@ enum ExportFormat {
   pdf,
   db;
 
-  int serialize() => switch(this) {
-    ExportFormat.csv => 0,
-    ExportFormat.pdf => 1,
-    ExportFormat.db => 2,
-    ExportFormat.xls => 3,
-  };
-
   factory ExportFormat.deserialize(Object? value) {
     final int? intValue = ConvertUtil.parseInt(value);
     if (value == null || intValue == null) return ExportFormat.csv;
@@ -38,4 +31,11 @@ enum ExportFormat {
       _ => ExportFormat.csv,
     };
   }
+
+  int serialize() => switch(this) {
+    ExportFormat.csv => 0,
+    ExportFormat.pdf => 1,
+    ExportFormat.db => 2,
+    ExportFormat.xls => 3,
+  };
 }

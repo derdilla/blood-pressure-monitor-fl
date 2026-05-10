@@ -22,7 +22,7 @@ void main() {
   testWidgets('close button pops scope', (tester) async {
     int popInvokedCount = 0;
     await tester.pumpWidget(materialApp(PopScope(
-      onPopInvoked: (_) => popInvokedCount++,
+      onPopInvokedWithResult: (_, __) => popInvokedCount++,
       child: const FullscreenDialog(
         closeIcon: Icons.add,
         bottomAppBar: false,
@@ -88,7 +88,7 @@ void main() {
   testWidgets("Close button doesn't pop scope when canClose returns false", (tester) async {
     int popInvokedCount = 0;
     await tester.pumpWidget(materialApp(PopScope(
-      onPopInvoked: (_) => popInvokedCount++,
+      onPopInvokedWithResult: (_, __) => popInvokedCount++,
       child: FullscreenDialog(
         closeIcon: Icons.add,
         bottomAppBar: false,

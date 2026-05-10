@@ -27,7 +27,9 @@ class ModelGenerator extends Generator {
     final classes = library.annotatedWith(generateSettingsTypeChecker);
     if (classes.isEmpty) return null;
 
-    final out = <String>["part of '${library.element.uri}';"];
+    final out = <String>[
+      '// ignore_for_file: curly_braces_in_flow_control_structures',
+      "part of '${library.element.uri}';"];
 
     for (final annotatedClassElement in classes) {
       assert(annotatedClassElement.element.kind == ElementKind.CLASS);
@@ -108,8 +110,10 @@ class ModelGenerator extends Generator {
       out.add('''
       /// Create a instance from a [String] created by [toJson].
       factory $newClassName.fromJson(String json) {
+        final decoded = jsonDecode(json);
+        if (decoded is! Map<String, dynamic>) return $newClassName();
         try {
-          return $newClassName.fromMap(jsonDecode(json));
+          return $newClassName.fromMap(decoded);
         } catch (e) {
           assert(e is FormatException || e is TypeError);
           return $newClassName();
@@ -167,7 +171,7 @@ class ModelGenerator extends Generator {
       }
 
       // ui
-      out.add('late final uiElements = <Setting>[');
+      out.add('late final uiElements = <Setting<Object?>>[');
       for (final v in classVariables) {
         out.add('_${v.name},');
       }

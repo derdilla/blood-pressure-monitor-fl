@@ -22,7 +22,7 @@ Future<void> migrateSharedPreferences(Settings settings, ExportSettings exportSe
     PdfExportSettings pdfExportSettings, IntervalStoreManager intervallStoreManager,) async {
   final SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
 
-  final List<Future> futures = [];
+  final List<Future<bool>> futures = [];
 
   final keys = sharedPreferences.getKeys();
   for (final key in keys) { // remove these first
@@ -178,7 +178,7 @@ Future<void> migrateSharedPreferences(Settings settings, ExportSettings exportSe
         break;
       case 'horizontalGraphLines':
         settings.horizontalGraphLines = sharedPreferences.getStringList(key)!.map((e) =>
-            HorizontalGraphLine.fromJson(jsonDecode(e)),).toList();
+            HorizontalGraphLine.fromJson(jsonDecode(e) as Map<String, dynamic>)).toList();
         break;
       case 'useLegacyList':
         settings.compactList = sharedPreferences.getBool(key)!;

@@ -42,7 +42,9 @@ class FileSettingsLoader implements SettingsLoader {
     T? obj;
     try {
       obj = build(f.readAsStringSync());
-    } on FileSystemException {}
+    } on FileSystemException {
+      // obj stays null
+    }
     obj ??= createNew();
 
     obj.addListener(() => f.writeAsStringSync(serialize(obj!)));

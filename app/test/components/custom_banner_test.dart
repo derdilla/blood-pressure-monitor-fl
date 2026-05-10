@@ -1,7 +1,6 @@
 import 'package:blood_pressure_app/components/custom_banner.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:blood_pressure_app/model/storage/types/export_format_setting.dart';
 
 import '../util.dart';
 
