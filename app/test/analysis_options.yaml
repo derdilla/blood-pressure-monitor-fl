@@ -1,0 +1,1 @@
+# Disable code analysis for the test directory. There is too much legacy code.

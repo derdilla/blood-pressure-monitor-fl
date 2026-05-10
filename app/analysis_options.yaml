@@ -46,7 +46,5 @@ analyzer:
     strict-raw-types: true
     strict-casts: true
   exclude:
-    # Testing takes enough time as is
-    - test/**
     # TODO: clean up this code
     - lib/model/storage/**
