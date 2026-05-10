@@ -12,7 +12,7 @@ class IntervalStorage extends ChangeNotifier {
   factory IntervalStorage.fromMap(Map<String, dynamic> map) => IntervalStorage(
     stepSize: TimeStep.deserialize(map['stepSize']),
     range: ConvertUtil.parseRange(map['start'], map['end']),
-    timeRange: TimeRange.fromJson(map['timeRange'] as Map<String, dynamic>)
+    timeRange: TimeRange.fromJson(map['timeRange'] as Map<String, dynamic>?)
   );
 
   /// Create a instance from a [String] created by [toJson].
