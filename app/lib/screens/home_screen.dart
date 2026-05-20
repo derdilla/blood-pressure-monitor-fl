@@ -1,8 +1,8 @@
 import 'dart:io';
 
 import 'package:blood_pressure_app/config.dart';
+import 'package:blood_pressure_app/data_util/add_entry_form_value_builder.dart';
 import 'package:blood_pressure_app/data_util/entry_context.dart';
-import 'package:blood_pressure_app/data_util/full_entry_builder.dart';
 import 'package:blood_pressure_app/features/data_picker/interval_picker.dart';
 import 'package:blood_pressure_app/features/health_connect/health_connect_screen.dart';
 import 'package:blood_pressure_app/features/home/navigation_action_buttons.dart';
@@ -36,7 +36,7 @@ class AppHome extends StatelessWidget with TypeLogger {
         child: SizedBox(
           height: 240.0,
           width: MediaQuery.of(context).size.width,
-          child: FullEntryBuilder(
+          child: AddEntryFormValueBuilder(
             rangeType: IntervalStoreManagerLocation.mainPage,
             onData: (context, records, intakes, notes) => BloodPressureValueGraph(
               records: records,
@@ -50,7 +50,7 @@ class AppHome extends StatelessWidget with TypeLogger {
     ],
   );
 
-  Widget _buildMeasurementList(BuildContext context) => FullEntryBuilder(
+  Widget _buildMeasurementList(BuildContext context) => AddEntryFormValueBuilder(
     rangeType: IntervalStoreManagerLocation.mainPage,
     onEntries: (context, entries) => Padding(
       padding: const EdgeInsets.only(top: 12.0),

@@ -4,6 +4,7 @@ import 'package:health_data_store/health_data_store.dart';
 
 /// Utility collection that containing all types that make sense at one point in
 /// time.
+@Deprecated('Use AddEntryFormValue instead')
 typedef FullEntry = (BloodPressureRecord, Note, List<MedicineIntake>);
 
 /// Utility getters for nested attributes.

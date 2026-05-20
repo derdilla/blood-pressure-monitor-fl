@@ -70,7 +70,7 @@ extension EntryUtils on BuildContext {
   }
 
   /// Delete record and note of an entry from the repositories.
-  Future<void> deleteEntry(FullEntry entry, [Health? health]) async {
+  Future<void> deleteEntry(AddEntryFormValue entry, [Health? health]) async {
     try {
       final localizations = AppLocalizations.of(this)!;
       final settings = Provider.of<Settings>(this, listen: false);
@@ -86,9 +86,9 @@ extension EntryUtils on BuildContext {
       }
 
       if (confirmedDeletion) {
-        await bpRepo.remove(entry.$1);
-        await noteRepo.remove(entry.$2);
-        await Future.forEach(entry.$3, intakeRepo.remove);
+        if (entry.record != null) await bpRepo.remove(entry.record!);
+        if (entry.record != null) await noteRepo.remove(entry.note!);
+        if (entry.intake != null) await intakeRepo.remove(entry.intake!);
 
         // Avoid automatically re-adding deleted measurements on app start
         if (hcSettings.useHealthConnect && hcSettings.syncPressureMeasurements){
@@ -115,8 +115,8 @@ extension EntryUtils on BuildContext {
           action: SnackBarAction(
             label: localizations.btnUndo,
             onPressed: () async {
-              await bpRepo.add(entry.$1);
-              await noteRepo.add(entry.$2);
+              if (entry.record != null) await bpRepo.add(entry.record!);
+              if (entry.note != null) await noteRepo.add(entry.note!);
             },
           ),
         ),);

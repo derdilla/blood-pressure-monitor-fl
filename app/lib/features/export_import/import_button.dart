@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:blood_pressure_app/features/export_import/import_preview_dialog.dart';
+import 'package:blood_pressure_app/features/input/forms/add_entry_form.dart';
 import 'package:blood_pressure_app/l10n/app_localizations.dart';
 import 'package:blood_pressure_app/model/export_import/csv_converter.dart';
 import 'package:blood_pressure_app/model/export_import/csv_record_parsing_actor.dart';
@@ -63,16 +64,14 @@ class ImportButton extends StatelessWidget {
           final bpRepo = RepositoryProvider.of<BloodPressureRepository>(context);
           final noteRepo = RepositoryProvider.of<NoteRepository>(context);
           final intakeRepo = RepositoryProvider.of<MedicineIntakeRepository>(context);
-          await Future.forEach<FullEntry>(importedRecords, (e) async {
+          final weightRepo = RepositoryProvider.of<BodyweightRepository>(context);
+          await Future.forEach<AddEntryFormValue>(importedRecords, (e) async {
             if (e.sys != null || e.dia != null || e.pul != null) {
-              await bpRepo.add(e.$1);
+              await bpRepo.add(e.record!);
             }
-            if (e.note != null || e.color != null) {
-              await noteRepo.add(e.$2);
-            }
-            if (e.$3.isNotEmpty) {
-              await Future.forEach(e.$3, intakeRepo.add);
-            }
+            if (e.note != null) await noteRepo.add(e.note!);
+            if (e.weight != null) await weightRepo.add(e.weight!);
+            if (e.intake != null) await intakeRepo.add(e.intake!);
           });
           messenger.showSnackBar(SnackBar(content: Text(localizations.importSuccess(importedRecords.length))));
           break;

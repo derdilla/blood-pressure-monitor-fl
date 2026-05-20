@@ -1,5 +1,6 @@
 import 'package:blood_pressure_app/components/custom_banner.dart';
 import 'package:blood_pressure_app/features/export_import/import_preview_dialog.dart';
+import 'package:blood_pressure_app/features/input/forms/add_entry_form.dart';
 import 'package:blood_pressure_app/l10n/app_localizations.dart';
 import 'package:blood_pressure_app/model/export_import/column.dart';
 import 'package:blood_pressure_app/model/export_import/csv_converter.dart';
@@ -142,8 +143,8 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.byType(ImportPreviewDialog), findsNothing);
 
-    expect(data, isA<List<FullEntry>>());
-    final List<FullEntry> res = data;
+    expect(data, isA<List<AddEntryFormValue>>());
+    final List<AddEntryFormValue> res = data;
     expect(res, hasLength(2));
     expect(res[0].color, 4285132974);
     expect(res[1].time.millisecondsSinceEpoch, 1703147206000);
@@ -183,21 +184,58 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.byType(ImportPreviewDialog), findsNothing);
 
-    expect(data, isA<List<FullEntry>>());
-    final List<FullEntry> res = data;
-    expect(res, hasLength(2));
-    expect(res[0].$3, hasLength(1));
-    expect(res[0].$3[0].medicine.designation, 'testMed1');
-    expect(res[0].$3[0].dosis.mg, 123.5);
+    expect(data, isA<List<AddEntryFormValue>>());
+    final List<AddEntryFormValue> res = data;
+    expect(res, hasLength(3));
+    expect(res[0].intake, isNotNull);
+    expect(res[0].intake!.medicine.designation, 'testMed1');
+    expect(res[0].intake!.dosis.mg, 123.5);
+    expect(res[0].weight, isNull);
+
+    final med2 = res.indexWhere((e) => e.intake?.medicine.designation == 'testMed2');
+    final med1 = (med2 == 1) ? 2 : 1;
     expect(res[1].time.millisecondsSinceEpoch, 1703147206000);
-    expect(res[1].$3, hasLength(2));
-    expect(res[1].$3, containsAll([
-      isA<MedicineIntake>()
-        .having((i) => i.medicine.designation, 'designation', 'testMed1')
-        .having((i) => i.dosis.mg, 'designation', 15.0),
-      isA<MedicineIntake>()
-        .having((i) => i.medicine.designation, 'designation', 'testMed2')
-        .having((i) => i.dosis.mg, 'designation', 12.0),
-    ]));
+    expect(res[med1].intake!.medicine.designation, 'testMed1');
+    expect(res[med1].intake!.dosis.mg, 15.0);
+    expect(res[2].time.millisecondsSinceEpoch, 1703147206000 + 1000);
+    expect(res[med2].intake!.medicine.designation, 'testMed2');
+    expect(res[med2].intake!.dosis.mg, 12.0);
+  });
+  testWidgets('should parse weight data', (tester) async {
+    dynamic data = 1;
+
+    await loadDialog(tester, (context) async {
+      data = await showImportPreview(
+        context,
+        CsvRecordParsingActor(
+          CsvConverter(
+            CsvExportSettings(),
+            ExportColumnsManager(),
+            [],
+          ),
+          'timestampUnixMs;bodyweight\n'
+          '1541545200000;72.0',
+        ),
+        ExportColumnsManager(),
+        false,
+      );
+    },);
+
+    expect(find.byType(ImportPreviewDialog), findsOneWidget);
+    expect(tester.takeException(), isNull);
+    expect(find.byType(DropdownButton<ExportColumn?>), findsNWidgets(2), reason: '2 columns');
+    expect(find.byType(CustomBanner), findsNothing, reason: 'no error');
+
+    final localizations = await AppLocalizations.delegate.load(const Locale('en'));
+    expect(find.text(localizations.import), findsOneWidget);
+    await tester.tap(find.text(localizations.import));
+    await tester.pumpAndSettle();
+    expect(find.byType(ImportPreviewDialog), findsNothing);
+
+    expect(data, isA<List<AddEntryFormValue>>());
+    final List<AddEntryFormValue> res = data;
+    expect(res, hasLength(1));
+    expect(res[0].weight, isNotNull);
+    expect(res[0].weight!.weight.kg, 72);
   });
 }

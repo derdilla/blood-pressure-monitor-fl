@@ -180,7 +180,13 @@ class _AddExportColumnDialogState extends State<AddExportColumnDialog>
                       children: [
                         if (type == _FormatterType.record)
                           MeasurementListRow(
-                            data: (record, Note(time: record.time), []),
+                            data: (
+                              timestamp: record.time,
+                              record: record,
+                              note: null,
+                              intake: null,
+                              weight: null,
+                            ),
                             onRequestEdit: () { }, // ignore
                           ) else Text(
                             DateFormat('MMM d, y - h:m.s')

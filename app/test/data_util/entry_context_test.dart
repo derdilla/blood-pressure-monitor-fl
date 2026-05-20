@@ -3,9 +3,9 @@ import 'package:blood_pressure_app/model/storage/storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:health/health.dart';
 import 'package:health_data_store/health_data_store.dart';
 import 'package:provider/provider.dart';
-import 'package:health/health.dart';
 
 import '../features/measurement_list/measurement_list_entry_test.dart';
 import '../model/export_import/record_formatter_test.dart';
@@ -18,9 +18,9 @@ void main() {
     final BloodPressureRepository bpRepo = MockBloodPressureRepository() as BloodPressureRepository;
     final NoteRepository noteRepo = MockNoteRepository() as NoteRepository;
     final MedicineIntakeRepository intakeRepo = MockMedicineIntakeRepository() as MedicineIntakeRepository;
-    await bpRepo.add(entry.$1);
-    await noteRepo.add(entry.$2);
-    await intakeRepo.add(entry.$3.first);
+    await bpRepo.add(entry.record!);
+    await noteRepo.add(entry.note!);
+    await intakeRepo.add(entry.intake!);
 
     await tester.pumpWidget(materialApp(
       settings: Settings(confirmDeletion: false),
@@ -60,7 +60,7 @@ void main() {
     final MedicineIntakeRepository intakeRepo =
         MockMedicineIntakeRepository() as MedicineIntakeRepository;
     final fakeHealth = _FakeHealth();
-    await bpRepo.add(entry.$1);
+    await bpRepo.add(entry.record!);
 
     await tester.pumpWidget(materialApp(
       settings: Settings(confirmDeletion: false),

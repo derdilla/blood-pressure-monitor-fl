@@ -1,3 +1,4 @@
+import 'package:blood_pressure_app/features/input/forms/add_entry_form.dart';
 import 'package:blood_pressure_app/logging.dart';
 import 'package:blood_pressure_app/model/export_import/column.dart';
 import 'package:blood_pressure_app/model/export_import/import_field_type.dart' show RowDataFieldType;
@@ -113,7 +114,7 @@ class CsvConverter with TypeLogger {
       List<ExportColumn?> parsers, [
         bool assumeHeadline = true,
       ]) {
-    final List<FullEntry> entries = [];
+    final List<AddEntryFormValue> entries = [];
     int currentLineNumber = assumeHeadline ? 1 : 0;
     for (final currentLine in dataLines) {
       if (currentLine.length < parsers.length) {
@@ -151,6 +152,8 @@ class CsvConverter with TypeLogger {
             (piece) => piece.$1 == RowDataFieldType.color)?.$2 as int?;
       final intakesData = recordPieces.firstWhereOrNull(
             (piece) => piece.$1 == RowDataFieldType.intakes)?.$2 as List<dynamic>?;
+      final weightData = recordPieces.firstWhereOrNull(
+              (piece) => piece.$1 == RowDataFieldType.weightKg)?.$2 as double?;
 
       // manually trim quotes after https://pub.dev/packages/csv/changelog#600
       noteText = noteText.trim();
@@ -160,18 +163,25 @@ class CsvConverter with TypeLogger {
       if (noteText.startsWith('"')) {
         noteText = noteText.substring(1, noteText.length);
       }
+      noteText = noteText.trim();
 
-      final record = BloodPressureRecord(
-        time: timestamp,
-        sys: sys?.asMMHg,
-        dia: dia?.asMMHg,
-        pul: pul,
-      );
-      final note = Note(
-        time: timestamp,
-        note: noteText,
-        color: color,
-      );
+      BloodPressureRecord? record;
+      if (sys != null || dia != null || pul != null) {
+        record = BloodPressureRecord(
+          time: timestamp,
+          sys: sys?.asMMHg,
+          dia: dia?.asMMHg,
+          pul: pul,
+        );
+      }
+      Note? note;
+      if (noteText.isNotEmpty || color != null) {
+        note = Note(
+          time: timestamp,
+          note: noteText.isEmpty ? null : noteText,
+          color: color,
+        );
+      }
       final intakes = intakesData
         ?.map((s) {
           assert(s is (String, double));
@@ -181,11 +191,36 @@ class CsvConverter with TypeLogger {
         })
         .nonNulls
         .toList();
-      entries.add((record, note, intakes ?? []));
+      final weight = weightData == null ? null : BodyweightRecord(
+        time: timestamp,
+        weight: Weight.kg(weightData),
+      );
+      entries.add((
+        timestamp: timestamp,
+        intake: intakes?.firstOrNull,
+        note: note,
+        record: record,
+        weight: weight,
+      ));
+      if (intakes != null && intakes.length > 1) {
+        for (int i = 1; i < intakes.length; i++) {
+          final newTime = timestamp.add(Duration(seconds: i));
+          entries.add((
+            timestamp: newTime,
+            intake: MedicineIntake(
+              time: newTime,
+              medicine: intakes[i].medicine,
+              dosis: intakes[i].dosis,
+            ),
+            note: null, record: null, weight: null,
+          ));
+        }
+      }
       currentLineNumber++;
     }
 
-    assert(entries.length == dataLines.length, 'every line should have been parse');
+    // There may be additional lines for historical records with multiple intakes
+    assert(entries.length >= dataLines.length, 'every line should have been parsed');
     return RecordParsingResult.ok(entries);
   }
 }

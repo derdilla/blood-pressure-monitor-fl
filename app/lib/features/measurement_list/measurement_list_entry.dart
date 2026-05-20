@@ -2,6 +2,7 @@ import 'package:blood_pressure_app/components/confirm_deletion_dialog.dart';
 import 'package:blood_pressure_app/components/nullable_text.dart';
 import 'package:blood_pressure_app/components/pressure_text.dart';
 import 'package:blood_pressure_app/data_util/entry_context.dart';
+import 'package:blood_pressure_app/features/input/forms/add_entry_form.dart';
 import 'package:blood_pressure_app/l10n/app_localizations.dart';
 import 'package:blood_pressure_app/model/storage/storage.dart';
 import 'package:flutter/material.dart';
@@ -18,7 +19,7 @@ class MeasurementListRow extends StatelessWidget {
   });
 
   /// The measurement to display.
-  final FullEntry data;
+  final AddEntryFormValue data;
 
   /// Called when the user taps on the edit icon.
   final void Function() onRequestEdit; // TODO: consider removing in favor of context methods
@@ -28,11 +29,12 @@ class MeasurementListRow extends StatelessWidget {
     final localizations = AppLocalizations.of(context)!;
     final settings = context.watch<Settings>();
     final formatter = DateFormat(settings.dateFormatString);
+    final intake = data.intake;
     return ExpansionTile(
       // Leading color possible
       title: _buildRow(formatter),
       childrenPadding: const EdgeInsets.only(bottom: 10),
-      backgroundColor: data.color == null ? null : Color(data.color!).withAlpha(30),
+      backgroundColor: data.note?.color == null ? null : Color(data.color!).withAlpha(30),
       collapsedShape: data.color == null ? null : Border(
         left: BorderSide(color: Color(data.color!), width: 8),
       ),
@@ -56,12 +58,12 @@ class MeasurementListRow extends StatelessWidget {
             ],
           ),
         ),
-        if (data.note?.isNotEmpty ?? false)
+        if (data.note?.note?.isNotEmpty ?? false)
           ListTile(
             title: Text(localizations.note),
-            subtitle: Text(data.note!),
+            subtitle: Text(data.note!.note!),
           ),
-        for (final MedicineIntake intake in data.$3)
+        if (intake != null)
           ListTile(
             title: Text(intake.medicine.designation),
             subtitle: Text('${intake.dosis.mg}mg'), // TODO: setting for unit
@@ -106,7 +108,7 @@ class MeasurementListRow extends StatelessWidget {
       ),
       Expanded(
         flex: 10,
-        child: data.$3.isNotEmpty ? Icon(Icons.medication) : SizedBox.shrink(),
+        child: data.intake != null ? Icon(Icons.medication) : SizedBox.shrink(),
       ),
     ],
   );
