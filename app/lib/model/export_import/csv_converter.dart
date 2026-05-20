@@ -165,17 +165,23 @@ class CsvConverter with TypeLogger {
       }
       noteText = noteText.trim();
 
-      final record = BloodPressureRecord(
-        time: timestamp,
-        sys: sys?.asMMHg,
-        dia: dia?.asMMHg,
-        pul: pul,
-      );
-      final note = Note(
-        time: timestamp,
-        note: noteText.isEmpty ? null : noteText,
-        color: color,
-      );
+      BloodPressureRecord? record;
+      if (sys != null || dia != null || pul != null) {
+        record = BloodPressureRecord(
+          time: timestamp,
+          sys: sys?.asMMHg,
+          dia: dia?.asMMHg,
+          pul: pul,
+        );
+      }
+      Note? note;
+      if (noteText.isNotEmpty || color != null) {
+        note = Note(
+          time: timestamp,
+          note: noteText.isEmpty ? null : noteText,
+          color: color,
+        );
+      }
       final intakes = intakesData
         ?.map((s) {
           assert(s is (String, double));

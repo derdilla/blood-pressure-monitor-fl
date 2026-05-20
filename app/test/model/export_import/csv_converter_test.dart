@@ -366,7 +366,8 @@ void main() {
     expect(records, isNotNull);
     expect(records, hasLength(3));
     expect(records, everyElement(isA<AddEntryFormValue>()
-        .having((e) => e.note?.note, 'no note text', isNull)));
+        .having((e) => e.note?.note, 'no note text', isNull)
+        .having((e) => e.note == null || e.note!.color != null, 'no empty note object', isTrue)));
   });
 }
 
@@ -391,5 +392,3 @@ List<AddEntryFormValue>? failParse(EntryParsingError error) {
       fail('Parsing failed because field ${error.fieldContents} in line ${error.lineNumber} is not parsable.');
   }
 }
-
-// TODO: test csv import actor
