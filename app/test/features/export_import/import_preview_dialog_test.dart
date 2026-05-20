@@ -190,6 +190,7 @@ void main() {
     expect(res[0].intake, isNotNull);
     expect(res[0].intake!.medicine.designation, 'testMed1');
     expect(res[0].intake!.dosis.mg, 123.5);
+    expect(res[0].weight, isNull);
 
     final med2 = res.indexWhere((e) => e.intake?.medicine.designation == 'testMed2');
     final med1 = (med2 == 1) ? 2 : 1;
@@ -199,5 +200,42 @@ void main() {
     expect(res[2].time.millisecondsSinceEpoch, 1703147206000 + 1000);
     expect(res[med2].intake!.medicine.designation, 'testMed2');
     expect(res[med2].intake!.dosis.mg, 12.0);
+  });
+  testWidgets('should parse weight data', (tester) async {
+    dynamic data = 1;
+
+    await loadDialog(tester, (context) async {
+      data = await showImportPreview(
+        context,
+        CsvRecordParsingActor(
+          CsvConverter(
+            CsvExportSettings(),
+            ExportColumnsManager(),
+            [],
+          ),
+          'timestampUnixMs;bodyweight\n'
+          '1541545200000;72.0',
+        ),
+        ExportColumnsManager(),
+        false,
+      );
+    },);
+
+    expect(find.byType(ImportPreviewDialog), findsOneWidget);
+    expect(tester.takeException(), isNull);
+    expect(find.byType(DropdownButton<ExportColumn?>), findsNWidgets(2), reason: '2 columns');
+    expect(find.byType(CustomBanner), findsNothing, reason: 'no error');
+
+    final localizations = await AppLocalizations.delegate.load(const Locale('en'));
+    expect(find.text(localizations.import), findsOneWidget);
+    await tester.tap(find.text(localizations.import));
+    await tester.pumpAndSettle();
+    expect(find.byType(ImportPreviewDialog), findsNothing);
+
+    expect(data, isA<List<AddEntryFormValue>>());
+    final List<AddEntryFormValue> res = data;
+    expect(res, hasLength(1));
+    expect(res[0].weight, isNotNull);
+    expect(res[0].weight!.weight.kg, 72);
   });
 }
