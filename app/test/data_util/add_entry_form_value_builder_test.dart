@@ -1,4 +1,4 @@
-import 'package:blood_pressure_app/data_util/full_entry_builder.dart';
+import 'package:blood_pressure_app/data_util/add_entry_form_value_builder.dart';
 import 'package:blood_pressure_app/features/input/forms/add_entry_form.dart';
 import 'package:blood_pressure_app/l10n/app_localizations.dart';
 import 'package:blood_pressure_app/model/storage/interval_store.dart';
@@ -47,6 +47,26 @@ void main() {
         expect(entries[0].time.year, 2003);
         expect(entries[1].time.year, 2001);
         expect(entries[2].time.year, 2000);
+        return const Text('ok');
+      },
+    ), notes: notes, intervallStoreManager: IntervalStoreManager(exportPageIntervalls, IntervalStorage(), IntervalStorage())));
+
+    final localizations = await AppLocalizations.delegate.load(const Locale('en'));
+    expect(find.text(localizations.loading), findsOneWidget);
+    await tester.pumpAndSettle();
+    expect(find.text('ok'), findsOneWidget);
+  });
+
+  testWidgets("doesn't load empty notes", (tester) async {
+    final notes = [Note(time: DateTime(2003), note: ''), Note(time: DateTime(2000), note: ''),];
+
+    final exportPageIntervalls = IntervalStorage();
+    exportPageIntervalls.changeStepSize(TimeStep.lifetime);
+
+    await tester.pumpWidget(await appBaseWithData(AddEntryFormValueBuilder(
+      rangeType: IntervalStoreManagerLocation.exportPage,
+      onEntries: (context, entries) {
+        expect(entries, isEmpty);
         return const Text('ok');
       },
     ), notes: notes, intervallStoreManager: IntervalStoreManager(exportPageIntervalls, IntervalStorage(), IntervalStorage())));

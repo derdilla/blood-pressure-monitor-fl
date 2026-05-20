@@ -459,6 +459,7 @@ extension AddEntryFormValueList on List<AddEntryFormValue> {
       entries[r.time]!.record = r;
     }
     for (final n in notes) {
+      if ((n.note?.isEmpty ?? true) && n.color == null) continue;
       entries.putIfAbsent(n.time, () => _AddEntryFormValueBuilder(n.time));
       entries[n.time]!.note = n;
     }
@@ -466,6 +467,7 @@ extension AddEntryFormValueList on List<AddEntryFormValue> {
       entries.putIfAbsent(i.time, () => _AddEntryFormValueBuilder(i.time));
       entries[i.time]!.intake = i;
     }
+
     return entries.values
         .map((e) => e.asFormValue)
         .toList();

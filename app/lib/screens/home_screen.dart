@@ -1,8 +1,8 @@
 import 'dart:io';
 
 import 'package:blood_pressure_app/config.dart';
+import 'package:blood_pressure_app/data_util/add_entry_form_value_builder.dart';
 import 'package:blood_pressure_app/data_util/entry_context.dart';
-import 'package:blood_pressure_app/data_util/full_entry_builder.dart';
 import 'package:blood_pressure_app/features/data_picker/interval_picker.dart';
 import 'package:blood_pressure_app/features/health_connect/health_connect_screen.dart';
 import 'package:blood_pressure_app/features/home/navigation_action_buttons.dart';
