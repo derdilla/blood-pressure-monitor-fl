@@ -1,5 +1,4 @@
 import 'package:blood_pressure_app/features/input/add_entry_dialog.dart';
-import 'package:blood_pressure_app/features/input/forms/add_entry_form.dart';
 import 'package:blood_pressure_app/features/settings/tiles/color_picker_list_tile.dart';
 import 'package:blood_pressure_app/l10n/app_localizations.dart';
 import 'package:blood_pressure_app/model/storage/settings.dart';
@@ -42,7 +41,7 @@ void main() {
       AddEntryDialog(
         initialRecord: mockEntryPos(
           DateTime.now(), 123, 56, 43, 'Test note', Colors.teal,
-        ).asAddEntry,
+        ),
         availableMeds: const [],
       ),
     ),);
@@ -62,7 +61,7 @@ void main() {
     await loadDialog(tester, (context) async
     => result = await showAddEntryDialog(context,
         medRepo(),
-        mockEntry(sys: 123, dia: 56, pul: 43, note: 'Test note', pin: Colors.teal).asAddEntry));
+        mockEntry(sys: 123, dia: 56, pul: 43, note: 'Test note', pin: Colors.teal)));
     expect(find.byType(DropdownButton<Medicine?>), findsNothing, reason: 'No medication in settings.');
 
     expect(find.byType(AddEntryDialog), findsOneWidget);
@@ -155,7 +154,7 @@ void main() {
   testWidgets('should start with sys input focused', (tester) async {
     final mRep = medRepo();
     await loadDialog(tester, (context) =>
-        showAddEntryDialog(context, mRep, mockEntry(sys: 12).asAddEntry));
+        showAddEntryDialog(context, mRep, mockEntry(sys: 12)));
     expect(find.byType(DropdownButton<Medicine?>), findsNothing, reason: 'No medication in settings.');
 
     final primaryFocus = FocusManager.instance.primaryFocus;
@@ -171,7 +170,7 @@ void main() {
   testWidgets('should focus next on input finished', (tester) async {
     final mRep = medRepo();
     await loadDialog(tester, (context) =>
-        showAddEntryDialog(context, mRep, mockEntry(sys: 12, dia: 3, pul: 4, note: 'note').asAddEntry),);
+        showAddEntryDialog(context, mRep, mockEntry(sys: 12, dia: 3, pul: 4, note: 'note')),);
     expect(find.byType(DropdownButton<Medicine?>), findsNothing, reason: 'No medication in settings.');
 
     await tester.enterText(find.ancestor(of: find.text('Systolic').first, matching: find.byType(TextField)), '123');
@@ -212,7 +211,7 @@ void main() {
   testWidgets('warns before discarding', (tester) async {
     final mRep = medRepo();
     await loadDialog(tester, (context) =>
-        showAddEntryDialog(context, mRep, mockEntry(sys: 12).asAddEntry));
+        showAddEntryDialog(context, mRep, mockEntry(sys: 12)));
 
     expect(find.byType(AddEntryDialog), findsOneWidget);
     await tester.tap(find.byIcon(Icons.close));

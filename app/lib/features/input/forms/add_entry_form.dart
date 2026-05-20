@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 
 import 'package:blood_pressure_app/features/bluetooth/backend/bluetooth_backend.dart';
 import 'package:blood_pressure_app/features/bluetooth/bluetooth_input.dart';
@@ -386,17 +387,87 @@ typedef AddEntryFormValue = ({
   BodyweightRecord? weight,
 });
 
-/// Compatibility extension for simpler API surface.
-extension AddEntryFormValueCompat on FullEntry {
-  /// Utility converter for the differences in API.
-  AddEntryFormValue get asAddEntry {
-    assert(intakes.length <= 1);
-    return (
-      timestamp: time,
-      note: (note == null && color == null) ? null : noteObj,
-      record: (sys == null && dia == null && pul == null) ? null : recordObj,
-      intake: intakes.firstOrNull,
-      weight: null,
-    );
+class _AddEntryFormValueBuilder {
+  _AddEntryFormValueBuilder(this.timestamp);
+
+  DateTime timestamp;
+  Note? note;
+  BloodPressureRecord? record;
+  MedicineIntake? intake;
+  BodyweightRecord? weight;
+
+  AddEntryFormValue get asFormValue => (
+    timestamp: timestamp,
+    note: note,
+    record: record,
+    intake: intake,
+    weight: weight,
+  );
+}
+
+/// Utility getters for nested attributes.
+extension AddEntryFormValueGetters on AddEntryFormValue {
+  /// Timestamp when the entry occurred.
+  DateTime get time => timestamp;
+
+  /// Systolic value of the measurement.
+  Pressure? get sys => record?.sys;
+
+  /// Diastolic value of the measurement.
+  Pressure? get dia => record?.dia;
+
+  /// Pulse value of the measurement in bpm.
+  int? get pul => record?.pul;
+
+  /// ARGB color in number format.
+  ///
+  /// Can also be obtained through the `Colors.toARGB32()` method in `dart:ui`.
+  /// Sample value: `0xFF42A5F5`
+  int? get color => note?.color;
+}
+
+/// Utility methods to work on full entries.
+extension AddEntryFormValueList on List<AddEntryFormValue> {
+  /// Create a list that only contains the records field from the entries.
+  List<BloodPressureRecord> get records => map((e) => e.record)
+      .nonNulls
+      .toList();
+
+  /// Create a list that only contains the note field from the entries.
+  List<Note> get notes => map((e) => e.note).nonNulls.toList();
+
+  /// Get all medicines that appear anywhere in the list.
+  List<Medicine> get distinctMedicines => <Medicine>{
+    for (final e in this)
+      if (e.intake != null)
+        e.intake!.medicine,
+  }.toList();
+
+  /// Merges values at the same time from passed lists to FullEntries and
+  /// creates list of them.
+  ///
+  /// In the resulting list every passed value is contained exactly once.
+  static List<AddEntryFormValue> merged(
+      List<BloodPressureRecord> records,
+      List<Note> notes,
+      List<MedicineIntake> intakes,
+    ) {
+    final entries = <DateTime, _AddEntryFormValueBuilder>{};
+
+    for (final r in records) {
+      entries.putIfAbsent(r.time, () => _AddEntryFormValueBuilder(r.time));
+      entries[r.time]!.record = r;
+    }
+    for (final n in notes) {
+      entries.putIfAbsent(n.time, () => _AddEntryFormValueBuilder(n.time));
+      entries[n.time]!.note = n;
+    }
+    for (final i in intakes) {
+      entries.putIfAbsent(i.time, () => _AddEntryFormValueBuilder(i.time));
+      entries[i.time]!.intake = i;
+    }
+    return entries.values
+        .map((e) => e.asFormValue)
+        .toList();
   }
 }

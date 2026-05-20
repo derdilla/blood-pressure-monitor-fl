@@ -4,7 +4,6 @@ import 'package:blood_pressure_app/features/measurement_list/measurement_list_en
 import 'package:blood_pressure_app/l10n/app_localizations.dart';
 import 'package:blood_pressure_app/model/storage/settings.dart';
 import 'package:flutter/material.dart';
-import 'package:health_data_store/health_data_store.dart';
 import 'package:provider/provider.dart';
 
 /// List that renders measurements and medicine intakes.
@@ -17,7 +16,7 @@ class MeasurementList extends StatelessWidget {
   });
 
   /// Entries sorted with newest comming first.
-  final List<FullEntry> entries;
+  final List<AddEntryFormValue> entries;
 
   @override
   Widget build(BuildContext context) {
@@ -71,7 +70,7 @@ class MeasurementList extends StatelessWidget {
             itemCount: entries.length,
             itemBuilder: (context, idx) => MeasurementListRow(
               data: entries[idx],
-              onRequestEdit: () => context.createEntry(entries[idx].asAddEntry),
+              onRequestEdit: () => context.createEntry(entries[idx]),
             ),
           ),
         ),

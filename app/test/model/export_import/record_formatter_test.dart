@@ -1,3 +1,4 @@
+import 'package:blood_pressure_app/features/input/forms/add_entry_form.dart';
 import 'package:blood_pressure_app/model/export_import/import_field_type.dart';
 import 'package:blood_pressure_app/model/export_import/record_formatter.dart';
 import 'package:flutter/material.dart';
@@ -12,39 +13,39 @@ void main() {
       
       expect(f.formatPattern, r'$SYS');
       final r1 = mockEntryPos(DateTime.now(), 123, 456, 789, 'test text');
-      f.encode(r1.$1, r1.$2, r1.$3, null);
+      f.encode(r1.record!, r1.note!, [if (r1.intake != null) r1.intake!], null);
       final r2 = mockEntry();
-      f.encode(r2.$1, r2.$2, r2.$3, null);
+      f.encode(r2.record!, r2.note!, [if (r2.intake != null) r2.intake!], null);
       f.decode('123');
     });
     test('should create correct strings', () {
       final r = mockEntryPos(DateTime.fromMillisecondsSinceEpoch(31415926), 123, 45, 67, 'Test', Colors.red);
 
-      expect(ScriptedFormatter(r'constant text',).encode(r.$1, r.$2, r.$3, null), 'constant text');
-      expect(ScriptedFormatter(r'$SYS',).encode(r.$1, r.$2, r.$3, null), r.$1.sys?.mmHg.toString());
-      expect(ScriptedFormatter(r'$DIA',).encode(r.$1, r.$2, r.$3, null), r.$1.dia?.mmHg.toString());
-      expect(ScriptedFormatter(r'$PUL',).encode(r.$1, r.$2, r.$3, null), r.$1.pul.toString());
-      expect(ScriptedFormatter(r'$COLOR',).encode(r.$1, r.$2, r.$3, null), r.$2.color.toString());
-      expect(ScriptedFormatter(r'$NOTE',).encode(r.$1, r.$2, r.$3, null), r.$2.note);
-      expect(ScriptedFormatter(r'$TIMESTAMP',).encode(r.$1, r.$2, r.$3, null), r.$1.time.millisecondsSinceEpoch.toString());
+      expect(ScriptedFormatter(r'constant text',).encode(r.record!, r.note!, [if (r.intake != null) r.intake!], null), 'constant text');
+      expect(ScriptedFormatter(r'$SYS',).encode(r.record!, r.note!, [if (r.intake != null) r.intake!], null), r.sys?.mmHg.toString());
+      expect(ScriptedFormatter(r'$DIA',).encode(r.record!, r.note!, [if (r.intake != null) r.intake!], null), r.dia?.mmHg.toString());
+      expect(ScriptedFormatter(r'$PUL',).encode(r.record!, r.note!, [if (r.intake != null) r.intake!], null), r.pul.toString());
+      expect(ScriptedFormatter(r'$COLOR',).encode(r.record!, r.note!, [if (r.intake != null) r.intake!], null), r.note?.color.toString());
+      expect(ScriptedFormatter(r'$NOTE',).encode(r.record!, r.note!, [if (r.intake != null) r.intake!], null), r.note?.note);
+      expect(ScriptedFormatter(r'$TIMESTAMP',).encode(r.record!, r.note!, [if (r.intake != null) r.intake!], null), r.time.millisecondsSinceEpoch.toString());
       expect(
-        ScriptedFormatter(r'$SYS$DIA$PUL',).encode(r.$1, r.$2, r.$3, null),
-        (r.$1.sys!.mmHg.toString() + r.$1.dia!.mmHg.toString() + r.$1.pul.toString()),);
+        ScriptedFormatter(r'$SYS$DIA$PUL',).encode(r.record!, r.note!, [if (r.intake != null) r.intake!], null),
+        (r.sys!.mmHg.toString() + r.dia!.mmHg.toString() + r.pul.toString()),);
       expect(
-        ScriptedFormatter(r'$SYS$SYS',).encode(r.$1, r.$2, r.$3, null),
-        (r.$1.sys!.mmHg.toString() + r.$1.sys!.mmHg.toString()),);
+        ScriptedFormatter(r'$SYS$SYS',).encode(r.record!, r.note!, [if (r.intake != null) r.intake!], null),
+        (r.sys!.mmHg.toString() + r.sys!.mmHg.toString()),);
       expect(
-        ScriptedFormatter(r'{{$SYS-$DIA}}',).encode(r.$1, r.$2, r.$3, null),
-        (r.$1.sys!.mmHg - r.$1.dia!.mmHg).toDouble().toString(),);
+        ScriptedFormatter(r'{{$SYS-$DIA}}',).encode(r.record!, r.note!, [if (r.intake != null) r.intake!], null),
+        (r.sys!.mmHg - r.dia!.mmHg).toDouble().toString(),);
       expect(
-        ScriptedFormatter(r'{{$SYS*$DIA-$PUL}}',).encode(r.$1, r.$2, r.$3, null),
-          (r.$1.sys!.mmHg * r.$1.dia!.mmHg - r.$1.pul!).toDouble().toString(),);
+        ScriptedFormatter(r'{{$SYS*$DIA-$PUL}}',).encode(r.record!, r.note!, [if (r.intake != null) r.intake!], null),
+          (r.sys!.mmHg * r.dia!.mmHg - r.pul!).toDouble().toString(),);
       expect(
-          ScriptedFormatter(r'$SYS-$DIA',).encode(r.$1, r.$2, r.$3, null), ('${r.$1.sys?.mmHg}-${r.$1.dia?.mmHg}'));
+          ScriptedFormatter(r'$SYS-$DIA',).encode(r.record!, r.note!, [if (r.intake != null) r.intake!], null), ('${r.sys?.mmHg}-${r.dia?.mmHg}'));
 
       final formatter = DateFormat.yMMMMEEEEd();
-      expect(ScriptedFormatter('\$FORMAT{\$TIMESTAMP,${formatter.pattern}}',).encode(r.$1, r.$2, r.$3, null),
-          formatter.format(r.$1.time),);
+      expect(ScriptedFormatter('\$FORMAT{\$TIMESTAMP,${formatter.pattern}}',).encode(r.record!, r.note!, [if (r.intake != null) r.intake!], null),
+          formatter.format(r.time),);
     });
     test('should report correct reversibility', () {
       expect(ScriptedFormatter(r'$SYS',).restoreAbleType, RowDataFieldType.sys);
@@ -70,7 +71,7 @@ void main() {
       expect(ScriptedFormatter(r'$TIMESTAMP',).decode('12345678'), (RowDataFieldType.timestamp, DateTime.fromMillisecondsSinceEpoch(12345678)));
       expect(ScriptedFormatter(r'$NOTE',).decode('test note'), (RowDataFieldType.notes, 'test note'));
       final r = mockEntryPos(DateTime.now(), null, null, null, '', Colors.purple);
-      final encodedPurple = ScriptedFormatter(r'$COLOR',).encode(r.$1, r.$2, r.$3, null);
+      final encodedPurple = ScriptedFormatter(r'$COLOR',).encode(r.record!, r.note!, [if (r.intake != null) r.intake!], null);
       expect(ScriptedFormatter(r'$COLOR',).decode(encodedPurple)?.$1, RowDataFieldType.color);
       expect(ScriptedFormatter(r'$COLOR',).decode(encodedPurple)?.$2, Colors.purple.toARGB32());
       expect(ScriptedFormatter(r'test$SYS',).decode('test567'), (RowDataFieldType.sys, 567));
@@ -89,10 +90,10 @@ void main() {
 
     test('should when ignore groups in format strings', () {
       final r1 = mockEntry(sys: 123);
-      expect(ScriptedFormatter(r'($SYS)',).encode(r1.$1, r1.$2, r1.$3, null), '(123)');
-      expect(ScriptedFormatter(r'($SYS',).encode(r1.$1, r1.$2, r1.$3, null), '(123');
+      expect(ScriptedFormatter(r'($SYS)',).encode(r1.record!, r1.note!, [if (r1.intake != null) r1.intake!], null), '(123)');
+      expect(ScriptedFormatter(r'($SYS',).encode(r1.record!, r1.note!, [if (r1.intake != null) r1.intake!], null), '(123');
       final r2 = mockEntry(note: 'test');
-      expect(ScriptedFormatter(r'($NOTE',).encode(r2.$1, r2.$2, r2.$3, null), '(test');
+      expect(ScriptedFormatter(r'($NOTE',).encode(r2.record!, r2.note!, [if (r2.intake != null) r2.intake!], null), '(test');
 
       expect(ScriptedFormatter(r'($SYS)',).restoreAbleType, RowDataFieldType.sys);
       expect(ScriptedFormatter(r'($SYS',).restoreAbleType, RowDataFieldType.sys);
@@ -114,20 +115,20 @@ void main() {
   group('ScriptedTimeFormatter', () {
     test('should create non-empty string', () {
       final r1 = mockEntry();
-      expect(ScriptedTimeFormatter('dd').encode(r1.$1, r1.$2, r1.$3, null), isNotNull);
-      expect(ScriptedTimeFormatter('dd').encode(r1.$1, r1.$2, r1.$3, null), isNotEmpty);
+      expect(ScriptedTimeFormatter('dd').encode(r1.record!, r1.note!, [if (r1.intake != null) r1.intake!], null), isNotNull);
+      expect(ScriptedTimeFormatter('dd').encode(r1.record!, r1.note!, [if (r1.intake != null) r1.intake!], null), isNotEmpty);
     });
     test('should decode rough time', () {
       final formatter = ScriptedTimeFormatter('yyyy.MMMM.dd GGG hh:mm.ss aaa');
       final r = mockEntry();
-      expect(formatter.encode(r.$1, r.$2, r.$3, null), isNotNull);
-      expect(formatter.decode(formatter.encode(r.$1, r.$2, r.$3, null))?.$2, isA<DateTime>()
-        .having((p0) => p0.millisecondsSinceEpoch, 'time(up to one second difference)', closeTo(r.$1.time.millisecondsSinceEpoch, 1000)),);
+      expect(formatter.encode(r.record!, r.note!, [if (r.intake != null) r.intake!], null), isNotNull);
+      expect(formatter.decode(formatter.encode(r.record!, r.note!, [if (r.intake != null) r.intake!], null))?.$2, isA<DateTime>()
+        .having((p0) => p0.millisecondsSinceEpoch, 'time(up to one second difference)', closeTo(r.time.millisecondsSinceEpoch, 1000)),);
     });
   });
 }
 
-FullEntry mockEntryPos([
+AddEntryFormValue mockEntryPos([
   DateTime? time,
   int? sys,
   int? dia,
@@ -143,7 +144,7 @@ FullEntry mockEntryPos([
   pin: pin,
 );
 
-FullEntry mockEntry({
+AddEntryFormValue mockEntry({
   DateTime? time,
   int? sys,
   int? dia,
@@ -154,22 +155,24 @@ FullEntry mockEntry({
 }) {
   time ??= DateTime.now();
   return (
-    BloodPressureRecord(
+  timestamp: time,
+    record: BloodPressureRecord(
       time: time,
       sys: sys == null ? null : Pressure.mmHg(sys),
       dia: dia == null ? null : Pressure.mmHg(dia),
       pul: pul,
     ),
-    Note(
+    note: Note(
       time: time,
       note: note,
       color: pin?.toARGB32(),
     ),
-    (intake == null ? [] : [ intake ]),
+    intake: intake,
+    weight: null,
   );
 }
 
-extension DebugFormat on FullEntry {
+extension DebugFormat on AddEntryFormValue {
   String debugToString() => 'FullEntry('
     'time: $time, '
     'sys: ${sys?.mmHg}, '
@@ -177,6 +180,6 @@ extension DebugFormat on FullEntry {
     'pul: $pul, '
     'note: $note, '
     'color: $color, '
-    'intakes: $intakes'
+    'intake: $intake'
   ')';
 }

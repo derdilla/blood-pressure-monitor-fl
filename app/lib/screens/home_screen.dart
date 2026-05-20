@@ -36,7 +36,7 @@ class AppHome extends StatelessWidget with TypeLogger {
         child: SizedBox(
           height: 240.0,
           width: MediaQuery.of(context).size.width,
-          child: FullEntryBuilder(
+          child: AddEntryFormValueBuilder(
             rangeType: IntervalStoreManagerLocation.mainPage,
             onData: (context, records, intakes, notes) => BloodPressureValueGraph(
               records: records,
@@ -50,7 +50,7 @@ class AppHome extends StatelessWidget with TypeLogger {
     ],
   );
 
-  Widget _buildMeasurementList(BuildContext context) => FullEntryBuilder(
+  Widget _buildMeasurementList(BuildContext context) => AddEntryFormValueBuilder(
     rangeType: IntervalStoreManagerLocation.mainPage,
     onEntries: (context, entries) => Padding(
       padding: const EdgeInsets.only(top: 12.0),

@@ -1,4 +1,5 @@
 import 'package:blood_pressure_app/data_util/full_entry_builder.dart';
+import 'package:blood_pressure_app/features/input/forms/add_entry_form.dart';
 import 'package:blood_pressure_app/l10n/app_localizations.dart';
 import 'package:blood_pressure_app/model/storage/interval_store.dart';
 import 'package:flutter/material.dart';
@@ -18,7 +19,7 @@ void main() {
     final mainIntervalls = IntervalStorage();
     mainIntervalls.changeStepSize(TimeStep.lifetime);
 
-    await tester.pumpWidget(await appBaseWithData(FullEntryBuilder(
+    await tester.pumpWidget(await appBaseWithData(AddEntryFormValueBuilder(
       rangeType: IntervalStoreManagerLocation.mainPage,
       onData: (context, foundRecords, foundIntakes, foundNotes) {
         expect(foundRecords, records);
@@ -39,7 +40,7 @@ void main() {
     final exportPageIntervalls = IntervalStorage();
     exportPageIntervalls.changeStepSize(TimeStep.lifetime);
 
-    await tester.pumpWidget(await appBaseWithData(FullEntryBuilder(
+    await tester.pumpWidget(await appBaseWithData(AddEntryFormValueBuilder(
       rangeType: IntervalStoreManagerLocation.exportPage,
       onEntries: (context, entries) {
         expect(entries, hasLength(3));
