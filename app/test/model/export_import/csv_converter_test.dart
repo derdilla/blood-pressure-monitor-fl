@@ -87,7 +87,7 @@ void main() {
       .having((p0) => p0.sys?.mmHg, 'systolic', 123)
       .having((p0) => p0.dia?.mmHg, 'diastolic', null)
       .having((p0) => p0.pul, 'pulse', null)
-      .having((p0) => p0.note?.note, 'notes', '')
+      .having((p0) => p0.note?.note, 'notes', null)
       .having((p0) => p0.note?.color, 'pin', null),
     ),);
   });
@@ -181,7 +181,7 @@ void main() {
       .having((p0) => p0.sys?.mmHg, 'systolic', 106)
       .having((p0) => p0.dia?.mmHg, 'diastolic', 77)
       .having((p0) => p0.pul, 'pulse', 53)
-      .having((p0) => p0.note?.note, 'notes', ''),
+      .having((p0) => p0.note?.note, 'notes', null),
     ),);
   });
   test('should import v1.5.1 measurements', () {
@@ -218,7 +218,7 @@ void main() {
       .having((p0) => p0.sys?.mmHg, 'systolic', 100)
       .having((p0) => p0.dia?.mmHg, 'diastolic', 82)
       .having((p0) => p0.pul, 'pulse', 63)
-      .having((p0) => p0.note?.note, 'notes', '')
+      .having((p0) => p0.note?.note, 'notes', null)
       .having((p0) => p0.note?.color, 'pin', null),
     ),);
   });
@@ -256,7 +256,7 @@ void main() {
         .having((p0) => p0.sys?.mmHg, 'systolic', 100)
         .having((p0) => p0.dia?.mmHg, 'diastolic', 82)
         .having((p0) => p0.pul, 'pulse', 63)
-        .having((p0) => p0.note?.note, 'notes', '')
+        .having((p0) => p0.note?.note, 'notes', null)
         .having((p0) => p0.note?.color, 'pin', null),
     ),);
     // TODO: test color
@@ -295,7 +295,7 @@ void main() {
       .having((p0) => p0.sys?.mmHg, 'systolic', 125)
       .having((p0) => p0.dia?.mmHg, 'diastolic', 77)
       .having((p0) => p0.pul, 'pulse', 60)
-      .having((p0) => p0.note?.note, 'notes', '')
+      .having((p0) => p0.note?.note, 'notes', null)
       .having((p0) => p0.note?.color, 'color', null),
     ),);
     expect(records, anyElement(isA<AddEntryFormValue>()
@@ -303,7 +303,7 @@ void main() {
         .having((p0) => p0.sys?.mmHg, 'systolic', 100)
         .having((p0) => p0.dia?.mmHg, 'diastolic', 82)
         .having((p0) => p0.pul, 'pulse', 63)
-        .having((p0) => p0.note?.note, 'notes', '')
+        .having((p0) => p0.note?.note, 'notes', null)
         .having((p0) => p0.note?.color, 'pin', null),
     ),);
   });
@@ -351,6 +351,22 @@ void main() {
       .having((c) => c.time.hour, 'hour', 0)
       .having((c) => c.time.minute, 'minute', 4),
     ));
+  });
+
+  test("Doesn't invent empty comments", () {
+    final text = File('test/model/export_import/exported_formats/empty_notes.csv').readAsStringSync();
+
+    final converter = CsvConverter(
+      CsvExportSettings(),
+      ExportColumnsManager(),
+      [],
+    );
+    final parsed = converter.parse(text);
+    final records = parsed.getOr(failParse);
+    expect(records, isNotNull);
+    expect(records, hasLength(3));
+    expect(records, everyElement(isA<AddEntryFormValue>()
+        .having((e) => e.note?.note, 'no note text', isNull)));
   });
 }
 

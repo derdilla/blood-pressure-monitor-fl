@@ -163,6 +163,7 @@ class CsvConverter with TypeLogger {
       if (noteText.startsWith('"')) {
         noteText = noteText.substring(1, noteText.length);
       }
+      noteText = noteText.trim();
 
       final record = BloodPressureRecord(
         time: timestamp,
@@ -172,7 +173,7 @@ class CsvConverter with TypeLogger {
       );
       final note = Note(
         time: timestamp,
-        note: noteText,
+        note: noteText.isEmpty ? null : noteText,
         color: color,
       );
       final intakes = intakesData
