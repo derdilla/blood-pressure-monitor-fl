@@ -8,6 +8,7 @@ import 'package:blood_pressure_app/model/storage/export_csv_settings.dart';
 import 'package:blood_pressure_app/model/storage/export_pdf_settings.dart';
 import 'package:blood_pressure_app/model/storage/export_xls_settings.dart';
 import 'package:blood_pressure_app/model/storage/types/export_format_setting.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -125,13 +126,18 @@ class ActiveExportFieldCustomization extends StatelessWidget {
                         },
                         icon: const Icon(Icons.remove_circle_outline),
                       ),
-                      const Icon(Icons.drag_handle),
+                      ReorderableDragStartListener(
+                        index: idx,
+                        child: const Icon(Icons.drag_handle),
+                      ),
                     ],
                   ),
                 );
               },
               itemCount: activeColumns.length + 1,
-              onReorder: fieldsConfig.reorderUserColumns,
+              onReorderItem: fieldsConfig.reorderUserColumns,
+              buildDefaultDragHandles: false,
+              dragStartBehavior: DragStartBehavior.down,
             );
           },
         ),
