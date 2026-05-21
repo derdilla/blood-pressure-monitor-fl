@@ -1,3 +1,4 @@
+import 'package:blood_pressure_app/app.dart';
 import 'package:blood_pressure_app/data_util/entry_context.dart';
 import 'package:blood_pressure_app/l10n/app_localizations.dart';
 import 'package:blood_pressure_app/model/storage/storage.dart';
@@ -24,7 +25,7 @@ class NavigationActionButtons extends StatelessWidget {
               heroTag: 'floatingActionAdd',
               tooltip: AppLocalizations.of(context)!.addMeasurement,
               autofocus: true,
-              onPressed: context.createEntry,
+              onPressed: () => Navigator.of(context).pushNamed(AppRoute.add.path),
               child: const Icon(Icons.add,),
             ),
           ),
@@ -36,9 +37,7 @@ class NavigationActionButtons extends StatelessWidget {
           heroTag: 'floatingActionStatistics',
           tooltip: AppLocalizations.of(context)!.statistics,
           backgroundColor: const Color(0xFF6F6F6F),
-          onPressed: () => Navigator.of(context).push(MaterialPageRoute<void>(
-            builder: (BuildContext context) => const StatisticsScreen(),
-          )),
+          onPressed: () => Navigator.of(context).pushNamed(AppRoute.statistics.path),
           child: const Icon(Icons.insights, color: Colors.black),
         ),
         const SizedBox(
@@ -49,9 +48,7 @@ class NavigationActionButtons extends StatelessWidget {
           tooltip: AppLocalizations.of(context)!.settings,
           backgroundColor: const Color(0xFF6F6F6F),
           child: const Icon(Icons.settings, color: Colors.black),
-          onPressed: () => Navigator.of(context).push(MaterialPageRoute<void>(
-            builder: (BuildContext context) => const SettingsPage(),
-          )),
+          onPressed: () => Navigator.of(context).pushNamed(AppRoute.settings.path),
         ),
       ],
     ),
