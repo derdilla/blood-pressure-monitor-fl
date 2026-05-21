@@ -23,7 +23,6 @@ class DeviceScanCubit extends Cubit<DeviceScanState> with TypeLogger {
   /// ([Settings.knownBleDev]).
   DeviceScanCubit({
     FlutterBluePlusMockable? flutterBluePlus,
-    required this.service,
     required this.settings,
   }) : _flutterBluePlus = flutterBluePlus ?? FlutterBluePlusMockable(),
         super(DeviceListLoading()) {
@@ -33,9 +32,6 @@ class DeviceScanCubit extends Cubit<DeviceScanState> with TypeLogger {
 
   /// Storage for known devices.
   final Settings settings;
-
-  /// Service required from bluetooth devices.
-  final Guid service;
 
   final FlutterBluePlusMockable _flutterBluePlus;
 
@@ -59,11 +55,7 @@ class DeviceScanCubit extends Cubit<DeviceScanState> with TypeLogger {
         onError: _onScanError,
     );
     try {
-      await _flutterBluePlus.startScan(
-        // no timeout, the user knows best how long scanning is needed
-        withServices: [ service ],
-        // Not all devices are found using this configuration (https://pub.dev/packages/flutter_blue_plus#scanning-does-not-find-my-device).
-      );
+      await _flutterBluePlus.startScan();
     } catch (e) {
       _onScanError(e);
     }

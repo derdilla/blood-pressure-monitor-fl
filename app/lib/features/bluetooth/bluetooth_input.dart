@@ -104,7 +104,6 @@ class _BluetoothInputState extends State<BluetoothInput> with TypeLogger {
     _bluetoothSubscription = null;
   }
 
-  // TODO(derdilla): extract logic from UI
   @override
   Widget build(BuildContext context) {
     const SizeChangedLayoutNotification().dispatch(context);
