@@ -569,8 +569,8 @@
     "@btnShare": {},
     "exportSuccess": "Eksportimine õnnestus",
     "@exportSuccess": {},
-    "xsl": "Excel (xls)",
-    "@xsl": {},
+    "xls": "Excel (xls)",
+    "@xls": {},
     "reset": "Lähtesta",
     "@reset": {}
 }

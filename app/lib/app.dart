@@ -2,26 +2,33 @@ import 'dart:io';
 
 import 'package:blood_pressure_app/data_util/consistent_future_builder.dart';
 import 'package:blood_pressure_app/features/health_connect/bp_sync_model.dart';
+import 'package:blood_pressure_app/features/health_connect/health_connect_screen.dart';
 import 'package:blood_pressure_app/features/health_connect/sync_model.dart';
 import 'package:blood_pressure_app/features/health_connect/weight_sync_model.dart';
+import 'package:blood_pressure_app/features/settings/export_import_screen.dart';
+import 'package:blood_pressure_app/features/settings/features_screen.dart';
 import 'package:blood_pressure_app/l10n/app_localizations.dart';
 import 'package:blood_pressure_app/logging.dart';
 import 'package:blood_pressure_app/model/storage/db/file_settings_loader.dart';
 import 'package:blood_pressure_app/model/storage/db/settings_loader.dart';
 import 'package:blood_pressure_app/model/storage/export_columns_store.dart';
-import 'package:blood_pressure_app/model/storage/export_xsl_settings_store.dart';
 import 'package:blood_pressure_app/model/storage/storage.dart';
+import 'package:blood_pressure_app/screens/add_entry_screen.dart';
 import 'package:blood_pressure_app/screens/error_reporting_screen.dart';
 import 'package:blood_pressure_app/screens/home_screen.dart';
 import 'package:blood_pressure_app/screens/loading_screen.dart';
+import 'package:blood_pressure_app/screens/settings_screen.dart';
+import 'package:blood_pressure_app/screens/statistics_screen.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:health/health.dart';
 import 'package:health_data_store/health_data_store.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:path/path.dart';
 import 'package:provider/provider.dart';
+import 'package:receive_intent/receive_intent.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
 /// Base class for the entire app.
@@ -47,10 +54,10 @@ class _AppState extends State<App> with TypeLogger {
   ExportSettings? _exportSettings;
   CsvExportSettings? _csvExportSettings;
   PdfExportSettings? _pdfExportSettings;
-  ExcelExportSettings? _xslExportSettings;
+  ExcelExportSettings? _xlsExportSettings;
   IntervalStoreManager? _intervalStorageManager;
   ExportColumnsManager? _exportColumnsManager;
-  HealthConnectSettingsStore? _healthConnectSettingsStore;
+  HealthConnectSettings? _healthConnectSettings;
 
   @override
   void dispose() {
@@ -60,10 +67,10 @@ class _AppState extends State<App> with TypeLogger {
     _exportSettings?.dispose();
     _csvExportSettings?.dispose();
     _pdfExportSettings?.dispose();
-    _xslExportSettings?.dispose();
+    _xlsExportSettings?.dispose();
     _intervalStorageManager?.dispose();
     _exportColumnsManager?.dispose();
-    _healthConnectSettingsStore?.dispose();
+    _healthConnectSettings?.dispose();
     super.dispose();
   }
 
@@ -100,10 +107,10 @@ class _AppState extends State<App> with TypeLogger {
       _exportSettings ??= await settingsLoader.loadExportSettings();
       _csvExportSettings ??= await settingsLoader.loadCsvExportSettings();
       _pdfExportSettings ??= await settingsLoader.loadPdfExportSettings();
-      _xslExportSettings ??= await settingsLoader.loadXslExportSettings();
+      _xlsExportSettings ??= await settingsLoader.loadXlsExportSettings();
       _intervalStorageManager ??= await settingsLoader.loadIntervalStorageManager();
       _exportColumnsManager ??= await settingsLoader.loadExportColumnsManager();
-      _healthConnectSettingsStore ??= await settingsLoader.loadHealthConnectSettingsStore();
+      _healthConnectSettings ??= await settingsLoader.loadHealthConnectSettings();
     } catch (e, stack) {
       await ErrorReporting.reportCriticalError('Error loading settings from files', '$e\n$stack',);
     }
@@ -166,22 +173,22 @@ class _AppState extends State<App> with TypeLogger {
     }
     
     // Sync with health-connect API
-    if (_healthConnectSettingsStore!.useHealthConnect
-        && _healthConnectSettingsStore!.syncOnAppStart) {
-      if (_healthConnectSettingsStore!.syncPressureMeasurements) {
+    if (_healthConnectSettings!.useHealthConnect
+        && _healthConnectSettings!.syncOnAppStart) {
+      if (_healthConnectSettings!.syncPressureMeasurements) {
         logger.info('Syncing blood pressure measurements');
         await BPSyncModel(bpRepo: bpRepo, health: Health()).sync();
       }
-      if (_healthConnectSettingsStore!.syncWeightMeasurements) {
+      if (_healthConnectSettings!.syncWeightMeasurements) {
         logger.info('Syncing weight measurements');
         await WeightSyncModel(weightRepo: weightRepo, health: Health()).sync();
       }
     }
 
     // Register listeners that sync on new measurements
-    if (_healthConnectSettingsStore!.useHealthConnect) {
+    if (_healthConnectSettings!.useHealthConnect) {
       final health = Health();
-      if (_healthConnectSettingsStore!.syncWeightMeasurements) {
+      if (_healthConnectSettings!.syncWeightMeasurements) {
         weightRepo.subscribe().listen((record) async {
           if (record != null) {
             final canWrite = await health.requestPermissionsIfMissing(
@@ -198,7 +205,7 @@ class _AppState extends State<App> with TypeLogger {
           }
         });
       }
-      if (_healthConnectSettingsStore!.syncPressureMeasurements) {
+      if (_healthConnectSettings!.syncPressureMeasurements) {
         bpRepo.subscribe().listen((record) async {
           if (record?.sys != null && record?.dia != null) {
             final canWrite = await health.requestPermissionsIfMissing(
@@ -220,6 +227,33 @@ class _AppState extends State<App> with TypeLogger {
 
     }
 
+    // Initial route building
+    AppRoute initialRoute = AppRoute.home;
+    if (_settings?.startWithAddMeasurementPage ?? false) {
+      initialRoute = AppRoute.add;
+    }
+    if (Platform.isAndroid) {
+      try {
+        final intent = await ReceiveIntent.getInitialIntent();
+        logger.info('Received intent: $intent');
+        if (intent?.action == 'android.intent.action.VIEW_PERMISSION_USAGE') {
+          switch (intent!.extra?['android.intent.extra.PERMISSION_GROUP_NAME']) {
+            case 'android.permission-group.HEALTH':
+              initialRoute = AppRoute.settingsHealthConnect;
+              break;
+            case 'android.permission-group.NEARBY_DEVICES':
+              initialRoute = AppRoute.settingsFeatures;
+              break;
+          }
+        }
+      } on PlatformException {
+        // Don't try too hard
+      }
+    }
+
+    // Cleans up loading with measurement on launch enabled
+    final initialMedicineList = await medRepo.getAll();
+
     _loadedChild = MultiRepositoryProvider(
       providers: [
         RepositoryProvider.value(value: bpRepo),
@@ -234,12 +268,12 @@ class _AppState extends State<App> with TypeLogger {
           ChangeNotifierProvider.value(value: _exportSettings!),
           ChangeNotifierProvider.value(value: _csvExportSettings!),
           ChangeNotifierProvider.value(value: _pdfExportSettings!),
-          ChangeNotifierProvider.value(value: _xslExportSettings!),
+          ChangeNotifierProvider.value(value: _xlsExportSettings!),
           ChangeNotifierProvider.value(value: _intervalStorageManager!),
           ChangeNotifierProvider.value(value: _exportColumnsManager!),
-          ChangeNotifierProvider.value(value: _healthConnectSettingsStore!),
+          ChangeNotifierProvider.value(value: _healthConnectSettings!),
         ],
-        child: _buildAppRoot(),
+        child: _buildAppRoot(initialRoute, initialMedicineList),
       ),
     );
 
@@ -260,7 +294,7 @@ class _AppState extends State<App> with TypeLogger {
   }
 
   /// Central [MaterialApp] widget of the app that sets the uniform style options.
-  Widget _buildAppRoot() => Consumer<Settings>(
+  Widget _buildAppRoot(AppRoute initialRoute, List<Medicine> initialMedicineList) => Consumer<Settings>(
     builder: (context, settings, child) => MaterialApp(
       title: 'Blood Pressure App',
       onGenerateTitle: (context) => AppLocalizations.of(context)!.title,
@@ -276,7 +310,18 @@ class _AppState extends State<App> with TypeLogger {
       supportedLocales: AppLocalizations.supportedLocales,
       locale: settings.language,
       debugShowCheckedModeBanner: false,
-      home: const AppHome(),
+      initialRoute: initialRoute.path,
+      routes: {
+        AppRoute.home.path: (_) => const AppHome(),
+        AppRoute.add.path: (_) => AddEntryScreen(
+          medicineList: initialMedicineList
+        ),
+        AppRoute.statistics.path: (_) => const StatisticsScreen(),
+        AppRoute.settings.path: (_) => const SettingsPage(),
+        AppRoute.settingsExport.path: (_) => const ExportImportScreen(),
+        AppRoute.settingsFeatures.path: (_) => const FeaturesScreen(),
+        AppRoute.settingsHealthConnect.path: (_) => const HealthConnectScreen(),
+      },
     ),
   );
 
@@ -319,4 +364,20 @@ class _AppState extends State<App> with TypeLogger {
       ),
     );
   }
+}
+
+enum AppRoute {
+  home('/'),
+  add('/add'),
+  statistics('/statistics'),
+  settings('/settings'),
+  settingsExport('/settings/export'),
+  settingsFeatures('/settings/features'),
+  settingsHealthConnect('/settings/healthConnect');
+
+  const AppRoute(this.path);
+
+  final String path;
+
+  String get name => path;
 }

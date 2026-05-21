@@ -1,4 +1,5 @@
-import 'package:blood_pressure_app/data_util/full_entry_builder.dart';
+import 'package:blood_pressure_app/data_util/add_entry_form_value_builder.dart';
+import 'package:blood_pressure_app/features/input/forms/add_entry_form.dart';
 import 'package:blood_pressure_app/l10n/app_localizations.dart';
 import 'package:blood_pressure_app/model/storage/interval_store.dart';
 import 'package:flutter/material.dart';
@@ -6,7 +7,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:health_data_store/health_data_store.dart';
 
 import '../features/measurement_list/measurement_list_entry_test.dart';
-import '../model/analyzer_test.dart';
+import '../model/blood_pressure_analyzer_test.dart';
 import '../util.dart';
 
 void main() {
@@ -18,7 +19,7 @@ void main() {
     final mainIntervalls = IntervalStorage();
     mainIntervalls.changeStepSize(TimeStep.lifetime);
 
-    await tester.pumpWidget(await appBaseWithData(FullEntryBuilder(
+    await tester.pumpWidget(await appBaseWithData(AddEntryFormValueBuilder(
       rangeType: IntervalStoreManagerLocation.mainPage,
       onData: (context, foundRecords, foundIntakes, foundNotes) {
         expect(foundRecords, records);
@@ -39,13 +40,33 @@ void main() {
     final exportPageIntervalls = IntervalStorage();
     exportPageIntervalls.changeStepSize(TimeStep.lifetime);
 
-    await tester.pumpWidget(await appBaseWithData(FullEntryBuilder(
+    await tester.pumpWidget(await appBaseWithData(AddEntryFormValueBuilder(
       rangeType: IntervalStoreManagerLocation.exportPage,
       onEntries: (context, entries) {
         expect(entries, hasLength(3));
         expect(entries[0].time.year, 2003);
         expect(entries[1].time.year, 2001);
         expect(entries[2].time.year, 2000);
+        return const Text('ok');
+      },
+    ), notes: notes, intervallStoreManager: IntervalStoreManager(exportPageIntervalls, IntervalStorage(), IntervalStorage())));
+
+    final localizations = await AppLocalizations.delegate.load(const Locale('en'));
+    expect(find.text(localizations.loading), findsOneWidget);
+    await tester.pumpAndSettle();
+    expect(find.text('ok'), findsOneWidget);
+  });
+
+  testWidgets("doesn't load empty notes", (tester) async {
+    final notes = [Note(time: DateTime(2003), note: ''), Note(time: DateTime(2000), note: ''),];
+
+    final exportPageIntervalls = IntervalStorage();
+    exportPageIntervalls.changeStepSize(TimeStep.lifetime);
+
+    await tester.pumpWidget(await appBaseWithData(AddEntryFormValueBuilder(
+      rangeType: IntervalStoreManagerLocation.exportPage,
+      onEntries: (context, entries) {
+        expect(entries, isEmpty);
         return const Text('ok');
       },
     ), notes: notes, intervallStoreManager: IntervalStoreManager(exportPageIntervalls, IntervalStorage(), IntervalStorage())));

@@ -1,8 +1,8 @@
 import 'package:blood_pressure_app/features/data_picker/filter_button.dart';
 import 'package:blood_pressure_app/l10n/app_localizations.dart';
-import 'package:blood_pressure_app/model/datarange_extension.dart';
 import 'package:blood_pressure_app/model/storage/interval_store.dart';
 import 'package:flutter/material.dart';
+import 'package:health_data_store/health_data_store.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:week_of_year/date_week_extensions.dart';
@@ -66,10 +66,10 @@ class IntervalPicker extends StatelessWidget {
                       );
                       if (res != null) {
                         interval.changeStepSize(value!);
-                        final dateRange = res.dateRange.copyWith(
+                        interval.customRange = DateRange(
+                          start: res.start.copyWith(hour: 0, minute: 0, second: 0),
                           end: res.end.copyWith(hour: 23, minute: 59, second: 59),
                         );
-                        interval.currentRange = dateRange;
                       }
                     } else if (value != null) {
                       interval.changeStepSize(value);

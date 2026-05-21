@@ -41,7 +41,7 @@ void main() {
       return [mockEntry(sys: 1234567)];
     });
     expect(value.length, 1);
-    expect(value.first.$1.sys?.mmHg, 1234567);
+    expect(value.first.record?.sys?.mmHg, 1234567);
   });
   test('should return empty list when error function returns null', () async {
     final result = RecordParsingResult.err(RecordParsingErrorExpectedMoreFields(123));

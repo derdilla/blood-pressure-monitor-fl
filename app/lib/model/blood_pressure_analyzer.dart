@@ -3,8 +3,6 @@ import 'dart:math';
 import 'package:collection/collection.dart';
 import 'package:health_data_store/health_data_store.dart';
 
-// TODO: test calculations work and return null in case of error
-
 /// Analysis utils for a list of blood pressure records.
 class BloodPressureAnalyzer {
   /// Create a analyzer for a list of records.
@@ -109,7 +107,7 @@ extension _NullableMath on Iterable<num?> {
   num? get tryAverage {
     final nonNull = nonNulls;
     if(nonNull.isEmpty) return null;
-    final double result = nonNull.fold(0.0, (last, next) => last + next / length);
+    final double result = nonNull.fold(0.0, (last, next) => last + next) / nonNull.length;
     return result;
   }
 

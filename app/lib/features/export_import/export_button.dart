@@ -9,12 +9,13 @@ import 'package:blood_pressure_app/model/export_import/csv_converter.dart';
 import 'package:blood_pressure_app/model/export_import/excel_converter.dart';
 import 'package:blood_pressure_app/model/export_import/pdf_converter.dart';
 import 'package:blood_pressure_app/model/storage/export_columns_store.dart';
-import 'package:blood_pressure_app/model/storage/export_csv_settings_store.dart';
-import 'package:blood_pressure_app/model/storage/export_pdf_settings_store.dart';
-import 'package:blood_pressure_app/model/storage/export_settings_store.dart';
-import 'package:blood_pressure_app/model/storage/export_xsl_settings_store.dart';
+import 'package:blood_pressure_app/model/storage/export_csv_settings.dart';
+import 'package:blood_pressure_app/model/storage/export_pdf_settings.dart';
+import 'package:blood_pressure_app/model/storage/export_settings.dart';
+import 'package:blood_pressure_app/model/storage/export_xls_settings.dart';
 import 'package:blood_pressure_app/model/storage/interval_store.dart';
-import 'package:blood_pressure_app/model/storage/settings_store.dart';
+import 'package:blood_pressure_app/model/storage/settings.dart';
+import 'package:blood_pressure_app/model/storage/types/export_format_setting.dart';
 import 'package:collection/collection.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
@@ -61,6 +62,7 @@ void performExport(BuildContext context, bool share) async { // TODO: extract
       final path = join(await getDatabasesPath(), 'bp.db');
       final data = await File(path).readAsBytes();
 
+      // https://mimetype.io/application/vnd.sqlite3
       if (context.mounted) await _exportData(context, data, '$filename.db', 'application/vnd.sqlite3', share);
       break;
     case ExportFormat.csv:
@@ -80,6 +82,7 @@ void performExport(BuildContext context, bool share) async { // TODO: extract
       final data = Uint8List.fromList(utf8.encode(csvString));
       if (context.mounted) {
         _logger.finer('performExport - Calling _exportData');
+        // https://www.rfc-editor.org/rfc/rfc7111
         await _exportData(context, data, '$filename.csv', 'text/csv', share);
       } else  {
         _logger.warning('performExport - No longer mounted: stopping export');
@@ -93,22 +96,23 @@ void performExport(BuildContext context, bool share) async { // TODO: extract
           Provider.of<ExportColumnsManager>(context, listen: false),
       );
       final pdf = await pdfConverter.create(await _getEntries(context));
-      if (context.mounted) await _exportData(context, pdf, '$filename.pdf', 'text/pdf', share);
+      // https://www.rfc-editor.org/rfc/rfc3778
+      if (context.mounted) await _exportData(context, pdf, '$filename.pdf', 'application/pdf', share);
       break;
-    case ExportFormat.xsl:
+    case ExportFormat.xls:
       final excelExportSettings = Provider.of<ExcelExportSettings>(context,
           listen: false);
       final exportColumnsManager = Provider.of<ExportColumnsManager>(context,
           listen: false);
-      final xslConverter = ExcelConverter(
+      final xlsConverter = ExcelConverter(
         excelExportSettings,
         exportColumnsManager,
         await RepositoryProvider.of<MedicineRepository>(context).getAll(),
       );
       if (!context.mounted) return;
-      final string = xslConverter.create(await _getEntries(context));
+      final string = xlsConverter.create(await _getEntries(context));
       final data = Uint8List.fromList(utf8.encode(string));
-      if (context.mounted) await _exportData(context, data, '$filename.xsl', 'application/vnd.ms-excel', share);
+      if (context.mounted) await _exportData(context, data, '$filename.xls', 'application/vnd.ms-excel', share);
       break;
   }
 

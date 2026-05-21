@@ -2,7 +2,7 @@ import 'dart:math' as math;
 import 'dart:ui';
 
 import 'package:blood_pressure_app/model/blood_pressure_analyzer.dart';
-import 'package:blood_pressure_app/model/storage/settings_store.dart';
+import 'package:blood_pressure_app/model/storage/settings.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:health_data_store/health_data_store.dart';

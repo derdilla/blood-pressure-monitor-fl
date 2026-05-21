@@ -57,11 +57,12 @@ class ActiveExportColumnConfiguration extends ChangeNotifier {
   /// Put the user column at [oldIndex] to [newIndex].
   void reorderUserColumns(int oldIndex, int newIndex) {
     assert(_activePreset == ExportImportPreset.none, 'user columns are not modifiable while another configuration is active');
+    if (newIndex >= _userSelectedColumns.length) {
+      // prevent dragging over add button
+      newIndex = newIndex = _userSelectedColumns.length - 1;
+    }
     assert(oldIndex >= 0 && oldIndex < _userSelectedColumns.length);
     assert(newIndex >= 0 && newIndex < _userSelectedColumns.length);
-    if (oldIndex < newIndex) {
-      newIndex -= 1;
-    }
     final item = _userSelectedColumns.removeAt(oldIndex);
     _userSelectedColumns.insert(newIndex, item);
     notifyListeners();

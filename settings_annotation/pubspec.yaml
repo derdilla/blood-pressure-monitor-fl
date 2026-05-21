@@ -1,0 +1,20 @@
+name: settings_annotation
+description: "Types for building typesafe settings for Blood Pressure Monitor."
+version: 0.0.1
+publish_to: none
+
+environment:
+  sdk: ^3.11.3
+  flutter: ">=1.17.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  meta: ^1.17.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+
+flutter:

@@ -42,11 +42,10 @@ abstract class BluetoothDeviceDiscovery<BM extends BluetoothManager> with TypeLo
 
   /// Start discovering for new devices
   ///
-  /// - [serviceUuids] The allowed service uuids to filter on when discovering devices
   /// - [onDevices] Callback for when devices have been discovered. The
   ///   [onDevices] callback can be called multiple times, it is also always
   ///   called with the list of all discovered devices from the start of discovering
-  Future<void> start(List<String> serviceUuids, ValueSetter<List<BluetoothDevice>> onDevices) async {
+  Future<void> start(ValueSetter<List<BluetoothDevice>> onDevices) async {
     if (_discovering) {
       logger.warning('Already discovering, not starting discovery again');
       return;
@@ -77,8 +76,8 @@ abstract class BluetoothDeviceDiscovery<BM extends BluetoothManager> with TypeLo
       onDevices(_devices.toList());
     }, onError: onDiscoveryError);
 
-    logger.fine('Starting discovery for devices with services: $serviceUuids');
-    await backendStart(serviceUuids);
+    logger.fine('Starting discovery for devices');
+    await backendStart();
   }
 
   /// Called when an error occurs during discovery

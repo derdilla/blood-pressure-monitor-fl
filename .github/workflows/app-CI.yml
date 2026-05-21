@@ -7,6 +7,8 @@ on:
     paths:
       - "app/**"
       - "health_data_store/**"
+      - "settings_annotation/**"
+      - "settings_builder/**"
       - "app-CI.yml"
   workflow_dispatch:
 
@@ -24,6 +26,8 @@ jobs:
           sparse-checkout: |
             app
             health_data_store
+            settings_annotation
+            settings_builder
       - name: Cache generated health data store
         id: cache-generated
         uses: actions/cache@v4
@@ -61,8 +65,12 @@ jobs:
       - name: Update app dependencies
         run: flutter pub get
         working-directory: app
-      - name: Generate app mock code # no efficient caching possible
-        run: flutter pub run build_runner build
+        # no efficient caching possible
+      - name: Generate settings code
+        run: dart run build_runner build --build-filter "lib/model/storage/*.dart"
+        working-directory: app
+      - name: Generate app mock code
+        run: dart run build_runner build --build-filter "test/**/*.dart"
         working-directory: app
       - name: Run analysis
         run: flutter analyze

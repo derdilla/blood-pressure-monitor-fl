@@ -8,17 +8,17 @@ import 'package:blood_pressure_app/features/bluetooth/backend/mock/mock_manager.
 final class MockBluetoothDiscovery extends BluetoothDeviceDiscovery<MockBluetoothManager> {
   /// constructor
   MockBluetoothDiscovery(super.manager);
-  
+
   @override
-  Future<void> backendStart(List<String> serviceUuids) {
+  Future<void> backendStart() {
     throw UnimplementedError();
   }
-  
+
   @override
   Future<void> backendStop() {
     throw UnimplementedError();
   }
-  
+
   @override
   Stream<List<BluetoothDevice>> get discoverStream => throw UnimplementedError();
 

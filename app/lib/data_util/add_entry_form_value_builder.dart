@@ -1,15 +1,16 @@
 import 'package:blood_pressure_app/data_util/repository_builder.dart';
+import 'package:blood_pressure_app/features/input/forms/add_entry_form.dart';
 import 'package:blood_pressure_app/model/storage/interval_store.dart';
 import 'package:flutter/material.dart';
 import 'package:health_data_store/health_data_store.dart';
 import 'package:provider/provider.dart';
 
-/// Shorthand class for getting a [rangeType]s [FullEntry] values.
-class FullEntryBuilder extends StatelessWidget {
-  /// Create a loader for getting a [rangeType]s [FullEntry] values.
+/// Shorthand class for getting a [rangeType]s [AddEntryFormValue] values.
+class AddEntryFormValueBuilder extends StatelessWidget {
+  /// Create a loader for getting a [rangeType]s [AddEntryFormValue] values.
   ///
   /// Provide either [onEntries] or [onData].
-  const FullEntryBuilder({
+  const AddEntryFormValueBuilder({
     super.key,
     this.onEntries,
     this.onData,
@@ -17,7 +18,7 @@ class FullEntryBuilder extends StatelessWidget {
   }) : assert((onEntries == null) != (onData == null), 'Provide either of the builders.');
 
   /// Builder using a sorted list of full entries.
-  final Widget Function(BuildContext context, List<FullEntry> entries)? onEntries;
+  final Widget Function(BuildContext context, List<AddEntryFormValue> entries)? onEntries;
 
   /// Builder using data from the main categories.
   final Widget Function(BuildContext context, List<BloodPressureRecord> records, List<MedicineIntake> intakes, List<Note> notes)? onData;
@@ -52,7 +53,7 @@ class FullEntryBuilder extends StatelessWidget {
 
           if (onData != null) return onData!(context, records, intakes, notes);
 
-          final entries = FullEntryList.merged(records, notes, intakes);
+          final entries = AddEntryFormValueList.merged(records, notes, intakes);
           entries.sort((a, b) => b.time.compareTo(a.time)); // newest first
           return onEntries!(context, entries);
         },

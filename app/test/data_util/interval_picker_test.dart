@@ -26,7 +26,7 @@ void main() {
   testWidgets('shows custom intervall start and end', (tester) async {
     final s = IntervalStoreManager(IntervalStorage(),IntervalStorage(),IntervalStorage());
     s.mainPage.changeStepSize(TimeStep.custom);
-    s.mainPage.currentRange = DateRange(start: DateTime(2000), end: DateTime(2001));
+    s.mainPage.customRange = DateRange(start: DateTime(2000), end: DateTime(2001));
 
     await tester.pumpWidget(materialApp(ChangeNotifierProvider.value(
       value: s,

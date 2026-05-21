@@ -8,16 +8,15 @@ import 'package:blood_pressure_app/features/input/forms/note_form.dart';
 import 'package:blood_pressure_app/features/input/forms/weight_form.dart';
 import 'package:blood_pressure_app/features/old_bluetooth/bluetooth_input.dart';
 import 'package:blood_pressure_app/l10n/app_localizations.dart';
-import 'package:blood_pressure_app/model/storage/bluetooth_input_mode.dart';
-import 'package:blood_pressure_app/model/storage/settings_store.dart';
+import 'package:blood_pressure_app/model/bluetooth_input_mode.dart';
+import 'package:blood_pressure_app/model/storage/settings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:health_data_store/health_data_store.dart';
 import 'package:intl/intl.dart';
 
-import '../../../model/analyzer_test.dart';
-import '../../../model/export_import/record_formatter_test.dart';
+import '../../../model/blood_pressure_analyzer_test.dart';
 import '../../../util.dart';
 import '../../measurement_list/measurement_list_entry_test.dart';
 
@@ -430,11 +429,6 @@ void main() {
 
     expect(find.byType(BloodPressureForm), findsNothing);
     expect(find.byType(WeightForm), findsOneWidget);
-  });
-
-  test('correctly creates AddEntryFormValue from note only FullEntry', () {
-    final FullEntry entry = mockEntry(note: 'Test');
-    expect(entry.asAddEntry.note?.note, 'Test');
   });
 
   testWidgets("doesn't update time from ble if setting isn't set", (tester) async {

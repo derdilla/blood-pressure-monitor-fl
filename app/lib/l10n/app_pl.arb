@@ -478,6 +478,6 @@
     "@noMedication": {},
     "bluetoothDisabled": "Wyłączono Bluetooth",
     "@bluetoothDisabled": {},
-    "xsl": "Excel (xsl)",
-    "@xsl": {}
+    "xls": "Excel (xls)",
+    "@xls": {}
 }

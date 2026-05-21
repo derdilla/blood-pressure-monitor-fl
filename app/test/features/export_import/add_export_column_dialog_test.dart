@@ -1,6 +1,5 @@
 import 'package:blood_pressure_app/features/export_import/add_export_column_dialog.dart';
 import 'package:blood_pressure_app/features/export_import/export_field_format_documentation_screen.dart';
-import 'package:blood_pressure_app/features/measurement_list/measurement_list_entry.dart';
 import 'package:blood_pressure_app/l10n/app_localizations.dart';
 import 'package:blood_pressure_app/model/export_import/column.dart';
 import 'package:flutter/material.dart';
@@ -20,7 +19,7 @@ void main() {
       expect(find.text('Field format'), findsOneWidget);
       expect(find.text('Please enter a value'), findsOneWidget);
       expect(find.text('null'), findsOneWidget);
-      expect(find.byType(MeasurementListRow), findsOneWidget);
+      expect(find.textContaining('Sys'), findsOneWidget);
       expect(find.byIcon(Icons.info_outline).hitTestable(), findsOneWidget);
       expect(find.byIcon(Icons.arrow_downward), findsNWidgets(2));
     });
@@ -36,7 +35,7 @@ void main() {
       expect(find.text('Field format'), findsAtLeastNWidgets(1));
       expect(find.text('csvTitle'), findsOneWidget);
       expect(find.text(r'formatPattern$SYS'), findsOneWidget);
-      expect(find.byType(MeasurementListRow), findsOneWidget);
+      expect(find.textContaining('Sys'), findsOneWidget);
       expect(find.byIcon(Icons.info_outline).hitTestable(), findsOneWidget);
       expect(find.byIcon(Icons.arrow_downward), findsNWidgets(2));
     });

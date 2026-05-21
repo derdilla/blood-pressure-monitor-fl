@@ -1,13 +1,13 @@
 import 'package:blood_pressure_app/model/storage/db/config_db.dart';
 import 'package:blood_pressure_app/model/storage/db/settings_loader.dart';
 import 'package:blood_pressure_app/model/storage/export_columns_store.dart';
-import 'package:blood_pressure_app/model/storage/export_csv_settings_store.dart';
-import 'package:blood_pressure_app/model/storage/export_pdf_settings_store.dart';
-import 'package:blood_pressure_app/model/storage/export_settings_store.dart';
-import 'package:blood_pressure_app/model/storage/export_xsl_settings_store.dart';
+import 'package:blood_pressure_app/model/storage/export_csv_settings.dart';
+import 'package:blood_pressure_app/model/storage/export_pdf_settings.dart';
+import 'package:blood_pressure_app/model/storage/export_settings.dart';
+import 'package:blood_pressure_app/model/storage/export_xls_settings.dart';
+import 'package:blood_pressure_app/model/storage/health_connect_settings.dart';
 import 'package:blood_pressure_app/model/storage/interval_store.dart';
-import 'package:blood_pressure_app/model/storage/settings_store.dart';
-import 'package:blood_pressure_app/model/storage/health_connect_settings_store.dart';
+import 'package:blood_pressure_app/model/storage/settings.dart';
 
 /// Class for loading data from the database.
 ///
@@ -18,7 +18,7 @@ import 'package:blood_pressure_app/model/storage/health_connect_settings_store.d
 ///
 /// The load... methods have to schedule a initial save to db in case an
 /// migration / update of fields occurred.
-@deprecated
+@Deprecated('The file based loader is now default')
 class ConfigDao implements SettingsLoader {
   /// Create a serializer to initialize data from a database.
   ConfigDao(this._configDB);
@@ -190,9 +190,10 @@ class ConfigDao implements SettingsLoader {
 
   // These were added after file settings
   @override
-  Future<ExcelExportSettings> loadXslExportSettings() async =>
+  Future<ExcelExportSettings> loadXlsExportSettings() async =>
       ExcelExportSettings();
 
-  Future<HealthConnectSettingsStore> loadHealthConnectSettingsStore() async =>
-      HealthConnectSettingsStore();
+  @override
+  Future<HealthConnectSettings> loadHealthConnectSettings() async =>
+      HealthConnectSettings();
 }

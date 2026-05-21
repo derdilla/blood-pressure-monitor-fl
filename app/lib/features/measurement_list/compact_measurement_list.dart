@@ -3,7 +3,7 @@ import 'package:blood_pressure_app/components/pressure_text.dart';
 import 'package:blood_pressure_app/data_util/entry_context.dart';
 import 'package:blood_pressure_app/features/input/forms/add_entry_form.dart';
 import 'package:blood_pressure_app/l10n/app_localizations.dart';
-import 'package:blood_pressure_app/model/storage/settings_store.dart';
+import 'package:blood_pressure_app/model/storage/settings.dart';
 import 'package:flutter/material.dart';
 import 'package:health_data_store/health_data_store.dart';
 import 'package:intl/intl.dart';
@@ -17,7 +17,7 @@ class CompactMeasurementList extends StatefulWidget {
   });
 
   /// Entries sorted with newest ordered first.
-  final List<FullEntry> data;
+  final List<AddEntryFormValue> data;
 
   @override
   State<CompactMeasurementList> createState() => _CompactMeasurementListState();
@@ -71,7 +71,7 @@ class _CompactMeasurementListState extends State<CompactMeasurementList> {
         key: Key(widget.data[index].time.toIso8601String()),
         confirmDismiss: (direction) async {
           if (direction == DismissDirection.startToEnd) { // edit
-            await context.createEntry(widget.data[index].asAddEntry);
+            await context.createEntry(widget.data[index]);
             return false;
           } else { // delete
             await context.deleteEntry(widget.data[index]);
@@ -113,8 +113,9 @@ class _CompactMeasurementListState extends State<CompactMeasurementList> {
             Expanded(
               flex: _tableElementsSizes[4],
               child: NullableText(() {
-                String note = widget.data[index].note ?? '';
-                for (final i in widget.data[index].intakes) {
+                String note = widget.data[index].note?.note ?? '';
+                final i = widget.data[index].intake;
+                if (i != null) {
                   note += '${i.medicine.designation}(${i.dosis.mg}mg)';
                 }
                 return note.isEmpty ? null : note;

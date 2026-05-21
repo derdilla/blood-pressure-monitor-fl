@@ -2,9 +2,10 @@ import 'package:blood_pressure_app/features/bluetooth/logic/ble_read_cubit.dart'
 import 'package:blood_pressure_app/features/bluetooth/logic/characteristics/ble_measurement_data.dart';
 import 'package:blood_pressure_app/features/bluetooth/logic/characteristics/ble_measurement_status.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:logging/logging.dart';
+import 'package:flutter_test/flutter_test.dart';
 
-class MockBleReadCubit extends Cubit<BleReadState> implements BleReadCubit {
+class MockBleReadCubit extends Cubit<BleReadState> with Fake
+    implements BleReadCubit {
   MockBleReadCubit(): super(BleReadSuccess(
     BleMeasurementData(
       systolic: 123,
@@ -25,24 +26,5 @@ class MockBleReadCubit extends Cubit<BleReadState> implements BleReadCubit {
       timestamp: DateTime.now(),
     ),
   ));
-
-  @override
-  String get characteristicUUID => throw UnimplementedError();
-
-  @override
-  String get serviceUUID => throw UnimplementedError();
-
-  @override
-  Logger get logger => throw UnimplementedError();
-
-  @override
-  Future<void> takeMeasurement() {
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<void> useMeasurement(BleMeasurementData data) {
-    throw UnimplementedError();
-  }
 
 }

@@ -3,7 +3,7 @@ import 'package:blood_pressure_app/components/input_dialog.dart';
 import 'package:blood_pressure_app/features/settings/tiles/number_input_list_tile.dart';
 import 'package:blood_pressure_app/l10n/app_localizations.dart';
 import 'package:blood_pressure_app/model/blood_pressure/warn_values.dart';
-import 'package:blood_pressure_app/model/storage/settings_store.dart';
+import 'package:blood_pressure_app/model/storage/settings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:url_launcher/url_launcher.dart';

@@ -6,7 +6,7 @@ import 'package:blood_pressure_app/features/health_connect/sync_tile.dart';
 import 'package:blood_pressure_app/features/health_connect/weight_sync_model.dart';
 import 'package:blood_pressure_app/features/settings/tiles/titled_column.dart';
 import 'package:blood_pressure_app/l10n/app_localizations.dart';
-import 'package:blood_pressure_app/model/storage/health_connect_settings_store.dart';
+import 'package:blood_pressure_app/model/storage/health_connect_settings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:health/health.dart';
@@ -58,7 +58,7 @@ class _HealthConnectScreenState extends State<HealthConnectScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final settings = context.watch<HealthConnectSettingsStore>();
+    final settings = context.watch<HealthConnectSettings>();
     final localizations = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: AppBar(

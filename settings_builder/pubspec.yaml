@@ -1,0 +1,17 @@
+name: settings_builder
+description: "Typesafe settings builder for Blood Pressure Monitor."
+version: 0.0.1
+publish_to: none
+
+environment:
+  sdk: ^3.11.3
+
+dependencies:
+  analyzer: ^10.0.1
+  build: ^4.0.5
+  source_gen: ^4.2.2
+  settings_annotation:
+    path: ../settings_annotation
+
+dev_dependencies:
+  lints: ^6.0.0

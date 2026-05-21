@@ -5,12 +5,12 @@ import 'package:health_data_store/health_data_store.dart';
 
 void main() {
   test('base constructor should initialize with values', () {
-    final storageObject = IntervalStorage(stepSize: TimeStep.month, range: DateRange(
+    final storageObject = IntervalStorage(stepSize: TimeStep.custom, customRange: DateRange(
         start: DateTime.fromMillisecondsSinceEpoch(1234),
         end: DateTime.fromMillisecondsSinceEpoch(5678),
     ),);
 
-    expect(storageObject.stepSize, TimeStep.month);
+    expect(storageObject.stepSize, TimeStep.custom);
     expect(storageObject.currentRange.start.millisecondsSinceEpoch, 1234);
     expect(storageObject.currentRange.end.millisecondsSinceEpoch, 5678);
   });
@@ -26,7 +26,7 @@ void main() {
   test('base constructor should initialize with only incomplete parameters', () {
     // only tests for no crashes
     IntervalStorage(stepSize: TimeStep.last30Days);
-    IntervalStorage(range: DateRange(
+    IntervalStorage(customRange: DateRange(
         start: DateTime.fromMillisecondsSinceEpoch(1234),
         end: DateTime.fromMillisecondsSinceEpoch(5678),
     ),);
@@ -56,7 +56,7 @@ void main() {
     final yearIntervall = IntervalStorage(stepSize: TimeStep.year);
     final last7DaysIntervall = IntervalStorage(stepSize: TimeStep.last7Days);
     final last30DaysIntervall = IntervalStorage(stepSize: TimeStep.last30Days);
-    final customIntervall = IntervalStorage(stepSize: TimeStep.custom, range: DateRange(
+    final customIntervall = IntervalStorage(stepSize: TimeStep.custom, customRange: DateRange(
         start: DateTime.fromMillisecondsSinceEpoch(1234),
         end: DateTime.fromMillisecondsSinceEpoch(1234 + 24 * 60 * 60 * 1000), // one day
     ),);
@@ -95,5 +95,4 @@ void main() {
     expect(last30DaysIntervall.currentRange.duration.inDays, 30);
     expect(customIntervall.currentRange.duration.inMilliseconds, 24 * 60 * 60 * 1000);
   });
-
 }

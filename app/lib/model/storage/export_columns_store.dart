@@ -10,14 +10,15 @@ import 'package:flutter/material.dart';
 class ExportColumnsManager extends ChangeNotifier {
   /// Create a instance from a map created by [toMap].
   factory ExportColumnsManager.fromMap(Map<String, dynamic> map) {
-    final List<dynamic> jsonUserColumns = map['userColumns'];
+    final jsonUserColumns = map['userColumns'] as List<dynamic>;
     final manager = ExportColumnsManager();
-    for (final Map<String, dynamic> c in jsonUserColumns) {
+    for (final c in jsonUserColumns) {
+      if (c is! Map<String, dynamic>) continue;
       switch (c['t']) {
         case 0:
-          manager.addOrUpdate(UserColumn.explicit(c['id'], c['csvTitle'], c['formatString']));
+          manager.addOrUpdate(UserColumn.explicit(c['id'].toString(), c['csvTitle'].toString(), c['formatString'].toString()));
         case 1:
-          manager.addOrUpdate(TimeColumn.explicit(c['id'], c['csvTitle'], c['formatPattern']));
+          manager.addOrUpdate(TimeColumn.explicit(c['id'].toString(), c['csvTitle'].toString(), c['formatPattern'].toString()));
         default:
           assert(false, 'Unexpected column type ${c['t']}.');
       }
@@ -28,7 +29,7 @@ class ExportColumnsManager extends ChangeNotifier {
   /// Create a instance from a [String] created by [toJson].
   factory ExportColumnsManager.fromJson(String jsonString) {
     try {
-      return ExportColumnsManager.fromMap(jsonDecode(jsonString));
+      return ExportColumnsManager.fromMap(jsonDecode(jsonString) as Map<String, dynamic>);
     } catch (e) {
       assert(e is FormatException || e is TypeError);
       return ExportColumnsManager();
@@ -75,7 +76,7 @@ class ExportColumnsManager extends ChangeNotifier {
 
   /// Deletes a [ExportColumn] the user added.
   ///
-  /// Calling this with the [ExportColumnI.internalIdentifier] of build-in columns
+  /// Calling this with the [ExportColumn.internalIdentifier] of build-in columns
   /// or undefined columns will have no effect.
   void deleteUserColumn(String identifier) {
     assert(_userColumns.containsKey(identifier), "Don't call deleteUserColumn for non-existent or non-user columns");
@@ -120,7 +121,7 @@ class ExportColumnsManager extends ChangeNotifier {
 
   /// Serialize the object to a restoreable map.
   Map<String, dynamic> toMap() {
-    final columns = [];
+    final columns = <Map<String, dynamic>>[];
     for (final c in _userColumns.values) {
       switch (c) {
         case UserColumn():
@@ -153,4 +154,3 @@ class ExportColumnsManager extends ChangeNotifier {
   /// Serialize the object to a restoreable string.
   String toJson() => jsonEncode(toMap());
 }
-

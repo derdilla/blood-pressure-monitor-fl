@@ -3,13 +3,13 @@ import 'dart:math';
 
 import 'package:blood_pressure_app/components/custom_banner.dart';
 import 'package:blood_pressure_app/components/fullscreen_dialog.dart';
+import 'package:blood_pressure_app/features/input/forms/add_entry_form.dart';
 import 'package:blood_pressure_app/l10n/app_localizations.dart';
 import 'package:blood_pressure_app/model/export_import/column.dart';
 import 'package:blood_pressure_app/model/export_import/csv_record_parsing_actor.dart';
 import 'package:blood_pressure_app/model/storage/export_columns_store.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
-import 'package:health_data_store/health_data_store.dart';
 
 /// A preview that allows customizing columns used for csv data import.
 ///
@@ -85,7 +85,7 @@ class _ImportPreviewDialogState extends State<ImportPreviewDialog> {
     onActionButtonPressed: (_showingError) ? null : () {
       final result = _actor.attemptParse();
       if (result.hasError()) return;
-      Navigator.pop<List<FullEntry>>(context, result.getOr((e) => null));
+      Navigator.pop<List<AddEntryFormValue>>(context, result.getOr((e) => null));
     },
     actions: [
       CheckboxMenuButton(
@@ -197,12 +197,12 @@ class _ImportPreviewDialogState extends State<ImportPreviewDialog> {
 }
 
 /// Shows a dialog to preview import of a csv file
-Future<List<FullEntry>?> showImportPreview(
+Future<List<AddEntryFormValue>?> showImportPreview(
   BuildContext context,
   CsvRecordParsingActor initialActor,
   ExportColumnsManager columnsManager,
   bool bottomAppBar,) =>
-  showDialog<List<FullEntry>>(
+  showDialog<List<AddEntryFormValue>>(
     context: context, builder: (context) =>
     ImportPreviewDialog(
       bottomAppBar: bottomAppBar,

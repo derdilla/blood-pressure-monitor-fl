@@ -1,13 +1,13 @@
 
 
+import 'package:blood_pressure_app/features/input/forms/add_entry_form.dart';
 import 'package:blood_pressure_app/l10n/app_localizations.dart';
-import 'package:health_data_store/health_data_store.dart';
 
 /// Indicate a possible error during record parsing.
 class RecordParsingResult {
 
   /// Pass a valid record list and indicate success.
-  factory RecordParsingResult.ok(List<FullEntry> result)=>
+  factory RecordParsingResult.ok(List<AddEntryFormValue> result)=>
       RecordParsingResult._create(result, null);
 
   /// Indicate a parsing failure.
@@ -15,7 +15,7 @@ class RecordParsingResult {
       RecordParsingResult._create(null, error);
   RecordParsingResult._create(this._result, this._error);
 
-  final List<FullEntry>? _result;
+  final List<AddEntryFormValue>? _result;
   final EntryParsingError? _error;
 
   /// Returns if there is an error present.
@@ -30,7 +30,7 @@ class RecordParsingResult {
   /// a error is present.
   ///
   /// When [errorHandler] returns null a empty list is passed.
-  List<FullEntry> getOr(List<FullEntry>? Function(EntryParsingError error) errorHandler) {
+  List<AddEntryFormValue> getOr(List<AddEntryFormValue>? Function(EntryParsingError error) errorHandler) {
     if (_result != null) {
       assert(_error == null);
       return _result!;

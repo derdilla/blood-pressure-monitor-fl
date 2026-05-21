@@ -7,7 +7,7 @@ import 'package:blood_pressure_app/features/bluetooth/backend/bluetooth_backend.
 import 'package:blood_pressure_app/features/bluetooth/logic/ble_read_cubit.dart';
 import 'package:blood_pressure_app/features/bluetooth/logic/bluetooth_cubit.dart';
 import 'package:blood_pressure_app/logging.dart';
-import 'package:blood_pressure_app/model/storage/settings_store.dart';
+import 'package:blood_pressure_app/model/storage/settings.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -26,7 +26,6 @@ class DeviceScanCubit extends Cubit<DeviceScanState> with TypeLogger {
   /// ([Settings.knownBleDev]).
   DeviceScanCubit({
     required BluetoothManager manager,
-    required this.services,
     required this.settings,
   }): super(DeviceListLoading()) {
     _manager = manager;
@@ -35,9 +34,6 @@ class DeviceScanCubit extends Cubit<DeviceScanState> with TypeLogger {
 
   /// Storage for known devices.
   late final Settings settings;
-
-  /// Service required from bluetooth devices.
-  final List<String> services;
 
   late final BluetoothManager _manager;
 
@@ -53,7 +49,7 @@ class DeviceScanCubit extends Cubit<DeviceScanState> with TypeLogger {
     try {
       // no timeout, the user knows best how long scanning is needed
       // Not all devices are found using this configuration (https://pub.dev/packages/flutter_blue_plus#scanning-does-not-find-my-device).
-      await _manager.discovery.start(services, _onScanResult);
+      await _manager.discovery.start(_onScanResult);
     } catch (e) {
       _onScanError(e);
     }

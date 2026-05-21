@@ -1,11 +1,11 @@
 import 'package:blood_pressure_app/features/statistics/blood_pressure_distribution.dart';
 import 'package:blood_pressure_app/features/statistics/value_distribution.dart';
 import 'package:blood_pressure_app/l10n/app_localizations.dart';
-import 'package:blood_pressure_app/model/storage/settings_store.dart';
+import 'package:blood_pressure_app/model/storage/settings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import '../../model/analyzer_test.dart';
+import '../../model/blood_pressure_analyzer_test.dart';
 import '../../util.dart';
 
 void main() {

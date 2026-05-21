@@ -1,12 +1,10 @@
 import 'dart:io';
 
 import 'package:archive/archive_io.dart';
+import 'package:blood_pressure_app/app.dart';
 import 'package:blood_pressure_app/data_util/consistent_future_builder.dart';
-import 'package:blood_pressure_app/features/health_connect/health_connect_screen.dart';
 import 'package:blood_pressure_app/features/settings/behavior_screen.dart';
 import 'package:blood_pressure_app/features/settings/delete_data_screen.dart';
-import 'package:blood_pressure_app/features/settings/export_import_screen.dart';
-import 'package:blood_pressure_app/features/settings/features_screen.dart';
 import 'package:blood_pressure_app/features/settings/graph_screen.dart';
 import 'package:blood_pressure_app/features/settings/style_screen.dart';
 import 'package:blood_pressure_app/features/settings/tiles/titled_column.dart';
@@ -56,7 +54,7 @@ class SettingsPage extends StatelessWidget {
                   title: Text(localizations.featuresSetting),
                   leading: const Icon(Icons.toggle_off_outlined),
                   trailing: const Icon(Icons.arrow_forward_ios),
-                  onTap: thenGoTo(context, (_) => const FeaturesScreen()),
+                  onTap: () => Navigator.of(context).pushNamed(AppRoute.settingsFeatures.path),
                 ),
                 ListTile(
                   title: Text(localizations.behavior),
@@ -86,13 +84,13 @@ class SettingsPage extends StatelessWidget {
                     title: Text(localizations.healthConnect),
                     leading: const Icon(Icons.sync),
                     trailing: const Icon(Icons.arrow_forward_ios),
-                    onTap: thenGoTo(context, (_) => const HealthConnectScreen()),
+                    onTap: () => Navigator.of(context).pushNamed(AppRoute.settingsHealthConnect.path),
                   ),
                   ListTile(
                     title: Text(localizations.exportImport),
                     leading: const Icon(Icons.download),
                     trailing: const Icon(Icons.arrow_forward_ios),
-                    onTap: thenGoTo(context, (_) => const ExportImportScreen()),
+                    onTap: () => Navigator.of(context).pushNamed(AppRoute.settingsExport.path),
                   ),
                   ListTile(
                     title: Text(localizations.delete),
@@ -165,6 +163,8 @@ class SettingsPage extends StatelessWidget {
                     final exportSettings = context.read<ExportSettings>();
                     final csvExportSettings = context.read<CsvExportSettings>();
                     final pdfExportSettings = context.read<PdfExportSettings>();
+                    final xlsExportSettings = context.read<ExcelExportSettings>();
+                    final healthConnectSettings = context.read<HealthConnectSettings>();
                     final intervalStoreManager = context.read<IntervalStoreManager>();
                     final exportColumnsManager = context.read<ExportColumnsManager>();
                     final result = await FilePicker.platform.pickFiles();
@@ -177,7 +177,7 @@ class SettingsPage extends StatelessWidget {
                       messenger.showSnackBar(SnackBar(content: Text(localizations.errCantReadFile)));
                       return;
                     }
-        
+
                     late SettingsLoader loader;
                     if (path.endsWith('db')) {
                       final configDB = await ConfigDB.open(dbPath: path, isFullPath: true);
@@ -198,14 +198,16 @@ class SettingsPage extends StatelessWidget {
                       messenger.showSnackBar(SnackBar(content: Text(localizations.errNotImportable)));
                       return;
                     }
-        
+
                     settings.copyFrom(await loader.loadSettings());
                     exportSettings.copyFrom(await loader.loadExportSettings());
                     csvExportSettings.copyFrom(await loader.loadCsvExportSettings());
                     pdfExportSettings.copyFrom(await loader.loadPdfExportSettings());
+                    xlsExportSettings.copyFrom(await loader.loadXlsExportSettings());
+                    healthConnectSettings.copyFrom(await loader.loadHealthConnectSettings());
                     intervalStoreManager.copyFrom(await loader.loadIntervalStorageManager());
                     exportColumnsManager.copyFrom(await loader.loadExportColumnsManager());
-        
+
                     messenger.showSnackBar(SnackBar(content: Text(localizations.success(localizations.importSettings))));
                   },
                 ),

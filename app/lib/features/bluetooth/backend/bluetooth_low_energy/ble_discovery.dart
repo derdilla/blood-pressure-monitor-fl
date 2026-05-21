@@ -1,7 +1,6 @@
 import 'package:blood_pressure_app/features/bluetooth/backend/bluetooth_device.dart';
 import 'package:blood_pressure_app/features/bluetooth/backend/bluetooth_discovery.dart';
 import 'package:blood_pressure_app/features/bluetooth/backend/bluetooth_low_energy/ble_manager.dart';
-import 'package:bluetooth_low_energy/bluetooth_low_energy.dart' show UUID;
 
 /// BluetoothDeviceDiscovery implementation for the 'bluetooth_low_energy' package
 final class BluetoothLowEnergyDiscovery extends BluetoothDeviceDiscovery<BluetoothLowEnergyManager> {
@@ -18,10 +17,7 @@ final class BluetoothLowEnergyDiscovery extends BluetoothDeviceDiscovery<Bluetoo
   @override
   Future<void> backendStart() async {
     try {
-      await manager.backend.startDiscovery(
-        // no timeout, the user knows best how long scanning is needed
-        serviceUUIDs: null,
-      );
+      await manager.backend.startDiscovery();
     } catch (e) {
       onDiscoveryError(e);
     }

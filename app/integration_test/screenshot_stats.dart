@@ -10,7 +10,7 @@ import 'package:health_data_store/health_data_store.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:provider/provider.dart';
 
-import '../test/model/analyzer_test.dart';
+import '../test/model/blood_pressure_analyzer_test.dart';
 import 'util.dart';
 
 void main() {

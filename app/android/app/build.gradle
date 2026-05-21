@@ -1,6 +1,5 @@
 plugins {
     id "com.android.application"
-    id "kotlin-android"
     id "dev.flutter.flutter-gradle-plugin"
 }
 
@@ -29,16 +28,12 @@ def keystoreProperties = new Properties()
    }
 
 android {
-    compileSdkVersion 36
-    ndkVersion flutter.ndkVersion
+    compileSdkVersion = 36
+    ndkVersion = flutter.ndkVersion
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_17
-        targetCompatibility JavaVersion.VERSION_17
-    }
-
-    kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_17
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
 
     sourceSets {
@@ -51,35 +46,35 @@ android {
         targetSdkVersion = flutter.targetSdkVersion
         versionCode = flutterVersionCode.toInteger()
         versionName = flutterVersionName
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
     signingConfigs {
        release {
-           keyAlias keystoreProperties['keyAlias']
-           keyPassword keystoreProperties['keyPassword']
-           storeFile keystoreProperties['storeFile'] ? file(keystoreProperties['storeFile']) : null
-           storePassword keystoreProperties['storePassword']
+           keyAlias = keystoreProperties.get('keyAlias')
+           keyPassword = keystoreProperties.get('keyPassword')
+           storeFile = keystoreProperties.get('storeFile') ? file(keystoreProperties.get('storeFile')) : null
+           storePassword = keystoreProperties.get('storePassword')
        }
     }
     buildTypes {
         release {
-            signingConfig signingConfigs.release
+            signingConfig = signingConfigs.release
         }
     }
 
     //Adding product flavors for fdroid
-    flavorDimensions "deploy"
+    flavorDimensions = [ "deploy" ]
 
     productFlavors {
         github {
-            dimension "deploy"
+            dimension = "deploy"
         }
         fdroid {
-            dimension "deploy"
-            signingConfig signingConfigs.debug
+            dimension = "deploy"
+            signingConfig = signingConfigs.debug
         }
     }
-    namespace 'com.derdilla.blood_pressure_app'
+    namespace = 'com.derdilla.blood_pressure_app'
 
     android.applicationVariants.all { variant ->
         if (variant.flavorName == "fdroid") {
@@ -90,8 +85,14 @@ android {
     }
 }
 
+kotlin {
+    compilerOptions {
+        jvmTarget = org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17
+    }
+}
+
 flutter {
-    source '../..'
+    source = '../..'
 }
 
 dependencies {

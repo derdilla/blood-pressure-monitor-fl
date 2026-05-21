@@ -1,27 +1,16 @@
-import 'dart:io';
-
 import 'package:blood_pressure_app/config.dart';
-import 'package:blood_pressure_app/data_util/entry_context.dart';
-import 'package:blood_pressure_app/data_util/full_entry_builder.dart';
+import 'package:blood_pressure_app/data_util/add_entry_form_value_builder.dart';
 import 'package:blood_pressure_app/features/data_picker/interval_picker.dart';
-import 'package:blood_pressure_app/features/health_connect/health_connect_screen.dart';
 import 'package:blood_pressure_app/features/home/navigation_action_buttons.dart';
 import 'package:blood_pressure_app/features/measurement_list/compact_measurement_list.dart';
 import 'package:blood_pressure_app/features/measurement_list/measurement_list.dart';
 import 'package:blood_pressure_app/features/measurement_list/weight_list.dart';
-import 'package:blood_pressure_app/features/settings/features_screen.dart';
 import 'package:blood_pressure_app/features/statistics/value_graph.dart';
 import 'package:blood_pressure_app/logging.dart';
 import 'package:blood_pressure_app/model/storage/interval_store.dart';
-import 'package:blood_pressure_app/model/storage/settings_store.dart';
+import 'package:blood_pressure_app/model/storage/settings.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
-import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-import 'package:receive_intent/receive_intent.dart';
-
-/// 0 when add entry dialog has not been shown, 1 when dialog is scheduled, 2 when dialog was launched.
-int _appStart = 0;
 
 /// Central screen of the app with graph and measurement list that is the center
 /// of navigation.
@@ -36,7 +25,7 @@ class AppHome extends StatelessWidget with TypeLogger {
         child: SizedBox(
           height: 240.0,
           width: MediaQuery.of(context).size.width,
-          child: FullEntryBuilder(
+          child: AddEntryFormValueBuilder(
             rangeType: IntervalStoreManagerLocation.mainPage,
             onData: (context, records, intakes, notes) => BloodPressureValueGraph(
               records: records,
@@ -50,7 +39,7 @@ class AppHome extends StatelessWidget with TypeLogger {
     ],
   );
 
-  Widget _buildMeasurementList(BuildContext context) => FullEntryBuilder(
+  Widget _buildMeasurementList(BuildContext context) => AddEntryFormValueBuilder(
     rangeType: IntervalStoreManagerLocation.mainPage,
     onEntries: (context, entries) => Padding(
       padding: const EdgeInsets.only(top: 12.0),
@@ -64,50 +53,6 @@ class AppHome extends StatelessWidget with TypeLogger {
   Widget build(BuildContext context) => SafeArea(
     child: OrientationBuilder(
       builder: (BuildContext context, Orientation orientation) {
-        // direct use of settings possible as no listening is required
-        if (_appStart == 0) {
-          if (Provider.of<Settings>(context, listen: false).startWithAddMeasurementPage) {
-            SchedulerBinding.instance.addPostFrameCallback((_) {
-              if (context.mounted) {
-                context.createEntry();
-                _appStart++;
-              } else {
-                _appStart--;
-              }
-            });
-          }
-
-          if (Platform.isAndroid) {
-            void open(Widget widget) {
-              SchedulerBinding.instance.addPostFrameCallback((_) {
-                if (!context.mounted) return;
-                Navigator.push(context, MaterialPageRoute<void>(
-                  builder: (_) => widget,
-                ));
-              });
-            }
-
-            try {
-              ReceiveIntent.getInitialIntent().then((intent) {
-                logger.info('Received intent: $intent');
-                if (intent?.action == 'android.intent.action.VIEW_PERMISSION_USAGE') {
-                  switch (intent!.extra?['android.intent.extra.PERMISSION_GROUP_NAME']) {
-                    case 'android.permission-group.HEALTH':
-                      open(const HealthConnectScreen());
-                      break;
-                    case 'android.permission-group.NEARBY_DEVICES':
-                      open(const FeaturesScreen());
-                      break;
-                  }
-                }
-              });
-            } on PlatformException {
-              // Don't try too hard
-            }
-          }
-          _appStart++;
-        }
-    
         if (showValueGraphAsHomeScreenInLandscapeMode && orientation == Orientation.landscape) {
           return Scaffold(
             body: _buildValueGraph(context),
