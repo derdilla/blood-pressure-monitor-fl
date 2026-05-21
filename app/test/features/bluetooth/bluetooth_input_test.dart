@@ -1,5 +1,4 @@
 import 'package:bloc_test/bloc_test.dart';
-import 'package:blood_pressure_app/features/bluetooth/backend/mock/mock_manager.dart';
 import 'package:blood_pressure_app/features/bluetooth/bluetooth_input.dart';
 import 'package:blood_pressure_app/features/bluetooth/logic/ble_read_cubit.dart';
 import 'package:blood_pressure_app/features/bluetooth/logic/bluetooth_cubit.dart';
@@ -12,6 +11,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:health_data_store/health_data_store.dart';
 
 import '../../util.dart';
+import 'ui/device_selection_test.dart';
 
 class _MockBluetoothCubit extends MockCubit<BluetoothState>
     implements BluetoothCubit {}
