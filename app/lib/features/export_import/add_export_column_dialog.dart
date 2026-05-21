@@ -1,6 +1,5 @@
 import 'package:blood_pressure_app/components/fullscreen_dialog.dart';
 import 'package:blood_pressure_app/features/export_import/export_field_format_documentation_screen.dart';
-import 'package:blood_pressure_app/features/measurement_list/measurement_list_entry.dart';
 import 'package:blood_pressure_app/l10n/app_localizations.dart';
 import 'package:blood_pressure_app/model/export_import/column.dart';
 import 'package:blood_pressure_app/model/export_import/record_formatter.dart';
@@ -179,15 +178,15 @@ class _AddExportColumnDialogState extends State<AddExportColumnDialog>
                     return Column(
                       children: [
                         if (type == _FormatterType.record)
-                          MeasurementListRow(
-                            data: (
-                              timestamp: record.time,
-                              record: record,
-                              note: null,
-                              intake: null,
-                              weight: null,
-                            ),
-                            onRequestEdit: () { }, // ignore
+                          Column(
+                            mainAxisSize: MainAxisSize.min,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text('${localizations.time}: ${record.time}'),
+                              Text('${localizations.sysLong}: ${record.sys}'),
+                              Text('${localizations.diaLong}: ${record.dia}'),
+                              Text('${localizations.pulLong}: ${record.pul}'),
+                            ],
                           ) else Text(
                             DateFormat('MMM d, y - h:m.s')
                               .format(record.time),
