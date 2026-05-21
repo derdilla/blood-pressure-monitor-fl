@@ -42,7 +42,6 @@ abstract class BluetoothDeviceDiscovery<BM extends BluetoothManager> with TypeLo
 
   /// Start discovering for new devices
   ///
-  /// - [serviceUuids] The allowed service uuids to filter on when discovering devices
   /// - [onDevices] Callback for when devices have been discovered. The
   ///   [onDevices] callback can be called multiple times, it is also always
   ///   called with the list of all discovered devices from the start of discovering
