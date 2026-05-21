@@ -36,6 +36,8 @@ extension EntryUtils on BuildContext {
       );
       _logger.finest('received $entry from dialog');
       if (entry != null) {
+        // When updating this logic: keep in mind the add entry screen,
+        // which does much of the same
         if (initial?.record != null) await recordRepo.remove(initial!.record!);
         if (initial?.note != null) await noteRepo.remove(initial!.note!);
         if (initial?.intake != null) await intakeRepo.remove(initial!.intake!);
