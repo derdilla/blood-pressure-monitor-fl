@@ -104,7 +104,6 @@ class _BluetoothInputState extends State<BluetoothInput> with TypeLogger {
     _bluetoothSubscription = null;
   }
 
-  // TODO(derdilla): extract logic from UI
   @override
   Widget build(BuildContext context) {
     const SizeChangedLayoutNotification().dispatch(context);
@@ -161,7 +160,6 @@ class _BluetoothInputState extends State<BluetoothInput> with TypeLogger {
     final settings = context.watch<Settings>();
     _deviceScanCubit ??= widget.deviceScanCubit?.call() ?? DeviceScanCubit(
       manager: widget.manager,
-      services: BleReadCubit.supportedServices,
       settings: settings,
     );
 

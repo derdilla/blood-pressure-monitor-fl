@@ -93,7 +93,6 @@ class _OldBluetoothInputState extends State<OldBluetoothInput> with TypeLogger {
     });
     final settings = context.watch<Settings>();
     _deviceScanCubit ??= DeviceScanCubit(
-      service: serviceUUID,
       settings: settings,
     );
     return BlocBuilder<DeviceScanCubit, DeviceScanState>(
