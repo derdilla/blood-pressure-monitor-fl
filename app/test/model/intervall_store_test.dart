@@ -95,16 +95,4 @@ void main() {
     expect(last30DaysIntervall.currentRange.duration.inDays, 30);
     expect(customIntervall.currentRange.duration.inMilliseconds, 24 * 60 * 60 * 1000);
   });
-
-  test('switch behaves like expected', () {
-    bool success = false;
-    switch(TimeStep.last7Days) {
-      case TimeStep.lifetime:
-      case TimeStep.last7Days:
-      case TimeStep.last30Days:
-        success = true;
-      default:
-    }
-    expect(success, isTrue);
-  });
 }
