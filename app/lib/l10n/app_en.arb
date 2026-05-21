@@ -547,7 +547,7 @@
     "@oldBluetoothInput": {},
     "newBluetoothInputCrossPlatform": "Stable",
     "@newBluetoothInputCrossPlatform": {},
-    "bluetoothInputDesc": "If the stable backend doesn't work, use the legacy backend and report it at contact@derdilla.com or https://github.com/derdilla/blood-pressure-monitor-fl/issues",
+    "bluetoothInputDesc": "If the stable backend doesn''t work, use the legacy backend and report it at contact@derdilla.com or https://github.com/derdilla/blood-pressure-monitor-fl/issues",
     "@bluetoothInputDesc": {},
     "tapToSelect": "Tap to select",
     "@tapToSelect": {},
