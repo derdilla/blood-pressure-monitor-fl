@@ -161,7 +161,6 @@ class _BluetoothInputState extends State<BluetoothInput> with TypeLogger {
     final settings = context.watch<Settings>();
     _deviceScanCubit ??= widget.deviceScanCubit?.call() ?? DeviceScanCubit(
       manager: widget.manager,
-      services: BleReadCubit.supportedServices,
       settings: settings,
     );
 

@@ -48,7 +48,6 @@ void main() {
     when(flutterBluePlus.scanResults).thenAnswer((_) => mockResults.stream);
 
     final cubit = DeviceScanCubit(
-        services: ['1810'],
         settings: settings,
         manager: manager
     );
@@ -93,7 +92,6 @@ void main() {
     });
     when(flutterBluePlus.scanResults).thenAnswer((_) => mockResults.stream);
     final cubit = DeviceScanCubit(
-      services: ['1810'],
       settings: settings,
       manager: manager
     );
