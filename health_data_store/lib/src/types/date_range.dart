@@ -25,9 +25,9 @@ abstract class DateRange with _$DateRange {
 
   /// Creates a date range from unix epoch to now.
   factory DateRange.all() => DateRange(
-        start: DateTime.fromMillisecondsSinceEpoch(0),
-        end: DateTime.now(),
-      );
+    start: DateTime.fromMillisecondsSinceEpoch(0),
+    end: DateTime.now().copyWith(hour: 23, minute: 59, second: 59),
+  );
 
   /// Returns a [Duration] of the time between [start] and [end].
   ///

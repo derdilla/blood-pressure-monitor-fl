@@ -39,12 +39,6 @@ class AddEntryScreen extends StatelessWidget {
         if (entry.intake != null) await intakeRepo.add(entry.intake!);
         if (entry.weight != null) await weightRepo.add(entry.weight!);
 
-        /*
-        read<IntervalStoreManager>().mainPage.setToMostRecentInterval();
-        read<IntervalStoreManager>().statsPage.setToMostRecentInterval();
-        read<IntervalStoreManager>().exportPage.setToMostRecentInterval();
-        */
-
         if (context.mounted &&
             context.read<ExportSettings>().exportAfterEveryEntry) {
           performExport(context, false);

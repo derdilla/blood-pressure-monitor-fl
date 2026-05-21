@@ -8,10 +8,22 @@ import 'package:health_data_store/health_data_store.dart';
 
 /// Class for storing the current interval, as it is needed in start page, statistics and export.
 class IntervalStorage extends ChangeNotifier {
+  /// Create a storage to interact with a display intervall.
+  IntervalStorage({
+    TimeStep stepSize = TimeStep.last7Days,
+    int directionalStep = 0,
+    DateRange? customRange,
+    TimeRange? timeRange,
+  }) : _stepSize = stepSize,
+       _directionalStep = directionalStep,
+       _customRange = customRange,
+       _timeRange = timeRange;
+
   /// Create a instance from a map created by [toMap].
   factory IntervalStorage.fromMap(Map<String, dynamic> map) => IntervalStorage(
     stepSize: TimeStep.deserialize(map['stepSize']),
-    range: ConvertUtil.parseRange(map['start'], map['end']),
+    directionalStep: ConvertUtil.parseInt(map['directionalStep']) ?? 0,
+    customRange: ConvertUtil.parseRange(map['customRangeStart'], map['customRangeEnd']),
     timeRange: TimeRange.fromJson(map['timeRange'] as Map<String, dynamic>?)
   );
 
@@ -24,34 +36,35 @@ class IntervalStorage extends ChangeNotifier {
     }
   }
 
-  /// Create a storage to interact with a display intervall.
-  IntervalStorage({TimeStep? stepSize, DateRange? range, TimeRange? timeRange}) :
-    _stepSize = stepSize ?? TimeStep.last7Days {
-    _currentRange = range ?? _getMostRecentDisplayIntervall();
-    _timeRange = timeRange;
-  }
-
-  TimeStep _stepSize;
-
-  late DateRange _currentRange;
-
-  TimeRange? _timeRange;
-
   /// Serialize the object to a restoreable map.
   Map<String, dynamic> toMap() => <String, dynamic>{
     'stepSize': stepSize.serialize(),
-    'start': currentRange.start.millisecondsSinceEpoch,
-    'end': currentRange.end.millisecondsSinceEpoch,
+    'directionalStep': _directionalStep,
+    'customRangeStart': _customRange?.start.millisecondsSinceEpoch,
+    'customRangeEnd': _customRange?.end.millisecondsSinceEpoch,
     'timeRange': _timeRange?.toJson(),
   };
 
   /// Serialize the object to a restoreable string.
   String toJson() => jsonEncode(toMap());
 
+  TimeStep _stepSize;
+
+  DateRange? _customRange;
+
+  int _directionalStep = 0;
+
+  TimeRange? _timeRange;
+
+  /// The range to use if [stepSize] is [TimeStep.custom]
+  set customRange(DateRange newRange) {
+    _customRange = newRange;
+    notifyListeners();
+  }
+
   /// The stepSize gets set through the changeStepSize method.
   TimeStep get stepSize => _stepSize;
 
-  // TODO: programmatically ensure this is respected:
   /// The [TimeRange] used to limit data selection if non-null.
   ///
   /// Data points must fall on or between the start and end times to be selected.
@@ -64,58 +77,56 @@ class IntervalStorage extends ChangeNotifier {
 
   /// sets the stepSize to the new value and resets the currentRange to the most recent one. 
   void changeStepSize(TimeStep value) {
+    _directionalStep = 0;
+    if (value == TimeStep.custom) _customRange ??= currentRange;
     _stepSize = value;
-    setToMostRecentInterval();
-  }
-
-  DateRange get currentRange => _currentRange;
-
-  set currentRange(DateRange value) {
-    _currentRange = value;
     notifyListeners();
   }
 
-  /// Sets internal _currentRange to the most recent intervall and notifies listeners.
-  void setToMostRecentInterval() {
-    _currentRange = _getMostRecentDisplayIntervall();
-    notifyListeners();
-  }
-
-  void moveDataRangeByStep(int directionalStep) {
-    final oldStart = currentRange.start;
-    final oldEnd = currentRange.end;
-    currentRange = switch (stepSize) {
+  DateRange get currentRange {
+    final range = _getMostRecentDisplayIntervall();
+    final oldStart = range.start;
+    final oldEnd = range.end;
+    return switch (stepSize) {
       TimeStep.day => DateRange(
-        start: oldStart.copyWith(day: oldStart.day + directionalStep),
-        end: oldEnd.copyWith(day: oldEnd.day + directionalStep),
+        start: oldStart.copyWith(day: oldStart.day + _directionalStep),
+        end: oldEnd.copyWith(day: oldEnd.day + _directionalStep),
       ),
       TimeStep.week || TimeStep.last7Days => DateRange(
-        start: oldStart.copyWith(day: oldStart.day + 7 * directionalStep),
-        end: oldEnd.copyWith(day: oldEnd.day + 7 * directionalStep),
+        start: oldStart.copyWith(day: oldStart.day + 7 * _directionalStep),
+        end: oldEnd.copyWith(day: oldEnd.day + 7 * _directionalStep),
       ),
       TimeStep.month => DateRange(
         // No fitting Duration: wraps correctly according to doc
-        start: oldStart.copyWith(month: oldStart.month + directionalStep),
-        end: oldEnd.copyWith(month: oldEnd.month + directionalStep),
+        start: oldStart.copyWith(month: oldStart.month + _directionalStep),
+        end: oldEnd.copyWith(month: oldEnd.month + _directionalStep),
       ),
       TimeStep.year => DateRange(
         // No fitting Duration: wraps correctly according to doc
-        start: oldStart.copyWith(year: oldStart.year + directionalStep),
-        end: oldEnd.copyWith(year: oldEnd.year + directionalStep),
+        start: oldStart.copyWith(year: oldStart.year + _directionalStep),
+        end: oldEnd.copyWith(year: oldEnd.year + _directionalStep),
       ),
-      TimeStep.lifetime => DateRange(
-        start: DateTime.fromMillisecondsSinceEpoch(1),
-        end: DateTime.now().copyWith(hour: 23, minute: 59, second: 59),
-      ),
+      TimeStep.lifetime => DateRange.all(),
       TimeStep.last30Days => DateRange(
-        start: oldStart.copyWith(day: oldStart.day + 30 * directionalStep),
-        end: oldEnd.copyWith(day: oldEnd.day + 30 * directionalStep),
+        start: oldStart.copyWith(day: oldStart.day + 30 * _directionalStep),
+        end: oldEnd.copyWith(day: oldEnd.day + 30 * _directionalStep),
       ),
       TimeStep.custom => DateRange(
-        start: oldStart.add(oldEnd.difference(oldStart) * directionalStep),
-        end: oldEnd.add(oldEnd.difference(oldStart) * directionalStep),
+        start: oldStart.add(oldEnd.difference(oldStart) * _directionalStep),
+        end: oldEnd.add(oldEnd.difference(oldStart) * _directionalStep),
       ),
     };
+  }
+
+  /// Resets any steps the user might have made.
+  void setToMostRecentInterval() {
+    _directionalStep = 0;
+    notifyListeners();
+  }
+
+  void moveDataRangeByStep(int delta) {
+    _directionalStep += delta;
+    notifyListeners();
   }
 
   DateRange _getMostRecentDisplayIntervall() {
@@ -146,10 +157,9 @@ class IntervalStorage extends ChangeNotifier {
         final endOfToday = now.copyWith(hour: 23, minute: 59, second: 59);
         return DateRange(start: start, end: endOfToday);
       case TimeStep.custom:
-        return DateRange(
-          start: now.subtract(currentRange.duration),
-          end: now,
-        );
+        // Do nothing
+        assert(_customRange != null);
+        return _customRange ?? DateRange.all();
     }
   }
 }
