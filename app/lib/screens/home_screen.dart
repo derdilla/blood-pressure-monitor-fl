@@ -1,4 +1,3 @@
-
 import 'package:blood_pressure_app/config.dart';
 import 'package:blood_pressure_app/data_util/add_entry_form_value_builder.dart';
 import 'package:blood_pressure_app/features/data_picker/interval_picker.dart';
