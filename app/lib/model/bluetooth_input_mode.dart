@@ -20,7 +20,7 @@ enum BluetoothInputMode {
   static BluetoothInputMode? deserialize(int? value) => switch (value) {
     0 => BluetoothInputMode.disabled,
     1 => BluetoothInputMode.oldBluetoothInput,
-    3 => BluetoothInputMode.newBluetoothInputCrossPlatform,
+    2 || 3 => BluetoothInputMode.newBluetoothInputCrossPlatform,
     _ => null,
   };
 
