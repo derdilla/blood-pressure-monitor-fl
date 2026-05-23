@@ -1,7 +1,6 @@
 /// Persistently stored information that is not a measurement.
 library;
 
-export 'db/config_dao.dart';
 export 'export_csv_settings.dart';
 export 'export_pdf_settings.dart';
 export 'export_settings.dart';
