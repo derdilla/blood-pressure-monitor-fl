@@ -1,7 +1,6 @@
 import 'package:blood_pressure_app/components/confirm_deletion_dialog.dart';
 import 'package:blood_pressure_app/l10n/app_localizations.dart';
-import 'package:blood_pressure_app/model/storage/export_columns_store.dart';
-import 'package:blood_pressure_app/model/storage/storage.dart';
+import 'package:blood_pressure_app/model/storage/db/settings_loader.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:health_data_store/health_data_store.dart';
@@ -37,12 +36,16 @@ class _DeleteDataScreenState extends State<DeleteDataScreen> {
               final messanger = ScaffoldMessenger.of(context);
               if (await showConfirmDeletionDialog(context, localizations.warnDeletionUnrecoverable)) {
                 if (!context.mounted) return;
-                context.read<Settings>().reset();
-                context.read<ExportSettings>().reset();
-                context.read<CsvExportSettings>().reset();
-                context.read<PdfExportSettings>().reset();
-                context.read<IntervalStoreManager>().reset();
-                context.read<ExportColumnsManager>().reset();
+                final loader = context.read<SettingsLoader?>();
+                if (loader == null) {
+                  messanger.showSnackBar(SnackBar( // Shouldn't happen in normal app use
+                    content: Text(localizations.error('No loader object')),
+                  ));
+                  return;
+                }
+                for (final s in loader.initializedSettings) {
+                  s.reset();
+                }
                 messanger.showSnackBar(SnackBar(
                   content: Text(localizations.deletionConfirmed),
                 ));

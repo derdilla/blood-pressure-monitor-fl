@@ -27,7 +27,7 @@ void main() {
       localizationsDelegates: [AppLocalizations.delegate,], locale: Locale('en'),
       home: MultiProvider(
         providers: [
-          ChangeNotifierProvider(create: (c) => IntervalStoreManager(IntervalStorage(), IntervalStorage(), IntervalStorage())),
+          ChangeNotifierProvider(create: (c) => IntervalStoreManager()),
           ChangeNotifierProvider(create: (c) => Settings()),
         ],
         child: RepositoryProvider<BloodPressureRepository>(

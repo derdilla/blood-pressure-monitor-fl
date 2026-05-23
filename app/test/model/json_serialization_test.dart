@@ -6,6 +6,8 @@ import 'package:blood_pressure_app/model/horizontal_graph_line.dart';
 import 'package:blood_pressure_app/model/storage/export_columns_store.dart';
 import 'package:blood_pressure_app/model/storage/storage.dart';
 import 'package:blood_pressure_app/model/storage/types/export_format_setting.dart';
+import 'package:blood_pressure_app/model/storage/types/interval_storage_setting.dart';
+import 'package:blood_pressure_app/model/storage/types/time_step.dart';
 import 'package:blood_pressure_app/model/weight_unit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';

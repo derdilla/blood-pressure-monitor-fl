@@ -1,5 +1,5 @@
-
-import 'package:blood_pressure_app/model/storage/interval_store.dart';
+import 'package:blood_pressure_app/model/storage/types/interval_storage_setting.dart';
+import 'package:blood_pressure_app/model/storage/types/time_step.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:health_data_store/health_data_store.dart';
 

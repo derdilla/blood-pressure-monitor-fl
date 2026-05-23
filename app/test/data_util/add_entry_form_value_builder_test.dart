@@ -1,7 +1,9 @@
 import 'package:blood_pressure_app/data_util/add_entry_form_value_builder.dart';
 import 'package:blood_pressure_app/features/input/forms/add_entry_form.dart';
 import 'package:blood_pressure_app/l10n/app_localizations.dart';
-import 'package:blood_pressure_app/model/storage/interval_store.dart';
+import 'package:blood_pressure_app/model/storage/interval_store_manager.dart';
+import 'package:blood_pressure_app/model/storage/types/interval_storage_setting.dart';
+import 'package:blood_pressure_app/model/storage/types/time_step.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:health_data_store/health_data_store.dart';
@@ -27,7 +29,7 @@ void main() {
         expect(foundNotes, notes);
         return const Text('ok');
       },
-    ), records: records, intakes: intakes, notes: notes, intervallStoreManager: IntervalStoreManager(mainIntervalls, IntervalStorage(), IntervalStorage())));
+    ), records: records, intakes: intakes, notes: notes, intervallStoreManager: IntervalStoreManager(mainPage: mainIntervalls)));
 
     final localizations = await AppLocalizations.delegate.load(const Locale('en'));
     expect(find.text(localizations.loading), findsOneWidget);
@@ -49,7 +51,7 @@ void main() {
         expect(entries[2].time.year, 2000);
         return const Text('ok');
       },
-    ), notes: notes, intervallStoreManager: IntervalStoreManager(exportPageIntervalls, IntervalStorage(), IntervalStorage())));
+    ), notes: notes, intervallStoreManager: IntervalStoreManager(mainPage: exportPageIntervalls)));
 
     final localizations = await AppLocalizations.delegate.load(const Locale('en'));
     expect(find.text(localizations.loading), findsOneWidget);
@@ -69,7 +71,7 @@ void main() {
         expect(entries, isEmpty);
         return const Text('ok');
       },
-    ), notes: notes, intervallStoreManager: IntervalStoreManager(exportPageIntervalls, IntervalStorage(), IntervalStorage())));
+    ), notes: notes, intervallStoreManager: IntervalStoreManager(mainPage: exportPageIntervalls)));
 
     final localizations = await AppLocalizations.delegate.load(const Locale('en'));
     expect(find.text(localizations.loading), findsOneWidget);

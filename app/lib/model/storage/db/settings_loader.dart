@@ -1,14 +1,20 @@
+import 'dart:collection';
+
 import 'package:blood_pressure_app/model/storage/export_columns_store.dart';
 import 'package:blood_pressure_app/model/storage/export_csv_settings.dart';
 import 'package:blood_pressure_app/model/storage/export_pdf_settings.dart';
 import 'package:blood_pressure_app/model/storage/export_settings.dart';
 import 'package:blood_pressure_app/model/storage/export_xls_settings.dart';
 import 'package:blood_pressure_app/model/storage/health_connect_settings.dart';
-import 'package:blood_pressure_app/model/storage/interval_store.dart';
+import 'package:blood_pressure_app/model/storage/interval_store_manager.dart';
 import 'package:blood_pressure_app/model/storage/settings.dart';
+import 'package:settings_annotation/settings_annotation.dart';
 
 /// A backend agnostic loader for settings data.
 abstract class SettingsLoader {
+  /// Contains values of every type for which a load... method was called.
+  UnmodifiableListView<SettingsGroup> get initializedSettings;
+
   /// Loads the profiles [Settings] object from disk.
   ///
   /// If any errors occur or the object is not present, a default one will be
