@@ -11,8 +11,6 @@ import 'package:blood_pressure_app/features/settings/tiles/titled_column.dart';
 import 'package:blood_pressure_app/features/settings/version_screen.dart';
 import 'package:blood_pressure_app/l10n/app_localizations.dart';
 import 'package:blood_pressure_app/logging.dart';
-import 'package:blood_pressure_app/model/storage/export_columns_store.dart';
-import 'package:blood_pressure_app/model/storage/file_settings_loader.dart';
 import 'package:blood_pressure_app/model/storage/storage.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
