@@ -36,7 +36,6 @@ class FileSettingsLoader implements SettingsLoader {
     String fileName,
     T Function(String) build,
     T Function() createNew,
-    String Function(T) serialize,
   ) {
     if (_instances.containsKey(fileName)) return _instances[fileName] as T;
     final f = File(join(_path, fileName));
@@ -48,8 +47,8 @@ class FileSettingsLoader implements SettingsLoader {
     }
     obj ??= createNew();
 
-    obj.addListener(() => f.writeAsStringSync(serialize(obj!)));
-    f.writeAsStringSync(serialize(obj));
+    obj.addListener(() => f.writeAsStringSync(obj!.toJson()));
+    f.writeAsStringSync(obj.toJson());
     _instances[fileName] = obj;
     return obj;
   }
@@ -64,7 +63,6 @@ class FileSettingsLoader implements SettingsLoader {
     'csv-export',
     CsvExportSettings.fromJson,
     CsvExportSettings.new,
-    (e) => e.toJson(),
   );
 
   @override
@@ -72,7 +70,6 @@ class FileSettingsLoader implements SettingsLoader {
     'export-columns',
     ExportColumnsManager.fromJson,
     ExportColumnsManager.new,
-    (e) => e.toJson(),
   );
 
   @override
@@ -80,7 +77,6 @@ class FileSettingsLoader implements SettingsLoader {
     'export',
     ExportSettings.fromJson,
     ExportSettings.new,
-    (e) => e.toJson(),
   );
 
   @override
@@ -88,7 +84,6 @@ class FileSettingsLoader implements SettingsLoader {
     'intervall-store',
     IntervalStoreManager.fromJson,
     IntervalStoreManager.new,
-    (e) => e.toJson(),
   );
 
   @override
@@ -96,7 +91,6 @@ class FileSettingsLoader implements SettingsLoader {
     'pdf-export',
     PdfExportSettings.fromJson,
     PdfExportSettings.new,
-    (e) => e.toJson(),
   );
 
   @override
@@ -104,7 +98,6 @@ class FileSettingsLoader implements SettingsLoader {
     'xsl-export', // wrong spelling kept for compatability reasons
     ExcelExportSettings.fromJson,
     ExcelExportSettings.new,
-    (e) => e.toJson(),
   );
 
   @override
@@ -112,7 +105,6 @@ class FileSettingsLoader implements SettingsLoader {
     'general',
     Settings.fromJson,
     Settings.new,
-    (e) => e.toJson(),
   );
 
   @override
@@ -120,7 +112,6 @@ class FileSettingsLoader implements SettingsLoader {
     'health_connect',
     HealthConnectSettings.fromJson,
     HealthConnectSettings.new,
-    (e) => e.toJson(),
   );
 
   /// Attempt to backup all stored data to archive.
