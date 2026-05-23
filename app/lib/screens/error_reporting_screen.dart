@@ -119,7 +119,7 @@ class ErrorScreen extends StatelessWidget {
                             content: Text('ERR: $e')));
                       }
                     },
-                    child: const Text('rescue config.db'),
+                    child: const Text('rescue settings'),
                   ),
                   TextButton(
                     onPressed: () async {

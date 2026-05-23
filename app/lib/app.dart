@@ -87,13 +87,7 @@ class _AppState extends State<App> with TypeLogger {
         // File is likely already deleted or couldn't be created in the first place.
       }
       try {
-        File(join(dbPath, 'config.db')).deleteSync();
-        File(join(dbPath, 'config.db-journal')).deleteSync();
-      } on FileSystemException {
-        // No file to delete
-      }
-      try {
-        File(join(dbPath, 'medicine.intakes')).deleteSync();
+        Directory(join(await getDatabasesPath(), 'settings')).deleteSync(recursive: true);
       } on FileSystemException {
         // No file to delete
       }
