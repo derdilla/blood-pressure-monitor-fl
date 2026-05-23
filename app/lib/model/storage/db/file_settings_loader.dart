@@ -56,6 +56,7 @@ class FileSettingsLoader implements SettingsLoader {
 
   final _instances = <String, SettingsGroup>{};
 
+  @override
   UnmodifiableListView<SettingsGroup> get initializedSettings => UnmodifiableListView(_instances.values);
 
   @override

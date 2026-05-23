@@ -102,8 +102,9 @@ class _AppState extends State<App> with TypeLogger {
       }
     }
 
+    SettingsLoader? settingsLoader;
     try {
-      final SettingsLoader settingsLoader = await FileSettingsLoader.load();
+      settingsLoader = await FileSettingsLoader.load();
       _settings ??= await settingsLoader.loadSettings();
       _exportSettings ??= await settingsLoader.loadExportSettings();
       _csvExportSettings ??= await settingsLoader.loadCsvExportSettings();
@@ -272,6 +273,7 @@ class _AppState extends State<App> with TypeLogger {
       ],
       child: MultiProvider(
         providers: [
+          Provider<SettingsLoader?>.value(value: settingsLoader),
           ChangeNotifierProvider.value(value: _settings!),
           ChangeNotifierProvider.value(value: _exportSettings!),
           ChangeNotifierProvider.value(value: _csvExportSettings!),

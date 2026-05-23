@@ -1,3 +1,5 @@
+import 'dart:collection';
+
 import 'package:blood_pressure_app/model/storage/db/config_db.dart';
 import 'package:blood_pressure_app/model/storage/db/settings_loader.dart';
 import 'package:blood_pressure_app/model/storage/export_columns_store.dart';
@@ -9,6 +11,7 @@ import 'package:blood_pressure_app/model/storage/health_connect_settings.dart';
 import 'package:blood_pressure_app/model/storage/interval_store_manager.dart';
 import 'package:blood_pressure_app/model/storage/settings.dart';
 import 'package:blood_pressure_app/model/storage/types/interval_storage_setting.dart';
+import 'package:settings_annotation/src/settings_group.dart';
 
 /// Class for loading data from the database.
 ///
@@ -197,4 +200,8 @@ class ConfigDao implements SettingsLoader {
   @override
   Future<HealthConnectSettings> loadHealthConnectSettings() async =>
       HealthConnectSettings();
+
+  @override
+  UnmodifiableListView<SettingsGroup> get initializedSettings =>
+      throw UnimplementedError('Code unmaintained');
 }
