@@ -160,25 +160,10 @@ class _AppState extends State<App> with TypeLogger {
 
     final dbPath = await getDatabasesPath();
     if (File(join(dbPath, 'config.db')).existsSync()) {
-      try {
-        await migrateDatabaseSettings(
-          _settings!,
-          _exportSettings!,
-          _csvExportSettings!,
-          _pdfExportSettings!,
-          _intervalStorageManager!,
-          _exportColumnsManager!,
-          medRepo,
-        );
-        File(join(dbPath, 'config.db')).copySync(join(dbPath, 'v39_config.db.backup'));
-        File(join(dbPath, 'config.db')).deleteSync();
-        if (File(join(dbPath, 'config.db-journal')).existsSync()) {
-          File(join(dbPath, 'config.db-journal')).copySync(join(dbPath, 'v39_config.db-journal.backup'));
-          File(join(dbPath, 'config.db-journal')).deleteSync();
-        }
-      } catch (e, stack) {
-        await ErrorReporting.reportCriticalError('Error upgrading to file based settings:', '$e\n$stack',);
-      }
+      File(join(dbPath, 'config.db')).deleteSync();
+    }
+    if (File(join(dbPath, 'config.db-journal')).existsSync()) {
+      File(join(dbPath, 'config.db-journal')).deleteSync();
     }
     
     // Sync with health-connect API
