@@ -10,9 +10,8 @@ import 'package:blood_pressure_app/features/settings/features_screen.dart';
 import 'package:blood_pressure_app/l10n/app_localizations.dart';
 import 'package:blood_pressure_app/logging.dart';
 import 'package:blood_pressure_app/model/bluetooth_input_mode.dart';
-import 'package:blood_pressure_app/model/storage/db/file_settings_loader.dart';
-import 'package:blood_pressure_app/model/storage/db/settings_loader.dart';
 import 'package:blood_pressure_app/model/storage/export_columns_store.dart';
+import 'package:blood_pressure_app/model/storage/file_settings_loader.dart';
 import 'package:blood_pressure_app/model/storage/storage.dart';
 import 'package:blood_pressure_app/screens/add_entry_screen.dart';
 import 'package:blood_pressure_app/screens/error_reporting_screen.dart';
@@ -102,7 +101,7 @@ class _AppState extends State<App> with TypeLogger {
       }
     }
 
-    SettingsLoader? settingsLoader;
+    FileSettingsLoader? settingsLoader;
     try {
       settingsLoader = await FileSettingsLoader.load();
       _settings ??= await settingsLoader.loadSettings();
@@ -258,7 +257,7 @@ class _AppState extends State<App> with TypeLogger {
       ],
       child: MultiProvider(
         providers: [
-          Provider<SettingsLoader?>.value(value: settingsLoader),
+          Provider<FileSettingsLoader?>.value(value: settingsLoader),
           ChangeNotifierProvider.value(value: _settings!),
           ChangeNotifierProvider.value(value: _exportSettings!),
           ChangeNotifierProvider.value(value: _csvExportSettings!),

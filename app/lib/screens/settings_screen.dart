@@ -11,9 +11,8 @@ import 'package:blood_pressure_app/features/settings/tiles/titled_column.dart';
 import 'package:blood_pressure_app/features/settings/version_screen.dart';
 import 'package:blood_pressure_app/l10n/app_localizations.dart';
 import 'package:blood_pressure_app/logging.dart';
-import 'package:blood_pressure_app/model/storage/db/file_settings_loader.dart';
-import 'package:blood_pressure_app/model/storage/db/settings_loader.dart';
 import 'package:blood_pressure_app/model/storage/export_columns_store.dart';
+import 'package:blood_pressure_app/model/storage/file_settings_loader.dart';
 import 'package:blood_pressure_app/model/storage/storage.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
@@ -177,36 +176,35 @@ class SettingsPage extends StatelessWidget {
                       return;
                     }
 
-                    late SettingsLoader loader;
                     if (path.endsWith('db')) {
                       messenger.showSnackBar(SnackBar(content: Text(localizations.error('Format too old'))));
                       return;
-                    } else if (path.endsWith('zip')) {
-                      try {
-                        final decoded = ZipDecoder().decodeStream(InputFileStream(result.files.single.path!));
-                        final dir = join(Directory.systemTemp.path, 'settingsBackup');
-                        await extractArchiveToDisk(decoded, dir);
-                        loader = await FileSettingsLoader.load(dir);
-                      } on FormatException catch (e, stack) {
-                        messenger.showSnackBar(SnackBar(content: Text(localizations.invalidZip)));
-                        log.severe('invalid zip', e, stack);
-                        return;
-                      }
-                    } else {
+                    } else if (!path.endsWith('zip')) {
                       messenger.showSnackBar(SnackBar(content: Text(localizations.errNotImportable)));
                       return;
                     }
 
-                    settings.copyFrom(await loader.loadSettings());
-                    exportSettings.copyFrom(await loader.loadExportSettings());
-                    csvExportSettings.copyFrom(await loader.loadCsvExportSettings());
-                    pdfExportSettings.copyFrom(await loader.loadPdfExportSettings());
-                    xlsExportSettings.copyFrom(await loader.loadXlsExportSettings());
-                    healthConnectSettings.copyFrom(await loader.loadHealthConnectSettings());
-                    intervalStoreManager.copyFrom(await loader.loadIntervalStorageManager());
-                    exportColumnsManager.copyFrom(await loader.loadExportColumnsManager());
+                    try {
+                      final decoded = ZipDecoder().decodeStream(InputFileStream(result.files.single.path!));
+                      final dir = join(Directory.systemTemp.path, 'settingsBackup');
+                      await extractArchiveToDisk(decoded, dir);
+                      final loader = await FileSettingsLoader.load(dir);
 
-                    messenger.showSnackBar(SnackBar(content: Text(localizations.success(localizations.importSettings))));
+                      settings.copyFrom(await loader.loadSettings());
+                      exportSettings.copyFrom(await loader.loadExportSettings());
+                      csvExportSettings.copyFrom(await loader.loadCsvExportSettings());
+                      pdfExportSettings.copyFrom(await loader.loadPdfExportSettings());
+                      xlsExportSettings.copyFrom(await loader.loadXlsExportSettings());
+                      healthConnectSettings.copyFrom(await loader.loadHealthConnectSettings());
+                      intervalStoreManager.copyFrom(await loader.loadIntervalStorageManager());
+                      exportColumnsManager.copyFrom(await loader.loadExportColumnsManager());
+
+                      messenger.showSnackBar(SnackBar(content: Text(localizations.success(localizations.importSettings))));
+                    } on FormatException catch (e, stack) {
+                      messenger.showSnackBar(SnackBar(content: Text(localizations.invalidZip)));
+                      log.warning('invalid zip', e, stack);
+                      return;
+                    }
                   },
                 ),
               ],),
