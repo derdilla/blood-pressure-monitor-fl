@@ -8,9 +8,5 @@ export 'package:blood_pressure_app/features/bluetooth/backend/bluetooth_state.da
 /// All available bluetooth backends
 enum BluetoothBackend {
   /// Bluetooth Low Energy backend
-  bluetoothLowEnergy,
-  /// Flutter Blue Plus backend
-  flutterBluePlus,
-  /// Mock backend
-  mock;
+  bluetoothLowEnergy;
 }
