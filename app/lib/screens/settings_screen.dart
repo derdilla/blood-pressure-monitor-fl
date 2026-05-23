@@ -11,7 +11,6 @@ import 'package:blood_pressure_app/features/settings/tiles/titled_column.dart';
 import 'package:blood_pressure_app/features/settings/version_screen.dart';
 import 'package:blood_pressure_app/l10n/app_localizations.dart';
 import 'package:blood_pressure_app/logging.dart';
-import 'package:blood_pressure_app/model/storage/db/config_db.dart';
 import 'package:blood_pressure_app/model/storage/db/file_settings_loader.dart';
 import 'package:blood_pressure_app/model/storage/db/settings_loader.dart';
 import 'package:blood_pressure_app/model/storage/export_columns_store.dart';
@@ -180,9 +179,8 @@ class SettingsPage extends StatelessWidget {
 
                     late SettingsLoader loader;
                     if (path.endsWith('db')) {
-                      final configDB = await ConfigDB.open(dbPath: path, isFullPath: true);
-                      if(configDB == null) return; // too old (doesn't contain settings yet)
-                      loader = ConfigDao(configDB);
+                      messenger.showSnackBar(SnackBar(content: Text(localizations.error('Format too old'))));
+                      return;
                     } else if (path.endsWith('zip')) {
                       try {
                         final decoded = ZipDecoder().decodeStream(InputFileStream(result.files.single.path!));
