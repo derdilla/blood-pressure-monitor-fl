@@ -11,7 +11,7 @@ import 'package:blood_pressure_app/model/storage/health_connect_settings.dart';
 import 'package:blood_pressure_app/model/storage/interval_store_manager.dart';
 import 'package:blood_pressure_app/model/storage/settings.dart';
 import 'package:blood_pressure_app/model/storage/types/interval_storage_setting.dart';
-import 'package:settings_annotation/src/settings_group.dart';
+import 'package:settings_annotation/settings_annotation.dart';
 
 /// Class for loading data from the database.
 ///
