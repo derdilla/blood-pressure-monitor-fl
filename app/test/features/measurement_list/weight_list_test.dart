@@ -1,7 +1,9 @@
 import 'package:blood_pressure_app/features/measurement_list/weight_list.dart';
 import 'package:blood_pressure_app/l10n/app_localizations.dart';
-import 'package:blood_pressure_app/model/storage/interval_store.dart';
+import 'package:blood_pressure_app/model/storage/interval_store_manager.dart';
 import 'package:blood_pressure_app/model/storage/settings.dart';
+import 'package:blood_pressure_app/model/storage/types/interval_storage_setting.dart';
+import 'package:blood_pressure_app/model/storage/types/time_step.dart';
 import 'package:blood_pressure_app/model/weight_unit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -21,7 +23,7 @@ void main() {
         BodyweightRecord(time: DateTime(2000), weight: Weight.kg(70.0)),
         BodyweightRecord(time: DateTime(2002), weight: Weight.kg(7000.12345)),
       ],
-      intervallStoreManager: IntervalStoreManager(interval, IntervalStorage(), IntervalStorage()),
+      intervallStoreManager: IntervalStoreManager(mainPage: interval),
       const WeightList(rangeType: IntervalStoreManagerLocation.mainPage),
     ));
     await tester.pumpAndSettle();
@@ -53,7 +55,7 @@ void main() {
 
     await tester.pumpWidget(appBase(
       weightRepo: repo,
-      intervallStoreManager: IntervalStoreManager(interval, IntervalStorage(), IntervalStorage()),
+      intervallStoreManager: IntervalStoreManager(mainPage: interval),
       const WeightList(rangeType: IntervalStoreManagerLocation.mainPage),
     ));
     final localizations = await AppLocalizations.delegate.load(const Locale('en'));
@@ -87,7 +89,7 @@ void main() {
 
     await tester.pumpWidget(appBase(
       weightRepo: repo,
-      intervallStoreManager: IntervalStoreManager(interval, IntervalStorage(), IntervalStorage()),
+      intervallStoreManager: IntervalStoreManager(mainPage: interval),
       settings: Settings(confirmDeletion: false),
       const WeightList(rangeType: IntervalStoreManagerLocation.mainPage),
     ));
@@ -111,7 +113,7 @@ void main() {
 
     await tester.pumpWidget(appBase(
       weightRepo: repo,
-      intervallStoreManager: IntervalStoreManager(interval, IntervalStorage(), IntervalStorage()),
+      intervallStoreManager: IntervalStoreManager(mainPage: interval),
       settings: Settings(weightUnit: WeightUnit.lbs),
       const WeightList(rangeType: IntervalStoreManagerLocation.mainPage),
     ));

@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:blood_pressure_app/model/storage/export_columns_store.dart';
 import 'package:blood_pressure_app/model/storage/storage.dart';
+import 'package:blood_pressure_app/model/storage/types/interval_storage_setting.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 

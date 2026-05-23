@@ -1,6 +1,7 @@
 import 'package:blood_pressure_app/features/data_picker/interval_picker.dart';
 import 'package:blood_pressure_app/l10n/app_localizations.dart';
-import 'package:blood_pressure_app/model/storage/interval_store.dart';
+import 'package:blood_pressure_app/model/storage/interval_store_manager.dart';
+import 'package:blood_pressure_app/model/storage/types/time_step.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:health_data_store/health_data_store.dart';
@@ -11,7 +12,7 @@ import '../util.dart';
 void main() {
   testWidgets('shows controls and dropdown', (tester) async {
     await tester.pumpWidget(materialApp(ChangeNotifierProvider(
-      create: (_) => IntervalStoreManager(IntervalStorage(),IntervalStorage(),IntervalStorage()),
+      create: (_) => IntervalStoreManager(),
       child: const IntervalPicker(type: IntervalStoreManagerLocation.mainPage)
     )));
     expect(find.byType(DropdownButton<TimeStep>), findsOneWidget);
@@ -24,7 +25,7 @@ void main() {
     );
   });
   testWidgets('shows custom intervall start and end', (tester) async {
-    final s = IntervalStoreManager(IntervalStorage(),IntervalStorage(),IntervalStorage());
+    final s = IntervalStoreManager();
     s.mainPage.changeStepSize(TimeStep.custom);
     s.mainPage.customRange = DateRange(start: DateTime(2000), end: DateTime(2001));
 
@@ -38,7 +39,7 @@ void main() {
     expect(find.text(localizations.custom), findsOneWidget);
   });
   testWidgets('allows switching interval', (tester) async {
-    final s = IntervalStoreManager(IntervalStorage(),IntervalStorage(),IntervalStorage());
+    final s = IntervalStoreManager();
     s.mainPage.changeStepSize(TimeStep.last7Days);
 
     await tester.pumpWidget(materialApp(ChangeNotifierProvider.value(
@@ -62,7 +63,7 @@ void main() {
     expect(find.byType(DateRangePickerDialog), findsOneWidget);
   });
   testWidgets('steps date stepper by one', (tester) async {
-    final s = IntervalStoreManager(IntervalStorage(),IntervalStorage(),IntervalStorage());
+    final s = IntervalStoreManager();
     s.mainPage.changeStepSize(TimeStep.year);
     final year = s.mainPage.currentRange.start
       .add(s.mainPage.currentRange.duration ~/ 2)
@@ -85,7 +86,7 @@ void main() {
     expect(find.text('${year + 1}'), findsOneWidget);
   });
   testWidgets('selected custom interval gets interpreted correctly', (tester) async {
-    final s = IntervalStoreManager(IntervalStorage(),IntervalStorage(),IntervalStorage());
+    final s = IntervalStoreManager();
 
     await tester.pumpWidget(materialApp(ChangeNotifierProvider.value(
       value: s,

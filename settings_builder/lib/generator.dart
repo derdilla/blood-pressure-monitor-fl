@@ -48,7 +48,7 @@ class ModelGenerator extends Generator {
       }
       final newClassName = name;
       out.add(
-        'class $newClassName with ChangeNotifier {',
+        'class $newClassName with ChangeNotifier implements SettingsGroup {',
       );
 
       final classVariables = <_Variable>[];
@@ -123,7 +123,7 @@ class ModelGenerator extends Generator {
       out.add('');
 
       // serialization
-      out.add('/// Serialize the object to a restoreable map.');
+      out.add('@override');
       out.add('Map<String, dynamic> toMap() => <String, dynamic>{');
       for (final v in classVariables) {
         out.add("'${v.name}': _${v.name}.toMapValue(),");
@@ -131,12 +131,12 @@ class ModelGenerator extends Generator {
       out.add('};');
       out.add('');
 
-      out.add('/// Serialize the object to a restoreable string.');
+      out.add('@override');
       out.add('String toJson() => jsonEncode(toMap());');
       out.add('');
 
       // helpers
-      out.add('/// Shallow copy all values from another instance.');
+      out.add('@override');
       out.add('void copyFrom($newClassName other) {');
       for (final v in classVariables) {
         out.add('_${v.name}.value = other._${v.name}.value;');
@@ -145,7 +145,24 @@ class ModelGenerator extends Generator {
       out.add('}');
       out.add('');
 
-      out.add('/// Reset all fields to their default values.');
+      out.add('''
+      @override
+      bool copyFromJson(String json) {
+        try {
+          final decoded = jsonDecode(json);
+          if (decoded is! Map<String, dynamic>) return false;
+          final other = $newClassName.fromMap(decoded);
+          copyFrom(other);
+          return true;
+        } catch (e) {
+          assert(e is FormatException || e is TypeError);
+          return false;
+        }
+      }
+      ''');
+      out.add('');
+
+      out.add('@override');
       out.add('void reset() => copyFrom($newClassName());');
       out.add('');
 

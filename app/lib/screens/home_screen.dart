@@ -7,7 +7,7 @@ import 'package:blood_pressure_app/features/measurement_list/measurement_list.da
 import 'package:blood_pressure_app/features/measurement_list/weight_list.dart';
 import 'package:blood_pressure_app/features/statistics/value_graph.dart';
 import 'package:blood_pressure_app/logging.dart';
-import 'package:blood_pressure_app/model/storage/interval_store.dart';
+import 'package:blood_pressure_app/model/storage/interval_store_manager.dart';
 import 'package:blood_pressure_app/model/storage/settings.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

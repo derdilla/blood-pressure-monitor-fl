@@ -1,7 +1,8 @@
 import 'dart:math';
 
 import 'package:blood_pressure_app/l10n/app_localizations.dart';
-import 'package:blood_pressure_app/model/storage/interval_store.dart';
+import 'package:blood_pressure_app/model/storage/types/interval_storage_setting.dart';
+import 'package:blood_pressure_app/model/storage/types/time_range.dart';
 import 'package:flutter/material.dart';
 
 /// Button that shows an menu to configure a display intervalls filter.
