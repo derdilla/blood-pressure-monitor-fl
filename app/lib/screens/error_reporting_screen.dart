@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:archive/archive.dart';
+import 'package:blood_pressure_app/model/storage/file_settings_loader.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -105,19 +107,16 @@ class ErrorScreen extends StatelessWidget {
                   TextButton(
                     onPressed: () async {
                       try {
-                        String dbPath = await getDatabasesPath();
-
-                        assert(dbPath != inMemoryDatabasePath);
-                        dbPath = join(dbPath, 'config.db');
-
+                        final loader = await FileSettingsLoader.load();
+                        final archive = loader.createArchive();
                         await FilePicker.platform.saveFile(
-                          fileName: 'config.db',
-                          bytes: File(dbPath).readAsBytesSync(),
-                          type: FileType.any, // application/vnd.sqlite3
+                          type: FileType.any, // application/zip
+                          fileName: 'bloodPressureSettings.zip',
+                          bytes: ZipEncoder().encodeBytes(archive!),
                         );
                       } catch(e) {
                         scaffoldMessenger.showSnackBar(SnackBar(
-                            content: Text('ERR: $e'),),);
+                            content: Text('ERR: $e')));
                       }
                     },
                     child: const Text('rescue config.db'),
