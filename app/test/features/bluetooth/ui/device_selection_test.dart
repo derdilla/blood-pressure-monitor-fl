@@ -1,13 +1,33 @@
 import 'dart:ui';
 
 import 'package:blood_pressure_app/features/bluetooth/backend/bluetooth_backend.dart';
-import 'package:blood_pressure_app/features/bluetooth/backend/mock/mock_device.dart';
-import 'package:blood_pressure_app/features/bluetooth/backend/mock/mock_manager.dart';
 import 'package:blood_pressure_app/features/bluetooth/ui/device_selection.dart';
 import 'package:blood_pressure_app/l10n/app_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../../../util.dart';
+
+class MockBluetoothDevice extends Fake implements BluetoothDevice {
+  MockBluetoothDevice(this.manager, this.source);
+
+  final BluetoothManager manager;
+
+  final String source;
+
+  @override
+  String get name => source;
+}
+
+class MockBluetoothManager extends Fake implements BluetoothManager {
+  @override
+  Future<bool?> enable() async => null;
+
+  @override
+  BluetoothAdapterState get lastKnownAdapterState => BluetoothAdapterState.initial;
+
+  @override
+  Stream<BluetoothAdapterState> get stateStream => const Stream.empty();
+}
 
 void main() {
   testWidgets('Connects with one element', (WidgetTester tester) async {

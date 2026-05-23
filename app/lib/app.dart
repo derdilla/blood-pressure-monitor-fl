@@ -9,6 +9,7 @@ import 'package:blood_pressure_app/features/settings/export_import_screen.dart';
 import 'package:blood_pressure_app/features/settings/features_screen.dart';
 import 'package:blood_pressure_app/l10n/app_localizations.dart';
 import 'package:blood_pressure_app/logging.dart';
+import 'package:blood_pressure_app/model/bluetooth_input_mode.dart';
 import 'package:blood_pressure_app/model/storage/db/file_settings_loader.dart';
 import 'package:blood_pressure_app/model/storage/db/settings_loader.dart';
 import 'package:blood_pressure_app/model/storage/export_columns_store.dart';
@@ -139,6 +140,13 @@ class _AppState extends State<App> with TypeLogger {
       // update logic
       if (_settings!.allowMissingValues && _settings!.validateInputs){
         _settings!.validateInputs = false;
+      }
+
+      if (_settings!.lastVersion <= 55) {
+        // Do this migration once for all users that enabled bluetooth
+        if (_settings!.bleInput == BluetoothInputMode.oldBluetoothInput) {
+          _settings!.bleInput = BluetoothInputMode.newBluetoothInputCrossPlatform;
+        }
       }
 
       _settings!.lastVersion = int.parse((await PackageInfo.fromPlatform()).buildNumber);

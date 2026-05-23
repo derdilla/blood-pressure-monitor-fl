@@ -317,11 +317,6 @@ class AddEntryFormState extends FormStateBase<AddEntryFormValue, AddEntryForm>
           BluetoothInputMode.oldBluetoothInput => OldBluetoothInput(
             onMeasurement: _onExternalMeasurement,
           ),
-          BluetoothInputMode.newBluetoothInputOldLib => BluetoothInput(
-            manager: BluetoothManager.create(BluetoothBackend.flutterBluePlus),
-            onMeasurement: _onExternalMeasurement,
-            bluetoothCubit: widget.bluetoothCubit,
-          ),
           BluetoothInputMode.newBluetoothInputCrossPlatform => BluetoothInput(
             manager: BluetoothManager.create(BluetoothBackend.bluetoothLowEnergy),
             onMeasurement: _onExternalMeasurement,

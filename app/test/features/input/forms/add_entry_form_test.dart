@@ -1,5 +1,4 @@
 import 'package:blood_pressure_app/features/bluetooth/bluetooth_input.dart';
-import 'package:blood_pressure_app/features/bluetooth/logic/bluetooth_cubit.dart';
 import 'package:blood_pressure_app/features/input/forms/add_entry_form.dart';
 import 'package:blood_pressure_app/features/input/forms/blood_pressure_form.dart';
 import 'package:blood_pressure_app/features/input/forms/date_time_form.dart';
@@ -23,36 +22,44 @@ import '../../measurement_list/measurement_list_entry_test.dart';
 void main() {
   group('shows sub-forms depending on settings', () {
     // always show NoteForm, BloodPressureForm
-    
-    testWidgets('show TimeForm if and only if setting is set (default true)', (tester) async {
+
+    testWidgets('show TimeForm if and only if setting is set (default true)', (
+        tester) async {
       final settings = Settings();
-      await tester.pumpWidget(materialApp(AddEntryForm(meds: []), settings: settings));
+      await tester.pumpWidget(
+          materialApp(AddEntryForm(meds: []), settings: settings));
 
       expect(find.byType(TabBar, skipOffstage: false), findsNothing);
       expect(find.byType(NoteForm, skipOffstage: false), findsOneWidget);
-      expect(find.byType(BloodPressureForm, skipOffstage: false), findsOneWidget);
+      expect(
+          find.byType(BloodPressureForm, skipOffstage: false), findsOneWidget);
       expect(find.byType(DateTimeForm, skipOffstage: false), findsOneWidget);
       expect(find.byType(WeightForm, skipOffstage: false), findsNothing);
-      expect(find.byType(MedicineIntakeForm, skipOffstage: false), findsNothing);
+      expect(
+          find.byType(MedicineIntakeForm, skipOffstage: false), findsNothing);
       expect(find.byType(OldBluetoothInput, skipOffstage: false), findsNothing);
       expect(find.byType(BluetoothInput, skipOffstage: false), findsNothing);
-      
+
       settings.allowManualTimeInput = false;
       await tester.pumpAndSettle();
 
       expect(find.byType(DateTimeForm, skipOffstage: false), findsNothing);
     });
-    
-    testWidgets('show WeightForm if and only if setting is set', (tester) async {
+
+    testWidgets(
+        'show WeightForm if and only if setting is set', (tester) async {
       final settings = Settings(weightInput: true);
-      await tester.pumpWidget(materialApp(AddEntryForm(meds: []), settings: settings));
+      await tester.pumpWidget(
+          materialApp(AddEntryForm(meds: []), settings: settings));
 
       expect(find.byType(TabBar, skipOffstage: false), findsOneWidget);
       expect(find.byType(NoteForm, skipOffstage: false), findsOneWidget);
-      expect(find.byType(BloodPressureForm, skipOffstage: false), findsOneWidget);
+      expect(
+          find.byType(BloodPressureForm, skipOffstage: false), findsOneWidget);
       expect(find.byType(DateTimeForm, skipOffstage: false), findsOneWidget);
       expect(find.byType(WeightForm, skipOffstage: false), findsOneWidget);
-      expect(find.byType(MedicineIntakeForm, skipOffstage: false), findsNothing);
+      expect(
+          find.byType(MedicineIntakeForm, skipOffstage: false), findsNothing);
       expect(find.byType(OldBluetoothInput, skipOffstage: false), findsNothing);
       expect(find.byType(BluetoothInput, skipOffstage: false), findsNothing);
 
@@ -62,43 +69,19 @@ void main() {
       expect(find.byType(WeightForm, skipOffstage: false), findsNothing);
     });
 
-    testWidgets('show MedicineIntakeForm if medicines are available', (tester) async {
-      await tester.pumpWidget(materialApp(AddEntryForm(meds: [mockMedicine()])));
+    testWidgets(
+        'show MedicineIntakeForm if medicines are available', (tester) async {
+      await tester.pumpWidget(
+          materialApp(AddEntryForm(meds: [mockMedicine()])));
 
       expect(find.byType(TabBar, skipOffstage: false), findsOneWidget);
       expect(find.byType(NoteForm, skipOffstage: false), findsOneWidget);
-      expect(find.byType(BloodPressureForm, skipOffstage: false), findsOneWidget);
+      expect(
+          find.byType(BloodPressureForm, skipOffstage: false), findsOneWidget);
       expect(find.byType(DateTimeForm, skipOffstage: false), findsOneWidget);
       expect(find.byType(WeightForm, skipOffstage: false), findsNothing);
-      expect(find.byType(MedicineIntakeForm, skipOffstage: false), findsOneWidget);
-      expect(find.byType(OldBluetoothInput, skipOffstage: false), findsNothing);
-      expect(find.byType(BluetoothInput, skipOffstage: false), findsNothing);
-    });
-
-    testWidgets('show the BluetoothInput specified by setting', (tester) async {
-      final settings = Settings(bleInput: BluetoothInputMode.disabled);
-      await tester.pumpWidget(materialApp(AddEntryForm(
-        bluetoothCubit: _MockBoringBluetoothCubit.new
-      ), settings: settings));
-
-      expect(find.byType(TabBar, skipOffstage: false), findsNothing);
-      expect(find.byType(NoteForm, skipOffstage: false), findsOneWidget);
-      expect(find.byType(BloodPressureForm, skipOffstage: false), findsOneWidget);
-      expect(find.byType(DateTimeForm, skipOffstage: false), findsOneWidget);
-      expect(find.byType(WeightForm, skipOffstage: false), findsNothing);
-      expect(find.byType(MedicineIntakeForm, skipOffstage: false), findsNothing);
-      expect(find.byType(OldBluetoothInput, skipOffstage: false), findsNothing);
-      expect(find.byType(BluetoothInput, skipOffstage: false), findsNothing);
-
-      settings.bleInput = BluetoothInputMode.newBluetoothInputOldLib;
-      await tester.pumpAndSettle();
-
-      expect(find.byType(OldBluetoothInput, skipOffstage: false), findsNothing);
-      expect(find.byType(BluetoothInput, skipOffstage: false), findsOneWidget);
-
-      settings.bleInput = BluetoothInputMode.disabled;
-      await tester.pumpAndSettle();
-
+      expect(
+          find.byType(MedicineIntakeForm, skipOffstage: false), findsOneWidget);
       expect(find.byType(OldBluetoothInput, skipOffstage: false), findsNothing);
       expect(find.byType(BluetoothInput, skipOffstage: false), findsNothing);
     });
@@ -648,16 +631,4 @@ Finder _focusedTextField() {
     of: find.byWidget(FocusManager.instance.primaryFocus!.context!.widget),
     matching: find.byType(TextField),
   );
-}
-
-/// A mock ble cubit that never does anything.
-class _MockBoringBluetoothCubit extends Fake implements BluetoothCubit {
-  @override
-  Future<void> close() async {}
-
-  @override
-  BluetoothState get state => BluetoothStateDisabled();
-
-  @override
-  Stream<BluetoothState> get stream => Stream.empty();
 }
