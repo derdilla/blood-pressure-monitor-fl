@@ -1,4 +1,4 @@
-import 'dart:convert';
+import 'dart:collection';
 import 'dart:io';
 
 import 'package:archive/archive_io.dart';
@@ -9,10 +9,10 @@ import 'package:blood_pressure_app/model/storage/export_pdf_settings.dart';
 import 'package:blood_pressure_app/model/storage/export_settings.dart';
 import 'package:blood_pressure_app/model/storage/export_xls_settings.dart';
 import 'package:blood_pressure_app/model/storage/health_connect_settings.dart';
-import 'package:blood_pressure_app/model/storage/interval_store.dart';
+import 'package:blood_pressure_app/model/storage/interval_store_manager.dart';
 import 'package:blood_pressure_app/model/storage/settings.dart';
-import 'package:flutter/widgets.dart';
 import 'package:path/path.dart';
+import 'package:settings_annotation/settings_annotation.dart';
 import 'package:sqflite/sqflite.dart';
 
 /// Store settings in a directory format on disk.
@@ -32,12 +32,13 @@ class FileSettingsLoader implements SettingsLoader {
   /// Instantiates a settings file relative to [_path] and writes changes.
   ///
   /// If the is read successfully [build] is called else [createNew] is called.
-  T _loadFile<T extends ChangeNotifier>(
+  T _loadFile<T extends SettingsGroup>(
     String fileName,
     T Function(String) build,
     T Function() createNew,
     String Function(T) serialize,
   ) {
+    if (_instances.containsKey(fileName)) return _instances[fileName] as T;
     final f = File(join(_path, fileName));
     T? obj;
     try {
@@ -49,8 +50,13 @@ class FileSettingsLoader implements SettingsLoader {
 
     obj.addListener(() => f.writeAsStringSync(serialize(obj!)));
     f.writeAsStringSync(serialize(obj));
+    _instances[fileName] = obj;
     return obj;
   }
+
+  final _instances = <String, SettingsGroup>{};
+
+  UnmodifiableListView<SettingsGroup> get initializedSettings => UnmodifiableListView(_instances.values);
 
   @override
   Future<CsvExportSettings> loadCsvExportSettings() async => _loadFile(
@@ -79,26 +85,9 @@ class FileSettingsLoader implements SettingsLoader {
   @override
   Future<IntervalStoreManager> loadIntervalStorageManager() async => _loadFile(
     'intervall-store',
-    (String jsonStr) {
-      final json = jsonDecode(jsonStr);
-      if (json is Map<String, dynamic>) {
-        return IntervalStoreManager(
-          json['main'] is! String ? IntervalStorage()
-              : IntervalStorage.fromJson(json['main']! as String),
-          json['export'] is! String ? IntervalStorage()
-              : IntervalStorage.fromJson(json['export']! as String),
-          json['stats'] is! String ? IntervalStorage()
-              : IntervalStorage.fromJson(json['stats']! as String),
-        );
-      }
-      return IntervalStoreManager(IntervalStorage(), IntervalStorage(), IntervalStorage());
-    },
-    () => IntervalStoreManager(IntervalStorage(), IntervalStorage(), IntervalStorage()),
-    (e) => jsonEncode({
-      'main': e.mainPage.toJson(),
-      'export': e.exportPage.toJson(),
-      'stats': e.statsPage.toJson(),
-    }),
+    IntervalStoreManager.fromJson,
+    IntervalStoreManager.new,
+    (e) => e.toJson(),
   );
 
   @override

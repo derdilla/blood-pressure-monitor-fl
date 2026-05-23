@@ -23,7 +23,7 @@ Widget materialApp(Widget child, {
   csvExportSettings ??= CsvExportSettings();
   pdfExportSettings ??= PdfExportSettings();
   hcSettings ??= HealthConnectSettings();
-  intervallStoreManager ??= IntervalStoreManager(IntervalStorage(), IntervalStorage(), IntervalStorage());
+  intervallStoreManager ??= IntervalStoreManager();
   return MultiProvider(
     providers: [
       ChangeNotifierProvider.value(value: settings),
@@ -144,7 +144,7 @@ Widget materialForScreens(Widget child, {
   exportSettings ??= ExportSettings();
   csvExportSettings ??= CsvExportSettings();
   pdfExportSettings ??= PdfExportSettings();
-  intervallStoreManager ??= IntervalStoreManager(IntervalStorage(), IntervalStorage(), IntervalStorage());
+  intervallStoreManager ??= IntervalStoreManager();
   return MultiProvider(
     providers: [
       ChangeNotifierProvider.value(value: settings),

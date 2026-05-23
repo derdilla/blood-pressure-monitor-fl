@@ -3,11 +3,12 @@ import 'dart:convert';
 
 import 'package:blood_pressure_app/model/export_import/column.dart';
 import 'package:flutter/material.dart';
+import 'package:settings_annotation/settings_annotation.dart';
 
 // ignore_for_file: strict_casts
 
 /// Class for managing columns available to the user.
-class ExportColumnsManager extends ChangeNotifier {
+class ExportColumnsManager extends ChangeNotifier implements SettingsGroup {
   /// Create a instance from a map created by [toMap].
   factory ExportColumnsManager.fromMap(Map<String, dynamic> map) {
     final jsonUserColumns = map['userColumns'] as List<dynamic>;
@@ -40,11 +41,13 @@ class ExportColumnsManager extends ChangeNotifier {
   /// It will be filled with the default columns but won't contain initial user columns.
   ExportColumnsManager();
 
-  /// Reset all fields to their default values.
+  @override
   void reset() {
     _userColumns.clear();
     notifyListeners();
   }
+
+  @override
   void copyFrom(ExportColumnsManager other) {
     _userColumns.clear();
     _userColumns.addAll(other._userColumns);
@@ -119,7 +122,7 @@ class ExportColumnsManager extends ChangeNotifier {
     return UnmodifiableListView(columns);
   }
 
-  /// Serialize the object to a restoreable map.
+  @override
   Map<String, dynamic> toMap() {
     final columns = <Map<String, dynamic>>[];
     for (final c in _userColumns.values) {
@@ -151,6 +154,13 @@ class ExportColumnsManager extends ChangeNotifier {
     };
   }
 
-  /// Serialize the object to a restoreable string.
+  @override
   String toJson() => jsonEncode(toMap());
+
+  @override
+  bool copyFromJson(String other) {
+    final otherObj = ExportColumnsManager.fromJson(other);
+    copyFrom(otherObj);
+    return true;
+  }
 }

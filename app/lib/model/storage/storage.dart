@@ -7,6 +7,6 @@ export 'export_pdf_settings.dart';
 export 'export_settings.dart';
 export 'export_xls_settings.dart';
 export 'health_connect_settings.dart';
-export 'interval_store.dart';
+export 'interval_store_manager.dart';
 export 'settings.dart';
 export 'update_legacy_settings.dart';
