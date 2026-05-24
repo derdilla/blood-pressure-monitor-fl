@@ -2,7 +2,6 @@ import 'dart:collection';
 import 'dart:io';
 
 import 'package:archive/archive_io.dart';
-import 'package:blood_pressure_app/model/storage/db/settings_loader.dart';
 import 'package:blood_pressure_app/model/storage/export_columns_store.dart';
 import 'package:blood_pressure_app/model/storage/export_csv_settings.dart';
 import 'package:blood_pressure_app/model/storage/export_pdf_settings.dart';
@@ -16,7 +15,12 @@ import 'package:settings_annotation/settings_annotation.dart';
 import 'package:sqflite/sqflite.dart';
 
 /// Store settings in a directory format on disk.
-class FileSettingsLoader implements SettingsLoader {
+///
+/// If any errors occur or the object is not present, a default one will be
+/// created. Changes in the object will save to the automatically.
+///
+/// Changes to the disk data will not propagate to the object.
+class FileSettingsLoader {
   FileSettingsLoader._create(this._path);
 
   /// Creates setting loader from relative directory [path] or the default
@@ -55,59 +59,51 @@ class FileSettingsLoader implements SettingsLoader {
 
   final _instances = <String, SettingsGroup>{};
 
-  @override
+  /// Contains values of every type for which a load... method was called.
   UnmodifiableListView<SettingsGroup> get initializedSettings => UnmodifiableListView(_instances.values);
 
-  @override
   Future<CsvExportSettings> loadCsvExportSettings() async => _loadFile(
     'csv-export',
     CsvExportSettings.fromJson,
     CsvExportSettings.new,
   );
 
-  @override
   Future<ExportColumnsManager> loadExportColumnsManager() async => _loadFile(
     'export-columns',
     ExportColumnsManager.fromJson,
     ExportColumnsManager.new,
   );
 
-  @override
   Future<ExportSettings> loadExportSettings() async => _loadFile(
     'export',
     ExportSettings.fromJson,
     ExportSettings.new,
   );
 
-  @override
   Future<IntervalStoreManager> loadIntervalStorageManager() async => _loadFile(
     'intervall-store',
     IntervalStoreManager.fromJson,
     IntervalStoreManager.new,
   );
 
-  @override
   Future<PdfExportSettings> loadPdfExportSettings() async => _loadFile(
     'pdf-export',
     PdfExportSettings.fromJson,
     PdfExportSettings.new,
   );
 
-  @override
   Future<ExcelExportSettings> loadXlsExportSettings() async => _loadFile(
     'xsl-export', // wrong spelling kept for compatability reasons
     ExcelExportSettings.fromJson,
     ExcelExportSettings.new,
   );
 
-  @override
   Future<Settings> loadSettings() async => _loadFile(
     'general',
     Settings.fromJson,
     Settings.new,
   );
 
-  @override
   Future<HealthConnectSettings> loadHealthConnectSettings() async => _loadFile(
     'health_connect',
     HealthConnectSettings.fromJson,

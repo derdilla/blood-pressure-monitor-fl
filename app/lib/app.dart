@@ -10,9 +10,6 @@ import 'package:blood_pressure_app/features/settings/features_screen.dart';
 import 'package:blood_pressure_app/l10n/app_localizations.dart';
 import 'package:blood_pressure_app/logging.dart';
 import 'package:blood_pressure_app/model/bluetooth_input_mode.dart';
-import 'package:blood_pressure_app/model/storage/db/file_settings_loader.dart';
-import 'package:blood_pressure_app/model/storage/db/settings_loader.dart';
-import 'package:blood_pressure_app/model/storage/export_columns_store.dart';
 import 'package:blood_pressure_app/model/storage/storage.dart';
 import 'package:blood_pressure_app/screens/add_entry_screen.dart';
 import 'package:blood_pressure_app/screens/error_reporting_screen.dart';
@@ -90,19 +87,13 @@ class _AppState extends State<App> with TypeLogger {
         // File is likely already deleted or couldn't be created in the first place.
       }
       try {
-        File(join(dbPath, 'config.db')).deleteSync();
-        File(join(dbPath, 'config.db-journal')).deleteSync();
-      } on FileSystemException {
-        // No file to delete
-      }
-      try {
-        File(join(dbPath, 'medicine.intakes')).deleteSync();
+        Directory(join(await getDatabasesPath(), 'settings')).deleteSync(recursive: true);
       } on FileSystemException {
         // No file to delete
       }
     }
 
-    SettingsLoader? settingsLoader;
+    FileSettingsLoader? settingsLoader;
     try {
       settingsLoader = await FileSettingsLoader.load();
       _settings ??= await settingsLoader.loadSettings();
@@ -160,25 +151,10 @@ class _AppState extends State<App> with TypeLogger {
 
     final dbPath = await getDatabasesPath();
     if (File(join(dbPath, 'config.db')).existsSync()) {
-      try {
-        await migrateDatabaseSettings(
-          _settings!,
-          _exportSettings!,
-          _csvExportSettings!,
-          _pdfExportSettings!,
-          _intervalStorageManager!,
-          _exportColumnsManager!,
-          medRepo,
-        );
-        File(join(dbPath, 'config.db')).copySync(join(dbPath, 'v39_config.db.backup'));
-        File(join(dbPath, 'config.db')).deleteSync();
-        if (File(join(dbPath, 'config.db-journal')).existsSync()) {
-          File(join(dbPath, 'config.db-journal')).copySync(join(dbPath, 'v39_config.db-journal.backup'));
-          File(join(dbPath, 'config.db-journal')).deleteSync();
-        }
-      } catch (e, stack) {
-        await ErrorReporting.reportCriticalError('Error upgrading to file based settings:', '$e\n$stack',);
-      }
+      File(join(dbPath, 'config.db')).deleteSync();
+    }
+    if (File(join(dbPath, 'config.db-journal')).existsSync()) {
+      File(join(dbPath, 'config.db-journal')).deleteSync();
     }
     
     // Sync with health-connect API
@@ -273,7 +249,7 @@ class _AppState extends State<App> with TypeLogger {
       ],
       child: MultiProvider(
         providers: [
-          Provider<SettingsLoader?>.value(value: settingsLoader),
+          Provider<FileSettingsLoader?>.value(value: settingsLoader),
           ChangeNotifierProvider.value(value: _settings!),
           ChangeNotifierProvider.value(value: _exportSettings!),
           ChangeNotifierProvider.value(value: _csvExportSettings!),
