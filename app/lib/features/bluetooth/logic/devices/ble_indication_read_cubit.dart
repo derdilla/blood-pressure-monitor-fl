@@ -107,7 +107,7 @@ abstract class BleIndicationReadCubit extends BleReadCubit with TypeLogger {
       final List<BleMeasurementData> measurements = [];
 
       for (final item in data) {
-        final decodedData = BleMeasurementData.decode(item, 0);
+        final decodedData = BleMeasurementData.decode(item);
         if (decodedData == null) {
           logger.severe('BleReadCubit decoding failed', item);
           emit(BleReadFailure('Could not decode data'));
