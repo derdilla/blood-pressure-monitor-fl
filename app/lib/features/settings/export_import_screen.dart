@@ -9,7 +9,6 @@ import 'package:blood_pressure_app/features/settings/tiles/dropdown_list_tile.da
 import 'package:blood_pressure_app/features/settings/tiles/input_list_tile.dart';
 import 'package:blood_pressure_app/features/settings/tiles/number_input_list_tile.dart';
 import 'package:blood_pressure_app/l10n/app_localizations.dart';
-import 'package:blood_pressure_app/model/storage/export_columns_store.dart';
 import 'package:blood_pressure_app/model/storage/storage.dart';
 import 'package:blood_pressure_app/model/storage/types/export_format_setting.dart';
 import 'package:flutter/material.dart';

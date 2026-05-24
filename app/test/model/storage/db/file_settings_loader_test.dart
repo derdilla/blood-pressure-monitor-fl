@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:blood_pressure_app/model/export_import/column.dart';
-import 'package:blood_pressure_app/model/storage/db/file_settings_loader.dart';
+import 'package:blood_pressure_app/model/storage/file_settings_loader.dart';
 import 'package:blood_pressure_app/model/storage/types/export_format_setting.dart';
 import 'package:blood_pressure_app/model/storage/types/time_step.dart';
 import 'package:flutter/material.dart';

@@ -1,6 +1,6 @@
 import 'package:blood_pressure_app/components/confirm_deletion_dialog.dart';
 import 'package:blood_pressure_app/l10n/app_localizations.dart';
-import 'package:blood_pressure_app/model/storage/db/settings_loader.dart';
+import 'package:blood_pressure_app/model/storage/file_settings_loader.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:health_data_store/health_data_store.dart';
@@ -36,7 +36,7 @@ class _DeleteDataScreenState extends State<DeleteDataScreen> {
               final messanger = ScaffoldMessenger.of(context);
               if (await showConfirmDeletionDialog(context, localizations.warnDeletionUnrecoverable)) {
                 if (!context.mounted) return;
-                final loader = context.read<SettingsLoader?>();
+                final loader = context.read<FileSettingsLoader?>();
                 if (loader == null) {
                   messanger.showSnackBar(SnackBar( // Shouldn't happen in normal app use
                     content: Text(localizations.error('No loader object')),
