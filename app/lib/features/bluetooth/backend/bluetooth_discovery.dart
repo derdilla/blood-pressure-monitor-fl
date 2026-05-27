@@ -1,6 +1,3 @@
-// TODO: cleanup types
-// ignore_for_file: strict_raw_type
-
 import 'dart:async';
 
 import 'package:blood_pressure_app/features/bluetooth/backend/bluetooth_device.dart';
@@ -9,14 +6,14 @@ import 'package:blood_pressure_app/logging.dart';
 import 'package:flutter/foundation.dart';
 
 /// Base class for backend device discovery implementations
-abstract class BluetoothDeviceDiscovery<BM extends BluetoothManager> with TypeLogger {
+abstract class BluetoothDeviceDiscovery<BackendDevice> with TypeLogger {
   /// Initialize base class for device discovery implementations.
   BluetoothDeviceDiscovery(this.manager) {
     logger.finer('init device discovery: $this');
   }
 
   /// Corresponding BluetoothManager
-  final BM manager;
+  final BluetoothManager<BackendDevice> manager;
 
   /// List of discovered devices
   final Set<BluetoothDevice> _devices = {};

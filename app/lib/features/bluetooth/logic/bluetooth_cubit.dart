@@ -3,7 +3,8 @@
 
 import 'dart:async';
 
-import 'package:blood_pressure_app/features/bluetooth/backend/bluetooth_backend.dart';
+import 'package:blood_pressure_app/features/bluetooth/backend/bluetooth_manager.dart';
+import 'package:blood_pressure_app/features/bluetooth/backend/bluetooth_state.dart';
 import 'package:blood_pressure_app/logging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:blood_pressure_app/features/bluetooth/backend/bluetooth_backend.dart';
 import 'package:blood_pressure_app/features/bluetooth/ui/device_selection.dart';
 import 'package:blood_pressure_app/l10n/app_localizations.dart';
+import 'package:bluetooth_low_energy/bluetooth_low_energy.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../../../util.dart';
@@ -10,28 +11,31 @@ import '../../../util.dart';
 class MockBluetoothDevice extends Fake implements BluetoothDevice {
   MockBluetoothDevice(this.manager, this.source);
 
-  final BluetoothManager manager;
+  final CentralManager manager;
 
-  final String source;
+  final DiscoveredEventArgs source;
 
   @override
-  String get name => source;
+  String get name => source.advertisement.name ?? source.peripheral.uuid.toString();
 }
 
-class MockBluetoothManager extends Fake implements BluetoothManager {
-  @override
-  Future<bool?> enable() async => null;
+class MockCentralManager extends Fake implements CentralManager {}
 
-  @override
-  BluetoothAdapterState get lastKnownAdapterState => BluetoothAdapterState.initial;
+class MockPeripheral extends Fake implements Peripheral {
+  MockPeripheral(String uuid): uuid = UUID.fromString(uuid);
 
-  @override
-  Stream<BluetoothAdapterState> get stateStream => const Stream.empty();
+  final UUID uuid;
+}
+
+class MockAdvertisement extends Fake implements Advertisement {
+  MockAdvertisement(this.name);
+
+  final String name;
 }
 
 void main() {
   testWidgets('Connects with one element', (WidgetTester tester) async {
-    final dev = MockBluetoothDevice(MockBluetoothManager(), 'Test device with long name (No.124356)');
+    final dev = MockBluetoothDevice(MockCentralManager(), DiscoveredEventArgs(MockPeripheral('00000000-0000-0000-0000-001234567890'), -1, MockAdvertisement('dev1')));
 
     final List<BluetoothDevice> accepted = [];
     await tester.pumpWidget(materialApp(DeviceSelection(
@@ -55,7 +59,7 @@ void main() {
   });
 
   testWidgets('Shows multiple elements', (WidgetTester tester) async {
-    BluetoothDevice getDev(String name) => MockBluetoothDevice(MockBluetoothManager(), name);
+    BluetoothDevice getDev(String name) => MockBluetoothDevice(MockCentralManager(), DiscoveredEventArgs(MockPeripheral('00000000-0000-0000-0000-001234567890'), -1, MockAdvertisement('dev1')));
 
     await tester.pumpWidget(materialApp(DeviceSelection(
       scanResults: [

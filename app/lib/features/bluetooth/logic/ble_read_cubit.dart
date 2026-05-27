@@ -16,10 +16,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 part 'ble_read_state.dart';
 
 /// Generic cubit a device implementation implements for reading bluetooth values.
-///
-/// To add support for more devices, implement a class like [BleGattReadCubit]
-/// in the `devices/` directory. Add references to relevant service UUIDs to the
-/// [supportedServices] list and cubit construction to the [build] method.
 class BleReadCubit extends Cubit<BleReadState> with TypeLogger {
   /// Start reading a characteristic from a device.
   BleReadCubit({

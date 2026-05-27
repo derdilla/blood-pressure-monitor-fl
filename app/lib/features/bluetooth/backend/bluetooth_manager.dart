@@ -1,19 +1,15 @@
-// TODO: cleanup types
-// ignore_for_file: strict_raw_type
 
-import 'package:blood_pressure_app/features/bluetooth/backend/bluetooth_backend.dart';
+import 'package:blood_pressure_app/features/bluetooth/backend/bluetooth_device.dart';
 import 'package:blood_pressure_app/features/bluetooth/backend/bluetooth_discovery.dart';
 import 'package:blood_pressure_app/features/bluetooth/backend/bluetooth_low_energy/ble_manager.dart';
-import 'package:blood_pressure_app/features/bluetooth/backend/bluetooth_service.dart';
 import 'package:blood_pressure_app/features/bluetooth/backend/bluetooth_state.dart';
 import 'package:blood_pressure_app/logging.dart';
+import 'package:bluetooth_low_energy/bluetooth_low_energy.dart' hide BluetoothLowEnergyManager;
 
 /// Base class for a bluetooth manager
-abstract class BluetoothManager<BackendDevice, BackendUuid, BackendService, BackendCharacteristic> with TypeLogger {
+abstract class BluetoothManager<BackendDevice> with TypeLogger {
   /// Instantiate the correct [BluetoothManager] implementation.
-  static BluetoothManager create([BluetoothBackend? backend]) => switch (backend) {
-    BluetoothBackend.bluetoothLowEnergy || null => BluetoothLowEnergyManager(),
-  };
+  static BluetoothManager<DiscoveredEventArgs> create() => BluetoothLowEnergyManager();
 
   /// Trigger the device to request the user for bluetooth ermissions
   ///
@@ -31,20 +27,10 @@ abstract class BluetoothManager<BackendDevice, BackendUuid, BackendService, Back
   Stream<BluetoothAdapterState> get stateStream;
 
   /// Device discovery implementation
-  BluetoothDeviceDiscovery get discovery;
+  BluetoothDeviceDiscovery<DiscoveredEventArgs> get discovery;
+
+  CentralManager get backend;
 
   /// Convert a BackendDevice into a BluetoothDevice
   BluetoothDevice createDevice(BackendDevice device);
-
-  /// Convert a BackendUuid into a BluetoothUuid
-  BluetoothUuid createUuid(BackendUuid uuid);
-
-  /// Create a BluetoothUuid from a String
-  BluetoothUuid createUuidFromString(String uuid);
-
-  /// Convert a BackendService into a BluetoothService
-  BluetoothService createService(BackendService service);
-
-  /// Convert a BackendCharacteristic into a BluetoothCharacteristic
-  BluetoothCharacteristic createCharacteristic(BackendCharacteristic characteristic);
 }

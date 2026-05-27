@@ -318,7 +318,7 @@ class AddEntryFormState extends FormStateBase<AddEntryFormValue, AddEntryForm>
             onMeasurement: _onExternalMeasurement,
           ),
           BluetoothInputMode.newBluetoothInputCrossPlatform => BluetoothInput(
-            manager: BluetoothManager.create(BluetoothBackend.bluetoothLowEnergy),
+            manager: BluetoothManager.create(),
             onMeasurement: _onExternalMeasurement,
             bluetoothCubit: widget.bluetoothCubit,
           ),
