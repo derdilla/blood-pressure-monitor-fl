@@ -3,15 +3,15 @@
 
 import 'dart:async';
 
-import 'package:blood_pressure_app/features/bluetooth/backend/bluetooth_backend.dart';
 import 'package:blood_pressure_app/features/bluetooth/logic/characteristics/ble_measurement_data.dart';
+import 'package:blood_pressure_app/features/bluetooth/logic/characteristics/yonker_measurement_data.dart';
 import 'package:blood_pressure_app/features/bluetooth/logic/devices/ble_gatt_read_cubit.dart';
 import 'package:blood_pressure_app/features/bluetooth/logic/devices/yonker_read_cubit.dart';
 import 'package:blood_pressure_app/logging.dart';
+import 'package:bluetooth_low_energy/bluetooth_low_energy.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:logging/logging.dart';
 
 part 'ble_read_state.dart';
 
@@ -20,61 +20,150 @@ part 'ble_read_state.dart';
 /// To add support for more devices, implement a class like [BleGattReadCubit]
 /// in the `devices/` directory. Add references to relevant service UUIDs to the
 /// [supportedServices] list and cubit construction to the [build] method.
-abstract class BleReadCubit extends Cubit<BleReadState> with TypeLogger {
+class BleReadCubit extends Cubit<BleReadState> with TypeLogger {
   /// Start reading a characteristic from a device.
   BleReadCubit(super.initialState, {
     required this.device,
+    required this.cm,
   });
 
-  static const supportedServices = [
-    BleGattReadCubit.defaultServiceUUID,
-    YonkerReadCubit.defaultServiceUUID,
-  ];
+  /// Bluetooth device to connect to.
+  final Peripheral device;
 
-  /// Create instance that understands the device.
-  static Future<BleReadCubit?> build(BluetoothDevice device) async {
-    final log = Logger('BleReadCubit.build');
+  final CentralManager cm;
 
-    // Get supported services
-    final supported = await device.getServices();
-    if (supported == null) {
-      log.info('Unable to retrieve services for $device');
-      return null;
+  Future<bool> _connectDevice({int retries = 3}) async {
+    logger.info('Connecting to ${device.uuid}');
+    await cm.connect(device);
+    final success = await cm.connectionStateChanged
+        .where((e) => e.peripheral == device)
+        .first;
+    if (success.state == ConnectionState.disconnected) {
+      logger.info('Device disconnected');
+      if (retries > 0) return _connectDevice(retries: retries - 1);
+      logger.finest('No retries left');
+      return false;
     }
-
-    // Check for BLE GATT service
-    final bleGattServiceUUID = device.manager
-        .createUuid(BleGattReadCubit.defaultServiceUUID);
-    final gattService = supported.firstWhereOrNull(
-            (e) => e.uuid.uuid == bleGattServiceUUID.uuid);
-    if (gattService != null) {
-      log.info('Found GATT service');
-      return BleGattReadCubit(device: device);
-    }
-
-    // FIXME: service only available after connection,
-    log.info('Found Yonker service');
-    return YonkerReadCubit(device: device);
-
-    // ...
-
-    log.info('No supported service found in $device');
-    return null;
+    logger.finer('Successfully connected to ${device.uuid}');
+    return true;
   }
 
-  /// Bluetooth device to connect to.
-  ///
-  /// Must have an active established connection and support the measurement characteristic.
-  final BluetoothDevice device;
-
   /// Take a 'measurement', i.e. read the blood pressure values from the given characteristicUUID
-  Future<void> takeMeasurement();
+  Future<void> takeMeasurement() async {
+    if (!await _connectDevice()) {
+      emit(BleReadFailure('Unable to connect to device: ${device.uuid}'));
+      return;
+    }
+
+    final services = await cm.discoverGATT(device);
+    if (services.isEmpty) {
+      logger.warning('Device ${device.uuid} advertised no services after connecting');
+    }
+
+    final gattService = services.firstWhereOrNull(
+            (s) => s.uuid == UUID.fromString(BleGattReadCubit.defaultServiceUUID));
+    if (gattService != null) return _readGatt(gattService);
+
+    final yonkerService = services.firstWhereOrNull(
+            (s) => s.uuid == UUID.fromString(YonkerReadCubit.defaultServiceUUID));
+    if (yonkerService != null) return _readYonker(yonkerService);
+
+    emit(BleReadFailure('Device ${device.uuid} does not advertise a supported service'));
+  }
+
+  Future<void> _readGatt(GATTService service) async {
+    // See assigned numbers:
+    // https://www.bluetooth.com/wp-content/uploads/Files/Specification/HTML/Assigned_Numbers/out/en/Assigned_Numbers.pdf?v=1706215305114
+
+    final characteristic = service.characteristics
+        .firstWhereOrNull((c) => c.uuid == UUID.fromString(BleGattReadCubit.defaultCharacteristicUUID));
+
+    if (characteristic == null) {
+      emit(BleReadFailure('Device ${device.uuid} does not provide the expected GATT characteristic'));
+      return;
+    }
+
+    // Read or indicate data;
+    Uint8List? data;
+    final canRead = characteristic.properties.contains(GATTCharacteristicProperty.read);
+    final canIndicate = characteristic.properties.contains(GATTCharacteristicProperty.indicate);
+    if (canRead) {
+      data = await cm.readCharacteristic(device, characteristic);
+    } else if (canIndicate) {
+      final future = cm.characteristicNotified
+          .where((e) => e.characteristic == characteristic
+                  && e.peripheral == device)
+          .map((e) => e.value)
+          .first;
+      await cm.setCharacteristicNotifyState(device, characteristic, state: true);
+      data = await future;
+      // FIXME: from bug reports we know that more data may follow for some devices
+      // We should handle that and return: BleReadMultiple;
+      // For that we need to wait until the device disconnects naturally
+      await cm.setCharacteristicNotifyState(device, characteristic, state: false);
+    }
+
+    if (data == null) {
+      emit(BleReadFailure('Unable to get data from characteristic of GATT device ${device.uuid}'));
+      return;
+    }
+
+    final decodedData = BleMeasurementData.decode(data);
+    if (decodedData == null) {
+      logger.warning('Failed to decode GATT measurement $data for $device');
+      emit(BleReadFailure('Could not decode data'));
+      return;
+    }
+
+    emit(BleReadSuccess(decodedData));
+  }
+
+  Future<void> _readYonker(GATTService service) async {
+    /// This is a low-cost device that may be sold under different brands/models:
+    /// - Yonker YK-IBPA1
+    /// - Yonker YK-BPW5
+    /// - Yongrow YK-IBPA1 (confirmed)
+    /// - METIKO MT-YK-BPA1
+    final characteristic = service.characteristics
+        .firstWhereOrNull((c) => c.uuid == UUID.fromString(YonkerReadCubit.defaultCharacteristicUUID));
+
+    if (characteristic == null) {
+      emit(BleReadFailure('Device ${device.uuid} does not provide the expected yonker characteristic'));
+      return;
+    }
+
+    final canIndicate = characteristic.properties.contains(GATTCharacteristicProperty.indicate);
+    if (!canIndicate) {
+      emit(BleReadFailure('Characteristic can not indicate like expected'));
+      return;
+    }
+
+    final future = cm.characteristicNotified
+        .where((e) => e.characteristic == characteristic
+        && e.peripheral == device)
+        .map((e) => e.value)
+        .first;
+    await cm.setCharacteristicNotifyState(device, characteristic, state: true);
+    final data = await future;
+    await cm.setCharacteristicNotifyState(device, characteristic, state: false);
+
+    final decodedData = YonkerMeasurementData.decode(data);
+    if (decodedData == null) {
+      logger.warning('Failed to decode yonker measurement $data for $device');
+      emit(BleReadFailure('Could not decode data'));
+      return;
+    }
+
+    emit(BleReadSuccess(decodedData.asBleData));
+  }
 
   @mustCallSuper
   @override
   Future<void> close() async {
-    if (device.isConnected) {
-      await device.disconnect();
+    try {
+      await cm.disconnect(device).timeout(Duration(seconds: 10));
+    } catch (e) {
+      logger.warning('Failed to disconnect from ${device.uuid}: $e');
     }
 
     await super.close();

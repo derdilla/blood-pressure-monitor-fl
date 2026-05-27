@@ -1,6 +1,7 @@
 
 import 'dart:typed_data';
 
+import 'package:blood_pressure_app/features/bluetooth/logic/characteristics/ble_measurement_data.dart';
 import 'package:blood_pressure_app/logging.dart';
 
 class YonkerMeasurementData {
@@ -43,4 +44,13 @@ class YonkerMeasurementData {
       pulse: data[3]
     );
   }
+
+  BleMeasurementData get asBleData => BleMeasurementData(
+    timestamp: timestamp,
+    systolic: systolic.toDouble(),
+    diastolic: diastolic.toDouble(),
+    isMMHG: true,
+    pulse: pulse.toDouble(),
+    meanArterialPressure: 1/3 * systolic + 2/3 * diastolic,
+  );
 }
