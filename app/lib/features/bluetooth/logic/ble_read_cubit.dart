@@ -34,10 +34,13 @@ class BleReadCubit extends Cubit<BleReadState> with TypeLogger {
 
   Future<bool> _connectDevice({int retries = 3}) async {
     logger.info('Connecting to ${device.uuid}');
-    await cm.connect(device);
-    final success = await cm.connectionStateChanged
+    final result = cm.connectionStateChanged
         .where((e) => e.peripheral == device)
         .first;
+    await cm.connect(device);
+    logger.finer('connect command send');
+    final success = await result;
+    logger.finer('Connection result: $success');
     if (success.state == ConnectionState.disconnected) {
       logger.info('Device disconnected');
       if (retries > 0) return _connectDevice(retries: retries - 1);
@@ -50,11 +53,13 @@ class BleReadCubit extends Cubit<BleReadState> with TypeLogger {
 
   /// Take a 'measurement', i.e. read the blood pressure values from the given characteristicUUID
   Future<void> takeMeasurement() async {
+    logger.finest('takeMeasurement();');
     if (!await _connectDevice()) {
       emit(BleReadFailure('Unable to connect to device: ${device.uuid}'));
       return;
     }
 
+    logger.finest('starting service discovery...');
     final services = await cm.discoverGATT(device);
     if (services.isEmpty) {
       logger.warning('Device ${device.uuid} advertised no services after connecting');
@@ -63,10 +68,12 @@ class BleReadCubit extends Cubit<BleReadState> with TypeLogger {
     final gattService = services.firstWhereOrNull(
             (s) => s.uuid == UUID.fromString(BleGattReadCubit.defaultServiceUUID));
     if (gattService != null) return _readGatt(gattService);
+    logger.finest("didn't get GATT service");
 
     final yonkerService = services.firstWhereOrNull(
             (s) => s.uuid == UUID.fromString(YonkerReadCubit.defaultServiceUUID));
     if (yonkerService != null) return _readYonker(yonkerService);
+    logger.finest("didn't get yonker service");
 
     emit(BleReadFailure('Device ${device.uuid} does not advertise a supported service'));
   }
@@ -124,17 +131,18 @@ class BleReadCubit extends Cubit<BleReadState> with TypeLogger {
     /// - Yonker YK-BPW5
     /// - Yongrow YK-IBPA1 (confirmed)
     /// - METIKO MT-YK-BPA1
+
+    // The process is as follows:
+    // 1. take an actual measurement
+    // 2. Connect to the device AFTER measurement
+    // 4. subscribe to the service/characteristic
+    // 5. the device sends us a notification (wrong timestamp)
+    logger.finest('_readYonker()');
     final characteristic = service.characteristics
         .firstWhereOrNull((c) => c.uuid == UUID.fromString(YonkerReadCubit.defaultCharacteristicUUID));
 
     if (characteristic == null) {
       emit(BleReadFailure('Device ${device.uuid} does not provide the expected yonker characteristic'));
-      return;
-    }
-
-    final canIndicate = characteristic.properties.contains(GATTCharacteristicProperty.indicate);
-    if (!canIndicate) {
-      emit(BleReadFailure('Characteristic can not indicate like expected'));
       return;
     }
 
@@ -144,6 +152,7 @@ class BleReadCubit extends Cubit<BleReadState> with TypeLogger {
         .map((e) => e.value)
         .first;
     await cm.setCharacteristicNotifyState(device, characteristic, state: true);
+    // FIXME: the device sends all values / the earliest value?
     final data = await future;
     await cm.setCharacteristicNotifyState(device, characteristic, state: false);
 

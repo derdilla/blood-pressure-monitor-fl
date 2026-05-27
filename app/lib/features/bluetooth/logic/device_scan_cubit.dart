@@ -82,7 +82,9 @@ class DeviceScanCubit extends Cubit<DeviceScanState> with TypeLogger {
         device: preferred.source.peripheral,
         cm: preferred.manager
       );
-      readCubit.takeMeasurement();
+      readCubit.takeMeasurement()
+          .onError((e, stack) => logger.severe('takeMeasurement failed', e, stack))
+          .ignore();
       _stopScanning().ignore();
       emit(DeviceSelected(readCubit));
       // TODO: implement fallback in case device is not real
@@ -113,7 +115,9 @@ class DeviceScanCubit extends Cubit<DeviceScanState> with TypeLogger {
         device: device.source.peripheral,
         cm: device.manager
     );
-    cubit.takeMeasurement().ignore();
+    cubit.takeMeasurement()
+        .onError((e, stack) => logger.severe('takeMeasurement failed', e, stack))
+        .ignore();
 
     assert(!_manager.discovery.isDiscovering);
     emit(DeviceSelected(cubit));
