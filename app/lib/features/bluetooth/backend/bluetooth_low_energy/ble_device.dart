@@ -30,7 +30,7 @@ final class BluetoothLowEnergyDevice
   @override
   String get name => source.advertisement.name ?? deviceId;
 
-  CentralManager get _cm => manager.backend;
+  CentralManager get _cm => manager;
 
   @override
   Stream<BluetoothConnectionState> get connectionStream => _cm.connectionStateChanged

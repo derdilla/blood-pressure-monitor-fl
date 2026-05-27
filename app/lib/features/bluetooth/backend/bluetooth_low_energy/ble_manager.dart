@@ -48,7 +48,7 @@ final class BluetoothLowEnergyManager extends BluetoothManager<DiscoveredEventAr
   }
 
   @override
-  BluetoothLowEnergyDevice createDevice(DiscoveredEventArgs device) => BluetoothLowEnergyDevice(this, device);
+  BluetoothLowEnergyDevice createDevice(DiscoveredEventArgs device) => BluetoothLowEnergyDevice(backend, device);
 
   @override
   BluetoothLowEnergyUUID createUuid(UUID uuid) => BluetoothLowEnergyUUID(uuid);

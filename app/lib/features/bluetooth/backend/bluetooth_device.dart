@@ -8,6 +8,7 @@ import 'package:blood_pressure_app/features/bluetooth/backend/bluetooth_connecti
 import 'package:blood_pressure_app/features/bluetooth/backend/bluetooth_manager.dart';
 import 'package:blood_pressure_app/features/bluetooth/backend/bluetooth_service.dart';
 import 'package:blood_pressure_app/logging.dart';
+import 'package:bluetooth_low_energy/bluetooth_low_energy.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
 
@@ -39,10 +40,10 @@ abstract class BluetoothDevice<
   }
 
   /// [BluetoothManager] this device belongs to
-  final BM manager;
+  final CentralManager manager;
 
   /// Original source device as returned by the backend
-  final BackendDevice source;
+  final DiscoveredEventArgs source;
 
   BluetoothDeviceState _state = BluetoothDeviceState.disconnected;
 

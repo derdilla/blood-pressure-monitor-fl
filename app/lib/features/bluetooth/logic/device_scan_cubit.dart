@@ -75,22 +75,17 @@ class DeviceScanCubit extends Cubit<DeviceScanState> with TypeLogger {
     }
 
     final preferred = devices.firstWhereOrNull((dev) =>
-      settings.knownBleDev.contains(dev.name));
+      settings.knownBleDev.contains(dev.deviceId));
 
     if (preferred != null) {
-      BleReadCubit.build(preferred).then((cubit) async {
-        if (cubit == null) {
-          logger.info('Device no longer supported: $preferred');
-          devices.remove(preferred);
-          if (settings.knownBleDev.contains(preferred.name)) {
-            settings.knownBleDev.remove(preferred.name);
-          }
-          emit(DeviceListAvailable(devices));
-          return;
-        }
-        await _stopScanning();
-        emit(DeviceSelected(cubit));
-      });
+      final readCubit = BleReadCubit(
+        device: preferred.source.peripheral,
+        cm: preferred.manager
+      );
+      readCubit.takeMeasurement();
+      _stopScanning().ignore();
+      emit(DeviceSelected(readCubit));
+      // TODO: implement fallback in case device is not real
     } else if (devices.isEmpty) {
       emit(DeviceListLoading());
     } else if (devices.length == 1) {
@@ -114,12 +109,11 @@ class DeviceScanCubit extends Cubit<DeviceScanState> with TypeLogger {
       return;
     }
 
-    final cubit = await BleReadCubit.build(device);
-    if (cubit == null) {
-      // TODO: indicate in UI
-      logger.info('Unsupported device: $device');
-      return;
-    }
+    final cubit = BleReadCubit(
+        device: device.source.peripheral,
+        cm: device.manager
+    );
+    cubit.takeMeasurement().ignore();
 
     assert(!_manager.discovery.isDiscovering);
     emit(DeviceSelected(cubit));

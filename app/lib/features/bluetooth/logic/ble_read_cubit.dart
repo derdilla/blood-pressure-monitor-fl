@@ -22,10 +22,10 @@ part 'ble_read_state.dart';
 /// [supportedServices] list and cubit construction to the [build] method.
 class BleReadCubit extends Cubit<BleReadState> with TypeLogger {
   /// Start reading a characteristic from a device.
-  BleReadCubit(super.initialState, {
+  BleReadCubit({
     required this.device,
     required this.cm,
-  });
+  }): super(BleReadInProgress());
 
   /// Bluetooth device to connect to.
   final Peripheral device;
