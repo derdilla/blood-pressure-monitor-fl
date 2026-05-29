@@ -12,7 +12,6 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:health_data_store/health_data_store.dart';
 
 import '../../util.dart';
-import 'ui/device_selection_test.dart';
 
 class _MockBluetoothCubit extends MockCubit<BluetoothState>
     implements BluetoothCubit {}
