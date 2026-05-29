@@ -3,17 +3,16 @@ import 'dart:io';
 
 import 'package:blood_pressure_app/features/bluetooth/backend/bluetooth_low_energy/ble_device.dart';
 import 'package:blood_pressure_app/features/bluetooth/backend/bluetooth_low_energy/ble_discovery.dart';
-import 'package:blood_pressure_app/features/bluetooth/backend/bluetooth_low_energy/ble_service.dart';
 import 'package:blood_pressure_app/features/bluetooth/backend/bluetooth_low_energy/ble_state.dart';
 import 'package:blood_pressure_app/features/bluetooth/backend/bluetooth_manager.dart';
 import 'package:blood_pressure_app/features/bluetooth/backend/bluetooth_state.dart';
 import 'package:bluetooth_low_energy/bluetooth_low_energy.dart';
 
 /// Bluetooth manager for the 'bluetooth_low_energy' package
-final class BluetoothLowEnergyManager extends BluetoothManager<DiscoveredEventArgs, UUID, GATTService, GATTCharacteristic> {
+final class BluetoothLowEnergyManager extends BluetoothManager<DiscoveredEventArgs> {
   /// constructor
   BluetoothLowEnergyManager() {
-    logger.fine('init');
+    logger.fine('BluetoothLowEnergyManager()');
 
     // Sync current adapter state
     _adapterStateParser.parseAndCache(BluetoothLowEnergyStateChangedEventArgs(backend.state));
@@ -29,6 +28,7 @@ final class BluetoothLowEnergyManager extends BluetoothManager<DiscoveredEventAr
   }
 
   /// The actual backend implementation
+  @override
   final CentralManager backend = CentralManager();
 
   final BluetoothLowEnergyStateParser _adapterStateParser = BluetoothLowEnergyStateParser();
@@ -48,17 +48,6 @@ final class BluetoothLowEnergyManager extends BluetoothManager<DiscoveredEventAr
   }
 
   @override
-  BluetoothLowEnergyDevice createDevice(DiscoveredEventArgs device) => BluetoothLowEnergyDevice(this, device);
+  BluetoothLowEnergyDevice createDevice(DiscoveredEventArgs device) => BluetoothLowEnergyDevice(backend, device);
 
-  @override
-  BluetoothLowEnergyUUID createUuid(UUID uuid) => BluetoothLowEnergyUUID(uuid);
-
-  @override
-  BluetoothLowEnergyUUID createUuidFromString(String uuid) => BluetoothLowEnergyUUID.fromString(uuid);
-
-  @override
-  BluetoothLowEnergyService createService(GATTService service) => BluetoothLowEnergyService.fromSource(service);
-
-  @override
-  BluetoothLowEnergyCharacteristic createCharacteristic(GATTCharacteristic characteristic) => BluetoothLowEnergyCharacteristic.fromSource(characteristic);
 }

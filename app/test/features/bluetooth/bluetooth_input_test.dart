@@ -1,4 +1,5 @@
 import 'package:bloc_test/bloc_test.dart';
+import 'package:blood_pressure_app/features/bluetooth/backend/bluetooth_backend.dart';
 import 'package:blood_pressure_app/features/bluetooth/bluetooth_input.dart';
 import 'package:blood_pressure_app/features/bluetooth/logic/ble_read_cubit.dart';
 import 'package:blood_pressure_app/features/bluetooth/logic/bluetooth_cubit.dart';
@@ -11,7 +12,6 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:health_data_store/health_data_store.dart';
 
 import '../../util.dart';
-import 'ui/device_selection_test.dart';
 
 class _MockBluetoothCubit extends MockCubit<BluetoothState>
     implements BluetoothCubit {}
@@ -26,6 +26,8 @@ class _MockBluetoothCubitFailingEnable extends MockCubit<BluetoothState>
     throw 'enableBluetooth called';
   }
 }
+
+class MockBluetoothManager extends Fake implements BluetoothManager {}
 
 void main() {
   testWidgets('propagates successful read', (WidgetTester tester) async {

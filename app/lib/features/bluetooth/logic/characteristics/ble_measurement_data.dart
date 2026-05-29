@@ -37,7 +37,7 @@ class BleMeasurementData {
     );
 
   /// Decode bytes read from the characteristic into a [BleMeasurementData]
-  static BleMeasurementData? decode(Uint8List data, int offset) {
+  static BleMeasurementData? decode(Uint8List data) {
     // https://github.com/NordicSemiconductor/Kotlin-BLE-Library/blob/6b565e59de21dfa53ef80ff8351ac4a4550e8d58/profile/src/main/java/no/nordicsemi/android/kotlin/ble/profile/bps/BloodPressureMeasurementParser.kt
 
     // Reading specific bits: `(byte & (1 << bitIdx))`
