@@ -35,7 +35,7 @@ class MockAdvertisement extends Fake implements Advertisement {
 
 void main() {
   testWidgets('Connects with one element', (WidgetTester tester) async {
-    final dev = MockBluetoothDevice(MockCentralManager(), DiscoveredEventArgs(MockPeripheral('00000000-0000-0000-0000-001234567890'), -1, MockAdvertisement('dev1')));
+    final dev = MockBluetoothDevice(MockCentralManager(), DiscoveredEventArgs(MockPeripheral('00000000-0000-0000-0000-001234567890'), -1, MockAdvertisement('Test device with long name (No.124356)')));
 
     final List<BluetoothDevice> accepted = [];
     await tester.pumpWidget(materialApp(DeviceSelection(
@@ -59,13 +59,13 @@ void main() {
   });
 
   testWidgets('Shows multiple elements', (WidgetTester tester) async {
-    BluetoothDevice getDev(String name) => MockBluetoothDevice(MockCentralManager(), DiscoveredEventArgs(MockPeripheral('00000000-0000-0000-0000-001234567890'), -1, MockAdvertisement('dev1')));
+    BluetoothDevice getDev(int i) => MockBluetoothDevice(MockCentralManager(), DiscoveredEventArgs(MockPeripheral('00000000-0000-0000-0000-00123456789$i'), -1, MockAdvertisement('dev$i')));
 
     await tester.pumpWidget(materialApp(DeviceSelection(
       scanResults: [
-        getDev('dev1'),
-        getDev('dev2'),
-        getDev('dev3'),
+        getDev(1),
+        getDev(2),
+        getDev(3),
       ],
       onAccepted: (dev) => fail('No entry tapped'),
     )));
