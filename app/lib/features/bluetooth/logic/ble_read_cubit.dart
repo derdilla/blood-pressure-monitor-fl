@@ -133,21 +133,17 @@ class BleReadCubit extends Cubit<BleReadState> with TypeLogger {
     }
   }
 
+  /// This reads from a low-cost device that may be sold under different brands:
+  /// - Yonker YK-IBPA1
+  /// - Yonker YK-BPW5
+  /// - Yongrow YK-IBPA1
+  /// - METIKO MT-YK-BPA1
   Future<void> _readYonker(GATTService service) async {
-    /// This is a low-cost device that may be sold under different brands/models:
-    /// - Yonker YK-IBPA1
-    /// - Yonker YK-BPW5
-    /// - Yongrow YK-IBPA1 (confirmed)
-    /// - METIKO MT-YK-BPA1
-
     // The process is as follows:
     // 1. take an actual measurement
     // 2. Connect to the device AFTER measurement
     // 4. subscribe to the service/characteristic
     // 5. the device sends us a notification (wrong timestamp)
-    //
-    // Don't do anything with the history buttons. This seems to mess up which
-    // measurement the device transmits?
 
     logger.finest('_readYonker()');
     final characteristic = service.characteristics

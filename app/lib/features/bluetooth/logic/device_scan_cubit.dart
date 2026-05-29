@@ -82,12 +82,11 @@ class DeviceScanCubit extends Cubit<DeviceScanState> with TypeLogger {
         device: preferred.source.peripheral,
         cm: preferred.manager
       );
+      emit(DeviceSelected(readCubit));
+      _stopScanning().ignore();
       readCubit.takeMeasurement()
           .onError((e, stack) => logger.severe('takeMeasurement failed', e, stack))
           .ignore();
-      _stopScanning().ignore();
-      emit(DeviceSelected(readCubit));
-      // TODO: implement fallback in case device is not real
     } else if (devices.isEmpty) {
       emit(DeviceListLoading());
     } else if (devices.length == 1) {
@@ -115,14 +114,14 @@ class DeviceScanCubit extends Cubit<DeviceScanState> with TypeLogger {
         device: device.source.peripheral,
         cm: device.manager
     );
+    emit(DeviceSelected(cubit));
     cubit.takeMeasurement()
         .onError((e, stack) => logger.severe('takeMeasurement failed', e, stack))
         .ignore();
 
     assert(!_manager.discovery.isDiscovering);
-    emit(DeviceSelected(cubit));
     final List<String> list = settings.knownBleDev.toList();
-    list.add(device.name);
+    list.add(device.deviceId);
     settings.knownBleDev = list;
   }
 }
