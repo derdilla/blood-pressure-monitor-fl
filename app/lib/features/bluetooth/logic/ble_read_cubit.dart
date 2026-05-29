@@ -5,8 +5,6 @@ import 'dart:async';
 
 import 'package:blood_pressure_app/features/bluetooth/logic/characteristics/ble_measurement_data.dart';
 import 'package:blood_pressure_app/features/bluetooth/logic/characteristics/yonker_measurement_data.dart';
-import 'package:blood_pressure_app/features/bluetooth/logic/devices/ble_gatt_read_cubit.dart';
-import 'package:blood_pressure_app/features/bluetooth/logic/devices/yonker_read_cubit.dart';
 import 'package:blood_pressure_app/logging.dart';
 import 'package:bluetooth_low_energy/bluetooth_low_energy.dart';
 import 'package:collection/collection.dart';
@@ -28,7 +26,13 @@ class BleReadCubit extends Cubit<BleReadState> with TypeLogger {
 
   final CentralManager cm;
 
-  Future<bool> _connectDevice({int retries = 3}) async {
+  static const defaultServiceUUID = '1810';
+  static const defaultCharacteristicUUID = '2A35';
+
+  static const yonkerServiceUUID = 'cdeacd80-5235-4c07-8846-93a37ee6b86d';
+  static const yonkerCharacteristicUUID = 'cdeacd81-5235-4c07-8846-93a37ee6b86d';
+
+  Future<bool> _connectDevice() async {
     logger.info('Connecting to ${device.uuid}');
     final result = cm.connectionStateChanged
         .where((e) => e.peripheral == device)
@@ -37,14 +41,7 @@ class BleReadCubit extends Cubit<BleReadState> with TypeLogger {
     logger.finer('connect command send');
     final success = await result;
     logger.finer('Connection result: $success');
-    if (success.state == ConnectionState.disconnected) {
-      logger.info('Device disconnected');
-      if (retries > 0) return _connectDevice(retries: retries - 1);
-      logger.finest('No retries left');
-      return false;
-    }
-    logger.finer('Successfully connected to ${device.uuid}');
-    return true;
+    return success.state == ConnectionState.connected;
   }
 
   /// Take a 'measurement', i.e. read the blood pressure values from the given characteristicUUID
@@ -62,12 +59,12 @@ class BleReadCubit extends Cubit<BleReadState> with TypeLogger {
     }
 
     final gattService = services.firstWhereOrNull(
-            (s) => s.uuid == UUID.fromString(BleGattReadCubit.defaultServiceUUID));
+            (s) => s.uuid == UUID.fromString(defaultServiceUUID));
     if (gattService != null) return _readGatt(gattService);
     logger.finest("didn't get GATT service");
 
     final yonkerService = services.firstWhereOrNull(
-            (s) => s.uuid == UUID.fromString(YonkerReadCubit.defaultServiceUUID));
+            (s) => s.uuid == UUID.fromString(yonkerServiceUUID));
     if (yonkerService != null) return _readYonker(yonkerService);
     logger.finest("didn't get yonker service");
 
@@ -79,7 +76,7 @@ class BleReadCubit extends Cubit<BleReadState> with TypeLogger {
     // https://www.bluetooth.com/wp-content/uploads/Files/Specification/HTML/Assigned_Numbers/out/en/Assigned_Numbers.pdf?v=1706215305114
 
     final characteristic = service.characteristics
-        .firstWhereOrNull((c) => c.uuid == UUID.fromString(BleGattReadCubit.defaultCharacteristicUUID));
+        .firstWhereOrNull((c) => c.uuid == UUID.fromString(defaultCharacteristicUUID));
 
     if (characteristic == null) {
       emit(BleReadFailure('Device ${device.uuid} does not provide the expected GATT characteristic'));
@@ -133,9 +130,13 @@ class BleReadCubit extends Cubit<BleReadState> with TypeLogger {
     // 2. Connect to the device AFTER measurement
     // 4. subscribe to the service/characteristic
     // 5. the device sends us a notification (wrong timestamp)
+    //
+    // Don't do anything with the history buttons. This seems to mess up which
+    // measurement the device transmits?
+
     logger.finest('_readYonker()');
     final characteristic = service.characteristics
-        .firstWhereOrNull((c) => c.uuid == UUID.fromString(YonkerReadCubit.defaultCharacteristicUUID));
+        .firstWhereOrNull((c) => c.uuid == UUID.fromString(yonkerCharacteristicUUID));
 
     if (characteristic == null) {
       emit(BleReadFailure('Device ${device.uuid} does not provide the expected yonker characteristic'));
@@ -148,7 +149,6 @@ class BleReadCubit extends Cubit<BleReadState> with TypeLogger {
         .map((e) => e.value)
         .first;
     await cm.setCharacteristicNotifyState(device, characteristic, state: true);
-    // FIXME: the device sends all values / the earliest value?
     final data = await future;
     await cm.setCharacteristicNotifyState(device, characteristic, state: false);
 
@@ -158,8 +158,6 @@ class BleReadCubit extends Cubit<BleReadState> with TypeLogger {
       emit(BleReadFailure('Could not decode data'));
       return;
     }
-
-    emit(BleReadSuccess(decodedData.asBleData));
   }
 
   @mustCallSuper

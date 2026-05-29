@@ -11,11 +11,11 @@ abstract class BluetoothManager<BackendDevice> with TypeLogger {
   /// Instantiate the correct [BluetoothManager] implementation.
   static BluetoothManager<DiscoveredEventArgs> create() => BluetoothLowEnergyManager();
 
-  /// Trigger the device to request the user for bluetooth ermissions
+  /// Trigger the device to request the user for bluetooth permissions
   ///
   /// Returns null if no permissions were requested (ie because its not needed on a platform)
   /// or true/false to indicate whether requesting permissions succeeded (not if it was granted)
-  Future<bool?> enable(); // TODO: use task specific plugin/native code
+  Future<bool?> enable();
 
   /// Last known adapter state
   ///
