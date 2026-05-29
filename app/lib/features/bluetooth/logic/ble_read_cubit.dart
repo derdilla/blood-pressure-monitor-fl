@@ -155,20 +155,22 @@ class BleReadCubit extends Cubit<BleReadState> with TypeLogger {
     }
 
     final future = cm.characteristicNotified
-        .where((e) => e.characteristic == characteristic
-        && e.peripheral == device)
-        .map((e) => e.value)
+        .where((e) {
+          logger.fine('Received notification: ${e.value} satisfying ${e.peripheral == device}, ${e.characteristic == characteristic}');
+          return e.characteristic == characteristic && e.peripheral == device;
+        })
+        .map((e) => YonkerMeasurementData.decode(e.value)?.asBleData)
         .first;
     await cm.setCharacteristicNotifyState(device, characteristic, state: true);
     final data = await future;
     await cm.setCharacteristicNotifyState(device, characteristic, state: false);
 
-    final decodedData = YonkerMeasurementData.decode(data);
-    if (decodedData == null) {
+    if (data == null) {
       logger.warning('Failed to decode yonker measurement $data for $device');
       emit(BleReadFailure('Could not decode data'));
       return;
     }
+    emit(BleReadSuccess(data));
   }
 
   @mustCallSuper
