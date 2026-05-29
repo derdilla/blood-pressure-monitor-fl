@@ -1,6 +1,3 @@
-// TODO: cleanup types
-// ignore_for_file: strict_raw_type
-
 import 'dart:async';
 
 import 'package:blood_pressure_app/features/bluetooth/logic/characteristics/ble_measurement_data.dart';
@@ -84,38 +81,56 @@ class BleReadCubit extends Cubit<BleReadState> with TypeLogger {
     }
 
     // Read or indicate data;
-    Uint8List? data;
     final canRead = characteristic.properties.contains(GATTCharacteristicProperty.read);
     final canIndicate = characteristic.properties.contains(GATTCharacteristicProperty.indicate);
     if (canRead) {
-      data = await cm.readCharacteristic(device, characteristic);
+      final data = await cm.readCharacteristic(device, characteristic);
+      final decodedData = BleMeasurementData.decode(data);
+      if (decodedData == null) {
+        logger.warning('Failed to decode GATT measurement $data for $device');
+        emit(BleReadFailure('Could not decode data'));
+        return;
+      }
+      emit(BleReadSuccess(decodedData));
+
     } else if (canIndicate) {
-      final future = cm.characteristicNotified
+      final completer = Completer<void>();
+      final data = <BleMeasurementData>[];
+      final connectionSubscription = cm.connectionStateChanged.listen((e) {
+        if (e.peripheral == device && e.state == ConnectionState.disconnected && !completer.isCompleted) {
+          completer.complete();
+        }
+      });
+      final dataSubscription = cm.characteristicNotified
           .where((e) => e.characteristic == characteristic
                   && e.peripheral == device)
-          .map((e) => e.value)
-          .first;
+          .map((e) => BleMeasurementData.decode(e.value))
+          .listen((e) { if (e != null) data.add(e); },
+              onDone: () {
+                if (!completer.isCompleted) completer.complete();
+              },
+              onError: ([Object? e]) {
+                logger.warning(e);
+                if (!completer.isCompleted) completer.complete();
+              });
       await cm.setCharacteristicNotifyState(device, characteristic, state: true);
-      data = await future;
-      // FIXME: from bug reports we know that more data may follow for some devices
-      // We should handle that and return: BleReadMultiple;
-      // For that we need to wait until the device disconnects naturally
+      await completer.future;
       await cm.setCharacteristicNotifyState(device, characteristic, state: false);
-    }
 
-    if (data == null) {
+      await connectionSubscription.cancel();
+      await dataSubscription.cancel();
+
+      if (data.isEmpty) {
+        emit(BleReadFailure('No data received'));
+      } else if (data.length == 1) {
+        emit(BleReadSuccess(data.first));
+      } else {
+        emit(BleReadMultiple(data));
+      }
+
+    } else {
       emit(BleReadFailure('Unable to get data from characteristic of GATT device ${device.uuid}'));
-      return;
     }
-
-    final decodedData = BleMeasurementData.decode(data);
-    if (decodedData == null) {
-      logger.warning('Failed to decode GATT measurement $data for $device');
-      emit(BleReadFailure('Could not decode data'));
-      return;
-    }
-
-    emit(BleReadSuccess(decodedData));
   }
 
   Future<void> _readYonker(GATTService service) async {
