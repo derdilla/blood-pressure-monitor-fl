@@ -25,24 +25,19 @@ Most devices provide 2 ways to retrieve measurements over bluetooth, but there a
 > 
 > Including you! If your device is not listed please edit this page and add it! 🙇
 
-|Device|Bluetooth name|Read after measurement|Download mode|Automatically disconnects after reading|
-|---|---| :---: | :---: | :---: |
-|HealthForYou by Silvercrest (Type SBM 69)|SBM69| 🔢 | ✅ | ✅ |
-|Omron X4 Smart|X4 Smart| 1️⃣ | ✅🗑️ | ✅ |
-|Omron X2 Smart+|X2 Smart+| 1️⃣ | ? | ? |
-|Omron Bronze BP5150|BLESmart_(long identifier string)| 1️⃣ | ? | ? |
-|Beurer BM59| BM 59 | 🔢 | ✅ | ✅ | 
 
+| Device                                    | Bluetooth Name                    |    Protocol     | Tested |          Quirks           |
+|-------------------------------------------|-----------------------------------|:---------------:|:------:|:-------------------------:|
+| HealthForYou by Silvercrest (Type SBM 69) | SBM69                             |  Standard GATT  |   ✅    |      Reads multiple       | 
+| Omron X4 Smart                            | X4 Smart                          |  Standard GATT  |   ✅    |  Deletes after transfer   | 
+| Omron X2 Smart+                           | X2 Smart+                         |  Standard GATT  |   ✅    |                           |
+| Omron Bronze BP5150                       | BLESmart_(long identifier string) |  Standard GATT  |   ✅    |                           |
+| Beurer BM59                               | BM 59                             |  Standard GATT  |   ✅    |      Reads multiple       |
+| Yonker YK-IBPA1                           |                                   | Yonker protocol |   ✅    | Connect after measurement |
+| Yonker YK-BPW5                            |                                   | Yonker protocol |   ?    |                           |
+| Yongrow YK-IBPA1                          |                                   | Yonker protocol |   ?    |                           |
+| METIKO MT-YK-BPA1                         |                                   | Yonker protocol |   ?    |                           |
 
-#### Legenda
-
-|Icon|Description|
-| :---: | --- |
-| 🚫 |Not supported / No|
-| ✅ |Supported / Yes|
-| 1️⃣ | Returns latest measurement|
-| 🔢 | Returns all measurements|
-| ✅🗑️ |Supported and removes all locally stored measurements|
 
 ## Specifications
 
