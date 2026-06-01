@@ -76,7 +76,7 @@ class _VersionScreenState extends State<VersionScreen> with TypeLogger {
               return ListTile(
                 onTap: () async {
                   try {
-                    await FilePicker.platform.saveFile(
+                    await FilePicker.saveFile(
                       fileName: 'blood_pressure.db',
                       bytes: File(snapshot.data!).readAsBytesSync(),
                       type: FileType.any, // application/vnd.sqlite3
