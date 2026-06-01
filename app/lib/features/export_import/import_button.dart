@@ -26,7 +26,7 @@ class ImportButton extends StatelessWidget {
       final localizations = AppLocalizations.of(context)!;
       final messenger = ScaffoldMessenger.of(context);
 
-      final file = (await FilePicker.platform.pickFiles(
+      final file = (await FilePicker.pickFiles(
         withData: true,
       ))?.files.firstOrNull;
       if (file == null) {

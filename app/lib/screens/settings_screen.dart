@@ -143,7 +143,7 @@ class SettingsPage extends StatelessWidget {
                       return;
                     }
                     final compressedArchive = ZipEncoder().encodeBytes(archive);
-                    await FilePicker.platform.saveFile(
+                    await FilePicker.saveFile(
                       type: FileType.any, // application/zip
                       fileName: 'bloodPressureSettings.zip',
                       bytes: compressedArchive,
@@ -163,7 +163,7 @@ class SettingsPage extends StatelessWidget {
                     final healthConnectSettings = context.read<HealthConnectSettings>();
                     final intervalStoreManager = context.read<IntervalStoreManager>();
                     final exportColumnsManager = context.read<ExportColumnsManager>();
-                    final result = await FilePicker.platform.pickFiles();
+                    final result = await FilePicker.pickFiles();
                     if (result == null) {
                       messenger.showSnackBar(SnackBar(content: Text(localizations.errNoFileOpened)));
                       return;

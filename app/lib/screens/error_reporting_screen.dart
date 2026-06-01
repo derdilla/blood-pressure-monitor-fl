@@ -109,7 +109,7 @@ class ErrorScreen extends StatelessWidget {
                       try {
                         final loader = await FileSettingsLoader.load();
                         final archive = loader.createArchive();
-                        await FilePicker.platform.saveFile(
+                        await FilePicker.saveFile(
                           type: FileType.any, // application/zip
                           fileName: 'bloodPressureSettings.zip',
                           bytes: ZipEncoder().encodeBytes(archive!),
@@ -128,7 +128,7 @@ class ErrorScreen extends StatelessWidget {
 
                         assert(dbPath != inMemoryDatabasePath);
                         dbPath = join(dbPath, 'bp.db');
-                        await FilePicker.platform.saveFile(
+                        await FilePicker.saveFile(
                           fileName: 'bp.db',
                           bytes: File(dbPath).readAsBytesSync(),
                           type: FileType.any, // application/vnd.sqlite3

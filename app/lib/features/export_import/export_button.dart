@@ -203,7 +203,7 @@ Future<void> _exportData(BuildContext context, Uint8List data, String fullFileNa
   final settings = Provider.of<ExportSettings>(context, listen: false);
   if (settings.defaultExportDir.isEmpty || !Platform.isAndroid) {
     _logger.fine('_exportData - Saving file using FilePicker');
-    await FilePicker.platform.saveFile(
+    await FilePicker.saveFile(
       type: FileType.any, // mimeType
       fileName: fullFileName,
       bytes: data,
