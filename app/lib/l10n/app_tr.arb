@@ -1,566 +1,388 @@
 {
-    "behavior": "Davranış",
-    "@behavior": {},
-    "weekOfYear": "Hafta {weekNum}, {year}",
-    "@weekOfYear": {
-        "placeholders": {
-            "weekNum": {
-                "type": "int"
-            },
-            "year": {
-                "type": "int"
-            }
-        }
-    },
-    "aboutWarnValuesScreenDesc": "Uyarı değerleri hakkında daha çok bilgi",
-    "@aboutWarnValuesScreenDesc": {},
-    "warnAboutTxt2": "Varsayılan yaşa bağlı değerler bu kaynaktan alındı.",
-    "@warnAboutTxt2": {},
-    "validateInputs": "Veri girişlerini doğrula",
-    "@validateInputs": {},
-    "month": "Ay",
-    "@month": {},
-    "addExportformat": "exportformat ekle",
-    "@addExportformat": {},
-    "exportDir": "Dışa aktarma dizini",
-    "@exportDir": {},
-    "csv": "CSV",
-    "@csv": {},
-    "default_": "Varsayılan",
-    "@default_": {},
-    "accentColor": "Tema rengi",
-    "@accentColor": {},
-    "title": "Kan Basıncı Uygulaması",
-    "@title": {},
-    "errTimeAfterNow": "Seçilen zaman gelecekte. Bu doğrulamayı ayarlardan kapatabilirsiniz.",
-    "@errTimeAfterNow": {},
-    "versionOf": "Sürüm: {version}",
-    "@versionOf": {
-        "placeholders": {
-            "version": {
-                "type": "String"
-            }
-        }
-    },
-    "btnConfirm": "TAMAM",
-    "@btnConfirm": {},
-    "addMeasurement": "Ölçüm ekle",
-    "@addMeasurement": {},
-    "startWithAddMeasurementPageDescription": "Uygulamanın açılışında, ölçüm giriş ekranı gösterilir.",
-    "@startWithAddMeasurementPageDescription": {},
-    "animationSpeed": "Animasyon süresi",
-    "@animationSpeed": {},
-    "licenses": "3. taraf lisanslar",
-    "@licenses": {},
-    "exportPdfExportData": "Veri tablosu",
-    "@exportPdfExportData": {},
-    "allowManualTimeInput": "Elle süre girmeye izin ver",
-    "@allowManualTimeInput": {},
-    "drawRegressionLines": "Eğilim çizgilerini çiz",
-    "@drawRegressionLines": {},
-    "btnSave": "KAYDET",
-    "@btnSave": {},
-    "deletionConfirmed": "Giriş silindi.",
-    "@deletionConfirmed": {},
-    "last30Days": "30 gün",
-    "@last30Days": {},
-    "fieldDelimiter": "Alan sınırlayıcı",
-    "@fieldDelimiter": {},
-    "horizontalLines": "Yatay çizgiler",
-    "@horizontalLines": {},
-    "exportPdfExportTitle": "Başlık",
-    "@exportPdfExportTitle": {},
-    "import": "İÇE AKTAR",
-    "@import": {},
-    "pulShort": "pul",
-    "@pulShort": {},
-    "sysLong": "Sistolik",
-    "@sysLong": {},
-    "exportPdfCellHeight": "Satır yüksekliği",
-    "@exportPdfCellHeight": {},
-    "success": "Başarılı: {msg}",
-    "@success": {
-        "placeholders": {
-            "msg": {
-                "type": "String"
-            }
-        }
-    },
-    "exportCustomEntries": "Alanları kişileştir",
-    "@exportCustomEntries": {},
-    "exportImport": "Dışa aktar / İçe aktar",
-    "@exportImport": {},
-    "enterTimeFormatString": "zaman biçimi",
-    "@enterTimeFormatString": {},
-    "allowMissingValues": "Kayıp değerlere izin ver",
-    "@allowMissingValues": {},
-    "edit": "Düzenle",
-    "@edit": {},
-    "errLt30": "Numara <= 30? Ayarlardan doğrulamayı kapatın!",
-    "@errLt30": {},
-    "diaShort": "dia",
-    "@diaShort": {},
-    "export": "DIŞA AKTAR",
-    "@export": {},
-    "theme": "Tema",
-    "@theme": {},
-    "year": "Yıl",
-    "@year": {},
-    "warnAboutTxt1": "Uyarı değerleri sadece bir öneridir ve tıbbi bir tavsiye değildir.",
-    "@warnAboutTxt1": {},
-    "customGraphMarkings": "Özel işaretler",
-    "@customGraphMarkings": {},
-    "exportFormat": "Dışa aktarma biçimi",
-    "@exportFormat": {},
-    "errUnrealistic": "Gerçekçi olmayan değer? Ayarlardan doğrulamayı kapatın!",
-    "@errUnrealistic": {},
-    "exportPdfHeaderHeight": "Başlık yüksekliği",
-    "@exportPdfHeaderHeight": {},
-    "iconSize": "Simge boyutu",
-    "@iconSize": {},
-    "measurementsPerDay": "Günde ölçüm sayısı",
-    "@measurementsPerDay": {},
-    "errNoData": "veri yok",
-    "@errNoData": {},
-    "light": "Açık",
-    "@light": {},
-    "errNotStarted": "başlatılmadı",
-    "@errNotStarted": {},
-    "errCantOpenURL": "URL açılamadı: {url}",
-    "@errCantOpenURL": {
-        "placeholders": {
-            "url": {
-                "type": "String"
-            }
-        }
-    },
-    "lifetime": "Ömür boyu",
-    "@lifetime": {},
-    "exportMimeType": "Dışa aktarılan medya türü",
-    "@exportMimeType": {},
-    "delete": "Sil",
-    "@delete": {},
-    "errCantReadFile": "Dosyanın içeriği okunamıyor",
-    "@errCantReadFile": {},
-    "notes": "Notlar",
-    "@notes": {},
-    "importSuccess": "{count} giriş içe aktarıldı",
-    "@importSuccess": {
-        "placeholders": {
-            "count": {
-                "type": "int"
-            }
-        }
-    },
-    "errDiaGtSys": "dia >= sys? Ayarlardan doğrulamayı kapatın!",
-    "@errDiaGtSys": {},
-    "graphLineThickness": "Çizgi kalınlığı",
-    "@graphLineThickness": {},
-    "data": "Veri",
-    "@data": {},
-    "version": "Sürüm",
-    "@version": {},
-    "errNoValue": "Lütfen bir değer girin",
-    "@errNoValue": {},
-    "other": "diğer",
-    "@other": {},
-    "exportWarnConfigNotImportable": "Merhaba! Size dostça bir uyarı: Şu anki dışa aktarma ayarlarıyla içe aktarmak mümkün olmayacak. Bunu düzeltmek için dışa aktarma türünün CSV olduğuna emin olun ve uygun zaman biçimlerinden birini dahil edin.",
-    "@exportWarnConfigNotImportable": {},
-    "timestamp": "Zaman damgası",
-    "@timestamp": {},
-    "exportCsvHeadlineDesc": "Türleri ayırmakta yardımcı olur",
-    "@exportCsvHeadlineDesc": {},
-    "btnUndo": "GERİ AL",
-    "@btnUndo": {},
-    "addNote": "Not (isteğe bağlı)",
-    "@addNote": {},
-    "packageNameOf": "Paket adı: {name}",
-    "@packageNameOf": {
-        "placeholders": {
-            "name": {
-                "type": "String"
-            }
-        }
-    },
-    "drawRegressionLinesDesc": "Grafikte regresyon çizgilerini çiz. Yalnızca geniş zaman aralıklarında kullanışlı.",
-    "@drawRegressionLinesDesc": {},
-    "pulColor": "Nabız rengi",
-    "@pulColor": {},
-    "addLine": "Çizgi ekle",
-    "@addLine": {},
-    "warnAboutTxt3": "Bu değerleri ihtiyacınıza göre değiştirebilirsiniz. Doktorunuzun tavsiyesine uyun.",
-    "@warnAboutTxt3": {},
-    "pulLong": "Nabız",
-    "@pulLong": {},
-    "errNotEnoughDataToGraph": "Grafik çizmeye yetecek kadar veri bulunmamakta.",
-    "@errNotEnoughDataToGraph": {},
-    "sysColor": "Sistolik rengi",
-    "@sysColor": {},
-    "maxOf": "{txt} azm.",
-    "@maxOf": {
-        "placeholders": {
-            "txt": {
-                "type": "String"
-            }
-        }
-    },
-    "startWithAddMeasurementPage": "Başlangıçta ölçüm",
-    "@startWithAddMeasurementPage": {},
-    "pulsePressure": "Nabız basıncı",
-    "@pulsePressure": {},
-    "errNotImportable": "Bu dosya aktarılamaz",
-    "@errNotImportable": {},
-    "errNaN": "Lütfen bir sayı girin",
-    "@errNaN": {},
-    "confirmDeletion": "Silmeyi onayla",
-    "@confirmDeletion": {},
-    "textDelimiter": "Metin sınırlayıcı",
-    "@textDelimiter": {},
-    "diaColor": "Diyastolik rengi",
-    "@diaColor": {},
-    "pdf": "PDF",
-    "@pdf": {},
-    "aboutWarnValuesScreen": "Hakkında",
-    "@aboutWarnValuesScreen": {},
-    "exportPdfExportStatistics": "İstatislikler",
-    "@exportPdfExportStatistics": {},
-    "age": "Yaş",
-    "@age": {},
-    "db": "SQLite Veritabanı",
-    "@db": {},
-    "exportPdfCellFontSize": "Satır yazı tipi boyutu",
-    "@exportPdfCellFontSize": {},
-    "dark": "Koyu",
-    "@dark": {},
-    "maximum": "Azami",
-    "@maximum": {},
-    "exportCsvHeadline": "Başlık",
-    "@exportCsvHeadline": {},
-    "errNeedHeadline": "Sadece başlık bulunduran dosyaları aktarabilirsiniz.",
-    "@errNeedHeadline": {},
-    "determineWarnValues": "Uyarı değerlerini belirle",
-    "@determineWarnValues": {},
-    "statistics": "İstatistikler",
-    "@statistics": {},
-    "diaWarn": "Diyastolik uyarı",
-    "@diaWarn": {},
-    "minimum": "Asgari",
-    "@minimum": {},
-    "shared": "paylaşıldı",
-    "@shared": {},
-    "btnCancel": "İPTAL",
-    "@btnCancel": {},
-    "language": "Dil",
-    "@language": {},
-    "exportWarnNotEveryFieldExported": "Bütün alanları dışa aktarmıyorsunuz: {fields} {count, plural, one{is} other{are}} kayıp.",
-    "@exportWarnNotEveryFieldExported": {
-        "placeholders": {
-            "count": {
-                "type": "int"
-            },
-            "fields": {
-                "type": "String"
-            }
-        }
-    },
-    "average": "Ortalama",
-    "@average": {},
-    "addEntry": "Alan ekle",
-    "@addEntry": {},
-    "sourceCode": "Kaynak kodu",
-    "@sourceCode": {},
-    "error": "Hata: {msg}",
-    "@error": {
-        "placeholders": {
-            "msg": {
-                "type": "String"
-            }
-        }
-    },
-    "useLegacyList": "Eski tip liste kullan",
-    "@useLegacyList": {},
-    "measurementCount": "Ölçüm sayısı",
-    "@measurementCount": {},
-    "exportAfterEveryInputDesc": "Önerilmez (dosya patlaması)",
-    "@exportAfterEveryInputDesc": {},
-    "exportFieldFormatDocumentation": "'## Değişkenler\nDışa aktarma alanı biçimi şu yerler için değer doldurabiliyor:\n- `$TIMESTAMP:` Unix miladından itibaren geçen zamanı milisaniyede gösterir.\n- `$SYS:` Eğer mevcutsa bir değer sağlar; yoksa -1 sağlar.\n- `$DIA:` Eğer mevcutsa bir değer sağlar; yoksa -1 sağlar\n- `$PUL:` Eğer mevcutsa bir değer sağlar; yoksa -1 sağlar\n- `$NOTE:` Eğer mevcutsa bir değer sağlar; yoksa -1 sağlar\n- `$COLOR:` Bir ölçümün rengini sayı olarak temsil eder. (örnek değer: `4291681337`)\n\nBu adı geçen yerlerden herhangi biri kan basıncı kaydında yoksa, -1 ile değiştirilir.\n\n## Matematik\nÇift süslü parantez içinde basit matematiksel işlemler yapabilirsiniz (\"`{{}}`\").\n\nAşağıdaki matematiksel işlemler desteklenir:\n- İşlemler: +, -, *, /, %, ^\n- Tek-parametreli fonksiyonlar: abs, acos, asin, atan, ceil, cos, cosh, cot, coth, csc, csch, exp, floor, ln, log, round sec, sech, sin, sinh, sqrt, tan, tanh\n- Çift-parametreli fonksiyonlar: log, nrt, pow\n- Sabit değişkenler: e, pi, ln2, ln10, log2e, log10e, sqrt1_2, sqrt2\n\nMatematik işlemcisinin bütün ayrıntıları için [function_tree](https://pub.dev/documentation/function_tree/latest#interpreter)''e bakabilirsiniz\n\n## İşlem önceliği\n1. Değişken değişimi\n2. Matematik'",
-    "@exportFieldFormatDocumentation": {},
-    "exportAfterEveryInput": "Her girişten sonra dışa aktar",
-    "@exportAfterEveryInput": {},
-    "week": "Hafta",
-    "@week": {},
-    "linePositionY": "Çizgi konumu (y)",
-    "@linePositionY": {},
-    "warnValues": "Uyarı değerleri",
-    "@warnValues": {},
-    "result": "Sonuç:",
-    "@result": {},
-    "settings": "Ayarlar",
-    "@settings": {},
-    "loading": "yükleniyor…",
-    "@loading": {},
-    "text": "metin",
-    "@text": {},
-    "avgOf": "{txt} Ø",
-    "@avgOf": {
-        "placeholders": {
-            "txt": {
-                "type": "String"
-            }
-        }
-    },
-    "confirmDelete": "Silmeyi onayla",
-    "@confirmDelete": {},
-    "errWrongImportFormat": "Sadece CSV ve SQLite veritabanı biçiminde dosya aktarabilirsiniz.",
-    "@errWrongImportFormat": {},
-    "minOf": "{txt} asg.",
-    "@minOf": {
-        "placeholders": {
-            "txt": {
-                "type": "String"
-            }
-        }
-    },
-    "timeResolvedMetrics": "Günün saatine göre ölçümler",
-    "@timeResolvedMetrics": {},
-    "enterTimeFormatScreen": "Zaman biçimi",
-    "@enterTimeFormatScreen": {},
-    "fieldFormat": "Alan biçimi",
-    "@fieldFormat": {},
-    "system": "Sistem",
-    "@system": {},
-    "sysShort": "sys",
-    "@sysShort": {},
-    "sysWarn": "Sistolik uyarı",
-    "@sysWarn": {},
-    "now": "şu an",
-    "@now": {},
-    "diaLong": "Diyastolik",
-    "@diaLong": {},
-    "time": "Zaman",
-    "@time": {},
-    "custom": "Özel",
-    "@custom": {},
-    "day": "Gün",
-    "@day": {},
-    "note": "Not",
-    "@note": {},
-    "exportPdfHeaderFontSize": "Başlık yazı tipi boyutu",
-    "@exportPdfHeaderFontSize": {},
-    "last7Days": "7 gün",
-    "@last7Days": {},
-    "buildNumberOf": "Sürüm numarası: {buildNumber}",
-    "@buildNumberOf": {
-        "placeholders": {
-            "buildNumber": {
-                "type": "String"
-            }
-        }
-    },
-    "pdfDocumentTitle": "{start}''den {end}''e kan basıncı değerleri",
-    "@pdfDocumentTitle": {
-        "placeholders": {
-            "start": {
-                "type": "String"
-            },
-            "end": {
-                "type": "String"
-            }
-        }
-    },
-    "confirmDeleteDesc": "Bu girişi sil? (Bu onaylama mesajını ayarlardan kapatabilirsiniz.)",
-    "@confirmDeleteDesc": {},
-    "errNoFileOpened": "herhangi bir dosya açılmadı",
-    "@errNoFileOpened": {},
-    "enterTimeFormatDesc": "Biçim stringi önceden tanımladan ICU/Skeleton stringlerinin ve eklemek istediğiniz herhangi başka metinin birleşimidir.\n\n[Tanımlanan biçimlerin bütünün bir listesini merak ettiyseniz burada bulabilirsiniz.](screen://TimeFormattingHelp)\n\nBir hatırlatma, uzun ya da kısa biçim String kullanmak tablodaki sütunların genişliğini değiştirmeyecek, ki bu da garip satır atlamalarına ve metnin gözükmemesine yol açabilir.\n\nvarsayılan: \"yy-MM-dd HH:mm\"",
-    "@enterTimeFormatDesc": {},
-    "importSettings": "Ayarları geri yükle",
-    "@importSettings": {},
-    "warnDeletionUnrecoverable": "Elle bir yedekleme yapmadıysanız bu adım geri döndürülemez. Bunu gerçekten silmek istiyor musunuz?",
-    "@warnDeletionUnrecoverable": {},
-    "exportSettings": "Ayarları yedekle",
-    "@exportSettings": {},
-    "needlePinBarWidthDesc": "Renkli girişlerin grafik üzerinde oluşturduğu çizgilerin genişliği.",
-    "@needlePinBarWidthDesc": {},
-    "restartNow": "Şimdi yeniden başlat",
-    "@restartNow": {},
-    "requiresAppRestart": "Uygulamanın yeniden başlatılmasını gerektirir",
-    "@requiresAppRestart": {},
-    "deleteAllSettings": "Tüm ayarları sil",
-    "@deleteAllSettings": {},
-    "deleteAllMeasurements": "Tüm ölçümleri sil",
-    "@deleteAllMeasurements": {},
-    "color": "Renk",
-    "@color": {},
-    "warnNeedsRestartForUsingApp": "Bu oturumda dosyalar silindi. Kullanmaya devam etmek için uygulamayı yeniden başlatın!",
-    "@warnNeedsRestartForUsingApp": {},
-    "needlePinBarWidth": "Renk kalınlığı",
-    "@needlePinBarWidth": {},
-    "errParseFailedDecodingField": "{lineNumber}. satırdaki \"{fieldContent}\" alanının çözülmesi başarısız oldu.",
-    "@errParseFailedDecodingField": {
-        "placeholders": {
-            "lineNumber": {
-                "type": "int"
-            },
-            "fieldContent": {
-                "type": "String"
-            }
-        }
-    },
-    "addMedication": "İlaç ekle",
-    "@addMedication": {},
-    "defaultDosis": "Öntanımlı doz",
-    "@defaultDosis": {},
-    "exportFieldsPreset": "Alan ön ayarlarını dışa aktar",
-    "@exportFieldsPreset": {},
-    "errParseEmptyCsvFile": "CSV dosyasında kaydı ayrıştırmak için yeterli satır yok.",
-    "@errParseEmptyCsvFile": {},
-    "errParseTimeNotRestoreable": "Zaman damgasını geri yüklemeye izin veren bir sütun yok.",
-    "@errParseTimeNotRestoreable": {},
-    "errParseLineTooShort": "{lineNumber}. satırda ilk satırdan daha az sütun var.",
-    "@errParseLineTooShort": {
-        "placeholders": {
-            "lineNumber": {
-                "type": "int"
-            }
-        }
-    },
-    "remove": "Kaldır",
-    "@remove": {},
-    "manageExportColumns": "Dışa aktarılan sütunları yönet",
-    "@manageExportColumns": {},
-    "buildIn": "Yerleşik",
-    "@buildIn": {},
-    "csvTitle": "CSV-başlığı",
-    "@csvTitle": {},
-    "recordFormat": "Kayıt biçimi",
-    "@recordFormat": {},
-    "timeFormat": "Zaman biçimi",
-    "@timeFormat": {},
-    "bottomAppBars": "Alt diyalog çubukları",
-    "@bottomAppBars": {},
-    "medications": "İlaçlar",
-    "@medications": {},
-    "name": "Ad",
-    "@name": {},
-    "noMedication": "İlaç yok",
-    "@noMedication": {},
-    "dosis": "Doz",
-    "@dosis": {},
-    "errAccuracyLoss": "Özel zaman biçimlendiricilerle dışa aktarırken hassasiyet kaybı olabilir.",
-    "@errAccuracyLoss": {},
-    "valueDistribution": "Değer dağılımı",
-    "@valueDistribution": {},
-    "errParseUnknownColumn": "\"{title}\" başlığına sahip bir sütun yok.",
-    "@errParseUnknownColumn": {
-        "placeholders": {
-            "title": {
-                "type": "String"
-            }
-        }
-    },
-    "preferredPressureUnit": "Tercih edilen basınç birimi",
-    "@preferredPressureUnit": {},
-    "titleInCsv": "CSV başlığı",
-    "@titleInCsv": {},
-    "bluetoothDisabled": "Bluetooth devre dışı",
-    "@bluetoothDisabled": {},
-    "errMeasurementRead": "Ölçüm alınırken hata oluştu!",
-    "@errMeasurementRead": {},
-    "connect": "Bağlan",
-    "@connect": {},
-    "bluetoothInput": "Bluetooth girişi",
-    "@bluetoothInput": {},
-    "scanningForDevices": "Aygıtlar taranıyor",
-    "@scanningForDevices": {},
-    "tapToClose": "Kapatmak için dokunun.",
-    "@tapToClose": {},
-    "meanArterialPressure": "Ortalama damar basıncı",
-    "@meanArterialPressure": {},
-    "userID": "Kullanıcı kimliği",
-    "@userID": {},
-    "irregularPulseDetected": "Düzensiz nabız algılandı",
-    "@irregularPulseDetected": {},
-    "pulseRateExceedsUpperLimit": "Nabız hızı üst sınırı aşıyor",
-    "@pulseRateExceedsUpperLimit": {},
-    "pulseRateLessThanLowerLimit": "Nabız hızı alt sınırdan düşük",
-    "@pulseRateLessThanLowerLimit": {},
-    "availableDevices": "Kullanılabilir aygıtlar",
-    "@availableDevices": {},
-    "deleteAllMedicineIntakes": "Tüm ilaç alımlarını sil",
-    "@deleteAllMedicineIntakes": {},
-    "errBleNoPerms": "Bluetooth izinleri yok",
-    "@errBleNoPerms": {},
-    "aboutBleInput": "Bazı ölçüm aygıtları BLE GATT uyumludur. Bu aygıtları burada eşleştirebilir ve ölçümleri otomatik olarak iletebilir veya ayarlardan bu seçeneği devre dışı bırakabilirsiniz.",
-    "@aboutBleInput": {},
-    "measurementSuccess": "Ölçüm başarıyla alındı!",
-    "@measurementSuccess": {},
-    "bodyMovementDetected": "Vücut hareketi algılandı",
-    "@bodyMovementDetected": {},
-    "cuffTooLoose": "Bileklik çok gevşek",
-    "@cuffTooLoose": {},
-    "improperMeasurementPosition": "Yanlış ölçüm konumu",
-    "@improperMeasurementPosition": {},
-    "compactList": "Sıkışık ölçüm listesi",
-    "@compactList": {},
-    "deleteAllNotes": "Tüm notları sil",
-    "@deleteAllNotes": {},
-    "date": "Tarih",
-    "@date": {},
-    "intakes": "İlaç alımları",
-    "@intakes": {},
-    "errFeatureNotSupported": "Bu özellik bu platformda kullanılamıyor.",
-    "@errFeatureNotSupported": {},
-    "invalidZip": "Geçersiz zip dosyası.",
-    "@invalidZip": {},
-    "errCantCreateArchive": "Arşiv oluşturulamıyor. Lütfen mümkünse hatayı bildirin.",
-    "@errCantCreateArchive": {},
-    "activateWeightFeatures": "Ağırlıkla ilgili özellikleri etkinleştir",
-    "@activateWeightFeatures": {},
-    "weight": "Ağırlık",
-    "@weight": {},
-    "enterWeight": "Ağırlık girin",
-    "@enterWeight": {},
-    "preferredWeightUnit": "Tercih edilen ağırlık birimi",
-    "@preferredWeightUnit": {
-        "description": "Setting for the unit the app will use for displaying weight"
-    },
-    "selectMeasurementTitle": "Kullanılacak ölçüyü seçin",
-    "@selectMeasurementTitle": {},
-    "select": "Seç",
-    "@select": {
-        "description": "Used when f.e. selecting a single measurement when the bluetooth device returned multiple"
-    },
-    "bloodPressure": "Kan basıncı",
-    "@bloodPressure": {},
-    "tapToSelect": "Seçmek için dokunun",
-    "@tapToSelect": {},
-    "disabled": "Devre dışı",
-    "@disabled": {},
-    "measurementIndex": "Ölçüm #{number}",
-    "@measurementIndex": {
-        "placeholders": {
-            "number": {
-                "type": "int"
-            }
-        }
-    },
-    "newBluetoothInputCrossPlatform": "Kararlı",
-    "@newBluetoothInputCrossPlatform": {},
-    "dontShowAgain": "Tekrar gösterme",
-    "@dontShowAgain": {},
-    "btnShare": "PAYLAŞ",
-    "@btnShare": {},
-    "trustBLETime": "Bluetooth aygıtları tarafından bildirilen zamana güven",
-    "@trustBLETime": {},
-    "warnBLETimeSus": "Bluetooth aygıtı {hours} saatlik bir zaman farkı bildirdi. Ayarlardan Bluetooth aygıtlarının zaman damgalarına güvenmeyi devre dışı bırakabilirsiniz.",
-    "@warnBLETimeSus": {
-        "placeholders": {
-            "hours": {
-                "type": "int"
-            }
-        }
-    },
-    "exportSuccess": "Dışa aktarma başarılı",
-    "@exportSuccess": {}
+  "behavior": "Davranış",
+  "weekOfYear": "Hafta {weekNum}, {year}",
+  "@weekOfYear": {
+    "placeholders": {
+      "weekNum": {
+        "type": "int"
+      },
+      "year": {
+        "type": "int"
+      }
+    }
+  },
+  "aboutWarnValuesScreenDesc": "Uyarı değerleri hakkında daha çok bilgi",
+  "warnAboutTxt2": "Varsayılan yaşa bağlı değerler bu kaynaktan alındı.",
+  "validateInputs": "Veri girişlerini doğrula",
+  "month": "Ay",
+  "addExportformat": "exportformat ekle",
+  "exportDir": "Dışa aktarma dizini",
+  "csv": "CSV",
+  "default_": "Varsayılan",
+  "accentColor": "Tema rengi",
+  "title": "Kan Basıncı Uygulaması",
+  "errTimeAfterNow": "Seçilen zaman gelecekte. Bu doğrulamayı ayarlardan kapatabilirsiniz.",
+  "versionOf": "Sürüm: {version}",
+  "@versionOf": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "btnConfirm": "TAMAM",
+  "addMeasurement": "Ölçüm ekle",
+  "startWithAddMeasurementPageDescription": "Uygulamanın açılışında, ölçüm giriş ekranı gösterilir.",
+  "animationSpeed": "Animasyon süresi",
+  "licenses": "3. taraf lisanslar",
+  "exportPdfExportData": "Veri tablosu",
+  "allowManualTimeInput": "Elle süre girmeye izin ver",
+  "drawRegressionLines": "Eğilim çizgilerini çiz",
+  "btnSave": "KAYDET",
+  "deletionConfirmed": "Giriş silindi.",
+  "last30Days": "30 gün",
+  "fieldDelimiter": "Alan sınırlayıcı",
+  "horizontalLines": "Yatay çizgiler",
+  "exportPdfExportTitle": "Başlık",
+  "import": "İÇE AKTAR",
+  "pulShort": "pul",
+  "sysLong": "Sistolik",
+  "exportPdfCellHeight": "Satır yüksekliği",
+  "success": "Başarılı: {msg}",
+  "@success": {
+    "placeholders": {
+      "msg": {
+        "type": "String"
+      }
+    }
+  },
+  "exportCustomEntries": "Alanları kişileştir",
+  "exportImport": "Dışa aktar / İçe aktar",
+  "enterTimeFormatString": "zaman biçimi",
+  "allowMissingValues": "Kayıp değerlere izin ver",
+  "edit": "Düzenle",
+  "errLt30": "Numara <= 30? Ayarlardan doğrulamayı kapatın!",
+  "diaShort": "dia",
+  "export": "DIŞA AKTAR",
+  "theme": "Tema",
+  "year": "Yıl",
+  "warnAboutTxt1": "Uyarı değerleri sadece bir öneridir ve tıbbi bir tavsiye değildir.",
+  "customGraphMarkings": "Özel işaretler",
+  "exportFormat": "Dışa aktarma biçimi",
+  "errUnrealistic": "Gerçekçi olmayan değer? Ayarlardan doğrulamayı kapatın!",
+  "exportPdfHeaderHeight": "Başlık yüksekliği",
+  "iconSize": "Simge boyutu",
+  "measurementsPerDay": "Günde ölçüm sayısı",
+  "errNoData": "veri yok",
+  "light": "Açık",
+  "errNotStarted": "başlatılmadı",
+  "errCantOpenURL": "URL açılamadı: {url}",
+  "@errCantOpenURL": {
+    "placeholders": {
+      "url": {
+        "type": "String"
+      }
+    }
+  },
+  "lifetime": "Ömür boyu",
+  "exportMimeType": "Dışa aktarılan medya türü",
+  "delete": "Sil",
+  "errCantReadFile": "Dosyanın içeriği okunamıyor",
+  "notes": "Notlar",
+  "importSuccess": "{count} giriş içe aktarıldı",
+  "@importSuccess": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "errDiaGtSys": "dia >= sys? Ayarlardan doğrulamayı kapatın!",
+  "graphLineThickness": "Çizgi kalınlığı",
+  "data": "Veri",
+  "version": "Sürüm",
+  "errNoValue": "Lütfen bir değer girin",
+  "other": "diğer",
+  "exportWarnConfigNotImportable": "Merhaba! Size dostça bir uyarı: Şu anki dışa aktarma ayarlarıyla içe aktarmak mümkün olmayacak. Bunu düzeltmek için dışa aktarma türünün CSV olduğuna emin olun ve uygun zaman biçimlerinden birini dahil edin.",
+  "timestamp": "Zaman damgası",
+  "exportCsvHeadlineDesc": "Türleri ayırmakta yardımcı olur",
+  "btnUndo": "GERİ AL",
+  "addNote": "Not (isteğe bağlı)",
+  "packageNameOf": "Paket adı: {name}",
+  "@packageNameOf": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "drawRegressionLinesDesc": "Grafikte regresyon çizgilerini çiz. Yalnızca geniş zaman aralıklarında kullanışlı.",
+  "pulColor": "Nabız rengi",
+  "addLine": "Çizgi ekle",
+  "warnAboutTxt3": "Bu değerleri ihtiyacınıza göre değiştirebilirsiniz. Doktorunuzun tavsiyesine uyun.",
+  "pulLong": "Nabız",
+  "errNotEnoughDataToGraph": "Grafik çizmeye yetecek kadar veri bulunmamakta.",
+  "sysColor": "Sistolik rengi",
+  "maxOf": "{txt} azm.",
+  "@maxOf": {
+    "placeholders": {
+      "txt": {
+        "type": "String"
+      }
+    }
+  },
+  "startWithAddMeasurementPage": "Başlangıçta ölçüm",
+  "pulsePressure": "Nabız basıncı",
+  "errNotImportable": "Bu dosya aktarılamaz",
+  "errNaN": "Lütfen bir sayı girin",
+  "confirmDeletion": "Silmeyi onayla",
+  "textDelimiter": "Metin sınırlayıcı",
+  "diaColor": "Diyastolik rengi",
+  "pdf": "PDF",
+  "aboutWarnValuesScreen": "Hakkında",
+  "exportPdfExportStatistics": "İstatislikler",
+  "age": "Yaş",
+  "db": "SQLite Veritabanı",
+  "exportPdfCellFontSize": "Satır yazı tipi boyutu",
+  "dark": "Koyu",
+  "maximum": "Azami",
+  "exportCsvHeadline": "Başlık",
+  "errNeedHeadline": "Sadece başlık bulunduran dosyaları aktarabilirsiniz.",
+  "determineWarnValues": "Uyarı değerlerini belirle",
+  "statistics": "İstatistikler",
+  "diaWarn": "Diyastolik uyarı",
+  "minimum": "Asgari",
+  "shared": "paylaşıldı",
+  "btnCancel": "İPTAL",
+  "language": "Dil",
+  "exportWarnNotEveryFieldExported": "Bütün alanları dışa aktarmıyorsunuz: {fields} {count, plural, one{is} other{are}} kayıp.",
+  "@exportWarnNotEveryFieldExported": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "fields": {
+        "type": "String"
+      }
+    }
+  },
+  "average": "Ortalama",
+  "addEntry": "Alan ekle",
+  "sourceCode": "Kaynak kodu",
+  "error": "Hata: {msg}",
+  "@error": {
+    "placeholders": {
+      "msg": {
+        "type": "String"
+      }
+    }
+  },
+  "useLegacyList": "Eski tip liste kullan",
+  "measurementCount": "Ölçüm sayısı",
+  "exportAfterEveryInputDesc": "Önerilmez (dosya patlaması)",
+  "exportFieldFormatDocumentation": "'## Değişkenler\nDışa aktarma alanı biçimi şu yerler için değer doldurabiliyor:\n- `$TIMESTAMP:` Unix miladından itibaren geçen zamanı milisaniyede gösterir.\n- `$SYS:` Eğer mevcutsa bir değer sağlar; yoksa -1 sağlar.\n- `$DIA:` Eğer mevcutsa bir değer sağlar; yoksa -1 sağlar\n- `$PUL:` Eğer mevcutsa bir değer sağlar; yoksa -1 sağlar\n- `$NOTE:` Eğer mevcutsa bir değer sağlar; yoksa -1 sağlar\n- `$COLOR:` Bir ölçümün rengini sayı olarak temsil eder. (örnek değer: `4291681337`)\n\nBu adı geçen yerlerden herhangi biri kan basıncı kaydında yoksa, -1 ile değiştirilir.\n\n## Matematik\nÇift süslü parantez içinde basit matematiksel işlemler yapabilirsiniz (\"`{{}}`\").\n\nAşağıdaki matematiksel işlemler desteklenir:\n- İşlemler: +, -, *, /, %, ^\n- Tek-parametreli fonksiyonlar: abs, acos, asin, atan, ceil, cos, cosh, cot, coth, csc, csch, exp, floor, ln, log, round sec, sech, sin, sinh, sqrt, tan, tanh\n- Çift-parametreli fonksiyonlar: log, nrt, pow\n- Sabit değişkenler: e, pi, ln2, ln10, log2e, log10e, sqrt1_2, sqrt2\n\nMatematik işlemcisinin bütün ayrıntıları için [function_tree](https://pub.dev/documentation/function_tree/latest#interpreter)''e bakabilirsiniz\n\n## İşlem önceliği\n1. Değişken değişimi\n2. Matematik'",
+  "exportAfterEveryInput": "Her girişten sonra dışa aktar",
+  "week": "Hafta",
+  "linePositionY": "Çizgi konumu (y)",
+  "warnValues": "Uyarı değerleri",
+  "result": "Sonuç:",
+  "settings": "Ayarlar",
+  "loading": "yükleniyor…",
+  "text": "metin",
+  "avgOf": "{txt} Ø",
+  "@avgOf": {
+    "placeholders": {
+      "txt": {
+        "type": "String"
+      }
+    }
+  },
+  "confirmDelete": "Silmeyi onayla",
+  "errWrongImportFormat": "Sadece CSV ve SQLite veritabanı biçiminde dosya aktarabilirsiniz.",
+  "minOf": "{txt} asg.",
+  "@minOf": {
+    "placeholders": {
+      "txt": {
+        "type": "String"
+      }
+    }
+  },
+  "timeResolvedMetrics": "Günün saatine göre ölçümler",
+  "enterTimeFormatScreen": "Zaman biçimi",
+  "fieldFormat": "Alan biçimi",
+  "system": "Sistem",
+  "sysShort": "sys",
+  "sysWarn": "Sistolik uyarı",
+  "now": "şu an",
+  "diaLong": "Diyastolik",
+  "time": "Zaman",
+  "custom": "Özel",
+  "day": "Gün",
+  "note": "Not",
+  "exportPdfHeaderFontSize": "Başlık yazı tipi boyutu",
+  "last7Days": "7 gün",
+  "buildNumberOf": "Sürüm numarası: {buildNumber}",
+  "@buildNumberOf": {
+    "placeholders": {
+      "buildNumber": {
+        "type": "String"
+      }
+    }
+  },
+  "pdfDocumentTitle": "{start}''den {end}''e kan basıncı değerleri",
+  "@pdfDocumentTitle": {
+    "placeholders": {
+      "start": {
+        "type": "String"
+      },
+      "end": {
+        "type": "String"
+      }
+    }
+  },
+  "confirmDeleteDesc": "Bu girişi sil? (Bu onaylama mesajını ayarlardan kapatabilirsiniz.)",
+  "errNoFileOpened": "herhangi bir dosya açılmadı",
+  "enterTimeFormatDesc": "Biçim stringi önceden tanımladan ICU/Skeleton stringlerinin ve eklemek istediğiniz herhangi başka metinin birleşimidir.\n\n[Tanımlanan biçimlerin bütünün bir listesini merak ettiyseniz burada bulabilirsiniz.](screen://TimeFormattingHelp)\n\nBir hatırlatma, uzun ya da kısa biçim String kullanmak tablodaki sütunların genişliğini değiştirmeyecek, ki bu da garip satır atlamalarına ve metnin gözükmemesine yol açabilir.\n\nvarsayılan: \"yy-MM-dd HH:mm\"",
+  "importSettings": "Ayarları geri yükle",
+  "warnDeletionUnrecoverable": "Elle bir yedekleme yapmadıysanız bu adım geri döndürülemez. Bunu gerçekten silmek istiyor musunuz?",
+  "exportSettings": "Ayarları yedekle",
+  "needlePinBarWidthDesc": "Renkli girişlerin grafik üzerinde oluşturduğu çizgilerin genişliği.",
+  "restartNow": "Şimdi yeniden başlat",
+  "requiresAppRestart": "Uygulamanın yeniden başlatılmasını gerektirir",
+  "deleteAllSettings": "Tüm ayarları sil",
+  "deleteAllMeasurements": "Tüm ölçümleri sil",
+  "color": "Renk",
+  "warnNeedsRestartForUsingApp": "Bu oturumda dosyalar silindi. Kullanmaya devam etmek için uygulamayı yeniden başlatın!",
+  "needlePinBarWidth": "Renk kalınlığı",
+  "errParseFailedDecodingField": "{lineNumber}. satırdaki \"{fieldContent}\" alanının çözülmesi başarısız oldu.",
+  "@errParseFailedDecodingField": {
+    "placeholders": {
+      "lineNumber": {
+        "type": "int"
+      },
+      "fieldContent": {
+        "type": "String"
+      }
+    }
+  },
+  "addMedication": "İlaç ekle",
+  "defaultDosis": "Öntanımlı doz",
+  "exportFieldsPreset": "Alan ön ayarlarını dışa aktar",
+  "errParseEmptyCsvFile": "CSV dosyasında kaydı ayrıştırmak için yeterli satır yok.",
+  "errParseTimeNotRestoreable": "Zaman damgasını geri yüklemeye izin veren bir sütun yok.",
+  "errParseLineTooShort": "{lineNumber}. satırda ilk satırdan daha az sütun var.",
+  "@errParseLineTooShort": {
+    "placeholders": {
+      "lineNumber": {
+        "type": "int"
+      }
+    }
+  },
+  "remove": "Kaldır",
+  "manageExportColumns": "Dışa aktarılan sütunları yönet",
+  "buildIn": "Yerleşik",
+  "csvTitle": "CSV-başlığı",
+  "recordFormat": "Kayıt biçimi",
+  "timeFormat": "Zaman biçimi",
+  "bottomAppBars": "Alt diyalog çubukları",
+  "medications": "İlaçlar",
+  "name": "Ad",
+  "noMedication": "İlaç yok",
+  "dosis": "Doz",
+  "errAccuracyLoss": "Özel zaman biçimlendiricilerle dışa aktarırken hassasiyet kaybı olabilir.",
+  "valueDistribution": "Değer dağılımı",
+  "errParseUnknownColumn": "\"{title}\" başlığına sahip bir sütun yok.",
+  "@errParseUnknownColumn": {
+    "placeholders": {
+      "title": {
+        "type": "String"
+      }
+    }
+  },
+  "preferredPressureUnit": "Tercih edilen basınç birimi",
+  "titleInCsv": "CSV başlığı",
+  "bluetoothDisabled": "Bluetooth devre dışı",
+  "errMeasurementRead": "Ölçüm alınırken hata oluştu!",
+  "connect": "Bağlan",
+  "bluetoothInput": "Bluetooth girişi",
+  "scanningForDevices": "Aygıtlar taranıyor",
+  "tapToClose": "Kapatmak için dokunun.",
+  "meanArterialPressure": "Ortalama damar basıncı",
+  "userID": "Kullanıcı kimliği",
+  "irregularPulseDetected": "Düzensiz nabız algılandı",
+  "pulseRateExceedsUpperLimit": "Nabız hızı üst sınırı aşıyor",
+  "pulseRateLessThanLowerLimit": "Nabız hızı alt sınırdan düşük",
+  "availableDevices": "Kullanılabilir aygıtlar",
+  "deleteAllMedicineIntakes": "Tüm ilaç alımlarını sil",
+  "errBleNoPerms": "Bluetooth izinleri yok",
+  "aboutBleInput": "Bazı ölçüm aygıtları BLE GATT uyumludur. Bu aygıtları burada eşleştirebilir ve ölçümleri otomatik olarak iletebilir veya ayarlardan bu seçeneği devre dışı bırakabilirsiniz.",
+  "measurementSuccess": "Ölçüm başarıyla alındı!",
+  "bodyMovementDetected": "Vücut hareketi algılandı",
+  "cuffTooLoose": "Bileklik çok gevşek",
+  "improperMeasurementPosition": "Yanlış ölçüm konumu",
+  "compactList": "Sıkışık ölçüm listesi",
+  "deleteAllNotes": "Tüm notları sil",
+  "date": "Tarih",
+  "intakes": "İlaç alımları",
+  "errFeatureNotSupported": "Bu özellik bu platformda kullanılamıyor.",
+  "invalidZip": "Geçersiz zip dosyası.",
+  "errCantCreateArchive": "Arşiv oluşturulamıyor. Lütfen mümkünse hatayı bildirin.",
+  "activateWeightFeatures": "Ağırlıkla ilgili özellikleri etkinleştir",
+  "weight": "Ağırlık",
+  "enterWeight": "Ağırlık girin",
+  "preferredWeightUnit": "Tercih edilen ağırlık birimi",
+  "@preferredWeightUnit": {
+    "description": "Setting for the unit the app will use for displaying weight"
+  },
+  "selectMeasurementTitle": "Kullanılacak ölçüyü seçin",
+  "select": "Seç",
+  "@select": {
+    "description": "Used when f.e. selecting a single measurement when the bluetooth device returned multiple"
+  },
+  "bloodPressure": "Kan basıncı",
+  "tapToSelect": "Seçmek için dokunun",
+  "disabled": "Devre dışı",
+  "measurementIndex": "Ölçüm #{number}",
+  "@measurementIndex": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "newBluetoothInputCrossPlatform": "Birden fazla işletim sistemini destekleyen beta sürüm",
+  "dontShowAgain": "Tekrar gösterme",
+  "btnShare": "PAYLAŞ",
+  "trustBLETime": "Bluetooth aygıtları tarafından bildirilen zamana güven",
+  "warnBLETimeSus": "Bluetooth aygıtı {hours} saatlik bir zaman farkı bildirdi. Ayarlardan Bluetooth aygıtlarının zaman damgalarına güvenmeyi devre dışı bırakabilirsiniz.",
+  "@warnBLETimeSus": {
+    "placeholders": {
+      "hours": {
+        "type": "int"
+      }
+    }
+  },
+  "exportSuccess": "Dışa aktarma başarılı",
+  "noWeightPermission": "Hiçbir ağırlık izni verilmez.",
+  "generalSettingsSection": "General",
+  "reset": "Reset",
+  "appStyleSettings": "App stili",
+  "noPermissions": "Hiçbir izin verilmez.",
+  "healthConnectDesc": "Sağlık Connect, verinizi destekleyen diğer uygulamalarla senkronize etmek için sistem API'lerini kullanır. Bu, manuel eski ve ithalat olmadan işlevselliği genişletmek için üçüncü taraf uygulamaları kullanmanıza olanak sağlar.\nHiçbir veri, onu yüklenen üçüncü bir parti uygulamasını açıkça yazarken cihazınızdan ayrılamaz.",
+  "syncOnAppStart": "Uygulamadaki veri başlangıçta",
+  "maxDataIntervalDesc": "Grafik çizgisinin kestiği günlerin miktarı. Zero bunu devre dışı bırakır.",
+  "syncNow": "Şimdi sen",
+  "xls": "Excel (xls)",
+  "automaticallySyncData": "Otomatik olarak senkronize edilen veriler",
+  "noBloodPressurePermission": "Hiçbir kan basıncı izni verilmez.",
+  "healthConnect": "Health Connect",
+  "btnCheckAgain": "Tekrar tekrar kontrol edin",
+  "healthConnectPlatformUnsupported": "Platformunuz Health Connect'i desteklemiyor.",
+  "optEnableHealthConnect": "Enable Health Connect",
+  "maxDataInterval": "Maksimum veri aralığı",
+  "graphSettings": "Graph settings",
+  "featuresSetting": "Özellikler",
+  "warnDiscardingData": "Yanlış olmayan verilere sahipsiniz. Onları devam etmek ve yıkmak ister misiniz?",
+  "bluetoothInputDesc": "Beta arka uç daha fazla cihazda çalışır ancak daha az test edilmiştir. Çok platformlu sürüm, Android dışındaki cihazlarda da çalışabilir ve yeterince olgunlaştığında kararlı sürümün yerini alması planlanmaktadır.",
+  "oldBluetoothInput": "Kararlı"
 }
