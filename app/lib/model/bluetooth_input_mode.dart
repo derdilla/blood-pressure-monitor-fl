@@ -27,7 +27,7 @@ enum BluetoothInputMode {
   /// Determine the matching localization.
   String localize(AppLocalizations localizations) => switch(this) {
     BluetoothInputMode.disabled => localizations.disabled,
-    BluetoothInputMode.oldBluetoothInput => localizations.oldBluetoothInput,
-    BluetoothInputMode.newBluetoothInputCrossPlatform => localizations.newBluetoothInputCrossPlatform,
+    BluetoothInputMode.oldBluetoothInput => localizations.legacyBluetoothInput,
+    BluetoothInputMode.newBluetoothInputCrossPlatform => localizations.stableBluetoothInput,
   };
 }

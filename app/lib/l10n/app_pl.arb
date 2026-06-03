@@ -256,7 +256,7 @@
   "dontShowAgain": "Nie pokazuj więcej",
   "trustBLETime": "Ufaj czasowi zgłaszanemu przez urządzenia bluetooth",
   "tapToSelect": "Dotknij aby wybrać",
-  "oldBluetoothInput": "Stabilna",
+  "stableBluetoothInput": "Stabilna",
   "disabled": "Zablokowane",
   "preferredWeightUnit": "Preferowana jednostka wagi",
   "@preferredWeightUnit": {

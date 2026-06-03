@@ -347,7 +347,6 @@
   "@select": {
     "description": "Used when f.e. selecting a single measurement when the bluetooth device returned multiple"
   },
-  "newBluetoothInputCrossPlatform": "跨平台（测试）",
   "disabled": "已停用",
   "warnNeedsRestartForUsingApp": "文件在此会话中被删除了。重启本应用继续使用它！",
   "tapToSelect": "轻按选择",
@@ -366,5 +365,5 @@
   "xls": "Excel 文件(xls)",
   "reset": "重置",
   "bluetoothInputDesc": "测试版本后端可以在更多设备上工作，但未经充分测试。该跨平台版本可以在非 android 设备上工作，并且按计划在足够成熟后将取代稳定版。",
-  "oldBluetoothInput": "稳定"
+  "stableBluetoothInput": "稳定"
 }

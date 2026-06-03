@@ -304,7 +304,6 @@
     "description": "Setting for the unit the app will use for displaying weight"
   },
   "disabled": "Onemogočeno",
-  "newBluetoothInputCrossPlatform": "Beta med platformami",
   "delete": "Izbriši",
   "useLegacyList": "Uporabi stari seznam",
   "linePositionY": "Položaj črte (y)",
@@ -351,5 +350,5 @@
   "behavior": "Obnašanje",
   "exportMimeType": "Tip izvozne datoteke",
   "bluetoothInputDesc": "Zaledje beta različice deluje na več napravah, vendar je manj preizkušeno. Različica za več platform morda deluje na napravah, ki niso Android, načrtujemo pa, da bo ta različica - ko bo dovolj razvita - nadomestila stabilno različico aplikacije.",
-  "oldBluetoothInput": "Stabilna"
+  "stableBluetoothInput": "Stabilna"
 }

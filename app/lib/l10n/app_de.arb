@@ -349,7 +349,6 @@
   },
   "bloodPressure": "Blutdruck",
   "disabled": "Deaktiviert",
-  "newBluetoothInputCrossPlatform": "Beta plattformübergreifend",
   "tapToSelect": "Tippen zum Auswählen",
   "trustBLETime": "Von Bluetooth-Geräten gemeldeter Uhrzeit vertrauen",
   "warnBLETimeSus": "Das Bluetooth-Gerät hat eine Zeitabweichung von {hours} Stunden gemeldet. Sie können in den Einstellungen festlegen, dass Zeitstempel von Bluetooth-Geräten nicht mehr als vertrauenswürdig angesehen werden.",
@@ -364,5 +363,5 @@
   "btnShare": "TEILEN",
   "warnDiscardingData": "Du hast ungespeicherte Werte. Möchtest du sie verwerfen?",
   "bluetoothInputDesc": "Das Beta-Backend funktioniert auf mehr Geräten, ist aber weniger getestet. Die plattformübergreifende Version kann auf Nicht-Android-Geräten funktionieren und soll die stabile Implementierung ablösen, sobald sie ausgereift genug ist.",
-  "oldBluetoothInput": "Stabil"
+  "stableBluetoothInput": "Stabil"
 }

@@ -350,7 +350,6 @@
       }
     }
   },
-  "newBluetoothInputCrossPlatform": "Birden fazla işletim sistemini destekleyen beta sürüm",
   "dontShowAgain": "Tekrar gösterme",
   "btnShare": "PAYLAŞ",
   "trustBLETime": "Bluetooth aygıtları tarafından bildirilen zamana güven",
@@ -368,7 +367,7 @@
   "reset": "Reset",
   "appStyleSettings": "App stili",
   "noPermissions": "Hiçbir izin verilmez.",
-  "healthConnectDesc": "Sağlık Connect, verinizi destekleyen diğer uygulamalarla senkronize etmek için sistem API'lerini kullanır. Bu, manuel eski ve ithalat olmadan işlevselliği genişletmek için üçüncü taraf uygulamaları kullanmanıza olanak sağlar.\nHiçbir veri, onu yüklenen üçüncü bir parti uygulamasını açıkça yazarken cihazınızdan ayrılamaz.",
+  "healthConnectDesc": "Sağlık Connect, verinizi destekleyen diğer uygulamalarla senkronize etmek için sistem API''lerini kullanır. Bu, manuel eski ve ithalat olmadan işlevselliği genişletmek için üçüncü taraf uygulamaları kullanmanıza olanak sağlar.\nHiçbir veri, onu yüklenen üçüncü bir parti uygulamasını açıkça yazarken cihazınızdan ayrılamaz.",
   "syncOnAppStart": "Uygulamadaki veri başlangıçta",
   "maxDataIntervalDesc": "Grafik çizgisinin kestiği günlerin miktarı. Zero bunu devre dışı bırakır.",
   "syncNow": "Şimdi sen",
@@ -377,12 +376,12 @@
   "noBloodPressurePermission": "Hiçbir kan basıncı izni verilmez.",
   "healthConnect": "Health Connect",
   "btnCheckAgain": "Tekrar tekrar kontrol edin",
-  "healthConnectPlatformUnsupported": "Platformunuz Health Connect'i desteklemiyor.",
+  "healthConnectPlatformUnsupported": "Platformunuz Health Connect''i desteklemiyor.",
   "optEnableHealthConnect": "Enable Health Connect",
   "maxDataInterval": "Maksimum veri aralığı",
   "graphSettings": "Graph settings",
   "featuresSetting": "Özellikler",
   "warnDiscardingData": "Yanlış olmayan verilere sahipsiniz. Onları devam etmek ve yıkmak ister misiniz?",
   "bluetoothInputDesc": "Beta arka uç daha fazla cihazda çalışır ancak daha az test edilmiştir. Çok platformlu sürüm, Android dışındaki cihazlarda da çalışabilir ve yeterince olgunlaştığında kararlı sürümün yerini alması planlanmaktadır.",
-  "oldBluetoothInput": "Kararlı"
+  "stableBluetoothInput": "Kararlı"
 }
