@@ -351,5 +351,38 @@
   "disabled": "Vypnuto",
   "tapToSelect": "Ťuknutím na položku vyberte",
   "bluetoothInputDesc": "Beta verze backendu funguje na více zařízeních, ale je méně otestovaná. Multiplatformní verze může fungovat i na jiných zařízeních než Android a plánuje se, že nahradí stabilní implementaci, jakmile bude dostatečně zralá.",
-  "stableBluetoothInput": "Stabilní"
+  "stableBluetoothInput": "Stabilní",
+  "trustBLETime": "Důvěry času hlášené bluetooth zařízení",
+  "warnBLETimeSus": "Zařízení bluetooth hlásil čas od {hours} hodin. Můžete zakázat důvěřování častamps z bluetooth zařízení v nastavení.",
+  "@warnBLETimeSus": {
+    "placeholders": {
+      "hours": {
+        "type": "int"
+      }
+    }
+  },
+  "dontShowAgain": "Don''t ukázat znovu",
+  "btnShare": "ČEŠTINA",
+  "exportSuccess": "Export úspěšný",
+  "reset": "Čeština",
+  "xls": "Excel (xls)",
+  "healthConnect": "Zdraví Connect",
+  "syncNow": "Synchronizujte nyní",
+  "optEnableHealthConnect": "Povolit připojení k zdraví",
+  "healthConnectDesc": "Health Connect používá systémové API pro synchronizaci dat s jinými aplikacemi, které podporují. To vám umožní používat aplikace třetích stran pro rozšíření funkčnosti bez manuálního ex- a importu.\nŽádné údaje o vašem zařízení, pokud výslovně povolíte aplikaci třetí strany, která jej nahrává.",
+  "healthConnectPlatformUnsupported": "Vaše platforma nepodporuje Health Connect.",
+  "noPermissions": "Žádné oprávnění.",
+  "noWeightPermission": "Nebylo uděleno žádné omezení hmotnosti.",
+  "noBloodPressurePermission": "Žádné povolení k tlaku v krvi.",
+  "btnCheckAgain": "Zpět",
+  "automaticallySyncData": "Automaticky synchronizovat data",
+  "syncOnAppStart": "Synchronizujte data na spuštění aplikace",
+  "warnDiscardingData": "Máte neuchovávané údaje. Chcete pokračovat a zlikvidovat?",
+  "maxDataInterval": "Maximální interval dat",
+  "maxDataIntervalDesc": "Počet dní, po kterém se odpojení grafu. Zero deaktivuje.",
+  "generalSettingsSection": "Všeobecné",
+  "featuresSetting": "Vlastnosti",
+  "graphSettings": "Nastavení grafu",
+  "appStyleSettings": "Styl aplikace",
+  "legacyBluetoothInput": "Čeština"
 }

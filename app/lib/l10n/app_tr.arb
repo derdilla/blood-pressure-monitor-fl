@@ -383,5 +383,6 @@
   "featuresSetting": "Özellikler",
   "warnDiscardingData": "Yanlış olmayan verilere sahipsiniz. Onları devam etmek ve yıkmak ister misiniz?",
   "bluetoothInputDesc": "Beta arka uç daha fazla cihazda çalışır ancak daha az test edilmiştir. Çok platformlu sürüm, Android dışındaki cihazlarda da çalışabilir ve yeterince olgunlaştığında kararlı sürümün yerini alması planlanmaktadır.",
-  "stableBluetoothInput": "Kararlı"
+  "stableBluetoothInput": "Kararlı",
+  "legacyBluetoothInput": "Mirası"
 }

@@ -326,5 +326,63 @@
   },
   "tapToClose": "Tik om te sluiten.",
   "errCantCreateArchive": "Kan archief niet aanmaken. Rapporteer deze fout indien mogelijk.",
-  "pulseRateLessThanLowerLimit": "Hartslag is lager dan de onderste limiet"
+  "pulseRateLessThanLowerLimit": "Hartslag is lager dan de onderste limiet",
+  "reset": "Vertaling:",
+  "dontShowAgain": "Kom niet meer opdagen",
+  "btnShare": "SHARE",
+  "weight": "Gewicht",
+  "tapToSelect": "Tap om te kiezen",
+  "bluetoothInputDesc": "Als de stalen ruggengraat niet werkt, gebruik dan de erfenis backend en meld het bij @derdilla.com of https,com/bloed-monitor-mucues/bloed",
+  "disabled": "Gehandhaafd",
+  "exportSuccess": "Export succesvol",
+  "trustBLETime": "Vertrouwtijd gemeld door bluetooth apparatuur",
+  "bloodPressure": "Bloeddruk",
+  "xls": "Excel (xls)",
+  "optEnableHealthConnect": "Aansluitbare Health Connect",
+  "maxDataInterval": "Maximum data interval",
+  "graphSettings": "Graph settings",
+  "featuresSetting": "Feature",
+  "warnDiscardingData": "Je hebt onbeschaafde gegevens. Wil je doorgaan en ze ontdoen?",
+  "activateWeightFeatures": "Activeer gewicht gerelateerde kenmerken",
+  "enterWeight": "Enter gewicht",
+  "selectMeasurementTitle": "Selecteer de meting",
+  "measurementIndex": "Measurement 13X",
+  "@measurementIndex": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "warnBLETimeSus": "De bluetooth meldde een tijd vrij door 44 uren. Je kunt vertrouwenstijden uitblazen van bluetooth apparaten in de setting.",
+  "@warnBLETimeSus": {
+    "placeholders": {
+      "hours": {
+        "type": "int"
+      }
+    }
+  },
+  "healthConnect": "Health Connect",
+  "syncNow": "Vertaling:",
+  "healthConnectDesc": "Health Connect gebruikt het systeem om je gegevens te synchroniseren met andere apps die het steunen. Hiermee kun je derde partij apps gebruiken om functionaliteit te verlengen zonder manuele ex- en imports.\nGeen gegevens zullen je apparaat achterlaten, tenzij je expliciet toestemming geeft voor een derde partij app die het uploadt.",
+  "healthConnectPlatformUnsupported": "Jouw platform steunt Health Connect niet.",
+  "noPermissions": "Geen toestemming.",
+  "noWeightPermission": "Geen toestemming van gewicht.",
+  "noBloodPressurePermission": "Geen bloeddruk toestemming verleend.",
+  "btnCheckAgain": "Controle:",
+  "automaticallySyncData": "Automatisch sync data",
+  "syncOnAppStart": "Vertaling:",
+  "maxDataIntervalDesc": "Enkele dagen daarna verbreekt de grafische lijn. Zero schakelt dit uit.",
+  "generalSettingsSection": "Generaal",
+  "appStyleSettings": "App stijl",
+  "select": "Select",
+  "@select": {
+    "description": "Used when f.e. selecting a single measurement when the bluetooth device returned multiple"
+  },
+  "preferredWeightUnit": "Preferf gewichtsteam",
+  "@preferredWeightUnit": {
+    "description": "Setting for the unit the app will use for displaying weight"
+  },
+  "stableBluetoothInput": "Stabiel",
+  "legacyBluetoothInput": "Legacy"
 }

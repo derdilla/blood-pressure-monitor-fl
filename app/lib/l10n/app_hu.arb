@@ -200,5 +200,161 @@
   "warnAboutTxt2": "Az alapértelmezett korfüggő értékek ebből a forrásból származnak.",
   "confirmDeleteDesc": "Törli ezt a bejegyzést? (A beállításokban kikapcsolhatja ezeket a megerősítéseket.)",
   "result": "Eredmény:",
-  "errTimeAfterNow": "A kiválasztott nap vissza lett állítva, mivel ez egy jövőbeli időpont. Ezt az érvényesítést kikapcsolhatja a beállításokban."
+  "errTimeAfterNow": "A kiválasztott nap vissza lett állítva, mivel ez egy jövőbeli időpont. Ezt az érvényesítést kikapcsolhatja a beállításokban.",
+  "dontShowAgain": "Ne mutassa meg újra",
+  "btnShare": "SHARE",
+  "activateWeightFeatures": "A súlycsökkentő funkciók aktiválása",
+  "weight": "Súly",
+  "enterWeight": "Enter súly",
+  "availableDevices": "Elérhető eszközök",
+  "needlePinBarWidthDesc": "A vonalak szélessége színes bejegyzések teszik a grafikont.",
+  "intakes": "Orvosi bevitel",
+  "addMeasurement": "Add mérés",
+  "importSettings": "Restore beállítások",
+  "errParseEmptyCsvFile": "Nincs elég sor a csv fájlban a rekord elválasztásához.",
+  "date": "Dátum",
+  "buildIn": "Beépített",
+  "timestamp": "Timestamp",
+  "addLine": "Add vonal",
+  "useLegacyList": "Használja a örökségi listát",
+  "recordFormat": "Record formátum",
+  "errAccuracyLoss": "A precizitás csökkenése várható, amikor a szokásos időformátumokkal exportál.",
+  "bluetoothInput": "Bluetooth bemenet",
+  "aboutBleInput": "Néhány mérőeszköz a BLE GATT kompatibilis. Itt párosíthatja ezeket az eszközöket, és automatikusan továbbíthatja a méréseket, vagy letilthatja ezt a lehetőséget a beállításokban.",
+  "bloodPressure": "Vérnyomás",
+  "disabled": "Letiltott",
+  "trustBLETime": "A bluetooth eszközök által jelentett bizalmi idő",
+  "warnBLETimeSus": "A bluetooth-eszköz egy {hours} órával számolt be. Letilthatja az időbélyeget a bluetooth eszközökről a beállításokban.",
+  "@warnBLETimeSus": {
+    "placeholders": {
+      "hours": {
+        "type": "int"
+      }
+    }
+  },
+  "exportSuccess": "Export sikeres",
+  "manageExportColumns": "Az export oszlopok kezelése",
+  "restartNow": "Kezdje újra",
+  "exportFieldsPreset": "Export mezők preset",
+  "errParseTimeNotRestoreable": "Nincs olyan oszlop, amely lehetővé teszi az időmérő helyreállítását.",
+  "bluetoothDisabled": "Bluetooth fogyatékkal élő",
+  "errMeasurementRead": "Hiba mérés közben!",
+  "measurementSuccess": "Mérés sikeresen!",
+  "connect": "Kapcsolat",
+  "scanningForDevices": "Szkennelési eszközök",
+  "tapToClose": "Érintse bezárni.",
+  "meanArterialPressure": "Mean arterialis nyomás",
+  "userID": "Felhasználói azonosító",
+  "cuffTooLoose": "Cuff túl laza",
+  "invalidZip": "Érvénytelen zip fájl.",
+  "remove": "Távolítás",
+  "startWithAddMeasurementPage": "Mérési indítás",
+  "requiresAppRestart": "Szükséges app újraindítás",
+  "xls": "Excel (xls)",
+  "csvTitle": "CSV-title",
+  "deleteAllMeasurements": "Törölje az összes mérést",
+  "valueDistribution": "Értékelosztás",
+  "defaultDosis": "Alapértelmezett adag",
+  "addMedication": "Adjon gyógyszert",
+  "linePositionY": "Line pozíció (y)",
+  "deleteAllNotes": "Törölje az összes jegyzetet",
+  "warnDiscardingData": "Nem mentett adatok. Szeretné folytatni és eldobni őket?",
+  "note": "Megjegyzés",
+  "color": "Szín",
+  "needlePinBarWidth": "Színvastagság",
+  "errFeatureNotSupported": "Ez a funkció nem érhető el ezen a platformon.",
+  "bottomAppBars": "Alsó párbeszéd bárok",
+  "exportPdfExportData": "Adattáblázat",
+  "startWithAddMeasurementPageDescription": "Az alkalmazás indításakor mérési bemeneti képernyő látható.",
+  "horizontalLines": "Horizontális vonalak",
+  "customGraphMarkings": "Vámjelzések",
+  "exportSettings": "Backup beállítások",
+  "warnNeedsRestartForUsingApp": "A fájlokat ebben az ülésben törölték. Indítsa újra az alkalmazást, hogy továbbra is használja!",
+  "deleteAllSettings": "Törölje az összes beállítást",
+  "warnDeletionUnrecoverable": "Ez a lépés nem visszafordítható, kivéve, ha manuálisan biztonsági mentést készített. Tényleg szeretné törölni ezt?",
+  "enterTimeFormatDesc": "A formátumterhelés az előre meghatározott ICU / Skeleton sztringek keveréke, és bármilyen további szöveget szeretne tartalmazni.\n\n[Ha kíváncsi vagy az érvényes formátumok teljes listájáról, akkor itt találhatja meg őket.]\n\nCsak egy barátságos emlékeztető, hosszabb vagy rövidebb formátumú Strings nem mágikusan megváltoztatja az asztali oszlopok szélességét, ami néhány kínos vonaltöréshez és szöveghez vezethet, amit nem mutat.\n\nalapértelmezett: \"yy-MM-dd HH:mm\"",
+  "errParseUnknownColumn": "Nincs oszlop a \"{title} címmel.",
+  "@errParseUnknownColumn": {
+    "placeholders": {
+      "title": {
+        "type": "String"
+      }
+    }
+  },
+  "errParseLineTooShort": "A Line {lineNumber} kevesebb oszlopot tartalmaz, mint az első vonal.",
+  "@errParseLineTooShort": {
+    "placeholders": {
+      "lineNumber": {
+        "type": "int"
+      }
+    }
+  },
+  "errParseFailedDecodingField": "A \"X16X\" dekódolási mező {lineNumber} meghiúsult.",
+  "@errParseFailedDecodingField": {
+    "placeholders": {
+      "lineNumber": {
+        "type": "int"
+      },
+      "fieldContent": {
+        "type": "String"
+      }
+    }
+  },
+  "medications": "Gyógyszerek",
+  "name": "Név",
+  "noMedication": "Nincs gyógyszer",
+  "dosis": "Dózis",
+  "titleInCsv": "CSV cím",
+  "preferredPressureUnit": "Preferált nyomásegység",
+  "deleteAllMedicineIntakes": "Törölje az összes gyógyszer bevitelét",
+  "errBleNoPerms": "Nincs bluetooth engedély",
+  "bodyMovementDetected": "Testmozgás észlelt",
+  "improperMeasurementPosition": "Hatékony mérési pozíció",
+  "irregularPulseDetected": "Irreguláris impulzus észlelt",
+  "pulseRateExceedsUpperLimit": "Pulse arány meghaladja a felső határt",
+  "pulseRateLessThanLowerLimit": "A pulzusszám kevesebb, mint alacsonyabb határérték",
+  "compactList": "Kompakt mérési lista",
+  "errCantCreateArchive": "Nem hozhat létre archívumot. Kérjük, jelentse be a hiba, ha lehetséges.",
+  "selectMeasurementTitle": "Válassza ki a mérést a használathoz",
+  "measurementIndex": "Mérés #{number}",
+  "@measurementIndex": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "bluetoothInputDesc": "Ha a stabil backend nem működik, használja a örökséget, és jelentse be a kapcsolatot@derdilla.com vagy a https://github.com/derdilla/vérnyomás-monitor-fl/issues",
+  "tapToSelect": "Kép a kiválasztott",
+  "reset": "Visszaállítás",
+  "healthConnect": "Egészségügyi kapcsolat",
+  "select": "Válasszon",
+  "@select": {
+    "description": "Used when f.e. selecting a single measurement when the bluetooth device returned multiple"
+  },
+  "syncNow": "Sync most",
+  "optEnableHealthConnect": "Enable Health Connect",
+  "healthConnectDesc": "Az Health Connect az API rendszert használja, hogy szinkronizálja az adatait más alkalmazásokkal, amelyek támogatják azt. Ez lehetővé teszi, hogy harmadik fél alkalmazásait használja a funkcionalitás meghosszabbítását kézi ex- és import nélkül.\nNincs adat elhagyja a készüléket, kivéve, ha kifejezetten engedélyezi a harmadik fél alkalmazását, amely feltölti.",
+  "healthConnectPlatformUnsupported": "A platform nem támogatja az egészségügyi kapcsolatot.",
+  "noPermissions": "Nincs engedélyezve.",
+  "noWeightPermission": "Nincs súlyengedély.",
+  "noBloodPressurePermission": "Nincs vérnyomás engedélyezve.",
+  "btnCheckAgain": "Ellenőrizze újra",
+  "automaticallySyncData": "Automatikusan szinkronizálja az adatokat",
+  "syncOnAppStart": "Szinkron adatok az alkalmazás kezdéséről",
+  "maxDataInterval": "Maximális adat intervallum",
+  "maxDataIntervalDesc": "Napokig, amikor a grafikonvonal lekapcsolódik. Zero ezt letiltja.",
+  "generalSettingsSection": "Általános",
+  "featuresSetting": "Jellemzők",
+  "graphSettings": "Graph beállítások",
+  "appStyleSettings": "App stílus",
+  "preferredWeightUnit": "Preferált súlyegység",
+  "@preferredWeightUnit": {
+    "description": "Setting for the unit the app will use for displaying weight"
+  },
+  "stableBluetoothInput": "Stabil",
+  "legacyBluetoothInput": "Jogi",
+  "exportPdfExportTitle": "Fejléc",
+  "timeFormat": "Idő formátum",
+  "exportPdfExportStatistics": "Statisztika"
 }

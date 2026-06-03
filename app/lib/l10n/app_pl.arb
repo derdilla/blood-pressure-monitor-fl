@@ -302,5 +302,43 @@
   "defaultDosis": "Dawka domyślna",
   "noMedication": "Brak leków",
   "bluetoothDisabled": "Wyłączono Bluetooth",
-  "xls": "Excel (xls)"
+  "xls": "Excel (xls)",
+  "bluetoothInput": "Bluetooth wejściowy",
+  "aboutBleInput": "Niektóre urządzenia pomiarowe są kompatybilne z BLE GATT. Możesz tu połączyć te urządzenia i automatycznie transmitować pomiary lub zdyskwalifikować tę opcję w ustawieniach.",
+  "meanArterialPressure": "Ciśnienie meanowe",
+  "bodyMovementDetected": "Ruch ciała wykrył",
+  "cuffTooLoose": "Cuff zakochany",
+  "improperMeasurementPosition": "Pozycja pomiarowa",
+  "deleteAllMedicineIntakes": "Wszystko o medycynie wpada",
+  "intakes": "Medycyna intakena",
+  "errCantCreateArchive": "Nie może tworzyć archiwów. Okazuje się, że jeśli jest to możliwe.",
+  "selectMeasurementTitle": "Wybieranie pomiarów w celu wykorzystania",
+  "bluetoothInputDesc": "Jeśli stabilny backend nie działa, wykorzystuje spuściznę i raportuje ją na kontakt z@derdilla.com lub https:/github.com/derdilla/blood-pressure-monitor-fl/issues",
+  "warnBLETimeSus": "Urządzenie niebieskich zębów donosiło czas (X44X). Możesz rozdzielić czasoprzestrzeni z urządzeń niebieskich zębów.",
+  "@warnBLETimeSus": {
+    "placeholders": {
+      "hours": {
+        "type": "int"
+      }
+    }
+  },
+  "healthConnect": "Health Connect",
+  "syncNow": "Sync",
+  "optEnableHealthConnect": "Strona internetowa",
+  "healthConnectDesc": "Health Connect używa systemu API do synchronizacji danych z innymi aplikacjami, które go wspierają. Pozwala to na korzystanie z aplikacji trzecich w celu przedłużenia funkcjonalności bez ręcznych i importowych.\nŻadne dane nie opuszczają swojego urządzenia, chyba że autoryzuje trzecią aplikację, która go przeładuje.",
+  "healthConnectPlatformUnsupported": "Jego platforma nie obsługuje Health Connect.",
+  "noPermissions": "Brak zgody.",
+  "noWeightPermission": "Brak zgody na wagę.",
+  "noBloodPressurePermission": "Nie ma zgody na ciśnienie krwi.",
+  "btnCheckAgain": "Ponownie Czeck znowu",
+  "automaticallySyncData": "Automatycznie sync data",
+  "syncOnAppStart": "Informacje na temat początku aplikacji",
+  "warnDiscardingData": "Nie są dane. Czy chcesz kontynuować i poradzić ich?",
+  "maxDataInterval": "Maksimum danych",
+  "maxDataIntervalDesc": "W ciągu kilku dni po odłączeniu grafu. Powoduje to rozwiązanie.",
+  "generalSettingsSection": "Generalny",
+  "featuresSetting": "Features",
+  "graphSettings": "Ustawienie Grapha",
+  "appStyleSettings": "Styl",
+  "legacyBluetoothInput": "Legacy"
 }
