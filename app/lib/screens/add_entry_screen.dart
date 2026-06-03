@@ -1,3 +1,4 @@
+import 'package:blood_pressure_app/data_util/consistent_future_builder.dart';
 import 'package:blood_pressure_app/features/export_import/export_button.dart';
 import 'package:blood_pressure_app/features/input/add_entry_dialog.dart';
 import 'package:blood_pressure_app/features/input/forms/add_entry_form.dart';
@@ -10,11 +11,8 @@ import 'package:health_data_store/health_data_store.dart';
 class AddEntryScreen extends StatelessWidget {
   const AddEntryScreen({
     super.key,
-    required this.medicineList,
     this.initialRecord
   });
-
-  final List<Medicine> medicineList;
 
   final AddEntryFormValue? initialRecord;
 
@@ -44,9 +42,12 @@ class AddEntryScreen extends StatelessWidget {
           performExport(context, false);
         }
       },
-      child: AddEntryDialog(
-        availableMeds: medicineList,
-        initialRecord: initialRecord,
+      child: ConsistentFutureBuilder(
+        future: context.watch<MedicineRepository>().getAll(),
+        onData: (context, data) => AddEntryDialog(
+          availableMeds: data,
+          initialRecord: initialRecord,
+        ),
       ),
     );
   }

@@ -13,7 +13,7 @@ void main() {
     final bpRepo = db.bpRepo;
 
     await tester.pumpWidget(appBase(
-      const AddEntryScreen(medicineList: []),
+      const AddEntryScreen(),
       bpRepo: bpRepo,
     ));
     await tester.pumpAndSettle();

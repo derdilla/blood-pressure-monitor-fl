@@ -236,9 +236,6 @@ class _AppState extends State<App> with TypeLogger {
       }
     }
 
-    // Cleans up loading with measurement on launch enabled
-    final initialMedicineList = await medRepo.getAll();
-
     _loadedChild = MultiRepositoryProvider(
       providers: [
         RepositoryProvider.value(value: bpRepo),
@@ -259,7 +256,7 @@ class _AppState extends State<App> with TypeLogger {
           ChangeNotifierProvider.value(value: _exportColumnsManager!),
           ChangeNotifierProvider.value(value: _healthConnectSettings!),
         ],
-        child: _buildAppRoot(initialRoute, initialMedicineList),
+        child: _buildAppRoot(initialRoute),
       ),
     );
 
@@ -280,7 +277,7 @@ class _AppState extends State<App> with TypeLogger {
   }
 
   /// Central [MaterialApp] widget of the app that sets the uniform style options.
-  Widget _buildAppRoot(AppRoute initialRoute, List<Medicine> initialMedicineList) => Consumer<Settings>(
+  Widget _buildAppRoot(AppRoute initialRoute) => Consumer<Settings>(
     builder: (context, settings, child) => MaterialApp(
       title: 'Blood Pressure App',
       onGenerateTitle: (context) => AppLocalizations.of(context)!.title,
@@ -299,9 +296,7 @@ class _AppState extends State<App> with TypeLogger {
       initialRoute: initialRoute.path,
       routes: {
         AppRoute.home.path: (_) => const AppHome(),
-        AppRoute.add.path: (_) => AddEntryScreen(
-          medicineList: initialMedicineList
-        ),
+        AppRoute.add.path: (_) => const AddEntryScreen(),
         AppRoute.statistics.path: (_) => const StatisticsScreen(),
         AppRoute.settings.path: (_) => const SettingsPage(),
         AppRoute.settingsExport.path: (_) => const ExportImportScreen(),
