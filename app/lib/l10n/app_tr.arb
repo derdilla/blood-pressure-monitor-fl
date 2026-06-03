@@ -350,7 +350,6 @@
       }
     }
   },
-  "newBluetoothInputCrossPlatform": "Birden fazla işletim sistemini destekleyen beta sürüm",
   "dontShowAgain": "Tekrar gösterme",
   "btnShare": "PAYLAŞ",
   "trustBLETime": "Bluetooth aygıtları tarafından bildirilen zamana güven",
@@ -384,5 +383,5 @@
   "featuresSetting": "Özellikler",
   "warnDiscardingData": "Yanlış olmayan verilere sahipsiniz. Onları devam etmek ve yıkmak ister misiniz?",
   "bluetoothInputDesc": "Beta arka uç daha fazla cihazda çalışır ancak daha az test edilmiştir. Çok platformlu sürüm, Android dışındaki cihazlarda da çalışabilir ve yeterince olgunlaştığında kararlı sürümün yerini alması planlanmaktadır.",
-  "oldBluetoothInput": "Kararlı"
+  "stableBluetoothInput": "Kararlı"
 }

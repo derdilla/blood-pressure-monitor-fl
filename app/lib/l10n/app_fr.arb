@@ -349,7 +349,6 @@
   },
   "bloodPressure": "Pression artérielle",
   "disabled": "Désactivé",
-  "newBluetoothInputCrossPlatform": "Beta multi-plateformes",
   "tapToSelect": "Tapez pour sélectionner",
   "trustBLETime": "Horodatage certifié envoyé par les périphériques Bluetooth",
   "warnBLETimeSus": "Le périphérique Bluetooth signale un arrêt de {hours} heures. Vous pouvez désactiver la certification d''horodatage des périphériques Bluetooth dans les paramètres.",
@@ -366,5 +365,5 @@
   "xls": "Excel (xls)",
   "reset": "Réinitialiser",
   "bluetoothInputDesc": "La version bêta fonctionne sur un plus grand nombre d''appareils mais a moins été testée. La version multi-plateformes peut fonctionner sur des appareils non-Android et il est prévu qu''elle remplace la version stable une fois qu''elle sera suffisamment mature.",
-  "oldBluetoothInput": "Stable"
+  "stableBluetoothInput": "Stable"
 }

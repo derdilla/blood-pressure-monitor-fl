@@ -349,8 +349,7 @@
   },
   "bloodPressure": "Krevní tlak",
   "disabled": "Vypnuto",
-  "newBluetoothInputCrossPlatform": "Beta multiplatformní",
   "tapToSelect": "Ťuknutím na položku vyberte",
   "bluetoothInputDesc": "Beta verze backendu funguje na více zařízeních, ale je méně otestovaná. Multiplatformní verze může fungovat i na jiných zařízeních než Android a plánuje se, že nahradí stabilní implementaci, jakmile bude dostatečně zralá.",
-  "oldBluetoothInput": "Stabilní"
+  "stableBluetoothInput": "Stabilní"
 }

@@ -349,7 +349,6 @@
   },
   "bloodPressure": "Vererõhk",
   "disabled": "Pole kasutusel",
-  "newBluetoothInputCrossPlatform": "Platvormiülene beetaliides",
   "tapToSelect": "Valimiseks puuduta",
   "trustBLETime": "Usalda Bluetoothi seadme edastatud aega",
   "warnBLETimeSus": "Bluetoothi seadme edastatud kellaaeg on {hours} tundi õigest kellaajast nihkes. Seadistustest saad määrata, kas usaldad seda ajamääratlust.",
@@ -366,5 +365,5 @@
   "xls": "Excel (xls)",
   "reset": "Lähtesta",
   "bluetoothInputDesc": "Beetaliides toimib enamate seadmetega, aga on vähem testitud. Platvormiülene beetaliides võib toimida ka muude, kui Androidipõhiste seadmetega ning meie eesmärk on, et peale piisavat testimist ta ühel hetkel asendab senise stabiilse liidese.",
-  "oldBluetoothInput": "Stabiilne liides"
+  "stableBluetoothInput": "Stabiilne liides"
 }
