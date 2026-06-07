@@ -24,6 +24,7 @@ String getDisplayLanguage(Locale l) => switch(l.toLanguageTag()) {
   'ta' => 'தமிழ்',
   'sl' => 'Slovenščina',
   'lt' => 'Lietuvių',
+  'bg' => 'Български',
   // Websites with names for expanding when new languages get added:
   // - https://chronoplexsoftware.com/localisation/help/languagecodes.htm
   // - https://localizely.com/locale-code/zh-Hans/
