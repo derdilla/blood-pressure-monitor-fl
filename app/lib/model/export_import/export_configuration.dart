@@ -7,7 +7,7 @@ import 'package:blood_pressure_app/model/storage/export_columns_store.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/widgets.dart';
 
-/// Class for managing columns currently used for ex- and import.
+/// Class for managing columns currently used for export.
 class ActiveExportColumnConfiguration extends ChangeNotifier {
   /// Create a manager of the currently relevant [ExportColumn]s.
   ///
