@@ -17,7 +17,7 @@ import 'package:provider/provider.dart';
 ///
 /// Note that this can't follow the users preferred unit as this would not allow
 /// to put all data on one graph
-class BloodPressureValueGraph extends StatelessWidget {
+class BloodPressureValueGraph extends StatefulWidget {
   /// Create a new graph of [BloodPressureRecord] values.
   const BloodPressureValueGraph({super.key,
     required this.records,
@@ -38,35 +38,50 @@ class BloodPressureValueGraph extends StatelessWidget {
   final List<MedicineIntake> intakes;
 
   @override
+  State<BloodPressureValueGraph> createState() => _BloodPressureValueGraphState();
+}
+
+class _BloodPressureValueGraphState extends State<BloodPressureValueGraph> {
+  final _drawingResults = _DrawingResults();
+
+  @override
+  void initState() {
+    _drawingResults.addListener(() => SchedulerBinding.instance
+        .addPostFrameCallback((_) => _maybeDisplayWarnings()));
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _drawingResults.dispose();
+    super.dispose();
+  }
+
+  void _maybeDisplayWarnings() {
+    ScaffoldMessenger.of(context).hideCurrentSnackBar();
+    if (_drawingResults.entirelyDisconnected) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(AppLocalizations.of(context)!.bigGraphSplit),
+        action: SnackBarAction(
+          onPressed: () => Navigator.of(context).pushNamed(AppRoute.settingsGraph.path),
+          label: AppLocalizations.of(context)!.openSettings,
+        ),
+      ));
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
-    if (records.sysGraph().length < 2
-      && records.diaGraph().length < 2
-      && records.pulGraph().length < 2) {
+    if (widget.records.sysGraph().length < 2
+      && widget.records.diaGraph().length < 2
+      && widget.records.pulGraph().length < 2) {
       return Center(
         child: Text(AppLocalizations.of(context)!.errNotEnoughDataToGraph),
       );
     }
-    final r = records.toList();
+    final r = widget.records.toList();
     r.sort((a, b) => a.time.compareTo(b.time));
     final settings = context.watch<Settings>();
-    final drawingResults = _DrawingResults();
-    drawingResults.addListener(() => SchedulerBinding.instance.addPostFrameCallback((_) {
-      ScaffoldMessenger.of(context).hideCurrentSnackBar();
-      if (drawingResults.entirelyDisconnected) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text(AppLocalizations.of(context)!.bigGraphSplit),
-          action: SnackBarAction(
-            onPressed: () {
-              final navigator = Navigator.of(context);
-              final messenger = ScaffoldMessenger.of(context);
-              messenger.hideCurrentMaterialBanner();
-              navigator.pushNamed(AppRoute.settingsGraph.path);
-            },
-            label: AppLocalizations.of(context)!.openSettings,
-          ),
-        ));
-      }
-    }));
     return Padding(
       padding: const EdgeInsets.only(top: 4.0),
       child: TweenAnimationBuilder(
@@ -79,10 +94,10 @@ class BloodPressureValueGraph extends StatelessWidget {
             settings: settings,
             labelStyle: Theme.of(context).textTheme.bodySmall ?? TextStyle(),
             records: r,
-            colors: colors,
+            colors: widget.colors,
             progress: value,
-            intakes: intakes,
-            drawingResults: drawingResults,
+            intakes: widget.intakes,
+            drawingResults: _drawingResults,
           ),
         ),
       ),
