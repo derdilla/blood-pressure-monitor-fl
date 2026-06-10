@@ -17,6 +17,7 @@ Widget materialApp(Widget child, {
   PdfExportSettings? pdfExportSettings,
   HealthConnectSettings? hcSettings,
   IntervalStoreManager? intervallStoreManager,
+  Map<String, Widget Function(BuildContext)> routes = const {},
 }) {
   settings ??= Settings();
   exportSettings ??= ExportSettings();
@@ -37,6 +38,7 @@ Widget materialApp(Widget child, {
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       locale: const Locale('en'),
       home: Scaffold(body:child),
+      routes: routes,
     ),
   );
 }

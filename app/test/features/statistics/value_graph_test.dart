@@ -1,3 +1,5 @@
+import 'package:blood_pressure_app/app.dart';
+import 'package:blood_pressure_app/features/settings/graph_screen.dart';
 import 'package:blood_pressure_app/features/statistics/value_graph.dart';
 import 'package:blood_pressure_app/l10n/app_localizations.dart';
 import 'package:blood_pressure_app/model/horizontal_graph_line.dart';
@@ -131,6 +133,33 @@ void main() {
     final localizations = await AppLocalizations.delegate.load(const Locale('en'));
     expect(find.text(localizations.errNotEnoughDataToGraph), findsNothing);
   });
+  testWidgets('Displays warning when data is too far apart', (tester) async {
+    await tester.pumpWidget(materialApp(_buildGraphWithoutApp([
+      mockRecord(time: DateTime(2005), sys: 123),
+      mockRecord(time: DateTime(2003), sys: 110),
+    ], [], []),
+      settings: Settings(interruptGraphAfterNDays: 5),
+      routes: { AppRoute.settingsGraph.path: (_) => const GraphScreen(), },
+    ));
+    final localizations = await AppLocalizations.delegate.load(const Locale('en'));
+    await tester.pumpAndSettle();
+
+    expect(find.text(localizations.bigGraphSplit), findsOneWidget);
+    expect(find.text(localizations.openSettings), findsOneWidget);
+
+    expect(find.byType(GraphScreen), findsNothing);
+    await tester.tap(find.text(localizations.openSettings));
+    await tester.pumpAndSettle();
+    expect(find.byType(GraphScreen), findsOneWidget);
+  });
+  testWidgets('Not displaying bigGraphSplit warning when splitting is disabled', (tester) async {
+    await tester.pumpWidget(_buildGraph([
+      mockRecord(time: DateTime(2005), sys: 123),
+      mockRecord(time: DateTime(2003), sys: 110),
+    ], [], [], settings: Settings(interruptGraphAfterNDays: -1)));
+    final localizations = await AppLocalizations.delegate.load(const Locale('en'));
+    expect(find.text(localizations.bigGraphSplit), findsNothing);
+  });
 
   testWidgets('[gold] graph renders area at start correctly', (tester) async {
     await tester.pumpWidget(_buildGraph([
@@ -211,13 +240,19 @@ Widget _buildGraph(
   Settings? settings,
 }) => materialApp(ChangeNotifierProvider<Settings>.value(
   value: settings ?? Settings(),
-  child: SizedBox(
-    width: 500,
-    height: 300,
-    child: BloodPressureValueGraph(
-      records: data,
-      colors: colors.map((e) => Note(time: e.$1, color: e.$2.toARGB32())).toList(),
-      intakes: intakes,
-    ),
-  ),
+  child: _buildGraphWithoutApp(data, colors, intakes),
 ));
+
+Widget _buildGraphWithoutApp(
+  List<BloodPressureRecord> data,
+  List<(DateTime, Color)> colors,
+  List<MedicineIntake> intakes,
+) => SizedBox(
+  width: 500,
+  height: 300,
+  child: BloodPressureValueGraph(
+    records: data,
+    colors: colors.map((e) => Note(time: e.$1, color: e.$2.toARGB32())).toList(),
+    intakes: intakes,
+  ),
+);
