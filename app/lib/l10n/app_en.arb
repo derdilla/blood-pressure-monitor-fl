@@ -385,5 +385,9 @@
   "featuresSetting": "Features",
   "graphSettings": "Graph settings",
   "appStyleSettings": "App style",
-  "@appStyleSettings": {}
+  "@appStyleSettings": {},
+  "bigGraphSplit": "The time between measurements is greater than the maximum distance displayed without interruptions. You can change that in the settings.",
+  "@bigGraphSplit": {},
+  "openSettings": "Open Settings",
+  "@openSettings": {}
 }

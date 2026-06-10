@@ -7,6 +7,7 @@ import 'package:blood_pressure_app/features/health_connect/sync_model.dart';
 import 'package:blood_pressure_app/features/health_connect/weight_sync_model.dart';
 import 'package:blood_pressure_app/features/settings/export_import_screen.dart';
 import 'package:blood_pressure_app/features/settings/features_screen.dart';
+import 'package:blood_pressure_app/features/settings/graph_screen.dart';
 import 'package:blood_pressure_app/l10n/app_localizations.dart';
 import 'package:blood_pressure_app/logging.dart';
 import 'package:blood_pressure_app/model/bluetooth_input_mode.dart';
@@ -306,6 +307,7 @@ class _AppState extends State<App> with TypeLogger {
         AppRoute.settings.path: (_) => const SettingsPage(),
         AppRoute.settingsExport.path: (_) => const ExportImportScreen(),
         AppRoute.settingsFeatures.path: (_) => const FeaturesScreen(),
+        AppRoute.settingsGraph.path: (_) => const GraphScreen(),
         AppRoute.settingsHealthConnect.path: (_) => const HealthConnectScreen(),
       },
     ),
@@ -359,6 +361,7 @@ enum AppRoute {
   settings('/settings'),
   settingsExport('/settings/export'),
   settingsFeatures('/settings/features'),
+  settingsGraph('/settings/graph'),
   settingsHealthConnect('/settings/healthConnect');
 
   const AppRoute(this.path);

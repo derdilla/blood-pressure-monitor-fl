@@ -1,12 +1,14 @@
 import 'dart:math' as math;
 import 'dart:ui' as ui;
 
+import 'package:blood_pressure_app/app.dart';
 import 'package:blood_pressure_app/l10n/app_localizations.dart';
 import 'package:blood_pressure_app/model/horizontal_graph_line.dart';
 import 'package:blood_pressure_app/model/storage/storage.dart';
 import 'package:blood_pressure_app/screens/loading_screen.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:health_data_store/health_data_store.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -15,7 +17,7 @@ import 'package:provider/provider.dart';
 ///
 /// Note that this can't follow the users preferred unit as this would not allow
 /// to put all data on one graph
-class BloodPressureValueGraph extends StatelessWidget {
+class BloodPressureValueGraph extends StatefulWidget {
   /// Create a new graph of [BloodPressureRecord] values.
   const BloodPressureValueGraph({super.key,
     required this.records,
@@ -36,15 +38,48 @@ class BloodPressureValueGraph extends StatelessWidget {
   final List<MedicineIntake> intakes;
 
   @override
+  State<BloodPressureValueGraph> createState() => _BloodPressureValueGraphState();
+}
+
+class _BloodPressureValueGraphState extends State<BloodPressureValueGraph> {
+  final _drawingResults = _DrawingResults();
+
+  @override
+  void initState() {
+    _drawingResults.addListener(() => SchedulerBinding.instance
+        .addPostFrameCallback((_) => _maybeDisplayWarnings()));
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _drawingResults.dispose();
+    super.dispose();
+  }
+
+  void _maybeDisplayWarnings() {
+    ScaffoldMessenger.of(context).hideCurrentSnackBar();
+    if (_drawingResults.entirelyDisconnected) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(AppLocalizations.of(context)!.bigGraphSplit),
+        action: SnackBarAction(
+          onPressed: () => Navigator.of(context).pushNamed(AppRoute.settingsGraph.path),
+          label: AppLocalizations.of(context)!.openSettings,
+        ),
+      ));
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
-    if (records.sysGraph().length < 2
-      && records.diaGraph().length < 2
-      && records.pulGraph().length < 2) {
+    if (widget.records.sysGraph().length < 2
+      && widget.records.diaGraph().length < 2
+      && widget.records.pulGraph().length < 2) {
       return Center(
         child: Text(AppLocalizations.of(context)!.errNotEnoughDataToGraph),
       );
     }
-    final r = records.toList();
+    final r = widget.records.toList();
     r.sort((a, b) => a.time.compareTo(b.time));
     final settings = context.watch<Settings>();
     return Padding(
@@ -59,9 +94,10 @@ class BloodPressureValueGraph extends StatelessWidget {
             settings: settings,
             labelStyle: Theme.of(context).textTheme.bodySmall ?? TextStyle(),
             records: r,
-            colors: colors,
+            colors: widget.colors,
             progress: value,
-            intakes: intakes,
+            intakes: widget.intakes,
+            drawingResults: _drawingResults,
           ),
         ),
       ),
@@ -78,6 +114,7 @@ class _ValueGraphPainter extends CustomPainter {
     required this.colors,
     required this.intakes,
     required this.progress,
+    required this.drawingResults,
   }): assert(1.0 >= progress && progress >= 0.0);
 
   final Settings settings;
@@ -100,6 +137,10 @@ class _ValueGraphPainter extends CustomPainter {
 
   /// Percentage of data line rendering (from 0 to 1).
   final double progress;
+
+  final _DrawingResults drawingResults;
+
+  bool _graphEntirelyDisconnected = true;
 
   void _paintDecorations(Canvas canvas, Size size, DateTimeRange range, double minY, double maxY) {
     assert(size.width > _kLeftLegendWidth && size.height > _kBottomLegendHeight);
@@ -215,6 +256,7 @@ class _ValueGraphPainter extends CustomPainter {
           path.moveTo(point.dx, point.dy);
           warnPath?.moveTo(point.dx, point.dy);
         } else {
+          _graphEntirelyDisconnected = false;
           path.lineTo(point.dx, point.dy);
           warnPath?.lineTo(point.dx, point.dy);
         }
@@ -399,9 +441,11 @@ class _ValueGraphPainter extends CustomPainter {
     _buildIntakes(canvas, size, intakes, range);
     _buildNeedlePins(canvas, size, colors, range, min, max);
 
+    _graphEntirelyDisconnected = true;
     _paintLine(canvas, size, records.sysGraph(), settings.sysColor, range, min, max, settings.sysWarn.toDouble());
     _paintLine(canvas, size, records.diaGraph(), settings.diaColor, range, min, max, settings.diaWarn.toDouble());
     _paintLine(canvas, size, records.pulGraph(), settings.pulColor, range, min, max, null);
+    drawingResults.entirelyDisconnected = _graphEntirelyDisconnected;
 
     if (settings.drawRegressionLines) {
       _paintRegressionLine(canvas, size, records.sysGraph().toList(), min, max);
@@ -475,4 +519,15 @@ extension GraphData on List<BloodPressureRecord> {
   Iterable<(DateTime, double)> pulGraph() => map((r) => (r.time, r.pul?.toDouble()))
     .whereNot(((DateTime, double?) e) => e.$2 == null)
     .cast<(DateTime, double)>();
+}
+
+class _DrawingResults extends ChangeNotifier {
+  bool _entirelyDisconnected = false;
+  /// Whether there is no line between any graph elements.
+  bool get entirelyDisconnected => _entirelyDisconnected;
+  set entirelyDisconnected (bool newValue) {
+    if (newValue == _entirelyDisconnected) return;
+    _entirelyDisconnected = newValue;
+    notifyListeners();
+  }
 }
