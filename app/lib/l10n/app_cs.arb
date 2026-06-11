@@ -351,5 +351,38 @@
   "disabled": "Vypnuto",
   "tapToSelect": "Ťuknutím na položku vyberte",
   "bluetoothInputDesc": "Beta verze backendu funguje na více zařízeních, ale je méně otestovaná. Multiplatformní verze může fungovat i na jiných zařízeních než Android a plánuje se, že nahradí stabilní implementaci, jakmile bude dostatečně zralá.",
-  "stableBluetoothInput": "Stabilní"
+  "stableBluetoothInput": "Stabilní",
+  "noWeightPermission": "Nebylo uděleno žádné omezení hmotnosti.",
+  "generalSettingsSection": "Všeobecné",
+  "exportSuccess": "Export úspěšný",
+  "reset": "Čeština",
+  "warnBLETimeSus": "Zařízení bluetooth hlásil čas od {hours} hodin. Můžete zakázat důvěřování častamps z bluetooth zařízení v nastavení.",
+  "@warnBLETimeSus": {
+    "placeholders": {
+      "hours": {
+        "type": "int"
+      }
+    }
+  },
+  "appStyleSettings": "Styl aplikace",
+  "noPermissions": "Žádné oprávnění.",
+  "healthConnectDesc": "Health Connect používá systémové API pro synchronizaci dat s jinými aplikacemi, které podporují. To vám umožní používat aplikace třetích stran pro rozšíření funkčnosti bez manuálního ex- a importu.\nŽádné údaje o vašem zařízení, pokud výslovně povolíte aplikaci třetí strany, která jej nahrává.",
+  "syncOnAppStart": "Synchronizujte data na spuštění aplikace",
+  "maxDataIntervalDesc": "Počet dní, po kterém se odpojení grafu. Zero deaktivuje.",
+  "trustBLETime": "Důvěry času hlášené bluetooth zařízení",
+  "legacyBluetoothInput": "Čeština",
+  "syncNow": "Synchronizujte nyní",
+  "xls": "Excel (xls)",
+  "automaticallySyncData": "Automaticky synchronizovat data",
+  "btnShare": "ČEŠTINA",
+  "noBloodPressurePermission": "Žádné povolení k tlaku v krvi.",
+  "healthConnect": "Zdraví Connect",
+  "dontShowAgain": "Don''t ukázat znovu",
+  "btnCheckAgain": "Zpět",
+  "healthConnectPlatformUnsupported": "Vaše platforma nepodporuje Health Connect.",
+  "optEnableHealthConnect": "Povolit připojení k zdraví",
+  "maxDataInterval": "Maximální interval dat",
+  "graphSettings": "Nastavení grafu",
+  "featuresSetting": "Vlastnosti",
+  "warnDiscardingData": "Máte neuchovávané údaje. Chcete pokračovat a zlikvidovat?"
 }

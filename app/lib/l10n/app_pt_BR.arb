@@ -347,5 +347,42 @@
     "description": "Setting for the unit the app will use for displaying weight"
   },
   "weight": "Peso",
-  "enterWeight": "Informe seu peso"
+  "enterWeight": "Informe seu peso",
+  "noWeightPermission": "Sem permissão de peso concedida.",
+  "generalSettingsSection": "Geral",
+  "exportSuccess": "Exportação bem sucedida",
+  "reset": "Redefinição",
+  "warnBLETimeSus": "O dispositivo bluetooth informou um tempo de folga por {hours} horas. Você pode desativar os timestamps de confiança de dispositivos bluetooth nas configurações.",
+  "@warnBLETimeSus": {
+    "placeholders": {
+      "hours": {
+        "type": "int"
+      }
+    }
+  },
+  "appStyleSettings": "Estilo de aplicação",
+  "noPermissions": "Sem permissões concedidas.",
+  "healthConnectDesc": "O Health Connect usa APIs do sistema para sincronizar seus dados com outros aplicativos que o suportam. Isso permite que você use aplicativos de terceiros para estender a funcionalidade sem ex- manuais e importações.\nNenhum dado deixará seu dispositivo a menos que você autorize explicitamente um aplicativo de terceiros que o faça upload.",
+  "stableBluetoothInput": "Estável",
+  "syncOnAppStart": "Sincronizar dados no início do aplicativo",
+  "maxDataIntervalDesc": "Quantidade de dias após os quais a linha de gráfico se desconecta. Zero desactiva isto.",
+  "trustBLETime": "Tempo de confiança relatado por dispositivos bluetooth",
+  "tapToSelect": "Toque para selecionar",
+  "legacyBluetoothInput": "Legado",
+  "syncNow": "Sincronizar agora",
+  "xls": "Excel (xls)",
+  "automaticallySyncData": "Sincronizar automaticamente dados",
+  "disabled": "Deficientes",
+  "btnShare": "COMPARTILHAR",
+  "noBloodPressurePermission": "Sem permissão de pressão arterial concedida.",
+  "healthConnect": "Conexão de Saúde",
+  "bluetoothInputDesc": "Se o backend estável não funcionar, use o backend legado e informe-o em contact@derdilla.com ou https://github.com/derdilla/blood-pressure-monitor-fl/issues",
+  "dontShowAgain": "Não voltes a aparecer",
+  "btnCheckAgain": "Verifica novamente",
+  "healthConnectPlatformUnsupported": "Sua plataforma não suporta o Health Connect.",
+  "optEnableHealthConnect": "Habilite a conexão de saúde",
+  "maxDataInterval": "Intervalo máximo de dados",
+  "graphSettings": "Definições do gráfico",
+  "featuresSetting": "Características",
+  "warnDiscardingData": "Você tem dados não salvos. Queres continuar e descartá-los?"
 }

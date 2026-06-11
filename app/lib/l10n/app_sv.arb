@@ -34,5 +34,335 @@
   "errDiaGtSys": "dia >= sys? Stäng av validering i inställningarna!",
   "errNoFileOpened": "ingen fil öppnades",
   "errNoValue": "Vänligen skriv ett värde",
-  "errWrongImportFormat": "Du kan endast importera filer i databas-formatet CSV och SQLite."
+  "errWrongImportFormat": "Du kan endast importera filer i databas-formatet CSV och SQLite.",
+  "behavior": "Beteende",
+  "connect": "Anslut",
+  "bluetoothInput": "Bluetooth Input",
+  "noWeightPermission": "Inget vikttillstånd beviljas.",
+  "weekOfYear": "Vecka {weekNum}, {year}",
+  "@weekOfYear": {
+    "placeholders": {
+      "weekNum": {
+        "type": "int"
+      },
+      "year": {
+        "type": "int"
+      }
+    }
+  },
+  "aboutWarnValuesScreenDesc": "Mer information om varningsvärden",
+  "warnAboutTxt2": "Standardåldern beroende värden kommer från denna källa.",
+  "validateInputs": "Validera ingångar",
+  "generalSettingsSection": "General general",
+  "month": "Månad",
+  "exportDir": "Export katalog",
+  "csv": "CSV",
+  "exportSuccess": "Export framgångsrik",
+  "accentColor": "Tema färg",
+  "compactList": "Kompakt mätlista",
+  "errTimeAfterNow": "Den valda tiden är i framtiden. Du kan stänga av denna validering i inställningarna.",
+  "versionOf": "Version: {version}",
+  "@versionOf": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "reset": "Återställ",
+  "measurementIndex": "Mätning #{number}",
+  "@measurementIndex": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "btnConfirm": "OK",
+  "addMeasurement": "Lägg till mätning",
+  "deleteAllMedicineIntakes": "Ta bort alla medicinintag",
+  "invalidZip": "Invalid zip-fil.",
+  "warnBLETimeSus": "Bluetooth-enheten rapporterade en tid av {hours} timmar. Du kan inaktivera lita på tidsstämplar från bluetooth-enheter i inställningarna.",
+  "@warnBLETimeSus": {
+    "placeholders": {
+      "hours": {
+        "type": "int"
+      }
+    }
+  },
+  "selectMeasurementTitle": "Välj mätningen för att använda",
+  "activateWeightFeatures": "Aktivera viktrelaterade funktioner",
+  "animationSpeed": "Animationstiden",
+  "noMedication": "Inget läkemedel",
+  "licenses": "3:e parts licenser",
+  "remove": "Ta bort",
+  "importSettings": "Återställ inställningar",
+  "warnDeletionUnrecoverable": "Detta steg inte revertibel om du manuellt gjorde en backup. Vill du verkligen ta bort detta?",
+  "allowManualTimeInput": "Tillåt manuell tid ingång",
+  "bodyMovementDetected": "Kroppsrörelse upptäckt",
+  "exportSettings": "Backup inställningar",
+  "errBleNoPerms": "Inga bluetooth behörigheter",
+  "drawRegressionLines": "Rita trendlinjer",
+  "btnSave": "SPARA",
+  "appStyleSettings": "App stil",
+  "noPermissions": "Inga behörigheter beviljas.",
+  "healthConnectDesc": "Health Connect använder system API för att synkronisera dina data med andra appar som stöder det. Detta gör att du kan använda tredjepartsappar för att utöka funktionaliteten utan manuell ex- och import.\nInga data kommer att lämna din enhet om du uttryckligen godkänner en tredjepartsapp som laddar upp den.",
+  "deletionConfirmed": "Inträde raderat.",
+  "last30Days": "30 dagar",
+  "fieldDelimiter": "Field Delimiter",
+  "horizontalLines": "Horisontella linjer",
+  "stableBluetoothInput": "Stabilt",
+  "preferredPressureUnit": "Föredrog tryckenhet",
+  "errParseEmptyCsvFile": "Det finns inte tillräckligt med linjer i csv-filen för att analysera rekordet.",
+  "date": "Datum",
+  "import": "IMPORT",
+  "pulShort": "puls",
+  "syncOnAppStart": "Synkronisera data på app start",
+  "availableDevices": "Tillgängliga enheter",
+  "buildIn": "Bygga in",
+  "timeFormat": "Time format",
+  "errCantCreateArchive": "Kan inte skapa arkiv. Vänligen rapportera felet om möjligt.",
+  "sysLong": "Systolisk",
+  "exportCustomEntries": "Anpassa fält",
+  "exportImport": "Export / Import",
+  "maxDataIntervalDesc": "Antal dagar efter vilka graflinjen kopplas bort. Zero inaktiverar detta.",
+  "enterTimeFormatString": "tidsformat",
+  "allowMissingValues": "Tillåta saknade värden",
+  "trustBLETime": "Förtroendetid rapporterad av bluetooth-enheter",
+  "needlePinBarWidthDesc": "Bredden på linjerna färgade poster gör på grafen.",
+  "diaShort": "dia",
+  "export": "EXPORT",
+  "bloodPressure": "Blodtryck",
+  "theme": "Tema",
+  "scanningForDevices": "Scanning för enheter",
+  "year": "År",
+  "warnAboutTxt1": "Varningsvärdena är rena förslag och inga medicinska råd.",
+  "measurementSuccess": "Mätning tas framgångsrikt!",
+  "improperMeasurementPosition": "Felaktig mätposition",
+  "customGraphMarkings": "Anpassade markeringar",
+  "exportFormat": "Exportformat",
+  "iconSize": "Ikonstorlek",
+  "name": "Namnnamn",
+  "measurementsPerDay": "Mätningar per dag",
+  "tapToSelect": "Tryck för att välja",
+  "aboutBleInput": "Vissa mätenheter är BLE GATT kompatibla. Du kan para ihop dessa enheter här och automatiskt överföra mätningar eller inaktivera det här alternativet i inställningarna.",
+  "bluetoothDisabled": "Bluetooth inaktiverad",
+  "errParseFailedDecodingField": "Avkodningsfältet \"{fieldContent}\" i linje {lineNumber} misslyckades.",
+  "@errParseFailedDecodingField": {
+    "placeholders": {
+      "lineNumber": {
+        "type": "int"
+      },
+      "fieldContent": {
+        "type": "String"
+      }
+    }
+  },
+  "light": "Ljus ljus",
+  "legacyBluetoothInput": "Legacy",
+  "lifetime": "Livstid",
+  "exportMimeType": "Exportera media typ",
+  "bottomAppBars": "Bottom dialogstänger",
+  "manageExportColumns": "Hantera exportkolumner",
+  "errCantReadFile": "Filens innehåll kan inte läsas",
+  "notes": "Anteckningar",
+  "restartNow": "Restart nu",
+  "importSuccess": "Importerade {count} poster",
+  "@importSuccess": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "meanArterialPressure": "Mean arteriellt tryck",
+  "graphLineThickness": "Line tjocklek",
+  "data": "Datadatadata data",
+  "version": "Version",
+  "errMeasurementRead": "Fel när du tar mätning!",
+  "other": "andra",
+  "enterWeight": "Gå in i vikt",
+  "errParseLineTooShort": "Line {lineNumber} har färre kolumner än den första raden.",
+  "@errParseLineTooShort": {
+    "placeholders": {
+      "lineNumber": {
+        "type": "int"
+      }
+    }
+  },
+  "exportWarnConfigNotImportable": "Hej! Bara ett vänligt steg: den nuvarande exportkonfigurationen kommer inte att vara importerbar. För att åtgärda det, se till att du ställer in exporttypen som CSV och inkludera en av de tillgängliga tidsformaten.",
+  "timestamp": "Timestamp",
+  "exportCsvHeadlineDesc": "Hjälper till att diskriminera typer",
+  "syncNow": "Synkronisera nu",
+  "btnUndo": "UNDO",
+  "addNote": "Observera (valfritt)",
+  "packageNameOf": "Paketnamn: {name}",
+  "@packageNameOf": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "drawRegressionLinesDesc": "Ritar regressionslinjer i graf. Endast användbar för stora intervall.",
+  "pulColor": "Pulsfärg",
+  "addLine": "Add line",
+  "warnAboutTxt3": "Känn dig fri att ändra värdena som passar dina behov och följ rekommendationerna från din läkare.",
+  "pulLong": "Puls",
+  "sysColor": "Systolisk färg",
+  "maxOf": "{txt} max.",
+  "@maxOf": {
+    "placeholders": {
+      "txt": {
+        "type": "String"
+      }
+    }
+  },
+  "medications": "Läkemedel",
+  "errNotImportable": "Denna fil kan inte importeras",
+  "confirmDeletion": "Bekräfta borttagning",
+  "textDelimiter": "Textdelimiter",
+  "select": "Välj",
+  "@select": {
+    "description": "Used when f.e. selecting a single measurement when the bluetooth device returned multiple"
+  },
+  "diaColor": "Diastolisk färg",
+  "requiresAppRestart": "Kräver app restart",
+  "xls": "Excel (xls)",
+  "deleteAllSettings": "Ta bort alla inställningar",
+  "pdf": "PDF",
+  "aboutWarnValuesScreen": "Om",
+  "age": "Ålder",
+  "db": "SQLite DB",
+  "dark": "Mörk",
+  "tapToClose": "Tryck för att stänga.",
+  "automaticallySyncData": "Automatiskt synkronisera data",
+  "exportCsvHeadline": "Headline",
+  "pulseRateLessThanLowerLimit": "Pulshastigheten är mindre än lägre gräns",
+  "errNeedHeadline": "Du kan bara importera filer med en rubrik.",
+  "determineWarnValues": "Bestäm varningsvärden",
+  "csvTitle": "CSV-title",
+  "statistics": "Statistik",
+  "diaWarn": "Diastolisk varning",
+  "shared": "delad",
+  "disabled": "Inaktiverad",
+  "btnCancel": "CANCEL",
+  "intakes": "Medicin intag",
+  "btnShare": "HARE",
+  "deleteAllMeasurements": "Ta bort alla mätningar",
+  "language": "Språkspråk",
+  "exportWarnNotEveryFieldExported": "Akta dig för att du inte exporterar alla fält: {fields} {räkna, plural, one{is} andra{are}} saknas.",
+  "@exportWarnNotEveryFieldExported": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "fields": {
+        "type": "String"
+      }
+    }
+  },
+  "addEntry": "Lägg till fält",
+  "sourceCode": "Källa kod",
+  "useLegacyList": "Använd äldre lista",
+  "measurementCount": "Mätningsräkning",
+  "exportAfterEveryInputDesc": "Rekommenderas inte (filexplosion)",
+  "valueDistribution": "Värdefördelning",
+  "defaultDosis": "Standarddos",
+  "exportFieldsPreset": "Exportfält förinställda",
+  "exportAfterEveryInput": "Exportera efter varje post",
+  "cuffTooLoose": "Cuff för löst",
+  "irregularPulseDetected": "Oregelbunden puls upptäckt",
+  "noBloodPressurePermission": "Inget blodtryck tillstånd beviljas.",
+  "healthConnect": "Health Connect",
+  "week": "Vecka",
+  "bluetoothInputDesc": "Om den stabila backend inte fungerar, använd arvet backend och rapportera det på contact@derdilla.com eller https://github.com/derdilla/blood-pressure-monitor-fl/frågor",
+  "titleInCsv": "Titel i CSV",
+  "addMedication": "Lägg till medicinering",
+  "linePositionY": "Line position (y)",
+  "dontShowAgain": "Visa inte igen",
+  "btnCheckAgain": "Kolla igen",
+  "warnValues": "Varna värden",
+  "preferredWeightUnit": "Föredrar vikt enhet",
+  "@preferredWeightUnit": {
+    "description": "Setting for the unit the app will use for displaying weight"
+  },
+  "settings": "Inställningar",
+  "text": "texttext",
+  "errParseTimeNotRestoreable": "Det finns ingen kolumn som tillåter att återställa en tidsstämpel.",
+  "avgOf": "{txt} Ø",
+  "@avgOf": {
+    "placeholders": {
+      "txt": {
+        "type": "String"
+      }
+    }
+  },
+  "enterTimeFormatDesc": "En formattersträng är en blandning av fördefinierade ICU / Skeleton strängar och någon ytterligare text du vill inkludera.\n\n[Om du är nyfiken på den fullständiga listan över giltiga format kan du hitta dem här.](screen://TimeFormattingHelp)\n\nBara en vänlig påminnelse, med längre eller kortare format Strings kommer inte magiskt att ändra bredden på tabellkolumnerna, vilket kan leda till några obekväma linjeavbrott och text som inte visar.\n\nStandard: \"Yy-MM-dd HH:mm\"",
+  "healthConnectPlatformUnsupported": "Din plattform stöder inte Health Connect.",
+  "confirmDelete": "Bekräfta borttagning",
+  "deleteAllNotes": "Ta bort alla anteckningar",
+  "weight": "Vikt",
+  "optEnableHealthConnect": "Aktivera Health Connect",
+  "recordFormat": "Record format",
+  "dosis": "Dos",
+  "pulseRateExceedsUpperLimit": "Pulshastigheten överstiger övre gränsen",
+  "maxDataInterval": "Maximalt dataintervall",
+  "errAccuracyLoss": "Det finns precisionsförlust som förväntas vid export med anpassade tidsformatter.",
+  "minOf": "{txt} min.",
+  "@minOf": {
+    "placeholders": {
+      "txt": {
+        "type": "String"
+      }
+    }
+  },
+  "timeResolvedMetrics": "Metrics vid tiden för dagen",
+  "enterTimeFormatScreen": "Time format",
+  "errParseUnknownColumn": "Det finns ingen kolumn med titeln \"{title}\".",
+  "@errParseUnknownColumn": {
+    "placeholders": {
+      "title": {
+        "type": "String"
+      }
+    }
+  },
+  "system": "Systemsystem",
+  "sysShort": "sysselsättning",
+  "graphSettings": "Graph inställningar",
+  "sysWarn": "Systolisk varning",
+  "now": "nu nu nu",
+  "diaLong": "Diastolisk",
+  "time": "Tid",
+  "featuresSetting": "Funktioner",
+  "warnDiscardingData": "Du har sparade data. Vill du fortsätta och kasta bort dem?",
+  "custom": "Anpassad",
+  "day": "Dagens dag",
+  "note": "Note",
+  "userID": "Användar-ID",
+  "color": "Färgfärg",
+  "last7Days": "7 dagar",
+  "warnNeedsRestartForUsingApp": "Filer raderades under denna session. Starta om appen för att fortsätta använda den!",
+  "needlePinBarWidth": "Färg tjocklek",
+  "buildNumberOf": "Versionsnummer: {buildNumber}",
+  "@buildNumberOf": {
+    "placeholders": {
+      "buildNumber": {
+        "type": "String"
+      }
+    }
+  },
+  "errFeatureNotSupported": "Denna funktion är inte tillgänglig på denna plattform.",
+  "pdfDocumentTitle": "Blodtrycksvärden från {start} till {end}",
+  "@pdfDocumentTitle": {
+    "placeholders": {
+      "start": {
+        "type": "String"
+      },
+      "end": {
+        "type": "String"
+      }
+    }
+  },
+  "confirmDeleteDesc": "Ta bort denna post? (Du kan stänga av dessa bekräftelser i inställningarna.)"
 }

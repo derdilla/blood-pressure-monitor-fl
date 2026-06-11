@@ -347,5 +347,42 @@
       }
     }
   },
-  "bloodPressure": "Presión arterial"
+  "bloodPressure": "Presión arterial",
+  "noWeightPermission": "Sin permiso de peso concedido.",
+  "generalSettingsSection": "General",
+  "exportSuccess": "Exportación con éxito",
+  "reset": "Reset",
+  "warnBLETimeSus": "El dispositivo bluetooth informó un tiempo libre por {hours} horas. Puede desactivar los tiempos de confianza de los dispositivos bluetooth en la configuración.",
+  "@warnBLETimeSus": {
+    "placeholders": {
+      "hours": {
+        "type": "int"
+      }
+    }
+  },
+  "appStyleSettings": "Estilo de aplicación",
+  "noPermissions": "Sin permisos concedidos.",
+  "healthConnectDesc": "Health Connect utiliza APIs del sistema para sincronizar sus datos con otras aplicaciones que lo soportan. Esto le permite utilizar aplicaciones de terceros para ampliar la funcionalidad sin ex manual e importaciones.\nNingún dato dejará su dispositivo a menos que autorice explícitamente una aplicación de terceros que lo suba.",
+  "stableBluetoothInput": "Stable",
+  "syncOnAppStart": "Datos sincronizados sobre el inicio de la aplicación",
+  "maxDataIntervalDesc": "Cantidad de días después de los cuales la línea gráfica se desconecta. Cero desactiva esto.",
+  "trustBLETime": "Tiempo de confianza reportado por dispositivos bluetooth",
+  "tapToSelect": "Pulse para seleccionar",
+  "legacyBluetoothInput": "Legacy",
+  "syncNow": "Ahora mismo",
+  "xls": "Excel (xls)",
+  "automaticallySyncData": "Sincronización automática de datos",
+  "disabled": "Discapacitados",
+  "btnShare": "SHARE",
+  "noBloodPressurePermission": "No se concede permiso de presión arterial.",
+  "healthConnect": "Health Connect",
+  "bluetoothInputDesc": "Si el backend estable no funciona, utilice el backend heredado e informe a contact@derdilla.com o https://github.com/derdilla/blood-pressure-monitor-fl/issues",
+  "dontShowAgain": "No vuelvas a aparecer",
+  "btnCheckAgain": "Mira otra vez",
+  "healthConnectPlatformUnsupported": "Su plataforma no admite Health Connect.",
+  "optEnableHealthConnect": "Enable Health Connect",
+  "maxDataInterval": "Intervalo máximo de datos",
+  "graphSettings": "Ajustes de gráficos",
+  "featuresSetting": "Características",
+  "warnDiscardingData": "Tienes datos no guardados. ¿Quieres continuar y descartarlos?"
 }

@@ -182,7 +182,7 @@
   "last7Days": "7 dni",
   "last30Days": "30 dni",
   "allowMissingValues": "Dovoli manjkajoče vrednosti",
-  "errTimeAfterNow": "Izbrani čas dneva je bil ponastavljen, saj je bil izbran v prihodnosti. To preverjanje lahko izklopite v nastavitvah.",
+  "errTimeAfterNow": "Izbrani čas je v prihodnosti. To preverjanje lahko izklopite v nastavitvah.",
   "language": "Jezik",
   "custom": "Po meri",
   "drawRegressionLines": "Nariši trendne črte",
@@ -310,7 +310,7 @@
   "startWithAddMeasurementPageDescription": "Ob zagonu aplikacije se prikaže okno za vnos meritev.",
   "customGraphMarkings": "Oznake po meri",
   "exportFieldFormatDocumentation": "'## Spremenljivke\nOblika izvoznega polja podpira vstavljanje vrednosti za naslednje oznake:\n- `$TIMESTAMP`: Predstavlja tim. Unix čas v milisekundah.\n- `$SYS:` Zagotavlja vrednost, če je na voljo; sicer je privzeta vrednost -1.\n- `$DIA:` Zagotavlja vrednost, če je na voljo; sicer je privzeta vrednost -1.\n- `$PUL:` Zagotavlja vrednost, če je na voljo; sicer je privzeta vrednost -1.\n- `$NOTE:` Zagotavlja vrednost, če je na voljo; sicer je privzeta vrednost -1.\n- `$COLOR:` predstavlja barvo meritve kot številko. (primer vrednosti: `4291681337`)\n\nČe katera od zgoraj omenjenih oznak ni prisotna v zapisu o krvnem tlaku, bo nadomeščena z `null`.\n\n## Matematične operacije\nOsnovne matematične operacije lahko uporabite znotraj dvojnih oklepajev (\"`{{}}`\").\n\nPodprte so naslednje matematične operacije:\n- Operacije: +, -, *, /, %, ^\n- Funkcije z enim parametrom: abs, acos, asin, atan, ceil, cos, cosh, cot, coth, csc, csch, exp, floor, ln, log, round sec, sech, sin, sinh, sqrt, tan, tanh\n- Funkcije z dvema parametroma: log, nrt, pow\n- Konstante: e, pi, ln2, ln10, log2e, log10e, sqrt1_2, sqrt2\n\nZa celotno specifikacijo matematičnih funkcij si lahko ogledate dokumentacijo [function_tree](https://pub.dev/documentation/function_tree/latest#interpreter).\n\n## Procesiranje\n1. zamenjava spremenljivke\n2. matematične operacije'",
-  "warnNeedsRestartForUsingApp": "V tej seji so bile izbrisane datoteke. Znova zaženite aplikacijo, če želite še naprej uporabljati vrnitev v druge dele aplikacije!",
+  "warnNeedsRestartForUsingApp": "V tej seji so bile izbrisane datoteke. Znova zaženite aplikacijo!",
   "average": "Povprečje",
   "exportPdfExportData": "Podatkovna tabela",
   "horizontalLines": "Horizontalne črte",
@@ -349,6 +349,40 @@
   },
   "behavior": "Obnašanje",
   "exportMimeType": "Tip izvozne datoteke",
-  "bluetoothInputDesc": "Zaledje beta različice deluje na več napravah, vendar je manj preizkušeno. Različica za več platform morda deluje na napravah, ki niso Android, načrtujemo pa, da bo ta različica - ko bo dovolj razvita - nadomestila stabilno različico aplikacije.",
-  "stableBluetoothInput": "Stabilna"
+  "bluetoothInputDesc": "Če stabilna različica sistema ne deluje, uporabite starejšo različico sistema in to sporočite na contact@derdilla.com ali https://github.com/derdilla/blood-pressure-monitor-fl/issues",
+  "stableBluetoothInput": "Stabilna",
+  "noWeightPermission": "Dovoljenje za težo ni odobreno.",
+  "generalSettingsSection": "Splošno",
+  "exportSuccess": "Izvoz uspešen",
+  "reset": "Resetiraj",
+  "warnBLETimeSus": "Naprava Bluetooth je sporočila čas, ki pa je zamaknjen za več ur ({hours}). V nastavitvah lahko onemogočite zaupanje v podatke o času, ki ga poročajo naprave Bluetooth.",
+  "@warnBLETimeSus": {
+    "placeholders": {
+      "hours": {
+        "type": "int"
+      }
+    }
+  },
+  "appStyleSettings": "Stil aplikacije",
+  "noPermissions": "Ni podeljenih nobenih dovoljenj.",
+  "healthConnectDesc": "Health Connect uporablja sistemske API-je za sinhronizacijo vaših podatkov z drugimi aplikacijami, ki to podpirajo. To vam omogoča uporabo aplikacij tretjih oseb za razširitev funkcionalnosti brez ročnega izvoza in uvoza.\nPodatki ne bodo zapustili vaše naprave, razen če izrecno dovolite aplikaciji tretje osebe, da si jih naloži.",
+  "syncOnAppStart": "Sinhroniziraj podatke ob zagonu aplikacije",
+  "maxDataIntervalDesc": "Število dni, po katerih se graf prekine. Število nič to onemogoči.",
+  "trustBLETime": "Zaupaj času, ki ga poročajo naprave Bluetooth",
+  "tapToSelect": "Dotakni se za izbor",
+  "legacyBluetoothInput": "Zastareli vnosi",
+  "syncNow": "Sinhroniziraj zdaj",
+  "xls": "Excel (xls)",
+  "automaticallySyncData": "Samodejno sinhroniziraj podatke",
+  "btnShare": "DELI",
+  "noBloodPressurePermission": "Dovoljenje za krvni tlak ni odobreno.",
+  "healthConnect": "Platforma Health Connect",
+  "dontShowAgain": "Ne prikaži ponovno",
+  "btnCheckAgain": "Preveri ponovno",
+  "healthConnectPlatformUnsupported": "Vaša platforma ne podpira Health Connect.",
+  "optEnableHealthConnect": "Omogoči Health Connect",
+  "maxDataInterval": "Najdaljši podatkovni interval",
+  "graphSettings": "Nastavitve grafa",
+  "featuresSetting": "Lastnosti",
+  "warnDiscardingData": "Imate neshranjene podatke. Ali želite nadaljevati in jih zavreči?"
 }
