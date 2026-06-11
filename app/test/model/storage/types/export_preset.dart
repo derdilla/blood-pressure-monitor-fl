@@ -16,14 +16,14 @@ void main() {
     final setting2 = ExportPresetListSetting();
     setting2.fromMapValue(mapValue);
     expect(setting2.value.length, setting.value.length);
-    expect(setting2.value[0].label, setting.value[0].label);
+    expect(setting2.value[0].id, setting.value[0].id);
     expect(setting2.value[0].columns[1], setting.value[0].columns[1]);
     expect(setting2.value[1].columns[0], setting.value[1].columns[0]);
 
 
     setting2.fromMapValue(jsonDecode(jsonEncode(mapValue)));
     expect(setting2.value.length, setting.value.length);
-    expect(setting2.value[0].label, setting.value[0].label);
+    expect(setting2.value[0].id, setting.value[0].id);
     expect(setting2.value[0].columns[1], setting.value[0].columns[1]);
     expect(setting2.value[1].columns[0], setting.value[1].columns[0]);
   });

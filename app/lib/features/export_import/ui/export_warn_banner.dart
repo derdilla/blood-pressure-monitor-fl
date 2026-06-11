@@ -1,8 +1,8 @@
 import 'package:blood_pressure_app/components/custom_banner.dart';
+import 'package:blood_pressure_app/features/export_import/model/column.dart';
+import 'package:blood_pressure_app/features/export_import/model/import_field_type.dart';
 import 'package:blood_pressure_app/l10n/app_localizations.dart';
-import 'package:blood_pressure_app/model/export_import/column.dart';
 import 'package:blood_pressure_app/model/export_import/export_configuration.dart';
-import 'package:blood_pressure_app/model/export_import/import_field_type.dart';
 import 'package:blood_pressure_app/model/storage/export_columns_store.dart';
 import 'package:blood_pressure_app/model/storage/export_csv_settings.dart';
 import 'package:blood_pressure_app/model/storage/export_settings.dart';

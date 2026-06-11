@@ -1,7 +1,7 @@
 import 'dart:collection';
 import 'dart:convert';
 
-import 'package:blood_pressure_app/model/export_import/column.dart';
+import 'package:blood_pressure_app/features/export_import/model/column.dart';
 import 'package:flutter/material.dart';
 import 'package:settings_annotation/settings_annotation.dart';
 

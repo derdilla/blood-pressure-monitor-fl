@@ -1,5 +1,5 @@
 
-import 'package:blood_pressure_app/model/export_import/record_parsing_result.dart';
+import 'package:blood_pressure_app/features/export_import/model/record_parsing_result.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'record_formatter_test.dart';

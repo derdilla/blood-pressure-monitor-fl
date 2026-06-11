@@ -1,3 +1,4 @@
+import 'package:blood_pressure_app/features/export_import/model/export_preset.dart';
 import 'package:blood_pressure_app/model/storage/convert_util.dart';
 import 'package:settings_annotation/settings_annotation.dart';
 
@@ -5,11 +6,12 @@ class ExportPresetListSetting extends Setting<List<ExportPreset>> {
   ExportPresetListSetting({
     List<ExportPreset>? initialValue,
   }): super(initialValue: initialValue ?? []);
+
   @override
   Object? toMapValue() => [
     for (final preset in value)
       {
-        'label': preset.label,
+        'label': preset.id,
         'columns': preset.columns,
       },
   ];
@@ -32,14 +34,5 @@ class ExportPresetListSetting extends Setting<List<ExportPreset>> {
     }
     super.fromMapValue(decoded);
   }
-
 }
 
-class ExportPreset {
-  const ExportPreset(this.label, this.columns);
-
-  final String label;
-
-  /// IDs of active columns
-  final List<String> columns;
-}

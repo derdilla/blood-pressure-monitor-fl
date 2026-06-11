@@ -1,6 +1,6 @@
+import 'package:blood_pressure_app/features/export_import/model/column.dart';
+import 'package:blood_pressure_app/features/export_import/model/import_field_type.dart';
 import 'package:blood_pressure_app/features/input/forms/add_entry_form.dart';
-import 'package:blood_pressure_app/model/export_import/column.dart';
-import 'package:blood_pressure_app/model/export_import/import_field_type.dart';
 import 'package:blood_pressure_app/model/export_import/record_formatter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';

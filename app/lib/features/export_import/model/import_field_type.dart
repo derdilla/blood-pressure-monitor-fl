@@ -1,5 +1,5 @@
+import 'package:blood_pressure_app/features/export_import/model/record_formatter.dart';
 import 'package:blood_pressure_app/l10n/app_localizations.dart';
-import 'package:blood_pressure_app/model/export_import/record_formatter.dart';
 
 /// Type a [Formatter] can uses to indicate the kind of data returned.
 enum RowDataFieldType {

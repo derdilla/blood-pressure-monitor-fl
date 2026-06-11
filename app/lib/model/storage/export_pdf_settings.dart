@@ -1,7 +1,7 @@
 import 'dart:convert';
 
-import 'package:blood_pressure_app/model/export_import/export_configuration.dart';
-import 'package:blood_pressure_app/model/storage/types/active_export_column_configuration_setting.dart';
+import 'package:blood_pressure_app/features/export_import/model/export_configuration.dart';
+import 'package:blood_pressure_app/features/export_import/model/export_preset.dart';
 import 'package:flutter/material.dart';
 import 'package:settings_annotation/settings_annotation.dart';
 
@@ -16,10 +16,5 @@ class _PdfExportSettingsSpec {
   final cellHeight = Setting<double>(initialValue: 15);
   final headerFontSize = Setting<double>(initialValue: 10);
   final cellFontSize = Setting<double>(initialValue: 8);
-  final Setting<ActiveExportColumnConfiguration> exportFieldsConfiguration =
-      ActiveExportColumnConfigurationSetting(
-    initialValue: ActiveExportColumnConfiguration(
-      activePreset: ExportImportPreset.bloodPressureAppPdf,
-    ),
-  );
+  final activePreset = Setting<String>(initialValue: ExportPreset.appPdf.id);
 }

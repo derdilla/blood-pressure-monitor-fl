@@ -1,6 +1,6 @@
+import 'package:blood_pressure_app/features/export_import/model/column.dart';
 import 'package:blood_pressure_app/model/blood_pressure/pressure_unit.dart';
 import 'package:blood_pressure_app/model/bluetooth_input_mode.dart';
-import 'package:blood_pressure_app/model/export_import/column.dart';
 import 'package:blood_pressure_app/model/export_import/export_configuration.dart';
 import 'package:blood_pressure_app/model/horizontal_graph_line.dart';
 import 'package:blood_pressure_app/model/storage/storage.dart';
