@@ -235,5 +235,7 @@
   "importSettings": "恢復設定",
   "requiresAppRestart": "需要重新啟動應用程式",
   "restartNow": "現在重新啟動",
-  "deleteAllSettings": "刪除所有設定"
+  "deleteAllSettings": "刪除所有設定",
+  "exportPdfExportTitle": "標題列",
+  "timeFormat": "時間格式"
 }

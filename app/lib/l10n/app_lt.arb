@@ -113,5 +113,9 @@
   "db": "SQLite DB",
   "text": "tekstas",
   "other": "kita",
-  "fieldDelimiter": "Laukelio skyriklis"
+  "fieldDelimiter": "Laukelio skyriklis",
+  "exportPdfExportTitle": "Pavadinimas",
+  "timeFormat": "Laiko formatas",
+  "enterTimeFormatString": "Laiko formatas",
+  "confirmDelete": "Patvirtinti ištrynimą"
 }
