@@ -7,6 +7,7 @@ import 'package:blood_pressure_app/features/input/forms/add_entry_form.dart';
 import 'package:blood_pressure_app/l10n/app_localizations.dart';
 import 'package:blood_pressure_app/model/storage/export_columns_store.dart';
 import 'package:blood_pressure_app/model/storage/export_csv_settings.dart';
+import 'package:blood_pressure_app/model/storage/export_settings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:health_data_store/health_data_store.dart';
@@ -17,12 +18,7 @@ void main() {
   testWidgets('should open', (tester) async {
     await tester.pumpWidget(materialApp(ImportPreviewDialog(
       bottomAppBar: false,
-      initialActor: CsvRecordParsingActor(
-        CsvConverter(
-          CsvExportSettings(),
-          ExportColumnsManager(),
-          [],
-        ),
+      initialActor: _dummyActor(
         'timestampUnixMs,systolic,diastolic,pulse,notes,needlePin\n1703175193324'
         ',123,45,67,note1,"{""color"":4285132974}"\n1703147206000,114,71,56,,null',
       ),
@@ -43,14 +39,7 @@ void main() {
 
     await tester.pumpWidget(materialApp(ImportPreviewDialog(
       bottomAppBar: false,
-      initialActor: CsvRecordParsingActor(
-        CsvConverter(
-          CsvExportSettings(),
-          ExportColumnsManager(),
-          [],
-        ),
-        csvTxt,
-      ),
+      initialActor: _dummyActor(csvTxt),
       columnsManager: ExportColumnsManager(),
     ),),);
 
@@ -62,12 +51,7 @@ void main() {
   testWidgets('should show error banner', (tester) async {
     await tester.pumpWidget(materialApp(ImportPreviewDialog(
       bottomAppBar: false,
-      initialActor: CsvRecordParsingActor(
-        CsvConverter(
-          CsvExportSettings(),
-          ExportColumnsManager(),
-          [],
-        ),
+      initialActor: _dummyActor(
         'systolic,diastolic,pulse,notes,needlePin\n123,45,67,note1,'
             '"{""color"":4285132974}"\n114,71,56,,null',
       ),
@@ -83,14 +67,7 @@ void main() {
   testWidgets('should have multiple lines', (tester) async {
     await tester.pumpWidget(materialApp(ImportPreviewDialog(
       bottomAppBar: false,
-      initialActor: CsvRecordParsingActor(
-        CsvConverter(
-          CsvExportSettings(),
-          ExportColumnsManager(),
-          [],
-        ),
-        'line1\nline2\nline3',
-      ),
+      initialActor: _dummyActor('line1\nline2\nline3'),
       columnsManager: ExportColumnsManager(),
     ),),);
 
@@ -117,12 +94,7 @@ void main() {
     await loadDialog(tester, (context) async {
       data = await showImportPreview(
         context,
-        CsvRecordParsingActor(
-          CsvConverter(
-            CsvExportSettings(),
-            ExportColumnsManager(),
-            [],
-          ),
+        _dummyActor(
           'timestampUnixMs,systolic,diastolic,pulse,notes,needlePin\n1703175193324'
               ',123,45,67,note1,"{""color"":4285132974}"\n1703147206000,114,71,56,,null',
         ),
@@ -161,6 +133,7 @@ void main() {
             CsvExportSettings(),
             ExportColumnsManager(),
             [Medicine(designation: 'testMed1'), Medicine(designation: 'testMed2')],
+            ExportSettings(),
           ),
           'timestampUnixMs,intakes\n'
           '1703175193324,testMed1(123.5)\n'
@@ -207,12 +180,7 @@ void main() {
     await loadDialog(tester, (context) async {
       data = await showImportPreview(
         context,
-        CsvRecordParsingActor(
-          CsvConverter(
-            CsvExportSettings(),
-            ExportColumnsManager(),
-            [],
-          ),
+        _dummyActor(
           'timestampUnixMs;bodyweight\n'
           '1541545200000;72.0',
         ),
@@ -239,3 +207,13 @@ void main() {
     expect(res[0].weight!.weight.kg, 72);
   });
 }
+
+CsvRecordParsingActor _dummyActor(String csvString) => CsvRecordParsingActor(
+  CsvConverter(
+    CsvExportSettings(),
+    ExportColumnsManager(),
+    [],
+    ExportSettings(),
+  ),
+  csvString,
+);

@@ -13,6 +13,7 @@ class ExportPresetListSetting extends Setting<List<ExportPreset>> {
       {
         'label': preset.id,
         'columns': preset.columns,
+        'editable': preset.editable,
       },
   ];
 
@@ -25,12 +26,15 @@ class ExportPresetListSetting extends Setting<List<ExportPreset>> {
       if (!presetData.containsKey('label')) continue;
       final label = presetData['label'];
       if (label is! String) continue;
+      final editable = presetData['editable'];
+      if (editable is! bool) continue;
+
 
       if (!presetData.containsKey('columns')) continue;
       final columns = ConvertUtil.parseList<String>(presetData['columns']);
       if (columns is! List<String>) continue;
 
-      decoded.add(ExportPreset(label, columns, true));
+      decoded.add(ExportPreset(label, columns, editable));
     }
     super.fromMapValue(decoded);
   }
