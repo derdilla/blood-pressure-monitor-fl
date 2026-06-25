@@ -30,7 +30,7 @@ class ExportPresetListSetting extends Setting<List<ExportPreset>> {
       final columns = ConvertUtil.parseList<String>(presetData['columns']);
       if (columns is! List<String>) continue;
 
-      decoded.add(ExportPreset(label, columns));
+      decoded.add(ExportPreset(label, columns, true));
     }
     super.fromMapValue(decoded);
   }

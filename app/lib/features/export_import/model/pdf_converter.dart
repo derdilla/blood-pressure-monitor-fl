@@ -2,20 +2,20 @@ import 'dart:math';
 import 'dart:typed_data';
 import 'dart:ui';
 
+import 'package:blood_pressure_app/features/export_import/model/export_preset.dart';
 import 'package:blood_pressure_app/l10n/app_localizations.dart';
+import 'package:blood_pressure_app/logging.dart';
 import 'package:blood_pressure_app/model/blood_pressure_analyzer.dart';
-import 'package:blood_pressure_app/model/storage/export_columns_store.dart';
-import 'package:blood_pressure_app/model/storage/export_pdf_settings.dart';
-import 'package:blood_pressure_app/model/storage/settings.dart';
+import 'package:blood_pressure_app/model/storage/storage.dart';
 import 'package:health_data_store/health_data_store.dart';
 import 'package:intl/intl.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 
 /// Utility class for creating pdf files.
-class PdfConverter {
+class PdfConverter with TypeLogger {
   /// Create pdf builder.
-  PdfConverter(this.pdfSettings, this.localizations, this.settings, this.availableColumns);
+  PdfConverter(this.pdfSettings, this.localizations, this.settings, this.availableColumns, this.exportSettings);
 
   /// pdf specific settings.
   final PdfExportSettings pdfSettings;
@@ -28,6 +28,8 @@ class PdfConverter {
   
   /// Columns manager used for ex- and import.
   final ExportColumnsManager availableColumns;
+
+  final ExportSettings exportSettings;
 
   /// Create a pdf from a record list.
   Future<Uint8List> create(List<(DateTime, BloodPressureRecord, Note, List<MedicineIntake>, Weight?)> entries) async {
@@ -89,7 +91,12 @@ class PdfConverter {
     );
 
   pw.Widget _buildPdfTable(Iterable<(DateTime, BloodPressureRecord, Note, List<MedicineIntake>, Weight?)> entries, double availableHeightOnFirstPage) {
-    final columns = pdfSettings.exportFieldsConfiguration.getActiveColumns(availableColumns);
+    final preset = exportSettings.getPresetById(pdfSettings.activePreset);
+    if (preset == null) {
+      logger.severe('No such preset: $preset');
+    }
+    final columns = availableColumns.resolveColumns(preset?.columns ?? []);
+
     final data = entries.map(
       (entry) => columns.map(
         (column) => column.encode(entry.$2, entry.$3, entry.$4, entry.$5),
@@ -123,7 +130,7 @@ class PdfConverter {
             data: [],
             border: null,
             headerDecoration: const pw.BoxDecoration(
-                border: pw.Border(bottom: pw.BorderSide()),
+              border: pw.Border(bottom: pw.BorderSide()),
             ),
             headerHeight: pdfSettings.headerHeight,
             headerStyle: pw.TextStyle(
@@ -151,7 +158,7 @@ class PdfConverter {
             border: null,
             cellAlignment: pw.Alignment.centerLeft,
             headerDecoration: const pw.BoxDecoration(
-                border: pw.Border(bottom: pw.BorderSide()),
+              border: pw.Border(bottom: pw.BorderSide()),
             ),
             headerHeight: pdfSettings.headerHeight,
             cellHeight: pdfSettings.cellHeight,
@@ -250,10 +257,10 @@ class PdfConverter {
         }
 
         return pw.Wrap(
-            children: [
-              for (final table in tables)
-                pw.Expanded(child: table),
-            ],
+          children: [
+            for (final table in tables)
+              pw.Expanded(child: table),
+          ],
         );
       },
     );

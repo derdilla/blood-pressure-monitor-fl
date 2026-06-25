@@ -25,6 +25,7 @@ class ImportButton extends StatelessWidget {
     onPressed: () async {
       final localizations = AppLocalizations.of(context)!;
       final messenger = ScaffoldMessenger.of(context);
+      final exportSettings = context.read<ExportSettings>();
 
       final file = (await FilePicker.pickFiles(
         withData: true,
@@ -48,6 +49,7 @@ class ImportButton extends StatelessWidget {
             csvSettings,
             exportColumnsManager,
             await RepositoryProvider.of<MedicineRepository>(context).getAll(),
+            exportSettings,
           );
           if (!context.mounted) return;
           final importedRecords = await showImportPreview(

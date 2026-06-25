@@ -1,13 +1,11 @@
 import 'package:blood_pressure_app/components/custom_banner.dart';
-import 'package:blood_pressure_app/features/export_import/model/column.dart';
+import 'package:blood_pressure_app/features/export_import/model/export_preset.dart';
 import 'package:blood_pressure_app/features/export_import/model/import_field_type.dart';
 import 'package:blood_pressure_app/l10n/app_localizations.dart';
-import 'package:blood_pressure_app/model/export_import/export_configuration.dart';
 import 'package:blood_pressure_app/model/storage/export_columns_store.dart';
 import 'package:blood_pressure_app/model/storage/export_csv_settings.dart';
 import 'package:blood_pressure_app/model/storage/export_settings.dart';
 import 'package:blood_pressure_app/model/storage/types/export_format_setting.dart';
-import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 
 /// Banner that gives the user information on the importability of their export.
@@ -50,34 +48,33 @@ class _ExportWarnBannerState extends State<ExportWarnBanner> {
         return _buildNotImportable(context);
       case ExportFormat.csv:
         if (!widget.csvExportSettings.exportHeadline) return _buildNoHeadline(context);
-        if (widget.csvExportSettings.fieldDelimiter != ',' && widget.csvExportSettings.fieldDelimiter != '|') return _buildNotImportable(context);
-        if (widget.csvExportSettings.textDelimiter != '"' && widget.csvExportSettings.textDelimiter != "'") return _buildNotImportable(context);
-        final preset = widget.csvExportSettings.exportFieldsConfiguration.activePreset;
-        switch (preset) {
-          case ExportImportPreset.bloodPressureApp:
-            return _buildOK();
-          case ExportImportPreset.myHeart:
-            return _buildNotImportable(context);
-          case ExportImportPreset.none:
-            final exportedColumns = widget.csvExportSettings.exportFieldsConfiguration
-                .getActiveColumns(widget.availableColumns);
-            final exportedTypes = exportedColumns
-                .map((column) => column.restoreAbleType);
+        if (![',', '|'].contains(widget.csvExportSettings.fieldDelimiter)) {
+          return _buildNotImportable(context);
+        }
+        if (!['"', "'"].contains(widget.csvExportSettings.textDelimiter)) {
+          return _buildNotImportable(context);
+        }
+        final preset = widget.exportSettings
+            .getPresetById(widget.csvExportSettings.activePreset);
+        final exportedTypes = widget.availableColumns
+            .resolveColumns(preset?.columns ?? [])
+            .map((c) => c.restoreAbleType)
+            .nonNulls;
+        final expectedTypes = widget.availableColumns
+            .resolveColumns(ExportPreset.appDefault.columns)
+            .map((c) => c.restoreAbleType)
+            .nonNulls
+            .toSet();
 
-            if (!exportedTypes.contains(RowDataFieldType.timestamp)) return _buildNotImportable(context);
-
-            if (exportedColumns.firstWhereOrNull((e) => (e is TimeColumn)) != null) return _buildAccuracyLoss(context);
-
-            final neededForFullExport = ActiveExportColumnConfiguration()
-                .getActiveColumns(widget.availableColumns)
-                .map((column) => column.restoreAbleType);
-            final missingTypes = neededForFullExport
-                .where((column) => !exportedTypes.contains(column));
-            if (missingTypes.isEmpty) return _buildOK();
-
-            return _buildIncompleteExport(context, missingTypes);
-          case ExportImportPreset.bloodPressureAppPdf:
-            return _buildNotImportable(context);
+        final missingTypes = [
+          for (final t in expectedTypes)
+            if (!exportedTypes.contains(t))
+              t,
+        ];
+        if (missingTypes.isEmpty) {
+          return _buildOK();
+        } else {
+          return _buildIncompleteExport(context, missingTypes);
         }
       case ExportFormat.xls:
         return _buildNotImportable(context);
@@ -98,12 +95,6 @@ class _ExportWarnBannerState extends State<ExportWarnBanner> {
   Widget _buildNoHeadline(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
     return _banner(localizations.errNeedHeadline, localizations);
-  }
-
-  /// The exported time looses accuracy.
-  Widget _buildAccuracyLoss(BuildContext context) {
-    final localizations = AppLocalizations.of(context)!;
-    return _banner(localizations.errAccuracyLoss, localizations);
   }
 
   /// Exports made with this configuration are not fully importable.

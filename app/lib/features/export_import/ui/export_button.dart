@@ -72,6 +72,7 @@ void performExport(BuildContext context, bool share) async { // TODO: extract
         csvSettings,
         exportColumnsManager,
         await RepositoryProvider.of<MedicineRepository>(context).getAll(),
+        exportSettings,
       );
       if (!context.mounted) {
         _logger.warning('performExport - No longer mounted: stopping export');
@@ -90,10 +91,11 @@ void performExport(BuildContext context, bool share) async { // TODO: extract
       break;
     case ExportFormat.pdf:
       final pdfConverter = PdfConverter(
-          Provider.of<PdfExportSettings>(context, listen: false),
-          localizations!,
-          Provider.of<Settings>(context, listen: false),
-          Provider.of<ExportColumnsManager>(context, listen: false),
+        Provider.of<PdfExportSettings>(context, listen: false),
+        localizations!,
+        Provider.of<Settings>(context, listen: false),
+        Provider.of<ExportColumnsManager>(context, listen: false),
+        exportSettings,
       );
       final pdf = await pdfConverter.create(await _getEntries(context));
       // https://www.rfc-editor.org/rfc/rfc3778
@@ -108,6 +110,7 @@ void performExport(BuildContext context, bool share) async { // TODO: extract
         excelExportSettings,
         exportColumnsManager,
         await RepositoryProvider.of<MedicineRepository>(context).getAll(),
+        exportSettings,
       );
       if (!context.mounted) return;
       final string = xlsConverter.create(await _getEntries(context));

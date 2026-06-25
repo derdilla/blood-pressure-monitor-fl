@@ -114,6 +114,11 @@ class ExportColumnsManager extends ChangeNotifier implements SettingsGroup {
     return UnmodifiableListView(columns);
   }
 
+  List<ExportColumn> resolveColumns(List<String> columns) =>
+      getAllColumns()
+          .where((c) => columns.contains(c.internalIdentifier))
+          .toList();
+
   /// Returns a list of all NativeColumns and BuildInColumns defined.
   UnmodifiableListView<ExportColumn> getAllUnmodifiableColumns() {
     final columns = <ExportColumn>[];

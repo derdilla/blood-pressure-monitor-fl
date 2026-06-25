@@ -1,8 +1,8 @@
 import 'package:blood_pressure_app/components/fullscreen_dialog.dart';
 import 'package:blood_pressure_app/features/export_import/model/column.dart';
+import 'package:blood_pressure_app/features/export_import/model/record_formatter.dart';
 import 'package:blood_pressure_app/features/export_import/ui/export_field_format_documentation_screen.dart';
 import 'package:blood_pressure_app/l10n/app_localizations.dart';
-import 'package:blood_pressure_app/model/export_import/record_formatter.dart';
 import 'package:blood_pressure_app/model/storage/settings.dart';
 import 'package:flutter/material.dart';
 import 'package:health_data_store/health_data_store.dart';
