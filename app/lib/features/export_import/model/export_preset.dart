@@ -127,10 +127,10 @@ class CustomPreset with ChangeNotifier implements ExportPreset {
     notifyListeners();
   }
 
-  /// Removes the first export column from user columns where
-  /// [ExportColumn.internalIdentifier] matches [identifier].
-  void removeUserColumn(String identifier) {
-    _columns.removeWhere((c) => c == identifier);
+  /// Removes the first export column at index [idx].
+  void removeUserColumn(int idx) {
+    assert(idx >= 0 && idx < _columns.length);
+    _columns.removeAt(idx);
     notifyListeners();
   }
 }

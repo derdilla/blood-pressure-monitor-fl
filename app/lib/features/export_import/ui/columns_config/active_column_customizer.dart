@@ -20,7 +20,6 @@ class ActiveColumnCustomizer extends StatelessWidget {
       PresetSelector(),
       ActivePresetBuilder(
           builder: (context, preset) {
-            // TODO: think about showing what columns will be used
             if (preset is! CustomPreset) return const SizedBox.shrink();
             return SizedBox(
               height: 400.0,
@@ -48,11 +47,30 @@ class _PresetEditButtons extends StatelessWidget {
   /// Whether there is already a saved version of this
   bool get isStored => preset.baseId != null;
 
+  Future<String?> _chooseId(BuildContext context) async {
+    final blockedIds = [
+      ...ExportPreset.buildInPresets,
+      CustomPreset([]),
+      ...context.read<ExportSettings>().presets
+    ].map((p) => p.id);
+    String? id;
+    id = await showInputDialog(context);
+    while (id != null && (blockedIds.contains(id) || id.isEmpty)) {
+      if (!context.mounted) break;
+      final ctrl = ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(AppLocalizations.of(context)!.titleAlreadyExists)));
+      id = await showInputDialog(context);
+      ctrl.close();
+    }
+    return id;
+  }
+
   /// Updates or creates preset from columns
   Future<void> _save(BuildContext context) async {
 
-    final id = preset.baseId ?? await showInputDialog(context);
+    final id = preset.baseId ?? await _chooseId(context);
     if (id == null || !context.mounted) return;
+
     // TODO: don't allow existing ids
 
     final exportSettings = context.read<ExportSettings>();
@@ -80,17 +98,28 @@ class _PresetEditButtons extends StatelessWidget {
   }
 
   /// Removes this column from stored presets but keeps columns.
-  void _unsave(ExportSettings exportSettings) {
+  void _unsave(BuildContext context) {
     if (!isStored) return;
+    final exportSettings = context.read<ExportSettings>();
 
     final oldPresets = exportSettings.presets;
     oldPresets.removeWhere((p) => p.id == preset.baseId);
+    if (exportSettings.customPresetColumns.isEmpty) {
+      exportSettings.customPresetColumns = preset.columns;
+    }
     exportSettings.presets = oldPresets;
 
-    // TODO: make sure preset is updated to one without baseId but with same columns
+    if (context.read<CsvExportSettings>().activePreset == preset.baseId) {
+      context.read<CsvExportSettings>().activePreset = CustomPreset([]).id;
+    }
+    if (context.read<PdfExportSettings>().activePreset == preset.baseId) {
+      context.read<PdfExportSettings>().activePreset = CustomPreset([]).id;
+    }
+    if (context.read<ExcelExportSettings>().activePreset == preset.baseId) {
+      context.read<ExcelExportSettings>().activePreset = CustomPreset([]).id;
+    }
   }
 
-  // TODO: think about syncing saves
   @override
   Widget build(BuildContext context) => Padding(
     padding: const EdgeInsets.only(right: 8.0),
@@ -102,10 +131,7 @@ class _PresetEditButtons extends StatelessWidget {
           IconButton.filledTonal(
             icon: Icon(Icons.delete_forever_outlined),
             tooltip: AppLocalizations.of(context)!.delete,
-            onPressed: () {
-              final s = context.read<ExportSettings>();
-              _unsave(s);
-            },
+            onPressed: () => _unsave(context),
           ),
         if (isStored)
           SizedBox(width: 4.0),

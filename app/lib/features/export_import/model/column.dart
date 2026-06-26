@@ -12,8 +12,6 @@ class NativeColumn extends ExportColumn {
   NativeColumn._create(this._csvTitle, this._restoreableType, this._encode, this._decode);
 
   /// All native columns that exist.
-  ///
-  /// They are all part of [ExportImportPreset.bloodPressureApp].
   static final List<NativeColumn> allColumns = [
     timestampUnixMs,
     systolic,

@@ -8,7 +8,7 @@ import 'package:provider/provider.dart';
 
 
 class PresetEditor extends  StatelessWidget {
-  const PresetEditor({required this.editor});
+  const PresetEditor({super.key, required this.editor});
 
   final CustomPreset editor;
 
@@ -40,7 +40,7 @@ class PresetEditor extends  StatelessWidget {
                 IconButton(
                   tooltip: AppLocalizations.of(context)!.remove,
                   onPressed: () {
-                    editor.removeUserColumn(editor.columns[idx]);
+                    editor.removeUserColumn(idx);
                   },
                   icon: const Icon(Icons.remove_circle_outline),
                 ),

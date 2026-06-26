@@ -39,4 +39,3 @@ class ExportPresetListSetting extends Setting<List<ExportPreset>> {
     super.fromMapValue(decoded);
   }
 }
-

@@ -15,24 +15,30 @@ Widget materialApp(Widget child, {
   ExportSettings? exportSettings,
   CsvExportSettings? csvExportSettings,
   PdfExportSettings? pdfExportSettings,
+  ExcelExportSettings? excelExportSettings,
   HealthConnectSettings? hcSettings,
   IntervalStoreManager? intervallStoreManager,
+  ExportColumnsManager? exportColumnsManager,
   Map<String, Widget Function(BuildContext)> routes = const {},
 }) {
   settings ??= Settings();
   exportSettings ??= ExportSettings();
   csvExportSettings ??= CsvExportSettings();
   pdfExportSettings ??= PdfExportSettings();
+  excelExportSettings ??= ExcelExportSettings();
   hcSettings ??= HealthConnectSettings();
   intervallStoreManager ??= IntervalStoreManager();
+  exportColumnsManager ??= ExportColumnsManager();
   return MultiProvider(
     providers: [
       ChangeNotifierProvider.value(value: settings),
       ChangeNotifierProvider.value(value: exportSettings),
       ChangeNotifierProvider.value(value: csvExportSettings),
       ChangeNotifierProvider.value(value: pdfExportSettings),
+      ChangeNotifierProvider.value(value: excelExportSettings),
       ChangeNotifierProvider.value(value: hcSettings),
       ChangeNotifierProvider.value(value: intervallStoreManager),
+      ChangeNotifierProvider.value(value: exportColumnsManager),
     ],
     child: MaterialApp(
       localizationsDelegates: AppLocalizations.localizationsDelegates,
