@@ -4,7 +4,8 @@ import 'package:blood_pressure_app/features/export_import/ui/columns_config/acti
 import 'package:blood_pressure_app/features/export_import/ui/columns_config/preset_editor.dart';
 import 'package:blood_pressure_app/features/export_import/ui/columns_config/preset_selector.dart';
 import 'package:blood_pressure_app/l10n/app_localizations.dart';
-import 'package:blood_pressure_app/model/storage/export_settings.dart';
+import 'package:blood_pressure_app/model/storage/storage.dart';
+import 'package:blood_pressure_app/model/storage/types/export_format_setting.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -40,12 +41,9 @@ class ActiveColumnCustomizer extends StatelessWidget {
 }
 
 class _PresetEditButtons extends StatelessWidget {
-  const _PresetEditButtons({super.key, required this.preset});
+  const _PresetEditButtons({required this.preset});
 
   final CustomPreset preset;
-
-  // FIXME: design intearction with [temporary] custom coulumns. When pressing#
-  // export it must be clear which columns are used
 
   /// Whether there is already a saved version of this
   bool get isStored => preset.baseId != null;
@@ -66,8 +64,19 @@ class _PresetEditButtons extends StatelessWidget {
       true,
     ));
     exportSettings.presets = presets;
-
-    // TODO: ask parent to make this the new active?
+    if (preset.baseId == null) {
+      exportSettings.customPresetColumns = [];
+      switch(exportSettings.exportFormat) {
+        case ExportFormat.csv:
+          context.read<CsvExportSettings>().activePreset = id;
+        case ExportFormat.xls:
+          context.read<PdfExportSettings>().activePreset = id;
+        case ExportFormat.pdf:
+          context.read<ExcelExportSettings>().activePreset = id;
+        case ExportFormat.db:
+          assert(false, 'used in bad context');
+      }
+    }
   }
 
   /// Removes this column from stored presets but keeps columns.

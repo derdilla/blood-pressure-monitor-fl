@@ -45,12 +45,16 @@ class __InnerPresetBuilderState extends State<_InnerPresetBuilder> {
 
   void _updatePreset() {
     // Here we explicitly don't want updates, if the stored preset updates
+    final settings = context.read<ExportSettings>();
+
     final savedPreset = widget.presetId == null
         ? null
-        : context.read<ExportSettings>().getPresetById(widget.presetId!);
+        : settings.getPresetById(widget.presetId!);
 
     if (savedPreset == null) {
-      preset = CustomPreset([]);
+      final customPreset = CustomPreset(settings.customPresetColumns.toList());
+      customPreset.addListener(() => settings.customPresetColumns = customPreset.columns);
+      preset = customPreset;
     } else if (savedPreset.editable) {
       // Wrap in editor
       preset = CustomPreset.fromPreset(savedPreset);
@@ -64,6 +68,9 @@ class __InnerPresetBuilderState extends State<_InnerPresetBuilder> {
   void didUpdateWidget(_InnerPresetBuilder oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.presetId == widget.presetId) return;
+    if (preset is CustomPreset) {
+      (preset as CustomPreset).dispose();
+    }
     _updatePreset();
   }
 

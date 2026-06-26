@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:blood_pressure_app/features/export_import/model/export_preset.dart';
 import 'package:blood_pressure_app/model/storage/types/export_format_setting.dart';
 import 'package:blood_pressure_app/model/storage/types/export_preset_list_setting.dart';
+import 'package:blood_pressure_app/model/storage/types/string_list_setting.dart';
 import 'package:flutter/material.dart';
 import 'package:settings_annotation/settings_annotation.dart';
 
@@ -16,4 +17,5 @@ class _ExportSettingsSpec extends ChangeNotifier {
   final exportAfterEveryEntry = Setting<bool>(initialValue: false);
   /// Presets defined by the user.
   final Setting<List<ExportPreset>> presets = ExportPresetListSetting();
+  final Setting<List<String>> customPresetColumns = StringListSetting(initialValue: []);
 }
