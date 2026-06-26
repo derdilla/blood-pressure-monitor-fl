@@ -1,0 +1,12 @@
+* Jagaja kasutamine keskmiste arvutamisel on korras
+* PDF-ekspordi MIME-tüüp on korras
+* XSL-i õigekiri on korras
+* Lisatud kehakaalu importimise võimalus
+* Ajavahemiku valimisega seotud vead on korras
+* Health-Connecti seadistuste kustutamine toimib
+* Parem kasutus käivitamisel
+* Pärandversioonide seadistusi ei saa importida
+* Uuenesid pruugitavad Bluetoothi taustateenused
+* Uus Bluetoothi taustateenus on nüüd kasutusel
+* Yonker IBPA1 tugi
+* Eemaldasime teenusefiltri BLE-seadmete otsimisel
