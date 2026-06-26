@@ -1,0 +1,12 @@
+* Fix divisor in average calculations
+* Fix pdf export mime type
+* Fix xsl spelling
+* Implement bodyweight import
+* Fix bugs related to time range selection
+* Fix health connect settings not being deletable
+* Improve launch navigation
+* Drop updating settings from legacy versions
+* Update available bluetooth backends
+* Use new bluetooth backend as default
+* Support yonker IBPA1
+* Remove service filter when scanning for BLE devices
