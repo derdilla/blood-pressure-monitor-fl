@@ -7,6 +7,7 @@ import 'package:blood_pressure_app/model/storage/export_csv_settings.dart';
 import 'package:blood_pressure_app/model/storage/export_settings.dart';
 import 'package:blood_pressure_app/model/storage/types/export_format_setting.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 /// Banner that gives the user information on the importability of their export.
 class ExportWarnBanner extends StatefulWidget {
@@ -14,20 +15,7 @@ class ExportWarnBanner extends StatefulWidget {
   /// empty widget.
   ///
   /// Whether the config is importable is determined by the passed settings.
-  const ExportWarnBanner({super.key,
-    required this.exportSettings,
-    required this.csvExportSettings,
-    required this.availableColumns,});
-
-  /// The [ExportSettings] validated for importability.
-  final ExportSettings exportSettings;
-
-  /// The [CsvExportSettings] validated for importability if applicable.
-  final CsvExportSettings csvExportSettings;
-
-  /// The columns used to validate importability in case custom export is
-  /// enabled.
-  final ExportColumnsManager availableColumns;
+  const ExportWarnBanner({super.key});
 
   @override
   State<ExportWarnBanner> createState() => _ExportWarnBannerState();
@@ -40,27 +28,29 @@ class _ExportWarnBannerState extends State<ExportWarnBanner> {
   @override
   Widget build(BuildContext context) {
     if (_hidden) return _buildOK();
-
-    switch (widget.exportSettings.exportFormat) {
+    final exportSettings = context.watch<ExportSettings>();
+    switch (exportSettings.exportFormat) {
       case ExportFormat.db:
         return _buildOK();
       case ExportFormat.pdf:
         return _buildNotImportable(context);
       case ExportFormat.csv:
-        if (!widget.csvExportSettings.exportHeadline) return _buildNoHeadline(context);
-        if (![',', '|'].contains(widget.csvExportSettings.fieldDelimiter)) {
+        final csvExportSettings = context.watch<CsvExportSettings>();
+        if (!csvExportSettings.exportHeadline) return _buildNoHeadline(context);
+        if (![',', '|', ';'].contains(csvExportSettings.fieldDelimiter)) {
           return _buildNotImportable(context);
         }
-        if (!['"', "'"].contains(widget.csvExportSettings.textDelimiter)) {
+        if (!['"', "'"].contains(csvExportSettings.textDelimiter)) {
           return _buildNotImportable(context);
         }
-        final preset = widget.exportSettings
-            .getPresetById(widget.csvExportSettings.activePreset);
-        final exportedTypes = widget.availableColumns
+        final preset = exportSettings
+            .getPresetById(csvExportSettings.activePreset);
+        final availableColumns = context.watch<ExportColumnsManager>();
+        final exportedTypes = availableColumns
             .resolveColumns(preset?.columns ?? [])
             .map((c) => c.restoreAbleType)
             .nonNulls;
-        final expectedTypes = widget.availableColumns
+        final expectedTypes = availableColumns
             .resolveColumns(ExportPreset.appDefault.columns)
             .map((c) => c.restoreAbleType)
             .nonNulls

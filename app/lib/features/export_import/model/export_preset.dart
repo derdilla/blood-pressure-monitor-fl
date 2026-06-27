@@ -136,9 +136,11 @@ class CustomPreset with ChangeNotifier implements ExportPreset {
 }
 
 extension BuildInPresets on ExportSettings {
-  /// Returns all export presets including build-ins.
+  /// Returns all export presets including build-ins. This does not include
+  /// [CustomPreset].
   List<ExportPreset> get allPresets => [
     ...ExportPreset.buildInPresets,
+    CustomPreset(customPresetColumns.toList()),
     ...presets,
   ];
 

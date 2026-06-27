@@ -19,21 +19,21 @@ class ActiveColumnCustomizer extends StatelessWidget {
     children: [
       PresetSelector(),
       ActivePresetBuilder(
-          builder: (context, preset) {
-            if (preset is! CustomPreset) return const SizedBox.shrink();
-            return SizedBox(
-              height: 400.0,
-              child: Stack(
-                children: [
-                  PresetEditor(editor: preset),
-                  Align(
-                    alignment: Alignment.bottomRight,
-                    child: _PresetEditButtons(preset: preset),
-                  ),
-                ],
-              ),
-            );
-          }
+        builder: (context, preset) {
+          if (preset is! CustomPreset) return const SizedBox.shrink();
+          return SizedBox(
+            height: 400.0,
+            child: Stack(
+              children: [
+                PresetEditor(editor: preset),
+                Align(
+                  alignment: Alignment.bottomRight,
+                  child: _PresetEditButtons(preset: preset),
+                ),
+              ],
+            ),
+          );
+        },
       ),
     ],
   );
@@ -47,12 +47,8 @@ class _PresetEditButtons extends StatelessWidget {
   /// Whether there is already a saved version of this
   bool get isStored => preset.baseId != null;
 
-  Future<String?> _chooseId(BuildContext context) async {
-    final blockedIds = [
-      ...ExportPreset.buildInPresets,
-      CustomPreset([]),
-      ...context.read<ExportSettings>().presets
-    ].map((p) => p.id);
+  Future<String?> _chooseId(BuildContext context, ExportSettings exportSettings) async {
+    final blockedIds = exportSettings.allPresets.map((p) => p.id);
     String? id;
     id = await showInputDialog(context);
     while (id != null && (blockedIds.contains(id) || id.isEmpty)) {
@@ -67,20 +63,13 @@ class _PresetEditButtons extends StatelessWidget {
 
   /// Updates or creates preset from columns
   Future<void> _save(BuildContext context) async {
-
-    final id = preset.baseId ?? await _chooseId(context);
+    final exportSettings = context.read<ExportSettings>();
+    final id = preset.baseId ?? await _chooseId(context, exportSettings);
     if (id == null || !context.mounted) return;
 
-    // TODO: don't allow existing ids
-
-    final exportSettings = context.read<ExportSettings>();
     final presets = exportSettings.presets;
     presets.removeWhere((p) => p.id == id);
-    presets.add(ExportPreset(
-      id,
-      preset.columns,
-      true,
-    ));
+    presets.add(ExportPreset(id, preset.columns, true));
     exportSettings.presets = presets;
     if (preset.baseId == null) {
       exportSettings.customPresetColumns = [];

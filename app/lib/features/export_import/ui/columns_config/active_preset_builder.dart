@@ -19,6 +19,7 @@ class ActivePresetBuilder extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final presetId = _getPreset(context);
+    assert(presetId != null, 'widget displayed in unsupported context');
     return _InnerPresetBuilder(presetId: presetId, builder: builder);
   }
 }
@@ -47,16 +48,18 @@ class __InnerPresetBuilderState extends State<_InnerPresetBuilder> {
     // Here we explicitly don't want updates, if the stored preset updates
     final settings = context.read<ExportSettings>();
 
-    final savedPreset = widget.presetId == null
-        ? null
-        : settings.getPresetById(widget.presetId!);
+    final savedPreset = switch(widget.presetId) {
+      null => CustomPreset(settings.customPresetColumns.toList()),
+      final presetId => switch(settings.getPresetById(presetId)) {
+        null => CustomPreset(settings.customPresetColumns.toList()),
+        final presetData => presetData,
+      },
+    };
 
-    if (savedPreset == null) {
-      final customPreset = CustomPreset(settings.customPresetColumns.toList());
-      customPreset.addListener(() => settings.customPresetColumns = customPreset.columns);
-      preset = customPreset;
+    if (savedPreset is CustomPreset) {
+      savedPreset.addListener(() => settings.customPresetColumns = savedPreset.columns);
+      preset = savedPreset;
     } else if (savedPreset.editable) {
-      // Wrap in editor
       preset = CustomPreset.fromPreset(savedPreset);
     } else {
       preset = savedPreset;

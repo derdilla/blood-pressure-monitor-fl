@@ -229,5 +229,5 @@ void main() {
     expect(find.byType(Dialog), findsOneWidget);
     expect(find.text(localizations.titleAlreadyExists), findsOneWidget);
   });
-  
+
 }

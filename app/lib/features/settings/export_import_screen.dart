@@ -23,161 +23,157 @@ class ExportImportScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
+    final settings = context.watch<ExportSettings>();
     return Scaffold(
       appBar: AppBar(
         title: Text(localizations.exportImport),
         backgroundColor: Theme.of(context).primaryColor,
       ),
-      body: Consumer<ExportSettings>(builder: (context, settings, child) => SingleChildScrollView(
-          child: Column(
-            children: [
-              Consumer<CsvExportSettings>(builder: (context, csvExportSettings, child) =>
-                Consumer<ExportColumnsManager>(builder: (context, availableColumns, child) =>
-                  ExportWarnBanner(
-                    exportSettings: settings,
-                    csvExportSettings: csvExportSettings,
-                    availableColumns: availableColumns,
-                  ),
-                ),
-              ),
-              const SizedBox(
-                height: 15,
-              ),
-              if (settings.exportFormat != ExportFormat.db)
-                const IntervalPicker(type: IntervalStoreManagerLocation.exportPage),
-              if (Platform.isAndroid) // only supported on android
-                ListTile(
-                  title: Text(localizations.exportDir),
-                  subtitle: settings.defaultExportDir.isNotEmpty ? Text(settings.defaultExportDir) : null,
-                  trailing: settings.defaultExportDir.isEmpty ? const Icon(Icons.folder_open) : const Icon(Icons.delete),
-                  onTap: () async {
-                    if (settings.defaultExportDir.isEmpty) {
-                      final uri = await const PersistentUserDirAccessAndroid().requestDirectoryUri();
-                      settings.defaultExportDir = uri ?? '';
-                    } else {
-                      settings.defaultExportDir = '';
-                    }
-                  },
-                ),
-              SwitchListTile(
-                title: Text(localizations.exportAfterEveryInput),
-                subtitle: Text(localizations.exportAfterEveryInputDesc),
-                value: settings.exportAfterEveryEntry,
-                onChanged: (value) {
-                  settings.exportAfterEveryEntry = value;
-                },
-              ),
-              DropDownListTile<ExportFormat>(
-                key: const Key('exportFormat'),
-                title: Text(localizations.exportFormat),
-                value: settings.exportFormat,
-                items: [
-                  DropdownMenuItem(
-                      value: ExportFormat.csv, child: Text(localizations.csv)),
-                  DropdownMenuItem(
-                      value: ExportFormat.pdf, child: Text(localizations.pdf)),
-                  DropdownMenuItem(
-                      value: ExportFormat.db, child: Text(localizations.db)),
-                  DropdownMenuItem(
-                    value: ExportFormat.xls, child: Text(localizations.xls)),
-                ],
-                onChanged: (ExportFormat? value) {
-                  if (value != null) {
-                    settings.exportFormat = value;
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            ExportWarnBanner(),
+            const SizedBox(
+              height: 15,
+            ),
+            if (settings.exportFormat != ExportFormat.db)
+              const IntervalPicker(type: IntervalStoreManagerLocation.exportPage),
+            if (Platform.isAndroid) // only supported on android
+              ListTile(
+                title: Text(localizations.exportDir),
+                subtitle: settings.defaultExportDir.isNotEmpty ? Text(settings.defaultExportDir) : null,
+                trailing: settings.defaultExportDir.isEmpty ? const Icon(Icons.folder_open) : const Icon(Icons.delete),
+                onTap: () async {
+                  if (settings.defaultExportDir.isEmpty) {
+                    final uri = await const PersistentUserDirAccessAndroid().requestDirectoryUri();
+                    settings.defaultExportDir = uri ?? '';
+                  } else {
+                    settings.defaultExportDir = '';
                   }
                 },
               ),
-              if (settings.exportFormat == ExportFormat.csv)
-                Consumer<CsvExportSettings>(builder: (context, csvExportSettings, child) =>
-                  Column(
-                    children: [
-                      InputListTile(
-                        label: localizations.fieldDelimiter,
-                        value: csvExportSettings.fieldDelimiter,
-                        onSubmit: (value) {
-                          csvExportSettings.fieldDelimiter = value;
-                        },
-                      ),
-                      InputListTile(
-                        label: localizations.textDelimiter,
-                        value: csvExportSettings.textDelimiter,
-                        onSubmit: (value) {
-                          csvExportSettings.textDelimiter = value;
-                        },
-                      ),
-                      SwitchListTile(
-                        title: Text(localizations.exportCsvHeadline),
-                        subtitle: Text(localizations.exportCsvHeadlineDesc),
-                        value: csvExportSettings.exportHeadline,
+            SwitchListTile(
+              title: Text(localizations.exportAfterEveryInput),
+              subtitle: Text(localizations.exportAfterEveryInputDesc),
+              value: settings.exportAfterEveryEntry,
+              onChanged: (value) {
+                settings.exportAfterEveryEntry = value;
+              },
+            ),
+            DropDownListTile<ExportFormat>(
+              key: const Key('exportFormat'),
+              title: Text(localizations.exportFormat),
+              value: settings.exportFormat,
+              items: [
+                DropdownMenuItem(
+                    value: ExportFormat.csv, child: Text(localizations.csv)),
+                DropdownMenuItem(
+                    value: ExportFormat.pdf, child: Text(localizations.pdf)),
+                DropdownMenuItem(
+                    value: ExportFormat.db, child: Text(localizations.db)),
+                DropdownMenuItem(
+                  value: ExportFormat.xls, child: Text(localizations.xls)),
+              ],
+              onChanged: (ExportFormat? value) {
+                if (value != null) {
+                  settings.exportFormat = value;
+                }
+              },
+            ),
+            if (settings.exportFormat == ExportFormat.csv)
+              Consumer<CsvExportSettings>(builder: (context, csvExportSettings, child) =>
+                Column(
+                  children: [
+                    InputListTile(
+                      label: localizations.fieldDelimiter,
+                      value: csvExportSettings.fieldDelimiter,
+                      onSubmit: (value) {
+                        csvExportSettings.fieldDelimiter = value;
+                      },
+                    ),
+                    InputListTile(
+                      label: localizations.textDelimiter,
+                      value: csvExportSettings.textDelimiter,
+                      onSubmit: (value) {
+                        csvExportSettings.textDelimiter = value;
+                      },
+                    ),
+                    SwitchListTile(
+                      title: Text(localizations.exportCsvHeadline),
+                      subtitle: Text(localizations.exportCsvHeadlineDesc),
+                      value: csvExportSettings.exportHeadline,
+                      onChanged: (value) {
+                        csvExportSettings.exportHeadline = value;
+                      },
+                    ),
+                  ],
+                ),
+              ),
+            if (settings.exportFormat == ExportFormat.pdf)
+              Consumer<PdfExportSettings>(builder: (context, pdfExportSettings, child) =>
+                Column(
+                  children: [
+                    SwitchListTile(
+                        title: Text(localizations.exportPdfExportTitle),
+                        value: pdfExportSettings.exportTitle,
                         onChanged: (value) {
-                          csvExportSettings.exportHeadline = value;
-                        },
+                          pdfExportSettings.exportTitle = value;
+                        },),
+                    SwitchListTile(
+                        title: Text(localizations.exportPdfExportStatistics),
+                        value: pdfExportSettings.exportStatistics,
+                        onChanged: (value) {
+                          pdfExportSettings.exportStatistics = value;
+                        },),
+                    SwitchListTile(
+                        title: Text(localizations.exportPdfExportData),
+                        value: pdfExportSettings.exportData,
+                        onChanged: (value) {
+                          pdfExportSettings.exportData = value;
+                        },),
+                    if (pdfExportSettings.exportData)
+                      Column(
+                        children: [
+                          NumberInputListTile(
+                            value: pdfExportSettings.headerHeight,
+                            label: localizations.exportPdfHeaderHeight,
+                            onParsableSubmit: (value) {
+                              pdfExportSettings.headerHeight = value;
+                            },
+                          ),
+                          NumberInputListTile(
+                            value: pdfExportSettings.cellHeight,
+                            label: localizations.exportPdfCellHeight,
+                            onParsableSubmit: (value) {
+                              pdfExportSettings.cellHeight = value;
+                            },
+                          ),
+                          NumberInputListTile(
+                            value: pdfExportSettings.headerFontSize,
+                            label: localizations.exportPdfHeaderFontSize,
+                            onParsableSubmit: (value) {
+                              pdfExportSettings.headerFontSize = value;
+                            },
+                          ),
+                          NumberInputListTile(
+                            value: pdfExportSettings.cellFontSize,
+                            label: localizations.exportPdfCellFontSize,
+                            onParsableSubmit: (value) {
+                              pdfExportSettings.cellFontSize = value;
+                            },
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
+                  ],
                 ),
-              if (settings.exportFormat == ExportFormat.pdf)
-                Consumer<PdfExportSettings>(builder: (context, pdfExportSettings, child) =>
-                  Column(
-                    children: [
-                      SwitchListTile(
-                          title: Text(localizations.exportPdfExportTitle),
-                          value: pdfExportSettings.exportTitle,
-                          onChanged: (value) {
-                            pdfExportSettings.exportTitle = value;
-                          },),
-                      SwitchListTile(
-                          title: Text(localizations.exportPdfExportStatistics),
-                          value: pdfExportSettings.exportStatistics,
-                          onChanged: (value) {
-                            pdfExportSettings.exportStatistics = value;
-                          },),
-                      SwitchListTile(
-                          title: Text(localizations.exportPdfExportData),
-                          value: pdfExportSettings.exportData,
-                          onChanged: (value) {
-                            pdfExportSettings.exportData = value;
-                          },),
-                      if (pdfExportSettings.exportData)
-                        Column(
-                          children: [
-                            NumberInputListTile(
-                              value: pdfExportSettings.headerHeight,
-                              label: localizations.exportPdfHeaderHeight,
-                              onParsableSubmit: (value) {
-                                pdfExportSettings.headerHeight = value;
-                              },
-                            ),
-                            NumberInputListTile(
-                              value: pdfExportSettings.cellHeight,
-                              label: localizations.exportPdfCellHeight,
-                              onParsableSubmit: (value) {
-                                pdfExportSettings.cellHeight = value;
-                              },
-                            ),
-                            NumberInputListTile(
-                              value: pdfExportSettings.headerFontSize,
-                              label: localizations.exportPdfHeaderFontSize,
-                              onParsableSubmit: (value) {
-                                pdfExportSettings.headerFontSize = value;
-                              },
-                            ),
-                            NumberInputListTile(
-                              value: pdfExportSettings.cellFontSize,
-                              label: localizations.exportPdfCellFontSize,
-                              onParsableSubmit: (value) {
-                                pdfExportSettings.cellFontSize = value;
-                              },
-                            ),
-                          ],
-                        ),
-                    ],
-                  ),
-                ),
+              ),
+            if (settings.exportFormat == ExportFormat.csv
+              || settings.exportFormat == ExportFormat.pdf
+              || settings.exportFormat == ExportFormat.xls)
               ActiveColumnCustomizer(),
-            ],
-          ),
-        ),),
+          ],
+        ),
+      ),
       persistentFooterButtons: const [
         ExportButton(share: true),
         ExportButton(share: false),

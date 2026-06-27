@@ -14,11 +14,7 @@ class PresetSelector extends StatelessWidget {
     title: Text(AppLocalizations.of(context)!.exportFieldsPreset),
     value: getPreset(context),
     items: [
-      for (final preset in [
-        ...ExportPreset.buildInPresets,
-        CustomPreset([]),
-        ...context.watch<ExportSettings>().presets
-      ])
+      for (final preset in context.watch<ExportSettings>().allPresets)
         DropdownMenuItem(
           value: preset.id,
           child: Text(preset.localize(AppLocalizations.of(context)!)),
