@@ -253,7 +253,7 @@
   "btnShare": "HARE",
   "deleteAllMeasurements": "Ta bort alla mätningar",
   "language": "Språkspråk",
-  "exportWarnNotEveryFieldExported": "Akta dig för att du inte exporterar alla fält: {fields} {räkna, plural, one{is} andra{are}} saknas.",
+  "exportWarnNotEveryFieldExported": "Akta dig för att du inte exporterar alla fält: {fields} {count, plural, one{is} other{are}} saknas.",
   "@exportWarnNotEveryFieldExported": {
     "placeholders": {
       "count": {
