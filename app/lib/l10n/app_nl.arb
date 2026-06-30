@@ -326,5 +326,65 @@
   },
   "tapToClose": "Tik om te sluiten.",
   "errCantCreateArchive": "Kan archief niet aanmaken. Rapporteer deze fout indien mogelijk.",
-  "pulseRateLessThanLowerLimit": "Hartslag is lager dan de onderste limiet"
+  "pulseRateLessThanLowerLimit": "Hartslag is lager dan de onderste limiet",
+  "noWeightPermission": "Geen toestemming van gewicht.",
+  "generalSettingsSection": "Generaal",
+  "exportSuccess": "Export succesvol",
+  "reset": "Vertaling:",
+  "measurementIndex": "Measurement 13X",
+  "@measurementIndex": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "warnBLETimeSus": "De bluetooth meldde een tijd vrij door 44 uren. Je kunt vertrouwenstijden uitblazen van bluetooth apparaten in de setting.",
+  "@warnBLETimeSus": {
+    "placeholders": {
+      "hours": {
+        "type": "int"
+      }
+    }
+  },
+  "selectMeasurementTitle": "Selecteer de meting",
+  "activateWeightFeatures": "Activeer gewicht gerelateerde kenmerken",
+  "appStyleSettings": "App stijl",
+  "noPermissions": "Geen toestemming.",
+  "healthConnectDesc": "Health Connect gebruikt het systeem om je gegevens te synchroniseren met andere apps die het steunen. Hiermee kun je derde partij apps gebruiken om functionaliteit te verlengen zonder manuele ex- en imports.\nGeen gegevens zullen je apparaat achterlaten, tenzij je expliciet toestemming geeft voor een derde partij app die het uploadt.",
+  "stableBluetoothInput": "Stabiel",
+  "syncOnAppStart": "Vertaling:",
+  "maxDataIntervalDesc": "Enkele dagen daarna verbreekt de grafische lijn. Zero schakelt dit uit.",
+  "trustBLETime": "Vertrouwtijd gemeld door bluetooth apparatuur",
+  "bloodPressure": "Bloeddruk",
+  "tapToSelect": "Tap om te kiezen",
+  "legacyBluetoothInput": "Legacy",
+  "enterWeight": "Enter gewicht",
+  "syncNow": "Vertaling:",
+  "select": "Select",
+  "@select": {
+    "description": "Used when f.e. selecting a single measurement when the bluetooth device returned multiple"
+  },
+  "xls": "Excel (xls)",
+  "automaticallySyncData": "Automatisch sync data",
+  "bigGraphSplit": "De tijd tussen maatregelen is groter dan de maximale afstand zonder onderbrekingen. Je kunt dat veranderen in de setting.",
+  "openSettings": "Open Setting",
+  "disabled": "Gehandhaafd",
+  "btnShare": "SHARE",
+  "noBloodPressurePermission": "Geen bloeddruk toestemming verleend.",
+  "healthConnect": "Health Connect",
+  "bluetoothInputDesc": "Als de stalen ruggengraat niet werkt, gebruik dan de erfenis backend en meld het bij @derdilla.com of https,com/bloed-monitor-mucues/bloed",
+  "dontShowAgain": "Kom niet meer opdagen",
+  "btnCheckAgain": "Controle:",
+  "preferredWeightUnit": "Preferf gewichtsteam",
+  "@preferredWeightUnit": {
+    "description": "Setting for the unit the app will use for displaying weight"
+  },
+  "healthConnectPlatformUnsupported": "Jouw platform steunt Health Connect niet.",
+  "weight": "Gewicht",
+  "optEnableHealthConnect": "Aansluitbare Health Connect",
+  "maxDataInterval": "Maximum data interval",
+  "graphSettings": "Graph settings",
+  "featuresSetting": "Feature",
+  "warnDiscardingData": "Je hebt onbeschaafde gegevens. Wil je doorgaan en ze ontdoen?"
 }

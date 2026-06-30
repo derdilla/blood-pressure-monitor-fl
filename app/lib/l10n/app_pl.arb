@@ -302,5 +302,45 @@
   "defaultDosis": "Dawka domyślna",
   "noMedication": "Brak leków",
   "bluetoothDisabled": "Wyłączono Bluetooth",
-  "xls": "Excel (xls)"
+  "xls": "Excel (xls)",
+  "bluetoothInput": "Bluetooth wejściowy",
+  "noWeightPermission": "Brak zgody na wagę.",
+  "generalSettingsSection": "Generalny",
+  "deleteAllMedicineIntakes": "Wszystko o medycynie wpada",
+  "warnBLETimeSus": "Urządzenie niebieskich zębów donosiło czas (X44X). Możesz rozdzielić czasoprzestrzeni z urządzeń niebieskich zębów.",
+  "@warnBLETimeSus": {
+    "placeholders": {
+      "hours": {
+        "type": "int"
+      }
+    }
+  },
+  "selectMeasurementTitle": "Wybieranie pomiarów w celu wykorzystania",
+  "bodyMovementDetected": "Ruch ciała wykrył",
+  "appStyleSettings": "Styl",
+  "noPermissions": "Brak zgody.",
+  "healthConnectDesc": "Health Connect używa systemu API do synchronizacji danych z innymi aplikacjami, które go wspierają. Pozwala to na korzystanie z aplikacji trzecich w celu przedłużenia funkcjonalności bez ręcznych i importowych.\nŻadne dane nie opuszczają swojego urządzenia, chyba że autoryzuje trzecią aplikację, która go przeładuje.",
+  "syncOnAppStart": "Informacje na temat początku aplikacji",
+  "errCantCreateArchive": "Nie może tworzyć archiwów. Okazuje się, że jeśli jest to możliwe.",
+  "maxDataIntervalDesc": "W ciągu kilku dni po odłączeniu grafu. Powoduje to rozwiązanie.",
+  "improperMeasurementPosition": "Pozycja pomiarowa",
+  "aboutBleInput": "Niektóre urządzenia pomiarowe są kompatybilne z BLE GATT. Możesz tu połączyć te urządzenia i automatycznie transmitować pomiary lub zdyskwalifikować tę opcję w ustawieniach.",
+  "legacyBluetoothInput": "Legacy",
+  "meanArterialPressure": "Ciśnienie meanowe",
+  "syncNow": "Sync",
+  "automaticallySyncData": "Automatycznie sync data",
+  "bigGraphSplit": "Czas pomiędzy pomiarami jest większy niż maksymalna odległość pokazana bez przerw. Może zmienić to w otoczeniu.",
+  "openSettings": "Open Setting",
+  "intakes": "Medycyna intakena",
+  "cuffTooLoose": "Cuff zakochany",
+  "noBloodPressurePermission": "Nie ma zgody na ciśnienie krwi.",
+  "healthConnect": "Health Connect",
+  "bluetoothInputDesc": "Jeśli stabilny backend nie działa, wykorzystuje spuściznę i raportuje ją na kontakt z@derdilla.com lub https:/github.com/derdilla/blood-pressure-monitor-fl/issues",
+  "btnCheckAgain": "Ponownie Czeck znowu",
+  "healthConnectPlatformUnsupported": "Jego platforma nie obsługuje Health Connect.",
+  "optEnableHealthConnect": "Strona internetowa",
+  "maxDataInterval": "Maksimum danych",
+  "graphSettings": "Ustawienie Grapha",
+  "featuresSetting": "Features",
+  "warnDiscardingData": "Nie są dane. Czy chcesz kontynuować i poradzić ich?"
 }
