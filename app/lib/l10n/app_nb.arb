@@ -219,5 +219,7 @@
   "fieldFormat": "Feltformat",
   "note": "Notat",
   "color": "Farge",
-  "enterTimeFormatDesc": "En formateringsstreng er en miks av predefinert ICU/Skeleton -strenger og all annen tekst du vil inkludere.\n\n[En fullstendig liste over gyldige formater er å finne her.](screen://TimeFormattingHelp)\n\nBruk av lengre eller kortere formatstrenger endrer ikke også bredden på tabellkolonnene, noe som fører til linjeskift og tekst som ikke vises.\n\nforvalg: \"yy-MM-dd HH:mm\""
+  "enterTimeFormatDesc": "En formateringsstreng er en miks av predefinert ICU/Skeleton -strenger og all annen tekst du vil inkludere.\n\n[En fullstendig liste over gyldige formater er å finne her.](screen://TimeFormattingHelp)\n\nBruk av lengre eller kortere formatstrenger endrer ikke også bredden på tabellkolonnene, noe som fører til linjeskift og tekst som ikke vises.\n\nforvalg: \"yy-MM-dd HH:mm\"",
+  "exportPdfExportTitle": "Overskrift",
+  "timeFormat": "Tidsformat"
 }
