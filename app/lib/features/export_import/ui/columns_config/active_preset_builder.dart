@@ -78,5 +78,13 @@ class __InnerPresetBuilderState extends State<_InnerPresetBuilder> {
   }
 
   @override
+  void dispose() {
+    if (preset is CustomPreset) {
+      (preset as CustomPreset).dispose();
+    }
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) => widget.builder(context, preset);
 }
