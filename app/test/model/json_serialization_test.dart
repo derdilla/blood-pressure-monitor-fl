@@ -1,7 +1,6 @@
+import 'package:blood_pressure_app/features/export_import/model/column.dart';
 import 'package:blood_pressure_app/model/blood_pressure/pressure_unit.dart';
 import 'package:blood_pressure_app/model/bluetooth_input_mode.dart';
-import 'package:blood_pressure_app/model/export_import/column.dart';
-import 'package:blood_pressure_app/model/export_import/export_configuration.dart';
 import 'package:blood_pressure_app/model/horizontal_graph_line.dart';
 import 'package:blood_pressure_app/model/storage/storage.dart';
 import 'package:blood_pressure_app/model/storage/types/export_format_setting.dart';
@@ -189,35 +188,6 @@ void main() {
       expect(v3.exportAfterEveryEntry, ExportSettings().exportAfterEveryEntry);
     });
   });
-  group('ActiveExportColumnConfiguration', () {
-    test('should be able to recreate all values from json', () {
-      final initial = ActiveExportColumnConfiguration(
-        activePreset: ExportImportPreset.myHeart,
-        userSelectedColumnIds: ['a', 'b', 'c'],
-      );
-      final fromJson = ActiveExportColumnConfiguration.fromJson(initial.toJson());
-
-      expect(initial.activePreset, fromJson.activePreset);
-      expect(initial.toJson(), fromJson.toJson());
-    });
-    test('should not crash when parsing incorrect json', () {
-      ActiveExportColumnConfiguration.fromJson('banana');
-      ActiveExportColumnConfiguration.fromJson('{"preset" = false}');
-      ActiveExportColumnConfiguration.fromJson('{"preset": false');
-      ActiveExportColumnConfiguration.fromJson('{"preset": null');
-      ActiveExportColumnConfiguration.fromJson('{"columns": null');
-      ActiveExportColumnConfiguration.fromJson('{"columns": [123]');
-      ActiveExportColumnConfiguration.fromJson('{preset: false}');
-      ActiveExportColumnConfiguration.fromJson('green{preset: false}');
-    });
-    test('should not crash when parsing invalid values and ignore them', () {
-      final v1 = ActiveExportColumnConfiguration.fromJson('{"preset": ["test"]}');
-      final v2 = ActiveExportColumnConfiguration.fromJson('{"columns": [123, 456]}');
-
-      expect(v1.activePreset, ActiveExportColumnConfiguration().activePreset);
-      expect(v2.toJson(), ActiveExportColumnConfiguration().toJson());
-    });
-  });
 
   group('CsvExportSettings', (){
     test('should be able to recreate all values from json', () {
@@ -225,17 +195,14 @@ void main() {
         fieldDelimiter: 'asdfghjklö',
         textDelimiter: 'asdfghjklö2',
         exportHeadline: false,
-        exportFieldsConfiguration: ActiveExportColumnConfiguration(
-          activePreset: ExportImportPreset.myHeart,
-          userSelectedColumnIds: ['a', 'b', 'c'],
-        ),
+        activePreset: 'test preset 1',
       );
       final fromJson = CsvExportSettings.fromJson(initial.toJson());
 
       expect(initial.fieldDelimiter, fromJson.fieldDelimiter);
       expect(initial.textDelimiter, fromJson.textDelimiter);
       expect(initial.exportHeadline, fromJson.exportHeadline);
-      expect(initial.exportFieldsConfiguration.toJson(), fromJson.exportFieldsConfiguration.toJson());
+      expect(initial.activePreset, fromJson.activePreset);
 
       expect(initial.toJson(), fromJson.toJson());
     });
@@ -256,7 +223,7 @@ void main() {
       expect(v1.fieldDelimiter, CsvExportSettings().fieldDelimiter);
       expect(v2.exportHeadline, CsvExportSettings().exportHeadline);
       expect(v3.textDelimiter, CsvExportSettings().textDelimiter);
-      expect(v3.exportFieldsConfiguration.toJson(), CsvExportSettings().exportFieldsConfiguration.toJson());
+      expect(v3.activePreset, CsvExportSettings().activePreset);
     });
   });
 
@@ -270,10 +237,6 @@ void main() {
         cellHeight: 67.89,
         headerFontSize: 67.89,
         cellFontSize: 67.89,
-        exportFieldsConfiguration: ActiveExportColumnConfiguration(
-          activePreset: ExportImportPreset.myHeart,
-          userSelectedColumnIds: ['a', 'b', 'c'],
-        ),
       );
       final fromJson = PdfExportSettings.fromJson(initial.toJson());
 
@@ -284,7 +247,6 @@ void main() {
       expect(initial.cellHeight, fromJson.cellHeight);
       expect(initial.headerFontSize, fromJson.headerFontSize);
       expect(initial.cellFontSize, fromJson.cellFontSize);
-      expect(initial.exportFieldsConfiguration.toJson(), fromJson.exportFieldsConfiguration.toJson());
 
       expect(initial.toJson(), fromJson.toJson());
     });

@@ -1,12 +1,13 @@
 import 'dart:io';
 
+import 'package:blood_pressure_app/features/export_import/model/column.dart';
+import 'package:blood_pressure_app/features/export_import/model/csv_converter.dart';
+import 'package:blood_pressure_app/features/export_import/model/export_preset.dart';
+import 'package:blood_pressure_app/features/export_import/model/record_parsing_result.dart';
 import 'package:blood_pressure_app/features/input/forms/add_entry_form.dart';
-import 'package:blood_pressure_app/model/export_import/column.dart';
-import 'package:blood_pressure_app/model/export_import/csv_converter.dart';
-import 'package:blood_pressure_app/model/export_import/export_configuration.dart';
-import 'package:blood_pressure_app/model/export_import/record_parsing_result.dart';
 import 'package:blood_pressure_app/model/storage/export_columns_store.dart';
 import 'package:blood_pressure_app/model/storage/export_csv_settings.dart';
+import 'package:blood_pressure_app/model/storage/export_settings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:health_data_store/health_data_store.dart';
@@ -15,15 +16,13 @@ import 'record_formatter_test.dart';
 
 void main() {
   test('should create csv string bigger than 0', () {
-    final converter = CsvConverter(CsvExportSettings(), ExportColumnsManager(), []);
-    final csv = converter.create(createRecords());
+    final csv = _defaultConverter.create(createRecords());
     expect(csv.length, isNonZero);
   });
 
   test('should create first line', () {
-    final converter = CsvConverter(CsvExportSettings(), ExportColumnsManager(), []);
-    final csv = converter.create([]);
-    final columns = CsvExportSettings().exportFieldsConfiguration.getActiveColumns(ExportColumnsManager());
+    final csv = _defaultConverter.create([]);
+    final columns = ExportColumnsManager().resolveColumns(ExportPreset.appDefault.columns);
     expect(csv, stringContainsInOrder(columns.map((e) => e.csvTitle).toList()));
   });
 
@@ -32,17 +31,17 @@ void main() {
       CsvExportSettings(exportHeadline: false),
       ExportColumnsManager(),
       [],
+      ExportSettings(),
     );
     final csv = converter.create([]);
-    final columns = CsvExportSettings().exportFieldsConfiguration.getActiveColumns(ExportColumnsManager());
+    final columns = ExportColumnsManager().resolveColumns(ExportPreset.appDefault.columns);
     expect(csv, isNot(stringContainsInOrder(columns.map((e) => e.csvTitle).toList())));
   });
 
   test('should be able to recreate records from csv in default configuration', () {
-    final converter = CsvConverter(CsvExportSettings(), ExportColumnsManager(), []);
     final List<(DateTime, BloodPressureRecord, Note, List<MedicineIntake>, Weight?)> initialRecords = createRecords();
-    final csv = converter.create(initialRecords);
-    final List<AddEntryFormValue> parsedRecords = converter.parse(csv).getOr(failParse);
+    final csv = _defaultConverter.create(initialRecords);
+    final List<AddEntryFormValue> parsedRecords = _defaultConverter.parse(csv).getOr(failParse);
 
     expect(parsedRecords, pairwiseCompare(initialRecords,
       ((DateTime, BloodPressureRecord, Note, List<MedicineIntake>, Weight?) p0, AddEntryFormValue p1) =>
@@ -57,11 +56,7 @@ void main() {
   test('should allow partial imports', () {
     final text = File('test/model/export_import/exported_formats/incomplete_export.csv').readAsStringSync();
 
-    final converter = CsvConverter(
-      CsvExportSettings(),
-      ExportColumnsManager(),
-      [],
-    );
+    final converter = _defaultConverter;
     final parsed = converter.parse(text);
     final records = parsed.getOr(failParse);
     expect(records, isNotNull);
@@ -96,11 +91,7 @@ void main() {
   test('should import v1.0.0 measurements', () {
     final text = File('test/model/export_import/exported_formats/v1.0.csv').readAsStringSync();
 
-    final converter = CsvConverter(
-      CsvExportSettings(),
-      ExportColumnsManager(),
-      [],
-    );
+    final converter = _defaultConverter;
     final parsed = converter.parse(text);
     final records = parsed.getOr(failParse);
     expect(records, isNotNull);
@@ -124,11 +115,7 @@ void main() {
   test('should import v1.1.0 measurements', () {
     final text = File('test/model/export_import/exported_formats/v1.1.0').readAsStringSync();
 
-    final converter = CsvConverter(
-      CsvExportSettings(),
-      ExportColumnsManager(),
-      [],
-    );
+    final converter = _defaultConverter;
     final parsed = converter.parse(text);
     final records = parsed.getOr(failParse);
     expect(records, isNotNull);
@@ -152,11 +139,7 @@ void main() {
   test('should import v1.4.0 measurements', () {
     final text = File('test/model/export_import/exported_formats/v1.4.0.CSV').readAsStringSync();
 
-    final converter = CsvConverter(
-      CsvExportSettings(),
-      ExportColumnsManager(),
-      [],
-    );
+    final converter = _defaultConverter;
     final parsed = converter.parse(text);
     final records = parsed.getOr(failParse);
     expect(records, isNotNull);
@@ -187,11 +170,7 @@ void main() {
   test('should import v1.5.1 measurements', () {
     final text = File('test/model/export_import/exported_formats/v1.5.1.csv').readAsStringSync();
 
-    final converter = CsvConverter(
-      CsvExportSettings(),
-      ExportColumnsManager(),
-      [],
-    );
+    final converter = _defaultConverter;
     final parsed = converter.parse(text);
     final records = parsed.getOr(failParse);
     expect(records, isNotNull);
@@ -225,11 +204,7 @@ void main() {
   test('should import v1.5.7 measurements', () {
     final text = File('test/model/export_import/exported_formats/v1.5.7.csv').readAsStringSync();
 
-    final converter = CsvConverter(
-      CsvExportSettings(),
-      ExportColumnsManager(),
-      [],
-    );
+    final converter = _defaultConverter;
     final parsed = converter.parse(text);
     final records = parsed.getOr(failParse);
     expect(records, isNotNull);
@@ -264,11 +239,7 @@ void main() {
   test('should import v1.5.8 measurements', () {
     final text = File('test/model/export_import/exported_formats/v1.5.8.csv').readAsStringSync();
 
-    final converter = CsvConverter(
-      CsvExportSettings(),
-      ExportColumnsManager(),
-      [],
-    );
+    final converter = _defaultConverter;
     final parsed = converter.parse(text);
     final records = parsed.getOr(failParse);
     expect(records, isNotNull);
@@ -311,16 +282,15 @@ void main() {
     final text = File('test/model/export_import/exported_formats/formatted_times.csv').readAsStringSync();
 
     final cols = ExportColumnsManager();
+    final exportSettings = ExportSettings(presets: [ExportPreset('none', [], true)]);
     cols.addOrUpdate(TimeColumn('someTime', 'yyyy-MM-dd HH:mm'));
     final converter = CsvConverter(
       CsvExportSettings(
-        exportFieldsConfiguration: ActiveExportColumnConfiguration(
-          activePreset: ExportImportPreset.none,
-          userSelectedColumnIds: [],
-        )
+        activePreset: 'none',
       ),
       cols,
       [],
+      exportSettings,
     );
     final parsed = converter.parse(text);
 
@@ -356,11 +326,7 @@ void main() {
   test("Doesn't invent empty comments", () {
     final text = File('test/model/export_import/exported_formats/empty_notes.csv').readAsStringSync();
 
-    final converter = CsvConverter(
-      CsvExportSettings(),
-      ExportColumnsManager(),
-      [],
-    );
+    final converter = _defaultConverter;
     final parsed = converter.parse(text);
     final records = parsed.getOr(failParse);
     expect(records, isNotNull);
@@ -392,3 +358,10 @@ List<AddEntryFormValue>? failParse(EntryParsingError error) {
       fail('Parsing failed because field ${error.fieldContents} in line ${error.lineNumber} is not parsable.');
   }
 }
+
+CsvConverter get _defaultConverter => CsvConverter(
+  CsvExportSettings(),
+  ExportColumnsManager(),
+  [],
+  ExportSettings(),
+);

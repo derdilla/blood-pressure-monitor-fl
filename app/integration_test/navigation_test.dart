@@ -1,7 +1,7 @@
 
 import 'package:blood_pressure_app/app.dart';
-import 'package:blood_pressure_app/features/export_import/add_export_column_dialog.dart';
-import 'package:blood_pressure_app/features/export_import/export_column_management_screen.dart';
+import 'package:blood_pressure_app/features/export_import/ui/add_export_column_dialog.dart';
+import 'package:blood_pressure_app/features/export_import/ui/export_column_management_screen.dart';
 import 'package:blood_pressure_app/features/settings/add_medication_dialog.dart';
 import 'package:blood_pressure_app/features/settings/delete_data_screen.dart';
 import 'package:blood_pressure_app/features/settings/enter_timeformat_dialog.dart';

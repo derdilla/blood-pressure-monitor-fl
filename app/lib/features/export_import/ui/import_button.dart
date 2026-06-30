@@ -1,10 +1,10 @@
 import 'dart:convert';
 
-import 'package:blood_pressure_app/features/export_import/import_preview_dialog.dart';
+import 'package:blood_pressure_app/features/export_import/model/csv_converter.dart';
+import 'package:blood_pressure_app/features/export_import/model/csv_record_parsing_actor.dart';
+import 'package:blood_pressure_app/features/export_import/ui/import_preview_dialog.dart';
 import 'package:blood_pressure_app/features/input/forms/add_entry_form.dart';
 import 'package:blood_pressure_app/l10n/app_localizations.dart';
-import 'package:blood_pressure_app/model/export_import/csv_converter.dart';
-import 'package:blood_pressure_app/model/export_import/csv_record_parsing_actor.dart';
 import 'package:blood_pressure_app/model/storage/storage.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
@@ -25,6 +25,7 @@ class ImportButton extends StatelessWidget {
     onPressed: () async {
       final localizations = AppLocalizations.of(context)!;
       final messenger = ScaffoldMessenger.of(context);
+      final exportSettings = context.read<ExportSettings>();
 
       final file = (await FilePicker.pickFiles(
         withData: true,
@@ -48,6 +49,7 @@ class ImportButton extends StatelessWidget {
             csvSettings,
             exportColumnsManager,
             await RepositoryProvider.of<MedicineRepository>(context).getAll(),
+            exportSettings,
           );
           if (!context.mounted) return;
           final importedRecords = await showImportPreview(

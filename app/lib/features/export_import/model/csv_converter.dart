@@ -1,10 +1,12 @@
+import 'package:blood_pressure_app/features/export_import/model/column.dart';
+import 'package:blood_pressure_app/features/export_import/model/export_preset.dart';
+import 'package:blood_pressure_app/features/export_import/model/import_field_type.dart' show RowDataFieldType;
+import 'package:blood_pressure_app/features/export_import/model/record_parsing_result.dart';
 import 'package:blood_pressure_app/features/input/forms/add_entry_form.dart';
 import 'package:blood_pressure_app/logging.dart';
-import 'package:blood_pressure_app/model/export_import/column.dart';
-import 'package:blood_pressure_app/model/export_import/import_field_type.dart' show RowDataFieldType;
-import 'package:blood_pressure_app/model/export_import/record_parsing_result.dart';
 import 'package:blood_pressure_app/model/storage/export_columns_store.dart';
 import 'package:blood_pressure_app/model/storage/export_csv_settings.dart';
+import 'package:blood_pressure_app/model/storage/export_settings.dart';
 import 'package:collection/collection.dart';
 import 'package:csv/csv.dart';
 import 'package:health_data_store/health_data_store.dart';
@@ -12,13 +14,7 @@ import 'package:health_data_store/health_data_store.dart';
 /// Utility class to convert between csv strings and [BloodPressureRecord]s.
 class CsvConverter with TypeLogger {
   /// Create converter between csv strings and [BloodPressureRecord] values that respects settings.
-  CsvConverter(this.settings, this.availableColumns, this.availableMedicines) {
-    logger.fine('Creating CsvConverter with '
-        'settings=${settings.toJson()}, '
-        'availableColumns=$availableColumns, ',
-        'availableMedicines=$availableMedicines'
-    );
-  }
+  CsvConverter(this.settings, this.availableColumns, this.availableMedicines, this.exportSettings);
 
   /// Settings that apply for ex- and import.
   final CsvExportSettings settings;
@@ -29,9 +25,14 @@ class CsvConverter with TypeLogger {
   /// Medicines to choose from during import.
   final List<Medicine> availableMedicines;
 
+  final ExportSettings exportSettings;
+
   /// Create the contents of a csv file from passed records.
   String create(List<(DateTime, BloodPressureRecord, Note, List<MedicineIntake>, Weight?)> entries) {
-    final columns = settings.exportFieldsConfiguration.getActiveColumns(availableColumns);
+    final preset = exportSettings.getPresetById(settings.activePreset);
+    if (preset == null) return 'Error: No such preset: $preset';
+    final columns = availableColumns.resolveColumns(preset.columns);
+
     final table = entries.map(
       (entry) => columns.map(
         (column) => column.encode(entry.$2, entry.$3, entry.$4, entry.$5),

@@ -1,9 +1,8 @@
 import 'dart:convert';
 
+import 'package:blood_pressure_app/features/export_import/model/import_field_type.dart';
+import 'package:blood_pressure_app/features/export_import/model/record_formatter.dart';
 import 'package:blood_pressure_app/l10n/app_localizations.dart';
-import 'package:blood_pressure_app/model/export_import/export_configuration.dart';
-import 'package:blood_pressure_app/model/export_import/import_field_type.dart';
-import 'package:blood_pressure_app/model/export_import/record_formatter.dart';
 import 'package:health_data_store/health_data_store.dart';
 
 // TODO: respect preferred Pressure unit
@@ -13,8 +12,6 @@ class NativeColumn extends ExportColumn {
   NativeColumn._create(this._csvTitle, this._restoreableType, this._encode, this._decode);
 
   /// All native columns that exist.
-  ///
-  /// They are all part of [ExportImportPreset.bloodPressureApp].
   static final List<NativeColumn> allColumns = [
     timestampUnixMs,
     systolic,

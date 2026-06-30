@@ -1,5 +1,5 @@
 import 'package:blood_pressure_app/components/fullscreen_dialog.dart';
-import 'package:blood_pressure_app/features/export_import/export_field_format_documentation_screen.dart';
+import 'package:blood_pressure_app/features/export_import/ui/export_field_format_documentation_screen.dart';
 import 'package:blood_pressure_app/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown_plus/flutter_markdown_plus.dart';

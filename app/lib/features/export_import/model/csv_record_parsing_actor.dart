@@ -1,9 +1,9 @@
 
 import 'dart:collection';
 
-import 'package:blood_pressure_app/model/export_import/column.dart';
-import 'package:blood_pressure_app/model/export_import/csv_converter.dart';
-import 'package:blood_pressure_app/model/export_import/record_parsing_result.dart';
+import 'package:blood_pressure_app/features/export_import/model/column.dart';
+import 'package:blood_pressure_app/features/export_import/model/csv_converter.dart';
+import 'package:blood_pressure_app/features/export_import/model/record_parsing_result.dart';
 
 /// A intermediate class usable by UI components to drive csv parsing.
 class CsvRecordParsingActor {

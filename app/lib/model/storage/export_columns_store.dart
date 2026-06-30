@@ -1,7 +1,7 @@
 import 'dart:collection';
 import 'dart:convert';
 
-import 'package:blood_pressure_app/model/export_import/column.dart';
+import 'package:blood_pressure_app/features/export_import/model/column.dart';
 import 'package:flutter/material.dart';
 import 'package:settings_annotation/settings_annotation.dart';
 
@@ -106,12 +106,22 @@ class ExportColumnsManager extends ChangeNotifier implements SettingsGroup {
   /// Returns a list of all userColumns, NativeColumns and BuildInColumns defined.
   ///
   /// Prefer using other methods like [firstWhere] when possible.
-  UnmodifiableListView<ExportColumn> getAllColumns() {
-    final columns = <ExportColumn>[];
-    columns.addAll(NativeColumn.allColumns);
-    columns.addAll(userColumns.values);
-    columns.addAll(BuildInColumn.allColumns);
-    return UnmodifiableListView(columns);
+  List<ExportColumn> getAllColumns() => [
+    ...NativeColumn.allColumns,
+    ...userColumns.values,
+    ...BuildInColumn.allColumns,
+  ];
+
+  List<ExportColumn> resolveColumns(List<String> columnIds) {
+    final columnMap = {
+      for (final c in getAllColumns())
+        c.internalIdentifier: c,
+    };
+    return [
+      for (final id in columnIds)
+        if (columnMap.containsKey(id))
+          columnMap[id]!,
+    ];
   }
 
   /// Returns a list of all NativeColumns and BuildInColumns defined.
