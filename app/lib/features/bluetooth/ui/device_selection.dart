@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:blood_pressure_app/features/bluetooth/backend/bluetooth_backend.dart';
 import 'package:blood_pressure_app/features/bluetooth/ui/input_card.dart';
 import 'package:blood_pressure_app/l10n/app_localizations.dart';
@@ -24,7 +26,7 @@ class DeviceSelection extends StatelessWidget {
       title: Text(AppLocalizations.of(context)!.availableDevices),
       child: ConstrainedBox(
         constraints: BoxConstraints(
-          //maxHeight: min(400.0, MediaQuery.of(context).size.height)
+          maxHeight: min(400.0, MediaQuery.of(context).size.height)
         ),
         child: ListView(
           shrinkWrap: true,
