@@ -1,5 +1,4 @@
-// TODO: cleanup types
-// ignore_for_file: strict_raw_type
+import 'dart:math';
 
 import 'package:blood_pressure_app/features/bluetooth/backend/bluetooth_backend.dart';
 import 'package:blood_pressure_app/features/bluetooth/ui/input_card.dart';
@@ -20,7 +19,36 @@ class DeviceSelection extends StatelessWidget {
   /// Called when the user accepts the device.
   final void Function(BluetoothDevice) onAccepted;
 
-  Widget _buildDeviceTile(BuildContext context, BluetoothDevice dev) => ListTile(
+  @override
+  Widget build(BuildContext context) {
+    assert(scanResults.isNotEmpty);
+    return InputCard(
+      title: Text(AppLocalizations.of(context)!.availableDevices),
+      child: ConstrainedBox(
+        constraints: BoxConstraints(
+          maxHeight: min(400.0, MediaQuery.of(context).size.height)
+        ),
+        child: ListView(
+          shrinkWrap: true,
+          children: [
+            for (final dev in scanResults)
+              _DeviceTile(dev, onAccepted),
+          ]
+        ),
+      ),
+    );
+  }
+}
+
+class _DeviceTile extends StatelessWidget {
+  const _DeviceTile(this.dev, this.onAccepted);
+
+  final BluetoothDevice dev;
+
+  final void Function(BluetoothDevice) onAccepted;
+
+  @override
+  Widget build(BuildContext context) => ListTile(
     title: Text(dev.name),
     trailing: FilledButton(
       onPressed: () => onAccepted(dev),
@@ -28,20 +56,4 @@ class DeviceSelection extends StatelessWidget {
     ),
     onTap: () => onAccepted(dev),
   );
-
-  @override
-  Widget build(BuildContext context) {
-    assert(scanResults.isNotEmpty);
-    return InputCard(
-      title: Text(AppLocalizations.of(context)!.availableDevices),
-      child: ListView(
-        shrinkWrap: true,
-        children: [
-          for (final dev in scanResults)
-            _buildDeviceTile(context, dev),
-        ]
-      ),
-    );
-  }
-
 }

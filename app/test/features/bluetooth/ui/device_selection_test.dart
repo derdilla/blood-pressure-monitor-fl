@@ -1,9 +1,8 @@
-import 'dart:ui';
-
 import 'package:blood_pressure_app/features/bluetooth/backend/bluetooth_backend.dart';
 import 'package:blood_pressure_app/features/bluetooth/ui/device_selection.dart';
 import 'package:blood_pressure_app/l10n/app_localizations.dart';
 import 'package:bluetooth_low_energy/bluetooth_low_energy.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../../../util.dart';
@@ -76,5 +75,32 @@ void main() {
     final localizations = await AppLocalizations.delegate.load(const Locale('en'));
     expect(find.text(localizations.connect), findsNWidgets(3));
   });
-  // Inside ListView
+
+  testWidgets('Handles long lists correctly', (WidgetTester tester) async {
+    BluetoothDevice getDev(int i) => MockBluetoothDevice(MockCentralManager(), DiscoveredEventArgs(MockPeripheral('00000000-0000-0000-0000-001234567${i.toString().padLeft(3,'0')}'), -1, MockAdvertisement('dev$i')));
+
+    await tester.pumpWidget(materialApp(ListView(
+      children: [
+        DeviceSelection(
+          scanResults: [
+            for (int i = 1; i < 20; i++)
+              getDev(i)
+          ],
+          onAccepted: (dev) => fail('No entry tapped'),
+        ),
+        SizedBox(height: 400),
+      ],
+    )));
+    await tester.pumpAndSettle();
+
+    final scrollable = find.descendant(
+        of: find.byType(DeviceSelection),
+        matching: find.byType(Scrollable),
+    );
+    expect(scrollable, findsOneWidget);
+    expect(find.text('dev10').hitTestable(), findsNothing);
+    await tester.scrollUntilVisible(find.text('dev10'), 200.0,
+        scrollable: scrollable);
+    expect(find.text('dev10').hitTestable(), findsOneWidget);
+  });
 }
