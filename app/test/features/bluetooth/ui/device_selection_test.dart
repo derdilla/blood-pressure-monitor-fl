@@ -76,5 +76,5 @@ void main() {
     final localizations = await AppLocalizations.delegate.load(const Locale('en'));
     expect(find.text(localizations.connect), findsNWidgets(3));
   });
-  // Inside ListView
+
 }
