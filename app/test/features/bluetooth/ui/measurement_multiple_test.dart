@@ -55,6 +55,7 @@ void main() {
     await tester.pumpWidget(materialApp(MeasurementMultiple(
       onClosed: () => tapCount++,
       onSelect: selected.add,
+      onSelectAll: (_) {},
       measurements: measurements,
     )));
 
@@ -82,5 +83,38 @@ void main() {
     await tester.tap(find.byIcon(Icons.close));
     await tester.pump();
     expect(tapCount, 1);
+  });
+
+  testWidgets('imports all measurements when import all is clicked', (WidgetTester tester) async {
+    final measurements = [
+      BleMeasurementData(
+        systolic: 123,
+        diastolic: 78,
+        meanArterialPressure: 90,
+        isMMHG: true,
+      ),
+      BleMeasurementData(
+        systolic: 124,
+        diastolic: 79,
+        meanArterialPressure: 91,
+        isMMHG: true,
+      ),
+    ];
+    List<BleMeasurementData>? importedAll;
+
+    await tester.pumpWidget(materialApp(MeasurementMultiple(
+      onClosed: () {},
+      onSelect: (_) {},
+      onSelectAll: (data) => importedAll = data,
+      measurements: measurements,
+    )));
+
+    final localizations = await AppLocalizations.delegate.load(const Locale('en'));
+    await tester.tap(find.text(localizations.importAll(measurements.length)));
+    await tester.pump();
+
+    expect(importedAll, isNotNull);
+    expect(importedAll!.length, 2);
+    expect(importedAll, containsAll(measurements));
   });
 }

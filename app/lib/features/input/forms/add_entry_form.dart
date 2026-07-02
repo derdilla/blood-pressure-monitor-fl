@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:blood_pressure_app/features/bluetooth/backend/bluetooth_backend.dart';
 import 'package:blood_pressure_app/features/bluetooth/bluetooth_input.dart';
 import 'package:blood_pressure_app/features/bluetooth/logic/bluetooth_cubit.dart';
+import 'package:blood_pressure_app/features/export_import/export_button.dart';
 import 'package:blood_pressure_app/features/input/forms/blood_pressure_form.dart';
 import 'package:blood_pressure_app/features/input/forms/date_time_form.dart';
 import 'package:blood_pressure_app/features/input/forms/form_base.dart';
@@ -20,7 +21,6 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:health_data_store/health_data_store.dart';
-import 'package:provider/provider.dart';
 
 /// Primary form to enter all types of entries.
 class AddEntryForm extends FormBase<AddEntryFormValue> with TypeLogger {
@@ -304,6 +304,29 @@ class AddEntryFormState extends FormStateBase<AddEntryFormValue, AddEntryForm>
     ));
   }
 
+  /// Gets called on inputs from a bluetooth device or similar. (multiple records)
+  Future<void> _onExternalMeasurements(List<BloodPressureRecord> records) async {
+    if (records.isEmpty) return;
+    final localizations = AppLocalizations.of(context)!;
+    final repo = RepositoryProvider.of<BloodPressureRepository>(context);
+    final messenger = ScaffoldMessenger.of(context);
+    final navigator = Navigator.of(context);
+    final exportSettings = context.read<ExportSettings>();
+
+    for (final record in records) {
+      await repo.add(record);
+    }
+    if (!mounted) return;
+
+    messenger.showSnackBar(SnackBar(
+      content: Text(localizations.measurementsImported(records.length)),
+    ));
+    if (exportSettings.exportAfterEveryEntry) {
+      performExport(context, false);
+    }
+    navigator.pop();
+  }
+
   @override
   Widget build(BuildContext context) {
     final settings = context.watch<Settings>();
@@ -320,6 +343,7 @@ class AddEntryFormState extends FormStateBase<AddEntryFormValue, AddEntryForm>
           BluetoothInputMode.newBluetoothInputCrossPlatform => BluetoothInput(
             manager: BluetoothManager.create(),
             onMeasurement: _onExternalMeasurement,
+            onAllMeasurements: _onExternalMeasurements,
             bluetoothCubit: widget.bluetoothCubit,
           ),
         })(),

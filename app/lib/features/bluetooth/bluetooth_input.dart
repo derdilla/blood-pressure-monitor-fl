@@ -26,6 +26,7 @@ class BluetoothInput extends StatefulWidget {
   /// Create a measurement input through bluetooth.
   const BluetoothInput({super.key,
     required this.onMeasurement,
+    required this.onAllMeasurements,
     required this.manager,
     this.bluetoothCubit,
     this.deviceScanCubit,
@@ -37,6 +38,9 @@ class BluetoothInput extends StatefulWidget {
 
   /// Called when a measurement was received through bluetooth.
   final void Function(BloodPressureRecord data) onMeasurement;
+
+  /// Called when the user chooses to import all received measurements through bluetooth.
+  final void Function(List<BloodPressureRecord> data) onAllMeasurements;
 
   /// Function to customize [BluetoothCubit] creation.
   final BluetoothCubit Function()? bluetoothCubit;
@@ -217,6 +221,12 @@ class _BluetoothInputState extends State<BluetoothInput> with TypeLogger {
           BleReadMultiple() => MeasurementMultiple(
             onClosed: _returnToIdle,
             onSelect: (data) => _deviceReadCubit!.useMeasurement(data),
+            onSelectAll: (data) {
+              widget.onAllMeasurements(
+                data.map((e) => e.asBloodPressureRecord()).toList(),
+              );
+              _returnToIdle();
+            },
             measurements: state.data,
           ),
           BleReadSuccess() => MeasurementSuccess(

@@ -343,6 +343,24 @@
   "@select": {
     "description": "Used when f.e. selecting a single measurement when the bluetooth device returned multiple"
   },
+  "importAll": "Import all ({count})",
+  "@importAll": {
+    "description": "Button to import every measurement returned by a bluetooth device.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "measurementsImported": "{count} measurements imported",
+  "@measurementsImported": {
+    "description": "Confirmation shown after importing all measurements returned by a bluetooth device.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "bloodPressure": "Blood pressure",
   "preferredWeightUnit": "Preferred weight unit",
   "@preferredWeightUnit": {
