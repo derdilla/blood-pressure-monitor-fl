@@ -53,6 +53,7 @@ void main() {
     await tester.pumpWidget(materialApp(BluetoothInput(
       manager: MockBluetoothManager(),
       onMeasurement: reads.add,
+      onAllMeasurements: (_) {},
       bluetoothCubit: () => bluetoothCubit,
       deviceScanCubit: () => deviceScanCubit,
       bleReadCubit: () => bleReadCubit,
@@ -90,6 +91,7 @@ void main() {
     await tester.pumpWidget(materialApp(BluetoothInput(
       manager: MockBluetoothManager(),
       onMeasurement: reads.add,
+      onAllMeasurements: (_) {},
       bluetoothCubit: () => bluetoothCubit,
       deviceScanCubit: () => deviceScanCubit,
     )));
@@ -110,6 +112,7 @@ void main() {
     await tester.pumpWidget(materialApp(BluetoothInput(
       manager: MockBluetoothManager(),
       onMeasurement: (_) {},
+      onAllMeasurements: (_) {},
       bluetoothCubit: () => bluetoothCubit,
     )));
     expect(tester.takeException(), isNull);
