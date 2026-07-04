@@ -47,6 +47,7 @@ class WeightList extends StatelessWidget {
                     timestamp: records[idx].time,
                     note: null,
                     record: null,
+                    records: null,
                     intake: null,
                     weight: records[idx],
                   )),

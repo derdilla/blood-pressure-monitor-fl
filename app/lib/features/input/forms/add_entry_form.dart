@@ -222,6 +222,7 @@ class AddEntryFormState extends FormStateBase<AddEntryFormValue, AddEntryForm>
       timestamp: time,
       note: note,
       record: record,
+      records: null,
       intake: intake,
       weight: weight,
     );
@@ -299,6 +300,7 @@ class AddEntryFormState extends FormStateBase<AddEntryFormValue, AddEntryForm>
           : _timeForm.currentState?.save() ?? DateTime.now(),
       note: null,
       record: record,
+      records: null,
       intake: null,
       weight: null,
     ));
@@ -307,24 +309,24 @@ class AddEntryFormState extends FormStateBase<AddEntryFormValue, AddEntryForm>
   /// Gets called on inputs from a bluetooth device or similar. (multiple records)
   Future<void> _onExternalMeasurements(List<BloodPressureRecord> records) async {
     if (records.isEmpty) return;
-    final localizations = AppLocalizations.of(context)!;
-    final repo = RepositoryProvider.of<BloodPressureRepository>(context);
-    final messenger = ScaffoldMessenger.of(context);
-    final navigator = Navigator.of(context);
-    final exportSettings = context.read<ExportSettings>();
 
-    for (final record in records) {
-      await repo.add(record);
-    }
     if (!mounted) return;
+
+    final messenger = ScaffoldMessenger.of(context);
+    final localizations = AppLocalizations.of(context)!;
 
     messenger.showSnackBar(SnackBar(
       content: Text(localizations.measurementsImported(records.length)),
     ));
-    if (exportSettings.exportAfterEveryEntry) {
-      performExport(context, false);
-    }
-    navigator.pop();
+
+    fillForm((
+      timestamp: DateTime.now(),
+      note: null,
+      record: null,
+      records: records,
+      intake: null,
+      weight: null,
+    ));
   }
 
   @override
@@ -401,6 +403,7 @@ typedef AddEntryFormValue = ({
   DateTime timestamp,
   Note? note,
   BloodPressureRecord? record,
+  List<BloodPressureRecord>? records,
   MedicineIntake? intake,
   BodyweightRecord? weight,
 });
@@ -411,6 +414,7 @@ class _AddEntryFormValueBuilder {
   DateTime timestamp;
   Note? note;
   BloodPressureRecord? record;
+  List<BloodPressureRecord>? records;
   MedicineIntake? intake;
   BodyweightRecord? weight;
 
@@ -418,6 +422,7 @@ class _AddEntryFormValueBuilder {
     timestamp: timestamp,
     note: note,
     record: record,
+    records: records,
     intake: intake,
     weight: weight,
   );
