@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'package:blood_pressure_app/features/bluetooth/logic/characteristics/ble_measurement_data.dart';
 import 'package:blood_pressure_app/features/bluetooth/ui/input_card.dart';
 import 'package:blood_pressure_app/l10n/app_localizations.dart';
@@ -91,16 +92,13 @@ class MeasurementMultiple extends StatelessWidget {
             ),
           ),
           ConstrainedBox(
-            constraints: const BoxConstraints(maxHeight: 300),
-            child: ConstrainedBox(
-              constraints: const BoxConstraints(maxHeight: 300),
-              child: ListView(
-                shrinkWrap: true,
-                children: [
-                  for (final (index, data) in measurements.indexed)
-                    _buildMeasurementTile(context, index, data),
-                ]
-              ),
+            constraints: BoxConstraints(maxHeight: min(400.0, MediaQuery.of(context).size.height)),
+            child: ListView(
+              shrinkWrap: true,
+              children: [
+                for (final (index, data) in measurements.indexed)
+                  _buildMeasurementTile(context, index, data),
+              ]
             ),
           ),
         ],
