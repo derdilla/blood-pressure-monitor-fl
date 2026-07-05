@@ -37,6 +37,7 @@ Most devices provide 2 ways to retrieve measurements over bluetooth, but there a
 | Yonker YK-BPW5                            |                                   | Yonker protocol |   ?    |                           |
 | Yongrow YK-IBPA1                          |                                   | Yonker protocol |   ?    |                           |
 | METIKO MT-YK-BPA1                         |                                   | Yonker protocol |   ?    |                           |
+| Microlife BP3GY1-2N                       | BP3GY1-2N                         | Microlife protocol | ? | Downloads all stored measurements |
 
 
 ## Specifications

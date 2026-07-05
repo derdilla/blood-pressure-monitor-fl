@@ -203,7 +203,7 @@ void main() {
 
     key.currentState!.fillForm((
       timestamp: time.add(Duration(hours: 1)),
-      intake: null, note: null, record: null, weight: null,
+      intake: null, note: null, record: null, weight: null, records: null
     ));
     await tester.pump();
     expect(key.currentState?.validate(), false);
@@ -217,7 +217,7 @@ void main() {
     key.currentState!.fillForm((
       timestamp: DateTime.now(),
       record: mockRecord(sys: 123123),
-      note: null, intake: null, weight: null,
+      note: null, intake: null, weight: null, records: null
     ));
     await tester.pump();
     expect(key.currentState?.validate(), false);
@@ -261,6 +261,7 @@ void main() {
       intake: intake,
       note: Note(time: intake.time, note: '123test', color: Colors.teal.toARGB32()),
       record: mockRecord(time: intake.time, sys: 123, dia: 45, pul: 67),
+      records: null,
       weight: BodyweightRecord(time: intake.time, weight: Weight.kg(123.45))
     );
     await tester.pumpWidget(materialApp(AddEntryForm(
@@ -288,6 +289,7 @@ void main() {
       intake: intake,
       note: Note(time: intake.time, note: '123test', color: Colors.teal.toARGB32()),
       record: mockRecord(time: intake.time, sys: 123, dia: 45, pul: 67),
+      records: null,
       weight: BodyweightRecord(time: intake.time, weight: Weight.kg(123.45))
     );
     await tester.pumpWidget(materialApp(AddEntryForm(
@@ -402,6 +404,7 @@ void main() {
         timestamp: DateTime.now(),
         weight: BodyweightRecord(time:  DateTime.now(), weight: Weight.kg(123.0)),
         record: null,
+        records: null,
         note: null,
         intake: null,
       ),
@@ -423,6 +426,7 @@ void main() {
         timestamp: initialTime,
         weight: null,
         record: null,
+        records: null,
         note: null,
         intake: null,
       ),
@@ -457,6 +461,7 @@ void main() {
         timestamp: initialTime,
         weight: null,
         record: null,
+        records: null,
         note: null,
         intake: null,
       ),

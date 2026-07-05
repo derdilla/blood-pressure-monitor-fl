@@ -162,6 +162,7 @@ AddEntryFormValue mockEntry({
       dia: dia == null ? null : Pressure.mmHg(dia),
       pul: pul,
     ),
+    records: null,
     note: Note(
       time: time,
       note: note,

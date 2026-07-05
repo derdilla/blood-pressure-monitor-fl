@@ -35,6 +35,11 @@ class AddEntryScreen extends StatelessWidget {
         if (initialRecord?.weight != null) await weightRepo.remove(initialRecord!.weight!);
 
         if (entry.record != null) await recordRepo.add(entry.record!);
+        if (entry.records != null) {
+          for (final record in entry.records!) {
+            await recordRepo.add(record);
+          }
+        }
         if (entry.note != null) await noteRepo.add(entry.note!);
         if (entry.intake != null) await intakeRepo.add(entry.intake!);
         if (entry.weight != null) await weightRepo.add(entry.weight!);

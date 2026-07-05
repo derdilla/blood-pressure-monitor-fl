@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:blood_pressure_app/features/bluetooth/backend/bluetooth_backend.dart';
 import 'package:blood_pressure_app/features/bluetooth/bluetooth_input.dart';
 import 'package:blood_pressure_app/features/bluetooth/logic/bluetooth_cubit.dart';
+import 'package:blood_pressure_app/features/export_import/ui/export_button.dart';
 import 'package:blood_pressure_app/features/input/forms/blood_pressure_form.dart';
 import 'package:blood_pressure_app/features/input/forms/date_time_form.dart';
 import 'package:blood_pressure_app/features/input/forms/form_base.dart';
@@ -20,7 +21,6 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:health_data_store/health_data_store.dart';
-import 'package:provider/provider.dart';
 
 /// Primary form to enter all types of entries.
 class AddEntryForm extends FormBase<AddEntryFormValue> with TypeLogger {
@@ -222,6 +222,7 @@ class AddEntryFormState extends FormStateBase<AddEntryFormValue, AddEntryForm>
       timestamp: time,
       note: note,
       record: record,
+      records: null,
       intake: intake,
       weight: weight,
     );
@@ -299,6 +300,30 @@ class AddEntryFormState extends FormStateBase<AddEntryFormValue, AddEntryForm>
           : _timeForm.currentState?.save() ?? DateTime.now(),
       note: null,
       record: record,
+      records: null,
+      intake: null,
+      weight: null,
+    ));
+  }
+
+  /// Gets called on inputs from a bluetooth device or similar. (multiple records)
+  Future<void> _onExternalMeasurements(List<BloodPressureRecord> records) async {
+    if (records.isEmpty) return;
+
+    if (!mounted) return;
+
+    final messenger = ScaffoldMessenger.of(context);
+    final localizations = AppLocalizations.of(context)!;
+
+    messenger.showSnackBar(SnackBar(
+      content: Text(localizations.measurementsImported(records.length)),
+    ));
+
+    fillForm((
+      timestamp: DateTime.now(),
+      note: null,
+      record: null,
+      records: records,
       intake: null,
       weight: null,
     ));
@@ -320,6 +345,7 @@ class AddEntryFormState extends FormStateBase<AddEntryFormValue, AddEntryForm>
           BluetoothInputMode.newBluetoothInputCrossPlatform => BluetoothInput(
             manager: BluetoothManager.create(),
             onMeasurement: _onExternalMeasurement,
+            onAllMeasurements: _onExternalMeasurements,
             bluetoothCubit: widget.bluetoothCubit,
           ),
         })(),
@@ -377,6 +403,7 @@ typedef AddEntryFormValue = ({
   DateTime timestamp,
   Note? note,
   BloodPressureRecord? record,
+  List<BloodPressureRecord>? records,
   MedicineIntake? intake,
   BodyweightRecord? weight,
 });
@@ -387,6 +414,7 @@ class _AddEntryFormValueBuilder {
   DateTime timestamp;
   Note? note;
   BloodPressureRecord? record;
+  List<BloodPressureRecord>? records;
   MedicineIntake? intake;
   BodyweightRecord? weight;
 
@@ -394,6 +422,7 @@ class _AddEntryFormValueBuilder {
     timestamp: timestamp,
     note: note,
     record: record,
+    records: records,
     intake: intake,
     weight: weight,
   );

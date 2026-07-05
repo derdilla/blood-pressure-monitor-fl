@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'package:blood_pressure_app/features/bluetooth/logic/characteristics/ble_measurement_data.dart';
 import 'package:blood_pressure_app/features/bluetooth/ui/input_card.dart';
 import 'package:blood_pressure_app/l10n/app_localizations.dart';
@@ -5,12 +6,12 @@ import 'package:flutter/material.dart';
 
 /// Indication of a successful bluetooth read that returned multiple measurements.
 ///
-/// TODO: Some devices can store up to 100 measurements which could cause a very long ListView. Maybe optimize UI for that?
 class MeasurementMultiple extends StatelessWidget {
   /// Indicate a successful read while taking a bluetooth measurement.
   const MeasurementMultiple({super.key,
     required this.onClosed,
     required this.onSelect,
+    required this.onSelectAll,
     required this.measurements,
   });
 
@@ -22,6 +23,9 @@ class MeasurementMultiple extends StatelessWidget {
 
   /// Called when user selects a measurement
   final void Function(BleMeasurementData data) onSelect;
+
+  /// Called when the user chooses to import every measurement at once.
+  final void Function(List<BleMeasurementData> data) onSelectAll;
   
   Widget _buildMeasurementTile(BuildContext context, int index, BleMeasurementData data) {
     final localizations = AppLocalizations.of(context)!;
@@ -69,15 +73,35 @@ class MeasurementMultiple extends StatelessWidget {
       return aTimestamp > bTimestamp ? -1 : 1;
     });
 
+  final localizations = AppLocalizations.of(context)!;
   return InputCard(
       onClosed: onClosed,
-      title: Text(AppLocalizations.of(context)!.selectMeasurementTitle),
-      child: ListView(
-        shrinkWrap: true,
+      title: Text(localizations.selectMeasurementTitle),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
         children: [
-          for (final (index, data) in measurements.indexed)
-            _buildMeasurementTile(context, index, data),
-        ]
+          Padding(
+            padding: const EdgeInsets.only(bottom: 8),
+            child: SizedBox(
+              width: double.infinity,
+              child: FilledButton.icon(
+                onPressed: () => onSelectAll(measurements),
+                icon: const Icon(Icons.download),
+                label: Text(localizations.importAll(measurements.length)),
+              ),
+            ),
+          ),
+          ConstrainedBox(
+            constraints: BoxConstraints(maxHeight: min(400.0, MediaQuery.of(context).size.height)),
+            child: ListView(
+              shrinkWrap: true,
+              children: [
+                for (final (index, data) in measurements.indexed)
+                  _buildMeasurementTile(context, index, data),
+              ]
+            ),
+          ),
+        ],
       ),
     );
   }

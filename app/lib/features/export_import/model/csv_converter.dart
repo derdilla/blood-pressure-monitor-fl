@@ -201,6 +201,7 @@ class CsvConverter with TypeLogger {
         intake: intakes?.firstOrNull,
         note: note,
         record: record,
+        records: null,
         weight: weight,
       ));
       if (intakes != null && intakes.length > 1) {
@@ -213,7 +214,7 @@ class CsvConverter with TypeLogger {
               medicine: intakes[i].medicine,
               dosis: intakes[i].dosis,
             ),
-            note: null, record: null, weight: null,
+            note: null, record: null, weight: null, records: null
           ));
         }
       }
