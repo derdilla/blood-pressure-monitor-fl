@@ -234,6 +234,8 @@
   "exportPdfExportData": "Data table",
   "startWithAddMeasurementPage": "Measurement on launch",
   "startWithAddMeasurementPageDescription": "Upon app launch, measurement input screen shown.",
+  "autostartBluetoothInput": "Auto-start Bluetooth import",
+  "autostartBluetoothInputDescription": "When Bluetooth input is enabled and Bluetooth is on, automatically start importing on the measurement input screen.",
   "horizontalLines": "Horizontal lines",
   "linePositionY": "Line position (y)",
   "customGraphMarkings": "Custom markings",

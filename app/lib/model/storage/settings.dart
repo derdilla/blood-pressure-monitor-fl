@@ -95,6 +95,10 @@ class _SettingsSpec extends ChangeNotifier {
   /// Whether to show the add measurement page on app launch.
   final startWithAddMeasurementPage = Setting<bool>(initialValue: false);
 
+  /// Whether to automatically start the bluetooth measurement import 
+  /// when bluetooth input is enabled and bluetooth is on.
+  final autostartBluetoothInput = Setting<bool>(initialValue: false);
+
   /// Whether to use the compact list with swipe deletion.
   final compactList = Setting<bool>(
     name: 'useLegacyList',

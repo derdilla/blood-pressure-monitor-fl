@@ -24,7 +24,8 @@ import 'package:health_data_store/health_data_store.dart';
 /// Class for inputting measurement through bluetooth.
 class BluetoothInput extends StatefulWidget {
   /// Create a measurement input through bluetooth.
-  const BluetoothInput({super.key,
+  const BluetoothInput({
+    super.key,
     required this.onMeasurement,
     required this.onAllMeasurements,
     required this.manager,
@@ -64,6 +65,7 @@ class BluetoothInput extends StatefulWidget {
 class _BluetoothInputState extends State<BluetoothInput> with TypeLogger {
   /// Whether the user initiated reading bluetooth input
   bool _isActive = false;
+  bool _hasAutostarted = false;
 
   late final BluetoothCubit _bluetoothCubit;
   DeviceScanCubit? _deviceScanCubit;
@@ -108,6 +110,26 @@ class _BluetoothInputState extends State<BluetoothInput> with TypeLogger {
     _bluetoothSubscription = null;
   }
 
+  /// Automatically start the input when bluetooth auto-import is enabled
+  void _maybeAutostart(Settings settings, BluetoothState state) {
+    if (!settings.autostartBluetoothInput ||
+        _hasAutostarted ||
+        _isActive ||
+        _finishedData != null ||
+        state is! BluetoothStateReady) {
+      return;
+    }
+    logger.finer('_maybeAutostart: starting bluetooth input');
+    _hasAutostarted = true;
+    // Handle the case where the adapter is already ready when this is built.
+    // See the call site before BlocListener below.
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted && !_isActive && _finishedData == null) {
+        setState(() => _isActive = true);
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     const SizeChangedLayoutNotification().dispatch(context);
@@ -124,29 +146,40 @@ class _BluetoothInputState extends State<BluetoothInput> with TypeLogger {
       return _buildActive(context);
     }
 
-    return ClosedBluetoothInput(
-      bluetoothCubit: _bluetoothCubit,
-      onStarted: () async {
-        setState(() => _isActive = true);
-      },
-      inputInfo: () async {
-        logger.finer('build.inputInfo[mounted: ${context.mounted}]');
-        if (context.mounted) {
-          await showDialog<void>(
-            context: context,
-            builder: (BuildContext context) => AlertDialog(
-              title: Text(AppLocalizations.of(context)!.bluetoothInput),
-              content: Text(AppLocalizations.of(context)!.aboutBleInput),
-              actions: <Widget>[
-                ElevatedButton(
-                  child: Text((AppLocalizations.of(context)!.btnConfirm)),
-                  onPressed: () => Navigator.of(context).pop(),
-                ),
-              ],
-            ),
-          );
-        }
-      },
+    final settings = context.watch<Settings>();
+    // Handle the case where the adapter is already ready when this is built.
+    // Most common case I think
+    _maybeAutostart(settings, _bluetoothCubit.state);
+
+    // Listen on the cubit and trigger import if the adapter is enabled 
+    // while we are on the import screen, also let the user cancel
+    return BlocListener<BluetoothCubit, BluetoothState>(
+      bloc: _bluetoothCubit,
+      listener: (context, state) => _maybeAutostart(settings, state),
+      child: ClosedBluetoothInput(
+        bluetoothCubit: _bluetoothCubit,
+        onStarted: () async {
+          setState(() => _isActive = true);
+        },
+        inputInfo: () async {
+          logger.finer('build.inputInfo[mounted: ${context.mounted}]');
+          if (context.mounted) {
+            await showDialog<void>(
+              context: context,
+              builder: (BuildContext context) => AlertDialog(
+                title: Text(AppLocalizations.of(context)!.bluetoothInput),
+                content: Text(AppLocalizations.of(context)!.aboutBleInput),
+                actions: <Widget>[
+                  ElevatedButton(
+                    child: Text((AppLocalizations.of(context)!.btnConfirm)),
+                    onPressed: () => Navigator.of(context).pop(),
+                  ),
+                ],
+              ),
+            );
+          }
+        },
+      ),
     );
   }
 
