@@ -16,7 +16,13 @@ abstract class BluetoothManager<BackendDevice> with TypeLogger {
   ///
   /// Returns null if no permissions were requested (ie because its not needed on a platform)
   /// or true/false to indicate whether requesting permissions succeeded (not if it was granted)
-  Future<bool?> enable();
+  Future<bool?> requestPermission();
+
+  /// Ask the system to turn on the bluetooth adapter.
+  ///
+  /// Returns null if turning on is not supported on the platform,
+  /// or true/false to indicate whether the adapter was turned on.
+  Future<bool?> turnOn();
 
   /// Last known adapter state
   ///

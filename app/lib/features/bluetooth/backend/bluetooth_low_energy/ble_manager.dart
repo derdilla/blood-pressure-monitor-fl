@@ -7,6 +7,7 @@ import 'package:blood_pressure_app/features/bluetooth/backend/bluetooth_low_ener
 import 'package:blood_pressure_app/features/bluetooth/backend/bluetooth_manager.dart';
 import 'package:blood_pressure_app/features/bluetooth/backend/bluetooth_state.dart';
 import 'package:bluetooth_low_energy/bluetooth_low_energy.dart';
+import 'package:flutter_blue_plus/flutter_blue_plus.dart' as fbp;
 
 /// Bluetooth manager for the 'bluetooth_low_energy' package
 final class BluetoothLowEnergyManager extends BluetoothManager<DiscoveredEventArgs> {
@@ -19,12 +20,27 @@ final class BluetoothLowEnergyManager extends BluetoothManager<DiscoveredEventAr
   }
 
   @override
-  Future<bool?> enable() async {
+  Future<bool?> requestPermission() async {
     if (!Platform.isAndroid) {
       return null;
     }
 
     return backend.authorize();
+  }
+
+  @override
+  Future<bool?> turnOn() async {
+    if (!Platform.isAndroid) {
+      return null;
+    }
+
+    try {
+      await fbp.FlutterBluePlus.turnOn();
+      return true;
+    } on fbp.FlutterBluePlusException catch (e) {
+      logger.warning('Turning on bluetooth failed', e);
+      return false;
+    }
   }
 
   /// The actual backend implementation
