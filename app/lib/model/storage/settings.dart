@@ -3,8 +3,10 @@ import 'dart:convert';
 import 'package:blood_pressure_app/features/bluetooth/logic/device_scan_cubit.dart';
 import 'package:blood_pressure_app/model/blood_pressure/pressure_unit.dart';
 import 'package:blood_pressure_app/model/bluetooth_input_mode.dart';
+import 'package:blood_pressure_app/model/bluetooth_measurement_import_mode.dart';
 import 'package:blood_pressure_app/model/horizontal_graph_line.dart';
 import 'package:blood_pressure_app/model/storage/types/bluetooth_input_mode_setting.dart';
+import 'package:blood_pressure_app/model/storage/types/bluetooth_measurement_import_mode_setting.dart';
 import 'package:blood_pressure_app/model/storage/types/color_setting.dart';
 import 'package:blood_pressure_app/model/storage/types/horizontal_graph_line_list_setting.dart';
 import 'package:blood_pressure_app/model/storage/types/locale_setting.dart';
@@ -98,6 +100,12 @@ class _SettingsSpec extends ChangeNotifier {
   /// Whether to automatically start the bluetooth measurement import 
   /// when bluetooth input is enabled and bluetooth is on.
   final autostartBluetoothInput = Setting<bool>(initialValue: false);
+
+  /// Whether to automatically import the bluetooth measurement(s)
+  final Setting<BluetoothMeasurementImportMode> bluetoothImportMode =
+      BluetoothMeasurementImportModeSetting(
+    initialValue: BluetoothMeasurementImportMode.disabled,
+  );
 
   /// Whether to use the compact list with swipe deletion.
   final compactList = Setting<bool>(

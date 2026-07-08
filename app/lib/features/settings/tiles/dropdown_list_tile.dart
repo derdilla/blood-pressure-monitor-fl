@@ -31,7 +31,9 @@ class DropDownListTile<T> extends StatefulWidget {
   final List<DropdownMenuItem<T>> items;
 
   /// Called when the selection changes.
-  final void Function(T? value) onChanged;
+  ///
+  /// When null, the dropdown is disabled
+  final void Function(T? value)? onChanged;
 
   @override
   State<DropDownListTile<T>> createState() => _DropDownListTileState<T>();
@@ -52,7 +54,8 @@ class _DropDownListTileState<T> extends State<DropDownListTile<T>> {
       title: widget.title,
       subtitle: widget.subtitle,
       leading: widget.leading,
-      onTap: focusNode.requestFocus,
+      enabled: widget.onChanged != null,
+      onTap: widget.onChanged == null ? null : focusNode.requestFocus,
       trailing: DropdownButton<T>(
         focusNode: focusNode,
         value: widget.value,
