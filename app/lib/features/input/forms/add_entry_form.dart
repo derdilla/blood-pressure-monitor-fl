@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:blood_pressure_app/features/bluetooth/backend/bluetooth_backend.dart';
 import 'package:blood_pressure_app/features/bluetooth/bluetooth_input.dart';
 import 'package:blood_pressure_app/features/bluetooth/logic/bluetooth_cubit.dart';
-import 'package:blood_pressure_app/features/export_import/ui/export_button.dart';
 import 'package:blood_pressure_app/features/input/forms/blood_pressure_form.dart';
 import 'package:blood_pressure_app/features/input/forms/date_time_form.dart';
 import 'package:blood_pressure_app/features/input/forms/form_base.dart';
@@ -307,26 +306,18 @@ class AddEntryFormState extends FormStateBase<AddEntryFormValue, AddEntryForm>
   }
 
   /// Gets called on inputs from a bluetooth device or similar. (multiple records)
-  Future<void> _onExternalMeasurements(List<BloodPressureRecord> records) async {
-    if (records.isEmpty) return;
-
-    if (!mounted) return;
-
-    final messenger = ScaffoldMessenger.of(context);
-    final localizations = AppLocalizations.of(context)!;
-
-    messenger.showSnackBar(SnackBar(
-      content: Text(localizations.measurementsImported(records.length)),
-    ));
-
-    fillForm((
+  void _onExternalMeasurements(List<BloodPressureRecord> records) {
+    if (records.isEmpty || !mounted) return;
+    logger.finer('_onExternalMeasurements: importing ${records.length} records');
+    final AddEntryFormValue value = (
       timestamp: DateTime.now(),
       note: null,
       record: null,
       records: records,
       intake: null,
       weight: null,
-    ));
+    );
+    Navigator.pop(context, value);
   }
 
   @override
