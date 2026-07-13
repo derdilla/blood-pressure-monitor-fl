@@ -66,8 +66,6 @@ class BluetoothInput extends StatefulWidget {
 class _BluetoothInputState extends State<BluetoothInput> with TypeLogger {
   /// Whether the user initiated reading bluetooth input
   bool _isActive = false;
-  /// Guard against auto-starting the import twice.
-  bool _hasAutostarted = false;
   /// Guard against auto-importing the same batch of measurements twice.
   bool _hasImported = false;
 
@@ -118,21 +116,13 @@ class _BluetoothInputState extends State<BluetoothInput> with TypeLogger {
   /// Automatically start the input when bluetooth auto-import is enabled
   void _maybeAutostart(Settings settings, BluetoothState state) {
     if (!settings.autostartBluetoothInput ||
-        _hasAutostarted ||
         _isActive ||
         _finishedData != null ||
         state is! BluetoothStateReady) {
       return;
     }
     logger.finer('_maybeAutostart: starting bluetooth input');
-    _hasAutostarted = true;
-    // Handle the case where the adapter is already ready when this is built.
-    // See the call site before BlocListener below.
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (mounted && !_isActive && _finishedData == null) {
-        setState(() => _isActive = true);
-      }
-    });
+    setState(() => _isActive = true);
   }
 
   @override
@@ -152,12 +142,7 @@ class _BluetoothInputState extends State<BluetoothInput> with TypeLogger {
     }
 
     final settings = context.watch<Settings>();
-    // Handle the case where the adapter is already ready when this is built.
-    // Most common case I think
-    _maybeAutostart(settings, _bluetoothCubit.state);
-
     // Listen on the cubit and trigger import if the adapter is enabled 
-    // while we are on the import screen, also let the user cancel
     return BlocListener<BluetoothCubit, BluetoothState>(
       bloc: _bluetoothCubit,
       listener: (context, state) => _maybeAutostart(settings, state),
