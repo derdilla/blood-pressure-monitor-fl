@@ -54,7 +54,7 @@ class BluetoothInput extends StatefulWidget {
   final BleReadCubit Function()? bleReadCubit;
 
   @override
-  State<BluetoothInput> createState() => _BluetoothInputState();
+  State<BluetoothInput> createState() => BluetoothInputState();
 }
 
 /// Read bluetooth input happy workflow:
@@ -63,11 +63,14 @@ class BluetoothInput extends StatefulWidget {
 /// - _buildActive is called, waits for device_scan_state.DeviceSelected
 /// - _buildReadDevice is called, waits for ble_read_state.BleReadSuccess
 /// - onMeasurement callback triggered
-class _BluetoothInputState extends State<BluetoothInput> with TypeLogger {
+@visibleForTesting
+class BluetoothInputState extends State<BluetoothInput> with TypeLogger {
   /// Whether the user initiated reading bluetooth input
-  bool _isActive = false;
+  @visibleForTesting
+  bool isActive = false;
   /// Guard against auto-importing the same batch of measurements twice.
-  bool _hasImported = false;
+  @visibleForTesting
+  bool hasImported = false;
 
   late final BluetoothCubit _bluetoothCubit;
   DeviceScanCubit? _deviceScanCubit;
@@ -96,11 +99,11 @@ class _BluetoothInputState extends State<BluetoothInput> with TypeLogger {
   }
 
   void _returnToIdle() async {
-    _hasImported = false;
+    hasImported = false;
     // No need to show wait in the UI.
-    if (_isActive) {
+    if (isActive) {
       setState(() {
-        _isActive = false;
+        isActive = false;
         _finishedData = null;
       });
     }
@@ -116,19 +119,19 @@ class _BluetoothInputState extends State<BluetoothInput> with TypeLogger {
   /// Automatically start the input when bluetooth auto-import is enabled
   void _maybeAutostart(Settings settings, BluetoothState state) {
     if (!settings.autostartBluetoothInput ||
-        _isActive ||
+        isActive ||
         _finishedData != null ||
         state is! BluetoothStateReady) {
       return;
     }
     logger.finer('_maybeAutostart: starting bluetooth input');
-    setState(() => _isActive = true);
+    setState(() => isActive = true);
   }
 
   @override
   Widget build(BuildContext context) {
     const SizeChangedLayoutNotification().dispatch(context);
-    logger.finer('build[_isActive: $_isActive, _finishedData: $_finishedData]');
+    logger.finer('build[_isActive: $isActive, _finishedData: $_finishedData]');
 
     if (_finishedData != null) {
       return MeasurementSuccess(
@@ -137,7 +140,7 @@ class _BluetoothInputState extends State<BluetoothInput> with TypeLogger {
       );
     }
 
-    if (_isActive) {
+    if (isActive) {
       return _buildActive(context);
     }
 
@@ -149,7 +152,7 @@ class _BluetoothInputState extends State<BluetoothInput> with TypeLogger {
       child: ClosedBluetoothInput(
         bluetoothCubit: _bluetoothCubit,
         onStarted: () async {
-          setState(() => _isActive = true);
+          setState(() => isActive = true);
         },
         inputInfo: () async {
           logger.finer('build.inputInfo[mounted: ${context.mounted}]');
@@ -223,20 +226,20 @@ class _BluetoothInputState extends State<BluetoothInput> with TypeLogger {
         return _deviceReadCubit;
       }(),
       listener: (BuildContext context, BleReadState state) {
-        final bluetoothImportMode = context.watch<Settings>().bluetoothImportMode;
+        final bluetoothImportMode = context.read<Settings>().bluetoothImportMode;
         if (state is BleReadSuccess) {
           if (bluetoothImportMode.isAutomatic) {
             // Import a single measurement immediately, without review.
-            if (!_hasImported) {
-              _hasImported = true;
+            if (!hasImported) {
+              setState(() => { hasImported: true });
               _importMeasurements([state.data]);
             }
           } else {
             widget.onMeasurement(state.data.asBloodPressureRecord());
             setState(() => _finishedData = state.data);
           }
-        } else if (state is BleReadMultiple && bluetoothImportMode.isAutomatic && !_hasImported) {
-          _hasImported = true;
+        } else if (state is BleReadMultiple && bluetoothImportMode.isAutomatic && !hasImported) {
+          setState(() => { hasImported: true });
           _importMeasurements(
             bluetoothImportMode == BluetoothMeasurementImportMode.all
                 ? state.data
