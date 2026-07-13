@@ -99,6 +99,8 @@
   },
   "exportImport": "Exportieren / Importieren",
   "exportDir": "Export Ordner",
+  "exportAddTimestamp": "Zeitstempel anhängen",
+  "exportAddTimestampDesc": "Einzigartiger Dateiname für jeden Export",
   "exportAfterEveryInput": "Export nach jedem Eintrag",
   "exportAfterEveryInputDesc": "Nicht empfohlen (datenexplosion)",
   "exportFormat": "Exportformat",
