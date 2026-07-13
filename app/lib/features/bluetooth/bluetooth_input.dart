@@ -238,9 +238,9 @@ class _BluetoothInputState extends State<BluetoothInput> with TypeLogger {
         return _deviceReadCubit;
       }(),
       listener: (BuildContext context, BleReadState state) {
-        final mode = context.read<Settings>().bluetoothImportMode;
+        final bluetoothImportMode = context.watch<Settings>().bluetoothImportMode;
         if (state is BleReadSuccess) {
-          if (mode.isAutomatic) {
+          if (bluetoothImportMode.isAutomatic) {
             // Import a single measurement immediately, without review.
             if (!_hasImported) {
               _hasImported = true;
@@ -250,10 +250,10 @@ class _BluetoothInputState extends State<BluetoothInput> with TypeLogger {
             widget.onMeasurement(state.data.asBloodPressureRecord());
             setState(() => _finishedData = state.data);
           }
-        } else if (state is BleReadMultiple && mode.isAutomatic && !_hasImported) {
+        } else if (state is BleReadMultiple && bluetoothImportMode.isAutomatic && !_hasImported) {
           _hasImported = true;
           _importMeasurements(
-            mode == BluetoothMeasurementImportMode.all
+            bluetoothImportMode == BluetoothMeasurementImportMode.all
                 ? state.data
                 : [state.data.first],
           );
@@ -262,7 +262,7 @@ class _BluetoothInputState extends State<BluetoothInput> with TypeLogger {
       builder: (BuildContext context, BleReadState state) {
         logger.finer('BleReadCubit.builder: $state');
         const SizeChangedLayoutNotification().dispatch(context);
-
+        final bluetoothImportMode = context.watch<Settings>().bluetoothImportMode;
         return switch (state) {
           BleReadInProgress() => _buildMainCard(context,
             child: const CircularProgressIndicator(),
@@ -274,9 +274,9 @@ class _BluetoothInputState extends State<BluetoothInput> with TypeLogger {
           // When auto-import is enabled the measurement(s) are imported
           // automatically, so show a loading indicator instead of the
           // flickering the list
-          BleReadMultiple() when context.read<Settings>().bluetoothImportMode.isAutomatic =>
+          BleReadMultiple() when bluetoothImportMode.isAutomatic =>
             _buildMainCard(context, child: const CircularProgressIndicator()),
-          BleReadSuccess() when context.read<Settings>().bluetoothImportMode.isAutomatic =>
+          BleReadSuccess() when bluetoothImportMode.isAutomatic =>
             _buildMainCard(context, child: const CircularProgressIndicator()),
           BleReadMultiple() => MeasurementMultiple(
             onClosed: _returnToIdle,
