@@ -52,6 +52,15 @@ class ExportImportScreen extends StatelessWidget {
                   }
                 },
               ),
+            if (Platform.isAndroid) // only makes sense with exportDir, which is supported only for android
+              SwitchListTile(
+                title: Text(localizations.exportAddTimestamp),
+                subtitle: Text(localizations.exportAddTimestampDesc),
+                value: settings.addTimestamp,
+                onChanged: (value) {
+                  settings.addTimestamp = value;
+                },
+              ),
             SwitchListTile(
               title: Text(localizations.exportAfterEveryInput),
               subtitle: Text(localizations.exportAfterEveryInputDesc),
