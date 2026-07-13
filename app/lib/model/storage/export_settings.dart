@@ -15,6 +15,7 @@ class _ExportSettingsSpec extends ChangeNotifier {
   final Setting<ExportFormat> exportFormat = ExportFormatSetting(initialValue: ExportFormat.csv);
   final defaultExportDir = Setting<String>(initialValue: '');
   final exportAfterEveryEntry = Setting<bool>(initialValue: false);
+  final addTimestamp = Setting<bool>(initialValue: true);
   /// Presets defined by the user.
   final Setting<List<ExportPreset>> presets = ExportPresetListSetting();
   final Setting<List<String>> customPresetColumns = StringListSetting(initialValue: []);
