@@ -56,7 +56,7 @@ void performExport(BuildContext context, bool share) async { // TODO: extract
   final localizations = AppLocalizations.of(context);
   final exportSettings = Provider.of<ExportSettings>(context, listen: false);
   _logger.fine('performExport - exportSettings=${exportSettings.toJson()}');
-  final filename = 'blood_press_${DateTime.now().toIso8601String()}';
+  final filename = exportSettings.addTimestamp ? 'blood_press_${DateTime.now().toIso8601String()}' : 'blood_press';
   switch (exportSettings.exportFormat) {
     case ExportFormat.db:
       final path = join(await getDatabasesPath(), 'bp.db');
