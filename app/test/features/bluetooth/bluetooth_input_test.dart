@@ -196,6 +196,7 @@ void main() {
     BluetoothInputState widgetState = tester.state(find.byWidget(widget));
     expect(widgetState.isActive, true);
     expect(widgetState.hasImported, true);
+    await tester.pumpAndSettle();
     expect(reads.length, 1);
   });
 }
