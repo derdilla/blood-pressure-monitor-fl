@@ -240,7 +240,7 @@ class BluetoothInputState extends State<BluetoothInput> with TypeLogger {
             setState(() => _finishedData = state.data);
           }
         } else if (state is BleReadMultiple && bluetoothImportMode.isAutomatic && !hasImported) {
-          setState(() => { hasImported: true });
+          setState(() => hasImported = true);
           _importMeasurements(
             bluetoothImportMode == BluetoothMeasurementImportMode.all
                 ? state.data
