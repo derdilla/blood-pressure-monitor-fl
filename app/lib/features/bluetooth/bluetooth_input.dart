@@ -87,6 +87,7 @@ class BluetoothInputState extends State<BluetoothInput> with TypeLogger {
   void initState() {
     super.initState();
     _bluetoothCubit = widget.bluetoothCubit?.call() ?? BluetoothCubit(manager: widget.manager);
+    _maybeAutostart(context.read(), _bluetoothCubit.state);
   }
 
   @override
