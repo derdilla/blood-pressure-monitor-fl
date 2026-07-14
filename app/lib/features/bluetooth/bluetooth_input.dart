@@ -232,7 +232,7 @@ class BluetoothInputState extends State<BluetoothInput> with TypeLogger {
           if (bluetoothImportMode.isAutomatic) {
             // Import a single measurement immediately, without review.
             if (!hasImported) {
-              setState(() => { hasImported: true });
+              setState(() => hasImported = true);
               _importMeasurements([state.data]);
             }
           } else {
