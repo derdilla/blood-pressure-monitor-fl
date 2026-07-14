@@ -306,26 +306,18 @@ class AddEntryFormState extends FormStateBase<AddEntryFormValue, AddEntryForm>
   }
 
   /// Gets called on inputs from a bluetooth device or similar. (multiple records)
-  Future<void> _onExternalMeasurements(List<BloodPressureRecord> records) async {
-    if (records.isEmpty) return;
-
-    if (!mounted) return;
-
-    final messenger = ScaffoldMessenger.of(context);
-    final localizations = AppLocalizations.of(context)!;
-
-    messenger.showSnackBar(SnackBar(
-      content: Text(localizations.measurementsImported(records.length)),
-    ));
-
-    fillForm((
+  void _onExternalMeasurements(List<BloodPressureRecord> records) {
+    if (records.isEmpty || !mounted) return;
+    logger.finer('_onExternalMeasurements: importing ${records.length} records');
+    final AddEntryFormValue value = (
       timestamp: DateTime.now(),
       note: null,
       record: null,
       records: records,
       intake: null,
       weight: null,
-    ));
+    );
+    Navigator.pop(context, value);
   }
 
   @override

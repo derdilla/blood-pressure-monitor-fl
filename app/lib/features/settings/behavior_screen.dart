@@ -1,6 +1,8 @@
 import 'package:blood_pressure_app/features/settings/tiles/dropdown_list_tile.dart';
 import 'package:blood_pressure_app/l10n/app_localizations.dart';
 import 'package:blood_pressure_app/model/blood_pressure/pressure_unit.dart';
+import 'package:blood_pressure_app/model/bluetooth_input_mode.dart';
+import 'package:blood_pressure_app/model/bluetooth_measurement_import_mode.dart';
 import 'package:blood_pressure_app/model/storage/settings.dart';
 import 'package:blood_pressure_app/model/weight_unit.dart';
 import 'package:flutter/material.dart';
@@ -27,6 +29,33 @@ class BehaviorScreen extends StatelessWidget {
             onChanged: (value) {
               settings.startWithAddMeasurementPage = value;
             },
+          ),
+          SwitchListTile(
+            title: Text(localizations.autostartBluetoothInput),
+            subtitle: Text(localizations.autostartBluetoothInputDescription),
+            secondary: const Icon(Icons.bluetooth),
+            value: settings.autostartBluetoothInput,
+            onChanged: settings.bleInput == BluetoothInputMode.disabled
+                ? null
+                : (value) { settings.autostartBluetoothInput = value; },
+          ),
+          DropDownListTile<BluetoothMeasurementImportMode>(
+            leading: const Icon(Icons.download),
+            title: Text(localizations.bluetoothImportMode),
+            subtitle: Text(localizations.bluetoothImportModeDescription),
+            value: settings.bluetoothImportMode,
+            items: [
+              for (final mode in BluetoothMeasurementImportMode.values)
+                DropdownMenuItem(
+                  value: mode,
+                  child: Text(mode.localize(localizations)),
+                ),
+            ],
+            onChanged: settings.bleInput == BluetoothInputMode.disabled
+                ? null
+                : (BluetoothMeasurementImportMode? value) {
+                    if (value != null) settings.bluetoothImportMode = value;
+                  },
           ),
           SwitchListTile(
             value: settings.trustBLETime,

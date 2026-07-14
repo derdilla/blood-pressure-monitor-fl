@@ -16,6 +16,7 @@ import 'package:blood_pressure_app/features/bluetooth/ui/measurement_multiple.da
 import 'package:blood_pressure_app/features/bluetooth/ui/measurement_success.dart';
 import 'package:blood_pressure_app/l10n/app_localizations.dart';
 import 'package:blood_pressure_app/logging.dart';
+import 'package:blood_pressure_app/model/bluetooth_measurement_import_mode.dart';
 import 'package:blood_pressure_app/model/storage/storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -24,7 +25,8 @@ import 'package:health_data_store/health_data_store.dart';
 /// Class for inputting measurement through bluetooth.
 class BluetoothInput extends StatefulWidget {
   /// Create a measurement input through bluetooth.
-  const BluetoothInput({super.key,
+  const BluetoothInput({
+    super.key,
     required this.onMeasurement,
     required this.onAllMeasurements,
     required this.manager,
@@ -52,7 +54,7 @@ class BluetoothInput extends StatefulWidget {
   final BleReadCubit Function()? bleReadCubit;
 
   @override
-  State<BluetoothInput> createState() => _BluetoothInputState();
+  State<BluetoothInput> createState() => BluetoothInputState();
 }
 
 /// Read bluetooth input happy workflow:
@@ -61,9 +63,14 @@ class BluetoothInput extends StatefulWidget {
 /// - _buildActive is called, waits for device_scan_state.DeviceSelected
 /// - _buildReadDevice is called, waits for ble_read_state.BleReadSuccess
 /// - onMeasurement callback triggered
-class _BluetoothInputState extends State<BluetoothInput> with TypeLogger {
+@visibleForTesting
+class BluetoothInputState extends State<BluetoothInput> with TypeLogger {
   /// Whether the user initiated reading bluetooth input
-  bool _isActive = false;
+  @visibleForTesting
+  bool isActive = false;
+  /// Guard against auto-importing the same batch of measurements twice.
+  @visibleForTesting
+  bool hasImported = false;
 
   late final BluetoothCubit _bluetoothCubit;
   DeviceScanCubit? _deviceScanCubit;
@@ -80,6 +87,7 @@ class _BluetoothInputState extends State<BluetoothInput> with TypeLogger {
   void initState() {
     super.initState();
     _bluetoothCubit = widget.bluetoothCubit?.call() ?? BluetoothCubit(manager: widget.manager);
+    _maybeAutostart(context.read(), _bluetoothCubit.state);
   }
 
   @override
@@ -92,10 +100,11 @@ class _BluetoothInputState extends State<BluetoothInput> with TypeLogger {
   }
 
   void _returnToIdle() async {
+    hasImported = false;
     // No need to show wait in the UI.
-    if (_isActive) {
+    if (isActive) {
       setState(() {
-        _isActive = false;
+        isActive = false;
         _finishedData = null;
       });
     }
@@ -108,10 +117,22 @@ class _BluetoothInputState extends State<BluetoothInput> with TypeLogger {
     _bluetoothSubscription = null;
   }
 
+  /// Automatically start the input when bluetooth auto-import is enabled
+  void _maybeAutostart(Settings settings, BluetoothState state) {
+    if (!settings.autostartBluetoothInput ||
+        isActive ||
+        _finishedData != null ||
+        state is! BluetoothStateReady) {
+      return;
+    }
+    logger.finer('_maybeAutostart: starting bluetooth input');
+    setState(() => isActive = true);
+  }
+
   @override
   Widget build(BuildContext context) {
     const SizeChangedLayoutNotification().dispatch(context);
-    logger.finer('build[_isActive: $_isActive, _finishedData: $_finishedData]');
+    logger.finer('build[_isActive: $isActive, _finishedData: $_finishedData]');
 
     if (_finishedData != null) {
       return MeasurementSuccess(
@@ -120,33 +141,39 @@ class _BluetoothInputState extends State<BluetoothInput> with TypeLogger {
       );
     }
 
-    if (_isActive) {
+    if (isActive) {
       return _buildActive(context);
     }
 
-    return ClosedBluetoothInput(
-      bluetoothCubit: _bluetoothCubit,
-      onStarted: () async {
-        setState(() => _isActive = true);
-      },
-      inputInfo: () async {
-        logger.finer('build.inputInfo[mounted: ${context.mounted}]');
-        if (context.mounted) {
-          await showDialog<void>(
-            context: context,
-            builder: (BuildContext context) => AlertDialog(
-              title: Text(AppLocalizations.of(context)!.bluetoothInput),
-              content: Text(AppLocalizations.of(context)!.aboutBleInput),
-              actions: <Widget>[
-                ElevatedButton(
-                  child: Text((AppLocalizations.of(context)!.btnConfirm)),
-                  onPressed: () => Navigator.of(context).pop(),
-                ),
-              ],
-            ),
-          );
-        }
-      },
+    final settings = context.watch<Settings>();
+    // Listen on the cubit and trigger import if the adapter is enabled 
+    return BlocListener<BluetoothCubit, BluetoothState>(
+      bloc: _bluetoothCubit,
+      listener: (context, state) => _maybeAutostart(settings, state),
+      child: ClosedBluetoothInput(
+        bluetoothCubit: _bluetoothCubit,
+        onStarted: () async {
+          setState(() => isActive = true);
+        },
+        inputInfo: () async {
+          logger.finer('build.inputInfo[mounted: ${context.mounted}]');
+          if (context.mounted) {
+            await showDialog<void>(
+              context: context,
+              builder: (BuildContext context) => AlertDialog(
+                title: Text(AppLocalizations.of(context)!.bluetoothInput),
+                content: Text(AppLocalizations.of(context)!.aboutBleInput),
+                actions: <Widget>[
+                  ElevatedButton(
+                    child: Text((AppLocalizations.of(context)!.btnConfirm)),
+                    onPressed: () => Navigator.of(context).pop(),
+                  ),
+                ],
+              ),
+            );
+          }
+        },
+      ),
     );
   }
 
@@ -200,16 +227,31 @@ class _BluetoothInputState extends State<BluetoothInput> with TypeLogger {
         return _deviceReadCubit;
       }(),
       listener: (BuildContext context, BleReadState state) {
+        final bluetoothImportMode = context.read<Settings>().bluetoothImportMode;
         if (state is BleReadSuccess) {
-          final BloodPressureRecord record = state.data.asBloodPressureRecord();
-          widget.onMeasurement(record);
-          setState(() => _finishedData = state.data);
+          if (bluetoothImportMode.isAutomatic) {
+            // Import a single measurement immediately, without review.
+            if (!hasImported) {
+              setState(() => hasImported = true);
+              _importMeasurements([state.data]);
+            }
+          } else {
+            widget.onMeasurement(state.data.asBloodPressureRecord());
+            setState(() => _finishedData = state.data);
+          }
+        } else if (state is BleReadMultiple && bluetoothImportMode.isAutomatic && !hasImported) {
+          setState(() => hasImported = true);
+          _importMeasurements(
+            bluetoothImportMode == BluetoothMeasurementImportMode.all
+                ? state.data
+                : [state.data.first],
+          );
         }
       },
       builder: (BuildContext context, BleReadState state) {
         logger.finer('BleReadCubit.builder: $state');
         const SizeChangedLayoutNotification().dispatch(context);
-
+        final bluetoothImportMode = context.watch<Settings>().bluetoothImportMode;
         return switch (state) {
           BleReadInProgress() => _buildMainCard(context,
             child: const CircularProgressIndicator(),
@@ -218,6 +260,13 @@ class _BluetoothInputState extends State<BluetoothInput> with TypeLogger {
             onTap: _returnToIdle,
             reason: state.reason,
           ),
+          // When auto-import is enabled the measurement(s) are imported
+          // automatically, so show a loading indicator instead of the
+          // flickering the list
+          BleReadMultiple() when bluetoothImportMode.isAutomatic =>
+            _buildMainCard(context, child: const CircularProgressIndicator()),
+          BleReadSuccess() when bluetoothImportMode.isAutomatic =>
+            _buildMainCard(context, child: const CircularProgressIndicator()),
           BleReadMultiple() => MeasurementMultiple(
             onClosed: _returnToIdle,
             onSelect: (data) => _deviceReadCubit!.useMeasurement(data),
@@ -246,4 +295,16 @@ class _BluetoothInputState extends State<BluetoothInput> with TypeLogger {
     title: title,
     child: child,
   );
+
+  /// Import measurements without letting the user review them first.
+  void _importMeasurements(List<BleMeasurementData> data) {
+    logger.finer('_importMeasurements: count=${data.length}');
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted || _finishedData != null) return;
+      widget.onAllMeasurements(
+        data.map((e) => e.asBloodPressureRecord()).toList(),
+      );
+      _returnToIdle();
+    });
+  }
 }
