@@ -26,7 +26,7 @@ class AddEntryForm extends FormBase<AddEntryFormValue> with TypeLogger {
   /// Create primary form to enter all types of entries.
   const AddEntryForm({super.key,
     super.initialValue,
-    this.meds = const [],
+    required this.meds,
     this.bluetoothCubit,
     this.mockBleInput,
   });

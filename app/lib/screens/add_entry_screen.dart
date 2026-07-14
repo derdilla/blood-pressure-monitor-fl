@@ -10,11 +10,8 @@ import 'package:health_data_store/health_data_store.dart';
 class AddEntryScreen extends StatelessWidget {
   const AddEntryScreen({
     super.key,
-    required this.medicineList,
     this.initialRecord
   });
-
-  final List<Medicine> medicineList;
 
   final AddEntryFormValue? initialRecord;
 
@@ -50,7 +47,6 @@ class AddEntryScreen extends StatelessWidget {
         }
       },
       child: AddEntryDialog(
-        availableMeds: medicineList,
         initialRecord: initialRecord,
       ),
     );

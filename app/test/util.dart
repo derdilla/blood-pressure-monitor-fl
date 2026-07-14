@@ -223,7 +223,7 @@ Future<void> loadDialog(WidgetTester tester, void Function(BuildContext context)
   String dialogStarterText = 'X',
   Settings? settings,
 }) async {
-  await tester.pumpWidget(materialApp(
+  await tester.pumpWidget(appBase(
     Builder(builder: (context) => TextButton(onPressed: () => dialogStarter(context), child: Text(dialogStarterText)),),
     settings: settings,
   ),);
@@ -336,7 +336,10 @@ class _MockRepo<T> extends Repository<T> {
 
 class MockBloodPressureRepository extends _MockRepo<BloodPressureRecord> implements BloodPressureRepository {}
 class MockMedicineIntakeRepository extends _MockRepo<MedicineIntake> implements MedicineIntakeRepository {}
-class MockMedicineRepository extends _MockRepo<Medicine> implements MedicineRepository {}
+class MockMedicineRepository extends _MockRepo<Medicine> implements MedicineRepository {
+  @override
+  Future<List<Medicine>> getAll() async => data;
+}
 class MockNoteRepository extends _MockRepo<Note> implements NoteRepository {}
 class MockBodyweightRepository extends _MockRepo<BodyweightRecord> implements BodyweightRepository {}
 

@@ -13,7 +13,7 @@ void main() {
     final bpRepo = db.bpRepo;
 
     await tester.pumpWidget(appBase(
-      const AddEntryScreen(medicineList: []),
+      const AddEntryScreen(),
       bpRepo: bpRepo,
     ));
     await tester.pumpAndSettle();
@@ -34,5 +34,19 @@ void main() {
     final newMeasurements = await bpRepo.get(DateRange.all());
     expect(newMeasurements, hasLength(1));
     expect(newMeasurements.first.dia, Pressure.mmHg(45));
+  });
+  testWidgets('Updates on new med', (tester) async {
+    final medRepo = MockMedRepo([]);
+
+    await tester.pumpWidget(appBase(
+      const AddEntryScreen(),
+      medRepo: medRepo,
+    ));
+    await tester.pumpAndSettle();
+
+    expect(find.byIcon(Icons.monitor_heart_outlined), findsNothing);
+    await medRepo.add(mockMedicine());
+    await tester.pumpAndSettle();
+    expect(find.byIcon(Icons.monitor_heart_outlined), findsOneWidget);
   });
 }

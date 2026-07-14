@@ -128,7 +128,7 @@ void main() {
 
   testWidgets('saves partially entered values (blood pressure)', (tester) async {
     final key = GlobalKey<AddEntryFormState>();
-    await tester.pumpWidget(materialApp(AddEntryForm(key: key)));
+    await tester.pumpWidget(materialApp(AddEntryForm(key: key, meds: [])));
 
     final fields = find.byType(TextField);
     await tester.enterText(fields.at(0), '123'); // sys
@@ -146,7 +146,7 @@ void main() {
 
   testWidgets('saves partially entered values (note)', (tester) async {
     final key = GlobalKey<AddEntryFormState>();
-    await tester.pumpWidget(materialApp(AddEntryForm(key: key)));
+    await tester.pumpWidget(materialApp(AddEntryForm(key: key, meds: [])));
 
     await tester.enterText(find.descendant(
       of: find.byType(NoteForm),
@@ -198,7 +198,7 @@ void main() {
   testWidgets('validates time form', (tester) async {
     final key = GlobalKey<AddEntryFormState>();
     final time = DateTime.now();
-    await tester.pumpWidget(materialApp(AddEntryForm(key: key)));
+    await tester.pumpWidget(materialApp(AddEntryForm(key: key, meds: [])));
     expect(key.currentState?.validate(), true);
 
     key.currentState!.fillForm((
@@ -211,7 +211,7 @@ void main() {
 
   testWidgets('validates bp form', (tester) async {
     final key = GlobalKey<AddEntryFormState>();
-    await tester.pumpWidget(materialApp(AddEntryForm(key: key)));
+    await tester.pumpWidget(materialApp(AddEntryForm(key: key, meds: [])));
     expect(key.currentState?.validate(), true);
 
     key.currentState!.fillForm((
@@ -225,7 +225,7 @@ void main() {
 
   testWidgets('validates weight form', (tester) async {
     final key = GlobalKey<AddEntryFormState>();
-    await tester.pumpWidget(materialApp(AddEntryForm(key: key),
+    await tester.pumpWidget(materialApp(AddEntryForm(key: key, meds: []),
       settings: Settings(weightInput: true),
     ));
     expect(key.currentState?.validate(), true);
@@ -311,7 +311,7 @@ void main() {
 
   testWidgets("doesn't save empty forms", (tester) async {
     final key = GlobalKey<AddEntryFormState>();
-    await tester.pumpWidget(materialApp(AddEntryForm(key: key)));
+    await tester.pumpWidget(materialApp(AddEntryForm(key: key, meds: [])));
     await tester.pumpAndSettle();
     expect(key.currentState!.validate(), true);
     expect(key.currentState!.save(), isNull);
@@ -319,7 +319,7 @@ void main() {
 
   testWidgets('focuses last input field on backspace', (tester) async {
     final key = GlobalKey<AddEntryFormState>();
-    await tester.pumpWidget(materialApp(AddEntryForm(key: key)));
+    await tester.pumpWidget(materialApp(AddEntryForm(key: key, meds: [])));
     final localizations = await AppLocalizations.delegate.load(const Locale('en'));
 
     final fields = find.byType(TextField);
@@ -366,7 +366,7 @@ void main() {
 
   testWidgets('should allow invalid values when setting is set', (tester) async {
     final key = GlobalKey<AddEntryFormState>();
-    await tester.pumpWidget(materialApp(AddEntryForm(key: key),
+    await tester.pumpWidget(materialApp(AddEntryForm(key: key, meds: []),
       settings: Settings(validateInputs: false)),
     );
 
@@ -384,7 +384,7 @@ void main() {
 
   testWidgets('starts with sys input focused', (tester) async {
     final key = GlobalKey<AddEntryFormState>();
-    await tester.pumpWidget(materialApp(AddEntryForm(key: key)));
+    await tester.pumpWidget(materialApp(AddEntryForm(key: key, meds: [])));
     final localizations = await AppLocalizations.delegate.load(const Locale('en'));
 
     await tester.pump();
@@ -408,6 +408,7 @@ void main() {
         note: null,
         intake: null,
       ),
+      meds: [],
     ),
       settings: Settings(weightInput: true),
     ));
@@ -430,6 +431,7 @@ void main() {
         note: null,
         intake: null,
       ),
+      meds: [],
       mockBleInput: (callback) => ListTile(
         onTap: () => callback(mockRecord(time: DateTime(2000))),
         title: Text('mockBleInput'),
@@ -465,6 +467,7 @@ void main() {
         note: null,
         intake: null,
       ),
+      meds: [],
       mockBleInput: (callback) => ListTile(
         onTap: () => callback(mockRecord(time: DateTime(2000))),
         title: Text('mockBleInput'),
@@ -485,6 +488,7 @@ void main() {
   testWidgets('shows warning if time from ble is too old', (tester) async {
     final localizations = await AppLocalizations.delegate.load(const Locale('en'));
     await tester.pumpWidget(materialApp(AddEntryForm(
+      meds: [],
       mockBleInput: (callback) => ListTile(
         onTap: () => callback(mockRecord(time: DateTime(2000))),
         title: Text('mockBleInput'),
@@ -517,6 +521,7 @@ void main() {
   testWidgets('allows disabling warning if time from ble is too old', (tester) async {
     final localizations = await AppLocalizations.delegate.load(const Locale('en'));
     await tester.pumpWidget(materialApp(AddEntryForm(
+      meds: [],
       mockBleInput: (callback) => ListTile(
         onTap: () => callback(mockRecord(time: DateTime(2000))),
         title: Text('mockBleInput'),
@@ -546,7 +551,7 @@ void main() {
 
   testWidgets('saves measurement when time input is hidden', (tester) async {
     final key = GlobalKey<AddEntryFormState>();
-    await tester.pumpWidget(materialApp(AddEntryForm(key: key),
+    await tester.pumpWidget(materialApp(AddEntryForm(key: key, meds: []),
         settings: Settings(allowManualTimeInput: false),
     ));
 
@@ -569,7 +574,7 @@ void main() {
   });
 
   testWidgets("Doesn't focus back without sending extra event", (WidgetTester tester) async {
-    await tester.pumpWidget(materialApp(AddEntryForm()));
+    await tester.pumpWidget(materialApp(AddEntryForm(meds: [])));
     final localizations = await AppLocalizations.delegate.load(const Locale('en'));
     await tester.pumpAndSettle();
     await tester.enterText(find.ancestor(of: find.text(localizations.sysLong), matching: find.byType(TextField)), '123');

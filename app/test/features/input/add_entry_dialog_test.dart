@@ -12,7 +12,7 @@ import '../../util.dart';
 void main() {
   testWidgets('respects bottomAppBars', (tester) async {
     final settings = Settings(bottomAppBars: false);
-    await tester.pumpWidget(materialApp(const AddEntryDialog(),
+    await tester.pumpWidget(appBase(const AddEntryDialog(),
       settings: settings
     ));
     final initialHeights = tester.getCenter(find.byType(AppBar)).dy;
@@ -23,9 +23,9 @@ void main() {
     expect(tester.getCenter(find.byType(AppBar)).dy, greaterThan(initialHeights));
   });
 
-  // TODO: update these old tests
   testWidgets('should show everything on initial page', (tester) async {
-    await tester.pumpWidget(materialApp(const AddEntryDialog()));
+    await tester.pumpWidget(appBase(const AddEntryDialog()));
+    await tester.pumpAndSettle();
     expect(tester.takeException(), isNull);
 
     expect(find.byType(DropdownButton<Medicine?>), findsNothing, reason: 'No medication in settings.');
@@ -37,12 +37,11 @@ void main() {
     expect(find.byType(ColorSelectionListTile), findsOneWidget);
   },);
   testWidgets('should prefill initialRecord values', (tester) async {
-    await tester.pumpWidget(materialApp(
+    await tester.pumpWidget(appBase(
       AddEntryDialog(
         initialRecord: mockEntryPos(
           DateTime.now(), 123, 56, 43, 'Test note', Colors.teal,
         ),
-        availableMeds: const [],
       ),
     ),);
     await tester.pumpAndSettle();
@@ -60,7 +59,6 @@ void main() {
     dynamic result = 'result before save';
     await loadDialog(tester, (context) async
     => result = await showAddEntryDialog(context,
-        medRepo(),
         mockEntry(sys: 123, dia: 56, pul: 43, note: 'Test note', pin: Colors.teal)));
     expect(find.byType(DropdownButton<Medicine?>), findsNothing, reason: 'No medication in settings.');
 
@@ -75,8 +73,7 @@ void main() {
     expect(result, null);
   });
   testWidgets('should not allow invalid values', (tester) async {
-    final mRep = medRepo();
-    await loadDialog(tester, (context) => showAddEntryDialog(context, mRep));
+    await loadDialog(tester, (context) => showAddEntryDialog(context));
     final localizations = await AppLocalizations.delegate.load(const Locale('en'));
 
     expect(find.byType(DropdownButton<Medicine?>), findsNothing, reason: 'No medication in settings.');
@@ -139,8 +136,7 @@ void main() {
     expect(find.text(localizations.errDiaGtSys), findsNothing);
   });
   testWidgets('should allow invalid values when setting is set', (tester) async {
-    final mRep = medRepo();
-    await loadDialog(tester, (context) => showAddEntryDialog(context, mRep),
+    await loadDialog(tester, (context) => showAddEntryDialog(context),
       settings: Settings(validateInputs: false, allowMissingValues: true),
     );
     expect(find.byType(DropdownButton<Medicine?>), findsNothing, reason: 'No medication in settings.');
@@ -152,9 +148,8 @@ void main() {
     expect(find.byType(AddEntryDialog), findsNothing);
   });
   testWidgets('should start with sys input focused', (tester) async {
-    final mRep = medRepo();
     await loadDialog(tester, (context) =>
-        showAddEntryDialog(context, mRep, mockEntry(sys: 12)));
+        showAddEntryDialog(context, mockEntry(sys: 12)));
     expect(find.byType(DropdownButton<Medicine?>), findsNothing, reason: 'No medication in settings.');
 
     final primaryFocus = FocusManager.instance.primaryFocus;
@@ -168,9 +163,8 @@ void main() {
     expect(field.controller?.text, '12');
   });
   testWidgets('should focus next on input finished', (tester) async {
-    final mRep = medRepo();
     await loadDialog(tester, (context) =>
-        showAddEntryDialog(context, mRep, mockEntry(sys: 12, dia: 3, pul: 4, note: 'note')),);
+        showAddEntryDialog(context, mockEntry(sys: 12, dia: 3, pul: 4, note: 'note')),);
     expect(find.byType(DropdownButton<Medicine?>), findsNothing, reason: 'No medication in settings.');
 
     await tester.enterText(find.ancestor(of: find.text('Systolic').first, matching: find.byType(TextField)), '123');
@@ -209,9 +203,8 @@ void main() {
     expect(find.descendant(of: thirdFocusedTextField, matching: find.text('Note (optional)')), findsOneWidget);
   });
   testWidgets('warns before discarding', (tester) async {
-    final mRep = medRepo();
     await loadDialog(tester, (context) =>
-        showAddEntryDialog(context, mRep, mockEntry(sys: 12)));
+        showAddEntryDialog(context, mockEntry(sys: 12)));
 
     expect(find.byType(AddEntryDialog), findsOneWidget);
     await tester.tap(find.byIcon(Icons.close));

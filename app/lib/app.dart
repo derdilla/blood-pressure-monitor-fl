@@ -300,9 +300,7 @@ class _AppState extends State<App> with TypeLogger {
       initialRoute: initialRoute.path,
       routes: {
         AppRoute.home.path: (_) => const AppHome(),
-        AppRoute.add.path: (_) => AddEntryScreen(
-          medicineList: initialMedicineList
-        ),
+        AppRoute.add.path: (_) => const AddEntryScreen(),
         AppRoute.statistics.path: (_) => const StatisticsScreen(),
         AppRoute.settings.path: (_) => const SettingsPage(),
         AppRoute.settingsExport.path: (_) => const ExportImportScreen(),
