@@ -8,6 +8,7 @@ import 'package:blood_pressure_app/features/export_import/model/excel_converter.
 import 'package:blood_pressure_app/features/export_import/model/pdf_converter.dart';
 import 'package:blood_pressure_app/l10n/app_localizations.dart';
 import 'package:blood_pressure_app/logging.dart';
+import 'package:blood_pressure_app/model/med_cache.dart';
 import 'package:blood_pressure_app/model/storage/export_columns_store.dart';
 import 'package:blood_pressure_app/model/storage/export_csv_settings.dart';
 import 'package:blood_pressure_app/model/storage/export_pdf_settings.dart';
@@ -51,7 +52,7 @@ class ExportButton extends StatelessWidget {
 Logger _logger = Logger('BPM[export_button]');
 
 /// Perform a full export according to the configuration in [context].
-void performExport(BuildContext context, bool share) async { // TODO: extract
+void performExport(BuildContext context, bool share) async {
   _logger.finer('performExport - mounted=${context.mounted}');
   final localizations = AppLocalizations.of(context);
   final exportSettings = Provider.of<ExportSettings>(context, listen: false);
@@ -71,7 +72,7 @@ void performExport(BuildContext context, bool share) async { // TODO: extract
       final csvConverter = CsvConverter(
         csvSettings,
         exportColumnsManager,
-        await RepositoryProvider.of<MedicineRepository>(context).getAll(),
+        context.read<MedCache>().medications,
         exportSettings,
       );
       if (!context.mounted) {
@@ -109,7 +110,7 @@ void performExport(BuildContext context, bool share) async { // TODO: extract
       final xlsConverter = ExcelConverter(
         excelExportSettings,
         exportColumnsManager,
-        await RepositoryProvider.of<MedicineRepository>(context).getAll(),
+        context.read<MedCache>().medications,
         exportSettings,
       );
       if (!context.mounted) return;

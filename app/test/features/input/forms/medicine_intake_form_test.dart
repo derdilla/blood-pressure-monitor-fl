@@ -9,7 +9,8 @@ import '../../../util.dart';
 void main() {
   testWidgets('shows input list on single med', (WidgetTester tester) async {
     final mockMed = mockMedicine(designation: 'monozernorditrocin');
-    await tester.pumpWidget(materialApp(MedicineIntakeForm(meds: [mockMed])));
+    await tester.pumpWidget(appBase(MedicineIntakeForm(),
+        medRepo: MockMedRepo([mockMed])));
     final localizations = await AppLocalizations.delegate.load(Locale('en'));
 
     expect(find.byType(TextField), findsNothing);
@@ -20,7 +21,8 @@ void main() {
   testWidgets('shows input list on multiple meds', (WidgetTester tester) async {
     final med1 = mockMedicine(designation: 'tetraebraphthyme');
     final med2 = mockMedicine(designation: 'hypovonyhensas');
-    await tester.pumpWidget(materialApp(MedicineIntakeForm(meds: [med1,med2])));
+    await tester.pumpWidget(appBase(MedicineIntakeForm(),
+        medRepo: MockMedRepo([med1,med2])));
     final localizations = await AppLocalizations.delegate.load(Locale('en'));
 
     expect(find.text('tetraebraphthyme'), findsOneWidget);
@@ -59,10 +61,9 @@ void main() {
     final med2 = mockMedicine(designation: 'hypovonyhensas');
     final key = GlobalKey<MedicineIntakeFormState>();
 
-    await tester.pumpWidget(materialApp(MedicineIntakeForm(
-      meds: [med1,med2],
+    await tester.pumpWidget(appBase(MedicineIntakeForm(
       key: key,
-    )));
+    ), medRepo: MockMedRepo([med1,med2])));
 
     expect(key.currentState!.validate(), isTrue);
     expect(key.currentState!.save(), isNull);
@@ -82,7 +83,7 @@ void main() {
   testWidgets('prefills values when selecting med', (WidgetTester tester) async {
     final med1 = mockMedicine(designation: 'tetraebraphthyme', defaultDosis: 3.141);
     final med2 = mockMedicine(designation: 'hypovonyhensas');
-    await tester.pumpWidget(materialApp(MedicineIntakeForm(meds: [med1,med2])));
+    await tester.pumpWidget(appBase(MedicineIntakeForm(), medRepo: MockMedRepo([med1,med2])));
 
     await tester.tap(find.text(med1.designation));
     await tester.pumpAndSettle();
@@ -95,11 +96,10 @@ void main() {
     final med2 = mockMedicine(designation: 'hypovonyhensas');
     final key = GlobalKey<MedicineIntakeFormState>();
 
-    await tester.pumpWidget(materialApp(MedicineIntakeForm(
-      meds: [med1,med2],
+    await tester.pumpWidget(appBase(MedicineIntakeForm(
       key: key,
       initialValue: (med2, Weight.mg(3.141)),
-    )));
+    ), medRepo: MockMedRepo([med1,med2])));
     await tester.pumpAndSettle();
 
     expect(find.text(med2.designation), findsOneWidget);

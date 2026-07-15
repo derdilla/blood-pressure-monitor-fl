@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:blood_pressure_app/l10n/app_localizations.dart';
+import 'package:blood_pressure_app/model/med_cache.dart';
 import 'package:blood_pressure_app/model/storage/storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -71,14 +72,25 @@ Widget appBase(Widget child,  {
   ) {
     db = MockHealthDataSore();
   }
+  medRepo ??= db!.medRepo;
+  List<Medicine> meds = [];
+  if (medRepo is MockMedRepo) {
+    meds = medRepo._meds;
+  } else {
+    medRepo.getAll().then((meds) {
+      assert(meds.isEmpty);
+    });
+  }
+  final medCache = MedCache(medRepo, meds);
 
   return MultiRepositoryProvider(
     providers: [
       RepositoryProvider(create: (context) => bpRepo ?? db!.bpRepo),
-      RepositoryProvider(create: (context) => medRepo ?? db!.medRepo),
+      RepositoryProvider(create: (context) => medRepo),
       RepositoryProvider(create: (context) => intakeRepo ?? db!.intakeRepo),
       RepositoryProvider(create: (context) => noteRepo ?? db!.noteRepo),
       RepositoryProvider(create: (context) => weightRepo ?? db!.weightRepo),
+      ChangeNotifierProvider.value(value: medCache),
     ],
     child: materialApp(child,
       settings: settings,
@@ -223,7 +235,7 @@ Future<void> loadDialog(WidgetTester tester, void Function(BuildContext context)
   String dialogStarterText = 'X',
   Settings? settings,
 }) async {
-  await tester.pumpWidget(materialApp(
+  await tester.pumpWidget(appBase(
     Builder(builder: (context) => TextButton(onPressed: () => dialogStarter(context), child: Text(dialogStarterText)),),
     settings: settings,
   ),);
@@ -336,7 +348,10 @@ class _MockRepo<T> extends Repository<T> {
 
 class MockBloodPressureRepository extends _MockRepo<BloodPressureRecord> implements BloodPressureRepository {}
 class MockMedicineIntakeRepository extends _MockRepo<MedicineIntake> implements MedicineIntakeRepository {}
-class MockMedicineRepository extends _MockRepo<Medicine> implements MedicineRepository {}
+class MockMedicineRepository extends _MockRepo<Medicine> implements MedicineRepository {
+  @override
+  Future<List<Medicine>> getAll() async => data;
+}
 class MockNoteRepository extends _MockRepo<Note> implements NoteRepository {}
 class MockBodyweightRepository extends _MockRepo<BodyweightRecord> implements BodyweightRepository {}
 

@@ -14,6 +14,7 @@ import 'package:blood_pressure_app/features/old_bluetooth/bluetooth_input.dart';
 import 'package:blood_pressure_app/l10n/app_localizations.dart';
 import 'package:blood_pressure_app/logging.dart';
 import 'package:blood_pressure_app/model/bluetooth_input_mode.dart';
+import 'package:blood_pressure_app/model/med_cache.dart';
 import 'package:blood_pressure_app/model/storage/storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
@@ -26,15 +27,9 @@ class AddEntryForm extends FormBase<AddEntryFormValue> with TypeLogger {
   /// Create primary form to enter all types of entries.
   const AddEntryForm({super.key,
     super.initialValue,
-    this.meds = const [],
     this.bluetoothCubit,
     this.mockBleInput,
   });
-
-  /// All medicines selectable.
-  ///
-  /// Hides med input when this is empty.
-  final List<Medicine> meds;
 
   /// Function to customize [BluetoothCubit] creation.
   ///
@@ -78,7 +73,7 @@ class AddEntryFormState extends FormStateBase<AddEntryFormValue, AddEntryForm>
       if (widget.initialValue!.record == null
           && widget.initialValue!.intake == null
           && widget.initialValue!.weight != null) {
-        _controller.animateTo(widget.meds.isEmpty ? 1 : 2);
+        _controller.animateTo(context.read<MedCache>().isEmpty ? 1 : 2);
       } else if (widget.initialValue!.record == null
           && widget.initialValue!.intake != null) {
         _controller.animateTo(1);
@@ -162,7 +157,7 @@ class AddEntryFormState extends FormStateBase<AddEntryFormValue, AddEntryForm>
         if (!(bpFormValidation ?? true))
           0,
         if (!(weightFormValidation ?? true))
-          (widget.meds.isEmpty ? 1 : 2),
+          (context.read<MedCache>().isEmpty ? 1 : 2),
       ];
       if (!wrongTabs.contains(_controller.index) && wrongTabs.isNotEmpty) {
         _controller.animateTo(wrongTabs.first);
@@ -358,10 +353,9 @@ class AddEntryFormState extends FormStateBase<AddEntryFormValue, AddEntryForm>
                 pul: widget.initialValue?.record?.pul,
               ),
             )),
-            if (widget.meds.isNotEmpty)
+            if (!context.select<MedCache, bool>((c) => c.isEmpty))
               (Icon(Icons.medication_outlined), MedicineIntakeForm(
                 key: _intakeForm,
-                meds: widget.meds,
                 initialValue: widget.initialValue?.intake == null ? null : (
                   widget.initialValue!.intake!.medicine,
                   widget.initialValue!.intake!.dosis,

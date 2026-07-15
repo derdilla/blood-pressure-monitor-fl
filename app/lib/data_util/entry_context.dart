@@ -24,10 +24,8 @@ extension EntryUtils on BuildContext {
   Future<void> createEntry([AddEntryFormValue? initial]) async {
     _logger.finer('createEntry($initial)');
     try {
-      final medicineList = await read<MedicineRepository>().getAll();
       await Navigator.of(this).push(MaterialPageRoute<Object?>(
         builder: (_) => AddEntryScreen(
-          medicineList: medicineList,
           initialRecord: initial,
         )
       ));

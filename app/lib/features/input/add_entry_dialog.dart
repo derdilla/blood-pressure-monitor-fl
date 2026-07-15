@@ -8,7 +8,6 @@ import 'package:blood_pressure_app/logging.dart';
 import 'package:blood_pressure_app/model/storage/storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:health_data_store/health_data_store.dart';
 
 /// Input mask for entering measurements.
 class AddEntryDialog extends StatefulWidget {
@@ -16,7 +15,6 @@ class AddEntryDialog extends StatefulWidget {
   /// 
   /// This is usually created through the [showAddEntryDialog] function.
   const AddEntryDialog({super.key,
-    this.availableMeds,
     this.initialRecord,
   });
 
@@ -25,11 +23,6 @@ class AddEntryDialog extends StatefulWidget {
   /// When this is null the timestamp is [DateTime.now] and the other fields
   /// will be empty.
   final AddEntryFormValue? initialRecord;
-
-  /// All medicines selectable.
-  ///
-  /// Hides med input when this is empty or null.
-  final List<Medicine>? availableMeds;
 
   @override
   State<AddEntryDialog> createState() => _AddEntryDialogState();
@@ -75,7 +68,6 @@ class _AddEntryDialogState extends State<AddEntryDialog> with TypeLogger {
       body: AddEntryForm(
         key: formKey,
         initialValue: widget.initialRecord,
-        meds: widget.availableMeds ?? [],
       ),
     ),
   );
@@ -84,16 +76,13 @@ class _AddEntryDialogState extends State<AddEntryDialog> with TypeLogger {
 /// Shows a dialog to input a blood pressure measurement or a medication.
 Future<AddEntryFormValue?> showAddEntryDialog(
   BuildContext context,
-  MedicineRepository medRepo,
   [AddEntryFormValue? initialRecord,
 ]) async {
-  final meds = await medRepo.getAll();
   if (context.mounted) {
     return showDialog<AddEntryFormValue>(
       context: context, builder: (context) =>
         AddEntryDialog(
           initialRecord: initialRecord,
-          availableMeds: meds,
         ),
     );
   }
