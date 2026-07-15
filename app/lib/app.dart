@@ -240,7 +240,7 @@ class _AppState extends State<App> with TypeLogger {
 
     // Cleans up loading with measurement on launch enabled
     final initialMedicineList = await medRepo.getAll();
-    final medicationRepo = MedCache(medRepo, initialMedicineList);
+    final medCache = MedCache(medRepo, initialMedicineList);
 
     _loadedChild = MultiRepositoryProvider(
       providers: [
@@ -261,7 +261,7 @@ class _AppState extends State<App> with TypeLogger {
           ChangeNotifierProvider.value(value: _intervalStorageManager!),
           ChangeNotifierProvider.value(value: _exportColumnsManager!),
           ChangeNotifierProvider.value(value: _healthConnectSettings!),
-          ChangeNotifierProvider.value(value: medicationRepo)
+          ChangeNotifierProvider.value(value: medCache),
         ],
         child: _buildAppRoot(initialRoute),
       ),
