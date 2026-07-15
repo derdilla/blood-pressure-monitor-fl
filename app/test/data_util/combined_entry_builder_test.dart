@@ -1,5 +1,4 @@
-import 'package:blood_pressure_app/data_util/add_entry_form_value_builder.dart';
-import 'package:blood_pressure_app/features/input/forms/add_entry_form.dart';
+import 'package:blood_pressure_app/data_util/combined_entry_builder.dart';
 import 'package:blood_pressure_app/l10n/app_localizations.dart';
 import 'package:blood_pressure_app/model/storage/interval_store_manager.dart';
 import 'package:blood_pressure_app/model/storage/types/interval_storage_setting.dart';
@@ -21,7 +20,7 @@ void main() {
     final mainIntervalls = IntervalStorage();
     mainIntervalls.changeStepSize(TimeStep.lifetime);
 
-    await tester.pumpWidget(await appBaseWithData(AddEntryFormValueBuilder(
+    await tester.pumpWidget(await appBaseWithData(CombinedEntryBuilder(
       rangeType: IntervalStoreManagerLocation.mainPage,
       onData: (context, foundRecords, foundIntakes, foundNotes) {
         expect(foundRecords, records);
@@ -42,7 +41,7 @@ void main() {
     final exportPageIntervalls = IntervalStorage();
     exportPageIntervalls.changeStepSize(TimeStep.lifetime);
 
-    await tester.pumpWidget(await appBaseWithData(AddEntryFormValueBuilder(
+    await tester.pumpWidget(await appBaseWithData(CombinedEntryBuilder(
       rangeType: IntervalStoreManagerLocation.exportPage,
       onEntries: (context, entries) {
         expect(entries, hasLength(3));
@@ -65,7 +64,7 @@ void main() {
     final exportPageIntervalls = IntervalStorage();
     exportPageIntervalls.changeStepSize(TimeStep.lifetime);
 
-    await tester.pumpWidget(await appBaseWithData(AddEntryFormValueBuilder(
+    await tester.pumpWidget(await appBaseWithData(CombinedEntryBuilder(
       rangeType: IntervalStoreManagerLocation.exportPage,
       onEntries: (context, entries) {
         expect(entries, isEmpty);

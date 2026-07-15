@@ -3,8 +3,8 @@ import 'dart:convert';
 import 'package:blood_pressure_app/features/export_import/model/csv_converter.dart';
 import 'package:blood_pressure_app/features/export_import/model/csv_record_parsing_actor.dart';
 import 'package:blood_pressure_app/features/export_import/ui/import_preview_dialog.dart';
-import 'package:blood_pressure_app/features/input/forms/add_entry_form.dart';
 import 'package:blood_pressure_app/l10n/app_localizations.dart';
+import 'package:blood_pressure_app/model/combined_entry.dart';
 import 'package:blood_pressure_app/model/med_cache.dart';
 import 'package:blood_pressure_app/model/storage/storage.dart';
 import 'package:file_picker/file_picker.dart';
@@ -67,7 +67,7 @@ class ImportButton extends StatelessWidget {
           final noteRepo = RepositoryProvider.of<NoteRepository>(context);
           final intakeRepo = RepositoryProvider.of<MedicineIntakeRepository>(context);
           final weightRepo = RepositoryProvider.of<BodyweightRepository>(context);
-          await Future.forEach<AddEntryFormValue>(importedRecords, (e) async {
+          await Future.forEach<CombinedEntry>(importedRecords, (e) async {
             if (e.sys != null || e.dia != null || e.pul != null) {
               await bpRepo.add(e.record!);
             }

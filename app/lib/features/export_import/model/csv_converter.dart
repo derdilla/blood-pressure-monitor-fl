@@ -2,8 +2,8 @@ import 'package:blood_pressure_app/features/export_import/model/column.dart';
 import 'package:blood_pressure_app/features/export_import/model/export_preset.dart';
 import 'package:blood_pressure_app/features/export_import/model/import_field_type.dart' show RowDataFieldType;
 import 'package:blood_pressure_app/features/export_import/model/record_parsing_result.dart';
-import 'package:blood_pressure_app/features/input/forms/add_entry_form.dart';
 import 'package:blood_pressure_app/logging.dart';
+import 'package:blood_pressure_app/model/combined_entry.dart';
 import 'package:blood_pressure_app/model/storage/export_columns_store.dart';
 import 'package:blood_pressure_app/model/storage/export_csv_settings.dart';
 import 'package:blood_pressure_app/model/storage/export_settings.dart';
@@ -115,7 +115,7 @@ class CsvConverter with TypeLogger {
       List<ExportColumn?> parsers, [
         bool assumeHeadline = true,
       ]) {
-    final List<AddEntryFormValue> entries = [];
+    final List<CombinedEntry> entries = [];
     int currentLineNumber = assumeHeadline ? 1 : 0;
     for (final currentLine in dataLines) {
       if (currentLine.length < parsers.length) {
@@ -196,25 +196,23 @@ class CsvConverter with TypeLogger {
         time: timestamp,
         weight: Weight.kg(weightData),
       );
-      entries.add((
-        timestamp: timestamp,
+      entries.add(CombinedEntry(
+        time: timestamp,
         intake: intakes?.firstOrNull,
         note: note,
         record: record,
-        records: null,
         weight: weight,
       ));
       if (intakes != null && intakes.length > 1) {
         for (int i = 1; i < intakes.length; i++) {
           final newTime = timestamp.add(Duration(seconds: i));
-          entries.add((
-            timestamp: newTime,
+          entries.add(CombinedEntry(
+            time: newTime,
             intake: MedicineIntake(
               time: newTime,
               medicine: intakes[i].medicine,
               dosis: intakes[i].dosis,
             ),
-            note: null, record: null, weight: null, records: null
           ));
         }
       }

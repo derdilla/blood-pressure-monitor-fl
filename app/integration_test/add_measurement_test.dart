@@ -1,6 +1,5 @@
 import 'package:blood_pressure_app/app.dart';
 import 'package:blood_pressure_app/features/input/add_entry_dialog.dart';
-import 'package:blood_pressure_app/features/input/forms/add_entry_form.dart';
 import 'package:blood_pressure_app/features/measurement_list/measurement_list_entry.dart';
 import 'package:blood_pressure_app/features/settings/tiles/color_picker_list_tile.dart';
 import 'package:blood_pressure_app/l10n/app_localizations.dart';

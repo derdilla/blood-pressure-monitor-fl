@@ -1,6 +1,6 @@
 import 'package:blood_pressure_app/features/export_import/model/import_field_type.dart';
 import 'package:blood_pressure_app/features/export_import/model/record_formatter.dart';
-import 'package:blood_pressure_app/features/input/forms/add_entry_form.dart';
+import 'package:blood_pressure_app/model/combined_entry.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:health_data_store/health_data_store.dart';
@@ -128,7 +128,7 @@ void main() {
   });
 }
 
-AddEntryFormValue mockEntryPos([
+CombinedEntry mockEntryPos([
   DateTime? time,
   int? sys,
   int? dia,
@@ -144,36 +144,39 @@ AddEntryFormValue mockEntryPos([
   pin: pin,
 );
 
-AddEntryFormValue mockEntry({
+CombinedEntry mockEntry({
   DateTime? time,
   int? sys,
   int? dia,
   int? pul,
   String? note,
   Color? pin,
-  MedicineIntake? intake,
+  (Medicine, double)? intake,
 }) {
   time ??= DateTime.now();
-  return (
-  timestamp: time,
+  return CombinedEntry(
+    time: time,
     record: BloodPressureRecord(
       time: time,
       sys: sys == null ? null : Pressure.mmHg(sys),
       dia: dia == null ? null : Pressure.mmHg(dia),
       pul: pul,
     ),
-    records: null,
     note: Note(
       time: time,
       note: note,
       color: pin?.toARGB32(),
     ),
-    intake: intake,
+    intake: intake == null ? null : MedicineIntake(
+      time: time,
+      medicine: intake.$1,
+      dosis: Weight.mg(intake.$2),
+    ),
     weight: null,
   );
 }
 
-extension DebugFormat on AddEntryFormValue {
+extension DebugFormat on CombinedEntry {
   String debugToString() => 'FullEntry('
     'time: $time, '
     'sys: ${sys?.mmHg}, '

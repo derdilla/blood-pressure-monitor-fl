@@ -8,6 +8,7 @@ import 'package:blood_pressure_app/features/input/forms/weight_form.dart';
 import 'package:blood_pressure_app/features/old_bluetooth/bluetooth_input.dart';
 import 'package:blood_pressure_app/l10n/app_localizations.dart';
 import 'package:blood_pressure_app/model/bluetooth_input_mode.dart';
+import 'package:blood_pressure_app/model/combined_entry.dart';
 import 'package:blood_pressure_app/model/storage/settings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -201,10 +202,8 @@ void main() {
     await tester.pumpWidget(appBase(AddEntryForm(key: key)));
     expect(key.currentState?.validate(), true);
 
-    key.currentState!.fillForm((
-      timestamp: time.add(Duration(hours: 1)),
-      intake: null, note: null, record: null, weight: null, records: null
-    ));
+    key.currentState!.fillForm(CombinedEntry(
+      time: time.add(Duration(hours: 1))));
     await tester.pump();
     expect(key.currentState?.validate(), false);
   });
@@ -214,10 +213,10 @@ void main() {
     await tester.pumpWidget(appBase(AddEntryForm(key: key)));
     expect(key.currentState?.validate(), true);
 
-    key.currentState!.fillForm((
-      timestamp: DateTime.now(),
-      record: mockRecord(sys: 123123),
-      note: null, intake: null, weight: null, records: null
+    final time = DateTime.now();
+    key.currentState!.fillForm(CombinedEntry(
+      time: time,
+      record: mockRecord(time: time, sys: 123123),
     ));
     await tester.pump();
     expect(key.currentState?.validate(), false);
@@ -256,12 +255,11 @@ void main() {
     final key = GlobalKey<AddEntryFormState>();
     final med = mockMedicine(designation: 'somemed123');
     final intake = mockIntake(med);
-    final value = (
-      timestamp: intake.time,
+    final value = CombinedEntry(
+      time: intake.time,
       intake: intake,
       note: Note(time: intake.time, note: '123test', color: Colors.teal.toARGB32()),
       record: mockRecord(time: intake.time, sys: 123, dia: 45, pul: 67),
-      records: null,
       weight: BodyweightRecord(time: intake.time, weight: Weight.kg(123.45))
     );
     await tester.pumpWidget(appBase(AddEntryForm(
@@ -270,8 +268,8 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(key.currentState?.validate(), true);
-    expect(key.currentState?.save(), isA<AddEntryFormValue>()
-      .having((e) => e.timestamp, 'timestamp', value.timestamp)
+    expect(key.currentState?.save(), isA<CombinedEntry>()
+      .having((e) => e.time, 'timestamp', value.time)
       .having((e) => e.intake, 'intake', value.intake)
       .having((e) => e.record, 'record', value.record)
       .having((e) => e.weight, 'weight', value.weight)
@@ -282,12 +280,11 @@ void main() {
     final key = GlobalKey<AddEntryFormState>();
     final med = mockMedicine(designation: 'somemed123');
     final intake = mockIntake(med);
-    final value = (
-      timestamp: intake.time,
+    final value = CombinedEntry(
+      time: intake.time,
       intake: intake,
       note: Note(time: intake.time, note: '123test', color: Colors.teal.toARGB32()),
       record: mockRecord(time: intake.time, sys: 123, dia: 45, pul: 67),
-      records: null,
       weight: BodyweightRecord(time: intake.time, weight: Weight.kg(123.45))
     );
     await tester.pumpWidget(appBase(AddEntryForm(key: key),
@@ -298,8 +295,8 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(key.currentState?.validate(), true);
-    expect(key.currentState?.save(), isA<AddEntryFormValue>()
-        .having((e) => e.timestamp, 'timestamp', value.timestamp)
+    expect(key.currentState?.save(), isA<CombinedEntry>()
+        .having((e) => e.time, 'timestamp', value.time)
         .having((e) => e.intake, 'intake', value.intake)
         .having((e) => e.record, 'record', value.record)
         .having((e) => e.weight, 'weight', value.weight)
@@ -396,14 +393,11 @@ void main() {
 
   testWidgets('opens correct tab on edit', (tester) async {
     final key = GlobalKey<AddEntryFormState>();
+    final time = DateTime.now();
     await tester.pumpWidget(appBase(AddEntryForm(key: key,
-      initialValue: (
-        timestamp: DateTime.now(),
-        weight: BodyweightRecord(time:  DateTime.now(), weight: Weight.kg(123.0)),
-        record: null,
-        records: null,
-        note: null,
-        intake: null,
+      initialValue: CombinedEntry(
+        time: time,
+        weight: BodyweightRecord(time: time, weight: Weight.kg(123.0)),
       ),
     ),
       settings: Settings(weightInput: true),
@@ -419,13 +413,8 @@ void main() {
     final initialTime = DateTime.now();
 
     await tester.pumpWidget(appBase(AddEntryForm(key: key,
-      initialValue: (
-        timestamp: initialTime,
-        weight: null,
-        record: null,
-        records: null,
-        note: null,
-        intake: null,
+      initialValue: CombinedEntry(
+        time: initialTime,
       ),
       mockBleInput: (callback) => ListTile(
         onTap: () => callback(mockRecord(time: DateTime(2000))),
@@ -441,8 +430,8 @@ void main() {
 
     await tester.tap(find.text('mockBleInput'));
     final returnedEntry = key.currentState!.save();
-    expect(returnedEntry!.timestamp.isAfter(DateTime(2000)), isTrue);
-    expect(returnedEntry.timestamp, initialTime);
+    expect(returnedEntry!.time.isAfter(DateTime(2000)), isTrue);
+    expect(returnedEntry.time, initialTime);
 
     // also check if the hint dialog isn't incorrectly displayed
     await tester.pumpAndSettle();
@@ -454,14 +443,7 @@ void main() {
     final initialTime = DateTime.now();
 
     await tester.pumpWidget(appBase(AddEntryForm(key: key,
-      initialValue: (
-        timestamp: initialTime,
-        weight: null,
-        record: null,
-        records: null,
-        note: null,
-        intake: null,
-      ),
+      initialValue: CombinedEntry(time: initialTime),
       mockBleInput: (callback) => ListTile(
         onTap: () => callback(mockRecord(time: DateTime(2000))),
         title: Text('mockBleInput'),
@@ -476,7 +458,7 @@ void main() {
 
     await tester.tap(find.text('mockBleInput'));
     final returnedEntry = key.currentState!.save();
-    expect(returnedEntry!.timestamp, equals(DateTime(2000)));
+    expect(returnedEntry!.time, equals(DateTime(2000)));
   });
 
   testWidgets('shows warning if time from ble is too old', (tester) async {

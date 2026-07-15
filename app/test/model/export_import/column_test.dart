@@ -1,12 +1,11 @@
 import 'package:blood_pressure_app/features/export_import/model/column.dart';
 import 'package:blood_pressure_app/features/export_import/model/import_field_type.dart';
 import 'package:blood_pressure_app/features/export_import/model/record_formatter.dart';
-import 'package:blood_pressure_app/features/input/forms/add_entry_form.dart';
+import 'package:blood_pressure_app/model/combined_entry.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:health_data_store/health_data_store.dart';
 
-import '../../features/measurement_list/measurement_list_entry_test.dart';
 import '../../util.dart';
 import 'record_formatter_test.dart';
 
@@ -203,13 +202,13 @@ void main() {
   });
 }
 
-AddEntryFormValue _filledRecord([bool addIntakes = false]) => mockEntry(
+CombinedEntry _filledRecord([bool addIntakes = false]) => mockEntry(
   sys: 123,
   dia: 456,
   pul: 789,
   note: 'test',
   pin: Colors.pink,
   intake: addIntakes
-    ? mockIntake(mockMedicine(designation: 'mockMed'), dosis: 123.4,)
+    ? (mockMedicine(designation: 'mockMed'), 123.4)
     : null,
 );

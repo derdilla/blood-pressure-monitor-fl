@@ -3,8 +3,8 @@ import 'package:blood_pressure_app/features/export_import/model/column.dart';
 import 'package:blood_pressure_app/features/export_import/model/csv_converter.dart';
 import 'package:blood_pressure_app/features/export_import/model/csv_record_parsing_actor.dart';
 import 'package:blood_pressure_app/features/export_import/ui/import_preview_dialog.dart';
-import 'package:blood_pressure_app/features/input/forms/add_entry_form.dart';
 import 'package:blood_pressure_app/l10n/app_localizations.dart';
+import 'package:blood_pressure_app/model/combined_entry.dart';
 import 'package:blood_pressure_app/model/storage/export_columns_store.dart';
 import 'package:blood_pressure_app/model/storage/export_csv_settings.dart';
 import 'package:blood_pressure_app/model/storage/export_settings.dart';
@@ -115,8 +115,8 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.byType(ImportPreviewDialog), findsNothing);
 
-    expect(data, isA<List<AddEntryFormValue>>());
-    final List<AddEntryFormValue> res = data;
+    expect(data, isA<List<CombinedEntry>>());
+    final List<CombinedEntry> res = data;
     expect(res, hasLength(2));
     expect(res[0].color, 4285132974);
     expect(res[1].time.millisecondsSinceEpoch, 1703147206000);
@@ -157,8 +157,8 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.byType(ImportPreviewDialog), findsNothing);
 
-    expect(data, isA<List<AddEntryFormValue>>());
-    final List<AddEntryFormValue> res = data;
+    expect(data, isA<List<CombinedEntry>>());
+    final List<CombinedEntry> res = data;
     expect(res, hasLength(3));
     expect(res[0].intake, isNotNull);
     expect(res[0].intake!.medicine.designation, 'testMed1');
@@ -200,8 +200,8 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.byType(ImportPreviewDialog), findsNothing);
 
-    expect(data, isA<List<AddEntryFormValue>>());
-    final List<AddEntryFormValue> res = data;
+    expect(data, isA<List<CombinedEntry>>());
+    final List<CombinedEntry> res = data;
     expect(res, hasLength(1));
     expect(res[0].weight, isNotNull);
     expect(res[0].weight!.weight.kg, 72);

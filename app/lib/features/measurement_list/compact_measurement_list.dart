@@ -1,8 +1,8 @@
 import 'package:blood_pressure_app/components/nullable_text.dart';
 import 'package:blood_pressure_app/components/pressure_text.dart';
 import 'package:blood_pressure_app/data_util/entry_context.dart';
-import 'package:blood_pressure_app/features/input/forms/add_entry_form.dart';
 import 'package:blood_pressure_app/l10n/app_localizations.dart';
+import 'package:blood_pressure_app/model/combined_entry.dart';
 import 'package:blood_pressure_app/model/storage/settings.dart';
 import 'package:flutter/material.dart';
 import 'package:health_data_store/health_data_store.dart';
@@ -17,7 +17,7 @@ class CompactMeasurementList extends StatefulWidget {
   });
 
   /// Entries sorted with newest ordered first.
-  final List<AddEntryFormValue> data;
+  final List<CombinedEntry> data;
 
   @override
   State<CompactMeasurementList> createState() => _CompactMeasurementListState();

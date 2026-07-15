@@ -4,7 +4,7 @@ import 'package:blood_pressure_app/features/export_import/model/column.dart';
 import 'package:blood_pressure_app/features/export_import/model/csv_converter.dart';
 import 'package:blood_pressure_app/features/export_import/model/export_preset.dart';
 import 'package:blood_pressure_app/features/export_import/model/record_parsing_result.dart';
-import 'package:blood_pressure_app/features/input/forms/add_entry_form.dart';
+import 'package:blood_pressure_app/model/combined_entry.dart';
 import 'package:blood_pressure_app/model/storage/export_columns_store.dart';
 import 'package:blood_pressure_app/model/storage/export_csv_settings.dart';
 import 'package:blood_pressure_app/model/storage/export_settings.dart';
@@ -41,10 +41,10 @@ void main() {
   test('should be able to recreate records from csv in default configuration', () {
     final List<(DateTime, BloodPressureRecord, Note, List<MedicineIntake>, Weight?)> initialRecords = createRecords();
     final csv = _defaultConverter.create(initialRecords);
-    final List<AddEntryFormValue> parsedRecords = _defaultConverter.parse(csv).getOr(failParse);
+    final List<CombinedEntry> parsedRecords = _defaultConverter.parse(csv).getOr(failParse);
 
     expect(parsedRecords, pairwiseCompare(initialRecords,
-      ((DateTime, BloodPressureRecord, Note, List<MedicineIntake>, Weight?) p0, AddEntryFormValue p1) =>
+      ((DateTime, BloodPressureRecord, Note, List<MedicineIntake>, Weight?) p0, CombinedEntry p1) =>
         p0.$2.time == p1.time &&
         p0.$2.sys == p1.sys &&
         p0.$2.dia == p1.dia &&
@@ -61,7 +61,7 @@ void main() {
     final records = parsed.getOr(failParse);
     expect(records, isNotNull);
     expect(records.length, 3);
-    expect(records, anyElement(isA<AddEntryFormValue>()
+    expect(records, anyElement(isA<CombinedEntry>()
       .having((p0) => p0.time.millisecondsSinceEpoch, 'timestamp', 1703239921194)
       .having((p0) => p0.sys?.mmHg, 'systolic', null)
       .having((p0) => p0.dia?.mmHg, 'diastolic', null)
@@ -69,7 +69,7 @@ void main() {
       .having((p0) => p0.note?.note, 'notes', 'note')
       .having((p0) => p0.note?.color, 'pin', null),
     ),);
-    expect(records, anyElement(isA<AddEntryFormValue>()
+    expect(records, anyElement(isA<CombinedEntry>()
       .having((p0) => p0.time.millisecondsSinceEpoch, 'timestamp', 1703239908244)
       .having((p0) => p0.sys?.mmHg, 'systolic', null)
       .having((p0) => p0.dia?.mmHg, 'diastolic', 45)
@@ -77,7 +77,7 @@ void main() {
       .having((p0) => p0.note?.note, 'notes', 'test')
       .having((p0) => p0.note?.color, 'pin', null),
     ),);
-    expect(records, anyElement(isA<AddEntryFormValue>()
+    expect(records, anyElement(isA<CombinedEntry>()
       .having((p0) => p0.time.millisecondsSinceEpoch, 'timestamp', 1703239905395)
       .having((p0) => p0.sys?.mmHg, 'systolic', 123)
       .having((p0) => p0.dia?.mmHg, 'diastolic', null)
@@ -96,15 +96,15 @@ void main() {
     final records = parsed.getOr(failParse);
     expect(records, isNotNull);
     expect(records.length, 2);
-    expect(records, everyElement(isA<AddEntryFormValue>()));
-    expect(records, anyElement(isA<AddEntryFormValue>()
+    expect(records, everyElement(isA<CombinedEntry>()));
+    expect(records, anyElement(isA<CombinedEntry>()
       .having((p0) => p0.time.millisecondsSinceEpoch, 'timestamp', 1703175660000)
       .having((p0) => p0.sys?.mmHg, 'systolic', 312)
       .having((p0) => p0.dia?.mmHg, 'diastolic', 315)
       .having((p0) => p0.pul, 'pulse', 46)
       .having((p0) => p0.note?.note?.trim(), 'notes', 'testfkajkfb'),
     ),);
-    expect(records, anyElement(isA<AddEntryFormValue>()
+    expect(records, anyElement(isA<CombinedEntry>()
       .having((p0) => p0.time.millisecondsSinceEpoch, 'timestamp', 1703175600000)
       .having((p0) => p0.sys?.mmHg, 'systolic', 123)
       .having((p0) => p0.dia?.mmHg, 'diastolic', 41)
@@ -120,15 +120,15 @@ void main() {
     final records = parsed.getOr(failParse);
     expect(records, isNotNull);
     expect(records.length, 4);
-    expect(records, everyElement(isA<AddEntryFormValue>()));
-    expect(records, anyElement(isA<AddEntryFormValue>()
+    expect(records, everyElement(isA<CombinedEntry>()));
+    expect(records, anyElement(isA<CombinedEntry>()
         .having((p0) => p0.time.millisecondsSinceEpoch, 'timestamp', 1703175660000)
         .having((p0) => p0.sys?.mmHg, 'systolic', 312)
         .having((p0) => p0.dia?.mmHg, 'diastolic', 315)
         .having((p0) => p0.pul, 'pulse', 46)
         .having((p0) => p0.note?.note?.trim(), 'notes', 'testfkajkfb'),
     ),);
-    expect(records, anyElement(isA<AddEntryFormValue>()
+    expect(records, anyElement(isA<CombinedEntry>()
         .having((p0) => p0.time.millisecondsSinceEpoch, 'timestamp', 1703175600000)
         .having((p0) => p0.sys?.mmHg, 'systolic', 123)
         .having((p0) => p0.dia?.mmHg, 'diastolic', 41)
@@ -144,22 +144,22 @@ void main() {
     final records = parsed.getOr(failParse);
     expect(records, isNotNull);
     expect(records.length, 186);
-    expect(records, everyElement(isA<AddEntryFormValue>()));
-    expect(records, anyElement(isA<AddEntryFormValue>()
+    expect(records, everyElement(isA<CombinedEntry>()));
+    expect(records, anyElement(isA<CombinedEntry>()
       .having((p0) => p0.time.millisecondsSinceEpoch, 'timestamp', 1703175660000)
       .having((p0) => p0.sys?.mmHg, 'systolic', 312)
       .having((p0) => p0.dia?.mmHg, 'diastolic', 315)
       .having((p0) => p0.pul, 'pulse', 46)
       .having((p0) => p0.note?.note, 'notes', 'testfkajkfb'),
     ),);
-    expect(records, anyElement(isA<AddEntryFormValue>()
+    expect(records, anyElement(isA<CombinedEntry>()
       .having((p0) => p0.time.millisecondsSinceEpoch, 'timestamp', 1703175600000)
       .having((p0) => p0.sys?.mmHg, 'systolic', 123)
       .having((p0) => p0.dia?.mmHg, 'diastolic', 41)
       .having((p0) => p0.pul, 'pulse', 43)
       .having((p0) => p0.note?.note, 'notes', '1214s3'),
     ),);
-    expect(records, anyElement(isA<AddEntryFormValue>()
+    expect(records, anyElement(isA<CombinedEntry>()
       .having((p0) => p0.time.millisecondsSinceEpoch, 'timestamp', 10893142303200)
       .having((p0) => p0.sys?.mmHg, 'systolic', 106)
       .having((p0) => p0.dia?.mmHg, 'diastolic', 77)
@@ -175,8 +175,8 @@ void main() {
     final records = parsed.getOr(failParse);
     expect(records, isNotNull);
     expect(records.length, 185);
-    expect(records, everyElement(isA<AddEntryFormValue>()));
-    expect(records, anyElement(isA<AddEntryFormValue>()
+    expect(records, everyElement(isA<CombinedEntry>()));
+    expect(records, anyElement(isA<CombinedEntry>()
       .having((p0) => p0.time.millisecondsSinceEpoch, 'timestamp', 1703175660000)
       .having((p0) => p0.sys?.mmHg, 'systolic', 312)
       .having((p0) => p0.dia?.mmHg, 'diastolic', 315)
@@ -184,7 +184,7 @@ void main() {
       .having((p0) => p0.note?.note, 'notes', 'testfkajkfb')
       .having((p0) => p0.note?.color, 'pin', null),
     ),);
-    expect(records, anyElement(isA<AddEntryFormValue>()
+    expect(records, anyElement(isA<CombinedEntry>()
       .having((p0) => p0.time.millisecondsSinceEpoch, 'timestamp', 1703175600000)
       .having((p0) => p0.sys?.mmHg, 'systolic', 123)
       .having((p0) => p0.dia?.mmHg, 'diastolic', 41)
@@ -192,7 +192,7 @@ void main() {
       .having((p0) => p0.note?.note, 'notes', '1214s3')
       .having((p0) => p0.note?.color, 'pin', null),
     ),);
-    expect(records, anyElement(isA<AddEntryFormValue>()
+    expect(records, anyElement(isA<CombinedEntry>()
       .having((p0) => p0.time.millisecondsSinceEpoch, 'timestamp', 1077625200000)
       .having((p0) => p0.sys?.mmHg, 'systolic', 100)
       .having((p0) => p0.dia?.mmHg, 'diastolic', 82)
@@ -209,8 +209,8 @@ void main() {
     final records = parsed.getOr(failParse);
     expect(records, isNotNull);
     expect(records.length, 185);
-    expect(records, everyElement(isA<AddEntryFormValue>()));
-    expect(records, anyElement(isA<AddEntryFormValue>()
+    expect(records, everyElement(isA<CombinedEntry>()));
+    expect(records, anyElement(isA<CombinedEntry>()
       .having((p0) => p0.time.millisecondsSinceEpoch, 'timestamp', 1703175660000)
       .having((p0) => p0.sys?.mmHg, 'systolic', 312)
       .having((p0) => p0.dia?.mmHg, 'diastolic', 315)
@@ -218,7 +218,7 @@ void main() {
       .having((p0) => p0.note?.note, 'notes', 'testfkajkfb')
       .having((p0) => p0.note?.color, 'pin', null),
     ),);
-    expect(records, anyElement(isA<AddEntryFormValue>()
+    expect(records, anyElement(isA<CombinedEntry>()
         .having((p0) => p0.time.millisecondsSinceEpoch, 'timestamp', 1703175600000)
         .having((p0) => p0.sys?.mmHg, 'systolic', 123)
         .having((p0) => p0.dia?.mmHg, 'diastolic', 41)
@@ -226,7 +226,7 @@ void main() {
         .having((p0) => p0.note?.note, 'notes', '1214s3')
         .having((p0) => p0.note?.color, 'pin', null),
     ),);
-    expect(records, anyElement(isA<AddEntryFormValue>()
+    expect(records, anyElement(isA<CombinedEntry>()
         .having((p0) => p0.time.millisecondsSinceEpoch, 'timestamp', 1077625200000)
         .having((p0) => p0.sys?.mmHg, 'systolic', 100)
         .having((p0) => p0.dia?.mmHg, 'diastolic', 82)
@@ -244,8 +244,8 @@ void main() {
     final records = parsed.getOr(failParse);
     expect(records, isNotNull);
     expect(records.length, 9478);
-    expect(records, everyElement(isA<AddEntryFormValue>()));
-    expect(records, anyElement(isA<AddEntryFormValue>()
+    expect(records, everyElement(isA<CombinedEntry>()));
+    expect(records, anyElement(isA<CombinedEntry>()
       .having((p0) => p0.time.millisecondsSinceEpoch, 'timestamp', 1703175193324)
       .having((p0) => p0.sys?.mmHg, 'systolic', 123)
       .having((p0) => p0.dia?.mmHg, 'diastolic', 43)
@@ -253,7 +253,7 @@ void main() {
       .having((p0) => p0.note?.note, 'notes', 'sdfsdfds')
       .having((p0) => p0.note?.color, 'color', 0xff69f0ae),
     ),);
-    expect(records, anyElement(isA<AddEntryFormValue>()
+    expect(records, anyElement(isA<CombinedEntry>()
       .having((p0) => p0.time.millisecondsSinceEpoch, 'timestamp', 1702883511000)
       .having((p0) => p0.sys?.mmHg, 'systolic', 114)
       .having((p0) => p0.dia?.mmHg, 'diastolic', 71)
@@ -261,7 +261,7 @@ void main() {
       .having((p0) => p0.note?.note, 'notes', 'fsaf &_*¢|^✓[=%®©')
       .having((p0) => p0.note?.color, 'color', Colors.lightGreen.toARGB32()),
     ),);
-    expect(records, anyElement(isA<AddEntryFormValue>()
+    expect(records, anyElement(isA<CombinedEntry>()
       .having((p0) => p0.time.millisecondsSinceEpoch, 'timestamp', 1701034952000)
       .having((p0) => p0.sys?.mmHg, 'systolic', 125)
       .having((p0) => p0.dia?.mmHg, 'diastolic', 77)
@@ -269,7 +269,7 @@ void main() {
       .having((p0) => p0.note?.note, 'notes', null)
       .having((p0) => p0.note?.color, 'color', null),
     ),);
-    expect(records, anyElement(isA<AddEntryFormValue>()
+    expect(records, anyElement(isA<CombinedEntry>()
         .having((p0) => p0.time.millisecondsSinceEpoch, 'timestamp', 1077625200000)
         .having((p0) => p0.sys?.mmHg, 'systolic', 100)
         .having((p0) => p0.dia?.mmHg, 'diastolic', 82)
@@ -297,7 +297,7 @@ void main() {
     final records = parsed.getOr(failParse);
     expect(records, isNotNull);
     expect(records.length, 3);
-    expect(records, contains(isA<AddEntryFormValue>()
+    expect(records, contains(isA<CombinedEntry>()
       .having((c) => c.sys?.mmHg, 'sys', 1)
       .having((c) => c.time.year, 'year', 2024)
       .having((c) => c.time.month, 'month', 3)
@@ -305,7 +305,7 @@ void main() {
       .having((c) => c.time.hour, 'hour', 15)
       .having((c) => c.time.minute, 'minute', 45),
     ));
-    expect(records, contains(isA<AddEntryFormValue>()
+    expect(records, contains(isA<CombinedEntry>()
       .having((c) => c.sys?.mmHg, 'sys', 2)
       .having((c) => c.time.year, 'year', 2004)
       .having((c) => c.time.month, 'month', 12)
@@ -313,7 +313,7 @@ void main() {
       .having((c) => c.time.hour, 'hour', 0)
       .having((c) => c.time.minute, 'minute', 42),
     ));
-    expect(records, contains(isA<AddEntryFormValue>()
+    expect(records, contains(isA<CombinedEntry>()
       .having((c) => c.sys?.mmHg, 'sys', 3)
       .having((c) => c.time.year, 'year', 2012)
       .having((c) => c.time.month, 'month', 10)
@@ -331,7 +331,7 @@ void main() {
     final records = parsed.getOr(failParse);
     expect(records, isNotNull);
     expect(records, hasLength(3));
-    expect(records, everyElement(isA<AddEntryFormValue>()
+    expect(records, everyElement(isA<CombinedEntry>()
         .having((e) => e.note?.note, 'no note text', isNull)
         .having((e) => e.note == null || e.note!.color != null, 'no empty note object', isTrue)));
   });
@@ -344,7 +344,7 @@ List<(DateTime, BloodPressureRecord, Note, List<MedicineIntake>, Null)> createRe
 ].map((e) => (e.time, e.record!, e.note!, [if (e.intake != null) e.intake!], null))
     .toList();
 
-List<AddEntryFormValue>? failParse(EntryParsingError error) {
+List<CombinedEntry>? failParse(EntryParsingError error) {
   switch (error) {
     case RecordParsingErrorEmptyFile():
       fail('Parsing failed due to insufficient data.');

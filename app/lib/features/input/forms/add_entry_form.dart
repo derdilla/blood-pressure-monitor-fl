@@ -14,6 +14,7 @@ import 'package:blood_pressure_app/features/old_bluetooth/bluetooth_input.dart';
 import 'package:blood_pressure_app/l10n/app_localizations.dart';
 import 'package:blood_pressure_app/logging.dart';
 import 'package:blood_pressure_app/model/bluetooth_input_mode.dart';
+import 'package:blood_pressure_app/model/combined_entry.dart';
 import 'package:blood_pressure_app/model/med_cache.dart';
 import 'package:blood_pressure_app/model/storage/storage.dart';
 import 'package:flutter/material.dart';
@@ -23,7 +24,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:health_data_store/health_data_store.dart';
 
 /// Primary form to enter all types of entries.
-class AddEntryForm extends FormBase<AddEntryFormValue> with TypeLogger {
+class AddEntryForm extends FormBase<CombinedEntry> with TypeLogger {
   /// Create primary form to enter all types of entries.
   const AddEntryForm({super.key,
     super.initialValue,
@@ -42,11 +43,11 @@ class AddEntryForm extends FormBase<AddEntryFormValue> with TypeLogger {
   final Widget Function(void Function(BloodPressureRecord data))? mockBleInput;
 
   @override
-  FormStateBase<AddEntryFormValue, AddEntryForm> createState() => AddEntryFormState();
+  FormStateBase<CombinedEntry, AddEntryForm> createState() => AddEntryFormState();
 }
 
 /// State of primary form to enter all types of entries.
-class AddEntryFormState extends FormStateBase<AddEntryFormValue, AddEntryForm>
+class AddEntryFormState extends FormStateBase<CombinedEntry, AddEntryForm>
     with TypeLogger {
   final _timeForm = GlobalKey<DateTimeFormState>();
   final _noteForm = GlobalKey<NoteFormState>();
@@ -168,7 +169,7 @@ class AddEntryFormState extends FormStateBase<AddEntryFormValue, AddEntryForm>
   }
 
   @override
-  AddEntryFormValue? save() {
+  CombinedEntry? save() {
     logger.fine('Calling save');
     if (!validate()) return null;
     final time = _timeForm.currentState?.save() ?? DateTime.now();
@@ -212,11 +213,10 @@ class AddEntryFormState extends FormStateBase<AddEntryFormValue, AddEntryForm>
       logger.fine('note, record, weight, and intake are null: returning null');
       return null;
     }
-    return (
-      timestamp: time,
+    return CombinedEntry(
+      time: time,
       note: note,
       record: record,
-      records: null,
       intake: intake,
       weight: weight,
     );
@@ -226,7 +226,7 @@ class AddEntryFormState extends FormStateBase<AddEntryFormValue, AddEntryForm>
   bool isEmptyInputFocused() => false; // doesn't contain text inputs
 
   @override
-  void fillForm(AddEntryFormValue? value) {
+  void fillForm(CombinedEntry? value) {
     logger.finer('fillForm($value)');
     _lastSavedPressure = value?.record;
     _lastSavedWeight = value?.weight;
@@ -238,7 +238,7 @@ class AddEntryFormState extends FormStateBase<AddEntryFormValue, AddEntryForm>
       _weightForm.currentState?.fillForm(null);
       _intakeForm.currentState?.fillForm(null);
     } else {
-      _timeForm.currentState?.fillForm(value.timestamp);
+      _timeForm.currentState?.fillForm(value.time);
       if (value.note != null) {
         final c = value.note?.color == null ? null : Color(value.note!.color!);
         _noteForm.currentState?.fillForm((value.note!.note, c));
@@ -288,15 +288,12 @@ class AddEntryFormState extends FormStateBase<AddEntryFormValue, AddEntryForm>
       )));
     }
 
-    fillForm((
-      timestamp: settings.trustBLETime
-          ? record.time
-          : _timeForm.currentState?.save() ?? DateTime.now(),
-      note: null,
-      record: record,
-      records: null,
-      intake: null,
-      weight: null,
+    final time = settings.trustBLETime
+        ? record.time
+        : _timeForm.currentState?.save() ?? DateTime.now();
+    fillForm(CombinedEntry(
+      time: time,
+      record: record.copyWith(time: time),
     ));
   }
 
@@ -304,6 +301,7 @@ class AddEntryFormState extends FormStateBase<AddEntryFormValue, AddEntryForm>
   void _onExternalMeasurements(List<BloodPressureRecord> records) {
     if (records.isEmpty || !mounted) return;
     logger.finer('_onExternalMeasurements: importing ${records.length} records');
+    /* FIXME: cahnge return type to list and reimplement:
     final AddEntryFormValue value = (
       timestamp: DateTime.now(),
       note: null,
@@ -313,6 +311,7 @@ class AddEntryFormState extends FormStateBase<AddEntryFormValue, AddEntryForm>
       weight: null,
     );
     Navigator.pop(context, value);
+     */
   }
 
   @override
@@ -338,7 +337,7 @@ class AddEntryFormState extends FormStateBase<AddEntryFormValue, AddEntryForm>
         if (settings.allowManualTimeInput)
           DateTimeForm(
             key: _timeForm,
-            initialValue: widget.initialValue?.timestamp,
+            initialValue: widget.initialValue?.time,
           ),
         SizedBox(height: 10),
         FormSwitcher(
@@ -380,104 +379,5 @@ class AddEntryFormState extends FormStateBase<AddEntryFormValue, AddEntryForm>
         ),
       ]
     );
-  }
-}
-
-/// Types of entries supported by [AddEntryForm].
-typedef AddEntryFormValue = ({
-  DateTime timestamp,
-  Note? note,
-  BloodPressureRecord? record,
-  List<BloodPressureRecord>? records,
-  MedicineIntake? intake,
-  BodyweightRecord? weight,
-});
-
-class _AddEntryFormValueBuilder {
-  _AddEntryFormValueBuilder(this.timestamp);
-
-  DateTime timestamp;
-  Note? note;
-  BloodPressureRecord? record;
-  List<BloodPressureRecord>? records;
-  MedicineIntake? intake;
-  BodyweightRecord? weight;
-
-  AddEntryFormValue get asFormValue => (
-    timestamp: timestamp,
-    note: note,
-    record: record,
-    records: records,
-    intake: intake,
-    weight: weight,
-  );
-}
-
-/// Utility getters for nested attributes.
-extension AddEntryFormValueGetters on AddEntryFormValue {
-  /// Timestamp when the entry occurred.
-  DateTime get time => timestamp;
-
-  /// Systolic value of the measurement.
-  Pressure? get sys => record?.sys;
-
-  /// Diastolic value of the measurement.
-  Pressure? get dia => record?.dia;
-
-  /// Pulse value of the measurement in bpm.
-  int? get pul => record?.pul;
-
-  /// ARGB color in number format.
-  ///
-  /// Can also be obtained through the `Colors.toARGB32()` method in `dart:ui`.
-  /// Sample value: `0xFF42A5F5`
-  int? get color => note?.color;
-}
-
-/// Utility methods to work on full entries.
-extension AddEntryFormValueList on List<AddEntryFormValue> {
-  /// Create a list that only contains the records field from the entries.
-  List<BloodPressureRecord> get records => map((e) => e.record)
-      .nonNulls
-      .toList();
-
-  /// Create a list that only contains the note field from the entries.
-  List<Note> get notes => map((e) => e.note).nonNulls.toList();
-
-  /// Get all medicines that appear anywhere in the list.
-  List<Medicine> get distinctMedicines => <Medicine>{
-    for (final e in this)
-      if (e.intake != null)
-        e.intake!.medicine,
-  }.toList();
-
-  /// Merges values at the same time from passed lists to FullEntries and
-  /// creates list of them.
-  ///
-  /// In the resulting list every passed value is contained exactly once.
-  static List<AddEntryFormValue> merged(
-      List<BloodPressureRecord> records,
-      List<Note> notes,
-      List<MedicineIntake> intakes,
-    ) {
-    final entries = <DateTime, _AddEntryFormValueBuilder>{};
-
-    for (final r in records) {
-      entries.putIfAbsent(r.time, () => _AddEntryFormValueBuilder(r.time));
-      entries[r.time]!.record = r;
-    }
-    for (final n in notes) {
-      if ((n.note?.isEmpty ?? true) && n.color == null) continue;
-      entries.putIfAbsent(n.time, () => _AddEntryFormValueBuilder(n.time));
-      entries[n.time]!.note = n;
-    }
-    for (final i in intakes) {
-      entries.putIfAbsent(i.time, () => _AddEntryFormValueBuilder(i.time));
-      entries[i.time]!.intake = i;
-    }
-
-    return entries.values
-        .map((e) => e.asFormValue)
-        .toList();
   }
 }

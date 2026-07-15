@@ -7,13 +7,12 @@ import 'package:health/health.dart';
 import 'package:health_data_store/health_data_store.dart';
 import 'package:provider/provider.dart';
 
-import '../features/measurement_list/measurement_list_entry_test.dart';
 import '../model/export_import/record_formatter_test.dart';
 import '../util.dart';
 
 void main() {
   testWidgets('fully deletes entries', (tester) async {
-    final entry = mockEntry(time: DateTime.now(), sys: 123, note: 'test', intake: mockIntake(mockMedicine()));
+    final entry = mockEntry(time: DateTime.now(), sys: 123, note: 'test', intake: (mockMedicine(), 42.0));
 
     final BloodPressureRepository bpRepo = MockBloodPressureRepository() as BloodPressureRepository;
     final NoteRepository noteRepo = MockNoteRepository() as NoteRepository;

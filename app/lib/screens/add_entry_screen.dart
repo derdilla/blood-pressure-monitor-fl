@@ -1,6 +1,6 @@
 import 'package:blood_pressure_app/features/export_import/ui/export_button.dart';
 import 'package:blood_pressure_app/features/input/add_entry_dialog.dart';
-import 'package:blood_pressure_app/features/input/forms/add_entry_form.dart';
+import 'package:blood_pressure_app/model/combined_entry.dart';
 import 'package:blood_pressure_app/model/storage/storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -13,7 +13,7 @@ class AddEntryScreen extends StatelessWidget {
     this.initialRecord
   });
 
-  final AddEntryFormValue? initialRecord;
+  final CombinedEntry? initialRecord;
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +24,7 @@ class AddEntryScreen extends StatelessWidget {
 
     return PopScope(
       onPopInvokedWithResult: (_, entry) async {
-        if (entry is! AddEntryFormValue) return;
+        if (entry is! CombinedEntry) return;
 
         if (initialRecord?.record != null) await recordRepo.remove(initialRecord!.record!);
         if (initialRecord?.note != null) await noteRepo.remove(initialRecord!.note!);
@@ -32,11 +32,12 @@ class AddEntryScreen extends StatelessWidget {
         if (initialRecord?.weight != null) await weightRepo.remove(initialRecord!.weight!);
 
         if (entry.record != null) await recordRepo.add(entry.record!);
+        /* FIXME: reimplement once return value is updated
         if (entry.records != null) {
           for (final record in entry.records!) {
             await recordRepo.add(record);
           }
-        }
+        }*/
         if (entry.note != null) await noteRepo.add(entry.note!);
         if (entry.intake != null) await intakeRepo.add(entry.intake!);
         if (entry.weight != null) await weightRepo.add(entry.weight!);
