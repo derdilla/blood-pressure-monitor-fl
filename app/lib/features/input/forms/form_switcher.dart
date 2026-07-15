@@ -23,13 +23,23 @@ class FormSwitcher extends StatefulWidget {
 
 class _FormSwitcherState extends State<FormSwitcher>
     with TickerProviderStateMixin {
-  late final TabController controller;
+  late TabController controller;
 
   @override
   void initState() {
     super.initState();
     controller = TabController(length: widget.subForms.length, vsync: this);
     widget.controller?._initialize(controller);
+  }
+
+  @override
+  void didUpdateWidget(covariant FormSwitcher oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.subForms.length != widget.subForms.length) {
+      controller.dispose();
+      controller = TabController(length: widget.subForms.length, vsync: this);
+      widget.controller?._initialize(controller);
+    }
   }
 
   @override
@@ -82,7 +92,6 @@ class FormSwitcherController {
   /// 
   /// This does not mean this object is responsible for destroying it.
   void _initialize(TabController controller) {
-    assert(_controller == null, 'FormSwitcherController was initialized twice');
     _controller = controller;
     while (_pendingActions.isNotEmpty) {
       _pendingActions.removeFirst().call();

@@ -1,7 +1,9 @@
 import 'package:blood_pressure_app/features/input/forms/form_base.dart';
 import 'package:blood_pressure_app/l10n/app_localizations.dart';
+import 'package:blood_pressure_app/model/med_cache.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:health_data_store/health_data_store.dart';
 
 /// Form to enter medicine intakes.
@@ -9,11 +11,7 @@ class MedicineIntakeForm extends FormBase<(Medicine, Weight)> {
   /// Create form to enter medicine intakes.
   MedicineIntakeForm({super.key,
     super.initialValue,
-    required this.meds,
-  }) : assert(meds.isNotEmpty);
-
-  /// All selectable medicines.
-  final List<Medicine> meds;
+  });
 
   @override
   FormStateBase<(Medicine, Weight), MedicineIntakeForm> createState() =>
@@ -97,13 +95,14 @@ class MedicineIntakeFormState extends FormStateBase<(Medicine, Weight), Medicine
         keyboardType: const TextInputType.numberWithOptions(decimal: true),
       );
     }
+    final meds = context.watch<MedCache>().medications;
     return Column(
       children: [
-        for (final m in widget.meds)
+        for (final m in meds)
           ListTile(
             leading: Icon(Icons.medication, color: m.color == null ? null : Color(m.color!)),
             title: Text(m.designation),
-            subtitle: (widget.meds.length == 1)
+            subtitle: (meds.length == 1)
                 ? Text(AppLocalizations.of(context)!.tapToSelect)
                 : null,
             onTap: () => setState(() {

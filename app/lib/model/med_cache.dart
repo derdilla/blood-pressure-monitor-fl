@@ -17,4 +17,5 @@ class MedCache with ChangeNotifier {
 
   List<Medicine> get medications => UnmodifiableListView(_meds);
 
+  bool get isEmpty => _meds.isEmpty;
 }

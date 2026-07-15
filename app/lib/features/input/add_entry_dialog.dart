@@ -5,7 +5,6 @@ import 'package:blood_pressure_app/components/fullscreen_dialog.dart';
 import 'package:blood_pressure_app/features/input/forms/add_entry_form.dart';
 import 'package:blood_pressure_app/l10n/app_localizations.dart';
 import 'package:blood_pressure_app/logging.dart';
-import 'package:blood_pressure_app/model/med_cache.dart';
 import 'package:blood_pressure_app/model/storage/storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -69,7 +68,6 @@ class _AddEntryDialogState extends State<AddEntryDialog> with TypeLogger {
       body: AddEntryForm(
         key: formKey,
         initialValue: widget.initialRecord,
-        meds: context.watch<MedCache>().medications,
       ),
     ),
   );
