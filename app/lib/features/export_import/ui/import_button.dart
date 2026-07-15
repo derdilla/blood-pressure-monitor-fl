@@ -49,7 +49,7 @@ class ImportButton extends StatelessWidget {
           final converter = CsvConverter(
             csvSettings,
             exportColumnsManager,
-            context.watch<MedCache>().medications,
+            context.read<MedCache>().medications,
             exportSettings,
           );
           if (!context.mounted) return;

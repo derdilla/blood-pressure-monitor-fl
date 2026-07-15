@@ -72,7 +72,7 @@ void performExport(BuildContext context, bool share) async {
       final csvConverter = CsvConverter(
         csvSettings,
         exportColumnsManager,
-        context.watch<MedCache>().medications,
+        context.read<MedCache>().medications,
         exportSettings,
       );
       if (!context.mounted) {
@@ -110,7 +110,7 @@ void performExport(BuildContext context, bool share) async {
       final xlsConverter = ExcelConverter(
         excelExportSettings,
         exportColumnsManager,
-        context.watch<MedCache>().medications,
+        context.read<MedCache>().medications,
         exportSettings,
       );
       if (!context.mounted) return;
