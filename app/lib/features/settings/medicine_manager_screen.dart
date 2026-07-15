@@ -1,7 +1,7 @@
 import 'package:blood_pressure_app/components/confirm_deletion_dialog.dart';
-import 'package:blood_pressure_app/data_util/consistent_future_builder.dart';
 import 'package:blood_pressure_app/features/settings/add_medication_dialog.dart';
 import 'package:blood_pressure_app/l10n/app_localizations.dart';
+import 'package:blood_pressure_app/model/med_cache.dart';
 import 'package:blood_pressure_app/model/storage/settings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -75,26 +75,23 @@ class MedicineManagerScreen extends StatelessWidget {
   );
 
  @override
-  Widget build(BuildContext context) => Scaffold(
-    appBar: AppBar(
-      forceMaterialTransparency: true,
-    ),
-    body: Center(
-      child: StreamBuilder(
-        stream: RepositoryProvider.of<MedicineRepository>(context).subscribe(),
-        builder: (context, _) => ConsistentFutureBuilder(
-          future: RepositoryProvider.of<MedicineRepository>(context).getAll(),
-          onData: (context, medicines) => ListView.builder(
-            itemCount: medicines.length + 1,
-            itemBuilder: (context, i) {
-              if (i == medicines.length) { // last row
-                return _buildAddMed(context);
-              }
-              return _buildMedicine(context, medicines[i]);
-            },
-          ),
+  Widget build(BuildContext context) {
+    final meds = context.watch<MedCache>().medications;
+    return Scaffold(
+      appBar: AppBar(
+        forceMaterialTransparency: true,
+      ),
+      body: Center(
+        child: ListView.builder(
+          itemCount: meds.length + 1,
+          itemBuilder: (context, i) {
+            if (i == meds.length) { // last row
+              return _buildAddMed(context);
+            }
+            return _buildMedicine(context, meds[i]);
+          },
         ),
       ),
-    ),
-  );
+    );
+  }
 }

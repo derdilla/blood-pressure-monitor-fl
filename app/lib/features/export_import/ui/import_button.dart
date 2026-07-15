@@ -5,6 +5,7 @@ import 'package:blood_pressure_app/features/export_import/model/csv_record_parsi
 import 'package:blood_pressure_app/features/export_import/ui/import_preview_dialog.dart';
 import 'package:blood_pressure_app/features/input/forms/add_entry_form.dart';
 import 'package:blood_pressure_app/l10n/app_localizations.dart';
+import 'package:blood_pressure_app/model/med_cache.dart';
 import 'package:blood_pressure_app/model/storage/storage.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
@@ -48,7 +49,7 @@ class ImportButton extends StatelessWidget {
           final converter = CsvConverter(
             csvSettings,
             exportColumnsManager,
-            await RepositoryProvider.of<MedicineRepository>(context).getAll(),
+            context.watch<MedCache>().medications,
             exportSettings,
           );
           if (!context.mounted) return;

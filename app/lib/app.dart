@@ -11,6 +11,7 @@ import 'package:blood_pressure_app/features/settings/graph_screen.dart';
 import 'package:blood_pressure_app/l10n/app_localizations.dart';
 import 'package:blood_pressure_app/logging.dart';
 import 'package:blood_pressure_app/model/bluetooth_input_mode.dart';
+import 'package:blood_pressure_app/model/med_cache.dart';
 import 'package:blood_pressure_app/model/storage/storage.dart';
 import 'package:blood_pressure_app/screens/add_entry_screen.dart';
 import 'package:blood_pressure_app/screens/error_reporting_screen.dart';
@@ -239,6 +240,7 @@ class _AppState extends State<App> with TypeLogger {
 
     // Cleans up loading with measurement on launch enabled
     final initialMedicineList = await medRepo.getAll();
+    final medicationRepo = MedCache(medRepo, initialMedicineList);
 
     _loadedChild = MultiRepositoryProvider(
       providers: [
@@ -259,8 +261,9 @@ class _AppState extends State<App> with TypeLogger {
           ChangeNotifierProvider.value(value: _intervalStorageManager!),
           ChangeNotifierProvider.value(value: _exportColumnsManager!),
           ChangeNotifierProvider.value(value: _healthConnectSettings!),
+          ChangeNotifierProvider.value(value: medicationRepo)
         ],
-        child: _buildAppRoot(initialRoute, initialMedicineList),
+        child: _buildAppRoot(initialRoute),
       ),
     );
 
@@ -281,7 +284,7 @@ class _AppState extends State<App> with TypeLogger {
   }
 
   /// Central [MaterialApp] widget of the app that sets the uniform style options.
-  Widget _buildAppRoot(AppRoute initialRoute, List<Medicine> initialMedicineList) => Consumer<Settings>(
+  Widget _buildAppRoot(AppRoute initialRoute) => Consumer<Settings>(
     builder: (context, settings, child) => MaterialApp(
       title: 'Blood Pressure App',
       onGenerateTitle: (context) => AppLocalizations.of(context)!.title,
