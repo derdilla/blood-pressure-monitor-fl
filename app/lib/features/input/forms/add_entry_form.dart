@@ -1,7 +1,5 @@
 import 'dart:async';
 
-import 'package:blood_pressure_app/features/bluetooth/backend/bluetooth_backend.dart';
-import 'package:blood_pressure_app/features/bluetooth/bluetooth_input.dart';
 import 'package:blood_pressure_app/features/bluetooth/logic/bluetooth_cubit.dart';
 import 'package:blood_pressure_app/features/input/forms/blood_pressure_form.dart';
 import 'package:blood_pressure_app/features/input/forms/date_time_form.dart';
@@ -10,7 +8,6 @@ import 'package:blood_pressure_app/features/input/forms/form_switcher.dart';
 import 'package:blood_pressure_app/features/input/forms/medicine_intake_form.dart';
 import 'package:blood_pressure_app/features/input/forms/note_form.dart';
 import 'package:blood_pressure_app/features/input/forms/weight_form.dart';
-import 'package:blood_pressure_app/features/old_bluetooth/bluetooth_input.dart';
 import 'package:blood_pressure_app/l10n/app_localizations.dart';
 import 'package:blood_pressure_app/logging.dart';
 import 'package:blood_pressure_app/model/bluetooth_input_mode.dart';
@@ -263,7 +260,7 @@ class AddEntryFormState extends FormStateBase<CombinedEntry, AddEntryForm>
   }
 
   /// Gets called on inputs from a bluetooth device or similar.
-  void _onExternalMeasurement(BloodPressureRecord record) {
+  void onExternalMeasurement(BloodPressureRecord record) {
     final settings = context.read<Settings>();
     if (settings.trustBLETime
         && settings.showBLETimeTrustDialog
@@ -297,43 +294,11 @@ class AddEntryFormState extends FormStateBase<CombinedEntry, AddEntryForm>
     ));
   }
 
-  /// Gets called on inputs from a bluetooth device or similar. (multiple records)
-  void _onExternalMeasurements(List<BloodPressureRecord> records) {
-    if (records.isEmpty || !mounted) return;
-    logger.finer('_onExternalMeasurements: importing ${records.length} records');
-    /* FIXME: cahnge return type to list and reimplement:
-    final AddEntryFormValue value = (
-      timestamp: DateTime.now(),
-      note: null,
-      record: null,
-      records: records,
-      intake: null,
-      weight: null,
-    );
-    Navigator.pop(context, value);
-     */
-  }
-
   @override
   Widget build(BuildContext context) {
     final settings = context.watch<Settings>();
-    return ListView(
-      padding: const EdgeInsets.symmetric(horizontal: 8),
+    return Column(
       children: [
-        if (widget.mockBleInput != null)
-          widget.mockBleInput!.call(_onExternalMeasurement),
-        (() => switch (settings.bleInput) {
-          BluetoothInputMode.disabled => SizedBox.shrink(),
-          BluetoothInputMode.oldBluetoothInput => OldBluetoothInput(
-            onMeasurement: _onExternalMeasurement,
-          ),
-          BluetoothInputMode.newBluetoothInputCrossPlatform => BluetoothInput(
-            manager: BluetoothManager.create(),
-            onMeasurement: _onExternalMeasurement,
-            onAllMeasurements: _onExternalMeasurements,
-            bluetoothCubit: widget.bluetoothCubit,
-          ),
-        })(),
         if (settings.allowManualTimeInput)
           DateTimeForm(
             key: _timeForm,

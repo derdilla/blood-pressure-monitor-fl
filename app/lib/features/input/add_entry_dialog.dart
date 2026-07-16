@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:blood_pressure_app/components/confirm_deletion_dialog.dart';
 import 'package:blood_pressure_app/components/fullscreen_dialog.dart';
-import 'package:blood_pressure_app/features/input/forms/add_entry_form.dart';
+import 'package:blood_pressure_app/features/input/forms/add_multiple_entries_form.dart';
 import 'package:blood_pressure_app/l10n/app_localizations.dart';
 import 'package:blood_pressure_app/logging.dart';
 import 'package:blood_pressure_app/model/combined_entry.dart';
@@ -30,11 +30,11 @@ class AddEntryDialog extends StatefulWidget {
 }
 
 class _AddEntryDialogState extends State<AddEntryDialog> with TypeLogger {
-  final formKey = GlobalKey<AddEntryFormState>();
+  final formKey = GlobalKey<AddMultipleEntriesFormState>();
 
   void _onSavePressed() {
     if (formKey.currentState?.validate() ?? false) {
-      final CombinedEntry? result = formKey.currentState?.save();
+      final result = formKey.currentState?.save();
       logger.finer('Returning result: $result');
       Navigator.pop(context, result);
     } else {
@@ -66,21 +66,21 @@ class _AddEntryDialogState extends State<AddEntryDialog> with TypeLogger {
       // Popping though in-app buttons
       canClose: shouldPop,
       bottomAppBar: context.select((Settings s) => s.bottomAppBars),
-      body: AddEntryForm(
+      body: AddMultipleEntriesForm(
         key: formKey,
-        initialValue: widget.initialRecord,
+        initialValue: widget.initialRecord == null ? null : [widget.initialRecord!],
       ),
     ),
   );
 }
 
 /// Shows a dialog to input a blood pressure measurement or a medication.
-Future<CombinedEntry?> showAddEntryDialog(
+Future<List<CombinedEntry>?> showAddEntryDialog(
   BuildContext context,
   [CombinedEntry? initialRecord,
 ]) async {
   if (context.mounted) {
-    return showDialog<CombinedEntry>(
+    return showDialog<List<CombinedEntry>>(
       context: context, builder: (context) =>
         AddEntryDialog(
           initialRecord: initialRecord,
