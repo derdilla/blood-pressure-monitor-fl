@@ -215,6 +215,6 @@ Future<void> _exportData(BuildContext context, Uint8List data, String fullFileNa
   } else {
     _logger.fine('_exportData - Saving file using PersistentUserDirAccessAndroid');
     const userDir = PersistentUserDirAccessAndroid();
-    await userDir.writeFile(settings.defaultExportDir, fullFileName, mimeType, data);
+    await userDir.writeFile(settings.defaultExportDir, fullFileName, mimeType, data, true);
   }
 }
