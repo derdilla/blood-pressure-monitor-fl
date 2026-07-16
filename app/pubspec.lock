@@ -863,10 +863,10 @@ packages:
     dependency: "direct main"
     description:
       name: persistent_user_dir_access_android
-      sha256: "6ce9fb8329b6b2463c29705cb5e382d77c0c945d311bd429fd752bfef81c92be"
+      sha256: ca727b8ed8bf4421142d5ef11a9bccc33d1abf0c2bced651b97e6698d7e0b395
       url: "https://pub.dev"
     source: hosted
-    version: "0.0.2"
+    version: "0.0.3"
   petitparser:
     dependency: transitive
     description:
