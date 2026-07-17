@@ -1,0 +1,12 @@
+* Solución de divisor en cálculos de media
+* Solución de tipo MIME de exportación pdf
+* Solución de deletreo xsl
+* Implementa importación de peso del cuerpo
+* Solución de fallo relacionado con el tipo de rango de selección
+* Solución de ajustes de conexión de salud sin ser eliminado
+* Mejora en lanzado por navegador
+* Abandona ajustes de actualización desde versiones heredadas
+* Actualización disponible de backend en bluetooth
+* Utilizar backend bluetooth nuevo como predeterminado
+* Admite yonker IBPA1
+* Retira filtro de servicio cuando analiza en dispositivos BLE
