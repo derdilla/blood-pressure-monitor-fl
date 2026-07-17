@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:blood_pressure_app/features/bluetooth/logic/bluetooth_cubit.dart';
 import 'package:blood_pressure_app/features/input/forms/blood_pressure_form.dart';
 import 'package:blood_pressure_app/features/input/forms/date_time_form.dart';
 import 'package:blood_pressure_app/features/input/forms/form_base.dart';
@@ -10,7 +9,6 @@ import 'package:blood_pressure_app/features/input/forms/note_form.dart';
 import 'package:blood_pressure_app/features/input/forms/weight_form.dart';
 import 'package:blood_pressure_app/l10n/app_localizations.dart';
 import 'package:blood_pressure_app/logging.dart';
-import 'package:blood_pressure_app/model/bluetooth_input_mode.dart';
 import 'package:blood_pressure_app/model/combined_entry.dart';
 import 'package:blood_pressure_app/model/med_cache.dart';
 import 'package:blood_pressure_app/model/storage/storage.dart';
@@ -23,21 +21,7 @@ import 'package:health_data_store/health_data_store.dart';
 /// Primary form to enter all types of entries.
 class AddEntryForm extends FormBase<CombinedEntry> with TypeLogger {
   /// Create primary form to enter all types of entries.
-  const AddEntryForm({super.key,
-    super.initialValue,
-    this.bluetoothCubit,
-    this.mockBleInput,
-  });
-
-  /// Function to customize [BluetoothCubit] creation.
-  ///
-  /// Works on [BluetoothInputMode.newBluetoothInputCrossPlatform].
-  @visibleForTesting
-  final BluetoothCubit Function()? bluetoothCubit;
-
-  /// A builder for a widget that can act as a bluetooth input.
-  @visibleForTesting
-  final Widget Function(void Function(BloodPressureRecord data))? mockBleInput;
+  const AddEntryForm({super.key, super.initialValue});
 
   @override
   FormStateBase<CombinedEntry, AddEntryForm> createState() => AddEntryFormState();

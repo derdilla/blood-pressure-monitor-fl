@@ -10,6 +10,7 @@ import 'package:blood_pressure_app/model/combined_entry.dart';
 import 'package:blood_pressure_app/model/storage/storage.dart';
 import 'package:flutter/material.dart';
 import 'package:health_data_store/health_data_store.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 /// Adds bluetooth functionality to [AddEntryForm] providing an interface to
@@ -34,7 +35,7 @@ class AddMultipleEntriesForm extends FormBase<List<CombinedEntry>> {
 
   /// A builder for a widget that can act as a bluetooth input.
   @visibleForTesting
-  final Widget Function(void Function(BloodPressureRecord data))? mockBleInput;
+  final Widget Function(void Function(List<BloodPressureRecord>))? mockBleInput;
 
   @override
   FormStateBase<List<CombinedEntry>, FormBase<List<CombinedEntry>>> createState() => AddMultipleEntriesFormState();
@@ -126,6 +127,7 @@ class AddMultipleEntriesFormState
   void _onExternalMeasurements(List<BloodPressureRecord> records) {
     if (records.isEmpty || !mounted) return;
     logger.finer('_onExternalMeasurements: importing ${records.length} records');
+    if (records.length == 1) return _onExternalMeasurement(records.first);
     _setMultipleValues([
       for (final record in records)
         CombinedEntry(time: record.time, record: record),
@@ -145,10 +147,19 @@ class AddMultipleEntriesFormState
   Widget build(BuildContext context) {
     if (_multipleValues case final List<CombinedEntry> values) {
       assert(values.length > 1);
+      final formatter = DateFormat(context.select((Settings s) => s.dateFormatString));
       return ListView.builder(
         itemCount: values.length,
         itemBuilder: (context, idx) => ListTile(
-          title: Text('${values[idx].time.day}'), // TODO
+          title: Text(formatter.format(values[idx].time)),
+          subtitle: Row(
+            spacing: 6.0,
+            children: [
+              Text(values[idx].sys?.toString() ?? '-'),
+              Text(values[idx].dia?.toString() ?? '-'),
+              Text(values[idx].pul?.toString() ?? '-'),
+            ],
+          ),
           trailing: IconButton(
             icon: const Icon(Icons.delete_forever),
             onPressed: () {
@@ -163,7 +174,7 @@ class AddMultipleEntriesFormState
       padding: const EdgeInsets.symmetric(horizontal: 8),
       children: [
         if (widget.mockBleInput != null)
-          widget.mockBleInput!.call(_onExternalMeasurement),
+          widget.mockBleInput!.call(_onExternalMeasurements),
         (() => switch (context.select((Settings s) => s.bleInput)) {
           BluetoothInputMode.disabled => SizedBox.shrink(),
           BluetoothInputMode.oldBluetoothInput => OldBluetoothInput(
