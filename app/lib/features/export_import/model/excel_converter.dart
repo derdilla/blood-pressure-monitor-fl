@@ -20,13 +20,13 @@ class ExcelConverter {
   final ExportSettings exportSettings;
 
   /// Create the contents of a xls file from passed records.
-  String create(List<(DateTime, BloodPressureRecord, Note, List<MedicineIntake>, Weight?)> entries) { // FIXME: update these
+  String create(List<CombinedEntry> entries) { // FIXME: update these
     final preset = exportSettings.getPresetById(settings.activePreset);
     if (preset == null) return 'Error: No such preset: $preset';
     final columns = availableColumns.resolveColumns(preset.columns);
     final table = entries.map(
           (entry) => columns.map(
-            (column) => column.encode(entry.$2, entry.$3, entry.$4, entry.$5),
+            (column) => column.encode(entry),
       ).toList(),
     ).toList();
 

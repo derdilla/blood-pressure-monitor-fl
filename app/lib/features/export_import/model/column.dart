@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:blood_pressure_app/features/export_import/model/import_field_type.dart';
 import 'package:blood_pressure_app/features/export_import/model/record_formatter.dart';
 import 'package:blood_pressure_app/l10n/app_localizations.dart';
+import 'package:blood_pressure_app/model/combined_entry.dart';
 import 'package:health_data_store/health_data_store.dart';
 
 // TODO: respect preferred Pressure unit
@@ -27,7 +28,7 @@ class NativeColumn extends ExportColumn {
   static final NativeColumn timestampUnixMs = NativeColumn._create(
     'timestampUnixMs',
     RowDataFieldType.timestamp,
-    (record, _, __, ___) => record.time.millisecondsSinceEpoch.toString(),
+    (entry) => entry.time.millisecondsSinceEpoch.toString(),
     (pattern) {
       final value = int.tryParse(pattern);
       return (value == null) ? null : DateTime.fromMillisecondsSinceEpoch(value);
@@ -36,31 +37,31 @@ class NativeColumn extends ExportColumn {
   static final NativeColumn systolic = NativeColumn._create(
     'systolic',
     RowDataFieldType.sys,
-    (record, _, __, ___) => (record.sys?.mmHg).toString(),
+    (entry) => (entry.record?.sys?.mmHg).toString(),
     int.tryParse,
   );
   static final NativeColumn diastolic = NativeColumn._create(
     'diastolic',
     RowDataFieldType.dia,
-    (record, _, __, ___) => (record.dia?.mmHg).toString(),
+    (entry) => (entry.record?.dia?.mmHg).toString(),
     int.tryParse,
   );
   static final NativeColumn pulse = NativeColumn._create(
     'pulse',
     RowDataFieldType.pul,
-    (record, _, __, ___) => record.pul.toString(),
+    (entry) => entry.record?.pul.toString() ?? '',
     int.tryParse,
   );
   static final NativeColumn notes = NativeColumn._create(
     'notes',
     RowDataFieldType.notes,
-    (_, note, __, ___) => note.note ?? '',
+    (entry) => entry.note?.note ?? '',
     (pattern) => pattern,
   );
   static final NativeColumn color = NativeColumn._create(
     'color',
     RowDataFieldType.color,
-    (_, note, __, ___) => note.color?.toString() ?? '',
+    (entry) => entry.note?.color?.toString() ?? '',
     (pattern) {
       final value = int.tryParse(pattern);
       return value;
@@ -69,7 +70,7 @@ class NativeColumn extends ExportColumn {
   static final NativeColumn needlePin = NativeColumn._create(
     'needlePin',
     RowDataFieldType.color,
-    (_, note, __, ___) => '{"color":${note.color}}',
+    (entry) => '{"color":${entry.note?.color}}',
     (pattern) {
       try {
         final json = jsonDecode(pattern);
@@ -89,9 +90,7 @@ class NativeColumn extends ExportColumn {
   static final NativeColumn intakes = NativeColumn._create(
     'intakes',
     RowDataFieldType.intakes,
-    (_, __, intakes, ___) => intakes
-      .map((i) => '${i.medicine.designation}(${i.dosis.mg})')
-      .join('|'),
+    (entry) => '${entry.intake?.medicine.designation}(${entry.intake?.dosis.mg})',
     (String pattern) {
       final intakes = <(String, double?)>[];
       for (final e in pattern.split('|')) {
@@ -108,13 +107,13 @@ class NativeColumn extends ExportColumn {
   static final NativeColumn bodyweight = NativeColumn._create(
     'bodyweight',
     RowDataFieldType.weightKg,
-      (_, __, ___, weight) => weight?.kg.toString() ?? '',
+      (entry) => entry.weight?.weight.kg.toString() ?? '',
       double.tryParse,
   );
   
   final String _csvTitle;
   final RowDataFieldType _restoreableType;
-  final String Function(BloodPressureRecord record, Note note, List<MedicineIntake> intakes, Weight? bodyweight) _encode;
+  final String Function(CombinedEntry entry) _encode;
   /// Function to attempt decoding.
   ///
   /// Must either return null or the type indicated by [_restoreableType].
@@ -131,8 +130,7 @@ class NativeColumn extends ExportColumn {
   }
 
   @override
-  String encode(BloodPressureRecord record, Note note, List<MedicineIntake> intakes, Weight? bodyweight) =>
-    _encode(record, note, intakes, bodyweight);
+  String encode(CombinedEntry entry) => _encode(entry);
 
   @override
   String? get formatPattern => null;
@@ -247,8 +245,7 @@ class BuildInColumn extends ExportColumn {
   (RowDataFieldType, dynamic)? decode(String pattern) => _formatter.decode(pattern);
 
   @override
-  String encode(BloodPressureRecord record, Note note, List<MedicineIntake> intakes, Weight? bodyweight) =>
-    _formatter.encode(record, note, intakes, bodyweight);
+  String encode(CombinedEntry entry) => _formatter.encode(entry);
 
   @override
   String? get formatPattern => _formatter.formatPattern;
@@ -293,8 +290,7 @@ class UserColumn extends ExportColumn {
   (RowDataFieldType, dynamic)? decode(String pattern) => formatter.decode(pattern);
 
   @override
-  String encode(BloodPressureRecord record, Note note, List<MedicineIntake> intakes, Weight? bodyweight) =>
-    formatter.encode(record, note, intakes, bodyweight);
+  String encode(CombinedEntry entry) => formatter.encode(entry);
 
   @override
   String? get formatPattern => formatter.formatPattern;
@@ -332,9 +328,9 @@ class TimeColumn extends ExportColumn {
   }
 
   @override
-  String encode(BloodPressureRecord record, Note note, List<MedicineIntake> intakes, Weight? bodyweight) {
+  String encode(CombinedEntry entry) {
     _formatter ??= ScriptedTimeFormatter(formatPattern);
-    return _formatter!.encode(record, note, intakes, bodyweight);
+    return _formatter!.encode(entry);
   }
 
   @override
@@ -365,7 +361,7 @@ sealed class ExportColumn implements Formatter {
   /// used in the rest of the app.
   ///
   /// It should not be used instead of [csvTitle].
-  String get internalIdentifier; // TODO: why is this needed
+  String get internalIdentifier;
 
   /// Column title in a csv file.
   ///

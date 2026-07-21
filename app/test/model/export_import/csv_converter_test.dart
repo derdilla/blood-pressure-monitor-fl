@@ -10,7 +10,6 @@ import 'package:blood_pressure_app/model/storage/export_csv_settings.dart';
 import 'package:blood_pressure_app/model/storage/export_settings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:health_data_store/health_data_store.dart';
 
 import 'record_formatter_test.dart';
 
@@ -39,18 +38,18 @@ void main() {
   });
 
   test('should be able to recreate records from csv in default configuration', () {
-    final List<(DateTime, BloodPressureRecord, Note, List<MedicineIntake>, Weight?)> initialRecords = createRecords();
+    final initialRecords = createRecords();
     final csv = _defaultConverter.create(initialRecords);
     final List<CombinedEntry> parsedRecords = _defaultConverter.parse(csv).getOr(failParse);
 
     expect(parsedRecords, pairwiseCompare(initialRecords,
-      ((DateTime, BloodPressureRecord, Note, List<MedicineIntake>, Weight?) p0, CombinedEntry p1) =>
-        p0.$2.time == p1.time &&
-        p0.$2.sys == p1.sys &&
-        p0.$2.dia == p1.dia &&
-        p0.$2.pul == p1.pul &&
-        p0.$3.note == p1.note?.note &&
-        p0.$3.color == p1.note?.color,
+      (CombinedEntry p0, CombinedEntry p1) =>
+        p0.time == p1.time &&
+        p0.sys == p1.sys &&
+        p0.dia == p1.dia &&
+        p0.pul == p1.pul &&
+        p0.note?.note == p1.note?.note &&
+        p0.color == p1.note?.color,
       'equal to',),);
   });
   test('should allow partial imports', () {
@@ -337,12 +336,11 @@ void main() {
   });
 }
 
-List<(DateTime, BloodPressureRecord, Note, List<MedicineIntake>, Null)> createRecords([int count = 20]) => [
+List<CombinedEntry> createRecords([int count = 20]) => [
   for (int i = 0; i<count; i++)
     mockEntryPos(DateTime.fromMillisecondsSinceEpoch(123456 + i),
         i, 100+i, 200+1, 'note $i', Color(123+i),),
-].map((e) => (e.time, e.record!, e.note!, [if (e.intake != null) e.intake!], null))
-    .toList();
+].toList();
 
 List<CombinedEntry>? failParse(EntryParsingError error) {
   switch (error) {

@@ -31,7 +31,8 @@ void main() {
       // Use BuildInColumn for utility columns
       for (final c in NativeColumn.allColumns) {
         final r = _filledRecord(true);
-        expect(c.encode(r.record!, r.note!, [if (r.intake != null) r.intake!], Weight.kg(123)), isNotEmpty, reason: '${c.internalIdentifier} is NativeColumn');
+        r.weight = BodyweightRecord(time: r.time, weight: Weight.kg(123));
+        expect(c.encode(r), isNotEmpty, reason: '${c.internalIdentifier} is NativeColumn');
       }
     });
     test('should only contain restoreable types', () {
@@ -42,8 +43,9 @@ void main() {
     });
     test('should decode correctly', () {
       final r = _filledRecord(true);
+      r.weight = BodyweightRecord(time: r.time, weight: Weight.kg(123));
       for (final c in NativeColumn.allColumns) {
-        final txt = c.encode(r.record!, r.note!, [if (r.intake != null) r.intake!], Weight.kg(123));
+        final txt = c.encode(r);
         final decoded = c.decode(txt);
         expect(decoded, isNotNull, reason: 'a real value was encoded: ${c.internalIdentifier}: ${r.debugToString()} > $txt');
         switch (decoded!.$1) {
@@ -101,13 +103,14 @@ void main() {
     test('should encode without problems', () {
       for (final c in BuildInColumn.allColumns) {
         final r = _filledRecord();
-        expect(c.encode(r.record!, r.note!, [if (r.intake != null) r.intake!], null), isNotNull);
+        expect(c.encode(r), isNotNull);
       }
     });
     test('should decode correctly', () {
       final r = _filledRecord(true);
+      r.weight = BodyweightRecord(time: r.time, weight: Weight.kg(123.45));
       for (final c in BuildInColumn.allColumns) {
-        final txt = c.encode(r.record!, r.note!, [if (r.intake != null) r.intake!], Weight.kg(123.45));
+        final txt = c.encode(r);
         final decoded = c.decode(txt);
         switch (decoded?.$1) {
           case RowDataFieldType.timestamp:
@@ -159,24 +162,24 @@ void main() {
     test('should encode like ScriptedFormatter', () {
       final r = _filledRecord();
       expect(
-        UserColumn('','', 'TEST').encode(r.record!, r.note!, [if (r.intake != null) r.intake!], null),
-        ScriptedFormatter('TEST').encode(r.record!, r.note!, [if (r.intake != null) r.intake!], null),
+        UserColumn('','', 'TEST').encode(r),
+        ScriptedFormatter('TEST').encode(r),
       );
       expect(
-        UserColumn('','', r'$SYS').encode(r.record!, r.note!, [if (r.intake != null) r.intake!], null),
-        ScriptedFormatter(r'$SYS').encode(r.record!, r.note!, [if (r.intake != null) r.intake!], null),
+        UserColumn('','', r'$SYS').encode(r),
+        ScriptedFormatter(r'$SYS').encode(r),
       );
       expect(
-        UserColumn('','', r'$SYS-$DIA').encode(r.record!, r.note!, [if (r.intake != null) r.intake!], null),
-        ScriptedFormatter(r'$SYS-$DIA').encode(r.record!, r.note!, [if (r.intake != null) r.intake!], null),
+        UserColumn('','', r'$SYS-$DIA').encode(r),
+        ScriptedFormatter(r'$SYS-$DIA').encode(r),
       );
       expect(
-        UserColumn('','', r'$TIMESTAMP').encode(r.record!, r.note!, [if (r.intake != null) r.intake!], null),
-        ScriptedFormatter(r'$TIMESTAMP').encode(r.record!, r.note!, [if (r.intake != null) r.intake!], null),
+        UserColumn('','', r'$TIMESTAMP').encode(r),
+        ScriptedFormatter(r'$TIMESTAMP').encode(r),
       );
       expect(
-        UserColumn('','', '').encode(r.record!, r.note!, [if (r.intake != null) r.intake!], null),
-        ScriptedFormatter('').encode(r.record!, r.note!, [if (r.intake != null) r.intake!], null),
+        UserColumn('','', '').encode(r),
+        ScriptedFormatter('').encode(r),
       );
     });
     test('should decode like ScriptedFormatter', () {
@@ -187,8 +190,8 @@ void main() {
         final column = UserColumn('','', pattern);
         final formatter = ScriptedFormatter(pattern);
         expect(
-          column.decode(column.encode(r.record!, r.note!, [if (r.intake != null) r.intake!], null)),
-          formatter.decode(formatter.encode(r.record!, r.note!, [if (r.intake != null) r.intake!], null)),
+          column.decode(column.encode(r)),
+          formatter.decode(formatter.encode(r)),
         );
       }
     });

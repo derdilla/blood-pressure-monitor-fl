@@ -3,6 +3,7 @@ import 'package:blood_pressure_app/features/export_import/model/column.dart';
 import 'package:blood_pressure_app/features/export_import/model/record_formatter.dart';
 import 'package:blood_pressure_app/features/export_import/ui/export_field_format_documentation_screen.dart';
 import 'package:blood_pressure_app/l10n/app_localizations.dart';
+import 'package:blood_pressure_app/model/combined_entry.dart';
 import 'package:blood_pressure_app/model/storage/settings.dart';
 import 'package:flutter/material.dart';
 import 'package:health_data_store/health_data_store.dart';
@@ -173,7 +174,7 @@ class _AddExportColumnDialogState extends State<AddExportColumnDialog>
                     final formatter = (type == _FormatterType.record)
                       ? ScriptedFormatter(recordPattern ?? '')
                       : ScriptedTimeFormatter(timePattern ?? '');
-                    final text = formatter.encode(record, note, [], null);
+                    final text = formatter.encode(CombinedEntry(time: record.time, note: note, record: record));
                     final decoded = formatter.decode(text);
                     return Column(
                       children: [

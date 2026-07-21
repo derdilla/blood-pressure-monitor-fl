@@ -107,6 +107,7 @@ extension CombinedEntryList on List<CombinedEntry> {
     List<BloodPressureRecord> records,
     List<Note> notes,
     List<MedicineIntake> intakes,
+    [List<BodyweightRecord>? weights]
   ) {
     final entries = <DateTime, CombinedEntry>{};
 
@@ -122,6 +123,12 @@ extension CombinedEntryList on List<CombinedEntry> {
     for (final i in intakes) {
       entries.putIfAbsent(i.time, () => CombinedEntry(time: i.time));
       entries[i.time]!.intake = i;
+    }
+    if (weights != null) {
+      for (final w in weights) {
+        entries.putIfAbsent(w.time, () => CombinedEntry(time: w.time));
+        entries[w.time]!.weight = w;
+      }
     }
 
     return entries.values.toList();

@@ -1,5 +1,6 @@
 import 'package:blood_pressure_app/features/export_import/model/column.dart';
 import 'package:blood_pressure_app/features/export_import/model/import_field_type.dart';
+import 'package:blood_pressure_app/model/combined_entry.dart';
 import 'package:function_tree/function_tree.dart';
 import 'package:health_data_store/health_data_store.dart';
 import 'package:intl/intl.dart';
@@ -13,7 +14,7 @@ abstract interface class Formatter {
   ///
   /// There is no guarantee that the information in the record can be restored.
   /// If not null this must follow [formatPattern].
-  String encode(BloodPressureRecord record, Note note, List<MedicineIntake> intakes, Weight? bodyweight);
+  String encode(CombinedEntry entry);
 
   /// Type of data that can be restored from a string obtained by [encode].
   RowDataFieldType? get restoreAbleType;
@@ -57,16 +58,16 @@ class ScriptedFormatter implements Formatter {
   }
 
   @override
-  String encode(BloodPressureRecord record, Note note, List<MedicineIntake> intakes, Weight? bodyweight) {
+  String encode(CombinedEntry entry) {
     var fieldContents = pattern;
 
     // variables
-    fieldContents = fieldContents.replaceAll(r'$TIMESTAMP', record.time.millisecondsSinceEpoch.toString());
-    fieldContents = fieldContents.replaceAll(r'$SYS', (record.sys?.mmHg).toString());
-    fieldContents = fieldContents.replaceAll(r'$DIA', (record.dia?.mmHg).toString());
-    fieldContents = fieldContents.replaceAll(r'$PUL', record.pul.toString());
-    fieldContents = fieldContents.replaceAll(r'$NOTE', note.note ?? '');
-    fieldContents = fieldContents.replaceAll(r'$COLOR', note.color?.toString() ?? '');
+    fieldContents = fieldContents.replaceAll(r'$TIMESTAMP', entry.time.millisecondsSinceEpoch.toString());
+    fieldContents = fieldContents.replaceAll(r'$SYS', (entry.sys?.mmHg).toString());
+    fieldContents = fieldContents.replaceAll(r'$DIA', (entry.dia?.mmHg).toString());
+    fieldContents = fieldContents.replaceAll(r'$PUL', entry.pul.toString());
+    fieldContents = fieldContents.replaceAll(r'$NOTE', entry.note?.note ?? '');
+    fieldContents = fieldContents.replaceAll(r'$COLOR', entry.note?.color?.toString() ?? '');
     // TODO: Weight? formatter, use for mhWeight
 
     // math
@@ -180,8 +181,8 @@ class ScriptedTimeFormatter implements Formatter {
   }
 
   @override
-  String encode(BloodPressureRecord record, Note note, List<MedicineIntake> intakes, Weight? _) =>
-    _timeFormatter.format(record.time);
+  String encode(CombinedEntry entry) =>
+    _timeFormatter.format(entry.time);
 
   @override
   String? get formatPattern => _timeFormatter.pattern;

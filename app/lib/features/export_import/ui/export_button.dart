@@ -8,6 +8,7 @@ import 'package:blood_pressure_app/features/export_import/model/excel_converter.
 import 'package:blood_pressure_app/features/export_import/model/pdf_converter.dart';
 import 'package:blood_pressure_app/l10n/app_localizations.dart';
 import 'package:blood_pressure_app/logging.dart';
+import 'package:blood_pressure_app/model/combined_entry.dart';
 import 'package:blood_pressure_app/model/med_cache.dart';
 import 'package:blood_pressure_app/model/storage/export_columns_store.dart';
 import 'package:blood_pressure_app/model/storage/export_csv_settings.dart';
@@ -17,7 +18,6 @@ import 'package:blood_pressure_app/model/storage/export_xls_settings.dart';
 import 'package:blood_pressure_app/model/storage/interval_store_manager.dart';
 import 'package:blood_pressure_app/model/storage/settings.dart';
 import 'package:blood_pressure_app/model/storage/types/export_format_setting.dart';
-import 'package:collection/collection.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -134,7 +134,7 @@ void performExport(BuildContext context, bool share) async {
 }
 
 /// Get the records that should be exported (oldest first).
-Future<List<(DateTime, BloodPressureRecord, Note, List<MedicineIntake>, Weight?)>> _getEntries(BuildContext context) async {
+Future<List<CombinedEntry>> _getEntries(BuildContext context) async {
   final range = Provider.of<IntervalStoreManager>(context, listen: false).exportPage.currentRange;
   _logger.fine('_getEntries - range=$range');
   final bpRepo = RepositoryProvider.of<BloodPressureRepository>(context);
@@ -147,7 +147,6 @@ Future<List<(DateTime, BloodPressureRecord, Note, List<MedicineIntake>, Weight?)
   List<Note> notes = await noteRepo.get(range);
   List<MedicineIntake> intakes = await intakeRepo.get(range);
   List<BodyweightRecord> weights = await weightRepo.get(range);
-
   // Apply time of day filter
 
   final timeLimitRange = intervalManager
@@ -172,24 +171,11 @@ Future<List<(DateTime, BloodPressureRecord, Note, List<MedicineIntake>, Weight?)
     }).toList();
   }
 
-  _logger.finest('_getEntries - range=$range');
+  final entries = CombinedEntryList.merged(records, notes, intakes, weights);
+  entries.sort((a,b) => a.time.compareTo(b.time));
+  _logger.fine('_getEntries - merged to ${entries.length} entries');
 
-  final entries = FullEntryList.merged(records, notes, intakes);
-  _logger.fine('_getEntries - merged ${records.length} records, ${notes.length}'
-      ' notes, and ${intakes.length} intakes to ${entries.length} entries');
-
-  final entriesWithWeight = entries
-      .map((e) => (e.time, e.recordObj, e.noteObj, e.intakes, weights.firstWhereOrNull((w) => e.time == w.time)?.weight))
-      .toList();
-  for (final e in weights.where((w) => entriesWithWeight.firstWhereOrNull((n) => n.$1 == w.time) == null)) {
-    entriesWithWeight.add((e.time, BloodPressureRecord(time: e.time), Note(time: e.time), [], e.weight));
-  }
-
-  _logger.fine('_getEntries - added ${weights.length} weights to get'
-      ' ${entries.length} entries');
-
-  entriesWithWeight.sort((a, b) => a.$1.compareTo(b.$1));
-  return entriesWithWeight;
+  return entries;
 }
 
 /// Save to default export path or share by providing binary data.
