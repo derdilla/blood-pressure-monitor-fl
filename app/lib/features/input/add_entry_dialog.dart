@@ -2,9 +2,10 @@ import 'dart:async';
 
 import 'package:blood_pressure_app/components/confirm_deletion_dialog.dart';
 import 'package:blood_pressure_app/components/fullscreen_dialog.dart';
-import 'package:blood_pressure_app/features/input/forms/add_entry_form.dart';
+import 'package:blood_pressure_app/features/input/forms/add_multiple_entries_form.dart';
 import 'package:blood_pressure_app/l10n/app_localizations.dart';
 import 'package:blood_pressure_app/logging.dart';
+import 'package:blood_pressure_app/model/combined_entry.dart';
 import 'package:blood_pressure_app/model/storage/storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -22,18 +23,18 @@ class AddEntryDialog extends StatefulWidget {
   ///
   /// When this is null the timestamp is [DateTime.now] and the other fields
   /// will be empty.
-  final AddEntryFormValue? initialRecord;
+  final CombinedEntry? initialRecord;
 
   @override
   State<AddEntryDialog> createState() => _AddEntryDialogState();
 }
 
 class _AddEntryDialogState extends State<AddEntryDialog> with TypeLogger {
-  final formKey = GlobalKey<AddEntryFormState>();
+  final formKey = GlobalKey<AddMultipleEntriesFormState>();
 
   void _onSavePressed() {
     if (formKey.currentState?.validate() ?? false) {
-      final AddEntryFormValue? result = formKey.currentState?.save();
+      final result = formKey.currentState?.save();
       logger.finer('Returning result: $result');
       Navigator.pop(context, result);
     } else {
@@ -65,21 +66,21 @@ class _AddEntryDialogState extends State<AddEntryDialog> with TypeLogger {
       // Popping though in-app buttons
       canClose: shouldPop,
       bottomAppBar: context.select((Settings s) => s.bottomAppBars),
-      body: AddEntryForm(
+      body: AddMultipleEntriesForm(
         key: formKey,
-        initialValue: widget.initialRecord,
+        initialValue: widget.initialRecord == null ? null : [widget.initialRecord!],
       ),
     ),
   );
 }
 
 /// Shows a dialog to input a blood pressure measurement or a medication.
-Future<AddEntryFormValue?> showAddEntryDialog(
+Future<List<CombinedEntry>?> showAddEntryDialog(
   BuildContext context,
-  [AddEntryFormValue? initialRecord,
+  [CombinedEntry? initialRecord,
 ]) async {
   if (context.mounted) {
-    return showDialog<AddEntryFormValue>(
+    return showDialog<List<CombinedEntry>>(
       context: context, builder: (context) =>
         AddEntryDialog(
           initialRecord: initialRecord,

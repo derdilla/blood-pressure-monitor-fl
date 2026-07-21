@@ -1,7 +1,7 @@
 import 'package:blood_pressure_app/data_util/entry_context.dart';
-import 'package:blood_pressure_app/features/input/forms/add_entry_form.dart';
 import 'package:blood_pressure_app/features/measurement_list/measurement_list_entry.dart';
 import 'package:blood_pressure_app/l10n/app_localizations.dart';
+import 'package:blood_pressure_app/model/combined_entry.dart';
 import 'package:blood_pressure_app/model/storage/settings.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -16,7 +16,7 @@ class MeasurementList extends StatelessWidget {
   });
 
   /// Entries sorted with newest comming first.
-  final List<AddEntryFormValue> entries;
+  final List<CombinedEntry> entries;
 
   @override
   Widget build(BuildContext context) {

@@ -1,8 +1,8 @@
 import 'package:blood_pressure_app/components/confirm_deletion_dialog.dart';
 import 'package:blood_pressure_app/features/input/add_entry_dialog.dart';
-import 'package:blood_pressure_app/features/input/forms/add_entry_form.dart';
 import 'package:blood_pressure_app/l10n/app_localizations.dart';
 import 'package:blood_pressure_app/logging.dart';
+import 'package:blood_pressure_app/model/combined_entry.dart';
 import 'package:blood_pressure_app/model/storage/storage.dart';
 import 'package:blood_pressure_app/screens/add_entry_screen.dart';
 import 'package:blood_pressure_app/screens/error_reporting_screen.dart';
@@ -21,7 +21,7 @@ extension EntryUtils on BuildContext {
   ///
   /// Follows [ExportSettings.exportAfterEveryEntry]. When [initial] is not null
   /// the dialog will be opened in edit mode.
-  Future<void> createEntry([AddEntryFormValue? initial]) async {
+  Future<void> createEntry([CombinedEntry? initial]) async {
     _logger.finer('createEntry($initial)');
     try {
       await Navigator.of(this).push(MaterialPageRoute<Object?>(
@@ -38,7 +38,7 @@ extension EntryUtils on BuildContext {
   }
 
   /// Delete record and note of an entry from the repositories.
-  Future<void> deleteEntry(AddEntryFormValue entry, [Health? health]) async {
+  Future<void> deleteEntry(CombinedEntry entry, [Health? health]) async {
     try {
       final localizations = AppLocalizations.of(this)!;
       final settings = Provider.of<Settings>(this, listen: false);

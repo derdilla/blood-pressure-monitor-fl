@@ -6,8 +6,8 @@ import 'package:blood_pressure_app/features/export_import/model/export_preset.da
 import 'package:blood_pressure_app/l10n/app_localizations.dart';
 import 'package:blood_pressure_app/logging.dart';
 import 'package:blood_pressure_app/model/blood_pressure_analyzer.dart';
+import 'package:blood_pressure_app/model/combined_entry.dart';
 import 'package:blood_pressure_app/model/storage/storage.dart';
-import 'package:health_data_store/health_data_store.dart';
 import 'package:intl/intl.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
@@ -32,11 +32,11 @@ class PdfConverter with TypeLogger {
   final ExportSettings exportSettings;
 
   /// Create a pdf from a record list.
-  Future<Uint8List> create(List<(DateTime, BloodPressureRecord, Note, List<MedicineIntake>, Weight?)> entries) async {
+  Future<Uint8List> create(List<CombinedEntry> entries) async {
     final pdf = pw.Document(
       creator: 'Blood pressure app',
     );
-    final analyzer = BloodPressureAnalyzer(entries.map((e) => e.$2).toList());
+    final analyzer = BloodPressureAnalyzer(entries.records);
 
     pdf.addPage(pw.MultiPage(
       pageFormat: PdfPageFormat.a4,
@@ -90,7 +90,7 @@ class PdfConverter with TypeLogger {
       ),
     );
 
-  pw.Widget _buildPdfTable(Iterable<(DateTime, BloodPressureRecord, Note, List<MedicineIntake>, Weight?)> entries, double availableHeightOnFirstPage) {
+  pw.Widget _buildPdfTable(Iterable<CombinedEntry> entries, double availableHeightOnFirstPage) {
     final preset = exportSettings.getPresetById(pdfSettings.activePreset);
     if (preset == null) {
       logger.severe('No such preset: $preset');
@@ -99,7 +99,7 @@ class PdfConverter with TypeLogger {
 
     final data = entries.map(
       (entry) => columns.map(
-        (column) => column.encode(entry.$2, entry.$3, entry.$4, entry.$5),
+        (column) => column.encode(entry),
       ).toList(),
     ).toList();
 

@@ -1,11 +1,11 @@
 import 'package:blood_pressure_app/features/export_import/model/export_preset.dart';
-import 'package:blood_pressure_app/features/input/forms/add_entry_form.dart';
+import 'package:blood_pressure_app/model/combined_entry.dart';
 import 'package:blood_pressure_app/model/storage/storage.dart';
 import 'package:health_data_store/health_data_store.dart';
 
-/// Utility class to convert [AddEntryFormValue]s to xls files.
+/// Utility class to convert [CombinedEntry]s to xls files.
 class ExcelConverter {
-  /// Initialize object to convert [AddEntryFormValue]s to xls files.
+  /// Initialize object to convert [CombinedEntry]s to xls files.
   ExcelConverter(this.settings, this.availableColumns, this.availableMedicines, this.exportSettings);
 
   /// Settings that apply for exports.
@@ -20,13 +20,13 @@ class ExcelConverter {
   final ExportSettings exportSettings;
 
   /// Create the contents of a xls file from passed records.
-  String create(List<(DateTime, BloodPressureRecord, Note, List<MedicineIntake>, Weight?)> entries) {
+  String create(List<CombinedEntry> entries) { // FIXME: update these
     final preset = exportSettings.getPresetById(settings.activePreset);
     if (preset == null) return 'Error: No such preset: $preset';
     final columns = availableColumns.resolveColumns(preset.columns);
     final table = entries.map(
           (entry) => columns.map(
-            (column) => column.encode(entry.$2, entry.$3, entry.$4, entry.$5),
+            (column) => column.encode(entry),
       ).toList(),
     ).toList();
 

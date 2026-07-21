@@ -98,7 +98,7 @@ void main() {
       onRequestEdit: () => fail('should not request edit'),
       data: mockEntry(
         time: DateTime(2023),
-        intake: mockIntake(mockMedicine(designation: 'testMed', color: Colors.red), dosis: 12.0),
+        intake: (mockMedicine(designation: 'testMed', color: Colors.red), 12.0),
       ),
     ),),);
     expect(find.byIcon(Icons.medication), findsOneWidget);

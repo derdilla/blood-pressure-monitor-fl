@@ -1,16 +1,16 @@
 import 'package:blood_pressure_app/data_util/repository_builder.dart';
-import 'package:blood_pressure_app/features/input/forms/add_entry_form.dart';
+import 'package:blood_pressure_app/model/combined_entry.dart';
 import 'package:blood_pressure_app/model/storage/interval_store_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:health_data_store/health_data_store.dart';
 import 'package:provider/provider.dart';
 
-/// Shorthand class for getting a [rangeType]s [AddEntryFormValue] values.
-class AddEntryFormValueBuilder extends StatelessWidget {
-  /// Create a loader for getting a [rangeType]s [AddEntryFormValue] values.
+/// Shorthand class for getting a [rangeType]s [CombinedEntry] values.
+class CombinedEntryBuilder extends StatelessWidget {
+  /// Create a loader for getting a [rangeType]s [CombinedEntry] values.
   ///
   /// Provide either [onEntries] or [onData].
-  const AddEntryFormValueBuilder({
+  const CombinedEntryBuilder({
     super.key,
     this.onEntries,
     this.onData,
@@ -18,7 +18,7 @@ class AddEntryFormValueBuilder extends StatelessWidget {
   }) : assert((onEntries == null) != (onData == null), 'Provide either of the builders.');
 
   /// Builder using a sorted list of full entries.
-  final Widget Function(BuildContext context, List<AddEntryFormValue> entries)? onEntries;
+  final Widget Function(BuildContext context, List<CombinedEntry> entries)? onEntries;
 
   /// Builder using data from the main categories.
   final Widget Function(BuildContext context, List<BloodPressureRecord> records, List<MedicineIntake> intakes, List<Note> notes)? onData;
@@ -53,7 +53,7 @@ class AddEntryFormValueBuilder extends StatelessWidget {
 
           if (onData != null) return onData!(context, records, intakes, notes);
 
-          final entries = AddEntryFormValueList.merged(records, notes, intakes);
+          final entries = CombinedEntryList.merged(records, notes, intakes);
           entries.sort((a, b) => b.time.compareTo(a.time)); // newest first
           return onEntries!(context, entries);
         },

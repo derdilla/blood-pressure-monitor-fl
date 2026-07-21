@@ -1,6 +1,7 @@
 import 'package:blood_pressure_app/components/confirm_deletion_dialog.dart';
 import 'package:blood_pressure_app/data_util/entry_context.dart';
 import 'package:blood_pressure_app/data_util/repository_builder.dart';
+import 'package:blood_pressure_app/model/combined_entry.dart';
 import 'package:blood_pressure_app/model/storage/storage.dart';
 import 'package:blood_pressure_app/model/weight_unit.dart';
 import 'package:flutter/material.dart';
@@ -43,12 +44,8 @@ class WeightList extends StatelessWidget {
               children: [
                 IconButton(
                   icon: Icon(Icons.edit),
-                  onPressed: () => context.createEntry((
-                    timestamp: records[idx].time,
-                    note: null,
-                    record: null,
-                    records: null,
-                    intake: null,
+                  onPressed: () => context.createEntry(CombinedEntry(
+                    time: records[idx].time,
                     weight: records[idx],
                   )),
                 ),

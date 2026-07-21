@@ -7,7 +7,7 @@ import 'package:blood_pressure_app/features/input/forms/note_form.dart';
 import 'package:blood_pressure_app/features/input/forms/weight_form.dart';
 import 'package:blood_pressure_app/features/old_bluetooth/bluetooth_input.dart';
 import 'package:blood_pressure_app/l10n/app_localizations.dart';
-import 'package:blood_pressure_app/model/bluetooth_input_mode.dart';
+import 'package:blood_pressure_app/model/combined_entry.dart';
 import 'package:blood_pressure_app/model/storage/settings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -201,10 +201,8 @@ void main() {
     await tester.pumpWidget(appBase(AddEntryForm(key: key)));
     expect(key.currentState?.validate(), true);
 
-    key.currentState!.fillForm((
-      timestamp: time.add(Duration(hours: 1)),
-      intake: null, note: null, record: null, weight: null, records: null
-    ));
+    key.currentState!.fillForm(CombinedEntry(
+      time: time.add(Duration(hours: 1))));
     await tester.pump();
     expect(key.currentState?.validate(), false);
   });
@@ -214,10 +212,10 @@ void main() {
     await tester.pumpWidget(appBase(AddEntryForm(key: key)));
     expect(key.currentState?.validate(), true);
 
-    key.currentState!.fillForm((
-      timestamp: DateTime.now(),
-      record: mockRecord(sys: 123123),
-      note: null, intake: null, weight: null, records: null
+    final time = DateTime.now();
+    key.currentState!.fillForm(CombinedEntry(
+      time: time,
+      record: mockRecord(time: time, sys: 123123),
     ));
     await tester.pump();
     expect(key.currentState?.validate(), false);
@@ -256,12 +254,11 @@ void main() {
     final key = GlobalKey<AddEntryFormState>();
     final med = mockMedicine(designation: 'somemed123');
     final intake = mockIntake(med);
-    final value = (
-      timestamp: intake.time,
+    final value = CombinedEntry(
+      time: intake.time,
       intake: intake,
       note: Note(time: intake.time, note: '123test', color: Colors.teal.toARGB32()),
       record: mockRecord(time: intake.time, sys: 123, dia: 45, pul: 67),
-      records: null,
       weight: BodyweightRecord(time: intake.time, weight: Weight.kg(123.45))
     );
     await tester.pumpWidget(appBase(AddEntryForm(
@@ -270,8 +267,8 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(key.currentState?.validate(), true);
-    expect(key.currentState?.save(), isA<AddEntryFormValue>()
-      .having((e) => e.timestamp, 'timestamp', value.timestamp)
+    expect(key.currentState?.save(), isA<CombinedEntry>()
+      .having((e) => e.time, 'timestamp', value.time)
       .having((e) => e.intake, 'intake', value.intake)
       .having((e) => e.record, 'record', value.record)
       .having((e) => e.weight, 'weight', value.weight)
@@ -282,12 +279,11 @@ void main() {
     final key = GlobalKey<AddEntryFormState>();
     final med = mockMedicine(designation: 'somemed123');
     final intake = mockIntake(med);
-    final value = (
-      timestamp: intake.time,
+    final value = CombinedEntry(
+      time: intake.time,
       intake: intake,
       note: Note(time: intake.time, note: '123test', color: Colors.teal.toARGB32()),
       record: mockRecord(time: intake.time, sys: 123, dia: 45, pul: 67),
-      records: null,
       weight: BodyweightRecord(time: intake.time, weight: Weight.kg(123.45))
     );
     await tester.pumpWidget(appBase(AddEntryForm(key: key),
@@ -298,8 +294,8 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(key.currentState?.validate(), true);
-    expect(key.currentState?.save(), isA<AddEntryFormValue>()
-        .having((e) => e.timestamp, 'timestamp', value.timestamp)
+    expect(key.currentState?.save(), isA<CombinedEntry>()
+        .having((e) => e.time, 'timestamp', value.time)
         .having((e) => e.intake, 'intake', value.intake)
         .having((e) => e.record, 'record', value.record)
         .having((e) => e.weight, 'weight', value.weight)
@@ -396,14 +392,11 @@ void main() {
 
   testWidgets('opens correct tab on edit', (tester) async {
     final key = GlobalKey<AddEntryFormState>();
+    final time = DateTime.now();
     await tester.pumpWidget(appBase(AddEntryForm(key: key,
-      initialValue: (
-        timestamp: DateTime.now(),
-        weight: BodyweightRecord(time:  DateTime.now(), weight: Weight.kg(123.0)),
-        record: null,
-        records: null,
-        note: null,
-        intake: null,
+      initialValue: CombinedEntry(
+        time: time,
+        weight: BodyweightRecord(time: time, weight: Weight.kg(123.0)),
       ),
     ),
       settings: Settings(weightInput: true),
@@ -412,133 +405,6 @@ void main() {
 
     expect(find.byType(BloodPressureForm), findsNothing);
     expect(find.byType(WeightForm), findsOneWidget);
-  });
-
-  testWidgets("doesn't update time from ble if setting isn't set", (tester) async {
-    final key = GlobalKey<AddEntryFormState>();
-    final initialTime = DateTime.now();
-
-    await tester.pumpWidget(appBase(AddEntryForm(key: key,
-      initialValue: (
-        timestamp: initialTime,
-        weight: null,
-        record: null,
-        records: null,
-        note: null,
-        intake: null,
-      ),
-      mockBleInput: (callback) => ListTile(
-        onTap: () => callback(mockRecord(time: DateTime(2000))),
-        title: Text('mockBleInput'),
-      ),
-    ),
-      settings: Settings(
-        bleInput: BluetoothInputMode.disabled,
-        trustBLETime: false,
-      ),
-    ));
-    await tester.pumpAndSettle();
-
-    await tester.tap(find.text('mockBleInput'));
-    final returnedEntry = key.currentState!.save();
-    expect(returnedEntry!.timestamp.isAfter(DateTime(2000)), isTrue);
-    expect(returnedEntry.timestamp, initialTime);
-
-    // also check if the hint dialog isn't incorrectly displayed
-    await tester.pumpAndSettle();
-    expect(find.byType(AlertDialog), findsNothing);
-  });
-
-  testWidgets('updates time from ble if setting is set', (tester) async {
-    final key = GlobalKey<AddEntryFormState>();
-    final initialTime = DateTime.now();
-
-    await tester.pumpWidget(appBase(AddEntryForm(key: key,
-      initialValue: (
-        timestamp: initialTime,
-        weight: null,
-        record: null,
-        records: null,
-        note: null,
-        intake: null,
-      ),
-      mockBleInput: (callback) => ListTile(
-        onTap: () => callback(mockRecord(time: DateTime(2000))),
-        title: Text('mockBleInput'),
-      ),
-    ),
-      settings: Settings(
-        bleInput: BluetoothInputMode.disabled,
-        trustBLETime: true,
-      ),
-    ));
-    await tester.pumpAndSettle();
-
-    await tester.tap(find.text('mockBleInput'));
-    final returnedEntry = key.currentState!.save();
-    expect(returnedEntry!.timestamp, equals(DateTime(2000)));
-  });
-
-  testWidgets('shows warning if time from ble is too old', (tester) async {
-    final localizations = await AppLocalizations.delegate.load(const Locale('en'));
-    await tester.pumpWidget(appBase(AddEntryForm(
-      mockBleInput: (callback) => ListTile(
-        onTap: () => callback(mockRecord(time: DateTime(2000))),
-        title: Text('mockBleInput'),
-      ),
-    ),
-      settings: Settings(
-        bleInput: BluetoothInputMode.disabled,
-        trustBLETime: true,
-      ),
-    ));
-    await tester.pumpAndSettle();
-
-    expect(find.byType(AlertDialog), findsNothing);
-    await tester.tap(find.text('mockBleInput'));
-    await tester.pumpAndSettle();
-    expect(find.byType(AlertDialog), findsOneWidget);
-    expect(find.textContaining('The bluetooth device reported a time off by'), findsOneWidget);
-    expect(find.text(localizations.btnConfirm), findsOneWidget);
-
-    await tester.tap(find.text(localizations.btnConfirm));
-    await tester.pumpAndSettle();
-    expect(find.byType(AlertDialog), findsNothing);
-
-    // reopens the next time
-    await tester.tap(find.text('mockBleInput'));
-    await tester.pumpAndSettle();
-    expect(find.byType(AlertDialog), findsOneWidget);
-  });
-
-  testWidgets('allows disabling warning if time from ble is too old', (tester) async {
-    final localizations = await AppLocalizations.delegate.load(const Locale('en'));
-    await tester.pumpWidget(appBase(AddEntryForm(
-      mockBleInput: (callback) => ListTile(
-        onTap: () => callback(mockRecord(time: DateTime(2000))),
-        title: Text('mockBleInput'),
-      ),
-    ),
-      settings: Settings(
-        bleInput: BluetoothInputMode.disabled,
-        trustBLETime: true,
-      ),
-    ));
-    await tester.pumpAndSettle();
-
-    expect(find.byType(AlertDialog), findsNothing);
-    await tester.tap(find.text('mockBleInput'));
-    await tester.pumpAndSettle();
-    expect(find.byType(AlertDialog), findsOneWidget);
-    expect(find.textContaining('The bluetooth device reported a time off by'), findsOneWidget);
-    expect(find.text(localizations.dontShowAgain), findsOneWidget);
-
-    await tester.tap(find.text(localizations.dontShowAgain));
-    await tester.pumpAndSettle();
-    expect(find.byType(AlertDialog), findsNothing);
-    await tester.tap(find.text('mockBleInput'));
-    await tester.pumpAndSettle();
-    expect(find.byType(AlertDialog), findsNothing);
   });
 
   testWidgets('saves measurement when time input is hidden', (tester) async {
