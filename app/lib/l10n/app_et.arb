@@ -248,7 +248,7 @@
   "edit": "Muuda",
   "delete": "Kustuta",
   "startWithAddMeasurementPage": "Lisamise vaade rakenduse käivitamisel",
-  "startWithAddMeasurementPageDescription": "Rakenduse käivitamisel kuvatakse lisamise vaade.",
+  "startWithAddMeasurementPageDescription": "Rakenduse käivitamisel näita kohe mõõtmiste lisamisvaadet.",
   "horizontalLines": "Horisontaaljooned",
   "linePositionY": "Joone asukoht (y)",
   "custom": "Kohandatud",
@@ -386,5 +386,33 @@
   "featuresSetting": "Funktsionaalsused",
   "legacyBluetoothInput": "Vana versioon (pärandversioon)",
   "bigGraphSplit": "Mõõtmistevaheline aeg on pikem kui katkestusteta kuvatav maksimaalne ajavälp. Seda saad muuta seadistustes.",
-  "openSettings": "Ava seadistused"
+  "openSettings": "Ava seadistused",
+  "titleAlreadyExists": "Selline pealkiri juba on olemas",
+  "importAll": "Impordi kõik ({count})",
+  "@importAll": {
+    "description": "Button to import every measurement returned by a bluetooth device.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "measurementsImported": "{count} mõõtmist on imporditud",
+  "@measurementsImported": {
+    "description": "Confirmation shown after importing all measurements returned by a bluetooth device.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "exportAddTimestamp": "Lisa failinimele ajatempel",
+  "exportAddTimestampDesc": "Tagab, et eksportimisel on failinimed alati unikaalsed",
+  "bluetoothImportModeDisabled": "Pole kasutusel",
+  "bluetoothImportModeAll": "Kõik mõõtmised",
+  "bluetoothImportModeLast": "Viimane mõõtmine",
+  "autostartBluetoothInput": "Bluetoothipõhise impordi automaatne käivitamine",
+  "bluetoothImportMode": "Automaatne import",
+  "bluetoothImportModeDescription": "Impordi mõõdistused seadmest automaatselt neid eelnevalt ülevaatamata. Enam kui ühe puhul saad valida, mida tahad importida.",
+  "autostartBluetoothInputDescription": "Bluetoothipõhine import on kasutusel ja Bluetooth sisse lülitatud, mõõdistuste import käivitub sisestusvaatest automaatselt."
 }

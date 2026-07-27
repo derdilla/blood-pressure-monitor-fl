@@ -356,5 +356,24 @@
   "errFeatureNotSupported": "Ez a funkció nem érhető el ezen a platformon.",
   "exportPdfExportTitle": "Fejléc",
   "timeFormat": "Idő formátum",
-  "exportPdfExportStatistics": "Statisztika"
+  "exportPdfExportStatistics": "Statisztika",
+  "titleAlreadyExists": "Ez a cím már létezik",
+  "importAll": "Import all ({count})",
+  "@importAll": {
+    "description": "Button to import every measurement returned by a bluetooth device.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "measurementsImported": "{count} importált mérések",
+  "@measurementsImported": {
+    "description": "Confirmation shown after importing all measurements returned by a bluetooth device.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  }
 }

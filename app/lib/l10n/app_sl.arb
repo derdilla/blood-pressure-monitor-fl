@@ -384,5 +384,7 @@
   "maxDataInterval": "Najdaljši podatkovni interval",
   "graphSettings": "Nastavitve grafa",
   "featuresSetting": "Lastnosti",
-  "warnDiscardingData": "Imate neshranjene podatke. Ali želite nadaljevati in jih zavreči?"
+  "warnDiscardingData": "Imate neshranjene podatke. Ali želite nadaljevati in jih zavreči?",
+  "bluetoothImportModeDisabled": "Onemogočeno",
+  "bluetoothImportModeAll": "Dodaj meritev"
 }

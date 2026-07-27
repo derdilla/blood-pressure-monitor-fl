@@ -234,7 +234,7 @@
   "fieldFormat": "字段格式",
   "pulsePressure": "收缩压和舒张压之间的差异",
   "addExportformat": "添加导出格式",
-  "startWithAddMeasurementPageDescription": "应用启动时显示的测量输入屏幕。",
+  "startWithAddMeasurementPageDescription": "应用启动时立即显示测量输入屏幕。",
   "addLine": "添加行",
   "note": "附注",
   "exportSettings": "备份设置",
@@ -386,5 +386,33 @@
   "featuresSetting": "功能",
   "warnDiscardingData": "你有未保存的数据。要继续并丢弃它们吗？",
   "bigGraphSplit": "测量相隔的时间大于无中断显示的最大间隔。可以在设置中进行更改。",
-  "openSettings": "打开设置"
+  "openSettings": "打开设置",
+  "titleAlreadyExists": "此标题已存在",
+  "importAll": "导入全部 ({count})",
+  "@importAll": {
+    "description": "Button to import every measurement returned by a bluetooth device.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "measurementsImported": "导入了 {count} 个测量",
+  "@measurementsImported": {
+    "description": "Confirmation shown after importing all measurements returned by a bluetooth device.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "exportAddTimestamp": "添加时间戳到文件名",
+  "exportAddTimestampDesc": "确保每个导出文件的名称都是唯一的",
+  "bluetoothImportModeDisabled": "已停用",
+  "bluetoothImportModeAll": "所有测量",
+  "autostartBluetoothInput": "自动启动蓝牙导入",
+  "autostartBluetoothInputDescription": "启用蓝牙输入并开启蓝牙时，自动开始在测量输入屏幕上导入。",
+  "bluetoothImportMode": "自动导入",
+  "bluetoothImportModeDescription": "自动导入设备返回的测量值，而不是先审核它们。返回的值超过一个时，选择要导入的值。",
+  "bluetoothImportModeLast": "最新测量值"
 }

@@ -1,5 +1,5 @@
 {
-  "behavior": "Плеймейт",
+  "behavior": "Бажані",
   "bluetoothInput": "Bluetooth вхід",
   "noWeightPermission": "Немає дозволу на використання ваги.",
   "weekOfYear": "Тиждень {weekNum}, {year}",
@@ -20,10 +20,10 @@
   "month": "Місяць",
   "addExportformat": "Додати експорт",
   "exportDir": "Експортний каталог",
-  "csv": "КСВ",
+  "csv": "CSV",
   "exportSuccess": "Експорт успішних",
   "default_": "Зареєструватися",
-  "accentColor": "Колір:",
+  "accentColor": "Колір теми",
   "title": "Додаток тиску крові",
   "compactList": "Список вимірювань",
   "errTimeAfterNow": "Вибраний час в майбутньому. Ви можете вимкнути цю перевірку в налаштуваннях.",
@@ -44,7 +44,7 @@
       }
     }
   },
-  "btnConfirm": "ЗАРЕЄСТРУВАТИСЯ",
+  "btnConfirm": "ОК",
   "addMeasurement": "Додавання вимірювання",
   "startWithAddMeasurementPageDescription": "Після запуску програми показаний вхідний екран.",
   "deleteAllMedicineIntakes": "Видалити всі надходження ліків",
@@ -70,21 +70,21 @@
   "exportSettings": "Налаштування резервного копіювання",
   "errBleNoPerms": "Немає дозволу на bluetooth",
   "drawRegressionLines": "Малюнок трендових ліній",
-  "btnSave": "САВИ",
+  "btnSave": "ЗАПИСИ",
   "appStyleSettings": "Стиль додатка",
   "noPermissions": "Відсутні дозволи.",
   "healthConnectDesc": "Підключіть систему API для синхронізації даних з іншими додатками, які підтримують її. Це дозволяє використовувати сторонні додатки для розширення функціональних можливостей без ручного експорту.\nЯкщо ви явно авторизуєте додаток третьої сторони, що додає його.",
   "deletionConfirmed": "Видалити видалені записи.",
   "last30Days": "30 хв",
-  "fieldDelimiter": "Сфера демітер",
+  "fieldDelimiter": "Розмежування поля",
   "horizontalLines": "Горизонтальні лінії",
   "stableBluetoothInput": "Стабільний",
   "preferredPressureUnit": "Пристрій тиску фарширований",
   "exportPdfExportTitle": "Головна",
   "errParseEmptyCsvFile": "Не вистачає рядків у файлі csv, щоб записати запис.",
   "date": "Дата",
-  "import": "ЗВІТ",
-  "pulShort": "пуль",
+  "import": "ІМПОРТ",
+  "pulShort": "пульс",
   "syncOnAppStart": "Синхронізація даних на старті програми",
   "availableDevices": "Доступні пристрої",
   "buildIn": "Побудова",
@@ -112,7 +112,7 @@
   "diaShort": "діа",
   "export": "ЕКСПОРТ",
   "bloodPressure": "Артеріальний тиск",
-  "theme": "Головна",
+  "theme": "Тема",
   "scanningForDevices": "Скакування для пристроїв",
   "year": "Рік",
   "warnAboutTxt1": "Попереднє значення є чистими пропозиціями та не медичними порадами.",
@@ -122,7 +122,7 @@
   "exportFormat": "Формат експорту",
   "errUnrealistic": "Нереальне значення? Вимкніть перевірку в налаштуваннях!",
   "exportPdfHeaderHeight": "Висота головки",
-  "iconSize": "Розмір ікони",
+  "iconSize": "Розмір іконок",
   "measurementsPerDay": "Вимірювання в день",
   "errNoData": "немає даних",
   "tapToSelect": "Натисніть для вибору",
@@ -139,7 +139,7 @@
       }
     }
   },
-  "light": "Світло",
+  "light": "Світла",
   "errNotStarted": "не розпочати",
   "errCantOpenURL": "Не можна відкрити URL: {url}",
   "@errCantOpenURL": {
@@ -170,7 +170,7 @@
   "errDiaGtSys": "діа >= sys? Вимкніть перевірку в налаштуваннях!",
   "graphLineThickness": "Товщина лінії",
   "data": "Дані",
-  "version": "Редагування",
+  "version": "Версія",
   "errNoValue": "Будь ласка, введіть значення",
   "errMeasurementRead": "Помилка при виконанні вимірювання!",
   "other": "інші",
@@ -183,11 +183,11 @@
       }
     }
   },
-  "exportWarnConfigNotImportable": "Привіт! Просто дружні керівники: поточна експортна конфігурація не імпортується. Щоб виправити це, переконайтеся, що ви встановите експортний тип як CSV і включите один з доступних форматів часу.",
+  "exportWarnConfigNotImportable": "Привіт! Просто дружне нагадування: поточні налаштування експорту не підійдуть для подальшого імпорту. Щоб змінити це, оберіть тип експорту файлів CSV та оберіть один з доступних форматів дати.",
   "timestamp": "Таймер",
-  "exportCsvHeadlineDesc": "Допомагає дискримінувати види",
+  "exportCsvHeadlineDesc": "Допомагає визначати види",
   "syncNow": "Sync тепер",
-  "btnUndo": "ЗАМОВИТИ",
+  "btnUndo": "ВІДМОВА",
   "packageNameOf": "Назва пакета: {name}",
   "@packageNameOf": {
     "placeholders": {
@@ -200,7 +200,7 @@
   "pulColor": "Імпульсний колір",
   "addLine": "Додати рядок",
   "warnAboutTxt3": "Відчуйте, щоб змінити значення для задоволення ваших потреб і дотримуйтесь рекомендацій лікаря.",
-  "pulLong": "Імпульс",
+  "pulLong": "Пульс",
   "errNotEnoughDataToGraph": "Не достатньо даних, щоб намалювати графіку.",
   "sysColor": "Систолічний колір",
   "maxOf": "{txt} макс.",
@@ -217,7 +217,7 @@
   "errNotImportable": "Цей файл не можна імпортувати",
   "errNaN": "Введіть номер",
   "confirmDeletion": "Підтвердити видалення",
-  "textDelimiter": "Текстовий емітер",
+  "textDelimiter": "Розмежування тексту",
   "select": "Обрати",
   "@select": {
     "description": "Used when f.e. selecting a single measurement when the bluetooth device returned multiple"
@@ -226,17 +226,17 @@
   "requiresAppRestart": "Потрібні застосунки",
   "xls": "Excel (xls)",
   "deleteAllSettings": "Видалити всі налаштування",
-  "pdf": "УКРАЇНСЬКА",
+  "pdf": "PDF",
   "aboutWarnValuesScreen": "Про нас",
   "exportPdfExportStatistics": "Статистика",
   "age": "Вік",
-  "db": "Кріайт ДБ",
+  "db": "SQLite DB",
   "exportPdfCellFontSize": "Розмір шрифту",
-  "dark": "Темний",
+  "dark": "Темна",
   "maximum": "Макс",
   "tapToClose": "Натисніть, щоб закрити.",
   "automaticallySyncData": "Автоматично синхронізація даних",
-  "exportCsvHeadline": "Головна",
+  "exportCsvHeadline": "Заголовок",
   "pulseRateLessThanLowerLimit": "Нормативно-правова норма менша за менший ліміт",
   "errNeedHeadline": "Ви можете лише імпортувати файли з заголовком.",
   "determineWarnValues": "Визначити значення попередження",
@@ -253,7 +253,7 @@
   "btnShare": "СХАРЕ",
   "deleteAllMeasurements": "Видалити всі вимірювання",
   "language": "Українська",
-  "exportWarnNotEveryFieldExported": "Якщо ви не експортуєте всі поля: {fields} {count, plural, one{is} other{are}} відсутні.",
+  "exportWarnNotEveryFieldExported": "Зверніть уваги, не всі поля експортуються: {fields} {count, plural, one{is} other{are}} відсутні.",
   "@exportWarnNotEveryFieldExported": {
     "placeholders": {
       "count": {
@@ -267,7 +267,7 @@
   "average": "Середній",
   "addEntry": "Додати поле",
   "sourceCode": "Код джерела",
-  "error": "{msg}",
+  "error": "Помилка {msg}",
   "@error": {
     "placeholders": {
       "msg": {
@@ -300,7 +300,7 @@
   "result": "Результат:",
   "settings": "Налаштування",
   "loading": "завантаження..",
-  "text": "новини",
+  "text": "текст",
   "errParseTimeNotRestoreable": "Немає стовпчика, що дозволяє відновити часовий затиск.",
   "avgOf": "{txt} Ø",
   "@avgOf": {
@@ -340,8 +340,8 @@
       }
     }
   },
-  "system": "Системи",
-  "sysShort": "шемале",
+  "system": "Системна",
+  "sysShort": "sys",
   "graphSettings": "Налаштування графіка",
   "sysWarn": "Систолічні попередження",
   "now": "зараз",
@@ -386,5 +386,26 @@
   "addNote": "Примітка (необов''язково)",
   "healthConnect": "Підключення охорони здоров''я",
   "bluetoothInputDesc": "Якщо стабільний задняк не працює, використовуйте зворотний зв''язок з спадщиною та повідомляють його в contact@derdilla.com або https://github.com/derdilla/blood-pressure-monitor-fl/issues",
-  "optEnableHealthConnect": "Увімкнути підключення до здоров''я"
+  "optEnableHealthConnect": "Увімкнути підключення до здоров''я",
+  "titleAlreadyExists": "Ця назва вже існує",
+  "importAll": "Імпорт всіх ({count})",
+  "@importAll": {
+    "description": "Button to import every measurement returned by a bluetooth device.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "measurementsImported": "{count} вимірювання імпортних",
+  "@measurementsImported": {
+    "description": "Confirmation shown after importing all measurements returned by a bluetooth device.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "exportAddTimestamp": "Додати час у назву файлу",
+  "exportAddTimestampDesc": "Забезпечує унікальну назву кожному файлу"
 }

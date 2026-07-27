@@ -366,5 +366,15 @@
       }
     }
   },
-  "confirmDeleteDesc": "Ta bort denna post? (Du kan stänga av dessa bekräftelser i inställningarna.)"
+  "confirmDeleteDesc": "Ta bort denna post? (Du kan stänga av dessa bekräftelser i inställningarna.)",
+  "titleAlreadyExists": "Denna titel existerar redan",
+  "measurementsImported": "{count} mätningar importerade",
+  "@measurementsImported": {
+    "description": "Confirmation shown after importing all measurements returned by a bluetooth device.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  }
 }
