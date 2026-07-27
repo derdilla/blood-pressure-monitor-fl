@@ -1,11 +1,17 @@
-<p><i>blood pressure monitor</i> is a reliable blood pressure measurement tracker and analyzer. It has the ambition to allow saving measurements faster than anywhere else and make sharing data with you doctor effortless. It works out of the box but can also be configured for individual use cases.</p>
+<p><i>இரத்த அழுத்த மானிட்டர்</i> என்பது நம்பகமான இரத்த அழுத்த அளவீட்டு டிராக்கர் மற்றும் பகுப்பாய்வி ஆகும். இது வேறு எங்கும் விட வேகமாக அளவீடுகளைச் சேமிக்க அனுமதிக்கும் வகையில் வடிவமைக்கப்பட்டுள்ளது மற்றும் உங்கள் மருத்துவருடன் தரவைப் பகிர்வதை சிரமமின்றி மாற்றுகிறது. இது பெட்டிக்கு வெளியே வேலை செய்கிறது, ஆனால் தனிப்பட்ட பயன்பாட்டு நிகழ்வுகளுக்கும் கட்டமைக்கப்படலாம்.</ப> 
 
-Features:
-- 📏 <b>Reliable</b> measurement storing
-- 🚀 Fast input through <b>user-friendly</b> dialogs on launch and automatic form navigation
-- 📊 <b>Beautiful</b> analytics provide insights on trends, distribution, differences over the day and much more
-- 📂 Versatile <b>export and import</b> (CSV, PDF, SQLite) with granular control
-- ⚙️ High configurability
-- 🔗 BLE GATT input through bluetooth devices
-- Ad free without disturbances
-- Well-documented, <b>open-source</b> code
+முக்கிய அம்சங்கள்: 
+- <b>நம்பகமானது</b> அளவீட்டு சேமிப்பு. 
+- வெளியீடு மற்றும் தானியங்கி வடிவ வழிசெலுத்தலில் <b>பயனர் நட்பு< / b> உரையாடல்கள் மூலம் வேகமான உள்ளீடு. 
+- <b>அழகு</b> பகுப்பாய்வுகள் போக்குகள், விநியோகம், நாள் வேறுபாடுகள் மற்றும் பலவற்றைப் பற்றிய நுண்ணறிவுகளை வழங்குகின்றன. 
+- பல்துறை <b>ஏற்றுமதி மற்றும் இறக்குமதி< / b> (CSV, PDF, SQLite) சிறுமணி கட்டுப்பாட்டுடன். 
+- மிகவும் கட்டமைக்கக்கூடியது. 
+- புளூடூத் சாதனங்கள் மூலம் BLE GATT உள்ளீடு. 
+- விளம்பரங்கள் இல்லை - கணக்குகள் இல்லை. 
+- நன்கு ஆவணப்படுத்தப்பட்ட, <b>open-source</b> குறியீடு. 
+- எடை அல்லது மருந்து உட்கொள்ளல் போன்ற பிற தொடர்புடைய அளவீடுகளை உள்ளிடுவதற்கான ஆதரவு. 
+- Health-Connect வழியாக மற்ற பயன்பாடுகளுடன் விருப்பமாக ஒத்திசைக்கவும். 
+
+BlE GATT நெறிமுறையை ஆதரிக்கும் எந்த சாதனத்தையும் நீங்கள் வைத்திருந்தால், அளவீடுகளை கைமுறையாக அல்லது தானாகவே உள்ளிடலாம். எந்தவொரு குறிப்பிட்ட சாதனத்தையும் நாங்கள் பரிந்துரைக்கவில்லை, தயவுசெய்து உங்கள் சொந்த ஆராய்ச்சியைச் செய்யுங்கள். 
+
+இந்த பயன்பாடு <b>not</b> ஒரு மருத்துவ சாதனம். இது <b>not</b> உங்கள் இரத்த அழுத்தத்தை அளவிடுகிறது அல்லது உங்களுக்கு எந்த மருத்துவ ஆலோசனையையும் வழங்காது. அதற்காக மருத்துவரிடம் கலந்தாலோசிக்கவும். இந்த பயன்பாடு எளிதான மற்றும் பாதுகாப்பான பாணியில் அளவீடுகளை விரைவாக பதிவு செய்வதற்கான ஒரு கருவி மட்டுமே.
