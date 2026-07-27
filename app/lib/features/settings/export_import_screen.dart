@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:blood_pressure_app/features/data_picker/interval_picker.dart';
 import 'package:blood_pressure_app/features/export_import/ui/columns_config/active_column_customizer.dart';
 import 'package:blood_pressure_app/features/export_import/ui/export_button.dart';
+import 'package:blood_pressure_app/features/export_import/ui/export_column_management_screen.dart';
 import 'package:blood_pressure_app/features/export_import/ui/export_warn_banner.dart';
 import 'package:blood_pressure_app/features/export_import/ui/import_button.dart';
 import 'package:blood_pressure_app/features/settings/tiles/dropdown_list_tile.dart';
@@ -177,9 +178,19 @@ class ExportImportScreen extends StatelessWidget {
                 ),
               ),
             if (settings.exportFormat == ExportFormat.csv
-              || settings.exportFormat == ExportFormat.pdf
-              || settings.exportFormat == ExportFormat.xls)
+                || settings.exportFormat == ExportFormat.pdf
+                || settings.exportFormat == ExportFormat.xls) ...[
+              ListTile(
+                title: Text(localizations.manageExportColumns),
+                trailing: const Icon(Icons.arrow_forward_ios),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute<void>(builder: (context) => const ExportColumnsManagementScreen()));
+                },
+              ),
               ActiveColumnCustomizer(),
+            ],
           ],
         ),
       ),

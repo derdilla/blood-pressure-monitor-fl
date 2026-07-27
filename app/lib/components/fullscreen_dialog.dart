@@ -94,7 +94,7 @@ class FullscreenDialog extends StatelessWidget {
     if (!bottomAppBar) return body;
     return Padding(
       padding: const EdgeInsets.only(top: 4.0),
-      child: body,
+      child: SafeArea(child: body!),
     );
   }
 
