@@ -1,11 +1,17 @@
-<p><i>blood pressure monitor</i> güvenilir bir kan basıncı ölçüm takip ve inceleme aracıdır. Ölçümleri başka hiçbir yerde olmadığı kadar hızlı kaydetme ve verileri doktorunuzla paylaşmayı zahmetsiz hale getirme tutkusuna sahiptir. Sorunsuz bir şekilde çalışır ancak bireysel kullanım durumları için de yapılandırılabilir.</p>
+<p><i>blood pressure monitor</i> güvenilir bir kan basıncı ölçüm takip ve inceleme aracıdır. Ölçümleri başka hiçbir yerde olmadığı kadar hızlı kaydetme ve verileri doktorunuzla paylaşmayı zahmetsiz hale getirmek üzere tasarlanmıştır. Sorunsuz bir şekilde çalışır ancak bireysel kullanım durumları için de yapılandırılabilir.</p>
 
-Özellikler:
-- 📏 <b>Güvenilir</b> ölçüm kaydı
-- 🚀 Açılışta <b>kullanıcı dostu iletişim kutuları</b> ve otomatik form gezinmesi sayesinde hızlı giriş
-- 📊 <b>Güzel</b> istatistikler sayesinde eğilimler, dağılım, gün içindeki farklılıklar ve çok daha fazlası hakkında bilgiler sağlar
-- 📂 Ayrıntılı denetim ile esnek <b>dışa ve içe aktarma</b> (CSV, PDF, SQLite)
-- ⚙️ Yüksek yapılandırılabilirlik
-- 🔗 Bluetooth aygıtları ile BLE GATT girişi
-- Rahatsız edici reklamlar yok
+Temel Özellikler:
+- <b>Güvenilir</b> ölçüm kaydı
+- Açılışta <b>kullanıcı dostu iletişim kutuları</b> ve otomatik form gezinmesi sayesinde hızlı giriş
+- <b>Güzel</b> istatistikler sayesinde eğilimler, dağılım, gün içindeki farklılıklar ve çok daha fazlası hakkında bilgiler sağlar
+- Ayrıntılı denetim ile esnek <b>dışa ve içe aktarma</b> (CSV, PDF, SQLite)
+- Yüksek yapılandırılabilirlik
+- Bluetooth aygıtları ile BLE GATT girişi
+- Reklam yok - hesap yok
 - İyi belgelenmiş, <b>açık kaynaklı</b> kod
+- Ağırlık veya ilaç alımı gibi diğer ilgili ölçümlerin girilmesi desteği.
+- İsteğe bağlı olarak Health-Connect aracılığıyla diğer uygulamalarla eşzamanlayın.
+
+Ölçümler elle girilebilir veya BlE GATT iletişim kuralını destekleyen herhangi bir aygıta sahipseniz otomatik olarak alınabilir. Herhangi bir aygıtı özellikle önermiyoruz; lütfen kendi araştırmanızı yapın..
+
+Bu uygulama bir tıbbi aygıt <b>değildir</b>. Kan basıncınızı <b>ölçmez</b> ve size herhangi bir tıbbi tavsiye vermez. Bunun için bir doktora danışın. Bu uygulama, ölçümleri kolay ve güvenli bir şekilde hızlıca kaydetmeye yarayan bir araçtır.

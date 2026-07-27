@@ -1,11 +1,17 @@
-<p><i>„Blood pressure monitor“ ehk vererõhumonitor</i> on usaldusväärne rakendus vererõhuandmete salvestamiseks ja analüüsimiseks. Rakenduse eesmärgiks on võimaldada andmete salvestamist kiiremini, kui mujal ja teha andmete jagamine sinu arstiga vaevatuks. Toimib hästi nii vaikimisi olekus, kui ka erisuguste individuaalsete eelistuste alusel.</p>
+<p><i>„Blood pressure monitor“ ehk vererõhumonitor</i> on usaldusväärne rakendus vererõhuandmete salvestamiseks ja analüüsimiseks. Rakenduse on mõeldud andmete salvestamiseks kiiremini, kui mujal ja teha andmete jagamine sinu arstiga vaevatuks. Toimib hästi nii vaikimisi olekus, kui ka erisuguste individuaalsete eelistuste alusel.</p>
 
 Funktsionaalsused:
-- 📏 <b>Usaldusväärne</b> mõõdistuste salvestamine
-- 🚀 Kiire sisestus <b>kasutajasõbralikust</b> sisestusvaatest kohe käivitamisel või menüüst
-- 📊 <b>Ilus</b> analüüsigraafika annab hea ülevaate suundumustest, andmete jaotusest ja erinevustest ning paljust muust
-- 📂 Paljud võimalused <b>andmete eksportimiseks ja importimiseks</b> (CSV, PDF, SQLite), sealhulgas detailsete seadistusvõimalustega
-- ⚙️ Tervikrakendusena väga seadistatav
-- 🔗 BLE GATT sisend Bluetoothi-põhistest seadmetest
-- Reklaamivaba ja kõrvalise mürata
+- <b>Usaldusväärne</b> mõõdistuste salvestamine
+- Kiire sisestus <b>kasutajasõbralikust</b> sisestusvaatest kohe käivitamisel või menüüst
+- <b>Ilus</b> analüüsigraafika annab hea ülevaate suundumustest, andmete jaotusest ja erinevustest ning paljust muust
+- Paljud võimalused <b>andmete eksportimiseks ja importimiseks</b> (CSV, PDF, SQLite), sealhulgas detailsete seadistusvõimalustega
+- Tervikrakendusena väga seadistatav
+- BLE GATT sisend Bluetoothi-põhistest seadmetest
+- Pole reklaame ega kasutajakontosid
 - Hästi dokumenteeritud ja põhineb <b>avatud lähtekoodil</b>
+- Tugi muude sisestuste jaoks, nagu kaal või võetud ravimid
+- Võimalus sünkroonida andmeid muude rakendustega Health-Connecti kaudu
+
+Andmeid saad sisestada käsitsi või automatselt, kui sinu seade toetab BLE GATT protokolli. Me ei oska soovitada ühtegi konkreetset seadet, seega palun otsi teemakohast teavet ise.
+
+See rakendus <b>ei ole</b> meditsiiniseade. Ta <b>ei mõõda</b> sinu vererõhku ega anne sulle nõu. Vastavat teavet palun küsi oma arstilt. See rakendus on lihtne tarvik, mis on mõeldud vaid andmete kiireks sisestamiseks lihtsal ja turvalisel moel.
