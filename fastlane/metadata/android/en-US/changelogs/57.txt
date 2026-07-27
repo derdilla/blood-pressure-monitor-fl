@@ -1,0 +1,13 @@
+* Warn on disconnected graph
+* Save custom export presets
+* Limit BLE input card size
+* Support for microlife BLE protocol
+* Allow adding all BLE measurements
+* Toggleable timestamp in export filename
+* Override identically named files for continous export
+* Add autostart and autoimport options for BLE
+* Fix new medicines missing until app restart
+* Fix status bar overlap
+* Update translations
+
+Welcome @dgudim and @jan-kuechler as new contributors!
