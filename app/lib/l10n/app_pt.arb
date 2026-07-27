@@ -386,5 +386,26 @@
   "maxDataInterval": "Intervalo máximo de dados",
   "graphSettings": "Definições do gráfico",
   "featuresSetting": "Características",
-  "warnDiscardingData": "Você tem dados não salvos. Queres continuar e descartá-los?"
+  "warnDiscardingData": "Você tem dados não salvos. Queres continuar e descartá-los?",
+  "titleAlreadyExists": "Este título já existe",
+  "importAll": "Importar tudo ({count})",
+  "@importAll": {
+    "description": "Button to import every measurement returned by a bluetooth device.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "measurementsImported": "{count} medidas importadas",
+  "@measurementsImported": {
+    "description": "Confirmation shown after importing all measurements returned by a bluetooth device.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "bluetoothImportModeDisabled": "Desativado",
+  "bluetoothImportModeAll": "Adicionar medição"
 }

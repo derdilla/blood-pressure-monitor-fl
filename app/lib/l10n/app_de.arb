@@ -388,5 +388,26 @@
   "maxDataInterval": "Maximales Datenintervall",
   "graphSettings": "Graphen-Einstellungen",
   "featuresSetting": "Eigenschaften",
-  "legacyBluetoothInput": "Alte Implementation"
+  "legacyBluetoothInput": "Alte Implementation",
+  "titleAlreadyExists": "Dieser Titel existiert bereits",
+  "importAll": "Alle importieren ({count})",
+  "@importAll": {
+    "description": "Button to import every measurement returned by a bluetooth device.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "measurementsImported": "{count} Messungen importiert",
+  "@measurementsImported": {
+    "description": "Confirmation shown after importing all measurements returned by a bluetooth device.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "bluetoothImportModeDisabled": "Deaktiviert",
+  "bluetoothImportModeAll": "Messung hinzufügen"
 }

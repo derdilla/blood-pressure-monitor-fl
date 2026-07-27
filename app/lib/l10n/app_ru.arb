@@ -386,5 +386,26 @@
   "maxDataInterval": "Максимальный интервал данных",
   "graphSettings": "Настройка профиля",
   "featuresSetting": "Особенности",
-  "warnDiscardingData": "У вас нет данных. Вы хотите продолжить и выбросить их?"
+  "warnDiscardingData": "У вас нет данных. Вы хотите продолжить и выбросить их?",
+  "titleAlreadyExists": "Это название уже существует",
+  "importAll": "Импорт всех ({count})",
+  "@importAll": {
+    "description": "Button to import every measurement returned by a bluetooth device.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "measurementsImported": "{count} Измерения, импортированные",
+  "@measurementsImported": {
+    "description": "Confirmation shown after importing all measurements returned by a bluetooth device.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "bluetoothImportModeDisabled": "Откючено",
+  "bluetoothImportModeAll": "Добавить измерение"
 }

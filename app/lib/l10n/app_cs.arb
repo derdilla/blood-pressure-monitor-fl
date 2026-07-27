@@ -386,5 +386,26 @@
   "maxDataInterval": "Maximální interval dat",
   "graphSettings": "Nastavení grafu",
   "featuresSetting": "Vlastnosti",
-  "warnDiscardingData": "Máte neuchovávané údaje. Chcete pokračovat a zlikvidovat?"
+  "warnDiscardingData": "Máte neuchovávané údaje. Chcete pokračovat a zlikvidovat?",
+  "titleAlreadyExists": "Tento název již existuje",
+  "importAll": "Importovat všechny ({count})",
+  "@importAll": {
+    "description": "Button to import every measurement returned by a bluetooth device.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "measurementsImported": "{count} dovážené měření",
+  "@measurementsImported": {
+    "description": "Confirmation shown after importing all measurements returned by a bluetooth device.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "bluetoothImportModeDisabled": "Vypnuto",
+  "bluetoothImportModeAll": "Přidat měření"
 }

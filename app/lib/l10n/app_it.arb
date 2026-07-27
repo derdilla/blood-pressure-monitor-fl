@@ -386,5 +386,26 @@
   "featuresSetting": "Caratteristiche",
   "warnDiscardingData": "Hai dati non salvati. Vuoi continuare a scartarli?",
   "healthConnectDesc": "Health Connect utilizza API di sistema per sincronizzare i dati con altre applicazioni che lo supportano. Questo consente di utilizzare applicazioni di terze parti per estendere la funzionalità senza ex- e importazioni manuali.\nNessun dato lascerà il dispositivo a meno che non autorizzi esplicitamente un''app di terze parti che lo carica.",
-  "syncOnAppStart": "Sincronizzare i dati sull''app"
+  "syncOnAppStart": "Sincronizzare i dati sull''app",
+  "titleAlreadyExists": "Questo titolo esiste già",
+  "importAll": "Importa tutto ({count})",
+  "@importAll": {
+    "description": "Button to import every measurement returned by a bluetooth device.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "measurementsImported": "{count} misure importate",
+  "@measurementsImported": {
+    "description": "Confirmation shown after importing all measurements returned by a bluetooth device.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "bluetoothImportModeDisabled": "Disabilitato",
+  "bluetoothImportModeAll": "Aggiungi misurazione"
 }

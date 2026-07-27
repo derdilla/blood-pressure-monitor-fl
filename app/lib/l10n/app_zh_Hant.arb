@@ -237,5 +237,7 @@
   "restartNow": "現在重新啟動",
   "deleteAllSettings": "刪除所有設定",
   "exportPdfExportTitle": "標題列",
-  "timeFormat": "時間格式"
+  "timeFormat": "時間格式",
+  "note": "備註",
+  "bloodPressure": "血壓記錄"
 }

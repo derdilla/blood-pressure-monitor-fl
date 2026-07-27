@@ -342,5 +342,16 @@
   "maxDataInterval": "Maksimum danych",
   "graphSettings": "Ustawienie Grapha",
   "featuresSetting": "Features",
-  "warnDiscardingData": "Nie są dane. Czy chcesz kontynuować i poradzić ich?"
+  "warnDiscardingData": "Nie są dane. Czy chcesz kontynuować i poradzić ich?",
+  "titleAlreadyExists": "Ten tytuł już istnieje",
+  "measurementsImported": "{count} pomiary importowane",
+  "@measurementsImported": {
+    "description": "Confirmation shown after importing all measurements returned by a bluetooth device.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "bluetoothImportModeDisabled": "Zablokowane"
 }

@@ -10,7 +10,7 @@
   },
   "errNaN": "Por favor, introduzca un número",
   "title": "Aplicación para la tensión arterial",
-  "success": "Exito: {msg}",
+  "success": "Logro: {msg}",
   "@success": {
     "placeholders": {
       "msg": {
@@ -137,7 +137,7 @@
     }
   },
   "measurementsPerDay": "Mediciones por día",
-  "timeResolvedMetrics": "Medidas por hora del día",
+  "timeResolvedMetrics": "Mediciones por hora del día",
   "minOf": "{txt} min.",
   "@minOf": {
     "placeholders": {
@@ -219,7 +219,7 @@
   "exportWarnConfigNotImportable": "¡Hey! Solo un aviso amistoso: la configuración de exportación actual no va a ser importable. Para corregirlo, asegura que elegiste el formato de exportación como CSV e incluye un de los formatos de tiempo disponible.",
   "warnAboutTxt3": "Dese la libertad de cambiar los valores para que se adapten a sus necesidades y siga las recomendaciones de su doctor.",
   "notes": "Notas",
-  "measurementCount": "Cuenta de medidas",
+  "measurementCount": "Cuenta de mediciones",
   "statistics": "Estadísticas",
   "confirmDelete": "Confirmar eliminación",
   "confirmDeleteDesc": "¿Eliminar esta entrada? (Puedes desactivar estas confirmaciones en la configuración.)",
@@ -264,7 +264,7 @@
   "exportPdfExportTitle": "Encabezado",
   "exportPdfExportStatistics": "Estadísticas",
   "startWithAddMeasurementPage": "Medida en el lanzamiento",
-  "startWithAddMeasurementPageDescription": "En el lanzamiento de la aplicación, se muestra la pantalla del input de las medidas.",
+  "startWithAddMeasurementPageDescription": "Al iniciar la aplicación, se muestra inmediatamente la entrada de mediciones en la pantalla.",
   "color": "Color",
   "restartNow": "Reiniciar ahora",
   "warnNeedsRestartForUsingApp": "Los archivos fueron eliminados en esta sesión. ¡Reinicie la aplicación para seguir usándola!",
@@ -386,5 +386,33 @@
   "maxDataInterval": "Intervalo máximo de datos",
   "graphSettings": "Ajustes de gráficos",
   "featuresSetting": "Características",
-  "warnDiscardingData": "Tienes datos no guardados. ¿Quieres continuar y descartarlos?"
+  "warnDiscardingData": "Tienes datos no guardados. ¿Quieres continuar y descartarlos?",
+  "titleAlreadyExists": "Este título ya existe",
+  "importAll": "Importar todo ({count})",
+  "@importAll": {
+    "description": "Button to import every measurement returned by a bluetooth device.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "measurementsImported": "{count} mediciones importadas",
+  "@measurementsImported": {
+    "description": "Confirmation shown after importing all measurements returned by a bluetooth device.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "exportAddTimestamp": "Añade estampa horaria al nombre del archivo",
+  "exportAddTimestampDesc": "Asegure un nombre de archivo único para cada exportación",
+  "bluetoothImportModeDisabled": "Deshabilitado",
+  "bluetoothImportModeAll": "Todas las mediciones",
+  "autostartBluetoothInput": "Importación de auto‐inicio de Bluetooth",
+  "autostartBluetoothInputDescription": "Cuando está habilitada la entrada y Bluetooth activada, automáticamente inicie la importación en la medida de la entrada de pantalla.",
+  "bluetoothImportMode": "Auto‐importar",
+  "bluetoothImportModeDescription": "Importa automáticamente las mediciones que devuelve el dispositivo, en lugar de revisarlas primero. Cuando se devuelvan varias, elige cuál quieres importar.",
+  "bluetoothImportModeLast": "Medición más última"
 }

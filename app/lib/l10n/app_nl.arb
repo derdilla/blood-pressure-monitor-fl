@@ -386,5 +386,25 @@
   "maxDataInterval": "Maximum data interval",
   "graphSettings": "Graph settings",
   "featuresSetting": "Feature",
-  "warnDiscardingData": "Je hebt onbeschaafde gegevens. Wil je doorgaan en ze ontdoen?"
+  "warnDiscardingData": "Je hebt onbeschaafde gegevens. Wil je doorgaan en ze ontdoen?",
+  "titleAlreadyExists": "Deze titel bestaat al",
+  "importAll": "Import all",
+  "@importAll": {
+    "description": "Button to import every measurement returned by a bluetooth device.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "measurementsImported": "Metingen geïmporteerd",
+  "@measurementsImported": {
+    "description": "Confirmation shown after importing all measurements returned by a bluetooth device.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "bluetoothImportModeAll": "Voeg meting toe"
 }

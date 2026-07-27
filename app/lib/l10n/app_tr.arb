@@ -12,13 +12,13 @@
     }
   },
   "aboutWarnValuesScreenDesc": "Uyarı değerleri hakkında daha çok bilgi",
-  "warnAboutTxt2": "Varsayılan yaşa bağlı değerler bu kaynaktan alındı.",
+  "warnAboutTxt2": "Öntanımlı yaşa bağlı değerler bu kaynaktan alındı.",
   "validateInputs": "Veri girişlerini doğrula",
   "month": "Ay",
-  "addExportformat": "exportformat ekle",
+  "addExportformat": "Dışa aktarım biçimi ekle",
   "exportDir": "Dışa aktarma dizini",
   "csv": "CSV",
-  "default_": "Varsayılan",
+  "default_": "Öntanımlı",
   "accentColor": "Tema rengi",
   "title": "Kan Basıncı Uygulaması",
   "errTimeAfterNow": "Seçilen zaman gelecekte. Bu doğrulamayı ayarlardan kapatabilirsiniz.",
@@ -32,7 +32,7 @@
   },
   "btnConfirm": "TAMAM",
   "addMeasurement": "Ölçüm ekle",
-  "startWithAddMeasurementPageDescription": "Uygulamanın açılışında, ölçüm giriş ekranı gösterilir.",
+  "startWithAddMeasurementPageDescription": "Uygulama başlatıldığında, ölçüm giriş ekranını hemen göster.",
   "animationSpeed": "Animasyon süresi",
   "licenses": "3. taraf lisanslar",
   "exportPdfExportData": "Veri tablosu",
@@ -57,7 +57,7 @@
     }
   },
   "exportCustomEntries": "Alanları kişileştir",
-  "exportImport": "Dışa aktar / İçe aktar",
+  "exportImport": "Dışa / İçe aktar",
   "enterTimeFormatString": "zaman biçimi",
   "allowMissingValues": "Kayıp değerlere izin ver",
   "edit": "Düzenle",
@@ -66,13 +66,13 @@
   "export": "DIŞA AKTAR",
   "theme": "Tema",
   "year": "Yıl",
-  "warnAboutTxt1": "Uyarı değerleri sadece bir öneridir ve tıbbi bir tavsiye değildir.",
+  "warnAboutTxt1": "Uyarı değerleri yalnızca bir öneridir ve tıbbi bir tavsiye değildir.",
   "customGraphMarkings": "Özel işaretler",
   "exportFormat": "Dışa aktarma biçimi",
   "errUnrealistic": "Gerçekçi olmayan değer? Ayarlardan doğrulamayı kapatın!",
   "exportPdfHeaderHeight": "Başlık yüksekliği",
   "iconSize": "Simge boyutu",
-  "measurementsPerDay": "Günde ölçüm sayısı",
+  "measurementsPerDay": "Günlük ölçüm sayısı",
   "errNoData": "veri yok",
   "light": "Açık",
   "errNotStarted": "başlatılmadı",
@@ -121,7 +121,7 @@
   "addLine": "Çizgi ekle",
   "warnAboutTxt3": "Bu değerleri ihtiyacınıza göre değiştirebilirsiniz. Doktorunuzun tavsiyesine uyun.",
   "pulLong": "Nabız",
-  "errNotEnoughDataToGraph": "Grafik çizmeye yetecek kadar veri bulunmamakta.",
+  "errNotEnoughDataToGraph": "Grafik çizmek için yeterli veri yok.",
   "sysColor": "Sistolik rengi",
   "maxOf": "{txt} azm.",
   "@maxOf": {
@@ -133,7 +133,7 @@
   },
   "startWithAddMeasurementPage": "Başlangıçta ölçüm",
   "pulsePressure": "Nabız basıncı",
-  "errNotImportable": "Bu dosya aktarılamaz",
+  "errNotImportable": "Bu dosya içe aktarılamaz",
   "errNaN": "Lütfen bir sayı girin",
   "confirmDeletion": "Silmeyi onayla",
   "textDelimiter": "Metin sınırlayıcı",
@@ -142,12 +142,12 @@
   "aboutWarnValuesScreen": "Hakkında",
   "exportPdfExportStatistics": "İstatislikler",
   "age": "Yaş",
-  "db": "SQLite Veritabanı",
+  "db": "SQLite Veri Tabanı",
   "exportPdfCellFontSize": "Satır yazı tipi boyutu",
   "dark": "Koyu",
   "maximum": "Azami",
   "exportCsvHeadline": "Başlık",
-  "errNeedHeadline": "Sadece başlık bulunduran dosyaları aktarabilirsiniz.",
+  "errNeedHeadline": "Yalnızca başlık bulunduran dosyaları aktarabilirsiniz.",
   "determineWarnValues": "Uyarı değerlerini belirle",
   "statistics": "İstatistikler",
   "diaWarn": "Diyastolik uyarı",
@@ -155,7 +155,7 @@
   "shared": "paylaşıldı",
   "btnCancel": "İPTAL",
   "language": "Dil",
-  "exportWarnNotEveryFieldExported": "Bütün alanları dışa aktarmıyorsunuz: {fields} {count, plural, one{is} other{are}} kayıp.",
+  "exportWarnNotEveryFieldExported": "Bütün alanları dışa aktarmıyorsunuz: {fields} {count, plural, one{alan} other{alan}} kayıp.",
   "@exportWarnNotEveryFieldExported": {
     "placeholders": {
       "count": {
@@ -198,7 +198,7 @@
     }
   },
   "confirmDelete": "Silmeyi onayla",
-  "errWrongImportFormat": "Sadece CSV ve SQLite veritabanı biçiminde dosya aktarabilirsiniz.",
+  "errWrongImportFormat": "Yalnızca CSV ve SQLite veri tabanı biçiminde dosya aktarabilirsiniz.",
   "minOf": "{txt} asg.",
   "@minOf": {
     "placeholders": {
@@ -229,7 +229,7 @@
       }
     }
   },
-  "pdfDocumentTitle": "{start}''den {end}''e kan basıncı değerleri",
+  "pdfDocumentTitle": "{start} ve {end} arasındaki kan basıncı değerleri",
   "@pdfDocumentTitle": {
     "placeholders": {
       "start": {
@@ -240,9 +240,9 @@
       }
     }
   },
-  "confirmDeleteDesc": "Bu girişi sil? (Bu onaylama mesajını ayarlardan kapatabilirsiniz.)",
+  "confirmDeleteDesc": "Bu giriş silinsin mi? (Bu onaylama mesajını ayarlardan kapatabilirsiniz.)",
   "errNoFileOpened": "herhangi bir dosya açılmadı",
-  "enterTimeFormatDesc": "Biçim stringi önceden tanımladan ICU/Skeleton stringlerinin ve eklemek istediğiniz herhangi başka metinin birleşimidir.\n\n[Tanımlanan biçimlerin bütünün bir listesini merak ettiyseniz burada bulabilirsiniz.](screen://TimeFormattingHelp)\n\nBir hatırlatma, uzun ya da kısa biçim String kullanmak tablodaki sütunların genişliğini değiştirmeyecek, ki bu da garip satır atlamalarına ve metnin gözükmemesine yol açabilir.\n\nvarsayılan: \"yy-MM-dd HH:mm\"",
+  "enterTimeFormatDesc": "Biçim dizgesi önceden tanımlanan ICU/Skeleton dizgelerinin ve eklemek istediğiniz herhangi başka metinin birleşimidir.\n\n[Geçerli biçimlerin bütünün bir listesini merak ettiyseniz burada bulabilirsiniz.](screen://TimeFormattingHelp)\n\nBir hatırlatma, uzun veya kısa biçim dizgeler kullanmak tablodaki sütunların genişliğini değiştirmeyecek, ki bu da garip satır atlamalarına ve metnin gözükmemesine yol açabilir.\n\nöntanımlı: \"yy-MM-dd HH:mm\"",
   "importSettings": "Ayarları geri yükle",
   "warnDeletionUnrecoverable": "Elle bir yedekleme yapmadıysanız bu adım geri döndürülemez. Bunu gerçekten silmek istiyor musunuz?",
   "exportSettings": "Ayarları yedekle",
@@ -284,7 +284,7 @@
   "csvTitle": "CSV-başlığı",
   "recordFormat": "Kayıt biçimi",
   "timeFormat": "Zaman biçimi",
-  "bottomAppBars": "Alt diyalog çubukları",
+  "bottomAppBars": "Alt iletişim kutusu çubukları",
   "medications": "İlaçlar",
   "name": "Ad",
   "noMedication": "İlaç yok",
@@ -362,29 +362,57 @@
     }
   },
   "exportSuccess": "Dışa aktarma başarılı",
-  "noWeightPermission": "Hiçbir ağırlık izni verilmez.",
-  "generalSettingsSection": "General",
-  "reset": "Reset",
-  "appStyleSettings": "App stili",
-  "noPermissions": "Hiçbir izin verilmez.",
-  "healthConnectDesc": "Sağlık Connect, verinizi destekleyen diğer uygulamalarla senkronize etmek için sistem API''lerini kullanır. Bu, manuel eski ve ithalat olmadan işlevselliği genişletmek için üçüncü taraf uygulamaları kullanmanıza olanak sağlar.\nHiçbir veri, onu yüklenen üçüncü bir parti uygulamasını açıkça yazarken cihazınızdan ayrılamaz.",
-  "syncOnAppStart": "Uygulamadaki veri başlangıçta",
-  "maxDataIntervalDesc": "Grafik çizgisinin kestiği günlerin miktarı. Zero bunu devre dışı bırakır.",
-  "syncNow": "Şimdi sen",
+  "noWeightPermission": "Ağırlık izni verilmedi.",
+  "generalSettingsSection": "Genel",
+  "reset": "Sıfırla",
+  "appStyleSettings": "Uygulama biçimi",
+  "noPermissions": "Herhangi bir izin verilmedi.",
+  "healthConnectDesc": "Health Connect, verinizi destekleyen diğer uygulamalarla eşzamanlamakk için sistem API''lerini kullanır. Bu, elle dışa ve içe aktarma olmadan işlevselliği genişletmek için üçüncü taraf uygulamaları kullanmanıza olanak sağlar.\nVerilerinizi yükleyen bir üçüncü taraf uygulamaya açıkça izin vermedikçe, aygıtınızdan hiçbir veri dışarı çıkmayacak.",
+  "syncOnAppStart": "Uygulama başlatıldığında verileri eşzamanla",
+  "maxDataIntervalDesc": "Grafik çizgisinin kesileceği gün sayısı. Sıfır değeri bunu devre dışı bırakır.",
+  "syncNow": "Şimdi eşzamanla",
   "xls": "Excel (xls)",
-  "automaticallySyncData": "Otomatik olarak senkronize edilen veriler",
-  "noBloodPressurePermission": "Hiçbir kan basıncı izni verilmez.",
+  "automaticallySyncData": "Verileri otomatik eşzamanla",
+  "noBloodPressurePermission": "Kan basıncı izni verilmedi.",
   "healthConnect": "Health Connect",
-  "btnCheckAgain": "Tekrar tekrar kontrol edin",
+  "btnCheckAgain": "Tekrar gözden geçirin",
   "healthConnectPlatformUnsupported": "Platformunuz Health Connect''i desteklemiyor.",
-  "optEnableHealthConnect": "Enable Health Connect",
-  "maxDataInterval": "Maksimum veri aralığı",
-  "graphSettings": "Graph settings",
+  "optEnableHealthConnect": "Health Connect''i etkinleştir",
+  "maxDataInterval": "Azami veri aralığı",
+  "graphSettings": "Grafik ayarları",
   "featuresSetting": "Özellikler",
-  "warnDiscardingData": "Yanlış olmayan verilere sahipsiniz. Onları devam etmek ve yıkmak ister misiniz?",
-  "bluetoothInputDesc": "Beta arka uç daha fazla cihazda çalışır ancak daha az test edilmiştir. Çok platformlu sürüm, Android dışındaki cihazlarda da çalışabilir ve yeterince olgunlaştığında kararlı sürümün yerini alması planlanmaktadır.",
+  "warnDiscardingData": "Kaydedilmemiş verileriniz var. Devam edip bu verileri silmek istiyor musunuz?",
+  "bluetoothInputDesc": "Kararlı arka uç çalışmazsa, eski arka ucu kullanın ve sorunu contact@derdilla.com veya https://github.com/derdilla/blood-pressure-monitor-fl/issues adreslerine bildirin.",
   "stableBluetoothInput": "Kararlı",
-  "legacyBluetoothInput": "Mirası",
-  "bigGraphSplit": "Ölçümler arasındaki zaman kesintiler olmadan gösterilen maksimum mesafeden daha büyüktür. Bunu ayarlarda değiştirebilirsiniz.",
-  "openSettings": "Açık Ayarlar"
+  "legacyBluetoothInput": "Eski",
+  "bigGraphSplit": "Ölçümler arasındaki süre, kesintisiz olarak görüntülenen azami mesafeden daha uzun. Bunu ayarlardan değiştirebilirsiniz.",
+  "openSettings": "Ayarları Aç",
+  "titleAlreadyExists": "Bu başlık zaten var",
+  "importAll": "Tümünü içe aktar ({count})",
+  "@importAll": {
+    "description": "Button to import every measurement returned by a bluetooth device.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "measurementsImported": "{count} ölçüm içe aktarıldı",
+  "@measurementsImported": {
+    "description": "Confirmation shown after importing all measurements returned by a bluetooth device.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "bluetoothImportModeDisabled": "Devre dışı",
+  "bluetoothImportModeAll": "Tüm ölçümler",
+  "exportAddTimestamp": "Dosya adına zaman damgası ekle",
+  "exportAddTimestampDesc": "Her dışa aktarım için benzersiz bir dosya adı oluşturulmasını sağlar",
+  "autostartBluetoothInput": "Bluetooth içe aktarımını otomatik başlat",
+  "autostartBluetoothInputDescription": "Bluetooth girişi etkinleştirildiğinde ve Bluetooth açıkken, ölçüm giriş ekranında içe aktarma işlemi otomatik olarak başlar.",
+  "bluetoothImportMode": "Otomatik içe aktar",
+  "bluetoothImportModeDescription": "Ölçümleri önce incelemek yerine, aygıt tarafından gönderilen ölçümleri otomatik olarak içe aktarın. Birden fazla ölçüm gönderildiğinde, hangisini içe aktaracağınızı seçin.",
+  "bluetoothImportModeLast": "En son ölçüm"
 }
