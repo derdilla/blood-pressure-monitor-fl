@@ -4,6 +4,5 @@
 .dart_tool/
 .packages
 build/
-pubspec.lock
 coverage/
 coverage.lcov
