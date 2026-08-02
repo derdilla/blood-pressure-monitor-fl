@@ -13,3 +13,10 @@
 
 # Release tool
 target/
+
+# Monorepo related
+**/doc/api/
+.dart_tool/
+.flutter-plugins-dependencies
+/build/
+/coverage/

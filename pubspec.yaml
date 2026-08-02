@@ -1,0 +1,10 @@
+name: _
+publish_to: none
+environment:
+  sdk: ^3.12.0
+  flutter: ^3.44.8
+workspace:
+- ./app
+- ./health_data_store
+- ./settings_annotation
+- ./settings_builder
