@@ -25,6 +25,7 @@ class ExportImportScreen extends StatelessWidget {
   static const String _documentationText = '''
 ## Export / import basics
 
+- Use database exports, if you just want to transfer the data or know your way around sqlite.
 - Choose CSV for spreadsheet workflows and for importing data back into the app.
 - Keep the headline enabled and include a time column so the import can be restored reliably.
 - Use the field-format dialog to add custom columns for values such as systolic, diastolic, pulse, notes, and medicine intakes.
@@ -32,8 +33,8 @@ class ExportImportScreen extends StatelessWidget {
 ## CSV import in LibreOffice and similar tools
 
 - Export as CSV and keep the headline enabled.
-- Use the default delimiter and text delimiter unless you know you need something different.
-- When you open the file in LibreOffice, Excel, or similar apps, make sure the time column is recognized as a date/time value.
+- Use the default delimiter and text delimiter for standard CSV files.
+- Open the file in LibreOffice, Excel, or similar apps and make sure the time column is recognized as a date/time value.
 - If you want to re-import the file later, keep the same CSV settings and include a valid time column.
 
 ## Color columns
@@ -41,12 +42,6 @@ class ExportImportScreen extends StatelessWidget {
 - The plain `color` column exports the note color as a simple value.
 - The legacy `needlePin` column stores a JSON payload such as `{"color":4291681337}` for compatibility with older workflows.
 - Use the plain `color` column when you want a straightforward spreadsheet-friendly export.
-
-## Useful placeholders
-
-- `\$INTAKES` exports medicine intakes.
-- `\$NOTE`, `\$SYS`, `\$DIA`, `\$PUL`, `\$COLOR`, and `\$TIMESTAMP` can be mixed into custom field formats.
-- The time formatter can be customized with [time format help](screen://TimeFormattingHelp).
 
 ## Example workflow
 
@@ -64,6 +59,21 @@ class ExportImportScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(localizations.exportImport),
+        actions: [
+          IconButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute<void>(
+                  builder: (context) =>
+                      InformationScreen(text: _documentationText),
+                ),
+              );
+            },
+            tooltip: 'How to use export/import',
+            icon: const Icon(Icons.info_outline),
+          ),
+        ],
         backgroundColor: Theme.of(context).primaryColor,
       ),
       body: SingleChildScrollView(
@@ -73,37 +83,30 @@ class ExportImportScreen extends StatelessWidget {
             const SizedBox(
               height: 15,
             ),
-            ListTile(
-              leading: const Icon(Icons.info_outline),
-              title: const Text('How to use export/import'),
-              subtitle: const Text(
-                  'Guides for CSV import, color columns, and sample workflows'),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute<void>(
-                      builder: (context) =>
-                          InformationScreen(text: _documentationText)),
-                );
-              },
-            ),
             if (settings.exportFormat != ExportFormat.db)
-              const IntervalPicker(type: IntervalStoreManagerLocation.exportPage),
+              const IntervalPicker(
+                  type: IntervalStoreManagerLocation.exportPage),
             if (Platform.isAndroid) // only supported on android
               ListTile(
                 title: Text(localizations.exportDir),
-                subtitle: settings.defaultExportDir.isNotEmpty ? Text(settings.defaultExportDir) : null,
-                trailing: settings.defaultExportDir.isEmpty ? const Icon(Icons.folder_open) : const Icon(Icons.delete),
+                subtitle: settings.defaultExportDir.isNotEmpty
+                    ? Text(settings.defaultExportDir)
+                    : null,
+                trailing: settings.defaultExportDir.isEmpty
+                    ? const Icon(Icons.folder_open)
+                    : const Icon(Icons.delete),
                 onTap: () async {
                   if (settings.defaultExportDir.isEmpty) {
-                    final uri = await const PersistentUserDirAccessAndroid().requestDirectoryUri();
+                    final uri = await const PersistentUserDirAccessAndroid()
+                        .requestDirectoryUri();
                     settings.defaultExportDir = uri ?? '';
                   } else {
                     settings.defaultExportDir = '';
                   }
                 },
               ),
-            if (Platform.isAndroid) // only makes sense with exportDir, which is supported only for android
+            if (Platform
+                .isAndroid) // only makes sense with exportDir, which is supported only for android
               SwitchListTile(
                 title: Text(localizations.exportAddTimestamp),
                 subtitle: Text(localizations.exportAddTimestampDesc),
@@ -132,7 +135,7 @@ class ExportImportScreen extends StatelessWidget {
                 DropdownMenuItem(
                     value: ExportFormat.db, child: Text(localizations.db)),
                 DropdownMenuItem(
-                  value: ExportFormat.xls, child: Text(localizations.xls)),
+                    value: ExportFormat.xls, child: Text(localizations.xls)),
               ],
               onChanged: (ExportFormat? value) {
                 if (value != null) {
@@ -141,8 +144,8 @@ class ExportImportScreen extends StatelessWidget {
               },
             ),
             if (settings.exportFormat == ExportFormat.csv)
-              Consumer<CsvExportSettings>(builder: (context, csvExportSettings, child) =>
-                Column(
+              Consumer<CsvExportSettings>(
+                builder: (context, csvExportSettings, child) => Column(
                   children: [
                     InputListTile(
                       label: localizations.fieldDelimiter,
@@ -170,27 +173,30 @@ class ExportImportScreen extends StatelessWidget {
                 ),
               ),
             if (settings.exportFormat == ExportFormat.pdf)
-              Consumer<PdfExportSettings>(builder: (context, pdfExportSettings, child) =>
-                Column(
+              Consumer<PdfExportSettings>(
+                builder: (context, pdfExportSettings, child) => Column(
                   children: [
                     SwitchListTile(
-                        title: Text(localizations.exportPdfExportTitle),
-                        value: pdfExportSettings.exportTitle,
-                        onChanged: (value) {
-                          pdfExportSettings.exportTitle = value;
-                        },),
+                      title: Text(localizations.exportPdfExportTitle),
+                      value: pdfExportSettings.exportTitle,
+                      onChanged: (value) {
+                        pdfExportSettings.exportTitle = value;
+                      },
+                    ),
                     SwitchListTile(
-                        title: Text(localizations.exportPdfExportStatistics),
-                        value: pdfExportSettings.exportStatistics,
-                        onChanged: (value) {
-                          pdfExportSettings.exportStatistics = value;
-                        },),
+                      title: Text(localizations.exportPdfExportStatistics),
+                      value: pdfExportSettings.exportStatistics,
+                      onChanged: (value) {
+                        pdfExportSettings.exportStatistics = value;
+                      },
+                    ),
                     SwitchListTile(
-                        title: Text(localizations.exportPdfExportData),
-                        value: pdfExportSettings.exportData,
-                        onChanged: (value) {
-                          pdfExportSettings.exportData = value;
-                        },),
+                      title: Text(localizations.exportPdfExportData),
+                      value: pdfExportSettings.exportData,
+                      onChanged: (value) {
+                        pdfExportSettings.exportData = value;
+                      },
+                    ),
                     if (pdfExportSettings.exportData)
                       Column(
                         children: [
@@ -227,16 +233,18 @@ class ExportImportScreen extends StatelessWidget {
                   ],
                 ),
               ),
-            if (settings.exportFormat == ExportFormat.csv
-                || settings.exportFormat == ExportFormat.pdf
-                || settings.exportFormat == ExportFormat.xls) ...[
+            if (settings.exportFormat == ExportFormat.csv ||
+                settings.exportFormat == ExportFormat.pdf ||
+                settings.exportFormat == ExportFormat.xls) ...[
               ListTile(
                 title: Text(localizations.manageExportColumns),
                 trailing: const Icon(Icons.arrow_forward_ios),
                 onTap: () {
                   Navigator.push(
-                    context,
-                    MaterialPageRoute<void>(builder: (context) => const ExportColumnsManagementScreen()));
+                      context,
+                      MaterialPageRoute<void>(
+                          builder: (context) =>
+                              const ExportColumnsManagementScreen()));
                 },
               ),
               ActiveColumnCustomizer(),

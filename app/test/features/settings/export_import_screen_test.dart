@@ -29,15 +29,15 @@ void main() {
     expect(find.byType(ActiveColumnCustomizer), findsOneWidget);
   });
 
-  testWidgets('Shows export/import documentation', (tester) async {
+  testWidgets('Shows export/import documentation from the app bar action', (tester) async {
     await tester.pumpWidget(materialApp(ExportImportScreen()));
     await tester.pumpAndSettle();
 
-    await tester.tap(find.textContaining('How to use export/import'));
+    await tester.tap(find.byTooltip('How to use export/import'));
     await tester.pumpAndSettle();
 
     expect(find.byType(InformationScreen), findsOneWidget);
     expect(find.textContaining('LibreOffice'), findsWidgets);
-    expect(find.textContaining('medicine intakes'), findsWidgets);
+    expect(find.textContaining('database'), findsWidgets);
   });
 }
