@@ -22,36 +22,6 @@ class ExportImportScreen extends StatelessWidget {
   /// Create a screen that shows options for ex- and importing data.
   const ExportImportScreen({super.key});
 
-  static const String _documentationText = '''
-## Export / import basics
-
-- Use database exports, if you just want to transfer the data or know your way around sqlite.
-- Choose CSV for spreadsheet workflows and for importing data back into the app.
-- Keep the headline enabled and include a time column so the import can be restored reliably.
-- Use the field-format dialog to add custom columns for values such as systolic, diastolic, pulse, notes, and medicine intakes.
-
-## CSV import in LibreOffice and similar tools
-
-- Export as CSV and keep the headline enabled.
-- Use the default delimiter and text delimiter for standard CSV files.
-- Open the file in LibreOffice, Excel, or similar apps and make sure the time column is recognized as a date/time value.
-- If you want to re-import the file later, keep the same CSV settings and include a valid time column.
-
-## Color columns
-
-- The plain `color` column exports the note color as a simple value.
-- The legacy `needlePin` column stores a JSON payload such as `{"color":4291681337}` for compatibility with older workflows.
-- Use the plain `color` column when you want a straightforward spreadsheet-friendly export.
-
-## Example workflow
-
-1. Enter a measurement and any notes.
-2. Open Export / Import and switch to CSV.
-3. Add a custom field or time column if you need one.
-4. Export the data and open it in LibreOffice or another spreadsheet app.
-5. Re-import the same file later when you want to restore or review the data.
-''';
-
   @override
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
@@ -65,13 +35,16 @@ class ExportImportScreen extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute<void>(
-                  builder: (context) =>
-                      InformationScreen(text: _documentationText),
+                  builder: (context) => InformationScreen(
+                      text: localizations.exportImportDocumentation),
                 ),
               );
             },
-            tooltip: 'How to use export/import',
-            icon: const Icon(Icons.info_outline),
+            tooltip: localizations.exportImportDocumentationTooltip,
+            icon: Icon(
+              Icons.info_outline,
+              color: Theme.of(context).colorScheme.onSurface,
+            ),
           ),
         ],
         backgroundColor: Theme.of(context).primaryColor,
