@@ -57,29 +57,22 @@ class ExportImportScreen extends StatelessWidget {
               height: 15,
             ),
             if (settings.exportFormat != ExportFormat.db)
-              const IntervalPicker(
-                  type: IntervalStoreManagerLocation.exportPage),
+              const IntervalPicker(type: IntervalStoreManagerLocation.exportPage),
             if (Platform.isAndroid) // only supported on android
               ListTile(
                 title: Text(localizations.exportDir),
-                subtitle: settings.defaultExportDir.isNotEmpty
-                    ? Text(settings.defaultExportDir)
-                    : null,
-                trailing: settings.defaultExportDir.isEmpty
-                    ? const Icon(Icons.folder_open)
-                    : const Icon(Icons.delete),
+                subtitle: settings.defaultExportDir.isNotEmpty ? Text(settings.defaultExportDir) : null,
+                trailing: settings.defaultExportDir.isEmpty ? const Icon(Icons.folder_open) : const Icon(Icons.delete),
                 onTap: () async {
                   if (settings.defaultExportDir.isEmpty) {
-                    final uri = await const PersistentUserDirAccessAndroid()
-                        .requestDirectoryUri();
+                    final uri = await const PersistentUserDirAccessAndroid().requestDirectoryUri();
                     settings.defaultExportDir = uri ?? '';
                   } else {
                     settings.defaultExportDir = '';
                   }
                 },
               ),
-            if (Platform
-                .isAndroid) // only makes sense with exportDir, which is supported only for android
+            if (Platform.isAndroid) // only makes sense with exportDir, which is supported only for android
               SwitchListTile(
                 title: Text(localizations.exportAddTimestamp),
                 subtitle: Text(localizations.exportAddTimestampDesc),
@@ -108,7 +101,7 @@ class ExportImportScreen extends StatelessWidget {
                 DropdownMenuItem(
                     value: ExportFormat.db, child: Text(localizations.db)),
                 DropdownMenuItem(
-                    value: ExportFormat.xls, child: Text(localizations.xls)),
+                  value: ExportFormat.xls, child: Text(localizations.xls)),
               ],
               onChanged: (ExportFormat? value) {
                 if (value != null) {
@@ -117,8 +110,8 @@ class ExportImportScreen extends StatelessWidget {
               },
             ),
             if (settings.exportFormat == ExportFormat.csv)
-              Consumer<CsvExportSettings>(
-                builder: (context, csvExportSettings, child) => Column(
+              Consumer<CsvExportSettings>(builder: (context, csvExportSettings, child) =>
+                Column(
                   children: [
                     InputListTile(
                       label: localizations.fieldDelimiter,
@@ -146,30 +139,27 @@ class ExportImportScreen extends StatelessWidget {
                 ),
               ),
             if (settings.exportFormat == ExportFormat.pdf)
-              Consumer<PdfExportSettings>(
-                builder: (context, pdfExportSettings, child) => Column(
+              Consumer<PdfExportSettings>(builder: (context, pdfExportSettings, child) =>
+                Column(
                   children: [
                     SwitchListTile(
-                      title: Text(localizations.exportPdfExportTitle),
-                      value: pdfExportSettings.exportTitle,
-                      onChanged: (value) {
-                        pdfExportSettings.exportTitle = value;
-                      },
-                    ),
+                        title: Text(localizations.exportPdfExportTitle),
+                        value: pdfExportSettings.exportTitle,
+                        onChanged: (value) {
+                          pdfExportSettings.exportTitle = value;
+                        },),
                     SwitchListTile(
-                      title: Text(localizations.exportPdfExportStatistics),
-                      value: pdfExportSettings.exportStatistics,
-                      onChanged: (value) {
-                        pdfExportSettings.exportStatistics = value;
-                      },
-                    ),
+                        title: Text(localizations.exportPdfExportStatistics),
+                        value: pdfExportSettings.exportStatistics,
+                        onChanged: (value) {
+                          pdfExportSettings.exportStatistics = value;
+                        },),
                     SwitchListTile(
-                      title: Text(localizations.exportPdfExportData),
-                      value: pdfExportSettings.exportData,
-                      onChanged: (value) {
-                        pdfExportSettings.exportData = value;
-                      },
-                    ),
+                        title: Text(localizations.exportPdfExportData),
+                        value: pdfExportSettings.exportData,
+                        onChanged: (value) {
+                          pdfExportSettings.exportData = value;
+                        },),
                     if (pdfExportSettings.exportData)
                       Column(
                         children: [
@@ -206,18 +196,16 @@ class ExportImportScreen extends StatelessWidget {
                   ],
                 ),
               ),
-            if (settings.exportFormat == ExportFormat.csv ||
-                settings.exportFormat == ExportFormat.pdf ||
-                settings.exportFormat == ExportFormat.xls) ...[
+            if (settings.exportFormat == ExportFormat.csv
+                || settings.exportFormat == ExportFormat.pdf
+                || settings.exportFormat == ExportFormat.xls) ...[
               ListTile(
                 title: Text(localizations.manageExportColumns),
                 trailing: const Icon(Icons.arrow_forward_ios),
                 onTap: () {
                   Navigator.push(
-                      context,
-                      MaterialPageRoute<void>(
-                          builder: (context) =>
-                              const ExportColumnsManagementScreen()));
+                    context,
+                    MaterialPageRoute<void>(builder: (context) => const ExportColumnsManagementScreen()));
                 },
               ),
               ActiveColumnCustomizer(),
