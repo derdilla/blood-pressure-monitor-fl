@@ -418,5 +418,7 @@
   "openSettings": "Open Settings",
   "@openSettings": {},
   "titleAlreadyExists": "This title already exists",
-  "@titleAlreadyExists": {}
+  "@titleAlreadyExists": {},
+  "exportImportDocumentationTooltip": "How to use export/import",
+  "exportImportDocumentation": "## Export / import basics\n\n- Use database exports, if you just want to transfer the data or know your way around sqlite.\n- Choose CSV for spreadsheet workflows and for importing data back into the app.\n- Keep the headline enabled and include a time column so the import can be restored reliably.\n- Use the field-format dialog to add custom columns for values such as systolic, diastolic, pulse, notes, and medicine intakes.\n\n## CSV import in LibreOffice and similar tools\n\n- Export as CSV and keep the headline enabled.\n- Use the default delimiter and text delimiter for standard CSV files.\n- Open the file in LibreOffice, Excel, or similar apps and make sure the time column is recognized as a date/time value.\n- If you want to re-import the file later, keep the same CSV settings and include a valid time column.\n\n## Color columns\n\n- The plain ''color'' column exports the note color as a simple value.\n- The legacy ''needlePin'' column stores a JSON payload for compatibility with older workflows.\n- Use the plain ''color'' column when you want a straightforward spreadsheet-friendly export.\n\n## Example workflow\n\n1. Enter a measurement and any notes.\n2. Open Export / Import and switch to CSV.\n3. Add a custom field or time column if you need one.\n4. Export the data and open it in LibreOffice or another spreadsheet app.\n5. Re-import the same file later when you want to restore or review the data."
 }
