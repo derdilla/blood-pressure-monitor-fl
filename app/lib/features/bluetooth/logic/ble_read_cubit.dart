@@ -56,7 +56,17 @@ class BleReadCubit extends Cubit<BleReadState> with TypeLogger {
   }
 
   /// Take a 'measurement', i.e. read the blood pressure values from the given characteristicUUID
+  /// and catch all exceptions to not stall the UI if something goes wrong.
   Future<void> takeMeasurement() async {
+    try {
+      await _takeMeasurement();
+    } catch (e, stack) {
+      logger.severe('takeMeasurement failed', e, stack);
+      if (state is BleReadInProgress) emit(BleReadFailure('Could not read from device: $e'));
+    }
+  }
+
+  Future<void> _takeMeasurement() async {
     logger.finest('takeMeasurement();');
     if (!await _connectDevice()) {
       emit(BleReadFailure('Unable to connect to device: ${device.uuid}'));
@@ -134,7 +144,12 @@ class BleReadCubit extends Cubit<BleReadState> with TypeLogger {
               });
       await cm.setCharacteristicNotifyState(device, characteristic, state: true);
       await completer.future;
-      await cm.setCharacteristicNotifyState(device, characteristic, state: false);
+      // if a device disconnects immediately after a data transfer, disabling notifications throws.
+      try {
+        await cm.setCharacteristicNotifyState(device, characteristic, state: false);
+      } catch (e) {
+        logger.finer('Failed to disable GATT notifications: $e');
+      }
 
       await connectionSubscription.cancel();
       await dataSubscription.cancel();
@@ -182,7 +197,11 @@ class BleReadCubit extends Cubit<BleReadState> with TypeLogger {
         .first;
     await cm.setCharacteristicNotifyState(device, characteristic, state: true);
     final data = await future;
-    await cm.setCharacteristicNotifyState(device, characteristic, state: false);
+    try {
+      await cm.setCharacteristicNotifyState(device, characteristic, state: false);
+    } catch (e) {
+      logger.finer('Failed to disable yonker notifications: $e');
+    }
 
     if (data == null) {
       logger.warning('Failed to decode yonker measurement $data for $device');
