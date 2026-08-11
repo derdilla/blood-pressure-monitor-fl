@@ -80,7 +80,8 @@ class DeviceScanCubit extends Cubit<DeviceScanState> with TypeLogger {
     if (preferred != null) {
       final readCubit = BleReadCubit(
         device: preferred.source.peripheral,
-        cm: preferred.manager
+        cm: preferred.manager,
+        deviceName: preferred.name,
       );
       emit(DeviceSelected(readCubit));
       _stopScanning().ignore();
@@ -112,7 +113,8 @@ class DeviceScanCubit extends Cubit<DeviceScanState> with TypeLogger {
 
     final cubit = BleReadCubit(
         device: device.source.peripheral,
-        cm: device.manager
+        cm: device.manager,
+        deviceName: device.name,
     );
     emit(DeviceSelected(cubit));
     cubit.takeMeasurement()
