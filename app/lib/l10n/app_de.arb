@@ -235,7 +235,7 @@
   "exportPdfExportData": "Datentabelle",
   "exportFieldFormatDocumentation": "'## Variablen\nDas Exportfeldformat unterstützt das Einfügen von Werten für die folgenden Platzhalter:\n- `$TIMESTAMP:` Stellt die Zeit seit der Unix-Epoche in Millisekunden dar.\n- `$SYS:` Liefert einen Wert, falls vorhanden; andernfalls ist er standardmäßig -1.\n- `$DIA:` Liefert einen Wert, falls vorhanden; andernfalls ist er standardmäßig -1.\n- `$PUL:` Gibt einen Wert an, falls verfügbar; andernfalls ist er standardmäßig -1.\n- `$NOTE:` Gibt einen Wert an, falls verfügbar; andernfalls ist er standardmäßig -1.\n- `$COLOR:` Repräsentiert die Farbe einer Messung als eine Zahl. (Beispielwert: `4291681337`)\n\nWenn einer der oben genannten Platzhalter im Blutdruckdatensatz nicht vorhanden ist, wird er durch -1 ersetzt.\n\n## Mathematik\nInnerhalb von Doppelklammern (\"`{{}}`\") kannst Du die Grundrechenarten verwenden.\n\nDie folgenden mathematischen Operationen werden unterstützt:\n- Operationen: +, -, *, /, %, ^\n- Funktionen mit einem Parameter: abs, acos, asin, atan, ceil, cos, cosh, cot, coth, csc, csch, exp, floor, ln, log, round sec, sech, sin, sinh, sqrt, tan, tanh \n- Funktionen mit zwei Parametern: log, nrt, pow\n- Konstanten: e, pi, ln2, ln10, log2e, log10e, sqrt1_2, sqrt2\n\nDie vollständige Spezifikation des mathematischen Interpreters findest Du in der [function_tree](https://pub.dev/documentation/function_tree/latest#interpreter) Spezifikation\n\n## Reihenfolge der Verarbeitung\n1. Variablen-Ersetzung\n2. Mathematik'",
   "startWithAddMeasurementPage": "Eintrag nach Start",
-  "startWithAddMeasurementPageDescription": "Nach dem App-Start öffnet sich die Messungserfassungsseite.",
+  "startWithAddMeasurementPageDescription": "Nach dem App-Start sofort die Messwerteingabeseite anzeigen.",
   "linePositionY": "Linienposition (y)",
   "addLine": "Linie hinzufügen",
   "horizontalLines": "Horizontale Linien",
@@ -390,7 +390,7 @@
   "featuresSetting": "Eigenschaften",
   "legacyBluetoothInput": "Alte Implementation",
   "titleAlreadyExists": "Dieser Titel existiert bereits",
-  "importAll": "Alle importieren ({count})",
+  "importAll": "Alle ({count}) importieren",
   "@importAll": {
     "description": "Button to import every measurement returned by a bluetooth device.",
     "placeholders": {
@@ -409,5 +409,11 @@
     }
   },
   "bluetoothImportModeDisabled": "Deaktiviert",
-  "bluetoothImportModeAll": "Messung hinzufügen"
+  "bluetoothImportModeAll": "Alle Messungen",
+  "autostartBluetoothInput": "Bluetooth Import automatisch starten",
+  "autostartBluetoothInputDescription": "Wenn Bluetooth-Eingabe aktiviert ist und Bluetooth eingeschaltet ist, automatisch mit dem Eingabefenster starten.",
+  "bluetoothImportMode": "Auto Import",
+  "bluetoothImportModeDescription": "Automatisch die vom Gerät gelieferten Messungen importieren anstatt sie zunächst anzuzeigen. Wenn mehr als ein Wert zurückgegeben wird, auswählen welcher importiert werden soll.",
+  "bluetoothImportModeLast": "Letzte Messung",
+  "exportImportDocumentationTooltip": "Wie Export/Import benutzt wird"
 }
