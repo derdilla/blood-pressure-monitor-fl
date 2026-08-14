@@ -12,12 +12,13 @@ class BleMeasurementStatus {
   });
 
   factory BleMeasurementStatus.decode(int byte) => BleMeasurementStatus(
-    bodyMovementDetected: isBitIntByteSet(byte, 1),
-    cuffTooLose: isBitIntByteSet(byte, 2),
-    irregularPulseDetected: isBitIntByteSet(byte, 3),
-    pulseRateInRange: (byte & (1 << 4) >> 3) == 0,
-    pulseRateExceedsUpperLimit: (byte & (1 << 4) >> 3) == 1,
-    pulseRateIsLessThenLowerLimit: (byte & (1 << 4) >> 3) == 2,
+    bodyMovementDetected: isBitIntByteSet(byte, 0),
+    cuffTooLose: isBitIntByteSet(byte, 1),
+    irregularPulseDetected: isBitIntByteSet(byte, 2),
+    // Bits 3 and 4 form the pulse rate range: 0 within, 1 above, 2 below.
+    pulseRateInRange: ((byte >> 3) & 0x3) == 0,
+    pulseRateExceedsUpperLimit: ((byte >> 3) & 0x3) == 1,
+    pulseRateIsLessThenLowerLimit: ((byte >> 3) & 0x3) == 2,
     improperMeasurementPosition: isBitIntByteSet(byte, 5),
   );
 
