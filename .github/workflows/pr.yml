@@ -123,9 +123,6 @@ jobs:
         if: steps.cache-generated.outputs.cache-hit != 'true'
         run: dart run build_runner build
         working-directory: health_data_store
-      - name: Update app dependencies
-        run: flutter pub get
-        working-directory: app
         # no efficient caching possible
       - name: Generate settings code
         run: dart run build_runner build --build-filter "lib/model/storage/*.dart"
@@ -168,33 +165,34 @@ jobs:
             health_data_store
             settings_annotation
             settings_builder
+      - name: Extract Flutter version
+        id: get_version
+        run: |
+          # This is the same function f-droid uses to ensure their builds keep succeeding:
+          # https://gitlab.com/fdroid/fdroiddata/-/blob/master/metadata/com.derdilla.bloodPressureApp.yml
+          VERSION=$(sed -n -E "s/.*flutter:\s*(.*)/\1/p" pubspec.yaml)
+          if [ -z "$VERSION" ]; then
+            echo "Error: Could not find a Flutter version specified in pubspec.yaml."
+            exit 1
+          fi
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ steps.get_version.outputs.version }}
+          cache: true
+      - name: Disable analytics
+        run: flutter config --no-analytics --suppress-analytics
       - name: Cache generated health data store
         id: cache-generated
         uses: actions/cache@v4
         with:
           path: health_data_store/lib
           key: builder-${{ hashFiles('health_data_store/pubspec.yaml', 'health_data_store/lib/*', 'health_data_store/lib/**/*dart') }}
-      - name: Setup dart
-        if: steps.cache-generated.outputs.cache-hit != 'true'
-        uses: dart-lang/setup-dart@v1
-        with:
-          sdk: stable
       - name: Generate code
         if: steps.cache-generated.outputs.cache-hit != 'true'
         run: dart run build_runner build
         working-directory: health_data_store
-      - name: Setup Flutter
-        uses: subosito/flutter-action@v2
-        with:
-          channel: stable
-          cache: true
-      - name: Disable analytics
-        run:
-          flutter config --no-analytics --suppress-analytics
-      - name: Update app dependencies
-        run: flutter pub get
-        working-directory: app
-        # no efficient caching possible
       - name: Generate settings code
         run: dart run build_runner build --build-filter "lib/model/storage/*.dart"
         working-directory: app
@@ -219,17 +217,30 @@ jobs:
             health_data_store
             settings_annotation
             settings_builder
+      - name: Extract Flutter version
+        id: get_version
+        run: |
+          # This is the same function f-droid uses to ensure their builds keep succeeding:
+          # https://gitlab.com/fdroid/fdroiddata/-/blob/master/metadata/com.derdilla.bloodPressureApp.yml
+          VERSION=$(sed -n -E "s/.*flutter:\s*(.*)/\1/p" pubspec.yaml)
+          if [ -z "$VERSION" ]; then
+            echo "Error: Could not find a Flutter version specified in pubspec.yaml."
+            exit 1
+          fi
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ steps.get_version.outputs.version }}
+          cache: true
+      - name: Disable analytics
+        run: flutter config --no-analytics --suppress-analytics
       - name: Cache generated health data store
         id: cache-generated
         uses: actions/cache@v4
         with:
           path: health_data_store/lib
           key: builder-${{ hashFiles('health_data_store/pubspec.yaml', 'health_data_store/lib/*', 'health_data_store/lib/**/*dart') }}
-      - name: Setup dart
-        if: steps.cache-generated.outputs.cache-hit != 'true'
-        uses: dart-lang/setup-dart@v1
-        with:
-          sdk: stable
       - name: Generate code
         if: steps.cache-generated.outputs.cache-hit != 'true'
         run: dart run build_runner build
@@ -239,16 +250,6 @@ jobs:
         with:
           distribution: 'oracle'
           java-version: '17'
-      - name: Setup Flutter
-        uses: subosito/flutter-action@v2
-        with:
-          channel: stable
-          cache: true
-      - name: Disable analytics
-        run: flutter config --no-analytics --suppress-analytics
-      - name: Update app dependencies
-        run: flutter pub get
-        working-directory: app
         # no efficient caching possible
       - name: Generate settings code
         run: dart run build_runner build --build-filter "lib/model/storage/*.dart"

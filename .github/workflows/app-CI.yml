@@ -58,9 +58,6 @@ jobs:
         if: steps.cache-generated.outputs.cache-hit != 'true'
         run: dart run build_runner build
         working-directory: health_data_store
-      - name: Update app dependencies
-        run: flutter pub get
-        working-directory: app
         # no efficient caching possible
       - name: Generate settings code
         run: dart run build_runner build --build-filter "lib/model/storage/*.dart"
