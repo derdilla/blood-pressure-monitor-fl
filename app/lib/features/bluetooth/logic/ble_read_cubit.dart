@@ -36,6 +36,9 @@ class BleReadCubit extends Cubit<BleReadState> with TypeLogger {
   static const microlifeNotifyCharacteristicUUID = 'fff1';
   static const microlifeWriteCharacteristicUUID = 'fff2';
 
+  /// How long to let a freshly connected device settle before subscribing.
+  static const _settleDelay = Duration(milliseconds: 100);
+
   /// Maximum number of bytes to be written to the device in a single GATT write.
   static const _microlifeWriteChunkSize = 20;
 
@@ -123,6 +126,9 @@ class BleReadCubit extends Cubit<BleReadState> with TypeLogger {
       emit(BleReadSuccess(decodedData));
 
     } else if (canIndicate) {
+      // Beurer BM85 seems to need some rest between service discovery and subscribing or it will stay silent.
+      await Future<void>.delayed(_settleDelay);
+
       final completer = Completer<void>();
       final data = <BleMeasurementData>[];
       final connectionSubscription = cm.connectionStateChanged.listen((e) {
