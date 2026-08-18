@@ -24,25 +24,12 @@ jobs:
         with:
           # ensures there are no unexpected directories needed
           sparse-checkout: |
+            pubspec.yaml
+            pubspec.lock
             app
             health_data_store
             settings_annotation
             settings_builder
-      - name: Cache generated health data store
-        id: cache-generated
-        uses: actions/cache@v4
-        with:
-          path: health_data_store/lib
-          key: builder-${{ hashFiles('health_data_store/pubspec.yaml', 'health_data_store/lib/*', 'health_data_store/lib/**/*dart') }}
-      - name: Setup dart
-        if: steps.cache-generated.outputs.cache-hit != 'true'
-        uses: dart-lang/setup-dart@v1
-        with:
-          sdk: stable
-      - name: Generate code
-        if: steps.cache-generated.outputs.cache-hit != 'true'
-        run: dart run build_runner build
-        working-directory: health_data_store
       - name: Extract Flutter version
         id: get_version
         run: |
@@ -60,8 +47,17 @@ jobs:
           flutter-version: ${{ steps.get_version.outputs.version }}
           cache: true
       - name: Disable analytics
-        run:
-          flutter config --no-analytics --suppress-analytics
+        run: flutter config --no-analytics --suppress-analytics
+      - name: Cache generated health data store
+        id: cache-generated
+        uses: actions/cache@v4
+        with:
+          path: health_data_store/lib
+          key: builder-${{ hashFiles('health_data_store/pubspec.yaml', 'health_data_store/lib/*', 'health_data_store/lib/**/*dart') }}
+      - name: Generate code
+        if: steps.cache-generated.outputs.cache-hit != 'true'
+        run: dart run build_runner build
+        working-directory: health_data_store
       - name: Update app dependencies
         run: flutter pub get
         working-directory: app
