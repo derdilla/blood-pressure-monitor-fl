@@ -139,6 +139,7 @@ class AddEntryFormState extends FormStateBase<CombinedEntry, AddEntryForm>
         if (!(bpFormValidation ?? true))
           0,
         if (!(weightFormValidation ?? true))
+          // ignore: prefer_if_elements_to_conditional_expressions
           (context.read<MedCache>().isEmpty ? 1 : 2),
       ];
       if (!wrongTabs.contains(_controller.index) && wrongTabs.isNotEmpty) {

@@ -21,14 +21,11 @@ class IntervalStorageSetting extends DeepSetting<IntervalStorage> {
 class IntervalStorage extends ChangeNotifier {
   /// Create a storage to interact with a display intervall.
   IntervalStorage({
-    TimeStep stepSize = TimeStep.last7Days,
-    int directionalStep = 0,
-    DateRange? customRange,
-    TimeRange? timeRange,
-  }) : _stepSize = stepSize,
-        _directionalStep = directionalStep,
-        _customRange = customRange,
-        _timeRange = timeRange;
+    this._stepSize = TimeStep.last7Days,
+    this._directionalStep = 0,
+    this._customRange,
+    this._timeRange,
+  });
 
   /// Create a instance from a map created by [toMap].
   factory IntervalStorage.fromMap(Map<String, dynamic> map) => IntervalStorage(
