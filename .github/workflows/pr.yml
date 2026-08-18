@@ -28,9 +28,6 @@ jobs:
   check-lints:
     if: github.event.pull_request.draft == false
     runs-on: ubuntu-slim
-    permissions:
-      contents: write
-      pull-requests: write
     steps:
       - name: Checkout PR code
         uses: actions/checkout@v4
