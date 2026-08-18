@@ -26,6 +26,14 @@ linter:
     - use_to_and_as_if_applicable
 
 analyzer:
+  exclude:
+    - build/**
+    - android/**
+    - ios/**
+    - web/**
+    - windows/**
+    - macos/**
+    - linux/**
   language:
     strict-inference: true
     strict-raw-types: true
