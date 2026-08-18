@@ -25,6 +25,52 @@ jobs:
       - name: Validate localizations
         # check for [^'"]'[^'"] in .arb files
         run: "grep \"[^'\\\"]'[^'\\\"]\" app/lib/l10n/*.arb && exit 1 || exit 0"
+  check-lints:
+    if: github.event.pull_request.draft == false
+    runs-on: ubuntu-slim
+    steps:
+      - name: Checkout PR code
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          sparse-checkout: |
+            app
+            health_data_store
+            settings_annotation
+            settings_builder
+      - name: Extract Flutter version
+        id: get_version
+        run: |
+          # This is the same function f-droid uses to ensure their builds keep succeeding:
+          # https://gitlab.com/fdroid/fdroiddata/-/blob/master/metadata/com.derdilla.bloodPressureApp.yml
+          VERSION=$(sed -n -E "s/.*flutter:\s*'(.*)'/\1/p" app/pubspec.yaml)
+          if [ -z "$VERSION" ]; then
+            echo "Error: Could not find a Flutter version specified in app/pubspec.yaml."
+            exit 1
+          fi
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ steps.get_version.outputs.version }}
+          cache: true
+      - name: Analyze app
+        if: success() || failure()
+        run: flutter analyze
+        working-directory: app
+      - name: Analyze health_data_store
+        if: success() || failure()
+        run: flutter analyze
+        working-directory: health_data_store
+      - name: Analyze settings_annotation
+        if: success() || failure()
+        run: flutter analyze
+        working-directory: settings_annotation
+      - name: Analyze settings_builder
+        if: success() || failure()
+        run: flutter analyze
+        working-directory: settings_builder
+
   update-goldens:
     if: github.event.pull_request.draft == false
     runs-on: ubuntu-latest
@@ -56,10 +102,21 @@ jobs:
         if: steps.cache-generated.outputs.cache-hit != 'true'
         run: dart run build_runner build
         working-directory: health_data_store
+      - name: Extract Flutter version
+        id: get_version
+        run: |
+          # This is the same function f-droid uses to ensure their builds keep succeeding:
+          # https://gitlab.com/fdroid/fdroiddata/-/blob/master/metadata/com.derdilla.bloodPressureApp.yml
+          VERSION=$(sed -n -E "s/.*flutter:\s*'(.*)'/\1/p" app/pubspec.yaml)
+          if [ -z "$VERSION" ]; then
+            echo "Error: Could not find a Flutter version specified in app/pubspec.yaml."
+            exit 1
+          fi
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          channel: stable
+          flutter-version: ${{ steps.get_version.outputs.version }}
           cache: true
       - name: Disable analytics
         run:
@@ -73,9 +130,6 @@ jobs:
         working-directory: app
       - name: Generate app mock code
         run: dart run build_runner build --build-filter "test/**/*.dart"
-        working-directory: app
-      - name: Analyze code
-        run: flutter analyze
         working-directory: app
       - name: Update goldens
         id: gold-upd
