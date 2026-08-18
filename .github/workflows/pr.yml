@@ -57,6 +57,7 @@ jobs:
           cache: true
       - name: Disable analytics
         run: flutter config --no-analytics --suppress-analytics
+      - run: flutter pub get --enforce-lockfile
       - name: Cache generated health data store
         id: cache-generated
         uses: actions/cache@v4
@@ -75,7 +76,6 @@ jobs:
         working-directory: app
       - name: Analyze code
         run: flutter analyze
-
   update-goldens:
     if: github.event.pull_request.draft == false
     runs-on: ubuntu-latest
@@ -112,6 +112,7 @@ jobs:
           cache: true
       - name: Disable analytics
         run: flutter config --no-analytics --suppress-analytics
+      - run: flutter pub get --enforce-lockfile
       - name: Cache generated health data store
         id: cache-generated
         uses: actions/cache@v4
@@ -182,6 +183,7 @@ jobs:
           cache: true
       - name: Disable analytics
         run: flutter config --no-analytics --suppress-analytics
+      - run: flutter pub get --enforce-lockfile
       - name: Cache generated health data store
         id: cache-generated
         uses: actions/cache@v4
@@ -234,6 +236,7 @@ jobs:
           cache: true
       - name: Disable analytics
         run: flutter config --no-analytics --suppress-analytics
+      - run: flutter pub get --enforce-lockfile
       - name: Cache generated health data store
         id: cache-generated
         uses: actions/cache@v4
