@@ -4,6 +4,7 @@ import 'package:blood_pressure_app/features/data_picker/interval_picker.dart';
 import 'package:blood_pressure_app/features/export_import/ui/columns_config/active_column_customizer.dart';
 import 'package:blood_pressure_app/features/export_import/ui/export_button.dart';
 import 'package:blood_pressure_app/features/export_import/ui/export_column_management_screen.dart';
+import 'package:blood_pressure_app/features/export_import/ui/export_field_format_documentation_screen.dart';
 import 'package:blood_pressure_app/features/export_import/ui/export_warn_banner.dart';
 import 'package:blood_pressure_app/features/export_import/ui/import_button.dart';
 import 'package:blood_pressure_app/features/settings/tiles/dropdown_list_tile.dart';
@@ -28,6 +29,24 @@ class ExportImportScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(localizations.exportImport),
+        actions: [
+          IconButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute<void>(
+                  builder: (context) => InformationScreen(
+                      text: localizations.exportImportDocumentation),
+                ),
+              );
+            },
+            tooltip: localizations.exportImportDocumentationTooltip,
+            icon: Icon(
+              Icons.info_outline,
+              color: Theme.of(context).colorScheme.onSurface,
+            ),
+          ),
+        ],
         backgroundColor: Theme.of(context).primaryColor,
       ),
       body: SingleChildScrollView(
