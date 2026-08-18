@@ -74,22 +74,8 @@ jobs:
       - name: Generate app mock code
         run: dart run build_runner build --build-filter "test/**/*.dart"
         working-directory: app
-      - name: Analyze app
-        if: success() || failure()
+      - name: Analyze code
         run: flutter analyze
-        working-directory: app
-      - name: Analyze health_data_store
-        if: success() || failure()
-        run: flutter analyze
-        working-directory: health_data_store
-      - name: Analyze settings_annotation
-        if: success() || failure()
-        run: flutter analyze
-        working-directory: settings_annotation
-      - name: Analyze settings_builder
-        if: success() || failure()
-        run: flutter analyze
-        working-directory: settings_builder
 
   update-goldens:
     if: github.event.pull_request.draft == false
