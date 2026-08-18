@@ -45,7 +45,7 @@ jobs:
         run: |
           # This is the same function f-droid uses to ensure their builds keep succeeding:
           # https://gitlab.com/fdroid/fdroiddata/-/blob/master/metadata/com.derdilla.bloodPressureApp.yml
-          VERSION=$(sed -n -E "s/.*flutter:\s*'(.*)'/\1/p" pubspec.yaml)
+          VERSION=$(sed -n -E "s/.*flutter:\s*(.*)/\1/p" pubspec.yaml)
           if [ -z "$VERSION" ]; then
             echo "Error: Could not find a Flutter version specified in pubspec.yaml."
             exit 1
@@ -100,7 +100,7 @@ jobs:
         run: |
           # This is the same function f-droid uses to ensure their builds keep succeeding:
           # https://gitlab.com/fdroid/fdroiddata/-/blob/master/metadata/com.derdilla.bloodPressureApp.yml
-          VERSION=$(sed -n -E "s/.*flutter:\s*'(.*)'/\1/p" pubspec.yaml)
+          VERSION=$(sed -n -E "s/.*flutter:\s*(.*)/\1/p" pubspec.yaml)
           if [ -z "$VERSION" ]; then
             echo "Error: Could not find a Flutter version specified in pubspec.yaml."
             exit 1
