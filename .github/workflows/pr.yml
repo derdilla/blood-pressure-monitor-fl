@@ -22,12 +22,11 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.head.sha }}
           sparse-checkout: "app/lib/l10n"
-      - name: Validate localizations
-        # check for [^'"]'[^'"] in .arb files
+      - name: Check for [^'"]'[^'"] in .arb files as they will fail to parse
         run: "grep \"[^'\\\"]'[^'\\\"]\" app/lib/l10n/*.arb && exit 1 || exit 0"
   check-lints:
     if: github.event.pull_request.draft == false
-    runs-on: ubuntu-slim
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout PR code
         uses: actions/checkout@v4
