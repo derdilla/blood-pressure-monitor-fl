@@ -21,10 +21,9 @@ jobs:
       settings_annotation: ${{ steps.filter.outputs.settings_annotation }}
       health_data_store: ${{ steps.filter.outputs.health_data_store }}
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
         with:
           sparse-checkout: |
-            pubspec.yaml
             pubspec.lock
             health_data_store
             settings_annotation
@@ -35,28 +34,42 @@ jobs:
           filters: |
             settings_builder:
               - 'settings_builder/**'
+              - 'pubspec.lock'
             settings_annotation:
               - 'settings_annotation/**'
+              - 'pubspec.lock'
             health_data_store:
               - 'health_data_store/**'
+              - 'pubspec.lock'
   test-health_data_store:
     runs-on: ubuntu-latest
     needs: changes
     if: ${{ needs.changes.outputs.health_data_store == 'true' }}
     steps:
     - name: Checkout code
-      uses: actions/checkout@v4
+      uses: actions/checkout@v7
       with:
         sparse-checkout: |
           pubspec.yaml
           pubspec.lock
+          app
           health_data_store
+          settings_annotation
+          settings_builder
+    - name: Extract Flutter version
+      id: get_version
+      run: |
+        VERSION=$(sed -n -E "s/.*sdk:\s*\^(.*)/\1/p" pubspec.yaml)
+        if [ -z "$VERSION" ]; then
+          echo "Error: Could not find a dart version specified in pubspec.yaml."
+          exit 1
+        fi
+        echo "version=$VERSION" >> $GITHUB_OUTPUT
     - name: Setup dart
       uses: dart-lang/setup-dart@v1
       with:
-        sdk: stable
+        sdk: ${{ steps.get_version.outputs.version }}
     - run: sudo apt-get -y install libsqlite3-dev
-
     - name: Get dependencies
       run: |
         dart pub get
@@ -80,15 +93,30 @@ jobs:
     if: ${{ needs.changes.outputs.settings_annotation == 'true' }}
     steps:
       - name: Checkout code
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           sparse-checkout: |
             pubspec.yaml
             pubspec.lock
+            app
+            health_data_store
             settings_annotation
+            settings_builder
+      - name: Extract Flutter version
+        id: get_version
+        run: |
+          # This is the same function f-droid uses to ensure their builds keep succeeding:
+          # https://gitlab.com/fdroid/fdroiddata/-/blob/master/metadata/com.derdilla.bloodPressureApp.yml
+          VERSION=$(sed -n -E "s/.*flutter:\s*(.*)/\1/p" pubspec.yaml)
+          if [ -z "$VERSION" ]; then
+            echo "Error: Could not find a Flutter version specified in pubspec.yaml."
+            exit 1
+          fi
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
+          flutter-version: ${{ steps.get_version.outputs.version }}
           cache: true
       - name: Disable analytics
         run: flutter config --no-analytics --suppress-analytics
