@@ -11,14 +11,15 @@ on:
       - "health_data_store/**"
       - "settings_annotation/**"
       - "settings_builder/**"
-      - "pr.yml"
+      - ".github/workflows/pr.yml"
+      - "pubspec.lock"
 
 jobs:
   validate-localizations:
     runs-on: ubuntu-slim
     steps:
       - name: Checkout PR code
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           ref: ${{ github.event.pull_request.head.sha }}
           sparse-checkout: "app/lib/l10n"
@@ -29,7 +30,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout PR code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           ref: ${{ github.event.pull_request.head.sha }}
           sparse-checkout: |
@@ -84,7 +85,7 @@ jobs:
       pull-requests: write
     steps:
       - name: Checkout PR code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           ref: ${{ github.event.pull_request.head.sha }}
           sparse-checkout: |
@@ -155,7 +156,7 @@ jobs:
     needs: update-goldens # this is guaranteed to fail if goldens need to be updated
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           ref: ${{ github.event.pull_request.head.sha }}
           sparse-checkout: |
@@ -208,7 +209,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           ref: ${{ github.event.pull_request.head.sha }}
           sparse-checkout: |
