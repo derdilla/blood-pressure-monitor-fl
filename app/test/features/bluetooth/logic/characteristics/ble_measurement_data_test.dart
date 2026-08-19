@@ -55,4 +55,45 @@ void main() {
     expect(below?.status?.pulseRateExceedsUpperLimit, false);
     expect(below?.status?.pulseRateInRange, false);
   });
+
+  test('decodes beurer sample data', () {
+    // Recorded from a Beurer BM85.
+    final result = BleMeasurementData.decode(Uint8List.fromList(
+        [86, 106, 0, 71, 0, 0, 0, 234, 7, 8, 11, 18, 31, 0, 0, 63, 0, 0, 0]),
+        bigEndian: true, alwaysSendsUserId: true);
+
+    expect(result, isNotNull);
+    expect(result!.systolic, 106.0);
+    expect(result.diastolic, 71.0);
+    expect(result.isMMHG, true);
+    expect(result.pulse, 63.0);
+    expect(result.userID, 0);
+    expect(result.timestamp, DateTime(2026, 08, 11, 18, 31));
+  });
+
+  test('decodes beurer sample data of the second user', () {
+    final result = BleMeasurementData.decode(Uint8List.fromList(
+        [86, 113, 0, 73, 0, 0, 0, 234, 7, 8, 11, 20, 56, 0, 0, 65, 1, 0, 0]),
+        bigEndian: true, alwaysSendsUserId: true);
+
+    expect(result, isNotNull);
+    expect(result!.systolic, 113.0);
+    expect(result.diastolic, 73.0);
+    expect(result.pulse, 65.0);
+    expect(result.userID, 1);
+    expect(result.timestamp, DateTime(2026, 08, 11, 20, 56));
+  });
+
+  test('decodes beurer sample data of the second user with a high pulse', () {
+    final result = BleMeasurementData.decode(Uint8List.fromList(
+        [86, 119, 0, 70, 0, 0, 0, 234, 7, 8, 11, 20, 57, 0, 0, 87, 1, 0, 64]),
+        bigEndian: true, alwaysSendsUserId: true);
+
+    expect(result, isNotNull);
+    expect(result!.systolic, 119.0);
+    expect(result.diastolic, 70.0);
+    expect(result.pulse, 87.0);
+    expect(result.userID, 1);
+    expect(result.timestamp, DateTime(2026, 08, 11, 20, 57));
+  });
 }
