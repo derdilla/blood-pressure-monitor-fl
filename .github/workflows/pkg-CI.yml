@@ -72,7 +72,7 @@ jobs:
     - run: sudo apt-get -y install libsqlite3-dev
     - name: Get dependencies
       run: |
-        dart pub get
+        dart pub get --enforce-lockfile
         dart pub global activate coverage
       working-directory: ./health_data_store
     - name: Generate code
@@ -120,6 +120,7 @@ jobs:
           cache: true
       - name: Disable analytics
         run: flutter config --no-analytics --suppress-analytics
+      - run: flutter pub get --enforce-lockfile
       - run: flutter test
         working-directory: ./settings_annotation
       - run: dart analyze
