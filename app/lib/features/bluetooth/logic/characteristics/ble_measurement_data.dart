@@ -37,7 +37,15 @@ class BleMeasurementData {
     );
 
   /// Decode bytes read from the characteristic into a [BleMeasurementData]
-  static BleMeasurementData? decode(Uint8List data) {
+  ///
+  /// Some devices deviate from the spec. The caller recognizes those devices by
+  /// name and opts into the quirks they need: [bigEndian] for multi byte fields
+  /// sent in the wrong byte order, [alwaysSendsUserId] for a user id that is
+  /// present without its flag being set.
+  static BleMeasurementData? decode(Uint8List data, {
+    bool bigEndian = false,
+    bool alwaysSendsUserId = false,
+  }) {
     // https://github.com/NordicSemiconductor/Kotlin-BLE-Library/blob/6b565e59de21dfa53ef80ff8351ac4a4550e8d58/profile/src/main/java/no/nordicsemi/android/kotlin/ble/profile/bps/BloodPressureMeasurementParser.kt
 
     // Reading specific bits: `(byte & (1 << bitIdx))`
@@ -55,7 +63,8 @@ class BleMeasurementData {
     final bool isMMHG = !isBitIntByteSet(flagsByte, 0); // 0 => mmHg 1 =>kPA
     final bool timestampPresent = isBitIntByteSet(flagsByte, 1);
     final bool pulseRatePresent = isBitIntByteSet(flagsByte, 2);
-    final bool userIdPresent = isBitIntByteSet(flagsByte, 3);
+    // Some Beurer devices always send the user id, without setting the flag for it.
+    final bool userIdPresent = isBitIntByteSet(flagsByte, 3) || alwaysSendsUserId;
     final bool measurementStatusPresent = isBitIntByteSet(flagsByte, 4);
 
     if (data.length < (7
@@ -88,7 +97,7 @@ class BleMeasurementData {
 
     double? pulse;
     if (pulseRatePresent) {
-      pulse = readSFloat(data, offset);
+      pulse = bigEndian ? readSFloatBe(data, offset) : readSFloat(data, offset);
       offset += 2;
     }
 
@@ -100,7 +109,12 @@ class BleMeasurementData {
 
     BleMeasurementStatus? status;
     if (measurementStatusPresent) {
-      status = BleMeasurementStatus.decode(data[offset]);
+      // The status field is a uint16. Some Beurer devices send it big endian
+      // instead of the little endian the spec requires.
+      final int? statusValue = bigEndian
+        ? readUInt16Be(data, offset)
+        : readUInt16Le(data, offset);
+      if (statusValue != null) status = BleMeasurementStatus.decode(statusValue);
     }
 
     return BleMeasurementData(

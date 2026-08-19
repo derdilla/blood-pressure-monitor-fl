@@ -17,6 +17,12 @@ double? readSFloat(List<int> data, int offset) {
   return (mantissa * (pow(10, exponent))).toDouble();
 }
 
+/// Attempts to read a byte swapped IEEE-11073 16bit SFloat at data[offset].
+double? readSFloatBe(List<int> data, int offset) {
+  if (data.length < offset + 2) return null;
+  return readSFloat([data[offset + 1], data[offset]], 0);
+}
+
 int? readUInt8(List<int> data, int offset) {
   if (data.length < offset + 1) return null;
   return data[offset];

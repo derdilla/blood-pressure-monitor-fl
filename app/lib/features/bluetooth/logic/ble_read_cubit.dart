@@ -19,12 +19,17 @@ class BleReadCubit extends Cubit<BleReadState> with TypeLogger {
   BleReadCubit({
     required this.device,
     required this.cm,
+    this.deviceName,
   }): super(BleReadInProgress());
 
   /// Bluetooth device to connect to.
   final Peripheral device;
 
   final CentralManager cm;
+
+  /// Advertised name of [device], used to detect devices that deviate from the
+  /// GATT spec (currently some Beurer devices, see [isKnownBigEndianDevice]).
+  final String? deviceName;
 
   static const defaultServiceUUID = '1810';
   static const defaultCharacteristicUUID = '2A35';
@@ -45,6 +50,19 @@ class BleReadCubit extends Cubit<BleReadState> with TypeLogger {
   static const _microlifeResponseTimeout = Duration(seconds: 30);
   final List<int> _microlifeResponseByteBuffer = [];
   Completer<Uint8List>? _microlifePendingResponse;
+
+  /// Whether [advertisedName] belongs to a model known to send multi byte
+  /// fields big endian instead of the little endian the spec requires.
+  ///
+  /// Currently supports some Beurer devices. The official Beurer app keeps the same list
+  /// of models and uses it to pick between the byte orders.
+  @visibleForTesting
+  static bool isKnownBigEndianDevice(String? advertisedName) {
+    if (advertisedName == null) return false;
+    final normalized = advertisedName.toUpperCase().replaceAll(RegExp(r'[^A-Z0-9]'), '');
+    return const ['BM48', 'BM59', 'BM85', 'ELITE900']
+        .any(normalized.contains);
+  }
 
   Future<bool> _connectDevice() async {
     logger.info('Connecting to ${device.uuid}');
@@ -112,12 +130,18 @@ class BleReadCubit extends Cubit<BleReadState> with TypeLogger {
       return;
     }
 
+    // The known big endian models also always send the user id without setting
+    // its flag, so one device check drives both quirks.
+    final bigEndian = isKnownBigEndianDevice(deviceName);
+    logger.finer('reading GATT data from $deviceName (bigEndian: $bigEndian)');
+
     // Read or indicate data;
     final canRead = characteristic.properties.contains(GATTCharacteristicProperty.read);
     final canIndicate = characteristic.properties.contains(GATTCharacteristicProperty.indicate);
     if (canRead) {
       final data = await cm.readCharacteristic(device, characteristic);
-      final decodedData = BleMeasurementData.decode(data);
+      final decodedData = BleMeasurementData.decode(data,
+          bigEndian: bigEndian, alwaysSendsUserId: bigEndian);
       if (decodedData == null) {
         logger.warning('Failed to decode GATT measurement $data for $device');
         emit(BleReadFailure('Could not decode data'));
@@ -139,7 +163,8 @@ class BleReadCubit extends Cubit<BleReadState> with TypeLogger {
       final dataSubscription = cm.characteristicNotified
           .where((e) => e.characteristic == characteristic
                   && e.peripheral == device)
-          .map((e) => BleMeasurementData.decode(e.value))
+          .map((e) => BleMeasurementData.decode(e.value,
+              bigEndian: bigEndian, alwaysSendsUserId: bigEndian))
           .listen((e) { if (e != null) data.add(e); },
               onDone: () {
                 if (!completer.isCompleted) completer.complete();
