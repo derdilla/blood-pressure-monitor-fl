@@ -33,7 +33,7 @@ class RecordParsingResult {
   List<CombinedEntry> getOr(List<CombinedEntry>? Function(EntryParsingError error) errorHandler) {
     if (_result != null) {
       assert(_error == null);
-      return _result!;
+      return _result;
     }
     assert(_error != null);
     return errorHandler(_error!) ?? [];
