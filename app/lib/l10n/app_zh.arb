@@ -414,5 +414,7 @@
   "autostartBluetoothInputDescription": "启用蓝牙输入并开启蓝牙时，自动开始在测量输入屏幕上导入。",
   "bluetoothImportMode": "自动导入",
   "bluetoothImportModeDescription": "自动导入设备返回的测量值，而不是先审核它们。返回的值超过一个时，选择要导入的值。",
-  "bluetoothImportModeLast": "最新测量值"
+  "bluetoothImportModeLast": "最新测量值",
+  "exportImportDocumentationTooltip": "如何使用导出/导入",
+  "exportImportDocumentation": "## 导出/导入基本情况\n\n- 如果想传输数据或了解 sqlite，使用数据库导出。.\n- 如使用电子表格工作流以及将数据导回应用，选择 CSV 格式。\n- 启用标题并包含时间列以便能可靠恢复数据。.\n- 使用字段格式对话框添加收缩压、舒张压、脉搏、附注和药物摄入量等值的自定义列。\n\n## 在 LibreOffice 和类似工具中导入 CSV \n\n- 导出为 CSV 并启用标题。\n- 标准 CSV 文件使用默认分隔符和默认文本分隔符。.\n- 在 LibreOffice、Excel 或类似程序中打开，确保时间列被识别为日期/时间值。\n- 如果之后要重新导入文件，保留相同的 csv 设置并包含有效的时间列。\n\n## 颜色列\n\n- 纯 ''颜色'' 列将附注颜色导出为简单值。\n- 旧的 ''needlePin'' 列存储 JSON 载荷兼容较老的工作流。\n- 想要电子表格友好的导出时使用纯 ''颜色'' 列。\n\n## 工作流示例\n\n1. 输入测量值和任意附注。\n2. 打开导出/导入并切换到 CSV。\n3. 如有需要，添加自定义字段或时间列。\n4. 导出数据并在 LibreOffice 或别的电子表格应用中打开它。\n5. 之后想恢复或查看数据时重新导入同一个文件。"
 }
