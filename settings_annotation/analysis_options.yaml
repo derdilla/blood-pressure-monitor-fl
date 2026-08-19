@@ -28,12 +28,6 @@ linter:
 analyzer:
   exclude:
     - build/**
-    - android/**
-    - ios/**
-    - web/**
-    - windows/**
-    - macos/**
-    - linux/**
   language:
     strict-inference: true
     strict-raw-types: true
