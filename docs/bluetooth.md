@@ -33,6 +33,7 @@ Most devices provide 2 ways to retrieve measurements over bluetooth, but there a
 | Omron X2 Smart+                           | X2 Smart+                         |  Standard GATT  |   ✅    |                           |
 | Omron Bronze BP5150                       | BLESmart_(long identifier string) |  Standard GATT  |   ✅    |                           |
 | Beurer BM59                               | BM 59                             |  Standard GATT  |   ✅    |      Reads multiple       |
+| Beurer BM85                               | Beurer BM85                       |  Standard GATT  |   ✅    |      Reads multiple       |
 | Yonker YK-IBPA1                           |                                   | Yonker protocol |   ✅    | Connect after measurement |
 | Yonker YK-BPW5                            |                                   | Yonker protocol |   ?    |                           |
 | Yongrow YK-IBPA1                          |                                   | Yonker protocol |   ?    |                           |
