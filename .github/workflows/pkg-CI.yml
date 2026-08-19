@@ -24,6 +24,8 @@ jobs:
       - uses: actions/checkout@v6
         with:
           sparse-checkout: |
+            pubspec.yaml
+            pubspec.lock
             health_data_store
             settings_annotation
             settings_builder
@@ -46,6 +48,8 @@ jobs:
       uses: actions/checkout@v4
       with:
         sparse-checkout: |
+          pubspec.yaml
+          pubspec.lock
           health_data_store
     - name: Setup dart
       uses: dart-lang/setup-dart@v1
@@ -79,6 +83,8 @@ jobs:
         uses: actions/checkout@v6
         with:
           sparse-checkout: |
+            pubspec.yaml
+            pubspec.lock
             settings_annotation
       - name: Setup Flutter
         uses: subosito/flutter-action@v2

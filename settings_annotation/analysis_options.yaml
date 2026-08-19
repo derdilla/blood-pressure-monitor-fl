@@ -26,6 +26,8 @@ linter:
     - use_to_and_as_if_applicable
 
 analyzer:
+  exclude:
+    - build/**
   language:
     strict-inference: true
     strict-raw-types: true

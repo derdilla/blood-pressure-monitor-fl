@@ -55,7 +55,7 @@ class BluetoothCubit extends Cubit<BluetoothState> with TypeLogger {
     assert(state is BluetoothStateDisabled, 'No need to enable bluetooth when '
         'already enabled or not known to be disabled.');
     try {
-      return manager.turnOn();
+      return await manager.turnOn();
     } on Exception {
       return false;
     }

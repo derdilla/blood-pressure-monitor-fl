@@ -1,6 +1,9 @@
 # This file configures the analyzer, which statically analyzes Dart code to
 # check for errors, warnings, and lints.
 
+analyzer:
+  exclude:
+    - build/**
 linter:
   rules:
     # Error:
@@ -38,7 +41,6 @@ linter:
     - unnecessary_await_in_return
     - unnecessary_lambdas
     - unnecessary_null_aware_operator_on_extension_on_nullable
-    - use_if_null_to_convert_nulls_to_bools
     - use_to_and_as_if_applicable
 
     # Pub
