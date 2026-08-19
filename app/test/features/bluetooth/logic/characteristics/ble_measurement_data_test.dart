@@ -96,4 +96,20 @@ void main() {
     expect(result.userID, 1);
     expect(result.timestamp, DateTime(2026, 08, 11, 20, 57));
   });
+
+  test('decodes the beurer status byte', () {
+    // These devices send the status field big endian as well, so the flags are
+    // in the second byte. Trailing 4 => the device flagged an irregular pulse.
+    final result = BleMeasurementData.decode(Uint8List.fromList(
+        [86, 118, 0, 80, 0, 0, 0, 234, 7, 8, 11, 20, 27, 0, 0, 60, 0, 0, 4]),
+        bigEndian: true, alwaysSendsUserId: true);
+
+    expect(result, isNotNull);
+    expect(result!.pulse, 60.0);
+    expect(result.status?.irregularPulseDetected, true);
+    expect(result.status?.bodyMovementDetected, false);
+    expect(result.status?.cuffTooLose, false);
+    expect(result.status?.improperMeasurementPosition, false);
+    expect(result.status?.pulseRateInRange, true);
+  });
 }
