@@ -11,7 +11,8 @@ on:
       - "health_data_store/**"
       - "settings_annotation/**"
       - "settings_builder/**"
-      - "pr.yml"
+      - ".github/workflows/pr.yml"
+      - "pubspec.lock"
 
 jobs:
   validate-localizations:
