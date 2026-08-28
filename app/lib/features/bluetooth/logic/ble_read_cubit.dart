@@ -54,14 +54,13 @@ class BleReadCubit extends Cubit<BleReadState> with TypeLogger {
   /// Whether [advertisedName] belongs to a model known to send multi byte
   /// fields big endian instead of the little endian the spec requires.
   ///
-  /// Currently supports some Beurer devices. The official Beurer app keeps the same list
-  /// of models and uses it to pick between the byte orders.
+  /// Currently supports some Beurer devices. The official Beurer app keeps a
+  /// similar list of models and uses it to pick between the byte orders.
   @visibleForTesting
   static bool isKnownBigEndianDevice(String? advertisedName) {
     if (advertisedName == null) return false;
     final normalized = advertisedName.toUpperCase().replaceAll(RegExp(r'[^A-Z0-9]'), '');
-    return const ['BM48', 'BM59', 'BM85', 'ELITE900']
-        .any(normalized.contains);
+    return const ['BM85'].any(normalized.contains);
   }
 
   Future<bool> _connectDevice() async {
