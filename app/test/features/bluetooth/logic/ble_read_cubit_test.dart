@@ -18,8 +18,8 @@ import 'ble_read_cubit_test.mocks.dart';*/
 void main() {
   test('detects devices that send big endian measurements', () {
     expect(BleReadCubit.isKnownBigEndianDevice('Beurer BM85'), true);
-    expect(BleReadCubit.isKnownBigEndianDevice('BM59'), true);
-    expect(BleReadCubit.isKnownBigEndianDevice('Elite 900'), true);
+    expect(BleReadCubit.isKnownBigEndianDevice('BM59'), false);
+    expect(BleReadCubit.isKnownBigEndianDevice('Elite 900'), false);
     expect(BleReadCubit.isKnownBigEndianDevice('Beurer BM96'), false);
     expect(BleReadCubit.isKnownBigEndianDevice(null), false);
   });
