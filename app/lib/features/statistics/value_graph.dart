@@ -88,21 +88,73 @@ class _BloodPressureValueGraphState extends State<BloodPressureValueGraph> {
         tween: Tween(begin: 0.0, end: 1.0),
         curve: Curves.slowMiddle,
         duration: Duration(milliseconds: settings.animationSpeed),
-        builder: (BuildContext context, double value, Widget? child) => CustomPaint(
-          painter: _ValueGraphPainter(
-            brightness: Theme.of(context).brightness,
-            settings: settings,
-            labelStyle: Theme.of(context).textTheme.bodySmall ?? TextStyle(),
-            records: r,
-            colors: widget.colors,
-            progress: value,
-            intakes: widget.intakes,
-            drawingResults: _drawingResults,
-          ),
+        builder: (BuildContext context, double value, Widget? child) => _TouchableValueGraph(
+          settings: settings,
+          progress: value,
+          records: r,
+          colors: widget.colors,
+          intakes: widget.intakes,
+          drawingResults: _drawingResults,
         ),
       ),
     );
   }
+}
+
+class _TouchableValueGraph extends StatefulWidget {
+  const _TouchableValueGraph({
+    required this.settings,
+    required this.progress,
+    required this.records,
+    required this.colors,
+    required this.intakes,
+    required this.drawingResults,
+  });
+
+  final Settings settings;
+  final double progress;
+
+  final List<BloodPressureRecord> records;
+  final List<Note> colors;
+  final List<MedicineIntake> intakes;
+
+  final _DrawingResults drawingResults;
+
+  @override
+  State<_TouchableValueGraph> createState() => __TouchableValueGraphState();
+}
+
+class __TouchableValueGraphState extends State<_TouchableValueGraph> {
+  Offset? _localPointerPosition;
+
+  @override
+  Widget build(BuildContext context) => GestureDetector(
+    onLongPressDown: (details) {
+      setState(() { _localPointerPosition = details.localPosition; });
+    },
+    onTapUp: (_) {
+      setState(() { _localPointerPosition = null; });
+    },
+    onHorizontalDragEnd: (_) {
+      setState(() { _localPointerPosition = null; });
+    },
+    onHorizontalDragUpdate:(details) {
+      setState(() { _localPointerPosition = details.localPosition; });
+    },
+    child: CustomPaint(
+      painter: _ValueGraphPainter(
+        brightness: Theme.of(context).brightness,
+        settings: widget.settings,
+        labelStyle: Theme.of(context).textTheme.bodySmall ?? TextStyle(),
+        records: widget.records,
+        colors: widget.colors,
+        progress: widget.progress,
+        intakes: widget.intakes,
+        drawingResults: widget.drawingResults,
+        pointerPosition: _localPointerPosition,
+      ),
+    ),
+  );
 }
 
 class _ValueGraphPainter extends CustomPainter {
@@ -115,6 +167,7 @@ class _ValueGraphPainter extends CustomPainter {
     required this.intakes,
     required this.progress,
     required this.drawingResults,
+    required this.pointerPosition,
   }): assert(1.0 >= progress && progress >= 0.0);
 
   final Settings settings;
@@ -139,6 +192,9 @@ class _ValueGraphPainter extends CustomPainter {
   final double progress;
 
   final _DrawingResults drawingResults;
+
+  /// Non-null, if the user is currently dragging across the widget.
+  final Offset? pointerPosition;
 
   bool _graphEntirelyDisconnected = true;
 
@@ -409,6 +465,50 @@ class _ValueGraphPainter extends CustomPainter {
     }
   }
 
+  void _paintHoverHiglight(Canvas canvas, Size size, DateTimeRange range, Offset pos, double minY, double maxY) {
+    // Draw dots and values at correct record
+    assert(records.isNotEmpty);
+    BloodPressureRecord min = records.first;
+    double dMin = double.infinity;
+    for (int i = 0; i < records.length; i++) {
+      final d = (_transformX(size, records[i].time, range) - pos.dx).abs();
+      if (d < dMin) {
+        dMin = d;
+        min = records[i];
+      }
+    }
+    final x = _transformX(size, min.time, range);
+    canvas.drawLine(
+      ui.Offset(x, 0),
+      ui.Offset(x, size.height - _kBottomLegendHeight),
+      ui.Paint()
+        ..strokeWidth = 2.0
+        ..color = (brightness == ui.Brightness.dark ? Colors.white : Colors.black).withAlpha(120),
+    );
+    if (min.sys != null) {
+      final y = _transformY(size, min.sys!.mmHg.toDouble(), minY, maxY);
+      canvas.drawCircle(Offset(x, y), 4.0, ui.Paint()..color = settings.sysColor);
+    }
+    if (min.dia != null) {
+      final y = _transformY(size, min.dia!.mmHg.toDouble(), minY, maxY);
+      canvas.drawCircle(Offset(x, y), 4.0, ui.Paint()..color = settings.diaColor);
+    }
+    if (min.pul != null) {
+      final y = _transformY(size, min.pul!.toDouble(), minY, maxY);
+      canvas.drawCircle(Offset(x, y), 4.0, ui.Paint()..color = settings.pulColor);
+    }
+
+
+    // draw exact finger pos marker
+    canvas.drawLine(
+      ui.Offset(pos.dx, 0),
+      ui.Offset(pos.dx, size.height - _kBottomLegendHeight),
+      ui.Paint()
+        ..strokeWidth = 4.0
+        ..color = (brightness == ui.Brightness.dark ? Colors.purpleAccent : Colors.purple).withAlpha(170),
+    );
+  }
+
   @override
   void paint(Canvas canvas, Size size) {
     assert(records.length >= 2);
@@ -453,6 +553,10 @@ class _ValueGraphPainter extends CustomPainter {
     }
 
     _paintHorizontalLines(canvas, size, settings.horizontalGraphLines, min, max);
+
+    if (pointerPosition != null) {
+      _paintHoverHiglight(canvas, size, range, pointerPosition!, min, max);
+    }
   }
 
   @override
