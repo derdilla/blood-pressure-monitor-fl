@@ -43,7 +43,15 @@
   "drawRegressionLines": "Desenhar linhas de tendência",
   "btnSave": "SALVAR",
   "deletionConfirmed": "Entrada excluída.",
-  "last30Days": "30 dias",
+  "lastNDays": "{n} dias",
+  "@lastNDays": {
+    "placeholders": {
+      "n": {
+        "type": "String",
+        "description": "Positive number of days for which data ist displayed or `n`"
+      }
+    }
+  },
   "fieldDelimiter": "Delimitador de campo",
   "horizontalLines": "Linhas horizontais",
   "exportPdfExportTitle": "Título",
@@ -230,7 +238,6 @@
   "note": "Nota",
   "exportPdfHeaderFontSize": "Tamanho da fonte do cabeçalho",
   "color": "Cor",
-  "last7Days": "7 dias",
   "warnNeedsRestartForUsingApp": "Os arquivos foram excluídos nesta sessão. Reinicie o aplicativo para continuar usando, retornando para outras partes do aplicativo!",
   "needlePinBarWidth": "Espessura da cor",
   "buildNumberOf": "Número da versão: {buildNumber}",

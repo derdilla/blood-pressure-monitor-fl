@@ -161,8 +161,15 @@
   "now": "nå",
   "notes": "Notater",
   "lifetime": "Levetid",
-  "last7Days": "7 dager",
-  "last30Days": "30 dager",
+  "lastNDays": "{n} dager",
+  "@lastNDays": {
+    "placeholders": {
+      "n": {
+        "type": "String",
+        "description": "Positive number of days for which data ist displayed or `n`"
+      }
+    }
+  },
   "errNotImportable": "Filen kan ikke importeres",
   "error": "Feil: {msg}",
   "@error": {

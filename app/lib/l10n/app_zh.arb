@@ -184,7 +184,15 @@
     }
   },
   "enterTimeFormatDesc": "格式化字符串是一个预定义的ICU/Skeleton字符串和您想要包含的其他文字的混合体。\n\n[点击即可查看可用的格式化字符串的完整列表。](screen://TimeFormattingHelp)\n\n友情提示：使用更长或更短的格式字符串不会改变表的列宽，还可能导致意外的换行和文字显示不全。\n\n默认：\"yy-MM-dd HH:mm\"",
-  "last30Days": "最近三十天",
+  "lastNDays": "最近 {n}",
+  "@lastNDays": {
+    "placeholders": {
+      "n": {
+        "type": "String",
+        "description": "Positive number of days for which data ist displayed or `n`"
+      }
+    }
+  },
   "determineWarnValues": "设置警戒值",
   "allowMissingValues": "允许空缺",
   "language": "语言",
@@ -195,7 +203,6 @@
   "delete": "删除",
   "minimum": "最小值",
   "errTimeAfterNow": "当所选的时间在未来时会发生这个错误。如果是这样，本应用在尝试更改前会重置时间（不是整个选中的时间）为当前时间。",
-  "last7Days": "最近七天",
   "average": "平均值",
   "maximum": "最大值",
   "exportWarnNotEveryFieldExported": "请注意你没有导出所有字段：缺少 {fields} 个字段。",

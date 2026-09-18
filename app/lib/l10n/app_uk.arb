@@ -75,7 +75,15 @@
   "noPermissions": "Відсутні дозволи.",
   "healthConnectDesc": "Підключіть систему API для синхронізації даних з іншими додатками, які підтримують її. Це дозволяє використовувати сторонні додатки для розширення функціональних можливостей без ручного експорту.\nЯкщо ви явно авторизуєте додаток третьої сторони, що додає його.",
   "deletionConfirmed": "Видалити видалені записи.",
-  "last30Days": "30 хв",
+  "lastNDays": "{n} хв",
+  "@lastNDays": {
+    "placeholders": {
+      "n": {
+        "type": "String",
+        "description": "Positive number of days for which data ist displayed or `n`"
+      }
+    }
+  },
   "fieldDelimiter": "Розмежування поля",
   "horizontalLines": "Горизонтальні лінії",
   "stableBluetoothInput": "Стабільний",
@@ -355,7 +363,6 @@
   "exportPdfHeaderFontSize": "Розмір основного шрифту",
   "userID": "Ідентифікатор користувача",
   "color": "Колір",
-  "last7Days": "7 хв",
   "warnNeedsRestartForUsingApp": "Файли були видалені в цьому сеансі. Перезавантажити додаток для продовження використання!",
   "needlePinBarWidth": "Товщина кольору",
   "buildNumberOf": "Версія: {buildNumber}",

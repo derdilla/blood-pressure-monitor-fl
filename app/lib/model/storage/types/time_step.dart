@@ -10,6 +10,7 @@ enum TimeStep {
   week,
   last7Days,
   last30Days,
+  lastNDays,
   custom;
 
   /// Recreate a TimeStep from a number created with [TimeStep.serialize].
@@ -26,19 +27,21 @@ enum TimeStep {
       5 => TimeStep.last7Days,
       6 => TimeStep.last30Days,
       7 => TimeStep.custom,
+      8 => TimeStep.lastNDays,
       _ => TimeStep.last7Days,
     };
   }
 
   /// Select a displayable string from [localizations].
-  String localize(AppLocalizations localizations) => switch (this) {
+  String localize(AppLocalizations localizations, [int? customLastNdayCount]) => switch (this) {
     TimeStep.day => localizations.day,
     TimeStep.month => localizations.month,
     TimeStep.year => localizations.year,
     TimeStep.lifetime => localizations.lifetime,
     TimeStep.week => localizations.week,
-    TimeStep.last7Days => localizations.last7Days,
-    TimeStep.last30Days => localizations.last30Days,
+    TimeStep.last7Days => localizations.lastNDays(7.toString()),
+    TimeStep.last30Days => localizations.lastNDays(30.toString()),
+    TimeStep.lastNDays => localizations.lastNDays(customLastNdayCount?.toString() ?? 'n'),
     TimeStep.custom =>  localizations.custom,
   };
 
@@ -51,5 +54,6 @@ enum TimeStep {
     TimeStep.last7Days => 5,
     TimeStep.last30Days => 6,
     TimeStep.custom => 7,
+    TimeStep.lastNDays => 8,
   };
 }

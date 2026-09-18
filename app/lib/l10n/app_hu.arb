@@ -162,8 +162,15 @@
     }
   },
   "day": "Nap",
-  "last7Days": "7 nap",
-  "last30Days": "30 nap",
+  "lastNDays": "{n} nap",
+  "@lastNDays": {
+    "placeholders": {
+      "n": {
+        "type": "String",
+        "description": "Positive number of days for which data ist displayed or `n`"
+      }
+    }
+  },
   "aboutWarnValuesScreenDesc": "Több infó a figyelmeztetésekről",
   "minOf": "{txt} min.",
   "@minOf": {

@@ -209,8 +209,15 @@
   },
   "enterTimeFormatString": "формат времени",
   "year": "Год",
-  "last7Days": "7 дней",
-  "last30Days": "30 дней",
+  "lastNDays": "{n} дней",
+  "@lastNDays": {
+    "placeholders": {
+      "n": {
+        "type": "String",
+        "description": "Positive number of days for which data ist displayed or `n`"
+      }
+    }
+  },
   "now": "сейчас",
   "notes": "Заметки",
   "time": "Время",

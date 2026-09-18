@@ -54,7 +54,15 @@
   "drawRegressionLines": "Desenhar linhas de tendência",
   "btnSave": "SALVAR",
   "deletionConfirmed": "Registro apagado.",
-  "last30Days": "30 dias",
+  "lastNDays": "{n} dias",
+  "@lastNDays": {
+    "placeholders": {
+      "n": {
+        "type": "String",
+        "description": "Positive number of days for which data ist displayed or `n`"
+      }
+    }
+  },
   "fieldDelimiter": "Encontrar delimitador",
   "import": "IMPORTAR",
   "pulShort": "pul",
@@ -198,7 +206,6 @@
   "time": "Hora",
   "custom": "Personalizado",
   "day": "Dia",
-  "last7Days": "7 dias",
   "buildNumberOf": "Número da versão: {buildNumber}",
   "@buildNumberOf": {
     "placeholders": {

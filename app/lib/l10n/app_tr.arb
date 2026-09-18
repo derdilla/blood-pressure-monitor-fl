@@ -40,7 +40,15 @@
   "drawRegressionLines": "Eğilim çizgilerini çiz",
   "btnSave": "KAYDET",
   "deletionConfirmed": "Giriş silindi.",
-  "last30Days": "30 gün",
+  "lastNDays": "{n} gün",
+  "@lastNDays": {
+    "placeholders": {
+      "n": {
+        "type": "String",
+        "description": "Positive number of days for which data ist displayed or `n`"
+      }
+    }
+  },
   "fieldDelimiter": "Alan sınırlayıcı",
   "horizontalLines": "Yatay çizgiler",
   "exportPdfExportTitle": "Başlık",
@@ -220,7 +228,6 @@
   "day": "Gün",
   "note": "Not",
   "exportPdfHeaderFontSize": "Başlık yazı tipi boyutu",
-  "last7Days": "7 gün",
   "buildNumberOf": "Sürüm numarası: {buildNumber}",
   "@buildNumberOf": {
     "placeholders": {

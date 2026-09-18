@@ -197,8 +197,15 @@
       }
     }
   },
-  "last7Days": "7 days",
-  "last30Days": "30 days",
+  "lastNDays": "{n} days",
+  "@lastNDays": {
+    "placeholders": {
+      "n": {
+        "type": "String",
+        "description": "Positive number of days for which data ist displayed or `n`"
+      }
+    }
+  },
   "allowMissingValues": "Allow missing values",
   "errTimeAfterNow": "The selected time is in the future. You can turn off this validation in the settings.",
   "language": "Language",
