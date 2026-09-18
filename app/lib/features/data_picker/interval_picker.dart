@@ -1,3 +1,4 @@
+import 'package:blood_pressure_app/components/input_dialog.dart';
 import 'package:blood_pressure_app/features/data_picker/filter_button.dart';
 import 'package:blood_pressure_app/l10n/app_localizations.dart';
 import 'package:blood_pressure_app/model/storage/interval_store_manager.dart';
@@ -41,7 +42,7 @@ class IntervalPicker extends StatelessWidget {
         TimeStep.month => DateFormat.yMMM().format(interval.currentRange.start),
         TimeStep.year => DateFormat.y().format(interval.currentRange.start),
         TimeStep.lifetime => '-',
-        TimeStep.last7Days || TimeStep.last30Days || TimeStep.custom =>
+        TimeStep.last7Days || TimeStep.last30Days || TimeStep.custom  || TimeStep.lastNDays =>
           '${DateFormat.yMMMd().format(start)} - ${DateFormat.yMMMd().format(end)}',
       };
       return Column(
@@ -73,13 +74,30 @@ class IntervalPicker extends StatelessWidget {
                           end: res.end.copyWith(hour: 23, minute: 59, second: 59),
                         );
                       }
+                    } if (value == TimeStep.lastNDays && context.mounted) {
+                      final res = await showNumberInputDialog(context,
+                        hintText: 'n',
+                      );
+                      if (res != null) {
+                        interval.changeStepSize(value!);
+                        final now = DateTime.now();
+                        interval.customRange = DateRange(
+                          start: now.subtract(Duration(days: 1) * res)
+                                    .copyWith(hour: 0, minute: 0, second: 0),
+                          end: now.copyWith(hour: 23, minute: 59, second: 59),
+                        );
+                      }
                     } else if (value != null) {
                       interval.changeStepSize(value);
                     }
                   },
                   items: [
                     for (final TimeStep e in TimeStep.values)
-                      DropdownMenuItem(value: e, child: Text(e.localize(loc))),
+                      DropdownMenuItem(value: e,
+                          child: Text(e.localize(loc,
+                              interval.stepSize == TimeStep.lastNDays
+                                  ? interval.currentRange.duration.inDays - 1
+                                  : null ))),
                   ]
                 ),
               ),

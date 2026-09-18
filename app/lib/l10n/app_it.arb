@@ -212,8 +212,15 @@
   "week": "Settimana",
   "month": "Mese",
   "year": "Anno",
-  "last7Days": "7 giorni",
-  "last30Days": "30 giorni",
+  "lastNDays": "{n} giorni",
+  "@lastNDays": {
+    "placeholders": {
+      "n": {
+        "type": "String",
+        "description": "Positive number of days for which data ist displayed or `n`"
+      }
+    }
+  },
   "allowMissingValues": "Consenti valori mancanti",
   "language": "Lingua",
   "drawRegressionLines": "Disegna linee di tendenza",

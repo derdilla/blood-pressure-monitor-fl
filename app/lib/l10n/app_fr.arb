@@ -194,8 +194,15 @@
       }
     }
   },
-  "last7Days": "7 jours",
-  "last30Days": "30 jours",
+  "lastNDays": "{n} jours",
+  "@lastNDays": {
+    "placeholders": {
+      "n": {
+        "type": "String",
+        "description": "Positive number of days for which data ist displayed or `n`"
+      }
+    }
+  },
   "allowMissingValues": "Autoriser les valeurs manquantes",
   "custom": "Personnalisé",
   "language": "Langue",

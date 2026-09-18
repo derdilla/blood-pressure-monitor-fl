@@ -188,8 +188,15 @@
       }
     }
   },
-  "last7Days": "7 dagen",
-  "last30Days": "30 dagen",
+  "lastNDays": "{n} dagen",
+  "@lastNDays": {
+    "placeholders": {
+      "n": {
+        "type": "String",
+        "description": "Positive number of days for which data ist displayed or `n`"
+      }
+    }
+  },
   "allowMissingValues": "Sta missende waarden toe",
   "errTimeAfterNow": "De geselecteerde tijd was in de toekomst en is teruggezet naar de huidige tijd. Deze validatie kan uitgezet worden in de instellingen.",
   "language": "Taal",

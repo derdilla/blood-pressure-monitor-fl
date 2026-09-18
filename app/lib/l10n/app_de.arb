@@ -186,8 +186,15 @@
     }
   },
   "determineWarnValues": "Warnwerte bestimmen",
-  "last7Days": "7 Tage",
-  "last30Days": "30 Tage",
+  "lastNDays": "{n} Tage",
+  "@lastNDays": {
+    "placeholders": {
+      "n": {
+        "type": "String",
+        "description": "Positive number of days for which data ist displayed or `n`"
+      }
+    }
+  },
   "exportWarnNotEveryFieldExported": "Achtung, {count, plural, one{ein Feld wird} other{einige Felder werden}} nicht exportiert: {fields}.",
   "@exportWarnNotEveryFieldExported": {
     "placeholders": {

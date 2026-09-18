@@ -118,6 +118,10 @@ class IntervalStorage extends ChangeNotifier {
         start: oldStart.copyWith(day: oldStart.day + 30 * _directionalStep),
         end: oldEnd.copyWith(day: oldEnd.day + 30 * _directionalStep),
       ),
+      TimeStep.lastNDays => DateRange(
+        start: oldStart.copyWith(day: oldStart.day + range.duration.inDays * _directionalStep),
+        end: oldEnd.copyWith(day: oldEnd.day + range.duration.inDays * _directionalStep),
+      ),
       TimeStep.custom => DateRange(
         start: oldStart.add(oldEnd.difference(oldStart) * _directionalStep),
         end: oldEnd.add(oldEnd.difference(oldStart) * _directionalStep),
@@ -161,6 +165,11 @@ class IntervalStorage extends ChangeNotifier {
         return DateRange(start: start, end: endOfToday);
       case TimeStep.last30Days:
         final start = now.subtract(const Duration(days: 30));
+        final endOfToday = now.copyWith(hour: 23, minute: 59, second: 59);
+        return DateRange(start: start, end: endOfToday);
+      case TimeStep.lastNDays:
+        assert(_customRange != null);
+        final start = now.subtract(_customRange?.duration ?? const Duration(days: 7));
         final endOfToday = now.copyWith(hour: 23, minute: 59, second: 59);
         return DateRange(start: start, end: endOfToday);
       case TimeStep.custom:

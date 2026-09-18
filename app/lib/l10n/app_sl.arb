@@ -179,8 +179,15 @@
       }
     }
   },
-  "last7Days": "7 dni",
-  "last30Days": "30 dni",
+  "lastNDays": "{n} dni",
+  "@lastNDays": {
+    "placeholders": {
+      "n": {
+        "type": "String",
+        "description": "Positive number of days for which data ist displayed or `n`"
+      }
+    }
+  },
   "allowMissingValues": "Dovoli manjkajoče vrednosti",
   "errTimeAfterNow": "Izbrani čas je v prihodnosti. To preverjanje lahko izklopite v nastavitvah.",
   "language": "Jezik",

@@ -108,7 +108,15 @@
   "noPermissions": "Inga behörigheter beviljas.",
   "healthConnectDesc": "Health Connect använder system API för att synkronisera dina data med andra appar som stöder det. Detta gör att du kan använda tredjepartsappar för att utöka funktionaliteten utan manuell ex- och import.\nInga data kommer att lämna din enhet om du uttryckligen godkänner en tredjepartsapp som laddar upp den.",
   "deletionConfirmed": "Inträde raderat.",
-  "last30Days": "30 dagar",
+  "lastNDays": "{n} dager",
+  "@lastNDays": {
+    "placeholders": {
+      "n": {
+        "type": "String",
+        "description": "Positive number of days for which data ist displayed or `n`"
+      }
+    }
+  },
   "fieldDelimiter": "Field Delimiter",
   "horizontalLines": "Horisontella linjer",
   "stableBluetoothInput": "Stabilt",
@@ -343,7 +351,6 @@
   "note": "Note",
   "userID": "Användar-ID",
   "color": "Färgfärg",
-  "last7Days": "7 dagar",
   "warnNeedsRestartForUsingApp": "Filer raderades under denna session. Starta om appen för att fortsätta använda den!",
   "needlePinBarWidth": "Färg tjocklek",
   "buildNumberOf": "Versionsnummer: {buildNumber}",

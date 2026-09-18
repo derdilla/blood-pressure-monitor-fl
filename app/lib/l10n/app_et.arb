@@ -152,8 +152,15 @@
       }
     }
   },
-  "last7Days": "7 päeva",
-  "last30Days": "30 päeva",
+  "lastNDays": "{n} päeva",
+  "@lastNDays": {
+    "placeholders": {
+      "n": {
+        "type": "String",
+        "description": "Positive number of days for which data ist displayed or `n`"
+      }
+    }
+  },
   "confirmDeleteDesc": "Kas kustutame selle kirje? (Sa saad sellised kontrollküsimised seadistusest kinni keerata.)",
   "deletionConfirmed": "Kirje on kustutatud.",
   "exportPdfHeaderHeight": "Päiserea kõrgus",

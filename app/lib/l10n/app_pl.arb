@@ -178,8 +178,15 @@
       }
     }
   },
-  "last7Days": "7 dni",
-  "last30Days": "39 dni",
+  "lastNDays": "{n} dni",
+  "@lastNDays": {
+    "placeholders": {
+      "n": {
+        "type": "String",
+        "description": "Positive number of days for which data ist displayed or `n`"
+      }
+    }
+  },
   "allowMissingValues": "Zezwól na brakujące wartości",
   "language": "Język",
   "errTimeAfterNow": "Wybrano przyszły czas. Możesz wyłączyć sprawdzanie tego w ustawieniach.",

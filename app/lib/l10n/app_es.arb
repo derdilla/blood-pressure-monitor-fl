@@ -236,8 +236,15 @@
   "year": "Año",
   "edit": "Editar",
   "lifetime": "Vida",
-  "last7Days": "7 días",
-  "last30Days": "30 días",
+  "lastNDays": "{n} días",
+  "@lastNDays": {
+    "placeholders": {
+      "n": {
+        "type": "String",
+        "description": "Positive number of days for which data ist displayed or `n`"
+      }
+    }
+  },
   "allowMissingValues": "Permitir valores faltantes",
   "warnAboutTxt1": "Los valores de precaución son únicamente sugerencias y no consejo médico.",
   "errTimeAfterNow": "El tiempo seleccionado está en el futuro. Puede apagar esta validación el los ajustes.",

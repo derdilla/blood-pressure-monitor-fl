@@ -230,8 +230,15 @@
   "confirmDelete": "நீக்குதலை உறுதிப்படுத்தவும்",
   "deletionConfirmed": "நுழைவு நீக்கப்பட்டது.",
   "confirmDeleteDesc": "இந்த உள்ளீட்டை நீக்கவா? (அமைப்புகளில் இந்த உறுதிப்படுத்தல்களை நீங்கள் அணைக்கலாம்.)",
-  "last7Days": "7 நாட்கள்",
-  "last30Days": "30 நாட்கள்",
+  "lastNDays": "{n} நாட்கள்",
+  "@lastNDays": {
+    "placeholders": {
+      "n": {
+        "type": "String",
+        "description": "Positive number of days for which data ist displayed or `n`"
+      }
+    }
+  },
   "allowMissingValues": "காணாமல் போன மதிப்புகளை அனுமதிக்கவும்",
   "pdfDocumentTitle": "{start} முதல் {end} வரை இரத்த அழுத்த மதிப்புகள்",
   "@pdfDocumentTitle": {

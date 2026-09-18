@@ -35,7 +35,15 @@
   "drawRegressionLines": "繪製趨勢線",
   "btnSave": "儲存",
   "deletionConfirmed": "記錄已刪除。",
-  "last30Days": "30天",
+  "lastNDays": "{n}天",
+  "@lastNDays": {
+    "placeholders": {
+      "n": {
+        "type": "String",
+        "description": "Positive number of days for which data ist displayed or `n`"
+      }
+    }
+  },
   "fieldDelimiter": "字段格式",
   "import": "匯入",
   "pulShort": "脈搏",
@@ -195,7 +203,6 @@
   "time": "時間",
   "custom": "自定",
   "day": "天",
-  "last7Days": "7天",
   "buildNumberOf": "版本號碼: {buildNumber}",
   "@buildNumberOf": {
     "placeholders": {

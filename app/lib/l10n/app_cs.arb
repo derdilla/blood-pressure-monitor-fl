@@ -199,8 +199,15 @@
       }
     }
   },
-  "last7Days": "7 dní",
-  "last30Days": "30 dní",
+  "lastNDays": "{n} dní",
+  "@lastNDays": {
+    "placeholders": {
+      "n": {
+        "type": "String",
+        "description": "Positive number of days for which data ist displayed or `n`"
+      }
+    }
+  },
   "allowMissingValues": "Povolit chybějící hodnoty",
   "errTimeAfterNow": "Vybraný čas je v budoucnosti. Toto ověřování můžete vypnout v nastavení.",
   "language": "Jazyk",
