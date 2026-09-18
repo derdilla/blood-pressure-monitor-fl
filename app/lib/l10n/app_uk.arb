@@ -363,7 +363,6 @@
   "exportPdfHeaderFontSize": "Розмір основного шрифту",
   "userID": "Ідентифікатор користувача",
   "color": "Колір",
-  "last7Days": "7 хв",
   "warnNeedsRestartForUsingApp": "Файли були видалені в цьому сеансі. Перезавантажити додаток для продовження використання!",
   "needlePinBarWidth": "Товщина кольору",
   "buildNumberOf": "Версія: {buildNumber}",
