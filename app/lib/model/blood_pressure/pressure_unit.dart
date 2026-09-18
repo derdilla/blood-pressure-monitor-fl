@@ -26,4 +26,9 @@ enum PressureUnit {
     PressureUnit.mmHg => Pressure.mmHg(value.toInt()),
     PressureUnit.kPa => Pressure.kPa(value.toDouble()),
   };
+
+  String prettyPrint(Pressure pressure) => switch(this) {
+    PressureUnit.mmHg => pressure.mmHg.toString(),
+    PressureUnit.kPa => pressure.kPa.toStringAsFixed(1),
+  };
 }

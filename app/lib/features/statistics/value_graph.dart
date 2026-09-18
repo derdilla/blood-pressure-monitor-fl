@@ -3,6 +3,7 @@ import 'dart:ui' as ui;
 
 import 'package:blood_pressure_app/app.dart';
 import 'package:blood_pressure_app/l10n/app_localizations.dart';
+import 'package:blood_pressure_app/model/blood_pressure/pressure_unit.dart';
 import 'package:blood_pressure_app/model/horizontal_graph_line.dart';
 import 'package:blood_pressure_app/model/storage/storage.dart';
 import 'package:blood_pressure_app/screens/loading_screen.dart';
@@ -145,7 +146,12 @@ class __TouchableValueGraphState extends State<_TouchableValueGraph> {
       painter: _ValueGraphPainter(
         brightness: Theme.of(context).brightness,
         settings: widget.settings,
-        labelStyle: Theme.of(context).textTheme.bodySmall ?? TextStyle(),
+        labelStyle: Theme.of(context).textTheme.bodySmall?.copyWith(
+          background: ui.Paint()
+          ..strokeCap = StrokeCap.round
+          ..strokeJoin = StrokeJoin.round
+          ..color = Theme.of(context).canvasColor,
+          ) ?? TextStyle(),
         records: widget.records,
         colors: widget.colors,
         progress: widget.progress,
@@ -485,27 +491,42 @@ class _ValueGraphPainter extends CustomPainter {
         ..strokeWidth = 2.0
         ..color = (brightness == ui.Brightness.dark ? Colors.white : Colors.black).withAlpha(120),
     );
+    // ensure labelOffset padding on the side of the label and no overflows
+    const labelWidth = 25.0;
+    double labelOffset = 8.0;
+    if (x + 2 * labelOffset + labelWidth >= size.width) {
+      labelOffset = 0 - labelOffset - labelWidth;
+    }
     if (min.sys != null) {
       final y = _transformY(size, min.sys!.mmHg.toDouble(), minY, maxY);
       canvas.drawCircle(Offset(x, y), 4.0, ui.Paint()..color = settings.sysColor);
+      final text = settings.preferredPressureUnit.prettyPrint(min.sys!);
+      final paragraph = _paragraph(ui.TextAlign.center, text, labelWidth);
+      canvas.drawParagraph(paragraph, ui.Offset(x + labelOffset, y));
     }
     if (min.dia != null) {
       final y = _transformY(size, min.dia!.mmHg.toDouble(), minY, maxY);
       canvas.drawCircle(Offset(x, y), 4.0, ui.Paint()..color = settings.diaColor);
+      final text = settings.preferredPressureUnit.prettyPrint(min.dia!);
+      final paragraph = _paragraph(ui.TextAlign.center, text, labelWidth);
+      canvas.drawParagraph(paragraph, ui.Offset(x + labelOffset, y));
     }
     if (min.pul != null) {
       final y = _transformY(size, min.pul!.toDouble(), minY, maxY);
       canvas.drawCircle(Offset(x, y), 4.0, ui.Paint()..color = settings.pulColor);
+      final paragraph = _paragraph(ui.TextAlign.center, min.pul.toString(), labelWidth);
+      canvas.drawParagraph(paragraph, ui.Offset(x + labelOffset, y));
     }
 
 
-    // draw exact finger pos marker
+    // Draw exact finger pos marker: intentionally until the very bottom to
+    // indicate touch area
     canvas.drawLine(
       ui.Offset(pos.dx, 0),
-      ui.Offset(pos.dx, size.height - _kBottomLegendHeight),
+      ui.Offset(pos.dx, size.height),
       ui.Paint()
-        ..strokeWidth = 4.0
-        ..color = (brightness == ui.Brightness.dark ? Colors.purpleAccent : Colors.purple).withAlpha(170),
+        ..strokeWidth = 2.0
+        ..color = (brightness == ui.Brightness.dark ? Colors.purpleAccent : Colors.purple).withAlpha(100),
     );
   }
 
