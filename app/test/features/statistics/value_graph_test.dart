@@ -232,6 +232,38 @@ void main() {
 
     await expectLater(find.byType(BloodPressureValueGraph), myMatchesGoldenFile('value-graph-interrupts.png'));
   }, tags: 'gold');
+
+  testWidgets('[gold] draws labels on interaction', (tester) async {
+    await tester.pumpWidget(_buildGraph([
+      mockRecord(time: DateTime(2026, 2, 28), sys: 110),
+      mockRecord(time: DateTime(2026, 3, 1), sys: 120),
+      mockRecord(time: DateTime(2026, 3, 2), sys: 89),
+      mockRecord(time: DateTime(2026, 3, 3), sys: 100),
+      mockRecord(time: DateTime(2026, 3, 6), sys: 88),
+      mockRecord(time: DateTime(2026, 3, 7), sys: 110),
+      mockRecord(time: DateTime(2026, 3, 8), sys: 97),
+      mockRecord(time: DateTime(2026, 3, 10), sys: 80),
+    ], [], [],
+      settings: Settings(
+        sysWarn: 120,
+        interruptGraphAfterNDays: 2,
+      ),
+    ));
+    await tester.pumpAndSettle();
+
+    final center = tester.getCenter(find.byType(BloodPressureValueGraph));
+    final gesture = await tester.startGesture(center);
+    await gesture.down(center);
+    await tester.pumpAndSettle();
+
+    await expectLater(find.byType(BloodPressureValueGraph), myMatchesGoldenFile('labels-on-interaction.png'));
+
+    await gesture.up();
+    await tester.pumpAndSettle();
+    
+    await expectLater(find.byType(BloodPressureValueGraph), myMatchesGoldenFile('value-graph-interrupts.png'));
+
+  }, tags: 'gold');
 }
 
 Widget _buildGraph(
