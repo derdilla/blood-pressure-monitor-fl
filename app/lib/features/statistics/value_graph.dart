@@ -82,15 +82,13 @@ class _BloodPressureValueGraphState extends State<BloodPressureValueGraph> {
     }
     final r = widget.records.toList();
     r.sort((a, b) => a.time.compareTo(b.time));
-    final settings = context.watch<Settings>();
     return Padding(
       padding: const EdgeInsets.only(top: 4.0),
       child: TweenAnimationBuilder(
         tween: Tween(begin: 0.0, end: 1.0),
         curve: Curves.slowMiddle,
-        duration: Duration(milliseconds: settings.animationSpeed),
+        duration: Duration(milliseconds: context.select((Settings s) => s.animationSpeed)),
         builder: (BuildContext context, double value, Widget? child) => _TouchableValueGraph(
-          settings: settings,
           progress: value,
           records: r,
           colors: widget.colors,
@@ -104,7 +102,6 @@ class _BloodPressureValueGraphState extends State<BloodPressureValueGraph> {
 
 class _TouchableValueGraph extends StatefulWidget {
   const _TouchableValueGraph({
-    required this.settings,
     required this.progress,
     required this.records,
     required this.colors,
@@ -112,7 +109,6 @@ class _TouchableValueGraph extends StatefulWidget {
     required this.drawingResults,
   });
 
-  final Settings settings;
   final double progress;
 
   final List<BloodPressureRecord> records;
@@ -128,24 +124,26 @@ class _TouchableValueGraph extends StatefulWidget {
 class __TouchableValueGraphState extends State<_TouchableValueGraph> {
   Offset? _localPointerPosition;
 
+  void _onPressUp([_]) {
+      setState(() { _localPointerPosition = null; });
+  }
+
   @override
   Widget build(BuildContext context) => GestureDetector(
     onLongPressDown: (details) {
       setState(() { _localPointerPosition = details.localPosition; });
     },
-    onTapUp: (_) {
-      setState(() { _localPointerPosition = null; });
-    },
-    onHorizontalDragEnd: (_) {
-      setState(() { _localPointerPosition = null; });
-    },
     onHorizontalDragUpdate:(details) {
       setState(() { _localPointerPosition = details.localPosition; });
     },
+    onLongPressUp: _onPressUp,
+    onTapUp: _onPressUp,
+    onHorizontalDragEnd: _onPressUp,
+    onTapCancel: _onPressUp,
     child: CustomPaint(
       painter: _ValueGraphPainter(
         brightness: Theme.of(context).brightness,
-        settings: widget.settings,
+        settings: context.watch<Settings>(),
         labelStyle: Theme.of(context).textTheme.bodySmall?.copyWith(
           background: ui.Paint()
           ..strokeCap = StrokeCap.round
@@ -594,9 +592,11 @@ class _ValueGraphPainter extends CustomPainter {
     || oldDelegate.settings.needlePinBarWidth != settings.needlePinBarWidth
     || oldDelegate.settings.horizontalGraphLines != settings.horizontalGraphLines
     || oldDelegate.settings.interruptGraphAfterNDays != settings.interruptGraphAfterNDays
+    || oldDelegate.settings.preferredPressureUnit != settings.preferredPressureUnit
     || oldDelegate.records != records
     || oldDelegate.colors != colors
-    || oldDelegate.intakes != intakes;
+    || oldDelegate.intakes != intakes
+    || oldDelegate.pointerPosition != pointerPosition;
 
   /// Transforms an untransformed [y] graph value to correct y-position on a
   /// canvas of [size].
