@@ -28,7 +28,7 @@ class ImportButton extends StatelessWidget {
       final messenger = ScaffoldMessenger.of(context);
       final exportSettings = context.read<ExportSettings>();
 
-      final file = (await FilePicker.pickFiles())?.firstOrNull;
+      final file = (await FilePicker.pickFiles()).firstOrNull;
       if (file == null) {
         messenger.showSnackBar(SnackBar(content: Text(localizations.errNoFileOpened)));
         return;

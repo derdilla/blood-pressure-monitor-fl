@@ -2,6 +2,7 @@ import 'package:blood_pressure_app/app.dart';
 import 'package:blood_pressure_app/features/settings/graph_screen.dart';
 import 'package:blood_pressure_app/features/statistics/value_graph.dart';
 import 'package:blood_pressure_app/l10n/app_localizations.dart';
+import 'package:blood_pressure_app/model/blood_pressure/pressure_unit.dart';
 import 'package:blood_pressure_app/model/horizontal_graph_line.dart';
 import 'package:blood_pressure_app/model/storage/storage.dart';
 import 'package:collection/collection.dart';
@@ -26,7 +27,7 @@ void main() {
     ];
     assert(records.isSorted((a, b) => a.time.compareTo(b.time)));
 
-    final graph = records.sysGraph();
+    final graph = records.sysGraph(PressureUnit.mmHg);
     expect(graph, hasLength(4));
     expect(graph.isSorted((a, b) => a.$1.compareTo(b.$1)), isTrue);
     expect(graph.elementAt(0).$2, 123);
@@ -45,7 +46,7 @@ void main() {
     ];
     assert(records.isSorted((a, b) => a.time.compareTo(b.time)));
 
-    final graph = records.diaGraph();
+    final graph = records.diaGraph(PressureUnit.mmHg);
     expect(graph, hasLength(4));
     expect(graph.isSorted((a, b) => a.$1.compareTo(b.$1)), isTrue);
     expect(graph.elementAt(0).$2, 123);
