@@ -253,7 +253,6 @@ void main() {
 
     final center = tester.getCenter(find.byType(BloodPressureValueGraph));
     final gesture = await tester.startGesture(center);
-    await gesture.down(center);
     await tester.pumpAndSettle();
 
     await expectLater(find.byType(BloodPressureValueGraph), myMatchesGoldenFile('labels-on-interaction.png'));
@@ -262,7 +261,6 @@ void main() {
     await tester.pumpAndSettle();
     
     await expectLater(find.byType(BloodPressureValueGraph), myMatchesGoldenFile('value-graph-interrupts.png'));
-
   }, tags: 'gold');
 }
 
