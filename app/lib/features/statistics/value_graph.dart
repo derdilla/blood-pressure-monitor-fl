@@ -73,8 +73,9 @@ class _BloodPressureValueGraphState extends State<BloodPressureValueGraph> {
 
   @override
   Widget build(BuildContext context) {
-    if (widget.records.sysGraph().length < 2
-      && widget.records.diaGraph().length < 2
+    // we just care about the count, not the unit
+    if (widget.records.sysGraph(PressureUnit.mmHg).length < 2
+      && widget.records.diaGraph(PressureUnit.mmHg).length < 2
       && widget.records.pulGraph().length < 2) {
       return Center(
         child: Text(AppLocalizations.of(context)!.errNotEnoughDataToGraph),
@@ -495,15 +496,16 @@ class _ValueGraphPainter extends CustomPainter {
     if (x + 2 * labelOffset + labelWidth >= size.width) {
       labelOffset = 0 - labelOffset - labelWidth;
     }
+    final unit = settings.preferredPressureUnit;
     if (min.sys != null) {
-      final y = _transformY(size, min.sys!.mmHg.toDouble(), minY, maxY);
+      final y = _transformY(size, min.sys!.inUnit(unit), minY, maxY);
       canvas.drawCircle(Offset(x, y), 4.0, ui.Paint()..color = settings.sysColor);
       final text = settings.preferredPressureUnit.prettyPrint(min.sys!);
       final paragraph = _paragraph(ui.TextAlign.center, text, labelWidth);
       canvas.drawParagraph(paragraph, ui.Offset(x + labelOffset, y));
     }
     if (min.dia != null) {
-      final y = _transformY(size, min.dia!.mmHg.toDouble(), minY, maxY);
+      final y = _transformY(size, min.dia!.inUnit(unit), minY, maxY);
       canvas.drawCircle(Offset(x, y), 4.0, ui.Paint()..color = settings.diaColor);
       final text = settings.preferredPressureUnit.prettyPrint(min.dia!);
       final paragraph = _paragraph(ui.TextAlign.center, text, labelWidth);
@@ -537,15 +539,16 @@ class _ValueGraphPainter extends CustomPainter {
       start: records.first.time,
       end: records.last.time, // TODO: fix intake, ... outside range
     );
+    final unit = settings.preferredPressureUnit;
 
     double min = double.infinity;
     double max = double.negativeInfinity;
     for (final r in records) {
-      if (r.sys != null && r.sys!.mmHg < min) { min = r.sys!.mmHg.toDouble(); }
-      if (r.dia != null && r.dia!.mmHg < min) { min = r.dia!.mmHg.toDouble(); }
+      if (r.sys != null && r.sys!.inUnit(unit) < min) { min = r.sys!.inUnit(unit); }
+      if (r.dia != null && r.dia!.inUnit(unit) < min) { min = r.dia!.inUnit(unit); }
       if (r.pul != null && r.pul! < min) { min = r.pul!.toDouble(); }
-      if (r.sys != null && r.sys!.mmHg > max) { max = r.sys!.mmHg.toDouble(); }
-      if (r.dia != null && r.dia!.mmHg > max) { max = r.dia!.mmHg.toDouble(); }
+      if (r.sys != null && r.sys!.inUnit(unit) > max) { max = r.sys!.inUnit(unit); }
+      if (r.dia != null && r.dia!.inUnit(unit) > max) { max = r.dia!.inUnit(unit); }
       if (r.pul != null && r.pul! > max) { max = r.pul!.toDouble(); }
     }
     for (final l in settings.horizontalGraphLines) {
@@ -561,14 +564,14 @@ class _ValueGraphPainter extends CustomPainter {
     _buildNeedlePins(canvas, size, colors, range, min, max);
 
     _graphEntirelyDisconnected = true;
-    _paintLine(canvas, size, records.sysGraph(), settings.sysColor, range, min, max, settings.sysWarn.toDouble());
-    _paintLine(canvas, size, records.diaGraph(), settings.diaColor, range, min, max, settings.diaWarn.toDouble());
+    _paintLine(canvas, size, records.sysGraph(unit), settings.sysColor, range, min, max, settings.sysWarn.toDouble());
+    _paintLine(canvas, size, records.diaGraph(unit), settings.diaColor, range, min, max, settings.diaWarn.toDouble());
     _paintLine(canvas, size, records.pulGraph(), settings.pulColor, range, min, max, null);
     drawingResults.entirelyDisconnected = _graphEntirelyDisconnected;
 
     if (settings.drawRegressionLines) {
-      _paintRegressionLine(canvas, size, records.sysGraph().toList(), min, max);
-      _paintRegressionLine(canvas, size, records.diaGraph().toList(), min, max);
+      _paintRegressionLine(canvas, size, records.sysGraph(unit).toList(), min, max);
+      _paintRegressionLine(canvas, size, records.diaGraph(unit).toList(), min, max);
     }
 
     _paintHorizontalLines(canvas, size, settings.horizontalGraphLines, min, max);
@@ -632,12 +635,14 @@ class _ValueGraphPainter extends CustomPainter {
 
 /// Create graph data from a list of blood pressure records.
 extension GraphData on List<BloodPressureRecord> {
-  /// Get the timestamps and mmHg values of all non-null sys values.
-  Iterable<(DateTime, double)> sysGraph() => map((r) => (r.time, r.sys?.mmHg.toDouble()))
+  /// Get the timestamps and pressure values of all non-null sys values.
+  Iterable<(DateTime, double)> sysGraph(PressureUnit unit) => map(
+        (r) => (r.time, r.sys?.inUnit(unit)))
     .whereNot(((DateTime, double?) e) => e.$2 == null)
     .cast<(DateTime, double)>();
-  /// Get the timestamps and mmHg values of all non-null dia values.
-  Iterable<(DateTime, double)> diaGraph() => map((r) => (r.time, r.dia?.mmHg.toDouble()))
+  /// Get the timestamps and pressure values of all non-null dia values.
+  Iterable<(DateTime, double)> diaGraph(PressureUnit unit) => map(
+        (r) => (r.time, r.dia?.inUnit(unit)))
     .whereNot(((DateTime, double?) e) => e.$2 == null)
     .cast<(DateTime, double)>();
   /// Get the timestamps and values as doubles of all non-null pul values.

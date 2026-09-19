@@ -32,3 +32,10 @@ enum PressureUnit {
     PressureUnit.kPa => pressure.kPa.toStringAsFixed(1),
   };
 }
+
+extension InUnit on Pressure {
+  double inUnit(PressureUnit unit) => switch (unit) {
+    PressureUnit.mmHg => mmHg.toDouble(),
+    PressureUnit.kPa => kPa,
+  };
+}
