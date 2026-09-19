@@ -49,7 +49,7 @@ void main() {
     final localizations = await AppLocalizations.delegate.load(const Locale('en'));
 
     expect(s.mainPage.stepSize, TimeStep.last7Days);
-    await tester.tap(find.text(localizations.last7Days));
+    await tester.tap(find.text(localizations.lastNDays('7')));
     await tester.pumpAndSettle();
     await tester.tap(find.text(localizations.month));
     await tester.pumpAndSettle();

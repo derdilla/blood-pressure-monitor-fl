@@ -164,11 +164,11 @@ class SettingsPage extends StatelessWidget {
                     final intervalStoreManager = context.read<IntervalStoreManager>();
                     final exportColumnsManager = context.read<ExportColumnsManager>();
                     final result = await FilePicker.pickFiles();
-                    if (result == null) {
+                    if (result.isEmpty) {
                       messenger.showSnackBar(SnackBar(content: Text(localizations.errNoFileOpened)));
                       return;
                     }
-                    final path = result.files.single.path;
+                    final path = result.single.path;
                     if (path == null) {
                       messenger.showSnackBar(SnackBar(content: Text(localizations.errCantReadFile)));
                       return;
@@ -183,7 +183,7 @@ class SettingsPage extends StatelessWidget {
                     }
 
                     try {
-                      final decoded = ZipDecoder().decodeStream(InputFileStream(result.files.single.path!));
+                      final decoded = ZipDecoder().decodeStream(InputFileStream(result.single.path!));
                       final dir = join(Directory.systemTemp.path, 'settingsBackup');
                       await extractArchiveToDisk(decoded, dir);
                       final loader = await FileSettingsLoader.load(dir);

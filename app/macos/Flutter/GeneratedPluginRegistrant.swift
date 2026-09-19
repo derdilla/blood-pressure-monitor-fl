@@ -8,7 +8,7 @@ import Foundation
 import app_settings
 import bluetooth_low_energy_darwin
 import device_info_plus
-import file_picker
+import file_picker_darwin
 import flutter_blue_plus_darwin
 import package_info_plus
 import share_plus

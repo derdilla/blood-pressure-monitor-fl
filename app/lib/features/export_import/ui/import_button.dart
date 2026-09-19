@@ -28,9 +28,7 @@ class ImportButton extends StatelessWidget {
       final messenger = ScaffoldMessenger.of(context);
       final exportSettings = context.read<ExportSettings>();
 
-      final file = (await FilePicker.pickFiles(
-        withData: true,
-      ))?.files.firstOrNull;
+      final file = (await FilePicker.pickFiles()).firstOrNull;
       if (file == null) {
         messenger.showSnackBar(SnackBar(content: Text(localizations.errNoFileOpened)));
         return;
@@ -38,11 +36,7 @@ class ImportButton extends StatelessWidget {
       if (!context.mounted) return;
       switch(file.extension?.toLowerCase()) {
         case 'csv':
-          final binaryContent = file.bytes;
-          if (binaryContent == null) {
-            messenger.showSnackBar(SnackBar(content: Text(localizations.errCantReadFile)));
-            return;
-          }
+          final binaryContent = await file.readAsBytes();
           if (!context.mounted) return;
           final csvSettings = Provider.of<CsvExportSettings>(context, listen: false);
           final exportColumnsManager = Provider.of<ExportColumnsManager>(context, listen: false);
