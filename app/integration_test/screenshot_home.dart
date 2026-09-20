@@ -14,7 +14,7 @@ void main() {
     await tester.pumpAndSettle();
     await tester.pumpUntil(() => find.byType(AppHome).hasFound);
     
-    await tester.tap(find.text(localizations.last7Days));
+    await tester.tap(find.text(localizations.lastNDays('7')));
     await tester.pumpAndSettle();
     await tester.tap(find.text(localizations.day));
     await tester.pumpAndSettle();
