@@ -307,5 +307,3 @@ extension on num {
     return toDouble().toStringAsFixed(fractionDigits);
   }
 }
-
-
