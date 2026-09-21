@@ -113,13 +113,12 @@ class _RadarChartPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    canvas.clipRect(Offset.zero & size);
     final decoPaint = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = 3.0
       ..color = (brightness == Brightness.dark ? Colors.white : Colors.black).withAlpha(76);
 
-    final maxRadius = size.shortestSide / 2;
+    final maxRadius = (size.shortestSide / 2) - 3.0;
 
     // static decorations
     double circleRadius = maxRadius - _kPadding;
