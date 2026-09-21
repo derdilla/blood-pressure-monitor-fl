@@ -10,6 +10,7 @@ import '../../util.dart';
 void main() {
   testWidgets('should show centered info when values are empty', (tester) async {
     await tester.pumpWidget(materialApp(const ValueDistribution(
+      mode: GraphMode.avgerage,
       color: Colors.red,
       values: [],
     ),),);
@@ -28,6 +29,7 @@ void main() {
       height: 50,
       width: 180,
       child: ValueDistribution(
+        mode: GraphMode.avgerage,
         color: Colors.red,
         values: [5,6,3,8,8,10], // min 3, max 10, avg 6 + 2/3
       ),
@@ -39,7 +41,7 @@ void main() {
     const posBelowCenter = 9.0;
     expect(find.byType(ValueDistribution), paints
       ..paragraph(offset: const Offset(0.0, posBelowCenter))
-      ..paragraph(offset: const Offset(66.0, posBelowCenter)) // overflows at the end
+      ..paragraph(offset: const Offset(50.0, posBelowCenter)) // overflows at the end
       ..paragraph(offset: const Offset(68.0, posBelowCenter)),
     );
   },);
@@ -48,6 +50,7 @@ void main() {
       height: 50,
       width: 180,
       child: ValueDistribution(
+        mode: GraphMode.avgerage,
         color: Colors.red,
         values: [1,2,3,3,5],
       ),
@@ -68,23 +71,45 @@ void main() {
       height: 50,
       width: 180,
       child: ValueDistribution(
+        mode: GraphMode.avgerage,
         color: Colors.red,
         values: [5,6,3,8,8,10], // min 3, max 10, avg 6 + 2/3
       ),
     ),),);
 
     final localizations = await AppLocalizations.delegate.load(const Locale('en'));
-    final labels = _getAllLabels(tester.getSemantics(find.byType(ValueDistribution)));
+    final labels = getAllLabels(tester.getSemantics(find.byType(ValueDistribution)));
 
     expect(labels, contains(localizations.minOf('3')));
     expect(labels, contains(localizations.maxOf('10')));
-    expect(labels, contains(localizations.avgOf('7')));
+    expect(labels, isNot(contains(localizations.medianOf('5.5'))));
+    expect(labels, contains(localizations.avgOf('6.7')));
+  },);
+  testWidgets('should add median labels when requested', (tester) async {
+    await tester.pumpWidget(materialApp(const SizedBox(
+      height: 50,
+      width: 180,
+      child: ValueDistribution(
+        mode: GraphMode.median,
+        color: Colors.red,
+        values: [5,6,3,8,8,10], // median: (3+8)/2 = 5.5
+      ),
+    ),),);
+
+    final localizations = await AppLocalizations.delegate.load(const Locale('en'));
+    final labels = getAllLabels(tester.getSemantics(find.byType(ValueDistribution)));
+
+    expect(labels, contains(localizations.minOf('3')));
+    expect(labels, contains(localizations.maxOf('10')));
+    expect(labels, contains(localizations.medianOf('5.5')));
+    expect(labels, isNot(contains(localizations.avgOf('6.7'))));
   },);
   testWidgets('draws bars in correct order', (tester) async {
     await tester.pumpWidget(materialApp(const SizedBox(
       height: 50,
       width: 180,
       child: ValueDistribution(
+        mode: GraphMode.avgerage,
         color: Colors.red,
         values: [1,2,3,3,5],
         // 1: 1, 2: 1, 3:2, 4:0, 5:1
@@ -102,10 +127,10 @@ void main() {
 }
 
 /// Recursively fetches the labels of the semantics node and all its children.
-List<String> _getAllLabels(SemanticsNode node) {
+List<String> getAllLabels(SemanticsNode node) {
   final labels = [node.label];
   node.visitChildren((node) {
-    labels.addAll(_getAllLabels(node));
+    labels.addAll(getAllLabels(node));
     return true;
   });
   return labels;

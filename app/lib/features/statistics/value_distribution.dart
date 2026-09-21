@@ -285,16 +285,7 @@ class _ValueDistributionPainter extends CustomPainter {
   String get _min => rawValues.min.maybeToFixedString(1);
 
   /// Average (mean) value of distribution: sum of values / number of values.
-  String get _average {
-    double sum = 0;
-    int count = 0;
-    for (int bpValue = distribution.keys.min; bpValue <= distribution.keys.max; bpValue++) {
-      sum += bpValue * (distribution[bpValue] ?? 0);
-      count += (distribution[bpValue] ?? 0);
-    }
-    assert(count == rawValues.length);
-    return (sum / count).maybeToFixedString(1);
-  }
+  String get _average => rawValues.average.maybeToFixedString(1);
 
   /// Median value.
   String get _median {

@@ -1,12 +1,14 @@
 import 'package:blood_pressure_app/features/statistics/blood_pressure_distribution.dart';
 import 'package:blood_pressure_app/features/statistics/value_distribution.dart';
 import 'package:blood_pressure_app/l10n/app_localizations.dart';
+import 'package:blood_pressure_app/model/blood_pressure/pressure_unit.dart';
 import 'package:blood_pressure_app/model/storage/settings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../../model/blood_pressure_analyzer_test.dart';
 import '../../util.dart';
+import 'value_distribution_test.dart';
 
 void main() {
   testWidgets('should show allow navigation to view all widgets', (tester) async {
@@ -78,5 +80,37 @@ void main() {
       ..line(color: Colors.blue.shade500)
       ..line(color: Colors.white70),
     );
+  });
+  testWidgets('respects preferred unit', (tester) async {
+    final settings = Settings(preferredPressureUnit: PressureUnit.mmHg);
+    await tester.pumpWidget(materialApp(
+      BloodPressureDistribution(
+        records: [
+          mockRecord(sys: 123),
+          mockRecord(sys: 123),
+          mockRecord(sys: 123),
+        ],
+      ),
+      settings: settings,
+    ),);
+    await tester.pumpAndSettle();
+
+    final localizations = await AppLocalizations.delegate.load(const Locale('en'));
+    List<String> labels = getAllLabels(tester.getSemantics(find.byType(ValueDistribution)));
+
+    expect(labels, contains(localizations.minOf('123')));
+    expect(labels, contains(localizations.maxOf('123')));
+    expect(labels, contains(localizations.avgOf('123')));
+    expect(labels, isNot(contains(localizations.medianOf('123'))));
+
+    settings.preferredPressureUnit = PressureUnit.kPa;
+    await tester.pumpAndSettle();
+
+    labels = getAllLabels(tester.getSemantics(find.byType(ValueDistribution)));
+
+    expect(labels, contains(localizations.minOf('16.4')));
+    expect(labels, contains(localizations.maxOf('16.4')));
+    expect(labels, contains(localizations.avgOf('16.4')));
+    expect(labels, isNot(contains(localizations.medianOf('16'))));
   });
 }
