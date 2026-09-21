@@ -35,7 +35,7 @@ class ValueDistribution extends StatelessWidget {
   ///   4: 2
   /// }
   /// ```
-  final List<int> values;
+  final List<num> values;
 
   /// Color of the data bars on the graph.
   final Color color;
@@ -52,7 +52,8 @@ class ValueDistribution extends StatelessWidget {
     }
 
     final distribution = <int, int>{};
-    for (final v in values) {
+    for (final r in values) {
+      final v = r.round();
       if(distribution.containsKey(v)) {
         distribution[v] = distribution[v]! + 1;
       } else {
@@ -106,7 +107,7 @@ class _ValueDistributionPainter extends CustomPainter {
   final Map<int, int> distribution;
 
   /// Raw values from [distribution].
-  final List<int> rawValues;
+  final List<num> rawValues;
 
   /// Text for labels on the graph and for semantics.
   final AppLocalizations localizations;

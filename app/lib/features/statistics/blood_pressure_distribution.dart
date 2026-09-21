@@ -1,5 +1,6 @@
 import 'package:blood_pressure_app/features/statistics/value_distribution.dart';
 import 'package:blood_pressure_app/l10n/app_localizations.dart';
+import 'package:blood_pressure_app/model/blood_pressure/pressure_unit.dart';
 import 'package:blood_pressure_app/model/storage/settings.dart';
 import 'package:flutter/material.dart';
 import 'package:health_data_store/health_data_store.dart';
@@ -52,6 +53,7 @@ class _BloodPressureDistributionState extends State<BloodPressureDistribution>
 
   @override
   Widget build(BuildContext context) {
+    final settings = context.watch<Settings>();
     final localizations = AppLocalizations.of(context)!;
     return Column(
       spacing: 4.0,
@@ -66,9 +68,9 @@ class _BloodPressureDistributionState extends State<BloodPressureDistribution>
             labelPadding: const EdgeInsets.symmetric(vertical: 16),
             indicator: BoxDecoration(
               color: switch(_valueTypeCtrl.index) {
-                0 => context.watch<Settings>().sysColor,
-                1 => context.watch<Settings>().diaColor,
-                2 => context.watch<Settings>().pulColor,
+                0 => settings.sysColor,
+                1 => settings.diaColor,
+                2 => settings.pulColor,
                 _ => Theme.of(context).colorScheme.primaryContainer,
               },
               borderRadius: BorderRadius.circular(50),
@@ -108,13 +110,15 @@ class _BloodPressureDistributionState extends State<BloodPressureDistribution>
               // Preferred pressure unit can be ignored as values are relative.
               ValueDistribution(
                 key: const Key('sys-dist'),
-                values: widget.records.map((e) => e.sys?.mmHg).nonNulls.toList(),
+                values: widget.records.map((e) => e.sys
+                  ?.inUnit(settings.preferredPressureUnit)).nonNulls.toList(),
                 color: context.select<Settings, Color>((s) => s.sysColor),
                 mode: _modeFromIndex(_modeCtrl.index),
               ),
               ValueDistribution(
                 key: const Key('dia-dist'),
-                values: widget.records.map((e) => e.dia?.mmHg).nonNulls.toList(),
+                values: widget.records.map((e) => e.dia
+                  ?.inUnit(settings.preferredPressureUnit)).nonNulls.toList(),
                 color: context.select<Settings, Color>((s) => s.diaColor),
                 mode: _modeFromIndex(_modeCtrl.index),
               ),
