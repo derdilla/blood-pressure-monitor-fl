@@ -21,6 +21,7 @@ class ValueDistribution extends StatelessWidget {
     super.key,
     required this.values,
     required this.color,
+    required this.mode
   });
 
   /// Raw list of all values to calculate the distribution from.
@@ -34,10 +35,12 @@ class ValueDistribution extends StatelessWidget {
   ///   4: 2
   /// }
   /// ```
-  final Iterable<int> values;
+  final List<num> values;
 
   /// Color of the data bars on the graph.
   final Color color;
+
+  final GraphMode mode;
 
   @override
   Widget build(BuildContext context) {
@@ -49,7 +52,8 @@ class ValueDistribution extends StatelessWidget {
     }
 
     final distribution = <int, int>{};
-    for (final v in values) {
+    for (final r in values) {
+      final v = r.round();
       if(distribution.containsKey(v)) {
         distribution[v] = distribution[v]! + 1;
       } else {
@@ -67,22 +71,31 @@ class ValueDistribution extends StatelessWidget {
       child: CustomPaint(
         painter: _ValueDistributionPainter(
           distribution,
+          values,
           localizations,
           color,
+          mode,
         ),
       ),
     );
   }
-  
 }
+
+enum GraphMode {
+  avgerage,
+  median,
+}
+
 
 /// Painter of a horizontal array of vertical bars.
 class _ValueDistributionPainter extends CustomPainter {
   /// Create a painter of a horizontal array of vertical bars.
   _ValueDistributionPainter(
     this.distribution,
+    this.rawValues,
     this.localizations,
     this.barColor,
+    this.mode,
   );
 
   /// Positions and height of bars that make up the distribution.
@@ -93,11 +106,17 @@ class _ValueDistributionPainter extends CustomPainter {
   /// The height of the bar is how often it occurs in a list of values.
   final Map<int, int> distribution;
 
+  /// Raw values from [distribution].
+  final List<num> rawValues;
+
   /// Text for labels on the graph and for semantics.
   final AppLocalizations localizations;
 
   /// Color of the data bars.
   final Color barColor;
+
+  /// Text type of the central label.
+  final GraphMode mode;
 
   static const double _kDefaultBarGapWidth = 5.0;
   static const Color _kDecorationColor = Colors.white70;
@@ -207,21 +226,26 @@ class _ValueDistributionPainter extends CustomPainter {
       textPainter.paint(canvas, position);
     }
 
-    drawLabel(localizations.minOf(_min),
-        Alignment.centerLeft,);
-    drawLabel(localizations.avgOf(_average),
-        Alignment.center,);
-    drawLabel(localizations.maxOf(_max),
-        Alignment.centerRight,);
+    drawLabel(localizations.minOf(_min), Alignment.centerLeft);
+    switch (mode) {
+      case GraphMode.avgerage:
+         drawLabel(localizations.avgOf(_average), Alignment.center);
+      case GraphMode.median:
+         drawLabel(localizations.medianOf(_median), Alignment.center);
+    }
+    drawLabel(localizations.maxOf(_max), Alignment.centerRight);
   }
 
   @override
   bool shouldRepaint(covariant _ValueDistributionPainter oldDelegate) =>
-      distribution == oldDelegate.distribution;
+      distribution != oldDelegate.distribution
+      || mode != oldDelegate.mode
+      || barColor != oldDelegate.barColor;
 
   @override
   bool shouldRebuildSemantics(covariant _ValueDistributionPainter oldDelegate)
-      => distribution == oldDelegate.distribution;
+      => distribution != oldDelegate.distribution
+      || mode != oldDelegate.mode;
 
   @override
   SemanticsBuilderCallback? get semanticsBuilder => (Size size) {
@@ -237,7 +261,10 @@ class _ValueDistributionPainter extends CustomPainter {
       CustomPainterSemantics(
         rect: Rect.fromLTRB(oneThird, 0, 2 * oneThird, size.height),
         properties: SemanticsProperties(
-          label: localizations.avgOf(_average),
+          label: switch (mode) {
+            GraphMode.avgerage => localizations.avgOf(_average),
+            GraphMode.median => localizations.medianOf(_median),
+          },
           textDirection: TextDirection.ltr,
         ),
       ),
@@ -252,19 +279,31 @@ class _ValueDistributionPainter extends CustomPainter {
   };
 
   /// Max (right end) value in distribution.
-  String get _max => distribution.keys.max.toString();
+  String get _max => rawValues.max.maybeToFixedString(1);
 
   /// Min (left end) value in distribution.
-  String get _min => distribution.keys.min.toString();
+  String get _min => rawValues.min.maybeToFixedString(1);
 
-  /// Average value of distribution.
-  String get _average {
-    double sum = 0;
-    int count = 0;
-    for (int key = distribution.keys.min; key <= distribution.keys.max; key++) {
-      sum += key * (distribution[key] ?? 0);
-      count += (distribution[key] ?? 0);
+  /// Average (mean) value of distribution: sum of values / number of values.
+  String get _average => rawValues.average.maybeToFixedString(1);
+
+  /// Median value.
+  String get _median {
+    if (rawValues.length % 2 == 1) {
+      return rawValues[(rawValues.length / 2).floor()].toString();
     }
-    return (sum / count).round().toString();
+    final a = rawValues[rawValues.length ~/ 2 - 1];
+    final b = rawValues[rawValues.length ~/ 2];
+    return ((a + b) / 2).maybeToFixedString(1);
+  }
+
+}
+
+extension on num {
+  String maybeToFixedString(int fractionDigits) {
+    if ((toDouble() - roundToDouble()).abs() < 0.1) {
+      return toInt().toString();
+    }
+    return toDouble().toStringAsFixed(fractionDigits);
   }
 }

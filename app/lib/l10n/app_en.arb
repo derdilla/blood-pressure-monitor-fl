@@ -170,6 +170,14 @@
       }
     }
   },
+  "medianOf": "{txt} med.",
+  "@medianOf": {
+    "placeholders": {
+      "txt": {
+        "type": "String"
+      }
+    }
+  },
   "warnValues": "Warn values",
   "warnAboutTxt1": "The warn values are a pure suggestions and no medical advice.",
   "warnAboutTxt2": "The default age dependent values come from this source.",
@@ -238,6 +246,7 @@
   "average": "Average",
   "maximum": "Maximum",
   "minimum": "Minimum",
+  "median": "Median",
   "exportPdfExportTitle": "Headline",
   "exportPdfExportStatistics": "Statistics",
   "exportPdfExportData": "Data table",
