@@ -35,7 +35,10 @@ class _ClockBpGraphState extends State<ClockBpGraph> {
       mainAxisSize: MainAxisSize.min,
       children: [
         SizedBox.square(
-          dimension: MediaQuery.of(context).size.width,
+          dimension: math.min(
+            MediaQuery.of(context).size.width,
+            MediaQuery.of(context).size.height / 2.5,
+          ),
           child: Padding(
             padding: const EdgeInsets.all(24.0),
             child: CustomPaint(
