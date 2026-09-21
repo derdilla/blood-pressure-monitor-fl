@@ -113,6 +113,7 @@ class _RadarChartPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
+    canvas.clipRect(Offset.zero & size);
     final decoPaint = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = 3.0
@@ -187,10 +188,16 @@ class _RadarChartPainter extends CustomPainter {
     off = size.center(off);
     // center at pos
     off = Offset(off.dx - (paragraph.minIntrinsicWidth / 2), off.dy - (paragraph.height / 2));
+    if (off.dy < 0) { // top overflow
+      off = Offset(off.dx, 0);
+    }
+    if (off.dx < 0) { // left overflow
+      off = Offset(0, off.dy);
+    }
     if ((off.dy + paragraph.height) > size.height) { // right overflow
       off = Offset(off.dx, off.dy - ((off.dy + paragraph.height) - size.height));
     }
-    if ((off.dx + paragraph.minIntrinsicWidth) > size.width) { // right overflow
+    if ((off.dx + paragraph.minIntrinsicWidth) > size.width) { // bottom overflow
       off = Offset(off.dx - ((off.dx + paragraph.minIntrinsicWidth) - size.width), off.dy);
     }
 
