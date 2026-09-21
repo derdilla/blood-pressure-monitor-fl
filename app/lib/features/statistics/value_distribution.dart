@@ -279,10 +279,10 @@ class _ValueDistributionPainter extends CustomPainter {
   };
 
   /// Max (right end) value in distribution.
-  String get _max => distribution.keys.max.toString();
+  String get _max => rawValues.max.maybeToFixedString(1);
 
   /// Min (left end) value in distribution.
-  String get _min => distribution.keys.min.toString();
+  String get _min => rawValues.min.maybeToFixedString(1);
 
   /// Average (mean) value of distribution: sum of values / number of values.
   String get _average {
@@ -293,7 +293,7 @@ class _ValueDistributionPainter extends CustomPainter {
       count += (distribution[bpValue] ?? 0);
     }
     assert(count == rawValues.length);
-    return (sum / count).toStringAsFixed(1);
+    return (sum / count).maybeToFixedString(1);
   }
 
   /// Median value.
@@ -303,9 +303,18 @@ class _ValueDistributionPainter extends CustomPainter {
     }
     final a = rawValues[rawValues.length ~/ 2 - 1];
     final b = rawValues[rawValues.length ~/ 2];
-    return (a + b / 2).toStringAsFixed(1);
+    return ((a + b) / 2).maybeToFixedString(1);
   }
 
+}
+
+extension on num {
+  String maybeToFixedString(int fractionDigits) {
+    if ((toDouble() - roundToDouble()).abs() < 0.1) {
+      return toInt().toString();
+    }
+    return toDouble().toStringAsFixed(fractionDigits);
+  }
 }
 
 
