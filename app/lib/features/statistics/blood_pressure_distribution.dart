@@ -84,17 +84,17 @@ class _BloodPressureDistributionState extends State<BloodPressureDistribution>
               // Preferred pressure unit can be ignored as values are relative.
               ValueDistribution(
                 key: const Key('sys-dist'),
-                values: widget.records.map((e) => e.sys?.mmHg).nonNulls,
+                values: widget.records.map((e) => e.sys?.mmHg).nonNulls.toList(),
                 color: context.select<Settings, Color>((s) => s.sysColor),
               ),
               ValueDistribution(
                 key: const Key('dia-dist'),
-                values: widget.records.map((e) => e.dia?.mmHg).nonNulls,
+                values: widget.records.map((e) => e.dia?.mmHg).nonNulls.toList(),
                 color: context.select<Settings, Color>((s) => s.diaColor),
               ),
               ValueDistribution(
                 key: const Key('pul-dist'),
-                values: widget.records.map((e) => e.pul).nonNulls,
+                values: widget.records.map((e) => e.pul).nonNulls.toList(),
                 color: context.select<Settings, Color>((s) => s.pulColor),
               ),
             ],

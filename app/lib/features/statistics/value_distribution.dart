@@ -15,7 +15,7 @@ import 'package:flutter/rendering.dart';
 ///
 /// First draws the graph lines, then draws the decorations in the color
 /// [Colors.white70].
-class ValueDistribution extends StatelessWidget {
+class ValueDistribution extends StatefulWidget {
   /// Create a statistic to show how often values occur.
   const ValueDistribution({
     super.key,
@@ -34,22 +34,34 @@ class ValueDistribution extends StatelessWidget {
   ///   4: 2
   /// }
   /// ```
-  final Iterable<int> values;
+  final List<int> values;
 
   /// Color of the data bars on the graph.
   final Color color;
 
   @override
+  State<ValueDistribution> createState() => _ValueDistributionState();
+}
+
+enum _GraphMode {
+  avgerage,
+  median,
+}
+
+class _ValueDistributionState extends State<ValueDistribution> {
+  _GraphMode _mode = _GraphMode.median;
+
+  @override
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
-    if (values.isEmpty) {
+    if (widget.values.isEmpty) {
       return Center(
         child: Text(localizations.errNoData),
       );
     }
 
     final distribution = <int, int>{};
-    for (final v in values) {
+    for (final v in widget.values) {
       if(distribution.containsKey(v)) {
         distribution[v] = distribution[v]! + 1;
       } else {
@@ -67,13 +79,14 @@ class ValueDistribution extends StatelessWidget {
       child: CustomPaint(
         painter: _ValueDistributionPainter(
           distribution,
+          widget.values,
           localizations,
-          color,
+          widget.color,
+          _mode,
         ),
       ),
     );
   }
-  
 }
 
 /// Painter of a horizontal array of vertical bars.
@@ -81,8 +94,10 @@ class _ValueDistributionPainter extends CustomPainter {
   /// Create a painter of a horizontal array of vertical bars.
   _ValueDistributionPainter(
     this.distribution,
+    this.rawValues,
     this.localizations,
     this.barColor,
+    this.mode,
   );
 
   /// Positions and height of bars that make up the distribution.
@@ -93,11 +108,17 @@ class _ValueDistributionPainter extends CustomPainter {
   /// The height of the bar is how often it occurs in a list of values.
   final Map<int, int> distribution;
 
+  /// Raw values from [distribution].
+  final List<int> rawValues;
+
   /// Text for labels on the graph and for semantics.
   final AppLocalizations localizations;
 
   /// Color of the data bars.
   final Color barColor;
+
+  /// Text type of the central label.
+  final _GraphMode mode;
 
   static const double _kDefaultBarGapWidth = 5.0;
   static const Color _kDecorationColor = Colors.white70;
@@ -207,12 +228,14 @@ class _ValueDistributionPainter extends CustomPainter {
       textPainter.paint(canvas, position);
     }
 
-    drawLabel(localizations.minOf(_min),
-        Alignment.centerLeft,);
-    drawLabel(localizations.avgOf(_average),
-        Alignment.center,);
-    drawLabel(localizations.maxOf(_max),
-        Alignment.centerRight,);
+    drawLabel(localizations.minOf(_min), Alignment.centerLeft);
+    switch (mode) {
+      case _GraphMode.avgerage:
+         drawLabel(localizations.avgOf(_average), Alignment.center);
+      case _GraphMode.median:
+         drawLabel(localizations.medianOf(_median), Alignment.center);
+    }
+    drawLabel(localizations.maxOf(_max), Alignment.centerRight);
   }
 
   @override
@@ -257,14 +280,28 @@ class _ValueDistributionPainter extends CustomPainter {
   /// Min (left end) value in distribution.
   String get _min => distribution.keys.min.toString();
 
-  /// Average value of distribution.
+  /// Average (mean) value of distribution: sum of values / number of values.
   String get _average {
     double sum = 0;
     int count = 0;
-    for (int key = distribution.keys.min; key <= distribution.keys.max; key++) {
-      sum += key * (distribution[key] ?? 0);
-      count += (distribution[key] ?? 0);
+    for (int bpValue = distribution.keys.min; bpValue <= distribution.keys.max; bpValue++) {
+      sum += bpValue * (distribution[bpValue] ?? 0);
+      count += (distribution[bpValue] ?? 0);
     }
-    return (sum / count).round().toString();
+    assert(count == rawValues.length);
+    return (sum / count).toStringAsFixed(1);
   }
+
+  /// Median value.
+  String get _median {
+    if (rawValues.length % 2 == 1) {
+      return rawValues[(rawValues.length / 2).floor()].toString();
+    }
+    final a = rawValues[rawValues.length ~/ 2 - 1];
+    final b = rawValues[rawValues.length ~/ 2];
+    return (a + b / 2).toStringAsFixed(1);
+  }
+
 }
+
+
