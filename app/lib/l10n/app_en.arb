@@ -246,6 +246,7 @@
   "average": "Average",
   "maximum": "Maximum",
   "minimum": "Minimum",
+  "median": "Median",
   "exportPdfExportTitle": "Headline",
   "exportPdfExportStatistics": "Statistics",
   "exportPdfExportData": "Data table",

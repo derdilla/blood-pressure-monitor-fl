@@ -15,12 +15,13 @@ import 'package:flutter/rendering.dart';
 ///
 /// First draws the graph lines, then draws the decorations in the color
 /// [Colors.white70].
-class ValueDistribution extends StatefulWidget {
+class ValueDistribution extends StatelessWidget {
   /// Create a statistic to show how often values occur.
   const ValueDistribution({
     super.key,
     required this.values,
     required this.color,
+    required this.mode
   });
 
   /// Raw list of all values to calculate the distribution from.
@@ -39,29 +40,19 @@ class ValueDistribution extends StatefulWidget {
   /// Color of the data bars on the graph.
   final Color color;
 
-  @override
-  State<ValueDistribution> createState() => _ValueDistributionState();
-}
-
-enum _GraphMode {
-  avgerage,
-  median,
-}
-
-class _ValueDistributionState extends State<ValueDistribution> {
-  _GraphMode _mode = _GraphMode.median;
+  final GraphMode mode;
 
   @override
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
-    if (widget.values.isEmpty) {
+    if (values.isEmpty) {
       return Center(
         child: Text(localizations.errNoData),
       );
     }
 
     final distribution = <int, int>{};
-    for (final v in widget.values) {
+    for (final v in values) {
       if(distribution.containsKey(v)) {
         distribution[v] = distribution[v]! + 1;
       } else {
@@ -79,15 +70,21 @@ class _ValueDistributionState extends State<ValueDistribution> {
       child: CustomPaint(
         painter: _ValueDistributionPainter(
           distribution,
-          widget.values,
+          values,
           localizations,
-          widget.color,
-          _mode,
+          color,
+          mode,
         ),
       ),
     );
   }
 }
+
+enum GraphMode {
+  avgerage,
+  median,
+}
+
 
 /// Painter of a horizontal array of vertical bars.
 class _ValueDistributionPainter extends CustomPainter {
@@ -118,7 +115,7 @@ class _ValueDistributionPainter extends CustomPainter {
   final Color barColor;
 
   /// Text type of the central label.
-  final _GraphMode mode;
+  final GraphMode mode;
 
   static const double _kDefaultBarGapWidth = 5.0;
   static const Color _kDecorationColor = Colors.white70;
@@ -230,9 +227,9 @@ class _ValueDistributionPainter extends CustomPainter {
 
     drawLabel(localizations.minOf(_min), Alignment.centerLeft);
     switch (mode) {
-      case _GraphMode.avgerage:
+      case GraphMode.avgerage:
          drawLabel(localizations.avgOf(_average), Alignment.center);
-      case _GraphMode.median:
+      case GraphMode.median:
          drawLabel(localizations.medianOf(_median), Alignment.center);
     }
     drawLabel(localizations.maxOf(_max), Alignment.centerRight);
@@ -240,11 +237,14 @@ class _ValueDistributionPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(covariant _ValueDistributionPainter oldDelegate) =>
-      distribution == oldDelegate.distribution;
+      distribution != oldDelegate.distribution
+      || mode != oldDelegate.mode
+      || barColor != oldDelegate.barColor;
 
   @override
   bool shouldRebuildSemantics(covariant _ValueDistributionPainter oldDelegate)
-      => distribution == oldDelegate.distribution;
+      => distribution != oldDelegate.distribution
+      || mode != oldDelegate.mode;
 
   @override
   SemanticsBuilderCallback? get semanticsBuilder => (Size size) {
@@ -260,7 +260,10 @@ class _ValueDistributionPainter extends CustomPainter {
       CustomPainterSemantics(
         rect: Rect.fromLTRB(oneThird, 0, 2 * oneThird, size.height),
         properties: SemanticsProperties(
-          label: localizations.avgOf(_average),
+          label: switch (mode) {
+            GraphMode.avgerage => localizations.avgOf(_average),
+            GraphMode.median => localizations.medianOf(_median),
+          },
           textDirection: TextDirection.ltr,
         ),
       ),
