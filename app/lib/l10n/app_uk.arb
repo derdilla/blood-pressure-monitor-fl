@@ -1,7 +1,7 @@
 {
   "behavior": "Бажані",
   "bluetoothInput": "Bluetooth вхід",
-  "noWeightPermission": "Немає дозволу на використання ваги.",
+  "noWeightPermission": "Дозволу на використання ваги не надано.",
   "weekOfYear": "Тиждень {weekNum}, {year}",
   "@weekOfYear": {
     "placeholders": {
@@ -13,19 +13,19 @@
       }
     }
   },
-  "aboutWarnValuesScreenDesc": "Більше інформації про попередні значення",
-  "warnAboutTxt2": "Залежні значення за замовчуванням надходять з цього джерела.",
-  "validateInputs": "Дійсні входи",
+  "aboutWarnValuesScreenDesc": "Детальніше про показники попередження",
+  "warnAboutTxt2": "Стандартне значення віку береться звідси.",
+  "validateInputs": "Підтверджувати дані",
   "generalSettingsSection": "Головна",
   "month": "Місяць",
-  "addExportformat": "Додати експорт",
-  "exportDir": "Експортний каталог",
+  "addExportformat": "Додати формат експорту",
+  "exportDir": "Тека експортування",
   "csv": "CSV",
-  "exportSuccess": "Експорт успішних",
-  "default_": "Зареєструватися",
+  "exportSuccess": "Успішно експортовано",
+  "default_": "Стандартні",
   "accentColor": "Колір теми",
-  "title": "Додаток тиску крові",
-  "compactList": "Список вимірювань",
+  "title": "Додаток вимірів тиску крові",
+  "compactList": "Компактний список вимірів",
   "errTimeAfterNow": "Вибраний час в майбутньому. Ви можете вимкнути цю перевірку в налаштуваннях.",
   "versionOf": "Версія: {version}",
   "@versionOf": {
@@ -35,7 +35,7 @@
       }
     }
   },
-  "reset": "Зареєструватися",
+  "reset": "Скинути",
   "measurementIndex": "Вимірювання #{number}",
   "@measurementIndex": {
     "placeholders": {
@@ -45,11 +45,11 @@
     }
   },
   "btnConfirm": "ОК",
-  "addMeasurement": "Додавання вимірювання",
-  "startWithAddMeasurementPageDescription": "Після запуску програми показаний вхідний екран.",
-  "deleteAllMedicineIntakes": "Видалити всі надходження ліків",
-  "invalidZip": "Invalid zip файл.",
-  "warnBLETimeSus": "Пристрій bluetooth повідомив час від {hours} годин. Ви можете відхилити від пристрою bluetooth у налаштуваннях.",
+  "addMeasurement": "Додати замір",
+  "startWithAddMeasurementPageDescription": "Після запуску програми одразу показується екран виводу вимірів.",
+  "deleteAllMedicineIntakes": "Видалити всі прийоми ліків",
+  "invalidZip": "Зламаний zip файл.",
+  "warnBLETimeSus": "Bluetooth пристрів надав час за день від {hours} годин. Ви можете вимкнути прийняття часових міток bluetooth пристроїв у налаштуваннях.",
   "@warnBLETimeSus": {
     "placeholders": {
       "hours": {
@@ -57,24 +57,23 @@
       }
     }
   },
-  "selectMeasurementTitle": "Виберіть вимірювання для використання",
+  "selectMeasurementTitle": "Оберіть одиниці виміру",
   "animationSpeed": "Тривалість анімації",
   "noMedication": "Немає ліків",
-  "licenses": "3rd party ліцензія",
+  "licenses": "Ліцензії 3-іх сторін",
   "remove": "Прибрати",
-  "importSettings": "Налаштування відновлення",
-  "warnDeletionUnrecoverable": "Цей крок не ревертується, якщо ви вручну зробили резервну копію. Ви дійсно хочете видалити це?",
+  "importSettings": "Відновити налаштування",
+  "warnDeletionUnrecoverable": "Ця дія незворотна, якщо ви не створили реезервну копію. Ви впевнені що бажаєте видалити?",
   "exportPdfExportData": "Таблиця даних",
-  "allowManualTimeInput": "Дозволити введення ручного часу",
+  "allowManualTimeInput": "Дозволити введення часу вручну",
   "bodyMovementDetected": "Виявлено рух тіла",
-  "exportSettings": "Налаштування резервного копіювання",
-  "errBleNoPerms": "Немає дозволу на bluetooth",
-  "drawRegressionLines": "Малюнок трендових ліній",
+  "exportSettings": "Резервна копія налаштувань",
+  "errBleNoPerms": "Не надано дозвіл bluetooth",
+  "drawRegressionLines": "Графік тенденцій",
   "btnSave": "ЗАПИСИ",
-  "appStyleSettings": "Стиль додатка",
-  "noPermissions": "Відсутні дозволи.",
+  "appStyleSettings": "Вид застосунка",
+  "noPermissions": "Дозволи не надано.",
   "healthConnectDesc": "Підключіть систему API для синхронізації даних з іншими додатками, які підтримують її. Це дозволяє використовувати сторонні додатки для розширення функціональних можливостей без ручного експорту.\nЯкщо ви явно авторизуєте додаток третьої сторони, що додає його.",
-  "deletionConfirmed": "Видалити видалені записи.",
   "lastNDays": "{n} хв",
   "@lastNDays": {
     "placeholders": {
@@ -84,20 +83,21 @@
       }
     }
   },
+  "deletionConfirmed": "Запис видалено.",
   "fieldDelimiter": "Розмежування поля",
   "horizontalLines": "Горизонтальні лінії",
   "stableBluetoothInput": "Стабільний",
-  "preferredPressureUnit": "Пристрій тиску фарширований",
-  "exportPdfExportTitle": "Головна",
-  "errParseEmptyCsvFile": "Не вистачає рядків у файлі csv, щоб записати запис.",
+  "preferredPressureUnit": "Бажані показники тиску",
+  "exportPdfExportTitle": "Заголовок",
+  "errParseEmptyCsvFile": "У csv файлі не достатньо рядків для аналіза запису.",
   "date": "Дата",
   "import": "ІМПОРТ",
   "pulShort": "пульс",
-  "syncOnAppStart": "Синхронізація даних на старті програми",
+  "syncOnAppStart": "Синхронізація даних при запуску",
   "availableDevices": "Доступні пристрої",
-  "buildIn": "Побудова",
-  "timeFormat": "Формат",
-  "errCantCreateArchive": "Не можна створювати архів. Повідомте про можливі помилки.",
+  "buildIn": "Вбудована",
+  "timeFormat": "Формат часу",
+  "errCantCreateArchive": "Не можу створити архів. Будь ласка, за можливості повідомте про баг.",
   "sysLong": "Систол",
   "exportPdfCellHeight": "Висота руп",
   "success": "Успіх: {msg}",
@@ -112,31 +112,31 @@
   "exportImport": "Експорт / Імпорт",
   "maxDataIntervalDesc": "Кількість днів після чого відключається графічна лінія. Зеро відключає це.",
   "enterTimeFormatString": "формат часу",
-  "allowMissingValues": "Відсутні значення",
-  "edit": "Редагування",
-  "trustBLETime": "Довірити час повідомлення від пристроїв bluetooth",
+  "allowMissingValues": "Дозволити пусті значення",
+  "edit": "Редагувати",
+  "trustBLETime": "Довіряти показникам часу, наданими bluetooth пристроями",
   "needlePinBarWidthDesc": "Ширина ліній кольорових записів роблять на графіку.",
-  "errLt30": "Кількість <= 30? Вимкніть перевірку в налаштуваннях!",
+  "errLt30": "Показник <= 30? Вимкніть перевірку в налаштуваннях!",
   "diaShort": "діа",
   "export": "ЕКСПОРТ",
-  "bloodPressure": "Артеріальний тиск",
+  "bloodPressure": "Тиск",
   "theme": "Тема",
-  "scanningForDevices": "Скакування для пристроїв",
+  "scanningForDevices": "Пошук пристроїв",
   "year": "Рік",
-  "warnAboutTxt1": "Попереднє значення є чистими пропозиціями та не медичними порадами.",
-  "measurementSuccess": "Вимірювання успішно вживали!",
+  "warnAboutTxt1": "Попереджувальні значення - просто припущення і не медична порада.",
+  "measurementSuccess": "Вимірювання пройшло успішно!",
   "improperMeasurementPosition": "Положення про вимірювання обмотки",
-  "customGraphMarkings": "Спеціальна маркування",
+  "customGraphMarkings": "Власні примітки",
   "exportFormat": "Формат експорту",
-  "errUnrealistic": "Нереальне значення? Вимкніть перевірку в налаштуваннях!",
-  "exportPdfHeaderHeight": "Висота головки",
+  "errUnrealistic": "Нереалістичне значення? Вимкніть перевірку в налаштуваннях!",
+  "exportPdfHeaderHeight": "Висота заголовка",
   "iconSize": "Розмір іконок",
-  "measurementsPerDay": "Вимірювання в день",
+  "measurementsPerDay": "Вимірюваннь в день",
   "errNoData": "немає даних",
-  "tapToSelect": "Натисніть для вибору",
+  "tapToSelect": "Тапніть щоб обрати",
   "aboutBleInput": "Деякі пристрої вимірювання BLE GATT сумісні. Ви можете ввести ці пристрої тут і автоматично передавати вимірювання або вимкнути цей параметр у налаштуваннях.",
-  "bluetoothDisabled": "Відключення Bluetooth",
-  "errParseFailedDecodingField": "{lineNumber} не вдалося.",
+  "bluetoothDisabled": "Bluetooth вимкнено",
+  "errParseFailedDecodingField": "Не вдалось розшифрувати поле \"{fieldContent}\" в рядку {lineNumber}.",
   "@errParseFailedDecodingField": {
     "placeholders": {
       "lineNumber": {
@@ -148,8 +148,8 @@
     }
   },
   "light": "Світла",
-  "errNotStarted": "не розпочати",
-  "errCantOpenURL": "Не можна відкрити URL: {url}",
+  "errNotStarted": "не розпочато",
+  "errCantOpenURL": "Не можу відкрити URL: {url}",
   "@errCantOpenURL": {
     "placeholders": {
       "url": {
@@ -158,15 +158,15 @@
     }
   },
   "legacyBluetoothInput": "Спадщина",
-  "lifetime": "Погода",
-  "exportMimeType": "Експорт медіа",
-  "bottomAppBars": "Підсумок діалогові стовпчики",
-  "manageExportColumns": "Управління експортними колонами",
-  "delete": "Видалення",
-  "errCantReadFile": "Зміст файлу не можна прочитати",
-  "notes": "Ноти",
-  "restartNow": "Решта зараз",
-  "importSuccess": "Імпортовані {count} записи",
+  "lifetime": "Все життя",
+  "exportMimeType": "Формат файлів експорту",
+  "bottomAppBars": "Нижній діалоговий рядок",
+  "manageExportColumns": "Керування стовпчиками експорту",
+  "delete": "Видалети",
+  "errCantReadFile": "Зміст файлу неможливо прочитати",
+  "notes": "Нотатки",
+  "restartNow": "Перезапустити зараз",
+  "importSuccess": "Імпортовано {count} записів",
   "@importSuccess": {
     "placeholders": {
       "count": {
@@ -175,15 +175,15 @@
     }
   },
   "meanArterialPressure": "Артеріальний тиск",
-  "errDiaGtSys": "діа >= sys? Вимкніть перевірку в налаштуваннях!",
+  "errDiaGtSys": "dia >= sys? Вимкніть перевірку в налаштуваннях!",
   "graphLineThickness": "Товщина лінії",
   "data": "Дані",
   "version": "Версія",
   "errNoValue": "Будь ласка, введіть значення",
-  "errMeasurementRead": "Помилка при виконанні вимірювання!",
+  "errMeasurementRead": "Помилка при спробі вимірювання!",
   "other": "інші",
   "enterWeight": "Введіть вагу",
-  "errParseLineTooShort": "Лінія {lineNumber} має менше стовпців, ніж перша лінія.",
+  "errParseLineTooShort": "У рядку {lineNumber} менше стовпчиків, ніж у перщому.",
   "@errParseLineTooShort": {
     "placeholders": {
       "lineNumber": {
@@ -192,9 +192,9 @@
     }
   },
   "exportWarnConfigNotImportable": "Привіт! Просто дружне нагадування: поточні налаштування експорту не підійдуть для подальшого імпорту. Щоб змінити це, оберіть тип експорту файлів CSV та оберіть один з доступних форматів дати.",
-  "timestamp": "Таймер",
+  "timestamp": "Часова мітка",
   "exportCsvHeadlineDesc": "Допомагає визначати види",
-  "syncNow": "Sync тепер",
+  "syncNow": "Синхронізувати",
   "btnUndo": "ВІДМОВА",
   "packageNameOf": "Назва пакета: {name}",
   "@packageNameOf": {
@@ -204,13 +204,13 @@
       }
     }
   },
-  "drawRegressionLinesDesc": "Рисунки регресії в графіку. Тільки корисна для великих інтервалів.",
-  "pulColor": "Імпульсний колір",
+  "drawRegressionLinesDesc": "Ствроює графік лінійних регресій. Використовувати тільки для великих інтервалів.",
+  "pulColor": "Колір пульсу",
   "addLine": "Додати рядок",
-  "warnAboutTxt3": "Відчуйте, щоб змінити значення для задоволення ваших потреб і дотримуйтесь рекомендацій лікаря.",
+  "warnAboutTxt3": "Не соромтесь міняти значення під ваші потреби та слідуйте рекомендаціям вашого лікаря.",
   "pulLong": "Пульс",
-  "errNotEnoughDataToGraph": "Не достатньо даних, щоб намалювати графіку.",
-  "sysColor": "Систолічний колір",
+  "errNotEnoughDataToGraph": "Не достатньо даних, для створення графіку.",
+  "sysColor": "Колір систоли",
   "maxOf": "{txt} макс.",
   "@maxOf": {
     "placeholders": {
@@ -219,48 +219,48 @@
       }
     }
   },
-  "medications": "Медикамент",
-  "startWithAddMeasurementPage": "Вимірювання на старті",
-  "pulsePressure": "Імпульсний тиск",
-  "errNotImportable": "Цей файл не можна імпортувати",
-  "errNaN": "Введіть номер",
+  "medications": "Ліки",
+  "startWithAddMeasurementPage": "Виміряти при запуску",
+  "pulsePressure": "Пульс",
+  "errNotImportable": "Цей файл неможливо імпортувати",
+  "errNaN": "Будь ласка, введіть номер",
   "confirmDeletion": "Підтвердити видалення",
   "textDelimiter": "Розмежування тексту",
   "select": "Обрати",
   "@select": {
     "description": "Used when f.e. selecting a single measurement when the bluetooth device returned multiple"
   },
-  "diaColor": "Діастольний колір",
-  "requiresAppRestart": "Потрібні застосунки",
+  "diaColor": "Колір діастоли",
+  "requiresAppRestart": "Потрібен перезапуск застосунка",
   "xls": "Excel (xls)",
   "deleteAllSettings": "Видалити всі налаштування",
   "pdf": "PDF",
-  "aboutWarnValuesScreen": "Про нас",
+  "aboutWarnValuesScreen": "Про застосунок",
   "exportPdfExportStatistics": "Статистика",
   "age": "Вік",
   "db": "SQLite DB",
   "exportPdfCellFontSize": "Розмір шрифту",
   "dark": "Темна",
-  "maximum": "Макс",
-  "tapToClose": "Натисніть, щоб закрити.",
-  "automaticallySyncData": "Автоматично синхронізація даних",
+  "maximum": "Максимум",
+  "tapToClose": "Тапніть, щоб закрити.",
+  "automaticallySyncData": "Автоматична синхронізація даних",
   "exportCsvHeadline": "Заголовок",
-  "pulseRateLessThanLowerLimit": "Нормативно-правова норма менша за менший ліміт",
-  "errNeedHeadline": "Ви можете лише імпортувати файли з заголовком.",
-  "determineWarnValues": "Визначити значення попередження",
+  "pulseRateLessThanLowerLimit": "Швидкість пульса менша за нижній ліміт",
+  "errNeedHeadline": "Ви можете імпортувати тільки файли з заголовком.",
+  "determineWarnValues": "Вказати показники для попередження",
   "bigGraphSplit": "Час між вимірами перевищує максимальну відстань, що відображається без перерв. Ви можете змінити це в налаштуваннях.",
-  "csvTitle": "CSV-title",
+  "csvTitle": "CSV заголовок",
   "openSettings": "Відкрити налаштування",
   "statistics": "Статистика",
-  "diaWarn": "Діастолічний попереджувач",
-  "minimum": "Мінімальний",
+  "diaWarn": "Діастолічне попередження",
+  "minimum": "Мінімум",
   "shared": "поділитися",
   "disabled": "Вимкнено",
-  "btnCancel": "КАНАЛ",
-  "intakes": "Медичні прийоми",
-  "btnShare": "СХАРЕ",
-  "deleteAllMeasurements": "Видалити всі вимірювання",
-  "language": "Українська",
+  "btnCancel": "ВІДМІНА",
+  "intakes": "Прийоми ліків",
+  "btnShare": "ПОДІЛИТИСЬ",
+  "deleteAllMeasurements": "Видалити всі виміри",
+  "language": "Мова",
   "exportWarnNotEveryFieldExported": "Зверніть уваги, не всі поля експортуються: {fields} {count, plural, one{is} other{are}} відсутні.",
   "@exportWarnNotEveryFieldExported": {
     "placeholders": {
@@ -274,7 +274,7 @@
   },
   "average": "Середній",
   "addEntry": "Додати поле",
-  "sourceCode": "Код джерела",
+  "sourceCode": "Початковий код",
   "error": "Помилка {msg}",
   "@error": {
     "placeholders": {
@@ -284,24 +284,24 @@
     }
   },
   "useLegacyList": "Використовуйте список спадщини",
-  "measurementCount": "Число вимірювання",
-  "exportAfterEveryInputDesc": "Не рекомендується (вибух файлів)",
+  "measurementCount": "Кількість вимірюваннь",
+  "exportAfterEveryInputDesc": "Не рекомендується (надлишок файлів)",
   "valueDistribution": "Розподіл цін",
-  "defaultDosis": "За замовчуванням",
+  "defaultDosis": "Звичайна доза",
   "exportFieldFormatDocumentation": "'# Варіанти\nФормат експорту підтримує вставку значень для наступних власників:\n- `$TIMESTAMP:` представить час з Unix epoch в мілісекунді.\n- `$SYS:` Забезпечує значення при наявності; в іншому випадку, за замовчуванням до -1.\n- `$DIA:` Забезпечує значення при наявності; в іншому випадку, за замовчуванням до -1.\n- `$PUL:` Забезпечує значення, якщо це можливо; інакше він за замовчуванням до -1.\n- `$NOTE:` Забезпечує значення, якщо це можливо; інакше він за замовчуванням до -1.\n- `$COLOR:` Представляє колір вимірювання як номер. (ціна: `4291681337`)\n\nУ разі, якщо у випадку, зазначених вище осіб, не присутні в записі артеріального тиску, вони будуть замінені на `null``.\n\n## Маф\nВи можете використовувати базову математику в подвійних дужках (\"{{}}`\").\n\nПідтримуються наступні математичні операції:\n- операції: +, -, *, %, ^\n- Один-параметр функції: abs, acos, asin, atan, ceil, cosh, cosh, cot, coth, csc, csch, exp, поверх, ln, log, круглий сек, sech, sin, sinh, sqrt, tanh, tanh\n- Двопараметрові функції: журнал, nrt, pow\n- Константи: e, p, ln2, ln10, log2e, log10e, sqrt1_2, sqrt2\n\nДля повної специфікації машинного перекладу можна звернутися до документації [function_tree](https://pub.dev/documentation/function_tree/latest#interpreter).\n\nУкраїнська Порядок обробки\n1. заміна змінної\n2. Маф Р'",
-  "exportFieldsPreset": "Експорт полів",
-  "exportAfterEveryInput": "Експорт після кожного запису",
+  "exportFieldsPreset": "Експорт наявних полів",
+  "exportAfterEveryInput": "Експортувати після кожного запису",
   "cuffTooLoose": "Одяг занадто пухкий",
-  "irregularPulseDetected": "Нерегулярний пульс виявлений",
-  "noBloodPressurePermission": "Надано дозвіл на артеріальний тиск.",
-  "week": "Тижневий",
-  "titleInCsv": "Назва в CSV",
+  "irregularPulseDetected": "Виявлено порушення пульса",
+  "noBloodPressurePermission": "Дозволу на використання тиску не надано.",
+  "week": "Тиждень",
+  "titleInCsv": "Назва CSV",
   "addMedication": "Додати ліки",
-  "linePositionY": "Позиція лінії (y)",
+  "linePositionY": "Розташування лінії (y)",
   "dontShowAgain": "Не показувати",
-  "btnCheckAgain": "Зареєструватися",
-  "warnValues": "Warn значення",
-  "preferredWeightUnit": "Накладна вага",
+  "btnCheckAgain": "Перевірити ще раз",
+  "warnValues": "Значення попередження",
+  "preferredWeightUnit": "Бажані одиниці виміру ваги",
   "@preferredWeightUnit": {
     "description": "Setting for the unit the app will use for displaying weight"
   },
@@ -309,7 +309,7 @@
   "settings": "Налаштування",
   "loading": "завантаження..",
   "text": "текст",
-  "errParseTimeNotRestoreable": "Немає стовпчика, що дозволяє відновити часовий затиск.",
+  "errParseTimeNotRestoreable": "Відсутній стовпчик, за яким можна відновити час.",
   "avgOf": "{txt} Ø",
   "@avgOf": {
     "placeholders": {
@@ -318,15 +318,15 @@
       }
     }
   },
-  "enterTimeFormatDesc": "Форматер рядка - це суміш попередньо визначених рядків ICU / Skeleton і будь-якого додаткового тексту, який вам подобається, щоб включити.\n\n[Якщо ви хвилюєтесь про повний перелік дійсних форматів, ви можете знайти їх прямо тут.] (секран «TimeFormattingHelp)\n\nПросто дружній нагадування, використовуючи більш тривалий або коротший формат Strings не буде чарівно змінювати ширину таблиці стовпців, які можуть призвести до деяких перерв лінії незручності і тексту, що не показує.\n\nТип: \"yy-MM-dd HH:mm\"",
+  "enterTimeFormatDesc": "A formatter string is a blend of predefined ICU/Skeleton strings and any additional text you''d like to include.\n\n[If you''re curious about the complete list of valid formats, you can find them right here.](screen://TimeFormattingHelp)\n\nJust a friendly reminder, using longer or shorter format Strings won''t magically alter the width of the table columns, which might lead to some awkward line breaks and text not showing.\n\nза замовчуванням: \"рр-ММ-дд ГГ:хх\"",
   "healthConnectPlatformUnsupported": "Ваша платформа не підтримує Health Connect.",
   "confirmDelete": "Підтвердити видалення",
-  "deleteAllNotes": "Видалити всі ноти",
+  "deleteAllNotes": "Видалити всі записи",
   "weight": "Вага",
   "recordFormat": "Формат запису",
   "dosis": "Доза",
-  "errWrongImportFormat": "Ви можете імпортувати файли в форматі CSV і SQLite.",
-  "pulseRateExceedsUpperLimit": "Швидкість імпульсу перевищує верхній ліміт",
+  "errWrongImportFormat": "Ви можете імпортувати файли форматів CSV і SQLite.",
+  "pulseRateExceedsUpperLimit": "Швидкість пульса перевищує верхній ліміт",
   "maxDataInterval": "Максимальний інтервал даних",
   "errAccuracyLoss": "При експорті з форматами часових часів очікується втрата точності.",
   "minOf": "{txt} хв.",
@@ -337,10 +337,10 @@
       }
     }
   },
-  "timeResolvedMetrics": "Терміни за днем",
-  "enterTimeFormatScreen": "Формат",
+  "timeResolvedMetrics": "Виміри за день",
+  "enterTimeFormatScreen": "Формат часу",
   "fieldFormat": "Формат поля",
-  "errParseUnknownColumn": "Немає стовпчика з назвою \"X31X\"\".",
+  "errParseUnknownColumn": "Відсунтій стовпчик під назвою \"{title}\".",
   "@errParseUnknownColumn": {
     "placeholders": {
       "title": {
@@ -351,21 +351,21 @@
   "system": "Системна",
   "sysShort": "sys",
   "graphSettings": "Налаштування графіка",
-  "sysWarn": "Систолічні попередження",
+  "sysWarn": "Систолічне попередження",
   "now": "зараз",
-  "diaLong": "Діастоліч",
+  "diaLong": "Діастол",
   "time": "Час",
   "featuresSetting": "Особливості",
-  "warnDiscardingData": "Ви не задоволені даними. Ви хочете продовжити і відкинути їх?",
-  "custom": "Користування",
-  "day": "День народження",
-  "note": "Зареєструватися",
-  "exportPdfHeaderFontSize": "Розмір основного шрифту",
-  "userID": "Ідентифікатор користувача",
+  "warnDiscardingData": "Є не збережені дані. Бажаєте продовжити без збереження?",
+  "custom": "Власні",
+  "day": "День",
+  "note": "Нотатка",
+  "exportPdfHeaderFontSize": "Розмір шрифта заголовка",
+  "userID": "ID користувача",
   "color": "Колір",
-  "warnNeedsRestartForUsingApp": "Файли були видалені в цьому сеансі. Перезавантажити додаток для продовження використання!",
-  "needlePinBarWidth": "Товщина кольору",
-  "buildNumberOf": "Версія: {buildNumber}",
+  "warnNeedsRestartForUsingApp": "Файли було видалено в цьому сеансі. Перезавантажте застосунок щоб користуватись далі!",
+  "needlePinBarWidth": "Глибина кольору",
+  "buildNumberOf": "Номер версії: {buildNumber}",
   "@buildNumberOf": {
     "placeholders": {
       "buildNumber": {
@@ -374,7 +374,7 @@
     }
   },
   "errFeatureNotSupported": "Ця функція не доступна на цій платформі.",
-  "pdfDocumentTitle": "Значення артеріального тиску від {start} до {end}",
+  "pdfDocumentTitle": "Значення тиску від {start} до {end}",
   "@pdfDocumentTitle": {
     "placeholders": {
       "start": {
@@ -385,8 +385,8 @@
       }
     }
   },
-  "confirmDeleteDesc": "Видалити цей запис? (Ви можете вимкнути ці підтвердження в налаштуваннях.)",
-  "errNoFileOpened": "немає файлу",
+  "confirmDeleteDesc": "Видалити цей запис? (Ви можете вимкнути підтвердження в налаштуваннях.)",
+  "errNoFileOpened": "нема відкритих файлів",
   "connect": "Роз''єм",
   "activateWeightFeatures": "Активувати функції, пов''язані з вагою",
   "name": "Ім''я",
@@ -394,8 +394,8 @@
   "healthConnect": "Підключення охорони здоров''я",
   "bluetoothInputDesc": "Якщо стабільний задняк не працює, використовуйте зворотний зв''язок з спадщиною та повідомляють його в contact@derdilla.com або https://github.com/derdilla/blood-pressure-monitor-fl/issues",
   "optEnableHealthConnect": "Увімкнути підключення до здоров''я",
-  "titleAlreadyExists": "Ця назва вже існує",
-  "importAll": "Імпорт всіх ({count})",
+  "titleAlreadyExists": "Така назва вже існує",
+  "importAll": "Імпортувати все ({count})",
   "@importAll": {
     "description": "Button to import every measurement returned by a bluetooth device.",
     "placeholders": {
@@ -404,7 +404,7 @@
       }
     }
   },
-  "measurementsImported": "{count} вимірювання імпортних",
+  "measurementsImported": "{count} вимірюваннь імпортовано",
   "@measurementsImported": {
     "description": "Confirmation shown after importing all measurements returned by a bluetooth device.",
     "placeholders": {
@@ -414,5 +414,14 @@
     }
   },
   "exportAddTimestamp": "Додати час у назву файлу",
-  "exportAddTimestampDesc": "Забезпечує унікальну назву кожному файлу"
+  "exportAddTimestampDesc": "Забезпечує унікальну назву кожному файлу",
+  "autostartBluetoothInput": "Авторстарт імпорту при Bluetooth підключенні",
+  "bluetoothImportMode": "Автоімпорт",
+  "bluetoothImportModeDescription": "Автоматично імпортувати показники надані пристроєм, не переглядаючи. Якщо надано більше одного, оберіть який імпортувати.",
+  "bluetoothImportModeDisabled": "Вимкнено",
+  "bluetoothImportModeLast": "Останні виміри",
+  "bluetoothImportModeAll": "Всі виміри",
+  "autostartBluetoothInputDescription": "Якщо увімкнено Bluetooth та під'єднано пристрій виводу, імпорт вимірів на екран виводу починається автоматично.",
+  "exportImportDocumentationTooltip": "Як експортувати/імпортувати",
+  "exportImportDocumentation": "## Основи експорту / імпорту\n\n- Use database exports, if you just want to transfer the data or know your way around sqlite.\n- Choose CSV for spreadsheet workflows and for importing data back into the app.\n- Keep the headline enabled and include a time column so the import can be restored reliably.\n- Use the field-format dialog to add custom columns for values such as systolic, diastolic, pulse, notes, and medicine intakes.\n\n## CSV import in LibreOffice and similar tools\n\n- Export as CSV and keep the headline enabled.\n- Use the default delimiter and text delimiter for standard CSV files.\n- Open the file in LibreOffice, Excel, or similar apps and make sure the time column is recognized as a date/time value.\n- If you want to re-import the file later, keep the same CSV settings and include a valid time column.\n\n## Color columns\n\n- The plain ''color'' column exports the note color as a simple value.\n- The legacy ''needlePin'' column stores a JSON payload for compatibility with older workflows.\n- Use the plain ''color'' column when you want a straightforward spreadsheet-friendly export.\n\n## Example workflow\n\n1. Enter a measurement and any notes.\n2. Open Export / Import and switch to CSV.\n3. Add a custom field or time column if you need one.\n4. Export the data and open it in LibreOffice or another spreadsheet app.\n5. Re-import the same file later when you want to restore or review the data."
 }
