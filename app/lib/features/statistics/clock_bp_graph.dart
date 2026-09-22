@@ -1,6 +1,7 @@
 import 'dart:math' as math;
 import 'dart:ui';
 
+import 'package:blood_pressure_app/l10n/app_localizations.dart';
 import 'package:blood_pressure_app/model/blood_pressure_analyzer.dart';
 import 'package:blood_pressure_app/model/storage/settings.dart';
 import 'package:collection/collection.dart';
@@ -10,37 +11,86 @@ import 'package:provider/provider.dart';
 
 /// A graph that displays the averages blood pressure values across by time in
 /// the familiar shape of a clock.
-class ClockBpGraph extends StatelessWidget {
+class ClockBpGraph extends StatefulWidget {
   /// Create a clock shaped graph of average by time.
-  const ClockBpGraph({super.key, required this.measurements});
+  const ClockBpGraph({super.key,
+    required this.measurements,
+    this.debugGraphOnly = false});
 
   /// All measurements used to generate the graph.
   final List<BloodPressureRecord> measurements;
 
+  @visibleForTesting
+  final bool debugGraphOnly;
+
+  @override
+  State<ClockBpGraph> createState() => _ClockBpGraphState();
+}
+
+class _ClockBpGraphState extends State<ClockBpGraph> {
+  bool showSys = true;
+  bool showDia = true;
+  bool showPul = true;
+
   @override
   Widget build(BuildContext context) {
-    final analyzer = BloodPressureAnalyzer(measurements);
+    final analyzer = BloodPressureAnalyzer(widget.measurements);
     final groups = analyzer.groupAnalyzers();
-    return SizedBox.square(
-      dimension: MediaQuery.of(context).size.width,
-      child: Padding(
-        padding: const EdgeInsets.all(24.0),
-        child: CustomPaint(
-          painter: _RadarChartPainter(
-            brightness: Theme.of(context).brightness,
-            labels: List.generate(groups.length, (i) => i.toString()),
-            values: [
+    final radarChart = Padding(
+      padding: const EdgeInsets.all(24.0),
+      child: CustomPaint(
+        painter: _RadarChartPainter(
+          brightness: Theme.of(context).brightness,
+          labels: List.generate(groups.length, (i) => i.toString()),
+          values: [
+            if (showSys)
               (context.watch<Settings>().sysColor, groups
                 .map((e) => (e.avgSys ?? analyzer.avgSys)?.mmHg ?? 0).toList(growable: false)),
+            if (showDia)
               (context.watch<Settings>().diaColor, groups
                 .map((e) => (e.avgDia ?? analyzer.avgDia)?.mmHg ?? 0).toList(growable: false)),
+            if (showPul)
               (context.watch<Settings>().pulColor, groups
                 .map((e) => e.avgPul ?? analyzer.avgPul ?? 0).toList(growable: false)),
-            ]
-          ),
+          ]
         ),
       ),
-  );
+    );
+    if (widget.debugGraphOnly) return radarChart;
+
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        SizedBox.square(
+          dimension: math.min(
+            MediaQuery.of(context).size.width,
+            MediaQuery.of(context).size.height / 2.5,
+          ),
+          child: radarChart,
+        ),
+        SwitchListTile(
+          value: showSys,
+          onChanged: showDia || showPul
+           ? (value) => setState(() { showSys = value; })
+           : null,
+          title: Text(AppLocalizations.of(context)!.sysLong),
+        ),
+        SwitchListTile(
+          value: showDia,
+          onChanged: showSys || showPul
+           ? (value) => setState(() { showDia = value; })
+           : null,
+          title: Text(AppLocalizations.of(context)!.diaLong),
+        ),
+        SwitchListTile(
+          value: showPul,
+          onChanged: showSys || showDia
+           ? (value) => setState(() { showPul = value; })
+           : null,
+          title: Text(AppLocalizations.of(context)!.pulLong),
+        ),
+      ],
+    );
   }
 }
 
@@ -76,7 +126,7 @@ class _RadarChartPainter extends CustomPainter {
       ..strokeWidth = 3.0
       ..color = (brightness == Brightness.dark ? Colors.white : Colors.black).withAlpha(76);
 
-    final maxRadius = size.shortestSide / 2;
+    final maxRadius = (size.shortestSide / 2) - 3.0;
 
     // static decorations
     double circleRadius = maxRadius - _kPadding;
@@ -145,10 +195,16 @@ class _RadarChartPainter extends CustomPainter {
     off = size.center(off);
     // center at pos
     off = Offset(off.dx - (paragraph.minIntrinsicWidth / 2), off.dy - (paragraph.height / 2));
+    if (off.dy < 0) { // top overflow
+      off = Offset(off.dx, 0);
+    }
+    if (off.dx < 0) { // left overflow
+      off = Offset(0, off.dy);
+    }
     if ((off.dy + paragraph.height) > size.height) { // right overflow
       off = Offset(off.dx, off.dy - ((off.dy + paragraph.height) - size.height));
     }
-    if ((off.dx + paragraph.minIntrinsicWidth) > size.width) { // right overflow
+    if ((off.dx + paragraph.minIntrinsicWidth) > size.width) { // bottom overflow
       off = Offset(off.dx - ((off.dx + paragraph.minIntrinsicWidth) - size.width), off.dy);
     }
 

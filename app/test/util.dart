@@ -44,6 +44,8 @@ Widget materialApp(Widget child, {
     child: MaterialApp(
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       locale: const Locale('en'),
+      themeMode: settings.themeMode,
+      darkTheme: ThemeData.dark(),
       home: Scaffold(body:child),
       routes: routes,
     ),
