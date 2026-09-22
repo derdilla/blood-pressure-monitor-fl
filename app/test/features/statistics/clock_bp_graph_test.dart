@@ -9,6 +9,8 @@ import '../../model/blood_pressure_analyzer_test.dart';
 import '../../util.dart';
 
 void main() {
+  final TestWidgetsFlutterBinding binding = TestWidgetsFlutterBinding.ensureInitialized();
+
   testWidgets("doesn't throw when empty" , (tester) async {
     await tester.pumpWidget(materialApp(const ClockBpGraph(measurements: [])));
     expect(tester.takeException(), isNull);
@@ -16,16 +18,21 @@ void main() {
   });
   testWidgets('[gold] renders sample data like expected in light mode', (tester) async {
     final rng = Random(1234);
+    await binding.setSurfaceSize(Size(400, 400));
+  addTearDown(() => binding.setSurfaceSize(null));
     await tester.pumpWidget(materialApp(
-      ClockBpGraph(measurements: [
-        for (int i = 0; i < 50; i++)
-          mockRecord(
-            time: DateTime.fromMillisecondsSinceEpoch(rng.nextInt(1724578014) * 1000),
-            sys: rng.nextInt(60) + 70,
-            dia: rng.nextInt(60) + 40,
-            pul: rng.nextInt(70) + 40,
-          )
-      ],),
+      SizedBox.square(
+        dimension: 400,
+        child: ClockBpGraph(debugGraphOnly: true, measurements: [
+          for (int i = 0; i < 50; i++)
+            mockRecord(
+              time: DateTime.fromMillisecondsSinceEpoch(rng.nextInt(1724578014) * 1000),
+              sys: rng.nextInt(60) + 70,
+              dia: rng.nextInt(60) + 40,
+              pul: rng.nextInt(70) + 40,
+            )
+        ],),
+      ),
       settings: Settings(
         pulColor: Colors.pink,
       )
@@ -34,17 +41,23 @@ void main() {
   }, tags: 'gold');
   testWidgets('[gold] renders sample data like expected in dark mode', (tester) async {
     final rng = Random(1234);
+    await binding.setSurfaceSize(Size(400, 400));
+    addTearDown(() => binding.setSurfaceSize(null));
     await tester.pumpWidget(materialApp(
-      ClockBpGraph(measurements: [
-        for (int i = 0; i < 50; i++)
-          mockRecord(
-            time: DateTime.fromMillisecondsSinceEpoch(rng.nextInt(1724578014) * 1000),
-            sys: rng.nextInt(60) + 70,
-            dia: rng.nextInt(60) + 40,
-            pul: rng.nextInt(70) + 40,
-          )
-      ],),
+      SizedBox.square(
+        dimension: 400,
+        child: ClockBpGraph(debugGraphOnly: true, measurements: [
+          for (int i = 0; i < 50; i++)
+            mockRecord(
+              time: DateTime.fromMillisecondsSinceEpoch(rng.nextInt(1724578014) * 1000),
+              sys: rng.nextInt(60) + 70,
+              dia: rng.nextInt(60) + 40,
+              pul: rng.nextInt(70) + 40,
+            )
+        ],),
+      ),
       settings: Settings(
+        themeMode: ThemeMode.dark,
         pulColor: Colors.pink,
       )
     ));

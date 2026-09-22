@@ -13,10 +13,15 @@ import 'package:provider/provider.dart';
 /// the familiar shape of a clock.
 class ClockBpGraph extends StatefulWidget {
   /// Create a clock shaped graph of average by time.
-  const ClockBpGraph({super.key, required this.measurements});
+  const ClockBpGraph({super.key,
+    required this.measurements,
+    this.debugGraphOnly = false});
 
   /// All measurements used to generate the graph.
   final List<BloodPressureRecord> measurements;
+
+  @visibleForTesting
+  final bool debugGraphOnly;
 
   @override
   State<ClockBpGraph> createState() => _ClockBpGraphState();
@@ -31,6 +36,28 @@ class _ClockBpGraphState extends State<ClockBpGraph> {
   Widget build(BuildContext context) {
     final analyzer = BloodPressureAnalyzer(widget.measurements);
     final groups = analyzer.groupAnalyzers();
+    final radarChart = Padding(
+      padding: const EdgeInsets.all(24.0),
+      child: CustomPaint(
+        painter: _RadarChartPainter(
+          brightness: Theme.of(context).brightness,
+          labels: List.generate(groups.length, (i) => i.toString()),
+          values: [
+            if (showSys)
+              (context.watch<Settings>().sysColor, groups
+                .map((e) => (e.avgSys ?? analyzer.avgSys)?.mmHg ?? 0).toList(growable: false)),
+            if (showDia)
+              (context.watch<Settings>().diaColor, groups
+                .map((e) => (e.avgDia ?? analyzer.avgDia)?.mmHg ?? 0).toList(growable: false)),
+            if (showPul)
+              (context.watch<Settings>().pulColor, groups
+                .map((e) => e.avgPul ?? analyzer.avgPul ?? 0).toList(growable: false)),
+          ]
+        ),
+      ),
+    );
+    if (widget.debugGraphOnly) return radarChart;
+
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -39,26 +66,7 @@ class _ClockBpGraphState extends State<ClockBpGraph> {
             MediaQuery.of(context).size.width,
             MediaQuery.of(context).size.height / 2.5,
           ),
-          child: Padding(
-            padding: const EdgeInsets.all(24.0),
-            child: CustomPaint(
-              painter: _RadarChartPainter(
-                brightness: Theme.of(context).brightness,
-                labels: List.generate(groups.length, (i) => i.toString()),
-                values: [
-                  if (showSys)
-                    (context.watch<Settings>().sysColor, groups
-                      .map((e) => (e.avgSys ?? analyzer.avgSys)?.mmHg ?? 0).toList(growable: false)),
-                  if (showDia)
-                    (context.watch<Settings>().diaColor, groups
-                      .map((e) => (e.avgDia ?? analyzer.avgDia)?.mmHg ?? 0).toList(growable: false)),
-                  if (showPul)
-                    (context.watch<Settings>().pulColor, groups
-                      .map((e) => e.avgPul ?? analyzer.avgPul ?? 0).toList(growable: false)),
-                ]
-              ),
-            ),
-          ),
+          child: radarChart,
         ),
         SwitchListTile(
           value: showSys,
