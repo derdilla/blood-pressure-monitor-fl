@@ -12,6 +12,6 @@ Hauptmerkmale:
 - Unterstützung für weitere Messwerte wie Gewicht oder Medikamenteneinnahme.
 - Optionaler Abgleich mit anderen Apps über Health-Connect.
 
-Messwerte können manuell oder automatisch eingegeben werden, sofern Sie ein Gerät besitzen, das das BLE GATT-Protokoll unterstützt. Wir empfehlen kein bestimmtes Gerät; bitte informieren Sie sich eigenständig.
+Messwerte können manuell oder automatisch eingegeben werden, sofern Sie ein Gerät besitzen, welches das BLE GATT-Protokoll unterstützt. Wir empfehlen kein bestimmtes Gerät; bitte informieren Sie sich eigenständig.
 
-Diese App ist <b>kein</b> Medizinprodukt. Sie misst <b>nicht</b> Ihren Blutdruck und bietet <b>keine</b> medizinische Beratung. Konsultieren Sie hierfür einen Arzt. Diese App ist lediglich ein Werkzeug, um Messwerte schnell, einfach und sicher aufzuzeichnen.
+Diese App ist <b>kein</b> Medizinprodukt. Sie misst <b>nicht</b> Ihren Blutdruck und bietet keine medizinische Beratung. Konsultieren Sie hierfür einen Arzt. Diese App ist lediglich ein Werkzeug, um Messwerte schnell, einfach und sicher aufzuzeichnen.
