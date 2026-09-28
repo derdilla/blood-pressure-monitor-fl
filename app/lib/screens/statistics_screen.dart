@@ -6,6 +6,7 @@ import 'package:blood_pressure_app/l10n/app_localizations.dart';
 import 'package:blood_pressure_app/model/blood_pressure_analyzer.dart';
 import 'package:blood_pressure_app/model/storage/interval_store_manager.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_markdown_plus/flutter_markdown_plus.dart';
 import 'package:health_data_store/health_data_store.dart';
 import 'package:provider/provider.dart';
 
@@ -41,7 +42,6 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
           final analyzer = BloodPressureAnalyzer(records.toList());
           return ListView(
             children: [
-              _buildSubTitle(localizations.statistics,),
               ListTile(
                 title: Text(localizations.measurementCount),
                 trailing: Text(
@@ -56,7 +56,11 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                   style: Theme.of(context).textTheme.headlineSmall,
                 ),
               ),
-              _buildSubTitle(localizations.valueDistribution,),
+              Divider(),
+              _ExplanationTile(
+                title: localizations.valueDistribution,
+                explanation: localizations.valueDistributionDocumentation,
+              ),
               Container(
                 height: 260,
                 padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -64,7 +68,11 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                   records: records,
                 ),
               ),
-              _buildSubTitle(localizations.timeResolvedMetrics),
+              Divider(),
+              _ExplanationTile(
+                title: localizations.timeResolvedMetrics,
+                explanation: localizations.timeResolvedMetricsDocumentation,
+              ),
               ClockBpGraph(measurements: records),
             ],
           );
@@ -77,12 +85,27 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
       )],
     );
   }
+}
 
-  Widget _buildSubTitle(String text) => ListTile(
-    contentPadding: EdgeInsets.zero,
-    title: Text(
-      text,
-      style: Theme.of(context).textTheme.titleLarge!,
-    ),
+class _ExplanationTile extends StatelessWidget {
+  const _ExplanationTile({required this.title, required this.explanation});
+
+  final String title;
+  final String explanation;
+
+  @override
+  Widget build(BuildContext context) => ExpansionTile(
+    trailing: Icon(Icons.info_outline),
+    shape: Border(),
+    title: Text(title),
+    children: [
+      Padding(
+        padding: EdgeInsetsGeometry.symmetric(horizontal: 8.0),
+        child: Markdown(
+          shrinkWrap: true,
+          data: explanation,
+        ),
+      ),
+    ],
   );
 }
