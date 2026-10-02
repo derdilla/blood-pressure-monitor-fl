@@ -48,6 +48,7 @@ android {
         versionName = flutterVersionName
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
+
     signingConfigs {
        release {
            keyAlias = keystoreProperties.get('keyAlias')
@@ -56,6 +57,11 @@ android {
            storePassword = keystoreProperties.get('storePassword')
        }
     }
+
+    packagingOptions {
+        exclude 'lib/**/*.so.dbg'
+    }
+
     buildTypes {
         release {
             signingConfig = signingConfigs.release
