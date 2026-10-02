@@ -22,7 +22,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v7
         with:
-          submodules: 'recursive'
           sparse-checkout: |
             flutter/
             pubspec.yaml
@@ -31,6 +30,7 @@ jobs:
             health_data_store
             settings_annotation
             settings_builder
+      - run: git submodule update --init --recursive
       - run: echo "${{ github.workspace }}/flutter/bin" >> $GITHUB_PATH
       - name: Disable analytics
         run: flutter config --no-analytics --suppress-analytics
