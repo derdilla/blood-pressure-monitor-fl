@@ -33,29 +33,16 @@ jobs:
         uses: actions/checkout@v7
         with:
           ref: ${{ github.event.pull_request.head.sha }}
+          submodules: 'recursive'
           sparse-checkout: |
+            flutter/
             pubspec.yaml
             pubspec.lock
             app
             health_data_store
             settings_annotation
             settings_builder
-      - name: Extract Flutter version
-        id: get_version
-        run: |
-          # This is the same function f-droid uses to ensure their builds keep succeeding:
-          # https://gitlab.com/fdroid/fdroiddata/-/blob/master/metadata/com.derdilla.bloodPressureApp.yml
-          VERSION=$(sed -n -E "s/.*flutter:\s*(.*)/\1/p" pubspec.yaml)
-          if [ -z "$VERSION" ]; then
-            echo "Error: Could not find a Flutter version specified in pubspec.yaml."
-            exit 1
-          fi
-          echo "version=$VERSION" >> $GITHUB_OUTPUT
-      - name: Setup Flutter
-        uses: subosito/flutter-action@v2
-        with:
-          flutter-version: ${{ steps.get_version.outputs.version }}
-          cache: true
+      - run: echo "${{ github.workspace }}/flutter/bin" >> $GITHUB_PATH
       - name: Disable analytics
         run: flutter config --no-analytics --suppress-analytics
       - run: flutter pub get --enforce-lockfile
@@ -88,29 +75,16 @@ jobs:
         uses: actions/checkout@v7
         with:
           ref: ${{ github.event.pull_request.head.sha }}
+          submodules: 'recursive'
           sparse-checkout: |
+            flutter/
             pubspec.yaml
             pubspec.lock
             app
             health_data_store
             settings_annotation
             settings_builder
-      - name: Extract Flutter version
-        id: get_version
-        run: |
-          # This is the same function f-droid uses to ensure their builds keep succeeding:
-          # https://gitlab.com/fdroid/fdroiddata/-/blob/master/metadata/com.derdilla.bloodPressureApp.yml
-          VERSION=$(sed -n -E "s/.*flutter:\s*(.*)/\1/p" pubspec.yaml)
-          if [ -z "$VERSION" ]; then
-            echo "Error: Could not find a Flutter version specified in pubspec.yaml."
-            exit 1
-          fi
-          echo "version=$VERSION" >> $GITHUB_OUTPUT
-      - name: Setup Flutter
-        uses: subosito/flutter-action@v2
-        with:
-          flutter-version: ${{ steps.get_version.outputs.version }}
-          cache: true
+      - run: echo "${{ github.workspace }}/flutter/bin" >> $GITHUB_PATH
       - name: Disable analytics
         run: flutter config --no-analytics --suppress-analytics
       - run: flutter pub get --enforce-lockfile
@@ -159,29 +133,16 @@ jobs:
         uses: actions/checkout@v7
         with:
           ref: ${{ github.event.pull_request.head.sha }}
+          submodules: 'recursive'
           sparse-checkout: |
+            flutter/
             pubspec.yaml
             pubspec.lock
             app
             health_data_store
             settings_annotation
             settings_builder
-      - name: Extract Flutter version
-        id: get_version
-        run: |
-          # This is the same function f-droid uses to ensure their builds keep succeeding:
-          # https://gitlab.com/fdroid/fdroiddata/-/blob/master/metadata/com.derdilla.bloodPressureApp.yml
-          VERSION=$(sed -n -E "s/.*flutter:\s*(.*)/\1/p" pubspec.yaml)
-          if [ -z "$VERSION" ]; then
-            echo "Error: Could not find a Flutter version specified in pubspec.yaml."
-            exit 1
-          fi
-          echo "version=$VERSION" >> $GITHUB_OUTPUT
-      - name: Setup Flutter
-        uses: subosito/flutter-action@v2
-        with:
-          flutter-version: ${{ steps.get_version.outputs.version }}
-          cache: true
+      - run: echo "${{ github.workspace }}/flutter/bin" >> $GITHUB_PATH
       - name: Disable analytics
         run: flutter config --no-analytics --suppress-analytics
       - run: flutter pub get --enforce-lockfile
@@ -212,29 +173,16 @@ jobs:
         uses: actions/checkout@v7
         with:
           ref: ${{ github.event.pull_request.head.sha }}
+          submodules: 'recursive'
           sparse-checkout: |
+            flutter/
             pubspec.yaml
             pubspec.lock
             app
             health_data_store
             settings_annotation
             settings_builder
-      - name: Extract Flutter version
-        id: get_version
-        run: |
-          # This is the same function f-droid uses to ensure their builds keep succeeding:
-          # https://gitlab.com/fdroid/fdroiddata/-/blob/master/metadata/com.derdilla.bloodPressureApp.yml
-          VERSION=$(sed -n -E "s/.*flutter:\s*(.*)/\1/p" pubspec.yaml)
-          if [ -z "$VERSION" ]; then
-            echo "Error: Could not find a Flutter version specified in pubspec.yaml."
-            exit 1
-          fi
-          echo "version=$VERSION" >> $GITHUB_OUTPUT
-      - name: Setup Flutter
-        uses: subosito/flutter-action@v2
-        with:
-          flutter-version: ${{ steps.get_version.outputs.version }}
-          cache: true
+      - run: echo "${{ github.workspace }}/flutter/bin" >> $GITHUB_PATH
       - name: Disable analytics
         run: flutter config --no-analytics --suppress-analytics
       - run: flutter pub get --enforce-lockfile
