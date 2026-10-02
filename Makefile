@@ -1,14 +1,15 @@
 TARGET_DIR := target
 FLAVOR := github
-# TODO: submodule
-FLUTTER := flutter
-DART := dart
+
+FLUTTER := $(shell cd $(CURDIR) && pwd)/flutter/bin/flutter
+DART := $(shell cd $(CURDIR) && pwd)/flutter/bin/dart
 
 version := $(shell  grep "version:" app/pubspec.yaml | sed 's/.*+//')
 
 # Supress gradle warning
 export GRADLE_OPTS="--enable-native-access=ALL-UNNAMED"
 
+.PHONY: clean build-all prepare-build get-deps codegen build-aab build-apk build-split-apk debug-info build-apk-x64 build-apk-arm build-apk-arm64
 .NOTPARALLEL:
 
 build-all: prepare-build get-deps codegen build-aab build-apk build-split-apk debug-info
