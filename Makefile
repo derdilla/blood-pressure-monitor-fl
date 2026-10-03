@@ -9,7 +9,7 @@ version := $(shell  grep "version:" app/pubspec.yaml | sed 's/.*+//')
 # Supress gradle warning
 export GRADLE_OPTS="--enable-native-access=ALL-UNNAMED"
 
-.PHONY: clean build-all prepare-build get-deps codegen build-aab build-apk build-split-apk debug-info build-apk-x64 build-apk-arm build-apk-arm64
+.PHONY: clean build-all prepare-build get-deps codegen build-aab build-apk build-split-apk debug-info build-apk-x64 build-apk-arm build-apk-arm64 analyze
 .NOTPARALLEL:
 
 build-all: prepare-build get-deps codegen build-aab build-apk build-split-apk debug-info
@@ -95,6 +95,12 @@ upgrade-deps-settings_annotation:
 
 upgrade-deps-settings_builder:
 	$(FLUTTER) pub upgrade --tighten --major-versions -C settings_builder
+
+analyze:
+	@cd health_data_store && dart analyze
+	@cd app && flutter analyze
+	@cd settings_builder && flutter analyze
+	@cd settings_annotation && flutter analyze
 
 
 version:

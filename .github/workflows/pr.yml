@@ -63,7 +63,7 @@ jobs:
         run: dart run build_runner build --build-filter "test/**/*.dart"
         working-directory: app
       - name: Analyze code
-        run: flutter analyze
+        run: make analyze
   update-goldens:
     if: github.event.pull_request.draft == false
     runs-on: ubuntu-latest
@@ -206,9 +206,11 @@ jobs:
         run: dart run build_runner build --build-filter "lib/model/storage/*.dart"
         working-directory: app
       - name: Build
-        run: flutter build apk --debug --flavor=github
+        run: |
+          make prepare_build
+          FLAVOR=fdroid make build-apk
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
           name: build-results
-          path: app/build/app/outputs/flutter-apk
+          path: target
