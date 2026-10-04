@@ -46,22 +46,7 @@ jobs:
       - name: Disable analytics
         run: flutter config --no-analytics --suppress-analytics
       - run: make get-deps
-      - name: Cache generated health data store
-        id: cache-generated
-        uses: actions/cache@v4
-        with:
-          path: health_data_store/lib
-          key: builder-${{ hashFiles('health_data_store/pubspec.yaml', 'health_data_store/lib/*', 'health_data_store/lib/**/*dart') }}
-      - name: Generate health_data_store code
-        if: steps.cache-generated.outputs.cache-hit != 'true'
-        run: dart run build_runner build
-        working-directory: health_data_store
-      - name: Generate settings code
-        run: dart run build_runner build --build-filter "lib/model/storage/*.dart"
-        working-directory: app
-      - name: Generate app mock code
-        run: dart run build_runner build --build-filter "test/**/*.dart"
-        working-directory: app
+      - run: make codegen
       - name: Analyze code
         run: make analyze
   update-goldens:
@@ -88,23 +73,7 @@ jobs:
       - name: Disable analytics
         run: flutter config --no-analytics --suppress-analytics
       - run: make get-deps
-      - name: Cache generated health data store
-        id: cache-generated
-        uses: actions/cache@v4
-        with:
-          path: health_data_store/lib
-          key: builder-${{ hashFiles('health_data_store/pubspec.yaml', 'health_data_store/lib/*', 'health_data_store/lib/**/*dart') }}
-      - name: Generate health_data_store code
-        if: steps.cache-generated.outputs.cache-hit != 'true'
-        run: dart run build_runner build
-        working-directory: health_data_store
-        # no efficient caching possible
-      - name: Generate settings code
-        run: dart run build_runner build --build-filter "lib/model/storage/*.dart"
-        working-directory: app
-      - name: Generate app mock code
-        run: dart run build_runner build --build-filter "test/**/*.dart"
-        working-directory: app
+      - run: make codegen
       - name: Update goldens
         id: gold-upd
         run: flutter test --update-goldens --fail-fast --tags gold --run-skipped
@@ -146,22 +115,7 @@ jobs:
       - name: Disable analytics
         run: flutter config --no-analytics --suppress-analytics
       - run: make get-deps
-      - name: Cache generated health data store
-        id: cache-generated
-        uses: actions/cache@v4
-        with:
-          path: health_data_store/lib
-          key: builder-${{ hashFiles('health_data_store/pubspec.yaml', 'health_data_store/lib/*', 'health_data_store/lib/**/*dart') }}
-      - name: Generate code
-        if: steps.cache-generated.outputs.cache-hit != 'true'
-        run: dart run build_runner build
-        working-directory: health_data_store
-      - name: Generate settings code
-        run: dart run build_runner build --build-filter "lib/model/storage/*.dart"
-        working-directory: app
-      - name: Generate app mock code
-        run: dart run build_runner build --build-filter "test/**/*.dart"
-        working-directory: app
+      - run: make codegen
       - name: Run tests
         run: flutter test --coverage
         working-directory: app
@@ -186,25 +140,12 @@ jobs:
       - name: Disable analytics
         run: flutter config --no-analytics --suppress-analytics
       - run: make get-deps
-      - name: Cache generated health data store
-        id: cache-generated
-        uses: actions/cache@v4
-        with:
-          path: health_data_store/lib
-          key: builder-${{ hashFiles('health_data_store/pubspec.yaml', 'health_data_store/lib/*', 'health_data_store/lib/**/*dart') }}
-      - name: Generate code
-        if: steps.cache-generated.outputs.cache-hit != 'true'
-        run: dart run build_runner build
-        working-directory: health_data_store
+      - run: make codegen
       - name: Set Up Java
         uses: actions/setup-java@v3.12.0
         with:
           distribution: 'oracle'
           java-version: '17'
-        # no efficient caching possible
-      - name: Generate settings code
-        run: dart run build_runner build --build-filter "lib/model/storage/*.dart"
-        working-directory: app
       - name: Build
         run: |
           make prepare-build
