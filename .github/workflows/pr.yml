@@ -34,49 +34,21 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.head.sha }}
           sparse-checkout: |
+            flutter/
             pubspec.yaml
             pubspec.lock
             app
             health_data_store
             settings_annotation
             settings_builder
-      - name: Extract Flutter version
-        id: get_version
-        run: |
-          # This is the same function f-droid uses to ensure their builds keep succeeding:
-          # https://gitlab.com/fdroid/fdroiddata/-/blob/master/metadata/com.derdilla.bloodPressureApp.yml
-          VERSION=$(sed -n -E "s/.*flutter:\s*(.*)/\1/p" pubspec.yaml)
-          if [ -z "$VERSION" ]; then
-            echo "Error: Could not find a Flutter version specified in pubspec.yaml."
-            exit 1
-          fi
-          echo "version=$VERSION" >> $GITHUB_OUTPUT
-      - name: Setup Flutter
-        uses: subosito/flutter-action@v2
-        with:
-          flutter-version: ${{ steps.get_version.outputs.version }}
-          cache: true
+      - run: git submodule update --init --recursive
+      - run: echo "${{ github.workspace }}/flutter/bin" >> $GITHUB_PATH
       - name: Disable analytics
         run: flutter config --no-analytics --suppress-analytics
-      - run: flutter pub get --enforce-lockfile
-      - name: Cache generated health data store
-        id: cache-generated
-        uses: actions/cache@v4
-        with:
-          path: health_data_store/lib
-          key: builder-${{ hashFiles('health_data_store/pubspec.yaml', 'health_data_store/lib/*', 'health_data_store/lib/**/*dart') }}
-      - name: Generate health_data_store code
-        if: steps.cache-generated.outputs.cache-hit != 'true'
-        run: dart run build_runner build
-        working-directory: health_data_store
-      - name: Generate settings code
-        run: dart run build_runner build --build-filter "lib/model/storage/*.dart"
-        working-directory: app
-      - name: Generate app mock code
-        run: dart run build_runner build --build-filter "test/**/*.dart"
-        working-directory: app
+      - run: make get-deps
+      - run: make codegen
       - name: Analyze code
-        run: flutter analyze
+        run: make analyze
   update-goldens:
     if: github.event.pull_request.draft == false
     runs-on: ubuntu-latest
@@ -89,51 +61,22 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.head.sha }}
           sparse-checkout: |
+            flutter/
             pubspec.yaml
             pubspec.lock
             app
             health_data_store
             settings_annotation
             settings_builder
-      - name: Extract Flutter version
-        id: get_version
-        run: |
-          # This is the same function f-droid uses to ensure their builds keep succeeding:
-          # https://gitlab.com/fdroid/fdroiddata/-/blob/master/metadata/com.derdilla.bloodPressureApp.yml
-          VERSION=$(sed -n -E "s/.*flutter:\s*(.*)/\1/p" pubspec.yaml)
-          if [ -z "$VERSION" ]; then
-            echo "Error: Could not find a Flutter version specified in pubspec.yaml."
-            exit 1
-          fi
-          echo "version=$VERSION" >> $GITHUB_OUTPUT
-      - name: Setup Flutter
-        uses: subosito/flutter-action@v2
-        with:
-          flutter-version: ${{ steps.get_version.outputs.version }}
-          cache: true
+      - run: git submodule update --init --recursive
+      - run: echo "${{ github.workspace }}/flutter/bin" >> $GITHUB_PATH
       - name: Disable analytics
         run: flutter config --no-analytics --suppress-analytics
-      - run: flutter pub get --enforce-lockfile
-      - name: Cache generated health data store
-        id: cache-generated
-        uses: actions/cache@v4
-        with:
-          path: health_data_store/lib
-          key: builder-${{ hashFiles('health_data_store/pubspec.yaml', 'health_data_store/lib/*', 'health_data_store/lib/**/*dart') }}
-      - name: Generate health_data_store code
-        if: steps.cache-generated.outputs.cache-hit != 'true'
-        run: dart run build_runner build
-        working-directory: health_data_store
-        # no efficient caching possible
-      - name: Generate settings code
-        run: dart run build_runner build --build-filter "lib/model/storage/*.dart"
-        working-directory: app
-      - name: Generate app mock code
-        run: dart run build_runner build --build-filter "test/**/*.dart"
-        working-directory: app
+      - run: make get-deps
+      - run: make codegen
       - name: Update goldens
         id: gold-upd
-        run: flutter test --update-goldens --fail-fast --tags gold --run-skipped
+        run: flutter test --no-pub --update-goldens --fail-fast --tags gold --run-skipped
         working-directory: app
       - name: Push golden changes
         # https://docs.github.com/en/actions/writing-workflows/choosing-what-your-workflow-does/evaluate-expressions-in-workflows-and-actions#example-of-failure-with-conditions
@@ -160,49 +103,21 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.head.sha }}
           sparse-checkout: |
+            flutter/
             pubspec.yaml
             pubspec.lock
             app
             health_data_store
             settings_annotation
             settings_builder
-      - name: Extract Flutter version
-        id: get_version
-        run: |
-          # This is the same function f-droid uses to ensure their builds keep succeeding:
-          # https://gitlab.com/fdroid/fdroiddata/-/blob/master/metadata/com.derdilla.bloodPressureApp.yml
-          VERSION=$(sed -n -E "s/.*flutter:\s*(.*)/\1/p" pubspec.yaml)
-          if [ -z "$VERSION" ]; then
-            echo "Error: Could not find a Flutter version specified in pubspec.yaml."
-            exit 1
-          fi
-          echo "version=$VERSION" >> $GITHUB_OUTPUT
-      - name: Setup Flutter
-        uses: subosito/flutter-action@v2
-        with:
-          flutter-version: ${{ steps.get_version.outputs.version }}
-          cache: true
+      - run: git submodule update --init --recursive
+      - run: echo "${{ github.workspace }}/flutter/bin" >> $GITHUB_PATH
       - name: Disable analytics
         run: flutter config --no-analytics --suppress-analytics
-      - run: flutter pub get --enforce-lockfile
-      - name: Cache generated health data store
-        id: cache-generated
-        uses: actions/cache@v4
-        with:
-          path: health_data_store/lib
-          key: builder-${{ hashFiles('health_data_store/pubspec.yaml', 'health_data_store/lib/*', 'health_data_store/lib/**/*dart') }}
-      - name: Generate code
-        if: steps.cache-generated.outputs.cache-hit != 'true'
-        run: dart run build_runner build
-        working-directory: health_data_store
-      - name: Generate settings code
-        run: dart run build_runner build --build-filter "lib/model/storage/*.dart"
-        working-directory: app
-      - name: Generate app mock code
-        run: dart run build_runner build --build-filter "test/**/*.dart"
-        working-directory: app
+      - run: make get-deps
+      - run: make codegen
       - name: Run tests
-        run: flutter test --coverage
+        run: flutter test --no-pub
         working-directory: app
   build:
     if: contains(github.event.pull_request.labels.*.name, 'auto-build')
@@ -213,54 +128,30 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.head.sha }}
           sparse-checkout: |
+            flutter/
             pubspec.yaml
             pubspec.lock
             app
             health_data_store
             settings_annotation
             settings_builder
-      - name: Extract Flutter version
-        id: get_version
-        run: |
-          # This is the same function f-droid uses to ensure their builds keep succeeding:
-          # https://gitlab.com/fdroid/fdroiddata/-/blob/master/metadata/com.derdilla.bloodPressureApp.yml
-          VERSION=$(sed -n -E "s/.*flutter:\s*(.*)/\1/p" pubspec.yaml)
-          if [ -z "$VERSION" ]; then
-            echo "Error: Could not find a Flutter version specified in pubspec.yaml."
-            exit 1
-          fi
-          echo "version=$VERSION" >> $GITHUB_OUTPUT
-      - name: Setup Flutter
-        uses: subosito/flutter-action@v2
-        with:
-          flutter-version: ${{ steps.get_version.outputs.version }}
-          cache: true
+      - run: git submodule update --init --recursive
+      - run: echo "${{ github.workspace }}/flutter/bin" >> $GITHUB_PATH
       - name: Disable analytics
         run: flutter config --no-analytics --suppress-analytics
-      - run: flutter pub get --enforce-lockfile
-      - name: Cache generated health data store
-        id: cache-generated
-        uses: actions/cache@v4
-        with:
-          path: health_data_store/lib
-          key: builder-${{ hashFiles('health_data_store/pubspec.yaml', 'health_data_store/lib/*', 'health_data_store/lib/**/*dart') }}
-      - name: Generate code
-        if: steps.cache-generated.outputs.cache-hit != 'true'
-        run: dart run build_runner build
-        working-directory: health_data_store
+      - run: make get-deps
+      - run: make codegen
       - name: Set Up Java
-        uses: actions/setup-java@v3.12.0
+        uses: actions/setup-java@v6
         with:
-          distribution: 'oracle'
-          java-version: '17'
-        # no efficient caching possible
-      - name: Generate settings code
-        run: dart run build_runner build --build-filter "lib/model/storage/*.dart"
-        working-directory: app
+          distribution: 'temurin'
+          java-version: '21'
       - name: Build
-        run: flutter build apk --debug --flavor=github
+        run: |
+          make prepare-build
+          FLAVOR=fdroid make build-apk
       - name: Upload artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: build-results
-          path: app/build/app/outputs/flutter-apk
+          path: target

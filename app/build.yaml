@@ -1,0 +1,9 @@
+targets:
+  $default:
+    builders:
+      settings_builder:
+        generate_for:
+          - lib/model/storage/*.dart
+      mockito:mockBuilder:
+        generate_for:
+        - test/features/bluetooth/logic/ble_read_cubit_test.dart
