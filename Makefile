@@ -12,6 +12,9 @@ export GRADLE_OPTS="--enable-native-access=ALL-UNNAMED"
 .PHONY: clean build-all prepare-build get-deps codegen build-aab build-apk build-split-apk debug-info build-apk-x64 build-apk-arm build-apk-arm64 analyze
 .NOTPARALLEL:
 
+run: get-deps codegen
+	@cd app && $(FLUTTER) run --no-pub --flavor $(FLAVOR)
+
 build-all: prepare-build get-deps codegen build-aab build-apk build-split-apk debug-info
 
 prepare-build:
