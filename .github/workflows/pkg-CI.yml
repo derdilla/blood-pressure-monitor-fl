@@ -60,23 +60,13 @@ jobs:
     - run: git submodule update --init --recursive
     - run: echo "${{ github.workspace }}/flutter/bin" >> $GITHUB_PATH
     - run: sudo apt-get -y install libsqlite3-dev
-    - name: Get dependencies
-      run: |
-        dart pub get --enforce-lockfile
-        dart pub global activate coverage
-      working-directory: ./health_data_store
+    - run: make get-deps
     - name: Generate code
       run: dart run build_runner build
       working-directory: ./health_data_store
     - name: Run tests
-      run: |
-        dart test --coverage=coverage
-        format_coverage --lcov --in=coverage --out=coverage.lcov --report-on=lib
+      run: dart test --no-deps
       working-directory: ./health_data_store
-    - uses: actions/upload-artifact@v4
-      with:
-        name: health_data_store-coverage
-        path: health_data_store/coverage.lcov
   test-settings_annotation:
     runs-on: ubuntu-slim
     needs: changes
@@ -97,7 +87,7 @@ jobs:
       - run: echo "${{ github.workspace }}/flutter/bin" >> $GITHUB_PATH
       - name: Disable analytics
         run: flutter config --no-analytics --suppress-analytics
-      - run: flutter pub get --enforce-lockfile
+      - run: make get-deps
       - run: flutter test
         working-directory: ./settings_annotation
       - run: dart analyze
