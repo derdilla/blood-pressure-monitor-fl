@@ -57,7 +57,7 @@ jobs:
           health_data_store
           settings_annotation
           settings_builder
-      - run: git submodule update --init --recursive
+    - run: git submodule update --init --recursive
     - run: echo "${{ github.workspace }}/flutter/bin" >> $GITHUB_PATH
     - run: sudo apt-get -y install libsqlite3-dev
     - name: Get dependencies

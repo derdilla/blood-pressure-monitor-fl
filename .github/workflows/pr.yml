@@ -76,7 +76,7 @@ jobs:
       - run: make codegen
       - name: Update goldens
         id: gold-upd
-        run: flutter test --update-goldens --fail-fast --tags gold --run-skipped
+        run: flutter test --no-pub --update-goldens --fail-fast --tags gold --run-skipped
         working-directory: app
       - name: Push golden changes
         # https://docs.github.com/en/actions/writing-workflows/choosing-what-your-workflow-does/evaluate-expressions-in-workflows-and-actions#example-of-failure-with-conditions
@@ -117,7 +117,7 @@ jobs:
       - run: make get-deps
       - run: make codegen
       - name: Run tests
-        run: flutter test --coverage
+        run: flutter test --no-pub
         working-directory: app
   build:
     if: contains(github.event.pull_request.labels.*.name, 'auto-build')

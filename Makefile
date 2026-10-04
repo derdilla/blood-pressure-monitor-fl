@@ -25,6 +25,7 @@ codegen:
 
 build-aab:
 	@cd app && $(FLUTTER) build aab --release \
+		--no-pub \
 		--flavor $(FLAVOR) \
 		--obfuscate \
 		--split-debug-info=./build/debug-info \
@@ -34,6 +35,7 @@ build-aab:
 
 build-apk:
 	@cd app && $(FLUTTER) build apk --release \
+		--no-pub \
 		--flavor $(FLAVOR) \
 		--obfuscate \
 		--split-debug-info=./build/debug-info \
@@ -45,6 +47,7 @@ build-split-apk: build-apk-x64 build-apk-arm build-apk-arm64
 
 build-apk-x64:
 	@cd app && $(FLUTTER) build apk --release \
+		--no-pub \
 		--flavor $(FLAVOR) \
 		--obfuscate \
 		--split-debug-info=./build/debug-info \
@@ -56,6 +59,7 @@ build-apk-x64:
 
 build-apk-arm:
 	@cd app && $(FLUTTER) build apk --release \
+		--no-pub \
 		--flavor $(FLAVOR) \
 		--obfuscate \
 		--split-debug-info=./build/debug-info \
@@ -67,6 +71,7 @@ build-apk-arm:
 
 build-apk-arm64:
 	@cd app && $(FLUTTER) build apk --release \
+		--no-pub \
 		--flavor $(FLAVOR) \
 		--obfuscate \
 		--split-debug-info=./build/debug-info \
@@ -98,9 +103,9 @@ upgrade-deps-settings_builder:
 
 analyze:
 	@cd health_data_store && dart analyze
-	@cd app && flutter analyze
-	@cd settings_builder && flutter analyze
-	@cd settings_annotation && flutter analyze
+	@cd app && flutter analyze --no-pub
+	@cd settings_builder && flutter analyze --no-pub
+	@cd settings_annotation && flutter analyze --no-pub
 
 
 version:
