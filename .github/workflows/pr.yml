@@ -45,7 +45,7 @@ jobs:
       - run: echo "${{ github.workspace }}/flutter/bin" >> $GITHUB_PATH
       - name: Disable analytics
         run: flutter config --no-analytics --suppress-analytics
-      - run: flutter pub get --enforce-lockfile
+      - run: make get-deps
       - name: Cache generated health data store
         id: cache-generated
         uses: actions/cache@v4
@@ -87,7 +87,7 @@ jobs:
       - run: echo "${{ github.workspace }}/flutter/bin" >> $GITHUB_PATH
       - name: Disable analytics
         run: flutter config --no-analytics --suppress-analytics
-      - run: flutter pub get --enforce-lockfile
+      - run: make get-deps
       - name: Cache generated health data store
         id: cache-generated
         uses: actions/cache@v4
@@ -145,7 +145,7 @@ jobs:
       - run: echo "${{ github.workspace }}/flutter/bin" >> $GITHUB_PATH
       - name: Disable analytics
         run: flutter config --no-analytics --suppress-analytics
-      - run: flutter pub get --enforce-lockfile
+      - run: make get-deps
       - name: Cache generated health data store
         id: cache-generated
         uses: actions/cache@v4
@@ -185,7 +185,7 @@ jobs:
       - run: echo "${{ github.workspace }}/flutter/bin" >> $GITHUB_PATH
       - name: Disable analytics
         run: flutter config --no-analytics --suppress-analytics
-      - run: flutter pub get --enforce-lockfile
+      - run: make get-deps
       - name: Cache generated health data store
         id: cache-generated
         uses: actions/cache@v4
@@ -207,7 +207,7 @@ jobs:
         working-directory: app
       - name: Build
         run: |
-          make prepare_build
+          make prepare-build
           FLAVOR=fdroid make build-apk
       - name: Upload artifacts
         uses: actions/upload-artifact@v4

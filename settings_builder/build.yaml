@@ -1,5 +1,5 @@
 builders:
-  member_count:
+  settings_builder:
     import: "package:settings_builder/generator.dart"
     builder_factories: ["modelLibraryBuilder"]
     build_extensions: {".dart": [".store.dart"]}
