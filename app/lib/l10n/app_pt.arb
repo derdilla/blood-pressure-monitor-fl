@@ -414,5 +414,13 @@
     }
   },
   "bluetoothImportModeDisabled": "Desativado",
-  "bluetoothImportModeAll": "Adicionar medição"
+  "bluetoothImportModeAll": "Adicionar medição",
+  "medianOf": "{txt} máx.",
+  "@medianOf": {
+    "placeholders": {
+      "txt": {
+        "type": "String"
+      }
+    }
+  }
 }

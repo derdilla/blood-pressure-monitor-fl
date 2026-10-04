@@ -393,5 +393,13 @@
   "featuresSetting": "Lastnosti",
   "warnDiscardingData": "Imate neshranjene podatke. Ali želite nadaljevati in jih zavreči?",
   "bluetoothImportModeDisabled": "Onemogočeno",
-  "bluetoothImportModeAll": "Dodaj meritev"
+  "bluetoothImportModeAll": "Dodaj meritev",
+  "medianOf": "{txt} max.",
+  "@medianOf": {
+    "placeholders": {
+      "txt": {
+        "type": "String"
+      }
+    }
+  }
 }
