@@ -422,5 +422,15 @@
   "bluetoothImportMode": "Auto Import",
   "bluetoothImportModeDescription": "Automatisch die vom Gerät gelieferten Messungen importieren anstatt sie zunächst anzuzeigen. Wenn mehr als ein Wert zurückgegeben wird, auswählen welcher importiert werden soll.",
   "bluetoothImportModeLast": "Letzte Messung",
-  "exportImportDocumentationTooltip": "Wie Export/Import benutzt wird"
+  "exportImportDocumentationTooltip": "Wie Export/Import benutzt wird",
+  "medianOf": "{txt} mittel.",
+  "@medianOf": {
+    "placeholders": {
+      "txt": {
+        "type": "String"
+      }
+    }
+  },
+  "exportImportDocumentation": "## Grundlagen zum Ex-/Importieren\n\n- Verwenden Sie Datenbankexporte, wenn Sie die Daten lediglich übertragen möchten oder sich mit SQLite auskennen.\n- Wählen Sie CSV für Arbeitsabläufe mit Tabellenkalkulationsprogrammen und für den Import der Daten zurück in die App.\n- Lassen Sie die Kopfzeile aktiviert und fügen Sie eine Zeitspalte hinzu, damit der Import zuverlässig wiederhergestellt werden kann.\n- Verwenden Sie den Feldformat-Dialog, um benutzerdefinierte Spalten für Werte wie systolischen Blutdruck, diastolischen Blutdruck, Puls, Notizen und Medikamenteneinnahmen hinzuzufügen.\n\n## CSV-Import in LibreOffice und ähnlichen Programmen\n\n- Exportieren Sie als CSV und lassen Sie die Kopfzeile aktiviert.\n- Verwenden Sie das Standard-Trennzeichen und das Text-Trennzeichen für Standard-CSV-Dateien.\n- Öffnen Sie die Datei in LibreOffice, Excel oder ähnlichen Programmen und stellen Sie sicher, dass die Zeitspalte als Datums-/Zeitwert erkannt wird.\n- Wenn Sie die Datei später erneut importieren möchten, behalten Sie die gleichen CSV-Einstellungen bei und fügen eine gültige Zeitspalte ein.\n\n## Farbspalten\n\n- Die Spalte ''color'' exportiert die Notizfarbe als einfachen Wert.\n- Die veraltete Spalte ''needlePin'' speichert JSON-Nutzdaten zur Kompatibilität mit älteren Arbeitsabläufen.\n- Verwenden Sie die einfache Spalte ''color'', wenn Sie einen einfachen, tabellenkalkulationsfreundlichen Export wünschen.\n\n## Beispiel-Arbeitsablauf\n\n1. Geben Sie eine Messung und beliebige Notizen ein.\n2. Öffnen Sie Exportieren / Importieren und wechseln Sie zu CSV.\n3. Fügen Sie ein benutzerdefiniertes Feld oder Zeitspalte hinzu, wenn Sie es benötigen.\n4. Exportieren Sie die Daten und öffnen Sie sie in LibreOffice oder einer ähnlichen Anwendung.\n5. Importieren Sie dieselbe Datei später erneut, wenn Sie die Daten wiederherstellen oder überprüfen möchten.",
+  "median": "Mittelwert"
 }

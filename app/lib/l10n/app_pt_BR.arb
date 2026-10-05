@@ -413,5 +413,13 @@
       }
     }
   },
-  "bluetoothImportModeAll": "Adicionar medição"
+  "bluetoothImportModeAll": "Adicionar medição",
+  "medianOf": "{txt} min.",
+  "@medianOf": {
+    "placeholders": {
+      "txt": {
+        "type": "String"
+      }
+    }
+  }
 }

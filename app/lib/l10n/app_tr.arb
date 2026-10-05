@@ -421,5 +421,15 @@
   "autostartBluetoothInputDescription": "Bluetooth girişi etkinleştirildiğinde ve Bluetooth açıkken, ölçüm giriş ekranında içe aktarma işlemi otomatik olarak başlar.",
   "bluetoothImportMode": "Otomatik içe aktar",
   "bluetoothImportModeDescription": "Ölçümleri önce incelemek yerine, aygıt tarafından gönderilen ölçümleri otomatik olarak içe aktarın. Birden fazla ölçüm gönderildiğinde, hangisini içe aktaracağınızı seçin.",
-  "bluetoothImportModeLast": "En son ölçüm"
+  "bluetoothImportModeLast": "En son ölçüm",
+  "medianOf": "{txt} azm.",
+  "@medianOf": {
+    "placeholders": {
+      "txt": {
+        "type": "String"
+      }
+    }
+  },
+  "median": "Ortalama",
+  "exportImportDocumentationTooltip": "Dışa aktarma/içe aktarma nasıl kullanılır"
 }
