@@ -1,0 +1,6 @@
+- Lisasime ekspordi-impordivaatesse viite juhendile (tänud @Pankajbarad18)
+- Parandasime erinevad BLE vead ja seadmete kiiksud (tänud @cmair)
+- Lisandus Beurer BM85 tugi (tänud cmair)
+- Lisandus viimase x päeva valik
+- Diagrammist saab nüüd klõpsida ka üksikasju
+- Senisest parem statistikavaade

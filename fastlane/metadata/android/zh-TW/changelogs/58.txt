@@ -1,0 +1,6 @@
+- Added documentation on export/import screen (thanks @Pankajbarad18)
+- Fixed various BLE bugs and device quirks (thanks @cmair)
+- Added support for Beurer BM85 (also thanks cmair)
+- Implement last n days selector
+- Show details when interacting with graph
+- Improve statistics screen
