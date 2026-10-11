@@ -11,7 +11,7 @@ resolution: workspace
 dependencies:
   flutter:
     sdk: flutter
-  meta: ^1.18.0
+  meta: ^1.19.0
 
 dev_dependencies:
   flutter_test:
