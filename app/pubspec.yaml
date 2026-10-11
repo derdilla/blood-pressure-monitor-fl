@@ -47,8 +47,6 @@ dependencies:
   receive_intent: ^0.2.8
 
 dev_dependencies:
-  integration_test:
-    sdk: flutter
   flutter_test:
     sdk: flutter
   file: ^7.0.1
