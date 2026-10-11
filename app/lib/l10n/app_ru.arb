@@ -414,5 +414,13 @@
     }
   },
   "bluetoothImportModeDisabled": "Откючено",
-  "bluetoothImportModeAll": "Добавить измерение"
+  "bluetoothImportModeAll": "Добавить измерение",
+  "medianOf": "{txt} макс.",
+  "@medianOf": {
+    "placeholders": {
+      "txt": {
+        "type": "String"
+      }
+    }
+  }
 }

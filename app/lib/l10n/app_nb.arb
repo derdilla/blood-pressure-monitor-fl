@@ -230,5 +230,13 @@
   "exportPdfExportTitle": "Overskrift",
   "timeFormat": "Tidsformat",
   "bloodPressure": "Blodtrykksprogram",
-  "bluetoothImportModeAll": "Legg til måling"
+  "bluetoothImportModeAll": "Legg til måling",
+  "medianOf": "{txt} maks.",
+  "@medianOf": {
+    "placeholders": {
+      "txt": {
+        "type": "String"
+      }
+    }
+  }
 }

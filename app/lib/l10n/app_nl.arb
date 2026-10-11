@@ -413,5 +413,13 @@
       }
     }
   },
-  "bluetoothImportModeAll": "Voeg meting toe"
+  "bluetoothImportModeAll": "Voeg meting toe",
+  "medianOf": "{txt} max.",
+  "@medianOf": {
+    "placeholders": {
+      "txt": {
+        "type": "String"
+      }
+    }
+  }
 }

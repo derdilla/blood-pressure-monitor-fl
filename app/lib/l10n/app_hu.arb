@@ -382,5 +382,13 @@
         "type": "int"
       }
     }
+  },
+  "medianOf": "{txt} max.",
+  "@medianOf": {
+    "placeholders": {
+      "txt": {
+        "type": "String"
+      }
+    }
   }
 }

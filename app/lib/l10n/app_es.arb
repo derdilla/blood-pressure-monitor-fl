@@ -421,5 +421,13 @@
   "autostartBluetoothInputDescription": "Cuando está habilitada la entrada y Bluetooth activada, automáticamente inicie la importación en la medida de la entrada de pantalla.",
   "bluetoothImportMode": "Auto‐importar",
   "bluetoothImportModeDescription": "Importa automáticamente las mediciones que devuelve el dispositivo, en lugar de revisarlas primero. Cuando se devuelvan varias, elige cuál quieres importar.",
-  "bluetoothImportModeLast": "Medición más última"
+  "bluetoothImportModeLast": "Medición más última",
+  "medianOf": "{txt} máx.",
+  "@medianOf": {
+    "placeholders": {
+      "txt": {
+        "type": "String"
+      }
+    }
+  }
 }
