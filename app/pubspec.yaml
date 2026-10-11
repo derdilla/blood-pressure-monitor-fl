@@ -4,7 +4,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 repository: https://github.com/derdilla/blood-pressure-monitor-fl
 issue_tracker: https://github.com/derdilla/blood-pressure-monitor-fl/issues
 
-version: 1.8.15+57
+version: 1.8.16+58
 
 environment:
   sdk: ^3.12.0
@@ -13,7 +13,7 @@ resolution: workspace
 dependencies:
   collection: ^1.19.1
   csv: ^8.0.0
-  intl: ^0.20.2
+  intl: ^0.20.3
   flutter:
     sdk: flutter
   flutter_localizations:
@@ -22,29 +22,29 @@ dependencies:
   function_tree: ^0.9.1
   provider: ^6.1.5+1
   path: ^1.9.1
-  pdf: ^3.13.0
-  package_info_plus: ^10.2.1
+  pdf: ^3.13.1
+  package_info_plus: ^10.2.2
   week_of_year: 2.2.0
-  sqflite: ^2.4.3
-  url_launcher: ^6.3.2
+  sqflite: ^2.4.4+1
+  url_launcher: ^6.3.3
   health_data_store:
     path: ../health_data_store/
   settings_annotation:
     path: ../settings_annotation
   flutter_bloc: ^9.1.1
   bluetooth_low_energy: ^6.2.1
-  flutter_blue_plus: 1.36.8 # Can't update further: Starting from 2.0 the license gets weird
-  archive: ^4.0.9
+  flutter_blue_plus: ^1.36.8 # Can't update further: Starting from 2.0 the license gets weird
+  archive: ^4.5.1
   file_picker: ^13.1.0
-  app_settings: ^8.0.3
+  app_settings: ^9.0.0
   logging: ^1.3.0
   persistent_user_dir_access_android: ^0.0.3
-  share_plus: ^13.3.0
-  sqflite_common_ffi: ^2.4.2
+  share_plus: ^13.3.1
+  sqflite_common_ffi: ^2.4.3
   inline_tab_view: ^1.0.2
-  xml: ^7.0.1
-  health: ^13.3.1
-  receive_intent: ^0.2.7
+  xml: ^7.1.0
+  health: ^13.3.2
+  receive_intent: ^0.2.8
 
 dev_dependencies:
   integration_test:
@@ -53,8 +53,8 @@ dev_dependencies:
     sdk: flutter
   file: ^7.0.1
   flutter_lints: ^6.0.0
-  mockito: ^5.6.4
-  build_runner: ^2.15.1
+  mockito: ^5.8.1
+  build_runner: ^2.16.1
   bloc_test: ^10.0.0
   settings_builder:
     path: ../settings_builder
