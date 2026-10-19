@@ -35,11 +35,13 @@ Most devices provide 2 ways to retrieve measurements over bluetooth, but there a
 | Beurer BM59                               | BM 59                             |  Standard GATT  |   ✅    |      Reads multiple       |
 | Beurer BM85                               | Beurer BM85                       |  Standard GATT  |   ✅    |      Reads multiple       |
 | Yonker YK-IBPA1                           |                                   | Yonker protocol |   ✅    | Connect after measurement |
-| Yonker YK-BPW5                            |                                   | Yonker protocol |   ?    |                           |
-| Yongrow YK-IBPA1                          |                                   | Yonker protocol |   ?    |                           |
-| METIKO MT-YK-BPA1                         |                                   | Yonker protocol |   ?    |                           |
+| Yonker YK-BPW5                            |                                   | Yonker protocol |   ?    |                            |
+| Yongrow YK-IBPA1                          |                                   | Yonker protocol |   ?    |                            |
+| METIKO MT-YK-BPA1                         |                                   | Yonker protocol |   ?    |                            |
 | Microlife BP3GY1-2N                       | BP3GY1-2N                         | Microlife protocol | ? | Downloads all stored measurements |
-| Medisana BU 572                           | BU 572                            | Standard GATT   |   ⚠️    | legacy only              |
+| Medisana BU 570                           | BU 570                            | Standard GATT   |   ✅    |                           |
+| Medisana BU 572                           | BU 572                            | Standard GATT   |   ✅    |                           |
+| Sanitas SBM67                             | SBM67                             | Standard GATT   |   ✅    |                           |
 
 
 ## Specifications
