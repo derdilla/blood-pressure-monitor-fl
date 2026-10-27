@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:blood_pressure_app/features/bluetooth/logic/characteristics/ble_measurement_data.dart';
+import 'package:blood_pressure_app/features/bluetooth/logic/characteristics/microlife_3g_measurement_data.dart';
 import 'package:blood_pressure_app/features/bluetooth/logic/characteristics/microlife_measurement_data.dart';
 import 'package:blood_pressure_app/features/bluetooth/logic/characteristics/microlife_protocol.dart';
 import 'package:blood_pressure_app/features/bluetooth/logic/characteristics/yonker_measurement_data.dart';
@@ -20,12 +21,25 @@ class BleReadCubit extends Cubit<BleReadState> with TypeLogger {
     required this.device,
     required this.cm,
     this.deviceName,
-  }): super(BleReadInProgress());
+    this.connectionTimeout = const Duration(seconds: 30),
+    this.serviceDiscoveryTimeout = const Duration(seconds: 20),
+    this.disconnectTimeout = const Duration(seconds: 5),
+  }) : super(BleReadInProgress());
 
   /// Bluetooth device to connect to.
   final Peripheral device;
 
   final CentralManager cm;
+
+  final Duration connectionTimeout;
+
+  final Duration serviceDiscoveryTimeout;
+
+  final Duration disconnectTimeout;
+
+  final Completer<void> _readCancelled = Completer<void>();
+  Future<void>? _disconnectFuture;
+  bool _closing = false;
 
   /// Advertised name of [device], used to detect devices that deviate from the
   /// GATT spec (currently some Beurer devices, see [isKnownBigEndianDevice]).
@@ -35,7 +49,8 @@ class BleReadCubit extends Cubit<BleReadState> with TypeLogger {
   static const defaultCharacteristicUUID = '2A35';
 
   static const yonkerServiceUUID = 'cdeacd80-5235-4c07-8846-93a37ee6b86d';
-  static const yonkerCharacteristicUUID = 'cdeacd81-5235-4c07-8846-93a37ee6b86d';
+  static const yonkerCharacteristicUUID =
+      'cdeacd81-5235-4c07-8846-93a37ee6b86d';
 
   static const microlifeServiceUUID = 'fff0';
   static const microlifeNotifyCharacteristicUUID = 'fff1';
@@ -48,8 +63,10 @@ class BleReadCubit extends Cubit<BleReadState> with TypeLogger {
   static const _microlifeWriteChunkSize = 20;
 
   static const _microlifeResponseTimeout = Duration(seconds: 30);
-  final List<int> _microlifeResponseByteBuffer = [];
-  Completer<Uint8List>? _microlifePendingResponse;
+  final _microlifeFrameDecoder = MicrolifeFrameDecoder();
+  Completer<MicrolifeResponseFrame>? _microlifePendingResponse;
+  bool Function(MicrolifeResponseFrame)? _microlifeAcceptsResponse;
+  bool _microlifeWriteInFlight = false;
 
   /// Whether [advertisedName] belongs to a model known to send multi byte
   /// fields big endian instead of the little endian the spec requires.
@@ -63,16 +80,99 @@ class BleReadCubit extends Cubit<BleReadState> with TypeLogger {
     return const ['BM85'].any(normalized.contains);
   }
 
-  Future<bool> _connectDevice() async {
+  Future<void> _connectDevice() async {
     logger.info('Connecting to ${device.uuid}');
-    final result = cm.connectionStateChanged
-        .where((e) => e.peripheral == device)
-        .first;
-    await cm.connect(device);
-    logger.finer('connect command send');
-    final success = await result;
-    logger.finer('Connection result: $success');
-    return success.state == ConnectionState.connected;
+    final result = Completer<void>();
+    final subscription = cm.connectionStateChanged
+        .where((event) => event.peripheral == device)
+        .listen(
+          (event) {
+            if (result.isCompleted) return;
+            switch (event.state) {
+              case ConnectionState.connected:
+                result.complete();
+              case ConnectionState.disconnected:
+                break;
+            }
+          },
+          onError: (Object error, StackTrace stack) {
+            if (!result.isCompleted) result.completeError(error, stack);
+          },
+          onDone: () {
+            if (!result.isCompleted) {
+              result.completeError(
+                StateError('Connection state stream closed'),
+              );
+            }
+          },
+        );
+
+    try {
+      await _runBluetoothPhase('Bluetooth connection', () async {
+        await Future.wait<void>([
+          cm.connect(device),
+          result.future,
+        ], eagerError: true);
+      }, timeout: connectionTimeout);
+    } finally {
+      await subscription.cancel();
+      if (!result.isCompleted) result.complete();
+    }
+  }
+
+  Future<T> _runBluetoothPhase<T>(
+    String phase,
+    Future<T> Function() action, {
+    required Duration timeout,
+    bool failOnDisconnect = false,
+  }) async {
+    if (_closing) throw const _BleReadCancelled();
+    final disconnected = Completer<T>();
+    final disconnectSubscription = failOnDisconnect
+        ? cm.connectionStateChanged
+              .where(
+                (event) =>
+                    event.peripheral == device &&
+                    event.state == ConnectionState.disconnected,
+              )
+              .listen((_) {
+                if (!disconnected.isCompleted) {
+                  disconnected.completeError(
+                    StateError('Device disconnected during $phase'),
+                  );
+                }
+              })
+        : null;
+    try {
+      final value = await Future.any<T>([
+        Future<T>.sync(action),
+        _readCancelled.future.then<T>((_) => throw const _BleReadCancelled()),
+        if (failOnDisconnect) disconnected.future,
+      ]).timeout(timeout);
+      return value;
+    } on _BleReadCancelled {
+      rethrow;
+    } on TimeoutException catch (error) {
+      throw _BluetoothPhaseFailure(
+        phase,
+        'Timed out after ${timeout.inSeconds} seconds. $error',
+      );
+    } catch (error) {
+      throw _BluetoothPhaseFailure(phase, error);
+    } finally {
+      await disconnectSubscription?.cancel();
+    }
+  }
+
+  Future<void> _disconnectDevice() =>
+      _disconnectFuture ??= _performDisconnect();
+
+  Future<void> _performDisconnect() async {
+    try {
+      await cm.disconnect(device).timeout(disconnectTimeout);
+    } catch (error) {
+      logger.warning('Failed to cancel connection to ${device.uuid}: $error');
+    }
   }
 
   /// Take a 'measurement', i.e. read the blood pressure values from the given characteristicUUID
@@ -80,41 +180,59 @@ class BleReadCubit extends Cubit<BleReadState> with TypeLogger {
   Future<void> takeMeasurement() async {
     try {
       await _takeMeasurement();
+      if (state is BleReadFailure) await _disconnectDevice();
+    } on _BleReadCancelled {
+      logger.finer('Read cancelled for ${device.uuid}');
     } catch (e, stack) {
       logger.severe('takeMeasurement failed', e, stack);
-      if (state is BleReadInProgress) emit(BleReadFailure('Could not read from device: $e'));
+      if (!_closing && !isClosed && state is BleReadInProgress) {
+        emit(BleReadFailure('Could not read from device: $e'));
+      }
+      await _disconnectDevice();
     }
   }
 
   Future<void> _takeMeasurement() async {
     logger.finest('takeMeasurement();');
-    if (!await _connectDevice()) {
-      emit(BleReadFailure('Unable to connect to device: ${device.uuid}'));
-      return;
-    }
+    await _connectDevice();
 
     logger.finest('starting service discovery...');
-    final services = await cm.discoverGATT(device);
+    final services = await _runBluetoothPhase(
+      'Bluetooth service discovery',
+      () => cm.discoverGATT(device),
+      timeout: serviceDiscoveryTimeout,
+      failOnDisconnect: true,
+    );
+    if (_closing) throw const _BleReadCancelled();
     if (services.isEmpty) {
-      logger.warning('Device ${device.uuid} advertised no services after connecting');
+      logger.warning(
+        'Device ${device.uuid} advertised no services after connecting',
+      );
     }
 
     final gattService = services.firstWhereOrNull(
-            (s) => s.uuid == UUID.fromString(defaultServiceUUID));
+      (s) => s.uuid == UUID.fromString(defaultServiceUUID),
+    );
     if (gattService != null) return _readGatt(gattService);
     logger.finest("didn't get GATT service");
 
     final yonkerService = services.firstWhereOrNull(
-            (s) => s.uuid == UUID.fromString(yonkerServiceUUID));
+      (s) => s.uuid == UUID.fromString(yonkerServiceUUID),
+    );
     if (yonkerService != null) return _readYonker(yonkerService);
     logger.finest("didn't get yonker service");
 
     final microlifeService = services.firstWhereOrNull(
-            (s) => s.uuid == UUID.fromString(microlifeServiceUUID));
+      (s) => s.uuid == UUID.fromString(microlifeServiceUUID),
+    );
     if (microlifeService != null) return _readMicrolife(microlifeService);
     logger.finest("didn't get microlife service");
 
-    emit(BleReadFailure('Device ${device.uuid} does not advertise a supported service'));
+    emit(
+      BleReadFailure(
+        'Device ${device.uuid} does not advertise a supported service',
+      ),
+    );
   }
 
   Future<void> _readGatt(GATTService service) async {
@@ -253,133 +371,297 @@ class BleReadCubit extends Cubit<BleReadState> with TypeLogger {
   Future<void> _readMicrolife(GATTService service) async {
     logger.finest('_readMicrolife()');
     final notifyCharacteristic = service.characteristics.firstWhereOrNull(
-            (c) => c.uuid == UUID.fromString(microlifeNotifyCharacteristicUUID));
+      (c) => c.uuid == UUID.fromString(microlifeNotifyCharacteristicUUID),
+    );
     final writeCharacteristic = service.characteristics.firstWhereOrNull(
-            (c) => c.uuid == UUID.fromString(microlifeWriteCharacteristicUUID));
+      (c) => c.uuid == UUID.fromString(microlifeWriteCharacteristicUUID),
+    );
 
     if (notifyCharacteristic == null || writeCharacteristic == null) {
-      emit(BleReadFailure('Device ${device.uuid} does not provide the expected microlife characteristics'));
+      emit(
+        BleReadFailure(
+          'Device ${device.uuid} does not provide the expected microlife characteristics',
+        ),
+      );
       return;
     }
 
-    _microlifeResponseByteBuffer.clear();
+    _microlifeFrameDecoder.clear();
     _microlifePendingResponse = null;
     final subscription = cm.characteristicNotified
-        .where((e) => e.characteristic == notifyCharacteristic && e.peripheral == device)
-        .listen((e) => _onMicrolifeNotified(e.value));
+        .where(
+          (e) =>
+              e.characteristic == notifyCharacteristic &&
+              e.peripheral == device,
+        )
+        .listen(
+          (e) => _onMicrolifeNotified(e.value),
+          onError: (Object error, StackTrace stack) {
+            final pending = _microlifePendingResponse;
+            if (pending != null && !pending.isCompleted) {
+              pending.completeError(error, stack);
+            }
+          },
+        );
 
     try {
-      await cm.setCharacteristicNotifyState(device, notifyCharacteristic, state: true);
+      await _runBluetoothPhase(
+        'Microlife notification setup',
+        () => cm.setCharacteristicNotifyState(
+          device,
+          notifyCharacteristic,
+          state: true,
+        ),
+        timeout: serviceDiscoveryTimeout,
+        failOnDisconnect: true,
+      );
 
-      // Keep the device clock accurate for future measurements.
-      try {
-        await _sendMicrolifeCommand(writeCharacteristic,
-            MicrolifeProtocol.buildSetTimeCommand(DateTime.now()),
-            timeout: const Duration(seconds: 10));
-      } catch (e) {
-        logger.warning('Microlife set time failed, continuing: $e');
+      var use3g = MicrolifeProtocol.isKnown3gDevice(deviceName);
+      if (use3g) {
+        final version = await _sendMicrolifeCommand(
+          writeCharacteristic,
+          MicrolifeProtocol.readUserVersionCommand,
+          phase: 'Microlife device identification',
+          preferWithoutResponse: true,
+          accepts: (frame) => frame.payload.length > 1 && frame.payload[0] == 5,
+        );
+        use3g = version!.marker == 0x31;
       }
 
-      final payload = await _sendMicrolifeCommand(
-          writeCharacteristic, MicrolifeProtocol.getMeasurementsCommand);
-      final measurements = MicrolifeMeasurementData.decodeMeasurements(payload)
-          .map((m) => m.asBleData)
-          .toList();
+      if (!use3g) {
+        try {
+          await _sendMicrolifeCommand(
+            writeCharacteristic,
+            MicrolifeProtocol.buildSetTimeCommand(DateTime.now()),
+            phase: 'Microlife clock synchronization',
+            accepts: (frame) =>
+                frame.marker == 0x3A &&
+                frame.payload.length == 1 &&
+                frame.payload[0] == 0x81,
+            timeout: const Duration(seconds: 10),
+          );
+        } on _BleReadCancelled {
+          rethrow;
+        } catch (error) {
+          logger.warning(
+            'Microlife clock synchronization failed, continuing: $error',
+          );
+        }
+      }
+
+      final response = await _sendMicrolifeCommand(
+        writeCharacteristic,
+        use3g
+            ? MicrolifeProtocol.buildRead3gMeasurementsCommand(DateTime.now())
+            : MicrolifeProtocol.getMeasurementsCommand,
+        phase: 'Microlife stored readings',
+        preferWithoutResponse: use3g,
+        responseCompletesWrite: true,
+        accepts: (frame) =>
+            frame.marker == (use3g ? 0x31 : 0x3A) &&
+            frame.payload.isNotEmpty &&
+            frame.payload[0] == 0 &&
+            frame.payload.length >= (use3g ? 29 : 38),
+      );
+      late final List<BleMeasurementData> measurements;
+      String? reviewNotice;
+      if (use3g) {
+        final history = Microlife3gMeasurementData.decodeHistory(
+          response!.payload,
+        );
+        measurements = history.measurements;
+        if (history.rejectedRecords.isNotEmpty) {
+          reviewNotice =
+              '${history.rejectedRecords.length} of '
+              '${response.payload[3]} stored readings were left out because '
+              'their date or measurement fields are invalid. '
+              '${measurements.isEmpty ? "No valid stored readings are available to import." : "Review the ${measurements.length} remaining readings before importing."}';
+        }
+      } else {
+        measurements = MicrolifeMeasurementData.decodeMeasurements(
+          response!.payload,
+        ).map((measurement) => measurement.asBleData).toList();
+      }
 
       // Politely tell the device to disconnect (no response is sent).
-      try {
-        await _sendMicrolifeCommand(
-            writeCharacteristic, MicrolifeProtocol.disconnectCommand,
-            waitForResponse: false);
-      } catch (e) {
-        logger.finer('Microlife disconnect command failed: $e');
+      if (!_microlifeWriteInFlight) {
+        try {
+          await _sendMicrolifeCommand(
+            writeCharacteristic,
+            MicrolifeProtocol.disconnectCommand,
+            phase: 'Microlife transfer completion',
+            preferWithoutResponse: use3g,
+            waitForResponse: false,
+            timeout: disconnectTimeout,
+          );
+        } catch (e) {
+          logger.finer('Microlife disconnect command failed: $e');
+        }
       }
 
+      if (_closing || isClosed) return;
       if (measurements.isEmpty) {
-        emit(BleReadFailure('No data received'));
+        emit(
+          BleReadFailure(
+            reviewNotice ??
+                'The monitor returned no stored readings for its selected user. '
+                    'Select the user bank on the monitor and try again.',
+          ),
+        );
+      } else if (reviewNotice != null) {
+        emit(BleReadMultiple(measurements, reviewNotice: reviewNotice));
       } else if (measurements.length == 1) {
         emit(BleReadSuccess(measurements.first));
       } else {
         emit(BleReadMultiple(measurements));
       }
-    } on TimeoutException {
-      logger.warning('Microlife communication timed out for ${device.uuid}');
-      emit(BleReadFailure('No data received'));
-    } catch (e) {
-      logger.warning('Microlife communication failed: $e');
-      emit(BleReadFailure('Could not decode data'));
     } finally {
       await subscription.cancel();
       try {
-        await cm.setCharacteristicNotifyState(device, notifyCharacteristic, state: false);
+        if (!_microlifeWriteInFlight) {
+          await cm
+              .setCharacteristicNotifyState(
+                device,
+                notifyCharacteristic,
+                state: false,
+              )
+              .timeout(disconnectTimeout);
+        }
       } catch (e) {
         logger.finer('Failed to disable microlife notifications: $e');
       }
+      await _disconnectDevice();
       _microlifePendingResponse = null;
-      _microlifeResponseByteBuffer.clear();
+      _microlifeAcceptsResponse = null;
+      _microlifeFrameDecoder.clear();
     }
   }
 
   /// Reassembles Microlife response frames from one or more notifications and
   /// completes the [_microlifePendingResponse] once a full frame is received.
   void _onMicrolifeNotified(Uint8List value) {
-    logger.fine('Microlife notification: $value');
-    _microlifeResponseByteBuffer.addAll(value);
-
-    final expectedLength = MicrolifeProtocol.expectedFrameLength(_microlifeResponseByteBuffer);
-    if (expectedLength == null || _microlifeResponseByteBuffer.length < expectedLength) {
-      return; // wait for the remaining packets
-    }
-
-    final frame = _microlifeResponseByteBuffer.sublist(0, expectedLength);
-    _microlifeResponseByteBuffer.clear();
-
-    final pending = _microlifePendingResponse;
-    if (pending == null || pending.isCompleted) return;
-
-    final payload = MicrolifeProtocol.parseResponsePayload(frame);
-    if (payload == null) {
-      pending.completeError(StateError('Invalid microlife frame: $frame'));
-    } else {
-      pending.complete(payload);
+    for (final frame in _microlifeFrameDecoder.add(value)) {
+      final pending = _microlifePendingResponse;
+      if (pending != null && !pending.isCompleted
+          && (_microlifeAcceptsResponse?.call(frame) ?? false)) {
+        pending.complete(frame);
+      }
     }
   }
 
   /// Writes [command] to the Microlife write characteristic (in chunks) and,
   /// when [waitForResponse] is true, waits for the decoded response payload.
-  Future<Uint8List> _sendMicrolifeCommand(
+  Future<MicrolifeResponseFrame?> _sendMicrolifeCommand(
     GATTCharacteristic writeChar,
     List<int> command, {
+    required String phase,
+    bool Function(MicrolifeResponseFrame)? accepts,
+    bool preferWithoutResponse = false,
+    bool responseCompletesWrite = false,
     bool waitForResponse = true,
     Duration timeout = _microlifeResponseTimeout,
   }) async {
-    _microlifeResponseByteBuffer.clear();
-    Completer<Uint8List>? completer;
+    Completer<MicrolifeResponseFrame>? completer;
     if (waitForResponse) {
-      completer = Completer<Uint8List>();
+      assert(accepts != null);
+      completer = Completer<MicrolifeResponseFrame>();
       _microlifePendingResponse = completer;
+      _microlifeAcceptsResponse = accepts;
     }
+    final connectionSubscription = completer == null
+        ? null
+        : cm.connectionStateChanged
+              .where((event) => event.peripheral == device)
+              .listen(
+                (event) {
+                  if (event.state == ConnectionState.disconnected &&
+                      !completer!.isCompleted) {
+                    completer.completeError(
+                      StateError('Device disconnected before $phase completed'),
+                    );
+                  }
+                },
+                onError: (Object error, StackTrace stack) {
+                  if (!completer!.isCompleted) {
+                    completer.completeError(error, stack);
+                  }
+                },
+              );
 
-    final writeType = writeChar.properties.contains(GATTCharacteristicProperty.write)
-        ? GATTCharacteristicWriteType.withResponse
-        : GATTCharacteristicWriteType.withoutResponse;
-
-    for (var offset = 0; offset < command.length; offset += _microlifeWriteChunkSize) {
-      final end = min(offset + _microlifeWriteChunkSize, command.length);
-      await cm.writeCharacteristic(
-        device,
-        writeChar,
-        value: Uint8List.fromList(command.sublist(offset, end)),
-        type: writeType,
-      );
-    }
-
-    if (completer == null) return Uint8List(0);
+    final withoutResponse = writeChar.properties.contains(
+      GATTCharacteristicProperty.writeWithoutResponse,
+    );
+    final withResponse = writeChar.properties.contains(
+      GATTCharacteristicProperty.write,
+    );
+    final writeType =
+        withoutResponse && (preferWithoutResponse || !withResponse)
+        ? GATTCharacteristicWriteType.withoutResponse
+        : GATTCharacteristicWriteType.withResponse;
     try {
-      return await completer.future.timeout(timeout);
+      return await _runBluetoothPhase<MicrolifeResponseFrame?>(
+        phase,
+        () async {
+          Future<void> writeChunks() async {
+            if (!withoutResponse && !withResponse) {
+              throw StateError(
+                'Microlife command characteristic is not writable',
+              );
+            }
+            for (
+              var offset = 0;
+              offset < command.length;
+              offset += _microlifeWriteChunkSize
+            ) {
+              if (_closing) throw const _BleReadCancelled();
+              final end = min(
+                offset + _microlifeWriteChunkSize,
+                command.length,
+              );
+              if (_microlifeWriteInFlight) {
+                throw StateError('A Microlife write is still pending');
+              }
+              _microlifeWriteInFlight = true;
+              try {
+                await cm.writeCharacteristic(
+                  device,
+                  writeChar,
+                  value: Uint8List.fromList(command.sublist(offset, end)),
+                  type: writeType,
+                );
+              } finally {
+                _microlifeWriteInFlight = false;
+              }
+            }
+          }
+
+          if (completer == null) {
+            await writeChunks();
+            return null;
+          }
+          if (!responseCompletesWrite) {
+            final results = await Future.wait<Object?>([
+              writeChunks(),
+              completer.future,
+            ], eagerError: true);
+            return results.last as MicrolifeResponseFrame;
+          }
+          return Future.any<MicrolifeResponseFrame>([
+            completer.future,
+            writeChunks().then((_) => completer!.future),
+          ]);
+        },
+        timeout: timeout,
+        failOnDisconnect: waitForResponse && !responseCompletesWrite,
+      );
     } finally {
+      await connectionSubscription?.cancel();
+      if (completer != null && !completer.isCompleted) {
+        completer.completeError(const _BleReadCancelled());
+      }
       if (identical(_microlifePendingResponse, completer)) {
         _microlifePendingResponse = null;
+        _microlifeAcceptsResponse = null;
       }
     }
   }
@@ -387,12 +669,10 @@ class BleReadCubit extends Cubit<BleReadState> with TypeLogger {
   @mustCallSuper
   @override
   Future<void> close() async {
-    try {
-      await cm.disconnect(device).timeout(Duration(seconds: 10));
-    } catch (e) {
-      logger.warning('Failed to disconnect from ${device.uuid}: $e');
-    }
-
+    if (_closing) return;
+    _closing = true;
+    _readCancelled.complete();
+    await _disconnectDevice();
     await super.close();
   }
 
@@ -402,4 +682,18 @@ class BleReadCubit extends Cubit<BleReadState> with TypeLogger {
     assert(state is! BleReadSuccess);
     emit(BleReadSuccess(data));
   }
+}
+
+class _BleReadCancelled implements Exception {
+  const _BleReadCancelled();
+}
+
+class _BluetoothPhaseFailure implements Exception {
+  const _BluetoothPhaseFailure(this.phase, this.cause);
+
+  final String phase;
+  final Object cause;
+
+  @override
+  String toString() => '$phase failed: $cause';
 }

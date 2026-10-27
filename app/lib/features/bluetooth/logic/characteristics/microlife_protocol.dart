@@ -21,11 +21,37 @@ class MicrolifeProtocol {
   MicrolifeProtocol._();
 
   static const responseHeader = [0x4D, 0x3A];
+  static const readUserVersionCommand = [0x4D, 0xFF, 0, 2, 5, 0x53];
   static const List<int> getMeasurementsCommand = [77, 255, 0, 9, 0, 0, 0, 0, 0, 0, 0, 253, 82];
   static const List<int> disconnectCommand = [77, 255, 0, 2, 4, 82];
 
   static int checksum(Iterable<int> bytes) =>
       bytes.fold<int>(0, (sum, b) => sum + b) % 256;
+
+  static bool isKnown3gDevice(String? name) {
+    final normalized = name?.toUpperCase().replaceAll(RegExp('[^A-Z0-9]'), '');
+    return normalized != null &&
+        (normalized == 'A7' ||
+            normalized.contains('A7TOUCHBT') ||
+            normalized.contains('BP3GT16F'));
+  }
+
+  static List<int> buildRead3gMeasurementsCommand(DateTime time) {
+    final command = [
+      0x4D,
+      0xFF,
+      0,
+      8,
+      0,
+      time.year % 100,
+      time.month,
+      time.day,
+      time.hour,
+      time.minute,
+      time.second,
+    ];
+    return [...command, checksum(command)];
+  }
 
   static List<int> buildSetTimeCommand(DateTime time) {
     final command = <int>[
@@ -51,7 +77,8 @@ class MicrolifeProtocol {
       log.warning('MicrolifeProtocol received frame that is too short: $frame');
       return null;
     }
-    if (frame[0] != responseHeader[0] || frame[1] != responseHeader[1]) {
+    if (frame[0] != responseHeader[0]
+        || (frame[1] != 0x31 && frame[1] != 0x3A)) {
       log.warning("MicrolifeProtocol didn't find response header: $frame");
       return null;
     }
@@ -64,5 +91,46 @@ class MicrolifeProtocol {
       return null;
     }
     return Uint8List.fromList(frame.sublist(4, frame.length - 1));
+  }
+}
+
+class MicrolifeResponseFrame {
+  MicrolifeResponseFrame(this.marker, this.payload);
+
+  final int marker;
+  final Uint8List payload;
+}
+
+class MicrolifeFrameDecoder {
+  final List<int> _buffer = [];
+
+  void clear() => _buffer.clear();
+
+  List<MicrolifeResponseFrame> add(List<int> bytes) {
+    _buffer.addAll(bytes);
+    final frames = <MicrolifeResponseFrame>[];
+    while (_buffer.length >= 2) {
+      if (_buffer[0] != 0x4D || (_buffer[1] != 0x31 && _buffer[1] != 0x3A)) {
+        _buffer.removeAt(0);
+        continue;
+      }
+      final length = MicrolifeProtocol.expectedFrameLength(_buffer);
+      if (length == null) break;
+      if (length < 6) {
+        _buffer.removeAt(0);
+        continue;
+      }
+      if (_buffer.length < length) break;
+      final payload = MicrolifeProtocol.parseResponsePayload(
+        _buffer.sublist(0, length),
+      );
+      if (payload == null) {
+        _buffer.removeAt(0);
+        continue;
+      }
+      frames.add(MicrolifeResponseFrame(_buffer[1], payload));
+      _buffer.removeRange(0, length);
+    }
+    return frames;
   }
 }

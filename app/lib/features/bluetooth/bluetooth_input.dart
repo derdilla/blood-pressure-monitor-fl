@@ -239,7 +239,8 @@ class BluetoothInputState extends State<BluetoothInput> with TypeLogger {
             widget.onMeasurement(state.data.asBloodPressureRecord());
             setState(() => _finishedData = state.data);
           }
-        } else if (state is BleReadMultiple && bluetoothImportMode.isAutomatic && !hasImported) {
+        } else if (state is BleReadMultiple && state.reviewNotice == null
+            && bluetoothImportMode.isAutomatic && !hasImported) {
           setState(() => hasImported = true);
           _importMeasurements(
             bluetoothImportMode == BluetoothMeasurementImportMode.all
@@ -263,7 +264,7 @@ class BluetoothInputState extends State<BluetoothInput> with TypeLogger {
           // When auto-import is enabled the measurement(s) are imported
           // automatically, so show a loading indicator instead of the
           // flickering the list
-          BleReadMultiple() when bluetoothImportMode.isAutomatic =>
+          BleReadMultiple() when bluetoothImportMode.isAutomatic && state.reviewNotice == null =>
             _buildMainCard(context, child: const CircularProgressIndicator()),
           BleReadSuccess() when bluetoothImportMode.isAutomatic =>
             _buildMainCard(context, child: const CircularProgressIndicator()),
@@ -277,6 +278,7 @@ class BluetoothInputState extends State<BluetoothInput> with TypeLogger {
               _returnToIdle();
             },
             measurements: state.data,
+            reviewNotice: state.reviewNotice,
           ),
           BleReadSuccess() => MeasurementSuccess(
             onTap: _returnToIdle,
