@@ -46,7 +46,9 @@ class _AddEntryDialogState extends State<AddEntryDialog> with TypeLogger {
     if (context.read<Settings>().validateInputs
         && !(formKey.currentState?.isEmpty ?? true)) {
       final res = await showConfirmDeletionDialog(context,
-          AppLocalizations.of(context)!.warnDiscardingData);
+        customTitle: AppLocalizations.of(context)!.discardData,
+        customDescription: AppLocalizations.of(context)!.warnDiscardingData,
+      );
       return res;
     }
     return true;
