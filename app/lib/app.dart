@@ -173,6 +173,9 @@ class _AppState extends State<App> with TypeLogger {
     }
 
     // Register listeners that sync on new measurements
+    // FIXME: use sync models:
+    //  - don't request every permission at 3 places, if not needed
+    //  - avoid code duplication
     if (_healthConnectSettings!.useHealthConnect) {
       final health = Health();
       if (_healthConnectSettings!.syncWeightMeasurements) {
@@ -194,20 +197,15 @@ class _AppState extends State<App> with TypeLogger {
       }
       if (_healthConnectSettings!.syncPressureMeasurements) {
         bpRepo.subscribe().listen((record) async {
-          if (record?.sys != null && record?.dia != null) {
+          if (record == null) return;
+          if ((record.sys != null && record.dia != null) || record.pul != null) {
             final canWrite = await health.requestPermissionsIfMissing(
-              [
-                HealthDataType.BLOOD_PRESSURE_SYSTOLIC,
-                HealthDataType.BLOOD_PRESSURE_DIASTOLIC,
-              ],
+              BPSyncModel.permissions,
               HealthDataAccess.WRITE,
             );
             if (!canWrite) logger.warning('Health Connect BP write permissions not granted');
-            await health.writeBloodPressure(
-              systolic: record!.sys!.mmHg,
-              diastolic: record.dia!.mmHg,
-              startTime: record.time,
-            );
+            final model = BPSyncModel(bpRepo: bpRepo, health: health);
+            await model.saveRecord(record);
           }
         });
       }

@@ -6,6 +6,12 @@ import 'package:health_data_store/health_data_store.dart';
 class BPSyncModel extends SyncModel with TypeLogger {
   BPSyncModel({required this.bpRepo, required this.health});
 
+  static const permissions = [
+    HealthDataType.BLOOD_PRESSURE_SYSTOLIC,
+    HealthDataType.BLOOD_PRESSURE_DIASTOLIC,
+    HealthDataType.RESTING_HEART_RATE,
+  ];
+
   final BloodPressureRepository bpRepo;
   final Health health;
 
@@ -23,11 +29,7 @@ class BPSyncModel extends SyncModel with TypeLogger {
     _progress = 0;
     notifyListeners();
 
-    await health.requestPermissionsIfMissing([
-      HealthDataType.BLOOD_PRESSURE_SYSTOLIC,
-      HealthDataType.BLOOD_PRESSURE_DIASTOLIC,
-      HealthDataType.RESTING_HEART_RATE,
-    ]);
+    await health.requestPermissionsIfMissing(permissions);
     final now = DateTime.now();
     DateTime start = now.subtract(Duration(days: 30));
     if (await health.isHealthDataHistoryAuthorized()
@@ -38,11 +40,7 @@ class BPSyncModel extends SyncModel with TypeLogger {
     notifyListeners();
 
     final healthConnectData = await health.getHealthDataFromTypes(
-      types: [
-        HealthDataType.BLOOD_PRESSURE_SYSTOLIC,
-        HealthDataType.BLOOD_PRESSURE_DIASTOLIC,
-        HealthDataType.RESTING_HEART_RATE,
-      ],
+      types: permissions,
       startTime: start,
       endTime: now,
     ).then((dataList) {
@@ -122,26 +120,28 @@ class BPSyncModel extends SyncModel with TypeLogger {
     _progress += 1;
     notifyListeners();
 
-    await Future.forEach(appOnlyData, (record) async {
-      if (record.pul != null) {
-        await health.writeHealthData(
-          value: record.pul!.toDouble(),
-          type: HealthDataType.RESTING_HEART_RATE,
-          startTime: record.time,
-        );
-      }
-      if (record.sys == null || record.dia == null) {
-        logger.info('Skip syncing incomplete BP record');
-        return false;
-      }
-      return health.writeBloodPressure(
-        systolic: record.sys!.mmHg,
-        diastolic: record.dia!.mmHg,
-        startTime: record.time,
-      );
-    });
+    await Future.forEach(appOnlyData, saveRecord);
     _progress += 1;
     _syncing = false;
     notifyListeners();
+  }
+
+  Future<bool> saveRecord(BloodPressureRecord record) async {
+    if (record.pul != null) {
+      await health.writeHealthData(
+        value: record.pul!.toDouble(),
+        type: HealthDataType.RESTING_HEART_RATE,
+        startTime: record.time,
+      );
+    }
+    if (record.sys == null || record.dia == null) {
+      logger.info('Skip syncing incomplete BP record');
+      return false;
+    }
+    return health.writeBloodPressure(
+      systolic: record.sys!.mmHg,
+      diastolic: record.dia!.mmHg,
+      startTime: record.time,
+    );
   }
 }
