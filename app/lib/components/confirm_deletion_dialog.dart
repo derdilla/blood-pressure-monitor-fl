@@ -6,10 +6,13 @@ import 'package:flutter/material.dart';
 /// Returns whether it is ok to proceed with deletion.
 ///
 /// When [customDescription] is set it is used instead of confirmDeleteDesc.
-Future<bool> showConfirmDeletionDialog(BuildContext context, [String? customDescription]) async =>
+Future<bool> showConfirmDeletionDialog(BuildContext context, {
+  String? customTitle,
+  String? customDescription,
+}) async =>
 await showDialog<bool>(context: context,
   builder: (context) => AlertDialog(
-    title: Text(AppLocalizations.of(context)!.confirmDelete),
+    title: Text(customTitle ?? AppLocalizations.of(context)!.confirmDelete),
     content: Text(customDescription ?? AppLocalizations.of(context)!.confirmDeleteDesc),
     actions: [
       TextButton(

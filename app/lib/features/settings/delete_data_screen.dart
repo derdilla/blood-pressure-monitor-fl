@@ -34,7 +34,8 @@ class _DeleteDataScreenState extends State<DeleteDataScreen> {
             trailing: const Icon(Icons.delete_forever),
             onTap: () async {
               final messanger = ScaffoldMessenger.of(context);
-              if (await showConfirmDeletionDialog(context, localizations.warnDeletionUnrecoverable)) {
+              if (await showConfirmDeletionDialog(context,
+                customDescription: localizations.warnDeletionUnrecoverable)) {
                 if (!context.mounted) return;
                 final loader = context.read<FileSettingsLoader?>();
                 if (loader == null) {
@@ -58,7 +59,8 @@ class _DeleteDataScreenState extends State<DeleteDataScreen> {
             trailing: const Icon(Icons.delete_forever),
             onTap: () async {
               final messanger = ScaffoldMessenger.of(context);
-              if (await showConfirmDeletionDialog(context, localizations.warnDeletionUnrecoverable)) {
+              if (await showConfirmDeletionDialog(context,
+                customDescription: localizations.warnDeletionUnrecoverable)) {
                 if (!context.mounted) return;
                 final repo = RepositoryProvider.of<BloodPressureRepository>(context);
                 final previousRecords = await repo.get(DateRange.all());
@@ -81,7 +83,8 @@ class _DeleteDataScreenState extends State<DeleteDataScreen> {
             trailing: const Icon(Icons.delete_forever),
             onTap: () async {
               final messanger = ScaffoldMessenger.of(context);
-              if (await showConfirmDeletionDialog(context, localizations.warnDeletionUnrecoverable)) {
+              if (await showConfirmDeletionDialog(context,
+                customDescription: localizations.warnDeletionUnrecoverable)) {
                 if (!context.mounted) return;
                 final repo = RepositoryProvider.of<NoteRepository>(context);
                 final previousNotes = await repo.get(DateRange.all());
@@ -103,7 +106,8 @@ class _DeleteDataScreenState extends State<DeleteDataScreen> {
             title: Text(localizations.deleteAllMedicineIntakes),
             trailing: const Icon(Icons.delete_forever),
             onTap: () async {
-              if (await showConfirmDeletionDialog(context, localizations.warnDeletionUnrecoverable)) {
+              if (await showConfirmDeletionDialog(context,
+                customDescription: localizations.warnDeletionUnrecoverable)) {
                 if (!context.mounted) return;
                 final repo = context.read<MedicineIntakeRepository>();
                 final messanger = ScaffoldMessenger.of(context);
