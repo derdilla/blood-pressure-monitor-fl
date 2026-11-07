@@ -41,14 +41,16 @@ class _HealthConnectScreenState extends State<HealthConnectScreen> {
       });
       return;
     }
+    // FIXME: permission sync buggy
     final platformSupport = await _health.isHealthConnectAvailable();
     final hasWeightPermission = await _health.hasPermissions([HealthDataType.WEIGHT],
       permissions: [HealthDataAccess.READ_WRITE])
         ?? false;
     final hasBloodPressurePermission = await _health.hasPermissions([
       HealthDataType.BLOOD_PRESSURE_SYSTOLIC,
-      HealthDataType.BLOOD_PRESSURE_DIASTOLIC
-    ], permissions: [HealthDataAccess.READ_WRITE, HealthDataAccess.READ_WRITE]) ?? false;
+      HealthDataType.BLOOD_PRESSURE_DIASTOLIC,
+      HealthDataType.RESTING_HEART_RATE,
+    ], permissions: List.filled(3, HealthDataAccess.READ_WRITE)) ?? false;
     setState(() {
       _platformSupport = platformSupport;
       _hasWeightPermission = hasWeightPermission;

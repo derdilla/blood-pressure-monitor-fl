@@ -26,6 +26,7 @@ class BPSyncModel extends SyncModel with TypeLogger {
     await health.requestPermissionsIfMissing([
       HealthDataType.BLOOD_PRESSURE_SYSTOLIC,
       HealthDataType.BLOOD_PRESSURE_DIASTOLIC,
+      HealthDataType.RESTING_HEART_RATE,
     ]);
     final now = DateTime.now();
     DateTime start = now.subtract(Duration(days: 30));
@@ -40,36 +41,44 @@ class BPSyncModel extends SyncModel with TypeLogger {
       types: [
         HealthDataType.BLOOD_PRESSURE_SYSTOLIC,
         HealthDataType.BLOOD_PRESSURE_DIASTOLIC,
+        HealthDataType.RESTING_HEART_RATE,
       ],
       startTime: start,
       endTime: now,
     ).then((dataList) {
-      final records = <String, BloodPressureRecord>{};
+      final records = <int, BloodPressureRecord>{};
       for (final x in dataList) {
-        final partialRecord =  records[x.uuid];
+        final partialRecord =  records[x.dateFrom.millisecondsSinceEpoch];
         assert(partialRecord == null || partialRecord.time == x.dateFrom);
         if (x.type == HealthDataType.BLOOD_PRESSURE_SYSTOLIC) {
           final newSys = (x.value as NumericHealthValue).numericValue.toInt();
-          records[x.uuid] = BloodPressureRecord(
+          records[x.dateFrom.millisecondsSinceEpoch] = BloodPressureRecord(
             time: x.dateFrom,
             sys: Pressure.mmHg(newSys),
             dia: partialRecord?.dia,
+            pul: partialRecord?.pul,
           );
         } else if (x.type == HealthDataType.BLOOD_PRESSURE_DIASTOLIC) {
           final newDia = (x.value as NumericHealthValue).numericValue.toInt();
-          records[x.uuid] = BloodPressureRecord(
+          records[x.dateFrom.millisecondsSinceEpoch] = BloodPressureRecord(
             time: x.dateFrom,
             sys: partialRecord?.sys,
             dia: Pressure.mmHg(newDia),
+            pul: partialRecord?.pul,
+          );
+        } else if (x.type == HealthDataType.RESTING_HEART_RATE) {
+          final newPul = (x.value as NumericHealthValue).numericValue.toInt();
+          records[x.dateFrom.millisecondsSinceEpoch] = BloodPressureRecord(
+            time: x.dateFrom,
+            sys: partialRecord?.sys,
+            dia: partialRecord?.dia,
+            pul: newPul,
           );
         } else {
           assert(false);
         }
       }
-      return {
-        for (final x in records.values)
-          x.time.millisecondsSinceEpoch: x,
-      };
+      return records;
     });
     _progress += 1;
     notifyListeners();
@@ -88,12 +97,13 @@ class BPSyncModel extends SyncModel with TypeLogger {
     final healthConnectOnlyData = [
       for (final x in healthConnectData.values)
         if (appData[x.time.millisecondsSinceEpoch]?.sys != x.sys
-            || appData[x.time.millisecondsSinceEpoch]?.dia != x.dia)
+            || appData[x.time.millisecondsSinceEpoch]?.dia != x.dia
+            || appData[x.time.millisecondsSinceEpoch]?.pul != x.pul)
           BloodPressureRecord(
             time: x.time,
-            sys: x.sys,
-            dia: x.dia,
-            pul: appData[x.time.millisecondsSinceEpoch]?.pul
+            sys: x.sys ?? appData[x.time.millisecondsSinceEpoch]?.sys,
+            dia: x.dia ?? appData[x.time.millisecondsSinceEpoch]?.dia,
+            pul: x.pul ?? appData[x.time.millisecondsSinceEpoch]?.pul,
           ),
     ];
     _progress += 1;
@@ -113,6 +123,13 @@ class BPSyncModel extends SyncModel with TypeLogger {
     notifyListeners();
 
     await Future.forEach(appOnlyData, (record) async {
+      if (record.pul != null) {
+        await health.writeHealthData(
+          value: record.pul!.toDouble(),
+          type: HealthDataType.RESTING_HEART_RATE,
+          startTime: record.time,
+        );
+      }
       if (record.sys == null || record.dia == null) {
         logger.info('Skip syncing incomplete BP record');
         return false;
