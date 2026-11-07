@@ -1,3 +1,4 @@
+import 'package:blood_pressure_app/features/health_connect/bp_sync_model.dart';
 import 'package:flutter/foundation.dart';
 import 'package:health/health.dart';
 
@@ -18,8 +19,7 @@ extension RequestPermissions on Health {
     HealthDataAccess permission = HealthDataAccess.READ_WRITE,
   ]) async {
     types ??= [
-      HealthDataType.BLOOD_PRESSURE_SYSTOLIC,
-      HealthDataType.BLOOD_PRESSURE_DIASTOLIC,
+      ...BPSyncModel.permissions,
       HealthDataType.WEIGHT,
     ];
 
@@ -30,7 +30,7 @@ extension RequestPermissions on Health {
     if (!canWrite) {
       return requestAuthorization(
         types,
-        permissions:  List.filled(types.length, permission),
+        permissions: List.filled(types.length, permission),
       );
     }
     return canWrite;
