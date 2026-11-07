@@ -28,15 +28,15 @@ class PresetSelector extends StatelessWidget {
 
   String? getPreset(BuildContext context) => switch(context.watch<ExportSettings>().exportFormat) {
     ExportFormat.csv => context.watch<CsvExportSettings>().activePreset,
-    ExportFormat.xls => context.watch<PdfExportSettings>().activePreset,
-    ExportFormat.pdf => context.watch<ExcelExportSettings>().activePreset,
+    ExportFormat.xls => context.watch<ExcelExportSettings>().activePreset,
+    ExportFormat.pdf => context.watch<PdfExportSettings>().activePreset,
     ExportFormat.db => null,
   };
 
   void setPreset(BuildContext context, String presetId) => switch(context.read<ExportSettings>().exportFormat) {
     ExportFormat.csv => context.read<CsvExportSettings>().activePreset = presetId,
-    ExportFormat.xls => context.read<PdfExportSettings>().activePreset = presetId,
-    ExportFormat.pdf => context.read<ExcelExportSettings>().activePreset = presetId,
+    ExportFormat.xls => context.read<ExcelExportSettings>().activePreset = presetId,
+    ExportFormat.pdf => context.read<PdfExportSettings>().activePreset = presetId,
     ExportFormat.db => null,
   };
 }
