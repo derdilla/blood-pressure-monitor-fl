@@ -82,7 +82,7 @@ void main() {
 
     expect(labels, contains(localizations.minOf('3')));
     expect(labels, contains(localizations.maxOf('10')));
-    expect(labels, isNot(contains(localizations.medianOf('5.5'))));
+    expect(labels, isNot(contains(localizations.medianOf('7'))));
     expect(labels, contains(localizations.avgOf('6.7')));
   },);
   testWidgets('should add median labels when requested', (tester) async {
@@ -92,7 +92,7 @@ void main() {
       child: ValueDistribution(
         mode: GraphMode.median,
         color: Colors.red,
-        values: [5,6,3,8,8,10], // median: (3+8)/2 = 5.5
+        values: [5,6,3,8,8,10], // median: (6+8)/2 = 7
       ),
     ),),);
 
@@ -101,7 +101,7 @@ void main() {
 
     expect(labels, contains(localizations.minOf('3')));
     expect(labels, contains(localizations.maxOf('10')));
-    expect(labels, contains(localizations.medianOf('5.5')));
+    expect(labels, contains(localizations.medianOf('7')));
     expect(labels, isNot(contains(localizations.avgOf('6.7'))));
   },);
   testWidgets('draws bars in correct order', (tester) async {
