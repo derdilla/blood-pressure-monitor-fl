@@ -289,6 +289,7 @@ class _ValueDistributionPainter extends CustomPainter {
 
   /// Median value.
   String get _median {
+    final rawValues = this.rawValues.sorted((a, b) => a.compareTo(b));
     if (rawValues.length % 2 == 1) {
       return rawValues[(rawValues.length / 2).floor()].toString();
     }
