@@ -35,7 +35,7 @@ class _DeleteDataScreenState extends State<DeleteDataScreen> {
             onTap: () async {
               final messanger = ScaffoldMessenger.of(context);
               if (await showConfirmDeletionDialog(context,
-                customTitle: localizations.warnDeletionUnrecoverable)) {
+                customDescription: localizations.warnDeletionUnrecoverable)) {
                 if (!context.mounted) return;
                 final loader = context.read<FileSettingsLoader?>();
                 if (loader == null) {
@@ -60,7 +60,7 @@ class _DeleteDataScreenState extends State<DeleteDataScreen> {
             onTap: () async {
               final messanger = ScaffoldMessenger.of(context);
               if (await showConfirmDeletionDialog(context,
-                customTitle: localizations.warnDeletionUnrecoverable)) {
+                customDescription: localizations.warnDeletionUnrecoverable)) {
                 if (!context.mounted) return;
                 final repo = RepositoryProvider.of<BloodPressureRepository>(context);
                 final previousRecords = await repo.get(DateRange.all());
@@ -84,7 +84,7 @@ class _DeleteDataScreenState extends State<DeleteDataScreen> {
             onTap: () async {
               final messanger = ScaffoldMessenger.of(context);
               if (await showConfirmDeletionDialog(context,
-                customTitle: localizations.warnDeletionUnrecoverable)) {
+                customDescription: localizations.warnDeletionUnrecoverable)) {
                 if (!context.mounted) return;
                 final repo = RepositoryProvider.of<NoteRepository>(context);
                 final previousNotes = await repo.get(DateRange.all());
@@ -107,7 +107,7 @@ class _DeleteDataScreenState extends State<DeleteDataScreen> {
             trailing: const Icon(Icons.delete_forever),
             onTap: () async {
               if (await showConfirmDeletionDialog(context,
-                customTitle: localizations.warnDeletionUnrecoverable)) {
+                customDescription: localizations.warnDeletionUnrecoverable)) {
                 if (!context.mounted) return;
                 final repo = context.read<MedicineIntakeRepository>();
                 final messanger = ScaffoldMessenger.of(context);
