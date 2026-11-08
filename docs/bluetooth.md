@@ -42,7 +42,7 @@ Most devices provide 2 ways to retrieve measurements over bluetooth, but there a
 | Medisana BU 570                           | BU 570                            | Standard GATT   |   ✅    |                           |
 | Medisana BU 572                           | BU 572                            | Standard GATT   |   ✅    |                           |
 | Sanitas SBM67                             | SBM67                             | Standard GATT   |   ✅    |                           |
-
+| A&D Medical UA-651BLE Digital/Connected/Wireless Essential/Deluxe Upper Arm Monitor | A&D_UA-651BLE_996ECA | Standard GATT | ✅ | Connects after measurement, downloads all stored values and then deletes them, time updatable via A&D Heart Track app |
 
 ## Specifications
 
