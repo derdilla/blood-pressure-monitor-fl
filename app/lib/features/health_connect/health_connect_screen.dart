@@ -45,10 +45,8 @@ class _HealthConnectScreenState extends State<HealthConnectScreen> {
     final hasWeightPermission = await _health.hasPermissions([HealthDataType.WEIGHT],
       permissions: [HealthDataAccess.READ_WRITE])
         ?? false;
-    final hasBloodPressurePermission = await _health.hasPermissions([
-      HealthDataType.BLOOD_PRESSURE_SYSTOLIC,
-      HealthDataType.BLOOD_PRESSURE_DIASTOLIC
-    ], permissions: [HealthDataAccess.READ_WRITE, HealthDataAccess.READ_WRITE]) ?? false;
+    final hasBloodPressurePermission = await _health.hasPermissions(BPSyncModel.permissions,
+     permissions: List.filled(3, HealthDataAccess.READ_WRITE)) ?? false;
     setState(() {
       _platformSupport = platformSupport;
       _hasWeightPermission = hasWeightPermission;
