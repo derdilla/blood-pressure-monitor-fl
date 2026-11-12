@@ -1,4 +1,3 @@
-import 'package:blood_pressure_app/features/settings/configure_warn_values_screen.dart';
 import 'package:blood_pressure_app/features/settings/graph_markings_screen.dart';
 import 'package:blood_pressure_app/features/settings/tiles/slider_list_tile.dart';
 import 'package:blood_pressure_app/l10n/app_localizations.dart';
@@ -35,19 +34,6 @@ class GraphScreen extends StatelessWidget {
             value: settings.drawRegressionLines,
             onChanged: (value) {
               settings.drawRegressionLines = value;
-            },
-          ),
-      
-          ListTile(
-            leading: const Icon(Icons.warning_amber_outlined),
-            title: Text(localizations.determineWarnValues),
-            subtitle: Text(localizations.aboutWarnValuesScreenDesc),
-            trailing: const Icon(Icons.arrow_forward_ios),
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute<void>(builder: (context) => const ConfigureWarnValuesScreen()),
-              );
             },
           ),
           SliderListTile(

@@ -1,3 +1,4 @@
+import 'package:blood_pressure_app/features/settings/configure_warn_values_screen.dart';
 import 'package:blood_pressure_app/features/settings/medicine_manager_screen.dart';
 import 'package:blood_pressure_app/features/settings/tiles/ble_input_options_tile.dart';
 import 'package:blood_pressure_app/l10n/app_localizations.dart';
@@ -36,6 +37,18 @@ class FeaturesScreen extends StatelessWidget {
           BleInputOptionsTile(
             value: settings.bleInput,
             onChanged: (value) => settings.bleInput = value ?? settings.bleInput,
+          ),
+          ListTile(
+            leading: const Icon(Icons.warning_amber_outlined),
+            title: Text(localizations.determineWarnValues),
+            subtitle: Text(localizations.aboutWarnValuesScreenDesc),
+            trailing: const Icon(Icons.arrow_forward_ios),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute<void>(builder: (context) => const ConfigureWarnValuesScreen()),
+              );
+            },
           ),
         ],
       ),
