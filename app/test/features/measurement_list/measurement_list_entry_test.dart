@@ -113,6 +113,34 @@ void main() {
       && widget.icon == Icons.medication
       && widget.color?.toARGB32() == Colors.red.toARGB32()), findsOneWidget);
   });
+  testWidgets('displays color at a bar on the left', (tester) async {
+    await tester.pumpWidget(materialApp(MeasurementListRow(
+      data: mockEntry(
+        time: DateTime(2023),
+        pin: Colors.amber
+      ),
+      onRequestEdit: () => fail('No onRequestEdit expected'),
+    )));
+    final box = tester.widget<ExpansionTile>(find.byType(ExpansionTile).first);
+    final border = box.collapsedShape as Border?;
+
+    expect(border?.left.color.toARGB32(), Colors.amber.toARGB32());
+    expect(border?.left.width, greaterThan(0));
+  });
+  testWidgets('displays color for warnings', (tester) async {
+    await tester.pumpWidget(materialApp(MeasurementListRow(
+      data: mockEntry(
+        time: DateTime(2023),
+        sys: 10000,
+      ),
+      onRequestEdit: () => fail('No onRequestEdit expected'),
+    )));
+    final box = tester.widget<ExpansionTile>(find.byType(ExpansionTile).first);
+    final border = box.collapsedShape as Border?;
+
+    expect(border?.left.color, isNotNull);
+    expect(border?.left.width, greaterThan(0));
+  });
 }
 
 MedicineIntake mockIntake(Medicine medicine, {

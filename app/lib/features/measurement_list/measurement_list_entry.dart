@@ -3,6 +3,7 @@ import 'package:blood_pressure_app/components/nullable_text.dart';
 import 'package:blood_pressure_app/components/pressure_text.dart';
 import 'package:blood_pressure_app/data_util/entry_context.dart';
 import 'package:blood_pressure_app/l10n/app_localizations.dart';
+import 'package:blood_pressure_app/model/blood_pressure/pressure_unit.dart';
 import 'package:blood_pressure_app/model/combined_entry.dart';
 import 'package:blood_pressure_app/model/storage/storage.dart';
 import 'package:flutter/material.dart';
@@ -30,13 +31,23 @@ class MeasurementListRow extends StatelessWidget {
     final settings = context.watch<Settings>();
     final formatter = DateFormat(settings.dateFormatString);
     final intake = data.intake;
+    
+    Color? color = data.color == null ? null : Color(data.color!);
+    if (color == null) {
+      final sys = data.sys?.inUnit(settings.preferredPressureUnit) ?? -1;
+      final dia = data.dia?.inUnit(settings.preferredPressureUnit) ?? -1;
+      if (sys > settings.sysWarn || dia > settings.diaWarn) {
+        color = Colors.redAccent.shade400;
+      }
+    }
+
     return ExpansionTile(
       // Leading color possible
       title: _buildRow(formatter),
       childrenPadding: const EdgeInsets.only(bottom: 10),
-      backgroundColor: data.note?.color == null ? null : Color(data.color!).withAlpha(30),
-      collapsedShape: data.color == null ? null : Border(
-        left: BorderSide(color: Color(data.color!), width: 8),
+      backgroundColor: color?.withAlpha(30),
+      collapsedShape: color == null ? null : Border(
+        left: BorderSide(color: color, width: 8),
       ),
       children: [
         ListTile(
