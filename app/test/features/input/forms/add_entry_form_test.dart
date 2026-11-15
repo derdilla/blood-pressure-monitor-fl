@@ -489,6 +489,32 @@ void main() {
     expect(find.text(localizations.sysLong), findsNothing);
     expect(find.text(',.,..'), findsOneWidget);
   });
+
+  testWidgets("Doesn't focus back after manually tapping field", (WidgetTester tester) async {
+    await tester.pumpWidget(appBase(AddEntryForm(),));
+    final localizations = await AppLocalizations.delegate.load(const Locale('en'));
+    await tester.pumpAndSettle();
+
+    expect(find.descendant(of: _focusedTextField(), matching: find.text(localizations.sysLong)), findsOneWidget);
+    tester.testTextInput.enterText('123');
+    await tester.pumpAndSettle();
+    expect(find.descendant(of: _focusedTextField(), matching: find.text(localizations.diaLong)), findsOneWidget);
+    tester.testTextInput.enterText('45');
+    await tester.pumpAndSettle();
+    expect(find.descendant(of: _focusedTextField(), matching: find.text(localizations.pulLong)), findsOneWidget);
+    tester.testTextInput.enterText('6');
+    await tester.pumpAndSettle();
+    await tester.sendKeyEvent(LogicalKeyboardKey.backspace);
+    await tester.pumpAndSettle();
+    expect(find.descendant(of: _focusedTextField(), matching: find.text(localizations.pulLong)), findsOneWidget);
+
+    await tester.showKeyboard(find.ancestor(of: find.text(localizations.diaLong), matching: find.byType(TextField)));
+    expect(find.descendant(of: _focusedTextField(), matching: find.text(localizations.diaLong)), findsOneWidget);
+
+    await tester.sendKeyEvent(LogicalKeyboardKey.backspace);
+
+    expect(find.descendant(of: _focusedTextField(), matching: find.text(localizations.diaLong)), findsOneWidget);
+  });
 }
 
 Finder _focusedTextField() {

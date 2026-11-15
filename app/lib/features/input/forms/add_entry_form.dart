@@ -81,7 +81,8 @@ class AddEntryFormState extends FormStateBase<CombinedEntry, AddEntryForm>
     // If an empty input has been focussed before pressing the back key,
     // we move back one Input-Field. We don't do so if the field was
     // just now emptied with this press.
-    if(event.logicalKey == LogicalKeyboardKey.backspace && _emptyFocussed) {
+    if(event.logicalKey == LogicalKeyboardKey.backspace
+         && _emptyFocussed && _emptyFocussedNow) {
       FocusScope.of(context).previousFocus();
       _emptyFocussed = false;
     }
