@@ -30,14 +30,14 @@ class _HealthConnectScreenState extends State<HealthConnectScreen> {
 
   bool _platformSupport = false;
   bool _hasWeightPermission = false;
-  bool _hasBloodPressurePermission = false;
+  bool _hasBPPermission = false;
 
   Future<void> _checkPermissions() async {
     if (!(Platform.isAndroid || Platform.isIOS)) {
       setState(() {
         _platformSupport = false;
         _hasWeightPermission = false;
-        _hasBloodPressurePermission = false;
+        _hasBPPermission = false;
       });
       return;
     }
@@ -50,7 +50,7 @@ class _HealthConnectScreenState extends State<HealthConnectScreen> {
     setState(() {
       _platformSupport = platformSupport;
       _hasWeightPermission = hasWeightPermission;
-      _hasBloodPressurePermission = hasBloodPressurePermission;
+      _hasBPPermission = hasBloodPressurePermission;
     });
   }
 
@@ -102,16 +102,16 @@ class _HealthConnectScreenState extends State<HealthConnectScreen> {
             ),
           ),
 
-          if (_platformSupport && !_hasWeightPermission && _hasBloodPressurePermission)
+          if (_needsWeightPerms(settings) && !_needsBPPerms(settings))
             _missingPermissionsBanner(localizations.noWeightPermission),
-          if (_platformSupport && _hasWeightPermission && !_hasBloodPressurePermission)
+          if (!_needsWeightPerms(settings) && _needsBPPerms(settings))
             _missingPermissionsBanner(localizations.noBloodPressurePermission),
-          if (_platformSupport && !_hasWeightPermission && !_hasBloodPressurePermission)
+          if (_needsWeightPerms(settings) && _needsBPPerms(settings))
             _missingPermissionsBanner(localizations.noPermissions),
           SwitchListTile(
             title: Text(localizations.syncOnAppStart),
             value: settings.syncOnAppStart,
-            onChanged: _hasBloodPressurePermission
+            onChanged: _hasBPPermission
                 ? (v) => settings.syncOnAppStart = v
                 : null,
           ),
@@ -140,12 +140,12 @@ class _HealthConnectScreenState extends State<HealthConnectScreen> {
               SwitchListTile(
                 title: Text(localizations.automaticallySyncData),
                 value: settings.syncPressureMeasurements,
-                onChanged: _hasBloodPressurePermission
+                onChanged: _hasBPPermission
                     ? (v) => settings.syncPressureMeasurements = v
                     : null,
               ),
               SyncTile(
-                disabled: !_hasBloodPressurePermission,
+                disabled: !_hasBPPermission,
                 mdl: BPSyncModel(
                   bpRepo: context.watch<BloodPressureRepository>(),
                   health: _health,
@@ -175,4 +175,14 @@ class _HealthConnectScreenState extends State<HealthConnectScreen> {
       ],
     ),
   );
+
+  bool _needsPerms(HealthConnectSettings settings) => settings.useHealthConnect && _platformSupport;
+
+  bool _needsBPPerms(HealthConnectSettings settings) => _needsPerms(settings)
+    && settings.syncPressureMeasurements
+    && !_hasBPPermission;
+
+  bool _needsWeightPerms(HealthConnectSettings settings) => _needsPerms(settings)
+    && settings.syncWeightMeasurements
+    && !_hasWeightPermission;
 }
