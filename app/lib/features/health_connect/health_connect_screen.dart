@@ -33,20 +33,23 @@ class _HealthConnectScreenState extends State<HealthConnectScreen> {
   bool _hasBPPermission = false;
 
   Future<void> _checkPermissions() async {
-    if (!(Platform.isAndroid || Platform.isIOS)) {
+    final settings = context.read<HealthConnectSettings>();
+    if (!(Platform.isAndroid || Platform.isIOS)
+      || !settings.useHealthConnect) {
       setState(() {
-        _platformSupport = false;
+        _platformSupport = (Platform.isAndroid || Platform.isIOS);
         _hasWeightPermission = false;
         _hasBPPermission = false;
       });
       return;
     }
     final platformSupport = await _health.isHealthConnectAvailable();
-    final hasWeightPermission = await _health.hasPermissions([HealthDataType.WEIGHT],
+    final hasPerms = await _health.requestPermissionsIfMissing(settings);
+    final hasWeightPermission = hasPerms || (await _health.hasPermissions([HealthDataType.WEIGHT],
       permissions: [HealthDataAccess.READ_WRITE])
-        ?? false;
-    final hasBloodPressurePermission = await _health.hasPermissions(BPSyncModel.permissions,
-     permissions: List.filled(3, HealthDataAccess.READ_WRITE)) ?? false;
+        ?? false);
+    final hasBloodPressurePermission = hasPerms || (await _health.hasPermissions(BPSyncModel.permissions,
+     permissions: List.filled(3, HealthDataAccess.READ_WRITE)) ?? false);
     setState(() {
       _platformSupport = platformSupport;
       _hasWeightPermission = hasWeightPermission;
