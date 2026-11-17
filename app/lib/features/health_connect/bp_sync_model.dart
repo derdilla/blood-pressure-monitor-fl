@@ -3,7 +3,7 @@ import 'package:blood_pressure_app/logging.dart';
 import 'package:health/health.dart';
 import 'package:health_data_store/health_data_store.dart';
 
-class BPSyncModel extends SyncModel with TypeLogger {
+class BPSyncModel extends SyncModel<BloodPressureRecord> with TypeLogger {
   BPSyncModel({required this.bpRepo, required this.health});
 
   static const permissions = [
@@ -29,7 +29,6 @@ class BPSyncModel extends SyncModel with TypeLogger {
     _progress = 0;
     notifyListeners();
 
-    await health.requestPermissionsIfMissing(permissions);
     final now = DateTime.now();
     DateTime start = now.subtract(Duration(days: 30));
     if (await health.isHealthDataHistoryAuthorized()
@@ -120,13 +119,14 @@ class BPSyncModel extends SyncModel with TypeLogger {
     _progress += 1;
     notifyListeners();
 
-    await Future.forEach(appOnlyData, saveRecord);
+    await Future.forEach(appOnlyData, saveEntry);
     _progress += 1;
     _syncing = false;
     notifyListeners();
   }
 
-  Future<bool> saveRecord(BloodPressureRecord record) async {
+  @override
+  Future<bool> saveEntry(BloodPressureRecord record) async {
     if (record.pul != null) {
       await health.writeHealthData(
         value: record.pul!.toDouble(),

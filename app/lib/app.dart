@@ -174,42 +174,34 @@ class _AppState extends State<App> with TypeLogger {
 
     // Register listeners that sync on new measurements
     // FIXME: use sync models:
-    //  - don't request every permission at 3 places, if not needed
     //  - avoid code duplication
     if (_healthConnectSettings!.useHealthConnect) {
       final health = Health();
-      if (_healthConnectSettings!.syncWeightMeasurements) {
-        weightRepo.subscribe().listen((record) async {
-          if (record != null) {
-            final canWrite = await health.requestPermissionsIfMissing(
-              [HealthDataType.WEIGHT],
-              HealthDataAccess.WRITE,
-            );
-            if (!canWrite) logger.warning('Health Connect weight write permissions not granted');
-            await health.writeHealthData(
-              type: HealthDataType.WEIGHT,
-              value: record.weight.kg,
-              startTime: record.time,
-              recordingMethod: RecordingMethod.manual,
-            );
-          }
-        });
+      final hasPermissions = await health.requestPermissionsIfMissing(
+        _healthConnectSettings!,
+      );
+      if (hasPermissions) {
+        if (_healthConnectSettings!.syncWeightMeasurements) {
+          weightRepo.subscribe().listen((record) async {
+            if (record != null) {
+              final model = WeightSyncModel(weightRepo: weightRepo, health: health);
+              await model.saveEntry(record);
+            }
+          });
+        }
+        if (_healthConnectSettings!.syncPressureMeasurements) {
+          bpRepo.subscribe().listen((record) async {
+            if (record == null) return;
+            if ((record.sys != null && record.dia != null)
+             || record.pul != null) {
+              final model = BPSyncModel(bpRepo: bpRepo, health: health);
+              await model.saveEntry(record);
+            }
+          });
+        }
+      } else {
+        logger.warning('Health Connect permissions not granted');
       }
-      if (_healthConnectSettings!.syncPressureMeasurements) {
-        bpRepo.subscribe().listen((record) async {
-          if (record == null) return;
-          if ((record.sys != null && record.dia != null) || record.pul != null) {
-            final canWrite = await health.requestPermissionsIfMissing(
-              BPSyncModel.permissions,
-              HealthDataAccess.WRITE,
-            );
-            if (!canWrite) logger.warning('Health Connect BP write permissions not granted');
-            final model = BPSyncModel(bpRepo: bpRepo, health: health);
-            await model.saveRecord(record);
-          }
-        });
-      }
-
     }
 
     // Initial route building

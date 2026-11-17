@@ -85,7 +85,7 @@ class _HealthConnectScreenState extends State<HealthConnectScreen> {
               value: settings.useHealthConnect,
               onChanged: (Platform.isAndroid || Platform.isIOS) ? (newValue) async {
                 if (newValue) {
-                  final granted = await _health.requestPermissionsIfMissing();
+                  final granted = await _health.requestPermissionsIfMissing(settings);
                   if (!granted && context.mounted) {
                     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                         content: Text(localizations.noPermissions),

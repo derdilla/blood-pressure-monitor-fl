@@ -3,7 +3,7 @@ import 'package:health/health.dart';
 import 'package:health_data_store/health_data_store.dart';
 
 
-class WeightSyncModel extends SyncModel {
+class WeightSyncModel extends SyncModel<BodyweightRecord> {
   WeightSyncModel({required this.weightRepo, required this.health});
 
   final BodyweightRepository weightRepo;
@@ -27,7 +27,6 @@ class WeightSyncModel extends SyncModel {
     _progress = 0;
     notifyListeners();
 
-    await health.requestPermissionsIfMissing([HealthDataType.WEIGHT]);
     final now = DateTime.now();
     DateTime start = now.subtract(Duration(days: 30));
     if (await health.isHealthDataHistoryAuthorized()
@@ -83,14 +82,17 @@ class WeightSyncModel extends SyncModel {
     _progress += 1;
     notifyListeners();
 
-    await Future.forEach(appOnlyData, (record) => health.writeHealthData(
-      type: HealthDataType.WEIGHT,
-      value: record.weight.kg,
-      startTime: record.time,
-      recordingMethod: RecordingMethod.manual,
-    ));
+    await Future.forEach(appOnlyData, saveEntry);
     _progress += 1;
     _syncing = false;
     notifyListeners();
   }
+
+  @override
+  Future<bool> saveEntry(BodyweightRecord record) => health.writeHealthData(
+    type: HealthDataType.WEIGHT,
+    value: record.weight.kg,
+    startTime: record.time,
+    recordingMethod: RecordingMethod.manual,
+  );
 }
