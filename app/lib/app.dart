@@ -173,36 +173,38 @@ class _AppState extends State<App> with TypeLogger {
     }
 
     // Register listeners that sync on new measurements
-    // FIXME: use sync models:
-    //  - avoid code duplication
-    if (_healthConnectSettings!.useHealthConnect) {
-      final health = Health();
+    final health = Health();
+    weightRepo.subscribe().listen((record) async {
+      if (record == null) return;
+      if (!_healthConnectSettings!.useHealthConnect) return;
+      if (!_healthConnectSettings!.syncWeightMeasurements) return;
       final hasPermissions = await health.requestPermissionsIfMissing(
         _healthConnectSettings!,
       );
-      if (hasPermissions) {
-        if (_healthConnectSettings!.syncWeightMeasurements) {
-          weightRepo.subscribe().listen((record) async {
-            if (record != null) {
-              final model = WeightSyncModel(weightRepo: weightRepo, health: health);
-              await model.saveEntry(record);
-            }
-          });
-        }
-        if (_healthConnectSettings!.syncPressureMeasurements) {
-          bpRepo.subscribe().listen((record) async {
-            if (record == null) return;
-            if ((record.sys != null && record.dia != null)
-             || record.pul != null) {
-              final model = BPSyncModel(bpRepo: bpRepo, health: health);
-              await model.saveEntry(record);
-            }
-          });
-        }
-      } else {
+      if (!hasPermissions) {
         logger.warning('Health Connect permissions not granted');
+        return;
       }
-    }
+      final model = WeightSyncModel(weightRepo: weightRepo, health: health);
+      await model.saveEntry(record);
+    });
+    bpRepo.subscribe().listen((record) async {
+      if (record == null) return;
+      if (!_healthConnectSettings!.useHealthConnect) return;
+      if (!_healthConnectSettings!.syncPressureMeasurements) return;
+      final hasPermissions = await health.requestPermissionsIfMissing(
+        _healthConnectSettings!,
+      );
+      if (!hasPermissions) {
+        logger.warning('Health Connect permissions not granted');
+        return;
+      }
+      if ((record.sys != null && record.dia != null)
+        || record.pul != null) {
+        final model = BPSyncModel(bpRepo: bpRepo, health: health);
+        await model.saveEntry(record);
+      }
+    });
 
     // Initial route building
     AppRoute initialRoute = AppRoute.home;
