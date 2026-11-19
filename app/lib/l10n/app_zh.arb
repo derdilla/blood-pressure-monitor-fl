@@ -391,7 +391,7 @@
   "maxDataInterval": "最长数据间隔",
   "graphSettings": "图表设置",
   "featuresSetting": "功能",
-  "warnDiscardingData": "你有未保存的数据。要继续并丢弃它们吗？",
+  "warnDiscardingData": "你有未保存的数据。要继续并丢弃更改吗？",
   "bigGraphSplit": "测量相隔的时间大于无中断显示的最大间隔。可以在设置中进行更改。",
   "openSettings": "打开设置",
   "titleAlreadyExists": "此标题已存在",
@@ -434,5 +434,6 @@
   },
   "median": "中值",
   "valueDistributionDocumentation": "显示测量值的频率。 比如，假如你测量脉搏六次:\n\n> 91, 95, 95, 95, 100, 100\n\n你会看到 10 个条形图:\n- 中间条形图高度是最左边条形图的 3倍。\n- 最右边条形图高度是左边的两倍。\n- 剩下的非常短；基本是点。",
-  "timeResolvedMetricsDocumentation": "像时钟一样工作：每个小时展示前半小时测量值和后半个小时测量值的平均数。\n\n无测量值的小时中显示每日均值。"
+  "timeResolvedMetricsDocumentation": "像时钟一样工作：每个小时展示前半小时测量值和后半个小时测量值的平均数。\n\n无测量值的小时中显示每日均值。",
+  "discardData": "丢弃数据"
 }
