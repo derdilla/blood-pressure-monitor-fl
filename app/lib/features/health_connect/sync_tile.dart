@@ -2,13 +2,13 @@ import 'package:blood_pressure_app/features/health_connect/sync_model.dart';
 import 'package:blood_pressure_app/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 
-class SyncTile extends StatelessWidget {
+class SyncTile<T> extends StatelessWidget {
   const SyncTile({super.key,
     required this.mdl,
     required this.disabled,
   });
 
-  final SyncModel mdl;
+  final SyncModel<T> mdl;
 
   final bool disabled;
 
