@@ -13,12 +13,8 @@ abstract class SyncModel<T> extends ChangeNotifier {
 }
 
 extension RequestPermissions on Health {
-  /// Requests configured types with [permission] if not already available.
-  ///
-  /// Requests all permissions used by the app if not specified.
-  Future<bool> requestPermissionsIfMissing(
-    HealthConnectSettings settings,
-  ) async {
+  /// Requests all permissions for syncing configured data, if necessary.
+  Future<bool> requestPermissionsIfMissing(HealthConnectSettings settings) async {
     const permission = HealthDataAccess.READ_WRITE;
     final types = [
       if (settings.syncPressureMeasurements) ...BPSyncModel.permissions,
