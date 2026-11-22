@@ -1,6 +1,6 @@
 {
   "behavior": "行為",
-  "weekOfYear": "週 {weekNum}, {year}",
+  "weekOfYear": "{year} 年第 {weekNum} 週",
   "@weekOfYear": {
     "placeholders": {
       "weekNum": {
@@ -19,7 +19,7 @@
   "csv": "CSV",
   "accentColor": "主題色彩",
   "title": "血壓記錄",
-  "errTimeAfterNow": "所選擇的時段已被重設，因為它發生在此時刻之後。您可以在設定中關閉此驗證。",
+  "errTimeAfterNow": "所選時間是未來的時間。您可以在設定中關閉此驗證。",
   "versionOf": "版本: {version}",
   "@versionOf": {
     "placeholders": {
@@ -44,7 +44,7 @@
       }
     }
   },
-  "fieldDelimiter": "字段格式",
+  "fieldDelimiter": "欄位分隔符號",
   "import": "匯入",
   "pulShort": "脈搏",
   "sysLong": "收縮壓",
@@ -67,13 +67,13 @@
   "year": "年",
   "warnAboutTxt1": "警告值僅供參考，並不是醫學建議。",
   "exportFormat": "匯出格式",
-  "errUnrealistic": "不切實際的數值？請在設定中關閉輸入驗證！",
+  "errUnrealistic": "數值不合理？請在設定中關閉輸入驗證！",
   "iconSize": "圖示大小",
-  "measurementsPerDay": "日測量次數",
+  "measurementsPerDay": "每日測量次數",
   "errNoData": "沒有資料",
   "light": "亮色",
   "errNotStarted": "尚未啟動",
-  "errCantOpenURL": "無法打開 URL: {url}",
+  "errCantOpenURL": "無法開啟 URL: {url}",
   "@errCantOpenURL": {
     "placeholders": {
       "url": {
@@ -81,7 +81,7 @@
       }
     }
   },
-  "lifetime": "終身",
+  "lifetime": "全部時間",
   "exportMimeType": "匯出媒體類型",
   "errCantReadFile": "檔案內容無法讀取",
   "notes": "備註",
@@ -98,7 +98,7 @@
   "data": "資料",
   "version": "版本",
   "errNoValue": "請輸入數值",
-  "other": "其它",
+  "other": "其他",
   "exportWarnConfigNotImportable": "嘿! 溫馨提醒: 目前的匯出設定將導致無法匯入。如要繼續，請確認您設定的匯出格式是 CSV，啟用標題列，並且包含一種有效的時間格式。",
   "exportCsvHeadlineDesc": "有助於區分類型",
   "btnUndo": "復原",
@@ -117,7 +117,7 @@
   "pulLong": "脈搏",
   "errNotEnoughDataToGraph": "沒有足夠的資料來繪製圖表。",
   "sysColor": "收縮壓顏色",
-  "maxOf": "{txt} 最高.",
+  "maxOf": "{txt} 最高",
   "@maxOf": {
     "placeholders": {
       "txt": {
@@ -125,7 +125,7 @@
       }
     }
   },
-  "pulsePressure": "血壓",
+  "pulsePressure": "脈壓",
   "errNotImportable": "這個檔案無法匯入",
   "errNaN": "請輸入數字",
   "confirmDeletion": "確認刪除",
@@ -144,7 +144,7 @@
   "shared": "已分享",
   "btnCancel": "取消",
   "language": "語言",
-  "exportWarnNotEveryFieldExported": "請注意，您並沒有匯出所有欄位: {fields} {count, plural, one{is} other{are}} 遺失。",
+  "exportWarnNotEveryFieldExported": "請注意，您並沒有匯出所有欄位：缺少 {fields}。",
   "@exportWarnNotEveryFieldExported": {
     "placeholders": {
       "count": {
@@ -166,13 +166,13 @@
     }
   },
   "measurementCount": "測量次數",
-  "exportAfterEveryInputDesc": "不建議 (檔案會過大)",
+  "exportAfterEveryInputDesc": "不建議 (檔案數量會暴增)",
   "exportAfterEveryInput": "每次輸入完畢後匯出",
   "week": "週",
   "warnValues": "警告值",
   "result": "結果:",
   "settings": "設定",
-  "loading": "讀取中…",
+  "loading": "載入中…",
   "text": "文字",
   "avgOf": "{txt} Ø",
   "@avgOf": {
@@ -184,7 +184,7 @@
   },
   "confirmDelete": "確認刪除",
   "errWrongImportFormat": "您只能匯入 CSV 和 SQLite 資料庫格式的檔案。",
-  "minOf": "{txt} 最低.",
+  "minOf": "{txt} 最低",
   "@minOf": {
     "placeholders": {
       "txt": {
@@ -194,14 +194,14 @@
   },
   "timeResolvedMetrics": "時段指標",
   "enterTimeFormatScreen": "時間格式",
-  "fieldFormat": "字段格式",
+  "fieldFormat": "欄位格式",
   "system": "跟隨系統",
   "sysShort": "收縮壓",
   "sysWarn": "收縮壓警告",
   "now": "現在",
   "diaLong": "舒張壓",
   "time": "時間",
-  "custom": "自定",
+  "custom": "自訂",
   "day": "天",
   "buildNumberOf": "版本號碼: {buildNumber}",
   "@buildNumberOf": {
@@ -222,13 +222,13 @@
       }
     }
   },
-  "confirmDeleteDesc": "刪除這筆記錄嗎? (您可以從設定把這個通知關掉。)",
-  "errNoFileOpened": "沒有打開任何檔案",
+  "confirmDeleteDesc": "刪除這筆記錄嗎？（您可以在設定中關閉此確認。）",
+  "errNoFileOpened": "沒有開啟任何檔案",
   "addExportformat": "增加匯出格式",
   "edit": "編輯",
   "delete": "刪除",
   "default_": "預設",
-  "exportPdfHeaderFontSize": "表頭字體大小",
+  "exportPdfHeaderFontSize": "表頭字型大小",
   "average": "平均",
   "maximum": "最大",
   "minimum": "最小",
@@ -236,23 +236,204 @@
   "startWithAddMeasurementPageDescription": "應用程式啟動後，顯示測量值輸入畫面。",
   "horizontalLines": "水平線",
   "addMeasurement": "加入測量值",
-  "timestamp": "時戳",
+  "timestamp": "時間戳記",
   "color": "顏色",
   "exportSettings": "備份設定",
-  "importSettings": "恢復設定",
+  "importSettings": "還原設定",
   "requiresAppRestart": "需要重新啟動應用程式",
   "restartNow": "現在重新啟動",
   "deleteAllSettings": "刪除所有設定",
   "exportPdfExportTitle": "標題列",
   "timeFormat": "時間格式",
   "note": "備註",
-  "bloodPressure": "血壓記錄",
-  "medianOf": "{txt} 最低.",
+  "bloodPressure": "血壓",
+  "medianOf": "{txt} 中介值",
   "@medianOf": {
     "placeholders": {
       "txt": {
         "type": "String"
       }
     }
-  }
+  },
+  "exportAddTimestamp": "新增時間戳記到檔名",
+  "exportAddTimestampDesc": "確保每個匯出檔案的名稱都是唯一的",
+  "exportFieldFormatDocumentation": "'## 變數\n匯出格式欄位支援插入以下佔位符的數值：\n- `$TIMESTAMP:` 表示自 Unix 紀元以來的時間，單位毫秒\n- `$SYS:` 如果有的話，提供一個值；否則預設為 -1.\n- `$DIA:` 如果有的話，提供一個值；否則，預設為 -1.\n- `$PUL:` 如果有的話，提供一個值；否則，預設為 -1.\n- `$NOTE:` 如果有的話，提供一個值；否則，預設為 -1.\n- `$COLOR:` 代表測量的顏色數值（範例值: `4291681337`）\n\n如果以上提及欄位中的任何一個沒有出現在血壓記錄中，它們將被 `null`代替。\n\n## 數學\n您可以在雙括號 (\"`{{}}`\") 內使用基本的數學計算。\n\n支援以下運算子：\n- 操作: +, -, *, /, %, ^\n- 一個引數的函式: abs, acos, asin, atan, ceil, cos, cosh, cot, coth, csc, csch, exp, floor, ln, log, round sec, sech, sin, sinh, sqrt, tan, tanh\n- 兩個引數的函式: log, nrt, pow\n- 常數: e, pi, ln2, ln10, log2e, log10e, sqrt1_2, sqrt2\n\n完整的數學直譯器規範可參見 [function_tree](https://pub.dev/documentation/function_tree/latest#interpreter) 文件。\n\n## 處理順序\n1. 變數替換\n2. 數學計算'",
+  "exportPdfHeaderHeight": "表頭高度",
+  "exportPdfCellHeight": "列高",
+  "exportPdfCellFontSize": "列字型大小",
+  "median": "中介值",
+  "exportPdfExportData": "資料表格",
+  "startWithAddMeasurementPage": "啟動時輸入測量",
+  "autostartBluetoothInput": "自動啟動藍牙匯入",
+  "autostartBluetoothInputDescription": "啟用藍牙輸入且藍牙已開啟時，在測量輸入畫面自動開始匯入。",
+  "bluetoothImportMode": "自動匯入",
+  "bluetoothImportModeDescription": "自動匯入裝置傳回的測量值，不需先確認。傳回多筆時，可選擇要匯入哪些。",
+  "bluetoothImportModeDisabled": "已停用",
+  "bluetoothImportModeLast": "最新測量值",
+  "bluetoothImportModeAll": "所有測量值",
+  "linePositionY": "線條位置 (y)",
+  "customGraphMarkings": "自訂標記",
+  "addLine": "新增線條",
+  "useLegacyList": "使用舊版清單",
+  "warnNeedsRestartForUsingApp": "本次使用期間已刪除檔案。請重新啟動應用程式以繼續使用！",
+  "deleteAllMeasurements": "刪除所有測量",
+  "warnDeletionUnrecoverable": "除非您已手動備份，否則此步驟無法復原。確定要刪除嗎？",
+  "enterTimeFormatDesc": "格式化字串是一個預定義的ICU/Skeleton字串和您想要包含的其他文字的混合體。\n\n[點選即可檢視可用的格式化字串的完整清單。](screen://TimeFormattingHelp)\n\n友情提示：使用更長或更短的格式字串不會改變表格的欄寬，還可能導致意外的換行和文字顯示不全。\n\n預設：\"yy-MM-dd HH:mm\"",
+  "needlePinBarWidth": "色條粗細",
+  "needlePinBarWidthDesc": "圖表上有色條目的寬度。",
+  "errParseEmptyCsvFile": "csv 檔案中行數不足以解析記錄。",
+  "errParseTimeNotRestoreable": "沒有可用來還原時間戳記的欄位。",
+  "errParseUnknownColumn": "沒有名為 \"{title}\"的欄位。",
+  "@errParseUnknownColumn": {
+    "placeholders": {
+      "title": {
+        "type": "String"
+      }
+    }
+  },
+  "errParseLineTooShort": "第 {lineNumber} 行的欄數少於第一行。",
+  "@errParseLineTooShort": {
+    "placeholders": {
+      "lineNumber": {
+        "type": "int"
+      }
+    }
+  },
+  "errParseFailedDecodingField": "解碼第 {lineNumber} 行中的 \"{fieldContent}\" 欄位失敗。",
+  "@errParseFailedDecodingField": {
+    "placeholders": {
+      "lineNumber": {
+        "type": "int"
+      },
+      "fieldContent": {
+        "type": "String"
+      }
+    }
+  },
+  "exportFieldsPreset": "匯出欄位預設",
+  "remove": "刪除",
+  "manageExportColumns": "管理匯出欄位",
+  "buildIn": "內建",
+  "csvTitle": "CSV標題",
+  "recordFormat": "記錄格式",
+  "errAccuracyLoss": "使用自訂時間格式匯出預計會損失精度。",
+  "bottomAppBars": "底部對話欄",
+  "medications": "藥物",
+  "addMedication": "新增藥物",
+  "name": "名稱",
+  "defaultDosis": "預設劑量",
+  "noMedication": "沒有藥物",
+  "dosis": "劑量",
+  "valueDistribution": "值分佈",
+  "titleInCsv": "CSV 標題",
+  "errBleNoPerms": "沒有藍牙權限",
+  "preferredPressureUnit": "偏好的血壓單位",
+  "compactList": "緊湊測量清單",
+  "bluetoothDisabled": "藍牙已關閉",
+  "errMeasurementRead": "測量時發生錯誤！",
+  "measurementSuccess": "測量成功！",
+  "connect": "連線",
+  "bluetoothInput": "藍牙輸入",
+  "aboutBleInput": "某些測量裝置相容 BLE GATT。您可以在此配對這些裝置並自動傳輸測量資料或在設定中停用此選項。",
+  "scanningForDevices": "正在掃描裝置",
+  "tapToClose": "輕按關閉。",
+  "meanArterialPressure": "平均動脈壓",
+  "userID": "使用者 ID",
+  "bodyMovementDetected": "偵測到身體移動",
+  "cuffTooLoose": "臂帶太鬆",
+  "improperMeasurementPosition": "測量姿勢不正確",
+  "irregularPulseDetected": "偵測到不規律的脈搏",
+  "pulseRateExceedsUpperLimit": "脈搏超出上限",
+  "pulseRateLessThanLowerLimit": "脈搏低於下限",
+  "availableDevices": "可用的裝置",
+  "deleteAllMedicineIntakes": "刪除所有服藥記錄",
+  "deleteAllNotes": "刪除所有備註",
+  "date": "日期",
+  "intakes": "服藥記錄",
+  "errFeatureNotSupported": "這個功能在這個平台上不可用。",
+  "invalidZip": "無效的 ZIP 檔案。",
+  "errCantCreateArchive": "無法建立存檔。如果可能請報告 Bug。",
+  "activateWeightFeatures": "啟用體重相關功能",
+  "weight": "體重",
+  "enterWeight": "輸入體重",
+  "selectMeasurementTitle": "選擇要使用的測量值",
+  "measurementIndex": "測量值 #{number}",
+  "@measurementIndex": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "select": "選擇",
+  "@select": {
+    "description": "Used when f.e. selecting a single measurement when the bluetooth device returned multiple"
+  },
+  "importAll": "匯入全部 ({count})",
+  "@importAll": {
+    "description": "Button to import every measurement returned by a bluetooth device.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "measurementsImported": "已匯入 {count} 筆測量值",
+  "@measurementsImported": {
+    "description": "Confirmation shown after importing all measurements returned by a bluetooth device.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "preferredWeightUnit": "偏好的體重單位",
+  "@preferredWeightUnit": {
+    "description": "Setting for the unit the app will use for displaying weight"
+  },
+  "disabled": "已停用",
+  "stableBluetoothInput": "穩定",
+  "legacyBluetoothInput": "舊版",
+  "bluetoothInputDesc": "如果穩定版後端無法運作，請使用舊版後端並透過 contact@derdilla.com 或 https://github.com/derdilla/blood-pressure-monitor-fl/issues 報告問題",
+  "tapToSelect": "輕按選擇",
+  "trustBLETime": "信任藍牙裝置報告的時間",
+  "warnBLETimeSus": "藍牙裝置報告了 {hours} 小時的時間偏差。您可以在設定中停用信任來自藍牙裝置的時間戳記。",
+  "@warnBLETimeSus": {
+    "placeholders": {
+      "hours": {
+        "type": "int"
+      }
+    }
+  },
+  "dontShowAgain": "不再顯示",
+  "btnShare": "分享",
+  "exportSuccess": "成功匯出",
+  "xls": "Excel 檔案(xls)",
+  "reset": "重設",
+  "healthConnect": "Health Connect",
+  "syncNow": "立即同步",
+  "optEnableHealthConnect": "啟用 Health Connect",
+  "healthConnectDesc": "Health Connect 使用系統 API 來和其他支援它的應用程式同步您的資料。這允許您無需手動匯出和匯入，使用第三方應用程式來擴充功能。\n除非明確授權第三方應用程式上傳資料，否則不會有資料離開您的裝置。",
+  "healthConnectPlatformUnsupported": "您的平台不支援 Health Connect。",
+  "noPermissions": "未授予權限。",
+  "noWeightPermission": "未授予體重權限。",
+  "noBloodPressurePermission": "未授予血壓權限。",
+  "btnCheckAgain": "再次檢查",
+  "automaticallySyncData": "自動同步資料",
+  "syncOnAppStart": "啟動應用程式時同步資料",
+  "warnDiscardingData": "您有未儲存的資料。要繼續並捨棄變更嗎？",
+  "maxDataInterval": "最長資料間隔",
+  "maxDataIntervalDesc": "圖表線在多少天後斷開。0 代表停用。",
+  "generalSettingsSection": "一般",
+  "featuresSetting": "功能",
+  "graphSettings": "圖表設定",
+  "appStyleSettings": "應用程式樣式",
+  "bigGraphSplit": "測量相隔的時間大於無中斷顯示的最大間隔。可以在設定中進行更改。",
+  "openSettings": "開啟設定",
+  "titleAlreadyExists": "此標題已存在",
+  "exportImportDocumentationTooltip": "如何使用匯出/匯入",
+  "exportImportDocumentation": "## 匯出/匯入基本情況\n\n- 如果想傳輸資料或瞭解 sqlite，使用資料庫匯出。\n- 如使用試算表工作流程以及將資料匯回應用程式，選擇 CSV 格式。\n- 啟用標題並包含時間欄位以便能可靠還原資料。\n- 使用欄位格式對話方塊新增收縮壓、舒張壓、脈搏、備註和服藥記錄等值的自訂欄位。\n\n## 在 LibreOffice 和類似工具中匯入 CSV \n\n- 匯出為 CSV 並啟用標題。\n- 標準 CSV 檔案使用預設分隔符和預設文字分隔符。\n- 在 LibreOffice、Excel 或類似程式中開啟，確保時間欄位被識別為日期/時間值。\n- 如果之後要重新匯入檔案，保留相同的 csv 設定並包含有效的時間欄位。\n\n## 顏色欄位\n\n- 純 ''顏色'' 欄位將備註顏色匯出為簡單值。\n- 舊的 ''needlePin'' 欄位儲存 JSON 內容，以相容較舊的工作流程。\n- 想要試算表友善的匯出時使用純 ''顏色'' 欄位。\n\n## 工作流程範例\n\n1. 輸入測量值和任意備註。\n2. 開啟匯出/匯入並切換到 CSV。\n3. 如有需要，新增自訂欄位或時間欄位。\n4. 匯出資料並在 LibreOffice 或別的試算表應用程式中開啟它。\n5. 之後想還原或檢視資料時重新匯入同一個檔案。",
+  "valueDistributionDocumentation": "顯示測量值的頻率。 比如，假如您測量脈搏六次:\n\n> 91, 95, 95, 95, 100, 100\n\n您會看到 10 個條形圖:\n- 中間條形圖高度是最左邊條形圖的 3倍。\n- 最右邊條形圖高度是左邊的兩倍。\n- 剩下的非常短；基本是點。",
+  "timeResolvedMetricsDocumentation": "像時鐘一樣工作：每個小時展示前半小時測量值和後半個小時測量值的平均數。\n\n無測量值的小時中顯示每日均值。",
+  "discardData": "捨棄資料"
 }
