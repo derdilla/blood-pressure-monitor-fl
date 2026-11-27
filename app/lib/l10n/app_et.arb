@@ -384,7 +384,7 @@
   "btnCheckAgain": "Kontrolli uuesti",
   "automaticallySyncData": "Sünkrooni andmed automaatselt",
   "syncOnAppStart": "Rakenduse käivitamisel sünkrooni andmed",
-  "warnDiscardingData": "Sul on salvestamata andmeid. Kas tahaksid jätkata ja neist loobuda?",
+  "warnDiscardingData": "Sul on salvestamata andmeid. Kas tahaksid jätkata ja muudatustest loobuda?",
   "maxDataInterval": "Suurim lubatud andmevälp",
   "maxDataIntervalDesc": "Päevade arv, mille möödumisel graafiku joon katkeb. Väärtus „0“ lülitab selle võimaluse välja.",
   "generalSettingsSection": "Üldseadistused",
@@ -434,5 +434,6 @@
   },
   "median": "Mediaan",
   "timeResolvedMetricsDocumentation": "Toimib nagu kell: iga tunni kohta kuvatakse pool tundi varem kuni pool tundi hiljem tehtud mõõtmiste keskmine.\n\nTundidel, mil mõõtmisi pole tehtud, kuvatakse päevane keskmine.",
-  "valueDistributionDocumentation": "Näitab, kui tihti väärtust mõõdetakse. Näiteks, kui mõõdad oma pulssi 6 korda:\n\n> 91, 95, 95, 95, 100, 100\n\nNäed 10 tulpa:\n- Keskmine tulp on 3 korda kõrgem kui kõige vasakpoolsem tulp.\n- Kõige parempoolsem tulp on kaks korda kõrgem kui vasakpoolne.\n- Ülejäänud on väga lühikesed, praktiliselt punktid."
+  "valueDistributionDocumentation": "Näitab, kui tihti väärtust mõõdetakse. Näiteks, kui mõõdad oma pulssi 6 korda:\n\n> 91, 95, 95, 95, 100, 100\n\nNäed 10 tulpa:\n- Keskmine tulp on 3 korda kõrgem kui kõige vasakpoolsem tulp.\n- Kõige parempoolsem tulp on kaks korda kõrgem kui vasakpoolne.\n- Ülejäänud on väga lühikesed, praktiliselt punktid.",
+  "discardData": "Loobu andmetest"
 }
