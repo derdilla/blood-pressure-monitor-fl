@@ -422,5 +422,6 @@
         "type": "String"
       }
     }
-  }
+  },
+  "exportAddTimestamp": "Aggiungi data e ora al nome del file"
 }
